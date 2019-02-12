@@ -119,7 +119,9 @@ class Tests2(Harness):
         assert not r.headers.cookie
 
     def test_caching_of_assets_with_etag(self):
-        r = self.client.GET(self.client.website.asset('jquery.min.js'))
+        url = self.client.website.asset('jquery.min.js')
+        assert url.startswith('http://localhost/assets/jquery.min.js?etag=')
+        r = self.client.GET(url[len('http://localhost'):])
         assert r.headers[b'Cache-Control'] == b'public, max-age=31536000'
         assert b'Vary' not in r.headers
         assert not r.headers.cookie

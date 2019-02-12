@@ -1,0 +1,110 @@
+interactions:
+- request:
+    body: '{"intent": "sale", "application_context": {"brand_name": "Liberapay", "locale":
+      "en", "landing_page": "Billing", "shipping_preference": "NO_SHIPPING", "user_action":
+      "commit"}, "payer": {"payment_method": "paypal"}, "transactions": [{"amount":
+      {"total": "10.00", "currency": "EUR"}, "description": "Liberapay donation to
+      creator_2 | 40 weeks of \u20ac0.25", "invoice_number": "1", "payee": {"email":
+      "bob@example.com"}, "payment_options": {"allowed_payment_method": "UNRESTRICTED"},
+      "soft_descriptor": "Liberapay"}], "redirect_urls": {"return_url": "http:///donor/giving/pay/paypal/1",
+      "cancel_url": "http:///donor/giving/pay/paypal/1"}}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.paypal.com/v1/payments/payment
+  response:
+    body: {string: "{\"id\":\"PAYID-LROG6RI5M728524H1063005Y\",\"intent\":\"sale\",\"state\":\"created\",\"payer\":{\"payment_method\":\"paypal\"},\"application_context\":{\"locale\":\"en\",\"landing_page\":\"Billing\",\"brand_name\":\"Liberapay\",\"shipping_preference\":\"NO_SHIPPING\",\"user_action\":\"commit\"},\"transactions\":[{\"amount\":{\"total\":\"10.00\",\"currency\":\"EUR\"},\"payee\":{\"email\":\"bob@example.com\"},\"description\":\"Liberapay
+        donation to creator_2 | 40 weeks of \u20AC0.25\",\"invoice_number\":\"1\",\"soft_descriptor\":\"Liberapay\",\"payment_options\":{\"allowed_payment_method\":\"UNRESTRICTED\",\"recurring_flag\":false,\"skip_fmf\":false},\"related_resources\":[]}],\"create_time\":\"2019-02-07T17:47:48Z\",\"links\":[{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y\",\"rel\":\"self\",\"method\":\"GET\"},{\"href\":\"https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-9X899333Y0716272U\",\"rel\":\"approval_url\",\"method\":\"REDIRECT\"},{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y/execute\",\"rel\":\"execute\",\"method\":\"POST\"}]}"}
+    headers:
+      Connection: [close]
+      Content-Language: ['*']
+      Content-Length: ['1050']
+      Content-Type: [application/json]
+      Date: ['Thu, 07 Feb 2019 17:47:48 GMT']
+      HTTP_X_PP_AZ_LOCATOR: [sandbox.slc]
+      Paypal-Debug-Id: [9493b4f46f2ad, 9493b4f46f2ad]
+      Server: [Apache]
+      Set-Cookie: ['X-PP-SILOVER=name%3DSANDBOX3.API.1%26silo_version%3D1880%26app%3Dapiplatformproxyserv%26TIME%3D1148148828%26HTTP_X_PP_AZ_LOCATOR%3Dsandbox.slc;
+          Expires=Thu, 07 Feb 2019 18:17:49 GMT; domain=.paypal.com; path=/; Secure;
+          HttpOnly', 'X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT']
+      Vary: [Authorization]
+      paypal-debug-id: [9493b4f46f2ad, 9493b4f46f2ad]
+    status: {code: 201, message: Created}
+- request:
+    body: '{"payer_id": "6C9EQBCEQY4MA"}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y/execute
+  response:
+    body: {string: "{\"id\":\"PAYID-LROG6RI5M728524H1063005Y\",\"intent\":\"sale\",\"state\":\"approved\",\"cart\":\"9X899333Y0716272U\",\"payer\":{\"payment_method\":\"paypal\",\"status\":\"VERIFIED\",\"payer_info\":{\"email\":\"donor@example.com\",\"first_name\":\"test\",\"last_name\":\"buyer\",\"payer_id\":\"6C9EQBCEQY4MA\",\"country_code\":\"FR\"}},\"transactions\":[{\"amount\":{\"total\":\"10.00\",\"currency\":\"EUR\",\"details\":{}},\"payee\":{\"merchant_id\":\"ZKKXBNCXUB6MY\",\"email\":\"bob@example.com\"},\"description\":\"Liberapay
+        donation to creator_2 | 40 weeks of \u20AC0.25\",\"invoice_number\":\"1\",\"related_resources\":[{\"sale\":{\"id\":\"2ED34753SW695792B\",\"state\":\"pending\",\"amount\":{\"total\":\"10.00\",\"currency\":\"EUR\",\"details\":{\"subtotal\":\"10.00\"}},\"payment_mode\":\"INSTANT_TRANSFER\",\"reason_code\":\"RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION\",\"protection_eligibility\":\"ELIGIBLE\",\"protection_eligibility_type\":\"ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE\",\"parent_payment\":\"PAYID-LROG6RI5M728524H1063005Y\",\"create_time\":\"2019-02-07T18:23:14Z\",\"update_time\":\"2019-02-07T18:23:14Z\",\"links\":[{\"href\":\"https://api.sandbox.paypal.com/v1/payments/sale/2ED34753SW695792B\",\"rel\":\"self\",\"method\":\"GET\"},{\"href\":\"https://api.sandbox.paypal.com/v1/payments/sale/2ED34753SW695792B/refund\",\"rel\":\"refund\",\"method\":\"POST\"},{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y\",\"rel\":\"parent_payment\",\"method\":\"GET\"}]}}]}],\"create_time\":\"2019-02-07T18:23:15Z\",\"links\":[{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y\",\"rel\":\"self\",\"method\":\"GET\"}]}"}
+    headers:
+      Connection: [close]
+      Content-Language: ['*']
+      Content-Length: ['1554']
+      Content-Type: [application/json]
+      Date: ['Thu, 07 Feb 2019 18:23:14 GMT']
+      HTTP_X_PP_AZ_LOCATOR: [sandbox.slc]
+      Paypal-Debug-Id: [5eb313bf2ce92, 5eb313bf2ce92]
+      Server: [Apache]
+      Set-Cookie: ['X-PP-SILOVER=name%3DSANDBOX3.API.1%26silo_version%3D1880%26app%3Dapiplatformproxyserv%26TIME%3D2457295964%26HTTP_X_PP_AZ_LOCATOR%3Dsandbox.slc;
+          Expires=Thu, 07 Feb 2019 18:53:15 GMT; domain=.paypal.com; path=/; Secure;
+          HttpOnly', 'X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT']
+      Vary: [Authorization]
+      paypal-debug-id: [5eb313bf2ce92, 5eb313bf2ce92]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y
+  response:
+    body: {string: "{\"id\":\"PAYID-LROG6RI5M728524H1063005Y\",\"intent\":\"sale\",\"state\":\"approved\",\"cart\":\"9X899333Y0716272U\",\"payer\":{\"payment_method\":\"paypal\",\"status\":\"VERIFIED\",\"payer_info\":{\"email\":\"admin-buyer@liberapay.com\",\"first_name\":\"test\",\"last_name\":\"buyer\",\"payer_id\":\"6C9EQBCEQY4MA\",\"shipping_address\":{\"recipient_name\":\"test
+        buyer\"},\"phone\":\"0459248496\",\"country_code\":\"FR\"}},\"transactions\":[{\"amount\":{\"total\":\"10.00\",\"currency\":\"EUR\",\"details\":{\"subtotal\":\"10.00\",\"shipping\":\"0.00\",\"insurance\":\"0.00\",\"handling_fee\":\"0.00\",\"shipping_discount\":\"0.00\"}},\"payee\":{\"merchant_id\":\"ZKKXBNCXUB6MY\",\"email\":\"alice@example.com\"},\"description\":\"Liberapay
+        donation to creator_2 | 40 weeks of \u20AC0.25\",\"invoice_number\":\"65\",\"item_list\":{\"shipping_address\":{\"recipient_name\":\"test
+        buyer\"}},\"related_resources\":[{\"sale\":{\"id\":\"2ED34753SW695792B\",\"state\":\"pending\",\"amount\":{\"total\":\"10.00\",\"currency\":\"EUR\",\"details\":{\"subtotal\":\"10.00\",\"shipping\":\"0.00\",\"insurance\":\"0.00\",\"handling_fee\":\"0.00\",\"shipping_discount\":\"0.00\"}},\"payment_mode\":\"INSTANT_TRANSFER\",\"reason_code\":\"RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION\",\"protection_eligibility\":\"ELIGIBLE\",\"protection_eligibility_type\":\"ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE\",\"parent_payment\":\"PAYID-LROG6RI5M728524H1063005Y\",\"create_time\":\"2019-02-07T18:23:14Z\",\"update_time\":\"2019-02-07T18:23:14Z\",\"links\":[{\"href\":\"https://api.sandbox.paypal.com/v1/payments/sale/2ED34753SW695792B\",\"rel\":\"self\",\"method\":\"GET\"},{\"href\":\"https://api.sandbox.paypal.com/v1/payments/sale/2ED34753SW695792B/refund\",\"rel\":\"refund\",\"method\":\"POST\"},{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y\",\"rel\":\"parent_payment\",\"method\":\"GET\"}]}}]}],\"create_time\":\"2019-02-07T17:47:49Z\",\"update_time\":\"2019-02-07T18:23:14Z\",\"links\":[{\"href\":\"https://api.sandbox.paypal.com/v1/payments/payment/PAYID-LROG6RI5M728524H1063005Y\",\"rel\":\"self\",\"method\":\"GET\"}]}"}
+    headers:
+      Connection: [close]
+      Content-Language: ['*']
+      Content-Length: ['1918']
+      Content-Type: [application/json]
+      Date: ['Thu, 07 Feb 2019 18:49:15 GMT']
+      HTTP_X_PP_AZ_LOCATOR: [sandbox.slc]
+      Paypal-Debug-Id: [8e3b821a58661, 8e3b821a58661]
+      Server: [Apache]
+      Set-Cookie: ['X-PP-SILOVER=name%3DSANDBOX3.API.1%26silo_version%3D1880%26app%3Dapiplatformproxyserv%26TIME%3D2877119580%26HTTP_X_PP_AZ_LOCATOR%3Dsandbox.slc;
+          Expires=Thu, 07 Feb 2019 19:19:15 GMT; domain=.paypal.com; path=/; Secure;
+          HttpOnly', 'X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT']
+      Vary: [Authorization]
+      paypal-debug-id: [8e3b821a58661, 8e3b821a58661]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"intent": "sale", "application_context": {"brand_name": "Liberapay", "locale":
+      "en", "landing_page": "Billing", "shipping_preference": "NO_SHIPPING", "user_action":
+      "commit"}, "payer": {"payment_method": "paypal"}, "transactions": [{"amount":
+      {"total": "12.00", "currency": "EUR"}, "description": "Liberapay donation to
+      creator_2 | 12 weeks of \u20ac1.00", "invoice_number": "1", "payee": {"email":
+      "bad email"}, "payment_options": {"allowed_payment_method": "UNRESTRICTED"},
+      "soft_descriptor": "Liberapay"}], "redirect_urls": {"return_url": "http:///donor/giving/pay/paypal/1",
+      "cancel_url": "http:///donor/giving/pay/paypal/1"}}'
+    headers: {}
+    method: POST
+    uri: https://api.sandbox.paypal.com/v1/payments/payment
+  response:
+    body: {string: '{"name":"VALIDATION_ERROR","details":[{"field":"transactions[0].payee.email","issue":"Email
+        format must be username@domain.com"}],"message":"Invalid request - see details","information_link":"https://developer.paypal.com/docs/api/payments/#errors","debug_id":"e3c1e0d4b5d5"}'}
+    headers:
+      Connection: [close]
+      Content-Language: ['*']
+      Content-Length: ['274']
+      Content-Type: [application/json]
+      Date: ['Thu, 07 Feb 2019 18:58:46 GMT']
+      HTTP_X_PP_AZ_LOCATOR: [sandbox.slc]
+      Paypal-Debug-Id: [e3c1e0d4b5d5, e3c1e0d4b5d5]
+      Server: [Apache]
+      Set-Cookie: ['X-PP-SILOVER=name%3DSANDBOX3.API.1%26silo_version%3D1880%26app%3Dapiplatformproxyserv%26TIME%3D3867106396%26HTTP_X_PP_AZ_LOCATOR%3Dsandbox.slc;
+          Expires=Thu, 07 Feb 2019 19:28:46 GMT; domain=.paypal.com; path=/; Secure;
+          HttpOnly', 'X-PP-SILOVER=; Expires=Thu, 01 Jan 1970 00:00:01 GMT']
+      Vary: [Authorization]
+      paypal-debug-id: [e3c1e0d4b5d5, e3c1e0d4b5d5]
+    status: {code: 400, message: Bad Request}
+version: 1

@@ -1,0 +1,769 @@
+interactions:
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/tokens/tok_visa
+  response:
+    body: {string: "{\n  \"id\": \"tok_1E2hzLFk4eGpfLOCfZ0AdRan\",\n  \"object\":
+        \"token\",\n  \"card\": {\n    \"id\": \"card_1E2hzLFk4eGpfLOC7QybLUfA\",\n
+        \   \"object\": \"card\",\n    \"address_city\": null,\n    \"address_country\":
+        null,\n    \"address_line1\": null,\n    \"address_line1_check\": null,\n
+        \   \"address_line2\": null,\n    \"address_state\": null,\n    \"address_zip\":
+        null,\n    \"address_zip_check\": null,\n    \"brand\": \"Visa\",\n    \"country\":
+        \"US\",\n    \"currency\": \"usd\",\n    \"cvc_check\": null,\n    \"dynamic_last4\":
+        null,\n    \"exp_month\": 2,\n    \"exp_year\": 2020,\n    \"fingerprint\":
+        \"k6ycurEAdsI1uF3b\",\n    \"funding\": \"credit\",\n    \"last4\": \"4242\",\n
+        \   \"metadata\": {\n    },\n    \"name\": null,\n    \"tokenization_method\":
+        null\n  },\n  \"client_ip\": null,\n  \"created\": 1549903835,\n  \"livemode\":
+        false,\n  \"type\": \"card\",\n  \"used\": false\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['790']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 16:50:35 GMT']
+      Request-Id: [req_4SVfWwhwgfB7HK]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: amount=2499&owner%5Bemail%5D=donor%40example.com&redirect%5Breturn_url%5D=http%3A%2F%2Flocalhost%2Fdonor%2Fgiving%2Fpay%2Fstripe%2Fcomplete&token=tok_1E2hzLFk4eGpfLOCfZ0AdRan&type=card&usage=single_use
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/sources
+  response:
+    body: {string: "{\n  \"id\": \"src_1E2i2wFk4eGpfLOCNlWbTBEl\",\n  \"object\":
+        \"source\",\n  \"amount\": 2499,\n  \"card\": {\n    \"exp_month\": 2,\n    \"exp_year\":
+        2020,\n    \"last4\": \"4242\",\n    \"country\": \"US\",\n    \"brand\":
+        \"Visa\",\n    \"funding\": \"credit\",\n    \"fingerprint\": \"k6ycurEAdsI1uF3b\",\n
+        \   \"three_d_secure\": \"optional\",\n    \"name\": null,\n    \"address_line1_check\":
+        null,\n    \"address_zip_check\": null,\n    \"cvc_check\": null,\n    \"tokenization_method\":
+        null,\n    \"dynamic_last4\": null\n  },\n  \"client_secret\": \"src_client_secret_EVjVypf1bPz6z5U2isV8L0e5\",\n
+        \ \"created\": 1549904058,\n  \"currency\": null,\n  \"flow\": \"none\",\n
+        \ \"livemode\": false,\n  \"metadata\": {\n  },\n  \"owner\": {\n    \"address\":
+        null,\n    \"email\": \"donor@example.com\",\n    \"name\": null,\n    \"phone\":
+        null,\n    \"verified_address\": null,\n    \"verified_email\": null,\n    \"verified_name\":
+        null,\n    \"verified_phone\": null\n  },\n  \"statement_descriptor\": null,\n
+        \ \"status\": \"chargeable\",\n  \"type\": \"card\",\n  \"usage\": \"single_use\"\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['960']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 16:54:18 GMT']
+      Request-Id: [req_8RKsMq2nSL4SNi]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: email=donor%40example.com&source=src_1E2i2wFk4eGpfLOCNlWbTBEl
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/customers
+  response:
+    body: {string: "{\n  \"id\": \"cus_EVjVDZw7g3KCo2\",\n  \"object\": \"customer\",\n
+        \ \"account_balance\": 0,\n  \"created\": 1549904059,\n  \"currency\": null,\n
+        \ \"default_source\": \"src_1E2i2wFk4eGpfLOCNlWbTBEl\",\n  \"delinquent\":
+        false,\n  \"description\": null,\n  \"discount\": null,\n  \"email\": \"donor@example.com\",\n
+        \ \"invoice_prefix\": \"8CC5D23\",\n  \"invoice_settings\": {\n    \"custom_fields\":
+        null,\n    \"footer\": null\n  },\n  \"livemode\": false,\n  \"metadata\":
+        {\n  },\n  \"shipping\": null,\n  \"sources\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n      {\n        \"id\": \"src_1E2i2wFk4eGpfLOCNlWbTBEl\",\n
+        \       \"object\": \"source\",\n        \"amount\": 2499,\n        \"card\":
+        {\n          \"exp_month\": 2,\n          \"exp_year\": 2020,\n          \"last4\":
+        \"4242\",\n          \"country\": \"US\",\n          \"brand\": \"Visa\",\n
+        \         \"funding\": \"credit\",\n          \"fingerprint\": \"k6ycurEAdsI1uF3b\",\n
+        \         \"three_d_secure\": \"optional\",\n          \"name\": null,\n          \"address_line1_check\":
+        null,\n          \"address_zip_check\": null,\n          \"cvc_check\": null,\n
+        \         \"tokenization_method\": null,\n          \"dynamic_last4\": null\n
+        \       },\n        \"client_secret\": \"src_client_secret_EVjVypf1bPz6z5U2isV8L0e5\",\n
+        \       \"created\": 1549904058,\n        \"currency\": null,\n        \"customer\":
+        \"cus_EVjVDZw7g3KCo2\",\n        \"flow\": \"none\",\n        \"livemode\":
+        false,\n        \"metadata\": {\n        },\n        \"owner\": {\n          \"address\":
+        null,\n          \"email\": \"donor@example.com\",\n          \"name\": null,\n
+        \         \"phone\": null,\n          \"verified_address\": null,\n          \"verified_email\":
+        null,\n          \"verified_name\": null,\n          \"verified_phone\": null\n
+        \       },\n        \"statement_descriptor\": null,\n        \"status\": \"chargeable\",\n
+        \       \"type\": \"card\",\n        \"usage\": \"single_use\"\n      }\n
+        \   ],\n    \"has_more\": false,\n    \"total_count\": 1,\n    \"url\": \"/v1/customers/cus_EVjVDZw7g3KCo2/sources\"\n
+        \ },\n  \"subscriptions\": {\n    \"object\": \"list\",\n    \"data\": [\n\n
+        \   ],\n    \"has_more\": false,\n    \"total_count\": 0,\n    \"url\": \"/v1/customers/cus_EVjVDZw7g3KCo2/subscriptions\"\n
+        \ },\n  \"tax_info\": null,\n  \"tax_info_verification\": null\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['2088']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 16:54:19 GMT']
+      Request-Id: [req_XV1tPw6IK7LqXI]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: amount=2499&currency=eur&customer=cus_EVjVDZw7g3KCo2&metadata%5Bpayin_id%5D=100&source=src_1E2i2wFk4eGpfLOCNlWbTBEl&statement_descriptor=Liberapay+100&expand%5B%5D=balance_transaction
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/charges
+  response:
+    body: {string: "{\n  \"id\": \"ch_1E2iPHFk4eGpfLOC32nb2HDs\",\n  \"object\": \"charge\",\n
+        \ \"amount\": 2499,\n  \"amount_refunded\": 0,\n  \"application\": null,\n
+        \ \"application_fee\": null,\n  \"application_fee_amount\": null,\n  \"balance_transaction\":
+        {\n    \"id\": \"txn_1E2iPHFk4eGpfLOCoAZVGuGp\",\n    \"object\": \"balance_transaction\",\n
+        \   \"amount\": 2499,\n    \"available_on\": 1550448000,\n    \"created\":
+        1549905443,\n    \"currency\": \"eur\",\n    \"description\": null,\n    \"exchange_rate\":
+        null,\n    \"fee\": 97,\n    \"fee_details\": [\n      {\n        \"amount\":
+        97,\n        \"application\": null,\n        \"currency\": \"eur\",\n        \"description\":
+        \"Stripe processing fees\",\n        \"type\": \"stripe_fee\"\n      }\n    ],\n
+        \   \"net\": 2402,\n    \"source\": \"ch_1E2iPHFk4eGpfLOC32nb2HDs\",\n    \"status\":
+        \"pending\",\n    \"type\": \"charge\"\n  },\n  \"captured\": true,\n  \"created\":
+        1549905443,\n  \"currency\": \"eur\",\n  \"customer\": \"cus_EVjVDZw7g3KCo2\",\n
+        \ \"description\": null,\n  \"destination\": null,\n  \"dispute\": null,\n
+        \ \"failure_code\": null,\n  \"failure_message\": null,\n  \"fraud_details\":
+        {\n  },\n  \"invoice\": null,\n  \"livemode\": false,\n  \"metadata\": {\n
+        \   \"payin_id\": \"100\"\n  },\n  \"on_behalf_of\": null,\n  \"order\": null,\n
+        \ \"outcome\": {\n    \"network_status\": \"approved_by_network\",\n    \"reason\":
+        null,\n    \"risk_level\": \"normal\",\n    \"risk_score\": 25,\n    \"seller_message\":
+        \"Payment complete.\",\n    \"type\": \"authorized\"\n  },\n  \"paid\": true,\n
+        \ \"payment_intent\": null,\n  \"receipt_email\": null,\n  \"receipt_number\":
+        null,\n  \"receipt_url\": \"https://pay.stripe.com/receipts/acct_1ChyayFk4eGpfLOC/ch_1E2iPHFk4eGpfLOC32nb2HDs/rcpt_EVjtyLsgjIpgyaECxsaK9ieZxvRwSdR\",\n
+        \ \"refunded\": false,\n  \"refunds\": {\n    \"object\": \"list\",\n    \"data\":
+        [\n\n    ],\n    \"has_more\": false,\n    \"total_count\": 0,\n    \"url\":
+        \"/v1/charges/ch_1E2iPHFk4eGpfLOC32nb2HDs/refunds\"\n  },\n  \"review\": null,\n
+        \ \"shipping\": null,\n  \"source\": {\n    \"id\": \"src_1E2i2wFk4eGpfLOCNlWbTBEl\",\n
+        \   \"object\": \"source\",\n    \"amount\": 2499,\n    \"card\": {\n      \"exp_month\":
+        2,\n      \"exp_year\": 2020,\n      \"last4\": \"4242\",\n      \"country\":
+        \"US\",\n      \"brand\": \"Visa\",\n      \"funding\": \"credit\",\n      \"fingerprint\":
+        \"k6ycurEAdsI1uF3b\",\n      \"three_d_secure\": \"optional\",\n      \"name\":
+        null,\n      \"address_line1_check\": null,\n      \"address_zip_check\":
+        null,\n      \"cvc_check\": null,\n      \"tokenization_method\": null,\n
+        \     \"dynamic_last4\": null\n    },\n    \"client_secret\": \"src_client_secret_EVjVypf1bPz6z5U2isV8L0e5\",\n
+        \   \"created\": 1549905443,\n    \"currency\": null,\n    \"customer\": \"cus_EVjVDZw7g3KCo2\",\n
+        \   \"flow\": \"none\",\n    \"livemode\": false,\n    \"metadata\": {\n    },\n
+        \   \"owner\": {\n      \"address\": null,\n      \"email\": \"donor@example.com\",\n
+        \     \"name\": null,\n      \"phone\": null,\n      \"verified_address\":
+        null,\n      \"verified_email\": null,\n      \"verified_name\": null,\n      \"verified_phone\":
+        null\n    },\n    \"statement_descriptor\": null,\n    \"status\": \"consumed\",\n
+        \   \"type\": \"card\",\n    \"usage\": \"single_use\"\n  },\n  \"source_transfer\":
+        null,\n  \"statement_descriptor\": \"Liberapay 100\",\n  \"status\": \"succeeded\",\n
+        \ \"transfer_data\": null,\n  \"transfer_group\": null\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['3047']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 17:17:24 GMT']
+      Idempotency-Key: [payin_100]
+      Original-Request: [req_e4W0KN4OahIFzp]
+      Request-Id: [req_e4W0KN4OahIFzp]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: bank_account%5Bcountry%5D=DE&bank_account%5Bcurrency%5D=EUR&bank_account%5Baccount_number%5D=DE89370400440532013000&bank_account%5Baccount_holder_name%5D=Jane+Doe
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/tokens
+  response:
+    body: {string: "{\n  \"id\": \"btok_1E2k5XFk4eGpfLOCkcrt01AT\",\n  \"object\":
+        \"token\",\n  \"bank_account\": {\n    \"id\": \"ba_1E2k5XFk4eGpfLOCrqtnJ8Aa\",\n
+        \   \"object\": \"bank_account\",\n    \"account_holder_name\": \"Jane Doe\",\n
+        \   \"account_holder_type\": null,\n    \"bank_name\": \"STRIPE TEST BANK\",\n
+        \   \"country\": \"DE\",\n    \"currency\": \"eur\",\n    \"fingerprint\":
+        \"vYeSfyBOnTdv1v6W\",\n    \"last4\": \"3000\",\n    \"routing_number\": \"110000000\",\n
+        \   \"status\": \"new\"\n  },\n  \"client_ip\": \"109.190.32.190\",\n  \"created\":
+        1549911907,\n  \"livemode\": false,\n  \"type\": \"bank_account\",\n  \"used\":
+        false\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['551']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:05:07 GMT']
+      Request-Id: [req_LRTTEWXHNjp5bc]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/tokens/btok_1E2k5XFk4eGpfLOCkcrt01AT
+  response:
+    body: {string: "{\n  \"id\": \"btok_1E2k5XFk4eGpfLOCkcrt01AT\",\n  \"object\":
+        \"token\",\n  \"bank_account\": {\n    \"id\": \"ba_1E2k5XFk4eGpfLOCrqtnJ8Aa\",\n
+        \   \"object\": \"bank_account\",\n    \"account_holder_name\": \"Jane Doe\",\n
+        \   \"account_holder_type\": null,\n    \"bank_name\": \"STRIPE TEST BANK\",\n
+        \   \"country\": \"DE\",\n    \"currency\": \"eur\",\n    \"fingerprint\":
+        \"vYeSfyBOnTdv1v6W\",\n    \"last4\": \"3000\",\n    \"routing_number\": \"110000000\",\n
+        \   \"status\": \"new\"\n  },\n  \"client_ip\": \"109.190.32.190\",\n  \"created\":
+        1549911907,\n  \"livemode\": false,\n  \"type\": \"bank_account\",\n  \"used\":
+        false\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['551']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:05:12 GMT']
+      Request-Id: [req_OYL8eO2kCQkeqa]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: amount=5200&owner%5Bemail%5D=donor%40example.com&redirect%5Breturn_url%5D=http%3A%2F%2Flocalhost%2Fdonor%2Fgiving%2Fpay%2Fstripe%2Fcomplete&token=btok_1E2k5XFk4eGpfLOCkcrt01AT&type=sepa_debit&usage=reusable
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/sources
+  response:
+    body: {string: "{\n  \"id\": \"src_1E2k5dFk4eGpfLOCIYGbLUcx\",\n  \"object\":
+        \"source\",\n  \"amount\": 5200,\n  \"client_secret\": \"src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n
+        \ \"created\": 1549911913,\n  \"currency\": \"eur\",\n  \"flow\": \"none\",\n
+        \ \"livemode\": false,\n  \"mandate\": {\n    \"acceptance\": {\n      \"date\":
+        null,\n      \"ip\": null,\n      \"offline\": null,\n      \"online\": null,\n
+        \     \"status\": \"pending\",\n      \"type\": null,\n      \"user_agent\":
+        null\n    },\n    \"amount\": null,\n    \"currency\": null,\n    \"interval\":
+        null,\n    \"notification_method\": \"none\",\n    \"reference\": \"6BLEG0S2XWY5QHUN\",\n
+        \   \"url\": \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\"\n
+        \ },\n  \"metadata\": {\n  },\n  \"owner\": {\n    \"address\": {\n      \"city\":
+        null,\n      \"country\": \"DE\",\n      \"line1\": null,\n      \"line2\":
+        null,\n      \"postal_code\": null,\n      \"state\": null\n    },\n    \"email\":
+        \"donor@example.com\",\n    \"name\": \"Jane Doe\",\n    \"phone\": null,\n
+        \   \"verified_address\": null,\n    \"verified_email\": null,\n    \"verified_name\":
+        null,\n    \"verified_phone\": null\n  },\n  \"sepa_debit\": {\n    \"bank_code\":
+        \"37040044\",\n    \"country\": \"DE\",\n    \"fingerprint\": \"VNz5BVW8XnYcq3XT\",\n
+        \   \"last4\": \"3000\",\n    \"mandate_reference\": \"6BLEG0S2XWY5QHUN\",\n
+        \   \"mandate_url\": \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n
+        \   \"branch_code\": null\n  },\n  \"statement_descriptor\": null,\n  \"status\":
+        \"chargeable\",\n  \"type\": \"sepa_debit\",\n  \"usage\": \"reusable\"\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['1539']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:05:13 GMT']
+      Request-Id: [req_SUaAP4lP1WOYol]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: email=donor%40example.com&source=src_1E2k5dFk4eGpfLOCIYGbLUcx
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/customers
+  response:
+    body: {string: "{\n  \"id\": \"cus_EVlcrPIIQzMYNc\",\n  \"object\": \"customer\",\n
+        \ \"account_balance\": 0,\n  \"created\": 1549911914,\n  \"currency\": null,\n
+        \ \"default_source\": \"src_1E2k5dFk4eGpfLOCIYGbLUcx\",\n  \"delinquent\":
+        false,\n  \"description\": null,\n  \"discount\": null,\n  \"email\": \"donor@example.com\",\n
+        \ \"invoice_prefix\": \"85DB903\",\n  \"invoice_settings\": {\n    \"custom_fields\":
+        null,\n    \"footer\": null\n  },\n  \"livemode\": false,\n  \"metadata\":
+        {\n  },\n  \"shipping\": null,\n  \"sources\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n      {\n        \"id\": \"src_1E2k5dFk4eGpfLOCIYGbLUcx\",\n
+        \       \"object\": \"source\",\n        \"amount\": 5200,\n        \"client_secret\":
+        \"src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n        \"created\": 1549911913,\n
+        \       \"currency\": \"eur\",\n        \"customer\": \"cus_EVlcrPIIQzMYNc\",\n
+        \       \"flow\": \"none\",\n        \"livemode\": false,\n        \"mandate\":
+        {\n          \"acceptance\": {\n            \"date\": null,\n            \"ip\":
+        null,\n            \"offline\": null,\n            \"online\": null,\n            \"status\":
+        \"pending\",\n            \"type\": null,\n            \"user_agent\": null\n
+        \         },\n          \"amount\": null,\n          \"currency\": null,\n
+        \         \"interval\": null,\n          \"notification_method\": \"none\",\n
+        \         \"reference\": \"6BLEG0S2XWY5QHUN\",\n          \"url\": \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\"\n
+        \       },\n        \"metadata\": {\n        },\n        \"owner\": {\n          \"address\":
+        {\n            \"city\": null,\n            \"country\": \"DE\",\n            \"line1\":
+        null,\n            \"line2\": null,\n            \"postal_code\": null,\n
+        \           \"state\": null\n          },\n          \"email\": \"donor@example.com\",\n
+        \         \"name\": \"Jane Doe\",\n          \"phone\": null,\n          \"verified_address\":
+        null,\n          \"verified_email\": null,\n          \"verified_name\": null,\n
+        \         \"verified_phone\": null\n        },\n        \"sepa_debit\": {\n
+        \         \"bank_code\": \"37040044\",\n          \"country\": \"DE\",\n          \"fingerprint\":
+        \"VNz5BVW8XnYcq3XT\",\n          \"last4\": \"3000\",\n          \"mandate_reference\":
+        \"6BLEG0S2XWY5QHUN\",\n          \"mandate_url\": \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n
+        \         \"branch_code\": null\n        },\n        \"statement_descriptor\":
+        null,\n        \"status\": \"chargeable\",\n        \"type\": \"sepa_debit\",\n
+        \       \"usage\": \"reusable\"\n      }\n    ],\n    \"has_more\": false,\n
+        \   \"total_count\": 1,\n    \"url\": \"/v1/customers/cus_EVlcrPIIQzMYNc/sources\"\n
+        \ },\n  \"subscriptions\": {\n    \"object\": \"list\",\n    \"data\": [\n\n
+        \   ],\n    \"has_more\": false,\n    \"total_count\": 0,\n    \"url\": \"/v1/customers/cus_EVlcrPIIQzMYNc/subscriptions\"\n
+        \ },\n  \"tax_info\": null,\n  \"tax_info_verification\": null\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['2769']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:05:14 GMT']
+      Request-Id: [req_GBiJFsOSVcw4ea]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: amount=5200&currency=eur&customer=cus_EVlcrPIIQzMYNc&metadata%5Bpayin_id%5D=101&source=src_1E2k5dFk4eGpfLOCIYGbLUcx&statement_descriptor=Liberapay+101&expand%5B%5D=balance_transaction
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/charges
+  response:
+    body: {string: "{\n  \"id\": \"py_1E2k5fFk4eGpfLOCeLoobn6D\",\n  \"object\": \"charge\",\n
+        \ \"amount\": 5200,\n  \"amount_refunded\": 0,\n  \"application\": null,\n
+        \ \"application_fee\": null,\n  \"application_fee_amount\": null,\n  \"balance_transaction\":
+        null,\n  \"captured\": true,\n  \"created\": 1549911915,\n  \"currency\":
+        \"eur\",\n  \"customer\": \"cus_EVlcrPIIQzMYNc\",\n  \"description\": null,\n
+        \ \"destination\": null,\n  \"dispute\": null,\n  \"failure_code\": null,\n
+        \ \"failure_message\": null,\n  \"fraud_details\": {\n  },\n  \"invoice\":
+        null,\n  \"livemode\": false,\n  \"metadata\": {\n    \"payin_id\": \"101\"\n
+        \ },\n  \"on_behalf_of\": null,\n  \"order\": null,\n  \"outcome\": {\n    \"network_status\":
+        \"approved_by_network\",\n    \"reason\": null,\n    \"risk_level\": \"not_assessed\",\n
+        \   \"seller_message\": \"Payment complete.\",\n    \"type\": \"authorized\"\n
+        \ },\n  \"paid\": false,\n  \"payment_intent\": null,\n  \"receipt_email\":
+        null,\n  \"receipt_number\": null,\n  \"receipt_url\": \"https://pay.stripe.com/receipts/acct_1ChyayFk4eGpfLOC/py_1E2k5fFk4eGpfLOCeLoobn6D/rcpt_EVlc10SWC93sTSAnSa0qIdV482DLuVD\",\n
+        \ \"refunded\": false,\n  \"refunds\": {\n    \"object\": \"list\",\n    \"data\":
+        [\n\n    ],\n    \"has_more\": false,\n    \"total_count\": 0,\n    \"url\":
+        \"/v1/charges/py_1E2k5fFk4eGpfLOCeLoobn6D/refunds\"\n  },\n  \"review\": null,\n
+        \ \"shipping\": null,\n  \"source\": {\n    \"id\": \"src_1E2k5dFk4eGpfLOCIYGbLUcx\",\n
+        \   \"object\": \"source\",\n    \"amount\": 5200,\n    \"client_secret\":
+        \"src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n    \"created\": 1549911915,\n
+        \   \"currency\": \"eur\",\n    \"customer\": \"cus_EVlcrPIIQzMYNc\",\n    \"flow\":
+        \"none\",\n    \"livemode\": false,\n    \"mandate\": {\n      \"acceptance\":
+        {\n        \"date\": null,\n        \"ip\": null,\n        \"offline\": null,\n
+        \       \"online\": null,\n        \"status\": \"pending\",\n        \"type\":
+        null,\n        \"user_agent\": null\n      },\n      \"amount\": null,\n      \"currency\":
+        null,\n      \"interval\": null,\n      \"notification_method\": \"none\",\n
+        \     \"reference\": \"6BLEG0S2XWY5QHUN\",\n      \"url\": \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\"\n
+        \   },\n    \"metadata\": {\n    },\n    \"owner\": {\n      \"address\":
+        {\n        \"city\": null,\n        \"country\": \"DE\",\n        \"line1\":
+        null,\n        \"line2\": null,\n        \"postal_code\": null,\n        \"state\":
+        null\n      },\n      \"email\": \"donor@example.com\",\n      \"name\": \"Jane
+        Doe\",\n      \"phone\": null,\n      \"verified_address\": null,\n      \"verified_email\":
+        null,\n      \"verified_name\": null,\n      \"verified_phone\": null\n    },\n
+        \   \"sepa_debit\": {\n      \"bank_code\": \"37040044\",\n      \"country\":
+        \"DE\",\n      \"fingerprint\": \"VNz5BVW8XnYcq3XT\",\n      \"last4\": \"3000\",\n
+        \     \"mandate_reference\": \"6BLEG0S2XWY5QHUN\",\n      \"mandate_url\":
+        \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n
+        \     \"branch_code\": null\n    },\n    \"statement_descriptor\": null,\n
+        \   \"status\": \"chargeable\",\n    \"type\": \"sepa_debit\",\n    \"usage\":
+        \"reusable\"\n  },\n  \"source_transfer\": null,\n  \"statement_descriptor\":
+        \"Liberapay 101\",\n  \"status\": \"pending\",\n  \"transfer_data\": null,\n
+        \ \"transfer_group\": null\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['3088']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:05:15 GMT']
+      Idempotency-Key: [payin_101]
+      Original-Request: [req_JVKFhp9wwFOV0K]
+      Request-Id: [req_JVKFhp9wwFOV0K]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/sources/src_1E2k5dFk4eGpfLOCIYGbLUcx
+  response:
+    body: {string: "{\n  \"id\": \"src_1E2k5dFk4eGpfLOCIYGbLUcx\",\n  \"object\":
+        \"source\",\n  \"amount\": 5200,\n  \"client_secret\": \"src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n
+        \ \"created\": 1549911913,\n  \"currency\": \"eur\",\n  \"customer\": \"cus_EVlcrPIIQzMYNc\",\n
+        \ \"flow\": \"none\",\n  \"livemode\": false,\n  \"mandate\": {\n    \"acceptance\":
+        {\n      \"date\": null,\n      \"ip\": null,\n      \"offline\": null,\n
+        \     \"online\": null,\n      \"status\": \"pending\",\n      \"type\": null,\n
+        \     \"user_agent\": null\n    },\n    \"amount\": null,\n    \"currency\":
+        null,\n    \"interval\": null,\n    \"notification_method\": \"none\",\n    \"reference\":
+        \"6BLEG0S2XWY5QHUN\",\n    \"url\": \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\"\n
+        \ },\n  \"metadata\": {\n  },\n  \"owner\": {\n    \"address\": {\n      \"city\":
+        null,\n      \"country\": \"DE\",\n      \"line1\": null,\n      \"line2\":
+        null,\n      \"postal_code\": null,\n      \"state\": null\n    },\n    \"email\":
+        \"donor@example.com\",\n    \"name\": \"Jane Doe\",\n    \"phone\": null,\n
+        \   \"verified_address\": null,\n    \"verified_email\": null,\n    \"verified_name\":
+        null,\n    \"verified_phone\": null\n  },\n  \"sepa_debit\": {\n    \"bank_code\":
+        \"37040044\",\n    \"country\": \"DE\",\n    \"fingerprint\": \"VNz5BVW8XnYcq3XT\",\n
+        \   \"last4\": \"3000\",\n    \"mandate_reference\": \"6BLEG0S2XWY5QHUN\",\n
+        \   \"mandate_url\": \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1E2k5dFk4eGpfLOCIYGbLUcx/src_client_secret_EVlc5tcewaBlxB0QbVmCCVrv\",\n
+        \   \"branch_code\": null\n  },\n  \"statement_descriptor\": null,\n  \"status\":
+        \"chargeable\",\n  \"type\": \"sepa_debit\",\n  \"usage\": \"reusable\"\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['1575']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:05:16 GMT']
+      Request-Id: [req_6ejAWyvZEUgdFv]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/tokens/tok_jp
+  response:
+    body: {string: "{\n  \"id\": \"tok_1E2kogFk4eGpfLOCTvdIkRmS\",\n  \"object\":
+        \"token\",\n  \"card\": {\n    \"id\": \"card_1E2kogFk4eGpfLOCwfbm26Qa\",\n
+        \   \"object\": \"card\",\n    \"address_city\": null,\n    \"address_country\":
+        null,\n    \"address_line1\": null,\n    \"address_line1_check\": null,\n
+        \   \"address_line2\": null,\n    \"address_state\": null,\n    \"address_zip\":
+        null,\n    \"address_zip_check\": null,\n    \"brand\": \"Visa\",\n    \"country\":
+        \"JP\",\n    \"currency\": \"usd\",\n    \"cvc_check\": null,\n    \"dynamic_last4\":
+        null,\n    \"exp_month\": 2,\n    \"exp_year\": 2020,\n    \"fingerprint\":
+        \"4heNPBHbDWXWyXBc\",\n    \"funding\": \"credit\",\n    \"last4\": \"0003\",\n
+        \   \"metadata\": {\n    },\n    \"name\": null,\n    \"tokenization_method\":
+        null\n  },\n  \"client_ip\": null,\n  \"created\": 1549914706,\n  \"livemode\":
+        false,\n  \"type\": \"card\",\n  \"used\": false\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['790']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:51:46 GMT']
+      Request-Id: [req_cpiJaWjwlHNalF]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: amount=10000&owner%5Bemail%5D=donor%40example.com&redirect%5Breturn_url%5D=http%3A%2F%2Flocalhost%2Fdonor%2Fgiving%2Fpay%2Fstripe%2Fcomplete&token=tok_1E2kogFk4eGpfLOCTvdIkRmS&type=card&usage=single_use
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/sources
+  response:
+    body: {string: "{\n  \"id\": \"src_1E2kohFk4eGpfLOCwI3hlZjN\",\n  \"object\":
+        \"source\",\n  \"amount\": 10000,\n  \"card\": {\n    \"exp_month\": 2,\n
+        \   \"exp_year\": 2020,\n    \"last4\": \"0003\",\n    \"country\": \"JP\",\n
+        \   \"brand\": \"Visa\",\n    \"funding\": \"credit\",\n    \"fingerprint\":
+        \"4heNPBHbDWXWyXBc\",\n    \"three_d_secure\": \"optional\",\n    \"name\":
+        null,\n    \"address_line1_check\": null,\n    \"address_zip_check\": null,\n
+        \   \"cvc_check\": null,\n    \"tokenization_method\": null,\n    \"dynamic_last4\":
+        null\n  },\n  \"client_secret\": \"src_client_secret_EVmNYBFHvAEdrUHFXX4VaJhQ\",\n
+        \ \"created\": 1549914707,\n  \"currency\": null,\n  \"flow\": \"none\",\n
+        \ \"livemode\": false,\n  \"metadata\": {\n  },\n  \"owner\": {\n    \"address\":
+        null,\n    \"email\": \"donor@example.com\",\n    \"name\": null,\n    \"phone\":
+        null,\n    \"verified_address\": null,\n    \"verified_email\": null,\n    \"verified_name\":
+        null,\n    \"verified_phone\": null\n  },\n  \"statement_descriptor\": null,\n
+        \ \"status\": \"chargeable\",\n  \"type\": \"card\",\n  \"usage\": \"single_use\"\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['961']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:51:47 GMT']
+      Request-Id: [req_jTOwo7z3UbfQ8d]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: email=donor%40example.com&source=src_1E2kohFk4eGpfLOCwI3hlZjN
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/customers
+  response:
+    body: {string: "{\n  \"id\": \"cus_EVmNvyLb4NDG1i\",\n  \"object\": \"customer\",\n
+        \ \"account_balance\": 0,\n  \"created\": 1549914708,\n  \"currency\": null,\n
+        \ \"default_source\": \"src_1E2kohFk4eGpfLOCwI3hlZjN\",\n  \"delinquent\":
+        false,\n  \"description\": null,\n  \"discount\": null,\n  \"email\": \"donor@example.com\",\n
+        \ \"invoice_prefix\": \"8818293\",\n  \"invoice_settings\": {\n    \"custom_fields\":
+        null,\n    \"footer\": null\n  },\n  \"livemode\": false,\n  \"metadata\":
+        {\n  },\n  \"shipping\": null,\n  \"sources\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n      {\n        \"id\": \"src_1E2kohFk4eGpfLOCwI3hlZjN\",\n
+        \       \"object\": \"source\",\n        \"amount\": 10000,\n        \"card\":
+        {\n          \"exp_month\": 2,\n          \"exp_year\": 2020,\n          \"last4\":
+        \"0003\",\n          \"country\": \"JP\",\n          \"brand\": \"Visa\",\n
+        \         \"funding\": \"credit\",\n          \"fingerprint\": \"4heNPBHbDWXWyXBc\",\n
+        \         \"three_d_secure\": \"optional\",\n          \"name\": null,\n          \"address_line1_check\":
+        null,\n          \"address_zip_check\": null,\n          \"cvc_check\": null,\n
+        \         \"tokenization_method\": null,\n          \"dynamic_last4\": null\n
+        \       },\n        \"client_secret\": \"src_client_secret_EVmNYBFHvAEdrUHFXX4VaJhQ\",\n
+        \       \"created\": 1549914707,\n        \"currency\": null,\n        \"customer\":
+        \"cus_EVmNvyLb4NDG1i\",\n        \"flow\": \"none\",\n        \"livemode\":
+        false,\n        \"metadata\": {\n        },\n        \"owner\": {\n          \"address\":
+        null,\n          \"email\": \"donor@example.com\",\n          \"name\": null,\n
+        \         \"phone\": null,\n          \"verified_address\": null,\n          \"verified_email\":
+        null,\n          \"verified_name\": null,\n          \"verified_phone\": null\n
+        \       },\n        \"statement_descriptor\": null,\n        \"status\": \"chargeable\",\n
+        \       \"type\": \"card\",\n        \"usage\": \"single_use\"\n      }\n
+        \   ],\n    \"has_more\": false,\n    \"total_count\": 1,\n    \"url\": \"/v1/customers/cus_EVmNvyLb4NDG1i/sources\"\n
+        \ },\n  \"subscriptions\": {\n    \"object\": \"list\",\n    \"data\": [\n\n
+        \   ],\n    \"has_more\": false,\n    \"total_count\": 0,\n    \"url\": \"/v1/customers/cus_EVmNvyLb4NDG1i/subscriptions\"\n
+        \ },\n  \"tax_info\": null,\n  \"tax_info_verification\": null\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['2089']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:51:49 GMT']
+      Request-Id: [req_XKkyhcG56ggf11]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: amount=10000&currency=jpy&customer=cus_EVmNvyLb4NDG1i&metadata%5Bpayin_id%5D=102&source=src_1E2kohFk4eGpfLOCwI3hlZjN&statement_descriptor=Liberapay+102&expand%5B%5D=balance_transaction
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/charges
+  response:
+    body: {string: "{\n  \"id\": \"ch_1E2kokFk4eGpfLOCXkpmykI4\",\n  \"object\": \"charge\",\n
+        \ \"amount\": 10000,\n  \"amount_refunded\": 0,\n  \"application\": null,\n
+        \ \"application_fee\": null,\n  \"application_fee_amount\": null,\n  \"balance_transaction\":
+        {\n    \"id\": \"txn_1E2kokFk4eGpfLOCbc72BI8c\",\n    \"object\": \"balance_transaction\",\n
+        \   \"amount\": 7866,\n    \"available_on\": 1550448000,\n    \"created\":
+        1549914710,\n    \"currency\": \"eur\",\n    \"description\": null,\n    \"exchange_rate\":
+        0.786636,\n    \"fee\": 253,\n    \"fee_details\": [\n      {\n        \"amount\":
+        253,\n        \"application\": null,\n        \"currency\": \"eur\",\n        \"description\":
+        \"Stripe processing fees\",\n        \"type\": \"stripe_fee\"\n      }\n    ],\n
+        \   \"net\": 7613,\n    \"source\": \"ch_1E2kokFk4eGpfLOCXkpmykI4\",\n    \"status\":
+        \"pending\",\n    \"type\": \"charge\"\n  },\n  \"captured\": true,\n  \"created\":
+        1549914710,\n  \"currency\": \"jpy\",\n  \"customer\": \"cus_EVmNvyLb4NDG1i\",\n
+        \ \"description\": null,\n  \"destination\": null,\n  \"dispute\": null,\n
+        \ \"failure_code\": null,\n  \"failure_message\": null,\n  \"fraud_details\":
+        {\n  },\n  \"invoice\": null,\n  \"livemode\": false,\n  \"metadata\": {\n
+        \   \"payin_id\": \"102\"\n  },\n  \"on_behalf_of\": null,\n  \"order\": null,\n
+        \ \"outcome\": {\n    \"network_status\": \"approved_by_network\",\n    \"reason\":
+        null,\n    \"risk_level\": \"normal\",\n    \"risk_score\": 20,\n    \"seller_message\":
+        \"Payment complete.\",\n    \"type\": \"authorized\"\n  },\n  \"paid\": true,\n
+        \ \"payment_intent\": null,\n  \"receipt_email\": null,\n  \"receipt_number\":
+        null,\n  \"receipt_url\": \"https://pay.stripe.com/receipts/acct_1ChyayFk4eGpfLOC/ch_1E2kokFk4eGpfLOCXkpmykI4/rcpt_EVmN2VF9d63rXCo8zHevs9c946NmfZH\",\n
+        \ \"refunded\": false,\n  \"refunds\": {\n    \"object\": \"list\",\n    \"data\":
+        [\n\n    ],\n    \"has_more\": false,\n    \"total_count\": 0,\n    \"url\":
+        \"/v1/charges/ch_1E2kokFk4eGpfLOCXkpmykI4/refunds\"\n  },\n  \"review\": null,\n
+        \ \"shipping\": null,\n  \"source\": {\n    \"id\": \"src_1E2kohFk4eGpfLOCwI3hlZjN\",\n
+        \   \"object\": \"source\",\n    \"amount\": 10000,\n    \"card\": {\n      \"exp_month\":
+        2,\n      \"exp_year\": 2020,\n      \"last4\": \"0003\",\n      \"country\":
+        \"JP\",\n      \"brand\": \"Visa\",\n      \"funding\": \"credit\",\n      \"fingerprint\":
+        \"4heNPBHbDWXWyXBc\",\n      \"three_d_secure\": \"optional\",\n      \"name\":
+        null,\n      \"address_line1_check\": null,\n      \"address_zip_check\":
+        null,\n      \"cvc_check\": null,\n      \"tokenization_method\": null,\n
+        \     \"dynamic_last4\": null\n    },\n    \"client_secret\": \"src_client_secret_EVmNYBFHvAEdrUHFXX4VaJhQ\",\n
+        \   \"created\": 1549914710,\n    \"currency\": null,\n    \"customer\": \"cus_EVmNvyLb4NDG1i\",\n
+        \   \"flow\": \"none\",\n    \"livemode\": false,\n    \"metadata\": {\n    },\n
+        \   \"owner\": {\n      \"address\": null,\n      \"email\": \"donor@example.com\",\n
+        \     \"name\": null,\n      \"phone\": null,\n      \"verified_address\":
+        null,\n      \"verified_email\": null,\n      \"verified_name\": null,\n      \"verified_phone\":
+        null\n    },\n    \"statement_descriptor\": null,\n    \"status\": \"consumed\",\n
+        \   \"type\": \"card\",\n    \"usage\": \"single_use\"\n  },\n  \"source_transfer\":
+        null,\n  \"statement_descriptor\": \"Liberapay 102\",\n  \"status\": \"succeeded\",\n
+        \ \"transfer_data\": null,\n  \"transfer_group\": null\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['3055']
+      Content-Type: [application/json]
+      Date: ['Mon, 11 Feb 2019 19:51:50 GMT']
+      Idempotency-Key: [payin_102]
+      Original-Request: [req_2n7yP1ZhDZ0GBk]
+      Request-Id: [req_2n7yP1ZhDZ0GBk]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: account%5Blegal_entity%5D%5Btype%5D=individual&account%5Btos_shown_and_accepted%5D=True
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/tokens
+  response:
+    body: {string: "{\n  \"id\": \"ct_1E2wvxFk4eGpfLOCLXwvyUqe\",\n  \"object\": \"token\",\n
+        \ \"client_ip\": \"109.190.32.190\",\n  \"created\": 1549961285,\n  \"livemode\":
+        false,\n  \"type\": \"account\",\n  \"used\": false\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['180']
+      Content-Type: [application/json]
+      Date: ['Tue, 12 Feb 2019 08:48:05 GMT']
+      Request-Id: [req_a7KvBWLc8bE9JE]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: account_token=ct_1E2wvxFk4eGpfLOCLXwvyUqe&country=CH&type=custom
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/accounts
+  response:
+    body: {string: "{\n  \"id\": \"acct_1E2wvyIKTDpO1vhc\",\n  \"object\": \"account\",\n
+        \ \"business_logo\": null,\n  \"business_name\": null,\n  \"business_primary_color\":
+        null,\n  \"business_url\": null,\n  \"charges_enabled\": true,\n  \"country\":
+        \"CH\",\n  \"created\": 1549961287,\n  \"debit_negative_balances\": false,\n
+        \ \"decline_charge_on\": {\n    \"avs_failure\": false,\n    \"cvc_failure\":
+        false\n  },\n  \"default_currency\": \"chf\",\n  \"details_submitted\": false,\n
+        \ \"display_name\": null,\n  \"email\": null,\n  \"external_accounts\": {\n
+        \   \"object\": \"list\",\n    \"data\": [\n\n    ],\n    \"has_more\": false,\n
+        \   \"total_count\": 0,\n    \"url\": \"/v1/accounts/acct_1E2wvyIKTDpO1vhc/external_accounts\"\n
+        \ },\n  \"keys\": {\n    \"secret\": \"sk_test_T8cgDbUsixyqLhyJpbyqu4MS\",\n
+        \   \"publishable\": \"pk_test_nDvSnp0pvEvGVVbAIM5m11Q8\"\n  },\n  \"legal_entity\":
+        {\n    \"additional_owners\": [\n\n    ],\n    \"address\": {\n      \"city\":
+        null,\n      \"country\": \"CH\",\n      \"line1\": null,\n      \"line2\":
+        null,\n      \"postal_code\": null,\n      \"state\": null\n    },\n    \"business_name\":
+        null,\n    \"business_tax_id_provided\": false,\n    \"dob\": {\n      \"day\":
+        null,\n      \"month\": null,\n      \"year\": null\n    },\n    \"first_name\":
+        null,\n    \"last_name\": null,\n    \"personal_address\": {\n      \"city\":
+        null,\n      \"country\": \"CH\",\n      \"line1\": null,\n      \"line2\":
+        null,\n      \"postal_code\": null,\n      \"state\": null\n    },\n    \"type\":
+        \"individual\",\n    \"verification\": {\n      \"details\": null,\n      \"details_code\":
+        null,\n      \"document\": null,\n      \"document_back\": null,\n      \"status\":
+        \"pending\"\n    }\n  },\n  \"metadata\": {\n  },\n  \"payout_schedule\":
+        {\n    \"delay_days\": 7,\n    \"interval\": \"daily\"\n  },\n  \"payout_statement_descriptor\":
+        null,\n  \"payouts_enabled\": false,\n  \"product_description\": null,\n  \"statement_descriptor\":
+        null,\n  \"support_address\": null,\n  \"support_email\": null,\n  \"support_phone\":
+        null,\n  \"support_url\": null,\n  \"timezone\": \"Etc/UTC\",\n  \"tos_acceptance\":
+        {\n    \"date\": 1549961285,\n    \"ip\": \"109.190.32.190\",\n    \"user_agent\":
+        \"Stripe/v1 PythonBindings/2.0.1\"\n  },\n  \"type\": \"custom\",\n  \"verification\":
+        {\n    \"disabled_reason\": null,\n    \"due_by\": null,\n    \"fields_needed\":
+        [\n      \"external_account\",\n      \"legal_entity.dob.day\",\n      \"legal_entity.dob.month\",\n
+        \     \"legal_entity.dob.year\",\n      \"legal_entity.first_name\",\n      \"legal_entity.last_name\"\n
+        \   ]\n  }\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['2303']
+      Content-Type: [application/json]
+      Date: ['Tue, 12 Feb 2019 08:48:08 GMT']
+      Request-Id: [req_XunQvPcV74PCnN]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+- request:
+    body: amount=3807&currency=EUR&destination=acct_1E2wvyIKTDpO1vhc&metadata%5Bpayin_transfer_id%5D=102&source_transaction=ch_1E2kokFk4eGpfLOCXkpmykI4
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/transfers
+  response:
+    body: {string: "{\n  \"id\": \"tr_1E2wxoFk4eGpfLOCZ06MIr9d\",\n  \"object\": \"transfer\",\n
+        \ \"amount\": 3807,\n  \"amount_reversed\": 0,\n  \"balance_transaction\":
+        \"txn_1E2wxoFk4eGpfLOCQRJbs0m3\",\n  \"created\": 1549961400,\n  \"currency\":
+        \"eur\",\n  \"description\": null,\n  \"destination\": \"acct_1E2wvyIKTDpO1vhc\",\n
+        \ \"destination_payment\": \"py_1E2wxoIKTDpO1vhcbFjfD7nV\",\n  \"livemode\":
+        false,\n  \"metadata\": {\n    \"payin_transfer_id\": \"102\"\n  },\n  \"reversals\":
+        {\n    \"object\": \"list\",\n    \"data\": [\n\n    ],\n    \"has_more\":
+        false,\n    \"total_count\": 0,\n    \"url\": \"/v1/transfers/tr_1E2wxoFk4eGpfLOCZ06MIr9d/reversals\"\n
+        \ },\n  \"reversed\": false,\n  \"source_transaction\": \"ch_1E2kokFk4eGpfLOCXkpmykI4\",\n
+        \ \"source_type\": \"card\",\n  \"transfer_group\": \"group_ch_1E2kokFk4eGpfLOCXkpmykI4\"\n}\n"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['739']
+      Content-Type: [application/json]
+      Date: ['Tue, 12 Feb 2019 08:50:00 GMT']
+      Idempotency-Key: [payin_transfer_102]
+      Original-Request: [req_vsGQRD3wOKgTOl]
+      Request-Id: [req_vsGQRD3wOKgTOl]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=31556926; includeSubDomains; preload]
+      Stripe-Version: ['2018-05-21']
+    status: {code: 200, message: OK}
+version: 1
