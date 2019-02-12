@@ -26,27 +26,6 @@ langs = participant.get_statement_langs()
 
 show_income = not participant.hide_receiving and participant.accepts_tips
 
-accepts_summary = _(
-        "{username} hasn't configured any payment method yet, so your donation "
-        "cannot actually be processed right now. We will notify you when payment "
-        "becomes possible.",
-        username=participant.username
-    ) if participant.payment_providers == 0 else _(
-        "Donations to {username} can be paid using a credit or debit card "
-        "(Visa, MasterCard, American Express), or by direct debit of a Euro "
-        "bank account (for donations in Euro only).",
-        username=participant.username
-    ) if participant.payment_providers == 1 else _(
-        "Donations to {username} are processed through PayPal.",
-        username=participant.username
-    ) if participant.payment_providers == 2 else _(
-        "Donations to {username} can be paid using: a credit or debit card "
-        "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
-        "Debit), or a PayPal account.",
-        username=participant.username
-    )
-    
-
 [-----------------------------------------------------------------------------]
 % extends "templates/profile.html"
 

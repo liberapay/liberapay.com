@@ -1,4 +1,5 @@
 % from "templates/icons.html" import fontawesome
+% from "templates/payment-methods.html" import payment_methods_icons with context
 
 % macro tip_form(tippee, tip=None, inline=False, disabled='')
     % set pledging = tippee.__class__.__name__ == 'AccountElsewhere'
@@ -177,19 +178,7 @@
         </label>
         </li>
     </ul>
-    <button class="btn btn-primary btn-lg btn-block" title="{{ accepts_summary }}" {{ disabled }}>
-        %if participant.payment_providers == 0 
-                {{ _(fontawesome('ban')) }}
-        %elif participant.payment_providers == 1
-                {{ fontawesome('credit-card') }}
-        %elif participant.payment_providers == 2
-                {{ fontawesome('paypal') }}
-        %else
-                {{ fontawesome('credit-card') }}
-                {{ fontawesome('bank') }}
-                {{ fontawesome('paypal') }}
-        %endif   
-        {{
+    <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
         _("Modify the donation") if tip.renewal_mode > 0 else
         _("Next step →") if user.ANON else
         _("Pledge") if pledging else
@@ -198,5 +187,10 @@
     % if tip.renewal_mode > 0
     <br>
     <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{ _("Stop the donation") }}</button>
+    % else
+    <p class="text-center">{{ _(
+        "{payment_icons}",
+        payment_icons=payment_methods_icons(tippee.participant or tippee)
+    ) }}</p>
     % endif
 % endmacro

@@ -1,0 +1,36 @@
+% from "templates/icons.html" import fontawesome
+
+% macro describe_payment_methods(tippee)
+{{ _(
+    "{username} hasn't configured any payment method yet, so your donation "
+    "cannot actually be processed right now. We will notify you when payment "
+    "becomes possible.",
+    username=tippee.username
+) if tippee.payment_providers == 0 else _(
+    "Donations to {username} can be paid using a credit or debit card "
+    "(Visa, MasterCard, American Express), or by direct debit of a Euro "
+    "bank account (for donations in Euro only).",
+    username=tippee.username
+) if tippee.payment_providers == 1 else _(
+    "Donations to {username} are processed through PayPal.",
+    username=tippee.username
+) if tippee.payment_providers == 2 else _(
+    "Donations to {username} can be paid using: a credit or debit card "
+    "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
+    "Debit), or a PayPal account.",
+    username=tippee.username
+) }}
+% endmacro
+
+% macro payment_methods_icons(tippee)
+<span class="payment-icons" title="{{ describe_payment_methods(tippee) }}"
+      data-toggle="tooltip" data-placement="bottom">
+    % if tippee.payment_providers.__and__(1)
+        {{ fontawesome('credit-card') }}
+        {{ fontawesome('bank') }}
+    % endif
+    % if tippee.payment_providers.__and__(2)
+        {{ fontawesome('paypal') }}
+    % endif
+</span>
+% endmacro

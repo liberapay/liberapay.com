@@ -2,6 +2,7 @@
 
 % from 'templates/avatar-url.html' import avatar_img with context
 % from "templates/icons.html" import fontawesome
+% from "templates/payment-methods.html" import payment_methods_icons with context
 
 {% block head_alternates %}{% endblock %}
 
@@ -99,21 +100,16 @@
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
                             _("Donating ({amount})", amount=tip.amount)
                         }}</a>
-                    % else                    
-                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}" title="{{ accepts_summary }}">
-                            %if participant.payment_providers == 0 
-                                 {{ _(fontawesome('ban')) }}
-                            %elif participant.payment_providers == 1
-                                 {{ fontawesome('credit-card') }}
-                            %elif participant.payment_providers == 2
-                                 {{ fontawesome('paypal') }}
-                            %else
-                                 {{ fontawesome('credit-card') }}
-                                 {{ fontawesome('bank') }}
-                                 {{ fontawesome('paypal') }}
-                            %endif  
-                            {{ _("Donate") }} 
-                        </a>
+                    % elif participant.payment_providers == 0
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
+                            _("Pledge")
+                        }}</a>
+                    % else
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
+                            _("Donate")
+                        }}</a>
+                        &nbsp;
+                        <span class="text-muted">{{ payment_methods_icons(participant) }}</span>
                     % endif
                 </div>
             </div>
