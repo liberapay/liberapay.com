@@ -33,7 +33,7 @@ with website.db.get_cursor() as cursor:
     organizations = cursor.all("""
         SELECT *
           FROM organizations o
-      ORDER BY (o.p).receiving DESC, (o.p).join_time DESC
+      ORDER BY convert((o.p).receiving, 'EUR') DESC, (o.p).join_time DESC
          LIMIT %s
         OFFSET %s
     """, (per_page, (current_page - 1) * per_page))

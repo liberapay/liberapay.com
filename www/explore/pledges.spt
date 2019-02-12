@@ -24,7 +24,7 @@ with website.db.get_cursor() as cursor:
     pledgees = cursor.all("""
         SELECT (e, p)::elsewhere_with_participant
           FROM pledgees
-      ORDER BY (p).npatrons DESC, (p).receiving DESC, (e).id DESC
+      ORDER BY (p).npatrons DESC, convert((p).receiving, 'EUR') DESC, (e).id DESC
          LIMIT %s
         OFFSET %s
     """, (per_page, (current_page - 1) * per_page))

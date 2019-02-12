@@ -20,8 +20,11 @@ if not website.db:
 
 sponsors = query_cache.all("""
     SELECT username, giving, avatar_url
-      FROM ( SELECT * FROM sponsors ORDER BY giving * random()::numeric DESC LIMIT 10 ) foo
-  ORDER BY giving DESC
+      FROM ( SELECT *
+               FROM sponsors
+           ORDER BY convert(giving, 'EUR') * random()::numeric DESC
+              LIMIT 10 ) foo
+  ORDER BY convert(giving, 'EUR') DESC
 """)
 nsponsors = query_cache.one("SELECT count(*) FROM sponsors")
 

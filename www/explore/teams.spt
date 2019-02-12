@@ -34,7 +34,8 @@ with website.db.get_cursor() as cursor:
     teams = cursor.all("""
         SELECT *
           FROM teams t
-      ORDER BY (t.participant).receiving DESC, (t.participant).join_time DESC
+      ORDER BY convert((t.participant).receiving, 'EUR') DESC
+             , (t.participant).join_time DESC
          LIMIT %s
         OFFSET %s
     """, (per_page, (current_page - 1) * per_page))
