@@ -19,6 +19,8 @@ err = response.text
 if code == 500 and not err:
     err = _("Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!")
 
+referer = request.headers.get(b'Referer')
+
 [----------------------------------------] text/html
 % extends "templates/base.html"
 
@@ -64,7 +66,7 @@ if code == 500 and not err:
         % else
             <p>{{ _("If you decide to contact us please include the following debugging information in your message:") }}</p>
             <pre>URL: {{ website.canonical_scheme }}://{{ request.hostname }}{{ request.line.uri.decoded }}{{ '\n'
-               }}Referer: {{ repr(request.headers.get(b'Referer')) }}{{ '\n'
+               }}Referer: {{ repr(referer) }}{{ '\n'
                }}Response code: {{ code }}{{ '\n'
                }}Response message: {{ repr(err) }}</pre>
         % endif
