@@ -1,4 +1,4 @@
-python := "$(shell { command -v python3.6 || command -v python; } 2>/dev/null)"
+python := "$(shell { command -v python3.6 || command -v python3.7; } 2>/dev/null)"
 install_where := $(shell $(python) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')")
 
 # Set the relative path to installed binaries under the project virtualenv.
@@ -57,6 +57,11 @@ run: env
 py: env
 	PYTHONPATH=. $(with_local_env) $(env_py) -i $${main-liberapay/main.py}
 
+shell: py
+
+test-shell: env
+	PYTHONPATH=. $(with_tests_env) $(env_py) -i $${main-liberapay/main.py}
+
 test-schema: env
 	$(with_tests_env) ./recreate-schema.sh test
 
@@ -72,7 +77,7 @@ pytest: env
 	$(py_test) --doctest-modules liberapay
 
 pytest-cov: env
-	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/
+	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
 	$(py_test) --doctest-modules liberapay
 
