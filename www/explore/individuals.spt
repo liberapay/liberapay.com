@@ -33,7 +33,7 @@ with website.db.get_cursor() as cursor:
     individuals = cursor.all("""
         SELECT *
           FROM individuals i
-      ORDER BY (i.p).receiving DESC, (i.p).join_time DESC
+      ORDER BY convert((i.p).receiving, 'EUR') DESC, (i.p).join_time DESC
          LIMIT %s
         OFFSET %s
     """, (per_page, (current_page - 1) * per_page))

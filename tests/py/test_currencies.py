@@ -1,6 +1,7 @@
 from decimal import Decimal as D
 
 from mock import patch
+import pytest
 
 from liberapay.billing.transactions import swap_currencies, Transfer
 from liberapay.constants import CURRENCIES
@@ -160,6 +161,13 @@ class TestCurrenciesInDB(Harness):
         expected = MoneyBasket(*amounts).fuzzy_sum('EUR')
         actual = self.db.one("SELECT sum(x, 'EUR') FROM unnest(%s) x", (amounts + [None],))
         assert expected == actual, (expected.__dict__, actual.__dict__)
+
+    @pytest.mark.xfail
+    def test_sorting(self):
+        amounts = [JPY('130'), EUR('99.58'), Money('79', 'KRW'), USD('35.52')]
+        expected = sorted(amounts, key=lambda m: -m.convert('EUR').amount)
+        actual = self.db.all("SELECT x FROM unnest(%s) x ORDER BY x DESC", (amounts,))
+        assert expected == actual
 
 
 class TestCurrenciesSimplate(Harness):
