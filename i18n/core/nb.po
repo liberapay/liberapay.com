@@ -386,14 +386,14 @@ msgstr "En direktedebitering av {money_amount} fra din {bank_name}-konto {partia
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "En direkte debetbetaling på {money_amount} fra din bankkonto {partial_account_number}) har blitt igangsatt."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Operasjonen blir utført basert på {link_start}mandatet{mandate_id}{link_end} du signerte {acceptance_date}, noe som lar Liberapay (SEPA-kreditor {creditor_identifier}) å sende instruks til din bank om debitering av din konto og din bank om å debitere din konto i henhold til disse instruksjonene."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Hvis du ikke vedkjenner deg denne betalingen, la det komme oss til kjenne, slik at den kan refunderes."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -424,15 +424,15 @@ msgstr "Klikk her for å se {0}s profil:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{user_name} fra {platform} har registrert seg på Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "Den {date} lovet du å donere {money_amount} til {user_name}, forutsatt at vedkommende registrerte seg på Liberapay."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "Gledelig nok har {user_name} registrert seg på Liberapay {time_ago}, som {liberapay_username}, slik at du nå kan gjøre virkelighet av ditt donasjonsløfte:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -1503,11 +1503,11 @@ msgid "Reconnect"
 msgstr "Koble til igjen"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Videresender…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "Hvis du bruker en eksotisk nettleser og ingenting skjer, {link_start}klikk på denne lenken for å fortsette{link_end}."
 
 msgid "(fork)"
 msgstr "(forgreining)"
@@ -2117,7 +2117,7 @@ msgstr "Startet for {timespan_ago_1} siden. Stoppet for {timespan_ago_2} siden."
 
 #, python-brace-format
 msgid "You are not donating to {username}."
-msgstr ""
+msgstr "Du donerer ikke til {username}."
 
 msgid "Funding your donations"
 msgstr "Finansiering av dine donasjoner"
@@ -2125,18 +2125,18 @@ msgstr "Finansiering av dine donasjoner"
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
+msgstr[1] "Som følge av tekniske begrensninger kan din betaling kun behandles som en enkeltbetaling. Isteden vil du måtte gjøre {n} egne betalinger."
 
 msgid "We are able to group these donations into a single payment."
-msgstr ""
+msgstr "Disse donasjonene kan slås sammen til en enkeltbetaling."
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr ""
+msgstr "Dine donasjoner til {recipients} er i påvente av betaling."
 
 msgid "For now this donation can only be renewed externally through PayPal."
-msgstr ""
+msgstr "Per nå kan denne donasjonen kun fornyes eksternt gjennom PayPal."
 
 msgid "Please choose a payment method:"
 msgstr "Velg en betalingsmetode:"
@@ -2160,7 +2160,7 @@ msgstr "Ikke anonym"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
-msgstr ""
+msgstr "Din donasjon til {team} kan ikke behandles, fordi det ville medført å sende penger til deg selv."
 
 msgid "All your donations are funded."
 msgstr "Alle dine donasjoner er finansiert."
@@ -2186,11 +2186,11 @@ msgstr "Betalingen avventer din godkjenning."
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har én annen donasjon i påvente av betaling."
+msgstr[1] "Du har {n} andre donasjoner i påvente av betaling."
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "Du har ingen andre ventende donasjoner per nå."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -2238,7 +2238,7 @@ msgstr "Valgfritt beløp (min={0}, max={1})"
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr ""
+msgstr "Hele betalingsbeløpet vil umiddelbart gå til {payment_provider}-kontoene tilhørende {recipient_names}."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
@@ -3709,7 +3709,7 @@ msgstr "Vi gjør vårt beste for å beskytte alles personvern: Vi prøver ikke �
 
 #, python-brace-format
 msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
-msgstr ""
+msgstr "{0} var Liberapay sin første betalingspartner, men de avsluttet forholdet i 2018. Nedenfor ser du kontrakten du ville ha måttet underskrive for å sende eller motta penger gjennom Liberapay før August 2018: "
 
 msgid "You need to log in to access this page."
 msgstr "Du må logge inn for å få tilgang til denne siden."
@@ -4554,7 +4554,7 @@ msgid "This page is dedicated to the {platform} user {user_name}:"
 msgstr "Denne siden er dedikert til {platform}-brukeren {user_name}:"
 
 msgid "No description available."
-msgstr ""
+msgstr "Ingen beskrivelse tilgjengelig."
 
 #, python-brace-format
 msgid "Profile on {0}"
@@ -4709,7 +4709,7 @@ msgid "How the accounts are now"
 msgstr "Hvordan kontoene er nå"
 
 msgid "No connected accounts."
-msgstr ""
+msgstr "Ingen tilknyttede kontoer."
 
 msgid "How the accounts will be after the transfer"
 msgstr "Hvordan kontoene vil være etter overførselen"
