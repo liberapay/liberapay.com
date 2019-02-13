@@ -9,7 +9,9 @@ from liberapay.models.participant import Participant
 from liberapay.payin.common import (
     prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_destination
 )
-from liberapay.payin.paypal import create_payment, execute_payment, sync_payment
+from liberapay.payin.paypal import (
+    capture_order, create_order, execute_payment, sync_order, sync_payment
+)
 from liberapay.utils import get_participant, NS
 
 PAYPAL_BIT = 2
@@ -100,13 +102,20 @@ if payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     if payin.status == 'pre':
         return_url = payer.url('giving/pay/paypal/%i' % payin.id)
-        payin = create_payment(website.db, payin, payer, return_url, state)
+        cancel_url = payer.url('giving/pay/paypal/%i' % payin.id)
+        payin = create_order(website.db, payin, payer, return_url, cancel_url, state)
     elif payin.status == 'pending':
         payer_id = request.qs.get('PayerID')
-        if payer_id:
-            payin = execute_payment(website.db, payin, payer_id)
+        if payin.remote_id.startswith('PAY-'):
+            if payer_id:
+                payin = execute_payment(website.db, payin, payer_id)
+            else:
+                payin = sync_payment(website.db, payin)
         else:
-            payin = sync_payment(website.db, payin)
+            if payer_id:
+                payin = capture_order(website.db, payin)
+            else:
+                payin = sync_order(website.db, payin)
 
 tippees = request.qs.parse_list('beneficiary', int, default=None)
 if tippees:
