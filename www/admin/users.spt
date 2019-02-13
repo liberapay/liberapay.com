@@ -47,7 +47,7 @@ if request.method == 'POST':
 
     raise response.json({'msg': "Done, %i bits have been updated." % updated})
 
-last_showed = request.qs.get_int('last_showed', float('inf'))
+last_showed = request.qs.get('last_showed')
 mode = request.qs.get('mode', 'all')
 if mode == 'all':
     participants = website.db.all("""
@@ -81,11 +81,12 @@ if mode == 'all':
                         ) e
                ) AS last_change
           FROM participants p
-         WHERE p.id < %s
+         WHERE coalesce(p.id < %s, true)
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
          LIMIT 25
     """, (last_showed,))
+    page_end = participants[-1][0].id if participants else None
 elif mode == 'new_recipients':
     participants = website.db.all("""
         SELECT p
@@ -129,17 +130,16 @@ elif mode == 'new_recipients':
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
-         WHERE p.id < %s
+         WHERE coalesce(pt.ctime < %s, true)
            AND p.is_suspended IS NULL
            AND pt.row_number <= 20
       GROUP BY p.id
       ORDER BY min(pt.ctime) DESC
          LIMIT 25
     """, (last_showed,))
+    page_end = participants[-1][-1][-1]['ctime'] if participants else None
 else:
     raise response.invalid_input(mode, 'mode', 'querystring')
-
-last_id = participants[-1][0].id if participants else 0
 
 title = "Users Admin"
 
@@ -315,8 +315,8 @@ title = "Users Admin"
 <p>Nothing to show.</p>
 % endfor
 
-% if last_id > 1
-<a class="btn btn-default btn-lg" href="{{ request.qs.derive(last_showed=last_id) }}">{{ _("Next") }} →</a>
+% if page_end
+<a class="btn btn-default btn-lg" href="{{ request.qs.derive(last_showed=page_end) }}">{{ _("Next") }} →</a>
 % endif
 
 % endblock
