@@ -1,10 +1,12 @@
-% from "templates/icons.html" import fontawesome
+% from "templates/icons.html" import fontawesome, glyphicon
 % from "templates/payment-methods.html" import payment_methods_icons with context
 
 % macro tip_form(tippee, tip=None, inline=False, disabled='')
-    % set pledging = tippee.__class__.__name__ == 'AccountElsewhere'
-    % set tippee_name = tippee.friendly_name if pledging else tippee.username
-    % set tip = tip or user.get_tip_to(tippee.participant or tippee, currency)
+    % set tippee_is_stub = tippee.__class__.__name__ == 'AccountElsewhere'
+    % set tippee_p = tippee.participant if tippee_is_stub else tippee
+    % set pledging = tippee_p.payment_providers == 0
+    % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
+    % set tip = tip or user.get_tip_to(tippee_p, currency)
     % set tip_currency = tip.amount.currency
     % set new_currency, accepted_currencies = user.get_currencies_for(tippee, tip)
     % if request.qs.get('currency') in accepted_currencies
@@ -62,7 +64,7 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="currency" value="{{ new_currency }}" />
             <div class="form-group">
-                {{ tip_select(tip, new_currency, tippee, disabled, pledging=pledging) }}
+                {{ tip_select(tip, new_currency, tippee, disabled) }}
             </div>
         </form>
         % if len(accepted_currencies) > 1
@@ -71,7 +73,7 @@
                 "Wrong currency? {n} other is supported:",
                 "Wrong currency? {n} others are supported:",
                 n=len(accepted_currencies) - 1, username=tippee_name
-            ) if pledging else ngettext(
+            ) if tippee_is_stub else ngettext(
                 "Wrong currency? {username} also accepts {n} other:",
                 "Wrong currency? {username} also accepts {n} others:",
                 n=len(accepted_currencies) - 1, username=tippee_name
@@ -141,7 +143,11 @@
     </div>
 % endmacro
 
-% macro tip_select(tip, new_currency, tippee, disabled='', small=False, pledging=False)
+% macro tip_select(tip, new_currency, tippee, disabled='', small=False)
+    % set tippee_is_stub = tippee.__class__.__name__ == 'AccountElsewhere'
+    % set tippee_p = tippee.participant if tippee_is_stub else tippee
+    % set pledging = tippee_p.payment_providers == 0
+    % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
     % set tip_is_standard = []
     <ul class="list-group radio-group">
     % for std_tip in constants.STANDARD_TIPS[new_currency]
@@ -180,17 +186,23 @@
     </ul>
     <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
         _("Modify the donation") if tip.renewal_mode > 0 else
-        _("Next step →") if user.ANON else
         _("Pledge") if pledging else
         _("Donate")
     }}</button>
     % if tip.renewal_mode > 0
     <br>
     <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{ _("Stop the donation") }}</button>
+    % elif tippee_p.payment_providers == 0
+    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
+        "{username} hasn't configured any payment method yet, so your donation "
+        "cannot actually be processed right now. We will notify you when payment "
+        "becomes possible.",
+        username=tippee_name
+    ) }}</p>
     % else
     <p class="text-center">{{ _(
         "{payment_icons}",
-        payment_icons=payment_methods_icons(tippee.participant or tippee)
+        payment_icons=payment_methods_icons(tippee_p)
     ) }}</p>
     % endif
 % endmacro

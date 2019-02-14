@@ -73,7 +73,7 @@
                 % set goal = participant.goal
 
                 <div class="flex-col expand-xs text-center-xs">
-                % if participant.hide_receiving
+                % if participant.hide_receiving or participant.payment_providers == 0
                     {{ ngettext(
                         "{0} has {n} patron.",
                         "{0} has {n} patrons.",
