@@ -218,6 +218,12 @@ class TestElsewhere(EmailHarness):
         assert "to dan" in last_email['text']
         assert "Change your email settings" in last_email['text']
 
+        # check that the notification isn't sent again
+        self.mailer.reset_mock()
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 0
+
 
 class TestConfirmTakeOver(Harness):
 
