@@ -1107,7 +1107,6 @@ class Participant(Model, MixinTeam):
              LIMIT 60
         """, (last_id,))
         dequeue = lambda m, sent: cls.db.run(
-            "DELETE FROM notifications WHERE id = %(id)s" if not m.web else
             "UPDATE notifications SET email_sent = %(sent)s WHERE id = %(id)s",
             dict(id=m.id, sent=sent)
         )
@@ -1133,6 +1132,12 @@ class Participant(Model, MixinTeam):
                     dequeue(msg, True)
                 sleep(1)
             last_id = messages[-1].id
+        # Delete old email-only notifications
+        cls.db.run("""
+            DELETE FROM notifications
+             WHERE NOT web
+               AND ts <= (current_timestamp - interval '90 days')
+        """)
 
     def set_email_lang(self, lang, cursor=None):
         (cursor or self.db).run(

@@ -287,7 +287,7 @@ class TestEmail(EmailHarness):
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'larry <larry@example.com>'
         assert last_email['subject'] == "Email address verification - Liberapay"
-        assert self.db.one("SELECT event FROM notifications") is None
+        assert self.db.one("SELECT email_sent FROM notifications") is True
 
     def test_dequeueing_an_email_without_address_just_skips_it(self):
         larry = self.make_participant('larry')
@@ -296,4 +296,4 @@ class TestEmail(EmailHarness):
         assert self.db.one("SELECT event FROM notifications") == "verification"
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
-        assert self.db.one("SELECT event FROM notifications") is None
+        assert self.db.one("SELECT email_sent FROM notifications") is False
