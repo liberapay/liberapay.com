@@ -17,6 +17,7 @@ good_data = {
     'sign-in.username': 'bob',
     'sign-in.password': password,
     'sign-in.email': 'bob@example.com',
+    'sign-in.token': 'ThisIsATokenThatIsThirtyTwoBytes',
 }
 
 
@@ -231,6 +232,10 @@ class TestSignIn(EmailHarness):
         # Check that the new user has an avatar
         p = Participant.from_username(username)
         assert p.avatar_url
+        # Simulate a double submit
+        r = self.sign_in(HTTP_ACCEPT_LANGUAGE='fr')
+        assert r.code == 302, r.text
+        assert SESSION in r.headers.cookie
 
     def test_sign_in_form_repost(self):
         extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
