@@ -371,6 +371,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert '0.40' in emails[1]['text']
 
         # Now run a second payday and check the results again
+        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
         Payday.start().run()
         tips = self.db.all("""
             SELECT *

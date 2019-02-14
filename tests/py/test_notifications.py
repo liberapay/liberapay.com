@@ -62,8 +62,20 @@ class TestNotifications(Harness):
 
     def test_marking_notifications_as_read_avoids_race_condition(self):
         alice = self.make_participant('alice')
-        n1 = alice.notify('low_balance', email=False)
-        n2 = alice.notify('low_balance', email=False)
+        n1 = alice.notify(
+            'team_invite',
+            email=False,
+            team='team',
+            team_url='fake_url',
+            inviter='bob',
+        )
+        n2 = alice.notify(
+            'team_invite',
+            email=False,
+            team='teamX',
+            team_url='fake_url',
+            inviter='Zarina',
+        )
         assert alice.pending_notifs == 2
 
         data = {'mark_all_as_read': 'true', 'until': str(n1)}

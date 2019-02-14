@@ -1151,6 +1151,17 @@ class Participant(Model, MixinTeam):
             email = self.email_notif_bits & bit > 0
         p_id = self.id
         context = serialize(context)
+        # Check that this notification isn't a duplicate
+        n = self.db.one("""
+            SELECT count(*)
+              FROM notifications
+             WHERE participant = %(p_id)s
+               AND event = %(event)s
+               AND ( idem_key = %(idem_key)s OR
+                     ts::date = current_date AND context = %(context)s )
+        """, locals())
+        assert n == 0
+        # Okay, add the notification to the queue
         n_id = self.db.one("""
             INSERT INTO notifications
                         (participant, event, context, web, email, idem_key)
@@ -1159,6 +1170,7 @@ class Participant(Model, MixinTeam):
         """, locals())
         if not web:
             return n_id
+        # Update the participant's `pending_notifs` count
         pending_notifs = self.db.one("""
             UPDATE participants
                SET pending_notifs = pending_notifs + 1
