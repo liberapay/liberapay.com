@@ -9,10 +9,12 @@ from liberapay.constants import (
     CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE, SESSION, SESSION_TIMEOUT
 )
 from liberapay.exceptions import (
-    BadPasswordSize, LoginRequired, TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps
+    BadPasswordSize, EmailAlreadyTaken, LoginRequired,
+    TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps,
 )
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
+from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import get_ip_net
 
 
@@ -105,6 +107,7 @@ def sign_in_with_form_data(body, state):
 
     elif 'sign-in.email' in body:
         response = state['response']
+        # Check the submitted data
         kind = body.pop('sign-in.kind', 'individual')
         if kind not in ('individual', 'organization'):
             raise response.invalid_input(kind, 'sign-in.kind', 'body')
@@ -119,12 +122,35 @@ def sign_in_with_form_data(body, state):
             l = len(password)
             if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
                 raise BadPasswordSize
+        session_token = body.pop('sign-in.token', '')
+        if session_token:
+            Participant.check_session_token(session_token)
+        # Check for an existing account
+        existing_account = website.db.one("""
+            SELECT p, s.secret
+              FROM emails e
+              JOIN participants p ON p.id = e.participant
+              JOIN user_secrets s ON s.participant = p.id AND s.id = 1
+             WHERE e.address = %s
+               AND e.verified IS NULL
+               AND p.join_time > (current_timestamp - interval '30 minutes')
+        """, (email,))
+        if existing_account:
+            p, secret = existing_account
+            if constant_time_compare(session_token, secret):
+                p.authenticated = True
+                p.sign_in(response.headers.cookie, token=session_token)
+                return p
+            else:
+                raise EmailAlreadyTaken(email)
+        # Rate limit
         request = state['request']
         src_addr, src_country = request.source, request.country
         website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-net', get_ip_net(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.country', src_country, TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
+        # Okay, create the account
         with website.db.get_cursor() as c:
             p = Participant.make_active(
                 kind, currency, body.pop('sign-in.username', None), cursor=c,
@@ -135,6 +161,7 @@ def sign_in_with_form_data(body, state):
             p.update_password(password)
             p.check_password(password, context='login')
         p.authenticated = True
+        p.sign_in(response.headers.cookie, token=session_token)
 
     return p
 
@@ -198,7 +225,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
             session_p.sign_out(response.headers.cookie)
         if p.status == 'closed':
             p.update_status('active')
-        p.sign_in(response.headers.cookie, session_suffix)
+        if not p.session:
+            p.sign_in(response.headers.cookie, suffix=session_suffix)
         state['user'] = p
         if request.body.pop('form.repost', None) != 'true':
             response.redirect(redirect_url, trusted_url=False)

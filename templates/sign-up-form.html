@@ -1,4 +1,6 @@
 % macro sign_up_form(select_currency=True)
+<input type="hidden" name="sign-in.token" value="{{ generate_session_token() }}" />
+
 % include "templates/form-repost.html"
 
 <p>{{ _("Please input your email address:") }}</p>
