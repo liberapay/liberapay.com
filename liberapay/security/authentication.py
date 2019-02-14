@@ -16,6 +16,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import get_ip_net
+from liberapay.utils.emails import check_email_blacklist, normalize_email_address
 
 
 class _ANON(object):
@@ -114,6 +115,8 @@ def sign_in_with_form_data(body, state):
         email = body.pop('sign-in.email')
         if not email:
             raise response.error(400, 'email is required')
+        email = normalize_email_address(email)
+        check_email_blacklist(email)
         currency = body.pop('sign-in.currency', 'EUR')
         if currency not in CURRENCIES:
             raise response.invalid_input(currency, 'sign-in.currency', 'body')
