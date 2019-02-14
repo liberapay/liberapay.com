@@ -1321,7 +1321,7 @@ class Participant(Model, MixinTeam):
                          FROM notifications n
                         WHERE n.participant = tip.tipper
                           AND n.event = 'pledgee_joined~v2'
-                          AND n.idem_key = event.payload->>'owner'
+                          AND n.idem_key = tip.tippee::text
                    )
           GROUP BY event.payload
         """)
