@@ -1,3 +1,5 @@
+% from "templates/icons.html" import glyphicon
+
 % macro postal_address_form(prefix='', saved=None, country=None)
 
     <label>
@@ -59,12 +61,15 @@
     </label>
 
     <label>
-        <span>{{ _("Region (state, province, island…)") }}</span>
+        <span>{{ _("Region (state, province, island…)") }}
+            <span title='{{ _(
+                      "You can leave this field empty if your country does not use regions in postal addresses."
+                  ) }}' data-toggle="tooltip" data-placement="top">{{
+                glyphicon('question-sign')
+            }}</span>
+        </span>
         <input name="{{ prefix }}.region" class="form-control" maxlength=100
                value="{{ saved.region or '' }}" />
-        <p class="help-block">{{ _(
-            "You can leave this field empty if your country doesn't use regions in postal addresses."
-        ) }}</p>
     </label>
 
     <label>

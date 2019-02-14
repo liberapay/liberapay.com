@@ -1,3 +1,4 @@
+% from "templates/icons.html" import glyphicon
 % from "templates/postal-addresses.html" import postal_address_form_v2 with context
 
 
@@ -8,6 +9,8 @@
     % set required = 'required' if required else ''
 
     <div class="block-labels max-width-500">
+
+    <h3>{{ _("Personal Information") }}</h3>
 
     % if 'name' in wanted
     <label>
@@ -54,9 +57,28 @@
     </label>
     % endif
 
+    % if 'occupation' in wanted
+    <label>
+        <span>{{ _("Occupation") }}
+            <span title='{{ _(
+                      "Your main professional activity."
+                  ) }}' data-toggle="tooltip" data-placement="top">{{
+                glyphicon('question-sign')
+            }}</span>
+        </span>
+        <input name="occupation" required maxlength=200
+               class="form-control" value="{{ identity.occupation or '' }}" />
+    </label>
+    % endif
+
+    % if 'postal_address' in wanted
+        <h4>{{ _("Postal Address") }}</h4>
+        {{ postal_address_form_v2(saved=identity.postal_address or None, required=required) }}
+    % endif
+
     % if 'organization_name' in wanted
     % if 'postal_address' in wanted
-        <h4>{{ _("Organization") }}</h4>
+        <h3>{{ _("Organization Information") }}</h3>
     % endif
     <p>{{ _("Are you acting as the representative of an organization?") }}</p>
 
@@ -73,16 +95,16 @@
             <input name="organization_name" {{ required }} maxlength=200
                    class="form-control" value="{{ identity.organization_name }}" />
         </label>
-    </fieldset>
-    % endif
 
-    % if 'postal_address' in wanted
-        <h4>{{ _("Postal Address") }}</h4>
-        <p>{{ _(
-            "If this account is for an organization you should input the address "
-            "of its headquarters instead of your home address."
-        ) }}</p>
-        {{ postal_address_form_v2(saved=identity.postal_address or None, required=required) }}
+        % if 'headquarters_address' in wanted
+        <h4>{{ _("Headquarters Address") }}</h4>
+        {{ postal_address_form_v2(
+            prefix='headquarters_address',
+            saved=identity.headquarters_address or None,
+            required=required
+        ) }}
+        % endif
+    </fieldset>
     % endif
 
     </div>

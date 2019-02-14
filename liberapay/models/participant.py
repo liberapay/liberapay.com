@@ -2495,15 +2495,26 @@ class Participant(Model, MixinTeam):
             prefix = '' if individual else 'LegalRepresentative'
             addr = getattr(
                 mp_account,
-                'Address' if individual else 'HeadquartersAddress'
+                'Address' if individual else 'LegalRepresentativeAddress'
             )
+            hq_addr = getattr(mp_account, 'HeadquartersAddress', None)
             p.insert_identity({
                 'birthdate': getattr(mp_account, prefix + 'Birthday').isoformat(),
                 'name': ' '.join((
                     getattr(mp_account, prefix + 'FirstName'),
                     getattr(mp_account, prefix + 'LastName'),
                 )),
+                'headquarters_address': {
+                    'country': hq_addr.Country,
+                    'region': hq_addr.Region,
+                    'city': hq_addr.City,
+                    'postal_code': hq_addr.PostalCode,
+                    'local_address': '\n'.join(filter(None, (
+                        hq_addr.AddressLine1, hq_addr.AddressLine2
+                    ))),
+                } if hq_addr else None,
                 'nationality': getattr(mp_account, prefix + 'Nationality'),
+                'occupation': getattr(mp_account, prefix + 'Occupation'),
                 'organization_name': '' if individual else mp_account.Name,
                 'postal_address': {
                     'country': (
@@ -2516,7 +2527,7 @@ class Participant(Model, MixinTeam):
                     'local_address': '\n'.join(filter(None, (
                         addr.AddressLine1, addr.AddressLine2
                     ))),
-                },
+                } if addr else None,
             })
 
 

@@ -31,7 +31,7 @@ if request.method == 'POST':
     identity = {}
     for k in constants.IDENTITY_FIELDS:
         v = body.get(k, '')
-        if k == 'postal_address':
+        if k in ('headquarters_address', 'postal_address'):
             v = {k2: body[k + '.' + k2].strip() for k2 in constants.POSTAL_ADDRESS_KEYS_LIBERAPAY}
             if v['city'] or v['postal_code'] or v['local_address']:
                 if not check_address_v2(v):

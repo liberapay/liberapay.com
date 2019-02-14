@@ -180,7 +180,8 @@ FEE_PAYOUT_WARN = Decimal('0.03')  # warn user when fee exceeds 3%
 HTML_A = Markup('<a href="%s">%s</a>')
 
 IDENTITY_FIELDS = set("""
-    birthdate name nationality organization_name postal_address
+    birthdate headquarters_address name nationality occupation organization_name
+    postal_address
 """.split())
 
 INVOICE_DOC_MAX_SIZE = 5000000
