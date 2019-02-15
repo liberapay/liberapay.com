@@ -1107,7 +1107,6 @@ class Participant(Model, MixinTeam):
              LIMIT 60
         """, (last_id,))
         dequeue = lambda m, sent: cls.db.run(
-            "DELETE FROM notifications WHERE id = %(id)s" if not m.web else
             "UPDATE notifications SET email_sent = %(sent)s WHERE id = %(id)s",
             dict(id=m.id, sent=sent)
         )
@@ -1133,6 +1132,12 @@ class Participant(Model, MixinTeam):
                     dequeue(msg, True)
                 sleep(1)
             last_id = messages[-1].id
+        # Delete old email-only notifications
+        cls.db.run("""
+            DELETE FROM notifications
+             WHERE NOT web
+               AND ts <= (current_timestamp - interval '90 days')
+        """)
 
     def set_email_lang(self, lang, cursor=None):
         (cursor or self.db).run(
@@ -1151,6 +1156,17 @@ class Participant(Model, MixinTeam):
             email = self.email_notif_bits & bit > 0
         p_id = self.id
         context = serialize(context)
+        # Check that this notification isn't a duplicate
+        n = self.db.one("""
+            SELECT count(*)
+              FROM notifications
+             WHERE participant = %(p_id)s
+               AND event = %(event)s
+               AND ( idem_key = %(idem_key)s OR
+                     ts::date = current_date AND context = %(context)s )
+        """, locals())
+        assert n == 0
+        # Okay, add the notification to the queue
         n_id = self.db.one("""
             INSERT INTO notifications
                         (participant, event, context, web, email, idem_key)
@@ -1159,6 +1175,7 @@ class Participant(Model, MixinTeam):
         """, locals())
         if not web:
             return n_id
+        # Update the participant's `pending_notifs` count
         pending_notifs = self.db.one("""
             UPDATE participants
                SET pending_notifs = pending_notifs + 1
@@ -1309,7 +1326,7 @@ class Participant(Model, MixinTeam):
                          FROM notifications n
                         WHERE n.participant = tip.tipper
                           AND n.event = 'pledgee_joined~v2'
-                          AND n.idem_key = event.payload->>'owner'
+                          AND n.idem_key = tip.tippee::text
                    )
           GROUP BY event.payload
         """)
