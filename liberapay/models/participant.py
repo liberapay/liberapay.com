@@ -1720,9 +1720,8 @@ class Participant(Model, MixinTeam):
     # More Random Stuff
     # =================
 
-    def change_username(self, suggested, cursor=None, recorder=None):
-        suggested = suggested and suggested.strip()
-
+    @staticmethod
+    def check_username(suggested):
         if not suggested:
             raise UsernameIsEmpty(suggested)
 
@@ -1739,10 +1738,11 @@ class Participant(Model, MixinTeam):
         if suffix in USERNAME_SUFFIX_BLACKLIST:
             raise UsernameEndsWithForbiddenSuffix(suggested, suffix)
 
-        lowercased = suggested.lower()
-
-        if lowercased in website.restricted_usernames:
+        if suggested.lower() in website.restricted_usernames:
             raise UsernameIsRestricted(suggested)
+
+    def change_username(self, suggested, cursor=None, recorder=None):
+        self.check_username(suggested)
 
         if suggested != self.username:
             with self.db.get_cursor(cursor) as c:
@@ -1759,7 +1759,7 @@ class Participant(Model, MixinTeam):
                     raise UsernameAlreadyTaken(suggested)
                 if actual is None:
                     return suggested
-                assert (suggested, lowercased) == actual  # sanity check
+                assert (suggested, suggested.lower()) == actual  # sanity check
 
                 # Deal with redirections
                 last_rename = self.get_last_event_of_type('set_username')

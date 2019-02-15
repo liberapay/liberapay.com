@@ -11,6 +11,7 @@ from liberapay.constants import (
 from liberapay.exceptions import (
     BadPasswordSize, EmailAlreadyTaken, LoginRequired,
     TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps,
+    UsernameAlreadyTaken,
 )
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
@@ -125,6 +126,10 @@ def sign_in_with_form_data(body, state):
             l = len(password)
             if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
                 raise BadPasswordSize
+        username = body.pop('sign-in.username', None)
+        if username:
+            username = username.strip()
+            Participant.check_username(username)
         session_token = body.pop('sign-in.token', '')
         if session_token:
             Participant.check_session_token(session_token)
@@ -146,6 +151,13 @@ def sign_in_with_form_data(body, state):
                 return p
             else:
                 raise EmailAlreadyTaken(email)
+        username_taken = website.db.one("""
+            SELECT count(*)
+              FROM participants p
+             WHERE p.username = %s
+        """, (username,))
+        if username_taken:
+            raise UsernameAlreadyTaken(username)
         # Rate limit
         request = state['request']
         src_addr, src_country = request.source, request.country
@@ -155,9 +167,7 @@ def sign_in_with_form_data(body, state):
         website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
         # Okay, create the account
         with website.db.get_cursor() as c:
-            p = Participant.make_active(
-                kind, currency, body.pop('sign-in.username', None), cursor=c,
-            )
+            p = Participant.make_active(kind, currency, username, cursor=c)
             p.set_email_lang(state['locale'].language, cursor=c)
             p.add_email(email, cursor=c)
         if password:

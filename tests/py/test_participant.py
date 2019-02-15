@@ -153,17 +153,8 @@ class TestStub(Harness):
         with self.assertRaises(UsernameIsEmpty):
             self.stub.change_username('')
 
-    def test_changing_username_to_all_spaces(self):
-        with self.assertRaises(UsernameIsEmpty):
-            self.stub.change_username('    ')
-
-    def test_changing_username_strips_spaces(self):
-        self.stub.change_username('  aaa  ')
-        actual = Participant.from_username('aaa')
-        assert self.stub == actual
-
     def test_changing_username_returns_the_new_username(self):
-        returned = self.stub.change_username('  foo_bar-baz  ')
+        returned = self.stub.change_username('foo_bar-baz')
         assert returned == 'foo_bar-baz'
 
     def test_changing_username_to_too_long(self):
