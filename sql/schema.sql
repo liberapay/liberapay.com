@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '96'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '97'::jsonb);
 
 
 -- app configuration
@@ -752,6 +752,7 @@ CREATE TABLE notifications
 , email_sent    boolean
 , idem_key      text
 , CONSTRAINT destination_chk CHECK (email OR web)
+, UNIQUE (participant, event, idem_key)
 );
 
 CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)

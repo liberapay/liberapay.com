@@ -2273,3 +2273,6 @@ DELETE FROM app_conf WHERE key IN (
     'fetch_email_bounces_every', 'refetch_elsewhere_data_every',
     'refetch_repos_every', 'send_newsletters_every'
 );
+
+-- migration #97
+CREATE UNIQUE INDEX ON notifications (participant, event, idem_key);
