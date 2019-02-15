@@ -919,7 +919,7 @@ class Participant(Model, MixinTeam):
         owner = (cursor or self.db).one("""
             SELECT participant
               FROM emails
-             WHERE address = %(email)s
+             WHERE lower(address) = lower(%(email)s)
                AND verified IS true
         """, locals())
         if owner:

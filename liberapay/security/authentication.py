@@ -138,14 +138,21 @@ def sign_in_with_form_data(body, state):
             SELECT p, s.secret
               FROM emails e
               JOIN participants p ON p.id = e.participant
-              JOIN user_secrets s ON s.participant = p.id AND s.id = 1
-             WHERE e.address = %s
-               AND e.verified IS NULL
-               AND p.join_time > (current_timestamp - interval '30 minutes')
+         LEFT JOIN user_secrets s ON s.participant = p.id
+                                 AND s.id = 1
+                                 AND s.mtime < (p.join_time + interval '6 hours')
+                                 AND s.mtime > (current_timestamp - interval '6 hours')
+             WHERE lower(e.address) = lower(%s)
+               AND ( e.verified IS TRUE OR
+                     e.added_time > (current_timestamp - interval '1 day') OR
+                     s.secret IS NOT NULL OR
+                     p.email IS NULL )
+          ORDER BY p.join_time DESC
+             LIMIT 1
         """, (email,))
         if existing_account:
             p, secret = existing_account
-            if constant_time_compare(session_token, secret):
+            if secret and constant_time_compare(session_token, secret):
                 p.authenticated = True
                 p.sign_in(response.headers.cookie, token=session_token)
                 return p
