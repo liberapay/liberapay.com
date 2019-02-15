@@ -62,7 +62,9 @@ Liberapay.stripe_init = function() {
         var tokenData = {};
         if (element_type == 'iban') {
             tokenData.currency = 'EUR';
-            tokenData.account_holder_name = $('#account_holder_name').val();
+            tokenData.account_holder_name = $('input[name="owner.name"]').val();
+        } else if (element_type == 'card') {
+            tokenData.name = $('input[name="owner.name"]').val();
         }
         stripe.createToken(element, tokenData).then(Liberapay.wrap(function(result) {
             if (result.error) {
