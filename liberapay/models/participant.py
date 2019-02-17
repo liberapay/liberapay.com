@@ -2114,7 +2114,7 @@ class Participant(Model, MixinTeam):
                          )
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
-                      , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
+                      , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
         """, dict(tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
                   period=period, periodic_amount=periodic_amount))._asdict()
@@ -2155,7 +2155,7 @@ class Participant(Model, MixinTeam):
                     AND tippee = %(tippee)s
                     AND renewal_mode > 0
               RETURNING *
-                      , ( SELECT join_time IS NULL FROM participants WHERE id = %(tippee)s ) AS is_pledge
+                      , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
         """, dict(tipper=self.id, tippee=tippee.id))
         if not t:
             return

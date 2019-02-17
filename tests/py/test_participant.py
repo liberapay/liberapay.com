@@ -283,6 +283,7 @@ class Tests(Harness):
     def test_stt_works_for_donations(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         t = alice.set_tip_to(bob, EUR('1.00'))
         assert t['amount'] == 1
         assert t['is_funded'] is False

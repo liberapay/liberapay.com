@@ -1,6 +1,8 @@
 % extends "templates/profile-base.html"
 
 % from 'templates/avatar-url.html' import avatar_img with context
+% from "templates/icons.html" import fontawesome
+% from "templates/payment-methods.html" import payment_methods_icons with context
 
 {% block head_alternates %}{% endblock %}
 
@@ -71,7 +73,7 @@
                 % set goal = participant.goal
 
                 <div class="flex-col expand-xs text-center-xs">
-                % if participant.hide_receiving
+                % if participant.hide_receiving or participant.payment_providers == 0
                     {{ ngettext(
                         "{0} has {n} patron.",
                         "{0} has {n} patrons.",
@@ -98,10 +100,16 @@
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
                             _("Donating ({amount})", amount=tip.amount)
                         }}</a>
+                    % elif participant.payment_providers == 0
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
+                            _("Pledge")
+                        }}</a>
                     % else
-                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">
-                            {{ _("Donate") }}
-                        </a>
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
+                            _("Donate")
+                        }}</a>
+                        &nbsp;
+                        <span class="text-muted">{{ payment_methods_icons(participant) }}</span>
                     % endif
                 </div>
             </div>

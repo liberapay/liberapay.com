@@ -93,6 +93,7 @@ next_payday = today + timedelta(days=days_till_wednesday)
 % from "templates/avatar-url.html" import avatar_img with context
 % from 'templates/elsewhere.html' import platform_icon
 % from "templates/icons.html" import glyphicon
+% from "templates/payment-methods.html" import payment_methods_icons with context
 % from "templates/your-tip.html" import tip_form with context
 
 % block content
@@ -242,6 +243,7 @@ next_payday = today + timedelta(days=days_till_wednesday)
                            href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
                            {{ glyphicon('repeat') }} {{ _("Renew") }}
                         </a>
+                        &nbsp; {{ payment_methods_icons(tippee) }}
                     % else
                         <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
                             "Cannot be renewed because the account of the recipient isn't ready to receive new payments."

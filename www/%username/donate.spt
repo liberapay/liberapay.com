@@ -12,6 +12,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 % extends "templates/profile-base.html"
 
 % from 'templates/elsewhere.html' import account_elsewhere with context
+% from "templates/payment-methods.html" import describe_payment_methods with context
 % from 'templates/profile-goal-bar.html' import profile_goal_bar with context
 % from 'templates/your-tip.html' import tip_form with context
 
@@ -86,25 +87,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     % endif
 
     <h4>{{ _("What payment methods are available?") }}</h4>
-    <p>{{ _(
-        "{username} hasn't configured any payment method yet, so your donation "
-        "cannot actually be processed right now. We will notify you when payment "
-        "becomes possible.",
-        username=participant.username
-    ) if participant.payment_providers == 0 else _(
-        "Donations to {username} can be paid using a credit or debit card "
-        "(Visa, MasterCard, American Express), or by direct debit of a Euro "
-        "bank account (for donations in Euro only).",
-        username=participant.username
-    ) if participant.payment_providers == 1 else _(
-        "Donations to {username} are processed through PayPal.",
-        username=participant.username
-    ) if participant.payment_providers == 2 else _(
-        "Donations to {username} can be paid using: a credit or debit card "
-        "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
-        "Debit), or a PayPal account.",
-        username=participant.username
-    ) }}</p>
+    <p>{{ describe_payment_methods(participant) }}</p>
 
     <h4>{{ _("How do recurrent donations work?") }}</h4>
     <p>{{ _(

@@ -783,6 +783,7 @@ p.event {
 span.help-title {
     border-bottom: 1px dotted;
     cursor: help;
+    padding-bottom: 0.1em;
 }
 
 .alert-read {
@@ -886,6 +887,12 @@ span.help-title {
             max-width: 320px;
         }
     }
+}
+
+.payment-icons {
+    font-size: $font-size-large;
+    text-wrap: nowrap;
+    vertical-align: middle;
 }
 
 .s-logo {
