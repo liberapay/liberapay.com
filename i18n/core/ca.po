@@ -516,8 +516,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Sembla que heu trobat un error! Disculpeu les molèsties, el corregirem tan aviat com sigui possible!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "S'han enregistrat els detalls de l'error. Si decidiu contactar amb nosaltres, incloeu el següent codi identificatiu d'error en el missatge: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Cada setmana, mentre rebi donatius"
@@ -1392,6 +1406,22 @@ msgstr "Encara voleu usar aquesta contrasenya?"
 msgid "No, cancel"
 msgstr "No, cancel·la"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} encara no ha configurat cap mètode de pagament, per això ara mateix no es pot processar el vostre donatiu. Quan el pagament sigui possible, us ho notificarem."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Es poden fer donatius a {username} amb una targeta de crèdit, de dèbit (Visa, MasterCard o American Express) o via càrrec per domiciliació d'un compte bancari europeu (només per a donatius en euros)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Els donatius a {username} es processen via PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Els donatius a {username} es poden pagar: amb targeta de crèdit o dèbit (Visa, MasterCard o American Express), amb un compte bancari europeu (càrrec directe SEPA), o amb un compte PayPal."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Les persones que col·laboren en el bé comú necessiten el vostre suport a la seva tasca. Coses com el desenvolupament en programari lliure o la difusió del coneixement lliure costen temps i diners, però no només la feina inicial, sinó també per a mantenir-lo en el temps."
 
@@ -1487,6 +1517,9 @@ msgstr[1] "{0} rep setmanalment {1} de {n} mecenes."
 msgid "Donating ({amount})"
 msgstr "Doneu ({amount})"
 
+msgid "Pledge"
+msgstr "Compromís"
+
 msgid "Donate"
 msgstr "Donatius"
 
@@ -1519,9 +1552,6 @@ msgstr "Treu de la llista"
 
 msgid "Show on your profile"
 msgstr "Mostra-ho en el perfil"
-
-msgid "Pledge"
-msgstr "Compromís"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Esteu en el mode de proves, no introduïu cap pagament real ni dades personals!"
@@ -1646,9 +1676,6 @@ msgstr "Personalitzada"
 msgid "Modify the donation"
 msgstr "Modifica el donatiu"
 
-msgid "Next step →"
-msgstr "Pas següent →"
-
 msgid "Stop the donation"
 msgstr "Atura el donatiu"
 
@@ -1699,22 +1726,6 @@ msgstr "No, {username} només accepta pagaments en {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Quins mètodes de pagament hi ha disponibles?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} encara no ha configurat cap mètode de pagament, per això ara mateix no es pot processar el vostre donatiu. Quan el pagament sigui possible, us ho notificarem."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Es poden fer donatius a {username} amb una targeta de crèdit, de dèbit (Visa, MasterCard o American Express) o via càrrec per domiciliació d'un compte bancari europeu (només per a donatius en euros)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Els donatius a {username} es processen via PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Els donatius a {username} es poden pagar: amb targeta de crèdit o dèbit (Visa, MasterCard o American Express), amb un compte bancari europeu (càrrec directe SEPA), o amb un compte PayPal."
 
 msgid "How do recurrent donations work?"
 msgstr "Com funcionen els donatius recurrents?"

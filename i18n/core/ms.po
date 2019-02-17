@@ -518,8 +518,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Nampaknya anda telah jumpa pepijat! Maaf atas segala kesulitan, kami akan segera baikinya!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Perincian ralat ini telah direkodkan. Jika anda memutuskan untuk menghubungi kami sila sertakan kod pengenalan ralat berikut di dalam mesej anda: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Setiap minggu selagi saya menerima derma"
@@ -1394,6 +1408,22 @@ msgstr "Adakah anda masih ingin gunakan kata laluan ini?"
 msgid "No, cancel"
 msgstr "Tidak, batalkan"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} masih belum menetapkan kaedah pembayaran, jadi derma anda tidak boleh diproses pada waktu ini. Kami akan maklumkan anda apabila pembayaran boleh diproses."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Derma ke {username} boleh dibayar menggunakan kad kredit atau debit (Visa, MasterCard, American Express), atau debit terus akaun bank Euro (untuk derma dalam mata wang Euro sahaja)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Derma ke {username} diproses melalui PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Derma ke {username} boleh dibayar menggunakan: kad kredit atau debit (Visa, MasterCard, American Express), akaun bank Euro (Debit Terus SEPA), atau melalui PayPal."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Mereka yang menyumbang kepada khalayak ramai perlukan anda untuk menyokong kerja mereka. Membina perisian percuma dan menyebarkan pengetahuan secara percuma mengambil banyak masa dan menggunakan banyak wang, bukan sahaja ketika baru bermula tetapi juga ketika mengekalkannya."
 
@@ -1489,6 +1519,9 @@ msgstr[1] "{0} menerima {1} setiap minggu daripada {n} pelanggan."
 msgid "Donating ({amount})"
 msgstr "Menderma ({amount})"
 
+msgid "Pledge"
+msgstr "Janji"
+
 msgid "Donate"
 msgstr "Derma"
 
@@ -1521,9 +1554,6 @@ msgstr "Padam dari senarai"
 
 msgid "Show on your profile"
 msgstr "Tunjuk di profil anda"
-
-msgid "Pledge"
-msgstr "Janji"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Anda dalam mod kotak pasir, jangan masukkan sebarang pembayaran sebenar atau data peribadi!"
@@ -1648,9 +1678,6 @@ msgstr "Ubah sendiri"
 msgid "Modify the donation"
 msgstr "Ubah suai derma"
 
-msgid "Next step →"
-msgstr "Langkah seterusnya →"
-
 msgid "Stop the donation"
 msgstr "Hentikan derma"
 
@@ -1701,22 +1728,6 @@ msgstr "Tidak, {username} hanya menerima pembayaran dalam {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Kaedah pembayaran apa yang ada?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} masih belum menetapkan kaedah pembayaran, jadi derma anda tidak boleh diproses pada waktu ini. Kami akan maklumkan anda apabila pembayaran boleh diproses."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Derma ke {username} boleh dibayar menggunakan kad kredit atau debit (Visa, MasterCard, American Express), atau debit terus akaun bank Euro (untuk derma dalam mata wang Euro sahaja)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Derma ke {username} diproses melalui PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Derma ke {username} boleh dibayar menggunakan: kad kredit atau debit (Visa, MasterCard, American Express), akaun bank Euro (Debit Terus SEPA), atau melalui PayPal."
 
 msgid "How do recurrent donations work?"
 msgstr "Bagaimanakah derma berulang dilakukan?"

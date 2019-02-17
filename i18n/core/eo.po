@@ -517,8 +517,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Ŝajne vi trovis cimon! Pardonon pro la ĝeno, ni forigos ĝin plej frue!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "La detaloj de tiu eraro estis registritaj. Se vi decidas kontakti nin, bonvolu aldoni la jenan erar-identigkodon al via mesaĝo: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Ĉiu semajno tiel longe kiel mi ricevas donacojn"
@@ -1395,6 +1409,22 @@ msgstr "Ĉu vi tamen volas uzi tiun pasvorton?"
 msgid "No, cancel"
 msgstr "Ne, nuligi"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} ne ankoraŭ agordis ajnan pagmetodon, do fakte via donaco ne povas esti traktita nun. Ni sciigos vin kiam pago eblos."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donacoj al {username} povas esti pagataj per kreditkarto aŭ debetkarto (Visa, MasterCard, American Express), aŭ per rekta debeto de eŭra bankokonto (nur por eŭraj donacoj)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Donacoj al {username} estas traktitaj per PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donacoj al {username} povas esti pagataj per: kreditkarto aŭ debetkarto (Visa, MasterCard, American Express), eŭra bankokonto (SEPA rekta debeto) aŭ PayPal-konto."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Homoj kiuj kontribuas al komunaĵoj bezonas vian subtenon. Konstruado de libera programo, disvastigado de libera scio, tiuj aferoj postulas tempon kaj kostas monon, ne nur por fari la komencan laboron, sed ankaŭ por daŭrigi ĝin dum tempo."
 
@@ -1490,6 +1520,9 @@ msgstr[1] "{0} ricevas {1} semajne el {n} donacantoj."
 msgid "Donating ({amount})"
 msgstr "Vi donacas {amount}"
 
+msgid "Pledge"
+msgstr "Promesi donacojn"
+
 msgid "Donate"
 msgstr "Donaci"
 
@@ -1522,9 +1555,6 @@ msgstr "Mallistigi"
 
 msgid "Show on your profile"
 msgstr "Montri en via profilo"
-
-msgid "Pledge"
-msgstr "Promesi donacojn"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Vi estas en proveja reĝimo, ne enigu veran pagan aŭ personajn datumojn!"
@@ -1649,9 +1679,6 @@ msgstr "Propra"
 msgid "Modify the donation"
 msgstr "Ŝanĝi la donacon"
 
-msgid "Next step →"
-msgstr "Sekva paŝo →"
-
 msgid "Stop the donation"
 msgstr "Ĉesigi la donacon"
 
@@ -1702,22 +1729,6 @@ msgstr "Ne, {username} nur akceptas pagojn per {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Kiuj pagmetodoj disponeblas?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} ne ankoraŭ agordis ajnan pagmetodon, do fakte via donaco ne povas esti traktita nun. Ni sciigos vin kiam pago eblos."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donacoj al {username} povas esti pagataj per kreditkarto aŭ debetkarto (Visa, MasterCard, American Express), aŭ per rekta debeto de eŭra bankokonto (nur por eŭraj donacoj)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Donacoj al {username} estas traktitaj per PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donacoj al {username} povas esti pagataj per: kreditkarto aŭ debetkarto (Visa, MasterCard, American Express), eŭra bankokonto (SEPA rekta debeto) aŭ PayPal-konto."
 
 msgid "How do recurrent donations work?"
 msgstr "Kiel periodaj donacoj funkcias?"

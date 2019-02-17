@@ -200,9 +200,6 @@
         username=tippee_name
     ) }}</p>
     % else
-    <p class="text-center">{{ _(
-        "{payment_icons}",
-        payment_icons=payment_methods_icons(tippee_p)
-    ) }}</p>
+    <p class="text-center">{{ payment_methods_icons(tippee_p) }}</p>
     % endif
 % endmacro

@@ -516,8 +516,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Det ser ud til at du har fundet en fejl i vores program! Undskyld ulejligheden, vi fikser det hurtigst muligt!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "denne fejls detaljer er blevet gemt. Hvis du beslutter dig for at kontakte os så vær sød at vedlægge følgende fejlidentifikationskode i din meddelelse: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Hver uge så længe jeg modtager donationer"
@@ -1392,6 +1406,22 @@ msgstr "Vil du stadig bruge denne adgangskode?"
 msgid "No, cancel"
 msgstr "Nej, afbryd"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donationer til {username} kan betales ved hjælp af et kredit- eller betalingskort (Visa, MasterCard, American Express) eller ved direkte debitering af en Euro bankkonto (kun til donationer i Euro)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Donationer til {username} bliver håndteret gennem PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort (Visa, MasterCard, American Express), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Folk der bidrager til commons, har brug for at støtte deres arbejde. Opbygning af fri software, spredning af gratis viden, disse ting tager tid og koster penge, ikke kun for at gøre det indledende arbejde, men også for at vedligeholde det over tid."
 
@@ -1487,6 +1517,9 @@ msgstr[1] "{0} modtager {1} hver uge fra {n} bidragsydere."
 msgid "Donating ({amount})"
 msgstr "Doner ({amount})"
 
+msgid "Pledge"
+msgstr "Donationstilbud"
+
 msgid "Donate"
 msgstr "Doner"
 
@@ -1519,9 +1552,6 @@ msgstr "Fjern fra liste"
 
 msgid "Show on your profile"
 msgstr "Vis på din profil"
-
-msgid "Pledge"
-msgstr "Donationstilbud"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Du er i sandkasse tilstand, lad vær med at indtaste nogen ægte betalings eller personlige data!"
@@ -1646,9 +1676,6 @@ msgstr "Brugerdefineret"
 msgid "Modify the donation"
 msgstr "Ændre bidraget"
 
-msgid "Next step →"
-msgstr "Næste trin →"
-
 msgid "Stop the donation"
 msgstr "Stoppe bidraget"
 
@@ -1699,22 +1726,6 @@ msgstr "Nej, {username} accepterer kun betalinger i {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Hvilke betalingsmetoder er tilgængelige?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donationer til {username} kan betales ved hjælp af et kredit- eller betalingskort (Visa, MasterCard, American Express) eller ved direkte debitering af en Euro bankkonto (kun til donationer i Euro)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Donationer til {username} bliver håndteret gennem PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort (Visa, MasterCard, American Express), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
 
 msgid "How do recurrent donations work?"
 msgstr "Hvordan virker gentagne bidrag?"

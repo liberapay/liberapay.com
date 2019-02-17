@@ -512,8 +512,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "看來你發現了系統上的一個問題！抱歉造成不便，我們會儘快修復！"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "該錯誤的詳細信息已紀錄。若希望聯繫我們，請在來信中提供以下的錯誤辨識碼：{0}。"
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "只要我每週收取捐款"
@@ -1383,6 +1397,22 @@ msgstr "您是否仍旧希望使用该密码？"
 msgid "No, cancel"
 msgstr "不，取消"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username}尚未設定支付方法，故您的捐款目前無法進行。當對方可接受付款時，我們會通知您。"
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "給{username}的捐款可使用信用卡或簽帳金融卡支付 (Visa, MasterCard, American Express)。"
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "給{username}捐款透過 PayPal 支付，如果沒有 PayPal 帳號還是可以使用信用卡或簽帳金額卡支付。"
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "捐助給{username}可使用信用卡或簽帳金融卡(Visa, MasterCard, American Express)，或是透過 PayPal 支付。"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
 
@@ -1476,6 +1506,9 @@ msgstr[0] "{0}每週從{n}個贊助者收到{1}捐款。"
 msgid "Donating ({amount})"
 msgstr "正在捐助{amount}"
 
+msgid "Pledge"
+msgstr "承諾"
+
 msgid "Donate"
 msgstr "捐款"
 
@@ -1508,9 +1541,6 @@ msgstr "刪除"
 
 msgid "Show on your profile"
 msgstr "在你的個人資料上顯示"
-
-msgid "Pledge"
-msgstr "承諾"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "你正在使用沙盒模式，請勿輸入真實的付款或個人信息！"
@@ -1633,9 +1663,6 @@ msgstr "自選"
 msgid "Modify the donation"
 msgstr "修改捐款"
 
-msgid "Next step →"
-msgstr "下一步→"
-
 msgid "Stop the donation"
 msgstr "停止捐款"
 
@@ -1686,22 +1713,6 @@ msgstr "否，{username}只接受{currency}付款。"
 
 msgid "What payment methods are available?"
 msgstr "有什麼可用的付款方式？"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username}尚未設定支付方法，故您的捐款目前無法進行。當對方可接受付款時，我們會通知您。"
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "給{username}的捐款可使用信用卡或簽帳金融卡支付 (Visa, MasterCard, American Express)。"
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "給{username}捐款透過 PayPal 支付，如果沒有 PayPal 帳號還是可以使用信用卡或簽帳金額卡支付。"
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "捐助給{username}可使用信用卡或簽帳金融卡(Visa, MasterCard, American Express)，或是透過 PayPal 支付。"
 
 msgid "How do recurrent donations work?"
 msgstr "定期捐款是如何進行的？"

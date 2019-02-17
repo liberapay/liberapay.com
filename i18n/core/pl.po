@@ -503,8 +503,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Wygląda na to, że znalazłeś błąd! Przepraszamy za niedogodności, postaramy się go naprawić najszybciej jak to możliwe!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Szczegóły błędu zostały zapisane. Jeśli zdecydujesz się na jego zgłoszenie, prosimy abyś umieścił w wiadomości następujący numer identyfikacyjny błędu: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr ""
@@ -1384,6 +1398,22 @@ msgstr "Czy wciąż chcesz używać tego hasła?"
 msgid "No, cancel"
 msgstr "Nie, anuluj"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Ludzie tworzący dobra wspólne potrzebują Twojej pomocy, by mogli kontynuować swoją pracę. Tworzenie wolnego oprogramowania, czy dzielenie się wiedzą: czynności te wymagają czasu i pieniędzy, nie tylko by stworzyć dany produkt, ale także by go utrzymywać."
 
@@ -1481,6 +1511,9 @@ msgstr[2] "{0} otrzymuje {1} tygodniowo od {n} patronów."
 msgid "Donating ({amount})"
 msgstr "Dotujesz ({amount})"
 
+msgid "Pledge"
+msgstr "Wesprzyj"
+
 msgid "Donate"
 msgstr "Wspieraj"
 
@@ -1513,9 +1546,6 @@ msgstr "Usuń z listy"
 
 msgid "Show on your profile"
 msgstr "Pokaż na swoim profilu"
-
-msgid "Pledge"
-msgstr "Wesprzyj"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Znajdujesz się w trybie piaskownicy, nie wpisuj żadnych prawdziwych danych płatności ani danych osobowych!"
@@ -1642,9 +1672,6 @@ msgstr "Własna kwota"
 msgid "Modify the donation"
 msgstr "Modyfikuj darowiznę"
 
-msgid "Next step →"
-msgstr "Przejdź dalej →"
-
 msgid "Stop the donation"
 msgstr "Zatrzymaj darowiznę"
 
@@ -1695,22 +1722,6 @@ msgstr "Nie, {username} przyjmuje płatności tylko w {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Jakie metody płatności są dostępne?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "Jak dokładnie działają regularne darowizny?"

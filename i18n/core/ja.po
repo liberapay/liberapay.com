@@ -492,8 +492,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "不具合が発生したようです！ご迷惑をおかけします。早急に解決をいたします！"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "このエラーの詳細が記録されました。お問い合わせの際は、以下のエラー識別コードをメッセージに記載してください：{0}。"
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "寄付を受け取っている限り、毎週"
@@ -1363,6 +1377,22 @@ msgstr "それでもこのパスワードを使用してもよろしいですか
 msgid "No, cancel"
 msgstr "キャンセル"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "公共の場において貢献をする人たちは、自分たちの仕事を支援してもらう必要があります。自由なソフトウェアをビルドすること、そして自由な知識を広めること。これらには、最初の仕事をするためのみならず、長きにわたってそれを維持していくための時間と費用がかかります。"
 
@@ -1456,6 +1486,9 @@ msgstr[0] "{0} は 1 週間あたり {n} 人のパトロンから {1} 受け取�
 msgid "Donating ({amount})"
 msgstr "寄付（{amount}）"
 
+msgid "Pledge"
+msgstr "約束"
+
 msgid "Donate"
 msgstr "寄付"
 
@@ -1488,9 +1521,6 @@ msgstr "リストから削除"
 
 msgid "Show on your profile"
 msgstr "プロフィールに表示"
-
-msgid "Pledge"
-msgstr "約束"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "現在サンドボックスモードです。実際の支払い情報や個人情報は入力しないでください！"
@@ -1613,9 +1643,6 @@ msgstr "カスタム"
 msgid "Modify the donation"
 msgstr "寄付を変更"
 
-msgid "Next step →"
-msgstr "次のステップ→"
-
 msgid "Stop the donation"
 msgstr "寄付を停止"
 
@@ -1666,22 +1693,6 @@ msgstr "できません。{username} は {currency} による支払いのみを�
 
 msgid "What payment methods are available?"
 msgstr "利用可能な支払い方法には何がありますか？"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
 
 msgid "How do recurrent donations work?"
 msgstr "継続的な寄付とは、どのような仕組みでしょうか？"

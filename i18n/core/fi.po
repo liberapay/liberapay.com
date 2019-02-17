@@ -517,8 +517,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Taisit löytää bugin! Pahoittelemme häiriötä. Korjaamme sen mahdollisimman pian!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Virheen tiedot on tallennettu. Jos haluat ottaa meihin yhteyttä, sisällytä viestissäsi tämä virhetunniste: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Joka viikko niin kauan kuin vastaanotan lahjoituksia"
@@ -1393,6 +1407,22 @@ msgstr "Haluatko yhä käyttää tätä salasanaa?"
 msgid "No, cancel"
 msgstr "En, peruuta"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} ei ole vielä määrittänyt maksumenetelmiä, joten lahjoitustasi ei voida käsitellä nyt. Ilmoitamme, kun maksaminen mahdollistuu."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express) tai suoraveloituksella eurooppalaiselta pankkitililtä (vain euromääräiset lahjoitukset)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express), SEPA-suoraveloituksella euromääräiseltä pankkitililtä tai PayPalin kautta."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Yhteistä hyvää rakentavat sisällöntuottajat tarvitsevat tukeasi. Ilmaisen ohjelmiston tuottamiseen, tiedon jakamiseen ilmaiseksi ym. kuluu aikaa ja rahaa: ei vain itse työhön alunperin, vaan myös sen pitkäaikaiseen ylläpitoon."
 
@@ -1488,6 +1518,9 @@ msgstr[1] "{0} saa {1} viikossa {n} tukijalta."
 msgid "Donating ({amount})"
 msgstr "Lahjoitat ({amount})"
 
+msgid "Pledge"
+msgstr "Tee maksulupaus"
+
 msgid "Donate"
 msgstr "Lahjoita"
 
@@ -1520,9 +1553,6 @@ msgstr "Poista listaus"
 
 msgid "Show on your profile"
 msgstr "Näytä profiilissasi"
-
-msgid "Pledge"
-msgstr "Tee maksulupaus"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Olet kokeilumoodissa, älä syötä mitään oikeita maksutietoja tai henkilökohtaisia tietoa!"
@@ -1647,9 +1677,6 @@ msgstr "Vapaavalintainen"
 msgid "Modify the donation"
 msgstr "Muuta lahjoitusta"
 
-msgid "Next step →"
-msgstr "Seuraava vaihe →"
-
 msgid "Stop the donation"
 msgstr "Pysäytä lahjoitus"
 
@@ -1700,22 +1727,6 @@ msgstr "Ei, {username} ottaa vastaan vain {currency}-määräisiä lahjoituksia.
 
 msgid "What payment methods are available?"
 msgstr "Mitä maksumenetelmiä tuemme?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} ei ole vielä määrittänyt maksumenetelmiä, joten lahjoitustasi ei voida käsitellä nyt. Ilmoitamme, kun maksaminen mahdollistuu."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express) tai suoraveloituksella eurooppalaiselta pankkitililtä (vain euromääräiset lahjoitukset)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express), SEPA-suoraveloituksella euromääräiseltä pankkitililtä tai PayPalin kautta."
 
 msgid "How do recurrent donations work?"
 msgstr "Miten toistuvat lahjoitukset toimivat?"

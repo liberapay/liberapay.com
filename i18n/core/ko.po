@@ -492,8 +492,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "버그를 발견하신 것 같네요! 불편을 겪게 해드려 죄송합니다. 최대한 빨리 고치겠습니다!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "이 오류의 세부 사항이 기록되었습니다. 저희에게 연락하기로 결정하셨다면 에러 식별자 {0} 을/를 알려주세요."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "기부를 받는 한 매 주"
@@ -1363,6 +1377,22 @@ msgstr "여전히 이 비밀번호를 사용하시겠습니까?"
 msgid "No, cancel"
 msgstr "아뇨, 취소합니다"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} 님이 아직 지불 방식을 명시하지 않으셨기 때문에 아직 기부금을 처리할 수 없습니다. 결제가 가능해지면 다시 연락드리겠습니다."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "{username}님에 대한 기부는 신용 카드 또는 직불 카드로 가능합니다 (비자, 마스타카드, 아메리칸 익스프레스)."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "{username} 님에 대한 기부는 PayPal을 통해 처리됩니다. PayPal 계정이 없더라도 신용 카드 또는 직불 카드로 기부할 수 있습니다."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "{username} 님에 대한 기부는 신용 카드 또는 직불 카드 (비자, 마스타카드, 아메리칸 익스프레스) 또는 PayPal로도 가능합니다."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "공공의 이익을 위해 기여하는 사람들은 지원이 필요합니다. 자유 소프트웨어 제작, 자유로운 지식의 공유와 같은 일들은 시간을 소모하며, 초기 작업 외에도 유지보수에 자금을 필요로 합니다."
 
@@ -1456,6 +1486,9 @@ msgstr[0] "{0} 님은 {n} 명으로부터 매주 {1} 만큼을 받고 있습니�
 msgid "Donating ({amount})"
 msgstr "기부 중 ({amount})"
 
+msgid "Pledge"
+msgstr "공약"
+
 msgid "Donate"
 msgstr "기부하기"
 
@@ -1488,9 +1521,6 @@ msgstr "리스트 해제"
 
 msgid "Show on your profile"
 msgstr "프로필 보기"
-
-msgid "Pledge"
-msgstr "공약"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "샌드박스 모드에 있습니다, 실제 결제 정보 또는 개인 정보를 입력하지 마십시오!"
@@ -1613,9 +1643,6 @@ msgstr "지정"
 msgid "Modify the donation"
 msgstr "기부 수정하기"
 
-msgid "Next step →"
-msgstr "다음 차례 →"
-
 msgid "Stop the donation"
 msgstr "기부 중지하기"
 
@@ -1666,22 +1693,6 @@ msgstr "아니오, {username} 님은 {currency} 화폐로만 기부금을 받습
 
 msgid "What payment methods are available?"
 msgstr "어떤 지불 방식을 사용할 수 있나요?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} 님이 아직 지불 방식을 명시하지 않으셨기 때문에 아직 기부금을 처리할 수 없습니다. 결제가 가능해지면 다시 연락드리겠습니다."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "{username}님에 대한 기부는 신용 카드 또는 직불 카드로 가능합니다 (비자, 마스타카드, 아메리칸 익스프레스)."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "{username} 님에 대한 기부는 PayPal을 통해 처리됩니다. PayPal 계정이 없더라도 신용 카드 또는 직불 카드로 기부할 수 있습니다."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "{username} 님에 대한 기부는 신용 카드 또는 직불 카드 (비자, 마스타카드, 아메리칸 익스프레스) 또는 PayPal로도 가능합니다."
 
 msgid "How do recurrent donations work?"
 msgstr "지속적인 기부는 어떻게 작동하나요?"

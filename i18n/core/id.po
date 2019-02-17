@@ -494,8 +494,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Sepertinya Anda telah menemukan bug! Maaf atas ketidaknyamanan ini, kami akan memperbaikinya!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Rincian kesalahan ini telah direkam. Jika anda memutuskan untuk menghubungi kami, harap sertakan kode identifikasi kesalahan berikut dalam pesan anda: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Setiap minggu selama saya menerima donasi"
@@ -1366,6 +1380,22 @@ msgstr "Apakah anda masih ingin menggunakan kata sandi ini?"
 msgid "No, cancel"
 msgstr "Tidak, batalkan"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} belum mengkonfigurasi metode pembayaran apapun, jadi donasi anda tidak dapat diproses saat ini. Kami akan memberitahukan kepada anda kapan pembayaran dapat dilaksanakan."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express)."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Donasi ke {username} diproses melalui PayPal. Anda dapat membayar dengan kartu kredit atau kartu debit meski anda tidak memiliki akun PayPal."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atu kartu debit (Visa, MasterCard, American Express),  atau melalui PayPal."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Orang-orang yang berkontribusi untuk kebutuhan bersama membutuhkan anda untuk mendukung pekerjaan mereka. Membangun perangkat lunak bebas, menyebarkan pengetahuan gratis, hal-hal ini membutuhkan waktu dan uang, tidak hanya untuk melakukan pekerjaan awal, tetapi juga untuk pemeliharaan (maintenance) dari waktu ke waktu."
 
@@ -1459,6 +1489,9 @@ msgstr[0] ""
 msgid "Donating ({amount})"
 msgstr "Mendonasikan ({amount})"
 
+msgid "Pledge"
+msgstr "Penjamin"
+
 msgid "Donate"
 msgstr "Donasi"
 
@@ -1492,9 +1525,6 @@ msgstr "Batalkan daftar"
 
 msgid "Show on your profile"
 msgstr "Tunjukan pada profil anda"
-
-msgid "Pledge"
-msgstr "Penjamin"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Anda berada dalam mode sandbox, jangan lakukan input pembayaran atau data pribadi!"
@@ -1617,9 +1647,6 @@ msgstr ""
 msgid "Modify the donation"
 msgstr "Ubah donasi"
 
-msgid "Next step →"
-msgstr "Langkah selanjutnya →"
-
 msgid "Stop the donation"
 msgstr "Hentikan donasi"
 
@@ -1670,22 +1697,6 @@ msgstr "Tidak, {username} hanya dapat menerima pembayaran dalam {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Metode pembayaran apa yang tersedia?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} belum mengkonfigurasi metode pembayaran apapun, jadi donasi anda tidak dapat diproses saat ini. Kami akan memberitahukan kepada anda kapan pembayaran dapat dilaksanakan."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express)."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Donasi ke {username} diproses melalui PayPal. Anda dapat membayar dengan kartu kredit atau kartu debit meski anda tidak memiliki akun PayPal."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atu kartu debit (Visa, MasterCard, American Express),  atau melalui PayPal."
 
 msgid "How do recurrent donations work?"
 msgstr "Bagai mana donasi berulang bekerja?"

@@ -517,8 +517,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Sie haben einen Fehler im Programm gefunden! Bitte entschuldigen Sie die Unannehmlichkeiten, wir werden ihn so schnell wie möglich beheben!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Die Einzelheiten dieses Fehlers wurden aufgezeichnet. Wenn Sie sich entschließen, uns zu kontaktieren, geben Sie bitte den folgenden Fehlercode in Ihrer Nachricht an: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Jede Woche, so lange wie ich Spenden empfange"
@@ -1393,6 +1407,22 @@ msgstr "Wollen Sie wirklich weiterhin dieses Passwort nutzen?"
 msgid "No, cancel"
 msgstr "Nein, abbrechen"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} hat bisher keine Zahlungsmethode eingestellt, weshalb Ihre Spende derzeit nicht verarbeitet werden kann. Wir werden Sie informieren, sobald Zahlungen möglich sind."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte (Visa, MasterCard, American Express) bezahlt werden."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Spenden an {username} werden durch PayPal abgewickelt. Sie können mit Kredit- oder Debitkarte zahlen, auch wenn Sie kein PayPal-Konto haben."
+
+#, fuzzy, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Spenden an {username} können per Kredit- und Debitkarte bezahlt werden (Visa, MasterCard, American Express) oder über PayPal."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Menschen, die zum Allgemeinwohl beitragen, brauchen Unterstützung bei ihrer Arbeit. Freie Software zu entwickeln oder Wissen zu vermitteln kostet Zeit und Geld. Dies betrifft nicht nur die anfängliche Arbeit, sondern auch die Pflege und Bereitstellung über längere Zeit."
 
@@ -1488,6 +1518,9 @@ msgstr[1] "{0} erhält {1} pro Woche von {n} Förderern."
 msgid "Donating ({amount})"
 msgstr "Spende ({amount})"
 
+msgid "Pledge"
+msgstr "Versprechen"
+
 msgid "Donate"
 msgstr "Spenden"
 
@@ -1520,9 +1553,6 @@ msgstr "Von der Liste entfernen"
 
 msgid "Show on your profile"
 msgstr "Ihr Profil anzeigen"
-
-msgid "Pledge"
-msgstr "Versprechen"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Sie befinden sich im Sandbox-Modus. Geben Sie keine echten Zahlungs- oder Personendaten ein!"
@@ -1647,9 +1677,6 @@ msgstr "Angepasst"
 msgid "Modify the donation"
 msgstr "Ändern der Spende"
 
-msgid "Next step →"
-msgstr "Nächster Schritt →"
-
 msgid "Stop the donation"
 msgstr "Spende beenden"
 
@@ -1700,22 +1727,6 @@ msgstr "Nein, {username} akzeptiert nur Zahlungen in {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Welche Zahlungsarten sind verfügbar?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} hat bisher keine Zahlungsmethode eingestellt, weshalb Ihre Spende derzeit nicht verarbeitet werden kann. Wir werden Sie informieren, sobald Zahlungen möglich sind."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte (Visa, MasterCard, American Express) bezahlt werden."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Spenden an {username} werden durch PayPal abgewickelt. Sie können mit Kredit- oder Debitkarte zahlen, auch wenn Sie kein PayPal-Konto haben."
-
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Spenden an {username} können per Kredit- und Debitkarte bezahlt werden (Visa, MasterCard, American Express) oder über PayPal."
 
 msgid "How do recurrent donations work?"
 msgstr "Wie funktionieren periodische Spenden?"

@@ -517,8 +517,22 @@ msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it 
 msgstr "Het lijkt erop dat je een bug hebt gevonden! Sorry voor het ongemak, we lossen het zo snel mogelijk op!"
 
 #, python-brace-format
+msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+#, python-brace-format
+msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
+msgstr ""
+
+msgid "Error message:"
+msgstr ""
+
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "De details van deze fout werden geregistreerd. Als je beslist om contact met ons op te nemen, vermeld alstublieft dan de volgende foutcode in je bericht: {0}."
+
+msgid "If you decide to contact us please include the following debugging information in your message:"
+msgstr ""
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Elke week zolang ik donaties ontvang"
@@ -1393,6 +1407,22 @@ msgstr "Wil je nog steeds dit wachtwoord gebruiken?"
 msgid "No, cancel"
 msgstr "Nee, annuleren"
 
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} heeft nog geen betaalmethode geconfigureerd, dus je donatie kan nu niet worden verwerkt. Wij zullen je op de hoogte brengen wanneer betaling mogelijk wordt."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donaties aan {username} kunnen betaald worden met een creditcard (Visa, MasterCard, American Express) of debetkaart van een Europees bankrekening (alleen voor donaties in Euro's)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Donaties aan {username} worden verwerkt via PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donaties aan {username} kunnen worden betaald met een creditcard (Visa, MasterCard, American Express), een Europese bankrekening (SEPA Direct Debit) of via PayPal-account."
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Mensen die bijdragen aan het gemeenschappelijke hebben je hulp nodig. Het bouwen van vrije software of het verspreiden van vrije kennis kost tijd en geld. Niet alleen het opstarten, maar ook om het te onderhouden."
 
@@ -1488,6 +1518,9 @@ msgstr[1] "{0} ontvangt {1} per week van {n} sponsors."
 msgid "Donating ({amount})"
 msgstr "Doneren ({amount})"
 
+msgid "Pledge"
+msgstr "Toezeggen"
+
 msgid "Donate"
 msgstr "Doneer"
 
@@ -1520,9 +1553,6 @@ msgstr "Niet vermelden"
 
 msgid "Show on your profile"
 msgstr "Op je profiel weergeven"
-
-msgid "Pledge"
-msgstr "Toezeggen"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Je bent in de sandbox-modus, voer geen echte betalingen of persoonlijke gegevens in!"
@@ -1647,9 +1677,6 @@ msgstr "Aangepast"
 msgid "Modify the donation"
 msgstr "Wijzig de donatie"
 
-msgid "Next step →"
-msgstr "Volgende stap →"
-
 msgid "Stop the donation"
 msgstr "Stop de donatie"
 
@@ -1700,22 +1727,6 @@ msgstr "Nee, {username} accepteert alleen betalingen in {currency}."
 
 msgid "What payment methods are available?"
 msgstr "Welke betalingsmethodes zijn er beschikbaar?"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} heeft nog geen betaalmethode geconfigureerd, dus je donatie kan nu niet worden verwerkt. Wij zullen je op de hoogte brengen wanneer betaling mogelijk wordt."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donaties aan {username} kunnen betaald worden met een creditcard (Visa, MasterCard, American Express) of debetkaart van een Europees bankrekening (alleen voor donaties in Euro's)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Donaties aan {username} worden verwerkt via PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donaties aan {username} kunnen worden betaald met een creditcard (Visa, MasterCard, American Express), een Europese bankrekening (SEPA Direct Debit) of via PayPal-account."
 
 msgid "How do recurrent donations work?"
 msgstr "Hoe werken periodieke donaties?"
