@@ -75,6 +75,7 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
     'Currency': Currency,
     'b64decode_s': b64decode_s,
     'b64encode_s': b64encode_s,
+    'generate_session_token': Participant.generate_session_token,
     'to_age': to_age,
     'to_javascript': utils.to_javascript,
     'urlquote': urlquote,

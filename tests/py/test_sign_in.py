@@ -17,6 +17,7 @@ good_data = {
     'sign-in.username': 'bob',
     'sign-in.password': password,
     'sign-in.email': 'bob@example.com',
+    'sign-in.token': 'ThisIsATokenThatIsThirtyTwoBytes',
 }
 
 
@@ -231,6 +232,10 @@ class TestSignIn(EmailHarness):
         # Check that the new user has an avatar
         p = Participant.from_username(username)
         assert p.avatar_url
+        # Simulate a double submit
+        r2 = self.sign_in(HTTP_ACCEPT_LANGUAGE='fr')
+        assert r2.code == 302, r2.text
+        assert r2.headers.cookie[SESSION].value == r.headers.cookie[SESSION].value
 
     def test_sign_in_form_repost(self):
         extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
@@ -241,6 +246,11 @@ class TestSignIn(EmailHarness):
     def test_sign_in_without_username(self):
         r = self.sign_in(dict(username=''))
         assert r.code == 302
+        assert SESSION in r.headers.cookie
+        # Simulate a double submit
+        r2 = self.sign_in(dict(username=''))
+        assert r2.code == 302, r2.text
+        assert r2.headers.cookie[SESSION].value == r.headers.cookie[SESSION].value
 
     def test_sign_in_non_ascii_username(self):
         r = self.sign_in(dict(username='mélodie'.encode('utf8')))
@@ -277,6 +287,34 @@ class TestSignIn(EmailHarness):
     def test_sign_in_bad_email(self):
         r = self.sign_in(dict(email='foo@bar'))
         assert r.code == 400
+
+    def test_sign_in_email_already_taken_just_now(self):
+        r = self.sign_in()
+        assert r.code == 302
+        r = self.sign_in(dict(username=None, token='0'*32))
+        assert r.code == 409
+        assert SESSION not in r.headers.cookie
+        r = self.sign_in(dict(username=None, token=''))
+        assert r.code == 409
+        assert SESSION not in r.headers.cookie
+        r = self.sign_in(dict(username=None, token=None))
+        assert r.code == 409
+        assert SESSION not in r.headers.cookie
+
+    def test_sign_in_email_already_taken_a_while_ago(self):
+        r = self.sign_in()
+        assert r.code == 302
+        self.db.run("UPDATE participants SET join_time = join_time - interval '1 week'")
+        self.db.run("UPDATE user_secrets SET mtime = mtime - interval '1 week'")
+        r = self.sign_in(dict(username=None, token='0'*32))
+        assert r.code == 409
+        assert SESSION not in r.headers.cookie
+        r = self.sign_in(dict(username=None, token=''))
+        assert r.code == 409
+        assert SESSION not in r.headers.cookie
+        r = self.sign_in(dict(username=None, token=None))
+        assert r.code == 409
+        assert SESSION not in r.headers.cookie
 
     def test_sign_in_without_csrf_cookie(self):
         r = self.sign_in(csrf_token=None)

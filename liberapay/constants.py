@@ -73,6 +73,8 @@ AVATAR_SOURCES = (
     'libravatar bitbucket facebook github gitlab google mastodon twitch twitter youtube'
 ).split()
 
+BASE64URL_CHARS = set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_')
+
 BIRTHDAY = date(2015, 5, 22)
 
 CURRENCIES = ordered_set([

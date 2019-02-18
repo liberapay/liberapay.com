@@ -8,7 +8,7 @@ from liberapay.models.participant import Participant
 if request.method == 'POST':
     if user.ANON:
         raise AuthRequired
-    name = request.body['name']
+    name = request.body['name'].strip()
     t = Participant.from_username(name)
     if t:
         if t.kind == 'group' and t.status == 'closed' and user.id == t.closed_by:

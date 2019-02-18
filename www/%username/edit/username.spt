@@ -6,7 +6,7 @@ from liberapay.utils import form_post_success, get_participant
 participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
-    new_username = request.body['username']
+    new_username = request.body['username'].strip()
     if new_username != participant.username:
         participant.change_username(new_username, recorder=user)
     new_public_name = request.body.get('public_name')

@@ -16,14 +16,14 @@ from dateutil.parser import parse as parse_date
 from html2text import html2text
 import mangopay
 from markupsafe import escape as htmlescape
-from pando import json
+from pando import json, Response
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 import requests
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, CURRENCIES,
+    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, BASE64URL_CHARS, CURRENCIES,
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
     PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
@@ -381,6 +381,17 @@ class Participant(Model, MixinTeam):
     # Session Management
     # ==================
 
+    @staticmethod
+    def generate_session_token():
+        return b64encode(urandom(24), b'-_').decode('ascii')
+
+    @staticmethod
+    def check_session_token(token):
+        if len(token) < 32:
+            raise Response(400, "bad token, too short")
+        if not set(token).issubset(BASE64URL_CHARS):
+            raise Response(400, "bad token, not base64url")
+
     def upsert_session(self, session_id, new_token):
         assert session_id >= 1
         session = self.db.one("""
@@ -405,16 +416,20 @@ class Participant(Model, MixinTeam):
         """, (self.id, session_id))
         self.session = session
 
-    def start_session(self, suffix=''):
+    def start_session(self, suffix='', token=None):
         """Start a new session for the user, invalidating the previous one.
         """
-        token = (b64encode(urandom(24), b'-_') + suffix.encode('ascii')).decode('ascii')
+        if token:
+            self.check_session_token(token)
+            token += suffix
+        else:
+            token = self.generate_session_token() + suffix
         self.upsert_session(1, token)
         return self.session
 
-    def sign_in(self, cookies, suffix=''):
+    def sign_in(self, cookies, **session_kw):
         assert self.authenticated
-        self.start_session(suffix)
+        self.start_session(**session_kw)
         creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
         set_cookie(cookies, SESSION, creds, self.session.mtime + SESSION_TIMEOUT)
 
@@ -904,7 +919,7 @@ class Participant(Model, MixinTeam):
         owner = (cursor or self.db).one("""
             SELECT participant
               FROM emails
-             WHERE address = %(email)s
+             WHERE lower(address) = lower(%(email)s)
                AND verified IS true
         """, locals())
         if owner:
@@ -1705,9 +1720,8 @@ class Participant(Model, MixinTeam):
     # More Random Stuff
     # =================
 
-    def change_username(self, suggested, cursor=None, recorder=None):
-        suggested = suggested and suggested.strip()
-
+    @staticmethod
+    def check_username(suggested):
         if not suggested:
             raise UsernameIsEmpty(suggested)
 
@@ -1724,10 +1738,11 @@ class Participant(Model, MixinTeam):
         if suffix in USERNAME_SUFFIX_BLACKLIST:
             raise UsernameEndsWithForbiddenSuffix(suggested, suffix)
 
-        lowercased = suggested.lower()
-
-        if lowercased in website.restricted_usernames:
+        if suggested.lower() in website.restricted_usernames:
             raise UsernameIsRestricted(suggested)
+
+    def change_username(self, suggested, cursor=None, recorder=None):
+        self.check_username(suggested)
 
         if suggested != self.username:
             with self.db.get_cursor(cursor) as c:
@@ -1744,7 +1759,7 @@ class Participant(Model, MixinTeam):
                     raise UsernameAlreadyTaken(suggested)
                 if actual is None:
                     return suggested
-                assert (suggested, lowercased) == actual  # sanity check
+                assert (suggested, suggested.lower()) == actual  # sanity check
 
                 # Deal with redirections
                 last_rename = self.get_last_event_of_type('set_username')
