@@ -24,19 +24,19 @@ class TestIdentity(Harness):
         # Create a mangopay natural user
         data = dict(user_data, terms='agree')
         kw = dict(auth_as=janeway, raise_immediately=False, xhr=True)
-        r = self.client.POST('/janeway/identity', data, **kw)
+        r = self.client.POST('/janeway/identity-v1', data, **kw)
         assert r.code == 200, r.text
         janeway = janeway.refetch()
         assert janeway.mangopay_user_id
 
         # Test the rendering of the identity page
-        r = self.client.GET('/janeway/identity.html', auth_as=janeway)
+        r = self.client.GET('/janeway/identity-v1.html', auth_as=janeway)
         assert r.code == 200, r.text
         assert user_data['FirstName'] in r.text
 
         # Edit the natural user
         data2 = dict(data, FirstName='Kathryn', Nationality='US', Birthday='1970-01-01')
-        r = self.client.POST('/janeway/identity', data2, **kw)
+        r = self.client.POST('/janeway/identity-v1', data2, **kw)
         assert r.code == 200, r.text
         janeway2 = janeway.refetch()
         assert janeway2.mangopay_user_id == janeway.mangopay_user_id
@@ -53,7 +53,7 @@ class TestIdentity(Harness):
         data['LegalPersonType'] = 'BUSINESS'
         data['Name'] = 'Starfleet'
         data['confirmed'] = 'yes'
-        r = self.client.POST('/janeway/identity', data, **kw)
+        r = self.client.POST('/janeway/identity-v1', data, **kw)
         assert r.code == 200, r.text
         janeway = janeway.refetch()
         assert janeway.mangopay_user_id != janeway2.mangopay_user_id
@@ -62,7 +62,7 @@ class TestIdentity(Harness):
 
         # Edit the legal user
         data2 = dict(data, LegalPersonType='ORGANIZATION')
-        r = self.client.POST('/janeway/identity', data2, **kw)
+        r = self.client.POST('/janeway/identity-v1', data2, **kw)
         assert r.code == 200, r.text
         janeway2 = janeway.refetch()
         assert janeway2.mangopay_user_id == janeway.mangopay_user_id
@@ -77,17 +77,17 @@ class TestIdentity(Harness):
         data['organization'] = 'yes'
         data['LegalPersonType'] = 'ORGANIZATION'
         data['Name'] = 'Starfleet'
-        r = self.client.POST('/janeway/identity', data, **kw)
+        r = self.client.POST('/janeway/identity-v1', data, **kw)
         assert "Invalid date of birth" in r.text
 
         data = dict(data, Birthday='1995-16-01')
-        r = self.client.POST('/janeway/identity', data, **kw)
+        r = self.client.POST('/janeway/identity-v1', data, **kw)
         assert "Invalid date of birth" in r.text
 
         data = dict(data, Birthday='bad')
-        r = self.client.POST('/janeway/identity', data, **kw)
+        r = self.client.POST('/janeway/identity-v1', data, **kw)
         assert "Invalid date of birth" in r.text
 
         data = dict(data, Birthday='')
-        r = self.client.POST('/janeway/identity', data, **kw)
+        r = self.client.POST('/janeway/identity-v1', data, **kw)
         assert "You haven&#39;t filled all the required fields." in r.text

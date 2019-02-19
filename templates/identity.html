@@ -1,0 +1,112 @@
+% from "templates/icons.html" import glyphicon
+% from "templates/postal-addresses.html" import postal_address_form_v2 with context
+
+
+% macro identity_form(identity, wanted, required=True)
+
+    % include "templates/sandbox-warning.html"
+
+    % set required = 'required' if required else ''
+
+    <div class="block-labels max-width-500">
+
+    <h3>{{ _("Personal Information") }}</h3>
+
+    % if 'name' in wanted
+    <label>
+        <span>{{ _("Full Name") }}</span>
+        <input name="name" autocomplete="name" {{ required }} maxlength=200
+               class="form-control" value="{{ identity.name }}" />
+    </label>
+    % endif
+
+    % if 'postal_address.country' in wanted
+    <label>
+        % set country = identity.postal_address['country'] or request.country
+        <span>{{ _("Country (residence)") }}</span>
+        <select name="postal_address.country" class="form-control country" {{ required }}>
+            <option></option>
+        % for each in locale.countries.items()
+            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
+        % endfor
+        </select>
+    </label>
+    % endif
+
+    % if 'nationality' in wanted
+    <label>
+        % set country = identity.nationality or request.country
+        <span>{{ _("Nationality") }}</span>
+        <select name="nationality" class="form-control country" {{ required }}>
+            <option></option>
+        % for each in locale.countries.items()
+            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
+        % endfor
+        </select>
+    </label>
+    % endif
+
+    % if 'birthdate' in wanted
+    <label>
+        <span>{{ _("Date of Birth") }}</span>
+        <input name="birthdate" value="{{ identity.birthdate }}"
+               type="date" autocomplete="bday"
+               pattern="[1-2][0-9]{3}-[0-9]{1,2}-[0-9]{1,2}"
+               placeholder="{{ _('YYYY-MM-DD') }}"
+               class="form-control" size=10 {{ required }} />
+    </label>
+    % endif
+
+    % if 'occupation' in wanted
+    <label>
+        <span>{{ _("Occupation") }}
+            <span title='{{ _(
+                      "Your main professional activity."
+                  ) }}' data-toggle="tooltip" data-placement="top">{{
+                glyphicon('question-sign')
+            }}</span>
+        </span>
+        <input name="occupation" required maxlength=200
+               class="form-control" value="{{ identity.occupation or '' }}" />
+    </label>
+    % endif
+
+    % if 'postal_address' in wanted
+        <h4>{{ _("Postal Address") }}</h4>
+        {{ postal_address_form_v2(saved=identity.postal_address or None, required=required) }}
+    % endif
+
+    % if 'organization_name' in wanted
+    % if 'postal_address' in wanted
+        <h3>{{ _("Organization Information") }}</h3>
+    % endif
+    <p>{{ _("Are you acting as the representative of an organization?") }}</p>
+
+    <label class="form-group">
+        <input type="checkbox" name="organization" value="yes"
+               data-toggle="enable" data-target="#organization"
+               {{ 'checked' if identity.organization_name else '' }} />
+        <span>{{ _("Yes, I represent a business or nonprofit.") }}</span>
+    </label>
+
+    <fieldset id="organization" {{ '' if identity.organization_name else 'disabled' }}>
+        <label>
+            <span>{{ _('Organization Name') }}</span>
+            <input name="organization_name" {{ required }} maxlength=200
+                   class="form-control" value="{{ identity.organization_name }}" />
+        </label>
+
+        % if 'headquarters_address' in wanted
+        <h4>{{ _("Headquarters Address") }}</h4>
+        {{ postal_address_form_v2(
+            prefix='headquarters_address',
+            saved=identity.headquarters_address or None,
+            required=required
+        ) }}
+        % endif
+    </fieldset>
+    % endif
+
+    </div>
+
+% endmacro

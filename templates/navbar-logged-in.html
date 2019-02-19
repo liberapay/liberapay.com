@@ -17,9 +17,7 @@
     <li class="level2"><a href="/{{ user.username }}/wallet/payout">{{ _("Withdraw money") }}</a></li>
     % endif
     <li><a href="/{{ user.username }}/payment/">{{ _("Payment Processors") }}</a></li>
-    % if user.mangopay_user_id
     <li><a href="/{{ user.username }}/identity">{{ _("Identity") }}</a></li>
-    % endif
     <li><a href="/{{ user.username }}/settings/">{{ _("Settings") }}</a></li>
     <li><a href="/{{ user.username }}/emails/">{{ _("Emails") }}</a></li>
     <li><a href="/{{ user.username }}/widgets/">{{ _("Widgets") }}</a></li>
