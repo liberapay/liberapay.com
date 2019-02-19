@@ -1,3 +1,13 @@
+# https://github.com/liberapay/liberapay.com/issues/1451
+import sys
+_init_modules = globals().get('_init_modules')
+if _init_modules:
+    for name in list(sys.modules):
+        if name not in _init_modules:
+            sys.modules.pop(name, None)
+else:
+    _init_modules = sys.modules.keys()
+
 import builtins
 from ipaddress import ip_address
 import os
