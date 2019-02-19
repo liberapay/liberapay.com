@@ -126,6 +126,7 @@ def database(env, tell_sentry):
     except psycopg2.OperationalError as e:
         tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()
+        return {'db': db, 'db_qc1': db, 'db_qc5': db}
 
     models = (
         _AccountElsewhere, AccountElsewhere, _Community, Community,
@@ -406,6 +407,8 @@ def billing(app_conf):
 
 
 def stripe(app_conf):
+    if not app_conf:
+        return
     import stripe
     stripe.api_key = app_conf.stripe_secret_key
 
@@ -762,6 +765,8 @@ def s3(env):
 
 
 def currency_exchange_rates(db):
+    if not db:
+        return
     return {'currency_exchange_rates': get_currency_exchange_rates(db)}
 
 
