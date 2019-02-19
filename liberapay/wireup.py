@@ -6,7 +6,6 @@ import os
 import re
 import socket
 import signal
-from subprocess import call
 from time import time
 import traceback
 from urllib.request import urlretrieve
@@ -126,12 +125,6 @@ def database(env, tell_sentry):
         db = DB(dburl, maxconn=maxconn)
     except psycopg2.OperationalError as e:
         tell_sentry(e, {})
-        pg_dir = os.environ.get('OPENSHIFT_PG_DATA_DIR')
-        if pg_dir:
-            # We know where the postgres data is, try to start the server ourselves
-            r = call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '15'])
-            if r == 0:
-                return database(env, tell_sentry)
         db = NoDB()
 
     models = (
