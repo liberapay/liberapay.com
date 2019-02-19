@@ -124,7 +124,7 @@ def database(env, tell_sentry):
     try:
         db = DB(dburl, maxconn=maxconn)
     except psycopg2.OperationalError as e:
-        tell_sentry(e, {})
+        tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()
 
     models = (
