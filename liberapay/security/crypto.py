@@ -89,7 +89,7 @@ class Cryptograph(object):
             keys = secret['SecretString'].split()
         else:
             self.secrets_manager = None
-            parts = os.environ.pop('SECRET_FERNET_KEYS').split()
+            parts = os.environ['SECRET_FERNET_KEYS'].split()
             rotation_start = date(*map(int, parts[0].split('-')))
             keys = parts[1:]
         self.fernet_rotation_start = rotation_start
