@@ -2513,6 +2513,7 @@ class Participant(Model, MixinTeam):
                         hq_addr.AddressLine1, hq_addr.AddressLine2
                     ))),
                 } if hq_addr else None,
+                'verified_by_mangopay': mp_account.kyc_level != 'LIGHT',
                 'nationality': getattr(mp_account, prefix + 'Nationality'),
                 'occupation': getattr(mp_account, prefix + 'Occupation'),
                 'organization_name': '' if individual else mp_account.Name,
