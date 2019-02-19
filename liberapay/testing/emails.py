@@ -1,4 +1,4 @@
-import mock
+from unittest import mock
 
 from liberapay.models.participant import Participant
 from liberapay.testing import Harness

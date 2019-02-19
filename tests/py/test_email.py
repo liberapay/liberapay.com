@@ -1,4 +1,4 @@
-from mock import patch
+from unittest.mock import patch
 
 from liberapay.exceptions import (
     BadEmailAddress, BadEmailDomain, CannotRemovePrimaryEmail, EmailAlreadyTaken,

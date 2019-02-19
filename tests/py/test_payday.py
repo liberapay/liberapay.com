@@ -1,6 +1,5 @@
 import json
-
-import mock
+from unittest import mock
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.billing.transactions import create_debt

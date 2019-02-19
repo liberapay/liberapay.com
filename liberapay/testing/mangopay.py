@@ -1,9 +1,9 @@
 import itertools
+from unittest import mock
 
 from mangopay.resources import (
     BankAccount, CardRegistration, NaturalUser, Wallet,
 )
-import mock
 import requests
 
 from liberapay.i18n.currencies import Money

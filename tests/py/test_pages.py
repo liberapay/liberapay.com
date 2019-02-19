@@ -1,9 +1,9 @@
 from collections import OrderedDict
 import os
 import re
+from unittest.mock import patch
 
 from mangopay.resources import DirectPayIn
-from mock import patch
 from pando import json, Response
 import pytest
 

@@ -1,5 +1,6 @@
+from unittest.mock import patch
+
 from mangopay.resources import Card
-from mock import patch
 
 from liberapay.testing.mangopay import MangopayHarness
 from liberapay.models.exchange_route import ExchangeRoute

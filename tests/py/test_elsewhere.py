@@ -1,6 +1,5 @@
 import json
-
-import mock
+from unittest import mock
 
 from liberapay.billing.payday import Payday
 from liberapay.elsewhere._base import UserInfo

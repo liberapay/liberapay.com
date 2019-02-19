@@ -1,6 +1,6 @@
 from datetime import datetime
+from unittest import mock
 
-import mock
 from pando.utils import utc
 import pytest
 

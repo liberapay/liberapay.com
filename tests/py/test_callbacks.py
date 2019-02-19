@@ -1,4 +1,4 @@
-from mock import patch
+from unittest.mock import patch
 
 from mangopay.resources import BankWirePayOut, Dispute, PayIn, Refund
 from mangopay.utils import Reason
