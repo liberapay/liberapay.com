@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import to_age
 from liberapay.models.participant import Participant
 from liberapay.utils import b64encode_s, get_participant
 
