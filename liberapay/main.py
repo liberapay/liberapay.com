@@ -1,3 +1,13 @@
+# https://github.com/liberapay/liberapay.com/issues/1451
+import sys
+_init_modules = globals().get('_init_modules')
+if _init_modules:
+    for name in list(sys.modules):
+        if name not in _init_modules:
+            sys.modules.pop(name, None)
+else:
+    _init_modules = sys.modules.keys()
+
 import builtins
 from ipaddress import ip_address
 import os
@@ -104,9 +114,14 @@ tell_sentry = website.tell_sentry
 
 if not website.db:
     # Re-exec in 30 second to see if the DB is back up
-    # SIGTERM is used to tell gunicorn to gracefully stop the worker
-    # http://docs.gunicorn.org/en/stable/signals.html
-    Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGTERM)).start()
+    if 'gunicorn' in sys.modules:
+        # SIGTERM is used to tell gunicorn to gracefully stop the worker
+        # http://docs.gunicorn.org/en/stable/signals.html
+        Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGTERM)).start()
+    else:
+        # SIGUSR1 is used to tell apache to gracefully restart this worker
+        # https://httpd.apache.org/docs/current/stopping.html
+        Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGUSR1)).start()
 
 if env.cache_static:
     http_caching.compile_assets(website)

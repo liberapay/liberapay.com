@@ -6,7 +6,6 @@ import os
 import re
 import socket
 import signal
-from subprocess import call
 from time import time
 import traceback
 from urllib.request import urlretrieve
@@ -125,14 +124,9 @@ def database(env, tell_sentry):
     try:
         db = DB(dburl, maxconn=maxconn)
     except psycopg2.OperationalError as e:
-        tell_sentry(e, {})
-        pg_dir = os.environ.get('OPENSHIFT_PG_DATA_DIR')
-        if pg_dir:
-            # We know where the postgres data is, try to start the server ourselves
-            r = call(['pg_ctl', '-D', pg_dir, 'start', '-w', '-t', '15'])
-            if r == 0:
-                return database(env, tell_sentry)
+        tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()
+        return {'db': db, 'db_qc1': db, 'db_qc5': db}
 
     models = (
         _AccountElsewhere, AccountElsewhere, _Community, Community,
@@ -413,6 +407,8 @@ def billing(app_conf):
 
 
 def stripe(app_conf):
+    if not app_conf:
+        return
     import stripe
     stripe.api_key = app_conf.stripe_secret_key
 
@@ -769,6 +765,8 @@ def s3(env):
 
 
 def currency_exchange_rates(db):
+    if not db:
+        return
     return {'currency_exchange_rates': get_currency_exchange_rates(db)}
 
 

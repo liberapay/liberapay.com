@@ -1,6 +1,6 @@
 from decimal import Decimal as D
+from unittest.mock import patch
 
-from mock import patch
 import pytest
 
 from liberapay.billing.transactions import swap_currencies, Transfer

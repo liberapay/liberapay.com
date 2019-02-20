@@ -1,7 +1,7 @@
 from os.path import abspath
+from unittest.mock import MagicMock, patch
 
 from aspen import resources
-from mock import MagicMock, patch
 
 from liberapay.constants import EPOCH
 from liberapay.testing import Harness
