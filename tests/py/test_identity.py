@@ -91,3 +91,17 @@ class TestIdentity(Harness):
         data = dict(data, Birthday='')
         r = self.client.POST('/janeway/identity-v1', data, **kw)
         assert "You haven&#39;t filled all the required fields." in r.text
+
+    def test_identity_form_v2(self):
+        janeway = self.make_participant(
+            'janeway', email='janeway@example.org', mangopay_user_id=None
+        )
+
+        # Test getting the form
+        r = self.client.GET('/janeway/identity', auth_as=janeway)
+        assert r.code == 200
+
+        # Test posting nothing
+        r = self.client.PxST('/janeway/identity', {}, auth_as=janeway)
+        assert r.code == 302, r.text
+        assert b'/janeway/identity' in r.headers[b'Location']
