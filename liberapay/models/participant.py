@@ -2515,7 +2515,7 @@ class Participant(Model, MixinTeam):
                 } if hq_addr else None,
                 'verified_by_mangopay': mp_account.kyc_level != 'LIGHT',
                 'nationality': getattr(mp_account, prefix + 'Nationality'),
-                'occupation': getattr(mp_account, prefix + 'Occupation'),
+                'occupation': mp_account.Occupation if individual else None,
                 'organization_name': '' if individual else mp_account.Name,
                 'postal_address': {
                     'country': (
