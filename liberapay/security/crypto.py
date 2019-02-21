@@ -6,7 +6,6 @@ import os
 from os import urandom
 import warnings
 
-import cbor2
 import boto3
 from cryptography.fernet import Fernet, InvalidToken, MultiFernet
 from pando.utils import utcnow
@@ -14,11 +13,8 @@ from psycopg2.extras import execute_batch
 
 from ..cron import CRON_ENCORE, CRON_STOP
 from ..models.encrypted import Encrypted
+from ..utils import cbor
 from ..website import website
-
-
-# Prevent https://github.com/agronholm/cbor2/issues/37
-cbor2.encoder.default_encoders.pop(date)
 
 
 def get_random_string(length=32, altchars=None) -> str:
@@ -105,14 +101,14 @@ class Cryptograph(object):
 
         For this to be effective the CBOR serializer must not sort the items
         again in an attempt to produce Canonical CBOR, so we explicitly pass
-        `canonical=False` to the `cbor2.dumps` function.
+        `canonical=False` to the `cbor.dumps` function.
 
         In addition, the dict must not contain only one key if that key is
         predictable, so a `CryptoWarning` is emitted when `dic` only contains
         one key, unless `allow_single_key` is set to `True`.
         """
         dic = self.randomize_dict(dic, allow_single_key=allow_single_key)
-        serialized = cbor2.dumps(dic, canonical=False)
+        serialized = cbor.dumps(dic, canonical=False)
         encrypted = self.fernet.encrypt(serialized)
         return Encrypted(dict(scheme='fernet', payload=encrypted, ts=utcnow()))
 
@@ -123,7 +119,7 @@ class Cryptograph(object):
             decrypted = self.fernet.decrypt(payload)
         else:
             raise ValueError('unknown encryption scheme %r' % scheme)
-        return cbor2.loads(decrypted)
+        return cbor.loads(decrypted)
 
     @staticmethod
     def randomize_dict(dic, allow_single_key=False):

@@ -25,6 +25,7 @@ from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
 from liberapay.security.csrf import SAFE_METHODS
 from liberapay.website import website
+from liberapay.utils import cbor
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
@@ -383,12 +384,14 @@ def serialize(context):
     for k, v in context.items():
         if str(type(v)) == "<class 'psycopg2.extras.Record'>":
             context[k] = v._asdict()
-    return b'\\x' + hexlify(pickle.dumps(context, 2))
+    return b'\\x' + hexlify(cbor.dumps(context, canonical=True))
 
 
-def deserialize(context):
+def deserialize(context, context_is_cbor):
     if isinstance(context, memoryview) and context[:2].tobytes() == b'\\x':
         context = unhexlify(context[2:])
+    if context_is_cbor:
+        return cbor.loads(context)
     return pickle.loads(context)
 
 
