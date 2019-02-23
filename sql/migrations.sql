@@ -2276,3 +2276,6 @@ DELETE FROM app_conf WHERE key IN (
 
 -- migration #97
 CREATE UNIQUE INDEX ON notifications (participant, event, idem_key);
+
+-- migration #98
+ALTER TABLE notifications ADD COLUMN context_is_cbor boolean;
