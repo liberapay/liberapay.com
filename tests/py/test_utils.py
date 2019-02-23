@@ -1,12 +1,13 @@
-from datetime import datetime
-from datetime import timedelta
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 
 from markupsafe import escape
 from pando.http.response import Response
 
 from liberapay import utils
+from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.testing import Harness
-from liberapay.utils import markdown, b64encode_s, b64decode_s
+from liberapay.utils import markdown, b64encode_s, b64decode_s, cbor
 from liberapay.wireup import CSP
 
 
@@ -192,6 +193,46 @@ class Tests(Harness):
 
     def test_b64decode_s_returns_default_if_passed_on_error(self):
         assert b64decode_s('abcd', default='error') == 'error'
+
+    # CBOR
+    # ====
+
+    def test_cbor_serialization_of_dates(self):
+        expected = date(1970, 1, 1)
+        actual = cbor.loads(cbor.dumps(expected))
+        assert expected == actual
+        expected = date(2019, 2, 23)
+        actual = cbor.loads(cbor.dumps(expected))
+        assert expected == actual
+
+    def test_cbor_serialization_of_Money(self):
+        expected = Money('9999999999.99', 'EUR')
+        actual = cbor.loads(cbor.dumps(expected))
+        assert expected == actual
+
+    def test_cbor_serialization_of_Money_with_extra_attribute(self):
+        expected = Money('0.01', 'EUR')
+        expected.fuzzy = True
+        actual = cbor.loads(cbor.dumps(expected))
+        assert expected.__dict__ == {
+            'amount': Decimal('0.01'),
+            'currency': 'EUR',
+            'fuzzy': True,
+        }
+        assert expected.__dict__ == actual.__dict__
+
+    def test_cbor_serialization_of_MoneyBasket(self):
+        expected = MoneyBasket(EUR=Decimal('10.01'), JPY=Decimal('1300'))
+        actual = cbor.loads(cbor.dumps(expected))
+        assert expected == actual
+
+    def test_cbor_serialization_of_MoneyBasket_with_extra_attribute(self):
+        expected = MoneyBasket(EUR=Decimal('10.01'), JPY=Decimal('1300'))
+        expected.foo = 'bar'
+        actual = cbor.loads(cbor.dumps(expected))
+        assert expected.amounts == actual.amounts
+        assert expected.__dict__ == {'foo': 'bar'}
+        assert expected.__dict__ == actual.__dict__
 
     # CSP
     # ===
