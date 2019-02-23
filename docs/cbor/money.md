@@ -48,6 +48,10 @@ If the key is `"attrs"`, then the value *must* be a map (major type 5) of additi
 
 Examples: `{"EUR": 10.00}`, `{"JPY": "1300", "USD": "11.22"}`, `{"XAF": 0, "attrs": {"date": "2001-01-01"}}`.
 
+## Implementations
+
+- Initial implementation: https://github.com/liberapay/liberapay.com/blob/2920b3c8ade10a8555a5b1095d1834c8d7cc0d55/liberapay/utils/cbor.py#L42-L83
+
 ## Trivia
 
 The tag number 77111 was chosen because it represents the first two letters of the word "Money" in ASCII.
