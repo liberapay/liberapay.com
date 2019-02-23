@@ -1131,7 +1131,7 @@ class Participant(Model, MixinTeam):
             if not messages:
                 break
             for msg in messages:
-                d = deserialize(msg.context, msg.context_is_cbor)
+                d = deserialize(msg.context)
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
                 if not email:
@@ -1184,8 +1184,8 @@ class Participant(Model, MixinTeam):
         # Okay, add the notification to the queue
         n_id = self.db.one("""
             INSERT INTO notifications
-                        (participant, event, context, web, email, idem_key, context_is_cbor)
-                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(idem_key)s, true)
+                        (participant, event, context, web, email, idem_key)
+                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(idem_key)s)
               RETURNING id;
         """, locals())
         if not web:
@@ -1282,7 +1282,7 @@ class Participant(Model, MixinTeam):
 
     def get_notifs(self):
         return self.db.all("""
-            SELECT id, event, context, context_is_cbor, is_new, ts
+            SELECT id, event, context, is_new, ts
               FROM notifications
              WHERE participant = %s
                AND web
@@ -1298,9 +1298,9 @@ class Participant(Model, MixinTeam):
         notifs = notifs or self.get_notifs()
 
         r = []
-        for id, event, notif_context, context_is_cbor, is_new, ts in notifs:
+        for id, event, notif_context, is_new, ts in notifs:
             try:
-                notif_context = deserialize(notif_context, context_is_cbor)
+                notif_context = deserialize(notif_context)
                 context = dict(state)
                 self.fill_notification_context(context)
                 context.update(notif_context)
@@ -1518,8 +1518,8 @@ class Participant(Model, MixinTeam):
                         context = dict(msg.context, unsubscribe_url=s.unsubscribe_url)
                         count += cursor.one("""
                             INSERT INTO notifications
-                                        (participant, event, context, web, email, context_is_cbor)
-                                 SELECT p.id, 'newsletter', %s, false, true, true
+                                        (participant, event, context, web, email)
+                                 SELECT p.id, 'newsletter', %s, false, true
                                    FROM participants p
                                   WHERE p.id = %s
                                     AND p.email IS NOT NULL
