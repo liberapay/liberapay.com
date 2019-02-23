@@ -117,6 +117,8 @@ Money.ZEROS = _Zeros()
 
 class MoneyBasket(object):
 
+    __slots__ = ('amounts', '__dict__')
+
     def __init__(self, *args, **decimals):
         self.amounts = OrderedDict(
             (currency, decimals.get(currency, Money.ZEROS[currency].amount))
@@ -229,6 +231,7 @@ class MoneyBasket(object):
         `amounts` attribute.
         """
         if 'amounts' in state:
+            self.amounts = state.pop('amounts')
             self.__dict__ = state
         else:
             self.amounts = {m.currency: m.amount for m in state.values()}
