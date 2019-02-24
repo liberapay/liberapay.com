@@ -7,7 +7,6 @@ from hashlib import sha256
 import hmac
 from operator import getitem
 import os
-import pickle
 import re
 import socket
 from urllib.parse import quote as urlquote
@@ -387,12 +386,10 @@ def serialize(context):
     return b'\\x' + hexlify(cbor.dumps(context, canonical=True))
 
 
-def deserialize(context, context_is_cbor):
+def deserialize(context):
     if isinstance(context, memoryview) and context[:2].tobytes() == b'\\x':
         context = unhexlify(context[2:])
-    if context_is_cbor:
-        return cbor.loads(context)
-    return pickle.loads(context)
+    return cbor.loads(context)
 
 
 def pid_exists(pid):
