@@ -37,7 +37,7 @@ cbor2.decoder.semantic_decoders[100] = decode_date
 
 # Money and MoneyBasket
 # =====================
-# Spec: the file `docs/cbor/money.md` in this repository.
+# Spec: https://liberapay.github.io/specs/cbor-money.html
 
 def encode_Money(encoder, value):
     if set(value.__dict__.keys()) == {'amount', 'currency'}:
