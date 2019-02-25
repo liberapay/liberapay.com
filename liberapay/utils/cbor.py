@@ -65,11 +65,12 @@ def decode_Money(decoder, value, shareable_index=None):
 
 
 def encode_MoneyBasket(encoder, value):
+    amounts = {k: v for k, v in value.amounts.items() if v}
     if value.__dict__:
         attrs = value.__dict__
-        encode_semantic(encoder, CBORTag(77112, dict(value.amounts, attrs=attrs)))
+        encode_semantic(encoder, CBORTag(77112, dict(amounts, attrs=attrs)))
     else:
-        encode_semantic(encoder, CBORTag(77112, value.amounts))
+        encode_semantic(encoder, CBORTag(77112, amounts))
 
 
 def decode_MoneyBasket(decoder, value, shareable_index=None):
