@@ -56,21 +56,25 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         raise LoginRequired
 
     if slug.startswith('~'):
-        thing = 'id'
-        value = slug[1:]
-        if not value.isdigit():
+        try:
+            value = int(slug[1:])
+        except ValueError:
             raise response.error(404)
-        participant = user if user and str(user.id) == value else None
-    else:
-        thing = 'username'
+        participant = user if user and user.id == value else None
+    elif slug:
         value = slug.lower()
         participant = user if user and user.username.lower() == value else None
+    else:
+        raise response.error(404)
 
     if participant is None:
         from liberapay.models.participant import Participant  # avoid circular import
-        participant = getattr(Participant, 'from_' + thing)(value) if value else None
+        if type(value) is int:
+            participant = Participant.from_id(value, _raise=False)
+        else:
+            participant = Participant.from_username(value)
         if participant is None:
-            if thing == 'username':
+            if type(value) is str:
                 look_up_redirections(request, response)
             raise response.error(404)
         elif participant.kind == 'community':
