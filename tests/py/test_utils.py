@@ -222,9 +222,11 @@ class Tests(Harness):
         assert expected.__dict__ == actual.__dict__
 
     def test_cbor_serialization_of_MoneyBasket(self):
-        expected = MoneyBasket(EUR=Decimal('10.01'), JPY=Decimal('1300'))
-        actual = cbor.loads(cbor.dumps(expected))
-        assert expected == actual
+        original = MoneyBasket(EUR=Decimal('10.01'), JPY=Decimal('1300'))
+        serialized = cbor.dumps(original)
+        recreated = cbor.loads(serialized)
+        assert len(serialized) < 30
+        assert recreated == original
 
     def test_cbor_serialization_of_MoneyBasket_with_extra_attribute(self):
         expected = MoneyBasket(EUR=Decimal('10.01'), JPY=Decimal('1300'))
