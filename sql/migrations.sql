@@ -2279,3 +2279,6 @@ CREATE UNIQUE INDEX ON notifications (participant, event, idem_key);
 
 -- migration #98
 ALTER TABLE notifications ADD COLUMN context_is_cbor boolean;
+
+-- migration #99
+ALTER TABLE notifications DROP COLUMN context_is_cbor;
