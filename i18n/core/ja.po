@@ -1,14 +1,11 @@
+
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-02-23 05:18+0000\n"
-"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
-"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.5-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -3700,27 +3697,27 @@ msgstr "{0} が Liberapay 内で取引されています。"
 #, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] ""
+msgstr[0] "直近の支払日は {timespan_ago} で、{n} 人のユーザーの間で {money_amount} が取引されました。"
 
 #, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] ""
+msgstr[0] "{n} 人の参加者がお金を寄付しました。"
 
 #, python-brace-format
 msgid "{n} participant received money."
 msgid_plural "{n} participants received money."
-msgstr[0] ""
+msgstr[0] "{n} 人の参加者がお金を受け取りました。"
 
 #, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
-msgstr[0] ""
+msgstr[0] "{n} 人の参加者は寄付と受け取りの両方を行いました。"
 
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
 msgid_plural "On average, people who donate give {0} each to {n} other users."
-msgstr[0] ""
+msgstr[0] "平均で、贈与者は {n} 人のユーザーにそれぞれ {0} を寄付しています。"
 
 msgid "Open Accounts"
 msgstr "利用されているアカウント"
@@ -3735,13 +3732,13 @@ msgid "Active Users"
 msgstr "アクティブなユーザー"
 
 msgid "Users that gave and/or received money within Liberapay (per week)"
-msgstr "Liberapay 内でお金を寄付したり受け取ったりしたユーザー（1 週間あたり）"
+msgstr "Liberapay においてお金を寄付したり受け取ったりしたユーザー（1 週間あたり）"
 
 msgid "Weekly Gifts (€)"
-msgstr ""
+msgstr "週ごとの寄付（€）"
 
 msgid "Money transferred within Liberapay (per week)"
-msgstr ""
+msgstr "Liberapay において取引されたお金（1 週間あたり）"
 
 msgid "Deposits (€)"
 msgstr ""
@@ -3756,11 +3753,11 @@ msgid "Money moved out of Liberapay"
 msgstr ""
 
 msgid "Weekly Donations"
-msgstr ""
+msgstr "週ごとの寄付"
 
 #, python-brace-format
 msgid "The sum of active donations for each week, expressed in {currency}."
-msgstr ""
+msgstr "各週においてアクティブな寄付の合計額（{currency}）。"
 
 msgid "Donor Debits"
 msgstr ""
@@ -3770,13 +3767,13 @@ msgid "The sum of charges processed during each week, expressed in {currency}."
 msgstr ""
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. Donors choose how much they want to give, donees decide how to share the money, Liberapay computes and executes the transfers from donors to donees."
-msgstr ""
+msgstr "Liberapay のチームは多対多の寄付と同等です。贈与者は寄付額を選択し、受贈者はお金の分配方法を決めます。Liberapay は贈与者から受贈者への取引を算定し、実行します。"
 
 msgid "Teams are for peer-to-peer donations, they can't be used by a legal entity to distribute donations to its members."
-msgstr ""
+msgstr "チームは対等な者同士の寄付のためのものです。法人がチームを使用して会員に寄付金を分配することはできません。"
 
 msgid "Creating a team"
-msgstr "チームを作成"
+msgstr "チームを作成する"
 
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
@@ -3789,10 +3786,10 @@ msgid "Once you have contributed to a team's project, ask its members to invite 
 msgstr "一度チームのプロジェクトに貢献したことがあれば、招待してもらえるか聞きましょう。ご自身のユーザー名を伝えるのを忘れないように。"
 
 msgid "Sharing the money"
-msgstr "お金を共有"
+msgstr "お金を分配する"
 
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
-msgstr ""
+msgstr "チームに階級はありません。メンバー全員が平等で、各自の取り分が設定されています。"
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
@@ -4458,14 +4455,14 @@ msgstr "未請求の寄付を探す"
 
 #, python-brace-format
 msgid "This page is dedicated to the {platform} user {user_name}:"
-msgstr ""
+msgstr "これは {platform} のユーザー {user_name} 専用のページです。"
 
 msgid "No description available."
-msgstr ""
+msgstr "説明がありません。"
 
 #, python-brace-format
 msgid "Profile on {0}"
-msgstr "{0} 上のプロフィール"
+msgstr "{0} のプロフィール"
 
 #, python-brace-format
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
@@ -4535,7 +4532,7 @@ msgid "Lock"
 msgstr "ロック"
 
 msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
-msgstr ""
+msgstr "Liberapay は、毎週少量の寄付をするようにすることで、皆さんのお好きなアーティストや音楽家、作家、プログラマーなどに感謝し、支援するための手段です。"
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
