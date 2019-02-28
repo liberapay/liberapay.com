@@ -358,8 +358,8 @@ class TestPayinsStripe(Harness):
         assert pt.amount == EUR('52.00')
 
     def test_03_payin_stripe_sdd_one_to_many(self):
-        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 103")
-        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 103")
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 203")
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 203")
         self.add_payment_account(self.creator_1, 'stripe', id=self.acct_switzerland.id)
         self.add_payment_account(self.creator_3, 'stripe')
         self.add_payment_account(self.creator_3, 'paypal')
@@ -391,7 +391,7 @@ class TestPayinsStripe(Harness):
         }
         r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
         assert r.code == 200, r.text
-        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/103'
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/203'
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
         assert payin.amount == EUR('100.00')
@@ -404,7 +404,7 @@ class TestPayinsStripe(Harness):
         assert pt2.amount == EUR('50.00')
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/103', auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/203', auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pending'
@@ -413,8 +413,9 @@ class TestPayinsStripe(Harness):
         payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
         assert len(payin_transfers) == 2
         pt1, pt2 = payin_transfers
-        assert pt1.status == 'pending'
+        assert pt1.status == 'pre'
         assert pt1.amount == EUR('50.00')
-        assert pt1.remote_id
-        assert pt2.status == 'pending'
+        assert pt1.remote_id is None
+        assert pt2.status == 'pre'
         assert pt2.amount == EUR('50.00')
+        assert pt2.remote_id is None
