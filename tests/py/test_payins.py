@@ -5,7 +5,7 @@ from liberapay.exceptions import MissingPaymentAccount
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_destination
 from liberapay.payin.paypal import sync_all_pending_payments
-from liberapay.testing import Harness, EUR, JPY
+from liberapay.testing import Harness, EUR, JPY, USD
 
 
 class TestResolveDestination(Harness):
@@ -78,6 +78,51 @@ class TestResolveDestination(Harness):
         assert pt.destination == stripe_account_carl.pk
         payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'))
         assert pt.destination == stripe_account_bob.pk
+
+
+class TestPayins(Harness):
+
+    def setUp(self):
+        super().setUp()
+        self.donor = self.make_participant('donor', email='donor@example.com')
+        self.creator_0 = self.make_participant(
+            'creator_0', email='zero@example.com', accepted_currencies=None
+        )
+        self.creator_1 = self.make_participant(
+            'creator_1', email='alice@example.com', accepted_currencies=None
+        )
+        self.creator_2 = self.make_participant(
+            'creator_2', email='bob@example.com', accepted_currencies=None
+        )
+        self.creator_3 = self.make_participant(
+            'creator_3', email='carl@example.com', accepted_currencies=None
+        )
+
+    def test_payin_pages_when_currencies_dont_match(self):
+        self.add_payment_account(self.creator_1, 'stripe')
+        self.add_payment_account(self.creator_2, 'paypal')
+        self.add_payment_account(self.creator_3, 'stripe')
+        self.add_payment_account(self.creator_3, 'paypal')
+        self.donor.set_tip_to(self.creator_1, EUR('11.00'))
+        self.donor.set_tip_to(self.creator_2, JPY('1100'))
+        self.donor.set_tip_to(self.creator_3, USD('11.00'))
+
+        paypal_path = '/donor/giving/pay/paypal/?beneficiary=%i,%i' % (
+            self.creator_2.id, self.creator_3.id
+        )
+        stripe_path = '/donor/giving/pay/stripe/?beneficiary=%i,%i&method=card' % (
+            self.creator_1.id, self.creator_3.id
+        )
+        r = self.client.GET('/donor/giving/pay/', auth_as=self.donor)
+        assert r.code == 200, r.text
+        assert str(Markup.escape(paypal_path)) not in r.text
+        assert str(Markup.escape(stripe_path)) not in r.text
+
+        r = self.client.GxT(paypal_path, auth_as=self.donor)
+        assert r.code == 400, r.text
+
+        r = self.client.GxT(stripe_path, auth_as=self.donor)
+        assert r.code == 400, r.text
 
 
 class TestPayinsPayPal(Harness):
