@@ -10,7 +10,7 @@
         % if repo.stars_count != None
         <span class="inline-block text-nowrap"><small>{{ glyphicon('star') }} {{ repo.stars_count }}</small></span>
         % endif
-        % set last_update = to_age(repo.last_update, add_direction=True, granularity='week')
+        % set last_update = to_age(repo.last_update, granularity='week')
         <span class="inline-block"><small>{{
             _("Updated this week") if last_update.days > -7 else
             _("Updated {timespan_ago}", timespan_ago=last_update)

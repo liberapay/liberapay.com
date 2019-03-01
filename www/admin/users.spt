@@ -305,7 +305,7 @@ title = "Users Admin"
         <span class="text-muted">{{ _(
             "Last changed {timespan_ago} by {username}.",
             username=row.last_change.recorder_name,
-            timespan_ago=to_age(parse_date(row.last_change.ts), add_direction=True)
+            timespan_ago=to_age(parse_date(row.last_change.ts))
         ) }}</span>
         % endif
     </div>

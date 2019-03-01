@@ -55,7 +55,7 @@ if action == 'invite':
         raise response.error(400, _("You can't invite an inactive user to join a team."))
     invite = get_invite(team, invitee)
     if invite:
-        invite_age = to_age(invite.ts, add_direction=True)
+        invite_age = to_age(invite.ts)
         if invite.type == 'invite' and invite_age < ONE_WEEK:
             raise response.error(400, _(
                 "{username} has already been invited to join this team {timespan_ago}.",

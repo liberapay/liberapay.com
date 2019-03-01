@@ -95,7 +95,7 @@ def out():
     <p>{{ ngettext(
         "Liberapay was launched {timespan_ago} and has {n} user.",
         "Liberapay was launched {timespan_ago} and has {n} users.",
-        n=nusers, timespan_ago=to_age(constants.LAUNCH_TIME, add_direction=True)
+        n=nusers, timespan_ago=to_age(constants.LAUNCH_TIME)
     ) }}</p>
 
     <p>{{ _("{0} is escrowed within Liberapay.", escrow) }}</p>
@@ -106,7 +106,7 @@ def out():
             "",
             "The last payday was {timespan_ago} and transferred {money_amount} between {n} users.",
             n=nactive,
-            timespan_ago=to_age(last_payday.ts_start, add_direction=True),
+            timespan_ago=to_age(last_payday.ts_start),
             money_amount=transfer_volume.fuzzy_sum(currency),
         ) }}<br />
         {{ ngettext("{n} participant gave money.", "{n} participants gave money.", ngivers) }}<br />

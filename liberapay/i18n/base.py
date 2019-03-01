@@ -359,8 +359,11 @@ def getdoc(state, name):
 
 
 def to_age(dt, **kw):
+    kw.setdefault('add_direction', True)
     if isinstance(dt, datetime):
         delta = Age(dt - utcnow())
+    elif isinstance(dt, timedelta):
+        delta = Age(dt)
     else:
         delta = Age(dt - date.today())
         kw.setdefault('granularity', 'day')

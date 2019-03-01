@@ -106,7 +106,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     <p>{{ _(
         "{username} joined {timespan_ago}.",
         username=participant.username,
-        timespan_ago=to_age(participant.join_time, add_direction=True)
+        timespan_ago=to_age(participant.join_time)
     ) }}</p>
 
     % if show_income
