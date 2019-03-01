@@ -113,7 +113,7 @@ def _dispatch_path_to_filesystem(website, request=None):
         raw_path = path.decoded
         if len(raw_path) < 3 or raw_path[-1] != '/' or raw_path[-2] == '/':
             raise
-        path = Path(raw_path[:-1].encode('ascii'))
+        path = Path(request.line.uri.path[:-1])
         if '.' in path.parts[-1]:
             # Don't dispatch `/foo.html/` to a `/foo.html` file
             raise

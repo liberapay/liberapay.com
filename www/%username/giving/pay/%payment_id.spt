@@ -94,7 +94,7 @@ else:
         ]
         if len(payment.tips) > 1 and 'paypal' in payment.providers:
             # We don't support one-to-many through PayPal yet.
-            payment.providers.pop('paypal')
+            payment.providers.remove('paypal')
         del _provider_bits
 
 if payment:

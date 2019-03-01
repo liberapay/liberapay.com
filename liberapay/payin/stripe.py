@@ -179,19 +179,15 @@ def settle_charge_and_transfers(db, payin, charge):
       ORDER BY pt.id
     """, (payin.id,))
     if amount_settled is not None:
-        payin_transfers_sum = Money.sum(
-            (pt.amount for pt in payin_transfers), payin.amount.currency
-        )
-        assert payin_transfers_sum == payin.amount
         transfer_amounts = {
             pt.id: pt.amount.convert(amount_settled.currency) for pt in payin_transfers
         }
         transfer_amounts = resolve_amounts(net_amount, transfer_amounts)
         for pt in payin_transfers:
             tr_amount = transfer_amounts[pt.id]
-            if net_amount is None or pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
+            if pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
                 update_payin_transfer(db, pt.id, None, charge.status, error, amount=tr_amount)
-            else:
+            elif pt.status == 'pre':
                 execute_transfer(db, pt, tr_amount, pt.destination_id, charge.id)
     elif charge.status == 'failed':
         for pt in payin_transfers:
