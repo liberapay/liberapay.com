@@ -51,7 +51,7 @@ if request.method == 'POST':
            AND p.payment_providers & %s > 0
       ORDER BY t.id
     """, (payer.id, set(body.parse_list('tips', int)), STRIPE_BIT))
-    if not tips:
+    if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(body.get('tips'), 'tips', 'body')
 
     tips_weekly_sum = Money.sum((tip.amount for tip in tips), payin_currency)
@@ -209,7 +209,7 @@ if tippees:
         tip for tip in payer.get_tips_to(tippees)
         if tip.tippee_p.payment_providers & STRIPE_BIT > 0
     ]
-    if not tips:
+    if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
     payment_currency = tips[0].amount.currency
     payment = NS()

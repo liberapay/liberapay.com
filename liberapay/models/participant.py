@@ -2364,7 +2364,7 @@ class Participant(Model, MixinTeam):
             'no_provider', 'suspended', 'fundable', 'self_donation'
         )}
         n_fundable = 0
-        stripe_europe = []
+        stripe_europe = {}
         for tip in tips:
             tippee_p = tip.tippee_p
             if tippee_p.payment_providers == 0:
@@ -2398,9 +2398,10 @@ class Participant(Model, MixinTeam):
                          LIMIT 1
                     """, dict(tippee=tip.tippee, SEPA=SEPA))
                     if in_sepa:
-                        if not stripe_europe:
-                            groups['fundable'].append(stripe_europe)
-                        stripe_europe.append(tip)
+                        group = stripe_europe.setdefault(tip.amount.currency, [])
+                        if len(group) == 0:
+                            groups['fundable'].append(group)
+                        group.append(tip)
                     else:
                         groups['fundable'].append((tip,))
                 else:
