@@ -385,7 +385,7 @@ msgstr "Wir haben eine Lastschrift über {money_amount} von ihrem {bank_name} Ko
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Wir haben eine direkte Abbuchung über {money_amount} von Ihrem Konto {partial_account_number} getätigt."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
@@ -396,14 +396,14 @@ msgstr ""
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
-msgstr "Nachdem die Zahlung abgewickelt wurde, sollte sie in Ihren Kontoauszügen als “{descriptor}” erscheinen."
+msgstr "Sobald diese Zahlung bearbeitet wurde, sollte sie auf Ihrem Kontoauszug erscheinen als “{descriptor}”."
 
 msgid "Your payment has succeeded"
 msgstr "Ihre Zahlung ist erfolgt"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr "Die Zahlung über {money_amount} durch Liberapay, die am {date} angefordert wurde, war erfolgreich."
+msgstr "Die Zahlung von {money_amount} durch Liberapay, die am {date} eingeleitet wurde, ist erfolgt."
 
 msgid "Thank you for this donation!"
 msgstr "Vielen Dank für diese Spende!"
@@ -426,11 +426,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "Am {date} haben sie versprochen {money_amount} an {user_name} zu spenden, wenn dieser Liberapay beitritt."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "Wir freuen uns Sie zu informieren, dass {user_name} Liberapay {time_ago} als {liberapay_username} beigetreten ist, so dass Sie nun Ihr versprechen in eine echte Spende umwandeln können:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -518,14 +518,14 @@ msgstr "Sie haben einen Fehler im Programm gefunden! Bitte entschuldigen Sie die
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Die angeforderte Seite konnte nicht gefunden werden. Bitte {link_open}kontaktieren Sie uns{link_close}, wenn Sie Hilfe benötigen."
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Ihre Anfrage wurde von unserer Software abgelehnt. Bitte {link_open}kontaktieren Sie uns{link_close}, wenn Sie Unterstützung benötigen."
 
 msgid "Error message:"
-msgstr ""
+msgstr "Fehlermeldung:"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
@@ -553,10 +553,10 @@ msgid "When someone invites me to join a team"
 msgstr "Wenn mich jemand dazu einlädt, einem Team beizutreten"
 
 msgid "When a payment I initiated fails"
-msgstr "Wenn eine Zahlung, die ich eingeleitet habe, fehlschlägt"
+msgstr "Wenn eine von mir initiierte Zahlung fehlschlägt"
 
 msgid "When a payment I initiated succeeds"
-msgstr "Wenn eine Zahlung, die ich eingeleitet habe, erfolgreich ist"
+msgstr "Wenn eine von mir initiierte Zahlung erfolgreich ist"
 
 msgid "Expense Report"
 msgstr "Kostenabrechnung"
@@ -627,7 +627,7 @@ msgstr "Groß"
 msgid "Maximum"
 msgstr "Maximal"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr "Sie haben Ihr Kontingent an Anfragen verbraucht. Sie können es {in_N_minutes} erneut versuchen."
 
@@ -714,13 +714,13 @@ msgstr "'{0}' ist keine gültige E-Mail-Adresse."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name} ist keine gültige Maildomain."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Die Email-Adresse {email_address} wurde auf die Sperrliste gesetzt, weil der Versuch dorthin eine Nachricht zu schicken {timespan_ago} gescheitert ist. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Sperrliste entfernen möchten."
+msgstr "Die Email-Adresse {email_address} wurde auf die Sperrliste gesetzt, weil der Versuch dorthin eine Nachricht zu schicken {timespan_ago} gescheitert ist. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie möchten, dass wir diese von der Sperrliste entfernen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Die Email-Adresse {email_address} wurde auf die Sperrliste gesetzt auf Grund einer Beschwerde {timespan_ago}. Bitte senden Sie eine Email von dieser Adresse an support@liberapay.com, wenn Sie diese von der Sperrliste entfernen möchten."
+msgstr "Die Email-Adresse {email_address} wurde auf Grund einer Beschwerde {timespan_ago} auf die Sperrliste gesetzt . Bitte senden Sie eine Email von dieser Adresse aus an support@liberapay.com, wenn Sie diese von der Sperrliste entfernen möchten."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -867,7 +867,7 @@ msgid "Conflict"
 msgstr "Konflikt"
 
 msgid "Gone"
-msgstr "Entfernt"
+msgstr "Verschwunden"
 
 msgid "Too Many Requests"
 msgstr "Zu viele Anfragen"
@@ -1229,10 +1229,10 @@ msgid "Personal Information"
 msgstr ""
 
 msgid "Full Name"
-msgstr ""
+msgstr "Voller Name"
 
 msgid "Nationality"
-msgstr ""
+msgstr "Nationalität"
 
 msgid "username"
 msgstr "Benutzername"
