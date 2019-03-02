@@ -102,7 +102,7 @@ subhead = _("Repositories")
             "We found {n} repository in your {platform} account, {timespan_ago}.",
             "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}.",
             n=total_count, platform=platform.display_name,
-            timespan_ago=to_age(last_fetch.ts, add_direction=True)
+            timespan_ago=to_age(last_fetch.ts)
         ) }}</p>
         <form action="javascript:" class="js-submit" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />

@@ -158,10 +158,15 @@ if tippees:
     )
     payment.min_proposed_amount = max(
         payment.min_acceptable_amount,
-        payment.one_months_worth
+        payment.one_months_worth,
+        payment.one_periods_worth
     )
     payment.moderate_proposed_amount = min(
-        max(payment.moderate_fee_amount, payment.one_months_worth),
+        max(
+            payment.moderate_fee_amount,
+            payment.one_months_worth,
+            payment.one_periods_worth
+        ),
         payment.twelve_years_worth
     )
     periodic_amounts = [
@@ -275,15 +280,12 @@ title = _("Funding your donations")
                     % endif
                     % endif
                     </h5>
-                    % set multiplier = int(floor(charge_amount / payment.one_periods_worth))
+                    % set weeks = int(floor(charge_amount / payment.one_weeks_worth))
                     <p class="list-group-item-text">{{ ngettext(
-                        "", "Next payment in {n} weeks ({timedelta}).", n=multiplier, timedelta=timedelta(weeks=multiplier)
-                    ) if payment.period == 'weekly' and multiplier > 7 else ngettext(
-                        "Next payment in {n} week.", "Next payment in {n} weeks.", n=multiplier
-                    ) if payment.period == 'weekly' else ngettext(
-                        "Next payment in {n} month.", "Next payment in {n} months.", n=multiplier
-                    ) if payment.period == 'monthly' else ngettext(
-                        "Next payment in {n} year.", "Next payment in {n} years.", n=multiplier
+                        "", "Next payment in {n} weeks ({timedelta}).", n=weeks, timedelta=timedelta(weeks=weeks)
+                    ) if payment.period == 'weekly' and weeks > 7 else _(
+                        "Next payment {in_N_weeks_months_or_years}.",
+                        in_N_weeks_months_or_years=to_age(timedelta(weeks=weeks))
                     ) }}</p>
                     </div>
                 </label>

@@ -31,13 +31,13 @@
                 % if participant.join_time
                 <p class="join-time">{{ _(
                     "Joined {timespan_ago}.",
-                    timespan_ago=to_age(participant.join_time, add_direction=True)
+                    timespan_ago=to_age(participant.join_time)
                 ) }}</p>
                 % endif
                 % if participant.status == 'closed'
                 <p>{{ _(
                     "Closed {timespan_ago}.",
-                    timespan_ago=to_age(participant.closed_time, add_direction=True)
+                    timespan_ago=to_age(participant.closed_time)
                 ) }}</p>
                 % endif
             </div>

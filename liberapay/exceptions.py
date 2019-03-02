@@ -169,7 +169,7 @@ class EmailAddressIsBlacklisted(ProblemChangingEmail):
                 "attempt to send a message to it failed {timespan_ago}. Please "
                 "send an email from that address to support@liberapay.com if "
                 "you want us to remove it from the blacklist.",
-                email_address=address, timespan_ago=to_age(ts, add_direction=True)
+                email_address=address, timespan_ago=to_age(ts)
             )
         else:
             return _(
@@ -177,7 +177,7 @@ class EmailAddressIsBlacklisted(ProblemChangingEmail):
                 "complaint received {timespan_ago}. Please send an email "
                 "from that address to support@liberapay.com if you want us to "
                 "remove it from the blacklist.",
-                email_address=address, timespan_ago=to_age(ts, add_direction=True)
+                email_address=address, timespan_ago=to_age(ts)
             )
 
 class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
