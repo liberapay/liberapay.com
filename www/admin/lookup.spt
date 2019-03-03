@@ -1,0 +1,89 @@
+# coding: utf8
+
+from pando import json
+
+from liberapay.exceptions import LoginRequired
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+if request.method == 'POST':
+    lookup_email = request.body['email']
+    results = website.db.all("""
+        SELECT p, e.address, e.added_time, e.verified
+          FROM emails e
+          JOIN participants p ON p.id = e.participant
+         WHERE lower(e.address) = lower(%s)
+      ORDER BY e.id DESC
+    """, (lookup_email,))
+    n_bounces = website.db.one("""
+        SELECT count(*)
+          FROM email_blacklist b
+         WHERE lower(b.address) = lower(%s)
+    """, (lookup_email,))
+    if n_bounces:
+        blacklisted = website.db.one("""
+            SELECT count(*)
+              FROM email_blacklist b
+             WHERE lower(b.address) = lower(%s)
+               AND ignore_after IS NULL
+        """, (lookup_email,)) > 0
+    else:
+        blacklisted = False
+
+title = "Admin Lookup"
+
+[---] text/html
+% from 'templates/avatar-url.html' import avatar_img with context
+% from 'templates/icons.html' import fontawesome, glyphicon
+% from 'templates/nav.html' import querystring_nav
+
+% extends "templates/base.html"
+
+% block content
+
+% if request.method == 'POST'
+    % if results
+        <p>Found {{ len(results) }}:</p>
+        <ul>
+        % for participant, address, added_time, verified in results
+            <li>
+                {{ address }} is
+                % if address == participant.email
+                    the <span class="label label-primary">Primary</span> address
+                % elif verified
+                    a <span class="label label-success">Verified</span> address
+                % else
+                    an <span class="label label-warning">Unverified</span> address
+                % endif
+                of the account {{ participant.link() }}. It was added on {{ added_time.date() }} at {{ added_time.time() }} UTC.
+            </li>
+        % endfor
+        </ul>
+    % else
+        <p>No accounts found for {{ lookup_email }}.</p>
+    % endif
+    % if n_bounces > 0
+        % if blacklisted
+            <p>The email address {{ lookup_email }} is currently <span class="label label-danger">Blacklisted</span>:</p>
+        % else
+            <p>The email address {{ lookup_email }} was blacklisted in the past:</p>
+        % endif
+        <pre>{{ website.db.render("SELECT * FROM email_blacklist b WHERE lower(b.address) = lower(%s) ORDER BY ts DESC", (lookup_email,)) }}</pre>
+    % endif
+    <br><hr>
+% endif
+
+<p>Look up an email address:</p>
+<form action="" class="form-inline" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input class="form-control" type="email" name="email" placeholder="alice@example.net" />
+    <button class="btn btn-primary">Look up</button>
+</form>
+
+% endblock
