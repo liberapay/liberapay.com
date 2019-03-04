@@ -389,10 +389,10 @@ msgstr "Wir haben eine direkte Abbuchung über {money_amount} von Ihrem Konto {p
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "Dieser Vorgang wird ausgeführt basierend auf {link_start}dem Mandat{mandate_id}{link_end}, dem Sie am {acceptance_date} zugestimmt haben. Damit habe Sie Liberapay (SEPA creditor {creditor_identifier}) die Erlaubnis zur Lastschrift auf Ihr Bankkonto erteilt."
+msgstr "Dieser Vorgang wird basierend auf dem {link_start}Mandat {mandate_id}{link_end} ausgeführt, dem Sie am {acceptance_date} zugestimmt haben. Damit habe Sie Liberapay (SEPA-Kreditor {creditor_identifier}) die Erlaubnis zur Lastschrift auf Ihr Bankkonto erteilt."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Falls Sie diese Zahlung nicht autorisiert haben, geben Sie uns bitte Bescheid. Wir werden die Rückzahlung veranlassen."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -422,7 +422,7 @@ msgstr "Folgen Sie folgendem Link, um das Profil von {0} zu sehen:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{user_name} von {platform} ist Liberapay beigetreten!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
@@ -532,7 +532,7 @@ msgid "The details of this error have been recorded. If you decide to contact us
 msgstr "Die Einzelheiten dieses Fehlers wurden aufgezeichnet. Wenn Sie sich entschließen, uns zu kontaktieren, geben Sie bitte den folgenden Fehlercode in Ihrer Nachricht an: {0}."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "Wenn Sie uns kontaktieren, fügen Sie bitte die folgenden Debugging-Informationen zu Ihrer Nachricht hinzu:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Jede Woche, so lange wie ich Spenden empfange"
@@ -1226,7 +1226,7 @@ msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Ich stimme den Nutzungsbedingungen von {0}MangoPay{1} zu"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "Persönliche Informationen"
 
 msgid "Full Name"
 msgstr "Voller Name"
@@ -1424,13 +1424,13 @@ msgstr "{username} hat bisher keine Zahlungsmethode eingestellt, weshalb Ihre Sp
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
 msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte (Visa, MasterCard, American Express) bezahlt werden."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "Spenden an {username} werden durch PayPal abgewickelt. Sie können mit Kredit- oder Debitkarte zahlen, auch wenn Sie kein PayPal-Konto haben."
+msgstr "Spenden an {username} werden mittels PayPal abgewickelt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Spenden an {username} können per Kredit- und Debitkarte bezahlt werden (Visa, MasterCard, American Express) oder über PayPal."
+msgstr "Spenden an {username} können per Kredit- oder Debitkarte (Visa, MasterCard, American Express), per Lastschrift oder über PayPal bezahlt werden."
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Menschen, die zum Allgemeinwohl beitragen, brauchen Unterstützung bei ihrer Arbeit. Freie Software zu entwickeln oder Wissen zu vermitteln kostet Zeit und Geld. Dies betrifft nicht nur die anfängliche Arbeit, sondern auch die Pflege und Bereitstellung über längere Zeit."
@@ -1457,13 +1457,13 @@ msgid "Country"
 msgstr "Land"
 
 msgid "Region (state, province, island…)"
-msgstr ""
+msgstr "Region (Bundesland, Provinz, Insel, ...)"
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
+msgstr "Sie können dieses Feld frei lassen, wenn Ihr Land keine Regionen in Postadressen verwendet."
 
 msgid "Postal code"
-msgstr ""
+msgstr "Postleitzahl"
 
 msgid "Address within the city"
 msgstr ""
@@ -1500,11 +1500,11 @@ msgstr "Einnahmen: {0}/Woche"
 msgid "Mission accomplished!"
 msgstr "Ziel erreicht!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
-msgstr "Registriert {timespan_ago}."
+msgstr "Beigetreten {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Geschlossen seit {timespan_ago}."
 
@@ -1553,7 +1553,7 @@ msgid "Reconnect"
 msgstr "Erneut verbinden"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Weiterleiten…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
@@ -1565,7 +1565,7 @@ msgstr "(Fork)"
 msgid "Updated this week"
 msgstr "Diese Woche aktualisiert"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "{timespan_ago} aktualisiert"
 
@@ -1629,10 +1629,10 @@ msgid "Actual Take"
 msgstr "Tatsächliche Entnahme"
 
 msgid "n/a"
-msgstr ""
+msgstr "nicht zutreffend"
 
 msgid "auto"
-msgstr ""
+msgstr "automatisch"
 
 msgid "Update my nominal take"
 msgstr "Aktualisiere nominelle Entnahme"
@@ -1863,7 +1863,7 @@ msgstr "Sie haben kein {platform}-Konto mit Ihrem Profil verknüpft."
 msgid "Connect {0} account"
 msgstr "Verknüpfe ein {0}-Konto"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
 msgstr[0] "Wir haben {n} Repository in Ihrem {platform}-Konto gefunden, {timespan_ago}."
@@ -2081,11 +2081,11 @@ msgstr "{money_amount}{small}/Monat{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/Jahr{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Begonnen {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Begonnen {timespan_ago_1}. Geändert {timespan_ago_2}."
 
@@ -2101,7 +2101,7 @@ msgstr "Inaktiv, weil der Empfänger keine Spenden mehr akzeptiert."
 msgid "Active"
 msgstr "Aktiv"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr "Nächste Zahlung {in_N_weeks_months_or_years}."
 
@@ -2136,32 +2136,32 @@ msgstr "innerhalb der letzten 30 Tage"
 msgid "Restart"
 msgstr "Neustart"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Begonnen {timespan_ago_1}. Beendet {timespan_ago_2}."
 
 #, python-brace-format
 msgid "You are not donating to {username}."
-msgstr ""
+msgstr "Sie spenden nicht an {username}."
 
 msgid "Funding your donations"
 msgstr "Ihre Spenden finanzieren"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Wegen rechtlicher und technischer Restriktionen können wir Ihre Spenden aktuell nicht mit einer Zahlung ausführen. Sie müssen eine weitere Zahlung leisten. Wir bitten Sie, diese Unannehmlichkeit zu entschuldigen."
+msgstr[1] "Wegen rechtlicher und technischer Restriktionen können wir Ihre Spenden aktuell nicht mit einer Zahlung ausführen. Sie müssen {n} weitere Zahlungen leisten. Wir bitten Sie, diese Unannehmlichkeit zu entschuldigen."
 
 msgid "We are able to group these donations into a single payment."
-msgstr ""
+msgstr "Wir können diese Spenden zu einer einzigen Traksaktion gruppieren."
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr ""
+msgstr "Die Zahlungen für Ihre Spenden an {recipients} stehen noch aus."
 
 msgid "For now this donation can only be renewed externally through PayPal."
-msgstr ""
+msgstr "Im Moment kann diese Spende nur extern via PayPal erneuert werden."
 
 msgid "Please choose a payment method:"
 msgstr "Bitte wähle Sie eine Zahlungsmethode:"
@@ -2183,7 +2183,7 @@ msgstr "Nicht anonym"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
-msgstr ""
+msgstr "Ihre Spende an {team} kann nicht ausgeführt werden, da Sie Geld an sich selbst senden würden."
 
 msgid "All your donations are funded."
 msgstr "Alle Ihre Spenden sind finanziert."
@@ -2209,11 +2209,11 @@ msgstr "Die Zahlung wartet auf Ihre Zustimmung."
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Die Zahlung für eine weitere Spende steht noch aus."
+msgstr[1] "Die Zahlung für {n} weitere Spenden steht noch aus."
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "Aktuell steht für keine weitere Spende die Zahlung aus."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -4554,7 +4554,7 @@ msgid "This page is dedicated to the {platform} user {user_name}:"
 msgstr "Die Seite ist dem Nutzer {user_name} auf {platform} gewidmet:"
 
 msgid "No description available."
-msgstr ""
+msgstr "Keine Beschreibung verfügbar."
 
 #, python-brace-format
 msgid "Profile on {0}"
@@ -4708,7 +4708,7 @@ msgid "How the accounts are now"
 msgstr "Wie sind nun die Konten"
 
 msgid "No connected accounts."
-msgstr ""
+msgstr "Keine verknüpften Accounts."
 
 msgid "How the accounts will be after the transfer"
 msgstr "Wie werden die Konten nach der Übertragung sein"
