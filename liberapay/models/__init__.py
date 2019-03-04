@@ -261,13 +261,13 @@ def render(db, query, args=None):
     widths = list(len(k) for k in data[0]._fields)
     for row in data:
         for i, v in enumerate(row):
-            widths[i] = max(widths[i], len(str(v)))
+            widths[i] = max(widths[i], len(str(v).replace('\n', '\\n')))
     for k, w in zip(data[0]._fields, widths):
         r += "{0:{width}} | ".format(str(k), width=w)
     r += '\n'
     for row in data:
         for v, w in zip(row, widths):
-            r += "{0:{width}} | ".format(str(v), width=w)
+            r += "{0:{width}} | ".format(str(v).replace('\n', '\\n'), width=w)
         r += '\n'
     return r
 

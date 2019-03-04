@@ -34,6 +34,10 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
                 <span class="address">{{ email.address }}</span>
                 % if email.blacklisted
                     <span class="label label-danger">{{ _("Blacklisted") }}</span>
+                    % if participant.email and email.address != participant.email
+                    <button name="remove" value="{{ email.address }}"
+                            class="btn btn-warning btn-sm">{{ _("Remove") }}</button>
+                    % endif
                 % elif email.address == participant.email
                     <span class="label label-primary">{{ _("Primary") }}</span>
                 % else
