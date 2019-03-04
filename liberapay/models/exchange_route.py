@@ -1,5 +1,6 @@
 from mangopay.resources import Card, Mandate
 from postgres.orm import Model
+import stripe
 
 from ..exceptions import InvalidId
 
@@ -98,6 +99,11 @@ class ExchangeRoute(Model):
         return r
 
     def invalidate(self, obj=None):
+        if self.network.startswith('stripe-'):
+            source = stripe.Source.retrieve(self.address).detach()
+            assert source.status == 'consumed'
+            self.update_status(source.status)
+            return
         if self.network == 'mango-cc':
             card = obj or Card.get(self.address)
             if card.Active:
