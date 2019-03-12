@@ -27,7 +27,7 @@ env: requirements*.txt
 
 rehash-requirements:
 	for f in requirements*.txt; do \
-	    sed -E -e '/^ +--hash/d' -e 's/\\$$//' $$f | xargs ./env/bin/hashin -r $$f -p 3.4 -p 3.6; \
+	    sed -E -e '/^ +--hash/d' -e 's/\\$$//' $$f | xargs ./env/bin/hashin -r $$f -p 3.4 -p 3.6 -p 3.7; \
 	done
 
 clean:
