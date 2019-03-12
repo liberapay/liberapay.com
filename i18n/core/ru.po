@@ -900,9 +900,9 @@ msgstr "Не удалось найти пользователя {0} на {1}."
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Пожертвование Liberapay  в пользу {username} (команда {team_name})"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Liberapay donation to {username}"
-msgstr "Пожертвование Liberapay в пользу"
+msgstr "Пожертвование Liberapay в пользу {username}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
@@ -916,14 +916,14 @@ msgid "{n} month of {money_amount}"
 msgid_plural "{n} months of {money_amount}"
 msgstr[0] "{n} месяц по {money_amount}"
 msgstr[1] "{n} месяца по {money_amount}"
-msgstr[2] "{n} месяцев по"
+msgstr[2] "{n} месяцев по {money_amount}"
 
 #, python-brace-format
 msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} год по {money_amount}"
 msgstr[1] "{n} года по {money_amount}"
-msgstr[2] "{n} лет по"
+msgstr[2] "{n} лет по {money_amount}"
 
 msgid "Bad username or password."
 msgstr "Неправильное имя пользователя или пароль."
@@ -1685,9 +1685,9 @@ msgstr[2] "Неверная валюта? Поддерживаются еще {n
 #, python-brace-format
 msgid "Wrong currency? {username} also accepts {n} other:"
 msgid_plural "Wrong currency? {username} also accepts {n} others:"
-msgstr[0] "Неверная валюта? Принимается еще {n} другая"
-msgstr[1] "Неверная валюта? Принимаются еще {n} другие"
-msgstr[2] "Неверная валюта? Принимаются еще {n} других"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Switch"
 msgstr "Переключить"
@@ -2158,7 +2158,7 @@ msgstr "Старт {timespan_ago_1}. Остановлено {timespan_ago_2}."
 
 #, python-brace-format
 msgid "You are not donating to {username}."
-msgstr "Вы не жертвуете"
+msgstr ""
 
 msgid "Funding your donations"
 msgstr "Финансирование ваших пожертвований"
