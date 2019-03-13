@@ -369,7 +369,6 @@ msgstr "Прямой дебетовый платёж на ваш кошелёк 
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Прямой дебетовый платёж на ваш кошелёк Liberapay прошёл успешно"
 
-#, fuzzy
 msgid "Your payment has failed"
 msgstr "Ваш платеж не прошёл"
 
@@ -390,28 +389,28 @@ msgstr "Вы инициировали прямое дебетование на �
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Мы запросили оплату в размере{money_amount} с Вашего счёта {partial_account_number}"
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Эта операция производится на основании {link_start}полномочия {mandate_id}{link_end}, которое вы подписали {acceptance_date}, давая Liberapay права (кредитор единой зоны платежей в евро {creditor_identifier}) отправлять указания в ваш банк, чтобы списывать средства с вашего счёта, а вашему банку - право списывать деньги с вашего счёта в соответствии с этими инструкциями."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Если Вы не запрашивали этот перевод, пожалуйста, сообщите нам - мы его отменим."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
-msgstr ""
+msgstr "После того, как платеж будет обработан, он появится в вашем аккаунте как \"{descriptor}\""
 
 msgid "Your payment has succeeded"
-msgstr ""
+msgstr "Ваш платеж успешно проведён"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr ""
+msgstr "Платеж на сумму {money_amount} через Liberapay, инициированный {date} успешно проведён"
 
 msgid "Thank you for this donation!"
-msgstr ""
+msgstr "Спасибо за пожертвование!"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -427,15 +426,15 @@ msgstr "Перейдите по этой ссылке, чтобы просмот
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{user_name} из {platform} присоединился к Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "{date} Вы хотели пожертвовать {money_amount} в адрес {user_name}, если он присоединится к Liberapay"
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "Уведомляем, что {user_name} присоединился к Liberapay под именем {liberapay_username} . Теперь Вы можете пожертвовать ему средства:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -523,24 +522,24 @@ msgstr "Похоже, вы нашли баг! Приносим извинени�
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Запрашиваемая страница не найдена. {link_open} Свяжитесь с нами {link_close} если Вам нужна помощь."
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Ваш запрос был отклонен нашей программой.  {link_open} Свяжитесь с нами {link_close} если Вам нужна помощь."
 
 msgid "Error message:"
-msgstr ""
+msgstr "Ошибка:"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Детали этой ошибки были зафиксированы. Если вы решите связаться с нами, включите следующий идентификатор ошибки в ваше сообщение: {0}."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "Если Вы хотите связаться с нами, добавьте следующую отладочную информацию в сообщение:"
 
 msgid "Every week as long as I am receiving donations"
-msgstr ""
+msgstr "Каждую неделю когда я получу пожертвования"
 
 msgid "When it's time to renew my donations"
 msgstr "Когда настало время обновить мои пожертвования"
@@ -558,10 +557,10 @@ msgid "When someone invites me to join a team"
 msgstr "Когда кто-то приглашает меня в команду"
 
 msgid "When a payment I initiated fails"
-msgstr ""
+msgstr "Когда мой платёж отклонён"
 
 msgid "When a payment I initiated succeeds"
-msgstr ""
+msgstr "Когда мой платёж успешно проведён"
 
 msgid "Expense Report"
 msgstr "Отчёт о расходах"
@@ -632,7 +631,7 @@ msgstr "Большая"
 msgid "Maximum"
 msgstr "Максимальная"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr "Вы превысили предел запросов, попробуйте снова {in_N_minutes}."
 
@@ -719,11 +718,11 @@ msgstr "'{0}' не является корректным адресом элек
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' не является допустимым почтовым доменом."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Почтовый адрес {email_address} занесён в чёрный список, потому что попытка отправить письмо на него не удалась{timespan_ago}. Отправьте письмо с этого адреса на support@liberapay.com, если хотите, чтобы мы удалили его из чёрного списка."
+msgstr "Почтовый адрес {email_address} занесён в чёрный список, потому что попытка отправить письмо на него не удалась {timespan_ago}. Отправьте письмо с этого адреса на support@liberapay.com, если хотите, чтобы мы удалили его из чёрного списка."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Адрес электронной почты {email_address} занесён в черный список из-за жалобы, полученной {timespan_ago}. Отправьте письмо с этого адреса на support@liberapay.com, если хотите, чтобы мы удалили его из чёрного списка."
 
@@ -869,10 +868,10 @@ msgid "Not Found"
 msgstr "Не найдено"
 
 msgid "Conflict"
-msgstr ""
+msgstr "Конфликт"
 
 msgid "Gone"
-msgstr ""
+msgstr "Прошёл"
 
 msgid "Too Many Requests"
 msgstr "Слишком много запросов"
@@ -899,11 +898,11 @@ msgstr "Не удалось найти пользователя {0} на {1}."
 
 #, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
-msgstr ""
+msgstr "Пожертвование Liberapay  в пользу {username} (команда {team_name})"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Liberapay donation to {username}"
-msgstr ""
+msgstr "Пожертвование Liberapay в пользу {username}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
@@ -915,16 +914,16 @@ msgstr[2] "{n} недель с {money_amount}"
 #, python-brace-format
 msgid "{n} month of {money_amount}"
 msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{n} месяц по {money_amount}"
+msgstr[1] "{n} месяца по {money_amount}"
+msgstr[2] "{n} месяцев по {money_amount}"
 
 #, python-brace-format
 msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{n} год по {money_amount}"
+msgstr[1] "{n} года по {money_amount}"
+msgstr[2] "{n} лет по {money_amount}"
 
 msgid "Bad username or password."
 msgstr "Неправильное имя пользователя или пароль."
@@ -1236,13 +1235,13 @@ msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Я согласен с {0}условиями использования MangoPay{1}"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "Персональная информация"
 
 msgid "Full Name"
-msgstr ""
+msgstr "Полное имя"
 
 msgid "Nationality"
-msgstr ""
+msgstr "Национальность"
 
 msgid "username"
 msgstr "имя пользователя"
@@ -1432,15 +1431,15 @@ msgstr "{username} ещё не задал никакой метод оплаты
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
+msgstr "Пожертвования в пользу {username} могут быть выполнены дебетовыми и кредитными картами (Visa, MasterCard, American Express) или прямым переводом на счёт в Euro bank (только для пожертвований в Евро)"
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr ""
+msgstr "Пожертвования в адрес {username} обрабатываются системой PayPal"
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Пожертвования в адрес {username} могут быть выполнены дебетовыми и кредитными картами (Visa, MasterCard, American Express), прямым переводом на счёт в Euro bank (только для пожертвований в Евро) и через систему PayPal"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Людям, делающим вклад в развитие общества, нужны вы для того, чтобы поддержать их работу. Создание бесплатного программного обеспечения, распространение свободных знаний - эти вещи требуют времени и стоят денег, и не только для того, чтобы начать работу, но и чтобы иметь возможность продолжать её."
@@ -1467,16 +1466,16 @@ msgid "Country"
 msgstr "Страна"
 
 msgid "Region (state, province, island…)"
-msgstr ""
+msgstr "Регион (край, область...)"
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
+msgstr "Вы можете оставить это поле пустым, если страна не использует регионы в почтовых адресах."
 
 msgid "Postal code"
-msgstr ""
+msgstr "Индекс"
 
 msgid "Address within the city"
-msgstr ""
+msgstr "Адрес в городе"
 
 msgid "Patrons"
 msgstr "Спонсоры"
@@ -1510,11 +1509,11 @@ msgstr "Доход: {0}/неделю"
 msgid "Mission accomplished!"
 msgstr "Цель достигнута!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
 msgstr "Присоединился {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Закрыт {timespan_ago}."
 
@@ -1565,11 +1564,11 @@ msgid "Reconnect"
 msgstr "Повторное подключение"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Перенаправление…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "Если Вы используете экзотический браузер и ничего не происходит, то {link_start} нажмите на ссылку {link_end} чтобы продолжить."
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1577,7 +1576,7 @@ msgstr "(fork)"
 msgid "Updated this week"
 msgstr "Обновлено на этой неделе"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Обновлено {timespan_ago}"
 
@@ -1641,10 +1640,10 @@ msgid "Actual Take"
 msgstr "Реальная выручка"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 msgid "auto"
-msgstr ""
+msgstr "авто"
 
 msgid "Update my nominal take"
 msgstr "Обновить мою номинальную выручку"
@@ -1679,9 +1678,9 @@ msgstr "Выберите или введите сумму:"
 #, python-brace-format
 msgid "Wrong currency? {n} other is supported:"
 msgid_plural "Wrong currency? {n} others are supported:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Неверная валюта? Поддерживается еще {n} другая"
+msgstr[1] "Неверная валюта? Поддерживаются еще {n} другие"
+msgstr[2] "Неверная валюта? Поддерживаются еще {n} других"
 
 #, python-brace-format
 msgid "Wrong currency? {username} also accepts {n} other:"
@@ -1813,7 +1812,7 @@ msgid "Which currencies should your donors be allowed to send you, and which one
 msgstr "Какие валюты ваши спонсоры могут посылать вам, и какую из них вы предпочитаете?"
 
 msgid "Accept all currencies, including any that we may add in the future."
-msgstr ""
+msgstr "Принимаются все валюты, включая все, которые мы можем добавить позже."
 
 msgid "accept"
 msgstr "принимать"
@@ -1822,11 +1821,11 @@ msgid "prefer"
 msgstr "предпочитать"
 
 msgid "Accepting foreign currencies can increase your income by convincing people in other countries to donate to you, but international payments usually result in a higher percentage of fees, and fluctuations in exchange rates can lessen the stability of your income."
-msgstr ""
+msgstr "Приём иностранных валют может повысить благосклонность пользователей."
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr ""
+msgstr "Stripe автоматически конвертирует фунты в Вашу основную валюту, PayPal принимает платежи в оригинальной валюте. Если Вы используете PayPal Business, то можете настроить автоматическое конвертирование валюты входящих платежей. Эта опция находится на странице {link_open} Preferences for receiving payments {link_close}."
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Я благодарен за пожертвования, но у меня нет определённой цели финансирования."
@@ -1877,12 +1876,12 @@ msgstr "У вас нет аккаунтов {platform}, подключённых
 msgid "Connect {0} account"
 msgstr "Подключить аккаунт {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
 msgstr[0] "Мы нашли {n} репозиторий в вашем аккаунте на {platform}, {timespan_ago}."
 msgstr[1] "Мы нашли {n} репозитория в вашем аккаунте на {platform}, {timespan_ago}."
-msgstr[2] ""
+msgstr[2] "Мы нашли {n} репозиториев в вашем аккаунте на {platform}, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "Репозитории не найдены."
@@ -1984,7 +1983,7 @@ msgstr[1] "Адреса электронной почты (Личные)"
 msgstr[2] "Адресов электронной почты (Личных)"
 
 msgid "Blacklisted"
-msgstr ""
+msgstr "В чёрном списке"
 
 msgid "Remove"
 msgstr "Удалить"
@@ -2088,61 +2087,61 @@ msgstr[2] "{n} пожертвований ожидают оплаты."
 
 #, python-brace-format
 msgid "{money_amount}{small}/week{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/в неделю{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/в месяц{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/в год{end_small}"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
-msgstr ""
+msgstr "Начат {timespan_ago}."
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
-msgstr ""
+msgstr "Начат {timespan_ago_1}. Изменён {timespan_ago_2}."
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr ""
+msgstr "Неактивно, потому что аккаунт получателя в чёрном списке."
 
 msgid "Inactive because the account of the recipient is closed."
-msgstr ""
+msgstr "Неактивно, потому что аккаунт получателя закрыт."
 
 msgid "Inactive because the recipient no longer accepts donations."
-msgstr ""
+msgstr "Неактивно, потому что получатель больше не принимает пожертвования."
 
 msgid "Active"
-msgstr ""
+msgstr "Активно"
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Следующая оплата {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
-msgstr ""
+msgstr "Обновить сейчас."
 
 msgid "Pending payment completion."
-msgstr ""
+msgstr "Ожидается завершение платежа."
 
 msgid "Awaiting payment."
-msgstr ""
+msgstr "Ожидание платежа."
 
 msgid "Renew"
-msgstr ""
+msgstr "Обновить."
 
 msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
-msgstr ""
+msgstr "Нельзя обновить, т.к. аккаунт получателя не готов для получения новых платежей."
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
-msgstr ""
+msgstr "{bold}Итого:{bold_end} {0} в неделю ~ {1} в месяц ~ {2} в год."
 
 msgid "Cancel the pledge"
-msgstr ""
+msgstr "Отменить обещание."
 
 msgid "Recently Cancelled"
 msgstr "Недавно отменённые"
@@ -2151,11 +2150,11 @@ msgid "within the last 30 days"
 msgstr "за последние 30 дней"
 
 msgid "Restart"
-msgstr ""
+msgstr "Рестарт"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
-msgstr ""
+msgstr "Старт {timespan_ago_1}. Остановлено {timespan_ago_2}."
 
 #, python-brace-format
 msgid "You are not donating to {username}."
@@ -2167,19 +2166,19 @@ msgstr "Финансирование ваших пожертвований"
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Из-за технических ограничений мы не можем обработать все Ваши пожертвования одним платежом. Вы должны сделать сделать {n} раздельный платёж. Извините за неудобства."
+msgstr[1] "Из-за технических ограничений мы не можем обработать все Ваши пожертвования одним платежом. Вы должны сделать сделать {n} раздельных платежа. Извините за неудобства."
+msgstr[2] "Из-за технических ограничений мы не можем обработать все Ваши пожертвования одним платежом. Вы должны сделать сделать {n} раздельных платежей. Извините за неудобства."
 
 msgid "We are able to group these donations into a single payment."
-msgstr ""
+msgstr "Мы можем объединить эти пожертвования в один платёж."
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr ""
+msgstr "Ваши пожертвования в пользу {recipients} ожидают оплаты."
 
 msgid "For now this donation can only be renewed externally through PayPal."
-msgstr ""
+msgstr "Данное пожертвование может быть обновлено только через сайт PayPal."
 
 msgid "Please choose a payment method:"
 msgstr "Выберите способ оплаты:"
@@ -2191,17 +2190,17 @@ msgid "Currently unavailable"
 msgstr "Недоступно в данный момент"
 
 msgid "Euro donations only"
-msgstr ""
+msgstr "Пожертвования только в Евро"
 
 msgid "Euro bank accounts only"
-msgstr ""
+msgstr "Только аккаунт в Euro bank"
 
 msgid "Not anonymous"
-msgstr ""
+msgstr "Не анонимно"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
-msgstr ""
+msgstr "Ваше пожертвование команде {team} не может быть обработано, т.к. это будет пожертвование самому себе."
 
 msgid "All your donations are funded."
 msgstr "Все ваши пожертвования профинансированы."
@@ -2222,17 +2221,17 @@ msgid "The payment failed. Error message: “{0}”"
 msgstr "Платёж не прошёл. Сообщение об ошибке: \"{0}\""
 
 msgid "The payment is awaiting your approval."
-msgstr ""
+msgstr "Платёж ожидает Вашего подтверждения."
 
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "У вас есть {n} пожертвование, ожидающее оплату."
+msgstr[1] "У вас есть {n} пожертвования, ожидающие оплату."
+msgstr[2] "У вас есть {n} пожертвований, ожидающих оплату."
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "У вас больше нет пожертвований, ожидающих оплаты."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."

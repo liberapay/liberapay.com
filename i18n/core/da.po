@@ -421,15 +421,15 @@ msgstr "Følg dette link for at se {0}'s profil:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{user_name} fra {platform} har sluttet sig til Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "{date} gav du et donationstilbud på {money_amount} til {user_name} hvis de meldte sig til Liberapay."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "Vi er glade for at kunne oplyse dig om at {user_name} har tilsluttet sig Liberapay {time_ago}, som {liberapay_username}, så du kan nu ændre dit donationstilbud til en rigtig donation:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -517,21 +517,21 @@ msgstr "Det ser ud til at du har fundet en fejl i vores program! Undskyld ulejli
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Siden du søgte findes ikke. Vær sød at {link_open}kontakte os{link_close} hvis du har brug for assistance."
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Din forespørgsel er blevet afvist af vores software. {link_open}Kontakt os{link_close} hvis du har brug for hjælp."
 
 msgid "Error message:"
-msgstr ""
+msgstr "Fejlmeddelelse:"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "denne fejls detaljer er blevet gemt. Hvis du beslutter dig for at kontakte os så vær sød at vedlægge følgende fejlidentifikationskode i din meddelelse: {0}."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "Hvis du beslutter dig for at kontakte os, skal du medtage følgende debugging information i din besked:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Hver uge så længe jeg modtager donationer"
@@ -1225,13 +1225,13 @@ msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Jeg tilslutter mig hermed {0}MangoPays Servicevilkår{1}"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "Personlig information"
 
 msgid "Full Name"
-msgstr ""
+msgstr "Fuldt navn"
 
 msgid "Nationality"
-msgstr ""
+msgstr "Nationalitet"
 
 msgid "username"
 msgstr "brugernavn"
@@ -1456,16 +1456,16 @@ msgid "Country"
 msgstr "Land"
 
 msgid "Region (state, province, island…)"
-msgstr ""
+msgstr "Region (stat, provins, ø...)"
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
+msgstr "Du kan lade dette felt stå tomt, hvis dit land ikke bruger regioner i postadresser."
 
 msgid "Postal code"
-msgstr ""
+msgstr "Postnummer"
 
 msgid "Address within the city"
-msgstr ""
+msgstr "Adresse i byen"
 
 msgid "Patrons"
 msgstr "Bidragsydere"
@@ -1552,11 +1552,11 @@ msgid "Reconnect"
 msgstr "Genforbind"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Videredirigerer…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "Hvis du bruger en sjælden browser og der ikke sker noget, så{link_start}klik på dette link for at komme videre{link_end}."
 
 msgid "(fork)"
 msgstr "(forgrene)"
@@ -2141,7 +2141,7 @@ msgstr "Begyndt {timespan_ago_1}. Stoppet {timespan_ago_2}."
 
 #, python-brace-format
 msgid "You are not donating to {username}."
-msgstr ""
+msgstr "Du donerer ikke til {username}."
 
 msgid "Funding your donations"
 msgstr "Financier dine donationer"
@@ -2149,18 +2149,18 @@ msgstr "Financier dine donationer"
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
+msgstr[1] "På grund af juridiske og tekniske begrænsninger er vi i øjeblikket ikke i stand til at behandle alle dine donationer som en enkeltbetaling. I stedet skal du lave {n} separate betalinger. Vi beklager ulejligheden."
 
 msgid "We are able to group these donations into a single payment."
-msgstr ""
+msgstr "Vi kan samle disse donationer i en enkelt betaling."
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr ""
+msgstr "Din donation til {recipients} venter betaling."
 
 msgid "For now this donation can only be renewed externally through PayPal."
-msgstr ""
+msgstr "For øjeblikket kan denne donation kun fornyes eksternt via PayPal."
 
 msgid "Please choose a payment method:"
 msgstr "Vælg venligst en betalingsmetode:"
@@ -2182,7 +2182,7 @@ msgstr "Ikke anonym"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
-msgstr ""
+msgstr "Din donation til {team} kan ikke gennemføres fordi du i så fald ville sende penge til dig selv."
 
 msgid "All your donations are funded."
 msgstr "Alle dine donationer er finansieret."
@@ -2208,11 +2208,11 @@ msgstr "Betalingen afventer din godkendelse."
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har {n} anden donation der afventer betaling."
+msgstr[1] "Du har {n} andre donationer der afventer betaling."
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "Du har ikke andre donationer, der afventer betaling på dette tidspunkt."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -2242,7 +2242,7 @@ msgstr "Valgfrit beløb (min={0}, max={1})"
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr ""
+msgstr "Hele beløbet for din betaling går straks til {recipient_names}s {payment_provider} kontoer."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
@@ -2267,23 +2267,23 @@ msgstr "Betalingen er blevet påbegyndt."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
-msgstr ""
+msgstr "Vi opkræver fra dit {brand}-kort (sidste fire cifre: {last4})."
 
 msgid "Use another card"
-msgstr ""
+msgstr "Brug et andet kort"
 
 #, python-brace-format
 msgid "We will charge your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "Vi opkræver fra din {bank_name}-konto ({partial_account_number})."
 
 msgid "Use another bank account"
-msgstr ""
+msgstr "Brug en anden bankkonto"
 
 msgid "Please input your name and card number:"
-msgstr ""
+msgstr "Skriv venligst dit navn og kortnummer:"
 
 msgid "Jane Doe"
-msgstr ""
+msgstr "Fru Hansen"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
@@ -2293,14 +2293,14 @@ msgid "Remember the card number for next time"
 msgstr "Husk kort-nummeret til næste gang"
 
 msgid "Please input your name and your IBAN (International Bank Account Number):"
-msgstr ""
+msgstr "Skriv venligst dit navn og dit IBAN (International Bank Account Number):"
 
 #, python-brace-format
 msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "Ved at give os dit IBAN og bekræfte denne betaling bemyndiger du {platform} og {provider}, vores betalingstjenesteudbyder, at sende instruktioner til din bank for at debitere din konto og din bank for at debitere din konto i overensstemmelse med disse instruktioner. Du har ret til refusion fra din bank i henhold til vilkårene for din aftale med din bank. En refusion skal kræves inden for 8 uger fra den dato, hvor din konto blev debiteret."
 
 msgid "Remember the bank account number for future payments"
-msgstr ""
+msgstr "Husk bankkontonummeret til fremtidige betalinger"
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på du vil ændre typen af din konto? På grund af juridiske grunde bliver vi nød til at oprette en ny konto på dine vegne hos vores partners betalingssystem og overføre pengene fra din gamle konto."
@@ -2343,7 +2343,7 @@ msgid "The provided postal address is incomplete."
 msgstr "Den angivne postadresse er ufuldstændig."
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
-msgstr ""
+msgstr "Denne side giver dig mulighed for at se og ændre identitetsoplysningerne der hører til din konto. Kun autoriseret personale har adgang til disse oplysninger, vi viser det ikke til andre brugere eller andre, medmindre det kræves i henhold til loven, eller hvis du beder os om det."
 
 msgid "Income Shares"
 msgstr "Indkomst Andele"
@@ -2374,7 +2374,7 @@ msgstr "Rediger"
 msgid "History"
 msgstr "Historie"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} tilmeldte sig {timespan_ago}."
 
@@ -2392,7 +2392,7 @@ msgstr "Antal Mæcener Per Uge"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} viser ikke hvor meget de modtager gennem Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Faktura-dokumenter er private."
@@ -2537,7 +2537,7 @@ msgstr "succes"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
-msgstr ""
+msgstr "Beløbene nedenfor omfatter ikke donationer gennem den gamle tegnebogssystem. Du kan finde dem på {link_start}din tegnebogside{link_end}."
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -2551,7 +2551,7 @@ msgid "Fees"
 msgstr "Gebyrer"
 
 msgid "charge"
-msgstr ""
+msgstr "opkræv"
 
 #, python-brace-format
 msgid "error message: {0}"
@@ -2577,7 +2577,7 @@ msgstr "Der var ingen transaktioner i denne periode."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
-msgstr ""
+msgstr "For at se de transaktioner, der er behandlet tidligere af Mangopay {link_start}gå til tegnebogsiden{link_end}."
 
 msgid "You are not invited to join this team."
 msgstr "Du er ikke inviteret til at blive medlem af dette team."
@@ -2600,11 +2600,11 @@ msgstr "Et team kan ikke blive medlem af et team"
 msgid "You can't invite an inactive user to join a team."
 msgstr "Du kan ikke invitere en inaktiv bruger til at blive medlem af et team."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
-msgstr "{username} er allerede blevet inviteret som medlem af dette team {timespan_ago}."
+msgstr "{username} er allerede blevet inviteret til dette team {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
 msgstr "{username} har allerede afvist at blive medlem af dette team {timespan_ago}."
 
@@ -2640,13 +2640,13 @@ msgstr "Ingen notifikationer at vise."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr ""
+msgstr "Du skal {link_open}udfylde din profil{link_close} før du kan begynde at modtage donationer."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "For at modtage donationer er du nødt til at forbinde mindst en konto fra en understøttet betalingsformidler. Denne side tillader dig at gøre netop det."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
-msgstr ""
+msgstr "donorer behøver ikke at forbinde via en betalingskonto nedenfor, det er kun nødvendigt for at modtage penge."
 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr ""
