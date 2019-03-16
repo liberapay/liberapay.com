@@ -1,8 +1,8 @@
 import json
 
 from liberapay.exceptions import (
-        AuthRequired,
-        CommunityAlreadyExists,
+    AuthRequired,
+    CommunityAlreadyExists,
 )
 from liberapay.models.community import Community
 from liberapay.testing import Harness
