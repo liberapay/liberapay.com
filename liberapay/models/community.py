@@ -3,6 +3,7 @@ import unicodedata
 
 from postgres.orm import Model
 from psycopg2 import IntegrityError
+from confusable_homoglyphs import confusables
 
 from liberapay.exceptions import CommunityAlreadyExists, InvalidCommunityName
 
@@ -38,8 +39,17 @@ class Community(Model):
         name = unicodedata.normalize('NFKC', name)
         if name_re.match(name) is None:
             raise InvalidCommunityName(name)
+
         try:
             with cls.db.get_cursor() as cursor:
+                all_names = cursor.all("""
+                    SELECT name
+                    FROM communities
+                    """)
+                for existing_name in all_names:
+                    if cls._unconfusable(name) == cls._unconfusable(existing_name):
+                        raise CommunityAlreadyExists
+
                 p_id = cursor.one("""
                     INSERT INTO participants
                                 (kind, status, join_time)
@@ -91,3 +101,14 @@ class Community(Model):
     @property
     def nsubscribers(self):
         return self.participant.nsubscribers
+
+    @staticmethod
+    def _unconfusable(name):
+        unconfusable_name = ''
+        for c in name:
+            confusable = confusables.is_confusable(c, preferred_aliases=['COMMON', 'LATIN'])
+            if confusable:
+                # if the character is confusable we replace it with the first prefered alias
+                c = confusable[0]['homoglyphs'][0]['c']
+            unconfusable_name += c
+        return unconfusable_name

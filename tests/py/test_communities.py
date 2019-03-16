@@ -1,6 +1,9 @@
 import json
 
-from liberapay.exceptions import AuthRequired
+from liberapay.exceptions import (
+        AuthRequired,
+        CommunityAlreadyExists,
+)
 from liberapay.models.community import Community
 from liberapay.testing import Harness
 
@@ -100,6 +103,30 @@ class TestCommunityActions(Harness):
 
         communities = self.bob.get_communities()
         assert len(communities) == 0
+
+    def test_create_community_already_taken(self):
+        with self.assertRaises(CommunityAlreadyExists):
+            Community.create('test', self.alice.id)
+
+    def test_create_community_already_taken_is_case_insensitive(self):
+        with self.assertRaises(CommunityAlreadyExists):
+            Community.create('TeSt', self.alice.id)
+
+    def test_unconfusable(self):
+        self.assertEqual('user2', Community._unconfusable('user2'))
+        self.assertEqual('alice', Community._unconfusable('alice'))
+        latin_string = 'AlaskaJazz'
+        mixed_string = 'ΑlaskaJazz'
+        self.assertNotEqual(latin_string, mixed_string)
+        self.assertEqual(latin_string, Community._unconfusable(mixed_string))
+
+    def test_create_community_already_taken_with_confusable_homoglyphs(self):
+        latin_string = 'AlaskaJazz'
+        mixed_string = 'ΑlaskaJazz'
+
+        Community.create(latin_string, self.bob.id)
+        with self.assertRaises(CommunityAlreadyExists):
+            Community.create(mixed_string, self.alice.id)
 
 
 class TestCommunityEdit(Harness):
