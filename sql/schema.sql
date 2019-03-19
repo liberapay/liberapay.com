@@ -602,6 +602,7 @@ CREATE FUNCTION compute_payment_providers(bigint) RETURNS bigint AS $$
                      SELECT t.member
                        FROM current_takes t
                       WHERE t.team = $1
+                        AND t.amount <> 0
                  )
                )
            AND a.is_current IS TRUE
