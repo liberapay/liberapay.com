@@ -1420,9 +1420,9 @@ msgstr "Nein, abbrechen"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} hat bisher keine Zahlungsmethode eingestellt, weshalb Ihre Spende derzeit nicht verarbeitet werden kann. Wir werden Sie informieren, sobald Zahlungen möglich sind."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte (Visa, MasterCard, American Express) bezahlt werden."
+msgstr "Spenden an {username} können mit Kreditkarte (Visa, MasterCard, American Express) bezahlt werden. Spenden in Euro können auch per Lastschrift von einem Euro Bankkonto abgebucht werden."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
@@ -1466,7 +1466,7 @@ msgid "Postal code"
 msgstr "Postleitzahl"
 
 msgid "Address within the city"
-msgstr ""
+msgstr "Adresse innerhalb der Stadt"
 
 msgid "Patrons"
 msgstr "Förderer"
@@ -1557,7 +1557,7 @@ msgstr "Weiterleiten…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "Wenn Sie einen exotischen Browser benutzen und nichts passiert, {link_start}klicken Sie hier{link_end}, um weiter zu machen."
 
 msgid "(fork)"
 msgstr "(Fork)"
@@ -2147,11 +2147,11 @@ msgstr "Sie spenden nicht an {username}."
 msgid "Funding your donations"
 msgstr "Ihre Spenden finanzieren"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] "Wegen rechtlicher und technischer Restriktionen können wir Ihre Spenden aktuell nicht mit einer Zahlung ausführen. Sie müssen eine weitere Zahlung leisten. Wir bitten Sie, diese Unannehmlichkeit zu entschuldigen."
-msgstr[1] "Wegen rechtlicher und technischer Restriktionen können wir Ihre Spenden aktuell nicht mit einer Zahlung ausführen. Sie müssen {n} weitere Zahlungen leisten. Wir bitten Sie, diese Unannehmlichkeit zu entschuldigen."
+msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
+msgstr[1] "Wegen rechtlicher und technischer Einschränkungen können wir Ihre gesamten Spenden aktuell nicht mit einer Einzelzahlung bearbeiten. Sie müssen stattdessen {n} getrennte Zahlungen leisten. Wir entschuldigen uns für die Unannehmlichkeiten."
 
 msgid "We are able to group these donations into a single payment."
 msgstr "Wir können diese Spenden zu einer einzigen Traksaktion gruppieren."
@@ -2243,7 +2243,7 @@ msgstr "Eigener Betrag (min={0}, max={1})"
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr ""
+msgstr "Der Gesamtbetrag Ihrer Zahlung gelangt unverzüglich auf die {payment_provider}-Konten von {recipient_names}."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
@@ -2280,9 +2280,8 @@ msgstr "Wir werden Ihr {bank_name} Konto {partial_account_number} belasten."
 msgid "Use another bank account"
 msgstr "Nutzen Sie ein anderes Bankkonto"
 
-#, fuzzy
 msgid "Please input your name and card number:"
-msgstr "Bitte geben Sie die Kartennummer ein:"
+msgstr "Bitte geben Sie Ihren Namen und die Kartennummer ein:"
 
 msgid "Jane Doe"
 msgstr "Max Mustermann"
@@ -2394,7 +2393,7 @@ msgstr "Anzahl Unterstützer/-innen pro Woche"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} gibt nicht an, wie viel sie über Liberapay erhalten."
 
 msgid "Invoice documents are private."
 msgstr "Rechnungsdokumente sind privat."
@@ -3742,17 +3741,17 @@ msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} 
 msgstr[0] "Der letzte Zahltag war {timespan_ago} und es wurden {money_amount} zwischen {n} Benutzern gespendet."
 msgstr[1] "Der letzte Zahltag war {timespan_ago} und es wurden {money_amount} zwischen {n} Benutzern gespendet."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] "{n} Nutzer haben Geld gespendet."
-msgstr[1] "{n} Nutzer haben Geld gespendet."
+msgstr[0] "{n} Teilnehmer hat Geld gespendet."
+msgstr[1] "{n} Teilnehmer haben Geld gespendet."
 
 #, python-brace-format
 msgid "{n} participant received money."
 msgid_plural "{n} participants received money."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} Teilnehmer hat Geld erhalten."
+msgstr[1] "{n} Teilnehmer haben Geld erhalten."
 
 #, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
@@ -4316,7 +4315,7 @@ msgstr[1] "{n} neue {link_open}Spenden{link_close} wurden im letzten Monat versp
 #, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
 msgid_plural "{money_amount} was transferred last week between {n} users."
-msgstr[0] ""
+msgstr[0] "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
 msgstr[1] "{money_amount} wurden letzte Woche zwischen {n} Nutzern verteilt."
 
 msgid "More stats"
