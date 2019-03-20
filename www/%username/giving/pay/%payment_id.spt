@@ -79,7 +79,11 @@ if tippee_id:
         donations_not_fundable = [tip]
 
 else:
-    donations_not_fundable = donation_groups['no_provider'] + donation_groups['suspended']
+    donations_not_fundable = (
+        donation_groups['no_provider'] +
+        donation_groups['no_taker'] +
+        donation_groups['suspended']
+    )
     self_donations = donation_groups['self_donation']
     if n_payments:
         payment = NS()

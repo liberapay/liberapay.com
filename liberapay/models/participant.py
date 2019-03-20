@@ -2325,6 +2325,7 @@ class Participant(Model, MixinTeam):
 
         - 'fundable': renewable donations grouped into lists (one per payment)
         - 'no_provider': the tippee hasn't connected any payment account
+        - 'no_taker': there is no team member willing and able to receive the donation
         - 'self_donation': the donor is the only fundable member of the tippee's team
         - 'suspended': the tippee's account is suspended
 
@@ -2340,6 +2341,7 @@ class Participant(Model, MixinTeam):
                      t.paid_in_advance < (t.amount * 4)
                    )
                AND p.status = 'active'
+               AND ( p.goal IS NULL OR p.goal >= 0 )
                AND NOT EXISTS (
                        SELECT 1
                          FROM payin_transfers pt
@@ -2360,9 +2362,9 @@ class Participant(Model, MixinTeam):
                  , (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
         """, (self.id,))
-        groups = {k: [] for k in (
-            'no_provider', 'suspended', 'fundable', 'self_donation'
-        )}
+        groups = dict(
+            fundable=[], no_provider=[], no_taker=[], self_donation=[], suspended=[]
+        )
         n_fundable = 0
         stripe_europe = {}
         for tip in tips:
@@ -2372,19 +2374,46 @@ class Participant(Model, MixinTeam):
             elif tippee_p.is_suspended:
                 groups['suspended'].append(tip)
             elif tippee_p.kind == 'group':
-                can_donate = self.db.one("""
-                    SELECT true
+                members = self.db.all("""
+                    SELECT t.member
                       FROM current_takes t
                       JOIN participants p ON p.id = t.member
                      WHERE t.team = %s
-                       AND t.member <> %s
-                     LIMIT 1
+                       AND t.amount <> 0
+                       AND p.payment_providers > 0
+                       AND p.is_suspended IS NOT TRUE
+                       AND ( p.goal IS NULL OR p.goal >= 0 )
+                  ORDER BY t.member <> %s DESC
                 """, (tippee_p.id, self.id))
-                if can_donate:
-                    n_fundable += 1
-                    groups['fundable'].append((tip,))
-                else:
+                if not members:
+                    groups['no_taker'].append(tip)
+                elif len(members) == 1 and members[0] == self.id:
                     groups['self_donation'].append(tip)
+                else:
+                    n_fundable += 1
+                    if tippee_p.payment_providers & 1 == 1:
+                        members = set(members)
+                        members.discard(self.id)
+                        in_sepa = self.db.one("""
+                            SELECT true
+                              FROM current_takes t
+                              JOIN payment_accounts a ON a.participant = t.member
+                             WHERE t.team = %(tippee)s
+                               AND t.member IN %(members)s
+                               AND a.provider = 'stripe'
+                               AND a.is_current
+                               AND a.country IN %(SEPA)s
+                             LIMIT 1
+                        """, dict(members=members, tippee=tip.tippee, SEPA=SEPA))
+                        if in_sepa:
+                            group = stripe_europe.setdefault(tip.amount.currency, [])
+                            if len(group) == 0:
+                                groups['fundable'].append(group)
+                            group.append(tip)
+                        else:
+                            groups['fundable'].append((tip,))
+                    else:
+                        groups['fundable'].append((tip,))
             else:
                 n_fundable += 1
                 if tippee_p.payment_providers & 1 == 1:
