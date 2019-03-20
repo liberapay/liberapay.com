@@ -1,0 +1,23 @@
+.timeline {
+    border-left: 3px solid #bbb;
+    list-style-type: none;
+    margin: 1em 0 1em 2ex;
+    padding: 0.5em 0;
+    & > li {
+        margin: 0.7em 0;
+        padding-left: 1.5ex;
+        position: relative;
+        &::before {
+            background-color: #fff;
+            border-radius: 100%;
+            color: #bbb;
+            content: '●';
+            font: 80% $font-family-monospace;
+            left: -9px;
+            position: absolute;
+            text-align: center;
+            top: 0.2em;
+            width: 15px;
+        }
+    }
+}

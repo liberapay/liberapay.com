@@ -475,6 +475,23 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None, maximum=None):
     return r
 
 
+def parse_date(mapping, k, default=NO_DEFAULT, sep='-'):
+    try:
+        r = mapping[k].split(sep)
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    try:
+        year, month, day = map(int, r)
+        # the above raises ValueError if the number of parts isn't 3
+        # or if any part isn't an integer
+        r = date(year, month, day)
+    except (ValueError, TypeError):
+        raise Response().error(400, "`%s` value %r is invalid" % (k, mapping[k]))
+    return r
+
+
 def parse_list(mapping, k, cast, default=NO_DEFAULT, sep=','):
     try:
         r = mapping[k].split(sep)

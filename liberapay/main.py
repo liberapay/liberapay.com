@@ -253,6 +253,10 @@ if hasattr(aspen.http.mapping.Mapping, 'get_int'):
     raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
 aspen.http.mapping.Mapping.get_int = utils.get_int
 
+if hasattr(aspen.http.mapping.Mapping, 'parse_date'):
+    raise Warning('aspen.http.mapping.Mapping.parse_date() already exists')
+aspen.http.mapping.Mapping.parse_date = utils.parse_date
+
 if hasattr(aspen.http.mapping.Mapping, 'parse_list'):
     raise Warning('aspen.http.mapping.Mapping.parse_list() already exists')
 aspen.http.mapping.Mapping.parse_list = utils.parse_list

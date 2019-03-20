@@ -1,0 +1,122 @@
+from liberapay.utils import form_post_success, get_participant, utcnow
+
+[---]
+
+payer = participant = get_participant(state, restrict=True)
+
+if request.method == 'POST':
+    action = request.qs['action']
+    sp_id = request.qs.get_int('id')
+    sp = website.db.one("""
+        SELECT *
+          FROM scheduled_payins
+         WHERE payer = %s
+           AND id = %s
+    """, (payer.id, sp_id))
+    if sp is None:
+        raise response.invalid_input(sp_id, 'id', 'querystring')
+    if action == 'cancel':
+        for tr in sp.transfers:
+            tippee = website.db.Participant.from_id(tr['tippee_id'])
+            payer.stop_tip_to(tippee, update_schedule=False)
+            payer.schedule_renewals()
+    elif action == 'reschedule':
+        new_date = request.body.parse_date('new_date')
+        if new_date <= utcnow().date():
+            raise response.error(400, _("The date must be in the future."))
+        payer.schedule_renewals(new_dates={sp.id: new_date})
+    else:
+        raise response.invalid_input(action, 'action', 'querystring')
+    form_post_success(state, redirect_url=payer.path('giving/schedule'))
+
+title = payer.username
+subhead = _("Schedule")
+
+scheduled_payins = website.db.all("""
+    SELECT sp.*
+      FROM scheduled_payins sp
+     WHERE sp.payer = %s
+  ORDER BY sp.execution_date ASC
+""", (payer.id,))
+
+action = request.qs.get('action')
+if action:
+    sp_id = request.qs.get_int('id')
+    sp = [sp for sp in scheduled_payins if sp.id == sp_id]
+    if sp:
+        sp = sp[0]
+    else:
+        raise response.invalid_input(sp_id, 'id', 'querystring')
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% from "templates/macros/icons.html" import glyphicon
+
+% block content
+
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+% if action == 'cancel'
+    <p>{{ _(
+        "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}.",
+        recipient=website.tippee_links(sp.transfers)[0]
+    ) if len(sp.transfers) == 1 else _(
+        "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}.",
+        recipients=website.tippee_links(sp.transfers)
+    ) }}</p>
+    <div class="buttons">
+        <button class="btn btn-danger">{{ _("Confirm") }}</button>
+        <a class="btn btn-default" href="?">{{ _("Go back") }}</a>
+    </div>
+% elif action == 'reschedule'
+    <p>{{ _("Please input a new date for this payment:") }}</p>
+    <div class="form-group">
+        <input type="date" name="new_date" value="{{ sp.execution_date }}"
+               class="form-control" placeholder="{{ _('YYYY-MM-DD') }}" />
+    </div>
+    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+        "Delaying your payment beyond its normal date will result in your donation "
+        "being inactive during that time."
+    ) }}</p>
+    <br>
+    <div class="buttons">
+        <button class="btn btn-primary">{{ _("Confirm") }}</button>
+        <a class="btn btn-default" href="?">{{ _("Go back") }}</a>
+    </div>
+% elif scheduled_payins
+    <p>{{ ngettext(
+        "You have {n} scheduled payment:",
+        "You have {n} scheduled payments:",
+        n=len(scheduled_payins)
+    ) }}</p>
+    <ul class="timeline">
+    % for sp in scheduled_payins
+        <li>{{ (_(
+                "{date}: automatic payment of {money_amount} to {recipient}",
+                date=sp.execution_date, money_amount=sp.amount, recipient=website.tippee_links(sp.transfers)[0]
+            ) if len(sp.transfers) == 1 else _(
+                "{date}: automatic payment of {money_amount} split between {recipients}",
+                date=sp.execution_date, money_amount=sp.amount, recipients=website.tippee_links(sp.transfers)
+            )) if sp.automatic else _(
+                "{date}: manual payment to {recipients}",
+                date=sp.execution_date, recipients=website.tippee_links(sp.transfers)
+            ) }}
+            &nbsp;&nbsp;
+            <span class="buttons">
+                <a class="btn btn-primary btn-xs" href="?id={{ sp.id }}&amp;action=reschedule">{{
+                    _("Reschedule")
+                }}</button>
+                <a class="btn btn-warning btn-xs" href="?id={{ sp.id }}&amp;action=cancel">{{
+                    _("Cancel")
+                }}</button>
+            </span>
+        </li>
+    % endfor
+    </ul>
+% else
+    <p>{{ _("You currently don't have any scheduled payment.") }}</p>
+% endif
+</form>
+
+% endblock

@@ -2447,7 +2447,7 @@ class Participant(Model, MixinTeam):
         return t
 
 
-    def schedule_renewals(self, save=True):
+    def schedule_renewals(self, save=True, new_dates={}):
         """(Re)schedule this donor's future payments.
         """
 
@@ -2610,7 +2610,17 @@ class Participant(Model, MixinTeam):
                     cur_sp = current_schedule_map.pop(tippees, None)
                     if cur_sp:
                         # Found it, now we check if the two are different
-                        if has_scheduled_payment_changed(cur_sp, new_sp):
+                        if cur_sp.id in new_dates:
+                            new_sp.execution_date = new_dates[cur_sp.id]
+                            new_sp.rescheduled = True
+                            updates.append((cur_sp, new_sp))
+                        elif cur_sp.rescheduled:
+                            # Don't modify a payment that has been explicitly
+                            # rescheduled by the donor.
+                            new_sp.execution_date = cur_sp.execution_date
+                            new_sp.rescheduled = True
+                            unchanged.append(cur_sp)
+                        elif has_scheduled_payment_changed(cur_sp, new_sp):
                             is_short_delay = (
                                 new_sp.amount == cur_sp.amount and
                                 new_sp.execution_date <= (
@@ -2671,6 +2681,7 @@ class Participant(Model, MixinTeam):
                          , automatic = %s
                          , notifs_count = 0
                          , last_notif_ts = NULL
+                         , rescheduled = %s
                          , mtime = current_timestamp
                      WHERE id = %s
                 """, [
@@ -2678,6 +2689,7 @@ class Participant(Model, MixinTeam):
                      json.dumps(new_sp.transfers),
                      new_sp.execution_date,
                      new_sp.automatic,
+                     getattr(new_sp, 'rescheduled', None),
                      cur_sp.id)
                     for cur_sp, new_sp in updates
                 ])
