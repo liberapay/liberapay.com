@@ -1,4 +1,5 @@
 from base64 import b64decode, b64encode
+from collections import defaultdict
 from datetime import timedelta
 from decimal import Decimal
 from email.utils import formataddr
@@ -21,8 +22,10 @@ from pando import json, Response
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
+from psycopg2.extras import execute_batch
 import requests
 
+from liberapay.billing.payday import compute_next_payday_date
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, BASE64URL_CHARS, CURRENCIES,
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
@@ -71,6 +74,7 @@ from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
+from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     deserialize, erase_cookie, serialize, set_cookie, urlquote,
@@ -2396,6 +2400,7 @@ class Participant(Model, MixinTeam):
             for u in updated:
                 if u.id == t.id:
                     t.is_funded = u.is_funded
+            self.schedule_renewals()
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving()
@@ -2416,7 +2421,7 @@ class Participant(Model, MixinTeam):
         )
 
 
-    def stop_tip_to(self, tippee):
+    def stop_tip_to(self, tippee, update_schedule=True):
         t = self.db.one("""
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
@@ -2437,8 +2442,271 @@ class Participant(Model, MixinTeam):
             self.update_giving()
             # Update receiving amount of tippee
             tippee.update_receiving()
+        if update_schedule:
+            self.schedule_renewals()
         return t
 
+
+    def schedule_renewals(self, save=True):
+        """(Re)schedule this donor's future payments.
+        """
+
+        def get_tippees_tuple(sp):
+            return tuple(sorted([tr['tippee_id'] for tr in sp.transfers]))
+
+        def has_scheduled_payment_changed(cur, new):
+            for k, v in new.__dict__.items():
+                if getattr(cur, k) != v:
+                    return True
+            return False
+
+        def find_partial_match(new_sp, current_schedule_map):
+            """Try to find the scheduled payment that most closely resembles `new_sp`.
+            """
+            new_tippees_set = set(tr['tippee_id'] for tr in new_sp.transfers)
+            best_match, best_match_score = None, 0
+            for tr in new_sp.transfers:
+                cur_sp = current_schedule_by_tippee.get(tr['tippee_id'])
+                if not cur_sp:
+                    continue
+                cur_tippees = get_tippees_tuple(cur_sp)
+                if cur_tippees not in current_schedule_map:
+                    # This scheduled payin has already been matched to another one.
+                    continue
+                cur_tippees_set = set(cur_tippees)
+                n_common_tippees = len(cur_tippees_set & new_tippees_set)
+                if best_match and best_match_score >= n_common_tippees:
+                    continue
+                else:
+                    best_match, best_match_score = cur_sp, n_common_tippees
+            return best_match
+
+        with self.db.get_cursor() as cursor:
+            # Prevent race conditions
+            if save:
+                cursor.run("SELECT * FROM participants WHERE id = %s FOR UPDATE",
+                           (self.id,))
+
+            # Get renewable tips
+            renewable_tips = cursor.all("""
+                SELECT t.*, tippee_p
+                  FROM current_tips t
+                  JOIN participants tippee_p ON tippee_p.id = t.tippee
+                 WHERE t.tipper = %s
+                   AND t.renewal_mode > 0
+                   AND t.paid_in_advance IS NOT NULL
+                   AND tippee_p.status = 'active'
+                   AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
+                   AND tippee_p.is_suspended IS NOT TRUE
+                   AND tippee_p.payment_providers > 0
+            """, (self.id,))
+
+            # Get the existing schedule
+            current_schedule = cursor.all("""
+                SELECT sp.*
+                  FROM scheduled_payins sp
+                 WHERE sp.payer = %s
+                   AND sp.execution_date > current_date
+              ORDER BY sp.execution_date, sp.id
+            """, (self.id,))
+            current_schedule_map = {get_tippees_tuple(sp): sp for sp in current_schedule}
+            current_schedule_by_tippee = {}
+            for sp in current_schedule:
+                for tr in sp.transfers:
+                    if isinstance(tr['amount'], dict):
+                        tr['amount'] = Money(**tr['amount'])
+                    if tr['tippee_id'] in current_schedule_by_tippee:
+                        # This isn't supposed to happen.
+                        continue
+                    current_schedule_by_tippee[tr['tippee_id']] = sp
+
+            # For each renewable tip, get the amount of the last payment
+            if renewable_tips:
+                tippees = set(t.tippee for t in renewable_tips)
+                last_payments = dict(cursor.all("""
+                    SELECT DISTINCT ON (coalesce(pt.team, pt.recipient))
+                           coalesce(pt.team, pt.recipient) AS tippee,
+                           round(
+                               convert(pt.amount, pi.amount::currency) / (
+                                   SELECT sum(pt2.amount, pi.amount::currency)
+                                     FROM payin_transfers pt2
+                                    WHERE pt2.payin = pt.payin
+                               ) * pi.amount
+                           ) AS amount
+                      FROM payin_transfers pt
+                      JOIN payins pi ON pi.id = pt.payin
+                     WHERE pt.payer = %(payer)s
+                       AND coalesce(pt.team, pt.recipient) IN %(tippees)s
+                       AND pt.status = 'succeeded'
+                  ORDER BY coalesce(pt.team, pt.recipient)
+                         , pt.ctime DESC
+                """, dict(payer=self.id, tippees=tippees)))
+                for tip in list(renewable_tips):
+                    last_payment_amount = last_payments.get(tip.tippee)
+                    if tip.renewal_mode == 2 and last_payment_amount:
+                        tip.renewal_amount = last_payment_amount.convert(tip.amount.currency)
+                        if tip.renewal_amount < (tip.amount * 2):
+                            pp = PayinProspect([tip], 'stripe')
+                            tip.renewal_amount = pp.moderate_proposed_amount
+                    else:
+                        tip.renewal_amount = None
+                del last_payments, tippees
+
+            # Group the tips into payments
+            next_payday = compute_next_payday_date()
+            tip_groups = defaultdict(list)
+            for tip in renewable_tips:
+                tip.weeks_left = int(tip.paid_in_advance // tip.amount)
+                if tip.weeks_left == 0:
+                    last_transfer_date = cursor.one("""
+                        SELECT tr.timestamp::date
+                          FROM transfers tr
+                         WHERE tr.tipper = %s
+                           AND coalesce(tr.team, tr.tippee) = %s
+                           AND tr.context IN ('tip', 'take')
+                      ORDER BY tr.timestamp DESC
+                         LIMIT 1
+                    """, (tip.tipper, tip.tippee)) or cursor.one("""
+                        SELECT pt.ctime::date
+                          FROM payin_transfers pt
+                         WHERE pt.payer = %s
+                           AND coalesce(pt.team, pt.recipient) = %s
+                           AND pt.context IN ('personal-donation', 'team-donation')
+                      ORDER BY pt.ctime DESC
+                         LIMIT 1
+                    """, (tip.tipper, tip.tippee))
+                    tip.due_date = last_transfer_date + timedelta(weeks=1)
+                else:
+                    tip.due_date = next_payday + timedelta(weeks=tip.weeks_left - 1)
+                renewal_quarter = tip.weeks_left // 13
+                tip_groups[(tip.renewal_mode, tip.amount.currency, renewal_quarter)].append(tip)
+            del renewable_tips
+            tip_groups = {
+                key: self.group_tips_into_payments(tips)[0]['fundable']
+                for key, tips in tip_groups.items()
+            }
+            new_schedule = []
+            insertions, updates, deletions, unchanged = [], [], [], []
+            for (renewal_mode, payin_currency, ignored), groups in tip_groups.items():
+                for payin_tips in groups:
+                    execution_date = min(t.due_date for t in payin_tips)
+                    new_sp = Object(
+                        amount=Money.sum(
+                            (t.renewal_amount for t in payin_tips),
+                            payin_currency
+                        ) if renewal_mode == 2 else None,
+                        transfers=[
+                            {
+                                'tippee_id': tip.tippee,
+                                'tippee_username': tip.tippee_p.username,
+                                'amount': tip.renewal_amount,
+                            } for tip in payin_tips
+                        ],
+                        execution_date=execution_date,
+                        automatic=(renewal_mode == 2),
+                    )
+                    # Try to find this new payment in the current schedule
+                    tippees = get_tippees_tuple(new_sp)
+                    cur_sp = current_schedule_map.pop(tippees, None)
+                    if cur_sp:
+                        # Found it, now we check if the two are different
+                        if has_scheduled_payment_changed(cur_sp, new_sp):
+                            is_short_delay = (
+                                new_sp.amount == cur_sp.amount and
+                                new_sp.execution_date <= (
+                                    cur_sp.execution_date + timedelta(weeks=4)
+                                )
+                            )
+                            if cur_sp.notifs_count and is_short_delay:
+                                # Don't push back a payment by only a few weeks
+                                # if we've already notified the payer.
+                                new_sp.execution_date = cur_sp.execution_date
+                                unchanged.append(cur_sp)
+                            else:
+                                updates.append((cur_sp, new_sp))
+                        else:
+                            unchanged.append(cur_sp)
+                    else:
+                        # No exact match, so we look for a partial match
+                        cur_sp = find_partial_match(new_sp, current_schedule_map)
+                        if cur_sp:
+                            # Found a partial match
+                            current_schedule_map.pop(get_tippees_tuple(cur_sp))
+                            updates.append((cur_sp, new_sp))
+                        else:
+                            # No match, this is a completely new payment
+                            insertions.append(new_sp)
+                    new_schedule.append(new_sp)
+            deletions = list(current_schedule_map.values())
+            del current_schedule_map
+
+            # Make sure any newly scheduled payment is at least a week away
+            ONE_WEEK = timedelta(weeks=1)
+            one_week_from_today = utcnow().date() + ONE_WEEK
+            for new_sp in insertions:
+                if new_sp.execution_date < one_week_from_today:
+                    new_sp.execution_date += ONE_WEEK
+
+            # Upsert the new schedule
+            notify = False
+            if save and (insertions or updates or deletions):
+                # Delete, insert and update the scheduled payins
+                execute_batch(cursor, """
+                    DELETE FROM scheduled_payins WHERE id = %s
+                """, [(sp.id,) for sp in deletions])
+                execute_batch(cursor, """
+                    INSERT INTO scheduled_payins
+                                (execution_date, payer, amount, transfers, automatic)
+                         VALUES (%s, %s, %s, %s, %s)
+                """, [
+                    (sp.execution_date, self.id, sp.amount, json.dumps(sp.transfers),
+                     sp.automatic)
+                    for sp in insertions
+                ])
+                execute_batch(cursor, """
+                    UPDATE scheduled_payins
+                       SET amount = %s
+                         , transfers = %s
+                         , execution_date = %s
+                         , automatic = %s
+                         , notifs_count = 0
+                         , last_notif_ts = NULL
+                         , mtime = current_timestamp
+                     WHERE id = %s
+                """, [
+                    (new_sp.amount,
+                     json.dumps(new_sp.transfers),
+                     new_sp.execution_date,
+                     new_sp.automatic,
+                     cur_sp.id)
+                    for cur_sp, new_sp in updates
+                ])
+                # Determine if we need to notify the user
+                notify = (
+                    any(sp.notifs_count for sp in deletions) or
+                    any(old_sp.notifs_count for old_sp, new_sp in updates)
+                )
+        new_schedule.sort(key=lambda sp: sp.execution_date)
+
+        # Notify the donor of important changes in scheduled payments
+        if notify:
+            sp_to_dict = lambda sp: {
+                'amount': sp.amount,
+                'execution_date': sp.execution_date,
+            }
+            self.notify(
+                'payment_schedule_modified',
+                force_email=True,
+                added_payments=[sp_to_dict(new_sp) for new_sp in insertions],
+                cancelled_payments=[sp_to_dict(old_sp) for old_sp in deletions],
+                modified_payments=[
+                    (sp_to_dict(old_sp), sp_to_dict(new_sp))
+                    for old_sp, new_sp in updates
+                ],
+                new_schedule=new_schedule,
+            )
+
+        return new_schedule
 
 
     def get_tip_to(self, tippee, currency=None):
@@ -2620,6 +2888,9 @@ class Participant(Model, MixinTeam):
                  , (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
         """, (self.id,))
+        return self.group_tips_into_payments(tips)
+
+    def group_tips_into_payments(self, tips):
         groups = dict(
             fundable=[], no_provider=[], no_taker=[], self_donation=[], suspended=[]
         )

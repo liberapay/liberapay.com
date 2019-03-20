@@ -634,11 +634,13 @@ def update_payin_transfer(
              WHERE p.id = %(p_id)s
         """, dict(p_id=(pt.team or pt.recipient)))
 
-        # Recompute the cached `giving` amount of the donor.
-        if update_donor:
-            db.Participant.from_id(pt.payer).update_giving(cursor)
+    # Recompute the donor's cached `giving` amount and payment schedule.
+    if update_donor:
+        donor = db.Participant.from_id(pt.payer)
+        donor.update_giving()
+        donor.schedule_renewals()
 
-        return pt
+    return pt
 
 
 def abort_payin(db, payin, error='aborted by payer'):

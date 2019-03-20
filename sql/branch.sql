@@ -5,7 +5,7 @@ BEGIN;
     , mtime            timestamptz       NOT NULL DEFAULT current_timestamp
     , execution_date   date              NOT NULL
     , payer            bigint            NOT NULL REFERENCES participants
-    , amount           currency_amount   NOT NULL CHECK (amount > 0)
+    , amount           currency_amount   CHECK (amount IS NULL OR amount > 0)
     , transfers        json              NOT NULL
     , automatic        boolean           NOT NULL DEFAULT FALSE
     , notifs_count     int               NOT NULL DEFAULT 0

@@ -221,7 +221,7 @@ next_payday = compute_next_payday_date()
                     <p>
                         % set delta = timedelta(weeks=weeks_remaning - 1)
                         {{ _(
-                            "Next payment {in_N_weeks_months_or_years}.",
+                            "Next payment due {in_N_weeks_months_or_years}.",
                             in_N_weeks_months_or_years=to_age(next_payday + delta)
                         ) }}
                         % if weeks_remaning < 4

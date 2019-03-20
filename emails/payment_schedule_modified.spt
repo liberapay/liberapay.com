@@ -1,0 +1,69 @@
+{{ _("Liberapay donation renewal: your upcoming payment has changed") }}
+
+[---] text/html
+<p>{{ _("Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:") }}</p>
+<ul>
+% for sp in cancelled_payments
+    <li>{{ _(
+        "The payment of {money_amount} scheduled for {date} has been cancelled.",
+        money_amount=sp.amount, date=sp.execution_date
+    ) if sp.amount else _(
+        "The manual payment scheduled for {date} has been cancelled.", date=sp.execution_date
+    ) }}</li>
+% endfor
+% for sp in added_payments
+    <li>{{ _(
+        "A new payment of {money_amount} has been scheduled for {date}.",
+        money_amount=sp.amount, date=sp.execution_date
+    ) if sp.amount else _(
+        "A new manual payment has been scheduled for {date}.", date=sp.execution_date
+    ) }}</li>
+% endfor
+% for old_sp, new_sp in modified_payments
+    <li>{{ _(
+        "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}.",
+        money_amount=old_sp.amount, old_date=old_sp.execution_date, new_date=new_sp.execution_date
+    ) if new_sp.amount and new_sp.amount == old_sp.amount else _(
+        "The manual payment scheduled for {old_date} has been rescheduled to {new_date}.",
+        old_date=old_sp.execution_date, new_date=new_sp.execution_date
+    ) if new_sp.amount == old_sp.amount else _(
+        "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}.",
+        date=old_sp.execution_date, old_money_amount=old_sp.amount, new_money_amount=new_sp.amount
+    ) if old_sp.amount and new_sp.amount and new_sp.execution_date == old_sp.execution_date else _(
+        "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}.",
+        old_money_amount=old_sp.amount, old_date=old_sp.execution_date, new_money_amount=new_sp.amount, new_date=new_sp.execution_date
+    ) if old_sp.amount and new_sp.amount else _(
+        "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}.",
+        old_money_amount=old_sp.amount, old_date=old_sp.execution_date, new_date=new_sp.execution_date
+    ) if old_sp.amount else _(
+        "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}.",
+        old_date=old_sp.execution_date, new_money_amount=new_sp.amount, new_date=new_sp.execution_date
+    ) }}</li>
+% endfor
+</ul>
+
+% if new_schedule
+<p>{{ ngettext(
+    "You now have {n} scheduled payment:",
+    "You now have {n} scheduled payments:",
+    len(new_schedule)
+) }}</p>
+<ul>
+% for sp in new_schedule
+    <li>{{ (_(
+        "{date}: automatic payment of {money_amount} to {recipient}",
+        date=sp.execution_date, money_amount=sp.amount, recipient=website.tippee_links(sp.transfers)[0]
+    ) if len(sp.transfers) == 1 else _(
+        "{date}: automatic payment of {money_amount} split between {recipients}",
+        date=sp.execution_date, money_amount=sp.amount, recipients=website.tippee_links(sp.transfers)
+    )) if sp.automatic else _(
+        "{date}: manual payment to {recipients}",
+        date=sp.execution_date, recipients=website.tippee_links(sp.transfers)
+    ) }}</li>
+% endfor
+</ul>
+% endif
+
+<p><a href="{{ participant.url('giving/schedule') }}" style="{{ button_style('default') }}">{{ _("Manage your payment schedule") }}</a></p>
+
+<p><a href="{{ participant.url('giving/') }}" style="{{ button_style('default') }}">{{ _("Manage your donations") }}</a></p>
