@@ -1,5 +1,5 @@
 from collections import namedtuple
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal, ROUND_UP
 from itertools import chain
 import os
@@ -1176,6 +1176,21 @@ class Payday(object):
             p.notify('payment_account_required', force_email=True)
             n += 1
         log("Sent %i payment_account_required notifications." % n)
+
+
+def compute_next_payday_date():
+    today = pando.utils.utcnow().date()
+    days_till_wednesday = (3 - today.isoweekday()) % 7
+    if days_till_wednesday == 0:
+        payday_is_already_done = website.db.one("""
+            SELECT true
+              FROM paydays
+             WHERE ts_start::date = %s
+               AND ts_end > ts_start
+        """, (today,))
+        if payday_is_already_done:
+            days_till_wednesday = 7
+    return today + timedelta(days=days_till_wednesday)
 
 
 def create_payday_issue():

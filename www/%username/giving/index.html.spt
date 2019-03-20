@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from pando.utils import utcnow
 
+from liberapay.billing.payday import compute_next_payday_date
 from liberapay.models.participant import Participant
 from liberapay.utils import get_participant, group_by
 
@@ -81,18 +82,7 @@ if not freeload:
     Liberapay_goal = getattr(Liberapay, 'goal', None)
     Liberapay_tip = participant.get_tip_to(Liberapay or participant)
 
-today = utcnow().date()
-days_till_wednesday = (3 - today.isoweekday()) % 7
-if days_till_wednesday == 0:
-    payday_is_already_done = website.db.one("""
-        SELECT true
-          FROM paydays
-         WHERE ts_start::date = %s
-           AND ts_end > ts_start
-    """, (today,))
-    if payday_is_already_done:
-        days_till_wednesday = 7
-next_payday = today + timedelta(days=days_till_wednesday)
+next_payday = compute_next_payday_date()
 
 [-----------------------------------------------------------------------------]
 % extends "templates/settings.html"
