@@ -23,7 +23,6 @@ env: requirements*.txt
 	$(python) -m $(pip) install $(install_where) "virtualenv>=15.0.0"
 	$(python) -m virtualenv --no-download ./env/
 	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
-	$(env_bin)/python -c "from confusable_homoglyphs import cli; cli.update()"
 	@touch env
 
 rehash-requirements:
