@@ -1,11 +1,13 @@
 from confusable_homoglyphs import confusables
 
-def unconfusable_string(name):
-    unconfusable_name = ''
-    for c in name:
+# Convert an Unicode string to its equivalent replacing all confusable homoglyphs
+# to its common/latin equivalent
+def unconfusable_string(s):
+    unconfusable_string = ''
+    for c in s:
         confusable = confusables.is_confusable(c, preferred_aliases=['COMMON', 'LATIN'])
         if confusable:
             # if the character is confusable we replace it with the first prefered alias
             c = confusable[0]['homoglyphs'][0]['c']
-        unconfusable_name += c
-    return unconfusable_name
+        unconfusable_string += c
+    return unconfusable_string
