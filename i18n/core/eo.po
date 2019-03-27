@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "PO-Revision-Date: 2019-03-28 22:04+0000\n"
-"Last-Translator: tuxayo/Victor Grousset <victor@tuxayo.net>\n"
+"Last-Translator: Vanege <vanege.noreply@gmail.com>\n"
 "Language-Team: Esperanto <https://hosted.weblate.org/projects/liberapay/core/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -372,7 +372,7 @@ msgstr "Via pago malsukcesis"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
-msgstr "La pago de {money_amount} per Liberapay kiu estis ekigita je {date} malsukcesis."
+msgstr "La pago de {money_amount} per Liberapay ekigita je {date} estis malsukcesa."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -405,7 +405,7 @@ msgstr "Vi pago sukcesis"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr "La pago de {money_amount} per Liberapay kiu estis ekigita je {date} sukcesis."
+msgstr "La pago de {money_amount} per Liberapay ekigita je {date} estis sukcesa."
 
 msgid "Thank you for this donation!"
 msgstr "Dankon por tiu donaco!"
@@ -1561,7 +1561,7 @@ msgstr "Alidirektanta…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr "Se vi uzas ekzotikan retumilon kaj nenion okazas, tiam, {link_start}klaku tiun ligilon por daŭrigi{link_end}."
+msgstr "Se vi uzas nekutiman retumilon kaj nenio okazas, tiam {link_start}klaku tiun ligilon por daŭrigi{link_end}."
 
 msgid "(fork)"
 msgstr "(forko)"
@@ -2201,7 +2201,7 @@ msgstr "Petado, bonvolu atendi…"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr "La pago de {charge_amount} sukcesis."
+msgstr "La pago de {charge_amount} estis sukcesa."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"
@@ -2217,14 +2217,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "Vi ne havas alian donacon kiu atendas pagon nun."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
-msgstr "Ni ne povas pagigi al vi nur {donation_amount}, la minimuma pagkiomo estas {min_payment_amount}."
+msgstr "Ni ne povas pagigi al vi nur {donation_amount}, la minimuma pagokvanto estas {min_payment_amount}."
 
 msgid "Please select or input a payment amount:"
-msgstr "Bonvolu elekti aŭ enigi pagkiomon:"
+msgstr "Bonvolu elekti aŭ enigi pagokvanton:"
 
 msgid "(not recommended, high fee percentage)"
 msgstr "(ne rekomendita, alta elcenta kosto)"
@@ -2261,7 +2261,7 @@ msgid "PayPal payments are currently not anonymous, the recipient will see your 
 msgstr "PayPal-pagoj nun ne estas sennomaj, la ricevanto vidos vian nomon kaj retadreson."
 
 msgid "Initiate the payment"
-msgstr "Inici la pagon"
+msgstr "Ekigi la pagon"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
@@ -4154,7 +4154,7 @@ msgstr "{0}Plenigu vian profilon{1}."
 
 #, python-brace-format
 msgid "{0}Configure a payment account{1}."
-msgstr "{0}Konfiguri pagkonton{1}."
+msgstr "{0}Agordu pagkonton{1}."
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
@@ -4173,7 +4173,7 @@ msgid "Find someone you want to give money to, then choose an amount and a perio
 msgstr "Trovu homojn al kiuj vi volas doni monon, kaj elektu kvanton kaj periodon (semajne, monate, aŭ jare)."
 
 msgid "2. Fund your donation"
-msgstr "2. Financi vian donacon"
+msgstr "2. Financu vian donacon"
 
 #, python-brace-format
 msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Sending more money at once results in a lower percentage of {0}transaction fees{1}."
@@ -4195,11 +4195,11 @@ msgid "Explain what you do, why you've chosen to ask for donations, what the mon
 msgstr "Klarigu kion vi faras, kial vi decidis peti donacojn, kaj kiel la mono estos uzata, ktp."
 
 msgid "2. Configure payment processing"
-msgstr "2. Agordi pagotraktadon"
+msgstr "2. Agordu pagotraktadon"
 
 #, python-brace-format
 msgid "We currently support processing payments through {payment_processors_list}."
-msgstr "Ni nuntempe subtenas trakti pagojn per {payment_processors_list}."
+msgstr "Ni nun subtenas traktadon de pagoj per {payment_processors_list}."
 
 msgid "3. Reach out to your audience"
 msgstr "3. Sciigu vian komunumon"
