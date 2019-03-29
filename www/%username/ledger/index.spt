@@ -97,6 +97,7 @@ if participant.join_time:
     % endif
 % endif
 
+% set show_id = user.is_admin
 <div class="row">
 <div class="col-lg-10">
 % if events
@@ -107,6 +108,9 @@ if participant.join_time:
         <th class="amount">{{ _("Amount") }}</th>
         <th class="fees">{{ _("Fees") }}</th>
         <th class="method">{{ _("Method") }}</th>
+        % if show_id
+        <th class="id">ID</th>
+        % endif
     </tr>
 </thead>
 <tbody>
@@ -117,6 +121,9 @@ if participant.join_time:
         <td class="amount"></td>
         <td class="fees"></td>
         <td class="method"></td>
+        % if show_id
+        <td class="id"></td>
+        % endif
     </tr>
     % elif event['kind'] == 'payin'
     <tr class="{{ 'zero' if event['status'] == 'failed' }}">
@@ -133,6 +140,9 @@ if participant.join_time:
         <td class="amount">{{ locale.format_money(event['amount']) }}</td>
         <td class="fees">{{ locale.format_money(event['fee']) if event['fee'] else '' }}</td>
         <td class="method">{{ payment_method_icon(event['payin_method']) }}</td>
+        % if show_id
+        <td class="id">{{ event['id'] }}</td>
+        % endif
     </tr>
     % elif event['kind'] == 'payin_transfer'
     <tr class="{{ 'zero' if event['status'] == 'failed' }}">
@@ -187,6 +197,9 @@ if participant.join_time:
         <td class="amount">{{ locale.format_money(event['amount']) }}</td>
         <td class="fees">{{ locale.format_money(event['fee']) if event['fee'] else '' }}</td>
         <td class="method">{{ payment_method_icon(event['payin_method']) if 'payin_method' in event else '' }}</td>
+        % if show_id
+        <td class="id">{{ event['id'] }}</td>
+        % endif
     </tr>
     % endif
 % endfor
