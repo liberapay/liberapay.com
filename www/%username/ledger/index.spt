@@ -190,7 +190,17 @@ if participant.join_time:
                 translated_status[event['status']]
             }}</span>
             % if event['error']
-                &mdash; {{ _("error message: {0}", event['error']) }}
+                &mdash;
+                % if event['payin_method'] == 'paypal'
+                    % if event['error'] == 'RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION'
+                        {{ _("This payment must be manually approved by the recipient through {provider}'s website.",
+                             provider='PayPal') }}
+                    % else
+                        {{ _("PayPal status code: {0}", event['error']) }}
+                    % endif
+                % else
+                    {{ _("error message: {0}", event['error']) }}
+                % endif
             % endif
         % endif
         </td>
