@@ -136,7 +136,7 @@ EMAIL_RE = re.compile(r'''
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
 EUROZONE = set("AT BE CY DE EE ES FI FR GR IE IT LT LU LV MT NL PT SI SK".split())
-SEPA = EUROZONE | set("BG CH CZ DK GB GI HR HU IS LI MC NO PL RO SE".split())
+SEPA = EUROZONE | set("AD BG CH CZ DK GB GI HR HU IS LI MC NO PL RO SE VA".split())
 
 EVENTS = [
     Event('income', 1, _("Every week as long as I am receiving donations")),
