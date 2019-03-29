@@ -451,7 +451,9 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     params = locals()
     payins = db.all("""
         SELECT pi.ctime, pi.amount, pi.status, pi.error, pi.amount_settled, pi.fee
+             , r.network AS payin_method
           FROM payins pi
+          JOIN exchange_routes r ON r.id = pi.route
          WHERE pi.payer = %(id)s
            AND pi.ctime >= %(period_start)s
            AND pi.ctime < %(period_end)s
@@ -473,7 +475,10 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
         SELECT tr.ctime, tr.payin, tr.payer, tr.context, tr.status, tr.error
              , tr.amount, tr.unit_amount, tr.n_units, tr.period
              , p.username AS payer_username, p2.username AS team_name
+             , r.network AS payin_method
           FROM payin_transfers tr
+          JOIN payins pi ON pi.id = tr.payin
+          JOIN exchange_routes r ON r.id = pi.route
           JOIN participants p ON p.id = tr.payer
      LEFT JOIN participants p2 ON p2.id = tr.team
          WHERE tr.recipient = %(id)s

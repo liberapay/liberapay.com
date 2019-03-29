@@ -34,3 +34,10 @@
     % endif
 </span>
 % endmacro
+
+% macro payment_method_icon(method)
+{{ fontawesome('credit-card', _("Credit/Debit Card")) if method == 'stripe-card' else
+   fontawesome('bank', _("Direct Debit")) if method == 'stripe-sdd' else
+   fontawesome('paypal', "PayPal") if method == 'paypal' else
+   '' }}
+% endmacro
