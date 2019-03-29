@@ -42,6 +42,7 @@ if participant.join_time:
     years = list(range(current_year, max(participant.join_time.year, 2018) - 1, -1))
 
 [---] text/html
+% from "templates/icons.html" import glyphicon
 % from "templates/payment-methods.html" import payment_method_icon with context
 
 % extends "templates/settings.html"
