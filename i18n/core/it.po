@@ -1431,6 +1431,9 @@ msgstr "Le donazioni verso {username} sono elaborate attraverso PayPal."
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Le donazioni verso {username} possono essere pagate attraverso una carta di credito o di debito (Visa, MasterCard, American Express), un conto bancario della zona Euro (SEPA Direct Debit) oppure attraverso PayPal."
 
+msgid "Credit/Debit Card"
+msgstr "Carta di credito/debito"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Le persone che contribuiscono a progetti liberi hanno bisogno di te per sostenere il loro lavoro. Costruire software libero, diffondere conoscenza libera, sono cose che richiedono tempo e denaro, non solo per fare il lavoro iniziale, ma anche per mantenerlo nel tempo."
 
@@ -2550,6 +2553,9 @@ msgstr "Denaro totale inviato: {0}"
 msgid "Fees"
 msgstr "Commissioni"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "addebito"
 
@@ -2571,6 +2577,14 @@ msgstr "donazione a {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "donazione a {0} per il suo ruolo nella squadra {1}"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "Non c'è stata alcuna transazione durante questo periodo."
@@ -3093,9 +3107,6 @@ msgstr "Hai un pagamento {payment_method} di {money_amount} in attesa. {link_ope
 
 msgid "Please choose a payment method to add money:"
 msgstr "Per favore, scegli un metodo di pagamento per aggiungere denaro:"
-
-msgid "Credit/Debit Card"
-msgstr "Carta di credito/debito"
 
 msgid "Easy and instantaneous"
 msgstr "Facile e immediato"

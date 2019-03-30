@@ -1422,6 +1422,9 @@ msgstr "給{username}捐款透過 PayPal 支付，如果沒有 PayPal 帳號還�
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "捐助給{username}可使用信用卡或簽帳金融卡(Visa, MasterCard, American Express)，或是透過 PayPal 支付。"
 
+msgid "Credit/Debit Card"
+msgstr "信用卡/ 簽帳金融卡"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
 
@@ -2532,6 +2535,9 @@ msgstr "付款總額：{0}"
 msgid "Fees"
 msgstr "手續費"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "收費"
 
@@ -2553,6 +2559,14 @@ msgstr "捐贈給 {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "该时段内没有交易。"
@@ -3069,9 +3083,6 @@ msgstr "你有要給{money_amount}待處理的 {payment_method} 付款，{link_o
 
 msgid "Please choose a payment method to add money:"
 msgstr "請挑選付款方式來增加金額："
-
-msgid "Credit/Debit Card"
-msgstr "信用卡/ 簽帳金融卡"
 
 msgid "Easy and instantaneous"
 msgstr "簡單與即時"

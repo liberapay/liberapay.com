@@ -1441,6 +1441,9 @@ msgstr "Пожертвования в адрес {username} обрабатыва
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Пожертвования в адрес {username} могут быть выполнены дебетовыми и кредитными картами (Visa, MasterCard, American Express), прямым переводом на счёт в Euro bank (только для пожертвований в Евро) и через систему PayPal"
 
+msgid "Credit/Debit Card"
+msgstr "Кредитная/Дебетовая карта"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Людям, делающим вклад в развитие общества, нужны вы для того, чтобы поддержать их работу. Создание бесплатного программного обеспечения, распространение свободных знаний - эти вещи требуют времени и стоят денег, и не только для того, чтобы начать работу, но и чтобы иметь возможность продолжать её."
 
@@ -2571,6 +2574,9 @@ msgstr "Всего денег отправлено: {0}"
 msgid "Fees"
 msgstr "Комиссии"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr ""
 
@@ -2592,6 +2598,14 @@ msgstr "пожертвование для {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "пожертвование для {0} за роль в команде {1}"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "За данный период не было транзакций."
@@ -3121,9 +3135,6 @@ msgstr "У вас незавершённый платёж {payment_method} на 
 
 msgid "Please choose a payment method to add money:"
 msgstr "Выберите способ оплаты, чтобы добавить деньги:"
-
-msgid "Credit/Debit Card"
-msgstr "Кредитная/Дебетовая карта"
 
 msgid "Easy and instantaneous"
 msgstr "Простой и молниеносный"

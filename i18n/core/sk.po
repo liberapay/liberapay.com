@@ -1442,6 +1442,9 @@ msgstr "Dary pre {username} sú vykonané cez PayPal. Môžte platiť aj prostre
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Dary pre {username} sa dajú zaplatiť pomocou kreditnej alebo debetnej karty (Visa, MasterCard, American Express) alebo prostredníctvom PayPal."
 
+msgid "Credit/Debit Card"
+msgstr "Kreditná/debetná Karta"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Ľudia, ktorí prispievajú spoločnosti, potrebujú Vašu podporu pre svoju prácu. Činnosti ako tvorba slobodného software, alebo bezplatné rozširovanie znalostí zaberajú čas a stoja peniaze. Nie len ich tvorba ale aj ich údržba v priebehu času."
 
@@ -2572,6 +2575,9 @@ msgstr "Celkom sa poslalo peňazí: {0}"
 msgid "Fees"
 msgstr "Poplatky"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "účtovať"
 
@@ -2593,6 +2599,14 @@ msgstr "dar na {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "Dar pre {0} pre och rolu v {1} tíme"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "V toto obdobie neboli žiadne transakcie."
@@ -3123,9 +3137,6 @@ msgstr "Máte očakavajúcu {payment_method} platbu na {money_amount}. {link_ope
 
 msgid "Please choose a payment method to add money:"
 msgstr "Prosím zvoľte platobnú metódu pre pridanie peňazí:"
-
-msgid "Credit/Debit Card"
-msgstr "Kreditná/debetná Karta"
 
 msgid "Easy and instantaneous"
 msgstr "Jednoduché a okamžité"

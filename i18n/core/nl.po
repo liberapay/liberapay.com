@@ -1432,6 +1432,9 @@ msgstr "Donaties aan {username} worden verwerkt via PayPal."
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Donaties aan {username} kunnen worden betaald met een creditcard (Visa, MasterCard, American Express), een Europese bankrekening (SEPA Direct Debit) of via PayPal-account."
 
+msgid "Credit/Debit Card"
+msgstr "Creditcard/betaalkaart"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Mensen die bijdragen aan het gemeenschappelijke hebben je hulp nodig. Het bouwen van vrije software of het verspreiden van vrije kennis kost tijd en geld. Niet alleen het opstarten, maar ook om het te onderhouden."
 
@@ -2551,6 +2554,9 @@ msgstr "Totaal geld verzonden: {0}"
 msgid "Fees"
 msgstr "Provisie"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "berekenen"
 
@@ -2572,6 +2578,14 @@ msgstr "donatie aan {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "donatie aan {0} van het {1} team"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "Er waren geen transacties tijdens deze periode."
@@ -3094,9 +3108,6 @@ msgstr "Je hebt een {payment_method} betaling van {money_amount} in behandeling.
 
 msgid "Please choose a payment method to add money:"
 msgstr "Kies een betaalmethode om geld toe te voegen:"
-
-msgid "Credit/Debit Card"
-msgstr "Creditcard/betaalkaart"
 
 msgid "Easy and instantaneous"
 msgstr "Gemakkelijk en direct"

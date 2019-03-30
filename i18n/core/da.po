@@ -1431,6 +1431,9 @@ msgstr "Donationer til {username} bliver håndteret gennem PayPal."
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort (Visa, MasterCard, American Express), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
 
+msgid "Credit/Debit Card"
+msgstr "Kredit/debit-kort"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Folk der bidrager til commons, har brug for at støtte deres arbejde. Opbygning af fri software, spredning af gratis viden, disse ting tager tid og koster penge, ikke kun for at gøre det indledende arbejde, men også for at vedligeholde det over tid."
 
@@ -2550,6 +2553,9 @@ msgstr "Penge afsendt, ialt: {0}"
 msgid "Fees"
 msgstr "Gebyrer"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "opkræv"
 
@@ -2571,6 +2577,14 @@ msgstr "donation til {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "donation til {0} for deres rolle i {1} teamet"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "Der var ingen transaktioner i denne periode."
@@ -3093,9 +3107,6 @@ msgstr "Du har en ventende {payment_method} betaling på {money_amount}. {link_o
 
 msgid "Please choose a payment method to add money:"
 msgstr "Vælg venligst en betalingsmetode for at tilføje penge:"
-
-msgid "Credit/Debit Card"
-msgstr "Kredit/debit-kort"
 
 msgid "Easy and instantaneous"
 msgstr "Nemt og umiddelbart"

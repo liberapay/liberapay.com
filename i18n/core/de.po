@@ -1432,6 +1432,9 @@ msgstr "Spenden an {username} werden mittels PayPal abgewickelt."
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Spenden an {username} können per Kredit- oder Debitkarte (Visa, MasterCard, American Express), per Lastschrift oder über PayPal bezahlt werden."
 
+msgid "Credit/Debit Card"
+msgstr "Kredit- oder Bankkarte"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Menschen, die zum Allgemeinwohl beitragen, brauchen Unterstützung bei ihrer Arbeit. Freie Software zu entwickeln oder Wissen zu vermitteln kostet Zeit und Geld. Dies betrifft nicht nur die anfängliche Arbeit, sondern auch die Pflege und Bereitstellung über längere Zeit."
 
@@ -2551,6 +2554,9 @@ msgstr "Gesamte Ausgaben: {0}"
 msgid "Fees"
 msgstr "Gebühren"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "aufladen"
 
@@ -2572,6 +2578,14 @@ msgstr "Spende für {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "Spende an {0} für seine Rolle im Team {1}"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "Es gab keine Transaktionen in diesem Zeitraum."
@@ -3094,9 +3108,6 @@ msgstr "Sie haben eine wartende {payment_method} Zahlung über {money_amount}. {
 
 msgid "Please choose a payment method to add money:"
 msgstr "Bitte wählen Sie die Zahlungsart um Geld aufzuladen:"
-
-msgid "Credit/Debit Card"
-msgstr "Kredit- oder Bankkarte"
 
 msgid "Easy and instantaneous"
 msgstr "einfach und unverzüglich"

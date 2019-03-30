@@ -1431,6 +1431,9 @@ msgstr "Les dons à {username} sont traités à travers PayPal."
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Les dons à {username} peuvent être réglés en utilisant soit une carte de paiement (Visa, MasterCard, American Express), soit un compte bancaire en Euros (prélèvement SEPA), soit un compte PayPal."
 
+msgid "Credit/Debit Card"
+msgstr "Carte de crédit/débit"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Les personnes qui contribuent aux communs ont besoin de votre soutien. Construire des logiciels libres, diffuser les savoirs libres, ces choses prennent du temps et coûtent de l'argent, non seulement pour effectuer le travail initial, mais aussi pour le maintenir dans le temps."
 
@@ -2550,6 +2553,9 @@ msgstr "Total des dépenses : {0}"
 msgid "Fees"
 msgstr "Frais"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "prélèvement"
 
@@ -2571,6 +2577,14 @@ msgstr "don à {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "don à {0} pour son rôle dans l'équipe {1}"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "Il n'y a pas eu de transaction durant cette période."
@@ -3093,9 +3107,6 @@ msgstr "Vous avez un paiement par {payment_method} en cours pour {money_amount}.
 
 msgid "Please choose a payment method to add money:"
 msgstr "Veuillez choisir une méthode de paiement pour ajouter de l'argent :"
-
-msgid "Credit/Debit Card"
-msgstr "Carte de crédit/débit"
 
 msgid "Easy and instantaneous"
 msgstr "Facile et instantané"

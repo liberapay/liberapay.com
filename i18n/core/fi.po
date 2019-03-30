@@ -1432,6 +1432,9 @@ msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta."
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa credit- tai debit-kortilla (Visa, MasterCard, American Express), SEPA-suoraveloituksella euromääräiseltä pankkitililtä tai PayPalin kautta."
 
+msgid "Credit/Debit Card"
+msgstr "Credit/Debit -kortti"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Yhteistä hyvää rakentavat sisällöntuottajat tarvitsevat tukeasi. Ilmaisen ohjelmiston tuottamiseen, tiedon jakamiseen ilmaiseksi ym. kuluu aikaa ja rahaa: ei vain itse työhön alunperin, vaan myös sen pitkäaikaiseen ylläpitoon."
 
@@ -2551,6 +2554,9 @@ msgstr "Rahaa lähetetty yhteensä: {0}"
 msgid "Fees"
 msgstr "Kulut"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "veloitus"
 
@@ -2572,6 +2578,14 @@ msgstr "lahjoitus→{0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "lahjoitus käyttäjälle {0} roolistaan ryhmässä {1}"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "Tälle ajanjaksolle ei ole tapahtumia."
@@ -3094,9 +3108,6 @@ msgstr "Sinulla on jonossa {money_amount} arvoinen {payment_method}-maksu. {link
 
 msgid "Please choose a payment method to add money:"
 msgstr "Valitse maksumenetelmä rahan lisäämiseksi:"
-
-msgid "Credit/Debit Card"
-msgstr "Credit/Debit -kortti"
 
 msgid "Easy and instantaneous"
 msgstr "Helppo ja välitön"

@@ -1431,6 +1431,9 @@ msgstr "Els donatius a {username} es processen via PayPal."
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Els donatius a {username} es poden pagar: amb targeta de crèdit o dèbit (Visa, MasterCard o American Express), amb un compte bancari europeu (càrrec directe SEPA), o amb un compte PayPal."
 
+msgid "Credit/Debit Card"
+msgstr "Targeta de crèdit o dèbit"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Les persones que col·laboren en el bé comú necessiten el vostre suport a la seva tasca. Coses com el desenvolupament en programari lliure o la difusió del coneixement lliure costen temps i diners, però no només la feina inicial, sinó també per a mantenir-lo en el temps."
 
@@ -2550,6 +2553,9 @@ msgstr "Total de diners enviats: {0}"
 msgid "Fees"
 msgstr "Comissions"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr "càrrec"
 
@@ -2571,6 +2577,14 @@ msgstr "donatiu a {0}"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "donatiu a {0} pel seu rol a l'equip {1}"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "No va haver-hi cap transacció en aquest període."
@@ -3093,9 +3107,6 @@ msgstr "Teniu un pagament {payment_method} pendent de {money_amount}. {link_open
 
 msgid "Please choose a payment method to add money:"
 msgstr "Trieu un mètode de pagament per a afegir diners:"
-
-msgid "Credit/Debit Card"
-msgstr "Targeta de crèdit o dèbit"
 
 msgid "Easy and instantaneous"
 msgstr "Fàcil i instantàni"

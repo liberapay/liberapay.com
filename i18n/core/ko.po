@@ -1402,6 +1402,9 @@ msgstr "{username} 님에 대한 기부는 PayPal을 통해 처리됩니다. Pay
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "{username} 님에 대한 기부는 신용 카드 또는 직불 카드 (비자, 마스타카드, 아메리칸 익스프레스) 또는 PayPal로도 가능합니다."
 
+msgid "Credit/Debit Card"
+msgstr "신용/직불카드"
+
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "공공의 이익을 위해 기여하는 사람들은 지원이 필요합니다. 자유 소프트웨어 제작, 자유로운 지식의 공유와 같은 일들은 시간을 소모하며, 초기 작업 외에도 유지보수에 자금을 필요로 합니다."
 
@@ -2511,6 +2514,9 @@ msgstr "총 보낸 금액: {0}"
 msgid "Fees"
 msgstr "수수료"
 
+msgid "Method"
+msgstr ""
+
 msgid "charge"
 msgstr ""
 
@@ -2532,6 +2538,14 @@ msgstr "{0} 에게 보내는 기부"
 #, python-brace-format
 msgid "donation to {0} for their role in the {1} team"
 msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
+
+#, python-brace-format
+msgid "This payment must be manually approved by the recipient through {provider}'s website."
+msgstr ""
+
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr ""
 
 msgid "There were no transactions during this period."
 msgstr "이 기간 중에 거래가 이루어지지 않았습니다."
@@ -3047,9 +3061,6 @@ msgstr "대기 중인 {money_amount} 만큼의 {payment_method}거래가 있습�
 
 msgid "Please choose a payment method to add money:"
 msgstr "계좌에 돈을 추가할 결제 방식을 선택해 주세요:"
-
-msgid "Credit/Debit Card"
-msgstr "신용/직불카드"
 
 msgid "Easy and instantaneous"
 msgstr "쉽고 즉각적입니다"
