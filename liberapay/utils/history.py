@@ -450,15 +450,17 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     id = participant.id
     params = locals()
     payins = db.all("""
-        SELECT pi.ctime, pi.amount, pi.status, pi.error, pi.amount_settled, pi.fee
+        SELECT pi.id, pi.ctime, pi.amount, pi.status, pi.error, pi.amount_settled, pi.fee
+             , r.network AS payin_method
           FROM payins pi
+          JOIN exchange_routes r ON r.id = pi.route
          WHERE pi.payer = %(id)s
            AND pi.ctime >= %(period_start)s
            AND pi.ctime < %(period_end)s
            AND (pi.status = 'succeeded' OR NOT %(minimize)s)
     """, params, back_as=dict)
     outgoing_transfers = db.all("""
-        SELECT tr.ctime, tr.payin, tr.recipient, tr.context, tr.status, tr.error
+        SELECT tr.id, tr.ctime, tr.payin, tr.recipient, tr.context, tr.status, tr.error
              , tr.amount, tr.unit_amount, tr.n_units, tr.period
              , p.username AS recipient_username, p2.username AS team_name
           FROM payin_transfers tr
@@ -470,10 +472,13 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
            AND (tr.status = 'succeeded' OR NOT %(minimize)s)
     """, params, back_as=dict)
     incoming_transfers = db.all("""
-        SELECT tr.ctime, tr.payin, tr.payer, tr.context, tr.status, tr.error
+        SELECT tr.id, tr.ctime, tr.payin, tr.payer, tr.context, tr.status, tr.error
              , tr.amount, tr.unit_amount, tr.n_units, tr.period
              , p.username AS payer_username, p2.username AS team_name
+             , r.network AS payin_method
           FROM payin_transfers tr
+          JOIN payins pi ON pi.id = tr.payin
+          JOIN exchange_routes r ON r.id = pi.route
           JOIN participants p ON p.id = tr.payer
      LEFT JOIN participants p2 ON p2.id = tr.team
          WHERE tr.recipient = %(id)s

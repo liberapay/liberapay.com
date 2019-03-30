@@ -625,12 +625,15 @@ a.dropdown-toggle {
             color: #999;
         }
     }
+    td.id {
+        font-family: $font-family-monospace;
+    }
 }
 
 @media (max-width: $screen-md-min - 1) {
     #history {
         display: block;
-        .balances, .fees, .bank {
+        .balances, .fees, .bank, .method, .id {
             display: none;
         }
         thead, tbody, td {
