@@ -6,9 +6,9 @@ import os
 import re
 import socket
 import signal
+from tempfile import mkstemp
 from time import time
 import traceback
-from urllib.request import urlretrieve
 
 from algorithm import Algorithm
 from babel.messages.pofile import read_po
@@ -19,6 +19,7 @@ import pando
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 import raven
+import requests
 import sass
 
 from liberapay import elsewhere
@@ -319,7 +320,10 @@ def trusted_proxies(app_conf, env, tell_sentry):
                 os.stat(filename).st_mtime > time() - 60*60*24*7
             )
             if not skip_download:
-                urlretrieve(net, filename)
+                tmpfd, tmp_path = mkstemp(dir=d)
+                with open(tmpfd, 'w') as f:
+                    f.write(requests.get(net).text)
+                os.rename(tmp_path, filename)
             with open(filename, 'rb') as f:
                 return [ip_network(x) for x in f.read().decode('ascii').strip().split()]
         else:
