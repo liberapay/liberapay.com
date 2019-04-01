@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Traditional Chinese "
-"<https://hosted.weblate.org/projects/liberapay/core/zh_Hant/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2019-04-01 21:04+0000\n"
+"Last-Translator: jxt <chihsun.tsai@gmail.com>\n"
+"Language-Team: Traditional Chinese <https://hosted.weblate.org/projects/liberapay/core/zh_Hant/>\n"
+"Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.6-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -380,7 +382,7 @@ msgstr "我們已直接自您的{bank_name}戶頭扣款{money_amount}({partial_a
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "我們自您的銀行帳戶{partial_account_number}直接扣貸了{money_amount}的金額。"
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
@@ -421,11 +423,11 @@ msgstr "來自{platform}的{user_name} 已加入 Liberapay！"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "在{date}這天，您承諾將捐獻{money_amount}金額給{user_name}，一旦他們加入 Liberapay。"
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "很高興通知您，{user_name}已在{time_ago}加入 Liberapay，其帳號名為{liberapay_username}。您現在可以將原有的捐款承諾化為實際行動："
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -513,21 +515,21 @@ msgstr "看來你發現了系統上的一個問題！抱歉造成不便，我們
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "找不到請求頁面。如需協助，可直接{link_open}連繫我們{link_close}。"
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "您的請求已被我們的軟體拒絕，如需協助請{link_open}直接聯繫我們{link_close}。"
 
 msgid "Error message:"
-msgstr ""
+msgstr "錯過訊息："
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "該錯誤的詳細信息已紀錄。若希望聯繫我們，請在來信中提供以下的錯誤辨識碼：{0}。"
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "若決定要聯絡我們，請記得內容要包含以下的除錯資訊："
 
 msgid "Every week as long as I am receiving donations"
 msgstr "只要我每週收取捐款"
@@ -709,7 +711,7 @@ msgstr "'{0}' 不是一個有效的電子郵件地址。"
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' 為無效的電郵地址。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "電郵{email_address} 遭到封鎖，{timespan_ago} 傳送的信件失敗。若想自封鎖黑名單除名，請用原信箱來信到 support@liberapay.com。"
 
@@ -1216,13 +1218,13 @@ msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "我同意 {0}MangoPay的服務條款{1}"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "個人資訊"
 
 msgid "Full Name"
-msgstr ""
+msgstr "全名"
 
 msgid "Nationality"
-msgstr ""
+msgstr "國籍"
 
 msgid "username"
 msgstr "用戶名稱"
@@ -1450,16 +1452,16 @@ msgid "Country"
 msgstr "國家"
 
 msgid "Region (state, province, island…)"
-msgstr ""
+msgstr "地區(州、省或島....)"
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
+msgstr "如果此欄位留白，則您的國別不會在郵件地址中用到區域。"
 
 msgid "Postal code"
-msgstr ""
+msgstr "郵編代碼"
 
 msgid "Address within the city"
-msgstr ""
+msgstr "含城市的地址資訊"
 
 msgid "Patrons"
 msgstr "贊助者"
@@ -1548,7 +1550,7 @@ msgstr "重新指向.…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "如果您使用外國瀏覽器且沒發生異常，那麼{link_start}請點擊此連結{link_end}以繼續操作。"
 
 msgid "(fork)"
 msgstr "（分支）"
@@ -2143,7 +2145,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr ""
+msgstr "您對{recipients}的捐款正待支付處理。"
 
 msgid "For now this donation can only be renewed externally through PayPal."
 msgstr ""
@@ -2194,10 +2196,10 @@ msgstr "此支付正待您的同意。"
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
+msgstr[0] "您有{n}筆其它捐款正待支付處理。"
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "此刻您並無其它待支付的捐款。"
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -2263,9 +2265,8 @@ msgstr "我們會向您的{bank_name}帳戶收取{partial_account_number}的金�
 msgid "Use another bank account"
 msgstr "使用其它的銀行帳戶"
 
-#, fuzzy
 msgid "Please input your name and card number:"
-msgstr "請輸入卡號："
+msgstr "請輸入姓名和卡號："
 
 msgid "Jane Doe"
 msgstr "無名氏"
@@ -2359,7 +2360,7 @@ msgstr "編輯"
 msgid "History"
 msgstr "記錄"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username}於{timespan_ago}加入。"
 
@@ -2536,7 +2537,7 @@ msgid "Fees"
 msgstr "手續費"
 
 msgid "Method"
-msgstr ""
+msgstr "方式"
 
 msgid "charge"
 msgstr "收費"
@@ -2566,7 +2567,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "PayPal status code: {0}"
-msgstr ""
+msgstr "PayPal 狀態碼: {0}"
 
 msgid "There were no transactions during this period."
 msgstr "该时段内没有交易。"
@@ -2596,11 +2597,11 @@ msgstr "團隊不能加入團隊"
 msgid "You can't invite an inactive user to join a team."
 msgstr "你不能邀請一個未激活的用戶加入團隊。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
 msgstr "{username} 之前已被邀請加入{timespan_ago} 團隊。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
 msgstr "{username} 之前已拒絕加入 {timespan_ago} 團隊。"
 
@@ -2647,9 +2648,8 @@ msgstr "捐款人不須用連接下方任何支付帳戶，它們是收取捐款
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "如果您的所在國允許，我們推薦可使用 Stripe 和 PayPal。"
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "使用Stripe 您的捐款人可直接從 Liberapay 網站使用信用卡支付，我們也即將支援 SEPA 簽帳金融卡。"
+msgstr "使用Stripe 您的捐款人可直接從 Liberapay 網站使用信用卡或直接扣款支付。(目前僅支援歐元銀行帳戶的金融卡直接支付)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3549,9 +3549,8 @@ msgstr "目前支援哪些貨幣和國家？"
 msgid "See the “{page_name}” page."
 msgstr "請見 “{page_name}” 頁。"
 
-#, fuzzy
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "可用的支付方式端視收款人所支援的情況，如果是採 Stripe 支付，則受理大多數的信用卡/簽帳金融卡( Visa, MasterCard, American Express)，近期也會接受 SEPA 簽帳金融卡。如果是透過 PayPal 支付，就算沒 PayPal 帳號它同樣可接受大多數信用卡/簽帳金融卡。"
+msgstr "可用的支付方式端視收款人支援情況，如果是採 Stripe 支付，則受理大多數的信用卡/金融卡( Visa, MasterCard, American Express)，與 SEPA 金融卡(僅接受歐元捐款)。如透過 PayPal 支付，則可接受各種支付方式，但捐款人必須要有 PayPal 帳號。"
 
 msgid "What are the payment processing fees?"
 msgstr "什麼是付款處理費用？"
@@ -3704,7 +3703,7 @@ msgstr "安全性"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "我們保證你存放的基金在我們的監管下不會因為破產而遭到損失，無論破產有沒有影響到我們或是我們所委託代理監管基金的第三方。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
 msgstr[0] "Liberapay 於 {timespan_ago} 年前啟動，目前有 {n} 用戶。"
@@ -3713,15 +3712,15 @@ msgstr[0] "Liberapay 於 {timespan_ago} 年前啟動，目前有 {n} 用戶。"
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} 目前在Liberapay保管。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] "最近一次付款日是 {timespan_ago}， 完成了{money_amount} {n} 用戶之間的轉帳。"
+msgstr[0] "最近一次付款日是 {timespan_ago}， 完成 {n} 用戶之間金額{money_amount}的轉帳。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] "{n} 參與者給出錢。"
+msgstr[0] "{n} 參與者給錢。"
 
 #, python-brace-format
 msgid "{n} participant received money."
@@ -3821,7 +3820,7 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr "你可能會問為什麼我們認為那些名目上的收取是最大值而非簡單的百分比。這是因為最大值使團隊能夠擁有閒錢，且此方式在幾個方面有很大好處。首先，它能為均衡團隊成員的收入提供緩衝。其次，它能使新成員更加簡單地加入一個團隊，因為在他們提高自己的分成時只會減少閒錢而非影響其他成員的收入。再說，它能使我們的軟件調整數目來讓捐助者事實上以一種平衡貢獻的方式轉帳給團隊成員，從而使這個系統更加公平。最後，即使一個團隊已經達到其目標，它仍舊鼓勵人們向其捐款，從而使團隊收入更加穩定。"
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "自動配額"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
 msgstr ""
@@ -3831,7 +3830,7 @@ msgstr "收取數額的規定"
 
 #, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "當該功能對一個團隊啟用，團隊成員無法使他們的分成高於靠在前一個捐款日的名目收取計算出來的最大值。這個功能是為了邀請更多的志願者加入團隊並且保障他們不會在前幾週拿到不成比例的收入。"
+msgstr "當一個團隊啟用分成節流“take throttling\"功能，團隊成員無法使他們的分成高於前一個捐款日的名目收取計算出來的最大值。這個功能是為了邀請更多的志願者加入團隊且保障他們不會在前幾週拿到不成比例的收入。"
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
@@ -3859,9 +3858,9 @@ msgstr "關閉團隊帳戶"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr "若最後一名成員退出則團隊帳戶會自動關閉。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
-msgstr "最後由{timespan_ago}於{username}前更新。"
+msgstr "最後由{username}於{timespan_ago}更新。"
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "社區社群可讓人找尋一些感興趣關心的事務。你也可以訂閱他們的電子報來掌握其資訊。"
@@ -4040,10 +4039,10 @@ msgstr "{0} 社群設定"
 msgid "Sidebar text"
 msgstr "側邊欄的文字"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
-msgstr[0] "這個建立於 {timespan_ago} 的社群現在有 {n} 成員。"
+msgstr[0] "這個建立於 {timespan_ago} 的社群目前有 {n} 成員。"
 
 #, python-brace-format
 msgid ""
@@ -4249,10 +4248,10 @@ msgstr "Liberapay從在以下開源平台上贊助的帳號中獲益："
 msgid "Recent Activity"
 msgstr "最近活動"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
-msgstr[0] "上一個月有{n}個使用者被註冊。最近一個是在{timespan_ago}註冊的。"
+msgstr[0] "上一個月有{n}個使用者註冊。最近一位註冊是在{timespan_ago}前。"
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
@@ -4483,7 +4482,7 @@ msgid "This page is dedicated to the {platform} user {user_name}:"
 msgstr "本頁是給{platform}用戶{user_name}的："
 
 msgid "No description available."
-msgstr ""
+msgstr "無描述介紹"
 
 #, python-brace-format
 msgid "Profile on {0}"
