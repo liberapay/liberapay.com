@@ -1,7 +1,5 @@
 # coding: utf8
 
-from pando import json
-
 from liberapay.exceptions import LoginRequired
 
 [---]
@@ -39,10 +37,6 @@ if request.method == 'POST':
 title = "Admin Lookup"
 
 [---] text/html
-% from 'templates/avatar-url.html' import avatar_img with context
-% from 'templates/icons.html' import fontawesome, glyphicon
-% from 'templates/nav.html' import querystring_nav
-
 % extends "templates/base.html"
 
 % block content
