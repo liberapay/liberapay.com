@@ -64,6 +64,7 @@ referer = request.headers.get(b'Referer')
                 '<code>%s</code>'|safe % sentry_ident
             ) }}</p>
         % else
+            <br>
             <p>{{ _("If you decide to contact us please include the following debugging information in your message:") }}</p>
             <pre>URL: {{ website.canonical_scheme }}://{{ request.hostname }}{{ request.line.uri.decoded }}{{ '\n'
                }}Method: {{ request.method }}{{ '\n'
