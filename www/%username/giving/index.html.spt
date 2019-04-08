@@ -65,8 +65,11 @@ n_pledge_currencies = len(tips_by_currency)
 has_pending_transfer = set(website.db.all("""
     SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
       FROM payin_transfers pt
+      JOIN payins pi ON pi.id = pt.payin
+      JOIN exchange_routes r ON r.id = pi.route
      WHERE pt.payer = %s
-       AND pt.status = 'pending'
+       AND ( pt.status = 'pending' OR
+             r.network = 'stripe-sdd' AND pi.status = 'pending' )
 """, (participant.id,)))
 
 if not freeload:
