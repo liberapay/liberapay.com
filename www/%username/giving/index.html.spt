@@ -25,6 +25,16 @@ if request.method == 'POST':
     else:
         raise response.error(400)
 
+has_pending_transfer = set(website.db.all("""
+    SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
+      FROM payin_transfers pt
+      JOIN payins pi ON pi.id = pt.payin
+      JOIN exchange_routes r ON r.id = pi.route
+     WHERE pt.payer = %s
+       AND ( pt.status = 'pending' OR
+             r.network = 'stripe-sdd' AND pi.status = 'pending' )
+""", (participant.id,)))
+
 tips, pledges = participant.get_giving_details()
 title = participant.username
 subhead = _("Giving")
@@ -36,7 +46,11 @@ ncancelled = len(cancelled_tips) + len(cancelled_pledges)
 tips = [t for t in tips if t.renewal_mode > 0]
 ntips = len(tips)
 ntips_awaiting_renewal = sum(
-    1 for t in tips if t.awaits_renewal and t.tippee_p.payment_providers > 0
+    1 for t in tips if (
+        t.awaits_renewal and
+        t.tippee_p.payment_providers > 0 and
+        t.tippee not in has_pending_transfer
+    )
 )
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
@@ -61,13 +75,6 @@ pledges_by_currency = {
 }
 del pledges
 n_pledge_currencies = len(tips_by_currency)
-
-has_pending_transfer = set(website.db.all("""
-    SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
-      FROM payin_transfers pt
-     WHERE pt.payer = %s
-       AND pt.status = 'pending'
-""", (participant.id,)))
 
 if not freeload:
     Liberapay = Participant.from_username('Liberapay')
