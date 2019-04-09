@@ -101,7 +101,7 @@
         % block before_content
             % block heading
                 % if title
-                    <h1 class="{{ 'hidden-xs hidden-sm' if subhead }}">{{ title }}</h1>
+                    <h1 class="main-title {{ 'hidden-xs hidden-sm' if subhead else '' }}">{{ title }}</h1>
                 % endif
             % endblock
             <div id="subnav">{% block subnav %}{% endblock %}</div>
