@@ -2305,3 +2305,6 @@ CREATE OR REPLACE FUNCTION compute_payment_providers(bigint) RETURNS bigint AS $
     ), 0);
 $$ LANGUAGE SQL STRICT;
 UPDATE participants SET payment_providers = compute_payment_providers(id) WHERE kind = 'group';
+
+-- migration #101
+CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type = 'admin_request';
