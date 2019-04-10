@@ -1,0 +1,35 @@
+from liberapay.exceptions import LoginRequired
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+title = "Admin Tools"
+
+[---] text/html
+% extends "templates/base.html"
+
+% block content
+
+<dl class="card">
+<dt><a href="/admin/admins">Audit Log</a></dt>
+<dd>View a log of actions performed by admins.</dd>
+</dl>
+<dl class="card">
+<dt><a href="/admin/lookup">Email Lookup</a></dt>
+<dd>Find the user account(s) linked to an email address.</dd>
+</dl>
+<dl class="card">
+<dt><a href="/admin/rate-limiting">Rate Limiting</a></dt>
+<dd>View the rate limiting counters.</dd>
+</dl>
+<dl class="card">
+<dt><a href="/admin/users">Users</a></dt>
+<dd>Browse user accounts and modify their flags.</dd>
+</dl>
+
+% endblock

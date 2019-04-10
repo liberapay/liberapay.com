@@ -1,0 +1,20 @@
+from liberapay.exceptions import LoginRequired
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+title = "Rate Limiting"
+
+[---] text/html
+% extends "templates/base.html"
+
+% block content
+
+<pre>{{ website.db.render("SELECT * FROM rate_limiting ORDER BY key") }}</pre>
+
+% endblock

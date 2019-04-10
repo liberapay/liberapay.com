@@ -1,0 +1,47 @@
+# coding: utf8
+
+from pando import json
+
+from liberapay.exceptions import LoginRequired
+
+PAGE_SIZE = 20
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+events = website.db.all("""
+    SELECT e.*, p.username, admin.username AS recorder_name
+      FROM events e
+      JOIN participants p ON p.id = e.participant
+      JOIN participants admin ON admin.id = e.recorder
+     WHERE e.type = 'admin_request'
+       AND coalesce(e.ts < %s, true)
+  ORDER BY e.ts DESC
+     LIMIT %s
+""", (request.qs.get('before'), PAGE_SIZE))
+
+title = "Admins Oversight"
+
+[---] text/html
+% extends "templates/base.html"
+
+% block content
+
+% if events
+    % for e in events
+        <div>{{ e.recorder_name }} modified the account of <a href="/~{{ e.participant }}/">{{ e.username }}</a> at {{ e.ts.time() }} on {{ e.ts.date() }}:<br>
+        <pre>{{ json.dumps(e.payload) }}</pre></div><br>
+    % endfor
+    % if len(events) == PAGE_SIZE
+        <a class="btn btn-primary" href="{{ request.qs.derive(before=events[-1].ts.isoformat()) }}">Next page →</a>
+    % endif
+% else
+    No events found.
+% endif
+
+% endblock
