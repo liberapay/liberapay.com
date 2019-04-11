@@ -85,7 +85,7 @@ subhead = _("Social Networks")
         % set n_connected_accounts = d['n_connected_accounts']
         % if n_connected_accounts or p in website.friends_platforms
         <div class="card card-default card-md card-narrow text-center">
-            <h3 class="text-info">{{ p.display_name }}</h3>
+            <h2 class="text-info">{{ p.display_name }}</h2>
             <p>{{ ngettext("{n} connected account", "{n} connected accounts", n_connected_accounts) }}</p>
             <a class="btn btn-info btn-lg" href="/explore/elsewhere/{{ p.name }}"
                 >{{ _("Explore {0}", p.display_name) }}</a>

@@ -100,11 +100,14 @@ body {
     }
 }
 
+.main-title {
+    margin: 0.25em 0 1em;
+    text-align: center;
+}
+
 .thin-title {
     color: #666;
     font-size: $font-size-h4;
-    margin: 0.5em 0 1.25em;
-    text-align: center;
 }
 
 .btn {
@@ -210,7 +213,7 @@ a.account-link[href="#not-available"] {
         display: inline-block;
     }
     & > h1 {
-        font-size: $font-size-h3;
+        font-size: $font-size-h2;
         margin: 1em 0;
     }
     & > .summary {
