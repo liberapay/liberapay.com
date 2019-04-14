@@ -18,7 +18,6 @@ class GitHub(PlatformOAuth2):
     auth_url = 'https://github.com/login/oauth/authorize'
     access_token_url = 'https://github.com/login/oauth/access_token'
     oauth_email_scope = 'user:email'
-    oauth_default_scope = ['read:org']
 
     # API attributes
     api_format = 'json'
