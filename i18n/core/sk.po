@@ -380,9 +380,8 @@ msgstr "Platba sumy {money_amount} prostredníctvom Liberapay, ktorá bola zahá
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Chybové hlásenie poskytnuté spracovateľom platby {provider} je:"
 
-#, fuzzy
 msgid "Your bank account is going to be debited"
-msgstr "Váš bankový účet bude odpísaný"
+msgstr "Váš bankový účet bude účtovaný"
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
@@ -390,14 +389,14 @@ msgstr "Vykonali sme inkaso {money_amount} z vášho bankového účtu {bank_nam
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Začali sme priamu platbu {money_amount} z vašeho bankového účtu ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Táto akcia je založená na Vašom {link_start} mandáte {mandate_id} {link_end}, podpísanom dňa {acceptance_date}, v ktorom ste autorizovali spoločnosť Liberapay (SEPA kreditor {creditor_identifier}), aby odoslala Vašej banke platobný príkaz na inkaso z Vášho účtu a Vašu banku, inkasovať Váš účet v súlade s týmito pokynmi."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Ak ste nautorizovali túto platbu, dajte nám vedieť, preplatíme ju."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -427,15 +426,15 @@ msgstr "Prejdite na tento odkaž pre zobrazenie profilu {0}:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{user_name} z {platform} sa prihlásil na Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "Dňa {date} ste sľúbili darovať {money_amount} na {user_name}, ktorý sa pripojil na Liberapay."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "Sme radi že vás môžme informovať, že {user_name} sa prihlásil na Liberapay pred {time_ago} pod menom {liberapay_username}, takže môžete svoj sľub premeniť na reálny dar:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -523,21 +522,21 @@ msgstr "Vyzerá to tak, že ste našli chybu! Ospravedlňujeme sa za nepríjemno
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Žiadaná stránka nemohla byť nájdená. Prosím {link_open}kontaktujte nás{link_close}, ak potrebujete pomoc."
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Vaša požiadavka bola odmietnutá naším softwarom. Prosím {link_open}kontaktujte nás{link_close}, ak potrebujete pomoc."
 
 msgid "Error message:"
-msgstr ""
+msgstr "Chybová správa:"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Podrobnosti o vašej chybe boli zaznamenané. Pokiaľ sa rozhodnete nás kontaktovať, zahrnte prosím nasledujúci chybový kód vo vašej správe: {0}."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "Ak ste sa nás rozhodli kontaktovať, prosíme vás aby ste priložili nasledujúce informácie s vašou správou:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Každý týždeň, pokiaľ dostávam dary"
@@ -632,9 +631,9 @@ msgstr "Veľa"
 msgid "Maximum"
 msgstr "Maximálne"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Spotreboval ste kôtu požiadaviek, môžete to skúsiť znova {in_N_minutes}."
+msgstr "Vyčerpali ste počet požiadaviek, môžete to skúsiť znova za {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Odosielate požiadavke príliš rýchlo, opakujte akciu neskôr."
@@ -719,11 +718,11 @@ msgstr "'{0}' nie je platnou emailovou adresou."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' nie je validná emailová doména."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Emailová adresa {email_address} je v čiernej listine pretože sme sa pokúsili odoslať správu a zlyhalo to {timespan_ago}. Prosím pošlite email z tejto adresy na support@liberapay.com ak chcete aby sme ju odstránili z tejto čienej listiny."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Emailová adresa {email_address} je na čiernej listine lebo sme dostali sťažnosť {timespan_ago}. Prosím pošlite email z tejto adresy na support@liberapay.com ak chcete aby sme ju odstránili z tejto čienej listiny."
 
@@ -1236,13 +1235,13 @@ msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "Súhlasím s {0}podmienkami služby MangoPay{1}"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "Osobné informácie"
 
 msgid "Full Name"
-msgstr ""
+msgstr "Celé meno"
 
 msgid "Nationality"
-msgstr ""
+msgstr "Národnosť"
 
 msgid "username"
 msgstr "užívateľské meno"
@@ -1430,15 +1429,15 @@ msgstr "Nie, zrušiť"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} nemá nastavený spôsob platby, takže Váš dar sa momentálne nedá spracovať. Oznámime Vám, keď bude platba možná."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Dary pre {username} možu byť zaplatené prostredníctvom debetnej karty (Visa, MasterCard, American Express)."
+msgstr "Dary pre {username} možu byť zaplatené prostredníctvom debetnej karty (Visa, MasterCard, American Express) alebo priamou platbou v eurách na bankový účet (pre dary iba v eurách)."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "Dary pre {username} sú vykonané cez PayPal. Môžte platiť aj prostredníctvom kreditnej alebo debetnej karty ak nemáte PayPal účet."
+msgstr "Dary pre {username} sú vykonané cez PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Dary pre {username} sa dajú zaplatiť pomocou kreditnej alebo debetnej karty (Visa, MasterCard, American Express) alebo prostredníctvom PayPal."
 
@@ -1470,16 +1469,16 @@ msgid "Country"
 msgstr "Zem"
 
 msgid "Region (state, province, island…)"
-msgstr ""
+msgstr "Región (štát, kraj, ostrov...)"
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
+msgstr "Môžete toto pole nechať prázdne ak vaša krajina nepoužíva kraje v poštových adresách."
 
 msgid "Postal code"
-msgstr ""
+msgstr "Poštové smerovacie číslo"
 
 msgid "Address within the city"
-msgstr ""
+msgstr "Adresa vo vnútri mesta"
 
 msgid "Patrons"
 msgstr "Patróni"
@@ -1513,11 +1512,11 @@ msgstr "Príjem: {0}/týždeň"
 msgid "Mission accomplished!"
 msgstr "Misia splnená!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
 msgstr "Pridal sa {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Uzavrený {timespan_ago}."
 
@@ -1568,11 +1567,11 @@ msgid "Reconnect"
 msgstr "Znovu pripojiť"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Presmerovávam…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "Ak používate exotický prehliadač a nič sa nedeje tak {link_start}kliknite sem pre pokračovanie{link_end}."
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1580,7 +1579,7 @@ msgstr "(fork)"
 msgid "Updated this week"
 msgstr "Upravené tento týždeň"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Upravené {timespan_ago}"
 
@@ -1644,10 +1643,10 @@ msgid "Actual Take"
 msgstr "Skutočný podiel"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 msgid "auto"
-msgstr ""
+msgstr "auto"
 
 msgid "Update my nominal take"
 msgstr "Upraviť môj normálny podiel"
@@ -1682,16 +1681,16 @@ msgstr "Prosím vyberte alebo zadajte čiastku:"
 #, python-brace-format
 msgid "Wrong currency? {n} other is supported:"
 msgid_plural "Wrong currency? {n} others are supported:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zlá mena? K dispozíci je aj iná:"
+msgstr[1] "Zlá mena: K dispozícií sú {n} ďalšie:"
+msgstr[2] "Zlá mena? K dispozicií je {n} ďalších:"
 
 #, python-brace-format
 msgid "Wrong currency? {username} also accepts {n} other:"
 msgid_plural "Wrong currency? {username} also accepts {n} others:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zlá mena? {username} príjma aj inú:"
+msgstr[1] "Zlá mena? {username} prijma aj {n} ďalšie:"
+msgstr[2] "ZLá mena? {username} príjma aj {n} ďalších:"
 
 msgid "Switch"
 msgstr "Prepnúť"
@@ -1880,11 +1879,11 @@ msgstr "K vášmu profilu nemáte pripojený žiadny účet {platform}."
 msgid "Connect {0} account"
 msgstr "Pripojiť účet {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
 msgstr[0] "Našli sme {n} repozitár na vašom {platform} účte, {timespan_ago}."
-msgstr[1] "Našli sme {n} repozitáre na vašom {platform} účte, {timespan_ago}."
+msgstr[1] "List {n} repozitárov bol importovaný na vašom {platform} účte, {timespan_ago}."
 msgstr[2] ""
 
 msgid "No repositories found."
@@ -2101,11 +2100,11 @@ msgstr "{money_amount}{small}/mesačne{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/ročne{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Začatý {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Začatý {timespan_ago_1}. Upravený {timespan_ago_2}."
 
@@ -2121,7 +2120,7 @@ msgstr "Neaktívny pretože adresát už neprijíma dary."
 msgid "Active"
 msgstr "Aktívny"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr "Ďalšia platba {in_N_weeks_months_or_years}."
 
@@ -2156,13 +2155,13 @@ msgstr "v posledných 30 dňoch"
 msgid "Restart"
 msgstr "Začať znovu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Začaté {timespan_ago_1}. Zrušené {timespan_ago_2}."
 
 #, python-brace-format
 msgid "You are not donating to {username}."
-msgstr ""
+msgstr "Nedarujete používateľovi {username}."
 
 msgid "Funding your donations"
 msgstr "Platenie vašich darov"
