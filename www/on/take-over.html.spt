@@ -15,8 +15,10 @@ participant = Participant.from_id(p_id, _raise=False) if p_id else user
 if not participant:
     raise response.invalid_input(p_id, 'p_id', 'body')
 
+then = request.body.get('then') or participant.path('edit/elsewhere')
+
 if body['should_transfer'] != 'yes':
-    response.redirect(participant.path('edit'))
+    response.redirect(then, trusted_url=False)
 
 if not user.controls(participant):
     raise LoginRequired
@@ -34,6 +36,6 @@ if not token or not account.check_connect_token(token.value):
 account.save_connect_token(None, None)
 
 participant.take_over(account, have_confirmation=True)
-response.redirect(participant.path('edit'))
+response.redirect(then, trusted_url=False)
 
 [---------]

@@ -1,5 +1,7 @@
 import json
 
+from urllib.parse import quote as urlquote
+
 from oauthlib.oauth2 import OAuth2Error
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
@@ -105,7 +107,8 @@ if action == 'connect':
     except NeedConfirmation:
         token, expires = account.make_connect_token()
         response.set_cookie('connect_%s' % account.id, token, expires)
-        response.redirect('/on/confirm.html?id=%s&p_id=%s' % (account.id, connect_to.id))
+        response.redirect('/on/confirm.html?id=%s&p_id=%s&then=%s' %
+                          (account.id, connect_to.id, urlquote(then)))
 
 elif action in {'lock', 'unlock'}:
     account.participant.update_goal(Money(-1, 'EUR') if action == 'lock' else None)

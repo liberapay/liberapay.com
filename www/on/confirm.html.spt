@@ -119,6 +119,7 @@ title = _("Please Confirm")
     <form action="/on/take-over.html" method="POST">
         <input type="hidden" name="account_id" value="{{ account_id }}" />
         <input type="hidden" name="p_id" value="{{ p.id }}" />
+        <input type="hidden" name="then" value="{{ request.qs.get('then', '') }}" />
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <button name="should_transfer" value="yes" class="btn btn-success">{{ _("Transfer the account") }}</button>
         <button name="should_transfer" value="no" class="btn btn-default" >{{ _("Cancel") }}</button>
