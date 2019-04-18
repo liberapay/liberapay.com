@@ -134,9 +134,9 @@ next_payday = today + timedelta(days=days_till_wednesday)
 </div>
 % endif
 
-% if ntips
 <div>
     <h3>{{ _("Donations") }} ({{ ntips }})</h3>
+% if ntips
     % if ntips_awaiting_renewal
         <div class="alert alert-warning">
         {{ ngettext(
@@ -268,8 +268,10 @@ next_payday = today + timedelta(days=days_till_wednesday)
             bold='<strong>'|safe, bold_end='</strong>'|safe
         ) }}</p>
     % endfor
-</div>
+% else
+    <p>{{ _("You are currently not donating to anyone.") }}</p>
 % endif
+</div>
 
 % if npledges
 <div>
