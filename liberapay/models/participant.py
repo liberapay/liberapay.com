@@ -2285,7 +2285,7 @@ class Participant(Model, MixinTeam):
                   FROM tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE tipper = %s
-                   AND p.status = 'active'
+                   AND p.status <> 'stub'
               ORDER BY tippee
                      , t.mtime DESC
 
