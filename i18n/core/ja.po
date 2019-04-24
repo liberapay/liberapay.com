@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2019-04-25 00:48+0000\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.7-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -367,7 +370,7 @@ msgid "This operation is being carried out based on {link_start}the mandate {man
 msgstr ""
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "この支払いを認証しなかった場合はお知らせください。返金いたします。"
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -385,31 +388,31 @@ msgstr "寄付していただき、ありがとうございます！"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
-msgstr "{1} から {0} が Liberapay に参加しました!"
+msgstr "{1} から {0} さんが Liberapay に参加しました!"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
-msgstr "{1} に毎週 {0} を寄付するというあなたの誓約はたった今、Liberapay に参加するという行動になりました。バンザイ！"
+msgstr "{1} さんに毎週 {0} を寄付するというあなたの誓約はたった今、Liberapay に参加するという行動になりました。バンザイ！"
 
 #, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
-msgstr "次のリンクをクリックすると {0} のプロフィールを表示します："
+msgstr "次のリンクをクリックすると {0} さんのプロフィールを表示します："
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{platform} の {user_name} さんが Liberapay に参加しました！"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "{date}に、{user_name} さんが Liberapay に参加した場合に {money_amount} を支払う約束をしました。"
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "{time_ago}に、{user_name} さんが {liberapay_username} として Liberapay に参加したことをお知らせします。ご自身の寄付の約束をもとに、実際の寄付を行えます。"
 
 #, python-brace-format
 msgid "Donate to {0}"
-msgstr "{0} に寄付する"
+msgstr "{0} さんに寄付する"
 
 msgid "A team you're a member of has been modified"
 msgstr "所属するチームが変更されました"
@@ -493,21 +496,21 @@ msgstr "不具合が発生したようです！ご迷惑をおかけします。
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "要求されたページが見つかりませんでした。お手伝いが必要な場合は、{link_open}お問い合わせください{link_close}。"
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "私たちのソフトウェアはあなたの要求を拒否しました。お手伝いが必要な場合は、{link_open}お問い合わせください{link_close}。"
 
 msgid "Error message:"
-msgstr ""
+msgstr "エラーメッセージ："
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "このエラーの詳細が記録されました。お問い合わせの際は、以下のエラー識別コードをメッセージに記載してください：{0}。"
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "お問い合わせする場合は、以下のデバッグ情報をメッセージに記載してください。"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "寄付を受け取っている限り、毎週"
@@ -604,7 +607,7 @@ msgstr "最大"
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr ""
+msgstr "割り当てられた要求の数を超過しました。{in_N_minutes}にもう一度お試しいただけます。"
 
 msgid "You're making requests too fast, please try again later."
 msgstr "リクエストの作成が速すぎます。後ほどもう一度お試しください。"
@@ -728,7 +731,7 @@ msgid "The password must be at least {0} and at most {1} characters long."
 msgstr "パスワードは少なくとも {0} 文字、多くとも {1} 文字である必要があります。"
 
 msgid "You can't donate to yourself."
-msgstr "自分自身に寄付することはできません。"
+msgstr "自分自身には寄付できません。"
 
 #, python-brace-format
 msgid "There is no user named {0}."
@@ -4071,7 +4074,7 @@ msgstr "アカウントを作成"
 #, python-brace-format
 msgid "You have {n} active donor who is giving you {money_amount} per week."
 msgid_plural "You have {n} active donors giving you a total of {money_amount} per week."
-msgstr[0] ""
+msgstr[0] "1 週間あたり合計 {money_amount} の寄付をしている、{n} 人のアクティブな寄付者がいます。"
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
@@ -4212,7 +4215,7 @@ msgstr "Liberapay では企業や非営利団体からの寄付を歓迎して�
 #, python-brace-format
 msgid "There is currently {n} sponsor on the platform, this section is our way of thanking them."
 msgid_plural "There are currently {n} sponsors on the platform, this section is our way of thanking them."
-msgstr[0] ""
+msgstr[0] "現在このプラットフォームには {n} のスポンサーが付いています。ここに、感謝の意を表します。"
 
 msgid "The list below is rotated pseudorandomly."
 msgstr "以下のリストは擬似ランダムに変更されます。"
