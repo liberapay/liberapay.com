@@ -13,8 +13,10 @@
     <li><a href="/{{ user.username }}/ledger/">{{ _("Ledger") }}</a></li>
     % if user.mangopay_user_id
     <li><a href="/{{ user.username }}/wallet/">{{ _("Wallet") }}</a></li>
+    % if user.balance
     <li class="level2"><a href="/{{ user.username }}/wallet/empty">{{ _("Emptying your wallet") }}</a></li>
     <li class="level2"><a href="/{{ user.username }}/wallet/payout">{{ _("Withdraw money") }}</a></li>
+    % endif
     % endif
     <li><a href="/{{ user.username }}/payment/">{{ _("Payment Processors") }}</a></li>
     <li><a href="/{{ user.username }}/identity">{{ _("Identity") }}</a></li>
