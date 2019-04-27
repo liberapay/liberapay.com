@@ -77,17 +77,17 @@
                 {{ nav([
                     ('/explore/', _('Explore'), {
                         'icon': 'glyphicon glyphicon-globe',
-                        'subnav': nav_explore(),
+                        'dropdown': nav_explore(),
                     }),
                     ('/search', _('Search'), {
                         'icon': 'glyphicon glyphicon-search',
                         'form': True,
                         'role': 'search',
-                        'subnav': search_form(autocomplete=False),
+                        'dropdown': search_form(autocomplete=False),
                     }),
                     ('/about/', _('About'), {
                         'icon': 'glyphicon glyphicon-question-sign',
-                        'subnav': nav_about(),
+                        'dropdown': nav_about(),
                     }),
                 ]) }}
             </ul>
@@ -96,6 +96,7 @@
     </nav>
 
     <div id="main">
+    % block main
         {% block before_container %}{% endblock %}
         <div class="container">
         % block before_content
@@ -109,6 +110,7 @@
         {% block content %}{% endblock %}
         {% block after_content %}{% endblock %}
         </div>
+    % endblock
     </div>
 
     <footer class="container" role="navigation">

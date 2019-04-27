@@ -16,7 +16,6 @@ title = _("Legal")
 % extends "templates/about.html"
 
 % block content
-<div class="row"><div class="col-md-8">
 
 <h3 id="info">{{ _("Legal Information") }}</h3>
 
@@ -66,5 +65,4 @@ Amazon Data Services Ireland Ltd<br>Burlington Plaza, Burlington Road<br>Dublin 
 <ul>{{ MANGOPAY_TERMS }}</ul>
 % endif
 
-</div></div>
 % endblock

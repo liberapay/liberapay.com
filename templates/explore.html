@@ -7,16 +7,16 @@
     % endif
 % endblock
 
-{% block heading %}{% endblock %}
-
-% block subnav
-    % if request.path.raw != '/explore/'
+% block main
+<div class="content-with-nav tabs-left">
+% if request.path.raw != '/explore/'
     % from "templates/nav.html" import nav_explore with context
-    <div class="collapse-md">
-    <button class="btn" type="button"
-            data-toggle="collapse" data-target="#subnav-collapse"
-            >{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></button>
-    <ul class="nav nav-tabs" id="subnav-collapse">{{ nav_explore() }}</ul>
+    <div class="nav-col">
+        <input id="subnav-explore" class="subnav-toggler sr-only" type="checkbox" />
+        <label for="subnav-explore">{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></label>
+        <ul class="nav nav-tabs-left text-center">{{ nav_explore() }}</ul>
     </div>
-    % endif
+% endif
+    <div class="content-col">{% block content %}{% endblock %}</div>
+</div>
 % endblock

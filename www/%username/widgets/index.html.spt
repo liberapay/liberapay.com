@@ -15,7 +15,6 @@ response.headers[b'Content-Security-Policy'] = csp
 [---]
 % extends "templates/settings.html"
 % block content
-<div class="col0">
 
     <h3>{{ _("Donation Button") }}</h3>
 
@@ -92,5 +91,4 @@ response.headers[b'Content-Security-Policy'] = csp
 
     <p><img src="http://img.shields.io/liberapay/goal/{{ participant.username }}.svg?logo=liberapay"></p>
 
-</div>
 % endblock

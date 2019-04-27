@@ -45,14 +45,9 @@ limited = getattr(platform, 'api_friends_limited', False)
 
 % block subnav
     % from "templates/nav.html" import nav with context
-    <div class="collapse-md">
-    <button class="btn btn-default" type="button"
-            data-toggle="collapse" data-target="#subnav-collapse"
-            >{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></button>
-    <nav class="nav nav-tabs" id="subnav-collapse">
+    <nav class="nav nav-pills">
         {{ nav(platforms_nav, base='/on') }}
     </nav>
-    </div>
 % endblock
 
 % macro limitation_note()

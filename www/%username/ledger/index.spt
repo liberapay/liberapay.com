@@ -50,7 +50,6 @@ if participant.join_time:
 % block content
 
 % if len(years) > 1
-<br>
 <ul class="nav nav-pills">
     % for y in years
         <li class="{{ 'active' if y == year }}"><a href="?year={{ y }}">{{ y }}</a></li>

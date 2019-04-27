@@ -1,36 +1,26 @@
+% from "templates/nav.html" import nav_settings with context
+
 % extends "templates/base.html"
 
-% block subnav
-    {% set pages = ([
-        ('/giving/', _("Giving")),
-        ('/receiving/', _("Receiving")),
-        ('/ledger/', _("Ledger")),
-        ('/wallet/', _("Wallet")),
-        ('/payment/', _("Payment Processors")),
-        ('/identity', _("Identity")),
-        ('/settings/', _("Settings")),
-    ] if participant.mangopay_user_id else [
-        ('/giving/', _("Giving")),
-        ('/receiving/', _("Receiving")),
-        ('/ledger/', _("Ledger")),
-        ('/payment/', _("Payment Processors")),
-        ('/identity', _("Identity")),
-        ('/settings/', _("Settings")),
-    ] if participant.is_person else [
-        ('/receiving/', _("Receiving")),
-    ]) + [
-        ('/emails/', _("Emails")),
-        ('/widgets/', _("Widgets")),
-    ] + ([
-        ('/admin', "Admin")
-    ] if user.is_admin else []) %}
-    % from "templates/nav.html" import nav with context
-    <div class="collapse-md">
-    <button class="btn btn-default" type="button"
-            data-toggle="collapse" data-target="#subnav-collapse"
-            >{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></button>
-    <ul class="nav nav-tabs" id="subnav-collapse">
-        {{ nav(pages, base='/'+participant.username) }}
-    </ul>
+% block main
+<div class="content-with-nav nav-left">
+    <div class="nav-col">
+        <input id="subnav-settings" class="subnav-toggler sr-only" type="checkbox" />
+        <label for="subnav-settings">{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></label>
+        <ul class="nav nav-aside">
+            <li class="header"><h1>{{ participant.username }}</h1></li>
+            {{ nav_settings(participant) }}
+        </ul>
     </div>
+    <div class="content-col">
+        % if 'success' in request.qs
+            % set success = request.qs.pop('success')
+            <div class="alert alert-success">{{
+                b64decode_s(success) if success else
+                _("The changes have been saved.")
+            }}</div>
+        % endif
+        {% block content %}{% endblock %}
+    </div>
+</div>
 % endblock

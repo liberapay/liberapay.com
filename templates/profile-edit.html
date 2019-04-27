@@ -1,31 +1,5 @@
-% from "templates/nav.html" import nav_profile_edit with context
+% extends "templates/settings.html"
 
-% extends "templates/base.html"
-
-{% block before_content %}{% endblock %}
-
-% block before_container
-<div class="tabs-vertical">
-    <div class="collapse-xs">
-        <button class="btn" type="button"
-                data-toggle="collapse" data-target="#subnav-collapse"
-                >{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></button>
-        <ul class="nav nav-tabs-vertical" id="subnav-collapse">
-            <li class="header"><h1>{{ participant.username }}</h1></li>
-            {{ nav_profile_edit(participant) }}
-            <li class="divider"></li>
-            <li class="not-a-tab"><a href="{{ participant.path('') }}">{{ _("View") }}</a></li>
-        </ul>
-    </div>
-    <div class="content-col">
-        % if 'success' in request.qs
-            % set success = request.qs.pop('success')
-            <div class="alert alert-success">{{
-                b64decode_s(success) if success else
-                _("The changes have been saved.")
-            }}</div>
-        % endif
-        {% block form %}{% endblock %}
-    </div>
-</div>
+% block content
+    {% block form %}{% endblock %}
 % endblock

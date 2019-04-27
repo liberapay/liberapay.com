@@ -13,7 +13,6 @@ is_a_person = participant.kind not in ('group', 'community')
 % extends "templates/settings.html"
 
 % block content
-<div id="settings">
 
         <h3>{{ _("Account type") }}</h3>
         <p>{{ _(constants.PARTICIPANT_KINDS.get(participant.kind, participant.kind)) }}
@@ -35,5 +34,4 @@ is_a_person = participant.kind not in ('group', 'community')
         </div>
         % endif
 
-</div>
 % endblock
