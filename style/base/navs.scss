@@ -86,11 +86,46 @@
     & > .header {
         border-bottom: 1px dotted $nav-tabs-border-color;
         margin: 0 0 8px;
-        padding: 10px 15px;
         text-align: center;
-        & > h1 {
+        h1 {
             font-size: $font-size-base;
+            line-height: floor(($font-size-base * $line-height-base));
             margin: 0;
+            overflow: hidden;
+            padding: 0.5em 1ex;
+            text-overflow: ellipsis;
+        }
+        & > .flex {
+            display: flex;
+            & > h1 {
+                flex-grow: 1;
+            }
+            & > label {
+                border-left: 1px dotted $nav-tabs-border-color;
+                cursor: pointer;
+                margin: 0;
+                padding: 0.5em 1ex;
+                & > .caret {
+                    margin: 0;
+                    transition: transform 0.2s linear;
+                }
+            }
+        }
+        & > .nav {
+            border-top: 1px dotted $nav-tabs-border-color;
+            display: none;
+            & > li > a {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        & > .subnav-toggler:checked {
+            & ~ .flex > label > .caret {
+                transform: rotate(-180deg);
+            }
+            & ~ .nav {
+                display: block;
+            }
         }
     }
     & > li {

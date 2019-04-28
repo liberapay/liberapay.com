@@ -1572,6 +1572,15 @@ class Participant(Model, MixinTeam):
 
         """, (self.id,))
 
+    @cached_property
+    def team_names(self):
+        return sorted(self.db.all("""
+            SELECT team.username
+              FROM current_takes take
+              JOIN participants team ON team.id = take.team
+             WHERE take.member = %s;
+        """, (self.id,)))
+
     @property
     def accepts_tips(self):
         return self.status != 'closed' and ((self.goal is None) or (self.goal >= 0))
