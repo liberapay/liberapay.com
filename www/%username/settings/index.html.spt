@@ -14,6 +14,11 @@ is_a_person = participant.kind not in ('group', 'community')
 
 % block content
 
+        <p>{{ _(
+            "The ID number of your Liberapay account is {user_id}.",
+            user_id=('<code>%s</code>'|safe) % participant.id,
+        ) }}</p>
+
         <h3>{{ _("Account type") }}</h3>
         <p>{{ _(constants.PARTICIPANT_KINDS.get(participant.kind, participant.kind)) }}
            &nbsp;
