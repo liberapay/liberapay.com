@@ -31,7 +31,6 @@ title = _("Teams")
 [---] text/html
 % extends "templates/about.html"
 % block content
-<div class="row paragraph"><div class="col-md-8">
 
 <p>{{ _(
     "A Liberapay team coordinates donations from multiple donors to multiple "
@@ -165,5 +164,4 @@ title = _("Teams")
     "A team account is automatically closed when its last member leaves."
 ) }}</p>
 
-</div></div>
 % endblock

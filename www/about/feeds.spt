@@ -5,7 +5,6 @@ title = _("Feeds")
 % from "templates/icons.html" import fontawesome
 
 % block content
-<div class="row paragraph"><div class="col-md-8">
 
     <p>{{ _("You can get updates from us on the following social networks:") }}</p>
     <div class="buttons">
@@ -37,5 +36,4 @@ title = _("Feeds")
         '<a href="https://github.com/liberapay/salon#readme">'|safe,
     ) }}</p>
 
-</div></div>
 % endblock

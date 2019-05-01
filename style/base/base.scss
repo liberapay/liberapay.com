@@ -250,12 +250,6 @@ p.summary {
     margin-right: -22px;
 }
 
-@media (max-width: $screen-md-min - 1) {
-    .inline-boxes {
-        text-align: center;
-    }
-}
-
 .inline-boxes > .inline-box {
     display: inline-block;
     max-width: 100%;
@@ -344,7 +338,7 @@ p.summary {
     }
 }
 
-@media (min-width: $screen-lg-min) {
+@media (min-width: $screen-md-min) {
     .inline-box.repo {
         width: 550px;
     }
@@ -454,7 +448,7 @@ ul.emails {
 }
 
 .faq dt {
-    margin: 1.5em 0 0;
+    margin: 0;
     padding-bottom: 0.33em;
     &:target, &:target + dd {
         background-color: rgba(yellow, 0.3);
@@ -464,12 +458,13 @@ ul.emails {
         color: #000;
         position: relative;
         text-decoration: none;
-        &:hover:before {
-            content: '§';
-            left: -1em;
-            position: absolute;
+        &:hover:after {
+            content: ' §';
         }
     }
+}
+.faq dd {
+    margin-bottom: 1.5em;
 }
 .faq dd > p {
     margin-bottom: 0.33em;

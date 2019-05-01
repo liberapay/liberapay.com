@@ -7,8 +7,9 @@
         % set options = item[2] or {}
         % set icon = options['icon']
         % set icon = icon_span(icon) if icon else ''
-        <li{% if slug.strip('/') == current %} class="active"{% endif %}>
-            % if options['subnav']
+        % set classes = (options['class'] or '') + (' active' if slug.strip('/') == current else '')
+        <li{% if classes %} class="{{ classes }}"{% endif %}>
+            % if options['dropdown']
                 % set button_extra_cls = 'dropdown-toggle-form' if options['form'] else ''
                 <div class="dropdown dropdown-hover">
                     <a class="dropdown-toggle navbar-btn {{ button_extra_cls }}"
@@ -17,13 +18,19 @@
                         <span>{{ item[1] }}</span>
                     </a>
                     % if options['role']
-                        <div class="dropdown-menu" role="{{ options['role'] }}">{{ options['subnav'] }}</div>
+                        <div class="dropdown-menu" role="{{ options['role'] }}">{{ options['dropdown'] }}</div>
                     % else
-                        <ul class="dropdown-menu" role="menu">{{ options['subnav'] }}</ul>
+                        <ul class="dropdown-menu" role="menu">{{ options['dropdown'] }}</ul>
                     % endif
                 </div>
-            % else
+            % elif options['subnav']
+                <input id="subnav-{{ id(item) }}" class="subnav-toggler sr-only" type="checkbox" {% if slug.strip('/') == current %} checked {% endif %} />
+                <label for="subnav-{{ id(item) }}">{{ icon }} {{ item[1] }} <span class="caret"></span></label>
+                <ul class="nav level2">{{ options['subnav'] }}</ul>
+            % elif slug
                 <a href="{{ base }}{{ slug }}">{{ icon }} {{ item[1] }}</a>
+            % else
+                <span>{{ icon }} {{ item[1] }}</span>
             % endif
         </li>
     % endfor
@@ -56,32 +63,52 @@
     ], base='/explore') }}
 % endmacro
 
-% macro nav_profile_edit(participant)
-    % if participant.is_person
-        {{ nav([
-            ('/username', _('Name')),
-            ('/avatar', _('Avatar')),
-            ('/currencies', _('Currencies')),
-            ('/goal', _('Goal')),
-            ('/statement', _('Statement')),
-            ('/elsewhere', _('Accounts Elsewhere')),
-            ('/repositories', _('Repositories')),
-            ('/teams', _('Teams')),
-            ('/communities', _('Communities')),
-            ('/privacy', _('Privacy')),
-        ], base=participant.path('edit')) }}
-    % else
-        {{ nav([
-            ('/username', _('Name')),
-            ('/avatar', _('Avatar')),
-            ('/currencies', _('Currencies')),
-            ('/goal', _('Goal')),
-            ('/statement', _('Statement')),
-            ('/elsewhere', _('Accounts Elsewhere')),
-            ('/repositories', _('Repositories')),
-            ('/members', _('Members')),
-            ('/privacy', _('Privacy')),
-        ], base=participant.path('edit')) }}
+% macro nav_settings(participant)
+    % set base = '/'+participant.username
+    {{ nav(([
+        ('/edit', _("Profile"), {
+            'subnav': nav([
+                ('/username', _("Name")),
+                ('/avatar', _("Avatar")),
+                ('/currencies', _("Currencies")),
+                ('/goal', _("Goal")),
+                ('/statement', _("Statement")),
+                ('/elsewhere', _("Linked Accounts")),
+                ('/repositories', _("Repositories")),
+                ('/teams', _("Teams")),
+                ('/communities', _("Communities")),
+                ('/privacy', _("Privacy"))
+            ], base=participant.path('edit'))
+        }),
+        ('/giving/', _("Giving")),
+        ('/receiving/', _("Receiving")),
+        ('/ledger/', _("Ledger")),
+        ('/payment/', _("Payment Processors")),
+        ('/identity', _("Identity")),
+        ('/settings/', _("Account")),
+        ('/emails/', _("Emails")),
+        ('/notifications/', _("Notifications")),
+        ('/widgets/', _("Widgets")),
+    ] if participant.is_person else [
+        ('/edit', _("Profile"), {
+            'subnav': nav([
+                ('/username', _("Name")),
+                ('/avatar', _("Avatar")),
+                ('/currencies', _("Currencies")),
+                ('/goal', _("Goal")),
+                ('/statement', _("Statement")),
+                ('/elsewhere', _("Linked Accounts")),
+                ('/repositories', _("Repositories")),
+                ('/members', _("Members")),
+                ('/privacy', _("Privacy")),
+            ], base=participant.path('edit'))
+        }),
+        ('/receiving/', _("Receiving")),
+        ('/emails/', _("Emails")),
+        ('/widgets/', _("Widgets")),
+    ]), base=base) }}
+    % if user.is_admin
+    {{ nav([('/admin', "Admin")], base=base) }}
     % endif
 % endmacro
 

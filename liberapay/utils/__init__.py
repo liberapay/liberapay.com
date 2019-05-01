@@ -116,6 +116,9 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     if block_suspended_user and participant.is_suspended and participant == user:
         raise AccountSuspended()
 
+    if allow_member and (user == participant or participant.kind == 'group' and user.member_of(participant)):
+        state['can_switch_account'] = True
+
     return participant
 
 

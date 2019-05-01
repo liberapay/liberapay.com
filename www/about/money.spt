@@ -5,7 +5,6 @@ title = _("Money")
 [---] text/html
 % extends "templates/about.html"
 % block content
-<div class="row"><div class="col-md-8">
 
 % if constants.QUARANTINE.days > 0
 <h3>{{ _("Quarantine") }}</h3>
@@ -28,5 +27,4 @@ title = _("Money")
     "have delegated the custody of the funds."
 ) }}</p>
 
-</div></div>
 % endblock

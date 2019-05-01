@@ -106,7 +106,6 @@ next_payday = today + timedelta(days=days_till_wednesday)
 % block content
 
 % if not freeload and not Liberapay_tip.amount
-<br>
 <div class="panel panel-default">
     <div class="panel-heading">
         <form action="" method="POST">
@@ -134,7 +133,6 @@ next_payday = today + timedelta(days=days_till_wednesday)
 </div>
 % endif
 
-<div>
     <h3>{{ _("Donations") }} ({{ ntips }})</h3>
 % if ntips
     % if ntips_awaiting_renewal
@@ -271,10 +269,8 @@ next_payday = today + timedelta(days=days_till_wednesday)
 % else
     <p>{{ _("You are currently not donating to anyone.") }}</p>
 % endif
-</div>
 
 % if npledges
-<div>
     <h3>{{ _("Pledges") }} ({{ npledges }})</h3>
     % for currency, t in pledges_by_currency.items()
         % set pledges, total = t
@@ -348,11 +344,9 @@ next_payday = today + timedelta(days=days_till_wednesday)
             bold='<strong>'|safe, bold_end='</strong>'|safe
         ) }}</p>
     % endfor
-</div>
 % endif
 
 % if ncancelled
-<div>
     <h3>{{ _("Recently Cancelled") }} ({{ ncancelled }})
         <small>{{ _("within the last 30 days") }}</small></h3>
     % for tip in cancelled_tips
@@ -438,7 +432,6 @@ next_payday = today + timedelta(days=days_till_wednesday)
             ) }}</p>
         </div>
     % endfor
-</div>
 % endif
 
 % endblock
