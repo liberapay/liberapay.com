@@ -1,4 +1,4 @@
-% from "templates/icons.html" import icon_span
+% from "templates/icons.html" import fontawesome, icon_span
 
 % macro nav(items, base='')
     % set current = request.path.raw.startswith(base) and request.path.raw[len(base):].lstrip('/').split('/', 1)[0]
@@ -48,6 +48,18 @@
         ('/contact', _('Contact')),
         ('/security', _('Security'))
     ], base='/about') }}
+% endmacro
+
+% macro nav_admin()
+    {{ nav([
+        ('/', fontawesome('home', "Index")),
+        ('/admins', "Audit Log"),
+        ('/emails', "Email Addresses"),
+        ('/notifications', "Notifications"),
+        ('/payments', "Payments"),
+        ('/rate-limiting', "Rate Limiting"),
+        ('/users', "Users"),
+    ], base='/admin') }}
 % endmacro
 
 % macro nav_explore()

@@ -1,0 +1,102 @@
+# coding: utf8
+
+from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import LOCALE_EN as locale
+
+PAGE_SIZE = 50
+STATUS_MAP = {
+    'failed': 'danger',
+    'pre': 'muted',
+    'succeeded': 'success',
+}
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+payins = website.db.all("""
+    SELECT pi.*, p.username AS payer_name, r.network AS payin_method
+         , ( SELECT json_agg((SELECT x FROM ( SELECT
+                        pt.recipient, recipient.username AS recipient_name,
+                        pt.team, team.username AS team_name,
+                        pt.amount, pt.unit_amount, pt.n_units, pt.period
+                    ) x))
+               FROM payin_transfers pt
+               JOIN participants recipient ON recipient.id = pt.recipient
+          LEFT JOIN participants team ON team.id = pt.team
+              WHERE pt.payin = pi.id
+           ) AS transfers
+      FROM payins pi
+      JOIN exchange_routes r ON r.id = pi.route
+      JOIN participants p ON p.id = pi.payer
+     WHERE coalesce(pi.id < %s, true)
+  ORDER BY pi.id DESC
+     LIMIT %s
+""", (request.qs.get('before'), PAGE_SIZE))
+
+title = "Payments Admin"
+
+[---] text/html
+% from "templates/payment-methods.html" import payment_method_icon with context
+
+% extends "templates/admin.html"
+
+% block content
+
+% if payins
+    <table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Creation time (UTC)</th>
+            <th>Payer</th>
+            <th class="text-center">Method</th>
+            <th class="text-right">Amount</th>
+            <th>Distribution</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+    % for pi in payins
+        <tr>
+            <td>{{ pi.id }}</td>
+            <td>{{ pi.ctime.replace(microsecond=0, tzinfo=None) }}</td>
+            <td><a href="/~{{ pi.payer }}/">{{ pi.payer_name }}</a></td>
+            <td class="text-center">{{ payment_method_icon(pi.payin_method) }}</td>
+            <td class="text-right">{{ locale.format_money(pi.amount) }}</td>
+            <td>
+                % for pt in pi.transfers
+                    → {{ locale.format_money(Money(**pt.amount)) }}
+                    to <a href="/~{{ pt.recipient }}/">{{ pt.recipient_name }}</a>
+                    % if pt.team
+                        through team <a href="/~{{ pt.team }}/">{{ pt.team_name }}</a>
+                    % endif
+                    % if pt.period
+                        ({{ locale.format_money(Money(**pt.unit_amount)) }}/{{ pt.period[:-2] }} × {{ pt.n_units }})
+                    % endif
+                    <br>
+                % endfor
+            </td>
+            <td class="text-{{ STATUS_MAP.get(pi.status, 'info') }}">{{ pi.status }}</td>
+        </tr>
+        % if pi.error
+        <tr class="subrow">
+            <td colspan="5"></td>
+            <td colspan="2">Error: <code>{{ pi.error }}</code></td>
+        </tr>
+        % endif
+    % endfor
+    </tbody>
+    </table>
+    % if len(payins) == PAGE_SIZE
+        <a class="btn btn-primary" href="{{ request.qs.derive(before=payins[-1].id) }}">Next page →</a>
+    % endif
+% else
+    No payins found.
+% endif
+
+% endblock

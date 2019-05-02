@@ -1,0 +1,153 @@
+# coding: utf8
+
+from pando import json
+
+from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import LOCALE_EN as locale
+
+PAGE_SIZE = 20
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+if request.method == 'POST':
+    email = request.body['email']
+    action = request.body.get('action', 'lookup')
+    if action == 'lookup':
+        pass
+    elif action == 'remove_from_blacklist':
+        website.db.run("""
+            UPDATE email_blacklist
+               SET ignore_after = current_timestamp
+             WHERE lower(address) = lower(%s)
+        """, (email,))
+    elif action == 'readd_to_blacklist':
+        website.db.run("""
+            UPDATE email_blacklist
+               SET ignore_after = NULL
+             WHERE lower(address) = lower(%s)
+        """, (email,))
+    else:
+        raise response.invalid_input(action, 'action', 'body')
+
+    results = website.db.all("""
+        SELECT p, e.address, e.added_time, e.verified
+          FROM emails e
+          JOIN participants p ON p.id = e.participant
+         WHERE lower(e.address) = lower(%s)
+      ORDER BY e.id DESC
+    """, (email,))
+    blacklist_entries = website.db.all("""
+        SELECT ts, reason, details, ses_data, ignore_after
+          FROM email_blacklist
+         WHERE lower(address) = lower(%s)
+      ORDER BY ts DESC
+         LIMIT 10
+    """, (email,))
+    blacklisted = any(True for e in blacklist_entries if e.ignore_after is None)
+
+else:
+    blacklist_entries = website.db.all("""
+        SELECT address, ts, reason
+          FROM email_blacklist bl
+         WHERE coalesce(bl.ts < %s, true)
+      ORDER BY bl.ts DESC
+         LIMIT %s
+    """, (request.qs.get('before'), PAGE_SIZE))
+
+title = "Email Addresses"
+
+[---] text/html
+% extends "templates/admin.html"
+
+% block content
+
+% if request.method == 'POST'
+    % if results
+        <p>Found {{ len(results) }}:</p>
+        <ul>
+        % for participant, address, added_time, verified in results
+            <li>
+                {{ address }} is
+                % if address == participant.email
+                    the <span class="label label-primary">Primary</span> address
+                % elif verified
+                    a <span class="label label-success">Verified</span> address
+                % else
+                    an <span class="label label-warning">Unverified</span> address
+                % endif
+                of the account {{ participant.link() }}. It was added on {{ added_time.date() }} at {{ added_time.time() }} UTC.
+            </li>
+        % endfor
+        </ul>
+    % else
+        <p>No accounts found for {{ email }}.</p>
+    % endif
+    % if blacklist_entries
+        % if blacklisted
+            <p>The email address {{ email }} is currently <span class="label label-danger">Blacklisted</span> because:</p>
+        % else
+            <p>The email address {{ email }} was blacklisted in the past:</p>
+        % endif
+        <ul>
+        % for e in blacklist_entries
+            <li>
+                {{ "A complaint was received" if e.reason == 'complaint' else "A message bounced" }}
+                at {{ locale.format_time(e.ts.time()) }} on {{ locale.format_date(e.ts.date(), format='long') }}. Details:<br>
+                <pre class="pre-wrap">{{ json.dumps(e.ses_data) if e.ses_data else e.details }}</pre>
+            </li>
+        % endfor
+        </ul>
+        <br>
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="email" value="{{ email }}" />
+        % if blacklisted
+            <input type="hidden" name="action" value="remove_from_blacklist" />
+            <button class="btn btn-warning">Remove <code>{{ email }}</code> from the blacklist</button>
+        % else
+            <input type="hidden" name="action" value="readd_to_blacklist" />
+            <button class="btn btn-warning">Put <code>{{ email }}</code> back onto the blacklist</button>
+        % endif
+        </form>
+    % endif
+    <br>
+    <a class="btn btn-default" href="">← Back to browsing the blacklist</a>
+    <br>
+    <hr>
+% endif
+
+<h3>Look up an email address</h3>
+<form action="" class="form-inline" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input class="form-control" type="email" name="email" placeholder="alice@example.net" />
+    <button class="btn btn-primary">Look up</button>
+</form>
+
+% if request.method != 'POST'
+    <h3>Bounces and complaints</h3>
+    % if blacklist_entries
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        % for e in blacklist_entries
+            <p>
+                <button class="link" name="email" value="{{ e.address }}">{{ e.address }}</button> :
+                {{ "a complaint was received" if e.reason == 'complaint' else "a message bounced" }}
+                at {{ locale.format_time(e.ts.time()) }} on {{ locale.format_date(e.ts.date(), format='long') }}.
+            </p>
+        % endfor
+        </form>
+        % if len(blacklist_entries) == PAGE_SIZE
+            <a class="btn btn-primary" href="{{ request.qs.derive(before=blacklist_entries[-1].ts.isoformat()) }}">Next page →</a>
+        % endif
+    % else
+        The email blacklist is empty.
+    % endif
+% endif
+
+% endblock
