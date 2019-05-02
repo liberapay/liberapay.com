@@ -1275,6 +1275,9 @@ msgstr "저장소"
 msgid "Social Networks"
 msgstr "사회적 관계망"
 
+msgid "Profile"
+msgstr "프로필 만들기"
+
 msgid "Name"
 msgstr "이름"
 
@@ -1293,6 +1296,33 @@ msgstr "성명 (statement)"
 msgid "Privacy"
 msgstr "개인 정보"
 
+msgid "Giving"
+msgstr "기부"
+
+msgid "Receiving"
+msgstr "수익"
+
+msgid "Ledger"
+msgstr "장부"
+
+msgid "Payment Processors"
+msgstr "지불 처리자"
+
+msgid "Identity"
+msgstr "신원"
+
+msgid "Account"
+msgstr "계정"
+
+msgid "Emails"
+msgstr "이메일"
+
+msgid "Notifications"
+msgstr "알림"
+
+msgid "Widgets"
+msgstr "위젯"
+
 msgid "Switch to another language"
 msgstr "다른 언어로 변경"
 
@@ -1303,41 +1333,11 @@ msgstr "({x_percent} 번역됨)"
 msgid "Help us translate Liberapay"
 msgstr "Liberapay 번역을 도와주세요"
 
-msgid "Profile"
-msgstr "프로필 만들기"
-
-msgid "Giving"
-msgstr "기부"
-
-msgid "Receiving"
-msgstr "수익"
-
-msgid "Ledger"
-msgstr "장부"
-
 msgid "Wallet"
 msgstr "지갑"
 
 msgid "Emptying your wallet"
 msgstr "지갑 비우기"
-
-msgid "Payment Processors"
-msgstr "지불 처리자"
-
-msgid "Identity"
-msgstr "신원"
-
-msgid "Settings"
-msgstr "설정"
-
-msgid "Emails"
-msgstr "이메일"
-
-msgid "Widgets"
-msgstr "위젯"
-
-msgid "Notifications"
-msgstr "알림"
 
 msgid "Create a new community"
 msgstr "새 커뮤니티 만들기"
@@ -1457,12 +1457,6 @@ msgstr "공약"
 msgid "Sum"
 msgstr "총액"
 
-msgid "View"
-msgstr "보기"
-
-msgid "The changes have been saved."
-msgstr "변경 사항을 저장하였습니다."
-
 #, python-brace-format
 msgid "Goal: {0}"
 msgstr "목표: {0}"
@@ -1552,6 +1546,12 @@ msgstr "샌드박스 모드에 있습니다, 실제 결제 정보 또는 개인 
 
 msgid "Search Liberapay"
 msgstr "Liberapay 검색"
+
+msgid "Switch to a different account"
+msgstr ""
+
+msgid "The changes have been saved."
+msgstr "변경 사항을 저장하였습니다."
 
 msgid "Log In or Create Account"
 msgstr "로그인 또는 계정 만들기"
@@ -2869,8 +2869,9 @@ msgstr "잘못된 비밀번호"
 msgid "Your password has been changed."
 msgstr "비밀번호가 변경되었습니다."
 
-msgid "Account"
-msgstr "계정"
+#, python-brace-format
+msgid "The ID number of your Liberapay account is {user_id}."
+msgstr ""
 
 msgid "Account type"
 msgstr "계정 종류"

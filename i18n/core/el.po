@@ -1305,6 +1305,9 @@ msgstr "Αποθετήρια"
 msgid "Social Networks"
 msgstr "Κοινωνικά Δίκτυα"
 
+msgid "Profile"
+msgstr "Προφίλ"
+
 msgid "Name"
 msgstr "Όνομα"
 
@@ -1323,6 +1326,33 @@ msgstr "Δήλωση"
 msgid "Privacy"
 msgstr "Ιδιωτικότητα"
 
+msgid "Giving"
+msgstr "Δίνει"
+
+msgid "Receiving"
+msgstr "Λαμβάνει"
+
+msgid "Ledger"
+msgstr "καθολικό"
+
+msgid "Payment Processors"
+msgstr "Επεξεργαστές Πληρωμής"
+
+msgid "Identity"
+msgstr "Ταυτότητα"
+
+msgid "Account"
+msgstr ""
+
+msgid "Emails"
+msgstr "Διευθύνσεις ηλεκτρονικού ταχυδρομείου"
+
+msgid "Notifications"
+msgstr "Ειδοποιήσεις"
+
+msgid "Widgets"
+msgstr "Μικροεφαρμογές"
+
 msgid "Switch to another language"
 msgstr "Αλλαγή σε άλλη γλώσσα"
 
@@ -1333,41 +1363,11 @@ msgstr "({x_percent} μεταφρασμένο)"
 msgid "Help us translate Liberapay"
 msgstr "Βοήθησε να μεταφραστεί το Liberapay"
 
-msgid "Profile"
-msgstr "Προφίλ"
-
-msgid "Giving"
-msgstr "Δίνει"
-
-msgid "Receiving"
-msgstr "Λαμβάνει"
-
-msgid "Ledger"
-msgstr "καθολικό"
-
 msgid "Wallet"
 msgstr "Πορτοφόλι"
 
 msgid "Emptying your wallet"
 msgstr "Αδειάζετε το πορτοφόλι σας"
-
-msgid "Payment Processors"
-msgstr "Επεξεργαστές Πληρωμής"
-
-msgid "Identity"
-msgstr "Ταυτότητα"
-
-msgid "Settings"
-msgstr "Ρυθμίσεις"
-
-msgid "Emails"
-msgstr "Διευθύνσεις ηλεκτρονικού ταχυδρομείου"
-
-msgid "Widgets"
-msgstr "Μικροεφαρμογές"
-
-msgid "Notifications"
-msgstr "Ειδοποιήσεις"
 
 msgid "Create a new community"
 msgstr "Δημιουργία νέας κοινότητας"
@@ -1487,12 +1487,6 @@ msgstr "Ποσά δωρεάς"
 msgid "Sum"
 msgstr "Σύνολο"
 
-msgid "View"
-msgstr "Προβολή"
-
-msgid "The changes have been saved."
-msgstr "Οι αλλαγές αποθηκεύτηκαν."
-
 #, python-brace-format
 msgid "Goal: {0}"
 msgstr "Στόχος: {0}"
@@ -1584,6 +1578,12 @@ msgstr "Είστε σε λειτουργία sandbox, μην εισάγετε ο
 
 msgid "Search Liberapay"
 msgstr "Αναζήτηση Liberapay"
+
+msgid "Switch to a different account"
+msgstr ""
+
+msgid "The changes have been saved."
+msgstr "Οι αλλαγές αποθηκεύτηκαν."
 
 msgid "Log In or Create Account"
 msgstr "Συνδεθείτε ή Δημιουργήστε Λογαριασμό"
@@ -2910,7 +2910,8 @@ msgstr ""
 msgid "Your password has been changed."
 msgstr ""
 
-msgid "Account"
+#, python-brace-format
+msgid "The ID number of your Liberapay account is {user_id}."
 msgstr ""
 
 msgid "Account type"

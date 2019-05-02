@@ -997,7 +997,7 @@ msgstr "Batalkan"
 msgid "Confirm"
 msgstr "Konfirmasi"
 
-msgid "Accounts Elsewhere"
+msgid "Linked Accounts"
 msgstr ""
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
@@ -1277,6 +1277,9 @@ msgstr "Repositori/Tempat penyimpanan"
 msgid "Social Networks"
 msgstr "Jaringan sosial"
 
+msgid "Profile"
+msgstr "Profil"
+
 msgid "Name"
 msgstr "Nama"
 
@@ -1295,6 +1298,33 @@ msgstr "Pernyataan"
 msgid "Privacy"
 msgstr "Pribadi/Rahasia"
 
+msgid "Giving"
+msgstr "Memberi"
+
+msgid "Receiving"
+msgstr "Menerima"
+
+msgid "Ledger"
+msgstr "Buku kas"
+
+msgid "Payment Processors"
+msgstr "Pemroses Pembayaran"
+
+msgid "Identity"
+msgstr "Identitas"
+
+msgid "Account"
+msgstr "Akun"
+
+msgid "Emails"
+msgstr "Email"
+
+msgid "Notifications"
+msgstr "Notifikasi"
+
+msgid "Widgets"
+msgstr "Widget"
+
 msgid "Switch to another language"
 msgstr "Ubah ke bahasa lain"
 
@@ -1305,41 +1335,11 @@ msgstr "({x_percent} diterjemahkan)"
 msgid "Help us translate Liberapay"
 msgstr "Bantu kami menerjemahkan Liberapay"
 
-msgid "Profile"
-msgstr "Profil"
-
-msgid "Giving"
-msgstr "Memberi"
-
-msgid "Receiving"
-msgstr "Menerima"
-
-msgid "Ledger"
-msgstr "Buku kas"
-
 msgid "Wallet"
 msgstr "Dompet"
 
 msgid "Emptying your wallet"
 msgstr "Kosongkan dompet anda"
-
-msgid "Payment Processors"
-msgstr "Pemroses Pembayaran"
-
-msgid "Identity"
-msgstr "Identitas"
-
-msgid "Settings"
-msgstr "Pengaturan"
-
-msgid "Emails"
-msgstr "Email"
-
-msgid "Widgets"
-msgstr "Widget"
-
-msgid "Notifications"
-msgstr "Notifikasi"
 
 msgid "Create a new community"
 msgstr "Buat komunitas baru"
@@ -1459,12 +1459,6 @@ msgstr "Penjamin"
 msgid "Sum"
 msgstr "Jumlah"
 
-msgid "View"
-msgstr "Dilihat"
-
-msgid "The changes have been saved."
-msgstr "Perubahan telah tersimpan."
-
 #, fuzzy, python-brace-format
 msgid "Goal: {0}"
 msgstr "Tujuan: {0}"
@@ -1555,6 +1549,12 @@ msgstr "Anda berada dalam mode sandbox, jangan lakukan input pembayaran atau dat
 
 msgid "Search Liberapay"
 msgstr ""
+
+msgid "Switch to a different account"
+msgstr ""
+
+msgid "The changes have been saved."
+msgstr "Perubahan telah tersimpan."
 
 msgid "Log In or Create Account"
 msgstr "Masuk atau buat akun"
@@ -2877,8 +2877,9 @@ msgstr "Kata sandi salah"
 msgid "Your password has been changed."
 msgstr "Kata sandi anda telah diubah."
 
-msgid "Account"
-msgstr "Akun"
+#, python-brace-format
+msgid "The ID number of your Liberapay account is {user_id}."
+msgstr ""
 
 msgid "Account type"
 msgstr "Jenis akun"
