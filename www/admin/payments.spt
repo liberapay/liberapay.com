@@ -69,7 +69,7 @@ title = "Payments Admin"
             <td class="text-center">{{ payment_method_icon(pi.payin_method) }}</td>
             <td class="text-right">{{ locale.format_money(pi.amount) }}</td>
             <td>
-                % for pt in pi.transfers
+                % for pt in pi.transfers or ()
                     → {{ locale.format_money(Money(**pt.amount)) }}
                     to <a href="/~{{ pt.recipient }}/">{{ pt.recipient_name }}</a>
                     % if pt.team
@@ -79,6 +79,8 @@ title = "Payments Admin"
                         ({{ locale.format_money(Money(**pt.unit_amount)) }}/{{ pt.period[:-2] }} × {{ pt.n_units }})
                     % endif
                     <br>
+                % else
+                    <code>{{ pi.transfers }}</code>
                 % endfor
             </td>
             <td class="text-{{ STATUS_MAP.get(pi.status, 'info') }}">{{ pi.status }}</td>
