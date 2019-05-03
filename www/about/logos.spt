@@ -1,3 +1,4 @@
+# coding: utf8
 [---]
 title = _("Logos")
 [---] text/html
@@ -5,54 +6,83 @@ title = _("Logos")
 
 % block content
 
-    <div class="section text-center">
-        <h1>{{ _(
-            "Liberapay logos"
-        ) }}</h1>
-        <br>
+    <p>{{ _(
+        "This page contains links to and information about the Liberapay logo. We "
+        "hope you'll find it especially useful if you're writing an article about "
+        "Liberapay or if you want to add custom links to your Liberapay profile "
+        "in your website."
+    ) }}</p>
 
-        <p>{{ _(
-            "Here are different logos you can use from Liberapay:"
-        ) }}</p>
-        <br>
+    <h3>{{ _("Description") }}</h3>
 
-        <div class="card card-narrow card-md text-center">
-            <p><img src="{{ website.asset('liberapay/icon-v2_yellow-r.svg') }}" height=200 width=200 /></p>
+    <p>{{ _(
+        "The Liberapay logo is composed of the two letters “lp”. It's usually "
+        "colored either white-on-yellow, black-on-yellow, or just black."
+    ) }}</p>
 
-            <p><a class="btn btn-lg" href="{{ website.asset('liberapay/logo_yellow.zip') }}">
-                {{ fontawesome('download') }}&nbsp; {{ _( "Download our yellow logo" ) }}
-            </a></p>
-            <p>{{ _(
-                "Available formats:"
-            ) }}</p>
-            <ul class="text-left">
-                <li>{{ _( "SVG") }}</li>
-                <li>{{ _( "PNG (200 x 200 pixels)") }}</li>
-            </ul>
-        </div>
+    <p>{{ _(
+        "The Liberapay yellow is {yellow_color_code}, the black is {black_color_code}.",
+        yellow_color_code='<code class="gray">#f6c915</code>'|safe,
+        black_color_code='<code class="gray">#1a171b</code>'|safe,
+    ) }}</p>
 
-        <div class="card card-narrow card-md text-center">
-            <p><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}" height=200 width=200 /></p>
+    <h3>{{ _("Legal information") }}</h3>
 
-            <p><a class="btn btn-lg" href="{{ website.asset('liberapay/logo_black.zip') }}">
-                {{ fontawesome('download') }}&nbsp; {{ _( "Download our black logo" ) }}
-            </a></p>
-            <p>{{ _(
-                "Available formats:"
-            ) }}</p>
-            <ul class="text-left">
-                <li>{{ _( "SVG") }}</li>
-                <li>{{ _( "PNG (200 x 200 pixels)") }}</li>
-            </ul>
-        </div>
+    <p>{{ _(
+        "The Liberapay logo is pretty much free of copyright thanks to {CC0_link_start}the "
+        "CC0 Public Domain Dedication{link_end}, so you are allowed to distribute "
+        "it and modify it without asking our permission. However, the Liberapay "
+        "logo is part of the Liberapay trademark, so you can't use it to represent "
+        "your own products.",
+        CC0_link_start='<a href="https://creativecommons.org/publicdomain/zero/1.0/">'|safe,
+        link_end='</a>'|safe,
+    ) }}</p>
 
-        <p>{{ _(
-            "You can also link directly to our {0}Github repository{1}.",
-            '<a href="https://github.com/liberapay/liberapay.com/tree/master/www/assets/liberapay">'|safe,
-            '</a>'|safe
-        ) }}</p>
+    <h3>{{ _("Download") }}</h3>
 
-        <p>Copyright Liberapay &reg; 2019</p>
+    <p>{{ _(
+        "You can view and download our logos below or {link_start}on GitHub{link_end}.",
+        link_start='<a href="https://github.com/liberapay/liberapay.com/tree/master/www/assets/liberapay">'|safe,
+        link_end='</a>'|safe
+    ) }}</p>
+
+    <div class="card text-center">
+        <p><img src="{{ website.asset('liberapay/icon-v2_white-on-yellow.svg') }}" height=150 /></p>
+
+        <p><a class="btn-lg" href="{{ website.asset('liberapay/icon-v2_white-on-yellow.zip') }}">
+            {{ fontawesome('download') }} {{ _("Download the white-on-yellow pack") }}
+        </a></p>
+        <p>{{ _("This pack contains the SVG and a PNG ({x_y} pixels).", x_y="200×200") }}</p>
     </div>
+
+    <div class="card text-center">
+        <p><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}" height=150 /></p>
+
+        <p><a class="btn-lg" href="{{ website.asset('liberapay/icon-v2_black.zip') }}">
+            {{ fontawesome('download') }} {{ _("Download the black pack") }}
+        </a></p>
+        <p>{{ _("This pack contains the SVG and a PNG ({x_y} pixels).", x_y="200×200") }}</p>
+    </div>
+
+    <br>
+    <div class="card text-center">
+        <p><img src="{{ website.asset('liberapay/logo-v2_black-on-yellow.svg') }}" height=150 /></p>
+
+        <p><a class="btn-lg" href="{{ website.asset('liberapay/logo-v2_black-on-yellow.zip') }}">
+            {{ fontawesome('download') }} {{ _("Download the black-on-yellow pack") }}
+        </a></p>
+        <p>{{ _("This pack contains the SVG and a PNG ({x_y} pixels).", x_y="1024×448") }}</p>
+    </div>
+
+    <h3>{{ _("Fonts") }}</h3>
+
+    <p>{{ _(
+        "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} "
+        "font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}.",
+        fa_link_start='<a href="https://forkaweso.me/Fork-Awesome/">'|safe,
+        fa_liberapay_link='<a href="https://forkaweso.me/Fork-Awesome/icon/liberapay/"><code class="gray">liberapay</code></a>'|safe,
+        fa_liberapay_square_link='<a href="https://forkaweso.me/Fork-Awesome/icon/liberapay-square/"><code class="gray">liberapay-square</code></a>'|safe,
+        link_end='</a>'|safe,
+    ) }}</p>
 
 % endblock
