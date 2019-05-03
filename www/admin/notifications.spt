@@ -1,0 +1,67 @@
+# coding: utf8
+
+from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import LOCALE_EN as locale
+
+PAGE_SIZE = 50
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+notifications = website.db.all("""
+    SELECT id, participant, event, is_new, ts, email, web, email_sent, idem_key
+      FROM notifications
+     WHERE coalesce(id < %s, true)
+  ORDER BY id DESC
+     LIMIT %s
+""", (request.qs.get('before'), PAGE_SIZE))
+
+title = "Notifications Overview"
+
+[---] text/html
+% extends "templates/admin.html"
+
+% block content
+
+% if notifications
+    <table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Creation time (UTC)</th>
+            <th>Recipient</th>
+            <th>Event</th>
+            <th class="text-center">Marked as read?</th>
+            <th class="text-center">Email sent?</th>
+            <th class="text-right">Idempotency key</th>
+        </tr>
+    </thead>
+    <tbody>
+    % for notif in notifications
+        <tr>
+            <td>{{ notif.id }}</td>
+            <td>{{ notif.ts.replace(microsecond=0, tzinfo=None) }}</td>
+            <td><a href="/~{{ notif.participant }}/notifications">~{{ notif.participant }}</a></td>
+            <td>{{ notif.event }}</td>
+            <td class="text-center">{{ "No" if notif.is_new else "Yes" if notif.web else "n/a" }}</td>
+            <td class="text-center {{ 'danger text-danger' if notif.email and notif.email_sent == False else '' }}">{{
+                "Yes" if notif.email_sent else "No" if notif.email else "n/a"
+            }}</td>
+            <td class="text-right">{{ notif.idem_key or '' }}</td>
+        </tr>
+    % endfor
+    </tbody>
+    </table>
+    % if len(notifications) == PAGE_SIZE
+        <a class="btn btn-primary" href="{{ request.qs.derive(before=notifications[-1].id) }}">Next page →</a>
+    % endif
+% else
+    <p>No notifications to show.</p>
+% endif
+
+% endblock

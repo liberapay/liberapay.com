@@ -44,6 +44,9 @@
     &.nav-left > .nav-col {
         margin-right: 22px;
     }
+    &.nav-right > .nav-col {
+        margin-left: 22px;
+    }
 }
 
 .nav-tabs-left {
@@ -82,10 +85,10 @@
 .nav-aside {
     border: 1px solid $nav-tabs-border-color;
     border-radius: 8px;
-    padding-bottom: 8px;
+    padding: 8px 0;
     & > .header {
         border-bottom: 1px dotted $nav-tabs-border-color;
-        margin: 0 0 8px;
+        margin: -8px 0 8px;
         text-align: center;
         h1 {
             font-size: $font-size-base;

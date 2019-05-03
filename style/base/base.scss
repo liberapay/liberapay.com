@@ -403,7 +403,8 @@ input.search {
 
 .user-admin {
     border-bottom: 1px solid #ddd;
-    padding-bottom: 1em;
+    margin: 0 0;
+    padding: 0 0 1em;
 }
 .mini-user-admin {
     text-align: center;
@@ -752,18 +753,6 @@ table.team {
     }
 }
 
-.table td > form > input.form-control {
-    height: 30px;
-    margin: -7px 0;
-    padding: 4px 8px;
-}
-
-.table-condensed td > form > input.form-control {
-    height: 28px;
-    margin: -4px 0;
-    padding: 2px 5px;
-}
-
 p.event {
     margin-bottom: 0.5em;
 }
@@ -995,6 +984,7 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
     background: transparent;
     border: none;
     color: $link-color;
+    padding: 0;
     &:hover {
         color: $link-hover-color;
         text-decoration: $link-hover-decoration;
@@ -1006,4 +996,9 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
     font-weight: bold;
     text-align: center;
     width: 2ex;
+}
+
+code.gray {
+    background-color: rgba(27,31,35,.05);
+    color: inherit;
 }
