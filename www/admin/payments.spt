@@ -87,8 +87,8 @@ title = "Payments Admin"
         </tr>
         % if pi.error
         <tr class="subrow">
-            <td colspan="5"></td>
-            <td colspan="2">Error: <code>{{ pi.error }}</code></td>
+            <td></td>
+            <td colspan="6" class="text-right">Error: <code>{{ pi.error }}</code></td>
         </tr>
         % endif
     % endfor
