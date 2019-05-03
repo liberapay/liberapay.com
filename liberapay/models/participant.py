@@ -2162,7 +2162,7 @@ class Participant(Model, MixinTeam):
     def _zero_tip_dict(tippee, currency=None):
         if not isinstance(tippee, Participant):
             tippee = Participant.from_id(tippee)
-        if not currency or currency not in tippee.accepted_currencies_set:
+        if currency is i18n.DEFAULT_CURRENCY or currency not in tippee.accepted_currencies_set:
             currency = tippee.main_currency
         zero = Money.ZEROS[currency]
         return dict(amount=zero, is_funded=False, tippee=tippee.id,

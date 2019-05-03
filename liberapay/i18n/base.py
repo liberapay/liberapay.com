@@ -460,6 +460,16 @@ def add_helpers_to_context(context, loc):
     )
 
 
+class DefaultString(str):
+    __slots__ = ()
+
+    def __bool__(self):
+        return False
+
+
+DEFAULT_CURRENCY = DefaultString('EUR')
+
+
 def add_currency_to_state(request, user):
     qs_currency = request.qs.get('currency')
     if qs_currency in CURRENCIES:
@@ -470,4 +480,4 @@ def add_currency_to_state(request, user):
     if user:
         return {'currency': user.main_currency}
     else:
-        return {'currency': CURRENCIES_MAP.get(request.country) or 'EUR'}
+        return {'currency': CURRENCIES_MAP.get(request.country) or DEFAULT_CURRENCY}

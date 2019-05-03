@@ -1,5 +1,5 @@
 from liberapay.exceptions import AmbiguousNumber, InvalidNumber
-from liberapay.i18n.base import CURRENCIES_MAP, LOCALE_EN, Money
+from liberapay.i18n.base import CURRENCIES_MAP, DEFAULT_CURRENCY, LOCALE_EN, Money
 from liberapay.testing import Harness
 
 
@@ -21,7 +21,7 @@ class Tests(Harness):
 
     def test_state_currency(self):
         state = self.client.GET('/', want='state')
-        assert state['currency'] == 'EUR'
+        assert state['currency'] is DEFAULT_CURRENCY
         state = self.client.GET('/', HTTP_CF_IPCOUNTRY='CH', want='state')
         assert state['currency'] == 'CHF'
         state = self.client.GET('/', HTTP_CF_IPCOUNTRY='US', want='state')
