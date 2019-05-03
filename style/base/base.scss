@@ -247,7 +247,7 @@ p.summary {
 }
 
 .inline-boxes {
-    margin-right: -22px;
+    width: 100%;
 }
 
 .inline-boxes > .inline-box {
@@ -259,6 +259,7 @@ p.summary {
 
 .profile-box-embedded {
     border-radius: 6px;
+    max-width: 320px;
     text-align: center;
     width: 320px;
     .platform-icon {
@@ -302,7 +303,7 @@ p.summary {
 
 .repo {
     text-align: left;
-    width: 450px;
+    width: 100%;
     & > .panel {
         border-radius: 6px;
     }
@@ -325,22 +326,25 @@ p.summary {
     }
 }
 
-@media (max-width: $screen-md-min - 1) {
-    .inline-box.repo {
+@media (max-width: $screen-xs-min - 1) {
+    .inline-boxes > .inline-box {
         display: block;
-        margin-right: 22px;
+        margin-right: 0;
         width: auto;
         & > .panel {
             margin-left: auto;
             margin-right: auto;
-            max-width: 450px;
+            & > .panel-body {
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
     }
 }
 
-@media (min-width: $screen-md-min) {
+@media (min-width: $screen-sm-min) {
     .inline-box.repo {
-        width: 550px;
+        width: 540px;
     }
 }
 
@@ -867,14 +871,6 @@ span.help-title {
         }
         .profile-goal-bar {
             margin: auto;
-        }
-    }
-    .profile-box-embedded {
-        max-width: 100%;
-        min-width: 250px;
-        width: auto;
-        & > .panel-body {
-            max-width: 320px;
         }
     }
 }
