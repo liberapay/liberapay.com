@@ -35,6 +35,7 @@ from liberapay.exceptions import (
     BadDonationCurrency,
     BadPasswordSize,
     CannotRemovePrimaryEmail,
+    DuplicateNotification,
     EmailAddressIsBlacklisted,
     EmailAlreadyAttachedToSelf,
     EmailAlreadyTaken,
@@ -1180,7 +1181,8 @@ class Participant(Model, MixinTeam):
                AND ( idem_key = %(idem_key)s OR
                      ts::date = current_date AND context = %(context)s )
         """, locals())
-        assert n == 0
+        if n > 0:
+            raise DuplicateNotification()
         # Okay, add the notification to the queue
         n_id = self.db.one("""
             INSERT INTO notifications
