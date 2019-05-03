@@ -290,11 +290,20 @@ COUNTRY_CODES = """
 
 COUNTRIES = make_sorted_dict(COUNTRY_CODES, Locale('en').territories)
 
-CURRENCIES_MAP = {
-    k: v[-1][0]
-    for k, v in babel.core.get_global('territory_currencies').items()
-    if v[-1][0] in CURRENCIES
-}
+CURRENCIES_MAP = {}
+today = utcnow().date()
+for country, currencies in babel.core.get_global('territory_currencies').items():
+    for currency, start_date, end_date, tender in currencies:
+        if currency not in CURRENCIES:
+            continue
+        if start_date:
+            start_date = date(*start_date)
+        if end_date:
+            end_date = date(*end_date)
+        if (start_date is None or start_date <= today) and (end_date is None or end_date >= today):
+            assert country not in CURRENCIES_MAP
+            CURRENCIES_MAP[country] = currency
+del today
 
 LANGUAGE_CODES_2 = """
     aa af ak am ar as az be bg bm bn bo br bs ca cs cy da de dz ee el en eo es
