@@ -477,3 +477,7 @@ class PaymentError(LazyResponseXXX):
             "and contact support@liberapay.com if the problem persists.",
             name=self.args[0]
         )
+
+
+class DuplicateNotification(Exception):
+    pass

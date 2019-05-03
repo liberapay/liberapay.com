@@ -10,7 +10,7 @@ from jinja2 import Environment
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
-    BadEmailAddress, BadEmailDomain, EmailAddressIsBlacklisted,
+    BadEmailAddress, BadEmailDomain, DuplicateNotification, EmailAddressIsBlacklisted,
 )
 from liberapay.website import website, JINJA_ENV_COMMON
 
@@ -175,6 +175,9 @@ def _handle_ses_notification(msg):
                AND (p.email IS NULL OR lower(p.email) = lower(e.address))
         """, (address,))
         for p in participants:
-            p.notify('email_blacklisted', email=False, web=True, type='warning',
-                     blacklisted_address=address, reason=r.reason)
+            try:
+                p.notify('email_blacklisted', email=False, web=True, type='warning',
+                         blacklisted_address=address, reason=r.reason)
+            except DuplicateNotification:
+                continue
     msg.delete()
