@@ -1,0 +1,23 @@
+from pprint import pformat
+
+from liberapay.exceptions import LoginRequired
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+title = "Debugging"
+
+[---] text/html
+% extends "templates/admin.html"
+
+% block content
+
+    request:
+    <pre class="pre-wrap">{{ pformat(request.__dict__) }}</pre>
+
+% endblock
