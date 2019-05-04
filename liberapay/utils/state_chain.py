@@ -15,7 +15,7 @@ from . import urlquote
 
 
 def attach_environ_to_request(environ, request):
-    request.country = request.headers.get('CF-IPCountry')
+    request.country = request.headers.get(b'Cf-Ipcountry', b'').decode() or None
     request.environ = environ
 
 

@@ -1,9 +1,38 @@
 from liberapay.exceptions import AmbiguousNumber, InvalidNumber
-from liberapay.i18n.base import LOCALE_EN, Money
+from liberapay.i18n.base import CURRENCIES_MAP, DEFAULT_CURRENCY, LOCALE_EN, Money
 from liberapay.testing import Harness
 
 
 class Tests(Harness):
+
+    def test_currencies_map(self):
+        assert CURRENCIES_MAP['BR'] == 'BRL'
+        assert CURRENCIES_MAP['CH'] == 'CHF'
+        assert CURRENCIES_MAP['DE'] == 'EUR'
+        assert CURRENCIES_MAP['JP'] == 'JPY'
+        assert CURRENCIES_MAP['US'] == 'USD'
+        assert CURRENCIES_MAP['ZA'] == 'ZAR'
+
+    def test_request_country(self):
+        request = self.client.GET('/', want='request')
+        assert request.country is None
+        request = self.client.GET('/', HTTP_CF_IPCOUNTRY='US', want='request')
+        assert request.country == 'US'
+
+    def test_state_currency(self):
+        state = self.client.GET('/', want='state')
+        assert state['currency'] is DEFAULT_CURRENCY
+        state = self.client.GET('/', HTTP_CF_IPCOUNTRY='CH', want='state')
+        assert state['currency'] == 'CHF'
+        state = self.client.GET('/', HTTP_CF_IPCOUNTRY='US', want='state')
+        assert state['currency'] == 'USD'
+
+    def test_default_donation_currency(self):
+        alice = self.make_participant('alice', main_currency='KRW', accepted_currencies=None)
+        self.add_payment_account(alice, 'stripe', 'KR')
+        self.add_payment_account(alice, 'paypal', 'KR')
+        r = self.client.GET('/alice/donate')
+        assert '<input type="hidden" name="currency" value="KRW" />' in r.text, r.text
 
     def test_format_currency_without_trailing_zeroes(self):
         expected = '$16'
