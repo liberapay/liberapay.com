@@ -48,30 +48,33 @@ title = _("Logos")
 
     <div class="card text-center">
         <p><img src="{{ website.asset('liberapay/icon-v2_white-on-yellow.svg') }}" height=150 /></p>
-
-        <p><a class="btn-lg" href="/assets/liberapay/icon-v2_white-on-yellow.zip?save_as=liberapay_logo_white-on-yellow.zip">
-            {{ fontawesome('download') }} {{ _("Download the white-on-yellow pack") }}
+        <p><a href="/assets/liberapay/icon-v2_white-on-yellow.svg?save_as=liberapay_logo_white-on-yellow.svg">
+            {{ fontawesome('download') }} {{ _("Download the white-on-yellow SVG") }}
         </a></p>
-        <p>{{ _("This pack contains the SVG and a PNG ({x_y} pixels).", x_y="200×200") }}</p>
+        <p><a href="/assets/liberapay/icon-v2_white-on-yellow.200.png?save_as=liberapay_logo_white-on-yellow_200px.png">
+            {{ fontawesome('download') }} {{ _("Download the white-on-yellow PNG ({x_y} pixels)", x_y="200×200") }}
+        </a></p>
     </div>
 
     <div class="card text-center">
         <p><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}" height=150 /></p>
-
-        <p><a class="btn-lg" href="/assets/liberapay/icon-v2_black.zip?save_as=liberapay_logo_black.zip">
-            {{ fontawesome('download') }} {{ _("Download the black pack") }}
+        <p><a href="/assets/liberapay/icon-v2_black.svg?save_as=liberapay_logo_black.svg">
+            {{ fontawesome('download') }} {{ _("Download the black SVG") }}
         </a></p>
-        <p>{{ _("This pack contains the SVG and a PNG ({x_y} pixels).", x_y="200×200") }}</p>
+        <p><a href="/assets/liberapay/icon-v2_black.200.png?save_as=liberapay_logo_black_200px.png">
+            {{ fontawesome('download') }} {{ _("Download the black PNG ({x_y} pixels)", x_y="200×200") }}
+        </a></p>
     </div>
 
     <br>
     <div class="card text-center">
         <p><img src="{{ website.asset('liberapay/logo-v2_black-on-yellow.svg') }}" height=150 /></p>
-
-        <p><a class="btn-lg" href="/assets/liberapay/logo-v2_black-on-yellow.zip?save_as=liberapay_logo_black-on-yellow.zip">
-            {{ fontawesome('download') }} {{ _("Download the black-on-yellow pack") }}
+        <p><a href="/assets/liberapay/logo-v2_black-on-yellow.svg?save_as=liberapay_logo_black-on-yellow.svg">
+            {{ fontawesome('download') }} {{ _("Download the black-on-yellow SVG") }}
         </a></p>
-        <p>{{ _("This pack contains the SVG and a PNG ({x_y} pixels).", x_y="1024×448") }}</p>
+        <p><a href="/assets/liberapay/logo-v2_black-on-yellow.1024.png?save_as=liberapay_logo_black-on-yellow_1024px.png">
+            {{ fontawesome('download') }} {{ _("Download the black-on-yellow PNG ({x_y} pixels)", x_y="1024×448") }}
+        </a></p>
     </div>
 
     <h3>{{ _("Fonts") }}</h3>
