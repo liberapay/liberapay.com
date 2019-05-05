@@ -44,35 +44,15 @@
 ) }}</div>
 % endif
 
-    <nav class="navbar navbar-liberapay navbar-static-top navbar-collapse"
+    <nav class="navbar navbar-expand-md navbar-liberapay"
          id="navbar">
         <div class="container">
-            <ul class="nav navbar-nav pull-right navbar-always">
-                <li class="collapsed">
-                    <a role="button" class="collapsed" data-toggle="collapse"
-                       data-target="#navbar-liberapay-collapse" data-parent="#navbar"
-                       aria-expanded="false">
-                        <span class="sr-only">{{ _("Toggle navigation") }}</span>
-                        {{ glyphicon('menu-hamburger') }}
-                    </a>
-                </li>
-                % block navbar_alternates
-                % include "templates/layouts/components/navbar-common.html"
-                % endblock
-            % if user
-                % include "templates/layouts/components/navbar-logged-in.html"
-            % elif response.html_template != 'templates/exceptions/AuthRequired.html' and not no_navbar_sign_in
-                % from "templates/macros/sign-in-link.html" import sign_in_link with context
-                <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
-            % endif
-            </ul>
-            <div class="collapse navbar-collapse navbar-left" id="navbar-liberapay-collapse">
-            <ul class="nav navbar-nav">
+            <ul class="navbar-nav collapse navbar-collapse" id="navbar-liberapay-collapse">
                 % if page_id != 'homepage'
-                <li class="hidden-xs">
-                    <a class="navbar-brand" href="/">{{ fontawesome('liberapay', _("Homepage")) }}</a></li>
-                <li class="visible-xs">
-                    <a href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
+                <li class="nav-item d-none d-md-block">
+                    <a class="nav-link logo" href="/">{{ fontawesome('liberapay', _("Homepage")) }}</a></li>
+                <li class="nav-item d-md-none">
+                    <a class="nav-link" href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
                 % endif
                 {{ nav([
                     ('/explore/', _('Explore'), {
@@ -91,7 +71,25 @@
                     }),
                 ]) }}
             </ul>
-            </div>
+            <ul class="navbar-nav navbar-always">
+                <li class="nav-item collapsed">
+                    <a role="button" class="collapsed" data-toggle="collapse"
+                       data-target="#navbar-liberapay-collapse" data-parent="#navbar"
+                       aria-expanded="false">
+                        <span class="sr-only">{{ _("Toggle navigation") }}</span>
+                        {{ glyphicon('menu-hamburger') }}
+                    </a>
+                </li>
+                % block navbar_alternates
+                % include "templates/layouts/components/navbar-common.html"
+                % endblock
+            % if user
+                % include "templates/layouts/components/navbar-logged-in.html"
+            % elif response.html_template != 'templates/exceptions/AuthRequired.html' and not no_navbar_sign_in
+                % from "templates/macros/sign-in-link.html" import sign_in_link with context
+                <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
+            % endif
+            </ul>
         </div>
     </nav>
 

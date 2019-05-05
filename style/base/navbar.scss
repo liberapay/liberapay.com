@@ -11,12 +11,18 @@
     background: #f6c915;
     border: none;
     color: #1a171b;
+    padding: 0 1ex;
 
-    .navbar-nav li {
-        & > a, .navbar-btn {
+    & > .container {
+        justify-content: space-between;
+        padding: 0;
+    }
+    .nav-item {
+        a, .nav-link {
             background: transparent;
             border: none;
             color: inherit;
+            padding: 0.75rem 0.8rem;
             &:hover, &:active, &:focus {
                 background: #444;
                 color: #f9f9f9;
@@ -32,7 +38,7 @@
             }
         }
         &.active {
-            & > a, .navbar-btn {
+            > a, > .dropdown > .nav-link {
                 background: #444;
                 color: #f9f9f9;
                 img {
@@ -45,16 +51,18 @@
         }
         &.divider {
             background: #666;
-        }
-        .navbar-btn {
-            margin: 0;
-            padding: $navbar-padding-y $navbar-padding-x;
+            height: 1px;
+            margin: 0.33em 0;
         }
         .dropdown-menu {
             background-color: #f6c915;
             border: none;
             border-radius: 0;
-            position: absolute;
+            max-width: 50vw;
+            width: max-content;
+            & > .nav-item > .nav-link {
+                padding: 0.33em 1ex;
+            }
             & > .level2 > a {
                 padding-left: 30px;
             }
@@ -73,22 +81,15 @@
             border-top-right-radius: 0;
         }
     }
-
-    .container .navbar-brand {
-        margin-left: 0;
+    .navbar-nav {
+        min-width: 0;  // allow shrinking below the default miminum size
     }
-    .navbar-brand {
-        & > img {
-            border-radius: 4px;
-            color: #000;
-            height: $font-size-base * 2;
-            line-height: $font-size-base * 2;
-            margin-top: -$font-size-base / 3;
-        }
-        & > .fa-liberapay {
-            font-size: $font-size-base * 2;
-            line-height: $font-size-base * 2;
-            margin-top: -$font-size-base / 3;
+    .nav-link.logo {
+        padding: 0;
+        .fa-liberapay {
+            font-size: 2rem;
+            line-height: 2.375rem;
+            padding: 0.25rem 1rem;
         }
     }
 }
@@ -107,42 +108,75 @@
     display: none;
 }
 
+.navbar-nav.navbar-always {
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    width: 100%;
+}
+
 @include media-breakpoint-down(md) {
     .navbar > .container {
+        max-width: 100%;
         position: relative;
     }
+}
+@include media-breakpoint-down(sm) {
     .navbar-nav > li.collapsed {
-        display: inline-block;
+        display: block;
     }
-    .navbar .navbar-nav.navbar-always {
-        display: table;
-        width: 100%;
-        & > li {
-            display: table-cell;
+    .navbar-nav .nav-item .dropdown-menu {
+        max-width: 98vw;
+    }
+    .navbar-nav.navbar-always {
+        position: static;
+        & > .nav-item {
+            position: static;
             text-align: center;
             vertical-align: top;
             & > a, & > button {
                 display: inline-block;
             }
-            &.dropdown {
-                position: static;
-            }
-            .dropdown-menu {
+            & > .dropdown-menu {
                 left: 0;
+                max-width: unset;
+                position: absolute;
                 right: 0;
+                width: unset;
             }
         }
     }
     .navbar-always > li {
-        span.text, span.caret {
+        span.text, .dropdown-toggle::after {
             display: none;
         }
     }
     .navbar-collapse > .navbar-nav {
         background-color: #f6c915;
         color: #1a171b;
-        > li .dropdown-menu {
+        > .nav-item .dropdown-menu {
             position: static;
+        }
+    }
+}
+@include media-breakpoint-up(md) {
+    .navbar-nav > .nav-item {
+        min-width: 3rem;
+        > .nav-link, > * > .nav-link {
+            align-items: baseline;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+            height: 2.875rem;
+            min-width: 3rem;
+            overflow: hidden;
+            text-align: center;
+            > span {
+                flex-grow: 1;
+                height: 2rem;
+            }
+            > span:first-child + span {
+                margin-left: 0.75ex;
+            }
         }
     }
 }
