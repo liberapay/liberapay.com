@@ -1,0 +1,91 @@
+# coding: utf8
+[---]
+title = _("Logos")
+[---] text/html
+% extends "templates/about.html"
+
+% block content
+
+    <p>{{ _(
+        "This page contains links to and information about the Liberapay logo. We "
+        "hope you'll find it especially useful if you're writing an article about "
+        "Liberapay or if you want to add custom links to your Liberapay profile "
+        "in your website."
+    ) }}</p>
+
+    <h3>{{ _("Description") }}</h3>
+
+    <p>{{ _(
+        "The Liberapay logo is composed of the two letters “lp”. It's usually "
+        "colored either white-on-yellow, black-on-yellow, or just black."
+    ) }}</p>
+
+    <p>{{ _(
+        "The Liberapay yellow is {yellow_color_code}, the black is {black_color_code}.",
+        yellow_color_code='<code class="gray">#f6c915</code>'|safe,
+        black_color_code='<code class="gray">#1a171b</code>'|safe,
+    ) }}</p>
+
+    <h3>{{ _("Legal information") }}</h3>
+
+    <p>{{ _(
+        "The Liberapay logo is pretty much free of copyright thanks to {CC0_link_start}the "
+        "CC0 Public Domain Dedication{link_end}, so you are allowed to distribute "
+        "it and modify it without asking our permission. However, the Liberapay "
+        "logo is part of the Liberapay trademark, so you can't use it to represent "
+        "your own products.",
+        CC0_link_start='<a href="https://creativecommons.org/publicdomain/zero/1.0/">'|safe,
+        link_end='</a>'|safe,
+    ) }}</p>
+
+    <h3>{{ _("Download") }}</h3>
+
+    <p>{{ _(
+        "You can view and download our logos below or {link_start}on GitHub{link_end}.",
+        link_start='<a href="https://github.com/liberapay/liberapay.com/tree/master/www/assets/liberapay">'|safe,
+        link_end='</a>'|safe
+    ) }}</p>
+
+    <div class="card text-center">
+        <p><img src="{{ website.asset('liberapay/icon-v2_white-on-yellow.svg') }}" height=150 /></p>
+        <p><a href="/assets/liberapay/icon-v2_white-on-yellow.svg?save_as=liberapay_logo_white-on-yellow.svg">
+            {{ fontawesome('download') }} {{ _("Download the white-on-yellow SVG") }}
+        </a></p>
+        <p><a href="/assets/liberapay/icon-v2_white-on-yellow.200.png?save_as=liberapay_logo_white-on-yellow_200px.png">
+            {{ fontawesome('download') }} {{ _("Download the white-on-yellow PNG ({x_y} pixels)", x_y="200×200") }}
+        </a></p>
+    </div>
+
+    <div class="card text-center">
+        <p><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}" height=150 /></p>
+        <p><a href="/assets/liberapay/icon-v2_black.svg?save_as=liberapay_logo_black.svg">
+            {{ fontawesome('download') }} {{ _("Download the black SVG") }}
+        </a></p>
+        <p><a href="/assets/liberapay/icon-v2_black.200.png?save_as=liberapay_logo_black_200px.png">
+            {{ fontawesome('download') }} {{ _("Download the black PNG ({x_y} pixels)", x_y="200×200") }}
+        </a></p>
+    </div>
+
+    <br>
+    <div class="card text-center">
+        <p><img src="{{ website.asset('liberapay/logo-v2_black-on-yellow.svg') }}" height=150 /></p>
+        <p><a href="/assets/liberapay/logo-v2_black-on-yellow.svg?save_as=liberapay_logo_black-on-yellow.svg">
+            {{ fontawesome('download') }} {{ _("Download the black-on-yellow SVG") }}
+        </a></p>
+        <p><a href="/assets/liberapay/logo-v2_black-on-yellow.1024.png?save_as=liberapay_logo_black-on-yellow_1024px.png">
+            {{ fontawesome('download') }} {{ _("Download the black-on-yellow PNG ({x_y} pixels)", x_y="1024×448") }}
+        </a></p>
+    </div>
+
+    <h3>{{ _("Fonts") }}</h3>
+
+    <p>{{ _(
+        "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} "
+        "font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}.",
+        fa_link_start='<a href="https://forkaweso.me/Fork-Awesome/">'|safe,
+        fa_liberapay_link='<a href="https://forkaweso.me/Fork-Awesome/icon/liberapay/"><code class="gray">liberapay</code></a>'|safe,
+        fa_liberapay_square_link='<a href="https://forkaweso.me/Fork-Awesome/icon/liberapay-square/"><code class="gray">liberapay-square</code></a>'|safe,
+        link_end='</a>'|safe,
+    ) }}</p>
+
+% endblock

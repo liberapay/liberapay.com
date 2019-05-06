@@ -153,6 +153,17 @@ def handle_negotiation_exception(exception):
     return {'response': response, 'exception': None}
 
 
+def add_content_disposition_header(request, response):
+    """Tell the browser if the response is meant to be saved into a file.
+
+    https://tools.ietf.org/html/rfc6266 and https://tools.ietf.org/html/rfc8187
+    """
+    save_as = request.qs.get('save_as')
+    if save_as:
+        save_as = urlquote(save_as, encoding='utf8').encode('ascii')
+        response.headers[b'Content-Disposition'] = b"attachment; filename*=UTF-8''" + save_as
+
+
 def merge_exception_into_response(state, exception, response=None):
     if response is None or not isinstance(exception, Response):
         return
