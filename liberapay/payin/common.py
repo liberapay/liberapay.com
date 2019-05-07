@@ -60,7 +60,7 @@ def update_payin(db, payin_id, remote_id, status, error,
             UPDATE payins
                SET status = %(status)s
                  , error = %(error)s
-                 , remote_id = %(remote_id)s
+                 , remote_id = coalesce(%(remote_id)s, remote_id)
                  , amount_settled = COALESCE(%(amount_settled)s, amount_settled)
                  , fee = COALESCE(%(fee)s, fee)
                  , intent_id = coalesce(%(intent_id)s, intent_id)
@@ -279,7 +279,7 @@ def update_payin_transfer(
             UPDATE payin_transfers
                SET status = %(status)s
                  , error = %(error)s
-                 , remote_id = %(remote_id)s
+                 , remote_id = coalesce(%(remote_id)s, remote_id)
                  , amount = COALESCE(%(amount)s, amount)
                  , fee = COALESCE(%(fee)s, fee)
              WHERE id = %(pt_id)s

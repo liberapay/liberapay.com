@@ -154,7 +154,7 @@ def capture_order(db, payin):
     response = _init_session().post(url, json={}, headers=headers)
     if response.status_code not in (200, 201):
         error = _extract_error_message(response)
-        return update_payin(db, payin.id, None, 'failed', error)
+        return update_payin(db, payin.id, payin.remote_id, 'failed', error)
     order = response.json()
     return record_order_result(db, payin, order)
 
@@ -327,7 +327,7 @@ def execute_payment(db, payin, payer_id):
     response = _init_session().post(url, json=data, headers=headers)
     if response.status_code != 200:
         error = _extract_error_message(response)
-        return update_payin(db, payin.id, None, 'failed', error)
+        return update_payin(db, payin.id, payin.remote_id, 'failed', error)
     payment = response.json()
     return record_payment_result(db, payin, payment)
 
