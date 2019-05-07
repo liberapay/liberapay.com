@@ -7,7 +7,8 @@ from math import floor
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import (
-    prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_destination
+    prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_destination,
+    abort_payin,
 )
 from liberapay.payin.paypal import (
     capture_order, create_order, execute_payment, sync_order, sync_payment
@@ -102,9 +103,9 @@ if payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     if payin.status == 'pre':
         return_url = payer.url('giving/pay/paypal/%i' % payin.id)
-        cancel_url = payer.url('giving/pay/paypal/%i' % payin.id)
+        cancel_url = payer.url('giving/pay/paypal/%i?cancel' % payin.id)
         payin = create_order(website.db, payin, payer, return_url, cancel_url, state)
-    elif payin.status == 'pending':
+    elif payin.status != 'succeeded':
         payer_id = request.qs.get('PayerID')
         if payin.remote_id.startswith('PAY-'):
             if payer_id:
@@ -116,6 +117,8 @@ if payin_id:
                 payin = capture_order(website.db, payin)
             else:
                 payin = sync_order(website.db, payin)
+    if payin.status == 'pending' and 'cancel' in request.qs:
+        payin = abort_payin(website.db, payin)
 
 tippees = request.qs.parse_list('beneficiary', int, default=None)
 if tippees:

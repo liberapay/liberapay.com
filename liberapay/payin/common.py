@@ -361,3 +361,32 @@ def update_payin_transfer(
             Participant.from_id(pt.payer).update_giving(cursor)
 
         return pt
+
+
+def abort_payin(db, payin, error='aborted by payer'):
+    """Mark a payin as cancelled.
+
+    Args:
+        payin (Record): a row from the `payins` table
+        error (str): the error message to attach to the payin
+
+    Returns:
+        Record: the row updated in the `payins` table
+
+    """
+    payin = update_payin(db, payin.id, payin.remote_id, 'failed', error)
+    db.run("""
+        WITH updated_transfers as (
+            UPDATE payin_transfers
+               SET status = 'failed'
+                 , error = %(error)s
+             WHERE payin = %(payin_id)s
+               AND status <> 'failed'
+         RETURNING *
+        )
+        INSERT INTO payin_transfer_events
+                    (payin_transfer, status, error, timestamp)
+             SELECT pt.id, 'failed', pt.error, current_timestamp
+               FROM updated_transfers pt
+    """, dict(error=error, payin_id=payin.id))
+    return payin
