@@ -70,13 +70,13 @@
         % if len(accepted_currencies) > 1
             <br>
             <p>{{ ngettext(
-                "Wrong currency? {n} other is supported:",
-                "Wrong currency? {n} others are supported:",
-                n=len(accepted_currencies) - 1, username=tippee_name
+                "The {currency_name} isn't your preferred currency? {n} other is supported:",
+                "The {currency_name} isn't your preferred currency? {n} others are supported:",
+                n=len(accepted_currencies) - 1, currency_name=Currency(new_currency)
             ) if tippee_is_stub else ngettext(
-                "Wrong currency? {username} also accepts {n} other:",
-                "Wrong currency? {username} also accepts {n} others:",
-                n=len(accepted_currencies) - 1, username=tippee_name
+                "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:",
+                "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:",
+                n=len(accepted_currencies) - 1, currency_name=Currency(new_currency), username=tippee_name
             ) }}</p>
             <form action="" method="GET" class="form-inline">
                 <select class="form-control" name="currency">
