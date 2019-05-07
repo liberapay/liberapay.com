@@ -132,7 +132,10 @@ class Locale(babel.core.Locale):
             for k, o in f(c):
                 o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
                 if isinstance(o, str):
-                    pass
+                    if isinstance(o, Country):
+                        c[k] = self.countries.get(o, o)
+                    elif isinstance(o, Currency):
+                        c[k] = self.currencies.get(o, o)
                 elif isinstance(o, (Decimal, int)):
                     c[k] = format_decimal(o, locale=self)
                 elif isinstance(o, Money):
@@ -148,10 +151,6 @@ class Locale(babel.core.Locale):
                         c[k] = format_date(o, locale=self)
                 elif isinstance(o, Locale):
                     c[k] = self.languages.get(o.language) or o.language.upper()
-                elif isinstance(o, Country):
-                    c[k] = self.countries.get(o, o)
-                elif isinstance(o, Currency):
-                    c[k] = self.currencies.get(o, o)
                 elif isinstance(o, list):
                     escape = getattr(s.__class__, 'escape', no_escape)
                     pattern = getattr(o, 'pattern', 'standard')
