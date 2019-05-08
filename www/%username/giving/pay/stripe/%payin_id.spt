@@ -317,7 +317,7 @@ if user == payer:
 # https://stripe.com/docs/security#content-security-policy
 csp = response.headers[b'Content-Security-Policy']
 csp = csp.allow(b'connect-src', b"api.stripe.com")
-csp = csp.allow(b'frame-src', b"js.stripe.com")
+csp = csp.allow(b'frame-src', b"js.stripe.com hooks.stripe.com")
 csp = csp.allow(b'script-src', b"js.stripe.com")
 response.headers[b'Content-Security-Policy'] = csp
 
