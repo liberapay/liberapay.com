@@ -132,32 +132,33 @@ class Locale(babel.core.Locale):
             for k, o in f(c):
                 o, wrapper = (o.value, o.wrapper) if isinstance(o, Wrap) else (o, None)
                 if isinstance(o, str):
-                    pass
+                    if isinstance(o, Country):
+                        o = self.countries.get(o, o)
+                    elif isinstance(o, Currency):
+                        o = self.currencies.get(o, o)
                 elif isinstance(o, (Decimal, int)):
-                    c[k] = format_decimal(o, locale=self)
+                    o = format_decimal(o, locale=self)
                 elif isinstance(o, Money):
-                    c[k] = self.format_money(o)
+                    o = self.format_money(o)
                 elif isinstance(o, MoneyBasket):
-                    c[k] = self.format_money_basket(o)
+                    o = self.format_money_basket(o)
                 elif isinstance(o, timedelta):
-                    c[k] = self.format_timedelta(o)
+                    o = self.format_timedelta(o)
                 elif isinstance(o, date):
                     if isinstance(o, datetime):
-                        c[k] = format_datetime(o, locale=self)
+                        o = format_datetime(o, locale=self)
                     else:
-                        c[k] = format_date(o, locale=self)
+                        o = format_date(o, locale=self)
                 elif isinstance(o, Locale):
-                    c[k] = self.languages.get(o.language) or o.language.upper()
-                elif isinstance(o, Country):
-                    c[k] = self.countries.get(o, o)
-                elif isinstance(o, Currency):
-                    c[k] = self.currencies.get(o, o)
+                    o = self.languages.get(o.language) or o.language.upper()
                 elif isinstance(o, list):
                     escape = getattr(s.__class__, 'escape', no_escape)
                     pattern = getattr(o, 'pattern', 'standard')
-                    c[k] = self.format_list(o, pattern, escape)
+                    o = self.format_list(o, pattern, escape)
                 if wrapper:
-                    c[k] = wrapper % (c[k],)
+                    c[k] = wrapper % (o,)
+                elif o is not c[k]:
+                    c[k] = o
         return s.format(*a, **kw)
 
     def format_money(self, m, format=None, trailing_zeroes=True):
