@@ -46,6 +46,7 @@ elif sys.argv[1] == 'fuzz':
     po_path = sys.argv[2]
     old_msg = sys.argv[3]
     new_msg = sys.argv[4]
+    new_msg_plural = sys.argv[5] if len(sys.argv) > 5 else None
     print('switching a message in PO file', po_path)
     # read PO file
     lang = po_path.rsplit('/', 1)[-1].split('.', 1)[0]
@@ -53,9 +54,13 @@ elif sys.argv[1] == 'fuzz':
         catalog = read_po(po, locale=lang)
     # replace old msg
     m = catalog.get(old_msg)
-    if m.string:
-        assert not isinstance(m.id, tuple)
-        m.id = new_msg
+    if any(m.string):
+        if new_msg_plural:
+            assert isinstance(m.id, tuple)
+            m.id = (new_msg, new_msg_plural)
+        else:
+            assert not isinstance(m.id, tuple)
+            m.id = new_msg
         m.flags.add('fuzzy')
         # write back
         with open(po_path, 'wb') as po:
