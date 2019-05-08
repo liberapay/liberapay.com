@@ -205,7 +205,7 @@ if participant.join_time:
         </td>
         <td class="amount">{{ locale.format_money(event['amount']) }}</td>
         <td class="fees">{{ locale.format_money(event['fee']) if event['fee'] else '' }}</td>
-        <td class="method">{{ payment_method_icon(event['payin_method']) if 'payin_method' in event else '' }}</td>
+        <td class="method">{{ payment_method_icon(event['payin_method']) if 'payer' in event else '' }}</td>
         % if show_id
         <td class="id">{{ event['id'] }}</td>
         % endif

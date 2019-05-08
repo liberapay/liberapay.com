@@ -463,7 +463,10 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
         SELECT tr.id, tr.ctime, tr.payin, tr.recipient, tr.context, tr.status, tr.error
              , tr.amount, tr.unit_amount, tr.n_units, tr.period
              , p.username AS recipient_username, p2.username AS team_name
+             , r.network AS payin_method
           FROM payin_transfers tr
+          JOIN payins pi ON pi.id = tr.payin
+          JOIN exchange_routes r ON r.id = pi.route
           JOIN participants p ON p.id = tr.recipient
      LEFT JOIN participants p2 ON p2.id = tr.team
          WHERE tr.payer = %(id)s
