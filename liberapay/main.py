@@ -256,6 +256,10 @@ if hasattr(aspen.http.mapping.Mapping, 'get_int'):
     raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
 aspen.http.mapping.Mapping.get_int = utils.get_int
 
+if hasattr(aspen.http.mapping.Mapping, 'get_choice'):
+    raise Warning('aspen.http.mapping.Mapping.get_choice() already exists')
+aspen.http.mapping.Mapping.get_choice = utils.get_choice
+
 if hasattr(aspen.http.mapping.Mapping, 'parse_date'):
     raise Warning('aspen.http.mapping.Mapping.parse_date() already exists')
 aspen.http.mapping.Mapping.parse_date = utils.parse_date
@@ -269,7 +273,10 @@ if hasattr(aspen.http.request.Querystring, 'derive'):
 def _Querystring_derive(self, **kw):
     new_qs = aspen.http.mapping.Mapping(self)
     for k, v in kw.items():
-        new_qs[k] = v
+        if v is None:
+            del new_qs[k]
+        else:
+            new_qs[k] = v
     return '?' + urlencode(new_qs, doseq=True)
 aspen.http.request.Querystring.derive = _Querystring_derive
 

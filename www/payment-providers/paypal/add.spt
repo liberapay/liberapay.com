@@ -1,4 +1,5 @@
 from liberapay.exceptions import LoginRequired
+from liberapay.utils.emails import check_email_blacklist, normalize_email_address
 
 [---]
 
@@ -12,9 +13,10 @@ if request.method == 'POST':
     country = body['country']
     if country not in locale.countries:
         raise response.invalid_input(country, 'country', 'body')
-    email_address = body['email']
+    email_address = normalize_email_address(body['email'])
     email = participant.get_email(email_address)
     if not (email and email.verified):
+        check_email_blacklist(email_address)
         participant.add_email(email_address)
     account_data = dict(
         p_id=participant.id, country=country, account_id=email_address,

@@ -475,6 +475,18 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None, maximum=None):
     return r
 
 
+def get_choice(d, k, choices, default=NO_DEFAULT):
+    try:
+        r = d[k]
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    if r not in choices:
+        raise Response().error(400, "`%s` value %r is invalid. Choices: %r" % (k, r, choices))
+    return r
+
+
 def parse_date(mapping, k, default=NO_DEFAULT, sep='-'):
     try:
         r = mapping[k]

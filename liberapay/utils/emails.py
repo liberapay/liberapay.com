@@ -15,8 +15,8 @@ from pando.utils import utcnow
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
-    BadEmailAddress, BadEmailDomain, DuplicateNotification, EmailAddressIsBlacklisted,
-    TooManyAttempts,
+    BadEmailAddress, BadEmailDomain, DuplicateNotification,
+    EmailAddressIsBlacklisted, EmailDomainIsBlacklisted, TooManyAttempts,
 )
 from liberapay.utils import deserialize
 from liberapay.website import website, JINJA_ENV_COMMON
@@ -107,8 +107,10 @@ def normalize_email_address(email):
     return email
 
 
-def check_email_blacklist(address):
-    """Raises `EmailAddressIsBlacklisted` if the given email address is blacklisted.
+def check_email_blacklist(address, check_domain=True):
+    """
+    Raises `EmailAddressIsBlacklisted` or `EmailDomainIsBlacklisted` if the
+    given email address or its domain is blacklisted.
     """
     r = website.db.one("""
         SELECT reason, ts, details, ses_data
@@ -120,6 +122,19 @@ def check_email_blacklist(address):
     """, (address,))
     if r:
         raise EmailAddressIsBlacklisted(address, r.reason, r.ts, r.details, r.ses_data)
+    if not check_domain:
+        return
+    domain = address[address.rfind('@')+1:]
+    r = website.db.one("""
+        SELECT reason, ts, details
+          FROM email_blacklist
+         WHERE lower(address) = '@' || lower(%s)
+           AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+      ORDER BY ts DESC
+         LIMIT 1
+    """, (domain,))
+    if r:
+        raise EmailDomainIsBlacklisted(domain, r.reason, r.ts, r.details)
 
 
 def get_bounce_message(reason, ses_data, details):
