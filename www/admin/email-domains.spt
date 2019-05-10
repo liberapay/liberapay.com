@@ -1,0 +1,77 @@
+# coding: utf8
+
+from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import LOCALE_EN as locale
+
+PAGE_SIZE = 50
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+offset = request.qs.get_int('offset', minimum=0, default=0)
+email_domains = website.db.all("""
+    SELECT *
+         , ( SELECT count(DISTINCT bl.address)
+               FROM email_blacklist bl
+              WHERE bl.address LIKE ('%%@' || d.domain)
+                AND bl.ignore_after IS NULL
+           ) AS n_blacklisted
+      FROM (
+        SELECT e.domain
+             , count(DISTINCT lower(e.address)) AS n_addresses
+             , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
+          FROM ( SELECT e.*, regexp_replace(lower(e.address), '.*@', '') AS domain
+                   FROM emails e
+               ) e
+      GROUP BY e.domain
+      ORDER BY n_addresses DESC, domain
+         LIMIT %s
+        OFFSET %s
+           ) d
+""", (PAGE_SIZE, offset))
+
+title = "Email Domains"
+
+[---] text/html
+% extends "templates/layouts/admin.html"
+
+% block content
+
+    % if email_domains
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th class="text-center">Connected addresses</th>
+                        <th class="text-center">Verified addresses</th>
+                        <th class="text-center">Blacklisted addresses</th>
+                    </tr>
+                <tbody>
+                % for d in email_domains
+                    <tr>
+                        <td><button class="link" name="domain" value="{{ d.domain }}">{{ d.domain }}</button></td>
+                        <td class="text-center">{{ d.n_addresses }}</td>
+                        % set percent_verified = d.n_verified / d.n_addresses
+                        <td class="text-center {{ 'danger' if percent_verified <= 0.2 else 'warning' if percent_verified <= 0.5 else '' }}">{{ d.n_verified }}</td>
+                        % set percent_blacklisted = d.n_blacklisted / d.n_addresses
+                        <td class="text-center {{ 'danger' if percent_blacklisted > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}">{{ d.n_blacklisted }}</td>
+                    </tr>
+                % endfor
+                </tbody>
+            </table>
+        </form>
+        % if len(email_domains) == PAGE_SIZE
+            <a class="btn btn-primary" href="{{ request.qs.derive(offset=offset + PAGE_SIZE) }}">Next page →</a>
+        % endif
+    % else
+        No email domains found.
+    % endif
+
+% endblock
