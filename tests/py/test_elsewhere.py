@@ -207,8 +207,14 @@ class TestElsewhere(EmailHarness):
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
 
-        # add a payment account and check again
+        # add a payment account and check again, but it's still too early
         self.add_payment_account(self.dan, 'stripe')
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 0
+
+        # simulate skipping one day ahead, now there should be a notification
+        self.db.run("UPDATE events SET ts = ts - interval '24 hours'")
         Participant.notify_patrons()
         Participant.dequeue_emails()
         assert self.mailer.call_count == 1
