@@ -205,6 +205,17 @@ class TestLogIn(EmailHarness):
         Participant.dequeue_emails()
         assert not self.get_emails()
 
+    def test_normal_session_cannot_be_escalated_to_email_session(self):
+        alice = self.make_participant('alice')
+        session = alice.start_session()
+        r = self.client.GxT(
+            '/about/me/?log-in.id=%s&log-in.key=%i&log-in.token=%s' % (
+                alice.id, session.id, session.secret
+            )
+        )
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+
 
 class TestSignIn(EmailHarness):
 
