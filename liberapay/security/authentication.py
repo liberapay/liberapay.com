@@ -86,7 +86,7 @@ def sign_in_with_form_data(body, state):
                 if not p.get_email(email).verified:
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
-                p.start_session()
+                p.start_session(suffix='.em')
                 qs = [
                     ('log-in.id', p.id),
                     ('log-in.key', p.session.id),
