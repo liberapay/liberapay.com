@@ -1318,18 +1318,24 @@ class Participant(Model, MixinTeam):
     @classmethod
     def notify_patrons(cls):
         grouped_tips = cls.db.all("""
-            SELECT event.payload AS takeover, json_agg(tip) AS tips
+            SELECT (elsewhere, tippee_p)::elsewhere_with_participant AS account_elsewhere
+                 , json_agg(tip) AS tips
               FROM current_tips tip
-              JOIN participants tippee ON tippee.id = tip.tippee
-              JOIN participants tipper ON tipper.id = tip.tipper
               JOIN events event ON event.participant = tip.tippee
                                AND event.type = 'take-over'
+              JOIN elsewhere ON elsewhere.participant = tip.tippee
+                            AND elsewhere.platform = event.payload->>'platform'
+                            AND elsewhere.user_id = event.payload->>'user_id'
+                            AND elsewhere.domain = event.payload->>'domain'
+              JOIN participants tippee_p ON tippee_p.id = tip.tippee
+              JOIN participants tipper_p ON tipper_p.id = tip.tipper
              WHERE tip.renewal_mode > 0
                AND tip.paid_in_advance IS NULL
-               AND tippee.payment_providers > 0
-               AND tippee.join_time >= (current_date - interval '30 days')
-               AND tippee.is_suspended IS NOT TRUE
-               AND tipper.is_suspended IS NOT TRUE
+               AND tippee_p.payment_providers > 0
+               AND tippee_p.join_time >= (current_date - interval '30 days')
+               AND tippee_p.is_suspended IS NOT TRUE
+               AND tipper_p.is_suspended IS NOT TRUE
+               AND event.ts < (current_timestamp - interval '6 hours')
                AND EXISTS (
                        SELECT 1
                          FROM tips old_tip
@@ -1345,13 +1351,9 @@ class Participant(Model, MixinTeam):
                           AND n.event = 'pledgee_joined~v2'
                           AND n.idem_key = tip.tippee::text
                    )
-          GROUP BY event.payload
+          GROUP BY elsewhere.id, tippee_p.id
         """)
-        for takeover, tips in grouped_tips:
-            elsewhere = AccountElsewhere._from_thing(
-                'user_id',
-                takeover['platform'], takeover['user_id'], takeover['domain']
-            )
+        for elsewhere, tips in grouped_tips:
             cls._notify_patrons(elsewhere, tips)
 
     @classmethod
