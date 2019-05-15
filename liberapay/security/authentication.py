@@ -232,6 +232,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
         id = request.qs.pop('log-in.id')
         session_id = request.qs.pop('log-in.key', 1)
         token = request.qs.pop('log-in.token', None)
+        if not (token and token.endswith('.em')):
+            raise response.error(400, _("This login link is expired or invalid."))
         p = Participant.authenticate(id, session_id, token)
         if not p and (not session_p or session_p.id != id):
             raise response.error(400, _("This login link is expired or invalid."))
