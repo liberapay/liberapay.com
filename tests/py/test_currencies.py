@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 
 from liberapay.billing.transactions import swap_currencies, Transfer
-from liberapay.constants import CURRENCIES
+from liberapay.constants import CURRENCIES, STANDARD_TIPS
 from liberapay.exceptions import NegativeBalance, TransferError
 from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.payin.stripe import int_to_Money, Money_to_int
@@ -71,6 +71,19 @@ class TestCurrencies(Harness):
         b = MoneyBasket()
         b2 = MoneyBasket(EUR=1, USD=1)
         assert not (b >= b2)
+
+    def test_standard_tips(self):
+        for currency in CURRENCIES:
+            minimum = Money.MINIMUMS[currency]
+            min_exponent = minimum.amount.as_tuple()[2]
+            standard_tips = STANDARD_TIPS[currency]
+            for st in standard_tips:
+                print(st)
+                assert st.weekly >= minimum
+                assert st.weekly.amount.as_tuple()[2] >= min_exponent
+                assert st.monthly.amount.as_tuple()[2] >= min_exponent
+                assert st.yearly.amount.as_tuple()[2] >= min_exponent
+                assert len(st.weekly.amount.normalize().as_tuple().digits) <= 2
 
 
 class TestCurrenciesInDB(Harness):
