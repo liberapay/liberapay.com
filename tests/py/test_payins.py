@@ -239,7 +239,6 @@ class TestPayinsStripe(Harness):
             account_holder_name='Jane Doe',
         ))
         acct_ch_token = stripe.Token.create(account=dict(
-            legal_entity=dict(type='individual'),
             tos_shown_and_accepted=True,
         ))
         cls.acct_switzerland = stripe.Account.create(

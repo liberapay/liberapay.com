@@ -187,7 +187,6 @@ def send_payin_notification(payin, payer, charge, route):
             mandate_id=sepa_debit.mandate_reference,
             mandate_creation_date=route.ctime.date(),
             creditor_identifier=website.app_conf.sepa_creditor_identifier,
-            statement_descriptor=charge.statement_descriptor,
         )
 
 
