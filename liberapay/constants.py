@@ -31,13 +31,23 @@ class Fees(namedtuple('Fees', ('var', 'fix'))):
 
 
 def to_precision(x, precision, rounding=ROUND_HALF_UP):
-    if not x:
-        return x
+    """Round `x` to keep only `precision` of its most significant digits.
+
+    >>> to_precision(Decimal('0.0086820'), 2)
+    Decimal('0.0087')
+    >>> to_precision(Decimal('13567.89'), 3)
+    Decimal('13600')
+    >>> to_precision(Decimal('0.000'), 4)
+    Decimal('0')
+    """
+    if x == 0:
+        return Decimal(0)
+    log10 = x.log10().to_integral(ROUND_FLOOR)
     # round
-    factor = Decimal(10) ** (x.log10().to_integral(ROUND_FLOOR) + 1)
+    factor = Decimal(10) ** (log10 + 1)
     r = (x / factor).quantize(Decimal(10) ** -precision, rounding=rounding) * factor
     # remove trailing zeros
-    r = r.quantize(Decimal(10) ** (int(x.log10()) - precision + 1))
+    r = r.quantize(Decimal(10) ** (log10 - precision + 1))
     return r
 
 
