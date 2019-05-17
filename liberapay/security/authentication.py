@@ -86,7 +86,7 @@ def sign_in_with_form_data(body, state):
                 if not p.get_email(email).verified:
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
-                p.start_session()
+                p.start_session(suffix='.em')
                 qs = [
                     ('log-in.id', p.id),
                     ('log-in.key', p.session.id),
@@ -232,6 +232,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
         id = request.qs.pop('log-in.id')
         session_id = request.qs.pop('log-in.key', 1)
         token = request.qs.pop('log-in.token', None)
+        if not (token and token.endswith('.em')):
+            raise response.error(400, _("This login link is expired or invalid."))
         p = Participant.authenticate(id, session_id, token)
         if not p and (not session_p or session_p.id != id):
             raise response.error(400, _("This login link is expired or invalid."))
