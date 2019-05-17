@@ -54,7 +54,11 @@ def to_precision(x, precision, rounding=ROUND_HALF_UP):
 def convert_symbolic_amount(amount, target_currency, precision=2, rounding=ROUND_HALF_UP):
     from liberapay.website import website
     rate = website.currency_exchange_rates[('EUR', target_currency)]
-    return to_precision(amount * rate, precision, rounding)
+    minimum = Money.MINIMUMS[target_currency].amount
+    return max(
+        to_precision(amount * rate, precision, rounding).quantize(minimum, rounding),
+        minimum
+    )
 
 
 class MoneyAutoConvertDict(defaultdict):
