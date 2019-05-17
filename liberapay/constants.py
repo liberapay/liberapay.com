@@ -413,11 +413,12 @@ SESSION_TIMEOUT = timedelta(hours=6)
 
 
 def make_standard_tip(label, weekly, currency):
+    minimum = Money.MINIMUMS[currency].amount if hasattr(Money, 'MINIMUMS') else D_CENT
     return StandardTip(
         label,
         Money(weekly, currency),
-        Money(weekly / PERIOD_CONVERSION_RATES['monthly'], currency),
-        Money(weekly / PERIOD_CONVERSION_RATES['yearly'], currency),
+        Money((weekly / PERIOD_CONVERSION_RATES['monthly']).quantize(minimum), currency),
+        Money((weekly / PERIOD_CONVERSION_RATES['yearly']).quantize(minimum), currency),
     )
 
 
