@@ -104,11 +104,19 @@ D_ZERO = Decimal('0.00')
 
 class _DonationLimits(defaultdict):
     def __missing__(self, currency):
+        minimum = Money.MINIMUMS[currency].amount
+        eur_weekly_amounts = DONATION_LIMITS_EUR_USD['weekly']
+        converted_weekly_amounts = (
+            convert_symbolic_amount(eur_weekly_amounts[0], currency),
+            convert_symbolic_amount(eur_weekly_amounts[1], currency)
+        )
         r = {
-            period: (
-                Money(convert_symbolic_amount(eur_amounts[0], currency, rounding=ROUND_UP), currency),
-                Money(convert_symbolic_amount(eur_amounts[1], currency, rounding=ROUND_UP), currency)
-            ) for period, eur_amounts in DONATION_LIMITS_EUR_USD.items()
+            'weekly': tuple(Money(x, currency) for x in converted_weekly_amounts),
+            'monthly': tuple(
+                Money((x * Decimal(52) / Decimal(12)).quantize(minimum, rounding=ROUND_UP), currency)
+                for x in converted_weekly_amounts
+            ),
+            'yearly': tuple(Money(x * Decimal(52), currency) for x in converted_weekly_amounts),
         }
         self[currency] = r
         return r
@@ -118,8 +126,7 @@ DONATION_LIMITS_EUR_USD = {
     'weekly': DONATION_LIMITS_WEEKLY_EUR_USD,
     'monthly': tuple((x * Decimal(52) / Decimal(12)).quantize(D_CENT, rounding=ROUND_UP)
                      for x in DONATION_LIMITS_WEEKLY_EUR_USD),
-    'yearly': tuple((x * Decimal(52)).quantize(D_CENT)
-                    for x in DONATION_LIMITS_WEEKLY_EUR_USD),
+    'yearly': tuple(x * Decimal(52) for x in DONATION_LIMITS_WEEKLY_EUR_USD),
 }
 DONATION_LIMITS = _DonationLimits(None, {
     'EUR': {k: (Money(v[0], 'EUR'), Money(v[1], 'EUR')) for k, v in DONATION_LIMITS_EUR_USD.items()},
@@ -426,7 +433,7 @@ class _StandardTips(defaultdict):
     def __missing__(self, currency):
         r = [
             make_standard_tip(
-                label, convert_symbolic_amount(weekly, currency, rounding=ROUND_UP), currency
+                label, convert_symbolic_amount(weekly, currency), currency
             ) for label, weekly in STANDARD_TIPS_EUR_USD
         ]
         self[currency] = r
