@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 
 from liberapay.billing.transactions import swap_currencies, Transfer
-from liberapay.constants import CURRENCIES
+from liberapay.constants import CURRENCIES, DONATION_LIMITS, STANDARD_TIPS
 from liberapay.exceptions import NegativeBalance, TransferError
 from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.payin.stripe import int_to_Money, Money_to_int
@@ -71,6 +71,33 @@ class TestCurrencies(Harness):
         b = MoneyBasket()
         b2 = MoneyBasket(EUR=1, USD=1)
         assert not (b >= b2)
+
+    def test_donation_limits(self):
+        for currency in CURRENCIES:
+            currency_minimum = Money.MINIMUMS[currency]
+            currency_exponent = currency_minimum.amount.as_tuple()[2]
+            limits = DONATION_LIMITS[currency]
+            for period, (min_limit, max_limit) in limits.items():
+                print(period, min_limit, max_limit)
+                assert min_limit >= currency_minimum
+                assert max_limit > min_limit
+                assert min_limit.amount.as_tuple()[2] >= currency_exponent
+                assert max_limit.amount.as_tuple()[2] >= currency_exponent
+                if period == 'weekly':
+                    assert len(min_limit.amount.normalize().as_tuple().digits) <= 2
+
+    def test_standard_tips(self):
+        for currency in CURRENCIES:
+            minimum = Money.MINIMUMS[currency]
+            min_exponent = minimum.amount.as_tuple()[2]
+            standard_tips = STANDARD_TIPS[currency]
+            for st in standard_tips:
+                print(st)
+                assert st.weekly >= minimum
+                assert st.weekly.amount.as_tuple()[2] >= min_exponent
+                assert st.monthly.amount.as_tuple()[2] >= min_exponent
+                assert st.yearly.amount.as_tuple()[2] >= min_exponent
+                assert len(st.weekly.amount.normalize().as_tuple().digits) <= 2
 
 
 class TestCurrenciesInDB(Harness):
