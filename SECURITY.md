@@ -12,7 +12,7 @@ If you believe you've found a security issue in software that is maintained in t
 
 # How to Submit a Report
 
-To submit a vulnerability report, please fill out this [form](https://hackerone.com/liberapay). Your submission will be reviewed and validated by a member of our team.
+Please [submit your vulnerability report through HackerOne](https://hackerone.com/liberapay/reports/new), it will be promptly reviewed by a member of our team.
 
 # Safe Harbor
 
