@@ -76,55 +76,15 @@ title = _("Security")
 % extends "templates/about.html"
 % block content
 
-    <p>If you have found a security issue, and it's not <a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ASelf-defense">already known</a>, then please send a report to <a data-email-reveal="admin&amp;#64;liberapay.com">[click to see email address]</a>.</p>
+    <p>If you've found a security issue, and it's not <a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ASelf-defense">already known</a>, then please <a href="https://hackerone.com/liberapay/reports/new">report it to us through HackerOne</a>.</p>
 
     <h3>Policy</h3>
 
-    <p>We will investigate legitimate reports and make every effort to quickly resolve any vulnerability. To encourage responsible reporting, we will not take legal action against you nor ask law enforcement to investigate you provided you make a good faith effort to <b>avoid causing harm to us, our users, and anyone else</b>. This includes avoiding privacy violations, destruction of data, and interruption or degradation of services.</li>
-
-    <h4>Scope</h4>
-
-    <p>The following <b>test types</b> are excluded from the scope:</p>
-
-    <ul>
-        <li><b>flooding</b> (e.g. denial of service attempts, unthrottled vulnerability scans)</li>
-        <li><b>physical testing</b> such as office access (e.g. open doors, tailgating)</li>
-        <li><b>social engineering</b> (e.g. phishing, vishing)</li>
-    </ul>
-
-    <p>The following <b>issue types</b> are excluded from scope:</p>
-
-    <ul>
-        <li><b>Low severity issues</b>, including:
-            <ul>
-                <li>Issues that can be detected with tools such as Hardenize and Security Headers. We run regular scans with these services and try to improve our score gradually.</li>
-                <li>Content injection issues.</li>
-                <li>Cross-site Request Forgery (CSRF) with minimal security implications (Logout CSRF, etc.). In order for CSRF to be a valid issue it must affect some important action such as deleting one’s account.</li>
-                <li>Missing cookie flags on non-security-sensitive cookies.</li>
-            </ul>
-        </li>
-        <li><b>Disclosure of non-sensitive information</b>. Our software is open source and we don't believe in security through obscurity.
-            <ul>
-                <li>Stack traces containing only public information.</li>
-                <li>Banner grabbing issues (figuring out what web server we use, etc.).</li>
-            </ul>
-        </li>
-        <li><b>Theoretical issues</b> without an accompanying proof-of-concept demonstrating vulnerability, including:
-            <ul>
-                <li><code>Host</code> header issues</li>
-                <li>open ports</li>
-                <li>out-of-date software</li>
-            </ul>
-        </li>
-        <li><b>Issues with no security implications</b> (e.g. spelling mistakes), they should be reported publicly <a href="https://github.com/liberapay/liberapay.com/issues/new">on GitHub</a>.</li>
-        <li><b>Issues in third-party services</b>, they should be reported to the respective team.</p>
-    </ul>
-
-    <p>We encourage hackers to read <a href="https://leanpub.com/web-hacking-101">Web Hacking 101</a> and <a href="https://leanpub.com/ltr101-breaking-into-infosec">Breaking into Information Security: Learning the Ropes 101</a> to get a good idea of the type of issues that we are looking for.</p>
-
-    <p>We may modify the above guidelines at any time. Last update: January 18, 2018.</p>
+    <p>The details of our security policy (scope, rewards…) are available in <a href="https://hackerone.com/liberapay">our HackerOne profile</a>.</p>
 
     <h3>Hall of Fame</h3>
+
+    <p>Thanks to <a href="https://hackerone.com/liberapay/thanks">everyone who has sent us a report through HackerOne</a>.</p>
 
     % macro show_hof(hof)
     <ol>
@@ -139,17 +99,15 @@ title = _("Security")
     </ol>
     % endmacro
 
-    <p>Thanks to the following researchers (most recent first) for having
-    reported security issues to us via email:</p>
+    <p>Thanks to the following researchers for having reported security issues to us via email:</p>
 
     {{ show_hof(liberapay_hof) }}
 
-    <p>Thanks to all hackers who have disclosed security issues to Gratipay
-    <a href="https://hackerone.com/gratipay">on Hackerone</a>, some of which
-    also applied to Liberapay.</p>
+    <p>Thanks to all hackers who have disclosed security issues to
+    <a href="https://hackerone.com/gratipay">Gratipay on Hackerone</a>, some of
+    which also applied to Liberapay.</p>
 
-    <p>Thanks to the following people (most recent first) for having alerted
-    Gratipay about security issues through other means:</p>
+    <p>Thanks to the following people for having alerted Gratipay about security issues through other channels:</p>
 
     {{ show_hof(gratipay_hof) }}
 
