@@ -4,14 +4,30 @@ title = _("Security")
 % extends "templates/about.html"
 % block content
 
-    <p>If you've found a security issue, and it's not <a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ASelf-defense">already known</a>, then please <a href="https://hackerone.com/liberapay/reports/new">report it to us through HackerOne</a>.</p>
+    <p>{{ _(
+        "If you think you've found a security issue, and it's not already in our list "
+        "of {known_issues_link}known low-severity issues{link_close}, then please "
+        "{hackerone_report_link}report it to us through HackerOne{link_close}.",
+        known_issues_link='<a href="https://github.com/liberapay/liberapay.com/issues?q=is%3Aissue+is%3Aopen+label%3ADefense">'|safe,
+        hackerone_report_link='<a href="https://hackerone.com/liberapay/reports/new">'|safe,
+        link_close='</a>'|safe,
+    ) }}</p>
 
-    <h3>Policy</h3>
+    <h3>{{ _("Policy") }}</h3>
 
-    <p>The details of our security policy (scope, rewards…) are available in <a href="https://hackerone.com/liberapay">our HackerOne profile</a>.</p>
+    <p>{{ _(
+        "The details of our security policy (scope, rewards…) are available in "
+        "{link_open}our HackerOne profile{link_close}.",
+        link_open='<a href="https://hackerone.com/liberapay">'|safe,
+        link_close='</a>'|safe,
+    ) }}</p>
 
-    <h3>Thanks</h3>
+    <h3>{{ _("Thanks") }}</h3>
 
-    <p>Thanks to <a href="https://hackerone.com/liberapay/thanks">everyone who has sent us a report through HackerOne</a>.</p>
+    <p>{{ _(
+        "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}.",
+        link_open='<a href="https://hackerone.com/liberapay/thanks">'|safe,
+        link_close='</a>'|safe,
+    ) }}</p>
 
 % endblock
