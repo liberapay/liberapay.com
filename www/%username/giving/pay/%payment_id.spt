@@ -206,6 +206,10 @@ title = _("Funding your donations")
                 <h4>PayPal<br>
                     % if not allow_paypal
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % elif payment.currency not in constants.PAYPAL_CURRENCIES
+                    <small class="text-danger">{{ _(
+                        "Doesn't support the {currency}", currency=Currency(payment.currency)
+                    ) }}</small>
                     % else
                     <small class="text-warning">{{ _("Not anonymous") }}</small>
                     % endif
