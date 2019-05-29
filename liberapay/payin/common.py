@@ -41,7 +41,8 @@ def prepare_payin(db, payer, amount, route):
     return payin
 
 
-def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fee=None):
+def update_payin(db, payin_id, remote_id, status, error,
+                 amount_settled=None, fee=None, intent_id=None):
     """Update the status and other attributes of a charge.
 
     Args:
@@ -62,6 +63,7 @@ def update_payin(db, payin_id, remote_id, status, error, amount_settled=None, fe
                  , remote_id = %(remote_id)s
                  , amount_settled = COALESCE(%(amount_settled)s, amount_settled)
                  , fee = COALESCE(%(fee)s, fee)
+                 , intent_id = coalesce(%(intent_id)s, intent_id)
              WHERE id = %(payin_id)s
                AND status <> %(status)s
          RETURNING *

@@ -91,6 +91,17 @@ BASE64URL_CHARS = set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTU
 
 BIRTHDAY = date(2015, 5, 22)
 
+CARD_BRANDS = {
+    'amex': 'American Express',
+    'diners': 'Diners Club',
+    'discover': 'Discover',
+    'jcb': 'JCB',
+    'mastercard': 'Mastercard',
+    'unionpay': 'UnionPay',
+    'visa': 'Visa',
+    'unknown': '',
+}
+
 CURRENCIES = ordered_set([
     'EUR', 'USD',
     'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',

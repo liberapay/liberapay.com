@@ -3,6 +3,7 @@ from decimal import Decimal
 import stripe
 import stripe.error
 
+from ..exceptions import NextAction
 from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
@@ -58,25 +59,48 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
     assert payer.id == payin.payer
     amount = payin.amount
     route = ExchangeRoute.from_id(payer, payin.route)
+    intent = None
     try:
-        charge = stripe.Charge.create(
-            amount=Money_to_int(amount),
-            currency=amount.currency.lower(),
-            customer=route.remote_user_id,
-            metadata={'payin_id': payin.id},
-            on_behalf_of=on_behalf_of,
-            source=route.address,
-            statement_descriptor=statement_descriptor,
-            expand=['balance_transaction'],
-            idempotency_key='payin_%i' % payin.id,
-        )
+        if route.address.startswith('pm_'):
+            intent = stripe.PaymentIntent.create(
+                amount=Money_to_int(amount),
+                confirm=True,
+                currency=amount.currency.lower(),
+                customer=route.remote_user_id,
+                metadata={'payin_id': payin.id},
+                on_behalf_of=on_behalf_of,
+                payment_method=route.address,
+                return_url=payer.url('giving/pay/stripe/%i' % payin.id),
+                statement_descriptor=statement_descriptor,
+                idempotency_key='payin_intent_%i' % payin.id,
+            )
+        else:
+            charge = stripe.Charge.create(
+                amount=Money_to_int(amount),
+                currency=amount.currency.lower(),
+                customer=route.remote_user_id,
+                metadata={'payin_id': payin.id},
+                on_behalf_of=on_behalf_of,
+                source=route.address,
+                statement_descriptor=statement_descriptor,
+                expand=['balance_transaction'],
+                idempotency_key='payin_%i' % payin.id,
+            )
     except stripe.error.StripeError as e:
         return update_payin(db, payin.id, '', 'failed', repr_stripe_error(e))
     except Exception as e:
         from liberapay.website import website
         website.tell_sentry(e, {})
         return update_payin(db, payin.id, '', 'failed', str(e))
-    payin = settle_charge_and_transfers(db, payin, charge)
+    if intent:
+        if intent.status == 'requires_action':
+            update_payin(db, payin.id, None, 'awaiting_payer_action', None,
+                         intent_id=intent.id)
+            raise NextAction(intent)
+        else:
+            charge = intent.charges.data[0]
+    intent_id = getattr(intent, 'id', None)
+    payin = settle_charge_and_transfers(db, payin, charge, intent_id=intent_id)
     send_payin_notification(payin, payer, charge, route)
     return payin
 
@@ -96,29 +120,51 @@ def destination_charge(db, payin, payer, statement_descriptor):
     destination = db.one("SELECT id FROM payment_accounts WHERE pk = %s", (pt.destination,))
     amount = payin.amount
     route = ExchangeRoute.from_id(payer, payin.route)
+    intent = None
     if destination == 'acct_1ChyayFk4eGpfLOC':
         # Stripe rejects the charge if the destination is our own account
         destination = None
-    else:
-        destination = {'account': destination}
     try:
-        charge = stripe.Charge.create(
-            amount=Money_to_int(amount),
-            currency=amount.currency.lower(),
-            customer=route.remote_user_id,
-            destination=destination,
-            metadata={'payin_id': payin.id},
-            source=route.address,
-            statement_descriptor=statement_descriptor,
-            expand=['balance_transaction'],
-            idempotency_key='payin_%i' % payin.id,
-        )
+        if route.address.startswith('pm_'):
+            intent = stripe.PaymentIntent.create(
+                amount=Money_to_int(amount),
+                confirm=True,
+                currency=amount.currency.lower(),
+                customer=route.remote_user_id,
+                metadata={'payin_id': payin.id},
+                on_behalf_of=destination,
+                payment_method=route.address,
+                return_url=payer.url('giving/pay/stripe/%i' % payin.id),
+                statement_descriptor=statement_descriptor,
+                transfer_data={'destination': destination} if destination else None,
+                idempotency_key='payin_intent_%i' % payin.id,
+            )
+        else:
+            charge = stripe.Charge.create(
+                amount=Money_to_int(amount),
+                currency=amount.currency.lower(),
+                customer=route.remote_user_id,
+                destination={'account': destination} if destination else None,
+                metadata={'payin_id': payin.id},
+                source=route.address,
+                statement_descriptor=statement_descriptor,
+                expand=['balance_transaction'],
+                idempotency_key='payin_%i' % payin.id,
+            )
     except stripe.error.StripeError as e:
         return update_payin(db, payin.id, '', 'failed', repr_stripe_error(e))
     except Exception as e:
         website.tell_sentry(e, {})
         return update_payin(db, payin.id, '', 'failed', str(e))
-    payin = settle_destination_charge(db, payin, charge, pt)
+    if intent:
+        if intent.status == 'requires_action':
+            update_payin(db, payin.id, None, 'awaiting_payer_action', None,
+                         intent_id=intent.id)
+            raise NextAction(intent)
+        else:
+            charge = intent.charges.data[0]
+    intent_id = getattr(intent, 'id', None)
+    payin = settle_destination_charge(db, payin, charge, pt, intent_id=intent_id)
     send_payin_notification(payin, payer, charge, route)
     return payin
 
@@ -127,7 +173,10 @@ def send_payin_notification(payin, payer, charge, route):
     """Send the legally required notification for SEPA Direct Debits.
     """
     if route.network == 'stripe-sdd' and charge.status != 'failed':
-        sepa_debit = stripe.Source.retrieve(route.address).sepa_debit
+        if route.address.startswith('pm_'):
+            raise NotImplementedError()
+        else:
+            sepa_debit = stripe.Source.retrieve(route.address).sepa_debit
         payer.notify(
             'payin_sdd_created',
             force_email=True,
@@ -138,8 +187,26 @@ def send_payin_notification(payin, payer, charge, route):
             mandate_id=sepa_debit.mandate_reference,
             mandate_creation_date=route.ctime.date(),
             creditor_identifier=website.app_conf.sepa_creditor_identifier,
-            statement_descriptor=charge.statement_descriptor,
         )
+
+
+def settle_payin(db, payin):
+    """Check the status of a payin, take appropriate action if it has changed.
+    """
+    if payin.intent_id:
+        intent = stripe.PaymentIntent.retrieve(payin.intent_id)
+        if intent.status == 'requires_action':
+            raise NextAction(intent)
+        err = intent.last_payment_error
+        if err and intent.status in ('requires_payment_method', 'canceled'):
+            return update_payin(db, payin.id, err.charge, 'failed', err.message)
+        if intent.charges.data:
+            charge = intent.charges.data[0]
+        else:
+            return payin
+    else:
+        charge = stripe.Charge.retrieve(payin.remote_id)
+    return settle_charge(db, payin, charge)
 
 
 def settle_charge(db, payin, charge):
@@ -152,7 +219,7 @@ def settle_charge(db, payin, charge):
         return settle_charge_and_transfers(db, payin, charge)
 
 
-def settle_charge_and_transfers(db, payin, charge):
+def settle_charge_and_transfers(db, payin, charge, intent_id=None):
     """Record the result of a charge, and execute the transfers if it succeeded.
     """
     if getattr(charge, 'balance_transaction', None):
@@ -168,7 +235,7 @@ def settle_charge_and_transfers(db, payin, charge):
     error = repr_charge_error(charge)
     payin = update_payin(
         db, payin.id, charge.id, charge.status, error,
-        amount_settled=amount_settled, fee=fee
+        amount_settled=amount_settled, fee=fee, intent_id=intent_id
     )
 
     payin_transfers = db.all("""
@@ -230,7 +297,7 @@ def execute_transfer(db, pt, amount, destination, source_transaction):
     return update_payin_transfer(db, pt.id, tr.id, 'succeeded', None, amount=amount)
 
 
-def settle_destination_charge(db, payin, charge, pt):
+def settle_destination_charge(db, payin, charge, pt, intent_id=None):
     """Record the result of a charge, and recover the fee.
     """
     if getattr(charge, 'balance_transaction', None):
@@ -258,7 +325,7 @@ def settle_destination_charge(db, payin, charge, pt):
 
     payin = update_payin(
         db, payin.id, charge.id, status, error,
-        amount_settled=amount_settled, fee=fee
+        amount_settled=amount_settled, fee=fee, intent_id=intent_id
     )
 
     pt_remote_id = getattr(charge, 'transfer', None)

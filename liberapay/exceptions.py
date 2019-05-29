@@ -4,6 +4,12 @@ from pando import Response
 from .constants import PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
 
 
+class NextAction(Exception):
+    def __init__(self, intent):
+        self.__dict__.update(intent.next_action)
+        self.client_secret = intent.client_secret
+
+
 class Redirect(Exception):
     def __init__(self, url):
         self.url = url

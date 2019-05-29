@@ -7,13 +7,15 @@ from math import floor
 import stripe
 import stripe.error
 
+from liberapay.exceptions import NextAction
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import (
     prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_destination
 )
 from liberapay.payin.stripe import (
-    charge_and_transfer, destination_charge, get_partial_iban, Money_to_int, repr_stripe_error
+    charge_and_transfer, destination_charge, get_partial_iban, Money_to_int,
+    repr_stripe_error, settle_payin,
 )
 from liberapay.utils import get_participant, NS
 
@@ -25,10 +27,11 @@ payer = get_participant(state, restrict=True)
 
 del currency
 
-payment_method = request.qs.get('method', 'card')
+client_secret = None
+payment_type = request.qs.get('method', 'card')
 
 if request.method == 'POST':
-    website.check_payin_allowed(user, 'stripe-' + payment_method)
+    website.check_payin_allowed(user, 'stripe-' + payment_type)
 
     body = request.body
 
@@ -119,12 +122,47 @@ if request.method == 'POST':
                 one_off=one_off, remote_user_id=customer_id,
                 country=source_country, currency=source_currency,
             )
+        elif 'stripe_pm_id' in body:
+            return_url = payer.url('giving/pay/stripe/complete')
+            one_off = body.get('keep') != 'true'
+
+            pm = stripe.PaymentMethod.retrieve(body['stripe_pm_id'])
+            if pm.type == 'card':
+                network = 'stripe-card'
+            else:
+                raise response.error(400, "unknown PaymentMethod type")
+
+            customer_id = website.db.one("""
+                SELECT remote_user_id
+                  FROM exchange_routes
+                 WHERE participant = %s
+                   AND network::text LIKE 'stripe-%%'
+                 LIMIT 1
+            """, (payer.id,))
+            if customer_id:
+                pm = stripe.PaymentMethod.attach(pm.id, customer=customer_id)
+            else:
+                customer_id = stripe.Customer.create(
+                    email=payer.email or payer.get_any_email(),
+                    payment_method=pm.id,
+                ).id
+            pm_country = getattr(getattr(pm, pm.type), 'country', None)
+            pm_currency = getattr(getattr(pm, pm.type), 'currency', None)
+            route = ExchangeRoute.insert(
+                payer, network, pm.id, 'chargeable',
+                one_off=one_off, remote_user_id=customer_id,
+                country=pm_country, currency=pm_currency,
+            )
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
                 raise response.invalid_input(body.get('route'), 'route', 'body')
-            source = stripe.Source.retrieve(route.address)
-            route.update_status(source.status)
+            if route.address.startswith('pm_'):
+                # A PaymentMethod doesn't have a status.
+                pass
+            else:
+                source = stripe.Source.retrieve(route.address)
+                route.update_status(source.status)
 
     except stripe.error.StripeError as e:
         raise response.error(e.http_status, _(
@@ -191,17 +229,27 @@ elif payin_id:
     """, dict(payin=payin_id, payer=payer.id))
     if not payin:
         raise response.error(404, "unknown payin ID in URL path")
-    if payin.status == 'pre':
-        if payin.n_transfers == 1:
-            payin = destination_charge(
-                website.db, payin, payer,
-                statement_descriptor=('Liberapay %i' % payin.id)
-            )
+    try:
+        if payin.status == 'pre':
+            if payin.n_transfers == 1:
+                payin = destination_charge(
+                    website.db, payin, payer,
+                    statement_descriptor=('Liberapay %i' % payin.id)
+                )
+            else:
+                payin = charge_and_transfer(
+                    website.db, payin, payer,
+                    statement_descriptor=('p%i' % payin.id)
+                )
+        elif payin.status == 'awaiting_payer_action':
+            payin = settle_payin(website.db, payin)
+    except NextAction as act:
+        if act.type == 'redirect_to_url':
+            response.refresh(state, url=act.redirect_to_url.url)
+        elif act.type == 'use_stripe_sdk':
+            client_secret = act.client_secret
         else:
-            payin = charge_and_transfer(
-                website.db, payin, payer,
-                statement_descriptor=('Liberapay %i' % payin.id)
-            )
+            raise NotImplementedError()
 
 tippees = request.qs.parse_list('beneficiary', int, default=None)
 if tippees:
@@ -286,8 +334,8 @@ if tippees:
 elif not payin_id:
     response.redirect(payer.path('giving/pay'))
 
-if payment_method:
-    route = ExchangeRoute.from_network(payer, 'stripe-' + payment_method)
+if payment_type:
+    route = ExchangeRoute.from_network(payer, 'stripe-' + payment_type)
     route = route[0] if route else None
 else:
     route = website.db.one("""
@@ -303,12 +351,15 @@ else:
     """, (payer.id,))
     route = None
 if route:
-    payment_method = route.network.split('-', 1)[-1]
-    source = stripe.Source.retrieve(route.address)
-    route.update_status(source.status)
+    payment_type = route.network.split('-', 1)[-1]
+    if route.address.startswith('pm_'):
+        pm = stripe.PaymentMethod.retrieve(route.address)
+    else:
+        source = stripe.Source.retrieve(route.address)
+        route.update_status(source.status)
     if not route:
         response.redirect(request.line.uri)
-if not payment_method:
+if not payment_type:
     response.redirect(payer.path('giving/pay'))
 
 if user == payer:
@@ -317,7 +368,7 @@ if user == payer:
 # https://stripe.com/docs/security#content-security-policy
 csp = response.headers[b'Content-Security-Policy']
 csp = csp.allow(b'connect-src', b"api.stripe.com")
-csp = csp.allow(b'frame-src', b"js.stripe.com")
+csp = csp.allow(b'frame-src', b"js.stripe.com hooks.stripe.com")
 csp = csp.allow(b'script-src', b"js.stripe.com")
 response.headers[b'Content-Security-Policy'] = csp
 
@@ -328,7 +379,13 @@ title = _("Funding your donations")
 
 % block thin_content
 
-% if payin
+% if client_secret
+
+    <p>{{ _("More information is required in order to process this payment.") }}</p>
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+    <div id="stripe_next_action" data-client_secret="{{ client_secret }}"></div>
+
+% elif payin
     % set status = payin.status
     % if status == 'succeeded'
         <div class="alert alert-success">{{ _(
@@ -444,7 +501,29 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        % if source
+        % if pm
+        <div class="form-group">
+            % if pm.type == 'card'
+            <p>{{ _(
+                "We will charge your {brand} card (last four digits: {last4}).",
+                brand=constants.CARD_BRANDS.get(pm.card.brand, pm.card.brand), last4=pm.card.last4
+            ) }}</p>
+            <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
+                _("Use another card")
+            }}</button>
+            % elif pm.type == 'sepa_debit'
+            <p>{{ _(
+                "We will charge your {bank_name} account ({partial_account_number}).",
+                bank_name=pm.sepa_debit.bank_name,
+                partial_account_number=get_partial_iban(pm.sepa_debit)
+            ) }}</p>
+            <button class="btn btn-default btn-sm" type="button" data-modify="#iban-form">{{
+                _("Use another bank account")
+            }}</button>
+            % endif
+            <br><br>
+        </div>
+        % elif source
         <div class="form-group">
             % if source.type == 'card'
             <p>{{ _(
@@ -468,8 +547,8 @@ title = _("Funding your donations")
         </div>
         % endif
 
-        % if payment_method == 'card'
-        <fieldset id="card-form" class="form-group {{ 'hidden' if source else '' }}">
+        % if payment_type == 'card'
+        <fieldset id="card-form" class="form-group {{ 'hidden' if source or pm else '' }}">
             <p>{{ _("Please input your name and card number:") }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
                    class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
@@ -486,8 +565,8 @@ title = _("Funding your donations")
             </label>
             <br><br>
         </fieldset>
-        % elif payment_method == 'sdd'
-        <fieldset id="iban-form" class="form-group {{ 'hidden' if source else '' }}">
+        % elif payment_type == 'sdd'
+        <fieldset id="iban-form" class="form-group {{ 'hidden' if source or pm else '' }}">
             <p>{{ _(
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>

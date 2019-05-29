@@ -100,11 +100,14 @@ class ExchangeRoute(Model):
 
     def invalidate(self, obj=None):
         if self.network.startswith('stripe-'):
-            source = stripe.Source.retrieve(self.address).detach()
-            assert source.status == 'consumed'
-            self.update_status(source.status)
-            return
-        if self.network == 'mango-cc':
+            if self.address.startswith('pm_'):
+                stripe.PaymentMethod.detach(self.address)
+            else:
+                source = stripe.Source.retrieve(self.address).detach()
+                assert source.status == 'consumed'
+                self.update_status(source.status)
+                return
+        elif self.network == 'mango-cc':
             card = obj or Card.get(self.address)
             if card.Active:
                 card.Active = False
