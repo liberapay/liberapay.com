@@ -417,6 +417,8 @@ RATE_LIMITS = {
     'log-in.ip-addr': (5, 5*60),  # 5 per 5 minutes per IP address
     'log-in.password': (3, 60*60),  # 3 per hour
     'make_team': (5, 60*60*24*7),  # 5 per week
+    'payin.from-user': (15, 60*60*24*7),  # 15 per week
+    'payin.from-ip-addr': (15, 60*60*24*7),  # 15 per week
     'refetch_elsewhere_data': (1, 60*60*24*7),  # retry after one week
     'refetch_repos': (1, 60*60*24),  # retry after one day
     'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address

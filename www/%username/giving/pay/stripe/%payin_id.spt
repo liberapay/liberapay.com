@@ -31,7 +31,7 @@ client_secret = None
 payment_type = request.qs.get('method', 'card')
 
 if request.method == 'POST':
-    website.check_payin_allowed(user, 'stripe-' + payment_type)
+    website.check_payin_allowed(request, user, 'stripe-' + payment_type)
 
     body = request.body
 
