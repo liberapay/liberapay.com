@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '101'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '102'::jsonb);
 
 
 -- app configuration
@@ -426,7 +426,7 @@ CREATE TABLE payment_accounts
 -- payins -- incoming payments that don't go into a donor wallet
 
 CREATE TYPE payin_status AS ENUM (
-    'pre', 'submitting', 'pending', 'succeeded', 'failed'
+    'pre', 'submitting', 'pending', 'succeeded', 'failed', 'awaiting_payer_action'
 );
 
 CREATE TABLE payins
@@ -440,6 +440,7 @@ CREATE TABLE payins
 , route            int               NOT NULL REFERENCES exchange_routes
 , amount_settled   currency_amount
 , fee              currency_amount   CHECK (fee >= 0)
+, intent_id        text
 , CONSTRAINT fee_currency_chk CHECK (fee::currency = amount_settled::currency)
 );
 

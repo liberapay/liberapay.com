@@ -2308,3 +2308,7 @@ UPDATE participants SET payment_providers = compute_payment_providers(id) WHERE 
 
 -- migration #101
 CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type = 'admin_request';
+
+-- migration #102
+ALTER TYPE payin_status ADD VALUE IF NOT EXISTS 'awaiting_payer_action';
+ALTER TABLE payins ADD COLUMN intent_id text;
