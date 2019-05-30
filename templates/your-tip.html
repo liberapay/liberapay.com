@@ -115,7 +115,7 @@
         % endif
         <input type="tel" inputmode="decimal" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
-               value="{{ locale.format_decimal(tip.periodic_amount.amount) if tip.periodic_amount and not hide_amount else '' }}"
+               value="{{ locale.format_decimal(tip.periodic_amount.amount, '#,##0.00') if tip.periodic_amount and not hide_amount else '' }}"
                {{ disabled }} />
     </div>
     % set period = request.qs.get('period') or tip.period or 'weekly'
