@@ -27,7 +27,7 @@ from pando.utils import maybe_encode
 from liberapay import utils, wireup
 from liberapay.billing.payday import Payday, create_payday_issue
 from liberapay.cron import Cron, Daily, Weekly
-from liberapay.exceptions import PayinMethodIsUnavailable, PayinsAreDisabled
+from liberapay.exceptions import PayinMethodIsUnavailable, PayinsAreDisabled, TooManyAttempts
 from liberapay.i18n.base import (
     Bold, Country, Currency, add_currency_to_state, set_up_i18n, to_age
 )
@@ -213,13 +213,18 @@ algorithm.functions = [
 # Monkey patch Website
 # ====================
 
-def check_payin_allowed(website, user, method=None):
+def check_payin_allowed(website, request, user, method=None):
+    # Check permission
     if user.is_admin:
-        return
-    if website.app_conf.payin_methods['*'] is False:
+        pass
+    elif website.app_conf.payin_methods['*'] is False:
         raise PayinsAreDisabled
-    if website.app_conf.payin_methods.get(method) is False:
+    elif website.app_conf.payin_methods.get(method) is False:
         raise PayinMethodIsUnavailable
+    # Limit payment attempts
+    if request.method == 'POST':
+        website.db.hit_rate_limit('payin.from-user', user.id, TooManyAttempts)
+        website.db.hit_rate_limit('payin.from-ip-addr', request.source, TooManyAttempts)
 
 Website.check_payin_allowed = check_payin_allowed
 

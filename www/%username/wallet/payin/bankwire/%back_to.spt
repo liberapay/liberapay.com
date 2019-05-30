@@ -80,7 +80,7 @@ amount_min = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MIN[currency])[0]
 amount_max = upcharge_bank_wire(constants.PAYIN_BANK_WIRE_MAX[currency])[0]
 
 if request.method == 'POST':
-    website.check_payin_allowed(user, 'mango-bw')
+    website.check_payin_allowed(request, user, 'mango-bw')
 
     if weekly <= 0 or funded >= 52:
         raise response.error(403, _(
@@ -106,7 +106,7 @@ back_to = b64decode_s(request.path['back_to'], default='')
 show_form = weekly > 0 and funded < 52 and not payin
 
 if show_form:
-    website.check_payin_allowed(user, 'mango-bw')
+    website.check_payin_allowed(request, user, 'mango-bw')
 
 if user == participant:
     participant.mark_notifications_as_read('low_balance')

@@ -10,7 +10,7 @@ allow_directdebit = website.app_conf.payin_methods.get('mango-ba', True)
 
 participant = get_participant(state, restrict=True, block_suspended_user=True)
 
-website.check_payin_allowed(user)
+website.check_payin_allowed(request, user)
 
 if not allow_bankwire and not allow_card and not allow_directdebit:
     response.redirect(participant.path('giving/pay/'))

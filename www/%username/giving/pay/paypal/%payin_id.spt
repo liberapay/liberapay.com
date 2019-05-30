@@ -21,7 +21,7 @@ payer = get_participant(state, restrict=True)
 del currency
 
 if request.method == 'POST':
-    website.check_payin_allowed(user, 'paypal')
+    website.check_payin_allowed(request, user, 'paypal')
 
     body = request.body
 
