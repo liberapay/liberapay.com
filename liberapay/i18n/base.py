@@ -6,7 +6,7 @@ from unicodedata import combining, normalize
 import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
 from babel.messages.pofile import Catalog
-from babel.numbers import format_currency, format_decimal, format_percent
+from babel.numbers import parse_pattern
 from markupsafe import Markup
 from pando.utils import utcnow
 
@@ -14,6 +14,10 @@ from ..constants import CURRENCIES, D_MAX
 from ..exceptions import AmbiguousNumber, InvalidNumber
 from ..website import website
 from .currencies import Money, MoneyBasket
+
+
+MONEY_AMOUNT_FORMAT = parse_pattern('#,##0.00')
+ONLY_ZERO = {'0'}
 
 
 def no_escape(s):
@@ -64,7 +68,7 @@ class Locale(babel.core.Locale):
 
     def __init__(self, *a, **kw):
         super(Locale, self).__init__(*a, **kw)
-        self.decimal_symbol = self.number_symbols['decimal']
+        self.currency_formats['amount_only'] = MONEY_AMOUNT_FORMAT
         delta_p = self.currency_formats['standard'].pattern
         minus_sign = self.number_symbols.get('minusSign', '-')
         plus_sign = self.number_symbols.get('plusSign', '+')
@@ -73,9 +77,9 @@ class Locale(babel.core.Locale):
             assert len(neg) > len(pos)
             assert minus_sign in neg
             pos = neg.replace(minus_sign, plus_sign)
-            self.currency_delta_pattern = '%s;%s' % (pos, neg)
+            self.currency_delta_pattern = parse_pattern('%s;%s' % (pos, neg))
         else:
-            self.currency_delta_pattern = (
+            self.currency_delta_pattern = parse_pattern(
                 '{0}{2};{1}{2}'.format(plus_sign, minus_sign, delta_p)
             )
 
@@ -116,7 +120,7 @@ class Locale(babel.core.Locale):
             if self is not LOCALE_EN:
                 self = LOCALE_EN
                 state['partial_translation'] = True
-        kw['n'] = format_decimal(n, locale=self) or n
+        kw['n'] = self.format_decimal(n) or n
         if wrapper:
             kw['n'] = wrapper % kw['n']
         try:
@@ -137,7 +141,7 @@ class Locale(babel.core.Locale):
                     elif isinstance(o, Currency):
                         o = self.currencies.get(o, o)
                 elif isinstance(o, (Decimal, int)):
-                    o = format_decimal(o, locale=self)
+                    o = self.format_decimal(o)
                 elif isinstance(o, Money):
                     o = self.format_money(o)
                 elif isinstance(o, MoneyBasket):
@@ -161,10 +165,15 @@ class Locale(babel.core.Locale):
                     c[k] = o
         return s.format(*a, **kw)
 
-    def format_money(self, m, format=None, trailing_zeroes=True):
-        s = format_currency(m.amount, m.currency, format, locale=self)
-        if not trailing_zeroes:
-            s = s.replace(self.decimal_symbol + '00', '')
+    def format_money(self, m, format='standard', trailing_zeroes=True):
+        s = self.currency_formats[format].apply(
+            m.amount, self, currency=m.currency, currency_digits=True,
+            decimal_quantization=True
+        )
+        if trailing_zeroes is False:
+            i = s.find(self.number_symbols['decimal'])
+            if i != -1 and set(s[i+1:]) == ONLY_ZERO:
+                s = s[:i]
         return s
 
     def format_date(self, date, format='medium'):
@@ -175,9 +184,8 @@ class Locale(babel.core.Locale):
     def format_datetime(self, *a):
         return format_datetime(*a, locale=self)
 
-    def format_decimal(self, *a, **kw):
-        kw['locale'] = self
-        return format_decimal(*a, **kw)
+    def format_decimal(self, number, **kw):
+        return self.decimal_formats[None].apply(number, self, **kw)
 
     def format_list(self, l, pattern='standard', escape=no_escape):
         n = len(l)
@@ -197,8 +205,9 @@ class Locale(babel.core.Locale):
     def format_money_basket(self, basket, sep=','):
         if basket is None:
             return '0'
+        pattern = self.currency_formats['standard']
         items = (
-            format_currency(money.amount, money.currency, locale=self)
+            pattern.apply(money.amount, self, currency=money.currency)
             for money in basket if money
         )
         if sep == ',':
@@ -207,14 +216,14 @@ class Locale(babel.core.Locale):
             r = sep.join(items)
         return r or '0'
 
-    def format_money_delta(self, money, *a):
-        return format_currency(
-            money.amount, money.currency, *a,
-            format=self.currency_delta_pattern, locale=self
+    def format_money_delta(self, money):
+        return self.currency_delta_pattern.apply(
+            money.amount, self, currency=money.currency, currency_digits=True,
+            decimal_quantization=True
         )
 
-    def format_percent(self, *a):
-        return format_percent(*a, locale=self)
+    def format_percent(self, number, **kw):
+        return self.percent_formats[None].apply(number, self, **kw)
 
     def format_time(self, t, format='medium'):
         return format_time(t, format=format, locale=self)

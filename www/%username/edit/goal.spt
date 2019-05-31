@@ -51,7 +51,8 @@ subhead = _("Goal")
                 <div class="input-group-addon">{{ locale.currency_symbols.get(goal_currency, goal_currency) }}</div>
                 <input type="tel" inputmode="decimal" name="goal_custom" id="goal-custom"
                        class="amount form-control input-sm"
-                       value="{{ locale.format_decimal(participant.goal.amount) if participant.goal and participant.goal > 0 else '' }}" />
+                       value="{{ locale.format_money_amount(participant.goal, trailing_zeroes=False)
+                                 if participant.goal and participant.goal > 0 else '' }}" />
                 <div class="input-group-addon">{{ _("per week") }}</div>
             </div></div>
             <span>{{ GOAL_PARTS[1] }}</span>

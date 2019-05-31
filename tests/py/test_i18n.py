@@ -34,15 +34,17 @@ class Tests(Harness):
         r = self.client.GET('/alice/donate')
         assert '<input type="hidden" name="currency" value="KRW" />' in r.text, r.text
 
-    def test_format_currency_without_trailing_zeroes(self):
-        expected = '$16'
-        actual = LOCALE_EN.format_money(Money(16, 'USD'), trailing_zeroes=False)
-        assert actual == expected
+    def test_format_money_without_trailing_zeroes(self):
+        result = LOCALE_EN.format_money(Money(16, 'USD'), trailing_zeroes=False)
+        assert result == '$16'
+        result = LOCALE_EN.format_money(Money(5555, 'KRW'), trailing_zeroes=False)
+        assert result == '₩5,555'
 
-    def test_format_currency_defaults_to_trailing_zeroes(self):
-        expected = '$16.00'
-        actual = LOCALE_EN.format_money(Money(16, 'USD'))
-        assert actual == expected
+    def test_format_money_defaults_to_trailing_zeroes(self):
+        result = LOCALE_EN.format_money(Money(16, 'USD'))
+        assert result == '$16.00'
+        result = LOCALE_EN.format_money(Money(5555, 'KRW'))
+        assert result == '₩5,555'
 
     def test_locales_share_message_keys(self):
         msgkey1 = self.website.locales['de'].catalog['Save'].id
