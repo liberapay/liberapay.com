@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
 import re
 
+from babel.numbers import get_currency_precision
 from mangopay.utils import Money
 from markupsafe import Markup
 from pando.utils import utc
@@ -433,7 +434,8 @@ SESSION_TIMEOUT = timedelta(hours=6)
 
 
 def make_standard_tip(label, weekly, currency):
-    minimum = Money.MINIMUMS[currency].amount if hasattr(Money, 'MINIMUMS') else D_CENT
+    precision = get_currency_precision(currency)
+    minimum = D_CENT if precision == 2 else Decimal(10) ** (-precision)
     return StandardTip(
         label,
         Money(weekly, currency),
