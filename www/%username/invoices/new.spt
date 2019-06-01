@@ -119,7 +119,7 @@ title = _("Invoice {someone}", someone=addressee.username)
     <div class="form-group form-inline">
         <input type="tel" inputmode="decimal" name="amount" class="amount form-control"
                placeholder="{{ _('Amount') }}" required
-               value="{{ locale.format_decimal(invoice.amount.amount) if invoice else '' }}" />
+               value="{{ locale.format_money(invoice.amount, format='amount_only') if invoice else '' }}" />
         &nbsp;&nbsp;
         {{ currency_buttons('currency', currency) }}
     </div>

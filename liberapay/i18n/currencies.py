@@ -3,6 +3,7 @@ from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_
 from numbers import Number
 import operator
 
+from babel.numbers import get_currency_precision
 from mangopay.exceptions import CurrencyMismatch
 from mangopay.utils import Money
 import requests
@@ -82,7 +83,7 @@ def _Money_round(self, rounding=ROUND_HALF_UP):
 
 class _Minimums(defaultdict):
     def __missing__(self, currency):
-        exponent = website.db.one("SELECT get_currency_exponent(%s)", (currency,))
+        exponent = get_currency_precision(currency)
         minimum = Money((D_CENT if exponent == 2 else Decimal(10) ** (-exponent)), currency)
         self[currency] = minimum
         return minimum
