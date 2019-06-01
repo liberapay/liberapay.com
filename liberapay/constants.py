@@ -354,6 +354,12 @@ PAYOUT_COUNTRIES = {
     """.split()),  # https://stripe.com/global
 }
 
+# https://developer.paypal.com/docs/api/reference/currency-codes/
+PAYPAL_CURRENCIES = set("""
+    AUD CAD CHF CZK DKK EUR GBP HKD HUF ILS JPY MXN NOK NZD PHP PLN RUB SEK SGD
+    THB TWD USD
+""".split())
+
 PERIOD_CONVERSION_MAP = {
     ('weekly', 'weekly'): Decimal(1),
     ('monthly', 'weekly'): Decimal(12) / Decimal(52),

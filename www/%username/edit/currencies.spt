@@ -75,6 +75,9 @@ subhead = _("Currencies")
         <td>
         {{ locale.title(locale.currencies.get(c, c)) }}
                 ({{ locale.currency_symbols.get(c, c) }})
+        % if c not in constants.PAYPAL_CURRENCIES
+            <small class="text-warning">({{ _("not supported by PayPal") }})</small>
+        % endif
         </td>
         <td><label>
             <input type="checkbox" name="accepted_currencies:{{ c }}" value="yes"

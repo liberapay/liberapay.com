@@ -25,7 +25,7 @@ import requests
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, BASE64URL_CHARS, CURRENCIES,
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
-    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS,
+    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
     PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
@@ -1724,10 +1724,17 @@ class Participant(Model, MixinTeam):
             tip = tip.__dict__
         tip_currency = tip['amount'].currency
         accepted = tippee.accepted_currencies_set
+        fallback_currency = tippee.main_currency
+        if tippee.payment_providers == 2:
+            accepted = PAYPAL_CURRENCIES.intersection(accepted)
+            if not accepted:
+                # The tippee's currency preferences are unsatisfiable, ignore them.
+                accepted = PAYPAL_CURRENCIES
+                fallback_currency = 'USD'
         if tip_currency in accepted:
             return tip_currency, accepted
         else:
-            return tippee.main_currency, accepted
+            return fallback_currency, accepted
 
 
     # More Random Stuff
