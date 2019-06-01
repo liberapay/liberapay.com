@@ -37,7 +37,7 @@ msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
 msgstr[0] "갱신 대기 중인 {n} 개의 기부금이 있습니다:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{amount} to {username}"
 msgstr "{amount} 을(를) {username} 에게"
 
@@ -367,7 +367,7 @@ msgid "This operation is being carried out based on {link_start}the mandate {man
 msgstr "이 작업은 {acceptance_date} 에 귀하가 Liberapay (SEPA 대행자: {creditor_identifier})가 하기 지시에 따라 귀하의 은행에 자금을 이체하도록 {link_start}허가 {mandate_id}{link_end}한 데 따른 것입니다."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "혹시 이 지불을 승인하지 않았다면 알려 주십시오. 환불해 드리겠습니다."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -397,7 +397,7 @@ msgstr "링크를 통해 {0} 님의 프로필을 확인하세요:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{platform} 의 {user_name} 님이 Liberapay에 가입했습니다!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
@@ -602,7 +602,7 @@ msgstr "고액"
 msgid "Maximum"
 msgstr "최대 금액"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr "요청 허용량을 초과했습니다. {in_N_minutes}에 다시 시도할 수 있습니다."
 
@@ -995,7 +995,6 @@ msgstr "취소"
 msgid "Confirm"
 msgstr "확인"
 
-#, fuzzy
 msgid "Linked Accounts"
 msgstr "다른 곳의 계정"
 
@@ -1394,17 +1393,17 @@ msgstr "아뇨, 취소합니다"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} 님이 아직 지불 방식을 명시하지 않으셨기 때문에 아직 기부금을 처리할 수 없습니다. 결제가 가능해지면 다시 연락드리겠습니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "{username}님에 대한 기부는 신용 카드 또는 직불 카드로 가능합니다 (비자, 마스타카드, 아메리칸 익스프레스)."
+msgstr "{username}님에 대한 기부는 신용카드 또는 직불카드로 가능합니다 (비자, 마스타카드, 아메리칸 익스프레스)."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "{username} 님에 대한 기부는 PayPal을 통해 처리됩니다. PayPal 계정이 없더라도 신용 카드 또는 직불 카드로 기부할 수 있습니다."
+msgstr "{username} 님에 대한 기부는 PayPal을 통해 처리됩니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "{username} 님에 대한 기부는 신용 카드 또는 직불 카드 (비자, 마스타카드, 아메리칸 익스프레스) 또는 PayPal로도 가능합니다."
+msgstr "{username} 님에 대한 기부는 신용카드 또는 직불카드 (비자, 마스타카드, 아메리칸 익스프레스), 유로 은행 계좌 (SEPA Direct Debit), 또는 PayPal을 통해 가능합니다."
 
 msgid "Credit/Debit Card"
 msgstr "신용/직불카드"
@@ -1471,11 +1470,11 @@ msgstr "수입: {0}/주"
 msgid "Mission accomplished!"
 msgstr "목표 달성!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
 msgstr "{timespan_ago}에 가입함."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "{timespan_ago}에 닫힘."
 
@@ -1534,7 +1533,7 @@ msgstr "(포크)"
 msgid "Updated this week"
 msgstr "이 주에 업데이트됨"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "{timespan_ago} 에 업데이트됨"
 
@@ -1639,15 +1638,15 @@ msgstr "{1} 님께 매주 {0} 만큼을 기부하고 있습니다. 다른 금액
 msgid "Please select or input an amount:"
 msgstr "선택하거나 값을 넣어 주세요:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] "화폐 설정이 잘못되어 있나요? {n} 개의 화폐가 지원됩니다:"
+msgstr[0] "{currency_name}이 선호하는 화폐가 아닌가요? {n} 개의 화폐가 지원됩니다:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] ""
+msgstr[0] "{currency_name}이 선호하는 화폐가 아닌가요? {username} 님은 {n} 개의 화폐를 지원합니다:"
 
 msgid "not supported by PayPal"
 msgstr ""
@@ -1839,7 +1838,7 @@ msgstr "프로필에 연결된 {platform} 계정이 존재하지 않습니다."
 msgid "Connect {0} account"
 msgstr "{0} 계정 연결하기"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
 msgstr[0] "{n} 개의 저장소를 {platform} 계정에서 {timespan_ago}에 들여왔습니다."
@@ -2355,7 +2354,7 @@ msgstr "고치기"
 msgid "History"
 msgstr "역사"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} 님은 {timespan_ago}에 가입했습니다."
 
@@ -2592,11 +2591,11 @@ msgstr "팀은 팀에 가입할 수 없습니다"
 msgid "You can't invite an inactive user to join a team."
 msgstr "비활성화된 사용자를 팀에 초대할 수 없습니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
 msgstr "{username} 님은 이미 {timespan_ago}에 팀에 초대되었습니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
 msgstr "{username} 님은 이미 {timespan_ago}에 팀 초대를 거절했습니다."
 
@@ -3748,7 +3747,7 @@ msgstr "안전"
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "저희의 보호 하에 있는 자금은 저희 또는 저희의 자금을 위탁받은 제3자가 파산하더라도 안전함을 보증합니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
 msgstr[0] "Liberapay는 {timespan_ago}에 설립되었고 {n} 명의 사용자가 있습니다."
@@ -3757,12 +3756,12 @@ msgstr[0] "Liberapay는 {timespan_ago}에 설립되었고 {n} 명의 사용자�
 msgid "{0} is escrowed within Liberapay."
 msgstr "{0} 만큼이 Liberapay에 에스크로 되어 있습니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
 msgstr[0] "가장 최근의 주간 지불일은 {timespan_ago}이었으며 {money_amount} 사용자 간에 {n} 만큼 이체되었습니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
 msgstr[0] "{n} 사용자가 기부에 참여하였습니다."
