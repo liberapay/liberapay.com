@@ -360,7 +360,7 @@ msgstr "{bank_name} のお使いの口座（{partial_account_number}）からの
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "お使いの銀行口座（{partial_account_number}）からの {money_amount} の口座自動振替を開始しました。"
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
@@ -691,11 +691,11 @@ msgstr "'{domain_name}' は有効なメールアドレスのドメインでは�
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "{timespan_ago} の {email_address} へのメールの送信に失敗したため、このメールアドレスはブラックリストに掲載されています。ブラックリストから削除するには、そのメールアドレスから support@liberapay.com 宛にメールを送信してください。"
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "{timespan_ago} に苦情を受けたため、メールアドレス {email_address} はブラックリストに掲載されています。ブラックリストから削除するには、そのメールアドレスから support@liberapay.com 宛にメールを送信してください。"
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."

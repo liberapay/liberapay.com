@@ -1032,9 +1032,8 @@ msgstr "Zrušiť"
 msgid "Confirm"
 msgstr "Potvrdiť"
 
-#, fuzzy
 msgid "Linked Accounts"
-msgstr "Účty inde"
+msgstr "Prepojené účty"
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr "Spojením s účtami, ktoré vlastníte na iných platformách, uľahčíte hľadanie vášho Liberapay profilu a lepšie ukážete, že ste, za koho sa vydávate."
@@ -1297,7 +1296,7 @@ msgid "Security"
 msgstr "Bezpečnosť"
 
 msgid "Logos"
-msgstr ""
+msgstr "Logá"
 
 msgid "Overview"
 msgstr "Prehľad"
@@ -1594,7 +1593,7 @@ msgid "Search Liberapay"
 msgstr "Hladať na Liberapay"
 
 msgid "Switch to a different account"
-msgstr ""
+msgstr "Prepnúť na iný účet"
 
 msgid "The changes have been saved."
 msgstr "Zmeny boli uložené."
@@ -1682,19 +1681,19 @@ msgstr "Momentálne darujete {0} za týždeň pre {1}. Môžete zvoliť alebo vl
 msgid "Please select or input an amount:"
 msgstr "Prosím vyberte alebo zadajte čiastku:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] "Zlá mena? K dispozíci je aj iná:"
-msgstr[1] "Zlá mena: K dispozícií sú {n} ďalšie:"
-msgstr[2] "Zlá mena? K dispozicií je {n} ďalších:"
+msgstr[0] "{currency_name} nie je vami preferovaná mena? {n} ďalší je podporovaný:"
+msgstr[1] "{currency_name} nie je vami preferovaná mena? {n} ďalšie je podporovaný:"
+msgstr[2] "{currency_name} nie je vami preferovaná mena? {n} ďalších je podporovaný:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] "Zlá mena? {username} príjma aj inú:"
-msgstr[1] "Zlá mena? {username} prijma aj {n} ďalšie:"
-msgstr[2] "ZLá mena? {username} príjma aj {n} ďalších:"
+msgstr[0] "{currency_name} nie je vami preferovaná mena? {username} podporuje {n} ďalší:"
+msgstr[1] "{currency_name} nie je vami preferovaná mena? {username} podporuje {n} ďalšie:"
+msgstr[2] "{currency_name} nie je vami preferovaná mena? {username} podporuje {n} ďalších:"
 
 msgid "Switch"
 msgstr "Prepnúť"
@@ -2148,7 +2147,7 @@ msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
 msgstr "{bold}Celkovo:{bold_end} {0} za týždeň ~ {1} za mesiac ~ {2} za rok."
 
 msgid "You are currently not donating to anyone."
-msgstr ""
+msgstr "Momentálne nikoho nepodporujete."
 
 msgid "Cancel the pledge"
 msgstr "Zrušiť prísľub"
@@ -2177,18 +2176,18 @@ msgstr "Platenie vašich darov"
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "Kvôli technickým a legálnym limitáciam nie sme schpný spracovať váš dar v jednej platbe. Namiesto toho musíme vystaviť {n} ďalšie oddelené platby. Ospravedlňujeme sa za nepríjemnosti."
+msgstr[2] "Kvôli technickým a legálnym limitáciam nie sme schpný spracovať váš dar v jednej platbe. Namiesto toho musíme vystaviť {n} ďalších oddelené platby. Ospravedlňujeme sa za nepríjemnosti."
 
 msgid "We are able to group these donations into a single payment."
-msgstr ""
+msgstr "Sme schopní zoskupiť tieto dary do jednej platby."
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr ""
+msgstr "Vaše dary pre {recipients} očakávajú zaplatenie."
 
 msgid "For now this donation can only be renewed externally through PayPal."
-msgstr ""
+msgstr "Tento dar môže byť obnovený jedine externe cez PayPal."
 
 msgid "Please choose a payment method:"
 msgstr "Prosím zvoľte platobnú metódu:"
@@ -2210,7 +2209,7 @@ msgstr "Nie anonymné"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
-msgstr ""
+msgstr "Váš dar pre {team} nemôže byť spracovaným, pretože by ste posielali peniaze sebe."
 
 msgid "All your donations are funded."
 msgstr "Všetky vaše dary boli zaplatené."
@@ -2236,12 +2235,12 @@ msgstr "Platba čaká na schválenie."
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Máte {n} ďalší dar očakávajúci platbu."
+msgstr[1] "Máte {n} ďalšie dary očakávajúce platbu."
+msgstr[2] "Máte {n} ďalších darov očakávajúcich platbu."
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "Momentálne nemáte žiadny dar očakávajúci platbu."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
@@ -2272,7 +2271,7 @@ msgstr "Vlastná čiastka (min = {0}, max = {1})"
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr ""
+msgstr "Celá čiastka vašej platby pôjde okamžite do {payment_provider} účtov {recipient_names}."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
@@ -2293,7 +2292,7 @@ msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "Platobný systém {name} vrátil chybu: \"{error_message}\"."
 
 msgid "More information is required in order to process this payment."
-msgstr ""
+msgstr "Ďalšie informácie sú potrebné na spracovanie tejto platby."
 
 msgid "The payment has been initiated."
 msgstr "Platba bola zahájená."
@@ -2312,9 +2311,8 @@ msgstr "Budeme účtovať z Vášho {bank_name} účtu ({partial_account_number}
 msgid "Use another bank account"
 msgstr "Použite iný bankový účet"
 
-#, fuzzy
 msgid "Please input your name and card number:"
-msgstr "Prosím vpíšte číslo karty:"
+msgstr "Prosím vypíšte svoje meno a číslo karty:"
 
 msgid "Jane Doe"
 msgstr "Jožko Mrkvička"
@@ -2408,7 +2406,7 @@ msgstr "Upraviť"
 msgid "History"
 msgstr "História"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} sa pridal {timespan_ago}."
 
@@ -2426,7 +2424,7 @@ msgstr "Počet patrónov týždenne"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} nezverejňuje koľko dostáva cez Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Faktúry sú súkromné."
@@ -2585,7 +2583,7 @@ msgid "Fees"
 msgstr "Poplatky"
 
 msgid "Method"
-msgstr ""
+msgstr "Metóda"
 
 msgid "charge"
 msgstr "účtovať"
@@ -4361,9 +4359,9 @@ msgstr[2] "Taktiež je čiastočné preložená do {n} jazykov ({link_open}s pre
 #, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
 msgid_plural "Your profile descriptions and other texts can be published in up to {n} languages."
-msgstr[0] "Váš popis môže byť pubikovaný až v {n} jazyku."
-msgstr[1] "Váš popis môže byť pubikovaný až v {n} jazykoch."
-msgstr[2] "Váš popis môže byť pubikovaný až v {n} jazykoch."
+msgstr[0] "Váš popis môže byť publikovaný až v {n} jazyku."
+msgstr[1] "Váš popis môže byť publikovaný až v {n} jazykoch."
+msgstr[2] "Váš popis môže byť publikovaný až v {n} jazykoch."
 
 msgid "Multiple currencies"
 msgstr "Viac mien"
