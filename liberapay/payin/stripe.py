@@ -199,7 +199,8 @@ def settle_payin(db, payin):
             raise NextAction(intent)
         err = intent.last_payment_error
         if err and intent.status in ('requires_payment_method', 'canceled'):
-            return update_payin(db, payin.id, err.charge, 'failed', err.message)
+            charge_id = getattr(err, 'charge', None)
+            return update_payin(db, payin.id, charge_id, 'failed', err.message)
         if intent.charges.data:
             charge = intent.charges.data[0]
         else:
