@@ -12,7 +12,7 @@ from pando.website import Website
 
 
 env = Environment(
-    ASPEN_CHANGES_RELOAD=str,
+    ASPEN_CHANGES_RELOAD=is_yesish,
     ASPEN_PROJECT_ROOT=str,
     ASPEN_SHOW_TRACEBACKS=str,
     ASPEN_WWW_ROOT=str,

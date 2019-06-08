@@ -43,8 +43,8 @@ from liberapay.utils import (
 from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
-    canonize, insert_constants, _dispatch_path_to_filesystem, enforce_rate_limits,
-    handle_negotiation_exception, add_content_disposition_header, merge_exception_into_response,
+    canonize, insert_constants, enforce_rate_limits,
+    add_content_disposition_header, merge_exception_into_response,
     bypass_csp_for_form_redirects, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
@@ -64,11 +64,12 @@ json.register_encoder(Object, lambda o: o.__dict__)
 
 website.renderer_default = 'unspecified'  # require explicit renderer, to avoid escaping bugs
 
-website.renderer_factories['csv_dump'] = csv_dump.Factory(website)
-website.renderer_factories['jinja2'] = jinja2.Factory(website)
-website.renderer_factories['jinja2_html_jswrapped'] = jinja2_jswrapped.Factory(website)
-website.renderer_factories['jinja2_xml_min'] = jinja2_xml_min.Factory(website)
-website.renderer_factories['scss'] = scss.Factory(website)
+rp = website.request_processor
+website.renderer_factories['csv_dump'] = csv_dump.Factory(rp)
+website.renderer_factories['jinja2'] = jinja2.Factory(rp)
+website.renderer_factories['jinja2_html_jswrapped'] = jinja2_jswrapped.Factory(rp)
+website.renderer_factories['jinja2_xml_min'] = jinja2_xml_min.Factory(rp)
+website.renderer_factories['scss'] = scss.Factory(rp)
 website.default_renderers_by_media_type['text/html'] = 'jinja2'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'
 
@@ -96,14 +97,14 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
 # Configure body_parsers
 # ======================
 
-del website.body_parsers[website.media_type_json]
+del website.body_parsers[rp.media_type_json]
 
 
 # Wireup Algorithm
 # ================
 
 attributes_before = set(website.__dict__.keys())
-d = wireup.full_algorithm.run(**website.__dict__)
+d = wireup.full_algorithm.run(**dict(website.__dict__, **rp.__dict__))
 d.pop('chain', None)
 d.pop('exception', None)
 d.pop('state', None)
@@ -126,8 +127,10 @@ if not website.db:
 
 if env.cache_static:
     http_caching.compile_assets(website)
+    website.request_processor.dispatcher.build_dispatch_tree()
 elif env.clean_assets:
     http_caching.clean_assets(website.www_root)
+    website.request_processor.dispatcher.build_dispatch_tree()
 
 
 # Periodic jobs
@@ -164,7 +167,6 @@ algorithm = website.state_chain
 algorithm.functions = [
     algorithm['parse_environ_into_request'],
     attach_environ_to_request,
-    algorithm['insert_variables_for_aspen'],
     algorithm['raise_200_for_OPTIONS'],
     create_response_object,
 
@@ -179,8 +181,8 @@ algorithm.functions = [
     authentication.authenticate_user_if_possible,
     add_currency_to_state,
 
-    _dispatch_path_to_filesystem,
-    algorithm['handle_dispatch_exception'],
+    algorithm['dispatch_path_to_filesystem'],
+    algorithm['raise_404_if_missing'],
 
     http_caching.get_etag_for_file if env.cache_static else noop,
     http_caching.try_to_serve_304 if env.cache_static else noop,
@@ -188,9 +190,10 @@ algorithm.functions = [
     enforce_rate_limits,
 
     algorithm['load_resource_from_filesystem'],
+    algorithm['extract_accept_header'],
     algorithm['render_response'],
     add_content_disposition_header,
-    handle_negotiation_exception,
+    algorithm['handle_negotiation_exception'],
 
     tell_sentry,
     merge_exception_into_response,
@@ -380,11 +383,11 @@ def _render(response, path, state, **extra):
     state.update(extra)
     if 'dispatch_result' not in state:
         state['dispatch_result'] = DispatchResult(
-            DispatchStatus.okay, path, {}, "Response.render()", {}, False
+            DispatchStatus.okay, path, None, None, None
         )
-    request_processor = state['request_processor']
-    resource = aspen.resources.get(request_processor, path)
-    render_response(state, resource, response, request_processor)
+    website = state['website']
+    resource = website.request_processor.resources.get(path)
+    render_response(state, resource, response, website)
     raise response
 pando.Response.render = _render
 

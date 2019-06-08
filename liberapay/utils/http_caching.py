@@ -7,7 +7,6 @@ from hashlib import md5
 import os
 from tempfile import mkstemp
 
-from aspen import resources
 from aspen.request_processor.dispatcher import DispatchResult, DispatchStatus
 from pando import Response
 
@@ -23,10 +22,11 @@ def compile_assets(website):
         filepath = spt[:-4]  # /path/to/www/assets/foo.css
         if not os.path.exists(filepath):
             cleanup.append(filepath)
-        dispatch_result = DispatchResult(DispatchStatus.okay, spt, {}, "Found.", {}, True)
+        dispatch_result = DispatchResult(DispatchStatus.okay, spt, None, None, None)
         state = dict(dispatch_result=dispatch_result, response=Response())
         state['state'] = state
-        content = resources.get(website.request_processor, spt).render(state).body
+        resource = website.request_processor.resources.get(spt)
+        content = resource.render(state, dispatch_result, None).body
         if not isinstance(content, bytes):
             content = content.encode('utf8')
         tmpfd, tmpfpath = mkstemp(dir='.')

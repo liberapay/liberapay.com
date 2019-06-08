@@ -1,11 +1,8 @@
 import socket
-import string
 from urllib.parse import urlsplit, urlunsplit
 
-from aspen.exceptions import NegotiationFailure, NotFound, RedirectFromSlashless, UnindexedDirectory
-from aspen.request_processor.algorithm import dispatch_path_to_filesystem
 from pando import Response
-from pando.http.request import Line, Path
+from pando.http.request import Line
 from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
@@ -91,49 +88,6 @@ def insert_constants():
     return {'constants': constants}
 
 
-def _dispatch_path_to_filesystem(website, request=None):
-    """This wrapper function neutralizes some of Aspen's dispatch exceptions.
-
-    - RedirectFromSlashless, always
-    - NotFound, when it's due to an extra slash at the end of the path (i.e.
-      dispatch `/foo/bar/` to `/foo/bar.spt`).
-    """
-    if request is None:
-        return
-    path = request.path
-    qs = request.qs
-    request_processor = website.request_processor
-    try:
-        return dispatch_path_to_filesystem(
-            request_processor=request_processor, path=path, querystring=qs
-        )
-    except UnindexedDirectory:
-        raise
-    except NotFound:
-        raw_path = path.decoded
-        if len(raw_path) < 3 or raw_path[-1] != '/' or raw_path[-2] == '/':
-            raise
-        path = Path(request.line.uri.path[:-1])
-        if '.' in path.parts[-1]:
-            # Don't dispatch `/foo.html/` to a `/foo.html` file
-            raise
-        r = dispatch_path_to_filesystem(
-            request_processor=request_processor, path=path.mapping, querystring=qs
-        )
-        r['path'] = request.line.uri.path = path
-        request.canonical_path = raw_path
-        return r
-    except RedirectFromSlashless as exception:
-        path = urlquote(exception.message, string.punctuation).encode('ascii')
-        path = request.line.uri.path = Path(path)
-        request.canonical_path = path.decoded
-        r = dispatch_path_to_filesystem(
-            request_processor=request_processor, path=path.mapping, querystring=qs
-        )
-        r['path'] = path
-        return r
-
-
 def enforce_rate_limits(request, user, website):
     if request.method in ('GET', 'HEAD'):
         return
@@ -141,16 +95,6 @@ def enforce_rate_limits(request, user, website):
         website.db.hit_rate_limit('http-unsafe.user', user.id, TooManyRequests)
     else:
         website.db.hit_rate_limit('http-unsafe.ip-addr', request.source, TooManyRequests)
-
-
-def handle_negotiation_exception(exception):
-    if isinstance(exception, NotFound):
-        response = Response(404)
-    elif isinstance(exception, NegotiationFailure):
-        response = Response(406, exception.message)
-    else:
-        return
-    return {'response': response, 'exception': None}
 
 
 def add_content_disposition_header(request, response):

@@ -18,20 +18,20 @@ class Tests(Harness):
 
     def test_get_participant_gets_participant(self):
         expected = self.make_participant('alice')
-        state = self.client.GET('/alice/', return_after='handle_dispatch_exception',
+        state = self.client.GET('/alice/', return_after='dispatch_path_to_filesystem',
                                 want='state')
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
     def test_get_participant_gets_participant_from_id(self):
         expected = self.make_participant('alice')
-        state = self.client.POST('/~1/', return_after='handle_dispatch_exception',
+        state = self.client.POST('/~1/', return_after='dispatch_path_to_filesystem',
                                  want='state')
         actual = utils.get_participant(state, restrict=False)
         assert actual == expected
 
     def GxT(self, path):
-        state = self.client.GET(path, return_after='handle_dispatch_exception',
+        state = self.client.GET(path, return_after='dispatch_path_to_filesystem',
                                 want='state')
         with self.assertRaises(Response) as cm:
             utils.get_participant(state, restrict=False)

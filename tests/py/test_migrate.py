@@ -2,8 +2,6 @@ from os.path import abspath
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-from aspen import resources
-
 from liberapay.constants import EPOCH
 from liberapay.testing import Harness
 
@@ -46,8 +44,9 @@ class TestMigrate(Harness):
         assert r.code == 200
         assert "Welcome, alice!" in r.text, r.text
         # Step 2
-        cache_entry = resources.__cache__[abspath('www/migrate.spt')]
-        simplate_context = cache_entry.resource.pages[0]
+        resources = self.website.request_processor.resources
+        cache_entry = resources.cache[abspath('www/migrate.spt')]
+        simplate_context = cache_entry.resource.page_one
         requests = MagicMock()
         requests.post.return_value = gratipay_response
         with patch.dict(simplate_context, {'requests': requests}):

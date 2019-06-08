@@ -184,6 +184,8 @@ def log_admin_request(admin, participant, request):
 
 def look_up_redirections(request, response):
     path = request.path.raw
+    if not path.endswith('/'):
+        path += '/'
     r = website.db.one("""
         SELECT *
           FROM redirections
