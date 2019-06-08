@@ -452,6 +452,13 @@ class Participant(Model, MixinTeam):
         del self.session
         erase_cookie(cookies, SESSION)
 
+    def get_login_url(self):
+        return self.url('settings/', [
+            ('log-in.id', self.id),
+            ('log-in.key', self.session.id),
+            ('log-in.token', self.session.secret)
+        ])
+
 
     # Permissions
     # ===========

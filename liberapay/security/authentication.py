@@ -87,17 +87,13 @@ def sign_in_with_form_data(body, state):
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
                 p.start_session(suffix='.em')
-                qs = [
-                    ('log-in.id', p.id),
-                    ('log-in.key', p.session.id),
-                    ('log-in.token', p.session.secret)
-                ]
                 p.send_email(
                     'login_link',
                     email,
-                    link=p.url('settings/', qs),
+                    link=p.get_login_url(),
                     link_validity=SESSION_TIMEOUT,
                 )
+                p.session = None
                 state['log-in.email-sent-to'] = email
                 raise LoginRequired
             else:
