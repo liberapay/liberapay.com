@@ -1133,7 +1133,7 @@ class Payday(object):
         for p, donations in participants:
             for tip in donations:
                 tip['periodic_amount'] = Money(**tip['periodic_amount'])
-            p.notify('donate_reminder', donations=donations)
+            p.notify('donate_reminder', donations=donations, email_unverified_address=True)
             n += 1
         log("Sent %i donate_reminder notifications." % n)
 
