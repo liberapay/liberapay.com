@@ -414,7 +414,10 @@ class Payday(object):
         total_income = MoneyBasket(t.full_amount for t in tips)
         if total_income == 0:
             return (), total_income
-        takes = [t for t in takes if t.amount != 0]
+        if mangopay.sandbox:
+            takes = [t for t in takes if t.amount != 0]
+        else:
+            takes = [t for t in takes if t.amount != 0 and t.paid_in_advance]
         if not takes:
             return (), total_income
         fuzzy_income_sum = total_income.fuzzy_sum(ref_currency)
