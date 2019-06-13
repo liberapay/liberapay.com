@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/liberapay/liberapay.com.svg?branch=master)](https://travis-ci.org/liberapay/liberapay.com)
 [![Weblate](https://hosted.weblate.org/widgets/liberapay/-/shields-badge.svg)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+[![Open Source Helpers](https://www.codetriage.com/liberapay/liberapay.com/badges/users.svg)](https://www.codetriage.com/liberapay/liberapay.com)
 [![Gitter](https://badges.gitter.im/liberapay/salon.svg)](https://gitter.im/liberapay/salon?utm_source=badge)
 [![Income](https://img.shields.io/liberapay/receives/Liberapay.svg)](https://liberapay.com/Liberapay)
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/liberapay/donate)
