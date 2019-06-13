@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2019-06-18 07:48+0000\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.7-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -4329,7 +4332,7 @@ msgid "Migrating from Gratipay"
 msgstr "Gratipay からの移行"
 
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "おっと、移行を開始する前に Gratipay に戻ってログインする必要があります。"
+msgstr "移行を開始する前に Gratipay に戻ってログインする必要があります。"
 
 msgid "Go back"
 msgstr "戻る"
@@ -4474,7 +4477,7 @@ msgstr "メールアドレス {0} はすでにお使いのアカウントに接�
 
 #, python-brace-format
 msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr ""
+msgstr "メールアドレス {0} はすでに別のアカウントに連携されているため、お使いのアカウントに接続できませんでした。"
 
 #, python-brace-format
 msgid ""
@@ -4482,6 +4485,9 @@ msgid ""
 "\n"
 "Please {2}check that you gave us the necessary permissions{3}."
 msgstr ""
+"ご自身が {1} 上の {0} チームのメンバーかどうかを確定できませんでした。\n"
+"\n"
+"{2}必要な権限を有効にしているか確認してください{3}。"
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
@@ -4489,7 +4495,7 @@ msgstr "本当に {0} チームの管理者ですか？"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
-msgstr ""
+msgstr "{1} チームの管理者ではない者として {0} にログインしているため、このアカウントに対する所有権の請求は却下されました。サインアウトして、{2}もう一度お試しください{3}。"
 
 #, python-brace-format
 msgid "Are you really {0}?"
@@ -4647,7 +4653,7 @@ msgid "'{0}' is not a valid domain name."
 msgstr "'{0}' は有効なドメイン名ではありません。"
 
 msgid "Which account?"
-msgstr ""
+msgstr "アカウントを選択"
 
 #, python-brace-format
 msgid "Please enter the name of the {0} account you would like to connect:"
@@ -4666,16 +4672,16 @@ msgstr "確認してください"
 
 #, python-brace-format
 msgid "{0} is connected to {1} on Liberapay. Transfer it?"
-msgstr ""
+msgstr "{0} は Liberapay で {1} に連携されています。移行しますか？"
 
 msgid "How the accounts are now"
-msgstr ""
+msgstr "アカウントの現状"
 
 msgid "No connected accounts."
-msgstr ""
+msgstr "連携されたアカウントはありません。"
 
 msgid "How the accounts will be after the transfer"
-msgstr ""
+msgstr "移行後のアカウントの状態"
 
 msgid "Abandoned:"
 msgstr ""
@@ -4685,16 +4691,16 @@ msgstr "アカウントを移行"
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
-msgstr "{platform} アカウントを連携しています"
+msgstr "{platform} アカウントを連携"
 
 msgid "Please input the email address and country of the PayPal account you want to connect:"
-msgstr "メールアドレスと、接続したい PayPal アカウントの国を入力してください。"
+msgstr "メールアドレスと、連携したい PayPal アカウントの国を入力してください。"
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr "すでにお使いの Liberapay アカウントに接続されている場合を除き、このメールアドレスに確認コードを送信します。"
+msgstr "すでにお使いの Liberapay アカウントに連携されている場合を除き、このメールアドレスに確認コードを送信します。"
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr ""
+msgstr "Paypal での支払いは現在匿名ではありません。寄付者はあなたのメールアドレスを表示でき、あなたも寄付者のメールアドレスを表示できます。"
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "申し訳ありませんが、要求されたキーワードに一致するものは見つかりませんでした。"
