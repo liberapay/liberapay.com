@@ -391,9 +391,9 @@ title = _("Funding your donations")
         <div class="alert alert-success">{{ _(
             "The payment of {charge_amount} was successful.", charge_amount=payin.amount
         ) }}</div>
-        {#<a class="btn btn-default" href="{{ payer.path('bill/%s' % payin.id) }}">{{
+        <a class="btn btn-default" href="{{ payer.path('receipts/direct/%s' % payin.id) }}">{{
             _("View receipt")
-        }}</a>#}
+        }}</a>
     % elif status == 'failed'
         <div class="alert alert-danger">{{ _(
             "The payment failed. Error message: “{0}”", payin.error
