@@ -138,20 +138,28 @@ class TestLogIn(EmailHarness):
         alice.add_email(email)
         alice.close(None)
 
+        # Sanity checks
+        email_row = alice.get_email(email)
+        assert email_row.verified is None
+        assert alice.email is None
+
+        # Initiate email log-in
         data = {'log-in.id': email.upper()}
         r = self.client.POST('/', data, raise_immediately=False)
         session = self.db.one("SELECT * FROM user_secrets WHERE participant = %s", (alice.id,))
         assert session.secret not in r.headers.raw.decode('ascii')
         assert session.secret not in r.body.decode('utf8')
 
+        # Check the email message
         Participant.dequeue_emails()
         last_email = self.get_last_email()
         assert last_email and last_email['subject'] == 'Log in to Liberapay'
-        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
-            alice.id, session.id, session.secret
+        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s&email.id=%s&email.nonce=%s' % (
+            alice.id, session.id, session.secret, email_row.id, email_row.nonce
         )
         assert qs in last_email['text']
 
+        # Log in
         r = self.client.GxT('/alice/?foo=bar&' + qs)
         assert r.code == 302
         assert r.headers[b'Location'] == b'http://localhost/alice/?foo=bar'
@@ -166,6 +174,12 @@ class TestLogIn(EmailHarness):
         """, (alice.id, session.id, session.secret))
         assert old_secret is None
         # ↑ this means that the link is only valid once
+
+        # Check that the email address is now verified
+        email_row = alice.get_email(email)
+        assert email_row.verified
+        alice = alice.refetch()
+        assert alice.email == email
 
         # Check that we can change our password
         password = 'correct-horse-battery-staple'

@@ -452,12 +452,16 @@ class Participant(Model, MixinTeam):
         del self.session
         erase_cookie(cookies, SESSION)
 
-    def get_login_url(self):
-        return self.url('settings/', [
+    def get_login_url(self, email_row):
+        qs = [
             ('log-in.id', self.id),
             ('log-in.key', self.session.id),
-            ('log-in.token', self.session.secret)
-        ])
+            ('log-in.token', self.session.secret),
+        ]
+        if not email_row.verified:
+            qs.append(('email.id', email_row.id))
+            qs.append(('email.nonce', email_row.nonce))
+        return self.url('settings/', qs)
 
 
     # Permissions
@@ -1022,7 +1026,6 @@ class Participant(Model, MixinTeam):
             """, (self.id, email))
         except IntegrityError:
             return emails.VERIFICATION_STYMIED
-
         if not self.email:
             self.update_email(email)
         return emails.VERIFICATION_SUCCEEDED

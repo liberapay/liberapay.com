@@ -70,7 +70,6 @@ def sign_in_with_form_data(body, state):
                     p.check_password(password, context='login')
                 except Exception as e:
                     website.tell_sentry(e, state)
-
         elif k == 'username':
             state['log-in.error'] = _("\"{0}\" is not a valid email address.", id)
             return
@@ -83,14 +82,15 @@ def sign_in_with_form_data(body, state):
                     email
                 )
             elif p:
-                if not p.get_email(email).verified:
+                email_row = p.get_email(email)
+                if not email_row.verified:
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
                 p.start_session(suffix='.em')
                 p.send_email(
                     'login_link',
                     email,
-                    link=p.get_login_url(),
+                    link=p.get_login_url(email_row),
                     link_validity=SESSION_TIMEOUT,
                 )
                 p.session = None
@@ -194,7 +194,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
     if request.line.uri.startswith(b'/assets/'):
         return
 
-    if not state['website'].db:
+    db = state['website'].db
+    if not db:
         return
 
     # Cookie and form auth
@@ -228,6 +229,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
         id = request.qs.pop('log-in.id')
         session_id = request.qs.pop('log-in.key', 1)
         token = request.qs.pop('log-in.token', None)
+        email_id = request.qs.pop('email.id', '')
+        email_nonce = request.qs.pop('email.nonce', '')
         if not (token and token.endswith('.em')):
             raise response.error(400, _("This login link is expired or invalid."))
         p = Participant.authenticate(id, session_id, token)
@@ -238,6 +241,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
             redirect_url = request.path.raw + qs
             session_p = p
             session_suffix = '.em'
+            if not p.email:
+                p.verify_email(email_id, email_nonce)
     if p:
         if session_p:
             session_p.sign_out(response.headers.cookie)
