@@ -583,6 +583,9 @@ msgstr "Przelew bankowy"
 msgid "Credit Card"
 msgstr "Karta kredytowa"
 
+msgid "Credit/Debit Card"
+msgstr "Karta kredytowa/debetowa"
+
 msgid "Hide total giving from others."
 msgstr "Nie pokazuj innym ile łącznie przekazuję."
 
@@ -1426,9 +1429,6 @@ msgstr ""
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr ""
-
-msgid "Credit/Debit Card"
-msgstr "Karta kredytowa/debetowa"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Ludzie tworzący dobra wspólne potrzebują Twojej pomocy, by mogli kontynuować swoją pracę. Tworzenie wolnego oprogramowania, czy dzielenie się wiedzą: czynności te wymagają czasu i pieniędzy, nie tylko by stworzyć dany produkt, ale także by go utrzymywać."
@@ -2773,6 +2773,40 @@ msgstr "ID transakcji: {0}"
 
 msgid "This document is not an invoice."
 msgstr "Ten dokument nie jest fakturą."
+
+#, python-brace-format
+msgid "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received."
+msgstr ""
+
+#, python-brace-format
+msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
+msgstr ""
+
+msgid "The money has been donated to the following recipient:"
+msgid_plural "The money has been donated to the following recipients:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "{recipient}, member of the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "Payment method: {brand} card, number ending in {last4}"
+msgstr ""
+
+#, python-brace-format
+msgid "Payment method: direct debit of bank account {partial_account_number}"
+msgstr ""
+
+#, python-brace-format
+msgid "Settlement date: {0}"
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr ""

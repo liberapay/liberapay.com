@@ -577,6 +577,9 @@ msgstr "Banköverföring"
 msgid "Credit Card"
 msgstr "Kreditkort"
 
+msgid "Credit/Debit Card"
+msgstr "Kredit- eller debitkort"
+
 msgid "Hide total giving from others."
 msgstr "Dölj mina totala donationer för andra."
 
@@ -1415,9 +1418,6 @@ msgstr "Donationer till {username} hanteras genom PayPal. Du kan betala med kred
 #, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Donationer till {username} kan betalas med kredit- eller debetkort (Visa, MasterCard, American Express), eller genom PayPal."
-
-msgid "Credit/Debit Card"
-msgstr "Kredit- eller debitkort"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Personer som bidrar till allmänningarna behöver din hjälp för att stödja sitt arbete. Att bygga fri programwara, sprida gratis kunskap, dessa saker tar tid och kostar pengar, inte bara det initiala arbetet, utan också att underhålla det över tiden."
@@ -2749,6 +2749,39 @@ msgstr "Transaktionsid: {0}"
 
 msgid "This document is not an invoice."
 msgstr "Detta dokument är inte en faktura."
+
+#, python-brace-format
+msgid "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received."
+msgstr ""
+
+#, python-brace-format
+msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
+msgstr ""
+
+msgid "The money has been donated to the following recipient:"
+msgid_plural "The money has been donated to the following recipients:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "{recipient}, member of the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "Payment method: {brand} card, number ending in {last4}"
+msgstr ""
+
+#, python-brace-format
+msgid "Payment method: direct debit of bank account {partial_account_number}"
+msgstr ""
+
+#, python-brace-format
+msgid "Settlement date: {0}"
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr ""

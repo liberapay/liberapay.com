@@ -592,6 +592,9 @@ msgstr "銀行轉帳"
 msgid "Credit Card"
 msgstr "信用卡"
 
+msgid "Credit/Debit Card"
+msgstr "信用卡/ 簽帳金融卡"
+
 msgid "Hide total giving from others."
 msgstr "不顯示別人給予的捐款。"
 
@@ -1424,9 +1427,6 @@ msgstr "給{username}捐款透過 PayPal 支付，如果沒有 PayPal 帳號還�
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "捐助給{username}可使用信用卡或簽帳金融卡(Visa, MasterCard, American Express)，或是透過 PayPal 支付。"
-
-msgid "Credit/Debit Card"
-msgstr "信用卡/ 簽帳金融卡"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
@@ -2748,6 +2748,38 @@ msgstr "交易 ID： {0}"
 
 msgid "This document is not an invoice."
 msgstr "此文件不是發票。"
+
+#, python-brace-format
+msgid "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received."
+msgstr ""
+
+#, python-brace-format
+msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
+msgstr ""
+
+msgid "The money has been donated to the following recipient:"
+msgid_plural "The money has been donated to the following recipients:"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "{recipient}, member of the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "Payment method: {brand} card, number ending in {last4}"
+msgstr ""
+
+#, python-brace-format
+msgid "Payment method: direct debit of bank account {partial_account_number}"
+msgstr ""
+
+#, python-brace-format
+msgid "Settlement date: {0}"
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "你必須設定支付方法才能收取新的捐款。"
