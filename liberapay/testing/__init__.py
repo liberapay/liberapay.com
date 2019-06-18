@@ -342,17 +342,17 @@ class Harness(unittest.TestCase):
         """, data)
 
     def upsert_route(self, participant, network,
-                     status='chargeable', one_off=False, remote_user_id='x'):
+                     status='chargeable', one_off=False, address='x', remote_user_id='x'):
         r = self.db.one("""
             INSERT INTO exchange_routes AS r
                         (participant, network, address, status, one_off, remote_user_id)
-                 VALUES (%s, %s, 'x', %s, %s, %s)
+                 VALUES (%s, %s, %s, %s, %s, %s)
             ON CONFLICT (participant, network, address) DO UPDATE
                     SET status = excluded.status
                       , one_off = excluded.one_off
                       , remote_user_id = excluded.remote_user_id
               RETURNING r
-        """, (participant.id, network, status, one_off, remote_user_id))
+        """, (participant.id, network, address, status, one_off, remote_user_id))
         r.__dict__['participant'] = participant
         return r
 

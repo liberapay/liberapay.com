@@ -327,6 +327,9 @@ PAYMENT_METHODS = {
     'mango-ba': _("Direct Debit"),
     'mango-bw': _("Bank Wire"),
     'mango-cc': _("Credit Card"),
+    'paypal': "PayPal",
+    'stripe-card': _("Credit/Debit Card"),
+    'stripe-sdd': _("Direct Debit"),
 }
 PAYMENT_SLUGS = {
     'mango-ba': 'direct-debit',

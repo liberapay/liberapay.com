@@ -50,7 +50,6 @@ class BrowseTestHarness(MangopayHarness):
 
     def browse_setup(self):
         self.team = self.make_participant('team', kind='group')
-        self.exchange_id = self.make_exchange('mango-cc', 19, 0, self.david)
         c = self.david.create_community('Wonderland')
         self.david.upsert_community_membership(True, c.id)
         self.team.add_member(self.david)
@@ -64,7 +63,7 @@ class BrowseTestHarness(MangopayHarness):
 
     def browse(self, **kw):
         for url in self.urls:
-            if url.endswith('/%exchange_id'):
+            if url.endswith('/%exchange_id') or '/receipts/' in url:
                 continue
             url = url.replace('/team/invoices/%invoice_id', '/org/invoices/%s' % self.invoice_id)
             url = url.replace('/%invoice_id', '/%s' % self.invoice_id)

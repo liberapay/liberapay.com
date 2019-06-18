@@ -1,0 +1,177 @@
+# coding: utf8
+
+from datetime import date
+
+import stripe
+
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.payin.stripe import get_partial_iban
+from liberapay.utils import get_participant, render
+
+[---]
+
+payer = get_participant(state, restrict=True)
+
+payin_id = request.path['payin_id'].split('.html')[0]
+try:
+    payin_id = int(payin_id)
+except ValueError:
+    raise response.error(404)
+
+payin = website.db.one("""
+    SELECT *
+      FROM payins
+     WHERE id = %s
+       AND payer = %s
+       AND amount > 0
+       AND status = 'succeeded'
+""", (payin_id, payer.id))
+if payin is None:
+    raise response.error(404)
+
+payer_identity = payer.get_current_identity() or {}
+payer_name = payer_identity.get('name')
+organization_name = payer_identity.get('organization_name')
+
+route = ExchangeRoute.from_id(payer, payin.route)
+if route.network.startswith('stripe-'):
+    if route.address.startswith('pm_'):
+        pm = stripe.PaymentMethod.retrieve(route.address)
+        if not payer_name:
+            payer_name = pm.billing_details.name
+        if pm.type == 'card':
+            card_brand, card_last4 = pm.card.brand, pm.card.last4
+        elif pm.type == 'sepa_debit':
+            partial_iban = get_partial_iban(pm.sepa_debit)
+        else:
+            try:
+                raise ValueError(pm.type)
+            except ValueError as e:
+                website.tell_sentry(e, state)
+    else:
+        source = stripe.Source.retrieve(route.address)
+        if not payer_name:
+            payer_name = source.owner.name
+        if source.type == 'card':
+            card_brand, card_last4 = source.card.brand, source.card.last4
+        elif source.type == 'sepa_debit':
+            partial_iban = get_partial_iban(source.sepa_debit)
+        else:
+            try:
+                raise ValueError(source.type)
+            except ValueError as e:
+                website.tell_sentry(e, state)
+    if not payer_name:
+        customer = stripe.Customer.retrieve(route.remote_user_id)
+        payer_name = customer.name
+
+if not payer_name:
+    payer_name = payer.email or payer.get_any_email()
+
+settlement_date = website.db.one("""
+    SELECT pe.timestamp::date
+      FROM payin_events pe
+     WHERE pe.payin = %s
+       AND pe.status = 'succeeded'
+  ORDER BY pe.timestamp
+     LIMIT 1
+""", (payin.id,))
+
+payin_transfers = website.db.all("""
+    SELECT pt.amount, pt.recipient, recipient.username AS recipient_username
+         , pt.team, team.username AS team_name
+      FROM payin_transfers pt
+      JOIN participants recipient ON recipient.id = pt.recipient
+ LEFT JOIN participants team ON team.id = pt.team
+     WHERE pt.payin = %s
+""", (payin.id,))
+
+today = date.today()
+title = _("liberapay_receipt_{number}", number=str(today)+'_'+str(payin.id))
+
+output.body = render(globals(), allow_partial_i18n=False)
+
+[---] text/html
+% extends "templates/paper.html"
+
+% block content
+
+    <h1>{{ _("Receipt") }}</h1>
+
+    <p>{{ _(
+        "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received.",
+        money_amount=payin.amount,
+        payer=payer_name,
+        date=payin.ctime.date()
+    ) }}</p>
+
+    % if payin.amount_settled and payin.amount_settled.currency != payin.amount.currency
+    <p>{{ _(
+        "The funds were automatically converted from {presentment_currency} to "
+        "{settlement_currency} at a rate of {exchange_rate}.",
+        presentment_currency=payin.amount.currency,
+        settlement_currency=payin.amount_settled.currency,
+        exchange_rate=payin.amount_settled.amount / payin.amount.amount
+    ) }}</p>
+    % endif
+
+    % if payin.fee
+    <p>{{ _(
+        "{0} was paid in processing fees and {1} was distributed as detailed below.",
+        payin.fee, payin.amount_settled - payin.fee
+    ) }}</p>
+    % endif
+
+    <h2>{{ _("Beneficiaries") }}</h2>
+    <p>{{ ngettext(
+        "The money has been donated to the following recipient:",
+        "The money has been donated to the following recipients:",
+        n=len(payin_transfers)
+    ) }}</p>
+    <table class="table table-bordered">
+        <tr>
+            <th>{{ _("Recipient") }}
+            <th class="text-right">{{ _("Amount") }}
+        </tr>
+    % for pt in payin_transfers
+        <tr>
+            <td>
+            % if pt.team_name
+                {{ _(
+                    "{recipient}, member of the {team_name} team",
+                    recipient=('<a href="%s/~%s">%s</a>'|safe) % (website.canonical_url, pt.recipient, pt.recipient_username),
+                    team_name=pt.team_name
+                ) }}
+            % else
+                <a href="{{ website.canonical_url }}/~{{ pt.recipient }}">{{ pt.recipient_username }}</a>
+            % endif
+            <td class="text-right">{{ locale.format_money(pt.amount) }}
+        </tr>
+    % endfor
+    </table>
+
+    <h2>{{ _("Payment Details") }}</h2>
+    % if card_last4
+    {{ _(
+        "Payment method: {brand} card, number ending in {last4}",
+        brand=constants.CARD_BRANDS.get(card_brand, card_brand), last4=card_last4
+    ) }}
+    % elif partial_iban
+    {{ _(
+        "Payment method: direct debit of bank account {partial_account_number}",
+        partial_account_number=partial_iban
+    ) }}
+    % else
+    {{ _("Payment method: {0}", _(constants.PAYMENT_METHODS[route.network])) }}
+    % endif
+    <br>
+    {{ _("Settlement date: {0}", settlement_date) }}<br>
+    {{ _("Transaction ID: {0}", str(payin.id)) }}<br>
+
+    <footer>
+        <div>{{ locale.format_date(today) }}</div>
+        <div><em>{{ _("This document is not an invoice.") }}</em></div>
+        <div></div>
+    </footer>
+
+% endblock

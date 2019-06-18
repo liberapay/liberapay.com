@@ -8,4 +8,4 @@
 
 <p>{{ _("Thank you for this donation!") }}</p>
 
-{#<p><a href="{{ participant.url('bill/%s' % payin.id) }}">{{ _("View receipt") }}</a></p>#}
+<p><a href="{{ participant.url('receipts/direct/%s' % payin.id) }}">{{ _("View receipt") }}</a></p>
