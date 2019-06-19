@@ -1028,9 +1028,8 @@ msgstr "Batal"
 msgid "Confirm"
 msgstr "Sahkan"
 
-#, fuzzy
 msgid "Linked Accounts"
-msgstr "Akaun Lain"
+msgstr "Akaun Terpaut"
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr "Kaitkan akaun yang anda miliki di platform lain membuatkan profil Liberapay anda lebih mudah dicari, dan membantu menunjukkan anda memang anda yang sebenar."
@@ -1292,7 +1291,7 @@ msgid "Security"
 msgstr "Keselamatan"
 
 msgid "Logos"
-msgstr ""
+msgstr "Logo"
 
 msgid "Overview"
 msgstr "Keseluruhan"
@@ -1584,7 +1583,7 @@ msgid "Search Liberapay"
 msgstr "Cari Liberapay"
 
 msgid "Switch to a different account"
-msgstr ""
+msgstr "Tukar ke akaun lain"
 
 msgid "The changes have been saved."
 msgstr "Anda masih belum simpan perubahan yang dilakukan."
@@ -1672,20 +1671,20 @@ msgstr "Anda sedang menderma {0} setiap minggu kepada {1}. Anda boleh pilih atau
 msgid "Please select or input an amount:"
 msgstr "Sila pilih atau masukkan jumlah:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] "Mata wang salah? {n} mata wang lain disokong:"
-msgstr[1] "Mata wang salah? {n} mata wang lain disokong:"
+msgstr[0] "Anda tidak suka mata wang {currency_name}? {n} mata wang lain disokong:"
+msgstr[1] "Anda tidak suka mata wang {currency_name}? {n} mata wang lain disokong:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] "Mata wang salah? {username} juga menerima {n} mata wang lain:"
-msgstr[1] "Mata wang salah? {username} juga menerima {n} mata wang lain:"
+msgstr[0] "Anda tidak ingin gunakan {currency_name}? {username} juga menerima {n} mata wang lain:"
+msgstr[1] "Anda tidak ingin gunakan {currency_name}? {username} juga menerima {n} mata wang lain:"
 
 msgid "not supported by PayPal"
-msgstr ""
+msgstr "tidak disokong oleh PayPal"
 
 msgid "Switch"
 msgstr "Tukar"
@@ -2194,7 +2193,7 @@ msgstr "Akaun bank Euro sahaja"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
-msgstr ""
+msgstr "Tidak menyokong {currency}"
 
 msgid "Not anonymous"
 msgstr "Bukannya tanpa nama"
@@ -2282,7 +2281,7 @@ msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "Pemprosesan pembayaran {name} mengembalikan ralat: “{error_message}”."
 
 msgid "More information is required in order to process this payment."
-msgstr ""
+msgstr "Maklumat tambahan diperlukan untuk memproses pembayaran ini."
 
 msgid "The payment has been initiated."
 msgstr "Pembayaran telah dimulakan."
@@ -2773,36 +2772,36 @@ msgstr "Dokumen ini bukanlah invois."
 
 #, python-brace-format
 msgid "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received."
-msgstr ""
+msgstr "Kami sahkan pembayaran {money_amount} dimulakan oleh {payer} pada {date} telah diterima."
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
-msgstr ""
+msgstr "Dana telah ditukarkan dari {presentment_currency} ke {settlement_currency} pada kadar {exchange_rate}."
 
 #, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
-msgstr ""
+msgstr "{0} dibayar sebagai caj pemprosesan dan {1} diagihkan seperti dinyatakan di bawah."
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Wang telah didermakan kepada penerima berikut:"
+msgstr[1] "Wang telah didermakan kepada penerima berikut:"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
-msgstr ""
+msgstr "{recipient}, ahli kumpulan {team_name}"
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
-msgstr ""
+msgstr "Kaedah pembayaran: kad {brand}, nombor berakhir dengan {last4}"
 
 #, python-brace-format
 msgid "Payment method: direct debit of bank account {partial_account_number}"
-msgstr ""
+msgstr "Kaedah pembayaran: debit terus akaun bank {partial_account_number}"
 
 #, python-brace-format
 msgid "Settlement date: {0}"
-msgstr ""
+msgstr "Tarikh pembayaran: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Anda tidak boleh menerima derma baru sehingga anda menetapkan pemprosesan pembayaran."
@@ -2959,7 +2958,7 @@ msgstr "Kata laluan anda telah ditukar."
 
 #, python-brace-format
 msgid "The ID number of your Liberapay account is {user_id}."
-msgstr ""
+msgstr "Nombor ID akaun Liberapay anda ialah {user_id}."
 
 msgid "Account type"
 msgstr "Jenis akaun"
@@ -3769,53 +3768,53 @@ msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018.
 msgstr "{0} dahulunya rakan pembayaran asal Liberapay, tetapi mereka berhenti bekerjasama pada tahun 2018. Di bawah ialah salinan kontrak yang anda perlu terima untuk menghantar atau menerima wang melalui Liberapay sebelum Ogos 2018: "
 
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
-msgstr ""
+msgstr "Halaman ini mengandungi pautan ke dan maklumat berkaitan logo Liberapay. Kami berharap anda mendapat manfaat terutamanya ketika anda menulis artikel berkaitan Liberapay atau jika anda ingin menambah pautan sendiri ke profil Liberapay anda di laman web anda."
 
 msgid "The Liberapay logo is composed of the two letters “lp”. It's usually colored either white-on-yellow, black-on-yellow, or just black."
-msgstr ""
+msgstr "Logo Liberapay terdiri daripada dua huruf “lp”. Ia biasanya diwarnakan putih atas kuning, hitam atas kuning, atau hanya hitam."
 
 #, python-brace-format
 msgid "The Liberapay yellow is {yellow_color_code}, the black is {black_color_code}."
-msgstr ""
+msgstr "Warna kuning Liberapay ialah {yellow_color_code}, hitamnya pula ialah {black_color_code}."
 
 msgid "Legal information"
-msgstr ""
+msgstr "Maklumat sah"
 
 #, python-brace-format
 msgid "The Liberapay logo is pretty much free of copyright thanks to {CC0_link_start}the CC0 Public Domain Dedication{link_end}, so you are allowed to distribute it and modify it without asking our permission. However, the Liberapay logo is part of the Liberapay trademark, so you can't use it to represent your own products."
-msgstr ""
+msgstr "Logo Liberapay itu sendiri tidak berhakcipta kerana ianya diterbitkan sebagai {CC0_link_start}CC0 Dedikasi Domain Awam{link_end}, jadi anda boleh mengedarkannya dan mengubahnya tanpa meminta kebenaran kami. Namun begitu, logo Liberapay ini sebahagian daripada tanda dagang Liberapay, jadi anda tidak boleh menggunakannya untuk mewakili produk anda sendiri."
 
 #, python-brace-format
 msgid "You can view and download our logos below or {link_start}on GitHub{link_end}."
-msgstr ""
+msgstr "Anda boleh melihat dan memuat turun logo kami di bawah atau {link_start}di GitHub{link_end}."
 
 msgid "Download the white-on-yellow SVG"
-msgstr ""
+msgstr "Muat turun SVG putih atas kuning"
 
 #, python-brace-format
 msgid "Download the white-on-yellow PNG ({x_y} pixels)"
-msgstr ""
+msgstr "Muat turun PNG putih atas kuning ({x_y} piksel)"
 
 msgid "Download the black SVG"
-msgstr ""
+msgstr "Muat turun SVG hitam"
 
 #, python-brace-format
 msgid "Download the black PNG ({x_y} pixels)"
-msgstr ""
+msgstr "Muat turun PNG hitam ({x_y} piksel)"
 
 msgid "Download the black-on-yellow SVG"
-msgstr ""
+msgstr "Muat turun SVG hitam atas kuning"
 
 #, python-brace-format
 msgid "Download the black-on-yellow PNG ({x_y} pixels)"
-msgstr ""
+msgstr "Muat turun PNG hitam atas kuning ({x_y} piksel)"
 
 msgid "Fonts"
-msgstr ""
+msgstr "Fon"
 
 #, python-brace-format
 msgid "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}."
-msgstr ""
+msgstr "Logo Liberapay disertakan dalam fon {fa_link_start}Fork Awesome{link_end} dalam dua bentuk: {fa_liberapay_link} dan {fa_liberapay_square_link}."
 
 msgid "You need to log in to access this page."
 msgstr "Anda perlu log masuk untuk mencapai halaman ini."
