@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-06-20 04:00+0000\n"
+"PO-Revision-Date: 2019-06-21 09:00+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
 "Language: ja\n"
@@ -26,7 +26,7 @@ msgstr "メール設定を変更"
 
 #, python-brace-format
 msgid "It's time to renew your donation to {username} on Liberapay"
-msgstr "Liberapay での {username} への寄付を更新しましょう"
+msgstr "Liberapay での {username} さんへの寄付を更新しましょう"
 
 msgid "It's time to renew your donations on Liberapay"
 msgstr "Liberapay での寄付を更新しましょう"
@@ -42,7 +42,7 @@ msgstr[0] "更新を待機中の寄付が {n} 件あります："
 
 #, python-brace-format
 msgid "{amount} to {username}"
-msgstr "{username} へ {amount}"
+msgstr "{username} さんへ {amount}"
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
@@ -758,13 +758,13 @@ msgstr "ユーザー {0} は寄付を受け付けていません。"
 
 #, python-brace-format
 msgid "Donations to {username} must be in {main_currency}, not {rejected_currency}."
-msgstr ""
+msgstr "{username} さんへの寄付は{rejected_currency}ではなく、{main_currency}で行う必要があります。"
 
 msgid "It seems you're trying to delete something that doesn't exist."
-msgstr ""
+msgstr "存在しないものを削除しようとしているようです。"
 
 msgid "There isn't enough money in your wallet."
-msgstr ""
+msgstr "ウォレットに十分なお金がありません。"
 
 #, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
@@ -1339,7 +1339,7 @@ msgid "({x_percent} translated)"
 msgstr "（{x_percent} 翻訳済み）"
 
 msgid "Help us translate Liberapay"
-msgstr "Liberapay の翻訳を手伝う"
+msgstr "Liberapay の翻訳に協力する"
 
 msgid "Wallet"
 msgstr "ウォレット"
@@ -1397,7 +1397,7 @@ msgstr "キャンセル"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} はまだ支払い方法を設定していないため、寄付を今すぐには処理できません。支払いが可能になった際に通知を送信します。"
+msgstr "{username} さんはまだ支払い方法を設定していないため、寄付を今すぐには処理できません。支払いが可能になった際に通知を送信します。"
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
@@ -1405,7 +1405,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "{username} への寄付は PayPal を通じて処理されます。"
+msgstr "{username} さんへの寄付は PayPal を通じて処理されます。"
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
@@ -1649,7 +1649,7 @@ msgstr[0] "{currency_name} はお好みの通貨ではありませんか？他�
 #, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] "{currency_name} はお好みの通貨ではありませんか？{username} は他に {n} 種類の通貨を承認しています："
+msgstr[0] "{currency_name} はお好みの通貨ではありませんか？{username} さんは他に {n} 種類の通貨を承認しています："
 
 msgid "not supported by PayPal"
 msgstr ""
@@ -1705,14 +1705,14 @@ msgstr "最初の貢献者になりましょう！"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week."
-msgstr "{0} は現在 1 週間あたり {1} を受け取っています。"
+msgstr "{0} さんは現在 1 週間あたり {1} を受け取っています。"
 
 msgid "Recipient Identity"
 msgstr ""
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
-msgstr "自動認証プロセスを通じて、{0} は他のプラットフォーム上の以下のアカウントを管理していることを確認しました："
+msgstr "自動認証プロセスを通じて、{0} さんは他のプラットフォーム上の以下のアカウントを管理していることを確認しました："
 
 msgid "Frequently Asked Questions"
 msgstr "よくある質問"
@@ -1722,7 +1722,7 @@ msgstr "別の通貨で寄付できますか？"
 
 #, python-brace-format
 msgid "No, {username} only accepts payments in {currency}."
-msgstr "できません。{username} は {currency} による支払いのみを受け入れています。"
+msgstr "できません。{username} さんは {currency} による支払いのみを受け入れています。"
 
 msgid "What payment methods are available?"
 msgstr "利用可能な支払い方法には何がありますか？"
@@ -1734,14 +1734,14 @@ msgid "Can I make a one-time donation?"
 msgstr "1 回限りの寄付はできるのでしょうか？"
 
 msgid "No, but you can stop your donation at any time, and it will de facto cease if you don't top up your account when needed."
-msgstr ""
+msgstr "できません。しかし、寄付はいつでも停止できますし、必要な際に口座に入金しなければ事実上停止します。"
 
 msgid "Is this platform legit and secure?"
 msgstr "このプラットフォームは合法的で安全なものですか？"
 
 #, python-brace-format
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
-msgstr ""
+msgstr "合法です。Liberapay はフランスで{0}合法的に登録されている{1}非営利団体であり、EU（欧州連合）の金融規制に従っています。また、当サービスのセキュリティーの確保は、私たちの最重要・最優先事項です。"
 
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
@@ -2120,7 +2120,7 @@ msgstr "{timespan_ago_1} に開始しました。{timespan_ago_2} に停止し�
 
 #, python-brace-format
 msgid "You are not donating to {username}."
-msgstr ""
+msgstr "あなたは {username} さんに寄付していません。"
 
 msgid "Funding your donations"
 msgstr ""
@@ -2349,7 +2349,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{username}'s profile"
-msgstr "{username} のプロフィール"
+msgstr "{username} さんのプロフィール"
 
 msgid "Edit"
 msgstr "編集"
@@ -2359,7 +2359,7 @@ msgstr "履歴"
 
 #, python-brace-format
 msgid "{username} joined {timespan_ago}."
-msgstr "{username} は {timespan_ago} に参加しました。"
+msgstr "{username} さんは {timespan_ago} に参加しました。"
 
 msgid "View income history"
 msgstr "収入履歴を表示"
@@ -2449,7 +2449,7 @@ msgstr "状態：{0}"
 
 #, python-brace-format
 msgid "Invoices - {username}"
-msgstr "請求書 - {username}"
+msgstr "請求書 - {username} さん"
 
 msgid "Nothing to show."
 msgstr "表示するものがありません。"
@@ -2596,11 +2596,11 @@ msgstr "非アクティブなユーザーを招待してチームに参加して
 
 #, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
-msgstr "{username} はすでに {timespan_ago} に、このチームに入るように招待されています。"
+msgstr "{username} さんはすでに {timespan_ago} に、このチームに入るように招待されています。"
 
 #, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
-msgstr "{username} はすでに {timespan_ago} に、このチームに入るのを拒否しています。"
+msgstr "{username} さんはすでに {timespan_ago} に、このチームに入るのを拒否しています。"
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3680,13 +3680,13 @@ msgstr "Liberapay の運営者"
 
 #, python-brace-format
 msgid "Liberapay is a non-profit organization {0}founded in 2015 in France{1} by {2} and {3}."
-msgstr "Liberapay は {2} と {3} によって {0}2005 年にフランスで設立された{1}非営利組織です。"
+msgstr "Liberapay は {2} と {3} によって {0}2005 年にフランスで設立された{1}非営利団体です。"
 
 msgid "Legal Information"
 msgstr "法的情報"
 
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
-msgstr "この Web サイトは法律上 2005 年にフランスで設立された非営利組織である Liberapay によって管理されています（識別子：W144000981）。"
+msgstr "この Web サイトは法律上 2005 年にフランスで設立された非営利団体である Liberapay によって管理されています（識別子：W144000981）。"
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay は EU（欧州連合）の法律に従っています。パートナーの皆様のご協力のもと、起こりうる詐欺・資金洗浄・テロへの資金供与を防ぐために取引を監視しています。"
@@ -3938,7 +3938,7 @@ msgstr "チームアカウントは、最後のメンバーが離脱すると自
 
 #, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
-msgstr "直近の変更は {username} によって {timespan_ago} に行われました。"
+msgstr "直近の変更は {username} さんによって {timespan_ago} に行われました。"
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr "コミュニティーはあなたが気にしているものに取り組む人たちを見つけることを可能にします。彼らの広報を定期購読して情報をいつでも入手することもできます。"
@@ -4371,7 +4371,7 @@ msgstr "戻る"
 
 #, python-brace-format
 msgid "Welcome, {username}!"
-msgstr "{username}、ようこそ！"
+msgstr "{username} さん、ようこそ！"
 
 #, python-brace-format
 msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
@@ -4759,7 +4759,7 @@ msgstr[0] "一致するリポジトリが見つかりました"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
-msgstr "{username} は {platform} アカウントに {repo_name} という名前のリポジトリを所有しています"
+msgstr "{username} さんは {platform} アカウントに {repo_name} という名前のリポジトリを所有しています"
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
