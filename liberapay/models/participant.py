@@ -73,9 +73,11 @@ from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     NS, deserialize, erase_cookie, serialize, set_cookie, urlquote,
-    emails, markdown,
+    markdown,
 )
-from liberapay.utils.emails import check_email_blacklist, normalize_email_address
+from liberapay.utils.emails import (
+    EmailVerificationResult, check_email_blacklist, normalize_email_address
+)
 from liberapay.website import website
 
 
@@ -996,7 +998,7 @@ class Participant(Model, MixinTeam):
 
     def verify_email(self, email, nonce):
         if '' in (email, nonce):
-            return emails.VERIFICATION_MISSING
+            return EmailVerificationResult.MISSING
         if email.isdigit():
             r = self.db.one("""
                 SELECT *
@@ -1008,14 +1010,14 @@ class Participant(Model, MixinTeam):
         else:
             r = self.get_email(email)
         if r is None:
-            return emails.VERIFICATION_FAILED
+            return EmailVerificationResult.FAILED
         if r.verified:
             assert r.nonce is None  # and therefore, order of conditions matters
-            return emails.VERIFICATION_REDUNDANT
+            return EmailVerificationResult.REDUNDANT
         if not constant_time_compare(r.nonce, nonce):
-            return emails.VERIFICATION_FAILED
+            return EmailVerificationResult.FAILED
         if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
-            return emails.VERIFICATION_EXPIRED
+            return EmailVerificationResult.EXPIRED
         try:
             self.db.run("""
                 UPDATE emails
@@ -1025,10 +1027,10 @@ class Participant(Model, MixinTeam):
                    AND verified IS NULL
             """, (self.id, email))
         except IntegrityError:
-            return emails.VERIFICATION_STYMIED
+            return EmailVerificationResult.STYMIED
         if not self.email:
-            self.update_email(email)
-        return emails.VERIFICATION_SUCCEEDED
+            self.update_email(r.address)
+        return EmailVerificationResult.SUCCEEDED
 
     def get_email(self, email):
         return self.db.one("""

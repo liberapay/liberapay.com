@@ -1,9 +1,8 @@
 """Verify a participant's email
 """
-from datetime import timedelta
 
-from pando.utils import utcnow
-from liberapay.utils import b64decode_s, emails, get_participant
+from liberapay.utils import get_participant
+from liberapay.utils.emails import EmailVerificationResult
 
 [-----------------------------------------------------------------------------]
 
@@ -17,27 +16,27 @@ result = participant.verify_email(email, nonce)
 % extends "templates/base.html"
 
 % block content
-    % if result == emails.VERIFICATION_SUCCEEDED
+    % if result == EmailVerificationResult.SUCCEEDED
         <h1>{{ _("Success!") }}</h1>
         <p>{{ _("Your email address is now verified.") }}</p>
-    % elif result == emails.VERIFICATION_STYMIED
+    % elif result == EmailVerificationResult.STYMIED
         <h1>{{ _("Address Taken") }}</h1>
         <p>{{ _("This email address is already connected to a different Liberapay account.") }}</p>
-    % elif result == emails.VERIFICATION_REDUNDANT
+    % elif result == EmailVerificationResult.REDUNDANT
         <h1>{{ _("Already Verified") }}</h1>
         <p>{{ _("This email address has already been verified.") }}</p>
-    % elif result == emails.VERIFICATION_EXPIRED
+    % elif result == EmailVerificationResult.EXPIRED
         <h1>{{ _("Expired") }}</h1>
         <p>{{ _("The verification code has expired.") }}</p>
-    % elif result == emails.VERIFICATION_FAILED
+    % elif result == EmailVerificationResult.FAILED
         <h1>{{ _("Failure") }}</h1>
         <p>{{ _("The verification code is invalid.") }}</p>
-    % elif result == emails.VERIFICATION_MISSING
+    % elif result == EmailVerificationResult.MISSING
         <h1>{{ _("Missing Info") }}</h1>
         <p>{{ _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.") }}</p>
     % endif
 
-    % if result == emails.VERIFICATION_SUCCEEDED and user == participant and not participant.has_password
+    % if result == EmailVerificationResult.SUCCEEDED and user == participant and not participant.has_password
         <br><br>
         <h2>{{ _("Password") }}</h2>
         % include "templates/password-form.html"

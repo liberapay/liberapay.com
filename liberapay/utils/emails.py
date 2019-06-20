@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 from time import sleep
 
@@ -15,14 +16,13 @@ from liberapay.exceptions import (
 from liberapay.website import website, JINJA_ENV_COMMON
 
 
-(
-    VERIFICATION_MISSING,
-    VERIFICATION_FAILED,
-    VERIFICATION_EXPIRED,
-    VERIFICATION_REDUNDANT,
-    VERIFICATION_STYMIED,
-    VERIFICATION_SUCCEEDED,
-) = range(6)
+class EmailVerificationResult(Enum):
+    MISSING = 0
+    FAILED = 1
+    EXPIRED = 2
+    REDUNDANT = 3
+    STYMIED = 4
+    SUCCEEDED = 5
 
 
 jinja_env = Environment(**JINJA_ENV_COMMON)

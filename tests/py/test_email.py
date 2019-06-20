@@ -6,7 +6,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.participant import Participant
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils import emails
+from liberapay.utils.emails import EmailVerificationResult
 
 
 class TestEmail(EmailHarness):
@@ -125,7 +125,7 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = 'fake-nonce'
         r = self.alice.verify_email('alice@example.com', nonce)
-        assert r == emails.VERIFICATION_FAILED
+        assert r == EmailVerificationResult.FAILED
         self.hit_verify('alice@example.com', nonce)
         expected = None
         actual = Participant.from_username('alice').email
@@ -137,7 +137,7 @@ class TestEmail(EmailHarness):
         nonce = self.alice.get_email(address).nonce
         r = self.alice.verify_email(address, nonce)
         r = self.alice.verify_email(address, nonce)
-        assert r == emails.VERIFICATION_REDUNDANT
+        assert r == EmailVerificationResult.REDUNDANT
 
     def test_verify_email_expired_nonce(self):
         address = 'alice@example.com'
@@ -149,7 +149,7 @@ class TestEmail(EmailHarness):
         """, (self.alice.id,))
         nonce = self.alice.get_email(address).nonce
         r = self.alice.verify_email(address, nonce)
-        assert r == emails.VERIFICATION_EXPIRED
+        assert r == EmailVerificationResult.EXPIRED
         actual = Participant.from_username('alice').email
         assert actual == None
 
@@ -194,7 +194,7 @@ class TestEmail(EmailHarness):
         self.alice.add_email('alice@example.com')
         nonce = self.alice.get_email('alice@example.com').nonce
         r = self.alice.verify_email('alice@example.com', nonce)
-        assert r == emails.VERIFICATION_SUCCEEDED
+        assert r == EmailVerificationResult.SUCCEEDED
 
         with self.assertRaises(EmailAlreadyTaken):
             bob.add_email('alice@example.com')
