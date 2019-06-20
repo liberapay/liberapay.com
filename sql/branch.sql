@@ -1,0 +1,1 @@
+ALTER TABLE emails ALTER COLUMN participant DROP NOT NULL;

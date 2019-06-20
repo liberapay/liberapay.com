@@ -789,7 +789,7 @@ class Participant(Model, MixinTeam):
 
             DELETE FROM community_memberships WHERE participant=%(id)s;
             DELETE FROM subscriptions WHERE subscriber=%(id)s;
-            DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
+            UPDATE emails SET participant = NULL WHERE participant=%(id)s AND address <> %(email)s;
             DELETE FROM notifications WHERE participant=%(id)s;
             DELETE FROM statements WHERE participant=%(id)s;
 
@@ -905,7 +905,7 @@ class Participant(Model, MixinTeam):
             self.close(None)
         with self.db.get_cursor() as cursor:
             cursor.run("""
-                DELETE FROM emails WHERE participant = %(p_id)s;
+                UPDATE emails SET participant = NULL WHERE participant = %(p_id)s;
                 DELETE FROM events WHERE participant = %(p_id)s;
                 DELETE FROM user_secrets
                       WHERE participant = %(p_id)s
@@ -1066,8 +1066,12 @@ class Participant(Model, MixinTeam):
             raise CannotRemovePrimaryEmail()
         with self.db.get_cursor() as c:
             self.add_event(c, 'remove_email', address)
-            c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
-                  (self.id, address))
+            c.run("""
+                UPDATE emails
+                   SET participant = NULL
+                 WHERE participant = %s
+                   AND address = %s
+            """, (self.id, address))
             n_left = c.one("SELECT count(*) FROM emails WHERE participant=%s", (self.id,))
             if n_left == 0:
                 raise CannotRemovePrimaryEmail()
