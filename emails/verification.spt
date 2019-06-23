@@ -11,9 +11,9 @@
     ('<b>%s</b>'|safe) % email,
 ) }}</p>
 
-<p><a href="{{ participant.url('emails/confirm') + querystring }}" style="{{ button_style('success') }}">{{ _("Yes, I confirm") }}</a></p>
+<p><a href="{{ participant.url('emails/confirm') }}" style="{{ button_style('success') }}">{{ _("Yes, I confirm") }}</a></p>
 
-<p><a href="{{ participant.url('emails/disavow') + querystring }}" style="{{ button_style('warning') }}">{{ _("No, it wasn't me") }}</a></p>
+<p><a href="{{ participant.url('emails/disavow') }}" style="{{ button_style('warning') }}">{{ _("No, it wasn't me") }}</a></p>
 
 [---] text/plain
 {{ _(
@@ -24,6 +24,6 @@
     participant.join_time, email,
 ) }}
 
-{{ _("Yes, I confirm") }}: {{ participant.url('emails/confirm') + querystring }}
+{{ _("Yes, I confirm") }}: {{ participant.url('emails/confirm') }}
 
-{{ _("No, it wasn't me") }}: {{ participant.url('emails/disavow') + querystring }}
+{{ _("No, it wasn't me") }}: {{ participant.url('emails/disavow') }}

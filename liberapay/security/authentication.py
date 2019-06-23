@@ -17,7 +17,9 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import get_ip_net
-from liberapay.utils.emails import check_email_blacklist, normalize_email_address
+from liberapay.utils.emails import (
+    EmailVerificationResult, check_email_blacklist, normalize_email_address,
+)
 
 
 class _ANON(object):
@@ -82,18 +84,10 @@ def sign_in_with_form_data(body, state):
                     email
                 )
             elif p:
-                email_row = p.get_email(email)
-                if not email_row.verified:
+                if not p.get_email(email).verified:
                     website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
-                p.start_session(suffix='.em')
-                p.send_email(
-                    'login_link',
-                    email,
-                    link=p.get_login_url(email_row),
-                    link_validity=SESSION_TIMEOUT,
-                )
-                p.session = None
+                p.send_email('login_link', email, link_validity=SESSION_TIMEOUT)
                 state['log-in.email-sent-to'] = email
                 raise LoginRequired
             else:
@@ -201,8 +195,9 @@ def authenticate_user_if_possible(request, response, state, user, _):
     if not db:
         return
 
-    # Cookie and form auth
-    # We want to try cookie auth first, but we want form auth to supersede it
+    # Try to authenticate the user
+    # We want to try cookie auth first, but we want password and email auth to
+    # supersede it.
     p = None
     if SESSION in request.headers.cookie:
         creds = request.headers.cookie[SESSION].value.split(':', 2)
@@ -216,6 +211,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
     session_suffix = ''
     redirect_url = request.line.uri.decoded
     if request.method == 'POST':
+        # Password auth
         body = _get_body(request)
         if body:
             p = sign_in_with_form_data(body, state)
@@ -229,15 +225,10 @@ def authenticate_user_if_possible(request, response, state, user, _):
                     raise LoginRequired
             redirect_url = body.get('sign-in.back-to') or redirect_url
     elif request.method == 'GET' and request.qs.get('log-in.id'):
+        # Email auth
         id = request.qs.pop('log-in.id')
         session_id = request.qs.pop('log-in.key', 1)
         token = request.qs.pop('log-in.token', None)
-        email_id = request.qs.pop('email.id', '')
-        try:
-            email_id = int(email_id)
-        except ValueError:
-            email_id = None
-        email_nonce = request.qs.pop('email.nonce', '')
         if not (token and token.endswith('.em')):
             raise response.error(400, _("This login link is expired or invalid."))
         p = Participant.authenticate(id, session_id, token)
@@ -248,8 +239,27 @@ def authenticate_user_if_possible(request, response, state, user, _):
             redirect_url = request.path.raw + qs
             session_p = p
             session_suffix = '.em'
-            if not p.email:
-                p.verify_email(email_id, email_nonce, p)
+
+    # Handle email verification
+    email_id = request.qs.get_int('email.id', default=None)
+    email_nonce = request.qs.get('email.nonce', '')
+    if email_id and not request.path.raw.endswith('/disavow'):
+        email_participant = db.one("""
+            SELECT p
+              FROM emails e
+              JOIN participants p On p.id = e.participant
+             WHERE e.id = %s
+        """, (email_id,))
+        if email_participant:
+            result = email_participant.verify_email(email_id, email_nonce, p)
+            state['email.verification-result'] = result
+            if result == EmailVerificationResult.SUCCEEDED:
+                del request.qs['email.id'], request.qs['email.nonce']
+                qs = '?' + urlencode(request.qs, doseq=True) if request.qs else ''
+                redirect_url = request.path.raw + qs
+        del email_participant
+
+    # Finish up
     if p:
         if session_p:
             session_p.sign_out(response.headers.cookie)

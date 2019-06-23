@@ -86,7 +86,7 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', address)
         addr_id = self.get_address_id(address)
         last_email = self.get_last_email()
-        assert "/alice/emails/confirm?email=%s&" % addr_id in last_email['text']
+        assert "/alice/emails/confirm?email.id=%s&" % addr_id in last_email['text']
 
     def test_adding_email_sends_verification_email(self):
         self.alice.add_email('alice@liberapay.com')

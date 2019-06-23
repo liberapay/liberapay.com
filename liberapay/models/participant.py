@@ -501,17 +501,6 @@ class Participant(Model, MixinTeam):
         del self.session
         erase_cookie(cookies, SESSION)
 
-    def get_login_url(self, email_row):
-        qs = [
-            ('log-in.id', self.id),
-            ('log-in.key', self.session.id),
-            ('log-in.token', self.session.secret),
-        ]
-        if not email_row.verified:
-            qs.append(('email.id', email_row.id))
-            qs.append(('email.nonce', email_row.nonce))
-        return self.url('settings/', qs)
-
 
     # Permissions
     # ===========
@@ -1014,8 +1003,7 @@ class Participant(Model, MixinTeam):
             # Limit number of verification emails per participant
             self.db.hit_rate_limit('add_email.source', self.id, TooManyEmailVerifications)
 
-        qs = "?email=%s&nonce=%s" % (email_row.id, email_row.nonce)
-        self.send_email('verification', email, old_email=old_email, querystring=qs)
+        self.send_email('verification', email, old_email=old_email)
 
         if self.email:
             self.send_email('verification_notice', self.email, new_email=email)
@@ -1171,8 +1159,10 @@ class Participant(Model, MixinTeam):
             message['from_email'] = 'Liberapay Newsletters <newsletters@liberapay.com>'
         message['to'] = [formataddr((self.username, email))]
         message['subject'] = spt['subject'].render(context).strip()
+        self._rendering_email_to, self._email_session = email, None
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
+        del self._rendering_email_to, self._email_session
 
         with email_lock:
             try:
@@ -1617,13 +1607,57 @@ class Participant(Model, MixinTeam):
     # Random Stuff
     # ============
 
-    def url(self, path='', query=''):
+    def url(self, path='', query='', autologin=False):
+        """Return the full canonical URL of a user page.
+
+        Args:
+            path (str):
+                the path to the user page. The default value (empty
+                string) leads to the user's public profile page.
+            query (dict):
+                querystring parameters to add to the URL.
+            autologin (bool):
+                if set to True, the returned URL contains an email session token
+                in the querystring. This only works when called from inside an
+                email simplate.
+        """
         scheme = website.canonical_scheme
         host = website.canonical_host
         username = self.username
         if query:
-            assert '?' not in path
             query = '?' + urlencode(query)
+        if getattr(self, '_rendering_email_to', None):
+            extra_query = []
+            if autologin:
+                primary_email = self.get_email_address()
+                if self._rendering_email_to.lower() != primary_email.lower():
+                    # Only send login links to the primary email address
+                    raise AssertionError('%r != %r' % (self._rendering_email_to, primary_email))
+                session = self._email_session
+                if not session:
+                    session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
+                    self._email_session = session
+                extra_query.append(('log-in.id', self.id))
+                extra_query.append(('log-in.key', session.id))
+                extra_query.append(('log-in.token', session.secret))
+            email_row = self.db.one("""
+                SELECT e.*
+                  FROM emails e
+                 WHERE lower(e.address) = lower(%s)
+                   AND e.participant = %s
+                   AND e.verified IS NULL
+            """, (self._rendering_email_to, self.id))
+            if email_row:
+                extra_query.append(('email.id', email_row.id))
+                extra_query.append(('email.nonce', email_row.nonce))
+            if extra_query:
+                query += ('&' if query else '?') + urlencode(extra_query)
+            del extra_query
+        elif autologin:
+            raise ValueError("autologin is True but _rendering_email_to is missing")
+        if query and '?' in path:
+            (path, query), extra_query = path.split('?', 1), query
+            query += '&' + extra_query[1:]
         return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
 
     def get_payin_url(self, network, e_id):

@@ -7,7 +7,7 @@
 
 <p>{{ _("Follow this link to proceed:") }}</p>
 
-<p><a href="{{ link }}" style="{{ button_style('primary') }}">{{ link }}</a></p>
+<p><a href="{{ participant.url('settings/', autologin=True) }}" style="{{ button_style('primary') }}">{{ _("Log in") }}</a></p>
 
 <p>{{ _("Please note that the link is only valid for {0}.", link_validity) }}</p>
 
@@ -17,6 +17,6 @@
 
 {{ _("Follow this link to proceed:") }}
 
-{{ link }}
+{{ participant.url('settings/', autologin=True) }}
 
 {{ _("Please note that the link is only valid for {0}.", link_validity) }}

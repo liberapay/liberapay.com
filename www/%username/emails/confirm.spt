@@ -10,15 +10,20 @@ from liberapay.utils.emails import EmailVerificationResult
 
 participant = get_participant(state, restrict=False)
 
-email_id = request.qs.get('email', '')
-try:
-    email_id = int(email_id)
-except ValueError:
-    result = EmailVerificationResult.FAILED
+if 'email.verification-result' in state:
+    result = state['email.verification-result']
+elif 'email' in request.qs:
+    email_id = request.qs.get('email', '')
+    try:
+        email_id = int(email_id)
+    except ValueError:
+        result = EmailVerificationResult.FAILED
+    else:
+        nonce = request.qs.get('nonce', '')
+        result = participant.verify_email(email_id, nonce, user)
+    del email_id
 else:
-    nonce = request.qs.get('nonce', '')
-    result = participant.verify_email(email_id, nonce, user)
-del email_id
+    result = EmailVerificationResult.FAILED
 
 [---] text/html
 % extends "templates/base-thin.html"
