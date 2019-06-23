@@ -5,6 +5,7 @@ from liberapay.exceptions import (
     EmailNotVerified, TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
+from liberapay.security.authentication import ANON
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils.emails import EmailVerificationResult
 
@@ -15,24 +16,23 @@ class TestEmail(EmailHarness):
         EmailHarness.setUp(self)
         self.alice = self.make_participant('alice')
 
-    def hit_email_spt(self, action, address, auth_as='alice', should_fail=False):
-        P = self.client.PxST if should_fail else self.client.POST
-        if action == 'add-email':
-            data = {'email': address}
-        else:
-            data = {action: address}
+    def hit_email_spt(self, action, address, auth_as='alice'):
+        data = {('email' if action == 'add-email' else action): address}
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         auth_as = self.alice if auth_as == 'alice' else auth_as
-        return P('/alice/emails/modify.json', data, auth_as=auth_as, **headers)
+        return self.client.POST(
+            '/alice/emails/modify.json', data,
+            auth_as=auth_as, raise_immediately=False,
+            **headers
+        )
 
     def get_address_id(self, addr):
         return self.db.one("SELECT id FROM emails WHERE address = %s", (addr,))
 
-    def hit_verify(self, email, nonce, should_fail=False):
+    def hit_verify(self, email, nonce):
         addr_id = self.get_address_id(email) or ''
         url = '/alice/emails/verify.html?email=%s&nonce=%s' % (addr_id, nonce)
-        G = self.client.GxT if should_fail else self.client.GET
-        return G(url, auth_as=self.alice)
+        return self.client.GET(url, auth_as=self.alice, raise_immediately=False)
 
     def verify_email(self, email):
         nonce = self.alice.get_email(email).nonce
@@ -52,7 +52,7 @@ class TestEmail(EmailHarness):
         assert self.alice.get_any_email() == punycode_email
 
     def test_participant_cannot_add_email_with_unicode_local_part(self):
-        r = self.hit_email_spt('add-email', 'tête@exemple.fr', should_fail=True)
+        r = self.hit_email_spt('add-email', 'tête@exemple.fr')
         assert r.code == 400
 
     def test_participant_cant_add_bad_email(self):
@@ -65,7 +65,7 @@ class TestEmail(EmailHarness):
         for blob in bad:
             with self.assertRaises(BadEmailAddress):
                 self.alice.add_email(blob)
-            response = self.hit_email_spt('add-email', blob, should_fail=True)
+            response = self.hit_email_spt('add-email', blob)
             assert response.code == 400
 
     def test_participant_cant_add_email_with_bad_domain(self):
@@ -78,7 +78,7 @@ class TestEmail(EmailHarness):
             for email in bad:
                 with self.assertRaises(BadEmailDomain):
                     self.alice.add_email(email)
-                response = self.hit_email_spt('add-email', email, should_fail=True)
+                response = self.hit_email_spt('add-email', email)
                 assert response.code == 400
 
     def test_verification_link_uses_address_id(self):
@@ -86,9 +86,11 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', address)
         addr_id = self.get_address_id(address)
         last_email = self.get_last_email()
-        assert "/alice/emails/verify.html?email=%s&" % addr_id in last_email['text']
+        assert "/alice/emails/confirm?email=%s&" % addr_id in last_email['text']
 
     def test_adding_email_sends_verification_email(self):
+        self.alice.add_email('alice@liberapay.com')
+        self.mailer.reset_mock()
         self.hit_email_spt('add-email', 'alice@example.com')
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
@@ -106,40 +108,49 @@ class TestEmail(EmailHarness):
         assert expected in last_email['text']
 
     def test_post_anon_returns_403(self):
-        response = self.hit_email_spt('add-email', 'anon@example.com', auth_as=None, should_fail=True)
+        response = self.hit_email_spt('add-email', 'anon@example.com', auth_as=None)
         assert response.code == 403
 
     def test_post_with_no_at_symbol_is_400(self):
-        response = self.hit_email_spt('add-email', 'example.com', should_fail=True)
+        response = self.hit_email_spt('add-email', 'example.com')
         assert response.code == 400
 
     def test_post_with_no_period_symbol_is_400(self):
-        response = self.hit_email_spt('add-email', 'test@example', should_fail=True)
+        response = self.hit_email_spt('add-email', 'test@example')
         assert response.code == 400
 
     def test_verify_email_without_adding_email(self):
         response = self.hit_verify('', 'sample-nonce')
-        assert 'Missing Info' in response.text
+        assert '<h3>Failure</h3>' in response.text
 
     def test_verify_email_wrong_nonce(self):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = 'fake-nonce'
-        r = self.alice.verify_email('alice@example.com', nonce)
+        email_row = self.alice.get_email('alice@example.com')
+        r = self.alice.verify_email(email_row.id, nonce, self.alice)
         assert r == EmailVerificationResult.FAILED
         self.hit_verify('alice@example.com', nonce)
         expected = None
         actual = Participant.from_username('alice').email
         assert expected == actual
 
+    def test_verify_email_wrong_participant(self):
+        address = 'alice@example.com'
+        self.hit_email_spt('add-email', address)
+        email_row = self.alice.get_email(address)
+        bob = self.make_participant('bob')
+        r = bob.verify_email(email_row.id, email_row.nonce, self.alice)
+        assert r == EmailVerificationResult.FAILED
+
     def test_verify_email_a_second_time_returns_redundant(self):
         address = 'alice@example.com'
         self.hit_email_spt('add-email', address)
-        nonce = self.alice.get_email(address).nonce
-        r = self.alice.verify_email(address, nonce)
-        r = self.alice.verify_email(address, nonce)
+        email_row = self.alice.get_email(address)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice)
         assert r == EmailVerificationResult.REDUNDANT
 
-    def test_verify_email_expired_nonce(self):
+    def test_verify_only_email_with_expired_nonce(self):
         address = 'alice@example.com'
         self.hit_email_spt('add-email', address)
         self.db.run("""
@@ -147,11 +158,42 @@ class TestEmail(EmailHarness):
                SET added_time = (now() - INTERVAL '25 hours')
              WHERE participant = %s
         """, (self.alice.id,))
-        nonce = self.alice.get_email(address).nonce
-        r = self.alice.verify_email(address, nonce)
-        assert r == EmailVerificationResult.EXPIRED
-        actual = Participant.from_username('alice').email
+        email_row = self.alice.get_email(address)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice)
+        assert r == EmailVerificationResult.SUCCEEDED
+
+    def test_verify_secondary_email_expired_nonce(self):
+        self.hit_email_spt('add-email', 'alice@example.com')
+        self.db.run("""
+            UPDATE emails
+               SET added_time = (now() - INTERVAL '25 hours')
+             WHERE participant = %s
+        """, (self.alice.id,))
+        email_row = self.alice.get_email('alice@example.com')
+        self.hit_email_spt('add-email', 'alice@liberapay.com')
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
+        assert r == EmailVerificationResult.LOGIN_REQUIRED
+        actual = self.alice.refetch().email
         assert actual == None
+        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice)
+        assert r == EmailVerificationResult.SUCCEEDED
+
+    def test_verify_email_doesnt_leak_whether_an_email_is_linked_to_an_account_or_not(self):
+        self.alice.add_email('alice@example.com')
+        email_row_alice = self.alice.get_email('alice@example.com')
+        bob = self.make_participant('bob', email='bob@example.com')
+        email_row_bob = bob.get_email(bob.email)
+        r1 = self.alice.verify_email(email_row_alice.id, 'bad nonce', ANON)
+        assert r1 == EmailVerificationResult.FAILED
+        self.db.run("""
+            UPDATE emails
+               SET added_time = (now() - INTERVAL '2 years')
+             WHERE participant = %s
+        """, (self.alice.id,))
+        r2 = self.alice.verify_email(email_row_alice.id, 'bad nonce', ANON)
+        assert r2 == EmailVerificationResult.FAILED
+        r3 = bob.verify_email(email_row_bob.id, 'bad nonce', ANON)
+        assert r3 == EmailVerificationResult.FAILED
 
     def test_verify_email(self):
         self.hit_email_spt('add-email', 'alice@example.com')
@@ -192,8 +234,8 @@ class TestEmail(EmailHarness):
     def test_cannot_update_email_to_already_verified(self):
         bob = self.make_participant('bob')
         self.alice.add_email('alice@example.com')
-        nonce = self.alice.get_email('alice@example.com').nonce
-        r = self.alice.verify_email('alice@example.com', nonce)
+        email_row = self.alice.get_email('alice@example.com')
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
         assert r == EmailVerificationResult.SUCCEEDED
 
         with self.assertRaises(EmailAlreadyTaken):
@@ -247,13 +289,13 @@ class TestEmail(EmailHarness):
 
     def test_cannot_set_primary_to_unverified(self):
         with self.assertRaises(EmailNotVerified):
-            self.hit_email_spt('set-primary', 'alice@example.com')
+            self.alice.update_email('alice@example.com')
 
     def test_remove_email(self):
         # Cannot remove unverified primary
         self.hit_email_spt('add-email', 'alice@example.com')
         with self.assertRaises(CannotRemovePrimaryEmail):
-            self.hit_email_spt('remove', 'alice@example.com')
+            self.alice.remove_email('alice@example.com')
 
         # Can remove extra unverified
         self.hit_email_spt('add-email', 'alice@example.org')
@@ -266,7 +308,7 @@ class TestEmail(EmailHarness):
 
         # Cannot remove primary
         with self.assertRaises(CannotRemovePrimaryEmail):
-            self.hit_email_spt('remove', 'alice@example.com')
+            self.alice.remove_email('alice@example.com')
 
     def test_html_escaping(self):
         self.alice.add_email("foo'bar@example.com")
@@ -279,21 +321,18 @@ class TestEmail(EmailHarness):
 
     def test_can_dequeue_an_email(self):
         larry = self.make_participant('larry', email='larry@example.com')
-        self.queue_email(larry, "verification", link='https://example.com/larry')
+        self.queue_email(larry, 'team_invite', team='team', team_url='fake_url', inviter='bob')
 
-        assert self.db.one("SELECT event FROM notifications") == "verification"
         Participant.dequeue_emails()
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'larry <larry@example.com>'
-        assert last_email['subject'] == "Email address verification - Liberapay"
         assert self.db.one("SELECT email_sent FROM notifications") is True
 
     def test_dequeueing_an_email_without_address_just_skips_it(self):
         larry = self.make_participant('larry')
-        self.queue_email(larry, "verification")
+        self.queue_email(larry, 'team_invite', team='team', team_url='fake_url', inviter='bob')
 
-        assert self.db.one("SELECT event FROM notifications") == "verification"
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
         assert self.db.one("SELECT email_sent FROM notifications") is False

@@ -945,6 +945,8 @@ class Participant(Model, MixinTeam):
         if len(self.get_emails()) > 9:
             raise TooManyEmailAddresses(email)
 
+        old_email = self.email or self.get_any_email()
+
         with self.db.get_cursor(cursor) as c:
             self.add_event(c, 'add_email', email)
             email_row = c.one("""
@@ -958,20 +960,15 @@ class Participant(Model, MixinTeam):
                   RETURNING *
             """, (email, str(uuid.uuid4()), self.id))
             if not email_row:
+                # The address is already connected and verified
                 return 0
             # Limit number of verification emails per address
             self.db.hit_rate_limit('add_email.target', email, VerificationEmailAlreadySent)
             # Limit number of verification emails per participant
             self.db.hit_rate_limit('add_email.source', self.id, TooManyEmailVerifications)
 
-        old_email = self.email or self.get_any_email()
-        scheme = website.canonical_scheme
-        host = website.canonical_host
-        username = self.username
-        addr_id = email_row.id
-        nonce = email_row.nonce
-        link = "{scheme}://{host}/{username}/emails/verify.html?email={addr_id}&nonce={nonce}"
-        self.send_email('verification', email, link=link.format(**locals()), old_email=old_email)
+        qs = "?email=%s&nonce=%s" % (email_row.id, email_row.nonce)
+        self.send_email('verification', email, old_email=old_email, querystring=qs)
 
         if self.email:
             self.send_email('verification_notice', self.email, new_email=email)
@@ -996,36 +993,50 @@ class Participant(Model, MixinTeam):
         self.set_attributes(email=email)
         self.update_avatar()
 
-    def verify_email(self, email, nonce):
-        if '' in (email, nonce):
-            return EmailVerificationResult.MISSING
-        if email.isdigit():
-            r = self.db.one("""
-                SELECT *
-                  FROM emails
-                 WHERE participant = %s
-                   AND id = %s
-            """, (self.id, email))
-            email = r.address if r else None
-        else:
-            r = self.get_email(email)
+    def verify_email(self, email_id, nonce, user):
+        """Set an email address as verified, if the given nonce is valid.
+
+        If the verification succeeds and the participant doesn't already have a
+        primary email address, then the verified address becomes the primary.
+
+        This function is designed not to leak information: attackers should not
+        be able to use it to learn something they don't already know, for
+        example whether a specific email address or ID is tied to a specific
+        Liberapay account.
+        """
+        assert type(email_id) is int
+        if not nonce:
+            return EmailVerificationResult.FAILED
+        r = self.db.one("""
+            SELECT *
+              FROM emails
+             WHERE participant = %s
+               AND id = %s
+        """, (self.id, email_id))
         if r is None:
             return EmailVerificationResult.FAILED
         if r.verified:
-            assert r.nonce is None  # and therefore, order of conditions matters
-            return EmailVerificationResult.REDUNDANT
+            if user and user.controls(self):
+                return EmailVerificationResult.REDUNDANT
+            else:
+                return EmailVerificationResult.FAILED
         if not constant_time_compare(r.nonce, nonce):
             return EmailVerificationResult.FAILED
         if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
-            return EmailVerificationResult.EXPIRED
+            # The timeout is meant to prevent an attacker who has gained access
+            # to a forgotten secondary email address to link it to the target's
+            # account. As such, it doesn't apply when the address isn't
+            # secondary nor when the user is logged in.
+            if user != self and len(self.get_emails()) > 1:
+                return EmailVerificationResult.LOGIN_REQUIRED
         try:
             self.db.run("""
                 UPDATE emails
-                   SET verified=true, verified_time=now(), nonce=NULL
-                 WHERE participant=%s
-                   AND address=%s
+                   SET verified = true, verified_time = now(), nonce = NULL
+                 WHERE participant = %s
+                   AND id = %s
                    AND verified IS NULL
-            """, (self.id, email))
+            """, (self.id, email_id))
         except IntegrityError:
             return EmailVerificationResult.STYMIED
         if not self.email:

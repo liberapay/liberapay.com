@@ -1,0 +1,70 @@
+"""Disavow ownership of this account.
+
+In this simplate the `participant` variable can be `None` if the account has
+been deleted or renamed.
+"""
+
+from liberapay.models.participant import Participant
+from liberapay.security.crypto import constant_time_compare
+from liberapay.utils.emails import EmailVerificationResult
+
+[---]
+
+slug = request.path['username']
+if slug.startswith('~'):
+    try:
+        participant = Participant.from_id(int(slug[1:]), _raise=False)
+    except ValueError:
+        participant = None
+else:
+    participant = Participant.from_username(slug)
+del slug
+
+email_id = request.qs.get_int('email.id')
+email_nonce = request.qs.get('email.nonce', '')
+email_row = website.db.one("""
+    SELECT *
+      FROM emails
+     WHERE id = %s
+       AND ( participant IS NULL OR participant = %s )
+""", (email_id, participant.id if participant else None))
+
+if email_row is None:
+    result = EmailVerificationResult.FAILED
+elif email_row.verified:
+    if user and participant and user.controls(participant):
+        result = EmailVerificationResult.REDUNDANT
+    else:
+        result = EmailVerificationResult.FAILED
+elif not constant_time_compare(email_row.nonce, email_nonce):
+    result = EmailVerificationResult.FAILED
+else:
+    result = EmailVerificationResult.SUCCEEDED
+    if email_row.participant:
+        # TODO log in the events table
+        # FIXME this breaks the assumption that every account has at least one email address
+        website.db.run("""
+            UPDATE emails
+               SET participant = NULL
+             WHERE id = %s
+        """, (email_row.id,))
+
+[---] text/html
+% extends "templates/base-thin.html"
+
+% block thin_content
+    % if result == EmailVerificationResult.SUCCEEDED
+        <p>{{ _(
+            "You have successfully disavowed having connected your email address "
+            "to this Liberapay account."
+        ) }}</p>
+    % elif result == EmailVerificationResult.REDUNDANT
+        <h3>{{ _("Already Verified") }}</h3>
+        <div class="alert alert-warning">{{ _("This email address has already been verified.") }}</div>
+    % elif result == EmailVerificationResult.FAILED
+        <h3>{{ _("Failure") }}</h3>
+        <div class="alert alert-danger">{{
+            _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.")
+        }}</div>
+    % endif
+% endblock

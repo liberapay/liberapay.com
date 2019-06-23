@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 import json
 from time import sleep
 
@@ -17,12 +17,11 @@ from liberapay.website import website, JINJA_ENV_COMMON
 
 
 class EmailVerificationResult(Enum):
-    MISSING = 0
-    FAILED = 1
-    EXPIRED = 2
-    REDUNDANT = 3
-    STYMIED = 4
-    SUCCEEDED = 5
+    FAILED = auto()
+    LOGIN_REQUIRED = auto()
+    REDUNDANT = auto()
+    STYMIED = auto()
+    SUCCEEDED = auto()
 
 
 jinja_env = Environment(**JINJA_ENV_COMMON)

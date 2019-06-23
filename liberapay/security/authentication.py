@@ -230,6 +230,10 @@ def authenticate_user_if_possible(request, response, state, user, _):
         session_id = request.qs.pop('log-in.key', 1)
         token = request.qs.pop('log-in.token', None)
         email_id = request.qs.pop('email.id', '')
+        try:
+            email_id = int(email_id)
+        except ValueError:
+            email_id = None
         email_nonce = request.qs.pop('email.nonce', '')
         if not (token and token.endswith('.em')):
             raise response.error(400, _("This login link is expired or invalid."))
@@ -242,7 +246,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
             session_p = p
             session_suffix = '.em'
             if not p.email:
-                p.verify_email(email_id, email_nonce)
+                p.verify_email(email_id, email_nonce, p)
     if p:
         if session_p:
             session_p.sign_out(response.headers.cookie)
