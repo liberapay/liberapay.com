@@ -1007,38 +1007,39 @@ class Participant(Model, MixinTeam):
         assert type(email_id) is int
         if not nonce:
             return EmailVerificationResult.FAILED
-        r = self.db.one("""
-            SELECT *
-              FROM emails
-             WHERE participant = %s
-               AND id = %s
-        """, (self.id, email_id))
-        if r is None:
-            return EmailVerificationResult.FAILED
-        if r.verified:
-            if user and user.controls(self):
-                return EmailVerificationResult.REDUNDANT
-            else:
-                return EmailVerificationResult.FAILED
-        if not constant_time_compare(r.nonce, nonce):
-            return EmailVerificationResult.FAILED
-        if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
-            # The timeout is meant to prevent an attacker who has gained access
-            # to a forgotten secondary email address to link it to the target's
-            # account. As such, it doesn't apply when the address isn't
-            # secondary nor when the user is logged in.
-            if user != self and len(self.get_emails()) > 1:
-                return EmailVerificationResult.LOGIN_REQUIRED
-        try:
-            self.db.run("""
-                UPDATE emails
-                   SET verified = true, verified_time = now(), nonce = NULL
+        with self.db.get_cursor() as cursor:
+            r = cursor.one("""
+                SELECT *
+                  FROM emails
                  WHERE participant = %s
                    AND id = %s
-                   AND verified IS NULL
+                   FOR UPDATE
             """, (self.id, email_id))
-        except IntegrityError:
-            return EmailVerificationResult.STYMIED
+            if r is None:
+                return EmailVerificationResult.FAILED
+            if r.verified:
+                if user and user.controls(self):
+                    return EmailVerificationResult.REDUNDANT
+                else:
+                    return EmailVerificationResult.FAILED
+            if not constant_time_compare(r.nonce, nonce):
+                return EmailVerificationResult.FAILED
+            if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
+                # The timeout is meant to prevent an attacker who has gained access
+                # to a forgotten secondary email address to link it to the target's
+                # account. As such, it doesn't apply when the address isn't
+                # secondary nor when the user is logged in.
+                if user != self and len(self.get_emails()) > 1:
+                    return EmailVerificationResult.LOGIN_REQUIRED
+            try:
+                cursor.run("""
+                    UPDATE emails
+                       SET verified = true, verified_time = now(), nonce = NULL
+                     WHERE participant = %s
+                       AND id = %s
+                """, (self.id, email_id))
+            except IntegrityError:
+                return EmailVerificationResult.STYMIED
         if not self.email:
             self.update_email(r.address)
         return EmailVerificationResult.SUCCEEDED
