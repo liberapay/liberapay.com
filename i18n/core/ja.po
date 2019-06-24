@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-06-23 17:00+0000\n"
-"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
+"PO-Revision-Date: 2019-06-24 13:48+0000\n"
+"Last-Translator: Hakaba Hitoyo <hakabahitoyo@yahoo.co.jp>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -794,7 +794,7 @@ msgid "The transaction's fee would exceed its amount."
 msgstr "取引手数料が取引金額を超える可能性があります。"
 
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
-msgstr ""
+msgstr "申し訳ございません。現在、支払日を実行しています。支払日を実行しているあいだ、支払いを行うようには設定されていません。数時間後に再びご確認ください。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -837,7 +837,7 @@ msgid "There have been too many attempts to perform this action recently, please
 msgstr "最近、このアカウントへのログインの試行が過度に行われています。間を空けてお試しいただくか（1 週間後など）、支援が必要な場合は support@liberapay.com までお問い合わせください。"
 
 msgid "You're sending requests at an unusually fast pace. Please retry in a few seconds, and contact support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "あなたは異常に速いペースでリクエストを送信しています。数秒後に再試行してください。問題が解決しない場合は、support@liberapay.com に連絡してください。"
 
 #, python-brace-format
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
@@ -845,18 +845,18 @@ msgstr "ウォレットのすべての金銭を分配できませんでした：
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists please contact support@liberapay.com."
-msgstr ""
+msgstr "{email_address} へのメールの送信に失敗しました。メールアドレスが正しいことを確認し、再試行してください。問題が解決しない場合は、support@liberapay.com に連絡してください。"
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
 msgstr "現在支払い方法が利用可能ではありません。ご迷惑をおかけし申し訳ありません。"
 
 #, python-brace-format
 msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr ""
+msgstr "たいへん申し訳ございません。現在、入金は無効になっています。原因につきましては、{link_start}このブログ記事{link_end} をお読みください。"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "決済サービス {name} がエラーを返しています。再試行してください。問題が解決しない場合は、support@liberapay.com に連絡してください。"
 
 msgid "Forbidden"
 msgstr "閲覧禁止"
@@ -865,10 +865,10 @@ msgid "Not Found"
 msgstr "ファイル未検出"
 
 msgid "Conflict"
-msgstr ""
+msgstr "コンフリクト"
 
 msgid "Gone"
-msgstr ""
+msgstr "消滅"
 
 msgid "Too Many Requests"
 msgstr "リクエストが多すぎます"
@@ -887,7 +887,7 @@ msgstr "ゲートウェイタイムアウト"
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr ""
+msgstr "'{0}' は {platform} において正しいユーザーIDではありません。"
 
 #, python-brace-format
 msgid "There doesn't seem to be a user named {0} on {1}."
@@ -904,17 +904,17 @@ msgstr "{username} さんへの Liberapay を使用した寄付"
 #, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
+msgstr[0] "{n} 週間× {money_amount}"
 
 #, python-brace-format
 msgid "{n} month of {money_amount}"
 msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
+msgstr[0] "{n} ヶ月× {money_amount}"
 
 #, python-brace-format
 msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
+msgstr[0] "{n} 年× {money_amount}"
 
 msgid "Bad username or password."
 msgstr "ユーザー名またはパスワードが間違っています。"
