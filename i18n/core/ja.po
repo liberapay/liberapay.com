@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "PO-Revision-Date: 2019-07-03 03:00+0000\n"
-"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
+"Last-Translator: Hakaba Hitoyo <hakabahitoyo@yahoo.co.jp>\n"
 "Language-Team: Japanese (https://hosted.weblate.org/projects/liberapay/core/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -793,7 +793,7 @@ msgid "The transaction's fee would exceed its amount."
 msgstr "取引手数料が取引金額を超える可能性があります。"
 
 msgid "Sorry, we're running payday right now, and we're not set up to do payouts while payday is running. Please check back in a few hours."
-msgstr "申し訳ございません。現在、支払日を実行しています。支払日を実行しているあいだ、支払いを行うようには設定されていません。数時間後に再びご確認ください。"
+msgstr "申し訳ございません。現在、paydayを実行しています。paydayを実行しているあいだ、支払いを行うようには設定されていません。数時間後に再びご確認ください。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1610,10 +1610,10 @@ msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{
 msgstr "チーム {0} からあなたが受け取る今週の名目上の取り分は {1} に制限されています。{2}理由{3}"
 
 msgid "Last Payday"
-msgstr "前回の支払日"
+msgstr "前回のpayday"
 
 msgid "Next Payday"
-msgstr "次の支払日"
+msgstr "次のpayday"
 
 msgid "Member"
 msgstr "メンバー"
@@ -2299,16 +2299,16 @@ msgstr "あなたのお名前と IBAN（International Bank Account Number）を�
 
 #, python-brace-format
 msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "IBANを提供し、この支払いを確認することにより、あなたは、{platform} と {provider}（決済サービスプロバイダ）があなたの銀行にあなたの銀行口座から引き落す指示を送信すること、および、あなたの銀行がこれらの指示に従ってあなたの銀行口座から引き落とすことを承認します。あなたは、あなたの銀行との規約と条件に基づき、銀行から払い戻しを受ける権利を有します。払い戻しは、あなたの口座から引き落とされた日から8週間以内に請求する必要があります。"
 
 msgid "Remember the bank account number for future payments"
-msgstr ""
+msgstr "将来の支払いのために、銀行の口座番号を記憶してください"
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr ""
+msgstr "アカウントの種類を変更したいとお考えですか？ 法的な理由により、私たちは決済パートナーのシステムにあなたの新しいアカウントを作成し、古いアカウントから金銭を転送する必要があります。"
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr ""
+msgstr "私たちは、paydayを実行しているあいだ、あなたのアカウントの種類を変更することができません。数分後に再試行してください。"
 
 msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
 msgstr ""
@@ -2880,7 +2880,7 @@ msgid "Try Again Later"
 msgstr "後で再試行"
 
 msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr ""
+msgstr "申し訳ございません。私たちはpaydayを実行中です。そのため、アカウントを閉じることができません。数時間後に再びご確認ください。"
 
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
@@ -3044,7 +3044,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Weekly Payday #{0}"
-msgstr ""
+msgstr "毎週のpayday #{0}"
 
 msgid "refund"
 msgstr ""
@@ -3644,11 +3644,11 @@ msgid "Liberapay used to hold the funds of donors in wallets, but we no longer d
 msgstr ""
 
 msgid "What is “payday”?"
-msgstr "“支払日” とは何ですか？"
+msgstr "“payday” とは何ですか？"
 
 #, python-brace-format
 msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr ""
+msgstr "paydayとは、私たちが毎週水曜日に実行するプログラム（{0}これです{1}）です。寄付を実行し、寄贈者と受領者に通知を送ります。"
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "以下の SNS から最新の情報を取得できます。"
@@ -3813,7 +3813,7 @@ msgstr "{0} が Liberapay 内で取引されています。"
 #, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] "直近の支払日は {timespan_ago} で、{n} 人のユーザーの間で {money_amount} が取引されました。"
+msgstr[0] "直近のpaydayは {timespan_ago} で、{n} 人のユーザーの間で {money_amount} が取引されました。"
 
 #, python-brace-format
 msgid "{n} participant gave money."
@@ -3909,7 +3909,7 @@ msgstr "チームに階級はありません。メンバー全員が平等で、
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr ""
+msgstr "あなたの取り分を {0}あなたのチームのダッシュボード{1} から変更できます。これには、前回と次回のpaydayでのすべてのメンバーの名目上の取り分と、次回のpaydayに受け取る実際の金額の見積もりを示すテーブルが含まれています。"
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr ""
