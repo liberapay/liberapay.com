@@ -92,7 +92,9 @@ class ExchangeRoute(Model):
                         (participant, network, address, one_off, status, remote_user_id)
                  VALUES (%s, %s, 'x', false, 'chargeable', %s)
             ON CONFLICT (participant, network, address) DO UPDATE
-                    SET one_off = false  -- dummy update
+                    SET one_off = excluded.one_off
+                      , status = excluded.status
+                      , remote_user_id = excluded.remote_user_id
               RETURNING r
         """, (participant.id, network, remote_user_id))
         r.__dict__['participant'] = participant
