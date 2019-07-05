@@ -180,6 +180,7 @@ def send_payin_notification(payin, payer, charge, route):
         payer.notify(
             'payin_sdd_created',
             force_email=True,
+            payin_id=payin.id,  # unused but required for uniqueness
             payin_amount=payin.amount,
             bank_name=getattr(sepa_debit, 'bank_name', None),
             partial_bank_account_number=get_partial_iban(sepa_debit),
