@@ -31,8 +31,8 @@ email_row = website.db.one("""
 
 if email_row is None:
     result = EmailVerificationResult.FAILED
-elif email_row.verified:
-    if user and participant and user.controls(participant):
+elif email_row.nonce is None:
+    if email_row.verified and user and participant and user.controls(participant):
         result = EmailVerificationResult.REDUNDANT
     else:
         result = EmailVerificationResult.FAILED

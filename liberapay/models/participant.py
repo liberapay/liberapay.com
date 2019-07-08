@@ -1064,13 +1064,15 @@ class Participant(Model, MixinTeam):
             """, (self.id, email_id))
             if r is None:
                 return EmailVerificationResult.FAILED
-            if r.verified:
-                if user and user.controls(self):
+            if r.nonce is None:
+                if r.verified and user and user.controls(self):
                     return EmailVerificationResult.REDUNDANT
                 else:
                     return EmailVerificationResult.FAILED
             if not constant_time_compare(r.nonce, nonce):
                 return EmailVerificationResult.FAILED
+            if r.verified:
+                return EmailVerificationResult.REDUNDANT
             if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
                 # The timeout is meant to prevent an attacker who has gained access
                 # to a forgotten secondary email address to link it to the target's
@@ -1083,7 +1085,6 @@ class Participant(Model, MixinTeam):
                     UPDATE emails
                        SET verified = true
                          , verified_time = now()
-                         , nonce = NULL
                          , disavowed = false
                      WHERE participant = %s
                        AND id = %s

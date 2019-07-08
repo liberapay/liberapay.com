@@ -147,7 +147,7 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', address)
         email_row = self.alice.get_email(address)
         r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
-        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
         assert r == EmailVerificationResult.REDUNDANT
 
     def test_verify_only_email_with_expired_nonce(self):
