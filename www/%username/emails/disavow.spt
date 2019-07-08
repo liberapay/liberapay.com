@@ -49,15 +49,75 @@ else:
              WHERE id = %s
         """, (email_row.id,))
 
+if request.method == 'POST':
+    if result != EmailVerificationResult.SUCCEEDED:
+        raise response.error(403, "email nonce is missing or invalid")
+    action = request.body['action']
+    if action == 'add_to_blacklist':
+        website.db.run("""
+            INSERT INTO email_blacklist
+                        (address, reason, details, report_id)
+                 VALUES (%s, 'complaint', 'disavowed', %s)
+            ON CONFLICT (report_id, address) DO UPDATE
+                    SET ignore_after = null
+        """, (email_row.address, email_row.nonce))
+    elif action == 'remove_from_blacklist':
+        website.db.run("""
+            UPDATE email_blacklist
+               SET ignore_after = current_timestamp
+             WHERE lower(address) = lower(%s)
+        """, (email_row.address,))
+    else:
+        raise response.invalid_input(action, 'action', 'body')
+
+if result == EmailVerificationResult.SUCCEEDED:
+    blacklisted = website.db.all("""
+        SELECT true AS blacklisted
+          FROM email_blacklist
+         WHERE lower(address) = lower(%s)
+           AND ignore_after IS null
+         LIMIT 1
+    """, (email_row.address,))
+
 [---] text/html
 % extends "templates/base-thin.html"
 
 % block thin_content
-    % if result == EmailVerificationResult.SUCCEEDED
-        <p>{{ _(
+    % if request.method == 'POST'
+        <p class="alert alert-success">{{ _(
+            "Your email address is now blacklisted."
+        ) if blacklisted else _(
+            "Your email address is no longer blacklisted."
+        ) }}</p>
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            % if blacklisted
+            <button class="btn btn-warning" name="action" value="remove_from_blacklist">{{ _(
+                "Remove my email address from the blacklist"
+            ) }}</button>
+            % else
+            <button class="btn btn-warning" name="action" value="add_to_blacklist">{{ _(
+                "Add my email address to the blacklist"
+            ) }}</button>
+            % endif
+        </form>
+    % elif result == EmailVerificationResult.SUCCEEDED
+        <p class="alert alert-success">{{ _(
             "You have successfully disavowed having connected your email address "
             "to this Liberapay account."
         ) }}</p>
+        % if not blacklisted
+        <p>{{ _(
+            "Would you like to block any future attempt to connect your email "
+            "address to a Liberapay account, by adding it to our blacklist?"
+        ) }}</p>
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <button class="btn btn-warning" name="action" value="add_to_blacklist">{{ _(
+                "Add my email address to the blacklist"
+            ) }}</button>
+        </form>
+        % endif
     % elif result == EmailVerificationResult.REDUNDANT
         <h3>{{ _("Already Verified") }}</h3>
         <div class="alert alert-warning">{{ _("This email address has already been verified.") }}</div>
