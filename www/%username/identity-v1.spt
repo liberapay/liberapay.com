@@ -81,7 +81,7 @@ if request.method == 'POST':
     if not account.Tag:
         account.Tag = website.canonical_url + '/~%i/' % participant.id
 
-    account.Email = participant.email or participant.get_any_email()
+    account.Email = participant.get_email_address()
 
     for k in keys:
         v = body.get(k)

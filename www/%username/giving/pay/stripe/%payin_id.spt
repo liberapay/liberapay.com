@@ -91,7 +91,7 @@ if request.method == 'POST':
                 amount=Money_to_int(payin_amount) if one_off else None,
                 owner={
                     'address': owner_address,
-                    'email': payer.email or payer.get_any_email(),
+                    'email': payer.get_email_address(),
                     'name': body.get('owner.name'),
                 },
                 redirect={'return_url': return_url},
@@ -143,7 +143,7 @@ if request.method == 'POST':
                 pm = stripe.PaymentMethod.attach(pm.id, customer=customer_id)
             else:
                 customer_id = stripe.Customer.create(
-                    email=payer.email or payer.get_any_email(),
+                    email=payer.get_email_address(),
                     payment_method=pm.id,
                 ).id
             pm_country = getattr(getattr(pm, pm.type), 'country', None)

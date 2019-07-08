@@ -66,7 +66,9 @@ if route.network.startswith('stripe-'):
         payer_name = customer.name
 
 if not payer_name:
-    payer_name = payer.email or payer.get_any_email()
+    payer_name = payer.get_email_address()
+    if not payer_name:
+        raise response.error(500, "missing payer_name")
 
 settlement_date = website.db.one("""
     SELECT pe.timestamp::date

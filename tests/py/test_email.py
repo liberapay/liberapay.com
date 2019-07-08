@@ -49,7 +49,7 @@ class TestEmail(EmailHarness):
     def test_participant_can_add_email_with_unicode_domain_name(self):
         punycode_email = 'alice@' + 'accentué.com'.encode('idna').decode()
         self.hit_email_spt('add-email', 'alice@accentué.com')
-        assert self.alice.get_any_email() == punycode_email
+        assert self.alice.get_email_address() == punycode_email
 
     def test_participant_cannot_add_email_with_unicode_local_part(self):
         r = self.hit_email_spt('add-email', 'tête@exemple.fr')
@@ -272,7 +272,7 @@ class TestEmail(EmailHarness):
 
     def test_email_addresses_are_normalized(self):
         self.alice.add_email('\t Alice&Bob@ExAmPlE.InFo \n')
-        assert self.alice.get_any_email() == 'Alice&Bob@example.info'
+        assert self.alice.get_email_address() == 'Alice&Bob@example.info'
 
     def test_emails_page_shows_emails(self):
         self.add_and_verify_email('alice@example.com')

@@ -217,9 +217,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
             p = sign_in_with_form_data(body, state)
             carry_on = body.pop('log-in.carry-on', None)
             if not p and carry_on:
-                p_email = session_p and (
-                    session_p.email or session_p.get_any_email()
-                )
+                p_email = session_p and session_p.get_email_address()
                 if p_email != carry_on:
                     state['log-in.carry-on'] = carry_on
                     raise LoginRequired

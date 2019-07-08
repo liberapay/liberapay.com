@@ -5,6 +5,7 @@ class TestReceipts(Harness):
 
     def setUp(self):
         self.donor = self.make_participant('alice')
+        self.donor.add_email('alice@liberapay.com')
         self.recipient = self.make_participant('bob', accepted_currencies=None)
 
     def test_paypal_receipt(self):

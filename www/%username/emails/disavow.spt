@@ -40,14 +40,31 @@ elif not constant_time_compare(email_row.nonce, email_nonce):
     result = EmailVerificationResult.FAILED
 else:
     result = EmailVerificationResult.SUCCEEDED
-    if email_row.participant:
-        # TODO log in the events table
-        # FIXME this breaks the assumption that every account has at least one email address
-        website.db.run("""
-            UPDATE emails
-               SET participant = NULL
-             WHERE id = %s
-        """, (email_row.id,))
+    changed = website.db.one("""
+        UPDATE emails
+           SET disavowed = true
+             , disavowed_time = current_timestamp
+             , verified = null
+         WHERE id = %s
+           AND disavowed IS NOT true
+     RETURNING true AS changed
+    """, (email_row.id,))
+    if changed and participant:
+        participant.add_event(website.db, 'disavow_email', email_row.address)
+        if participant.email == email_row.address:
+            website.db.run("""
+                UPDATE participants AS p
+                   SET email = (
+                           SELECT e.address
+                             FROM emails e
+                            WHERE e.participant = p.id
+                              AND e.verified IS true
+                         ORDER BY e.added_time
+                            LIMIT 1
+                       )
+                 WHERE id = %s
+                   AND email = %s
+            """, (participant.id, participant.email))
 
 if request.method == 'POST':
     if result != EmailVerificationResult.SUCCEEDED:

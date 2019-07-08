@@ -846,7 +846,7 @@ class Participant(Model, MixinTeam):
              WHERE id=%(id)s
          RETURNING *;
 
-        """, dict(id=self.id, email=self.email or self.get_any_email()))
+        """, dict(id=self.id, email=self.get_email_address(allow_disavowed=True)))
         self.set_attributes(**r._asdict())
         self.add_event(self.db, 'erase_personal_information', None)
 
@@ -978,30 +978,42 @@ class Participant(Model, MixinTeam):
             else:
                 raise EmailAlreadyTaken(email)
 
-        if len(self.get_emails()) > 9:
+        addresses = set((cursor or self.db).all("""
+            SELECT lower(address)
+              FROM emails
+             WHERE participant = %s
+        """, (self.id,)))
+        if email.lower() not in addresses and len(addresses) > 9:
             raise TooManyEmailAddresses(email)
 
-        old_email = self.email or self.get_any_email()
+        old_email = self.get_email_address(allow_disavowed=True)
 
         with self.db.get_cursor(cursor) as c:
-            self.add_event(c, 'add_email', email)
             email_row = c.one("""
                 INSERT INTO emails AS e
                             (address, nonce, added_time, participant)
                      VALUES (%s, %s, current_timestamp, %s)
                 ON CONFLICT (participant, lower(address)) DO UPDATE
-                        SET added_time = excluded.added_time
+                        SET added_time = (CASE
+                                WHEN e.verified IS true OR e.disavowed IS true
+                                THEN e.added_time
+                                ELSE excluded.added_time
+                            END)
                           , address = excluded.address
-                      WHERE e.verified IS NULL
                   RETURNING *
             """, (email, str(uuid.uuid4()), self.id))
-            if not email_row:
-                # The address is already connected and verified
+            if email_row.disavowed:
+                raise EmailAddressIsBlacklisted(
+                    email, 'complaint', email_row.disavowed_time
+                )
+            if email_row.verified:
                 return 0
             # Limit number of verification emails per address
             self.db.hit_rate_limit('add_email.target', email, VerificationEmailAlreadySent)
             # Limit number of verification emails per participant
             self.db.hit_rate_limit('add_email.source', self.id, TooManyEmailVerifications)
+            # Log event
+            self.add_event(c, 'add_email', email)
 
         self.send_email('verification', email, old_email=old_email)
 
@@ -1069,7 +1081,10 @@ class Participant(Model, MixinTeam):
             try:
                 cursor.run("""
                     UPDATE emails
-                       SET verified = true, verified_time = now(), nonce = NULL
+                       SET verified = true
+                         , verified_time = now()
+                         , nonce = NULL
+                         , disavowed = false
                      WHERE participant = %s
                        AND id = %s
                 """, (self.id, email_id))
@@ -1100,13 +1115,19 @@ class Participant(Model, MixinTeam):
           ORDER BY e.id
         """, (self.id,))
 
-    def get_any_email(self, cursor=None):
-        return (cursor or self.db).one("""
+    def get_email_address(self, cursor=None, allow_disavowed=False):
+        """
+        Get the participant's "primary" email address, even if it hasn't been
+        confirmed yet.
+        """
+        return self.email or (cursor or self.db).one("""
             SELECT address
               FROM emails
-             WHERE participant=%s
+             WHERE participant = %s
+               AND ( %s OR disavowed IS NOT true )
+          ORDER BY disavowed IS NOT true DESC, added_time ASC
              LIMIT 1
-        """, (self.id,))
+        """, (self.id, allow_disavowed))
 
     def remove_email(self, address):
         if address == self.email:
@@ -1982,7 +2003,7 @@ class Participant(Model, MixinTeam):
 
         if avatar_email is None:
             avatar_email = self.avatar_email
-        email = avatar_email or self.email or self.get_any_email(cursor)
+        email = avatar_email or self.get_email_address(cursor)
 
         if platform == 'libravatar' or platform is None and email:
             if not email:

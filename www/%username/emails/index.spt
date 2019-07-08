@@ -43,7 +43,9 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
                 % else
                     <button name="remove" value="{{ email.address }}"
                             class="btn btn-danger btn-sm">{{ _("Remove") }}</button>
-                    % if not email.verified
+                    % if email.disavowed
+                        <span class="label label-danger">{{ _("Disavowed") }}</span>
+                    % elif not email.verified
                         <span class="label label-warning">{{ _("Unverified") }}</span>
                         <button name="resend" value="{{ email.address }}"
                                 class="btn btn-default btn-sm">{{ _("Resend email") }}</button>
