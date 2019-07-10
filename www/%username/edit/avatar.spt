@@ -27,7 +27,7 @@ title = participant.username
 subhead = _("Avatar")
 
 [---] text/html
-% from 'templates/avatar-url.html' import avatar_img with context
+% from 'templates/avatar-url.html' import avatar_img, avatar_url with context
 % from 'templates/icons.html' import glyphicon
 % extends "templates/profile-edit.html"
 
@@ -36,7 +36,7 @@ subhead = _("Avatar")
     <div class="flex-row block-xs text-center-xs">
 
     <div class="flex-col"><div class="inline-block">
-        <a href="{{ participant.avatar_url }}" target="_blank" rel="noopener noreferrer">{{
+        <a href="{{ avatar_url(participant) }}" target="_blank" rel="noopener noreferrer">{{
             avatar_img(participant, size=120)
         }}</a>
     </div></div>
