@@ -187,7 +187,7 @@ def form_post_success(state, msg='', redirect_url=None):
         raise response.json({"msg": msg} if msg else {})
     else:
         if not redirect_url:
-            redirect_url = request.body.get('back_to') or request.path.raw
+            redirect_url = request.body.get('back_to') or request.line.uri.decoded
             redirect_url = response.sanitize_untrusted_url(redirect_url)
         redirect_url = _modify_query(redirect_url, 'success', b64encode_s(msg))
         response.redirect(redirect_url)
