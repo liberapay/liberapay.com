@@ -1869,7 +1869,7 @@ class Participant(Model, MixinTeam):
             assert src is None
 
         src = self.avatar_src if src is None else src
-        platform, key = src.split(':', 1) if src else (None, None)
+        platform, user_id = src.split(':', 1) if src else (None, None)
         email = self.avatar_email or self.email or self.get_any_email(cursor)
 
         if platform == 'libravatar' or platform is None and email:
@@ -1896,8 +1896,8 @@ class Participant(Model, MixinTeam):
                   FROM elsewhere
                  WHERE participant = %s
                    AND platform = %s
-                -- AND user_id = %%s  -- not implemented yet
-            """, (self.id, platform))
+                   AND coalesce(user_id = %s, true)
+            """, (self.id, platform, user_id or None))
 
         if not avatar_url:
             return
