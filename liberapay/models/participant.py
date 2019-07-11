@@ -1864,13 +1864,16 @@ class Participant(Model, MixinTeam):
 
         return new_public_name
 
-    def update_avatar(self, src=None, cursor=None):
+    def update_avatar(self, src=None, cursor=None, avatar_email=None):
         if self.status == 'stub':
             assert src is None
 
         src = self.avatar_src if src is None else src
         platform, user_id = src.split(':', 1) if src else (None, None)
-        email = self.avatar_email or self.email or self.get_any_email(cursor)
+
+        if avatar_email is None:
+            avatar_email = self.avatar_email
+        email = avatar_email or self.email or self.get_any_email(cursor)
 
         if platform == 'libravatar' or platform is None and email:
             if not email:
@@ -1899,16 +1902,16 @@ class Participant(Model, MixinTeam):
                    AND coalesce(user_id = %s, true)
             """, (self.id, platform, user_id or None))
 
-        if not avatar_url:
-            return
-
+        if avatar_email == '':
+            avatar_email = None
         (cursor or self.db).run("""
             UPDATE participants
-               SET avatar_url = %s
+               SET avatar_url = coalesce(%s, avatar_url)
                  , avatar_src = %s
+                 , avatar_email = %s
              WHERE id = %s
-        """, (avatar_url, src, self.id))
-        self.set_attributes(avatar_src=src, avatar_url=avatar_url)
+        """, (avatar_url, src, avatar_email, self.id))
+        self.set_attributes(avatar_src=src, avatar_url=avatar_url, avatar_email=avatar_email)
 
         return avatar_url
 

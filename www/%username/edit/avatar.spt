@@ -6,32 +6,50 @@ from liberapay.utils import form_post_success, get_participant
 participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
-    src, email = request.body['src'], request.body.get('email') or None
+    src, email = request.body['src'], request.body.get('email', '')
 
     if src not in constants.AVATAR_SOURCES:
         raise response.invalid_input(src, 'src', 'body')
 
-    website.db.run("""
-        UPDATE participants SET avatar_email = %s WHERE id = %s
-    """, (email, participant.id))
-    participant.set_attributes(avatar_email=email)
+    new_avatar_url = participant.update_avatar(src+':', avatar_email=email)
+    if new_avatar_url:
+        msg = _("Your new avatar URL is: {0}", new_avatar_url)
+        form_post_success(state, msg=msg)
 
-    r = participant.update_avatar(src+':')
-    if not r:
-        raise response.error(400, _("We were unable to get an avatar for you from {0}.", src))
-
-    msg = _("Your new avatar URL is: {0}", participant.avatar_url)
-    form_post_success(state, msg=msg)
+else:
+    src = participant.avatar_src
+    src = src.split(':', 1)[0] if src else None
 
 title = participant.username
 subhead = _("Avatar")
 
 [---] text/html
+% from "templates/auth.html" import auth_button with context
 % from 'templates/avatar-url.html' import avatar_img, avatar_url with context
 % from 'templates/icons.html' import glyphicon
+
 % extends "templates/profile-edit.html"
 
 % block form
+
+    % set platform = website.platforms.get(src)
+    % if platform and not participant.get_account_elsewhere(platform.name)
+        <div class="alert alert-warning">
+            <p>{{ _(
+                "You have selected {platform} as your avatar source but you "
+                "haven't connected any {platform} account.",
+                platform=platform.display_name
+            ) }}</p>
+            <p> </p>{# for spacing #}
+            % call auth_button(src, 'connect', participant=participant)
+                {{ _("Connect {0} account", platform.display_name) }}
+            % endcall
+        </div>
+    % elif new_avatar_url == None
+        <div class="alert alert-danger">{{ _(
+            "We were unable to get an avatar for you from {0}.", src
+        ) }}</div>
+    % endif
 
     <div class="flex-row block-xs text-center-xs">
 
@@ -71,11 +89,8 @@ subhead = _("Avatar")
         <div class="form-group">
             <label for="avatar-src">{{ _("Avatar source") }}</label><br>
             <select class="form-control" name="src" id="avatar-src">
-                % set accounts = participant.get_accounts_elsewhere()
-                % for src in constants.AVATAR_SOURCES
-                    <option value="{{ src }}" {% if src == participant.avatar_src %} selected {% endif %}
-                            {% if src != 'libravatar' and src not in accounts %} disabled {% endif %}
-                        >{{ src }}</option>
+                % for s in constants.AVATAR_SOURCES
+                    <option value="{{ s }}" {% if s == src %} selected {% endif %}>{{ s }}</option>
                 % endfor
             </select>
         </div>
