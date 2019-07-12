@@ -1751,13 +1751,21 @@ msgstr "Törvényes és biztonságos ez az oldal?"
 msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{1} in France, we comply with the European Union's financial regulations, and the security of our service is of paramount importance to us."
 msgstr "Igen. A Liberapay-t egy nonprofit szervezet üzemelteti, {0}hivatalosan bejegyzett{1} Franciaországban, megfelelünk az Európai Unió pénzügyi előírásainak, és a szolgáltatásunk biztonsága kiemelkedően fontos számunkra."
 
-#, fuzzy, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "Nem tudtunk profilképet szerezni Önnek {0}-tól."
-
 #, python-brace-format
 msgid "Your new avatar URL is: {0}"
 msgstr "Az Ön új profilképének az elérhetősége: {0}"
+
+#, python-brace-format
+msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Connect {0} account"
+msgstr "{0} fiók csatolása"
+
+#, fuzzy, python-brace-format
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "Nem tudtunk profilképet szerezni Önnek {0}-tól."
 
 #, fuzzy
 msgid "Modify your Libravatar"
@@ -1845,10 +1853,6 @@ msgstr "Az Ön adatlapja frissítve lett."
 #, python-brace-format
 msgid "You don't have any {platform} account connected to your profile."
 msgstr "Önnek nincs {platform} fiókja csatolva az adatlapjához."
-
-#, fuzzy, python-brace-format
-msgid "Connect {0} account"
-msgstr "{0} fiók csatolása"
 
 #, fuzzy, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."

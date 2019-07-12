@@ -1789,12 +1789,20 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "Да. Liberapay создан некоммерческой организацией, {0}официально зарегистрированной{1} во Франции, мы соблюдаем финансовый регламент Евросоюза, а безопасность нашего сервиса играет для нас первостепенную роль."
 
 #, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "Мы не смогли загрузить аватар для вас из {0}."
-
-#, python-brace-format
 msgid "Your new avatar URL is: {0}"
 msgstr "URL вашего нового аватара: {0}"
+
+#, python-brace-format
+msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "Подключить аккаунт {0}"
+
+#, python-brace-format
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "Мы не смогли загрузить аватар для вас из {0}."
 
 msgid "Modify your Libravatar"
 msgstr "Изменить свой Libravatar"
@@ -1881,10 +1889,6 @@ msgstr "Профиль обновлён."
 #, python-brace-format
 msgid "You don't have any {platform} account connected to your profile."
 msgstr "У вас нет аккаунтов {platform}, подключённых к вашему профилю."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Подключить аккаунт {0}"
 
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."

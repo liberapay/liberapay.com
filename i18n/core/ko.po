@@ -1741,12 +1741,20 @@ msgid "Yes. Liberapay is run by a non-profit organisation {0}legally registered{
 msgstr "예, Liberapay는 프랑스에 {0}소재한 비영리기구{1}에 의해 운영되며, 유럽 연합의 금융 제재를 준수합니다. 서비스의 보안은 저희에게 있어 가장 중요한 요소이기도 합니다."
 
 #, python-brace-format
-msgid "We were unable to get an avatar for you from {0}."
-msgstr "{0}에서 아바타를 가져올 수 없었습니다."
-
-#, python-brace-format
 msgid "Your new avatar URL is: {0}"
 msgstr "새 아바타 URL은 {0} 입니다"
+
+#, python-brace-format
+msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {0} account"
+msgstr "{0} 계정 연결하기"
+
+#, python-brace-format
+msgid "We were unable to get an avatar for you from {0}."
+msgstr "{0}에서 아바타를 가져올 수 없었습니다."
 
 msgid "Modify your Libravatar"
 msgstr "Libravata 바꾸기"
@@ -1833,10 +1841,6 @@ msgstr "프로필이 업데이트되었습니다."
 #, python-brace-format
 msgid "You don't have any {platform} account connected to your profile."
 msgstr "프로필에 연결된 {platform} 계정이 존재하지 않습니다."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "{0} 계정 연결하기"
 
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
