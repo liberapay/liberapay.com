@@ -12,8 +12,12 @@ if request.method == "POST":
     elif goal == "custom":
         goal = request.body["goal_custom"]
         goal = locale.parse_money_amount(goal, participant.main_currency)
+        if not (goal > 0 or participant.is_person and goal.amount in (0, -1)):
+            raise response.invalid_input(goal, 'goal_custom', 'body')
     else:
         goal = Money(request.body.get_int("goal"), participant.main_currency).round_down()
+        if not (goal > 0 or participant.is_person and goal.amount in (0, -1)):
+            raise response.invalid_input(goal, 'goal', 'body')
     participant.update_goal(goal)
     form_post_success(state)
 
