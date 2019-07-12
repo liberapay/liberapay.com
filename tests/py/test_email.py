@@ -1,13 +1,14 @@
 from unittest.mock import patch
 
 from liberapay.exceptions import (
-    BadEmailAddress, BadEmailDomain, CannotRemovePrimaryEmail, EmailAlreadyTaken,
-    EmailNotVerified, TooManyEmailAddresses, TooManyEmailVerifications,
+    BadEmailAddress, BadEmailDomain, CannotRemovePrimaryEmail,
+    EmailAddressIsBlacklisted, EmailAlreadyTaken, EmailNotVerified,
+    TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
 from liberapay.security.authentication import ANON
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils.emails import EmailVerificationResult
+from liberapay.utils.emails import EmailVerificationResult, check_email_blacklist
 
 
 class TestEmail(EmailHarness):
@@ -217,6 +218,40 @@ class TestEmail(EmailHarness):
         expected = 'alice@example.com'
         actual = Participant.from_username('alice').email
         assert expected == actual
+
+    def test_disavow_email(self):
+        self.alice.add_email('alice@liberapay.com')
+        email = self.alice.get_email('alice@liberapay.com')
+        url = '/alice/emails/disavow?email.id=%s&email.nonce=%s' % (email.id, email.nonce)
+        verification_email = self.get_last_email()
+        assert url in verification_email['text']
+        r = self.client.GET(url)
+        assert r.code == 200
+        email = self.alice.get_email(email.address)
+        assert email.disavowed is True
+        assert email.disavowed_time is not None
+        assert email.verified is None
+        assert email.verified_time is None
+        assert email.nonce
+
+        # Check idempotency
+        r = self.client.GET(url)
+        assert r.code == 200
+
+        # Check that resending the verification email isn't allowed
+        r = self.hit_email_spt('resend', email.address)
+        assert r.code == 400, r.text
+
+        # Test adding the address to the blacklist
+        r = self.client.POST(url, {'action': 'add_to_blacklist'})
+        assert r.code == 200, r.text
+        with self.assertRaises(EmailAddressIsBlacklisted):
+            check_email_blacklist(email.address)
+
+        # and removing it
+        r = self.client.POST(url, {'action': 'remove_from_blacklist'})
+        assert r.code == 200, r.text
+        assert check_email_blacklist(email.address) is None
 
     def test_get_emails(self):
         self.add_and_verify_email('alice@example.com')
