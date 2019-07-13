@@ -180,3 +180,14 @@ def _handle_ses_notification(msg):
             except DuplicateNotification:
                 continue
     msg.delete()
+
+
+def clean_up_emails():
+    website.db.run("""
+        DELETE FROM emails
+         WHERE participant IS NULL
+           AND added_time < (current_timestamp - interval '1 year');
+        UPDATE emails
+           SET nonce = NULL
+         WHERE added_time < (current_timestamp - interval '1 year');
+    """)
