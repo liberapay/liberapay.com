@@ -105,7 +105,7 @@ class TestEmail(EmailHarness):
         assert self.mailer.call_count == 3
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'alice <alice1@example.com>'
-        expected = "We are connecting alice2@example.com to the alice account on Liberapay"
+        expected = "Someone is attempting to associate the email address alice2@example.com to "
         assert expected in last_email['text']
 
     def test_post_anon_returns_403(self):
