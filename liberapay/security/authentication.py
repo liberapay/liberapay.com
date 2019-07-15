@@ -131,26 +131,29 @@ def sign_in_with_form_data(body, state):
             Participant.check_session_token(session_token)
         # Check for an existing account
         existing_account = website.db.one("""
-            SELECT p, s.secret
+            SELECT p
               FROM emails e
               JOIN participants p ON p.id = e.participant
-         LEFT JOIN user_secrets s ON s.participant = p.id
-                                 AND s.id = 1
-                                 AND s.mtime < (p.join_time + interval '6 hours')
-                                 AND s.mtime > (current_timestamp - interval '6 hours')
              WHERE lower(e.address) = lower(%s)
                AND ( e.verified IS TRUE OR
                      e.added_time > (current_timestamp - interval '1 day') OR
-                     s.secret IS NOT NULL OR
                      p.email IS NULL )
           ORDER BY p.join_time DESC
              LIMIT 1
         """, (email,))
         if existing_account:
-            p, secret = existing_account
-            if secret and constant_time_compare(session_token, secret):
+            session = website.db.one("""
+                SELECT id, secret, mtime
+                  FROM user_secrets
+                 WHERE participant = %s
+                   AND id = 1
+                   AND mtime < (%s + interval '6 hours')
+                   AND mtime > (current_timestamp - interval '6 hours')
+            """, (existing_account.id, existing_account.join_time))
+            if session and constant_time_compare(session_token, session.secret):
+                p = existing_account
                 p.authenticated = True
-                p.sign_in(response.headers.cookie, token=session_token)
+                p.sign_in(response.headers.cookie, session=session)
                 return p
             else:
                 raise EmailAlreadyTaken(email)

@@ -35,8 +35,13 @@ class TestLogIn(EmailHarness):
     def check_login(self, r, p):
         # Basic checks
         assert r.code == 302
-        p.extend_session_lifetime(1)  # trick to get p.session
-        expected = '%i:%i:%s' % (p.id, p.session.id, p.session.secret)
+        session = self.db.one("""
+            SELECT id, secret, mtime
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = 1
+        """, (p.id,))
+        expected = '%i:%i:%s' % (p.id, session.id, session.secret)
         sess_cookie = r.headers.cookie[SESSION]
         assert sess_cookie.value == expected
         expires = sess_cookie['expires']

@@ -395,44 +395,90 @@ class Participant(Model, MixinTeam):
         if not set(token).issubset(BASE64URL_CHARS):
             raise Response(400, "bad token, not base64url")
 
-    def upsert_session(self, session_id, new_token):
-        assert session_id >= 1
-        session = self.db.one("""
-            INSERT INTO user_secrets
-                        (participant, id, secret)
-                 VALUES (%s, %s, %s)
-            ON CONFLICT (participant, id) DO UPDATE
-                    SET secret = excluded.secret
-                      , mtime = excluded.mtime
-              RETURNING id, secret, mtime
-        """, (self.id, session_id, new_token))
-        self.session = session
-
-    def extend_session_lifetime(self, session_id):
-        assert session_id >= 1
-        session = self.db.one("""
+    def extend_session_lifetime(self):
+        self.session = self.db.one("""
             UPDATE user_secrets
                SET mtime = current_timestamp
              WHERE participant = %s
                AND id = %s
          RETURNING id, secret, mtime
-        """, (self.id, session_id))
-        self.session = session
+        """, (self.id, self.session.id))
 
-    def start_session(self, suffix='', token=None):
-        """Start a new session for the user, invalidating the previous one.
+    def start_session(self, suffix='', token=None, id_min=1, id_max=20,
+                      lifetime=SESSION_TIMEOUT):
+        """Start a new session for the user.
+
+        Args:
+            suffix (str):
+                the session type ('.em' for email sessions, empty for normal sessions)
+            token (str):
+                the session token, if it's already been generated
+            id_min (int):
+                the lowest acceptable session ID
+            id_max (int):
+                the highest acceptable session ID
+            lifetime (timedelta):
+                the session timeout, used to determine if existing sessions have expired
+
+        The session ID is selected in the following order:
+        1. if the oldest existing session has expired, then its ID is reused;
+        2. if there are unused session IDs, then the lowest one is claimed;
+        3. the oldest session is overwritten, even though it hasn't expired yet.
+
         """
+        assert id_min < id_max, (id_min, id_max)
         if token:
             self.check_session_token(token)
             token += suffix
         else:
             token = self.generate_session_token() + suffix
-        self.upsert_session(1, token)
-        return self.session
+        p_id = self.id
+        session = self.db.one("""
+            WITH oldest_secret AS (
+                     SELECT *
+                       FROM user_secrets
+                      WHERE participant = %(p_id)s
+                        AND id >= %(id_min)s
+                        AND id <= %(id_max)s
+                   ORDER BY mtime
+                      LIMIT 1
+                 )
+               , unused_id AS (
+                     SELECT i
+                       FROM generate_series(%(id_min)s, %(id_max)s) i
+                      WHERE NOT EXISTS (
+                                SELECT 1
+                                  FROM user_secrets s2
+                                 WHERE s2.participant = %(p_id)s
+                                   AND s2.id = i
+                            )
+                   ORDER BY i
+                      LIMIT 1
+                 )
+            INSERT INTO user_secrets AS s
+                        (participant, id, secret)
+                 SELECT %(p_id)s
+                      , coalesce(
+                            (SELECT s2.id FROM oldest_secret s2
+                              WHERE s2.mtime < (current_timestamp - %(lifetime)s)
+                            ),
+                            (SELECT i FROM unused_id),
+                            (SELECT s2.id FROM oldest_secret s2)
+                        )
+                      , %(token)s
+            ON CONFLICT (participant, id) DO UPDATE
+                    SET mtime = excluded.mtime
+                      , secret = excluded.secret
+                  WHERE s.mtime = (SELECT s2.mtime FROM oldest_secret s2)
+              RETURNING *
+        """, locals())
+        if session is None:
+            return self.start_session(token=token, id_min=id_min, id_max=id_max)
+        return session
 
-    def sign_in(self, cookies, **session_kw):
+    def sign_in(self, cookies, session=None, **session_kw):
         assert self.authenticated
-        self.start_session(**session_kw)
+        self.session = session or self.start_session(**session_kw)
         creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
         set_cookie(cookies, SESSION, creds, self.session.mtime + SESSION_TIMEOUT)
 
@@ -441,9 +487,10 @@ class Participant(Model, MixinTeam):
         """
         now = utcnow()
         if now - self.session.mtime > SESSION_REFRESH:
-            session_id = self.session.id
-            self.extend_session_lifetime(session_id)
-            creds = '%i:%i:%s' % (self.id, session_id, self.session.secret)
+            self.extend_session_lifetime()
+            if not self.session:
+                return
+            creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
             set_cookie(cookies, SESSION, creds, expires=now + SESSION_TIMEOUT)
 
     def sign_out(self, cookies):
