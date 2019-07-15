@@ -19,6 +19,11 @@ err = response.text
 if code == 500 and not err:
     err = _("Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!")
 
+if response.whence_raised == (None, None):
+    response.set_whence_raised()
+filepath, linenum = response.whence_raised
+error_location = '%s:%i' % (filepath, linenum) if filepath else 'unknown'
+
 referer = request.headers.get(b'Referer')
 
 [----------------------------------------] text/html
@@ -70,7 +75,8 @@ referer = request.headers.get(b'Referer')
                }}Method: {{ request.method }}{{ '\n'
                }}Referer: {{ repr(referer) }}{{ '\n'
                }}Response code: {{ code }}{{ '\n'
-               }}Response message: {{ repr(err) }}</pre>
+               }}Response message: {{ repr(err) }}{{ '\n'
+               }}Error location: {{ error_location }}</pre>
         % endif
     % endif
 % endblock
@@ -79,6 +85,7 @@ referer = request.headers.get(b'Referer')
 , "error_message_short": msg
 , "error_message_long": err
 , "error_id": sentry_ident
+, "error_location": error_location
  }
 [----------------------------------------] text/plain
 {{err or msg}}
