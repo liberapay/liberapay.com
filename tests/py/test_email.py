@@ -17,15 +17,17 @@ class TestEmail(EmailHarness):
         EmailHarness.setUp(self)
         self.alice = self.make_participant('alice')
 
-    def hit_email_spt(self, action, address, auth_as='alice'):
+    def hit_email_spt(self, action, address, auth_as='alice', expected_code=200):
         data = {('email' if action == 'add-email' else action): address}
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         auth_as = self.alice if auth_as == 'alice' else auth_as
-        return self.client.POST(
+        r = self.client.POST(
             '/alice/emails/modify.json', data,
             auth_as=auth_as, raise_immediately=False,
             **headers
         )
+        assert r.code == expected_code, r.text
+        return r
 
     def get_address_id(self, addr):
         return self.db.one("SELECT id FROM emails WHERE address = %s", (addr,))
@@ -53,8 +55,7 @@ class TestEmail(EmailHarness):
         assert self.alice.get_email_address() == punycode_email
 
     def test_participant_cannot_add_email_with_unicode_local_part(self):
-        r = self.hit_email_spt('add-email', 'tête@exemple.fr')
-        assert r.code == 400
+        self.hit_email_spt('add-email', 'tête@exemple.fr', expected_code=400)
 
     def test_participant_cant_add_bad_email(self):
         bad = (
@@ -66,8 +67,7 @@ class TestEmail(EmailHarness):
         for blob in bad:
             with self.assertRaises(BadEmailAddress):
                 self.alice.add_email(blob)
-            response = self.hit_email_spt('add-email', blob)
-            assert response.code == 400
+            self.hit_email_spt('add-email', blob, expected_code=400)
 
     def test_participant_cant_add_email_with_bad_domain(self):
         bad = (
@@ -79,8 +79,7 @@ class TestEmail(EmailHarness):
             for email in bad:
                 with self.assertRaises(BadEmailDomain):
                     self.alice.add_email(email)
-                response = self.hit_email_spt('add-email', email)
-                assert response.code == 400
+                self.hit_email_spt('add-email', email, expected_code=400)
 
     def test_verification_link_uses_address_id(self):
         address = 'alice@gratipay.com'
@@ -109,16 +108,13 @@ class TestEmail(EmailHarness):
         assert expected in last_email['text']
 
     def test_post_anon_returns_403(self):
-        response = self.hit_email_spt('add-email', 'anon@example.com', auth_as=None)
-        assert response.code == 403
+        self.hit_email_spt('add-email', 'anon@example.com', auth_as=None, expected_code=403)
 
     def test_post_with_no_at_symbol_is_400(self):
-        response = self.hit_email_spt('add-email', 'example.com')
-        assert response.code == 400
+        self.hit_email_spt('add-email', 'example.com', expected_code=400)
 
     def test_post_with_no_period_symbol_is_400(self):
-        response = self.hit_email_spt('add-email', 'test@example')
-        assert response.code == 400
+        self.hit_email_spt('add-email', 'test@example', expected_code=400)
 
     def test_verify_email_without_adding_email(self):
         response = self.hit_verify('', 'sample-nonce')
@@ -239,8 +235,7 @@ class TestEmail(EmailHarness):
         assert r.code == 200
 
         # Check that resending the verification email isn't allowed
-        r = self.hit_email_spt('resend', email.address)
-        assert r.code == 400, r.text
+        self.hit_email_spt('resend', email.address, expected_code=400)
 
         # Test adding the address to the blacklist
         r = self.client.POST(url, {'action': 'add_to_blacklist'})
