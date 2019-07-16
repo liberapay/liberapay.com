@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2019-07-16 14:04+0000\n"
+"Last-Translator: bluepencil <bluepencil@yahoo.com>\n"
 "Language-Team: Korean (https://hosted.weblate.org/projects/liberapay/core/ko/)\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.8-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -262,6 +265,25 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
+"지불 처리기(Mangopay)가 저희를 내쫓고 있으니 7월 26일 이전에 귀하의 계정에서 {link1_start}돈을 인출하는 것{link_end}이 좋습니다.\n"
+"\n"
+"위의 링크를 클릭하면 \"지갑 사용\"이라는 새 페이지가 열리고 두 가지 옵션 중 하나를 선택하라는 메시지가 나타납니다.\n"
+"\n"
+"기증자로 Liberapay를 사용하는 경우, 특히 Liberapay를 계속 사용하려는 경우 첫 번째 선택이 권장됩니다. 이 첫 번째 옵션은 여러분의 지갑에서 나온 모든 돈을 보통 시간이 지남에 따라 그것을 받았을 사람들에게 분배합니다. 수령자들은 이 갑작스런 소득의 폭락이 여러 주간의 기부금에 해당한다는 것을 알 수 있을 것입니다.\n"
+"\n"
+"예를 들어, 만약 여러분이 일주일에 1달러를 2명의 크리에이터에게 기부하고 지갑에 40달러를 가지고 있다면, 각 창조자는 20달러를 받게 될 것이고, 지금부터 20주 후에 여러분은 돈을 다시 추가할 때라는 것을 알려주는 우리의 통상적인 이메일을 받게 될 것입니다.\n"
+"\n"
+"여러 가지 이유로 지출이 실패할 수 있습니다. \"지갑에 있는 돈을 다 나눠주려다가 실패했다는 오류 메시지가 뜨면 XX입니다.XX는 남아 있습니다.\" 그렇다면 문제는 아마도 수령자 쪽일 것이다. 예를 들어 신분증을 작성하지 않은 사람이나 회원들 간에 소득이 어떻게 분할되어야 하는지를 규정하지 않은 팀입니다.\n"
+"\n"
+"또 다른 방법은 환불을 통해 가능하면 돈을 돌려받는 것입니다. 그렇지 않으면 은행 계좌로 돈을 인출하는 것입니다.\n"
+"\n"
+"만약 여러분이 Liberapay에 기부금을 받는다면, 여러분의 고객들에게 그들의 남은 기부금을 여러분의 지갑에서 여러분의 지갑으로 옮길 수 있는 기회를 주기 위해 여러분의 수입을 철회하기 전에 일주일 동안 기다리고 싶을지도 모릅니다.\n"
+"\n"
+"새로운 결제 프로세서의 통합이 완료되는 대로 알려드리고, Liberapay에 대한 기부를 다시 받기 위해 필요한 것이 있는지 알려드리겠습니다.\n"
+"\n"
+"팀원이라면 테이크 설정과 최신 상태를 확인해야 합니다. {link2_start}사용자의 \"수신\" 페이지{link_end}에서 이 작업을 수행할 수 있습니다.\n"
+"\n"
+"자세한 내용은 {link3_start}이 블로그 게시물{link_end}에서 확인할 수 있으며, 항상 도움이 필요한 경우 이 이메일에 회신할 수 있습니다.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "Liberapay 비밀번호의 강도가 약합니다"
@@ -360,7 +382,7 @@ msgstr "{bank_name} 은행 계좌에서 {money_amount} 의 자동 이체를 지�
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "귀하의 은행 계좌({partial_account_number})에서 직접 {money_amount} 지급을 시작했습니다."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
@@ -401,11 +423,11 @@ msgstr "{platform} 의 {user_name} 님이 Liberapay에 가입했습니다!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "{date}에 {date}이(가) Liberapay에 가입할 경우 {money_mount}을(를) 기부하기로 서약했습니다."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "{user_name}이(가) {liberapay_username}라는 이름으로 Liberapay에 {time_ago}에 가입하였음을 알려드리게 되어 기쁩니다. 이제 서약을 실제 기부금으로 바꿀 수 있습니다."
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -493,21 +515,21 @@ msgstr "버그를 발견하신 것 같네요! 불편을 겪게 해드려 죄송�
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "요청한 페이지를 찾을 수 없습니다. 도움이 필요한 경우 {link_open}문의{link_close}하시기 바랍니다."
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "귀하의 요청이 저희 소프트웨어에서 거부되었습니다. 도움이 필요한 경우 {link_open}문의{link_close}하시기 바랍니다."
 
 msgid "Error message:"
-msgstr ""
+msgstr "오류 메시지:"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "이 오류의 세부 사항이 기록되었습니다. 저희에게 연락하기로 결정하셨다면 에러 식별자 {0} 을/를 알려주세요."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "당사에 연락하기로 결정한 경우, 다음 디버깅 정보를 메시지에 포함해 주십시오:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "기부를 받는 한 매 주"
@@ -1199,13 +1221,13 @@ msgid "I agree to {0}MangoPay's Terms of Service{1}"
 msgstr "{0}MangoPay 이용약관에 동의합니다.{1}"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "개인정보"
 
 msgid "Full Name"
-msgstr ""
+msgstr "이름"
 
 msgid "Nationality"
-msgstr ""
+msgstr "국적"
 
 msgid "username"
 msgstr "사용자 이름"
@@ -1260,7 +1282,7 @@ msgid "Security"
 msgstr "보안"
 
 msgid "Logos"
-msgstr ""
+msgstr "로고"
 
 msgid "Overview"
 msgstr "개요"
@@ -1433,13 +1455,13 @@ msgid "Country"
 msgstr "국가"
 
 msgid "Region (state, province, island…)"
-msgstr ""
+msgstr "지역 (주, 도, 섬...)"
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
+msgstr "국가에서 우편번호를 사용하지 않는 경우 이 필드를 비워둘 수 있습니다."
 
 msgid "Postal code"
-msgstr ""
+msgstr "우편번호"
 
 msgid "Address within the city"
 msgstr ""
@@ -1521,11 +1543,11 @@ msgid "Reconnect"
 msgstr "재연결"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "리디렉션 중…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "아무 일도 발생하지 않는 경우 {link_start}이 링크를 클릭하여{link_end} 진행해 주십시오."
 
 msgid "(fork)"
 msgstr "(포크)"
@@ -1550,7 +1572,7 @@ msgid "Search Liberapay"
 msgstr "Liberapay 검색"
 
 msgid "Switch to a different account"
-msgstr ""
+msgstr "다른 계정으로 전환"
 
 msgid "The changes have been saved."
 msgstr "변경 사항을 저장하였습니다."
@@ -1603,16 +1625,16 @@ msgid "Actual Take"
 msgstr "실제 지분"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 msgid "auto"
-msgstr ""
+msgstr "자동"
 
 msgid "Update my nominal take"
 msgstr "명목상 수입 업데이트"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
-msgstr ""
+msgstr "사용되지 않는 수입은 다음 주 내에 소비될 것이며, 팀 계정에 포함되지 않습니다. 팀은 합법적인 실체가 아니기 때문에 돈을 소유할 수 없습니다."
 
 msgid "Leftover"
 msgstr "잔액"
@@ -1649,7 +1671,7 @@ msgid_plural "The {currency_name} isn't your preferred currency? {username} also
 msgstr[0] "{currency_name}이 선호하는 화폐가 아닌가요? {username} 님은 {n} 개의 화폐를 지원합니다:"
 
 msgid "not supported by PayPal"
-msgstr ""
+msgstr "PayPal에서 지원되지 않음"
 
 msgid "Switch"
 msgstr "전환"
@@ -1746,7 +1768,7 @@ msgstr "새 아바타 URL은 {0} 입니다"
 
 #, python-brace-format
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
-msgstr ""
+msgstr "{platform}을(를) 아바타 출처로 선택했지만 {platform} 계정을 연결하지 않았습니다."
 
 #, python-brace-format
 msgid "Connect {0} account"
@@ -1833,7 +1855,7 @@ msgid "Save changes"
 msgstr "바뀐 내용 저장"
 
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
-msgstr ""
+msgstr "*Liberapay 프로필 참조는 관리자의 승인을 받아야 합니다."
 
 msgid "Your profile has been updated."
 msgstr "프로필이 업데이트되었습니다."
@@ -2101,7 +2123,7 @@ msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
 msgstr "{bold}총계:{bold_end} 매주 {0} ~ 매달 {1} ~ 매년 {2}."
 
 msgid "You are currently not donating to anyone."
-msgstr ""
+msgstr "당신은 현재 누구에게도 기부하지 않고 있습니다."
 
 msgid "Cancel the pledge"
 msgstr "공약 취소"
@@ -2121,28 +2143,28 @@ msgstr "{timespan_ago_1} 전에 시작됨. {timespan_ago_2} 전에 중지됨."
 
 #, python-brace-format
 msgid "You are not donating to {username}."
-msgstr ""
+msgstr "{username}에 기부하고 있지 않습니다."
 
 msgid "Funding your donations"
-msgstr ""
+msgstr "기부금 모금"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] ""
+msgstr[0] "법적 및 기술적 제한으로 인해 현재 귀하의 모든 기부를 단일 지급으로 처리할 수 없습니다. 대신 {n} 개의 개별 지불을 수행해야 합니다. 불편을 드리게 되어 사과드립니다."
 
 msgid "We are able to group these donations into a single payment."
-msgstr ""
+msgstr "이 기부들을 하나의 지불로 묶을 수 있습니다."
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr ""
+msgstr "{recipients}에 대한 기부금이 지급 대기 중입니다."
 
 msgid "For now this donation can only be renewed externally through PayPal."
-msgstr ""
+msgstr "현재 이 기부는 PayPal을 통해서만 외부적으로 갱신될 수 있습니다."
 
 msgid "Please choose a payment method:"
-msgstr ""
+msgstr "결제 방법을 선택하십시오:"
 
 msgid "Card"
 msgstr "카드"
@@ -2151,21 +2173,21 @@ msgid "Currently unavailable"
 msgstr "현재 사용 불가능"
 
 msgid "Euro donations only"
-msgstr ""
+msgstr "유로 기부금 전용"
 
 msgid "Euro bank accounts only"
-msgstr ""
+msgstr "유럽 계좌 전용"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
-msgstr ""
+msgstr "{currency}를 지원하지 않음"
 
 msgid "Not anonymous"
-msgstr ""
+msgstr "익명이 아님"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
-msgstr ""
+msgstr "{team}에 대한 당신의 기부금은 자신에게 돈을 보내는 것이기 때문에 처리할 수 없습니다."
 
 msgid "All your donations are funded."
 msgstr ""
@@ -2179,43 +2201,43 @@ msgstr "요청 진행 중, 잠시만 기다려 주십시오…"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr ""
+msgstr "{charge_amount} 을(를) 성공적으로 지불했습니다."
 
 #, python-brace-format
 msgid "The payment failed. Error message: “{0}”"
-msgstr ""
+msgstr "지불이 실패했습니다. 오류 메시지: “{0}”"
 
 msgid "The payment is awaiting your approval."
-msgstr ""
+msgstr "결제가 승인 대기 중입니다."
 
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
+msgstr[0] "지불 대기 중인 다른 기부금이 {n}개 있습니다."
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr ""
+msgstr "현재 지불을 기다리는 다른 기부가 없습니다."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
-msgstr ""
+msgstr "{donation_mount}만 청구할 수 없습니다. 최소 지불 금액은 {min_payment_mount} 입니다."
 
 msgid "Please select or input a payment amount:"
-msgstr ""
+msgstr "결제금액을 선택 또는 입력해 주세요."
 
 msgid "(not recommended, high fee percentage)"
-msgstr ""
+msgstr "(높은 수수료율로 인해 권장되지 않습니다.)"
 
 msgid "(okay, moderate fee percentage)"
-msgstr ""
+msgstr "(그럭저럭, 적당한 수수료율)"
 
 msgid "(recommended, low fee percentage)"
-msgstr ""
+msgstr "(권장됨, 수수료율 낮음)"
 
 #, python-brace-format
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
-msgstr[0] ""
+msgstr[0] "다음 번 지불은 {n} 주({timedelta})입니다."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -2223,68 +2245,68 @@ msgstr "맞춤 금액 (최소={0}, 최대={1})"
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr ""
+msgstr "전체 지불 금액은 즉시 {recipient_names}의 {payment_provider} 계정으로 이동됩니다."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Liberapay는 더 이상 돈을 지갑에 저장하지 않습니다. 전체 지불 금액은 즉시 {payment_provider} 계정의 {recipient_name}(으)로 이동합니다."
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "전체 지불 금액은 즉시 {recipient_name}의 {payment_provider} 계정으로 이동합니다."
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr ""
+msgstr "PayPal 지불은 현재 익명이 아니며, 받는 사람은 당신의 이름과 이메일 주소를 볼 것입니다."
 
 msgid "Initiate the payment"
-msgstr ""
+msgstr "지불 시작"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr ""
+msgstr "결제 프로세서 {name}에서 \"{error_message}\" 오류를 반환했습니다."
 
 msgid "More information is required in order to process this payment."
-msgstr ""
+msgstr "이 지불을 처리하기 위해서는 더 많은 정보가 필요합니다."
 
 msgid "The payment has been initiated."
-msgstr ""
+msgstr "결제가 시작되었습니다."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
-msgstr ""
+msgstr "{brand} 카드(마지막 네 자리: {last4})에서 청구됩니다."
 
 msgid "Use another card"
-msgstr ""
+msgstr "다른 카드 사용"
 
 #, python-brace-format
 msgid "We will charge your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "{bank_name} 계정({partial_account_number})에서 청구됩니다."
 
 msgid "Use another bank account"
-msgstr ""
+msgstr "다른 은행 계좌 사용"
 
 msgid "Please input your name and card number:"
-msgstr ""
+msgstr "이름과 카드 번호를 입력해 주십시오:"
 
 msgid "Jane Doe"
-msgstr ""
+msgstr "Jane Doe"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
-msgstr ""
+msgstr "이 데이터는 암호화된 연결을 통해 결제 프로세서 {name}(으)로 직접 전송됩니다."
 
 msgid "Remember the card number for next time"
 msgstr "다음 결제를 위해 카드 번호 기억하기"
 
 msgid "Please input your name and your IBAN (International Bank Account Number):"
-msgstr ""
+msgstr "이름과 IBAN(국제 은행 계좌 번호)을 입력해 주십시오."
 
 #, python-brace-format
 msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "귀하는 IBAN을 제공하고 이 지급을 확인함으로써 귀하의 은행과 귀하의 은행이 해당 지침에 따라 귀하의 계정에 차변에 대한 지침을 보내도록 {platform} 및 NAT 지불 서비스 제공업체 {provider}을(를) 승인합니다. 귀하는 귀하의 은행과의 계약 조건에 따라 귀하의 은행으로부터 환불받을 수 있습니다. 환불은 계좌가 인출된 날로부터 8주 이내에 청구되어야 합니다."
 
 msgid "Remember the bank account number for future payments"
-msgstr ""
+msgstr "향후 지급을 위해 은행 계좌 번호를 기억하세요"
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "계정의 종류를 정말 바꾸시겠습니까? 법적인 이유로 결제 대행사의 시스템에서 새 계정을 생성하고 기존 계정에서 새 계정으로 자금을 이체하게 됩니다."
@@ -2327,7 +2349,7 @@ msgid "The provided postal address is incomplete."
 msgstr "우편번호가 정확하지 않습니다."
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
-msgstr ""
+msgstr "이 페이지를 통해 계정에 연결된 ID 정보를 보고 수정할 수 있습니다. 허가된 직원만 이 정보에 액세스할 수 있으며, 법률상 필요하거나 귀하가 이를 지시하지 않는 한 다른 사용자나 다른 누구에게도 이 정보를 표시하지 않습니다."
 
 msgid "Income Shares"
 msgstr "수익 분배"
@@ -2376,7 +2398,7 @@ msgstr "주간 후원자 수"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username}은(는) Liberapay를 통해 받는 금액을 공개하지 않습니다."
 
 msgid "Invoice documents are private."
 msgstr "청구서 문서는 비공개입니다."
@@ -2521,7 +2543,7 @@ msgstr "성공"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
-msgstr ""
+msgstr "아래 총계는 오래된 지갑 시스템을 통한 기부를 포함하지 않습니다. 이러한 정보는 {link_start} 사용자의 Wallet 페이지{link_end}에서 찾을 수 있습니다."
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -2535,7 +2557,7 @@ msgid "Fees"
 msgstr "수수료"
 
 msgid "Method"
-msgstr ""
+msgstr "수단"
 
 msgid "charge"
 msgstr ""
@@ -2561,18 +2583,18 @@ msgstr "{1} 에서의 역할에 대해 {0} 에게 보내는 기여"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
-msgstr ""
+msgstr "이 지급은 수신인이 {provider}의 웹사이트를 통해 수동으로 승인해야 합니다."
 
 #, python-brace-format
 msgid "PayPal status code: {0}"
-msgstr ""
+msgstr "PayPal 상태 코드: {0}"
 
 msgid "There were no transactions during this period."
 msgstr "이 기간 중에 거래가 이루어지지 않았습니다."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
-msgstr ""
+msgstr "Mangopay {link_start}에서 이전에 처리된 거래를 보려면 Wallet 페이지{link_end}로 이동합니다."
 
 msgid "You are not invited to join this team."
 msgstr "이 팀에 가입하도록 초대되지 않았습니다."
@@ -2635,49 +2657,49 @@ msgstr "확인할 알림이 없습니다."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr ""
+msgstr "기부금 수령을 시작하려면 먼저 {link_open}프로필을{link_link_close} 채워 주세요."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
-msgstr ""
+msgstr "기부를 받으려면 지원되는 결제 과정에서 하나 이상의 계정을 연결해야 합니다. 이 페이지에서는 그렇게 할 수 있습니다."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
-msgstr ""
+msgstr "기부자는 아래의 결제 계좌를 연결할 필요가 없으며, 돈을 받기 위해서만 필요합니다."
 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
-msgstr ""
+msgstr "Stripe과 PayPal 둘 다 자국에서 사용이 가능하다면 연결하기를 권해드립니다."
 
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr ""
+msgstr "Stripe를 사용하면 기증자가 Liberapay 웹사이트에서 직접 카드 또는 직불금을 지불할 수 있습니다. (직불은 현재 유럽 은행 계좌에서만 지원됩니다.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
-msgstr ""
+msgstr "계정 ID: {0}"
 
 #, python-brace-format
 msgid "Country: {0}"
-msgstr ""
+msgstr "국가: {0}"
 
 #, python-brace-format
 msgid "Currency: {0}"
-msgstr ""
+msgstr "통화: {0}"
 
 msgid "This account cannot receive payments."
-msgstr ""
+msgstr "이 계정은 지급을 받을 수 없습니다."
 
 #, python-brace-format
 msgid "Available in {country}."
-msgstr ""
+msgstr "{country}에서 사용 가능."
 
 #, python-brace-format
 msgid "Not available in {country}."
-msgstr ""
+msgstr "{country}에서 사용할 수 없음."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
-msgstr ""
+msgstr "{platform_name} 계정 연결"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
-msgstr ""
+msgstr "PayPal은 Stripe보다 더 많은 나라에서 돈을 받을 수 있지만, Liberapay에 잘 호환되지 않습니다."
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
@@ -2735,7 +2757,7 @@ msgstr "이 문서는 청구서가 아닙니다."
 
 #, python-brace-format
 msgid "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received."
-msgstr ""
+msgstr "{date} 에 {payer} 이(가) 시작한 {money_amount} 의 지불이 수신되었는지 확인합니다."
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
