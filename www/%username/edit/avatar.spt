@@ -99,7 +99,7 @@ subhead = _("Avatar")
             <label for="avatar_email">{{ _('Avatar email (for Libravatar only)') }}</label><br>
             <input class="form-control" id="avatar_email" name="email"
                    type="email" size=30
-                   placeholder="{{ participant.email or participant.get_any_email() or '' }}"
+                   placeholder="{{ participant.get_email_address() or '' }}"
                    value="{{ participant.avatar_email or '' }}" />
             <button class="save btn btn-success">{{ _("Save") }}</button>
         </div>

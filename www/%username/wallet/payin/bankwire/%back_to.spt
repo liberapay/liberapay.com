@@ -35,7 +35,7 @@ if request.method == 'POST' and 'action' in request.body:
     if action == 'email':
         participant.send_email(
             'payin_bankwire_created',
-            (participant.email or participant.get_any_email()),
+            participant.get_email_address(),
             exchange=exchange._asdict(), payin=payin,
         )
         if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':

@@ -1,0 +1,61 @@
+"""Confirm a participant's email address.
+
+This simplate must not reveal the email address in its response.
+"""
+
+from liberapay.utils import get_participant
+from liberapay.utils.emails import EmailVerificationResult
+
+[---]
+
+participant = get_participant(state, restrict=False)
+
+if 'email.verification-result' in state:
+    result = state['email.verification-result']
+elif 'email' in request.qs:
+    email_id = request.qs.get('email', '')
+    try:
+        email_id = int(email_id)
+    except ValueError:
+        result = EmailVerificationResult.FAILED
+    else:
+        nonce = request.qs.get('nonce', '')
+        result = participant.verify_email(email_id, nonce, user)
+    del email_id
+else:
+    result = EmailVerificationResult.FAILED
+
+[---] text/html
+% extends "templates/base-thin.html"
+
+% block thin_content
+    % if result == EmailVerificationResult.SUCCEEDED
+        <p class="alert alert-success">{{ _("Your email address is now verified.") }}</p>
+    % elif result == EmailVerificationResult.REDUNDANT
+        <h3>{{ _("Already Verified") }}</h3>
+        <div class="alert alert-info">{{ _("This email address has already been verified.") }}</div>
+    % elif result == EmailVerificationResult.LOGIN_REQUIRED
+        <p>{{ _("You need to log in") }}</p>
+        % include "templates/log-in-form.html"
+    % else
+        % if result == EmailVerificationResult.STYMIED
+        <h3>{{ _("Address Taken") }}</h3>
+        <p class="alert alert-danger">{{
+            _("This email address is already connected to a different Liberapay account.")
+        }}</p>
+        % elif result == EmailVerificationResult.FAILED
+        <h3>{{ _("Failure") }}</h3>
+        <p class="alert alert-danger">{{
+            _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.")
+        }}</p>
+        % endif
+    % endif
+
+    % if result == EmailVerificationResult.SUCCEEDED and user == participant and not participant.has_password
+        <br><br>
+        <h2>{{ _("Password") }}</h2>
+        % include "templates/password-form.html"
+    % else
+        <a class="btn btn-primary" href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a>
+    % endif
+% endblock

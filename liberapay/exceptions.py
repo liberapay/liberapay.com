@@ -167,7 +167,8 @@ class BadEmailDomain(ProblemChangingEmail):
         return _("'{domain_name}' is not a valid email domain.", domain_name=self.args[0])
 
 class EmailAddressIsBlacklisted(ProblemChangingEmail):
-    def msg(self, _, to_age):
+    def msg(self, _):
+        from liberapay.i18n.base import to_age
         address, reason, ts = self.args
         if reason == 'bounce':
             return _(

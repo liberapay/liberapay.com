@@ -73,9 +73,11 @@ from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     NS, deserialize, erase_cookie, serialize, set_cookie, urlquote,
-    emails, markdown,
+    markdown,
 )
-from liberapay.utils.emails import check_email_blacklist, normalize_email_address
+from liberapay.utils.emails import (
+    EmailVerificationResult, check_email_blacklist, normalize_email_address
+)
 from liberapay.website import website
 
 
@@ -393,44 +395,90 @@ class Participant(Model, MixinTeam):
         if not set(token).issubset(BASE64URL_CHARS):
             raise Response(400, "bad token, not base64url")
 
-    def upsert_session(self, session_id, new_token):
-        assert session_id >= 1
-        session = self.db.one("""
-            INSERT INTO user_secrets
-                        (participant, id, secret)
-                 VALUES (%s, %s, %s)
-            ON CONFLICT (participant, id) DO UPDATE
-                    SET secret = excluded.secret
-                      , mtime = excluded.mtime
-              RETURNING id, secret, mtime
-        """, (self.id, session_id, new_token))
-        self.session = session
-
-    def extend_session_lifetime(self, session_id):
-        assert session_id >= 1
-        session = self.db.one("""
+    def extend_session_lifetime(self):
+        self.session = self.db.one("""
             UPDATE user_secrets
                SET mtime = current_timestamp
              WHERE participant = %s
                AND id = %s
          RETURNING id, secret, mtime
-        """, (self.id, session_id))
-        self.session = session
+        """, (self.id, self.session.id))
 
-    def start_session(self, suffix='', token=None):
-        """Start a new session for the user, invalidating the previous one.
+    def start_session(self, suffix='', token=None, id_min=1, id_max=20,
+                      lifetime=SESSION_TIMEOUT):
+        """Start a new session for the user.
+
+        Args:
+            suffix (str):
+                the session type ('.em' for email sessions, empty for normal sessions)
+            token (str):
+                the session token, if it's already been generated
+            id_min (int):
+                the lowest acceptable session ID
+            id_max (int):
+                the highest acceptable session ID
+            lifetime (timedelta):
+                the session timeout, used to determine if existing sessions have expired
+
+        The session ID is selected in the following order:
+        1. if the oldest existing session has expired, then its ID is reused;
+        2. if there are unused session IDs, then the lowest one is claimed;
+        3. the oldest session is overwritten, even though it hasn't expired yet.
+
         """
+        assert id_min < id_max, (id_min, id_max)
         if token:
             self.check_session_token(token)
             token += suffix
         else:
             token = self.generate_session_token() + suffix
-        self.upsert_session(1, token)
-        return self.session
+        p_id = self.id
+        session = self.db.one("""
+            WITH oldest_secret AS (
+                     SELECT *
+                       FROM user_secrets
+                      WHERE participant = %(p_id)s
+                        AND id >= %(id_min)s
+                        AND id <= %(id_max)s
+                   ORDER BY mtime
+                      LIMIT 1
+                 )
+               , unused_id AS (
+                     SELECT i
+                       FROM generate_series(%(id_min)s, %(id_max)s) i
+                      WHERE NOT EXISTS (
+                                SELECT 1
+                                  FROM user_secrets s2
+                                 WHERE s2.participant = %(p_id)s
+                                   AND s2.id = i
+                            )
+                   ORDER BY i
+                      LIMIT 1
+                 )
+            INSERT INTO user_secrets AS s
+                        (participant, id, secret)
+                 SELECT %(p_id)s
+                      , coalesce(
+                            (SELECT s2.id FROM oldest_secret s2
+                              WHERE s2.mtime < (current_timestamp - %(lifetime)s)
+                            ),
+                            (SELECT i FROM unused_id),
+                            (SELECT s2.id FROM oldest_secret s2)
+                        )
+                      , %(token)s
+            ON CONFLICT (participant, id) DO UPDATE
+                    SET mtime = excluded.mtime
+                      , secret = excluded.secret
+                  WHERE s.mtime = (SELECT s2.mtime FROM oldest_secret s2)
+              RETURNING *
+        """, locals())
+        if session is None:
+            return self.start_session(token=token, id_min=id_min, id_max=id_max)
+        return session
 
-    def sign_in(self, cookies, **session_kw):
+    def sign_in(self, cookies, session=None, **session_kw):
         assert self.authenticated
-        self.start_session(**session_kw)
+        self.session = session or self.start_session(**session_kw)
         creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
         set_cookie(cookies, SESSION, creds, self.session.mtime + SESSION_TIMEOUT)
 
@@ -439,9 +487,10 @@ class Participant(Model, MixinTeam):
         """
         now = utcnow()
         if now - self.session.mtime > SESSION_REFRESH:
-            session_id = self.session.id
-            self.extend_session_lifetime(session_id)
-            creds = '%i:%i:%s' % (self.id, session_id, self.session.secret)
+            self.extend_session_lifetime()
+            if not self.session:
+                return
+            creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
             set_cookie(cookies, SESSION, creds, expires=now + SESSION_TIMEOUT)
 
     def sign_out(self, cookies):
@@ -776,7 +825,7 @@ class Participant(Model, MixinTeam):
 
             DELETE FROM community_memberships WHERE participant=%(id)s;
             DELETE FROM subscriptions WHERE subscriber=%(id)s;
-            DELETE FROM emails WHERE participant=%(id)s AND address <> %(email)s;
+            UPDATE emails SET participant = NULL WHERE participant=%(id)s AND address <> %(email)s;
             DELETE FROM notifications WHERE participant=%(id)s;
             DELETE FROM statements WHERE participant=%(id)s;
 
@@ -797,7 +846,7 @@ class Participant(Model, MixinTeam):
              WHERE id=%(id)s
          RETURNING *;
 
-        """, dict(id=self.id, email=self.email or self.get_any_email()))
+        """, dict(id=self.id, email=self.get_email_address(allow_disavowed=True)))
         self.set_attributes(**r._asdict())
         self.add_event(self.db, 'erase_personal_information', None)
 
@@ -892,7 +941,7 @@ class Participant(Model, MixinTeam):
             self.close(None)
         with self.db.get_cursor() as cursor:
             cursor.run("""
-                DELETE FROM emails WHERE participant = %(p_id)s;
+                UPDATE emails SET participant = NULL WHERE participant = %(p_id)s;
                 DELETE FROM events WHERE participant = %(p_id)s;
                 DELETE FROM user_secrets
                       WHERE participant = %(p_id)s
@@ -929,36 +978,44 @@ class Participant(Model, MixinTeam):
             else:
                 raise EmailAlreadyTaken(email)
 
-        if len(self.get_emails()) > 9:
+        addresses = set((cursor or self.db).all("""
+            SELECT lower(address)
+              FROM emails
+             WHERE participant = %s
+        """, (self.id,)))
+        if email.lower() not in addresses and len(addresses) > 9:
             raise TooManyEmailAddresses(email)
 
+        old_email = self.get_email_address(allow_disavowed=True)
+
         with self.db.get_cursor(cursor) as c:
-            self.add_event(c, 'add_email', email)
             email_row = c.one("""
                 INSERT INTO emails AS e
                             (address, nonce, added_time, participant)
                      VALUES (%s, %s, current_timestamp, %s)
                 ON CONFLICT (participant, lower(address)) DO UPDATE
-                        SET added_time = excluded.added_time
+                        SET added_time = (CASE
+                                WHEN e.verified IS true OR e.disavowed IS true
+                                THEN e.added_time
+                                ELSE excluded.added_time
+                            END)
                           , address = excluded.address
-                      WHERE e.verified IS NULL
                   RETURNING *
             """, (email, str(uuid.uuid4()), self.id))
-            if not email_row:
+            if email_row.disavowed:
+                raise EmailAddressIsBlacklisted(
+                    email, 'complaint', email_row.disavowed_time
+                )
+            if email_row.verified:
                 return 0
             # Limit number of verification emails per address
             self.db.hit_rate_limit('add_email.target', email, VerificationEmailAlreadySent)
             # Limit number of verification emails per participant
             self.db.hit_rate_limit('add_email.source', self.id, TooManyEmailVerifications)
+            # Log event
+            self.add_event(c, 'add_email', email)
 
-        old_email = self.email or self.get_any_email()
-        scheme = website.canonical_scheme
-        host = website.canonical_host
-        username = self.username
-        addr_id = email_row.id
-        nonce = email_row.nonce
-        link = "{scheme}://{host}/{username}/emails/verify.html?email={addr_id}&nonce={nonce}"
-        self.send_email('verification', email, link=link.format(**locals()), old_email=old_email)
+        self.send_email('verification', email, old_email=old_email)
 
         if self.email:
             self.send_email('verification_notice', self.email, new_email=email)
@@ -983,42 +1040,60 @@ class Participant(Model, MixinTeam):
         self.set_attributes(email=email)
         self.update_avatar()
 
-    def verify_email(self, email, nonce):
-        if '' in (email, nonce):
-            return emails.VERIFICATION_MISSING
-        if email.isdigit():
-            r = self.db.one("""
+    def verify_email(self, email_id, nonce, user):
+        """Set an email address as verified, if the given nonce is valid.
+
+        If the verification succeeds and the participant doesn't already have a
+        primary email address, then the verified address becomes the primary.
+
+        This function is designed not to leak information: attackers should not
+        be able to use it to learn something they don't already know, for
+        example whether a specific email address or ID is tied to a specific
+        Liberapay account.
+        """
+        assert type(email_id) is int
+        if not nonce:
+            return EmailVerificationResult.FAILED
+        with self.db.get_cursor() as cursor:
+            r = cursor.one("""
                 SELECT *
                   FROM emails
                  WHERE participant = %s
                    AND id = %s
-            """, (self.id, email))
-            email = r.address if r else None
-        else:
-            r = self.get_email(email)
-        if r is None:
-            return emails.VERIFICATION_FAILED
-        if r.verified:
-            assert r.nonce is None  # and therefore, order of conditions matters
-            return emails.VERIFICATION_REDUNDANT
-        if not constant_time_compare(r.nonce, nonce):
-            return emails.VERIFICATION_FAILED
-        if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
-            return emails.VERIFICATION_EXPIRED
-        try:
-            self.db.run("""
-                UPDATE emails
-                   SET verified=true, verified_time=now(), nonce=NULL
-                 WHERE participant=%s
-                   AND address=%s
-                   AND verified IS NULL
-            """, (self.id, email))
-        except IntegrityError:
-            return emails.VERIFICATION_STYMIED
-
+                   FOR UPDATE
+            """, (self.id, email_id))
+            if r is None:
+                return EmailVerificationResult.FAILED
+            if r.nonce is None:
+                if r.verified and user and user.controls(self):
+                    return EmailVerificationResult.REDUNDANT
+                else:
+                    return EmailVerificationResult.FAILED
+            if not constant_time_compare(r.nonce, nonce):
+                return EmailVerificationResult.FAILED
+            if r.verified:
+                return EmailVerificationResult.REDUNDANT
+            if (utcnow() - r.added_time) > EMAIL_VERIFICATION_TIMEOUT:
+                # The timeout is meant to prevent an attacker who has gained access
+                # to a forgotten secondary email address to link it to the target's
+                # account. As such, it doesn't apply when the address isn't
+                # secondary nor when the user is logged in.
+                if user != self and len(self.get_emails()) > 1:
+                    return EmailVerificationResult.LOGIN_REQUIRED
+            try:
+                cursor.run("""
+                    UPDATE emails
+                       SET verified = true
+                         , verified_time = now()
+                         , disavowed = false
+                     WHERE participant = %s
+                       AND id = %s
+                """, (self.id, email_id))
+            except IntegrityError:
+                return EmailVerificationResult.STYMIED
         if not self.email:
-            self.update_email(email)
-        return emails.VERIFICATION_SUCCEEDED
+            self.update_email(r.address)
+        return EmailVerificationResult.SUCCEEDED
 
     def get_email(self, email):
         return self.db.one("""
@@ -1041,21 +1116,31 @@ class Participant(Model, MixinTeam):
           ORDER BY e.id
         """, (self.id,))
 
-    def get_any_email(self, cursor=None):
-        return (cursor or self.db).one("""
+    def get_email_address(self, cursor=None, allow_disavowed=False):
+        """
+        Get the participant's "primary" email address, even if it hasn't been
+        confirmed yet.
+        """
+        return self.email or (cursor or self.db).one("""
             SELECT address
               FROM emails
-             WHERE participant=%s
+             WHERE participant = %s
+               AND ( %s OR disavowed IS NOT true )
+          ORDER BY disavowed IS NOT true DESC, added_time ASC
              LIMIT 1
-        """, (self.id,))
+        """, (self.id, allow_disavowed))
 
     def remove_email(self, address):
         if address == self.email:
             raise CannotRemovePrimaryEmail()
         with self.db.get_cursor() as c:
             self.add_event(c, 'remove_email', address)
-            c.run("DELETE FROM emails WHERE participant=%s AND address=%s",
-                  (self.id, address))
+            c.run("""
+                UPDATE emails
+                   SET participant = NULL
+                 WHERE participant = %s
+                   AND address = %s
+            """, (self.id, address))
             n_left = c.one("SELECT count(*) FROM emails WHERE participant=%s", (self.id,))
             if n_left == 0:
                 raise CannotRemovePrimaryEmail()
@@ -1096,8 +1181,10 @@ class Participant(Model, MixinTeam):
             message['from_email'] = 'Liberapay Newsletters <newsletters@liberapay.com>'
         message['to'] = [formataddr((self.username, email))]
         message['subject'] = spt['subject'].render(context).strip()
+        self._rendering_email_to, self._email_session = email, None
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
+        del self._rendering_email_to, self._email_session
 
         with email_lock:
             try:
@@ -1542,13 +1629,57 @@ class Participant(Model, MixinTeam):
     # Random Stuff
     # ============
 
-    def url(self, path='', query=''):
+    def url(self, path='', query='', autologin=False):
+        """Return the full canonical URL of a user page.
+
+        Args:
+            path (str):
+                the path to the user page. The default value (empty
+                string) leads to the user's public profile page.
+            query (dict):
+                querystring parameters to add to the URL.
+            autologin (bool):
+                if set to True, the returned URL contains an email session token
+                in the querystring. This only works when called from inside an
+                email simplate.
+        """
         scheme = website.canonical_scheme
         host = website.canonical_host
         username = self.username
         if query:
-            assert '?' not in path
             query = '?' + urlencode(query)
+        if getattr(self, '_rendering_email_to', None):
+            extra_query = []
+            if autologin:
+                primary_email = self.get_email_address()
+                if self._rendering_email_to.lower() != primary_email.lower():
+                    # Only send login links to the primary email address
+                    raise AssertionError('%r != %r' % (self._rendering_email_to, primary_email))
+                session = self._email_session
+                if not session:
+                    session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
+                    self._email_session = session
+                extra_query.append(('log-in.id', self.id))
+                extra_query.append(('log-in.key', session.id))
+                extra_query.append(('log-in.token', session.secret))
+            email_row = self.db.one("""
+                SELECT e.*
+                  FROM emails e
+                 WHERE lower(e.address) = lower(%s)
+                   AND e.participant = %s
+                   AND e.verified IS NULL
+            """, (self._rendering_email_to, self.id))
+            if email_row:
+                extra_query.append(('email.id', email_row.id))
+                extra_query.append(('email.nonce', email_row.nonce))
+            if extra_query:
+                query += ('&' if query else '?') + urlencode(extra_query)
+            del extra_query
+        elif autologin:
+            raise ValueError("autologin is True but _rendering_email_to is missing")
+        if query and '?' in path:
+            (path, query), extra_query = path.split('?', 1), query
+            query += '&' + extra_query[1:]
         return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
 
     def get_payin_url(self, network, e_id):
@@ -1873,7 +2004,7 @@ class Participant(Model, MixinTeam):
 
         if avatar_email is None:
             avatar_email = self.avatar_email
-        email = avatar_email or self.email or self.get_any_email(cursor)
+        email = avatar_email or self.get_email_address(cursor)
 
         if platform == 'libravatar' or platform is None and email:
             if not email:

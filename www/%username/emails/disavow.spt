@@ -1,0 +1,147 @@
+"""Disavow ownership of this account.
+
+In this simplate the `participant` variable can be `None` if the account has
+been deleted or renamed.
+"""
+
+from liberapay.models.participant import Participant
+from liberapay.security.crypto import constant_time_compare
+from liberapay.utils.emails import EmailVerificationResult
+
+[---]
+
+slug = request.path['username']
+if slug.startswith('~'):
+    try:
+        participant = Participant.from_id(int(slug[1:]), _raise=False)
+    except ValueError:
+        participant = None
+else:
+    participant = Participant.from_username(slug)
+del slug
+
+email_id = request.qs.get_int('email.id')
+email_nonce = request.qs.get('email.nonce', '')
+email_row = website.db.one("""
+    SELECT *
+      FROM emails
+     WHERE id = %s
+       AND ( participant IS NULL OR participant = %s )
+""", (email_id, participant.id if participant else None))
+
+if email_row is None:
+    result = EmailVerificationResult.FAILED
+elif email_row.nonce is None:
+    if email_row.verified and user and participant and user.controls(participant):
+        result = EmailVerificationResult.REDUNDANT
+    else:
+        result = EmailVerificationResult.FAILED
+elif not constant_time_compare(email_row.nonce, email_nonce):
+    result = EmailVerificationResult.FAILED
+else:
+    result = EmailVerificationResult.SUCCEEDED
+    changed = website.db.one("""
+        UPDATE emails
+           SET disavowed = true
+             , disavowed_time = current_timestamp
+             , verified = null
+         WHERE id = %s
+           AND disavowed IS NOT true
+     RETURNING true AS changed
+    """, (email_row.id,))
+    if changed and participant:
+        participant.add_event(website.db, 'disavow_email', email_row.address)
+        if participant.email == email_row.address:
+            website.db.run("""
+                UPDATE participants AS p
+                   SET email = (
+                           SELECT e.address
+                             FROM emails e
+                            WHERE e.participant = p.id
+                              AND e.verified IS true
+                         ORDER BY e.added_time
+                            LIMIT 1
+                       )
+                 WHERE id = %s
+                   AND email = %s
+            """, (participant.id, participant.email))
+
+if request.method == 'POST':
+    if result != EmailVerificationResult.SUCCEEDED:
+        raise response.error(403, "email nonce is missing or invalid")
+    action = request.body['action']
+    if action == 'add_to_blacklist':
+        website.db.run("""
+            INSERT INTO email_blacklist
+                        (address, reason, details, report_id)
+                 VALUES (%s, 'complaint', 'disavowed', %s)
+            ON CONFLICT (report_id, address) DO UPDATE
+                    SET ignore_after = null
+        """, (email_row.address, email_row.nonce))
+    elif action == 'remove_from_blacklist':
+        website.db.run("""
+            UPDATE email_blacklist
+               SET ignore_after = current_timestamp
+             WHERE lower(address) = lower(%s)
+        """, (email_row.address,))
+    else:
+        raise response.invalid_input(action, 'action', 'body')
+
+if result == EmailVerificationResult.SUCCEEDED:
+    blacklisted = website.db.all("""
+        SELECT true AS blacklisted
+          FROM email_blacklist
+         WHERE lower(address) = lower(%s)
+           AND ignore_after IS null
+         LIMIT 1
+    """, (email_row.address,))
+
+[---] text/html
+% extends "templates/base-thin.html"
+
+% block thin_content
+    % if request.method == 'POST'
+        <p class="alert alert-success">{{ _(
+            "Your email address is now blacklisted."
+        ) if blacklisted else _(
+            "Your email address is no longer blacklisted."
+        ) }}</p>
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            % if blacklisted
+            <button class="btn btn-warning" name="action" value="remove_from_blacklist">{{ _(
+                "Remove my email address from the blacklist"
+            ) }}</button>
+            % else
+            <button class="btn btn-warning" name="action" value="add_to_blacklist">{{ _(
+                "Add my email address to the blacklist"
+            ) }}</button>
+            % endif
+        </form>
+    % elif result == EmailVerificationResult.SUCCEEDED
+        <p class="alert alert-success">{{ _(
+            "You have successfully disavowed having connected your email address "
+            "to this Liberapay account."
+        ) }}</p>
+        % if not blacklisted
+        <p>{{ _(
+            "Would you like to block any future attempt to connect your email "
+            "address to a Liberapay account, by adding it to our blacklist?"
+        ) }}</p>
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <button class="btn btn-warning" name="action" value="add_to_blacklist">{{ _(
+                "Add my email address to the blacklist"
+            ) }}</button>
+        </form>
+        % endif
+    % elif result == EmailVerificationResult.REDUNDANT
+        <h3>{{ _("Already Verified") }}</h3>
+        <div class="alert alert-warning">{{ _("This email address has already been verified.") }}</div>
+    % elif result == EmailVerificationResult.FAILED
+        <h3>{{ _("Failure") }}</h3>
+        <div class="alert alert-danger">{{
+            _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.")
+        }}</div>
+    % endif
+% endblock

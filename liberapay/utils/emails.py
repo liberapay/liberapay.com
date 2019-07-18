@@ -1,3 +1,4 @@
+from enum import Enum, auto
 import json
 from time import sleep
 
@@ -15,14 +16,12 @@ from liberapay.exceptions import (
 from liberapay.website import website, JINJA_ENV_COMMON
 
 
-(
-    VERIFICATION_MISSING,
-    VERIFICATION_FAILED,
-    VERIFICATION_EXPIRED,
-    VERIFICATION_REDUNDANT,
-    VERIFICATION_STYMIED,
-    VERIFICATION_SUCCEEDED,
-) = range(6)
+class EmailVerificationResult(Enum):
+    FAILED = auto()
+    LOGIN_REQUIRED = auto()
+    REDUNDANT = auto()
+    STYMIED = auto()
+    SUCCEEDED = auto()
 
 
 jinja_env = Environment(**JINJA_ENV_COMMON)
@@ -181,3 +180,14 @@ def _handle_ses_notification(msg):
             except DuplicateNotification:
                 continue
     msg.delete()
+
+
+def clean_up_emails():
+    website.db.run("""
+        DELETE FROM emails
+         WHERE participant IS NULL
+           AND added_time < (current_timestamp - interval '1 year');
+        UPDATE emails
+           SET nonce = NULL
+         WHERE added_time < (current_timestamp - interval '1 year');
+    """)

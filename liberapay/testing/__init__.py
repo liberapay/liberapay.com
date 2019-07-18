@@ -72,7 +72,7 @@ class ClientWithAuth(Client):
             cookies = kw.setdefault('cookies', {})
             sess = auth_as.session
             if not sess:
-                sess = auth_as.start_session()
+                sess = auth_as.session = auth_as.start_session()
             cookies[SESSION] = '%i:%i:%s' % (auth_as.id, sess.id, sess.secret)
 
         return Client.build_wsgi_environ(self, *a, **kw)

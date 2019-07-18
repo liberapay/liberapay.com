@@ -40,7 +40,7 @@ from liberapay.security import authentication, csrf, set_default_security_header
 from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
 )
-from liberapay.utils.emails import handle_email_bounces
+from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
     canonize, insert_constants, _dispatch_path_to_filesystem, enforce_rate_limits,
@@ -150,6 +150,7 @@ if conf:
     cron(intervals.get('migrate_identities', 120), Participant.migrate_identities, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
+    cron(Daily(hour=1), clean_up_emails, True)
 
     cron('once', website.cryptograph.rotate_stored_data, True)
 

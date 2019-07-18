@@ -36,7 +36,7 @@ if request.method == 'POST':
         raise response.invalid_input(action, 'action', 'body')
 
     results = website.db.all("""
-        SELECT p, e.address, e.added_time, e.verified
+        SELECT p, e.address, e.added_time, e.verified, e.disavowed
           FROM emails e
           JOIN participants p ON p.id = e.participant
          WHERE lower(e.address) = lower(%s)
@@ -71,11 +71,13 @@ title = "Email Addresses"
     % if results
         <p>Found {{ len(results) }}:</p>
         <ul>
-        % for participant, address, added_time, verified in results
+        % for participant, address, added_time, verified, disavowed in results
             <li>
                 {{ address }} is
                 % if address == participant.email
                     the <span class="label label-primary">Primary</span> address
+                % elif disavowed
+                    a <span class="label label-danger">Disavowed</span> address
                 % elif verified
                     a <span class="label label-success">Verified</span> address
                 % else
