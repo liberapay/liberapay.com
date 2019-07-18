@@ -213,6 +213,9 @@ msgstr "Seseorang (harapnya andalah) meminta capaian ke akaun {0} di Liberapay."
 msgid "Follow this link to proceed:"
 msgstr "Ikuti pautan ini untuk teruskan:"
 
+msgid "Log in"
+msgstr "Log masuk"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Sila ambil perhatian bahawa pautan hanya sah untuk {0}."
@@ -478,23 +481,18 @@ msgstr ""
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Akaun Liberapay telah dicipta pada {0} dengan alamat emel {1}. Adakah ianya anda?"
 
-msgid "Yes, proceed"
-msgstr "Ya, teruskan"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Sila ambil perhatian bahawa kod pengesahan dalam mesej ini hanya sah untuk {time_interval}."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Ikuti pautan ini untuk mengesahkan alamat emel anda:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "Mengaitkan {0} kepada {1} di Liberapay"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Kami sedang mengaitkan {0} kepada akaun {1} di Liberapay. Pemberitahuan ini dihantar kepada {2} kerana ianya alamat emel utama dalam fail kami."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Pengeluaran wang dimulakan"
@@ -959,9 +957,6 @@ msgstr "Adakah anda pemilik akaun?"
 msgid "Log in to reopen your account."
 msgstr "Log masuk untuk membuka semula akaun anda."
 
-msgid "Log in"
-msgstr "Log masuk"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Anda perlukan akaun untuk membuat perkara ini. Sila isi salah satu borang berikut."
 
@@ -1422,6 +1417,9 @@ msgstr "Adakah anda masih ingin gunakan kata laluan ini?"
 
 msgid "No, cancel"
 msgstr "Tidak, batalkan"
+
+msgid "Yes, proceed"
+msgstr "Ya, teruskan"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1973,6 +1971,48 @@ msgstr "Nama penuh projek atau organisasi anda. Ia akan ditunjukkan di samping n
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Aksara dibenarkan: angka abjad, selang, dan tanda baca."
 
+msgid "Your email address is now verified."
+msgstr "Alamat emel anda kini telah disahkan."
+
+msgid "Already Verified"
+msgstr "Telah Disahkan"
+
+msgid "This email address has already been verified."
+msgstr "Alamat emel ini telah pun disahkan."
+
+msgid "Address Taken"
+msgstr "Alamat Telah Diambil"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Alamat emel ini telah pun dikaitkan kepada akaun Liberapay yang berbeza."
+
+msgid "Failure"
+msgstr "Gagal"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Sila pastikan pautan yang anda klik atau salin-tampal tidak terpotong atau terubah dalam sebarang cara."
+
+msgid "Password"
+msgstr "Kata laluan"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "Tetapan emel"
 
@@ -1989,6 +2029,9 @@ msgstr "Buang"
 
 msgid "Primary"
 msgstr "Utama"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Belum disahkan"
@@ -2024,45 +2067,6 @@ msgstr "Emel pengesahan telah dihantar ke {0}."
 
 msgid "Your notification settings have been changed."
 msgstr "Tetapan pemberitahuan anda telah diubah."
-
-msgid "Success!"
-msgstr "Berjaya!"
-
-msgid "Your email address is now verified."
-msgstr "Alamat emel anda kini telah disahkan."
-
-msgid "Address Taken"
-msgstr "Alamat Telah Diambil"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Alamat emel ini telah pun dikaitkan kepada akaun Liberapay yang berbeza."
-
-msgid "Already Verified"
-msgstr "Telah Disahkan"
-
-msgid "This email address has already been verified."
-msgstr "Alamat emel ini telah pun disahkan."
-
-msgid "Expired"
-msgstr "Tamat Tempoh"
-
-msgid "The verification code has expired."
-msgstr "Kod pengesahan telah pun tamat tempoh."
-
-msgid "Failure"
-msgstr "Gagal"
-
-msgid "The verification code is invalid."
-msgstr "Kod pengesahan tidak sah."
-
-msgid "Missing Info"
-msgstr "Maklumat Tidak Lengkap"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Sila pastikan pautan yang anda klik atau salin-tampal tidak terpotong atau terubah dalam sebarang cara."
-
-msgid "Password"
-msgstr "Kata laluan"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay perlukan sokongan anda"

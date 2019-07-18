@@ -214,6 +214,9 @@ msgstr "Iemand (hopelijk jij) verzocht toegang tot het {0} account op Liberapay.
 msgid "Follow this link to proceed:"
 msgstr "Volg deze link om verder te gaan:"
 
+msgid "Log in"
+msgstr "Log in"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Noteer alstublieft dat deze link maar valide is voor {0}."
@@ -477,23 +480,18 @@ msgstr "We hebben een verzoek ontvangen om het e-mailadres {0} aan het Liberapay
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Een Liberapay-account werd gemaakt op {0} met het e-mailadres {1}. Was jij dit?"
 
-msgid "Yes, proceed"
-msgstr "Ja, doe maar"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Let op: de verificatiecode in dit bericht is geldig voor {time_interval}."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Volg deze link om je e-mailadres te valideren:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "{0} met {1} verbinden op Liberapay"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "We hebben {0} met het {1} account verbonden op Liberapay. Dit is een notificatie voor {2}, omdat dit het primaire e-mailadres is dat we geregistreerd hebben."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Opnames geïnitieerd"
@@ -958,9 +956,6 @@ msgstr "Ben jij de eigenaar van dit account?"
 msgid "Log in to reopen your account."
 msgstr "Log in om je account te heropenen."
 
-msgid "Log in"
-msgstr "Log in"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Hiervoor heb je een account nodig. Vul één van de onderstaande formulieren in."
 
@@ -1421,6 +1416,9 @@ msgstr "Wil je nog steeds dit wachtwoord gebruiken?"
 
 msgid "No, cancel"
 msgstr "Nee, annuleren"
+
+msgid "Yes, proceed"
+msgstr "Ja, doe maar"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1972,6 +1970,48 @@ msgstr "De volledige naam van je project of organisatie. Het zal worden getoond 
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Toegestane tekens: alfanumerieke tekens, spaties en leestekens."
 
+msgid "Your email address is now verified."
+msgstr "Je e-mailadres is nu geverifieerd."
+
+msgid "Already Verified"
+msgstr "Deze is reeds geverifieerd"
+
+msgid "This email address has already been verified."
+msgstr "Dit e-mailadres is al geverifieerd."
+
+msgid "Address Taken"
+msgstr "Adres is al bezet"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Dit e-mailadres is al verbonden met een andere Liberapay-account."
+
+msgid "Failure"
+msgstr "Mislukt"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Controleer alsjeblieft of de link die je geklikt of geplakt hebt niet is afgebroken of veranderd op wat voor manier dan ook."
+
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "Emailinstellingen"
 
@@ -1988,6 +2028,9 @@ msgstr "Verwijderen"
 
 msgid "Primary"
 msgstr "Primair"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Niet geverifieerd"
@@ -2023,45 +2066,6 @@ msgstr "Een verificatie-e-mail is verzonden naar {0}."
 
 msgid "Your notification settings have been changed."
 msgstr "Je notificatie-instellingen zijn gewijzigd."
-
-msgid "Success!"
-msgstr "Gelukt!"
-
-msgid "Your email address is now verified."
-msgstr "Je e-mailadres is nu geverifieerd."
-
-msgid "Address Taken"
-msgstr "Adres is al bezet"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Dit e-mailadres is al verbonden met een andere Liberapay-account."
-
-msgid "Already Verified"
-msgstr "Deze is reeds geverifieerd"
-
-msgid "This email address has already been verified."
-msgstr "Dit e-mailadres is al geverifieerd."
-
-msgid "Expired"
-msgstr "Verlopen"
-
-msgid "The verification code has expired."
-msgstr "De verificatiecode is verlopen."
-
-msgid "Failure"
-msgstr "Mislukt"
-
-msgid "The verification code is invalid."
-msgstr "De verificatiecode is ongeldig."
-
-msgid "Missing Info"
-msgstr "Deze informatie mist nog"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Controleer alsjeblieft of de link die je geklikt of geplakt hebt niet is afgebroken of veranderd op wat voor manier dan ook."
-
-msgid "Password"
-msgstr "Wachtwoord"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay heeft je steun nodig"

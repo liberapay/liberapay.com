@@ -208,6 +208,9 @@ msgstr "누군가 (아마도 당신이) Liberapay의 {0} 계정에 접근을 요
 msgid "Follow this link to proceed:"
 msgstr "이 링크를 통해 진행하세요:"
 
+msgid "Log in"
+msgstr "로그인"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "이 링크는 {0}까지만 유효합니다."
@@ -471,23 +474,18 @@ msgstr "이 이메일 주소 {0} 을/를 Liberapay 계정 {1} 와/과 연결하�
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "{0} 에 {1} 이메일 주소로 Liberapay 계정이 생성되었습니다. 당신인가요?"
 
-msgid "Yes, proceed"
-msgstr "네, 진행합니다"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "이 이메일에 포함된 인증 코드는 {time_interval} 까지만 유효하다는 것을 참고해 주세요."
-
-msgid "Follow this link to validate your email address:"
-msgstr "이메일 주소를 확인하려면 이 링크를 따라가십시오:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "{0} 계정을 Liberapay {1} 계정과 연결하기"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Liberapay {1} 계정에 이메일 {0} 을(를) 연결하고 있습니다. {2} 이메일 주소가 주 이메일 주소이기 때문에 알림 메일이 발송됩니다."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "출금 지시됨"
@@ -949,9 +947,6 @@ msgstr "계정의 소유주입니까?"
 msgid "Log in to reopen your account."
 msgstr "로그인하여 계정을 복구하세요."
 
-msgid "Log in"
-msgstr "로그인"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "이 행위를 하려면 계정이 필요합니다. 아래의 양식을 채워 주세요."
 
@@ -1410,6 +1405,9 @@ msgstr "여전히 이 비밀번호를 사용하시겠습니까?"
 
 msgid "No, cancel"
 msgstr "아뇨, 취소합니다"
+
+msgid "Yes, proceed"
+msgstr "네, 진행합니다"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1956,6 +1954,48 @@ msgstr "프로젝트나 조직의 이름. 프로필의 사용자 이름 옆에 �
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "허용되는 단어: 라틴 알파벳과 숫자, 그리고 구두점."
 
+msgid "Your email address is now verified."
+msgstr "이메일 주소가 확인되었습니다."
+
+msgid "Already Verified"
+msgstr "이미 확인됨"
+
+msgid "This email address has already been verified."
+msgstr "이 이메일 주소는 이미 확인되었습니다."
+
+msgid "Address Taken"
+msgstr "이메일 사용 중"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "이 이메일 주소는 다른 Liberapay 계정에 연결되어 있습니다."
+
+msgid "Failure"
+msgstr "실패"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "클릭하거나 복사-붙여넣기 한 링크가 변조되거나 링크의 일부가 잘려나가지 않았는지 확인해 주세요."
+
+msgid "Password"
+msgstr "비밀번호"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "이메일 설정"
 
@@ -1971,6 +2011,9 @@ msgstr "제거"
 
 msgid "Primary"
 msgstr "기본"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "확인되지 않음"
@@ -2006,45 +2049,6 @@ msgstr "{0} (으)로 확인 이메일이 발송되었습니다."
 
 msgid "Your notification settings have been changed."
 msgstr "알림 설정이 변경되었습니다."
-
-msgid "Success!"
-msgstr "성공!"
-
-msgid "Your email address is now verified."
-msgstr "이메일 주소가 확인되었습니다."
-
-msgid "Address Taken"
-msgstr "이메일 사용 중"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "이 이메일 주소는 다른 Liberapay 계정에 연결되어 있습니다."
-
-msgid "Already Verified"
-msgstr "이미 확인됨"
-
-msgid "This email address has already been verified."
-msgstr "이 이메일 주소는 이미 확인되었습니다."
-
-msgid "Expired"
-msgstr "만료됨"
-
-msgid "The verification code has expired."
-msgstr "요청 코드가 만료되었습니다."
-
-msgid "Failure"
-msgstr "실패"
-
-msgid "The verification code is invalid."
-msgstr "인증 코드가 유효하지 않습니다."
-
-msgid "Missing Info"
-msgstr "정보 부족"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "클릭하거나 복사-붙여넣기 한 링크가 변조되거나 링크의 일부가 잘려나가지 않았는지 확인해 주세요."
-
-msgid "Password"
-msgstr "비밀번호"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay는 당신의 도움이 필요합니다"

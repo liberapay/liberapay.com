@@ -214,6 +214,9 @@ msgstr "Joku (toivottavasti sinä) on pyytänyt käyttöoikeuksia tiliin {0} Lib
 msgid "Follow this link to proceed:"
 msgstr "Jatka klikkaamalla tätä linkkiä:"
 
+msgid "Log in"
+msgstr "Kirjautuminen"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Huomioi, että tämä linkki toimii vain {0} ajan."
@@ -477,23 +480,18 @@ msgstr "Olemme vastaanottaneet pyynnön liittää sähköpostiosoite {0} Liberap
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Liberapay-tili luotiin {0} sähköpostiosoitteella {1}. Olitko se sinä?"
 
-msgid "Yes, proceed"
-msgstr "Kyllä, jatka"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Huomioithan, että tässä viestissä oleva tarkistuskoodi toimii vain {time_interval} ajan."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Klikkaa tätä linkkiä vahvistaaksesi sähköpostiosoitteesi toiminta:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "Yhdistetään {0} tiliin {1} Liberapay-palvelussa"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Yhdistimme osoitteen {0} tiliin {1} Liberapay-palvelussa. Tämä tiedote on lähetetty osoitteeseen {2}, koska se on tiedossamme oleva kyseisen tilin pääsähköpostiosoite."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Nosto aloitettu"
@@ -958,9 +956,6 @@ msgstr "Oletko tilin omistaja?"
 msgid "Log in to reopen your account."
 msgstr "Kirjaudu avataksesi tili uudelleen."
 
-msgid "Log in"
-msgstr "Kirjautuminen"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Tarvitset tilin tätä varten. Täytä yksi seuraavista lomakkeista."
 
@@ -1421,6 +1416,9 @@ msgstr "Haluatko yhä käyttää tätä salasanaa?"
 
 msgid "No, cancel"
 msgstr "En, peruuta"
+
+msgid "Yes, proceed"
+msgstr "Kyllä, jatka"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1972,6 +1970,48 @@ msgstr "Projektisi tai yhteisösi koko nimi. Se näytetään käyttäjänimen yh
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Sallitut merkit: alfanumeeriset merkit, välilyönti ja välimerkit."
 
+msgid "Your email address is now verified."
+msgstr "Sähköpostiosoitteesi on nyt varmistettu."
+
+msgid "Already Verified"
+msgstr "Varmistettu jo"
+
+msgid "This email address has already been verified."
+msgstr "Tämä sähköpostiosoite on jo varmistettu."
+
+msgid "Address Taken"
+msgstr "Osoite käytössä"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Tämä sähköpostiosoite on jo liitetty muuhun Liberapay-tiliin."
+
+msgid "Failure"
+msgstr "Epäonnistui"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Tarkista, että klikkaamasi tai copypastettamasi linkki ei ollut rikkinäinen tai jollain tavalla muuttunut."
+
+msgid "Password"
+msgstr "Salasana"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "Sähköpostiasetukset"
 
@@ -1988,6 +2028,9 @@ msgstr "Poista"
 
 msgid "Primary"
 msgstr "Pääasiallinen"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Varmistamaton"
@@ -2023,45 +2066,6 @@ msgstr "Varmistussähköposti on lähetetty osoitteeseen {0}."
 
 msgid "Your notification settings have been changed."
 msgstr "Ilmoitusasetuksesi on tallennettu."
-
-msgid "Success!"
-msgstr "Onnistui!"
-
-msgid "Your email address is now verified."
-msgstr "Sähköpostiosoitteesi on nyt varmistettu."
-
-msgid "Address Taken"
-msgstr "Osoite käytössä"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Tämä sähköpostiosoite on jo liitetty muuhun Liberapay-tiliin."
-
-msgid "Already Verified"
-msgstr "Varmistettu jo"
-
-msgid "This email address has already been verified."
-msgstr "Tämä sähköpostiosoite on jo varmistettu."
-
-msgid "Expired"
-msgstr "Vanhentunut"
-
-msgid "The verification code has expired."
-msgstr "Tarkistuskoodi on vanhentunut."
-
-msgid "Failure"
-msgstr "Epäonnistui"
-
-msgid "The verification code is invalid."
-msgstr "Varmistuskoodi oli väärä."
-
-msgid "Missing Info"
-msgstr "Tiedot puuttuvat"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Tarkista, että klikkaamasi tai copypastettamasi linkki ei ollut rikkinäinen tai jollain tavalla muuttunut."
-
-msgid "Password"
-msgstr "Salasana"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay tarvitsee tukeasi"

@@ -218,6 +218,9 @@ msgstr "Хтось (сподіваємося, ви) запросили дост�
 msgid "Follow this link to proceed:"
 msgstr "Перейдіть за цим посиланням для продовження:"
 
+msgid "Log in"
+msgstr "Увійти"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Зверніть увагу, що це посилання дійсне протягом {0}."
@@ -481,23 +484,18 @@ msgstr "Ми отримали запит на те, щоб зв'язати ад�
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "{0} було створено аккаунт Liberapay з адресою електронної пошти {1}. Це були ви?"
 
-msgid "Yes, proceed"
-msgstr "Так, продовжити"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Зверніть увагу, що код підтвердження, що міститься в цьому повідомленні дійсний тільки {time_interval}."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Перейдіть за цим посиланням, щоб підтвердити вашу адресу електронної пошти:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "Підключення {0} до {1} в Liberapay"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Ми підключаємо {0} до аккаунту {1} в Liberapay. Це повідомлення відправлено на {2}, тому що це основна адреса електронної пошти, який було вказано."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Ініційовано зняття грошей"
@@ -965,9 +963,6 @@ msgstr "Ви власник цього аккаунту?"
 msgid "Log in to reopen your account."
 msgstr "Увійдіть, щоб поновити ваш аккаунт."
 
-msgid "Log in"
-msgstr "Увійти"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Вам потрібен аккаунт для цього. Будь ласка заповніть одну із форм нижче."
 
@@ -1431,6 +1426,9 @@ msgstr "Ви ще бажаєте користуватися цим пароле�
 
 msgid "No, cancel"
 msgstr "Ні, відмовитися"
+
+msgid "Yes, proceed"
+msgstr "Так, продовжити"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1987,6 +1985,48 @@ msgstr "Повне ім'я вашого проекту або організац
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Дозволені символи: буквено-цифрові, пробіли та пунктуація."
 
+msgid "Your email address is now verified."
+msgstr "Вашу адресу електронної пошти підтверджено."
+
+msgid "Already Verified"
+msgstr "Вже підтверджено"
+
+msgid "This email address has already been verified."
+msgstr "Цю адресу електронної пошти вже підтверджено."
+
+msgid "Address Taken"
+msgstr "Адреса зайнята"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Ця адреса електронної пошти вже зв'язана з іншим аккаунтом Liberapay."
+
+msgid "Failure"
+msgstr "Помилка"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Перевірте, чи посилання, на яке ви натиснули або скопіювали, не обрізано або якимось чином змінено."
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "Налаштування електронної пошти"
 
@@ -2004,6 +2044,9 @@ msgstr "Видалити"
 
 msgid "Primary"
 msgstr "Основна"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Непідтверджена"
@@ -2039,45 +2082,6 @@ msgstr "Листа для підтвердження надіслано на {0}
 
 msgid "Your notification settings have been changed."
 msgstr "Налаштування повідомлень змінено."
-
-msgid "Success!"
-msgstr "Вийшло!"
-
-msgid "Your email address is now verified."
-msgstr "Вашу адресу електронної пошти підтверджено."
-
-msgid "Address Taken"
-msgstr "Адреса зайнята"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Ця адреса електронної пошти вже зв'язана з іншим аккаунтом Liberapay."
-
-msgid "Already Verified"
-msgstr "Вже підтверджено"
-
-msgid "This email address has already been verified."
-msgstr "Цю адресу електронної пошти вже підтверджено."
-
-msgid "Expired"
-msgstr "Термін дії закінчився"
-
-msgid "The verification code has expired."
-msgstr "Термін дії коду підтвердження закінчився."
-
-msgid "Failure"
-msgstr "Помилка"
-
-msgid "The verification code is invalid."
-msgstr "Неправильний код підтвердження."
-
-msgid "Missing Info"
-msgstr "Неповні дані"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Перевірте, чи посилання, на яке ви натиснули або скопіювали, не обрізано або якимось чином змінено."
-
-msgid "Password"
-msgstr "Пароль"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay потрібна ваша підтримка"

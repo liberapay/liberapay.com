@@ -218,6 +218,9 @@ msgstr "Кто-то (надеемся, вы) запросил доступ к а
 msgid "Follow this link to proceed:"
 msgstr "Перейдите по этой ссылке для продолжения:"
 
+msgid "Log in"
+msgstr "Войти"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Обратите внимание, что эта ссылка действительна только в течение {0}."
@@ -481,23 +484,18 @@ msgstr "Мы получили запрос на то, чтобы связать 
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "{0} был создан аккаунт Liberapay с адресом электронной почты {1}. Это были вы?"
 
-msgid "Yes, proceed"
-msgstr "Да, продолжить"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Обратите внимание, что код верификации в этом сообщении действителен только {time_interval}."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Перейдите по этой ссылке, чтобы подтвердить ваш адрес электронной почты:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "Подключение {0} к {1} на Liberapay"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Мы подключаем {0} у аккаунту {1} на Liberapay. Это уведомление отправлено на {2}, потому что это основной адрес электронной почты, который был указан."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Инициировано снятие денег"
@@ -965,9 +963,6 @@ msgstr "Вы владелец аккаунта?"
 msgid "Log in to reopen your account."
 msgstr "Войдите, чтобы заново открыть ваш аккаунт."
 
-msgid "Log in"
-msgstr "Войти"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Вам нужен аккаунт для этого. Заполните одну из форм ниже."
 
@@ -1431,6 +1426,9 @@ msgstr "Вы всё ещё хотите использовать этот пар
 
 msgid "No, cancel"
 msgstr "Нет, отмена"
+
+msgid "Yes, proceed"
+msgstr "Да, продолжить"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1987,6 +1985,48 @@ msgstr "Полное название вашего проекта или орг�
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Допустимые символы: буквы и цифры, пробелы и знаки пунктуации."
 
+msgid "Your email address is now verified."
+msgstr "Ваш адрес электронной почты подтверждён."
+
+msgid "Already Verified"
+msgstr "Уже подтверждён"
+
+msgid "This email address has already been verified."
+msgstr "Этот адрес электронной почты уже подтверждён."
+
+msgid "Address Taken"
+msgstr "Адрес занят"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Этот адрес электронной почты уже связан с другим аккаунтом Liberapay."
+
+msgid "Failure"
+msgstr "Ошибка"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Проверьте, что ссылка, на которую вы нажали или скопировали, не обрезана или каким-то образом изменена."
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "Настройки email"
 
@@ -2004,6 +2044,9 @@ msgstr "Удалить"
 
 msgid "Primary"
 msgstr "Основной"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Неподтверждён"
@@ -2039,45 +2082,6 @@ msgstr "Письмо для подтверждения отправлено на
 
 msgid "Your notification settings have been changed."
 msgstr "Настройки уведомлений изменены."
-
-msgid "Success!"
-msgstr "Получилось!"
-
-msgid "Your email address is now verified."
-msgstr "Ваш адрес электронной почты подтверждён."
-
-msgid "Address Taken"
-msgstr "Адрес занят"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Этот адрес электронной почты уже связан с другим аккаунтом Liberapay."
-
-msgid "Already Verified"
-msgstr "Уже подтверждён"
-
-msgid "This email address has already been verified."
-msgstr "Этот адрес электронной почты уже подтверждён."
-
-msgid "Expired"
-msgstr "Срок действия истёк"
-
-msgid "The verification code has expired."
-msgstr "Срок действия кода подтверждения истёк."
-
-msgid "Failure"
-msgstr "Ошибка"
-
-msgid "The verification code is invalid."
-msgstr "Неверный код подтверждения."
-
-msgid "Missing Info"
-msgstr "Неполные данные"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Проверьте, что ссылка, на которую вы нажали или скопировали, не обрезана или каким-то образом изменена."
-
-msgid "Password"
-msgstr "Пароль"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay нужна ваша поддержка"

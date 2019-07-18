@@ -214,6 +214,9 @@ msgstr "Iu (espereble vi) petis aliron al la konto {0} en Liberapay."
 msgid "Follow this link to proceed:"
 msgstr "Alklaku tiun ligilon por daŭrigi:"
 
+msgid "Log in"
+msgstr "Ensaluti"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Bonvolu atenti, ke la ligilo estas valida nur dum {0}."
@@ -477,23 +480,18 @@ msgstr "Ni ricevis peton por ligi la retadreson {0} al la Liberapay-konto, kies 
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Liberapay-konto estis kreita en {0} kun la retadreso {1}. Ĉu fare de vi?"
 
-msgid "Yes, proceed"
-msgstr "Jes, daŭrigi"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Bonvolu atenti, ke la konfirma kodo en tiu mesaĝo validas nur dum {time_interval}."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Alklaku tiun ligilon por validigi vian retadreson:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "Konektado de {0} al {1} en Liberapay"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Ni konektas {0} al la konto {1} en Liberapay. Tio estas sciigo sendita al {2}, ĉar ĝi estas la ĉefa retadreso ligita al tiu konto."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Retiro komencita"
@@ -960,9 +958,6 @@ msgstr "Ĉu vi estas la posedanto de la konto?"
 msgid "Log in to reopen your account."
 msgstr "Ensalutu por remalfermi vian konton."
 
-msgid "Log in"
-msgstr "Ensaluti"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Vi bezonas konton por tio. Bonvolu plenigi unu el la subaj formularoj."
 
@@ -1423,6 +1418,9 @@ msgstr "Ĉu vi tamen volas uzi tiun pasvorton?"
 
 msgid "No, cancel"
 msgstr "Ne, nuligi"
+
+msgid "Yes, proceed"
+msgstr "Jes, daŭrigi"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1974,6 +1972,48 @@ msgstr "La kompleta nomo de via projekto aŭ organizo. Ĝi estos montrata apud l
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Permesitaj signoj: literoj, ciferoj, spacetoj, kaj interpunkciaĵoj."
 
+msgid "Your email address is now verified."
+msgstr "Via retadreso estas nun konfirmita."
+
+msgid "Already Verified"
+msgstr "Jam konfirmita"
+
+msgid "This email address has already been verified."
+msgstr "Tiu retadreso jam estis konfirmita."
+
+msgid "Address Taken"
+msgstr "Retadreso jam uzata"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Tiu retadreso jam estas konektita al malsama Liberapay-konto."
+
+msgid "Failure"
+msgstr "Malsukceso"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Bonvolu kontroli, ke la ligilo, kiun vi alklakis aŭ kopigluis, ne estis hakita aŭ ŝanĝita iumaniere."
+
+msgid "Password"
+msgstr "Pasvorto"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "Retmesaĝaj agordoj"
 
@@ -1990,6 +2030,9 @@ msgstr "Forigi"
 
 msgid "Primary"
 msgstr "Ĉefa"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Nekonfirmita"
@@ -2025,45 +2068,6 @@ msgstr "Konfirma retmesaĝo estis sendita al {0}."
 
 msgid "Your notification settings have been changed."
 msgstr "Viaj sciigaj agordoj estis ŝanĝitaj."
-
-msgid "Success!"
-msgstr "Sukceso!"
-
-msgid "Your email address is now verified."
-msgstr "Via retadreso estas nun konfirmita."
-
-msgid "Address Taken"
-msgstr "Retadreso jam uzata"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Tiu retadreso jam estas konektita al malsama Liberapay-konto."
-
-msgid "Already Verified"
-msgstr "Jam konfirmita"
-
-msgid "This email address has already been verified."
-msgstr "Tiu retadreso jam estis konfirmita."
-
-msgid "Expired"
-msgstr "Eksvalida"
-
-msgid "The verification code has expired."
-msgstr "La konfirma kodo eksvalidiĝis."
-
-msgid "Failure"
-msgstr "Malsukceso"
-
-msgid "The verification code is invalid."
-msgstr "La konfirma kodo estas nevalida."
-
-msgid "Missing Info"
-msgstr "Mankanta informo"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Bonvolu kontroli, ke la ligilo, kiun vi alklakis aŭ kopigluis, ne estis hakita aŭ ŝanĝita iumaniere."
-
-msgid "Password"
-msgstr "Pasvorto"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay bezonas vian subtenon"

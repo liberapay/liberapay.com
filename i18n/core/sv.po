@@ -213,6 +213,9 @@ msgstr "Någon (förhoppningsvis du) har begärt tillgång till {0}-kontot på L
 msgid "Follow this link to proceed:"
 msgstr "Följ denna länk för att fortsätta:"
 
+msgid "Log in"
+msgstr "Logga in"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Lägg märke till att länken bara är giltig i {0}."
@@ -457,23 +460,18 @@ msgstr "Vi har mottagit en förfrågan om att ansluta e-postadressen {0} till et
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Ett Liberapay-konto skapades {0} med e-postadressen {1}. Var det du?"
 
-msgid "Yes, proceed"
-msgstr "Ja, fortsätt"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Lägg märke till att verifikationskoden i detta meddelande bara är giltig i {time_interval}."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Följ denna länk för att validera din e-postadress:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "Ansluter {0} till {1} på Liberapay"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Vi ansluter {0} till {1}-kontot på Liberapay. Detta är en notifiering skickad till {2} eftersom det är den primära adressen vi har."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Uttag påbörjad"
@@ -938,9 +936,6 @@ msgstr "Är du kontots ägare?"
 msgid "Log in to reopen your account."
 msgstr "Logga in för att återöppna ditt konto."
 
-msgid "Log in"
-msgstr "Logga in"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Du behöver ett konto för detta. Var god fyll i ett av formulären nedan."
 
@@ -1402,6 +1397,9 @@ msgstr "Vill du fortfarande använda detta lösenord?"
 
 msgid "No, cancel"
 msgstr "Nej, avbryt"
+
+msgid "Yes, proceed"
+msgstr "Ja, fortsätt"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1953,6 +1951,48 @@ msgstr "Fullständiga namnet på ditt projekt eller organisation. Det kommer att
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Tillåtna tecken: alfanumeriska tecken, mellanrum, och skiljetecken."
 
+msgid "Your email address is now verified."
+msgstr "Din e-mail adress är nu verifierad."
+
+msgid "Already Verified"
+msgstr "Redan verifierad"
+
+msgid "This email address has already been verified."
+msgstr "Denna e-mail adress är redan verifierad."
+
+msgid "Address Taken"
+msgstr "Adress tagen"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Denna e-mail adress är redan ansluten till ett annat Liberapay konto."
+
+msgid "Failure"
+msgstr "Fel"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Var god kontrollera att länken du klickade på eller kopierade inte har blivit avkortad eller ändrad på något sätt."
+
+msgid "Password"
+msgstr "Lösenord"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "E-mail inställningar"
 
@@ -1969,6 +2009,9 @@ msgstr "Ta bort"
 
 msgid "Primary"
 msgstr "Primär"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Overifierad"
@@ -2004,45 +2047,6 @@ msgstr "Ett verifikations e-mail har skickats till {0}."
 
 msgid "Your notification settings have been changed."
 msgstr "Dina notifieringsinställningar har ändrats."
-
-msgid "Success!"
-msgstr "Lyckades!"
-
-msgid "Your email address is now verified."
-msgstr "Din e-mail adress är nu verifierad."
-
-msgid "Address Taken"
-msgstr "Adress tagen"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Denna e-mail adress är redan ansluten till ett annat Liberapay konto."
-
-msgid "Already Verified"
-msgstr "Redan verifierad"
-
-msgid "This email address has already been verified."
-msgstr "Denna e-mail adress är redan verifierad."
-
-msgid "Expired"
-msgstr "Utgången"
-
-msgid "The verification code has expired."
-msgstr "Verifikationskoden har gått ut."
-
-msgid "Failure"
-msgstr "Fel"
-
-msgid "The verification code is invalid."
-msgstr "Verifikationskoden är ogiltig."
-
-msgid "Missing Info"
-msgstr "Information fattas"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Var god kontrollera att länken du klickade på eller kopierade inte har blivit avkortad eller ändrad på något sätt."
-
-msgid "Password"
-msgstr "Lösenord"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay behöver ditt stöd"

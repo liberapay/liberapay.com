@@ -218,6 +218,9 @@ msgstr "Cineva (sperăm că dumneavoastră) a cerut acces la contul {0} pe Liber
 msgid "Follow this link to proceed:"
 msgstr "Urmați această legătură pentru a continua:"
 
+msgid "Log in"
+msgstr "Autentificare"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "Luați aminte că legătura este validă numai pentru {0}."
@@ -462,23 +465,18 @@ msgstr "Am primit o cerere de asociere a adresei de e-mail {0} cu contul Liberap
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "Un cont Liberapay a fost creeat pe {0} cu adresa de e-mail {1}. Ați fost dumneavoastră?"
 
-msgid "Yes, proceed"
-msgstr "Da, continuă"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "Luați aminte că codul de verificare conținut în acest measaj este valid numai pentru {time_interval}."
-
-msgid "Follow this link to validate your email address:"
-msgstr "Urmăriți acestă legătură pentru a valida adresa de e-mail:"
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "Se conectează {0} la {1} pe Liberapay"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "Vă conectăm {0} la contul {1} pe Liberapay. Această notificare a fost trimisă la {2} pentru că aceasta este adresa primară de e-mail pe care o avem."
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "Extragere inițiată"
@@ -946,9 +944,6 @@ msgstr "Sunteți deținătorul contului?"
 msgid "Log in to reopen your account."
 msgstr "Autentificați-vă pentru a redeschide contul."
 
-msgid "Log in"
-msgstr "Autentificare"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Aveți nevoie de un cont pentru asta. Completați unul din formularele de mai jos."
 
@@ -1412,6 +1407,9 @@ msgstr "Totuși, doriți să utilizați această parolă?"
 
 msgid "No, cancel"
 msgstr "Nu, anulează"
+
+msgid "Yes, proceed"
+msgstr "Da, continuă"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1968,6 +1966,48 @@ msgstr "Numele întreg al proiectului sau organizației dumneavoastră. Va fi af
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Simboluri permise: alfanumerice, spații și punctuație."
 
+msgid "Your email address is now verified."
+msgstr "Adresa de e-mail este acum verificată."
+
+msgid "Already Verified"
+msgstr "Verificată deja"
+
+msgid "This email address has already been verified."
+msgstr "Această adresă de e-mail a fost verificată deja."
+
+msgid "Address Taken"
+msgstr "Adresă folosită"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "Această adresă de e-mail este deja conectată la un cont diferit de Liberapay."
+
+msgid "Failure"
+msgstr "Eșec"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "Verificați dacă legătura pe care ați apăsat sau ați copiat-o a fost redusă sau alterată în vreun fel."
+
+msgid "Password"
+msgstr "Parolă"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "Configurări e-mail"
 
@@ -1985,6 +2025,9 @@ msgstr "Elimină"
 
 msgid "Primary"
 msgstr "Primară"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "Neverificată"
@@ -2020,45 +2063,6 @@ msgstr "Un e-mail de verificare a fost trimis la {0}."
 
 msgid "Your notification settings have been changed."
 msgstr "Configurările de notificare au fost modificate."
-
-msgid "Success!"
-msgstr "Succes!"
-
-msgid "Your email address is now verified."
-msgstr "Adresa de e-mail este acum verificată."
-
-msgid "Address Taken"
-msgstr "Adresă folosită"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "Această adresă de e-mail este deja conectată la un cont diferit de Liberapay."
-
-msgid "Already Verified"
-msgstr "Verificată deja"
-
-msgid "This email address has already been verified."
-msgstr "Această adresă de e-mail a fost verificată deja."
-
-msgid "Expired"
-msgstr "Expirat"
-
-msgid "The verification code has expired."
-msgstr "Codul de verificare a expirat."
-
-msgid "Failure"
-msgstr "Eșec"
-
-msgid "The verification code is invalid."
-msgstr "Codul de verificare este nevalid."
-
-msgid "Missing Info"
-msgstr "Informații lipsă"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Verificați dacă legătura pe care ați apăsat sau ați copiat-o a fost redusă sau alterată în vreun fel."
-
-msgid "Password"
-msgstr "Parolă"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay are nevoie de sprijinul dumneavoastră"

@@ -208,6 +208,9 @@ msgstr "誰か（あなたであることを願います）が Liberapay の {0}
 msgid "Follow this link to proceed:"
 msgstr "続行するにはこのリンクをクリックしてください："
 
+msgid "Log in"
+msgstr "ログイン"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "リンクは {0} のみ有効です。"
@@ -471,23 +474,18 @@ msgstr "メールアドレス {0} を、現在のメールアドレスが {1} �
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "メールアドレス {1} を使用して Liberapay アカウントが {0} に作成されました。ご自身ですか？"
 
-msgid "Yes, proceed"
-msgstr "続行"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "このメッセージに含まれる認証コードは {time_interval}以内にのみ有効であることに注意してください。"
-
-msgid "Follow this link to validate your email address:"
-msgstr "メールアドレスを確認するには以下のリンクをクリックしてください："
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "{0} を Liberapay 上の {1} に接続しています"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "{0} を Liberapay 上の {1} アカウントに接続しています。この通知を、記録されているプライマリメールアドレスである {2} にお送りしました。"
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "出金が開始されました"
@@ -949,9 +947,6 @@ msgstr "アカウントの所有者ですか？"
 msgid "Log in to reopen your account."
 msgstr "ログインしてアカウントを再開します。"
 
-msgid "Log in"
-msgstr "ログイン"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "これにはアカウントが必要です。以下の入力欄のどちらかに記入してください。"
 
@@ -1410,6 +1405,9 @@ msgstr "それでもこのパスワードを使用してもよろしいですか
 
 msgid "No, cancel"
 msgstr "キャンセル"
+
+msgid "Yes, proceed"
+msgstr "続行"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1956,6 +1954,48 @@ msgstr "自分のプロジェクトや組織のフルネームです。公開プ
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "使用可能な文字：英数字・スペース・句読点。"
 
+msgid "Your email address is now verified."
+msgstr "メールアドレスが認証されました。"
+
+msgid "Already Verified"
+msgstr "すでに認証済みです"
+
+msgid "This email address has already been verified."
+msgstr "このメールアドレスはすでに認証されています。"
+
+msgid "Address Taken"
+msgstr "このメールアドレスは使用済みです"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "このメールアドレスはすでに別の Liberapay アカウントに連携されています。"
+
+msgid "Failure"
+msgstr "失敗しました"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "あなたがクリックした、またはコピー・アンド・ペーストしたリンクが、何らかの理由で一部分になっていたり、変更されていたりしないことを確認してください。"
+
+msgid "Password"
+msgstr "パスワード"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "メールの設定"
 
@@ -1971,6 +2011,9 @@ msgstr "削除"
 
 msgid "Primary"
 msgstr "メイン"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "未認証"
@@ -2006,45 +2049,6 @@ msgstr "認証メールが {0} に送信されました。"
 
 msgid "Your notification settings have been changed."
 msgstr "通知設定が変更されました。"
-
-msgid "Success!"
-msgstr "成功しました！"
-
-msgid "Your email address is now verified."
-msgstr "メールアドレスが認証されました。"
-
-msgid "Address Taken"
-msgstr "このメールアドレスは使用済みです"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "このメールアドレスはすでに別の Liberapay アカウントに連携されています。"
-
-msgid "Already Verified"
-msgstr "すでに認証済みです"
-
-msgid "This email address has already been verified."
-msgstr "このメールアドレスはすでに認証されています。"
-
-msgid "Expired"
-msgstr "期限切れ"
-
-msgid "The verification code has expired."
-msgstr "認証コードが期限切れです。"
-
-msgid "Failure"
-msgstr "失敗しました"
-
-msgid "The verification code is invalid."
-msgstr "認証コードが無効です。"
-
-msgid "Missing Info"
-msgstr "情報が不足しています"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "あなたがクリックした、またはコピー・アンド・ペーストしたリンクが、何らかの理由で一部分になっていたり、変更されていたりしないことを確認してください。"
-
-msgid "Password"
-msgstr "パスワード"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapayには皆さんの支援が必要です"

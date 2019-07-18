@@ -209,6 +209,9 @@ msgstr "有人 (希望是你) 請求存取 Liberapay {0} 帳戶。"
 msgid "Follow this link to proceed:"
 msgstr "点击此链接继续："
 
+msgid "Log in"
+msgstr "登入"
+
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
 msgstr "请注意，该链接仅对{0}有效。"
@@ -472,23 +475,18 @@ msgstr "我們收到來自{0} 請求加入 Liberapay ，其電郵地址為 {1}�
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
 msgstr "有人用 {1} 電郵建立了 Liberapay帳戶 {0}，這是你嗎？"
 
-msgid "Yes, proceed"
-msgstr "是的，請繼續"
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "No, it wasn't me"
+msgstr ""
+
+msgid "Your Liberapay account is being modified"
+msgstr ""
 
 #, python-brace-format
-msgid "Please note that the verification code contained in this message is only valid for {time_interval}."
-msgstr "請注意這條訊息裏認證碼的有效期間為 {time_interval}。"
-
-msgid "Follow this link to validate your email address:"
-msgstr "點擊此連結以認證你的電郵信箱："
-
-#, python-brace-format
-msgid "Connecting {0} to {1} on Liberapay"
-msgstr "連結 {0} 到 Liberapay 的 {1}"
-
-#, python-brace-format
-msgid "We are connecting {0} to the {1} account on Liberapay. This is a notification sent to {2} because that is the primary email address we have on file."
-msgstr "我們正在連結 {0} 到 Liberapay {1} 帳號。這個給 {2} 的通知是依據我們保留的檔案裏所留下的主要電郵地址。"
+msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
+msgstr ""
 
 msgid "Withdrawal initiated"
 msgstr "要求提領"
@@ -950,9 +948,6 @@ msgstr "你是此帳戶的所有人嗎？"
 msgid "Log in to reopen your account."
 msgstr "登入重新開啟帳戶。"
 
-msgid "Log in"
-msgstr "登入"
-
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "你需要一個帳戶，請填寫以下的表格。"
 
@@ -1411,6 +1406,9 @@ msgstr "您是否仍旧希望使用该密码？"
 
 msgid "No, cancel"
 msgstr "不，取消"
+
+msgid "Yes, proceed"
+msgstr "是的，請繼續"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1957,6 +1955,48 @@ msgstr "您的项目或是组织的名称。该名称会与您的用户名一起
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "允许字符：字母及数字，空格，标点。"
 
+msgid "Your email address is now verified."
+msgstr "你已完成電郵認證。"
+
+msgid "Already Verified"
+msgstr "已通過認證"
+
+msgid "This email address has already been verified."
+msgstr "這個電郵地址已通過認證。"
+
+msgid "Address Taken"
+msgstr "採用的地址"
+
+msgid "This email address is already connected to a different Liberapay account."
+msgstr "這個電郵地址已用於其它不同的Liberapay帳戶。"
+
+msgid "Failure"
+msgstr "失敗"
+
+msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr "請檢查你所點擊的連結或是以其它不會改變其內容的方式複制貼上。"
+
+msgid "Password"
+msgstr "密碼"
+
+msgid "Your email address is now blacklisted."
+msgstr ""
+
+msgid "Your email address is no longer blacklisted."
+msgstr ""
+
+msgid "Remove my email address from the blacklist"
+msgstr ""
+
+msgid "Add my email address to the blacklist"
+msgstr ""
+
+msgid "You have successfully disavowed having connected your email address to this Liberapay account."
+msgstr ""
+
+msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
+msgstr ""
+
 msgid "Email settings"
 msgstr "電郵設定"
 
@@ -1972,6 +2012,9 @@ msgstr "移除"
 
 msgid "Primary"
 msgstr "主要的"
+
+msgid "Disavowed"
+msgstr ""
 
 msgid "Unverified"
 msgstr "未認證"
@@ -2007,45 +2050,6 @@ msgstr "認證電郵送至 {0}."
 
 msgid "Your notification settings have been changed."
 msgstr "你的通知設定已被更改。"
-
-msgid "Success!"
-msgstr "成功！"
-
-msgid "Your email address is now verified."
-msgstr "你已完成電郵認證。"
-
-msgid "Address Taken"
-msgstr "採用的地址"
-
-msgid "This email address is already connected to a different Liberapay account."
-msgstr "這個電郵地址已用於其它不同的Liberapay帳戶。"
-
-msgid "Already Verified"
-msgstr "已通過認證"
-
-msgid "This email address has already been verified."
-msgstr "這個電郵地址已通過認證。"
-
-msgid "Expired"
-msgstr "逾期"
-
-msgid "The verification code has expired."
-msgstr "認證碼已過期。"
-
-msgid "Failure"
-msgstr "失敗"
-
-msgid "The verification code is invalid."
-msgstr "認證碼無效。"
-
-msgid "Missing Info"
-msgstr "遺漏資訊"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "請檢查你所點擊的連結或是以其它不會改變其內容的方式複制貼上。"
-
-msgid "Password"
-msgstr "密碼"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay 需要大家的支持"
