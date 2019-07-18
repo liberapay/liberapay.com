@@ -195,17 +195,14 @@ if participant.join_time:
             % endif
         % endif
         % if event['unit_amount']
-            ({{ ngettext(
-                "{n} week of {money_amount}",
-                "{n} weeks of {money_amount}",
+            ({{ _(
+                "{money_amount}/week × {n}",
                 n=event['n_units'], money_amount=event['unit_amount']
-            ) if event['period'] == 'weekly' else ngettext(
-                "{n} month of {money_amount}",
-                "{n} months of {money_amount}",
+            ) if event['period'] == 'weekly' else _(
+                "{money_amount}/month × {n}",
                 n=event['n_units'], money_amount=event['unit_amount']
-            ) if event['period'] == 'monthly' else ngettext(
-                "{n} year of {money_amount}",
-                "{n} years of {money_amount}",
+            ) if event['period'] == 'monthly' else _(
+                "{money_amount}/year × {n}",
                 n=event['n_units'], money_amount=event['unit_amount']
             )}})
         % endif

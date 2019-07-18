@@ -113,17 +113,14 @@ def create_order(db, payin, payer, return_url, cancel_url, state):
                   username=pt.recipient_username, team_name=pt.team_name)
                 if pt.team_name else
                 _("Liberapay donation to {username}", username=pt.recipient_username)
-            ) + ' | ' + (ngettext(
-                "{n} week of {money_amount}",
-                "{n} weeks of {money_amount}",
+            ) + ' | ' + (_(
+                "{money_amount}/week × {n}",
                 n=pt.n_units, money_amount=pt.unit_amount
-            ) if pt.period == 'weekly' else ngettext(
-                "{n} month of {money_amount}",
-                "{n} months of {money_amount}",
+            ) if pt.period == 'weekly' else _(
+                "{money_amount}/month × {n}",
                 n=pt.n_units, money_amount=pt.unit_amount
-            ) if pt.period == 'monthly' else ngettext(
-                "{n} year of {money_amount}",
-                "{n} years of {money_amount}",
+            ) if pt.period == 'monthly' else _(
+                "{money_amount}/year × {n}",
                 n=pt.n_units, money_amount=pt.unit_amount
             )),
             "payee": {
