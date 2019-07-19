@@ -117,7 +117,7 @@ if payin_id:
                 payin = capture_order(website.db, payin)
             else:
                 payin = sync_order(website.db, payin)
-    if payin.status == 'pending' and 'cancel' in request.qs:
+    if payin.status == 'awaiting_payer_action' and 'cancel' in request.qs:
         payin = abort_payin(website.db, payin)
 
 tippees = request.qs.parse_list('beneficiary', int, default=None)
@@ -227,7 +227,7 @@ title = _("Funding your donations")
             "The payment failed. Error message: “{0}”", payin.error
         ) }}</div>
         <p><a class="btn btn-primary" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
-    % elif status == 'pending'
+    % elif status == 'awaiting_payer_action'
         <div class="alert alert-warning">{{ _("The payment is awaiting your approval.") }}</div>
     % endif
 

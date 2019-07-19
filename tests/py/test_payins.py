@@ -169,7 +169,7 @@ class TestPayinsPayPal(Harness):
         assert r.code == 302, r.text
         assert r.headers[b'Location'].startswith(b'https://www.sandbox.paypal.com/')
         payin = self.db.one("SELECT * FROM payins")
-        assert payin.status == 'pending'
+        assert payin.status == 'awaiting_payer_action'
 
         # 4th request: execute the payment
         qs = '?token=91V21788MR556192E&PayerID=6C9EQBCEQY4MA'

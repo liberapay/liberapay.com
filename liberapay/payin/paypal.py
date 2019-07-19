@@ -51,7 +51,7 @@ CAPTURE_STATUSES_MAP = {
 ORDER_STATUSES_MAP = {
     'APPROVED': 'succeeded',
     'COMPLETED': 'succeeded',
-    'CREATED': 'pending',
+    'CREATED': 'awaiting_payer_action',
     'SAVED': 'pending',
     'VOIDED': 'failed',
 }
@@ -133,7 +133,7 @@ def create_order(db, payin, payer, return_url, cancel_url, state):
     status = ORDER_STATUSES_MAP[order['status']]
     error = order['status'] if status == 'failed' else None
     payin = update_payin(db, payin.id, order['id'], status, error)
-    if payin.status == 'pending':
+    if payin.status == 'awaiting_payer_action':
         redirect_url = [l['href'] for l in order['links'] if l['rel'] == 'approve'][0]
         raise state['response'].redirect(redirect_url)
     return payin
@@ -213,7 +213,7 @@ def sync_order(db, payin):
 
 PAYMENT_STATES_MAP = {
     'approved': 'succeeded',
-    'created': 'pending',
+    'created': 'awaiting_payer_action',
     'failed': 'failed',
 }
 SALE_STATES_MAP = {
@@ -308,7 +308,7 @@ def create_payment(db, payin, payer, return_url, state):
     status = PAYMENT_STATES_MAP[payment['state']]
     error = payment.get('failure_reason')
     payin = update_payin(db, payin.id, payment['id'], status, error)
-    if payin.status == 'pending':
+    if payin.status == 'awaiting_payer_action':
         redirect_url = [l['href'] for l in payment['links'] if l['rel'] == 'approval_url'][0]
         raise state['response'].redirect(redirect_url)
     return payin
@@ -383,7 +383,7 @@ def sync_payment(db, payin):
 # =============
 
 def sync_all_pending_payments(db):
-    """Calls `sync_payment` or `sync_order` for every pending payin.
+    """Calls `sync_payment` or `sync_order` for every pending payment.
     """
     payins = db.all("""
         SELECT DISTINCT ON (pi.id) pi.*
