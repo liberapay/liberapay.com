@@ -6,7 +6,7 @@ import requests
 from ..exceptions import PaymentError
 from ..i18n.currencies import Money
 from ..website import website
-from .common import update_payin, update_payin_transfer
+from .common import abort_payin, update_payin, update_payin_transfer
 
 
 logger = logging.Logger('paypal')
@@ -128,7 +128,7 @@ def create_order(db, payin, payer, return_url, cancel_url, state):
     response = _init_session().post(url, json=data, headers=headers)
     if response.status_code not in (200, 201):
         error = _extract_error_message(response)
-        return update_payin(db, payin.id, None, 'failed', error)
+        return abort_payin(db, payin, error)
     order = response.json()
     status = ORDER_STATUSES_MAP[order['status']]
     error = order['status'] if status == 'failed' else None
@@ -154,7 +154,7 @@ def capture_order(db, payin):
     response = _init_session().post(url, json={}, headers=headers)
     if response.status_code not in (200, 201):
         error = _extract_error_message(response)
-        return update_payin(db, payin.id, payin.remote_id, 'failed', error)
+        return abort_payin(db, payin, error)
     order = response.json()
     return record_order_result(db, payin, order)
 
@@ -303,7 +303,7 @@ def create_payment(db, payin, payer, return_url, state):
     response = _init_session().post(url, json=data, headers=headers)
     if response.status_code != 201:
         error = _extract_error_message(response)
-        return update_payin(db, payin.id, None, 'failed', error)
+        return abort_payin(db, payin, error)
     payment = response.json()
     status = PAYMENT_STATES_MAP[payment['state']]
     error = payment.get('failure_reason')
@@ -327,7 +327,7 @@ def execute_payment(db, payin, payer_id):
     response = _init_session().post(url, json=data, headers=headers)
     if response.status_code != 200:
         error = _extract_error_message(response)
-        return update_payin(db, payin.id, payin.remote_id, 'failed', error)
+        return abort_payin(db, payin, error)
     payment = response.json()
     return record_payment_result(db, payin, payment)
 

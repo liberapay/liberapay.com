@@ -7,7 +7,7 @@ from ..exceptions import NextAction
 from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
-from .common import resolve_amounts, update_payin, update_payin_transfer
+from .common import abort_payin, resolve_amounts, update_payin, update_payin_transfer
 
 
 # https://stripe.com/docs/currencies#presentment-currencies
@@ -87,11 +87,10 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
                 idempotency_key='payin_%i' % payin.id,
             )
     except stripe.error.StripeError as e:
-        return update_payin(db, payin.id, '', 'failed', repr_stripe_error(e))
+        return abort_payin(db, payin, repr_stripe_error(e))
     except Exception as e:
-        from liberapay.website import website
         website.tell_sentry(e, {})
-        return update_payin(db, payin.id, '', 'failed', str(e))
+        return abort_payin(db, payin, str(e))
     if intent:
         if intent.status == 'requires_action':
             update_payin(db, payin.id, None, 'awaiting_payer_action', None,
@@ -152,10 +151,10 @@ def destination_charge(db, payin, payer, statement_descriptor):
                 idempotency_key='payin_%i' % payin.id,
             )
     except stripe.error.StripeError as e:
-        return update_payin(db, payin.id, '', 'failed', repr_stripe_error(e))
+        return abort_payin(db, payin, repr_stripe_error(e))
     except Exception as e:
         website.tell_sentry(e, {})
-        return update_payin(db, payin.id, '', 'failed', str(e))
+        return abort_payin(db, payin, str(e))
     if intent:
         if intent.status == 'requires_action':
             update_payin(db, payin.id, None, 'awaiting_payer_action', None,
