@@ -1153,6 +1153,9 @@ class Participant(Model, MixinTeam):
 
     def send_email(self, spt_name, email, **context):
         check_email_blacklist(email)
+        email_row = self.get_email(email)
+        if email_row and email_row.disavowed:
+            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time)
         self.fill_notification_context(context)
         context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
