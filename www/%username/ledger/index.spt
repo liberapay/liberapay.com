@@ -136,6 +136,9 @@ if participant.join_time:
         % if event['status'] == 'succeeded'
             &mdash;
             <a href="{{ participant.path('receipts/direct/%s' % event['id']) }}">{{ _("View receipt").lower() }}</a>
+        % elif event['status'] == 'awaiting_payer_action' and event['payin_method'] == 'paypal'
+            &mdash;
+            <a href="{{ participant.path('giving/pay/paypal/%s?cancel' % event['id']) }}">{{ _("Cancel").lower() }}</a>
         % endif
         % if event['error']
             &mdash; {{ _("error message: {0}", event['error']) }}
