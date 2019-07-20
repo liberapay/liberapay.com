@@ -398,10 +398,12 @@ title = _("Funding your donations")
         <div class="alert alert-danger">{{ _(
             "The payment failed. Error message: “{0}”", payin.error
         ) }}</div>
+        <p><a class="btn btn-primary" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
     % elif status == 'pending'
         <div class="alert alert-info">{{ _("The payment has been initiated.") }}</div>
     % endif
 
+    % if status != 'failed'
     <hr>
     % set n_fundable = payer.get_tips_awaiting_renewal()[1]
     % if n_fundable
@@ -416,6 +418,7 @@ title = _("Funding your donations")
     % else
         <p>{{ _("You don't have any other donation awaiting payment at this time.") }}</p>
         <a class="btn btn-default" href="{{ payer.path('giving/') }}">{{ _("Manage your donations") }}</a>
+    % endif
     % endif
 
 % else

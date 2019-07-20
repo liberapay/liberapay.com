@@ -60,7 +60,7 @@ def update_payin(db, payin_id, remote_id, status, error,
             UPDATE payins
                SET status = %(status)s
                  , error = %(error)s
-                 , remote_id = %(remote_id)s
+                 , remote_id = coalesce(%(remote_id)s, remote_id)
                  , amount_settled = COALESCE(%(amount_settled)s, amount_settled)
                  , fee = COALESCE(%(fee)s, fee)
                  , intent_id = coalesce(%(intent_id)s, intent_id)
@@ -279,7 +279,7 @@ def update_payin_transfer(
             UPDATE payin_transfers
                SET status = %(status)s
                  , error = %(error)s
-                 , remote_id = %(remote_id)s
+                 , remote_id = coalesce(%(remote_id)s, remote_id)
                  , amount = COALESCE(%(amount)s, amount)
                  , fee = COALESCE(%(fee)s, fee)
              WHERE id = %(pt_id)s
@@ -361,3 +361,32 @@ def update_payin_transfer(
             Participant.from_id(pt.payer).update_giving(cursor)
 
         return pt
+
+
+def abort_payin(db, payin, error='aborted by payer'):
+    """Mark a payin as cancelled.
+
+    Args:
+        payin (Record): a row from the `payins` table
+        error (str): the error message to attach to the payin
+
+    Returns:
+        Record: the row updated in the `payins` table
+
+    """
+    payin = update_payin(db, payin.id, payin.remote_id, 'failed', error)
+    db.run("""
+        WITH updated_transfers as (
+            UPDATE payin_transfers
+               SET status = 'failed'
+                 , error = %(error)s
+             WHERE payin = %(payin_id)s
+               AND status <> 'failed'
+         RETURNING *
+        )
+        INSERT INTO payin_transfer_events
+                    (payin_transfer, status, error, timestamp)
+             SELECT pt.id, 'failed', pt.error, current_timestamp
+               FROM updated_transfers pt
+    """, dict(error=error, payin_id=payin.id))
+    return payin

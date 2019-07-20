@@ -59,6 +59,7 @@ n_payments = len(donation_groups['fundable'])
 
 payment = None
 tippee_id = request.qs.get_int('beneficiary', default=None)
+retry_id = request.qs.get_int('retry', default=None)
 if tippee_id:
     tippee = Participant.from_id(tippee_id)
     tip = NS(payer.get_tip_to(tippee))
@@ -77,6 +78,32 @@ if tippee_id:
         ]
     else:
         donations_not_fundable = [tip]
+
+elif retry_id:
+    tips = website.db.all("""
+        SELECT tip.*, tippee_p
+          FROM payin_transfers pt
+          JOIN current_tips tip ON tip.tipper = pt.payer AND tip.tippee = coalesce(pt.team, pt.recipient)
+          JOIN participants tippee_p ON tippee_p.id = tip.tippee
+         WHERE pt.payer = %s
+           AND pt.payin = %s
+    """, (payer.id, retry_id))
+    if not tips:
+        raise response.invalid_input(retry_id, 'retry', 'querystring')
+    payment = NS()
+    payment.tips = tips
+    payment.currency = payment.tips[0].amount.currency
+    _provider_bits = reduce(
+        int.__and__, (tip.tippee_p.payment_providers for tip in payment.tips)
+    )
+    payment.providers = [
+        name for i, name in enumerate(PAYMENT_PROVIDERS)
+        if _provider_bits & 2**i > 0
+    ]
+    if len(payment.tips) > 1 and 'paypal' in payment.providers:
+        # We don't support one-to-many through PayPal yet.
+        payment.providers.remove('paypal')
+    del _provider_bits
 
 else:
     donations_not_fundable = (
@@ -118,7 +145,7 @@ title = _("Funding your donations")
 
 % if payment
 
-    % if n_fundable > 1
+    % if n_fundable > 1 and not retry_id
         <p>{{ ngettext(
             "You have {n} donation awaiting payment.",
             "You have {n} donations awaiting payment.",
