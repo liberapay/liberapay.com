@@ -1123,10 +1123,16 @@ class Participant(Model, MixinTeam):
         """
         return self.email or (cursor or self.db).one("""
             SELECT address
-              FROM emails
+              FROM emails e
              WHERE participant = %s
                AND ( %s OR disavowed IS NOT true )
-          ORDER BY disavowed IS NOT true DESC, added_time ASC
+          ORDER BY disavowed IS NOT true DESC
+                 , ( SELECT count(b)
+                       FROM email_blacklist b
+                      WHERE lower(b.address) = lower(e.address)
+                        AND (b.ignore_after IS NULL OR b.ignore_after > current_timestamp)
+                   ) ASC
+                 , added_time ASC
              LIMIT 1
         """, (self.id, allow_disavowed))
 
@@ -1147,6 +1153,9 @@ class Participant(Model, MixinTeam):
 
     def send_email(self, spt_name, email, **context):
         check_email_blacklist(email)
+        email_row = self.get_email(email)
+        if email_row and email_row.disavowed:
+            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time)
         self.fill_notification_context(context)
         context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
