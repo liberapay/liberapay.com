@@ -2312,3 +2312,11 @@ CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type = 'admin_request';
 -- migration #102
 ALTER TYPE payin_status ADD VALUE IF NOT EXISTS 'awaiting_payer_action';
 ALTER TABLE payins ADD COLUMN intent_id text;
+
+-- migration #103
+ALTER TABLE emails ALTER COLUMN participant DROP NOT NULL;
+ALTER TABLE emails
+    ADD COLUMN disavowed boolean,
+    ADD COLUMN disavowed_time timestamptz;
+ALTER TABLE emails
+    ADD CONSTRAINT not_verified_and_disavowed CHECK (NOT (verified AND disavowed));

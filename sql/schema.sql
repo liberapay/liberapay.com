@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '102'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '103'::jsonb);
 
 
 -- app configuration
@@ -672,7 +672,10 @@ CREATE TABLE emails
 , nonce             text
 , added_time        timestamptz    NOT NULL DEFAULT CURRENT_TIMESTAMP
 , verified_time     timestamptz
-, participant       bigint         NOT NULL REFERENCES participants
+, participant       bigint         REFERENCES participants
+, disavowed         boolean
+, disavowed_time    timestamptz
+, CONSTRAINT not_verified_and_disavowed CHECK (NOT (verified AND disavowed))
  );
 
 CREATE UNIQUE INDEX emails_participant_address_key ON emails (participant, lower(address));
