@@ -37,8 +37,7 @@ if event_object_type == 'charge':
         SELECT *
           FROM payins
          WHERE id = %s
-           AND remote_id = %s
-    """, (payin_id, charge.id))
+    """, (payin_id,))
     if not payin:
         raise response.error(400, "payin not found")
     payin = settle_charge(website.db, payin, charge)
