@@ -170,10 +170,10 @@ output.body = render(globals(), allow_partial_i18n=False)
             % endif
             % if event['status'] != 'succeeded'
                 % if event['error'] == 'canceled'
-                    &mdash; <span class="text text-warning">{{ _("canceled") }}</span>
+                    &mdash; <span class="text-warning">{{ _("canceled") }}</span>
                 % elif not (event['kind'] == 'credit' and event['status'] == 'pre')
                     &mdash;
-                    <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+                    <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
                         translated_status[event['status']]
                     }}</span>
                     % if event['error']

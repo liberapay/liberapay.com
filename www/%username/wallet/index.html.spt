@@ -255,12 +255,12 @@ if user.is_admin:
             {{ _("refund of failed withdrawal (error message: {0})", event['error']) }}
         % endif
         % if event['error'] == 'canceled'
-            &mdash; <span class="text text-warning">{{ _("canceled") }}</span>
+            &mdash; <span class="text-warning">{{ _("canceled") }}</span>
         % elif event['status'] == 'succeeded' and event['kind'] == 'charge'
             (<a href="{{ participant.path('receipts/') }}{{ event['exchange_id'] }}">{{ _("Receipt").lower() }}</a>)
         % else
             &mdash;
-            <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+            <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
                 translated_status[event['status']]
             }}</span>
             % if event['error']
@@ -375,7 +375,7 @@ if user.is_admin:
         % endif
         % if event['status'] != 'succeeded'
             &mdash;
-            <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+            <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
                 translated_status[event['status']]
             }}</span>
             % if event['error']

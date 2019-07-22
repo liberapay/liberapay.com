@@ -130,7 +130,7 @@ if participant.join_time:
         <td class="description">
         {{ _("charge") }}
         &mdash;
-        <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+        <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
             translated_status[event['status']]
         }}</span>
         % if event['status'] == 'succeeded'
@@ -193,7 +193,7 @@ if participant.join_time:
         % endif
         % if event['status'] != 'succeeded'
             &mdash;
-            <span class="text text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
+            <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{
                 translated_status[event['status']]
             }}</span>
             % if event['error']
