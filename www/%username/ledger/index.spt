@@ -18,7 +18,7 @@ admin_override = user.is_admin and (participant != user or 'override' in request
 translated_status = {
     None: '',
     'pre': _('preparing'),
-    'awaiting_payer_action': _('awaiting confirmation from payer'),
+    'awaiting_payer_action': _('awaiting confirmation'),
     'pending': _('pending'),
     'failed': _('failed'),
     'succeeded': _('succeeded')
