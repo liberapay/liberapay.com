@@ -287,6 +287,7 @@ def execute_transfer(db, pt, amount, destination, source_transaction):
             idempotency_key='payin_transfer_%i' % pt.id,
         )
     except stripe.error.StripeError as e:
+        website.tell_sentry(e, {})
         return update_payin_transfer(
             db, pt.id, '', 'failed', repr_stripe_error(e), amount=amount
         )
