@@ -165,7 +165,7 @@ if request.method == 'POST':
     response.redirect('/admin/payday/%s' % p_id)
 
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/admin.html"
 
 % block content
     % if payday_id

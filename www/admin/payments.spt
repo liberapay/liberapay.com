@@ -23,6 +23,7 @@ payins = website.db.all("""
          , ( SELECT json_agg((SELECT x FROM ( SELECT
                         pt.recipient, recipient.username AS recipient_name,
                         pt.team, team.username AS team_name,
+                        pt.status, pt.error,
                         pt.amount, pt.unit_amount, pt.n_units, pt.period
                     ) x))
                FROM payin_transfers pt
@@ -77,6 +78,12 @@ title = "Payments Admin"
                     % endif
                     % if pt.period
                         ({{ locale.format_money(Money(**pt.unit_amount)) }}/{{ pt.period[:-2] }} × {{ pt.n_units }})
+                    % endif
+                    % if pt.status != pi.status and pt.status not in ('pre', 'pending')
+                        ‒ <span class="text-{{ STATUS_MAP.get(pt.status, 'info') }}">{{ pt.status }}</span>
+                        % if pt.error
+                            ‒ error: <code>{{ pt.error }}</code>
+                        % endif
                     % endif
                     <br>
                 % else

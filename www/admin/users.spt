@@ -5,6 +5,11 @@ from dateutil.parser import parse as parse_date
 from liberapay.exceptions import LoginRequired
 from liberapay.models.participant import Participant
 
+PT_STATUS_MAP = {
+    'failed': 'danger',
+    'pre': 'muted',
+}
+
 [---]
 
 if user.ANON:
@@ -121,12 +126,16 @@ elif mode == 'new_recipients':
                    'amount', pt.amount, 'context', pt.context, 'ctime', date_trunc('second', pt.ctime),
                    'payer', pt.payer, 'payer_name', payer.username,
                    'team', pt.team, 'team_name', team.username,
-                   'status', pt.status
+                   'status', pt.status, 'error', pt.error, 'payin_method', r.network
                ) ORDER BY pt.row_number) AS payments
           FROM ( SELECT pt.*
                       , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC)
                    FROM payin_transfers pt
+                  WHERE pt.status <> 'pre'
+                    AND coalesce(pt.error <> 'aborted by payer', true)
                ) pt
+          JOIN payins pi ON pi.id = pt.payin
+          JOIN exchange_routes r ON r.id = pi.route
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
@@ -147,6 +156,7 @@ title = "Users Admin"
 % from 'templates/avatar-url.html' import avatar_img with context
 % from 'templates/icons.html' import fontawesome, glyphicon
 % from 'templates/nav.html' import querystring_nav
+% from "templates/payment-methods.html" import payment_method_icon with context
 
 % extends "templates/admin.html"
 
@@ -230,11 +240,7 @@ title = "Users Admin"
         % if row.payments
         <p><strong>Incoming payments:</strong><br>
             % for pt in row.payments
-                <span class="glyphicon glyphicon-{{
-                          'ok-circle' if pt.status == 'succeeded' else
-                          'remove-circle text-danger' if pt.status == 'failed' else
-                          'time text-muted'
-                      }}" title="{{ pt.status }}"></span>&nbsp;
+                <span class="symbol">{{ payment_method_icon(pt.payin_method) }}</span>&nbsp;
                 {{ locale.format_money(Money(**pt.amount)) }}
                 from <a href="/~{{ pt.payer }}/">{{ pt.payer_name }}</a>
                 % set ctime = parse_date(pt.ctime)
@@ -242,6 +248,12 @@ title = "Users Admin"
                 at {{ locale.format_time(ctime) }}
                 % if pt.team
                 through team <a href="/~{{ pt.team }}/">{{ pt.team_name }}</a>
+                % endif
+                % if pt.status != 'succeeded'
+                    ‒ <span class="text-{{ PT_STATUS_MAP.get(pt.status, 'info') }}">{{ pt.status }}</span>
+                    % if pt.error
+                        ‒ error: <code>{{ pt.error }}</code>
+                    % endif
                 % endif
                 <br>
             % endfor
