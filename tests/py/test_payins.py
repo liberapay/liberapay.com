@@ -98,6 +98,10 @@ class TestPayins(Harness):
             'creator_3', email='carl@example.com', accepted_currencies=None
         )
 
+    def tearDown(self):
+        self.db.self_check()
+        super().tearDown()
+
     def test_payin_pages_when_currencies_dont_match(self):
         self.add_payment_account(self.creator_1, 'stripe')
         self.add_payment_account(self.creator_2, 'paypal')

@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from psycopg2.extras import execute_batch
 import stripe
 import stripe.error
 
@@ -239,24 +240,45 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
         amount_settled=amount_settled, fee=fee, intent_id=intent_id
     )
 
+    if amount_settled is not None:
+        # We have to update the transfer amounts in a single transaction to
+        # avoid ending up in an inconsistent state.
+        with db.get_cursor() as cursor:
+            payin_transfers = cursor.all("""
+                SELECT id, amount
+                  FROM payin_transfers
+                 WHERE payin = %s
+              ORDER BY id
+                   FOR UPDATE
+            """, (payin.id,))
+            transfer_amounts = resolve_amounts(net_amount, {
+                pt.id: pt.amount.convert(amount_settled.currency) for pt in payin_transfers
+            })
+            args_list = [
+                (transfer_amounts[pt.id], pt.id) for pt in payin_transfers
+                if pt.amount != transfer_amounts[pt.id]
+            ]
+            if args_list:
+                execute_batch(cursor, """
+                    UPDATE payin_transfers
+                       SET amount = %s
+                     WHERE id = %s
+                       AND status <> 'succeeded';
+                """, args_list)
+
     payin_transfers = db.all("""
         SELECT pt.*, pa.id AS destination_id
           FROM payin_transfers pt
           JOIN payment_accounts pa ON pa.pk = pt.destination
-         WHERE payin = %s
+         WHERE pt.payin = %s
       ORDER BY pt.id
     """, (payin.id,))
     if amount_settled is not None:
-        transfer_amounts = {
-            pt.id: pt.amount.convert(amount_settled.currency) for pt in payin_transfers
-        }
-        transfer_amounts = resolve_amounts(net_amount, transfer_amounts)
         for pt in payin_transfers:
-            tr_amount = transfer_amounts[pt.id]
             if pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
-                update_payin_transfer(db, pt.id, None, charge.status, error, amount=tr_amount)
+                update_payin_transfer(db, pt.id, None, charge.status, error)
             elif pt.status == 'pre':
-                execute_transfer(db, pt, tr_amount, pt.destination_id, charge.id)
+                execute_transfer(db, pt, pt.destination_id, charge.id)
     elif charge.status == 'failed':
         for pt in payin_transfers:
             update_payin_transfer(db, pt.id, None, charge.status, error)
@@ -264,12 +286,11 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
     return payin
 
 
-def execute_transfer(db, pt, amount, destination, source_transaction):
+def execute_transfer(db, pt, destination, source_transaction):
     """Create a Transfer.
 
     Args:
         pt (Record): a row from the `payin_transfers` table
-        amount (Money): the amount of the transfer
         destination (str): the Stripe ID of the destination account
         source_transaction (str): the ID of the Charge this transfer is linked to
 
@@ -279,23 +300,22 @@ def execute_transfer(db, pt, amount, destination, source_transaction):
     """
     try:
         tr = stripe.Transfer.create(
-            amount=Money_to_int(amount),
-            currency=amount.currency,
+            amount=Money_to_int(pt.amount),
+            currency=pt.amount.currency,
             destination=destination,
             metadata={'payin_transfer_id': pt.id},
             source_transaction=source_transaction,
             idempotency_key='payin_transfer_%i' % pt.id,
         )
     except stripe.error.StripeError as e:
-        return update_payin_transfer(
-            db, pt.id, '', 'failed', repr_stripe_error(e), amount=amount
-        )
+        website.tell_sentry(e, {})
+        return update_payin_transfer(db, pt.id, '', 'failed', repr_stripe_error(e))
     except Exception as e:
         website.tell_sentry(e, {})
-        return update_payin_transfer(db, pt.id, '', 'failed', str(e), amount=amount)
+        return update_payin_transfer(db, pt.id, '', 'failed', str(e))
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
-    return update_payin_transfer(db, pt.id, tr.id, 'succeeded', None, amount=amount)
+    return update_payin_transfer(db, pt.id, tr.id, 'succeeded', None)
 
 
 def settle_destination_charge(db, payin, charge, pt, intent_id=None):

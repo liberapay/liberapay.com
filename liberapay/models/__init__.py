@@ -39,6 +39,7 @@ def check_db(cursor):
     _check_bundles_against_balances(cursor)
     _check_bundles_grouped_by_origin_against_exchanges(cursor)
     _check_bundles_grouped_by_withdrawal_against_exchanges(cursor)
+    _check_sum_of_payin_transfers(cursor)
 
 
 def _check_tips(cursor):
@@ -210,6 +211,22 @@ def _check_bundles_grouped_by_withdrawal_against_exchanges(cursor):
       ORDER BY e_id
     """)
     assert len(l) == 0, "bundles are out of whack:\n" + '\n'.join(str(r) for r in l)
+
+
+def _check_sum_of_payin_transfers(cursor):
+    """Check that the sum of a payin's transfers matches its net amount.
+    """
+    l = cursor.all("""
+        SELECT pi.id AS payin_id, pi.amount_settled, pi.fee
+             , (pi.amount_settled - pi.fee) AS net_amount
+             , sum(pt.amount) AS transfers_sum
+          FROM payin_transfers pt
+          JOIN payins pi ON pi.id = pt.payin
+         WHERE pi.amount_settled IS NOT NULL
+      GROUP BY pi.id
+        HAVING (pi.amount_settled - pi.fee) <> sum(pt.amount);
+    """)
+    assert len(l) == 0, "payin transfers are out of whack:\n" + '\n'.join(str(r) for r in l)
 
 
 def run_migrations(db):
