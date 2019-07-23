@@ -41,8 +41,10 @@ def prepare_payin(db, payer, amount, route):
     return payin
 
 
-def update_payin(db, payin_id, remote_id, status, error,
-                 amount_settled=None, fee=None, intent_id=None):
+def update_payin(
+    db, payin_id, remote_id, status, error,
+    amount_settled=None, fee=None, intent_id=None, refunded_amount=None,
+):
     """Update the status and other attributes of a charge.
 
     Args:
@@ -57,6 +59,9 @@ def update_payin(db, payin_id, remote_id, status, error,
     """
     with db.get_cursor() as cursor:
         payin = cursor.one("""
+            WITH old AS (
+                SELECT * FROM payins WHERE id = %(payin_id)s
+            )
             UPDATE payins
                SET status = %(status)s
                  , error = %(error)s
@@ -64,18 +69,24 @@ def update_payin(db, payin_id, remote_id, status, error,
                  , amount_settled = COALESCE(%(amount_settled)s, amount_settled)
                  , fee = COALESCE(%(fee)s, fee)
                  , intent_id = coalesce(%(intent_id)s, intent_id)
+                 , refunded_amount = coalesce(%(refunded_amount)s, refunded_amount)
              WHERE id = %(payin_id)s
-               AND status <> %(status)s
+               AND ( status <> %(status)s OR
+                     coalesce_currency_amount(%(refunded_amount)s, amount::currency) <>
+                     coalesce_currency_amount(refunded_amount, amount::currency)
+                   )
          RETURNING *
+                 , (SELECT status FROM old) AS old_status
         """, locals())
         if not payin:
             return cursor.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
 
-        cursor.run("""
-            INSERT INTO payin_events
-                   (payin, status, error, timestamp)
-            VALUES (%s, %s, %s, current_timestamp)
-        """, (payin_id, status, error))
+        if payin.status != payin.old_status:
+            cursor.run("""
+                INSERT INTO payin_events
+                       (payin, status, error, timestamp)
+                VALUES (%s, %s, %s, current_timestamp)
+            """, (payin_id, status, error))
 
         if payin.status in ('pending', 'succeeded'):
             cursor.run("""
@@ -129,7 +140,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
         SELECT t.member
              , t.ctime
              , (coalesce_currency_amount((
-                   SELECT sum(pt.amount, 'EUR')
+                   SELECT sum(pt.amount - coalesce(pt.reversed_amount, zero(pt.amount)), 'EUR')
                      FROM payin_transfers pt
                     WHERE pt.recipient = t.member
                       AND pt.team = t.team
@@ -260,7 +271,7 @@ def prepare_payin_transfer(
 
 def update_payin_transfer(
     db, pt_id, remote_id, status, error,
-    amount=None, fee=None, update_donor=True
+    amount=None, fee=None, update_donor=True, reversed_amount=None,
 ):
     """Update the status and other attributes of a payment.
 
@@ -276,30 +287,47 @@ def update_payin_transfer(
     """
     with db.get_cursor() as cursor:
         pt = cursor.one("""
+            WITH old AS (
+                SELECT * FROM payin_transfers WHERE id = %(pt_id)s
+            )
             UPDATE payin_transfers
                SET status = %(status)s
                  , error = %(error)s
                  , remote_id = coalesce(%(remote_id)s, remote_id)
                  , amount = COALESCE(%(amount)s, amount)
                  , fee = COALESCE(%(fee)s, fee)
+                 , reversed_amount = coalesce(%(reversed_amount)s, reversed_amount)
              WHERE id = %(pt_id)s
-               AND status <> %(status)s
+               AND ( status <> %(status)s OR
+                     coalesce_currency_amount(%(reversed_amount)s, amount::currency) <>
+                     coalesce_currency_amount(reversed_amount, amount::currency)
+                   )
          RETURNING *
+                 , (SELECT reversed_amount FROM old) AS old_reversed_amount
+                 , (SELECT status FROM old) AS old_status
         """, locals())
         if not pt:
             return cursor.one("SELECT * FROM payin_transfers WHERE id = %s", (pt_id,))
 
-        cursor.run("""
-            INSERT INTO payin_transfer_events
-                   (payin_transfer, status, error, timestamp)
-            VALUES (%s, %s, %s, current_timestamp)
-        """, (pt_id, status, error))
+        if pt.status != pt.old_status:
+            cursor.run("""
+                INSERT INTO payin_transfer_events
+                       (payin_transfer, status, error, timestamp)
+                VALUES (%s, %s, %s, current_timestamp)
+            """, (pt_id, status, error))
 
         # If the payment has failed or hasn't been settled yet, then stop here.
         if status != 'succeeded':
             return pt
 
-        # Increase the `paid_in_advance` value of the donation.
+        # Update the `paid_in_advance` value of the donation.
+        params = pt._asdict()
+        if pt.reversed_amount:
+            params['delta'] = -(pt.reversed_amount - (pt.old_reversed_amount or 0))
+            if params['delta'] == 0:
+                return pt
+        else:
+            params['delta'] = pt.amount
         paid_in_advance = cursor.one("""
             WITH current_tip AS (
                      SELECT id
@@ -310,15 +338,24 @@ def update_payin_transfer(
             UPDATE tips
                SET paid_in_advance = (
                        coalesce_currency_amount(paid_in_advance, amount::currency) +
-                       convert(%(amount)s, amount::currency)
+                       convert(%(delta)s, amount::currency)
                    )
                  , is_funded = true
              WHERE id = (SELECT id FROM current_tip)
          RETURNING paid_in_advance
-        """, pt._asdict())
-        assert paid_in_advance > 0, locals()
+        """, params)
+        if paid_in_advance is None:
+            # This transfer isn't linked to a tip.
+            return pt
+        if paid_in_advance <= 0:
+            cursor.run("""
+                UPDATE tips
+                   SET is_funded = false
+                 WHERE tipper = %(payer)s
+                   AND paid_in_advance <= 0
+            """, params)
 
-        # If it's a team donation, increase the `paid_in_advance` value of the take.
+        # If it's a team donation, update the `paid_in_advance` value of the take.
         if pt.context == 'team-donation':
             paid_in_advance = cursor.one("""
                 WITH current_take AS (
@@ -332,11 +369,11 @@ def update_payin_transfer(
                 UPDATE takes
                    SET paid_in_advance = (
                            coalesce_currency_amount(paid_in_advance, amount::currency) +
-                           convert(%(amount)s, amount::currency)
+                           convert(%(delta)s, amount::currency)
                        )
                  WHERE id = (SELECT id FROM current_take)
              RETURNING paid_in_advance
-            """, pt._asdict())
+            """, params)
             assert paid_in_advance is not None, locals()
 
         # Recompute the cached `receiving` amount of the donee.
@@ -390,3 +427,67 @@ def abort_payin(db, payin, error='aborted by payer'):
                FROM updated_transfers pt
     """, dict(error=error, payin_id=payin.id))
     return payin
+
+
+def record_payin_refund(
+    db, payin_id, remote_id, amount, reason, description, status, error=None, ctime=None,
+):
+    """Record a charge refund.
+
+    Args:
+        payin_id (int): the ID of the refunded payin in our database
+        remote_id (int): the ID of the refund in the payment processor's database
+        amount (Money): the refund amount, must be less or equal to the payin amount
+        reason (str): why this refund was initiated (`refund_reason` SQL type)
+        description (str): details of the circumstances of this refund
+        status (str): the current status of the refund (`refund_status` SQL type)
+        error (str): error message, if the refund has failed
+        ctime (datetime): when the refund was initiated
+
+    Returns:
+        Record: the row inserted in the `payin_refunds` table
+
+    """
+    return db.one("""
+        INSERT INTO payin_refunds
+               (payin, remote_id, amount, reason, description,
+                status, error, ctime)
+        VALUES (%(payin_id)s, %(remote_id)s, %(amount)s, %(reason)s, %(description)s,
+                %(status)s, %(error)s, coalesce(%(ctime)s, current_timestamp))
+   ON CONFLICT (payin, remote_id) DO UPDATE
+           SET amount = excluded.amount
+             , reason = excluded.reason
+             , description = excluded.description
+             , status = excluded.status
+             , error = excluded.error
+     RETURNING *
+    """, locals())
+
+
+def record_payin_transfer_reversal(
+    db, pt_id, remote_id, amount, payin_refund_id=None, ctime=None
+):
+    """Record a transfer reversal.
+
+    Args:
+        pt_id (int): the ID of the reversed transfer in our database
+        remote_id (int): the ID of the reversal in the payment processor's database
+        amount (Money): the reversal amount, must be less or equal to the transfer amount
+        payin_refund_id (int): the ID of the associated payin refund in our database
+        ctime (datetime): when the refund was initiated
+
+    Returns:
+        Record: the row inserted in the `payin_transfer_reversals` table
+
+    """
+    return db.one("""
+        INSERT INTO payin_transfer_reversals
+               (payin_transfer, remote_id, amount, payin_refund,
+                ctime)
+        VALUES (%(pt_id)s, %(remote_id)s, %(amount)s, %(payin_refund_id)s,
+                coalesce(%(ctime)s, current_timestamp))
+   ON CONFLICT (payin_transfer, remote_id) DO UPDATE
+           SET amount = excluded.amount
+             , payin_refund = excluded.payin_refund
+     RETURNING *
+    """, locals())

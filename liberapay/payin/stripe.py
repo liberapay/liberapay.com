@@ -1,3 +1,4 @@
+from datetime import timedelta
 from decimal import Decimal
 from time import sleep
 
@@ -5,12 +6,22 @@ from psycopg2.extras import execute_batch
 import stripe
 import stripe.error
 
+from ..constants import EPOCH
 from ..exceptions import NextAction
 from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
-from .common import abort_payin, resolve_amounts, update_payin, update_payin_transfer
+from .common import (
+    abort_payin, record_payin_refund, record_payin_transfer_reversal,
+    resolve_amounts, update_payin, update_payin_transfer,
+)
 
+
+REFUND_REASONS_MAP = {
+    'duplicate': 'duplicate',
+    'fraudulent': 'fraud',
+    'requested_by_customer': 'requested_by_payer',
+}
 
 # https://stripe.com/docs/currencies#presentment-currencies
 ZERO_DECIMAL_CURRENCIES = """
@@ -236,10 +247,18 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
         amount_settled, fee, net_amount = None, None, None
 
     error = repr_charge_error(charge)
+    refunded_amount, refund_ratio = None, None
+    if charge.amount_refunded:
+        refunded_amount = int_to_Money(charge.amount_refunded, charge.currency)
+        refund_ratio = refunded_amount / payin.amount
     payin = update_payin(
         db, payin.id, charge.id, charge.status, error,
-        amount_settled=amount_settled, fee=fee, intent_id=intent_id
+        amount_settled=amount_settled, fee=fee, intent_id=intent_id,
+        refunded_amount=refunded_amount,
     )
+
+    if charge.refunds.data:
+        record_refunds(db, payin, charge)
 
     if amount_settled is not None:
         # We have to update the transfer amounts in a single transaction to
@@ -277,9 +296,18 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
     if amount_settled is not None:
         for pt in payin_transfers:
             if pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
-                update_payin_transfer(db, pt.id, None, charge.status, error)
+                if refund_ratio:
+                    pt_reversed_amount = (pt.amount * refund_ratio).round_up()
+                else:
+                    pt_reversed_amount = None
+                update_payin_transfer(
+                    db, pt.id, None, charge.status, error,
+                    reversed_amount=pt_reversed_amount,
+                )
             elif pt.status == 'pre':
                 execute_transfer(db, pt, pt.destination_id, charge.id)
+            elif refunded_amount:
+                sync_transfer(db, pt)
     elif charge.status == 'failed':
         for pt in payin_transfers:
             update_payin_transfer(db, pt.id, None, charge.status, error)
@@ -324,6 +352,27 @@ def execute_transfer(db, pt, destination, source_transaction):
     return update_payin_transfer(db, pt.id, tr.id, 'succeeded', None)
 
 
+def sync_transfer(db, pt):
+    """Fetch the transfer's data and update our database.
+
+    Args:
+        pt (Record): a row from the `payin_transfers` table
+
+    Returns:
+        Record: the row updated in the `payin_transfers` table
+
+    """
+    tr = stripe.Transfer.retrieve(pt.remote_id)
+    if tr.amount_reversed:
+        reversed_amount = min(int_to_Money(tr.amount_reversed, tr.currency), pt.amount)
+    else:
+        reversed_amount = None
+    record_reversals(db, pt, tr)
+    return update_payin_transfer(
+        db, pt.id, tr.id, 'succeeded', None, reversed_amount=reversed_amount
+    )
+
+
 def settle_destination_charge(db, payin, charge, pt, intent_id=None):
     """Record the result of a charge, and recover the fee.
     """
@@ -334,40 +383,108 @@ def settle_destination_charge(db, payin, charge, pt, intent_id=None):
         amount_settled = int_to_Money(bt.amount, bt.currency)
         fee = int_to_Money(bt.fee, bt.currency)
         net_amount = amount_settled - fee
-
-        if getattr(charge, 'transfer', None):
-            tr = stripe.Transfer.retrieve(charge.transfer)
-            if tr.amount_reversed == 0:
-                try:
-                    tr.reversals.create(
-                        amount=bt.fee,
-                        description="Stripe fee",
-                        metadata={'payin_id': payin.id},
-                        idempotency_key='payin_fee_%i' % payin.id,
-                    )
-                except stripe.error.StripeError as e:
-                    if e.code == 'idempotency_key_in_use':
-                        # Two threads are submitting this same request at the
-                        # same time, retry in a second.
-                        sleep(1)
-                        return settle_destination_charge(
-                            db, payin, charge, pt, intent_id=intent_id
-                        )
-                    raise
     else:
         amount_settled, fee, net_amount = None, None, payin.amount
 
     status = charge.status
     error = repr_charge_error(charge)
+    refunded_amount = None
+    if charge.amount_refunded:
+        refunded_amount = int_to_Money(charge.amount_refunded, charge.currency)
 
     payin = update_payin(
         db, payin.id, charge.id, status, error,
-        amount_settled=amount_settled, fee=fee, intent_id=intent_id
+        amount_settled=amount_settled, fee=fee, intent_id=intent_id,
+        refunded_amount=refunded_amount,
     )
+
+    if charge.refunds.data:
+        record_refunds(db, payin, charge)
+
+    reversed_amount = None
+    if getattr(charge, 'transfer', None):
+        tr = stripe.Transfer.retrieve(charge.transfer)
+        if tr.amount_reversed == 0:
+            try:
+                tr.reversals.create(
+                    amount=bt.fee,
+                    description="Stripe fee",
+                    metadata={'payin_id': payin.id},
+                    idempotency_key='payin_fee_%i' % payin.id,
+                )
+            except stripe.error.StripeError as e:
+                if e.code == 'idempotency_key_in_use':
+                    # Two threads are submitting this same request at the same time,
+                    # retry in a second.
+                    sleep(1)
+                    return settle_destination_charge(
+                        db, payin, charge, pt, intent_id=intent_id
+                    )
+                raise
+        elif tr.amount_reversed > bt.fee:
+            reversed_amount = int_to_Money(tr.amount_reversed, tr.currency) - fee
+            record_reversals(db, pt, tr)
 
     pt_remote_id = getattr(charge, 'transfer', None)
     pt = update_payin_transfer(
-        db, pt.id, pt_remote_id, status, error, amount=net_amount
+        db, pt.id, pt_remote_id, status, error, amount=net_amount,
+        reversed_amount=reversed_amount,
     )
 
     return payin
+
+
+def record_refunds(db, payin, charge):
+    """Record charge refunds in our database.
+
+    Args:
+        payin (Record): a row from the `payins` table
+        charge (Charge): a `stripe.Charge` object
+
+    Returns: the list of rows upserted into the `payin_refunds` table
+
+    """
+    if charge.refunds.has_more:
+        raise NotImplementedError()
+    r = []
+    for refund in charge.refunds.data:
+        rf_amount = int_to_Money(refund.amount, refund.currency)
+        rf_reason = REFUND_REASONS_MAP[refund.reason]
+        rf_description = getattr(refund, 'description', None)
+        r.append(record_payin_refund(
+            db, payin.id, refund.id, rf_amount, rf_reason, rf_description,
+            refund.status, error=getattr(refund, 'failure_reason', None),
+            ctime=(EPOCH + timedelta(seconds=refund.created)),
+        ))
+    return r
+
+
+def record_reversals(db, pt, transfer):
+    """Record transfer reversals in our database.
+
+    Args:
+        pt (Record): a row from the `payin_transfers` table
+        transfer (Transfer): a `stripe.Transfer` object
+
+    Returns: the list of rows upserted into the `payin_transfer_reversals` table
+
+    """
+    if transfer.reversals.has_more:
+        raise NotImplementedError()
+    r = []
+    fee = transfer.amount - Money_to_int(pt.amount)
+    for reversal in transfer.reversals.data:
+        if reversal.amount == fee and reversal.id == transfer.reversals.data[-1].id:
+            continue
+        reversal_amount = int_to_Money(reversal.amount, reversal.currency)
+        payin_refund_id = db.one("""
+            SELECT pr.id
+              FROM payin_refunds pr
+             WHERE pr.payin = %s
+               AND pr.remote_id = %s
+        """, (pt.payin, reversal.source_refund))
+        r.append(record_payin_transfer_reversal(
+            db, pt.id, reversal.id, reversal_amount, payin_refund_id=payin_refund_id,
+            ctime=(EPOCH + timedelta(seconds=reversal.created)),
+        ))
+    return r

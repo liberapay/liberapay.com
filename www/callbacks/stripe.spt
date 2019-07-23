@@ -4,7 +4,7 @@ import stripe
 
 from liberapay.models.participant import Participant
 from liberapay.payin.stripe import (
-    int_to_Money, repr_charge_error, settle_charge
+    int_to_Money, Money_to_int, record_reversals, repr_charge_error, settle_charge
 )
 from liberapay.utils import utcnow
 
@@ -38,12 +38,23 @@ if event_object_type == 'charge':
           FROM payins
          WHERE id = %s
     """, (payin_id,))
-    if not payin:
-        raise response.error(400, "payin not found")
+    assert payin
     payin = settle_charge(website.db, payin, charge)
-    if payin.status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
+    if status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
         payer = Participant.from_id(payin.payer)
         payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
+
+elif event.type == 'transfer.reversed':
+    transfer = event.data.object
+    pt_id = transfer.metadata['payin_transfer_id']
+    pt = website.db.one("SELECT * FROM payin_transfers WHERE id = %s", (pt_id,))
+    assert pt
+    record_reversals(website.db, pt, transfer)
+    fee = transfer.amount - Money_to_int(pt.amount)
+    update_payin_transfer(
+        website.db, pt.id, None, pt.status, pt.error,
+        reversed_amount=int_to_Money(transfer.amount_reversed - fee, transfer.currency),
+    )
 
 else:
     raise response.error(500, "unknown event object type %r" % event_object_type)
