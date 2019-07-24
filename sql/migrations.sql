@@ -2320,3 +2320,15 @@ ALTER TABLE emails
     ADD COLUMN disavowed_time timestamptz;
 ALTER TABLE emails
     ADD CONSTRAINT not_verified_and_disavowed CHECK (NOT (verified AND disavowed));
+
+-- migration #104
+WITH pending_paypal_payins AS (
+    SELECT pi.id
+      FROM payins pi
+      JOIN exchange_routes r ON r.id = pi.route
+     WHERE r.network = 'paypal'
+       AND pi.status = 'pending'
+)
+UPDATE payins
+   SET status = 'awaiting_payer_action'
+ WHERE id IN (SELECT * FROM pending_paypal_payins);
