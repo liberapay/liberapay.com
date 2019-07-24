@@ -1,7 +1,9 @@
+from datetime import timedelta
 import logging
 from time import sleep
 
 import requests
+from pando.utils import utcnow
 
 from ..exceptions import PaymentError
 from ..i18n.currencies import Money
@@ -201,6 +203,13 @@ def sync_order(db, payin):
     )
     response = _init_session().get(url)
     if response.status_code != 200:
+        expired = (
+            payin.status == 'awaiting_payer_action' and
+            response.status_code == 404 and
+            payin.ctime < (utcnow() - timedelta(days=30))
+        )
+        if expired:
+            return abort_payin(db, payin, "expired")
         error = response.text  # for Sentry
         logger.debug(error)
         raise PaymentError('PayPal')
@@ -372,6 +381,13 @@ def sync_payment(db, payin):
     )
     response = _init_session().get(url)
     if response.status_code != 200:
+        expired = (
+            payin.status == 'awaiting_payer_action' and
+            response.status_code == 404 and
+            payin.ctime < (utcnow() - timedelta(days=30))
+        )
+        if expired:
+            return abort_payin(db, payin, "expired")
         error = response.text  # for Sentry
         logger.debug(error)
         raise PaymentError('PayPal')
@@ -396,8 +412,11 @@ def sync_all_pending_payments(db):
     """)
     print("Syncing %i pending PayPal payments..." % len(payins))
     for payin in payins:
-        if payin.remote_id.startswith('PAY-'):
-            sync_payment(db, payin)
-        else:
-            sync_order(db, payin)
+        try:
+            if payin.remote_id.startswith('PAY-'):
+                sync_payment(db, payin)
+            else:
+                sync_order(db, payin)
+        except Exception as e:
+            website.tell_sentry(e, {})
         sleep(0.2)
