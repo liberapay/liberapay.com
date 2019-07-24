@@ -412,8 +412,11 @@ def sync_all_pending_payments(db):
     """)
     print("Syncing %i pending PayPal payments..." % len(payins))
     for payin in payins:
-        if payin.remote_id.startswith('PAY-'):
-            sync_payment(db, payin)
-        else:
-            sync_order(db, payin)
+        try:
+            if payin.remote_id.startswith('PAY-'):
+                sync_payment(db, payin)
+            else:
+                sync_order(db, payin)
+        except Exception as e:
+            website.tell_sentry(e, {})
         sleep(0.2)
