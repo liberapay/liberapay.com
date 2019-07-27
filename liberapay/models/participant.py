@@ -1280,7 +1280,7 @@ class Participant(Model, MixinTeam):
                      ts::date = current_date AND context = %(context)s )
         """, locals())
         if n > 0:
-            raise DuplicateNotification()
+            raise DuplicateNotification(p_id, event, idem_key)
         # Okay, add the notification to the queue
         n_id = self.db.one("""
             INSERT INTO notifications
