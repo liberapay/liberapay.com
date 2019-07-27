@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from pando.utils import utcnow
+
 from ..exceptions import (
     AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended,
     NoSelfTipping,
@@ -448,7 +452,7 @@ def record_payin_refund(
         Record: the row inserted in the `payin_refunds` table
 
     """
-    return db.one("""
+    refund = db.one("""
         INSERT INTO payin_refunds
                (payin, remote_id, amount, reason, description,
                 status, error, ctime)
@@ -461,7 +465,28 @@ def record_payin_refund(
              , status = excluded.status
              , error = excluded.error
      RETURNING *
+             , ( SELECT old.status
+                   FROM payin_refunds old
+                  WHERE old.payin = %(payin_id)s
+                    AND old.remote_id = %(remote_id)s
+               ) AS old_status
     """, locals())
+    notify = (
+        refund.status in ('pending', 'succeeded') and
+        refund.status != refund.old_status and
+        refund.ctime > (utcnow() - timedelta(hours=24))
+    )
+    if notify:
+        payin = db.one("SELECT * FROM payins WHERE id = %s", (refund.payin,))
+        payer = Participant.from_id(payin.payer)
+        payer.notify(
+            'payin_refund_initiated',
+            payin_amount=payin.amount,
+            payin_ctime=payin.ctime,
+            refund_amount=refund.amount,
+            refund_reason=refund.reason,
+        )
+    return refund
 
 
 def record_payin_transfer_reversal(
