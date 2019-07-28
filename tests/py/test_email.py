@@ -216,14 +216,19 @@ class TestEmail(EmailHarness):
         assert expected == actual
 
     def test_disavow_email(self):
-        self.alice.add_email('alice@liberapay.com')
-        email = self.alice.get_email('alice@liberapay.com')
-        url = '/alice/emails/disavow?email.id=%s&email.nonce=%s' % (email.id, email.nonce)
+        self.client.PxST('/sign-up', {
+            'sign-in.email': 'bob@liberapay.com',
+            'sign-in.username': 'bob',
+            'sign-in.currency': 'USD',
+        })
+        bob = Participant.from_username('bob')
+        email = bob.get_email('bob@liberapay.com')
+        url = '/bob/emails/disavow?email.id=%s&email.nonce=%s' % (email.id, email.nonce)
         verification_email = self.get_last_email()
         assert url in verification_email['text']
         r = self.client.GET(url)
         assert r.code == 200
-        email = self.alice.get_email(email.address)
+        email = bob.get_email(email.address)
         assert email.disavowed is True
         assert email.disavowed_time is not None
         assert email.verified is None
@@ -235,7 +240,11 @@ class TestEmail(EmailHarness):
         assert r.code == 200
 
         # Check that resending the verification email isn't allowed
-        self.hit_email_spt('resend', email.address, expected_code=400)
+        r = self.client.POST(
+            '/bob/emails/modify.json', {'resend': email.address},
+            auth_as=bob, raise_immediately=False,
+        )
+        assert r.code == 400, r.text
 
         # Test adding the address to the blacklist
         r = self.client.POST(url, {'action': 'add_to_blacklist'})
