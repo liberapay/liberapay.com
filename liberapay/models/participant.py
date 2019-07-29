@@ -1015,10 +1015,11 @@ class Participant(Model, MixinTeam):
             # Log event
             self.add_event(c, 'add_email', email)
 
-        self.send_email('verification', email, old_email=old_email)
+        self.send_email('verification', email_row, old_email=old_email)
 
         if self.email:
-            self.send_email('verification_notice', self.email, new_email=email)
+            primary_email_row = self.get_email(self.email, cursor=cursor)
+            self.send_email('verification_notice', primary_email_row, new_email=email)
             return 2
         else:
             self.update_avatar(cursor=cursor)
@@ -1095,8 +1096,8 @@ class Participant(Model, MixinTeam):
             self.update_email(r.address)
         return EmailVerificationResult.SUCCEEDED
 
-    def get_email(self, email):
-        return self.db.one("""
+    def get_email(self, email, cursor=None):
+        return (cursor or self.db).one("""
             SELECT *
               FROM emails
              WHERE participant=%s
@@ -1151,10 +1152,10 @@ class Participant(Model, MixinTeam):
             if n_left == 0:
                 raise CannotRemovePrimaryEmail()
 
-    def send_email(self, spt_name, email, **context):
+    def send_email(self, spt_name, email_row, **context):
+        email = email_row.address
         check_email_blacklist(email)
-        email_row = self.get_email(email)
-        if email_row and email_row.disavowed:
+        if email_row.disavowed:
             raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time)
         self.fill_notification_context(context)
         context['email'] = email
@@ -1190,7 +1191,7 @@ class Participant(Model, MixinTeam):
             message['from_email'] = 'Liberapay Newsletters <newsletters@liberapay.com>'
         message['to'] = [formataddr((self.username, email))]
         message['subject'] = spt['subject'].render(context).strip()
-        self._rendering_email_to, self._email_session = email, None
+        self._rendering_email_to, self._email_session = email_row, None
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
         del self._rendering_email_to, self._email_session
@@ -1234,8 +1235,9 @@ class Participant(Model, MixinTeam):
                 if not email:
                     dequeue(msg, False)
                     continue
+                email_row = p.get_email(email)
                 try:
-                    p.send_email(msg.event, email, **d)
+                    p.send_email(msg.event, email_row, **d)
                 except EmailAddressIsBlacklisted:
                     dequeue(msg, False)
                 except Exception as e:
@@ -1657,13 +1659,14 @@ class Participant(Model, MixinTeam):
         username = self.username
         if query:
             query = '?' + urlencode(query)
-        if getattr(self, '_rendering_email_to', None):
+        email_row = getattr(self, '_rendering_email_to', None)
+        if email_row:
             extra_query = []
             if autologin:
                 primary_email = self.get_email_address()
-                if self._rendering_email_to.lower() != primary_email.lower():
+                if email_row.address.lower() != primary_email.lower():
                     # Only send login links to the primary email address
-                    raise AssertionError('%r != %r' % (self._rendering_email_to, primary_email))
+                    raise AssertionError('%r != %r' % (email_row.address, primary_email))
                 session = self._email_session
                 if not session:
                     session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
@@ -1671,14 +1674,7 @@ class Participant(Model, MixinTeam):
                 extra_query.append(('log-in.id', self.id))
                 extra_query.append(('log-in.key', session.id))
                 extra_query.append(('log-in.token', session.secret))
-            email_row = self.db.one("""
-                SELECT e.*
-                  FROM emails e
-                 WHERE lower(e.address) = lower(%s)
-                   AND e.participant = %s
-                   AND e.verified IS NULL
-            """, (self._rendering_email_to, self.id))
-            if email_row:
+            if not email_row.verified:
                 extra_query.append(('email.id', email_row.id))
                 extra_query.append(('email.nonce', email_row.nonce))
             if extra_query:
