@@ -51,7 +51,7 @@ CAPTURE_STATUSES_MAP = {
     'REFUNDED': 'succeeded',
 }
 ORDER_STATUSES_MAP = {
-    'APPROVED': 'succeeded',
+    'APPROVED': 'pending',
     'COMPLETED': 'succeeded',
     'CREATED': 'awaiting_payer_action',
     'SAVED': 'pending',
