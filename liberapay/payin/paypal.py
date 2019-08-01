@@ -18,9 +18,18 @@ session = requests.Session()
 
 def _extract_error_message(response):
     try:
-        error = response.json()['message']
-        assert error
-        return error
+        error = response.json()
+        message = error['message']
+        assert message
+        details = error.get('details')
+        if details and isinstance(details, list):
+            message = ' | '.join(
+                d['description'] for d in details if d.get('description')
+            ) or message
+        debug_id = error.get('debug_id')
+        if debug_id:
+            message += " | PayPal debug_id: " + debug_id
+        return message
     except Exception:
         error = response.text  # for Sentry
         logger.debug(error)
