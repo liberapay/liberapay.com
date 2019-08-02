@@ -1,3 +1,5 @@
+# coding: utf8
+
 from liberapay.utils import get_int, get_participant
 
 get_unread = lambda notifs: [n for n in notifs if n['is_new']]
@@ -25,10 +27,13 @@ csp = response.headers[b'Content-Security-Policy']
 csp = csp.allow(b'style-src', b"'unsafe-inline'")
 response.headers[b'Content-Security-Policy'] = csp
 
+before = request.qs.get_int('before', default=None)
+limit = 20
+
 # NOTE: don't factor the render_notifications() call here, it'll break escaping
 
 [---] application/json via json_dump
-participant.render_notifications(state)
+participant.render_notifications(state, before=before, limit=limit)
 
 [---] text/html
 % extends "templates/settings.html"
@@ -36,7 +41,7 @@ participant.render_notifications(state)
 % block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    % set notifs = participant.render_notifications(state)
+    % set notifs = participant.render_notifications(state, before=before, limit=limit)
     % set unread_notifications = get_unread(notifs)
     % if len(unread_notifications) > 0
         <input type="hidden" name="until" value="{{ unread_notifications[0].id }}" />
@@ -58,5 +63,10 @@ participant.render_notifications(state)
     % else
         <p>{{ _("No notifications to show.") }}</p>
     % endfor
+    % if len(notifs) == limit
+        <a class="btn btn-default" href="{{ request.qs.derive(before=notifs[-1].id) }}">{{
+            _("Next Page →")
+        }}</a>
+    % endif
 </form>
 % endblock
