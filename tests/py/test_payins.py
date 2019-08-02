@@ -229,6 +229,7 @@ class TestPayinsPayPal(Harness):
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'failed'
         assert payin.error
+        assert 'debug_id' in payin.error
 
 
 class TestPayinsStripe(Harness):

@@ -1,4 +1,5 @@
 from decimal import Decimal
+from time import sleep
 
 from psycopg2.extras import execute_batch
 import stripe
@@ -308,6 +309,11 @@ def execute_transfer(db, pt, destination, source_transaction):
             idempotency_key='payin_transfer_%i' % pt.id,
         )
     except stripe.error.StripeError as e:
+        if e.code == 'idempotency_key_in_use':
+            # Two threads are submitting this same request at the same time,
+            # retry in a second.
+            sleep(1)
+            return execute_transfer(db, pt, destination, source_transaction)
         website.tell_sentry(e, {})
         return update_payin_transfer(db, pt.id, '', 'failed', repr_stripe_error(e))
     except Exception as e:

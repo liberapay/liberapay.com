@@ -18,9 +18,18 @@ session = requests.Session()
 
 def _extract_error_message(response):
     try:
-        error = response.json()['message']
-        assert error
-        return error
+        error = response.json()
+        message = error['message']
+        assert message
+        details = error.get('details')
+        if details and isinstance(details, list):
+            message = ' | '.join(
+                d['description'] for d in details if d.get('description')
+            ) or message
+        debug_id = error.get('debug_id')
+        if debug_id:
+            message += " | PayPal debug_id: " + debug_id
+        return message
     except Exception:
         error = response.text  # for Sentry
         logger.debug(error)
@@ -51,7 +60,7 @@ CAPTURE_STATUSES_MAP = {
     'REFUNDED': 'succeeded',
 }
 ORDER_STATUSES_MAP = {
-    'APPROVED': 'succeeded',
+    'APPROVED': 'pending',
     'COMPLETED': 'succeeded',
     'CREATED': 'awaiting_payer_action',
     'SAVED': 'pending',
@@ -177,7 +186,7 @@ def record_order_result(db, payin, order):
             pt_status = CAPTURE_STATUSES_MAP[capture['status']]
             pt_error = capture.get('status_details', {}).get('reason')
             breakdown = capture.get('seller_receivable_breakdown')
-            if breakdown:
+            if breakdown and breakdown.get('paypal_fee'):
                 pt_fee = breakdown['paypal_fee']
                 pt_fee = Money(pt_fee['value'], pt_fee['currency_code'])
                 net_amount = breakdown['net_amount']
