@@ -186,7 +186,7 @@ def record_order_result(db, payin, order):
             pt_status = CAPTURE_STATUSES_MAP[capture['status']]
             pt_error = capture.get('status_details', {}).get('reason')
             breakdown = capture.get('seller_receivable_breakdown')
-            if breakdown:
+            if breakdown and breakdown.get('paypal_fee'):
                 pt_fee = breakdown['paypal_fee']
                 pt_fee = Money(pt_fee['value'], pt_fee['currency_code'])
                 net_amount = breakdown['net_amount']
