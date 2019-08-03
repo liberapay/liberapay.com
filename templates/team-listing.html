@@ -1,24 +1,50 @@
-% set teams = participant.get_teams()
+% from 'templates/profile-box.html' import profile_box_embedded with context
+
+% set teams = website.db.all("""
+    SELECT team_p AS participant
+         , take.team AS id
+         , ( SELECT s.content
+               FROM statements s
+              WHERE s.participant = take.team
+                AND s.type = 'summary'
+           ORDER BY s.lang = %s DESC, s.id
+              LIMIT 1
+           ) AS summary
+         , ( SELECT count(*)
+               FROM current_takes take2
+              WHERE take2.team = take.team
+            ) AS nmembers
+      FROM current_takes take
+      JOIN participants team_p ON team_p.id = take.team
+     WHERE take.member = %s
+  ORDER BY team_p.username
+""", (locale.language, participant.id))
+
 % if teams or edit
-    % if not edit
-    <h3>{{ _("Teams") }}</h3>
-    % endif
-    <ul class="team memberships">
-        % for team in teams
-        <li>
-            <a href="/{{ team.name }}/">{{ team.name }}</a>
-            <div class="nmembers">{{
-                ngettext("with {n} other", "with {n} others", team.nmembers - 1)
-            }}</div>
-            % if edit
-                <a href="/{{ team.name }}/membership/leave?back_to={{ urlquote(request.line.uri) }}"
-                   class="btn btn-default btn-xs">{{ _('Leave') }}</a>
-            % endif
-        </li>
-        % endfor
-    </ul>
     % if edit
+        <div class="inline-boxes">
+            % for team in teams
+                <div class="inline-box text-center">
+                    {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
+                    <a href="{{ team.participant.path('membership/leave') }}?back_to={{ urlquote(request.line.uri) }}"
+                       class="btn btn-default">{{ _('Leave') }}</a>
+                </div>
+            % endfor
+        </div>
+        <br>
         <p><a href="/explore/teams/">{{ _("Explore teams") }}</a></p>
         <p><a href="/about/teams">{{ _("About teams") }}</a></p>
+    % else
+        <h3>{{ _("Teams") }}</h3>
+        <p>{{ ngettext(
+            "{username} is a member of {n} team:",
+            "{username} is a member of {n} teams:",
+            n=len(teams), username=participant.username
+        ) }}</p>
+        <div class="inline-boxes">
+            % for team in teams
+                {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
+            % endfor
+        </div>
     % endif
 % endif
