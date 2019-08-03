@@ -2038,6 +2038,14 @@ class Participant(Model, MixinTeam):
                    AND coalesce(user_id = %s, true)
             """, (self.id, platform, user_id or None))
 
+        if avatar_url and avatar_url != self.avatar_url and website.app_conf.check_avatar_urls:
+            # Check that the new avatar URL returns a 200.
+            try:
+                r = requests.head(avatar_url, allow_redirects=True, timeout=3)
+                if r.status_code != 200:
+                    avatar_url = None
+            except requests.exceptions.RequestException:
+                avatar_url = None
         if avatar_email == '':
             avatar_email = None
         (cursor or self.db).run("""
