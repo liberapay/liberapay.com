@@ -1380,22 +1380,24 @@ class Participant(Model, MixinTeam):
         )
         context['LegacyMoney'] = i18n.LegacyMoney
 
-    def get_notifs(self):
+    def get_notifs(self, before=None, limit=None):
         return self.db.all("""
             SELECT id, event, context, is_new, ts
               FROM notifications
              WHERE participant = %s
                AND web
-          ORDER BY is_new DESC, id DESC
-        """, (self.id,))
+               AND coalesce(id < %s, true)
+          ORDER BY id DESC
+             LIMIT %s
+        """, (self.id, before, limit))
 
-    def render_notifications(self, state, notifs=None):
+    def render_notifications(self, state, notifs=None, before=None, limit=None):
         """Render notifications as HTML.
 
         The `notifs` argument allows rendering arbitrary notifications.
 
         """
-        notifs = notifs or self.get_notifs()
+        notifs = notifs or self.get_notifs(before=before, limit=limit)
 
         r = []
         for id, event, notif_context, is_new, ts in notifs:
