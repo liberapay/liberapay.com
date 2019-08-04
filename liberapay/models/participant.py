@@ -2048,14 +2048,14 @@ class Participant(Model, MixinTeam):
                 avatar_url = None
         if avatar_email == '':
             avatar_email = None
-        (cursor or self.db).run("""
+        self.set_attributes(**(cursor or self.db).one("""
             UPDATE participants
                SET avatar_url = coalesce(%s, avatar_url)
                  , avatar_src = %s
                  , avatar_email = %s
              WHERE id = %s
-        """, (avatar_url, src, avatar_email, self.id))
-        self.set_attributes(avatar_src=src, avatar_url=avatar_url, avatar_email=avatar_email)
+         RETURNING avatar_url, avatar_src, avatar_email
+        """, (avatar_url, src, avatar_email, self.id))._asdict())
 
         return avatar_url
 
