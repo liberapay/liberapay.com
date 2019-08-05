@@ -1602,6 +1602,11 @@ msgid "About teams"
 msgstr "關於團隊"
 
 #, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] ""
+
+#, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "你來自{0} 團隊的名目收取本週被限制為 {1} 。 {2}為什麼會這樣？{3}"
 
@@ -1867,9 +1872,6 @@ msgstr[0] "在{n}前，一個{platform}代碼庫列表已從你的{timespan_ago}
 
 msgid "No repositories found."
 msgstr "未找到代碼庫。"
-
-msgid "Next Page →"
-msgstr "下一頁 →"
 
 msgid "← Go back"
 msgstr "← 返回"
@@ -2659,6 +2661,9 @@ msgstr "所有的通知標為已讀"
 
 msgid "No notifications to show."
 msgstr "無通知可顯示。"
+
+msgid "Next Page →"
+msgstr "下一頁 →"
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
