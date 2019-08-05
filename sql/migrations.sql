@@ -2332,3 +2332,6 @@ WITH pending_paypal_payins AS (
 UPDATE payins
    SET status = 'awaiting_payer_action'
  WHERE id IN (SELECT * FROM pending_paypal_payins);
+
+-- migration #105
+INSERT INTO app_conf (key, value) VALUES ('check_avatar_urls', 'true'::jsonb);
