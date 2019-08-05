@@ -83,7 +83,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 "-_.")
 
-AVATAR_QUERY = '?s=160&default=retro'
+AVATAR_QUERY = '?s=160&d=404'
 AVATAR_SOURCES = (
     'libravatar bitbucket facebook github gitlab google mastodon twitch twitter youtube'
 ).split()

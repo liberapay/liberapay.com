@@ -4,6 +4,7 @@ $$ LANGUAGE sql;
 
 DO $$
 BEGIN
+    PERFORM update_app_conf('check_avatar_urls', 'false'::jsonb);
     PERFORM update_app_conf('check_email_domains', 'false'::jsonb);
     PERFORM update_app_conf('payin_methods', '{"*": true}'::jsonb);
 END;

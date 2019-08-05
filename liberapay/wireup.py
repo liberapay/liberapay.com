@@ -206,6 +206,7 @@ class AppConf(object):
         bountysource_callback=str,
         bountysource_id=None.__class__,
         bountysource_secret=str,
+        check_avatar_urls=bool,
         check_email_domains=bool,
         cron_intervals=dict,
         facebook_callback=str,

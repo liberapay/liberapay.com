@@ -46,9 +46,13 @@ subhead = _("Avatar")
             % endcall
         </div>
     % elif new_avatar_url == None
-        <div class="alert alert-danger">{{ _(
-            "We were unable to get an avatar for you from {0}.", src
-        ) }}</div>
+        <div class="alert alert-danger">
+            {{ _("We were unable to get an avatar for you from {0}.", src) }}
+            <form action="" method="POST" class="form-inline inline-block">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <button class="link" name="src" value="{{ src }}">{{ _("Retry") }}</button>
+            </form>
+        </div>
     % endif
 
     <div class="flex-row block-xs text-center-xs">
@@ -59,7 +63,7 @@ subhead = _("Avatar")
         }}</a>
     </div></div>
 
-    % if 'libravatar.org' in (participant.avatar_url or '')
+    % if src in (None, 'libravatar') or 'libravatar.org' in (participant.avatar_url or '')
     <div class="flex-col">
     <div class="buttons">
     <a class="btn btn-default" target="_blank" rel="noopener noreferrer"
@@ -74,10 +78,12 @@ subhead = _("Avatar")
        <span>{{ _("What is Libravatar?") }}</span>
     </a>
     <br><br>
+    % if participant.avatar_url and request.method == 'GET'
     <button class="btn btn-default" data-action="reload" type="button">
        {{ glyphicon('refresh') }} <span>{{ _("Refresh") }}</span>
     </button>
     <noscript><span class="text-danger">{{ _("JavaScript is required") }}</span></noscript>
+    % endif
     </div>
     </div>
     % endif
