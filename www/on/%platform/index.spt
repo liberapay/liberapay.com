@@ -30,6 +30,13 @@ if account:
             need_reconnect = True
         else:
             friends = AccountElsewhere.get_many(platform.name, friends)
+            user_tippees = set(website.db.all("""
+                SELECT t.tippee
+                  FROM current_tips t
+                 WHERE t.tipper = %s
+                   AND t.tippee IN %s
+                   AND t.amount > 0
+            """, (user.id, set(e.participant.id for e in friends))))
 
 limited = getattr(platform, 'api_friends_limited', False)
 
@@ -37,6 +44,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 % extends "templates/base.html"
 
 % from 'templates/auth.html' import auth_button with context
+% from 'templates/profile-box.html' import profile_box_embedded_elsewhere with context
 % from "templates/your-tip.html" import tip_form with context
 
 % block subnav
@@ -85,29 +93,19 @@ limited = getattr(platform, 'api_friends_limited', False)
 % else
 <p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
                nfriends, platform.display_name) if nfriends >= 0 }}</p>
-<table class="table table-condensed valign-middle">
-    <tr>
-        <th>{{ _('Name') }}</th>
-        <th>{{ _('On Liberapay?') }}</th>
-        <th>{{ _('Receives') }}</th>
-        <th>{{ _('Support') }}</th>
-    </tr>
-    % for friend in friends
-    % set p = friend.participant
-    % set tippee = p if p.join_time else friend
-    <tr class="{{ 'info' if p.join_time and p.accepts_tips else '' }}">
-        <td><a href="/on/{{ platform.name }}/{{ friend.liberapay_slug }}/">{{ friend.friendly_name }}</a></td>
-        <td>{{ _("Yes") if p.join_time else _("No") }}</td>
-        <td>{{ _('hidden') if p.hide_receiving else p.receiving and locale.format_money(p.receiving) or '0' }}</td>
-        <td>{{ tip_form(tippee=tippee, inline=True) if p.accepts_tips else
-               _("{0} doesn't accept donations", friend.friendly_name) }}</td>
-    </tr>
-    % endfor
-    % if pages_urls
-        % from 'templates/pagination.html' import pages_links with context
-        <tr><td colspan="5">{{ pages_links(pages_urls) }}</td></tr>
-    % endif
-</table>
+<div class="inline-boxes">
+% for friend in friends
+    {{ profile_box_embedded_elsewhere(
+        friend, has_tip=(friend.participant.id in user_tippees),
+        show_button=True, show_numbers=False, show_platform_icon=False,
+    ) }}
+% endfor
+</div>
+% if pages_urls
+    % from 'templates/pagination.html' import pages_links with context
+    {{ pages_links(pages_urls) }}
+% endif
+
 {{ limitation_note() }}
 % endif
 
