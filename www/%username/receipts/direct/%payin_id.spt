@@ -4,6 +4,7 @@ from datetime import date
 
 import stripe
 
+from liberapay.i18n.base import Percent
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.stripe import get_partial_iban
 from liberapay.utils import get_participant, render
@@ -79,6 +80,14 @@ settlement_date = website.db.one("""
      LIMIT 1
 """, (payin.id,))
 
+if payin.refunded_amount:
+    refund_date = website.db.one("""
+        SELECT max(ctime)
+          FROM payin_refunds
+         WHERE payin = %s
+           AND status IN ('pending', 'succeeded')
+    """, (payin.id,))
+
 payin_transfers = website.db.all("""
     SELECT pt.amount, pt.recipient, recipient.username AS recipient_username
          , pt.team, team.username AS team_name
@@ -117,11 +126,26 @@ output.body = render(globals(), allow_partial_i18n=False)
     ) }}</p>
     % endif
 
+    % if payin.refunded_amount == payin.amount
+    <p><strong>{{ _(
+        "However, the payment was fully refunded on {refund_date}.",
+        refund_date=refund_date,
+    ) }}</strong></p>
+    % else
+
     % if payin.fee
     <p>{{ _(
         "{0} was paid in processing fees and {1} was distributed as detailed below.",
         payin.fee, payin.amount_settled - payin.fee
     ) }}</p>
+    % endif
+
+    % if payin.refunded_amount
+    <p><strong>{{ _(
+        "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}.",
+        x_percent=Percent(payin.refunded_amount / payin.amount),
+        refund_amount=payin.refunded_amount, refund_date=refund_date,
+    ) }}</strong></p>
     % endif
 
     <h2>{{ _("Beneficiaries") }}</h2>
@@ -147,10 +171,11 @@ output.body = render(globals(), allow_partial_i18n=False)
             % else
                 <a href="{{ website.canonical_url }}/~{{ pt.recipient }}">{{ pt.recipient_username }}</a>
             % endif
-            <td class="text-right">{{ locale.format_money(pt.amount) }}
+            <td class="text-right">{{ locale.format_money(pt.amount - (pt.reversed_amount or 0)) }}
         </tr>
     % endfor
     </table>
+    % endif
 
     <h2>{{ _("Payment Details") }}</h2>
     % if card_last4
