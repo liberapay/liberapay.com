@@ -36,7 +36,7 @@ if account:
                  WHERE t.tipper = %s
                    AND t.tippee IN %s
                    AND t.amount > 0
-            """, (user.id, set(e.participant.id for e in friends))))
+            """, (user.id, set(e.participant.id for e in friends)))) if friends else set()
 
 limited = getattr(platform, 'api_friends_limited', False)
 
