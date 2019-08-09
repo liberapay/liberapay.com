@@ -338,12 +338,22 @@ def settle_destination_charge(db, payin, charge, pt, intent_id=None):
         if getattr(charge, 'transfer', None):
             tr = stripe.Transfer.retrieve(charge.transfer)
             if tr.amount_reversed == 0:
-                tr.reversals.create(
-                    amount=bt.fee,
-                    description="Stripe fee",
-                    metadata={'payin_id': payin.id},
-                    idempotency_key='payin_fee_%i' % payin.id,
-                )
+                try:
+                    tr.reversals.create(
+                        amount=bt.fee,
+                        description="Stripe fee",
+                        metadata={'payin_id': payin.id},
+                        idempotency_key='payin_fee_%i' % payin.id,
+                    )
+                except stripe.error.StripeError as e:
+                    if e.code == 'idempotency_key_in_use':
+                        # Two threads are submitting this same request at the
+                        # same time, retry in a second.
+                        sleep(1)
+                        return settle_destination_charge(
+                            db, payin, charge, pt, intent_id=intent_id
+                        )
+                    raise
     else:
         amount_settled, fee, net_amount = None, None, payin.amount
 
