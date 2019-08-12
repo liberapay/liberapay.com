@@ -417,6 +417,7 @@ def stripe(app_conf):
     import stripe
     stripe.api_key = app_conf.stripe_secret_key
     stripe.api_version = '2019-03-14'
+    stripe.max_network_retries = 2
 
 
 def username_restrictions(www_root):
