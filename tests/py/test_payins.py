@@ -1279,3 +1279,391 @@ class TestRefundsStripe(Harness):
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
         assert r.code == 200
         assert ' fully refunded ' in r.text
+
+    @patch('stripe.BalanceTransaction.retrieve')
+    @patch('stripe.Charge.retrieve')
+    @patch('stripe.Source.retrieve')
+    @patch('stripe.Transfer.create_reversal')
+    @patch('stripe.Transfer.retrieve')
+    @patch('stripe.Webhook.construct_event')
+    def test_charge_dispute(
+        self, construct_event, tr_retrieve, create_reversal, source_retrieve,
+        ch_retrieve, bt_retrieve,
+    ):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe', id='acct_XXXXXXXXXXXXXXXX')
+        LiberapayOrg = self.make_participant('LiberapayOrg')
+        self.add_payment_account(LiberapayOrg, 'stripe', id='acct_1ChyayFk4eGpfLOC')
+        route = self.upsert_route(alice, 'stripe-card')
+        payin, transfers = self.make_payin_and_transfers(
+            route, EUR(400),
+            [
+                (bob, EUR(200), {'remote_id': 'tr_XXXXXXXXXXXXXXXXXXXXXXXX'}),
+                (LiberapayOrg, EUR(200), {'remote_id': None}),
+            ],
+            remote_id='py_XXXXXXXXXXXXXXXXXXXXXXXX',
+        )
+        params = dict(
+            payin_id=payin.id,
+            payin_transfer_id=[tr.id for tr in transfers if tr.remote_id][0],
+            recent_timestamp=(utcnow() - EPOCH).total_seconds(),
+        )
+        construct_event.return_value = stripe.Event.construct_from(
+            json.loads('''{
+              "id": "evt_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "event",
+              "api_version": "2018-05-21",
+              "created": %(recent_timestamp)s,
+              "data": {
+                "object": {
+                  "id": "dp_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "object": "dispute",
+                  "amount": 40000,
+                  "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXY",
+                  "balance_transactions": [],
+                  "charge": "ch_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "created": %(recent_timestamp)s,
+                  "currency": "eur",
+                  "evidence": {},
+                  "evidence_details": {},
+                  "is_charge_refundable": false,
+                  "livemode": false,
+                  "metadata": {},
+                  "reason": "general",
+                  "status": "lost"
+                }
+              },
+              "livemode": false,
+              "type": "charge.dispute.lost"
+            }''' % params),
+            stripe.api_key
+        )
+        ch_retrieve.return_value = stripe.Charge.construct_from(
+            json.loads('''{
+              "id": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "charge",
+              "amount": 40000,
+              "amount_refunded": 40000,
+              "application": null,
+              "application_fee": null,
+              "application_fee_amount": null,
+              "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "billing_details": {
+                "address": {
+                  "city": null,
+                  "country": "FR",
+                  "line1": null,
+                  "line2": null,
+                  "postal_code": null,
+                  "state": null
+                },
+                "email": "xxxxxxxxx@outlook.fr",
+                "name": "Jane Doe",
+                "phone": null
+              },
+              "captured": true,
+              "created": 1563594672,
+              "currency": "eur",
+              "customer": "cus_XXXXXXXXXXXXXX",
+              "description": null,
+              "destination": null,
+              "dispute": null,
+              "failure_code": null,
+              "failure_message": null,
+              "fraud_details": {
+              },
+              "invoice": null,
+              "livemode": false,
+              "metadata": {
+                "payin_id": "%(payin_id)s"
+              },
+              "on_behalf_of": null,
+              "order": null,
+              "outcome": {
+                "network_status": "approved_by_network",
+                "reason": null,
+                "risk_level": "not_assessed",
+                "seller_message": "Payment complete.",
+                "type": "authorized"
+              },
+              "paid": true,
+              "payment_intent": null,
+              "payment_method": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "payment_method_details": {
+                "sepa_debit": {
+                  "bank_code": "12345",
+                  "branch_code": "10000",
+                  "country": "FR",
+                  "fingerprint": "XXXXXXXXXXXXXXXX",
+                  "last4": "0000"
+                },
+                "type": "sepa_debit"
+              },
+              "receipt_email": null,
+              "receipt_number": null,
+              "receipt_url": "https://pay.stripe.com/receipts/...",
+              "refunded": true,
+              "refunds": {
+                "object": "list",
+                "data": [],
+                "has_more": false,
+                "total_count": 0,
+                "url": "/v1/charges/py_XXXXXXXXXXXXXXXXXXXXXXXX/refunds"
+              },
+              "review": null,
+              "shipping": null,
+              "source": {
+                "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
+                "object": "source",
+                "amount": null,
+                "client_secret": "src_client_secret_XXXXXXXXXXXXXXXXXXXXXXXX",
+                "created": 1563594673,
+                "currency": "eur",
+                "customer": "cus_XXXXXXXXXXXXXX",
+                "flow": "none",
+                "livemode": false,
+                "mandate": {
+                  "acceptance": {
+                    "date": null,
+                    "ip": null,
+                    "offline": null,
+                    "online": null,
+                    "status": "pending",
+                    "type": null,
+                    "user_agent": null
+                  },
+                  "amount": null,
+                  "currency": null,
+                  "interval": "variable",
+                  "notification_method": "none",
+                  "reference": "XXXXXXXXXXXXXXXX",
+                  "url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
+                },
+                "metadata": {
+                },
+                "owner": {
+                  "address": {
+                    "city": null,
+                    "country": "FR",
+                    "line1": null,
+                    "line2": null,
+                    "postal_code": null,
+                    "state": null
+                  },
+                  "email": "xxxxxxxxx@outlook.fr",
+                  "name": "Jane Doe",
+                  "phone": null,
+                  "verified_address": null,
+                  "verified_email": null,
+                  "verified_name": null,
+                  "verified_phone": null
+                },
+                "sepa_debit": {
+                  "last4": "0000",
+                  "bank_code": "12345",
+                  "branch_code": "10000",
+                  "fingerprint": "XXXXXXXXXXXXXXXX",
+                  "country": "FR",
+                  "mandate_reference": "XXXXXXXXXXXXXXXX",
+                  "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
+                },
+                "statement_descriptor": null,
+                "status": "chargeable",
+                "type": "sepa_debit",
+                "usage": "reusable"
+              },
+              "source_transfer": null,
+              "statement_descriptor": "Liberapay %(payin_id)s",
+              "status": "succeeded",
+              "transfer": null,
+              "transfer_group": "group_py_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }''' % params),
+            stripe.api_key
+        )
+        bt_retrieve.return_value = stripe.BalanceTransaction.construct_from(
+            json.loads('''{
+              "amount": 40000,
+              "available_on": 1564617600,
+              "created": 1564038239,
+              "currency": "eur",
+              "description": null,
+              "exchange_rate": null,
+              "fee": 0,
+              "fee_details": [],
+              "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "net": 40000,
+              "object": "balance_transaction",
+              "source": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "status": "pending",
+              "type": "payment"
+            }'''),
+            stripe.api_key
+        )
+        tr_retrieve.return_value = stripe.Transfer.construct_from(
+            json.loads('''{
+              "amount": 20000,
+              "amount_reversed": 0,
+              "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "created": 1564038240,
+              "currency": "eur",
+              "description": null,
+              "destination": "acct_XXXXXXXXXXXXXXXX",
+              "destination_payment": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "id": "tr_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "livemode": false,
+              "metadata": {},
+              "object": "transfer",
+              "reversals": {
+                "data": [],
+                "has_more": false,
+                "object": "list",
+                "total_count": 0,
+                "url": "/v1/transfers/tr_XXXXXXXXXXXXXXXXXXXXXXXX/reversals"
+              },
+              "reversed": false,
+              "source_transaction": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "source_type": "card",
+              "transfer_group": "group_py_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }''' % params),
+            stripe.api_key
+        )
+        create_reversal.return_value = stripe.Reversal.construct_from(
+            json.loads('''{
+              "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "transfer_reversal",
+              "amount": 20000,
+              "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
+              "created": %(recent_timestamp)s,
+              "currency": "eur",
+              "destination_payment_refund": null,
+              "metadata": {
+                  "payin_transfer_id": %(payin_transfer_id)s
+              },
+              "source_refund": null,
+              "transfer": "tr_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }''' % params),
+            stripe.api_key
+        )
+        r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
+        assert r.code == 200
+        assert r.text == 'OK'
+        payin = self.db.one("SELECT * FROM payins WHERE id = %s", (payin.id,))
+        assert payin.status == 'succeeded'
+        assert payin.refunded_amount == EUR('400.00')
+        # Second event
+        construct_event.return_value = stripe.Event.construct_from(
+            json.loads('''{
+              "id": "evt_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "event",
+              "api_version": "2018-05-21",
+              "created": %(recent_timestamp)i,
+              "data": {
+                "object": {
+                  "amount": 20000,
+                  "amount_reversed": 20000,
+                  "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "created": 1564038240,
+                  "currency": "eur",
+                  "description": null,
+                  "destination": "acct_XXXXXXXXXXXXXXXX",
+                  "destination_payment": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "id": "tr_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "livemode": false,
+                  "metadata": {
+                      "payin_transfer_id": %(payin_transfer_id)i
+                  },
+                  "object": "transfer",
+                  "reversals": {
+                    "data": [
+                      {
+                        "amount": 20000,
+                        "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXZ",
+                        "created": %(recent_timestamp)i,
+                        "currency": "eur",
+                        "destination_payment_refund": null,
+                        "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
+                        "metadata": {},
+                        "object": "transfer_reversal",
+                        "source_refund": null,
+                        "transfer": "tr_XXXXXXXXXXXXXXXXXXXXXXXX"
+                      }
+                    ],
+                    "has_more": false,
+                    "object": "list",
+                    "total_count": 1,
+                    "url": "/v1/transfers/tr_XXXXXXXXXXXXXXXXXXXXXXXX/reversals"
+                  },
+                  "reversed": true,
+                  "source_transaction": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "source_type": "card",
+                  "transfer_group": "group_py_XXXXXXXXXXXXXXXXXXXXXXXX"
+                }
+              },
+              "livemode": false,
+              "type": "transfer.reversed"
+            }''' % params),
+            stripe.api_key
+        )
+        r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
+        assert r.code == 200
+        assert r.text == 'OK'
+        payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
+        assert len(payin_transfers) == 2
+        for pt in payin_transfers:
+            assert pt.status == 'succeeded'
+            assert pt.reversed_amount == EUR('200.00')
+        reversal = self.db.one("SELECT * FROM payin_transfer_reversals")
+        assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
+        assert reversal.payin_refund is None
+        assert reversal.amount == EUR('200.00')
+        # Check that no notification was sent
+        notifs = alice.get_notifs()
+        assert len(notifs) == 0
+        # Check that the receipt for this payment has been voided
+        source_retrieve.return_value = stripe.Source.construct_from(
+            json.loads('''{
+              "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "source",
+              "amount": null,
+              "created": 1563594673,
+              "currency": "eur",
+              "customer": "cus_XXXXXXXXXXXXXX",
+              "flow": "none",
+              "livemode": false,
+              "owner": {
+                "address": {
+                  "city": null,
+                  "country": "FR",
+                  "line1": null,
+                  "line2": null,
+                  "postal_code": null,
+                  "state": null
+                },
+                "email": "xxxxxxxxx@outlook.fr",
+                "name": "Jane Doe",
+                "phone": null,
+                "verified_address": null,
+                "verified_email": null,
+                "verified_name": null,
+                "verified_phone": null
+              },
+              "sepa_debit": {
+                "last4": "0000",
+                "bank_code": "12345",
+                "branch_code": "10000",
+                "fingerprint": "XXXXXXXXXXXXXXXX",
+                "country": "FR",
+                "mandate_reference": "XXXXXXXXXXXXXXXX",
+                "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
+              },
+              "statement_descriptor": null,
+              "status": "chargeable",
+              "type": "sepa_debit",
+              "usage": "reusable"
+            }'''),
+            stripe.api_key
+        )
+        r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
+        assert r.code == 200
+        assert ' fully refunded ' in r.text
