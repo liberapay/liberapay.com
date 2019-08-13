@@ -14,12 +14,23 @@ if request.method == 'POST':
     """, (participant.id, account_pk))
     response.redirect(request.path.raw)
 
-accounts_by_provider = group_by(website.db.all("""
+accounts = website.db.all("""
     SELECT *
       FROM payment_accounts
      WHERE participant = %s
        AND is_current IS true
-""", (participant.id,)), lambda a: a.provider)
+""", (participant.id,))
+accounts_by_provider = group_by(accounts, lambda a: a.provider)
+paypal_accounts = accounts_by_provider.get('paypal')
+stripe_accounts = accounts_by_provider.get('stripe')
+
+countries = set(a.country for a in accounts)
+country = list(countries)[0] if len(countries) == 1 else request.country
+
+has_paypal_but_not_stripe = (
+    paypal_accounts and not stripe_accounts and
+    country in constants.PAYOUT_COUNTRIES['stripe']
+)
 
 title = participant.username
 subhead = _("Payment Processors")
@@ -50,10 +61,18 @@ subhead = _("Payment Processors")
         "necessary to receive money."
     ) }}</p>
 
+    % if has_paypal_but_not_stripe
+    <p class="alert alert-warning">{{ _(
+        "You've connected a PayPal account but no Stripe account. We strongly "
+        "recommend that you also connect a Stripe account, because it's better "
+        "than PayPal in several ways, for both you and your donors."
+    ) }}</p>
+    % elif not accounts
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
         "We recommend connecting both Stripe and PayPal if they're both available "
         "in your country."
     ) }}</p>
+    % endif
 
     % include "templates/sandbox-warning.html"
 
@@ -63,11 +82,10 @@ subhead = _("Payment Processors")
         "Liberapay website. (Direct debits are currently only supported from Euro "
         "bank accounts.)"
     ) }}</p>
-    % set accounts = accounts_by_provider.get('stripe', ())
-    % if accounts
+    % if stripe_accounts
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        % for account in accounts
+        % for account in stripe_accounts
         <div class="card card-default">
             <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
                     title="{{ _('Disconnect') }}">&times;</button>
@@ -92,8 +110,7 @@ subhead = _("Payment Processors")
         % endfor
     </form>
     <br>
-    % elif request.country in locale.countries
-        % set country = request.country
+    % elif country in locale.countries
         % if country in constants.PAYOUT_COUNTRIES['stripe']
             <p class="text-success">{{ glyphicon('ok-sign') }} {{ _(
                 "Available in {country}.", country=Country(country)
@@ -108,7 +125,7 @@ subhead = _("Payment Processors")
     <form action="/payment-providers/stripe/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        <button class="btn btn-{{ 'default' if accounts else 'primary' }}">{{
+        <button class="btn btn-{{ 'default' if stripe_accounts else 'primary' }}">{{
             _("Connect {platform_name} account", platform_name='Stripe')
         }}</button>
     </form>
@@ -119,11 +136,10 @@ subhead = _("Payment Processors")
         "PayPal allows receiving money in many more countries than Stripe, "
         "but it's not as well integrated into Liberapay."
     ) }}</p>
-    % set accounts = accounts_by_provider.get('paypal', ())
-    % if accounts
+    % if paypal_accounts
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        % for account in accounts
+        % for account in paypal_accounts
         <div class="card card-default">
             <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
                     title="{{ _('Disconnect') }}">&times;</button>
@@ -143,8 +159,7 @@ subhead = _("Payment Processors")
         % endfor
     </form>
     <br>
-    % elif request.country in locale.countries
-        % set country = request.country
+    % elif country in locale.countries
         % if country in constants.PAYOUT_COUNTRIES['paypal']
             <p class="text-success">{{ glyphicon('ok-sign') }} {{ _(
                 "Available in {country}.", country=Country(country)
@@ -156,7 +171,7 @@ subhead = _("Payment Processors")
         % endif
     % endif
 
-    <a class="btn btn-{{ 'default' if accounts else 'primary' }}"
+    <a class="btn btn-{{ 'default' if paypal_accounts else 'primary' }}"
        href="/payment-providers/paypal/add">{{
         _("Connect {platform_name} account", platform_name='PayPal')
     }}</a>
@@ -164,7 +179,7 @@ subhead = _("Payment Processors")
     {#<form action="/payment-providers/paypal/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        <button class="btn btn-{{ 'default' if accounts else 'primary' }}">{{
+        <button class="btn btn-{{ 'default' if paypal_accounts else 'primary' }}">{{
             _("Connect {platform_name} account", platform_name='PayPal')
         }}</button>
     </form>#}
