@@ -86,6 +86,11 @@ if payin.refunded_amount:
           FROM payin_refunds
          WHERE payin = %s
            AND status IN ('pending', 'succeeded')
+    """, (payin.id,)) or website.db.one("""
+        SELECT max(reversal.ctime)
+          FROM payin_transfers pt
+          JOIN payin_transfer_reversals reversal ON reversal.payin_transfer = pt.id
+         WHERE pt.payin = %s
     """, (payin.id,))
 
 payin_transfers = website.db.all("""
