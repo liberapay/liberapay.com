@@ -64,8 +64,11 @@ subhead = _("Payment Processors")
     % if has_paypal_but_not_stripe
     <p class="alert alert-warning">{{ _(
         "You've connected a PayPal account but no Stripe account. We strongly "
-        "recommend that you also connect a Stripe account, because it's better "
-        "than PayPal in several ways, for both you and your donors."
+        "recommend that you also connect a Stripe account, because it's "
+        "{link_open}better than PayPal{link_close} in several ways, for both "
+        "you and your donors.",
+        link_open='<a href="/about/payment-processors">'|safe,
+        link_close='</a>'|safe,
     ) }}</p>
     % elif not accounts
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
