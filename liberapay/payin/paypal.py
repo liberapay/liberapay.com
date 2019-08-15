@@ -212,10 +212,16 @@ def sync_order(db, payin):
     )
     response = _init_session().get(url)
     if response.status_code != 200:
+        try:
+            error = response.json()
+        except Exception:
+            error = {}
         expired = (
             payin.status == 'awaiting_payer_action' and
-            response.status_code == 404 and
-            payin.ctime < (utcnow() - timedelta(days=30))
+            response.status_code == 404 and (
+                error.get('message') == "The specified resource does not exist." or
+                payin.ctime < (utcnow() - timedelta(days=30))
+            )
         )
         if expired:
             return abort_payin(db, payin, "expired")
