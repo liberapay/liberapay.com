@@ -180,6 +180,7 @@ EVENTS = [
     Event('team_invite', 32, _("When someone invites me to join a team")),
     Event('payin_failed', 2**11, _("When a payment I initiated fails")),
     Event('payin_succeeded', 2**12, _("When a payment I initiated succeeds")),
+    Event('payin_refund_initiated', 2**13, _("When money is being refunded back to me")),
 ]
 check_bits([e.bit for e in EVENTS])
 EVENTS = OrderedDict((e.name, e) for e in EVENTS)

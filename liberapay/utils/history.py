@@ -451,7 +451,7 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     params = locals()
     payins = db.all("""
         SELECT pi.id, pi.ctime, pi.amount, pi.status, pi.error, pi.amount_settled, pi.fee
-             , r.network AS payin_method
+             , pi.refunded_amount, r.network AS payin_method
           FROM payins pi
           JOIN exchange_routes r ON r.id = pi.route
          WHERE pi.payer = %(id)s
@@ -477,6 +477,7 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     incoming_transfers = db.all("""
         SELECT tr.id, tr.ctime, tr.payin, tr.payer, tr.context, tr.status, tr.error
              , tr.amount, tr.fee, tr.unit_amount, tr.n_units, tr.period
+             , tr.reversed_amount
              , p.username AS payer_username, p2.username AS team_name
              , r.network AS payin_method
           FROM payin_transfers tr
@@ -509,10 +510,14 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
             event['kind'] = 'payin_transfer'
             if 'payer_username' in event and event['status'] == 'succeeded':
                 totals['received'][event_date.month] += event['amount']
+                if event['reversed_amount']:
+                    totals['received'][event_date.month] -= event['reversed_amount']
         else:
             event['kind'] = 'payin'
             if event['status'] == 'succeeded':
                 totals['sent'][event_date.month] += event['amount']
+                if event['refunded_amount']:
+                    totals['sent'][event_date.month] -= event['refunded_amount']
         yield event
 
     if events:

@@ -1,0 +1,22 @@
+{{ _("A refund of {money_amount} has been initiated", money_amount=refund_amount) }}
+
+[---] text/html
+<p>{{ _(
+    "The payment of {money_amount} that you initiated on {date} is being refunded.",
+    money_amount=payin_amount, time_ago=payin_ctime.date(),
+) if refund_amount == payin_amount else _(
+    "The payment of {money_amount} that you initiated on {date} is being partially refunded.",
+    money_amount=payin_amount, time_ago=payin_ctime.date(),
+) }}</p>
+
+<p>{{ _(
+    "Reason: the payment was a duplicate.",
+) if refund_reason == 'duplicate' else _(
+    "Reason: the payment has been deemed fraudulent.",
+) if refund_reason == 'fraud' else _(
+    "Reason: the refund was requested by you.",
+) if refund_reason == 'requested_by_payer' else _(
+    "Please contact us to obtain more information.",
+) }}</p>
+
+<p>{{ _("It can take several business days for the funds to reappear in your bank account.") }}</p>

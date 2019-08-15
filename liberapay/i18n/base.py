@@ -54,6 +54,10 @@ class List(list):
         self.pattern = pattern
 
 
+class Percent(Decimal):
+    __slots__ = ()
+
+
 class Age(timedelta):
 
     def __new__(cls, *a, **kw):
@@ -141,7 +145,10 @@ class Locale(babel.core.Locale):
                     elif isinstance(o, Currency):
                         o = self.currencies.get(o, o)
                 elif isinstance(o, (Decimal, int)):
-                    o = self.format_decimal(o)
+                    if isinstance(o, Percent):
+                        o = self.format_percent(o)
+                    else:
+                        o = self.format_decimal(o)
                 elif isinstance(o, Money):
                     o = self.format_money(o)
                 elif isinstance(o, MoneyBasket):
