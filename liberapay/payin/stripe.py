@@ -18,6 +18,7 @@ from .common import (
 
 
 REFUND_REASONS_MAP = {
+    None: None,
     'duplicate': 'duplicate',
     'fraudulent': 'fraud',
     'requested_by_customer': 'requested_by_payer',

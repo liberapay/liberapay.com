@@ -2368,3 +2368,6 @@ ALTER TABLE payins
     ADD CONSTRAINT refund_currency_chk CHECK (refunded_amount::currency = amount::currency);
 ALTER TABLE payin_transfers
     ADD CONSTRAINT reversal_currency_chk CHECK (reversed_amount::currency = amount::currency);
+
+-- migration #107
+ALTER TABLE payin_refunds ALTER COLUMN reason DROP NOT NULL;
