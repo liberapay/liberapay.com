@@ -378,6 +378,33 @@ msgstr "Betalingen på {money_amount} gjennom Liberapay som ble igangsatt på {d
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Feilmeldingen fra betalingsformidleren {provider} er:"
 
+#, python-brace-format
+msgid "A refund of {money_amount} has been initiated"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
+msgstr ""
+
+msgid "Reason: the payment was a duplicate."
+msgstr ""
+
+msgid "Reason: the payment has been deemed fraudulent."
+msgstr ""
+
+msgid "Reason: the refund was requested by you."
+msgstr ""
+
+msgid "Please contact us to obtain more information."
+msgstr ""
+
+msgid "It can take several business days for the funds to reappear in your bank account."
+msgstr ""
+
 msgid "Your bank account is going to be debited"
 msgstr "Din bankkonto vil bli debitert"
 
@@ -554,6 +581,9 @@ msgstr "Når en betaling jeg har igangsatt mislykkes"
 
 msgid "When a payment I initiated succeeds"
 msgstr "Når en betaling jeg har igangsatt overføres"
+
+msgid "When money is being refunded back to me"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Utgiftsrapport"
@@ -2586,6 +2616,12 @@ msgstr "mislykket"
 msgid "succeeded"
 msgstr "vellykket"
 
+msgid "partially refunded"
+msgstr ""
+
+msgid "refunded"
+msgstr ""
+
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
 msgstr "Sluttsummene nedenfor inkluderer ikke donasjoner gjennom det gamle lommeboksystemet. Dem finner du i {link_start}din lommeboksside{link_end}."
@@ -2813,8 +2849,16 @@ msgid "The funds were automatically converted from {presentment_currency} to {se
 msgstr "Midlene ble automatisk konvertert fra {presentment_currency} til {settlement_currency} med vekslingskurs på {exchange_rate}."
 
 #, python-brace-format
+msgid "However, the payment was fully refunded on {refund_date}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
 msgstr "{0} ble betalt i betalingsgebyrer, og {1} ble distribuert som vist nedenfor."
+
+#, python-brace-format
+msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
+msgstr ""
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"

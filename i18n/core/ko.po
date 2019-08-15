@@ -373,6 +373,33 @@ msgstr "{date}에 Liberapay를 통해 {money_amount} 를 이체하도록 지시�
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "결제 대행사 {provider} 에서 제공한 메시지는 다음과 같습니다:"
 
+#, python-brace-format
+msgid "A refund of {money_amount} has been initiated"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
+msgstr ""
+
+msgid "Reason: the payment was a duplicate."
+msgstr ""
+
+msgid "Reason: the payment has been deemed fraudulent."
+msgstr ""
+
+msgid "Reason: the refund was requested by you."
+msgstr ""
+
+msgid "Please contact us to obtain more information."
+msgstr ""
+
+msgid "It can take several business days for the funds to reappear in your bank account."
+msgstr ""
+
 msgid "Your bank account is going to be debited"
 msgstr "은행 계좌에 청구가 이루어질 예정입니다"
 
@@ -549,6 +576,9 @@ msgstr "지시한 지불이 실패하면"
 
 msgid "When a payment I initiated succeeds"
 msgstr "지시한 지불이 성공했을 때"
+
+msgid "When money is being refunded back to me"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "비용 보고서"
@@ -2553,6 +2583,12 @@ msgstr "실패"
 msgid "succeeded"
 msgstr "성공"
 
+msgid "partially refunded"
+msgstr ""
+
+msgid "refunded"
+msgstr ""
+
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
 msgstr "아래 총계는 오래된 지갑 시스템을 통한 기부를 포함하지 않습니다. 이러한 정보는 {link_start} 사용자의 Wallet 페이지{link_end}에서 찾을 수 있습니다."
@@ -2779,7 +2815,15 @@ msgid "The funds were automatically converted from {presentment_currency} to {se
 msgstr ""
 
 #, python-brace-format
+msgid "However, the payment was fully refunded on {refund_date}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
+msgstr ""
+
+#, python-brace-format
+msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
 msgstr ""
 
 msgid "The money has been donated to the following recipient:"

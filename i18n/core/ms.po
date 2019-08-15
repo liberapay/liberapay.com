@@ -378,6 +378,33 @@ msgstr "Pembayaran {money_amount} melalui Liberapay yang dimulakan pada {date} t
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Mesej ralat yang diberikan oleh pemprosesan pembayaran {provider} ialah:"
 
+#, python-brace-format
+msgid "A refund of {money_amount} has been initiated"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
+msgstr ""
+
+msgid "Reason: the payment was a duplicate."
+msgstr ""
+
+msgid "Reason: the payment has been deemed fraudulent."
+msgstr ""
+
+msgid "Reason: the refund was requested by you."
+msgstr ""
+
+msgid "Please contact us to obtain more information."
+msgstr ""
+
+msgid "It can take several business days for the funds to reappear in your bank account."
+msgstr ""
+
 msgid "Your bank account is going to be debited"
 msgstr "Akaun bank anda akan didebitkan"
 
@@ -556,6 +583,9 @@ msgstr "Apabila pembayaran yang saya mulakan gagal dilaksanakan"
 
 msgid "When a payment I initiated succeeds"
 msgstr "Apabila pembayaran yang saya mulakan berjaya dilaksanakan"
+
+msgid "When money is being refunded back to me"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Laporan Perbelanjaan"
@@ -2576,6 +2606,12 @@ msgstr "gagal"
 msgid "succeeded"
 msgstr "berjaya"
 
+msgid "partially refunded"
+msgstr ""
+
+msgid "refunded"
+msgstr ""
+
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
 msgstr "Jumlah di bawah tidak termasuk derma melalui sistem dompet lama. Anda boleh cari jumlah sistem lama di {link_start}halaman Dompet anda{link_end}."
@@ -2802,8 +2838,16 @@ msgid "The funds were automatically converted from {presentment_currency} to {se
 msgstr "Dana telah ditukarkan dari {presentment_currency} ke {settlement_currency} pada kadar {exchange_rate}."
 
 #, python-brace-format
+msgid "However, the payment was fully refunded on {refund_date}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
 msgstr "{0} dibayar sebagai caj pemprosesan dan {1} diagihkan seperti dinyatakan di bawah."
+
+#, python-brace-format
+msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
+msgstr ""
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"

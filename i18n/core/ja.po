@@ -373,6 +373,33 @@ msgstr "{date} に開始された Liberapay を通じての {money_amount} の�
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "決済サービス {provider} によって出力されたエラーメッセージは以下の通りです："
 
+#, python-brace-format
+msgid "A refund of {money_amount} has been initiated"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
+msgstr ""
+
+msgid "Reason: the payment was a duplicate."
+msgstr ""
+
+msgid "Reason: the payment has been deemed fraudulent."
+msgstr ""
+
+msgid "Reason: the refund was requested by you."
+msgstr ""
+
+msgid "Please contact us to obtain more information."
+msgstr ""
+
+msgid "It can take several business days for the funds to reappear in your bank account."
+msgstr ""
+
 msgid "Your bank account is going to be debited"
 msgstr "お使いの銀行口座において引き落としが開始されます"
 
@@ -549,6 +576,9 @@ msgstr "自分が開始した支払いが失敗した場合"
 
 msgid "When a payment I initiated succeeds"
 msgstr "自分が開始した支払いが成功した場合"
+
+msgid "When money is being refunded back to me"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "取引明細書"
@@ -2553,6 +2583,12 @@ msgstr "失敗"
 msgid "succeeded"
 msgstr "成功"
 
+msgid "partially refunded"
+msgstr ""
+
+msgid "refunded"
+msgstr ""
+
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
 msgstr "以下の合計には、古いウォレットシステムを通じた寄付は含まれていません。これらは{link_start}ウォレットページ{link_end}で見ることができます。"
@@ -2779,8 +2815,16 @@ msgid "The funds were automatically converted from {presentment_currency} to {se
 msgstr "資金は {presentment_currency} から {settlement_currency} に自動的に変換されます。レートは {exchange_rate} です。"
 
 #, python-brace-format
+msgid "However, the payment was fully refunded on {refund_date}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
 msgstr "{0} は処理手数料に支払われ、{1} は以下のように分配されました。"
+
+#, python-brace-format
+msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
+msgstr ""
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"

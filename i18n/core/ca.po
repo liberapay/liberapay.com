@@ -378,6 +378,33 @@ msgstr "El pagament de {money_amount} via Liberapay que es va iniciar amb data {
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "El missatge d'error proporcionat pel processador de pagaments {provider} és:"
 
+#, python-brace-format
+msgid "A refund of {money_amount} has been initiated"
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
+msgstr ""
+
+#, python-brace-format
+msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
+msgstr ""
+
+msgid "Reason: the payment was a duplicate."
+msgstr ""
+
+msgid "Reason: the payment has been deemed fraudulent."
+msgstr ""
+
+msgid "Reason: the refund was requested by you."
+msgstr ""
+
+msgid "Please contact us to obtain more information."
+msgstr ""
+
+msgid "It can take several business days for the funds to reappear in your bank account."
+msgstr ""
+
 msgid "Your bank account is going to be debited"
 msgstr "Es girarà un càrrec a dèbit del vostre compte bancari"
 
@@ -554,6 +581,9 @@ msgstr "Si un pagament que vaig iniciar falla"
 
 msgid "When a payment I initiated succeeds"
 msgstr "Si un pagament que vaig iniciar finalitza correctament"
+
+msgid "When money is being refunded back to me"
+msgstr ""
 
 msgid "Expense Report"
 msgstr "Informe de despeses"
@@ -2574,6 +2604,12 @@ msgstr "erroni"
 msgid "succeeded"
 msgstr "reeixit"
 
+msgid "partially refunded"
+msgstr ""
+
+msgid "refunded"
+msgstr ""
+
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
 msgstr "Les quantitats totals de sota no inclouen els donatius fet via l'antic sistema de cartera. Podeu trobar-los en la {link_start}vostra pàgina de cartera{link_end}."
@@ -2800,8 +2836,16 @@ msgid "The funds were automatically converted from {presentment_currency} to {se
 msgstr "Els fons s'han convertit automàticament de {presentment_currency} a {settlement_currency} amb una taxa de canvi de {exchange_rate}."
 
 #, python-brace-format
+msgid "However, the payment was fully refunded on {refund_date}."
+msgstr ""
+
+#, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
 msgstr "S'han pagat {0} en comissions de processaments i {1} s'han distribuït com es detalla tot seguit."
+
+#, python-brace-format
+msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
+msgstr ""
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
