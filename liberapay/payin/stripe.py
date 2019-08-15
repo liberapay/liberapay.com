@@ -445,10 +445,8 @@ def record_refunds(db, payin, charge):
     Returns: the list of rows upserted into the `payin_refunds` table
 
     """
-    if charge.refunds.has_more:
-        raise NotImplementedError()
     r = []
-    for refund in charge.refunds.data:
+    for refund in charge.refunds.auto_paging_iter():
         rf_amount = int_to_Money(refund.amount, refund.currency)
         rf_reason = REFUND_REASONS_MAP[refund.reason]
         rf_description = getattr(refund, 'description', None)
@@ -470,11 +468,9 @@ def record_reversals(db, pt, transfer):
     Returns: the list of rows upserted into the `payin_transfer_reversals` table
 
     """
-    if transfer.reversals.has_more:
-        raise NotImplementedError()
     r = []
     fee = transfer.amount - Money_to_int(pt.amount)
-    for reversal in transfer.reversals.data:
+    for reversal in transfer.reversals.auto_paging_iter():
         if reversal.amount == fee and reversal.id == transfer.reversals.data[-1].id:
             continue
         reversal_amount = int_to_Money(reversal.amount, reversal.currency)
