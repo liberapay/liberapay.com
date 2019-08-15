@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '105'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '106'::jsonb);
 
 
 -- app configuration
@@ -441,7 +441,9 @@ CREATE TABLE payins
 , amount_settled   currency_amount
 , fee              currency_amount   CHECK (fee >= 0)
 , intent_id        text
+, refunded_amount  currency_amount   CHECK (NOT (refunded_amount <= 0))
 , CONSTRAINT fee_currency_chk CHECK (fee::currency = amount_settled::currency)
+, CONSTRAINT refund_currency_chk CHECK (refunded_amount::currency = amount::currency)
 );
 
 CREATE INDEX payins_payer_idx ON payins (payer);
@@ -478,6 +480,8 @@ CREATE TABLE payin_transfers
 , period        donation_period
 , team          bigint                   REFERENCES participants
 , fee           currency_amount
+, reversed_amount   currency_amount      CHECK (NOT (reversed_amount <= 0))
+, CONSTRAINT reversal_currency_chk CHECK (reversed_amount::currency = amount::currency)
 , CONSTRAINT self_chk CHECK (payer <> recipient)
 , CONSTRAINT team_chk CHECK ((context = 'team-donation') = (team IS NOT NULL))
 , CONSTRAINT unit_chk CHECK ((unit_amount IS NULL) = (n_units IS NULL))
@@ -492,6 +496,39 @@ CREATE TABLE payin_transfer_events
 , error            text
 , timestamp        timestamptz       NOT NULL
 , UNIQUE (payin_transfer, status)
+);
+
+
+-- payin refunds
+
+CREATE TYPE refund_reason AS ENUM ('duplicate', 'fraud', 'requested_by_payer');
+
+CREATE TYPE refund_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
+
+CREATE TABLE payin_refunds
+( id               bigserial             PRIMARY KEY
+, ctime            timestamptz           NOT NULL DEFAULT current_timestamp
+, payin            bigint                NOT NULL REFERENCES payins
+, remote_id        text
+, amount           currency_amount       NOT NULL CHECK (amount > 0)
+, reason           refund_reason         NOT NULL
+, description      text
+, status           refund_status         NOT NULL
+, error            text
+, UNIQUE (payin, remote_id)
+);
+
+
+-- payin transfer reversals
+
+CREATE TABLE payin_transfer_reversals
+( id               bigserial             PRIMARY KEY
+, ctime            timestamptz           NOT NULL DEFAULT current_timestamp
+, payin_transfer   bigint                NOT NULL REFERENCES payin_transfers
+, remote_id        text
+, payin_refund     bigint                REFERENCES payin_refunds
+, amount           currency_amount       NOT NULL CHECK (amount > 0)
+, UNIQUE (payin_transfer, remote_id)
 );
 
 
