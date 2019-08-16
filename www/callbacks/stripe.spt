@@ -77,8 +77,18 @@ elif event_object_type == 'charge.dispute':
 
 elif event.type == 'transfer.reversed':
     transfer = event.data.object
-    pt_id = transfer.metadata['payin_transfer_id']
-    pt = website.db.one("SELECT * FROM payin_transfers WHERE id = %s", (pt_id,))
+    pt_id = transfer.metadata.get('payin_transfer_id')
+    if pt_id:
+        pt = website.db.one("SELECT * FROM payin_transfers WHERE id = %s", (pt_id,))
+    else:
+        charge = stripe.Charge.retrieve(transfer.source_transaction)
+        payin_id = charge.metadata['payin_id']
+        pt = website.db.one("""
+            SELECT *
+              FROM payin_transfers
+             WHERE payin = %s
+               AND remote_id = %s
+        """, (payin_id, transfer.id))
     assert pt
     record_reversals(website.db, pt, transfer)
     fee = transfer.amount - Money_to_int(pt.amount)

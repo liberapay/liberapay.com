@@ -1000,6 +1000,7 @@ class Participant(Model, MixinTeam):
                                 ELSE excluded.added_time
                             END)
                           , address = excluded.address
+                          , nonce = coalesce(e.nonce, excluded.nonce)
                   RETURNING *
             """, (email, str(uuid.uuid4()), self.id))
             if email_row.disavowed:
