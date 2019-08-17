@@ -1090,17 +1090,17 @@ class Payday(object):
                        SELECT t.periodic_amount, t.tippee_username
                    ) a))
               FROM (
-                     SELECT t.*, p2.username AS tippee_username
+                     SELECT t.*, tippee_p.username AS tippee_username
                        FROM current_tips t
-                       JOIN participants p2 ON p2.id = t.tippee
+                       JOIN participants tippee_p ON tippee_p.id = t.tippee
                       WHERE t.renewal_mode > 0
                         AND ( t.paid_in_advance IS NULL OR
                               t.paid_in_advance < t.amount
                             )
-                        AND p2.status = 'active'
-                        AND p2.is_suspended IS NOT true
-                        AND p2.payment_providers > 0
-                        AND (p2.goal IS NULL OR p2.goal >= 0)
+                        AND tippee_p.status = 'active'
+                        AND tippee_p.is_suspended IS NOT true
+                        AND tippee_p.payment_providers > 0
+                        AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                    ) t
              WHERE EXISTS (
                      SELECT 1
@@ -1132,6 +1132,8 @@ class Payday(object):
           ORDER BY t.tipper
         """)
         for p, donations in participants:
+            if p.status != 'active' or p.is_suspended:
+                continue
             for tip in donations:
                 tip['periodic_amount'] = Money(**tip['periodic_amount'])
             p.notify('donate_reminder', donations=donations, email_unverified_address=True)
