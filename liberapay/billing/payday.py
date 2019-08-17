@@ -1109,15 +1109,16 @@ class Payday(object):
                         AND COALESCE(tr.team, tr.tippee) = t.tippee
                         AND tr.context IN ('tip', 'take')
                         AND tr.status = 'succeeded'
-                        AND tr.timestamp >= (current_timestamp - interval '9 weeks')
+                        AND tr.timestamp >= (current_date - interval '26 weeks')
                    )
-               AND (
-                     SELECT count(*)
+               AND NOT EXISTS (
+                     SELECT 1
                        FROM notifications n
                       WHERE n.participant = t.tipper
                         AND n.event = 'donate_reminder'
+                        AND n.ts >= (current_date - interval '3 weeks')
                         AND n.is_new
-                   ) < 2
+                   )
                AND NOT EXISTS (
                      SELECT 1
                        FROM payin_transfers pt
@@ -1125,7 +1126,7 @@ class Payday(object):
                         AND COALESCE(pt.team, pt.recipient) = t.tippee
                         AND pt.context IN ('personal-donation', 'team-donation')
                         AND pt.status = 'pending'
-                        AND pt.ctime >= (current_timestamp - interval '9 weeks')
+                        AND pt.ctime >= (current_date - interval '3 weeks')
                    )
           GROUP BY t.tipper
           ORDER BY t.tipper
