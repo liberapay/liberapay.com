@@ -24,7 +24,8 @@ def _extract_error_message(response):
         details = error.get('details')
         if details and isinstance(details, list):
             message = ' | '.join(
-                d['description'] for d in details if d.get('description')
+                ('%(issue)s: %(description)s' % d if d.get('issue') else d['description'])
+                for d in details if d.get('description')
             ) or message
         debug_id = error.get('debug_id')
         if debug_id:
