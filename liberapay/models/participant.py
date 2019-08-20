@@ -1265,13 +1265,17 @@ class Participant(Model, MixinTeam):
     # Notifications
     # =============
 
-    def notify(self, event, force_email=False, email=True, web=True, idem_key=None, **context):
+    def notify(self, event, force_email=False, email=True, web=True, idem_key=None,
+               email_unverified_address=False, **context):
         if email and not force_email:
             bit = EVENTS.get(event.split('~', 1)[0]).bit
             email = self.email_notif_bits & bit > 0
         p_id = self.id
-        context = serialize(context)
+        # If email_unverified_address is on, allow sending to an unverified email address.
+        if email_unverified_address and not self.email:
+            context['email'] = self.get_email_address()
         # Check that this notification isn't a duplicate
+        context = serialize(context)
         n = self.db.one("""
             SELECT count(*)
               FROM notifications

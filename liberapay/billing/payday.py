@@ -1090,17 +1090,17 @@ class Payday(object):
                        SELECT t.periodic_amount, t.tippee_username
                    ) a))
               FROM (
-                     SELECT t.*, p2.username AS tippee_username
+                     SELECT t.*, tippee_p.username AS tippee_username
                        FROM current_tips t
-                       JOIN participants p2 ON p2.id = t.tippee
+                       JOIN participants tippee_p ON tippee_p.id = t.tippee
                       WHERE t.renewal_mode > 0
                         AND ( t.paid_in_advance IS NULL OR
                               t.paid_in_advance < t.amount
                             )
-                        AND p2.status = 'active'
-                        AND p2.is_suspended IS NOT true
-                        AND p2.payment_providers > 0
-                        AND (p2.goal IS NULL OR p2.goal >= 0)
+                        AND tippee_p.status = 'active'
+                        AND tippee_p.is_suspended IS NOT true
+                        AND tippee_p.payment_providers > 0
+                        AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                    ) t
              WHERE EXISTS (
                      SELECT 1
@@ -1109,15 +1109,16 @@ class Payday(object):
                         AND COALESCE(tr.team, tr.tippee) = t.tippee
                         AND tr.context IN ('tip', 'take')
                         AND tr.status = 'succeeded'
-                        AND tr.timestamp >= (current_timestamp - interval '9 weeks')
+                        AND tr.timestamp >= (current_date - interval '26 weeks')
                    )
-               AND (
-                     SELECT count(*)
+               AND NOT EXISTS (
+                     SELECT 1
                        FROM notifications n
                       WHERE n.participant = t.tipper
                         AND n.event = 'donate_reminder'
+                        AND n.ts >= (current_date - interval '3 weeks')
                         AND n.is_new
-                   ) < 2
+                   )
                AND NOT EXISTS (
                      SELECT 1
                        FROM payin_transfers pt
@@ -1125,15 +1126,17 @@ class Payday(object):
                         AND COALESCE(pt.team, pt.recipient) = t.tippee
                         AND pt.context IN ('personal-donation', 'team-donation')
                         AND pt.status = 'pending'
-                        AND pt.ctime >= (current_timestamp - interval '9 weeks')
+                        AND pt.ctime >= (current_date - interval '3 weeks')
                    )
           GROUP BY t.tipper
           ORDER BY t.tipper
         """)
         for p, donations in participants:
+            if p.status != 'active' or p.is_suspended:
+                continue
             for tip in donations:
                 tip['periodic_amount'] = Money(**tip['periodic_amount'])
-            p.notify('donate_reminder', donations=donations)
+            p.notify('donate_reminder', donations=donations, email_unverified_address=True)
             n += 1
         log("Sent %i donate_reminder notifications." % n)
 
