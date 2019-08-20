@@ -176,6 +176,9 @@ def record_order_result(db, payin, order):
     """
     # Update the payin
     status = ORDER_STATUSES_MAP[order['status']]
+    if status == 'awaiting_payer_action' and payin.status == 'failed':
+        # This payin has already been aborted, don't reset it.
+        return payin
     error = order['status'] if status == 'failed' else None
     payin = update_payin(db, payin.id, order['id'], status, error)
 
@@ -362,6 +365,9 @@ def record_payment_result(db, payin, payment):
     """
     # Update the payin
     status = PAYMENT_STATES_MAP[payment['state']]
+    if status == 'awaiting_payer_action' and payin.status == 'failed':
+        # This payin has already been aborted, don't reset it.
+        return payin
     error = payment.get('failure_reason')
     payin = update_payin(db, payin.id, payment['id'], status, error)
 
