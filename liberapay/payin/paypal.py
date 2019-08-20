@@ -216,6 +216,8 @@ def sync_order(db, payin):
     )
     response = _init_session().get(url)
     if response.status_code != 200:
+        if payin.status == 'failed':
+            return payin
         try:
             error = response.json()
         except Exception:
@@ -403,6 +405,8 @@ def sync_payment(db, payin):
     )
     response = _init_session().get(url)
     if response.status_code != 200:
+        if payin.status == 'failed':
+            return payin
         expired = (
             payin.status == 'awaiting_payer_action' and
             response.status_code == 404 and
