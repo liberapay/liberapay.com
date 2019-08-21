@@ -375,30 +375,30 @@ msgstr "決済サービス {provider} によって出力されたエラーメッ
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
-msgstr ""
+msgstr "{money_amount} の払い戻しを開始しました"
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr ""
+msgstr "あなたが {date} に開始した {money_amount} の支払いは払い戻しの最中です。"
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr ""
+msgstr "あなたが {date} に開始した {money_amount} の支払いは部分的に払い戻されました。"
 
 msgid "Reason: the payment was a duplicate."
-msgstr ""
+msgstr "理由：支払いが重複したため。"
 
 msgid "Reason: the payment has been deemed fraudulent."
-msgstr ""
+msgstr "理由：支払いが詐欺だとみなされたため。"
 
 msgid "Reason: the refund was requested by you."
-msgstr ""
+msgstr "理由：あなたが払い戻しを要求したため。"
 
 msgid "Please contact us to obtain more information."
-msgstr ""
+msgstr "詳細な情報を知るにはお問い合わせください。"
 
 msgid "It can take several business days for the funds to reappear in your bank account."
-msgstr ""
+msgstr "資金がお持ちの銀行口座に戻るまでには数営業日かかることがあります。"
 
 msgid "Your bank account is going to be debited"
 msgstr "お使いの銀行口座において引き落としが開始されます"
@@ -519,7 +519,7 @@ msgstr "出金が開始されました"
 
 #, python-brace-format
 msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
-msgstr "お使いの Liberapay ウォレットからお使いの銀行口座への {0} の振り込みを開始しました。取引が完了するには数営業日かかります。ご注意ください。"
+msgstr "お使いの Liberapay ウォレットからお使いの銀行口座への {0} の振り込みを開始しました。取引が完了するには数営業日かかることがあります。ご注意ください。"
 
 msgid "Withdrawal failure"
 msgstr "出金が失敗しました"
@@ -578,7 +578,7 @@ msgid "When a payment I initiated succeeds"
 msgstr "自分が開始した支払いが成功した場合"
 
 msgid "When money is being refunded back to me"
-msgstr ""
+msgstr "お金が払い戻される日時"
 
 msgid "Expense Report"
 msgstr "取引明細書"
@@ -2584,10 +2584,10 @@ msgid "succeeded"
 msgstr "成功"
 
 msgid "partially refunded"
-msgstr ""
+msgstr "部分的に払い戻し済み"
 
 msgid "refunded"
-msgstr ""
+msgstr "払い戻し済み"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -2605,7 +2605,7 @@ msgid "Fees"
 msgstr "手数料"
 
 msgid "Method"
-msgstr "メソッド"
+msgstr "手段"
 
 msgid "charge"
 msgstr "料金"
@@ -2816,7 +2816,7 @@ msgstr "資金は {presentment_currency} から {settlement_currency} に自動�
 
 #, python-brace-format
 msgid "However, the payment was fully refunded on {refund_date}."
-msgstr ""
+msgstr "しかし、支払いは {refund_date} に払い戻しが完了しています。"
 
 #, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
@@ -2824,7 +2824,7 @@ msgstr "{0} は処理手数料に支払われ、{1} は以下のように分配�
 
 #, python-brace-format
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
-msgstr ""
+msgstr "しかし、支払い（{refund_amount}）の {x_percent} は {refund_date} に払い戻し済みです。"
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
