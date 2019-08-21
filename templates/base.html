@@ -59,7 +59,7 @@
                 % block navbar_alternates
                 % include "templates/navbar-common.html"
                 % endblock
-            % if not user.ANON
+            % if user
                 % include "templates/navbar-logged-in.html"
             % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
                 % from "templates/sign-in-link.html" import sign_in_link with context
