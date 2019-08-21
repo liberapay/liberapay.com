@@ -1116,7 +1116,7 @@ class Payday(object):
                        FROM notifications n
                       WHERE n.participant = t.tipper
                         AND n.event = 'donate_reminder'
-                        AND n.ts >= (current_date - interval '3 weeks')
+                        AND n.ts >= (current_date - interval '30 days')
                         AND n.is_new
                    )
                AND NOT EXISTS (
@@ -1126,7 +1126,7 @@ class Payday(object):
                         AND COALESCE(pt.team, pt.recipient) = t.tippee
                         AND pt.context IN ('personal-donation', 'team-donation')
                         AND pt.status = 'pending'
-                        AND pt.ctime >= (current_date - interval '3 weeks')
+                        AND pt.ctime >= (current_date - interval '30 days')
                    )
           GROUP BY t.tipper
           ORDER BY t.tipper
