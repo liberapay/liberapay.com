@@ -1,13 +1,26 @@
 from datetime import timedelta
+from decimal import Decimal
 
 from pando.utils import utcnow
 
+from ..constants import SEPA
 from ..exceptions import (
     AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended,
     NoSelfTipping,
 )
-from ..i18n.currencies import Money
+from ..i18n.currencies import Money, MoneyBasket
 from ..models.participant import Participant
+
+
+class Donation(object):
+
+    __slots__ = ('amount', 'recipient', 'destination')
+
+    def __init__(self, amount, recipient, destination):
+        assert destination.participant == recipient.id
+        self.amount = amount
+        self.recipient = recipient
+        self.destination = destination
 
 
 def prepare_payin(db, payer, amount, route):
@@ -103,14 +116,57 @@ def update_payin(
         return payin
 
 
+def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, payment_amount):
+    """Prepare to distribute a donation.
+
+    Args:
+        payin (Record): a row from the `payins` table
+        tip (Record): a row from the `tips` table
+        tippee (Participant): the intended beneficiary of the donation
+        provider (str): the payment processor ('paypal' or 'stripe')
+        payer (Participant): the donor
+        payer_country (str): the country the money is supposedly coming from
+        payment_amount (Money): the amount of money being sent
+
+    Returns:
+        a list of the rows created in the `payin_transfers` table
+
+    Raises:
+        MissingPaymentAccount: if no suitable destination has been found
+        NoSelfTipping: if the donor would end up sending money to themself
+
+    """
+    assert tip.tipper == payer.id
+    assert tip.tippee == tippee.id
+    r = []
+    if tippee.kind == 'group':
+        team_donations = resolve_team_donation(
+            db, tippee, provider, payer, payer_country, payment_amount, tip.amount
+        )
+        for d in team_donations:
+            r.append(prepare_payin_transfer(
+                db, payin, d.recipient, d.destination, 'team-donation',
+                d.amount, tip.periodic_amount, tip.period, team=tippee.id
+            ))
+    else:
+        destination = resolve_destination(
+            db, tippee, provider, payer, payer_country, payment_amount
+        )
+        r.append(prepare_payin_transfer(
+            db, payin, tippee, destination, 'personal-donation',
+            payment_amount, tip.periodic_amount, tip.period
+        ))
+    return r
+
+
 def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount):
     """Figure out where to send a payment.
 
     Args:
-        tippee (Participant): the intended beneficiary of the payment (can be a team)
+        tippee (Participant): the intended beneficiary of the payment
         provider (str): the payment processor ('paypal' or 'stripe')
         payer (Participant): the user who wants to pay
-        payer_country (str): the country code the money is supposedly coming from
+        payer_country (str): the country the money is supposedly coming from
         payin_amount (Money): the payment amount
 
     Returns:
@@ -138,11 +194,35 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
     """, (tippee.id, provider, payer_country, payin_amount.currency))
     if destination:
         return destination
-    if tippee.kind != 'group':
+    else:
         raise MissingPaymentAccount(tippee)
+
+
+def resolve_team_donation(
+    db, team, provider, payer, payer_country, payment_amount, weekly_amount
+):
+    """Figure out how to distribute a donation to a team's members.
+
+    Args:
+        team (Participant): the team the donation is for
+        provider (str): the payment processor ('paypal' or 'stripe')
+        payer (Participant): the donor
+        payer_country (str): the country code the money is supposedly coming from
+        payment_amount (Money): the amount of money being sent
+        weekly_amount (Money): the weekly donation amount
+
+    Returns:
+        a list of `Donation` objects
+
+    Raises:
+        MissingPaymentAccount: if no suitable destination has been found
+        NoSelfTipping: if the payer would end up sending money to themself
+
+    """
     members = db.all("""
         SELECT t.member
              , t.ctime
+             , t.amount
              , (coalesce_currency_amount((
                    SELECT sum(pt.amount - coalesce(pt.reversed_amount, zero(pt.amount)), 'EUR')
                      FROM payin_transfers pt
@@ -159,7 +239,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                       AND tr.status = 'succeeded'
                       AND tr.virtual IS NOT true
                ), 'EUR')) AS received_sum_eur
-             , (convert(t.amount, 'EUR') + coalesce_currency_amount((
+             , (coalesce_currency_amount((
                    SELECT sum(t2.amount, 'EUR')
                      FROM ( SELECT ( SELECT t2.amount
                                        FROM takes t2
@@ -173,6 +253,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                                    ) AS amount
                               FROM paydays payday
                           ) t2
+                    WHERE t2.amount > 0
                ), 'EUR')) AS takes_sum_eur
           FROM current_takes t
          WHERE t.team = %s
@@ -186,19 +267,56 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
                       AND a.verified
                       AND coalesce(a.charges_enabled, true)
                )
-    """, (tippee.id, provider))
+    """, (team.id, provider))
     if not members:
-        raise MissingPaymentAccount(tippee)
-    payin_amount_eur = payin_amount.convert('EUR')
+        raise MissingPaymentAccount(team)
+    payment_amount_eur = payment_amount.convert('EUR')
     zero_eur = Money.ZEROS['EUR']
+    income_amount_eur = team.receiving.convert('EUR') + weekly_amount.convert('EUR')
+    manual_takes_sum = MoneyBasket(t.amount for t in members if t.amount > 0)
+    auto_take = income_amount_eur - manual_takes_sum.fuzzy_sum('EUR')
+    if auto_take < 0:
+        auto_take = zero_eur
     members = sorted(members, key=lambda t: (
         int(t.member == payer.id),
-        -max(t.takes_sum_eur, zero_eur) / (t.received_sum_eur + payin_amount_eur),
+        -(
+            ((auto_take if t.amount < 0 else t.amount.convert('EUR')) + t.takes_sum_eur) /
+            (t.received_sum_eur + payment_amount_eur)
+        ),
         t.received_sum_eur,
         t.ctime
     ))
+    # Try to distribute the donation to multiple members.
+    if provider == 'stripe':
+        sepa_accounts = {a.participant: a for a in db.all("""
+            SELECT DISTINCT ON (a.participant) a.*
+              FROM payment_accounts a
+             WHERE a.participant IN %(members)s
+               AND a.provider = 'stripe'
+               AND a.is_current
+               AND a.country IN %(SEPA)s
+          ORDER BY a.participant
+                 , a.default_currency = 'EUR' DESC
+                 , a.connection_ts
+        """, dict(members=set(t.member for t in members if t.member != payer.id), SEPA=SEPA))}
+        if len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
+            exp = Decimal('0.7')
+            naive_amounts = {
+                t.member: (
+                    (auto_take if t.amount < 0 else t.amount.convert('EUR')) +
+                    (max(t.takes_sum_eur - t.received_sum_eur, zero_eur) ** exp).round_up()
+                )
+                for t in members if t.member in sepa_accounts
+            }
+            tr_amounts = resolve_amounts(payment_amount_eur, naive_amounts)
+            return [
+                Donation(tr_amounts[p_id], Participant.from_id(p_id), sepa_accounts[p_id])
+                for p_id in tr_amounts
+            ]
+    # Fall back to sending the entire donation to the member who "needs" it most.
     member = Participant.from_id(members[0].member)
-    return resolve_destination(db, member, provider, payer, payer_country, payin_amount)
+    account = resolve_destination(db, member, provider, payer, payer_country, payment_amount)
+    return [Donation(payment_amount, member, account)]
 
 
 def resolve_amounts(available_amount, naive_transfer_amounts):

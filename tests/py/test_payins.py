@@ -8,14 +8,30 @@ import stripe
 from liberapay.constants import EPOCH
 from liberapay.exceptions import MissingPaymentAccount
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.payin.common import resolve_destination
+from liberapay.payin.common import resolve_team_donation
 from liberapay.payin.paypal import sync_all_pending_payments
 from liberapay.testing import Harness, EUR, JPY, USD
 
 
-class TestResolveDestination(Harness):
+class TestResolveTeamDonation(Harness):
 
-    def test_resolve_destination(self):
+    def resolve(self, team, provider, payer, payer_country, payment_amount):
+        tip = self.db.one("""
+            SELECT *
+              FROM current_tips
+             WHERE tipper = %s
+               AND tippee = %s
+        """, (payer.id, team.id))
+        donations = resolve_team_donation(
+            self.db, team, provider, payer, payer_country, payment_amount, tip.amount
+        )
+        if len(donations) == 1:
+            assert donations[0].amount == payment_amount
+            return donations[0].destination
+        else:
+            return donations
+
+    def test_resolve_team_donation(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
@@ -25,48 +41,48 @@ class TestResolveDestination(Harness):
         # Test without payment account
         team.add_member(bob)
         with self.assertRaises(MissingPaymentAccount):
-            resolve_destination(self.db, team, 'stripe', alice, 'FR', EUR('10'))
+            self.resolve(team, 'stripe', alice, 'FR', EUR('10'))
 
         # Test without payment account at the requested provider
-        stripe_account_bob = self.add_payment_account(bob, 'stripe')
+        stripe_account_bob = self.add_payment_account(bob, 'stripe', country='FR')
         with self.assertRaises(MissingPaymentAccount):
-            resolve_destination(self.db, team, 'paypal', alice, 'US', EUR('10'))
+            self.resolve(team, 'paypal', alice, 'US', EUR('10'))
 
-        # Test with a single member and the take at zero
-        account = resolve_destination(self.db, team, 'stripe', alice, 'GB', EUR('7'))
+        # Test with a single member and the take set to `auto`
+        account = self.resolve(team, 'stripe', alice, 'GB', EUR('7'))
         assert account == stripe_account_bob
 
         # Test with two members but only one payment account
         team.add_member(carl)
-        account = resolve_destination(self.db, team, 'stripe', alice, 'CH', EUR('8'))
+        account = self.resolve(team, 'stripe', alice, 'CH', EUR('8'))
         assert account == stripe_account_bob
 
         # Test with two members but only one payment account at the requested provider
         paypal_account_carl = self.add_payment_account(carl, 'paypal')
-        account = resolve_destination(self.db, team, 'stripe', alice, 'BE', EUR('42'))
+        account = self.resolve(team, 'stripe', alice, 'BE', EUR('42'))
         assert account == stripe_account_bob
 
-        # Test with two members and both takes at zero
-        stripe_account_carl = self.add_payment_account(carl, 'stripe')
-        account = resolve_destination(self.db, team, 'stripe', alice, 'PL', EUR('5.46'))
+        # Test with two members and both takes set to `auto`
+        stripe_account_carl = self.add_payment_account(carl, 'stripe', country='JP')
+        account = self.resolve(team, 'stripe', alice, 'PL', EUR('5.46'))
         assert account == stripe_account_bob
-        account = resolve_destination(self.db, team, 'paypal', alice, 'PL', EUR('99.9'))
+        account = self.resolve(team, 'paypal', alice, 'PL', EUR('99.9'))
         assert account == paypal_account_carl
 
-        # Test with two members and one non-zero take
-        team.set_take_for(bob, EUR('1'), bob)
-        account = resolve_destination(self.db, team, 'stripe', alice, 'RU', EUR('50.02'))
+        # Test with two members and one non-auto take
+        team.set_take_for(bob, EUR('100.00'), bob)
+        account = self.resolve(team, 'stripe', alice, 'RU', EUR('50.02'))
         assert account == stripe_account_bob
-        account = resolve_destination(self.db, team, 'paypal', alice, 'RU', EUR('33'))
+        account = self.resolve(team, 'paypal', alice, 'RU', EUR('33'))
         assert account == paypal_account_carl
 
-        # Test with two members and two different non-zero takes
-        team.set_take_for(carl, EUR('2'), carl)
-        account = resolve_destination(self.db, team, 'stripe', alice, 'BR', EUR('10'))
+        # Test with two members and two different non-auto takes
+        team.set_take_for(carl, EUR('200.00'), carl)
+        account = self.resolve(team, 'stripe', alice, 'BR', EUR('10'))
         assert account == stripe_account_carl
-        account = resolve_destination(self.db, team, 'stripe', alice, 'BR', EUR('1'))
+        account = self.resolve(team, 'stripe', alice, 'BR', EUR('1'))
         assert account == stripe_account_carl
-        account = resolve_destination(self.db, team, 'paypal', alice, 'BR', EUR('5'))
+        account = self.resolve(team, 'paypal', alice, 'BR', EUR('5'))
         assert account == paypal_account_carl
 
         # Check that members are cycled through
@@ -83,6 +99,17 @@ class TestResolveDestination(Harness):
         assert pt.destination == stripe_account_carl.pk
         payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'))
         assert pt.destination == stripe_account_bob.pk
+
+        # Test with two members having SEPA accounts
+        stripe_account_carl = self.add_payment_account(
+            carl, 'stripe', country='DE', id='acct_DE',
+        )
+        donations = self.resolve(team, 'stripe', alice, 'ZA', EUR('6.30'))
+        assert len(donations) == 2
+        assert donations[0].amount == EUR('2.10')
+        assert donations[0].destination == stripe_account_bob
+        assert donations[1].amount == EUR('4.20')
+        assert donations[1].destination == stripe_account_carl
 
 
 class TestPayins(Harness):
@@ -598,6 +625,7 @@ class TestRefundsStripe(Harness):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         route = self.upsert_route(alice, 'stripe-card')
+        alice.set_tip_to(bob, EUR('2.46'))
         payin, pt = self.make_payin_and_transfer(
             route, bob, EUR(400), fee=EUR('3.45'),
             remote_id='py_XXXXXXXXXXXXXXXXXXXXXXXX',
@@ -957,6 +985,8 @@ class TestRefundsStripe(Harness):
         self.add_payment_account(bob, 'stripe', id='acct_XXXXXXXXXXXXXXXX')
         LiberapayOrg = self.make_participant('LiberapayOrg')
         self.add_payment_account(LiberapayOrg, 'stripe', id='acct_1ChyayFk4eGpfLOC')
+        alice.set_tip_to(bob, EUR('1.00'))
+        alice.set_tip_to(LiberapayOrg, EUR('1.00'))
         route = self.upsert_route(alice, 'stripe-card')
         payin, transfers = self.make_payin_and_transfers(
             route, EUR(400),
@@ -1296,6 +1326,8 @@ class TestRefundsStripe(Harness):
         self.add_payment_account(bob, 'stripe', id='acct_XXXXXXXXXXXXXXXX')
         LiberapayOrg = self.make_participant('LiberapayOrg')
         self.add_payment_account(LiberapayOrg, 'stripe', id='acct_1ChyayFk4eGpfLOC')
+        alice.set_tip_to(bob, EUR('3.96'))
+        alice.set_tip_to(LiberapayOrg, EUR('3.96'))
         route = self.upsert_route(alice, 'stripe-card')
         payin, transfers = self.make_payin_and_transfers(
             route, EUR(400),

@@ -24,9 +24,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import (
-    prepare_payin, update_payin,
-    resolve_destination,
-    prepare_payin_transfer, update_payin_transfer,
+    prepare_donation, prepare_payin, update_payin, update_payin_transfer,
 )
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.vcr import use_cassette
@@ -289,75 +287,64 @@ class Harness(unittest.TestCase):
     def make_payin_and_transfer(
         self, route, tippee, amount,
         status='succeeded', error=None, payer_country=None, fee=None,
-        unit_amount=None, period=None,
-        remote_id='fake', pt_remote_id='fake',
+        remote_id='fake', **opt
+    ):
+        payin, payin_transfers = self.make_payin_and_transfers(
+            route, amount, [(tippee, amount - (fee or 0), opt)],
+            status=status, error=error,
+            payer_country=payer_country, remote_id=remote_id,
+        )
+        if len(payin_transfers) == 1:
+            return payin, payin_transfers[0]
+        else:
+            return payin, payin_transfers
+
+    def make_payin_and_transfers(
+        self, route, amount, transfers,
+        status='succeeded', error=None, payer_country=None, fee=None,
+        remote_id='fake',
     ):
         payer = route.participant
         payin = prepare_payin(self.db, payer, amount, route)
         payin = update_payin(self.db, payin.id, remote_id, status, error, fee=fee)
         provider = route.network.split('-', 1)[0]
-        try:
-            destination = resolve_destination(
-                self.db, tippee, provider, payer, payer_country, amount
-            )
-        except MissingPaymentAccount as e:
-            destination = self.add_payment_account(e.args[0], provider)
-        recipient = Participant.from_id(destination.participant)
-        if tippee.kind == 'group':
-            context = 'team-donation'
-            team = tippee.id
-        else:
-            context = 'personal-donation'
-            team = None
-        pt = prepare_payin_transfer(
-            self.db, payin, recipient, destination, context, amount,
-            unit_amount, period, team,
-        )
-        pt = update_payin_transfer(
-            self.db, pt.id, pt_remote_id, status, error,
-            amount=(amount - (fee or 0)),
-        )
-        payer.update_giving()
-        tippee.update_receiving()
-        if team:
-            recipient.update_receiving()
-        return payin, pt
-
-    def make_payin_and_transfers(
-        self, route, amount, transfers,
-        status='succeeded', error=None, payer_country=None, remote_id='fake',
-    ):
-        payer = route.participant
-        payin = prepare_payin(self.db, payer, amount, route)
-        payin = update_payin(self.db, payin.id, remote_id, status, error)
-        provider = route.network.split('-', 1)[0]
         payin_transfers = []
         for tippee, pt_amount, opt in transfers:
-            try:
-                destination = resolve_destination(
-                    self.db, tippee, provider, payer, payer_country, pt_amount
-                )
-            except MissingPaymentAccount as e:
-                destination = self.add_payment_account(e.args[0], provider)
-            recipient = Participant.from_id(destination.participant)
-            if tippee.kind == 'group':
-                context = 'team-donation'
-                team = tippee.id
+            tip = opt.get('tip')
+            if tip:
+                assert tip.tipper == payer.id
+                assert tip.tippee == tippee.id
             else:
-                context = 'personal-donation'
-                team = None
-            pt = prepare_payin_transfer(
-                self.db, payin, recipient, destination, context, pt_amount,
-                opt.get('unit_amount'), opt.get('period'), team
-            )
-            pt = update_payin_transfer(
-                self.db, pt.id, opt.get('remote_id', 'fake'),
-                opt.get('status', status), opt.get('error', error)
-            )
-            payin_transfers.append(pt)
+                tip = self.db.one("""
+                    SELECT *
+                      FROM current_tips
+                     WHERE tipper = %s
+                       AND tippee = %s
+                """, (payer.id, tippee.id))
+                assert tip
+            for i in range(100):
+                try:
+                    new_payin_transfers = prepare_donation(
+                        self.db, payin, tip, tippee, provider, payer, payer_country, pt_amount
+                    )
+                except MissingPaymentAccount as e:
+                    if i > 95:
+                        # Infinite loop?
+                        raise
+                    recipient = e.args[0]
+                    if recipient.kind == 'group':
+                        raise
+                    self.add_payment_account(recipient, provider)
+                else:
+                    break
+            for i, pt in enumerate(new_payin_transfers):
+                payin_transfers.append(update_payin_transfer(
+                    self.db, pt.id, opt.get('remote_id', 'fake'),
+                    opt.get('status', status), opt.get('error', error)
+                ))
+                if pt.team:
+                    Participant.from_id(pt.recipient).update_receiving()
             tippee.update_receiving()
-            if team:
-                recipient.update_receiving()
         payer.update_giving()
         return payin, payin_transfers
 
