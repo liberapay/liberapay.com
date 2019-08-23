@@ -416,7 +416,7 @@ def stripe(app_conf):
         return
     import stripe
     stripe.api_key = app_conf.stripe_secret_key
-    stripe.api_version = '2019-03-14'
+    stripe.api_version = '2019-08-14'
     stripe.max_network_retries = 2
 
 
