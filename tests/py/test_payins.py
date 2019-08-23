@@ -359,16 +359,17 @@ class TestPayinsStripe(Harness):
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded'
-        assert payin.amount_settled == EUR('78.66')
-        assert payin.fee == EUR('2.53')
+        assert payin.amount_settled.currency == 'EUR'
+        assert payin.fee.currency == 'EUR'
         payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
         assert len(payin_transfers) == 2
         pt1, pt2 = payin_transfers
+        net_amount = payin.amount_settled - payin.fee
         assert pt1.status == 'succeeded'
-        assert pt1.amount == EUR('38.07')
+        assert pt1.amount == (net_amount / 2).round_up()
         assert pt1.remote_id
         assert pt2.status == 'succeeded'
-        assert pt2.amount == EUR('38.06')
+        assert pt2.amount == (net_amount / 2).round_down()
 
     def test_01_payin_stripe_sdd(self):
         self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 101")
