@@ -921,7 +921,7 @@ class TestPaydayForTeams(FakeTransfersHarness):
         team.set_take_for(bob, EUR('1.00'), team)
 
         stripe_account_alice = self.add_payment_account(alice, 'stripe', default_currency='EUR')
-        self.add_payment_account(bob, 'stripe', default_currency='USD')
+        self.add_payment_account(bob, 'stripe', country='US', default_currency='USD')
 
         carl = self.make_participant('carl')
         carl.set_tip_to(team, EUR('10'))
