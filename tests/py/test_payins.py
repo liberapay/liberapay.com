@@ -8,9 +8,18 @@ import stripe
 from liberapay.constants import EPOCH
 from liberapay.exceptions import MissingPaymentAccount
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.payin.common import resolve_team_donation
+from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.paypal import sync_all_pending_payments
 from liberapay.testing import Harness, EUR, JPY, USD
+
+
+class TestResolveAmounts(Harness):
+
+    def test_resolve_low_amounts(self):
+        naive_amounts = {1: EUR('20.00'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('6.00'), 2: EUR('0.01')}
+        resolved_amounts = resolve_amounts(EUR('6.01'), naive_amounts)
+        assert resolved_amounts == expected_amounts
 
 
 class TestResolveTeamDonation(Harness):
