@@ -337,15 +337,24 @@ def resolve_amounts(available_amount, naive_transfer_amounts):
     amount_left = available_amount
     for key, naive_amount in sorted(naive_transfer_amounts.items()):
         assert amount_left >= min_transfer_amount
-        r[key] = min((naive_amount * ratio).round_up(), amount_left)
+        r[key] = min((naive_amount * ratio).round_down(), amount_left)
         amount_left -= r[key]
     if amount_left > 0:
         # Deal with rounding error
-        for key, amount in naive_transfer_amounts.items():
-            r[key] += min_transfer_amount
-            amount_left -= min_transfer_amount
-            if amount_left == 0:
-                break
+        # Distribute first to recipients who have been allocated zero so far.
+        for key, amount in r.items():
+            if amount == 0:
+                r[key] += min_transfer_amount
+                amount_left -= min_transfer_amount
+                if amount_left == 0:
+                    break
+        # Then distribute to the recipients who have been allocated the most.
+        if amount_left:
+            for key, amount in sorted(r.items(), key=lambda t: -t[1]):
+                r[key] += min_transfer_amount
+                amount_left -= min_transfer_amount
+                if amount_left == 0:
+                    break
     assert amount_left == 0, '%r != 0' % amount_left
     return r
 
