@@ -6,7 +6,7 @@ from pando.utils import utcnow
 import stripe
 
 from liberapay.constants import EPOCH
-from liberapay.exceptions import MissingPaymentAccount
+from liberapay.exceptions import MissingPaymentAccount, NoSelfTipping
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.paypal import sync_all_pending_payments
@@ -60,6 +60,11 @@ class TestResolveTeamDonation(Harness):
         # Test with a single member and the take set to `auto`
         account = self.resolve(team, 'stripe', alice, 'GB', EUR('7'))
         assert account == stripe_account_bob
+
+        # Test self donation
+        bob.set_tip_to(team, EUR('0.06'))
+        with self.assertRaises(NoSelfTipping):
+            account = self.resolve(team, 'stripe', bob, 'FR', EUR('6'))
 
         # Test with two members but only one payment account
         team.add_member(carl)
