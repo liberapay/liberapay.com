@@ -288,6 +288,7 @@ def resolve_team_donation(
     ))
     # Try to distribute the donation to multiple members.
     if provider == 'stripe':
+        other_members = set(t.member for t in members if t.member != payer.id)
         sepa_accounts = {a.participant: a for a in db.all("""
             SELECT DISTINCT ON (a.participant) a.*
               FROM payment_accounts a
@@ -298,7 +299,7 @@ def resolve_team_donation(
           ORDER BY a.participant
                  , a.default_currency = 'EUR' DESC
                  , a.connection_ts
-        """, dict(members=set(t.member for t in members if t.member != payer.id), SEPA=SEPA))}
+        """, dict(members=other_members, SEPA=SEPA))} if other_members else ()
         if len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
             exp = Decimal('0.7')
             naive_amounts = {
