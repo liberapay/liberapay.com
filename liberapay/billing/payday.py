@@ -529,7 +529,8 @@ class Payday(object):
             tip_currency = tip.amount.currency
             sorted_takes = chain(
                 takes_by_preferred_currency.get(tip_currency, ()),
-                takes_by_secondary_currency.get(tip_currency, ())
+                takes_by_secondary_currency.get(tip_currency, ()),
+                takes
             )
             for take in sorted_takes:
                 if take.amount == 0 or tip.tipper == take.member:
