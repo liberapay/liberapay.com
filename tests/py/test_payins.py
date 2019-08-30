@@ -115,24 +115,33 @@ class TestResolveTeamDonation(Harness):
         payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'))
         assert pt.destination == stripe_account_bob.pk
 
-        # Test with two members having SEPA accounts
+        # Test with two members having SEPA accounts and one non-SEPA
+        # We also add the donor to the team, to check that self tipping is avoided.
         stripe_account_carl = self.add_payment_account(
             carl, 'stripe', country='DE', id='acct_DE',
         )
-        donations = self.resolve(team, 'stripe', alice, 'ZA', EUR('6.30'))
-        assert len(donations) == 2
-        assert donations[0].amount == EUR('5.44')
-        assert donations[0].destination == stripe_account_bob
-        assert donations[1].amount == EUR('0.86')
-        assert donations[1].destination == stripe_account_carl
+        dana = self.make_participant('dana')
+        self.add_payment_account(dana, 'stripe', country='US', default_currency='USD')
+        team.add_member(dana)
+        self.add_payment_account(alice, 'stripe', country='BE')
+        team.add_member(alice)
+        payin, payin_transfers = self.make_payin_and_transfer(
+            alice_card, team, EUR('6.90'), fee=EUR('0.60')
+        )
+        assert len(payin_transfers) == 2
+        assert payin_transfers[0].amount == EUR('5.44')
+        assert payin_transfers[0].destination == stripe_account_bob.pk
+        assert payin_transfers[1].amount == EUR('0.86')
+        assert payin_transfers[1].destination == stripe_account_carl.pk
+        # Check that this donation has balanced the takes.
         takes = {t.member: t for t in self.db.all("""
             SELECT member, amount, paid_in_advance
               FROM current_takes
              WHERE team = %s
         """, (team.id,))}
-        x1 = (takes[bob.id].paid_in_advance + donations[0].amount) / takes[bob.id].amount
-        x2 = (takes[carl.id].paid_in_advance + donations[1].amount) / takes[carl.id].amount
-        assert abs(x1 - x2) <= Decimal('0.001')
+        weeks_of_advance_bob = takes[bob.id].paid_in_advance / takes[bob.id].amount
+        weeks_of_advance_carl = takes[carl.id].paid_in_advance / takes[carl.id].amount
+        assert abs(weeks_of_advance_bob - weeks_of_advance_carl) <= Decimal('0.001')
 
 
 class TestPayins(Harness):
