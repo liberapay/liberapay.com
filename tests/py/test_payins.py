@@ -1,3 +1,4 @@
+from decimal import Decimal
 import json
 from unittest.mock import patch
 
@@ -120,10 +121,18 @@ class TestResolveTeamDonation(Harness):
         )
         donations = self.resolve(team, 'stripe', alice, 'ZA', EUR('6.30'))
         assert len(donations) == 2
-        assert donations[0].amount == EUR('2.10')
+        assert donations[0].amount == EUR('5.44')
         assert donations[0].destination == stripe_account_bob
-        assert donations[1].amount == EUR('4.20')
+        assert donations[1].amount == EUR('0.86')
         assert donations[1].destination == stripe_account_carl
+        takes = {t.member: t for t in self.db.all("""
+            SELECT member, amount, paid_in_advance
+              FROM current_takes
+             WHERE team = %s
+        """, (team.id,))}
+        x1 = (takes[bob.id].paid_in_advance + donations[0].amount) / takes[bob.id].amount
+        x2 = (takes[carl.id].paid_in_advance + donations[1].amount) / takes[carl.id].amount
+        assert abs(x1 - x2) <= Decimal('0.001')
 
 
 class TestPayins(Harness):

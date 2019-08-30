@@ -10,6 +10,7 @@ from ..exceptions import (
 )
 from ..i18n.currencies import Money, MoneyBasket
 from ..models.participant import Participant
+from ..utils import NS
 
 
 class Donation(object):
@@ -219,7 +220,7 @@ def resolve_team_donation(
         NoSelfTipping: if the payer would end up sending money to themself
 
     """
-    members = db.all("""
+    members = [NS(r._asdict()) for r in db.all("""
         SELECT t.member
              , t.ctime
              , t.amount
@@ -229,7 +230,7 @@ def resolve_team_donation(
                     WHERE pt.recipient = t.member
                       AND pt.team = t.team
                       AND pt.context = 'team-donation'
-                      AND pt.status = 'succeeded'
+                      AND pt.status IN ('succeeded', 'pending')
                ), 'EUR') + coalesce_currency_amount((
                    SELECT sum(tr.amount, 'EUR')
                      FROM transfers tr
@@ -267,20 +268,24 @@ def resolve_team_donation(
                       AND a.verified
                       AND coalesce(a.charges_enabled, true)
                )
-    """, (team.id, provider))
+    """, (team.id, provider))]
     if not members:
         raise MissingPaymentAccount(team)
     payment_amount_eur = payment_amount.convert('EUR')
     zero_eur = Money.ZEROS['EUR']
     income_amount_eur = team.receiving.convert('EUR') + weekly_amount.convert('EUR')
+    if income_amount_eur == 0:
+        income_amount_eur = Money.MINIMUMS['EUR']
     manual_takes_sum = MoneyBasket(t.amount for t in members if t.amount > 0)
     auto_take = income_amount_eur - manual_takes_sum.fuzzy_sum('EUR')
     if auto_take < 0:
         auto_take = zero_eur
+    for t in members:
+        t.amount_eur = auto_take if t.amount < 0 else t.amount.convert('EUR')
     members = sorted(members, key=lambda t: (
         int(t.member == payer.id),
         -(
-            ((auto_take if t.amount < 0 else t.amount.convert('EUR')) + t.takes_sum_eur) /
+            (t.amount_eur + t.takes_sum_eur) /
             (t.received_sum_eur + payment_amount_eur)
         ),
         t.received_sum_eur,
@@ -302,14 +307,27 @@ def resolve_team_donation(
         """, dict(members=other_members, SEPA=SEPA))} if other_members else ()
         if len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
             exp = Decimal('0.7')
-            naive_amounts = {
+            selected_takes = []
+            max_weeks_of_advance = 0
+            for t in members:
+                if t.member not in sepa_accounts:
+                    continue
+                t.weeks_of_advance = (t.received_sum_eur - t.takes_sum_eur) / t.amount_eur
+                if t.weeks_of_advance < -1:
+                    # Dampen the effect of past takes, because they can't be changed.
+                    t.weeks_of_advance = t.weeks_of_advance ** exp
+                elif t.weeks_of_advance > max_weeks_of_advance:
+                    max_weeks_of_advance = t.weeks_of_advance
+                selected_takes.append(t)
+            del members
+            base_amounts = {t.member: t.amount_eur for t in selected_takes}
+            convergence_amounts = {
                 t.member: (
-                    (auto_take if t.amount < 0 else t.amount.convert('EUR')) +
-                    (max(t.takes_sum_eur - t.received_sum_eur, zero_eur) ** exp).round_up()
-                )
-                for t in members if t.member in sepa_accounts
+                    t.amount_eur * (max_weeks_of_advance - t.weeks_of_advance)
+                ).round_up()
+                for t in selected_takes
             }
-            tr_amounts = resolve_amounts(payment_amount_eur, naive_amounts)
+            tr_amounts = resolve_amounts(payment_amount_eur, base_amounts, convergence_amounts)
             return [
                 Donation(tr_amounts[p_id], Participant.from_id(p_id), sepa_accounts[p_id])
                 for p_id in tr_amounts
@@ -320,26 +338,38 @@ def resolve_team_donation(
     return [Donation(payment_amount, member, account)]
 
 
-def resolve_amounts(available_amount, naive_transfer_amounts):
+def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
     """Compute transfer amounts.
 
     Args:
         available_amount (Money):
             the payin amount to split into transfer amounts
-        naive_transfer_amounts (Dict[Any, Money]):
-            a map of transfer IDs (or tip IDs) to transfer amounts
+        base_amounts (Dict[Any, Money]):
+            a map of IDs to raw transfer amounts
+        convergence_amounts (Dict[Any, Money]):
+            an optional map of IDs to ideal additional amounts
 
-    Returns a copy of `naive_transfer_amounts` with updated values.
+    Returns a copy of `base_amounts` with updated values.
     """
-    naive_sum = Money.sum(naive_transfer_amounts.values(), available_amount.currency)
-    ratio = available_amount / naive_sum
     min_transfer_amount = Money.MINIMUMS[available_amount.currency]
     r = {}
     amount_left = available_amount
-    for key, naive_amount in sorted(naive_transfer_amounts.items()):
+    if convergence_amounts:
+        convergence_sum = Money.sum(convergence_amounts.values(), amount_left.currency)
+        if convergence_sum != 0:
+            convergence_amounts = {k: v for k, v in convergence_amounts.items() if v != 0}
+            if amount_left > convergence_sum:
+                r.update(convergence_amounts)
+                amount_left -= convergence_sum
+            else:
+                base_amounts = convergence_amounts
+    base_sum = Money.sum(base_amounts.values(), amount_left.currency)
+    base_ratio = amount_left / base_sum
+    for key, base_amount in sorted(base_amounts.items()):
         assert amount_left >= min_transfer_amount
-        r[key] = min((naive_amount * ratio).round_down(), amount_left)
-        amount_left -= r[key]
+        amount = min((base_amount * base_ratio).round_down(), amount_left)
+        r[key] = amount + r.get(key, 0)
+        amount_left -= amount
     if amount_left > 0:
         # Deal with rounding error
         # Distribute first to recipients who have been allocated zero so far.
@@ -349,9 +379,10 @@ def resolve_amounts(available_amount, naive_transfer_amounts):
                 amount_left -= min_transfer_amount
                 if amount_left == 0:
                     break
-        # Then distribute to the recipients who have been allocated the most.
+        # Then distribute to the recipients who have been allocated the most,
+        # because that skews the percentages the least.
         if amount_left:
-            for key, amount in sorted(r.items(), key=lambda t: -t[1]):
+            for key, amount in sorted(r.items(), key=lambda t: -t[1].amount):
                 r[key] += min_transfer_amount
                 amount_left -= min_transfer_amount
                 if amount_left == 0:
