@@ -10,8 +10,9 @@ from ..exceptions import (
     NoSelfTipping,
 )
 from ..i18n.currencies import Money, MoneyBasket
+from ..models.exchange_route import ExchangeRoute
 from ..models.participant import Participant
-from ..utils import NS
+from ..utils import NS, group_by
 
 
 class Donation(object):
@@ -126,30 +127,74 @@ def adjust_payin_transfers(db, payin, net_amount):
         net_amount (Money): the amount of money available to transfer
 
     """
+    payer = Participant.from_id(payin.payer)
+    route = ExchangeRoute.from_id(payer, payin.route)
+    provider = route.network.split('-', 1)[0]
+    payer_country = route.country
     # We have to update the transfer amounts in a single transaction to
     # avoid ending up in an inconsistent state.
     with db.get_cursor() as cursor:
         payin_transfers = cursor.all("""
-            SELECT id, amount
-              FROM payin_transfers
-             WHERE payin = %s
-          ORDER BY id
-               FOR UPDATE
+            SELECT pt.id, pt.amount, pt.team, pt.recipient, team_p
+              FROM payin_transfers pt
+         LEFT JOIN participants team_p ON team_p.id = pt.team
+             WHERE pt.payin = %s
+          ORDER BY pt.id
+               FOR UPDATE OF pt
         """, (payin.id,))
-        transfer_amounts = resolve_amounts(net_amount, {
-            pt.id: pt.amount.convert(net_amount.currency) for pt in payin_transfers
+        assert payin_transfers
+        transfers_by_tippee = group_by(
+            payin_transfers, lambda pt: (pt.team or pt.recipient)
+        )
+        prorated_amounts = resolve_amounts(net_amount, {
+            tippee: MoneyBasket(pt.amount for pt in grouped).fuzzy_sum(net_amount.currency)
+            for tippee, grouped in transfers_by_tippee.items()
         })
-        args_list = [
-            (transfer_amounts[pt.id], pt.id) for pt in payin_transfers
-            if pt.amount != transfer_amounts[pt.id]
-        ]
-        if args_list:
+        updates = []
+        for tippee, prorated_amount in prorated_amounts.items():
+            transfers = transfers_by_tippee[tippee]
+            if len(transfers) > 1:
+                team = transfers[0].team_p
+                tip = payer.get_tip_to(team)
+                try:
+                    team_donations = resolve_team_donation(
+                        cursor, team, provider, payer, payer_country,
+                        prorated_amount, tip['amount']
+                    )
+                except (MissingPaymentAccount, NoSelfTipping):
+                    team_amounts = resolve_amounts(prorated_amount, {
+                        pt.id: pt.amount.convert(prorated_amount.currency)
+                        for pt in transfers
+                    })
+                    for pt in transfers:
+                        if pt.amount != team_amounts.get(pt.id):
+                            updates.append((team_amounts[pt.id], pt.id))
+                else:
+                    team_donations = {d.recipient.id: d for d in team_donations}
+                    for pt in transfers:
+                        d = team_donations.pop(pt.recipient, None)
+                        if d is None:
+                            assert pt.status == 'pre'
+                            cursor.run("DELETE FROM payin_transfers WHERE id = %s", (pt.id,))
+                        elif pt.amount != d.amount:
+                            updates.append((d.amount, pt.id))
+                    for d in team_donations.values():
+                        prepare_payin_transfer(
+                            db, payin, d.recipient, d.destination, 'team-donation',
+                            d.amount, tip['periodic_amount'], tip['period'],
+                            team=team.id
+                        )
+            else:
+                pt = transfers[0]
+                if pt.amount != prorated_amount:
+                    updates.append((prorated_amount, pt.id))
+        if updates:
             execute_batch(cursor, """
                 UPDATE payin_transfers
                    SET amount = %s
                  WHERE id = %s
                    AND status <> 'succeeded';
-            """, args_list)
+            """, updates)
 
 
 def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, payment_amount):
@@ -265,7 +310,7 @@ def resolve_team_donation(
                     WHERE pt.recipient = t.member
                       AND pt.team = t.team
                       AND pt.context = 'team-donation'
-                      AND pt.status IN ('succeeded', 'pending')
+                      AND pt.status = 'succeeded'
                ), 'EUR') + coalesce_currency_amount((
                    SELECT sum(tr.amount, 'EUR')
                      FROM transfers tr
