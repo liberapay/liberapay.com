@@ -6,7 +6,7 @@ from liberapay.billing.transactions import create_debt
 from liberapay.i18n.currencies import MoneyBasket
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
-from liberapay.testing import EUR, USD, Foobar
+from liberapay.testing import EUR, JPY, USD, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
 
@@ -963,6 +963,36 @@ class TestPaydayForTeams(FakeTransfersHarness):
 
         transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
         assert len(transfers) == 0
+
+    def test_take_paid_in_advance_in_unaccepted_currency(self):
+        team = self.make_participant('team', kind='group', accepted_currencies=None)
+        alice = self.make_participant('alice', main_currency='EUR',
+                                      accepted_currencies='EUR,USD')
+        team.set_take_for(alice, EUR('1.00'), team)
+        bob = self.make_participant('bob', main_currency='USD',
+                                    accepted_currencies='EUR,USD')
+        team.set_take_for(bob, USD('1.00'), team)
+
+        stripe_account_alice = self.add_payment_account(alice, 'stripe', default_currency='EUR')
+        self.add_payment_account(bob, 'stripe', country='US', default_currency='USD')
+
+        carl = self.make_participant('carl')
+        carl.set_tip_to(team, JPY('1250'))
+
+        carl_card = ExchangeRoute.insert(
+            carl, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
+        )
+        payin, pt = self.make_payin_and_transfer(carl_card, team, JPY('1250'))
+        assert pt.destination == stripe_account_alice.pk
+
+        Payday.start().run()
+
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 1
+        assert transfers[0].virtual is True
+        assert transfers[0].tipper == carl.id
+        assert transfers[0].tippee == alice.id
+        assert transfers[0].amount == JPY('125')
 
 
 class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
