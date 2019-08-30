@@ -1,7 +1,6 @@
 from datetime import timedelta
 from decimal import Decimal
 
-from psycopg2.extras import execute_batch
 import stripe
 import stripe.error
 
@@ -11,8 +10,9 @@ from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
 from .common import (
-    abort_payin, record_payin_refund, record_payin_transfer_reversal,
-    resolve_amounts, update_payin, update_payin_transfer,
+    abort_payin, adjust_payin_transfers,
+    record_payin_refund, record_payin_transfer_reversal,
+    update_payin, update_payin_transfer,
 )
 
 
@@ -261,30 +261,7 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
         record_refunds(db, payin, charge)
 
     if amount_settled is not None:
-        # We have to update the transfer amounts in a single transaction to
-        # avoid ending up in an inconsistent state.
-        with db.get_cursor() as cursor:
-            payin_transfers = cursor.all("""
-                SELECT id, amount
-                  FROM payin_transfers
-                 WHERE payin = %s
-              ORDER BY id
-                   FOR UPDATE
-            """, (payin.id,))
-            transfer_amounts = resolve_amounts(net_amount, {
-                pt.id: pt.amount.convert(amount_settled.currency) for pt in payin_transfers
-            })
-            args_list = [
-                (transfer_amounts[pt.id], pt.id) for pt in payin_transfers
-                if pt.amount != transfer_amounts[pt.id]
-            ]
-            if args_list:
-                execute_batch(cursor, """
-                    UPDATE payin_transfers
-                       SET amount = %s
-                     WHERE id = %s
-                       AND status <> 'succeeded';
-                """, args_list)
+        adjust_payin_transfers(db, payin, net_amount)
 
     payin_transfers = db.all("""
         SELECT pt.*, pa.id AS destination_id

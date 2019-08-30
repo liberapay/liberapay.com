@@ -2,6 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 from pando.utils import utcnow
+from psycopg2.extras import execute_batch
 
 from ..constants import SEPA
 from ..exceptions import (
@@ -115,6 +116,40 @@ def update_payin(
             """, (payin.route,))
 
         return payin
+
+
+def adjust_payin_transfers(db, payin, net_amount):
+    """Correct a payin's transfers once the net amount is known.
+
+    Args:
+        payin (Record): a row from the `payins` table
+        net_amount (Money): the amount of money available to transfer
+
+    """
+    # We have to update the transfer amounts in a single transaction to
+    # avoid ending up in an inconsistent state.
+    with db.get_cursor() as cursor:
+        payin_transfers = cursor.all("""
+            SELECT id, amount
+              FROM payin_transfers
+             WHERE payin = %s
+          ORDER BY id
+               FOR UPDATE
+        """, (payin.id,))
+        transfer_amounts = resolve_amounts(net_amount, {
+            pt.id: pt.amount.convert(net_amount.currency) for pt in payin_transfers
+        })
+        args_list = [
+            (transfer_amounts[pt.id], pt.id) for pt in payin_transfers
+            if pt.amount != transfer_amounts[pt.id]
+        ]
+        if args_list:
+            execute_batch(cursor, """
+                UPDATE payin_transfers
+                   SET amount = %s
+                 WHERE id = %s
+                   AND status <> 'succeeded';
+            """, args_list)
 
 
 def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, payment_amount):
