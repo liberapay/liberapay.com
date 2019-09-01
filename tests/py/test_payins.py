@@ -78,7 +78,9 @@ class TestResolveTeamDonation(Harness):
         assert account == stripe_account_bob
 
         # Test with two members and both takes set to `auto`
-        stripe_account_carl = self.add_payment_account(carl, 'stripe', country='JP')
+        stripe_account_carl = self.add_payment_account(
+            carl, 'stripe', country='JP', default_currency='JPY'
+        )
         account = self.resolve(team, 'stripe', alice, 'PL', EUR('5.46'))
         assert account == stripe_account_bob
         account = self.resolve(team, 'paypal', alice, 'PL', EUR('99.9'))
@@ -99,6 +101,12 @@ class TestResolveTeamDonation(Harness):
         assert account == stripe_account_carl
         account = self.resolve(team, 'paypal', alice, 'BR', EUR('5'))
         assert account == paypal_account_carl
+
+        # Test with a suspended member
+        self.db.run("UPDATE participants SET is_suspended = true WHERE id = %s", (carl.id,))
+        account = self.resolve(team, 'stripe', alice, 'RU', EUR('7.70'))
+        assert account == stripe_account_bob
+        self.db.run("UPDATE participants SET is_suspended = false WHERE id = %s", (carl.id,))
 
         # Check that members are cycled through
         alice_card = ExchangeRoute.insert(

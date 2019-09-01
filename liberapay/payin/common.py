@@ -37,6 +37,9 @@ def prepare_payin(db, payer, amount, route):
     Returns:
         Record: the row created in the `payins` table
 
+    Raises:
+        AccountSuspended: if the payer's account is suspended
+
     """
     assert isinstance(amount, Money), type(amount)
     assert route.participant == payer, (route.participant, payer)
@@ -216,9 +219,19 @@ def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, pay
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the donor would end up sending money to themself
 
+    Raises:
+        AccountSuspended: if the payer's account is suspended
+        RecipientAccountSuspended: if the tippee's account is suspended
+
     """
     assert tip.tipper == payer.id
     assert tip.tippee == tippee.id
+
+    if payer.is_suspended:
+        raise AccountSuspended(payer)
+    if tippee.is_suspended:
+        raise RecipientAccountSuspended(tippee)
+
     r = []
     if tippee.kind == 'group':
         team_donations = resolve_team_donation(
@@ -337,8 +350,10 @@ def resolve_team_donation(
                     WHERE t2.amount > 0
                ), 'EUR')) AS takes_sum_eur
           FROM current_takes t
+          JOIN participants p ON p.id = t.member
          WHERE t.team = %s
            AND t.amount <> 0
+           AND p.is_suspended IS NOT true
            AND EXISTS (
                    SELECT true
                      FROM payment_accounts a
