@@ -24,7 +24,8 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import (
-    prepare_donation, prepare_payin, update_payin, update_payin_transfer,
+    adjust_payin_transfers, prepare_donation, prepare_payin,
+    update_payin, update_payin_transfer,
 )
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing.vcr import use_cassette
@@ -290,9 +291,9 @@ class Harness(unittest.TestCase):
         remote_id='fake', **opt
     ):
         payin, payin_transfers = self.make_payin_and_transfers(
-            route, amount, [(tippee, amount - (fee or 0), opt)],
-            status=status, error=error,
-            payer_country=payer_country, remote_id=remote_id,
+            route, amount, [(tippee, amount, opt)],
+            status=status, error=error, payer_country=payer_country, fee=fee,
+            remote_id=remote_id,
         )
         if len(payin_transfers) == 1:
             return payin, payin_transfers[0]
@@ -306,9 +307,7 @@ class Harness(unittest.TestCase):
     ):
         payer = route.participant
         payin = prepare_payin(self.db, payer, amount, route)
-        payin = update_payin(self.db, payin.id, remote_id, status, error, fee=fee)
         provider = route.network.split('-', 1)[0]
-        payin_transfers = []
         for tippee, pt_amount, opt in transfers:
             tip = opt.get('tip')
             if tip:
@@ -324,7 +323,7 @@ class Harness(unittest.TestCase):
                 assert tip
             for i in range(100):
                 try:
-                    new_payin_transfers = prepare_donation(
+                    prepare_donation(
                         self.db, payin, tip, tippee, provider, payer, payer_country, pt_amount
                     )
                 except MissingPaymentAccount as e:
@@ -337,11 +336,20 @@ class Harness(unittest.TestCase):
                     self.add_payment_account(recipient, provider)
                 else:
                     break
-            for i, pt in enumerate(new_payin_transfers):
-                payin_transfers.append(update_payin_transfer(
+        payin = update_payin(self.db, payin.id, remote_id, status, error, fee=fee)
+        net_amount = payin.amount - (fee or 0)
+        adjust_payin_transfers(self.db, payin, net_amount)
+        payin_transfers = self.db.all("""
+            SELECT *
+              FROM payin_transfers
+             WHERE payin = %s
+        """, (payin.id,))
+        for tippee, pt_amount, opt in transfers:
+            for i, pt in enumerate(payin_transfers):
+                payin_transfers[i] = update_payin_transfer(
                     self.db, pt.id, opt.get('remote_id', 'fake'),
                     opt.get('status', status), opt.get('error', error)
-                ))
+                )
                 if pt.team:
                     Participant.from_id(pt.recipient).update_receiving()
             tippee.update_receiving()

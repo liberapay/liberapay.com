@@ -1,3 +1,4 @@
+from decimal import Decimal
 import json
 from unittest.mock import patch
 
@@ -6,7 +7,7 @@ from pando.utils import utcnow
 import stripe
 
 from liberapay.constants import EPOCH
-from liberapay.exceptions import MissingPaymentAccount
+from liberapay.exceptions import MissingPaymentAccount, NoSelfTipping
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.paypal import sync_all_pending_payments
@@ -45,7 +46,7 @@ class TestResolveTeamDonation(Harness):
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
         team = self.make_participant('team', kind='group')
-        alice.set_tip_to(team, EUR('10'))
+        alice.set_tip_to(team, EUR('1.00'))
 
         # Test without payment account
         team.add_member(bob)
@@ -61,6 +62,11 @@ class TestResolveTeamDonation(Harness):
         account = self.resolve(team, 'stripe', alice, 'GB', EUR('7'))
         assert account == stripe_account_bob
 
+        # Test self donation
+        bob.set_tip_to(team, EUR('0.06'))
+        with self.assertRaises(NoSelfTipping):
+            account = self.resolve(team, 'stripe', bob, 'FR', EUR('6'))
+
         # Test with two members but only one payment account
         team.add_member(carl)
         account = self.resolve(team, 'stripe', alice, 'CH', EUR('8'))
@@ -72,7 +78,9 @@ class TestResolveTeamDonation(Harness):
         assert account == stripe_account_bob
 
         # Test with two members and both takes set to `auto`
-        stripe_account_carl = self.add_payment_account(carl, 'stripe', country='JP')
+        stripe_account_carl = self.add_payment_account(
+            carl, 'stripe', country='JP', default_currency='JPY'
+        )
         account = self.resolve(team, 'stripe', alice, 'PL', EUR('5.46'))
         assert account == stripe_account_bob
         account = self.resolve(team, 'paypal', alice, 'PL', EUR('99.9'))
@@ -94,6 +102,12 @@ class TestResolveTeamDonation(Harness):
         account = self.resolve(team, 'paypal', alice, 'BR', EUR('5'))
         assert account == paypal_account_carl
 
+        # Test with a suspended member
+        self.db.run("UPDATE participants SET is_suspended = true WHERE id = %s", (carl.id,))
+        account = self.resolve(team, 'stripe', alice, 'RU', EUR('7.70'))
+        assert account == stripe_account_bob
+        self.db.run("UPDATE participants SET is_suspended = false WHERE id = %s", (carl.id,))
+
         # Check that members are cycled through
         alice_card = ExchangeRoute.insert(
             alice, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
@@ -109,16 +123,37 @@ class TestResolveTeamDonation(Harness):
         payin, pt = self.make_payin_and_transfer(alice_card, team, EUR('2'))
         assert pt.destination == stripe_account_bob.pk
 
-        # Test with two members having SEPA accounts
+        # Test with two members having SEPA accounts and one non-SEPA
+        # We also add the donor to the team, to check that self tipping is avoided.
         stripe_account_carl = self.add_payment_account(
             carl, 'stripe', country='DE', id='acct_DE',
         )
-        donations = self.resolve(team, 'stripe', alice, 'ZA', EUR('6.30'))
-        assert len(donations) == 2
-        assert donations[0].amount == EUR('2.10')
-        assert donations[0].destination == stripe_account_bob
-        assert donations[1].amount == EUR('4.20')
-        assert donations[1].destination == stripe_account_carl
+        dana = self.make_participant('dana')
+        self.add_payment_account(dana, 'stripe', country='US', default_currency='USD')
+        team.add_member(dana)
+        self.add_payment_account(alice, 'stripe', country='BE')
+        team.add_member(alice)
+        payin, payin_transfers = self.make_payin_and_transfer(
+            alice_card, team, EUR('6.90'), fee=EUR('0.60')
+        )
+        assert len(payin_transfers) == 2
+        assert payin_transfers[0].amount == EUR('5.43')
+        assert payin_transfers[0].destination == stripe_account_bob.pk
+        assert payin_transfers[0].unit_amount == EUR('0.82')
+        assert payin_transfers[0].n_units == 6
+        assert payin_transfers[1].amount == EUR('0.87')
+        assert payin_transfers[1].destination == stripe_account_carl.pk
+        assert payin_transfers[1].unit_amount == EUR('0.19')
+        assert payin_transfers[1].n_units == 6
+        # Check that this donation has balanced the takes.
+        takes = {t.member: t for t in self.db.all("""
+            SELECT member, amount, paid_in_advance
+              FROM current_takes
+             WHERE team = %s
+        """, (team.id,))}
+        weeks_of_advance_bob = takes[bob.id].paid_in_advance / takes[bob.id].amount
+        weeks_of_advance_carl = takes[carl.id].paid_in_advance / takes[carl.id].amount
+        assert abs(weeks_of_advance_bob - weeks_of_advance_carl) <= Decimal('0.001')
 
 
 class TestPayins(Harness):

@@ -2,6 +2,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 from pando.utils import utcnow
+from psycopg2.extras import execute_batch
 
 from ..constants import SEPA
 from ..exceptions import (
@@ -9,7 +10,9 @@ from ..exceptions import (
     NoSelfTipping,
 )
 from ..i18n.currencies import Money, MoneyBasket
+from ..models.exchange_route import ExchangeRoute
 from ..models.participant import Participant
+from ..utils import NS, group_by
 
 
 class Donation(object):
@@ -33,6 +36,9 @@ def prepare_payin(db, payer, amount, route):
 
     Returns:
         Record: the row created in the `payins` table
+
+    Raises:
+        AccountSuspended: if the payer's account is suspended
 
     """
     assert isinstance(amount, Money), type(amount)
@@ -116,6 +122,84 @@ def update_payin(
         return payin
 
 
+def adjust_payin_transfers(db, payin, net_amount):
+    """Correct a payin's transfers once the net amount is known.
+
+    Args:
+        payin (Record): a row from the `payins` table
+        net_amount (Money): the amount of money available to transfer
+
+    """
+    payer = Participant.from_id(payin.payer)
+    route = ExchangeRoute.from_id(payer, payin.route)
+    provider = route.network.split('-', 1)[0]
+    payer_country = route.country
+    # We have to update the transfer amounts in a single transaction to
+    # avoid ending up in an inconsistent state.
+    with db.get_cursor() as cursor:
+        payin_transfers = cursor.all("""
+            SELECT pt.id, pt.amount, pt.team, pt.recipient, team_p
+              FROM payin_transfers pt
+         LEFT JOIN participants team_p ON team_p.id = pt.team
+             WHERE pt.payin = %s
+          ORDER BY pt.id
+               FOR UPDATE OF pt
+        """, (payin.id,))
+        assert payin_transfers
+        transfers_by_tippee = group_by(
+            payin_transfers, lambda pt: (pt.team or pt.recipient)
+        )
+        prorated_amounts = resolve_amounts(net_amount, {
+            tippee: MoneyBasket(pt.amount for pt in grouped).fuzzy_sum(net_amount.currency)
+            for tippee, grouped in transfers_by_tippee.items()
+        })
+        updates = []
+        for tippee, prorated_amount in prorated_amounts.items():
+            transfers = transfers_by_tippee[tippee]
+            if len(transfers) > 1:
+                team = transfers[0].team_p
+                tip = payer.get_tip_to(team)
+                try:
+                    team_donations = resolve_team_donation(
+                        cursor, team, provider, payer, payer_country,
+                        prorated_amount, tip['amount']
+                    )
+                except (MissingPaymentAccount, NoSelfTipping):
+                    team_amounts = resolve_amounts(prorated_amount, {
+                        pt.id: pt.amount.convert(prorated_amount.currency)
+                        for pt in transfers
+                    })
+                    for pt in transfers:
+                        if pt.amount != team_amounts.get(pt.id):
+                            updates.append((team_amounts[pt.id], pt.id))
+                else:
+                    team_donations = {d.recipient.id: d for d in team_donations}
+                    for pt in transfers:
+                        d = team_donations.pop(pt.recipient, None)
+                        if d is None:
+                            assert pt.status == 'pre'
+                            cursor.run("DELETE FROM payin_transfers WHERE id = %s", (pt.id,))
+                        elif pt.amount != d.amount:
+                            updates.append((d.amount, pt.id))
+                    for d in team_donations.values():
+                        prepare_payin_transfer(
+                            db, payin, d.recipient, d.destination, 'team-donation',
+                            d.amount, tip['periodic_amount'], tip['period'],
+                            team=team.id
+                        )
+            else:
+                pt = transfers[0]
+                if pt.amount != prorated_amount:
+                    updates.append((prorated_amount, pt.id))
+        if updates:
+            execute_batch(cursor, """
+                UPDATE payin_transfers
+                   SET amount = %s
+                 WHERE id = %s
+                   AND status <> 'succeeded';
+            """, updates)
+
+
 def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, payment_amount):
     """Prepare to distribute a donation.
 
@@ -135,18 +219,30 @@ def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, pay
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the donor would end up sending money to themself
 
+    Raises:
+        AccountSuspended: if the payer's account is suspended
+        RecipientAccountSuspended: if the tippee's account is suspended
+
     """
     assert tip.tipper == payer.id
     assert tip.tippee == tippee.id
+
+    if payer.is_suspended:
+        raise AccountSuspended(payer)
+    if tippee.is_suspended:
+        raise RecipientAccountSuspended(tippee)
+
     r = []
     if tippee.kind == 'group':
         team_donations = resolve_team_donation(
             db, tippee, provider, payer, payer_country, payment_amount, tip.amount
         )
+        n_periods = payment_amount / tip.periodic_amount
         for d in team_donations:
+            unit_amount = (d.amount / n_periods).round_up()
             r.append(prepare_payin_transfer(
                 db, payin, d.recipient, d.destination, 'team-donation',
-                d.amount, tip.periodic_amount, tip.period, team=tippee.id
+                d.amount, unit_amount, tip.period, team=tippee.id
             ))
     else:
         destination = resolve_destination(
@@ -219,7 +315,7 @@ def resolve_team_donation(
         NoSelfTipping: if the payer would end up sending money to themself
 
     """
-    members = db.all("""
+    members = [NS(r._asdict()) for r in db.all("""
         SELECT t.member
              , t.ctime
              , t.amount
@@ -256,8 +352,10 @@ def resolve_team_donation(
                     WHERE t2.amount > 0
                ), 'EUR')) AS takes_sum_eur
           FROM current_takes t
+          JOIN participants p ON p.id = t.member
          WHERE t.team = %s
            AND t.amount <> 0
+           AND p.is_suspended IS NOT true
            AND EXISTS (
                    SELECT true
                      FROM payment_accounts a
@@ -267,20 +365,24 @@ def resolve_team_donation(
                       AND a.verified
                       AND coalesce(a.charges_enabled, true)
                )
-    """, (team.id, provider))
+    """, (team.id, provider))]
     if not members:
         raise MissingPaymentAccount(team)
     payment_amount_eur = payment_amount.convert('EUR')
     zero_eur = Money.ZEROS['EUR']
     income_amount_eur = team.receiving.convert('EUR') + weekly_amount.convert('EUR')
+    if income_amount_eur == 0:
+        income_amount_eur = Money.MINIMUMS['EUR']
     manual_takes_sum = MoneyBasket(t.amount for t in members if t.amount > 0)
     auto_take = income_amount_eur - manual_takes_sum.fuzzy_sum('EUR')
     if auto_take < 0:
         auto_take = zero_eur
+    for t in members:
+        t.amount_eur = auto_take if t.amount < 0 else t.amount.convert('EUR')
     members = sorted(members, key=lambda t: (
         int(t.member == payer.id),
         -(
-            ((auto_take if t.amount < 0 else t.amount.convert('EUR')) + t.takes_sum_eur) /
+            (t.amount_eur + t.takes_sum_eur) /
             (t.received_sum_eur + payment_amount_eur)
         ),
         t.received_sum_eur,
@@ -288,6 +390,7 @@ def resolve_team_donation(
     ))
     # Try to distribute the donation to multiple members.
     if provider == 'stripe':
+        other_members = set(t.member for t in members if t.member != payer.id)
         sepa_accounts = {a.participant: a for a in db.all("""
             SELECT DISTINCT ON (a.participant) a.*
               FROM payment_accounts a
@@ -298,20 +401,33 @@ def resolve_team_donation(
           ORDER BY a.participant
                  , a.default_currency = 'EUR' DESC
                  , a.connection_ts
-        """, dict(members=set(t.member for t in members if t.member != payer.id), SEPA=SEPA))}
+        """, dict(members=other_members, SEPA=SEPA))} if other_members else ()
         if len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
             exp = Decimal('0.7')
-            naive_amounts = {
+            selected_takes = []
+            max_weeks_of_advance = 0
+            for t in members:
+                if t.member not in sepa_accounts:
+                    continue
+                t.weeks_of_advance = (t.received_sum_eur - t.takes_sum_eur) / t.amount_eur
+                if t.weeks_of_advance < -1:
+                    # Dampen the effect of past takes, because they can't be changed.
+                    t.weeks_of_advance = t.weeks_of_advance ** exp
+                elif t.weeks_of_advance > max_weeks_of_advance:
+                    max_weeks_of_advance = t.weeks_of_advance
+                selected_takes.append(t)
+            del members
+            base_amounts = {t.member: t.amount_eur for t in selected_takes}
+            convergence_amounts = {
                 t.member: (
-                    (auto_take if t.amount < 0 else t.amount.convert('EUR')) +
-                    (max(t.takes_sum_eur - t.received_sum_eur, zero_eur) ** exp).round_up()
-                )
-                for t in members if t.member in sepa_accounts
+                    t.amount_eur * (max_weeks_of_advance - t.weeks_of_advance)
+                ).round_up()
+                for t in selected_takes
             }
-            tr_amounts = resolve_amounts(payment_amount_eur, naive_amounts)
+            tr_amounts = resolve_amounts(payment_amount_eur, base_amounts, convergence_amounts)
             return [
-                Donation(tr_amounts[p_id], Participant.from_id(p_id), sepa_accounts[p_id])
-                for p_id in tr_amounts
+                Donation(tr_amount, Participant.from_id(p_id), sepa_accounts[p_id])
+                for p_id, tr_amount in sorted(tr_amounts.items()) if tr_amount != 0
             ]
     # Fall back to sending the entire donation to the member who "needs" it most.
     member = Participant.from_id(members[0].member)
@@ -319,42 +435,67 @@ def resolve_team_donation(
     return [Donation(payment_amount, member, account)]
 
 
-def resolve_amounts(available_amount, naive_transfer_amounts):
+def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
     """Compute transfer amounts.
 
     Args:
         available_amount (Money):
             the payin amount to split into transfer amounts
-        naive_transfer_amounts (Dict[Any, Money]):
-            a map of transfer IDs (or tip IDs) to transfer amounts
+        base_amounts (Dict[Any, Money]):
+            a map of IDs to raw transfer amounts
+        convergence_amounts (Dict[Any, Money]):
+            an optional map of IDs to ideal additional amounts
 
-    Returns a copy of `naive_transfer_amounts` with updated values.
+    Returns a copy of `base_amounts` with updated values.
     """
-    naive_sum = Money.sum(naive_transfer_amounts.values(), available_amount.currency)
-    ratio = available_amount / naive_sum
     min_transfer_amount = Money.MINIMUMS[available_amount.currency]
     r = {}
     amount_left = available_amount
-    for key, naive_amount in sorted(naive_transfer_amounts.items()):
+
+    # Attempt to converge
+    if convergence_amounts:
+        convergence_sum = Money.sum(convergence_amounts.values(), amount_left.currency)
+        if convergence_sum != 0:
+            convergence_amounts = {k: v for k, v in convergence_amounts.items() if v != 0}
+            if amount_left == convergence_sum:
+                # We have just enough money for convergence.
+                return convergence_amounts
+            elif amount_left > convergence_sum:
+                # We have more than enough money for full convergence, the extra
+                # funds will be allocated in proportion to `base_amounts`.
+                r.update(convergence_amounts)
+                amount_left -= convergence_sum
+            else:
+                # We only have enough for partial convergence, the funds will be
+                # allocated in proportion to `convergence_amounts`.
+                base_amounts = convergence_amounts
+
+    # Compute the prorated amounts
+    base_sum = Money.sum(base_amounts.values(), amount_left.currency)
+    base_ratio = amount_left / base_sum
+    for key, base_amount in sorted(base_amounts.items()):
+        if base_amount == 0:
+            continue
         assert amount_left >= min_transfer_amount
-        r[key] = min((naive_amount * ratio).round_down(), amount_left)
-        amount_left -= r[key]
+        amount = min((base_amount * base_ratio).round_down(), amount_left)
+        r[key] = amount + r.get(key, 0)
+        amount_left -= amount
+
+    # Deal with rounding errors
     if amount_left > 0:
-        # Deal with rounding error
-        # Distribute first to recipients who have been allocated zero so far.
-        for key, amount in r.items():
-            if amount == 0:
-                r[key] += min_transfer_amount
-                amount_left -= min_transfer_amount
-                if amount_left == 0:
-                    break
-        # Then distribute to the recipients who have been allocated the most.
-        if amount_left:
-            for key, amount in sorted(r.items(), key=lambda t: -t[1]):
-                r[key] += min_transfer_amount
-                amount_left -= min_transfer_amount
-                if amount_left == 0:
-                    break
+        # Try to distribute in a way that doesn't skew the percentages much.
+        def compute_priority(item):
+            key, current_amount = item
+            base_amount = base_amounts[key] * base_ratio
+            return (current_amount - base_amount) / base_amount
+
+        for key, amount in sorted(r.items(), key=compute_priority):
+            r[key] += min_transfer_amount
+            amount_left -= min_transfer_amount
+            if amount_left == 0:
+                break
+
+    # Final check and return
     assert amount_left == 0, '%r != 0' % amount_left
     return r
 
