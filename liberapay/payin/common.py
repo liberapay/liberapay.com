@@ -424,8 +424,8 @@ def resolve_team_donation(
             }
             tr_amounts = resolve_amounts(payment_amount_eur, base_amounts, convergence_amounts)
             return [
-                Donation(tr_amounts[p_id], Participant.from_id(p_id), sepa_accounts[p_id])
-                for p_id in sorted(tr_amounts)
+                Donation(tr_amount, Participant.from_id(p_id), sepa_accounts[p_id])
+                for p_id, tr_amount in sorted(tr_amounts.items()) if tr_amount != 0
             ]
     # Fall back to sending the entire donation to the member who "needs" it most.
     member = Participant.from_id(members[0].member)
