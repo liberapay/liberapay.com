@@ -1190,7 +1190,11 @@ class Participant(Model, MixinTeam):
         message['from_email'] = 'Liberapay Support <support@liberapay.com>'
         if spt_name == 'newsletter':
             message['from_email'] = 'Liberapay Newsletters <newsletters@liberapay.com>'
-        message['to'] = [formataddr((self.username, email))]
+        if self.username[0] != '~':
+            name = self.username
+        else:
+            name = (self.get_current_identity() or {}).get('name')
+        message['to'] = [formataddr((name, email))]
         message['subject'] = spt['subject'].render(context).strip()
         self._rendering_email_to, self._email_session = email_row, None
         message['html'] = render('text/html', context_html)
