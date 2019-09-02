@@ -449,39 +449,51 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
     min_transfer_amount = Money.MINIMUMS[available_amount.currency]
     r = {}
     amount_left = available_amount
+
+    # Attempt to converge
     if convergence_amounts:
         convergence_sum = Money.sum(convergence_amounts.values(), amount_left.currency)
         if convergence_sum != 0:
             convergence_amounts = {k: v for k, v in convergence_amounts.items() if v != 0}
-            if amount_left > convergence_sum:
+            if amount_left == convergence_sum:
+                # We have just enough money for convergence.
+                return convergence_amounts
+            elif amount_left > convergence_sum:
+                # We have more than enough money for full convergence, the extra
+                # funds will be allocated in proportion to `base_amounts`.
                 r.update(convergence_amounts)
                 amount_left -= convergence_sum
             else:
+                # We only have enough for partial convergence, the funds will be
+                # allocated in proportion to `convergence_amounts`.
                 base_amounts = convergence_amounts
+
+    # Compute the prorated amounts
     base_sum = Money.sum(base_amounts.values(), amount_left.currency)
     base_ratio = amount_left / base_sum
     for key, base_amount in sorted(base_amounts.items()):
+        if base_amount == 0:
+            continue
         assert amount_left >= min_transfer_amount
         amount = min((base_amount * base_ratio).round_down(), amount_left)
         r[key] = amount + r.get(key, 0)
         amount_left -= amount
+
+    # Deal with rounding errors
     if amount_left > 0:
-        # Deal with rounding error
-        # Distribute first to recipients who have been allocated zero so far.
-        for key, amount in r.items():
-            if amount == 0:
-                r[key] += min_transfer_amount
-                amount_left -= min_transfer_amount
-                if amount_left == 0:
-                    break
-        # Then distribute to the recipients who have been allocated the most,
-        # because that skews the percentages the least.
-        if amount_left:
-            for key, amount in sorted(r.items(), key=lambda t: -t[1].amount):
-                r[key] += min_transfer_amount
-                amount_left -= min_transfer_amount
-                if amount_left == 0:
-                    break
+        # Try to distribute in a way that doesn't skew the percentages much.
+        def compute_priority(item):
+            key, current_amount = item
+            base_amount = base_amounts[key] * base_ratio
+            return (current_amount - base_amount) / base_amount
+
+        for key, amount in sorted(r.items(), key=compute_priority):
+            r[key] += min_transfer_amount
+            amount_left -= min_transfer_amount
+            if amount_left == 0:
+                break
+
+    # Final check and return
     assert amount_left == 0, '%r != 0' % amount_left
     return r
 

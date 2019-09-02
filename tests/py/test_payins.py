@@ -137,9 +137,9 @@ class TestResolveTeamDonation(Harness):
             alice_card, team, EUR('6.90'), fee=EUR('0.60')
         )
         assert len(payin_transfers) == 2
-        assert payin_transfers[0].amount == EUR('5.44')
+        assert payin_transfers[0].amount == EUR('5.43')
         assert payin_transfers[0].destination == stripe_account_bob.pk
-        assert payin_transfers[1].amount == EUR('0.86')
+        assert payin_transfers[1].amount == EUR('0.87')
         assert payin_transfers[1].destination == stripe_account_carl.pk
         # Check that this donation has balanced the takes.
         takes = {t.member: t for t in self.db.all("""
