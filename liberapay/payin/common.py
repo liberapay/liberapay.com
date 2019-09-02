@@ -237,10 +237,12 @@ def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, pay
         team_donations = resolve_team_donation(
             db, tippee, provider, payer, payer_country, payment_amount, tip.amount
         )
+        n_periods = payment_amount / tip.periodic_amount
         for d in team_donations:
+            unit_amount = (d.amount / n_periods).round_up()
             r.append(prepare_payin_transfer(
                 db, payin, d.recipient, d.destination, 'team-donation',
-                d.amount, tip.periodic_amount, tip.period, team=tippee.id
+                d.amount, unit_amount, tip.period, team=tippee.id
             ))
     else:
         destination = resolve_destination(
