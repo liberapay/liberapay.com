@@ -412,7 +412,7 @@ def resolve_team_donation(
                 t.weeks_of_advance = (t.received_sum_eur - t.takes_sum_eur) / t.amount_eur
                 if t.weeks_of_advance < -1:
                     # Dampen the effect of past takes, because they can't be changed.
-                    t.weeks_of_advance = t.weeks_of_advance ** exp
+                    t.weeks_of_advance = -((-t.weeks_of_advance) ** exp)
                 elif t.weeks_of_advance > max_weeks_of_advance:
                     max_weeks_of_advance = t.weeks_of_advance
                 selected_takes.append(t)
