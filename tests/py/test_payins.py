@@ -6,6 +6,7 @@ from markupsafe import Markup
 from pando.utils import utcnow
 import stripe
 
+from liberapay.billing.payday import Payday
 from liberapay.constants import EPOCH
 from liberapay.exceptions import MissingPaymentAccount, NoSelfTipping
 from liberapay.models.exchange_route import ExchangeRoute
@@ -154,6 +155,19 @@ class TestResolveTeamDonation(Harness):
         weeks_of_advance_bob = takes[bob.id].paid_in_advance / takes[bob.id].amount
         weeks_of_advance_carl = takes[carl.id].paid_in_advance / takes[carl.id].amount
         assert abs(weeks_of_advance_bob - weeks_of_advance_carl) <= Decimal('0.001')
+
+        # Test after two paydays, when takes are quite higher than incomes
+        Payday.start().run()
+        self.db.run("UPDATE notifications SET ts = ts - interval '7 days'")
+        Payday.start().run()
+        payin, payin_transfers = self.make_payin_and_transfer(
+            alice_card, team, EUR('3.30'), fee=EUR('0.30')
+        )
+        assert len(payin_transfers) == 2
+        assert payin_transfers[0].amount == EUR('1.00')
+        assert payin_transfers[0].destination == stripe_account_bob.pk
+        assert payin_transfers[1].amount == EUR('2.00')
+        assert payin_transfers[1].destination == stripe_account_carl.pk
 
 
 class TestPayins(Harness):
