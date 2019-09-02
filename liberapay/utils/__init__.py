@@ -9,6 +9,7 @@ from operator import getitem
 import os
 import re
 import socket
+from types import SimpleNamespace
 from urllib.parse import quote as urlquote
 
 from pando import Response, json
@@ -30,13 +31,10 @@ from liberapay.utils import cbor
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
-class NS(object):
+class NS(SimpleNamespace):
 
     def __init__(self, *d, **kw):
         self.__dict__.update(*d, **kw)
-
-    def __str__(self):
-        return 'NS(%s)' % self.__dict__
 
 
 def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,

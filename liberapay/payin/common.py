@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import timedelta
 from decimal import Decimal
 
@@ -15,15 +16,7 @@ from ..models.participant import Participant
 from ..utils import NS, group_by
 
 
-class Donation(object):
-
-    __slots__ = ('amount', 'recipient', 'destination')
-
-    def __init__(self, amount, recipient, destination):
-        assert destination.participant == recipient.id
-        self.amount = amount
-        self.recipient = recipient
-        self.destination = destination
+Donation = namedtuple('Donation', 'amount recipient destination')
 
 
 def prepare_payin(db, payer, amount, route):
@@ -412,7 +405,7 @@ def resolve_team_donation(
                 t.weeks_of_advance = (t.received_sum_eur - t.takes_sum_eur) / t.amount_eur
                 if t.weeks_of_advance < -1:
                     # Dampen the effect of past takes, because they can't be changed.
-                    t.weeks_of_advance = t.weeks_of_advance ** exp
+                    t.weeks_of_advance = -((-t.weeks_of_advance) ** exp)
                 elif t.weeks_of_advance > max_weeks_of_advance:
                     max_weeks_of_advance = t.weeks_of_advance
                 selected_takes.append(t)
