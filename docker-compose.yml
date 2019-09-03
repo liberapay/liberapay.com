@@ -5,7 +5,7 @@ services:
         extends:
             file: docker/common.yml
             service: web
-        command: python app.py
+        command: python3 app.py
         entrypoint: honcho run -e defaults.env,docker/defaults.env,local.env
         links:
             - db
