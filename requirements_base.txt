@@ -1,3 +1,5 @@
+# https://github.com/liberapay/liberapay.com#modifying-python-dependencies
+
 pando==0.46 \
     --hash=sha256:52a6be1777b065e699709a8d0ab0c16ba1a49b451255e49cc3fd552aa7f51c78 \
     --hash=sha256:c017f0b62fbed20d3ac4cac1236072398a9a97ce71a388789a4a33c8a921418f
@@ -87,9 +89,9 @@ postgres==2.2.1 \
 simplejson==3.8.1 \
     --hash=sha256:428ac8f3219c78fb04ce05895d5dff9bd813c05a9a7922c53dc879cd32a12493
 
-requests==2.21.0 \
-    --hash=sha256:7bf2a778576d825600030a110f3c0e3e8edc51dfaafe1c146e39a2027784957b \
-    --hash=sha256:502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e
+requests==2.22.0 \
+    --hash=sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4 \
+    --hash=sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31
 
     certifi==2018.8.13 \
         --hash=sha256:4c1d68a1408dd090d2f3a869aa94c3947cc1d967821d1ed303208c9f41f0f2f4 \
@@ -103,9 +105,9 @@ requests==2.21.0 \
         --hash=sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c \
         --hash=sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407
 
-    urllib3==1.25.1 \
-        --hash=sha256:904bd981d6371bb95a200c0ec9dba5ba7cc980f2d6b125bd793fefe3293be388 \
-        --hash=sha256:a9645efd62b9fc1c7cad8ed93e162aad4c6bfd90e143966ddd4099b78cd244be
+    urllib3==1.25.3 \
+        --hash=sha256:b246607a25ac80bedac05c6f282e3cdaf3afb65420fd024ac94435cabe6e18d1 \
+        --hash=sha256:dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232
 
 requests-oauthlib==0.8.0 \
     --hash=sha256:883ac416757eada6d3d07054ec7092ac21c7f35cb1d2cf82faf205637081f468 \
@@ -200,21 +202,21 @@ python-dateutil==2.6.0 \
     --hash=sha256:3acbef017340600e9ff8f2994d8f7afd6eacb295383f286466a6df3961e486f0 \
     --hash=sha256:537bf2a8f8ce6f6862ad705cd68f9e405c0b5db014aa40fa29eab4335d4b1716
 
-boto3==1.9.85 \
-    --hash=sha256:acfd27967cf1ba7f9d83ad6fc2011764541e4c295fe0d896ea7b495cc2f03336 \
-    --hash=sha256:96296871863e0245b04931df7dd5c583e53cadbe1d54197829b34b03b0d048a8
+boto3==1.9.221 \
+    --hash=sha256:962b8a6038538962e5a91665b7e9d8397ccc8dad9018c8bf853fcb96c434ff90 \
+    --hash=sha256:bc1708ca764eb76ee5e3dc4b08846ac10009c8825615b4f219f08b96a3be47e3
 
-    botocore==1.12.85 \
-        --hash=sha256:af727d4af0cf1ddbf84eaf1cc9d0160ff066eac7f9e6a2fe6a75ccbed4452c98 \
-        --hash=sha256:c381fd05b777f41a608ea0846a8d8ecc32077a83e456d05e824cce8d6b213e32
+    botocore==1.12.221 \
+        --hash=sha256:6d49deff062d2ae0f03fc26b56df8b1bb9e8b136657bcd8d84c986a4068fb784 \
+        --hash=sha256:bbee3fdcbe56ca53e2c32c6c12d174fa9b4ffe27b633183c29bd5aec9e200bae
 
     jmespath==0.9.3 \
         --hash=sha256:f11b4461f425740a1d908e9a3f7365c3d2e569f6ca68a2ff8bc5bcd9676edd63 \
         --hash=sha256:6a81d4c9aa62caf061cb517b4d9ad1dd300374cd4706997aff9cd6aedd61fc64
 
-    s3transfer==0.1.13 \
-        --hash=sha256:c7a9ec356982d5e9ab2d4b46391a7d6a950e2b04c472419f5fdec70cc0ada72f \
-        --hash=sha256:90dc18e028989c609146e241ea153250be451e05ecc0c2832565231dacdf59c1
+    s3transfer==0.2.1 \
+        --hash=sha256:6efc926738a3cd576c2a79725fed9afde92378aa5c6a957e3af010cb019fac9d \
+        --hash=sha256:b780f2411b824cb541dbcd2c713d0cb61c7d1bcadae204cdddda2b35cef493ba
 
 ipaddress==1.0.18 \
     --hash=sha256:d34cf15d95ce9a734560f7400a8bd2ac2606f378e2a1d0eadbf1c98707e7c74a \
