@@ -5,14 +5,12 @@ RUN apt-get update && \
       libpq-dev libffi-dev python3-dev postgresql-client && \
     rm -rf /var/lib/apt/lists/*
 
-ADD ./requirements_base.txt /requirements/pip/base.txt
-RUN pip3 install --require-hashes -r /requirements/pip/base.txt
 
-ADD ./requirements_dev.txt /requirements/pip/dev.txt
-RUN pip3 install --require-hashes -r /requirements/pip/dev.txt
+COPY requirements_*.txt /tmp/
 
-ADD ./requirements_tests.txt /requirements/pip/tests.txt
-RUN pip3 install --require-hashes -r /requirements/pip/tests.txt
+RUN pip3 install --require-hashes -r /tmp/requirements_base.txt \
+      -r /tmp/requirements_tests.txt \
+      -r /tmp/requirements_dev.txt
 
-ADD . /app
+COPY . /app
 WORKDIR /app
