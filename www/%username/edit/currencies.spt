@@ -27,7 +27,7 @@ if request.method == 'POST':
                AND t.amount::currency NOT IN %s
         """, (participant.id, tuple(new_accepted.split(','))))
         if foreign_donations and body.get('confirmed') != 'true':
-            back_to = participant.path('edit')
+            back_to = participant.path('edit/curencies')
             total = Money.sum((t.amount.convert(new_currency) for t in foreign_donations), new_currency)
             msg = _(
                 "You currently receive the equivalent of {money_amount} per week from donations in "

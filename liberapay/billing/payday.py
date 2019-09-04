@@ -171,23 +171,17 @@ class Payday(object):
                  , username
                  , join_time
                  , status
-                 , ( COALESCE((eur_w.balance).amount, '0.00'),
-                     COALESCE((usd_w.balance).amount, '0.00'),
-                     NULL
-                   )::currency_basket AS balances
+                 , ( SELECT basket_sum(w.balance)
+                       FROM wallets w
+                      WHERE w.owner = p.id
+                        AND w.is_current
+                        AND %(use_mangopay)s
+                   ) AS balances
                  , goal
                  , kind
                  , main_currency
                  , accepted_currencies
               FROM participants p
-         LEFT JOIN wallets eur_w ON eur_w.owner = p.id
-                                AND eur_w.balance::currency = 'EUR'
-                                AND eur_w.is_current
-                                AND %(use_mangopay)s
-         LEFT JOIN wallets usd_w ON usd_w.owner = p.id
-                                AND usd_w.balance::currency = 'USD'
-                                AND usd_w.is_current
-                                AND %(use_mangopay)s
              WHERE join_time < %(ts_start)s
                AND is_suspended IS NOT true
                AND status <> 'stub'

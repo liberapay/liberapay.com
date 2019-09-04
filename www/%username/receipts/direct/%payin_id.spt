@@ -32,7 +32,6 @@ if payin is None:
 
 payer_identity = payer.get_current_identity() or {}
 payer_name = payer_identity.get('name')
-organization_name = payer_identity.get('organization_name')
 
 route = ExchangeRoute.from_id(payer, payin.route)
 if route.network.startswith('stripe-'):

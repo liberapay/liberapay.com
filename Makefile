@@ -1,10 +1,10 @@
 python := "$(shell { command -v python3.6 || command -v python3.7; } 2>/dev/null)"
-install_where := $(shell $(python) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')")
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
 bin_dir := $(shell $(python) -c 'import sys; print("Scripts" if sys.platform == "win32" else "bin")')
-env_bin := env/$(bin_dir)
+env := env
+env_bin := $(env)/$(bin_dir)
 env_py := $(env_bin)/python
 test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := pip --disable-pip-version-check
@@ -18,23 +18,21 @@ echo:
 _warning:
 	@echo -e "\nWarning: you're using an old version of python, you really should upgrade!\n"
 
-env: requirements*.txt
-	$(python) -m ensurepip $(install_where) || $(MAKE) --no-print-directory _warning
-	$(python) -m $(pip) install $(install_where) "virtualenv>=15.0.0"
-	$(python) -m virtualenv --no-download ./env/
+$(env): requirements*.txt
+	$(python) -m venv $(env)
 	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
-	@touch env
+	@touch $(env)
 
 rehash-requirements:
 	for f in requirements*.txt; do \
-	    sed -E -e '/^ +--hash/d' -e 's/\\$$//' $$f | xargs ./env/bin/hashin -r $$f -p 3.4 -p 3.6 -p 3.7; \
+	    sed -E -e '/^ +--hash/d' -e 's/\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.4 -p 3.6 -p 3.7; \
 	done
 
 clean:
-	rm -rf env *.egg *.egg-info
+	rm -rf $(env) *.egg *.egg-info
 	find . -name \*.pyc -delete
 
-schema: env
+schema: $(env)
 	$(with_local_env) ./recreate-schema.sh
 
 schema-diff: test-schema
@@ -44,55 +42,55 @@ schema-diff: test-schema
 	diff -uw prod.sql local.sql
 	rm prod.sql local.sql
 
-data: env
+data: $(env)
 	$(with_local_env) $(env_py) -m liberapay.utils.fake_data
 
 db-migrations: sql/migrations.sql
 	PYTHONPATH=. $(with_local_env) $(env_py) liberapay/models/__init__.py
 
-run: env
+run: $(env)
 	@$(MAKE) --no-print-directory db-migrations || true
 	PATH=$(env_bin):$$PATH $(with_local_env) $(env_py) app.py
 
-py: env
+py: $(env)
 	PYTHONPATH=. $(with_local_env) $(env_py) -i $${main-liberapay/main.py}
 
 shell: py
 
-test-shell: env
+test-shell: $(env)
 	PYTHONPATH=. $(with_tests_env) $(env_py) -i $${main-liberapay/main.py}
 
-test-schema: env
+test-schema: $(env)
 	$(with_tests_env) ./recreate-schema.sh test
 
-pyflakes: env
+pyflakes: $(env)
 	$(env_bin)/python -m flake8 app.py liberapay tests
 
 test: test-schema pytest
 tests: test
 
-pytest: env
+pytest: $(env)
 	PYTHONPATH=. $(py_test) ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
 	$(py_test) --doctest-modules liberapay
 
-pytest-cov: env
+pytest-cov: $(env)
 	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
 	$(py_test) --doctest-modules liberapay
 
-pytest-re: env
+pytest-re: $(env)
 	PYTHONPATH=. $(py_test) --lf ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
-pytest-i18n-browse: env
+pytest-i18n-browse: $(env)
 	@if [ -f sql/branch.sql ]; then $(MAKE) --no-print-directory test-schema; fi
 	PYTHONPATH=. LIBERAPAY_I18N_TEST=yes $(py_test) -k TestTranslations ./tests/py/
 
-pytest-profiling: env
+pytest-profiling: $(env)
 	PYTHONPATH=. LIBERAPAY_PROFILING=yes $(py_test) -k $${k-TestPerformance} --profile-svg ./tests/py/
 
-_i18n_extract: env
+_i18n_extract: $(env)
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot --sort-by-file _i18n_warning.html emails liberapay templates www *.spt
 	@PYTHONPATH=. $(env_bin)/python cli/po-tools.py reflag i18n/core.pot
 	@for f in i18n/*/*.po; do \

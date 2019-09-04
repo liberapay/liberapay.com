@@ -1709,18 +1709,14 @@ class Participant(Model, MixinTeam):
         """Return a list of teams this user is a member of.
         """
         return self.db.all("""
-
-            SELECT team AS id
-                 , p.username AS name
-                 , p.avatar_url
+            SELECT take.team AS id, team.username AS name, team.avatar_url
                  , ( SELECT count(*)
-                       FROM current_takes
-                      WHERE team=x.team
-                    ) AS nmembers
-              FROM current_takes x
-              JOIN participants p ON p.id = x.team
-             WHERE member=%s;
-
+                       FROM current_takes take2
+                      WHERE take2.team = take.team
+                   ) AS nmembers
+              FROM current_takes take
+              JOIN participants team ON team.id = take.team
+             WHERE take.member = %s
         """, (self.id,))
 
     @cached_property
