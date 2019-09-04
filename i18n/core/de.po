@@ -419,10 +419,10 @@ msgstr "Wir haben eine direkte Abbuchung über {money_amount} von Ihrem Konto {p
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "Dieser Vorgang wird basierend auf dem {link_start}Mandat {mandate_id}{link_end} ausgeführt, dem Sie am {acceptance_date} zugestimmt haben. Damit habe Sie Liberapay (SEPA-Kreditor {creditor_identifier}) die Erlaubnis zur Lastschrift auf Ihr Bankkonto erteilt."
+msgstr "Dieser Vorgang wird basierend auf dem {link_start}Mandat {mandate_id}{link_end} ausgeführt, dem Sie am {acceptance_date} zugestimmt haben. Damit haben Sie Liberapay (SEPA-Kreditor {creditor_identifier}) die Erlaubnis zur Lastschrift auf Ihr Bankkonto erteilt."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr "Wenn Sie diese Zahlung nicht autorisiert haben, lassen Sie es uns wissen. Wir werden sie zurückerstatten."
+msgstr "Falls Sie diese Zahlung nicht veranlasst haben, lassen Sie es uns wissen. Wir werden sie zurückerstatten."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -452,7 +452,7 @@ msgstr "Folgen Sie folgendem Link, um das Profil von {0} zu sehen:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr "{user_name} von {platform} ist Liberapay beigetreten!"
+msgstr "{user_name} von {platform} ist jetzt bei Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
@@ -557,7 +557,7 @@ msgid "The details of this error have been recorded. If you decide to contact us
 msgstr "Die Einzelheiten dieses Fehlers wurden aufgezeichnet. Wenn Sie sich entschließen, uns zu kontaktieren, geben Sie bitte den folgenden Fehlercode in Ihrer Nachricht an: {0}."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr "Wenn Sie sich dazu entscheiden uns zu kontaktieren, bitte fügen Sie die folgenden Debugging-Informationen zu Ihrer Nachricht hinzu:"
+msgstr "Falls Sie sich entscheiden uns zu kontaktieren, senden Sie uns bitte auch die folgenden Informationen in Ihrer Nachricht:"
 
 msgid "Every week as long as I am receiving donations"
 msgstr "Jede Woche, so lange wie ich Spenden empfange"
@@ -1652,7 +1652,7 @@ msgstr "Über Teams"
 #, python-brace-format
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} ist Mitglied in {n} Team:"
+msgstr[0] "{username} ist Mitglied in einem Team:"
 msgstr[1] "{username} ist Mitglied in {n} Teams:"
 
 #, python-brace-format
@@ -2049,7 +2049,7 @@ msgid "You have successfully disavowed having connected your email address to th
 msgstr ""
 
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
-msgstr ""
+msgstr "Wollen Sie verhindern, dass zukünftig Dritte Ihre E-Mail-Adresse mit einem Liberapay-Konto verknüpfen?"
 
 msgid "Email settings"
 msgstr "E-Mail-Einstellungen"
@@ -2069,7 +2069,7 @@ msgid "Primary"
 msgstr "Primär"
 
 msgid "Disavowed"
-msgstr ""
+msgstr "Widersprochen"
 
 msgid "Unverified"
 msgstr "Nicht bestätigt"
@@ -2606,10 +2606,10 @@ msgid "succeeded"
 msgstr "erfolgreich"
 
 msgid "partially refunded"
-msgstr ""
+msgstr "teilweise erstattet"
 
 msgid "refunded"
-msgstr ""
+msgstr "erstattet"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -2838,7 +2838,7 @@ msgstr "Das Geld wurde automatisch von {presentment_currency} in {settlement_cur
 
 #, python-brace-format
 msgid "However, the payment was fully refunded on {refund_date}."
-msgstr ""
+msgstr "Die Zahlung wurde vollständig erstattet am {refund_date}."
 
 #, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
@@ -2846,7 +2846,7 @@ msgstr "Es wurden {0} Transaktionsgebühren bezahlt und {1} wurden verteilt wie 
 
 #, python-brace-format
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
-msgstr ""
+msgstr "{x_percent} der Zahlung über {refund_amount} wurde am  {refund_date} erstattet."
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
