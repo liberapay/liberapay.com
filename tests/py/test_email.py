@@ -71,7 +71,7 @@ class TestEmail(EmailHarness):
 
     def test_participant_cant_add_email_with_bad_domain(self):
         bad = (
-            'alice@example.net',  # no MX record
+            'alice@phantom.liberapay.com',  # no MX record
             'alice@nonexistent.liberapay.com',  # NXDOMAIN
         )
         with patch.object(self.website, 'app_conf') as app_conf:
