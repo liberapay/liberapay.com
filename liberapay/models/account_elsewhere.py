@@ -42,6 +42,11 @@ class AccountElsewhere(Model):
         super(AccountElsewhere, self).__init__(record)
         self.platform_data = getattr(website.platforms, self.platform)
 
+    def __repr__(self):
+        return '<AccountElsewhere id=%i platform=%r user_name=%r>' % (
+            self.id, self.platform, self.user_name
+        )
+
 
     # Constructors
     # ============
