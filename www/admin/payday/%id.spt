@@ -141,11 +141,13 @@ if request.method == 'POST':
         raise response.invalid_input(action, 'action', 'body')
     rerun = action == 'rerun_payday'
     if rerun:
-        if not last_payday:
+        p_id = website.db.one("""
+            SELECT id
+              FROM paydays
+             WHERE stage IS NOT NULL
+        """)
+        if not p_id:
             raise response.error(400, "no payday to rerun")
-        if last_payday.stage is None:
-            raise response.error(409, "payday has already finished running")
-        p_id = last_payday.id
     else:
         if payday_is_running:
             # Payday has already been started, redirect

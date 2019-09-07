@@ -131,7 +131,7 @@ def adjust_payin_transfers(db, payin, net_amount):
     # avoid ending up in an inconsistent state.
     with db.get_cursor() as cursor:
         payin_transfers = cursor.all("""
-            SELECT pt.id, pt.amount, pt.team, pt.recipient, team_p
+            SELECT pt.id, pt.amount, pt.status, pt.team, pt.recipient, team_p
               FROM payin_transfers pt
          LEFT JOIN participants team_p ON team_p.id = pt.team
              WHERE pt.payin = %s

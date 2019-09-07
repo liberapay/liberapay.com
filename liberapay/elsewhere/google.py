@@ -26,6 +26,7 @@ class Google(PlatformOAuth2):
     person_fields = 'personFields=names,nicknames,photos,taglines'
 
     # API attributes
+    api_requires_user_token = True
     api_format = 'json'
     api_paginator = query_param_paginator('pageToken',
                                           next='nextPageToken',

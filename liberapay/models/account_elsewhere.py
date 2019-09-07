@@ -42,6 +42,11 @@ class AccountElsewhere(Model):
         super(AccountElsewhere, self).__init__(record)
         self.platform_data = getattr(website.platforms, self.platform)
 
+    def __repr__(self):
+        return '<AccountElsewhere id=%i platform=%r user_name=%r>' % (
+            self.id, self.platform, self.user_name
+        )
+
 
     # Constructors
     # ============
@@ -285,12 +290,14 @@ class AccountElsewhere(Model):
                 self.db.run("UPDATE elsewhere SET token = NULL WHERE id = %s", (self.id,))
                 sess = None
         # We don't have a valid user token, try a non-authenticated request
+        if getattr(self.platform_data, 'api_requires_user_token', False):
+            raise UnableToRefreshAccount(self.id, self.platform)
         if self.user_id and hasattr(self.platform_data, 'api_user_info_path'):
             type_of_id, id_value = 'user_id', self.user_id
         elif self.user_name and hasattr(self.platform_data, 'api_user_name_info_path'):
             type_of_id, id_value = 'user_name', self.user_name
         else:
-            raise UnableToRefreshAccount
+            raise UnableToRefreshAccount(self.id, self.platform)
         info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
         return self.upsert(info)
 
@@ -347,6 +354,7 @@ def refetch_elsewhere_data():
           JOIN participants p ON p.id = e.participant
          WHERE e.info_fetched_at < now() - interval '90 days'
            AND (p.status = 'active' OR p.receiving > 0)
+           AND (e.token IS NOT NULL OR e.platform <> 'google')
            AND check_rate_limit(%s || e.id::text, %s, %s)
       ORDER BY e.info_fetched_at ASC
          LIMIT 1
