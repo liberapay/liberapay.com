@@ -39,20 +39,18 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     % if not participant.hide_receiving
         % set goal, receiving = participant.goal, participant.receiving
         % if goal
-            % if receiving
-                % if receiving < participant.goal
-                <p>{{ _(
-                    "{0} currently receives {1} per week, they need your help to reach "
-                    "their funding goal ({2} per week)."
-                    , participant.username, receiving, goal
-                ) }}</p>
-                % else
-                <p>{{ _(
-                    "{0} currently receives {1} per week. They have already reached their funding "
-                    "goal ({2} per week), but your donation would still help them."
-                    , participant.username, receiving, goal
-                ) }}</p>
-                % endif
+            % if receiving >= goal
+            <p>{{ _(
+                "{0} currently receives {1} per week. They have already reached their funding "
+                "goal ({2} per week), but your donation would still help them."
+                , participant.username, receiving, goal
+            ) }}</p>
+            % elif receiving
+            <p>{{ _(
+                "{0} currently receives {1} per week, they need your help to reach "
+                "their funding goal ({2} per week)."
+                , participant.username, receiving, goal
+            ) }}</p>
             % else
             <p>{{ _(
                 "{0}'s goal is to receive {1} per week."
