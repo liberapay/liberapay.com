@@ -2,9 +2,10 @@
 
 from functools import reduce
 from math import ceil
+from types import SimpleNamespace
 
 from liberapay.models.participant import Participant
-from liberapay.utils import get_participant, group_by, NS, partition
+from liberapay.utils import get_participant, group_by, partition
 
 PAYMENT_PROVIDERS = website.db.one(
     "SELECT array_to_json(enum_range(NULL::payment_providers))"
@@ -62,14 +63,14 @@ tippee_id = request.qs.get_int('beneficiary', default=None)
 retry_id = request.qs.get_int('retry', default=None)
 if tippee_id:
     tippee = Participant.from_id(tippee_id)
-    tip = NS(payer.get_tip_to(tippee))
+    tip = payer.get_tip_to(tippee)
     if tip.renewal_mode == 0:
         raise response.error(400, _(
             "You are not donating to {username}.", username=tippee.username
         ))
     tip.tippee_p = tippee
     if tip.tippee_p.payment_providers:
-        payment = NS()
+        payment = SimpleNamespace()
         payment.tips = (tip,)
         payment.currency = tip.amount.currency
         payment.providers = [
@@ -90,7 +91,7 @@ elif retry_id:
     """, (payer.id, retry_id))
     if not tips:
         raise response.invalid_input(retry_id, 'retry', 'querystring')
-    payment = NS()
+    payment = SimpleNamespace()
     payment.tips = tips
     payment.currency = payment.tips[0].amount.currency
     _provider_bits = reduce(
@@ -113,7 +114,7 @@ else:
     )
     self_donations = donation_groups['self_donation']
     if n_payments:
-        payment = NS()
+        payment = SimpleNamespace()
         payment.tips = donation_groups['fundable'][0]
         payment.currency = payment.tips[0].amount.currency
         _provider_bits = reduce(

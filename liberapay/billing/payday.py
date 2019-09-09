@@ -18,7 +18,7 @@ from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.i18n.currencies import MoneyBasket
 from liberapay.models.participant import Participant
-from liberapay.utils import NS, group_by
+from liberapay.utils import group_by
 from liberapay.website import website
 
 
@@ -111,7 +111,7 @@ class Payday(object):
     def shuffle(self, log_dir='.'):
         if self.stage > 2:
             return
-        get_transfers = lambda: [NS(t._asdict()) for t in self.db.all("""
+        get_transfers = lambda: self.db.all("""
             SELECT t.*
                  , w.remote_owner_id AS tipper_mango_id
                  , w2.remote_owner_id AS tippee_mango_id
@@ -125,7 +125,7 @@ class Payday(object):
                    w2.balance::currency = t.amount::currency AND
                    w2.is_current IS TRUE
           ORDER BY t.id
-        """)]
+        """)
         if self.stage == 2:
             transfers = get_transfers()
             done = self.db.all("""
@@ -370,7 +370,7 @@ class Payday(object):
         """Resolve and transfer takes for the specified team
         """
         args = dict(team_id=team_id)
-        tips = [NS(t._asdict()) for t in cursor.all("""
+        tips = cursor.all("""
             UPDATE payday_tips AS t
                SET is_funded = true
              WHERE tippee = %(team_id)s
@@ -388,14 +388,14 @@ class Payday(object):
                           AND tr.context = 'take'
                           AND tr.status = 'succeeded'
                    ), t.amount::currency) AS past_transfers_sum
-        """, args)]
-        takes = [NS(t._asdict()) for t in cursor.all("""
+        """, args)
+        takes = cursor.all("""
             SELECT t.member, t.amount, t.paid_in_advance
                  , p.main_currency, p.accepted_currencies
               FROM payday_takes t
               JOIN payday_participants p ON p.id = t.member
              WHERE t.team = %(team_id)s;
-        """, args)]
+        """, args)
         transfers, leftover = Payday.resolve_takes(tips, takes, currency)
         for t in transfers:
             cursor.run("SELECT transfer(%s, %s, %s, 'take', %s, NULL)",

@@ -3,6 +3,7 @@ from unittest import mock
 
 from pando.utils import utc
 import pytest
+from types import SimpleNamespace
 
 from liberapay.billing import transactions, watcher
 from liberapay.billing.fees import (
@@ -32,7 +33,6 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, USD, Foobar
 from liberapay.testing.mangopay import FakeTransfersHarness, Harness, MangopayHarness
-from liberapay.utils import NS
 
 
 def fail_payin(payin):
@@ -552,7 +552,7 @@ class TestMangopayWatcher(Harness):
         now = datetime.utcnow().replace(tzinfo=utc)
         ts_now = int((now - EPOCH).total_seconds())
         reset = (ts_now + 15*60, ts_now + 30*60, ts_now + 60*60, ts_now + 24*60*60)
-        watcher.on_response(None, result=NS(headers={
+        watcher.on_response(None, result=SimpleNamespace(headers={
             'X-RateLimit': ', '.join(map(str, consumed)),
             'X-RateLimit-Remaining': ', '.join(map(str, remaining)),
             'X-RateLimit-Reset': ', '.join(map(str, reset)),

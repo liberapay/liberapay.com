@@ -8,7 +8,7 @@ import mangopay
 
 from liberapay.constants import TAKE_THROTTLING_THRESHOLD
 from liberapay.i18n.currencies import Money, MoneyBasket
-from liberapay.utils import NS, group_by
+from liberapay.utils import group_by
 
 
 class MemberLimitReached(Exception): pass
@@ -192,7 +192,7 @@ class MixinTeam(object):
         exclusive lock on the `takes` table.
         """
         from liberapay.billing.payday import Payday
-        tips = [NS(t._asdict()) for t in cursor.all("""
+        tips = cursor.all("""
             SELECT t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
                  , ( SELECT basket_sum(w.balance)
                        FROM wallets w
@@ -213,14 +213,14 @@ class MixinTeam(object):
              WHERE t.tippee = %(team_id)s
                AND t.is_funded
                AND p.is_suspended IS NOT true
-        """, dict(team_id=self.id, use_mangopay=mangopay.sandbox))]
-        takes = [NS(r._asdict()) for r in (cursor or self.db).all("""
+        """, dict(team_id=self.id, use_mangopay=mangopay.sandbox))
+        takes = (cursor or self.db).all("""
             SELECT t.*, p.main_currency, p.accepted_currencies
               FROM current_takes t
               JOIN participants p ON p.id = t.member
              WHERE t.team = %s
                AND p.is_suspended IS NOT true
-        """, (self.id,))]
+        """, (self.id,))
         # Recompute the takes
         transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
         transfers_by_member = group_by(transfers, lambda t: t.member)

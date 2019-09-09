@@ -1,11 +1,11 @@
 from os.path import abspath
+from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 from aspen import resources
 
 from liberapay.constants import EPOCH
 from liberapay.testing import Harness
-from liberapay.utils import NS
 
 
 initial_data = dict(
@@ -15,7 +15,7 @@ initial_data = dict(
     session_token='foobar',
 )
 
-gratipay_response = NS(
+gratipay_response = SimpleNamespace(
     json=lambda: dict(
         initial_data,
         anonymous_giving=False,

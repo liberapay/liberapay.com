@@ -3,6 +3,7 @@
 from datetime import timedelta
 from decimal import ROUND_HALF_UP
 from math import floor
+from types import SimpleNamespace
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
@@ -13,7 +14,7 @@ from liberapay.payin.common import (
 from liberapay.payin.paypal import (
     capture_order, create_order, execute_payment, sync_order, sync_payment
 )
-from liberapay.utils import get_participant, NS
+from liberapay.utils import get_participant
 
 PAYPAL_BIT = 2
 
@@ -117,7 +118,7 @@ if tippees:
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
     payment_currency = tips[0].amount.currency
-    payment = NS()
+    payment = SimpleNamespace()
     payment.recipient_links = [tip.tippee_p.link() for tip in tips]
     payment.recipient_names = [tip.tippee_p.username for tip in tips]
     payment.tips = tips

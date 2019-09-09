@@ -13,7 +13,7 @@ from ..exceptions import (
 from ..i18n.currencies import Money, MoneyBasket
 from ..models.exchange_route import ExchangeRoute
 from ..models.participant import Participant
-from ..utils import NS, group_by
+from ..utils import group_by
 
 
 Donation = namedtuple('Donation', 'amount recipient destination')
@@ -308,7 +308,7 @@ def resolve_team_donation(
         NoSelfTipping: if the payer would end up sending money to themself
 
     """
-    members = [NS(r._asdict()) for r in db.all("""
+    members = db.all("""
         SELECT t.member
              , t.ctime
              , t.amount
@@ -358,7 +358,7 @@ def resolve_team_donation(
                       AND a.verified
                       AND coalesce(a.charges_enabled, true)
                )
-    """, (team.id, provider))]
+    """, (team.id, provider))
     if not members:
         raise MissingPaymentAccount(team)
     payment_amount_eur = payment_amount.convert('EUR')
