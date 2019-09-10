@@ -6,6 +6,7 @@ from hashlib import pbkdf2_hmac, md5, sha1
 from os import urandom
 from threading import Lock
 from time import sleep
+from types import SimpleNamespace
 import unicodedata
 from urllib.parse import urlencode
 import uuid
@@ -72,7 +73,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    NS, deserialize, erase_cookie, serialize, set_cookie, urlquote,
+    deserialize, erase_cookie, serialize, set_cookie, urlquote,
     markdown,
 )
 from liberapay.utils.emails import (
@@ -243,7 +244,7 @@ class Participant(Model, MixinTeam):
             p, stored_secret, mtime = r
             if constant_time_compare(stored_secret, secret):
                 p.authenticated = True
-                p.session = NS(id=secret_id, secret=secret, mtime=mtime)
+                p.session = SimpleNamespace(id=secret_id, secret=secret, mtime=mtime)
                 return p
         elif secret_id == 0:  # user-input password
             r = cls.db.one("""
@@ -628,7 +629,7 @@ class Participant(Model, MixinTeam):
         if self.balance == 0:
             return
 
-        tips = [NS(r._asdict()) for r in self.db.all("""
+        tips = self.db.all("""
             SELECT amount, tippee, t.ctime, p.kind
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
@@ -637,7 +638,7 @@ class Participant(Model, MixinTeam):
                AND p.status = 'active'
                AND (p.mangopay_user_id IS NOT NULL OR kind = 'group')
                AND p.is_suspended IS NOT TRUE
-        """, (self.id,))]
+        """, (self.id,))
 
         for tip in tips:
             if tip.kind == 'group':
@@ -1863,7 +1864,7 @@ class Participant(Model, MixinTeam):
     def get_currencies_for(self, tippee, tip):
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
-        if isinstance(tip, NS):
+        if isinstance(tip, SimpleNamespace):
             tip = tip.__dict__
         tip_currency = tip['amount'].currency
         accepted = tippee.accepted_currencies_set
@@ -2438,7 +2439,7 @@ class Participant(Model, MixinTeam):
         """Get details of current outgoing donations and pledges.
         """
 
-        tips = [NS(r._asdict()) for r in self.db.all("""\
+        tips = self.db.all("""\
 
                 SELECT DISTINCT ON (tippee)
                        amount
@@ -2463,9 +2464,9 @@ class Participant(Model, MixinTeam):
               ORDER BY tippee
                      , t.mtime DESC
 
-        """, (self.id,))]
+        """, (self.id,))
 
-        pledges = [NS(r._asdict()) for r in self.db.all("""\
+        pledges = self.db.all("""\
 
                 SELECT DISTINCT ON (tippee)
                        amount
@@ -2484,7 +2485,7 @@ class Participant(Model, MixinTeam):
               ORDER BY tippee
                      , t.mtime DESC
 
-        """, (self.id,))]
+        """, (self.id,))
 
         return tips, pledges
 

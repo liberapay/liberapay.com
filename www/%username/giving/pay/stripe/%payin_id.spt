@@ -3,6 +3,7 @@
 from datetime import timedelta
 from decimal import ROUND_HALF_UP
 from math import floor
+from types import SimpleNamespace
 
 import stripe
 import stripe.error
@@ -17,7 +18,7 @@ from liberapay.payin.stripe import (
     charge_and_transfer, destination_charge, get_partial_iban, Money_to_int,
     repr_stripe_error, settle_payin,
 )
-from liberapay.utils import get_participant, NS
+from liberapay.utils import get_participant
 
 STRIPE_BIT = 1
 
@@ -248,7 +249,7 @@ if tippees:
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
     payment_currency = tips[0].amount.currency
-    payment = NS()
+    payment = SimpleNamespace()
     payment.recipient_links = [tip.tippee_p.link() for tip in tips]
     payment.recipient_names = [tip.tippee_p.username for tip in tips]
     payment.tips = tips

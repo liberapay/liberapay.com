@@ -3,6 +3,7 @@
 
 from decimal import Decimal
 from time import sleep
+from types import SimpleNamespace
 
 from mangopay.exceptions import APIError
 from mangopay.resources import (
@@ -23,7 +24,7 @@ from liberapay.exceptions import (
 from liberapay.models import check_db
 from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.utils import group_by, NS
+from liberapay.utils import group_by
 
 
 QUARANTINE = '%s days' % QUARANTINE.days
@@ -493,10 +494,16 @@ def propagate_exchange(cursor, participant, exchange, error, amount, bundles=Non
 
 
 def transfer(db, tipper, tippee, amount, context, **kw):
-    tipper_wallet = NS(remote_id=kw.get('tipper_wallet_id'), remote_owner_id=kw.get('tipper_mango_id'))
+    tipper_wallet = SimpleNamespace(
+        remote_id=kw.get('tipper_wallet_id'),
+        remote_owner_id=kw.get('tipper_mango_id')
+    )
     if not all(tipper_wallet.__dict__.values()):
         tipper_wallet = Participant.from_id(tipper).get_current_wallet(amount.currency)
-    tippee_wallet = NS(remote_id=kw.get('tippee_wallet_id'), remote_owner_id=kw.get('tippee_mango_id'))
+    tippee_wallet = SimpleNamespace(
+        remote_id=kw.get('tippee_wallet_id'),
+        remote_owner_id=kw.get('tippee_mango_id')
+    )
     if not all(tippee_wallet.__dict__.values()):
         tippee_wallet = Participant.from_id(tippee).get_current_wallet(amount.currency, create=True)
     wallet_from = tipper_wallet.remote_id
@@ -831,12 +838,12 @@ def lock_disputed_funds(cursor, exchange, amount):
     if amount != exchange.amount + exchange.fee:
         raise NotImplementedError("partial disputes are not implemented")
     cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
-    disputed_bundles = [NS(d._asdict()) for d in cursor.all("""
+    disputed_bundles = cursor.all("""
         UPDATE cash_bundles
            SET disputed = true
          WHERE origin = %s
      RETURNING *
-    """, (exchange.id,))]
+    """, (exchange.id,))
     disputed_bundles_sum = sum(b.amount for b in disputed_bundles)
     assert disputed_bundles_sum == exchange.amount
     original_owner = exchange.participant
@@ -857,12 +864,12 @@ def refund_disputed_payin(db, exchange, create_debts=False, refund_fee=False, dr
     # Lock the bundles and try to swap them
     with db.get_cursor() as cursor:
         cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
-        bundles = [NS(d._asdict()) for d in cursor.all("""
+        bundles = cursor.all("""
             UPDATE cash_bundles
                SET disputed = true
              WHERE origin = %s
          RETURNING *
-        """, (exchange.id,))]
+        """, (exchange.id,))
         bundles_sum = sum(b.amount for b in bundles)
         assert bundles_sum == exchange.amount
         original_owner = exchange.participant
@@ -956,12 +963,12 @@ def return_payin_bundles_to_origin(db, exchange, last_resort_payer, create_debts
         tippee_wallet_id=origin_wallet.remote_id,
         tippee_mango_id=origin_wallet.remote_owner_id,
     )
-    payin_bundles = [NS(d._asdict()) for d in db.all("""
+    payin_bundles = db.all("""
         SELECT *
           FROM cash_bundles
          WHERE origin = %s
            AND disputed = true
-    """, (exchange.id,))]
+    """, (exchange.id,))
     grouped = group_by(payin_bundles, lambda b: (b.owner, b.withdrawal))
     for (current_owner, withdrawal), bundles in grouped.items():
         assert current_owner != chargebacks_account.id
@@ -991,12 +998,12 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     # Try (again) to swap the disputed bundles
     with db.get_cursor() as cursor:
         cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
-        disputed_bundles = [NS(d._asdict()) for d in cursor.all("""
+        disputed_bundles = cursor.all("""
             SELECT *
               FROM cash_bundles
              WHERE origin = %s
                AND disputed = true
-        """, (exchange.id,))]
+        """, (exchange.id,))
         bundles_sum = sum(b.amount for b in disputed_bundles)
         assert bundles_sum == lost_amount - exchange.fee
         for b in disputed_bundles:
@@ -1037,7 +1044,7 @@ def try_to_swap_bundle(cursor, b, original_owner):
     """Attempt to switch a disputed cash bundle with a "safe" one.
     """
     currency = b.amount.currency
-    swappable_origin_bundles = [NS(d._asdict()) for d in cursor.all("""
+    swappable_origin_bundles = cursor.all("""
         SELECT *
           FROM cash_bundles
          WHERE owner = %s
@@ -1045,14 +1052,14 @@ def try_to_swap_bundle(cursor, b, original_owner):
            AND locked_for IS NULL
            AND amount::currency = %s
       ORDER BY ts ASC
-    """, (original_owner, currency))]
+    """, (original_owner, currency))
     try_to_swap_bundle_with(cursor, b, swappable_origin_bundles)
     merge_cash_bundles(cursor, original_owner)
     if b.withdrawal:
         withdrawer = cursor.one(
             "SELECT participant FROM exchanges WHERE id = %s", (b.withdrawal,)
         )
-        swappable_recipient_bundles = [NS(d._asdict()) for d in cursor.all("""
+        swappable_recipient_bundles = cursor.all("""
             SELECT *
               FROM cash_bundles
              WHERE owner = %s
@@ -1060,7 +1067,7 @@ def try_to_swap_bundle(cursor, b, original_owner):
                AND locked_for IS NULL
                AND amount::currency = %s
           ORDER BY ts ASC, amount = %s DESC
-        """, (withdrawer, currency, b.amount))]
+        """, (withdrawer, currency, b.amount))
         # Note: we don't restrict the date in the query above, so a swapped
         # bundle can end up "withdrawn" before it was even created
         try_to_swap_bundle_with(cursor, b, swappable_recipient_bundles)
@@ -1101,12 +1108,12 @@ def split_bundle(cursor, b, amount):
          WHERE id = %s
      RETURNING amount
     """, (amount, b.id))
-    return NS(cursor.one("""
+    return cursor.one("""
         INSERT INTO cash_bundles
                     (owner, origin, amount, ts, withdrawal, disputed, wallet_id)
              VALUES (%s, %s, %s, %s, %s, %s, %s)
           RETURNING *;
-    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed, b.wallet_id))._asdict())
+    """, (b.owner, b.origin, amount, b.ts, b.withdrawal, b.disputed, b.wallet_id))
 
 
 def swap_bundles(cursor, b1, b2):

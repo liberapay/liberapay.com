@@ -9,7 +9,6 @@ from operator import getitem
 import os
 import re
 import socket
-from types import SimpleNamespace
 from urllib.parse import quote as urlquote
 
 from pando import Response, json
@@ -29,12 +28,6 @@ from liberapay.utils import cbor
 
 
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
-
-
-class NS(SimpleNamespace):
-
-    def __init__(self, *d, **kw):
-        self.__dict__.update(*d, **kw)
 
 
 def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,
@@ -386,7 +379,7 @@ def find_files(directory, pattern):
 
 def serialize(context):
     for k, v in context.items():
-        if str(type(v)) == "<class 'psycopg2.extras.Record'>":
+        if callable(getattr(v, '_asdict', None)):
             context[k] = v._asdict()
     return b'\\x' + hexlify(cbor.dumps(context, canonical=True))
 

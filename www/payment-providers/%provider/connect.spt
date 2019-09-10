@@ -4,18 +4,19 @@ from base64 import b32encode, b64encode
 from datetime import timedelta
 import json
 from os import urandom
+from types import SimpleNamespace
 
 import requests
 import stripe
 
 from liberapay.exceptions import AuthRequired, LoginRequired
-from liberapay.utils import b64decode_s, b64encode_s, NS
+from liberapay.utils import b64decode_s, b64encode_s
 
 OAUTH_QUERYSTRING = '?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}'
 
 paypal_domain = website.app_conf.paypal_domain
 PROVIDERS = {
-    'paypal': NS({
+    'paypal': SimpleNamespace(**{
         'display_name': 'PayPal',
         'client_id': website.app_conf.paypal_id,
         'api_headers': {
@@ -27,7 +28,7 @@ PROVIDERS = {
         # https://developer.paypal.com/docs/integration/direct/identity/attributes/
         'scope': 'openid+profile+address+email',
     }),
-    'stripe': NS({
+    'stripe': SimpleNamespace(**{
         'display_name': 'Stripe',
         'client_id': website.app_conf.stripe_connect_id,
         'authorize_url': 'https://connect.stripe.com/oauth/authorize',
