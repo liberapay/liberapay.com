@@ -73,7 +73,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    deserialize, erase_cookie, serialize, set_cookie, urlquote,
+    Object, deserialize, erase_cookie, serialize, set_cookie, urlquote,
     markdown,
 )
 from liberapay.utils.emails import (
@@ -737,16 +737,16 @@ class Participant(Model, MixinTeam):
         LiberapayOrg = self.from_username('LiberapayOrg')
         Liberapay = self.from_username('Liberapay')
         tip = self.get_tip_to(LiberapayOrg)
-        if not tip['amount']:
+        if not tip.amount:
             tip = self.get_tip_to(Liberapay)
-        if tip['amount'] and donate:
-            if tip['tippee'] == Liberapay.id:
+        if tip.amount and donate:
+            if tip.tippee == Liberapay.id:
                 context = 'take-in-advance'
                 team = Liberapay.id
             else:
                 context = 'tip-in-advance'
                 team = None
-            unit_amount = tip['amount']
+            unit_amount = tip.amount
         else:
             context = 'final-gift' if donate else 'indirect-payout'
             team = None
@@ -1864,9 +1864,7 @@ class Participant(Model, MixinTeam):
     def get_currencies_for(self, tippee, tip):
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
-        if isinstance(tip, SimpleNamespace):
-            tip = tip.__dict__
-        tip_currency = tip['amount'].currency
+        tip_currency = tip.amount.currency
         accepted = tippee.accepted_currencies_set
         fallback_currency = tippee.main_currency
         if tippee.payment_providers == 2:
@@ -2255,10 +2253,9 @@ class Participant(Model, MixinTeam):
         tip from this user to that. I believe this is used to determine the
         order of transfers during payday.
 
-        The dict returned represents the row inserted in the tips table, with
-        an additional boolean indicating whether this is the first time this
-        tipper has tipped (we want to track that as part of our conversion
-        funnel).
+        Returns an `Object` representing the row inserted in the tips table,
+        with two additional boolean attributes: `first_time_tipper` and
+        `is_pledge`.
 
         """
         assert self.status == 'active'  # sanity check
@@ -2288,7 +2285,7 @@ class Participant(Model, MixinTeam):
                 raise BadDonationCurrency(tippee, amount.currency)
 
         # Insert tip
-        t = (cursor or self.db).one("""\
+        t = Object((cursor or self.db).one("""\
 
             WITH current_tip AS (
                      SELECT *
@@ -2307,14 +2304,14 @@ class Participant(Model, MixinTeam):
                       , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
         """, dict(tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
-                  period=period, periodic_amount=periodic_amount))._asdict()
+                  period=period, periodic_amount=periodic_amount)).__dict__)
 
         if update_self:
             # Update giving amount of tipper
             updated = self.update_giving(cursor)
             for u in updated:
-                if u.id == t['id']:
-                    t['is_funded'] = u.is_funded
+                if u.id == t.id:
+                    t.is_funded = u.is_funded
         if update_tippee:
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
@@ -2323,14 +2320,16 @@ class Participant(Model, MixinTeam):
 
 
     @staticmethod
-    def _zero_tip_dict(tippee, currency=None):
+    def _zero_tip(tippee, currency=None):
         if not isinstance(tippee, Participant):
             tippee = Participant.from_id(tippee)
         if currency is i18n.DEFAULT_CURRENCY or currency not in tippee.accepted_currencies_set:
             currency = tippee.main_currency
         zero = Money.ZEROS[currency]
-        return dict(amount=zero, is_funded=False, tippee=tippee.id,
-                    period='weekly', periodic_amount=zero, renewal_mode=0)
+        return Object(
+            amount=zero, is_funded=False, tippee=tippee.id,
+            period='weekly', periodic_amount=zero, renewal_mode=0
+        )
 
 
     def stop_tip_to(self, tippee, cursor=None):
@@ -2354,12 +2353,12 @@ class Participant(Model, MixinTeam):
             self.update_giving(cursor)
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
-        return t._asdict()
+        return Object(t.__dict__)
 
 
 
     def get_tip_to(self, tippee, currency=None):
-        """Given a participant (or their id), returns a dict.
+        """Given a participant (or their id), returns an `Object`.
         """
         if not isinstance(tippee, Participant):
             tippee = Participant.from_id(tippee)
@@ -2372,8 +2371,8 @@ class Participant(Model, MixinTeam):
              LIMIT 1
         """, (self.id, tippee.id), back_as=dict)
         if r:
-            return r
-        return self._zero_tip_dict(tippee, currency)
+            return Object(r)
+        return self._zero_tip(tippee, currency)
 
 
     def get_tip_distribution(self):

@@ -38,7 +38,7 @@ from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
-    b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
+    Object, b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
 )
 from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
@@ -60,6 +60,7 @@ application = website  # for stupid WSGI implementations
 
 json.register_encoder(Money, lambda m: {'amount': str(m.amount), 'currency': m.currency})
 json.register_encoder(MoneyBasket, lambda b: list(b))
+json.register_encoder(Object, lambda o: o.__dict__)
 
 website.renderer_default = 'unspecified'  # require explicit renderer, to avoid escaping bugs
 

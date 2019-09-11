@@ -155,7 +155,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                 try:
                     team_donations = resolve_team_donation(
                         cursor, team, provider, payer, payer_country,
-                        prorated_amount, tip['amount']
+                        prorated_amount, tip.amount
                     )
                 except (MissingPaymentAccount, NoSelfTipping):
                     team_amounts = resolve_amounts(prorated_amount, {
@@ -177,7 +177,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                     for d in team_donations.values():
                         prepare_payin_transfer(
                             db, payin, d.recipient, d.destination, 'team-donation',
-                            d.amount, tip['periodic_amount'], tip['period'],
+                            d.amount, tip.periodic_amount, tip.period,
                             team=team.id
                         )
             else:

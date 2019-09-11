@@ -28,13 +28,13 @@ class _ANON(object):
     session = None
     id = None
     __bool__ = __nonzero__ = lambda *a: False
-    get_tip_to = staticmethod(Participant._zero_tip_dict)
+    get_tip_to = staticmethod(Participant._zero_tip)
     __repr__ = lambda self: '<ANON>'
 
     def get_currencies_for(self, tippee, tip):
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
-        return tip['amount'].currency, tippee.accepted_currencies_set
+        return tip.amount.currency, tippee.accepted_currencies_set
 
 
 ANON = _ANON()
