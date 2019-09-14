@@ -44,6 +44,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         admin = self.make_participant('admin', privileges=1)
         r = self.client.PxST('/admin/payday', data={'action': 'rerun_payday'}, auth_as=admin)
         assert r.code == 302
+        assert r.headers[b'Location'] == b'/admin/payday/1'
         assert exec_payday.call_count == 1
         # Test actually relaunching
         transfer_for_real.side_effect = None

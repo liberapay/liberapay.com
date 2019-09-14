@@ -316,7 +316,7 @@ if hasattr(pando.Response, 'error'):
 def _error(self, code, msg=''):
     self.code = code
     self.body = msg
-    raise self
+    return self
 pando.Response.error = _error
 
 if hasattr(pando.Response, 'invalid_input'):
