@@ -147,7 +147,6 @@ class Harness(unittest.TestCase):
 
 
     def tearDown(self):
-        self.website.request_processor.resources.cache.clear()
         self.clear_tables()
 
 
