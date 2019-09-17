@@ -104,7 +104,7 @@ del website.body_parsers[rp.media_type_json]
 # ================
 
 attributes_before = set(website.__dict__.keys())
-d = wireup.full_algorithm.run(**dict(website.__dict__, **rp.__dict__))
+d = wireup.full_chain.run(**dict(website.__dict__, **rp.__dict__))
 d.pop('chain', None)
 d.pop('exception', None)
 d.pop('state', None)

@@ -456,7 +456,7 @@ DB.lock = acquire_db_lock
 if __name__ == '__main__':
     from liberapay.website import website
     from liberapay import wireup
-    db = wireup.minimal_algorithm.run(**website.__dict__)['db']
+    db = wireup.minimal_chain.run(**website.__dict__)['db']
     print('Checking DB...')
     try:
         db.self_check()

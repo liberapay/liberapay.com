@@ -10,7 +10,6 @@ from tempfile import mkstemp
 from time import time
 import traceback
 
-from algorithm import Algorithm
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
@@ -21,6 +20,7 @@ from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, registe
 import raven
 import requests
 import sass
+from state_chain import StateChain
 
 from liberapay import elsewhere
 import liberapay.billing.payday
@@ -778,12 +778,12 @@ def currency_exchange_rates(db):
     return {'currency_exchange_rates': get_currency_exchange_rates(db)}
 
 
-minimal_algorithm = Algorithm(
+minimal_chain = StateChain(
     make_sentry_teller,
     database,
 )
 
-full_algorithm = Algorithm(
+full_chain = StateChain(
     make_sentry_teller,
     crypto,
     database,
