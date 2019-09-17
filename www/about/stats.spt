@@ -1,11 +1,9 @@
-# coding: utf8
-
 from liberapay.i18n.currencies import Money, MoneyBasket
+
+[--------------------------------------------------------]
 
 db = website.db
 db_qc5 = website.db_qc5
-
-[--------------------------------------------------------]
 
 title = _("Stats")
 zero = Money.ZEROS[currency]

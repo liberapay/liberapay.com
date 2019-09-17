@@ -1,1 +1,12 @@
-../me.spt
+from liberapay.exceptions import LoginRequired
+[---]
+if not user.ANON:
+    response.redirect('/' + user.username + '/' + request.path.get('redirect_to', ''))
+else:
+    raise LoginRequired
+title = _("Log In")
+[---] text/html
+% extends "templates/base.html"
+% block content
+    <p>{{ _("You need to log in to access this page.") }}</p>
+% endblock

@@ -1,5 +1,3 @@
-# coding: utf8
-
 from liberapay.utils import b64decode_s, get_participant, group_by, utcnow
 
 allow_bankwire = website.app_conf.payin_methods.get('mango-bw', True)

@@ -3,7 +3,7 @@ import mmap
 import os
 from threading import Lock
 
-from liberapay.billing.payday import exec_payday
+import liberapay.billing.payday
 from liberapay.exceptions import LoginRequired
 from liberapay.utils import parse_int, pid_exists
 
@@ -163,7 +163,7 @@ if request.method == 'POST':
                 ON CONFLICT (id) DO NOTHING
             """, (p_id,))
     with open(payday_log_path(p_id)+'.part', 'a') as log_file:
-        exec_payday(log_file)
+        liberapay.billing.payday.exec_payday(log_file)
     response.redirect('/admin/payday/%s' % p_id)
 
 [---] text/html

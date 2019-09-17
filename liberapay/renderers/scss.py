@@ -7,18 +7,20 @@ from urllib.parse import urlsplit
 import sass
 from aspen import renderers
 
+from ..website import website
+
 
 class Renderer(renderers.Renderer):
 
     def __init__(self, factory, *a, **kw):
-        self.website = factory._configuration
+        self.request_processor = factory._configuration
         renderers.Renderer.__init__(self, factory, *a, **kw)
-        self.cache_static = self.website.env.cache_static
-        compress = self.website.env.compress_assets
+        self.cache_static = website.env.cache_static
+        compress = website.env.compress_assets
         output_style = 'compressed' if compress else 'nested'
         kw = dict(output_style=output_style)
-        if self.website.project_root is not None:
-            kw['include_paths'] = self.website.project_root
+        if self.request_processor.project_root is not None:
+            kw['include_paths'] = self.request_processor.project_root
         self.sass_conf = kw
 
     # SASS doesn't support wildcard imports, so we implement it ourselves
@@ -26,13 +28,13 @@ class Renderer(renderers.Renderer):
 
     def wildcard_import_sub(self, m):
         d = m.group(1)
-        files = sorted(os.listdir(self.website.project_root + '/' + d))
+        files = sorted(os.listdir(self.request_processor.project_root + '/' + d))
         files = fnmatch.filter(files, '*.scss')
         return '; '.join('@import "%s"' % (d + name[:-5]) for name in files)
 
     def compile(self, filepath, src):
         basepath = posixpath.dirname(filepath) + '/'
-        assets_root = self.website.www_root + '/assets/'
+        assets_root = self.request_processor.www_root + '/assets/'
         if basepath.startswith(assets_root):
             basepath = basepath[len(assets_root):]
         self.basepath = (basepath.rstrip('/') + '/').lstrip('/')
@@ -47,7 +49,7 @@ class Renderer(renderers.Renderer):
             # has no netloc. In either case, we want to leave the URL untouched.
             return m.group(0)
         path = posixpath.normpath(self.basepath + url.path)
-        repl = self.website.asset(path) \
+        repl = website.asset(path) \
              + (url.query and '&'+url.query) \
              + (url.fragment and '#'+url.fragment)
         return 'url({0}{1}{0})'.format(m.group(1), repl)

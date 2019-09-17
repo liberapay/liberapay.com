@@ -1,5 +1,3 @@
-# coding: utf8
-
 from liberapay.utils import get_int, get_participant
 
 get_unread = lambda notifs: [n for n in notifs if n['is_new']]

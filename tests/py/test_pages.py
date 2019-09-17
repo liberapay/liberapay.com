@@ -269,3 +269,21 @@ class TestPages(BrowseTestHarness):
                             auth_as=self.david)
         assert r.code == 200
         assert '€19' in r.body.decode('utf8')
+
+    def test_about_me(self):
+        r = self.client.GET('/about/me', raise_immediately=False)
+        assert r.code == 403
+        r = self.client.GET('/about/me/', raise_immediately=False)
+        assert r.code == 403
+        r = self.client.GET('/about/me/edit/username', raise_immediately=False)
+        assert r.code == 403
+        alice = self.make_participant('alice')
+        r = self.client.GET('/about/me', auth_as=alice, raise_immediately=False)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/alice/'
+        r = self.client.GET('/about/me/', auth_as=alice, raise_immediately=False)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/alice/'
+        r = self.client.GET('/about/me/edit/username', auth_as=alice, raise_immediately=False)
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'/alice/edit/username'

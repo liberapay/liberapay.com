@@ -22,8 +22,8 @@
     % endif
     % endblock
     <meta name="theme-color" content="#f6c915">
-    % if request.canonical_path
-        <link rel="canonical" href="{{ website.canonical_scheme + '://' + request.hostname + request.canonical_path }}" />
+    % if dispatch_result.canonical
+        <link rel="canonical" href="{{ website.canonical_scheme + '://' + request.hostname + dispatch_result.canonical }}" />
     % endif
     {% block head %}{% endblock %}
 </head>

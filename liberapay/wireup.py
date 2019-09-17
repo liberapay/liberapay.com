@@ -499,11 +499,12 @@ def make_sentry_teller(env):
                 user_data = sentry_data['user'] = {}
                 if request is not None:
                     user_data['ip_address'] = str(request.source)
+                    decode = lambda b: b.decode('ascii', 'backslashreplace')
                     sentry_data['request'] = {
                         'method': request.method,
                         'url': request.line.uri.decoded,
                         'headers': {
-                            k.decode('ascii', 'repr'): b', '.join(v).decode('ascii', 'repr')
+                            decode(k): decode(b', '.join(v))
                             for k, v in request.headers.items()
                             if k != b'Cookie'
                         },

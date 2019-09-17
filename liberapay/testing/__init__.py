@@ -6,7 +6,6 @@ import itertools
 import unittest
 from os.path import dirname, join, realpath
 
-from aspen import resources
 from pando.utils import utcnow
 from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
@@ -148,7 +147,6 @@ class Harness(unittest.TestCase):
 
 
     def tearDown(self):
-        resources.__cache__ = {}  # Clear the simplate cache.
         self.clear_tables()
 
 
