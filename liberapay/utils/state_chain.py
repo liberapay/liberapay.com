@@ -97,6 +97,11 @@ def enforce_rate_limits(request, user, website):
         website.db.hit_rate_limit('http-unsafe.ip-addr', request.source, TooManyRequests)
 
 
+def set_output_to_None(state):
+    # This is a temporary workaround for a shortcoming in Pando 0.47
+    state.setdefault('output', None)
+
+
 def add_content_disposition_header(request, response):
     """Tell the browser if the response is meant to be saved into a file.
 
