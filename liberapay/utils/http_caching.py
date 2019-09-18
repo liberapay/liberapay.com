@@ -63,6 +63,8 @@ def asset_etag(path):
 # algorithm functions
 
 def get_etag_for_file(dispatch_result, website, state):
+    if dispatch_result.status != DispatchStatus.okay:
+        return {'etag': None}
     try:
         return {'etag': asset_etag(dispatch_result.match)}
     except Exception as e:
