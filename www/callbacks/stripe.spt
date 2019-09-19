@@ -94,10 +94,12 @@ elif event.type == 'transfer.reversed':
     assert pt
     record_reversals(website.db, pt, transfer)
     fee = transfer.amount - Money_to_int(pt.amount)
-    update_payin_transfer(
-        website.db, pt.id, None, pt.status, pt.error,
-        reversed_amount=int_to_Money(transfer.amount_reversed - fee, transfer.currency),
-    )
+    reversed_amount = transfer.amount_reversed - fee
+    if reversed_amount:
+        update_payin_transfer(
+            website.db, pt.id, None, pt.status, pt.error,
+            reversed_amount=int_to_Money(reversed_amount, transfer.currency),
+        )
 
 else:
     raise response.error(500, "unknown event object type %r" % event_object_type)
