@@ -2455,8 +2455,9 @@ msgstr "Einkommensverlauf anzeigen"
 msgid "No data to show."
 msgstr "Keine Daten zu zeigen."
 
-msgid "Euros Received Per Week"
-msgstr "Einnahmen pro Woche (in Euro)"
+#, python-brace-format
+msgid "Income Per Week (in {currency})"
+msgstr "Einkommen pro Woche (in {currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "Anzahl Unterstützer/-innen pro Woche"
@@ -2930,10 +2931,6 @@ msgstr "{x_percent} der Spenden"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "{x_percent} der gesamten Einnahmen"
-
-#, python-brace-format
-msgid "Income Per Week (in {currency})"
-msgstr "Einkommen pro Woche (in {currency})"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"

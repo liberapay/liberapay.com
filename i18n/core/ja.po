@@ -2433,8 +2433,9 @@ msgstr "収入履歴を表示"
 msgid "No data to show."
 msgstr "表示できるデータはありません。"
 
-msgid "Euros Received Per Week"
-msgstr "1 週間あたりに受け取ったユーロ"
+#, python-brace-format
+msgid "Income Per Week (in {currency})"
+msgstr "週あたりの収入（{currency}）"
 
 msgid "Number of Patrons Per Week"
 msgstr "1 週間あたりのパトロンの数"
@@ -2907,10 +2908,6 @@ msgstr "寄付の内{x_percent}"
 #, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "総収入の{x_percent}"
-
-#, python-brace-format
-msgid "Income Per Week (in {currency})"
-msgstr "週あたりの収入（{currency}）"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
