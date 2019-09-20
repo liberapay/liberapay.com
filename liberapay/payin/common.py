@@ -139,6 +139,9 @@ def adjust_payin_transfers(db, payin, net_amount):
                FOR UPDATE OF pt
         """, (payin.id,))
         assert payin_transfers
+        if all(pt.status != 'pre' for pt in payin_transfers):
+            # It's too late to adjust anything.
+            return
         transfers_by_tippee = group_by(
             payin_transfers, lambda pt: (pt.team or pt.recipient)
         )
@@ -164,6 +167,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                     })
                     for pt in transfers:
                         if pt.amount != team_amounts.get(pt.id):
+                            assert pt.status == 'pre'
                             updates.append((team_amounts[pt.id], pt.id))
                 else:
                     team_donations = {d.recipient.id: d for d in team_donations}
@@ -173,6 +177,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                             assert pt.status == 'pre'
                             cursor.run("DELETE FROM payin_transfers WHERE id = %s", (pt.id,))
                         elif pt.amount != d.amount:
+                            assert pt.status == 'pre'
                             updates.append((d.amount, pt.id))
                     for d in team_donations.values():
                         prepare_payin_transfer(
@@ -183,6 +188,7 @@ def adjust_payin_transfers(db, payin, net_amount):
             else:
                 pt = transfers[0]
                 if pt.amount != prorated_amount:
+                    assert pt.status == 'pre'
                     updates.append((prorated_amount, pt.id))
         if updates:
             execute_batch(cursor, """
