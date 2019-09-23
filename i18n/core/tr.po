@@ -77,7 +77,7 @@ msgid "If you do not wish to receive donations on Liberapay, you can reject them
 msgstr "Liberapay'den bağış almak istemiyorsanız, profilinizi buna uygun şekilde düzenleyerek bağışları reddedebilirsiniz."
 
 msgid "Reject donations"
-msgstr ""
+msgstr "Bağışları reddet"
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
@@ -335,7 +335,7 @@ msgstr "Aşağıdaki bağlantıya tıklayarak, belki de başka bir ödeme yönte
 msgid "The bank wire to your Liberapay wallet has succeeded"
 msgstr "Liberapay cüzdanınıza banka havalesi başarılı"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
 msgstr "Banka hesabınızdan yaptığınız havalenin başarılı olduğunu bildirmekten mutluluk duyarız. {0} gönderdiniz, {2} gerekli ücretler için ödendikten sonra, {1} Liberapay cüzdanınıza aktarıldı."
 
@@ -638,7 +638,7 @@ msgstr "Büyük"
 msgid "Maximum"
 msgstr "En çok"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr "İstek kotanızı doldurdunuz, {in_N_minutes} içinde tekrar deneyebilirsiniz."
 
@@ -914,8 +914,8 @@ msgstr "{username}'e Liberapay bağışı"
 #, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] "{money_amount} haftası {n}"
-msgstr[1] "{n} weeks of {money_amount}"
+msgstr[0] "{n} haftada {money_amount}"
+msgstr[1] "{n} haftada {money_amount}"
 
 #, python-brace-format
 msgid "{n} month of {money_amount}"
@@ -1085,7 +1085,6 @@ msgstr "Sil"
 msgid "Close"
 msgstr "Kapatma"
 
-#, fuzzy
 msgid "No"
 msgstr "Hayır"
 
@@ -1527,7 +1526,7 @@ msgstr "Katılan{timespan_ago}."
 
 #, python-brace-format
 msgid "Closed {timespan_ago}."
-msgstr "{timespan_ago} kapalı"
+msgstr "{timespan_ago} kapandı."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1646,7 +1645,6 @@ msgstr "Son Ödeme Günü"
 msgid "Next Payday"
 msgstr ""
 
-#, fuzzy
 msgid "Member"
 msgstr "Üye"
 
@@ -1692,17 +1690,17 @@ msgstr ""
 msgid "Please select or input an amount:"
 msgstr "Lütfen bir miktar seçin veya girin:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{currency_name} tercih edilen para biriminiz değil mi? Diğer {n} tanesi desteklenmektedir:"
+msgstr[1] "{currency_name} tercih edilen para biriminiz değil mi? Diğer {n} tanesi desteklenmektedir:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{currency_name} tercih edilen para biriminiz değil mi? {username} ayrıca {n} tane kabul etmektedir:"
+msgstr[1] "{currency_name} tercih edilen para biriminiz değil mi? {username} ayrıca {n} tane kabul etmektedir:"
 
 msgid "not supported by PayPal"
 msgstr ""
@@ -2040,11 +2038,10 @@ msgstr ""
 msgid "Email settings"
 msgstr ""
 
-#, fuzzy
 msgid "Email Address (Private)"
 msgid_plural "Email Addresses (Private)"
 msgstr[0] "E-posta Adresi (Gizli)"
-msgstr[1] "E-posta Adresi (Gizli)"
+msgstr[1] "E-posta Adresleri (Gizli)"
 
 msgid "Blacklisted"
 msgstr ""
@@ -4830,7 +4827,7 @@ msgstr ""
 msgid "Please Confirm"
 msgstr "Lütfen Doğrulayın"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} is connected to {1} on Liberapay. Transfer it?"
 msgstr "{0}, Liberapay'de {1}'e bağlandı . Aktar?"
 
@@ -4901,7 +4898,6 @@ msgstr[1] ""
 msgid "Didn't find who you were looking for?"
 msgstr "Aradığınız kişiyi bulamadınız mı?"
 
-#, fuzzy
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
 msgstr "Henüz Liberapay'e katılmamış kişilere de bağış yapabilirsiniz:"
 
