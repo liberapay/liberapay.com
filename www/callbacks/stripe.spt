@@ -68,7 +68,7 @@ elif event_object_type == 'charge.dispute':
                     stripe.Transfer.create_reversal(
                         pt.remote_id,
                         amount=Money_to_int(reversal_amount),
-                        idempotency_key=dispute.id,
+                        idempotency_key='%s_pt_%i' % (dispute.id, pt.id),
                     )
                     # ↑ This triggers a `transfer.reversed` event, handled below.
             else:
