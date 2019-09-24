@@ -210,19 +210,22 @@ def authenticate_user_if_possible(request, response, state, user, _):
                 state['user'] = p
     session_p, p = p, None
     session_suffix = ''
-    redirect_url = request.line.uri.decoded
+    redirect = False
+    redirect_url = None
     if request.method == 'POST':
         # Password auth
         body = _get_body(request)
         if body:
             p = sign_in_with_form_data(body, state)
             carry_on = body.pop('log-in.carry-on', None)
-            if not p and carry_on:
+            if p:
+                redirect = body.get('form.repost', None) != 'true'
+                redirect_url = body.get('sign-in.back-to') or request.line.uri.decoded
+            elif carry_on:
                 p_email = session_p and session_p.get_email_address()
                 if p_email != carry_on:
                     state['log-in.carry-on'] = carry_on
                     raise LoginRequired
-            redirect_url = body.get('sign-in.back-to') or redirect_url
     elif request.method == 'GET' and request.qs.get('log-in.id'):
         # Email auth
         id = request.qs.pop('log-in.id')
@@ -231,20 +234,19 @@ def authenticate_user_if_possible(request, response, state, user, _):
         if not (token and token.endswith('.em')):
             raise response.error(400, _("This login link is expired or invalid."))
         p = Participant.authenticate(id, session_id, token)
-        if not p and (not session_p or session_p.id != id):
-            raise response.error(400, _("This login link is expired or invalid."))
-        else:
-            qs = '?' + urlencode(request.qs, doseq=True) if request.qs else ''
-            redirect_url = request.path.raw + qs
+        if p:
+            redirect = True
             session_p = p
             session_suffix = '.em'
+        else:
+            raise response.error(400, _("This login link is expired or invalid."))
 
     # Handle email verification
     email_id = request.qs.get_int('email.id', default=None)
     email_nonce = request.qs.get('email.nonce', '')
     if email_id and not request.path.raw.endswith('/disavow'):
-        email_participant = db.one("""
-            SELECT p
+        email_participant, email_is_already_verified = db.one("""
+            SELECT p, e.verified
               FROM emails e
               JOIN participants p On p.id = e.participant
              WHERE e.id = %s
@@ -252,13 +254,11 @@ def authenticate_user_if_possible(request, response, state, user, _):
         if email_participant:
             result = email_participant.verify_email(email_id, email_nonce, p)
             state['email.verification-result'] = result
-            if result == EmailVerificationResult.SUCCEEDED:
+            if result == EmailVerificationResult.SUCCEEDED or email_is_already_verified:
                 del request.qs['email.id'], request.qs['email.nonce']
-                qs = '?' + urlencode(request.qs, doseq=True) if request.qs else ''
-                redirect_url = request.path.raw + qs
         del email_participant
 
-    # Finish up
+    # Set up the new session
     if p:
         if session_p:
             session_p.sign_out(response.headers.cookie)
@@ -267,8 +267,15 @@ def authenticate_user_if_possible(request, response, state, user, _):
         if not p.session:
             p.sign_in(response.headers.cookie, suffix=session_suffix)
         state['user'] = p
-        if request.body.pop('form.repost', None) != 'true':
-            response.redirect(redirect_url, trusted_url=False)
+
+    # Redirect if appropriate
+    if redirect:
+        if not redirect_url:
+            # Build the redirect URL with the querystring that we've probably
+            # modified at this point.
+            qs = ('?' + urlencode(request.qs, doseq=True)) if request.qs else ''
+            redirect_url = request.path.raw + qs
+        response.redirect(redirect_url, trusted_url=False)
 
 
 def add_auth_to_response(response, request=None, user=ANON):
