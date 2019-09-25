@@ -190,6 +190,7 @@ class TestLogIn(EmailHarness):
         cookies = r.headers.cookie
         r = self.client.GxT('/alice/?foo=bar&' + qs, cookies=cookies)
         assert r.code == 400
+        assert " can only be used once." in r.text
 
         # Check that we can change our password
         password = 'correct-horse-battery-staple'

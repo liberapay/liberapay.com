@@ -232,14 +232,14 @@ def authenticate_user_if_possible(request, response, state, user, _):
         session_id = request.qs.pop('log-in.key', 1)
         token = request.qs.pop('log-in.token', None)
         if not (token and token.endswith('.em')):
-            raise response.error(400, _("This login link is expired or invalid."))
+            raise response.render('templates/bad-login-link.spt', state)
         p = Participant.authenticate(id, session_id, token)
         if p:
             redirect = True
             session_p = p
             session_suffix = '.em'
         else:
-            raise response.error(400, _("This login link is expired or invalid."))
+            raise response.render('templates/bad-login-link.spt', state)
 
     # Handle email verification
     email_id = request.qs.get_int('email.id', default=None)
