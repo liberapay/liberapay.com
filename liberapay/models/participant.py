@@ -2556,7 +2556,6 @@ class Participant(Model, MixinTeam):
                        AND t.amount <> 0
                        AND p.payment_providers > 0
                        AND p.is_suspended IS NOT TRUE
-                       AND ( p.goal IS NULL OR p.goal >= 0 )
                   ORDER BY t.member <> %s DESC
                 """, (tippee_p.id, self.id))
                 if not members:
