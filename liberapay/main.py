@@ -169,10 +169,12 @@ algorithm.functions = [
     attach_environ_to_request,
     algorithm['raise_200_for_OPTIONS'],
     create_response_object,
+    set_output_to_None,
 
     reject_requests_bypassing_proxy,
 
     canonize,
+    algorithm['extract_accept_header'],
     set_default_security_headers,
     set_up_i18n,
     insert_constants,
@@ -190,8 +192,6 @@ algorithm.functions = [
     enforce_rate_limits,
 
     algorithm['load_resource_from_filesystem'],
-    algorithm['extract_accept_header'],
-    set_output_to_None,
     algorithm['render_response'],
     add_content_disposition_header,
     algorithm['handle_negotiation_exception'],
