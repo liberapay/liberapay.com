@@ -417,9 +417,9 @@ msgstr "Wir haben eine Lastschrift über {money_amount} von ihrem {bank_name} Ko
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
 msgstr "Wir haben eine direkte Abbuchung über {money_amount} von Ihrem Konto {partial_account_number} getätigt."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "Dieser Vorgang wird basierend auf dem {link_start}Mandat {mandate_id}{link_end} ausgeführt, dem Sie am {acceptance_date} zugestimmt haben. Damit haben Sie Liberapay (SEPA-Kreditor {creditor_identifier}) die Erlaubnis zur Lastschrift auf Ihr Bankkonto erteilt."
+msgstr "Diese Transaktion wird auf der Grundlage von {link_start}des Auftrags {mandate_id}{link_end} ausgeführt, den Sie am {acceptance_date} bestätigt haben. Dieser berechtigt Liberapay (SEPA-Gläubiger {creditor_identifier}) Ihr Konto mit Lastschriften zu belasten."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
 msgstr "Falls Sie diese Zahlung nicht veranlasst haben, lassen Sie es uns wissen. Wir werden sie zurückerstatten."
@@ -1769,7 +1769,7 @@ msgstr "Dieses Konto wird vorübergehend ausgesetzt, Spenden an sie werden nicht
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr ""
+msgstr "{0} erhält zur Zeit {1} pro Woche. Sie haben bereits ihr Spendenziel ({2} pro Woche) erreicht. Ihre Spenden würden dennoch helfen."
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
@@ -3900,10 +3900,11 @@ msgstr "Wir garantieren, dass die Gelder, die Sie in unsere Obhut legen, nicht d
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr ""
+msgstr "Wenn Sie glauben, ein Sicherheitsproblem entdeckt zu haben, dann {hackerone_report_link}melden Sie uns dieses über HackerOne{link_close}. Bitte prüfen Sie zuvor, ob uns das Problem nicht bereits auf {known_issues_link}unserer Liste bekannter Probleme steht{link_close}."
 
+#, fuzzy
 msgid "Policy"
-msgstr ""
+msgstr "Regeln"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
