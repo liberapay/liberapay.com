@@ -1,8 +1,6 @@
 """Defines website authentication helpers.
 """
 
-from urllib.parse import urlencode
-
 from pando import Response
 
 from liberapay.constants import (
@@ -228,9 +226,9 @@ def authenticate_user_if_possible(request, response, state, user, _):
                     raise LoginRequired
     elif request.method == 'GET' and request.qs.get('log-in.id'):
         # Email auth
-        id = request.qs.pop('log-in.id')
-        session_id = request.qs.pop('log-in.key', 1)
-        token = request.qs.pop('log-in.token', None)
+        id = request.qs.get('log-in.id')
+        session_id = request.qs.get('log-in.key')
+        token = request.qs.get('log-in.token')
         if not (token and token.endswith('.em')):
             raise response.render('templates/bad-login-link.spt', state)
         p = Participant.authenticate(id, session_id, token)
@@ -240,6 +238,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
             session_suffix = '.em'
         else:
             raise response.render('templates/bad-login-link.spt', state)
+        del request.qs['log-in.id'], request.qs['log-in.key'], request.qs['log-in.token']
 
     # Handle email verification
     email_id = request.qs.get_int('email.id', default=None)
@@ -271,10 +270,9 @@ def authenticate_user_if_possible(request, response, state, user, _):
     # Redirect if appropriate
     if redirect:
         if not redirect_url:
-            # Build the redirect URL with the querystring that we've probably
-            # modified at this point.
-            qs = ('?' + urlencode(request.qs, doseq=True)) if request.qs else ''
-            redirect_url = request.path.raw + qs
+            # Build the redirect URL with the querystring as it is now (we've
+            # probably removed items from it at this point).
+            redirect_url = request.path.raw + request.qs.serialize()
         response.redirect(redirect_url, trusted_url=False)
 
 

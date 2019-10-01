@@ -263,6 +263,12 @@ def _Querystring_derive(self, **kw):
     return '?' + urlencode(new_qs, doseq=True)
 aspen.http.request.Querystring.derive = _Querystring_derive
 
+if hasattr(aspen.http.request.Querystring, 'serialize'):
+    raise Warning('aspen.http.request.Querystring.serialize() already exists')
+def _Querystring_serialize(self, **kw):
+    return ('?' + urlencode(self, doseq=True)) if self else ''
+aspen.http.request.Querystring.serialize = _Querystring_serialize
+
 if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
 def _source(self):
