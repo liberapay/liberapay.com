@@ -45,7 +45,7 @@ from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
     canonize, insert_constants, enforce_rate_limits, set_output_to_None,
     add_content_disposition_header, merge_exception_into_response,
-    bypass_csp_for_form_redirects, return_500_for_exception,
+    bypass_csp_for_form_redirects, delegate_error_to_simplate, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
@@ -206,7 +206,7 @@ algorithm.functions = [
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,
 
-    algorithm['delegate_error_to_simplate'],
+    delegate_error_to_simplate,
     tell_sentry,
     return_500_for_exception,
 
