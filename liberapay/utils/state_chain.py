@@ -3,6 +3,7 @@ from urllib.parse import urlsplit, urlunsplit
 
 from pando import Response
 from pando.http.request import Line
+import pando.state_chain
 from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
@@ -177,6 +178,18 @@ def bypass_csp_for_form_redirects(response, state, website, request=None):
             response.refresh(state, interval=0, url=url)
         except Response:
             pass
+
+
+def delegate_error_to_simplate(website, state, response, request=None, resource=None):
+    """
+    Wrap Pando's function to avoid dispatching to `error.spt` if the response is
+    already a complete error page.
+    """
+    if b'Content-Type' in response.headers:
+        return  # this response is already completely rendered
+    return pando.state_chain.delegate_error_to_simplate(
+        website, state, response, request, resource
+    )
 
 
 def return_500_for_exception(website, exception, response=None):

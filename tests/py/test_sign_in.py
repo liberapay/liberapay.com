@@ -186,12 +186,18 @@ class TestLogIn(EmailHarness):
         alice = alice.refetch()
         assert alice.email == email
 
+        # Check what happens if the user clicks the login link a second time
+        cookies = r.headers.cookie
+        r = self.client.GxT('/alice/?foo=bar&' + qs, cookies=cookies)
+        assert r.code == 400
+        assert " already logged in," in r.text, r.text
+
         # Check that we can change our password
         password = 'correct-horse-battery-staple'
         r = self.client.POST(
             '/alice/settings/edit',
             {'new-password': password},
-            cookies=r.headers.cookie,
+            cookies=cookies,
             raise_immediately=False,
         )
         assert r.code == 302
@@ -210,10 +216,36 @@ class TestLogIn(EmailHarness):
         r = self.client.GxT('/?log-in.id=1&log-in.token=x')
         assert r.code == 400
 
+    def test_email_login_bad_key(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        email_session = alice.start_session('.em')
+        url = '/about/me/?log-in.id=%s&log-in.key=%i&log-in.token=%s' % (
+            alice.id, email_session.id + 1, email_session.secret
+        )
+        r = self.client.GxT(url)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=alice)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=bob)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+
     def test_email_login_bad_token(self):
         alice = self.make_participant('alice')
-        r = self.client.GxT('/?log-in.id=%s&log-in.token=x' % alice.id)
+        bob = self.make_participant('bob')
+        url = '/?log-in.id=%s&log-in.token=x' % alice.id
+        r = self.client.GxT(url)
         assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=alice)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=bob)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
 
     def test_email_login_team_account(self):
         email = 'team@example.net'
