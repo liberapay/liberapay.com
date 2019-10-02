@@ -1086,12 +1086,17 @@ class Participant(Model, MixinTeam):
             try:
                 cursor.run("""
                     UPDATE emails
+                       SET verified = NULL
+                     WHERE lower(address) = lower(%s)
+                       AND participant IS NULL;
+
+                    UPDATE emails
                        SET verified = true
                          , verified_time = now()
                          , disavowed = false
                      WHERE participant = %s
                        AND id = %s
-                """, (self.id, email_id))
+                """, (r.address, self.id, email_id))
             except IntegrityError:
                 return EmailVerificationResult.STYMIED
         if not self.email:
