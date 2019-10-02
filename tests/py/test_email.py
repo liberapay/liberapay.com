@@ -30,7 +30,13 @@ class TestEmail(EmailHarness):
         return r
 
     def get_address_id(self, addr):
-        return self.db.one("SELECT id FROM emails WHERE address = %s", (addr,))
+        return self.db.one("""
+            SELECT id
+              FROM emails
+             WHERE address = %s
+          ORDER BY id DESC
+             LIMIT 1
+        """, (addr,))
 
     def hit_verify(self, email, nonce):
         addr_id = self.get_address_id(email) or ''
@@ -44,6 +50,8 @@ class TestEmail(EmailHarness):
     def add_and_verify_email(self, email):
         self.hit_email_spt('add-email', email)
         self.verify_email(email)
+        email = self.alice.get_email(email)
+        assert email.verified
 
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
@@ -348,6 +356,9 @@ class TestEmail(EmailHarness):
         # Cannot remove primary
         with self.assertRaises(CannotRemovePrimaryEmail):
             self.alice.remove_email('alice@example.com')
+
+        # Can reclaim removed verified email address
+        self.add_and_verify_email('alice@example.net')
 
     def test_html_escaping(self):
         self.alice.add_email("foo'bar@example.com")
