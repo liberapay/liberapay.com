@@ -963,9 +963,6 @@ msgstr "{0} està enllaçat a un compte d'equip. No és possible d'iniciar sessi
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "No hem trobat cap compte amb adreça electrònica principal {0}."
 
-msgid "This login link is expired or invalid."
-msgstr "Aquest enllaç d'inici de sessió ha expirat o no és vàlid."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Ha fallat una comprovació de seguretat. Assegureu-vos que el vostre navegador està configurat per a permetre galetes per a {domain} i després torneu-ho a intentar."
@@ -993,6 +990,31 @@ msgstr "Creació d'un compte"
 
 msgid "Use an existing account"
 msgstr "Usa un compte existent"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Continua"
+
+msgid "This login link is expired or invalid."
+msgstr "Aquest enllaç d'inici de sessió ha expirat o no és vàlid."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "Adreça electrònica"
+
+msgid "Go"
+msgstr "D'acord"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Estem experimentant problemes tècnics. Com a resultat, moltes coses no funcionen. Lamentem els inconvenients. Tornarem a la normalitat tan aviat com sigui possible."
@@ -1264,21 +1286,12 @@ msgstr "Nacionalitat"
 msgid "username"
 msgstr "nom d'usuari"
 
-msgid "Go"
-msgstr "D'acord"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Us hem enviat un enllaç per a iniciar sessió d'un únic ús. Comproveu la bústia de correu, obriu l'enllaç proporcionat en una pestanya nova, després torneu a aquesta pàgina i feu clic al botó de sota per a continuar amb el que volíeu fer."
-
-msgid "Carry on"
-msgstr "Continua"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Encara no heu iniciat sessió com a {0}."
-
-msgid "Email address"
-msgstr "Adreça electrònica"
 
 msgid "Password (optional)"
 msgstr "Contrasenya (opcional)"

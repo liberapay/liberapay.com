@@ -964,9 +964,6 @@ msgstr "{0} on kytketty ryhmätunnukseen. Ryhmänä ei ole mahdollista kirjautua
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Järjestelmästä ei löydy tunnusta, jonka pääsähköpostiosoite olisi {0}."
 
-msgid "This login link is expired or invalid."
-msgstr "Kirjautumislinkki on vanhentunut tai viallinen."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Tietoturvatarkistus on epäonnistunut. Varmista, että selaimesi sallii evästeet domainille {domain} ja yritä uudelleen."
@@ -994,6 +991,31 @@ msgstr "Tilin luominen"
 
 msgid "Use an existing account"
 msgstr "Olemassaolevan tilin käyttäminen"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Jatka"
+
+msgid "This login link is expired or invalid."
+msgstr "Kirjautumislinkki on vanhentunut tai viallinen."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "Sähköpostiosoite"
+
+msgid "Go"
+msgstr "Siirry"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Meillä on tällä hetkellä hieman teknisiä vaikeuksia. Siksi kaikki ei nyt aivan toimi. Pahoittelemme tästä aiheutuvaa vaivaa, mutta yritämme korjata kaiken mahdollisimman pian."
@@ -1265,21 +1287,12 @@ msgstr "Kansallisuus"
 msgid "username"
 msgstr "käyttäjätunnus"
 
-msgid "Go"
-msgstr "Siirry"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Lähetimme sinulle kertakäyttöisen kirjautumislinkin. Tarkista sähköpostilaatikkosi, avaa saamasi linkki uudessa välilehdessä, ja palaa sitten tälle sivulle ja klikkaa alla olevaa nappia, jatkaaksesi mitä olitkin tekemässä."
-
-msgid "Carry on"
-msgstr "Jatka"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Et edelleenkään ole kirjautunut tunnuksella {0}."
-
-msgid "Email address"
-msgstr "Sähköpostiosoite"
 
 msgid "Password (optional)"
 msgstr "Salasana (ei pakollinen)"

@@ -956,9 +956,6 @@ msgstr "{0}已經綁定了一個團隊帳號。團隊帳號不能登入。"
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "查無任何用戶其主要電郵地址為 {0} 。"
 
-msgid "This login link is expired or invalid."
-msgstr "登入的連結已過期或無效。"
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "安全檢查失敗，請確認您的瀏覽器設置同意{domain}的 cookies，然後再試看看。"
@@ -986,6 +983,31 @@ msgstr "註冊新帳戶"
 
 msgid "Use an existing account"
 msgstr "使用已有的帳戶"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "繼續"
+
+msgid "This login link is expired or invalid."
+msgstr "登入的連結已過期或無效。"
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "電子郵件地址"
+
+msgid "Go"
+msgstr "前往"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "目前我們遇到了技術故障，因此無法正常運作。很抱歉造成不便，我們會儘快修復以回歸正常。"
@@ -1255,21 +1277,12 @@ msgstr "國籍"
 msgid "username"
 msgstr "用戶名稱"
 
-msgid "Go"
-msgstr "前往"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "我們剛寄給你一封一次用的登入連結信郵，請 檢查你的信箱，然後在新分頁上開啟所提供的連結，再重回到本頁並點擊以下的按鈕以便繼續要進行的作業。"
-
-msgid "Carry on"
-msgstr "繼續"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "你仍未以 {0} 身份登入。"
-
-msgid "Email address"
-msgstr "電子郵件地址"
 
 msgid "Password (optional)"
 msgstr "密碼 (可選)"

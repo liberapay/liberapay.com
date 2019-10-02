@@ -964,9 +964,6 @@ msgstr "Το {0} είναι συνδεδεμένο με λογαριασμό μ�
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Δε βρήκαμε κανένα λογαριασμό με κυρίως διεύθυνση ηλεκτρονικού ταχυδρομείου {0}."
 
-msgid "This login link is expired or invalid."
-msgstr "Ο σύνδεσμος για σύνδεση έχει λήξει ή δεν είναι έγκυρος."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Ο έλεγχος ασφαλείας έχει αποτύχει. Παρακαλώ βεβαιωθείτε ότι το πρόγραμμα περιήγησής σας έχει ρυθμιστεί για να επιτρέπει τα cookies για {domain} και στη συνέχεια προσπαθήστε ξανά."
@@ -994,6 +991,31 @@ msgstr "Δημιουργία λογαριασμού"
 
 msgid "Use an existing account"
 msgstr "Χρήση υπάρχοντος λογαριασμού"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Συνέχεια"
+
+msgid "This login link is expired or invalid."
+msgstr "Ο σύνδεσμος για σύνδεση έχει λήξει ή δεν είναι έγκυρος."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
+
+msgid "Go"
+msgstr "Εμπρός"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Αυτή τη στιγμή αντιμετωπίζουμε τεχνικές δυσκολίες. Σαν αποτέλεσμα τα περισσότερα πράγματα δεν δουλεύουν.  Απολογούμαστε για την ταλαιπωρία, θα τα φτιάξουμε όλα το συντομότερο."
@@ -1265,21 +1287,12 @@ msgstr "Εθνικότητα"
 msgid "username"
 msgstr "όνομα χρήστη"
 
-msgid "Go"
-msgstr "Εμπρός"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Σου στείλαμε ένα σύνδεσμο μιας χρήσης για να συνδεθείς. Έλεγξε τα εισερχόμενα, άνοιξε τον σχετικό  σύνδεσμο σε μια καινούρια καρτέλα και μετά επέστρεψε πίσω σε αυτή τη σελίδα και κάνε κλικ στο πιο κάτω κουμπί για να συνεχίσεις με αυτό που ήθελες να κάνεις."
-
-msgid "Carry on"
-msgstr "Συνέχεια"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Δεν έχετε ακόμη συνδεθεί σαν {0}."
-
-msgid "Email address"
-msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
 
 msgid "Password (optional)"
 msgstr "Κωδικός (προαιρετικός)"

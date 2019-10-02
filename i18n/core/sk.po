@@ -971,9 +971,6 @@ msgstr "{0} je spojený s tímovým účtom. NIe je možné prihlásiť sa ako t
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Nenašli sme žiadny účet, ktorého hlavná adresa je {0}."
 
-msgid "This login link is expired or invalid."
-msgstr "Tento odkaz pre prihlásenie vypršal alebo nie je platný."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Bezpečnostná kontrola zlyhala. Uistite sa, že nastavenia vášho prehliadača povolujú použitie cookies pre {domain}, následne skúste zopakovať túto akciu."
@@ -1001,6 +998,31 @@ msgstr "Vytvoriť účet"
 
 msgid "Use an existing account"
 msgstr "Použiť existujúci účet"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Pokračujte"
+
+msgid "This login link is expired or invalid."
+msgstr "Tento odkaz pre prihlásenie vypršal alebo nie je platný."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "Emailová adresa"
+
+msgid "Go"
+msgstr "Odoslať"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Momentálne máme technické problémy. Dôsledkom toho väčšina vecí nefunguje. Ospravelňujem sa za nepríjemnosti, budeme sa snažiť všetko opraviť čo najskôr."
@@ -1274,21 +1296,12 @@ msgstr "Národnosť"
 msgid "username"
 msgstr "užívateľské meno"
 
-msgid "Go"
-msgstr "Odoslať"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Poslali sme vám jednorázový prihlasovací odkaz. Skontrolujte schránku doručenej pošty, otvorte zaslaný odkaz v novom panely a kliknite na tlačidlo nižšie pre pokračovanie, v tom čo ste chceli spraviť."
-
-msgid "Carry on"
-msgstr "Pokračujte"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Stále nie ste prihlásený ako {0}."
-
-msgid "Email address"
-msgstr "Emailová adresa"
 
 msgid "Password (optional)"
 msgstr "Heslo (volitelné)"

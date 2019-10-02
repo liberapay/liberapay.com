@@ -964,9 +964,6 @@ msgstr "{0} ist mit einem Team-Konto verknüpft. Sie können sich nicht als Team
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Wir finden kein Konto mit der primären E-Mail-Adresse {0}."
 
-msgid "This login link is expired or invalid."
-msgstr "Dieser Login-Link ist abgelaufen oder ungültig."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Eine Sicherheitsüberprüfung schlug fehl. Bitte stellen Sie sicher, dass Ihr Browser Cookies von {domain} erlaubt und versuchen Sie es erneut.."
@@ -994,6 +991,31 @@ msgstr "Erstellen Sie ein Konto"
 
 msgid "Use an existing account"
 msgstr "Nutzen Sie ein bestehendes Konto"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Weiter"
+
+msgid "This login link is expired or invalid."
+msgstr "Dieser Login-Link ist abgelaufen oder ungültig."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "E-Mail-Adresse"
+
+msgid "Go"
+msgstr "Los"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Wir haben zurzeit technische Probleme, deshalb funktionieren die meisten Dinge nicht. Bitte entschuldigen Sie die Unannehmlichkeiten."
@@ -1265,21 +1287,12 @@ msgstr "Nationalität"
 msgid "username"
 msgstr "Benutzername"
 
-msgid "Go"
-msgstr "Los"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Wir haben Ihnen ein Einmal-Login geschickt. Prüfen Sie Ihr E-Mail-Postfach, öffnen Sie den erhaltenen Link in einem neuen Tab und klicken Sie auf den Knopf unten um fortzufahren."
-
-msgid "Carry on"
-msgstr "Weiter"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Sie sind noch nicht eingeloggt als {0}."
-
-msgid "Email address"
-msgstr "E-Mail-Adresse"
 
 msgid "Password (optional)"
 msgstr "Passwort (optional)"

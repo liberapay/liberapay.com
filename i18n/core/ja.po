@@ -955,9 +955,6 @@ msgstr "{0} はチームアカウントにリンクされています。チー�
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "メインのメールアドレスが {0} であるアカウントは見つかりませんでした。"
 
-msgid "This login link is expired or invalid."
-msgstr "このログインリンクは期限切れまたは無効です。"
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "セキュリティーチェックに失敗しました。お使いのブラウザーが {domain} の Cookie を許可するように設定されているか確認して、再度お試しください。"
@@ -985,6 +982,31 @@ msgstr "アカウントを作成"
 
 msgid "Use an existing account"
 msgstr "既存のアカウントを使用"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "続行"
+
+msgid "This login link is expired or invalid."
+msgstr "このログインリンクは期限切れまたは無効です。"
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "メールアドレス"
+
+msgid "Go"
+msgstr "次へ"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "現在技術的な障害が発生しています。結果的にほとんどの昨日が動作しません。ご迷惑をおかけして申し訳ありません。できる限り速やかに通常の状態に復帰いたします。"
@@ -1254,21 +1276,12 @@ msgstr "国籍"
 msgid "username"
 msgstr "ユーザー名"
 
-msgid "Go"
-msgstr "次へ"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "1 回限りのログインリンクをお送りしました。受信トレイを確認し、リンクを新しいタブで開いてください。続いて、このページに戻り、下のボタンをクリックしてください。目的の操作を続けることができます。"
-
-msgid "Carry on"
-msgstr "続行"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "まだ {0} としてログインしていません。"
-
-msgid "Email address"
-msgstr "メールアドレス"
 
 msgid "Password (optional)"
 msgstr "パスワード（省略可）"

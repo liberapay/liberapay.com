@@ -964,9 +964,6 @@ msgstr "{0} er knyttet til en lag-konto. Det er ikke mulig å logge inn som et l
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Fant ingen konto med {0} som primær e-postadresse."
 
-msgid "This login link is expired or invalid."
-msgstr "Innloggingslenken har utløpt eller er ugyldig."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "En sikkerhetssjekk har mislyktes. Sjekk at nettleseren din er satt opp til å tillate kaker for {domain}, prøv så igjen."
@@ -994,6 +991,31 @@ msgstr "Opprett en konto"
 
 msgid "Use an existing account"
 msgstr "Bruk en eksisterende konto"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Fortsett"
+
+msgid "This login link is expired or invalid."
+msgstr "Innloggingslenken har utløpt eller er ugyldig."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "E-postadresse"
+
+msgid "Go"
+msgstr "Gå"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Liberapay opplever for øyeblikket tekniske problemer, og jobber med å løse dem. En beklagelig følge av dette kan være at ting ikke virker."
@@ -1266,21 +1288,12 @@ msgstr "Nasjonalitet"
 msgid "username"
 msgstr "brukernavn"
 
-msgid "Go"
-msgstr "Gå"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Sjekk innboksen din for en engangsinnloggingslenke, åpne den i en ny fane, kom tilbake til denne siden og klikk på knappen nedenfor for å fortsette med det du ville gjøre."
-
-msgid "Carry on"
-msgstr "Fortsett"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Du er fremdeles ikke innlogget som {0}."
-
-msgid "Email address"
-msgstr "E-postadresse"
 
 msgid "Password (optional)"
 msgstr "Passord (valgfritt)"

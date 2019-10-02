@@ -963,9 +963,6 @@ msgstr "{0} è collegato al conto di una squadra. Non è possibile effettuare l'
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Non abbiamo trovato alcun conto il cui indirizzo e-mail principale è {0}."
 
-msgid "This login link is expired or invalid."
-msgstr "Questo collegamento di accesso è scaduto o non valido."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Un controllo di sicurezza è fallito. Per favore accertati che il browser sia configurato per accettare i cookie per il dominio {domain}, quindi riprova."
@@ -993,6 +990,31 @@ msgstr "Crea un conto"
 
 msgid "Use an existing account"
 msgstr "Usa un conto esistente"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Prosegui"
+
+msgid "This login link is expired or invalid."
+msgstr "Questo collegamento di accesso è scaduto o non valido."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "Indirizzo e-mail"
+
+msgid "Go"
+msgstr "Vai"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "In questo momento siamo soggetti a problemi tecnici. Per questo motivo molte cose non funzionano. Siamo spiacenti per il problema, lo risolveremo al più presto."
@@ -1264,21 +1286,12 @@ msgstr "Nazionalità"
 msgid "username"
 msgstr "nome utente"
 
-msgid "Go"
-msgstr "Vai"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Ti abbiamo inviato un collegamento di accesso usa e getta. Controlla la tua posta in arrivo, apri il collegamento che ti è stato inviato in una nuova scheda, quindi ritorna su questa pagina e usa il tasto qui sotto per continuare."
-
-msgid "Carry on"
-msgstr "Prosegui"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Non sei ancora autenticato come {0}."
-
-msgid "Email address"
-msgstr "Indirizzo e-mail"
 
 msgid "Password (optional)"
 msgstr "Password (opzionale)"

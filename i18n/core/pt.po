@@ -963,9 +963,6 @@ msgstr "{0} está vinculado a uma conta de equipe. Não é possível entrar como
 msgid "We didn't find any account whose primary email address is {0}."
 msgstr "Nenhuma conta com o e-mail {0} como principal foi encontrada."
 
-msgid "This login link is expired or invalid."
-msgstr "Link de entrada inválido ou expirado."
-
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Falha na verificação de segurança. Verifique se o seu navegador está configurado para permitir cookies para {domain} e tente novamente."
@@ -993,6 +990,31 @@ msgstr "Criar uma conta"
 
 msgid "Use an existing account"
 msgstr "Usar uma conta existente"
+
+msgid "Bad Request"
+msgstr ""
+
+msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
+msgstr ""
+
+msgid "Carry on"
+msgstr "Continuar"
+
+msgid "This login link is expired or invalid."
+msgstr "Link de entrada inválido ou expirado."
+
+#, python-brace-format
+msgid "A login link is only valid for {x_hours} and can only be used once."
+msgstr ""
+
+msgid "To request a new login link, input your email address:"
+msgstr ""
+
+msgid "Email address"
+msgstr "E-mail"
+
+msgid "Go"
+msgstr "Ok"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Nós estamos com problemas técnicos, por isso a maioria das coisas não estão funcionando. Pedimos desculpas pelo inconveniente, logo tudo voltará ao normal."
@@ -1264,21 +1286,12 @@ msgstr "Nacionalidade"
 msgid "username"
 msgstr "nome de utilizador"
 
-msgid "Go"
-msgstr "Ok"
-
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Enviamos um link de uso único para entrar. Verifique a sua caixa de entrada, abra o link numa nova aba, volte para esta página e clique no botão abaixo para continuar com o queria fazer."
-
-msgid "Carry on"
-msgstr "Continuar"
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Você ainda não entrou como {0}."
-
-msgid "Email address"
-msgstr "E-mail"
 
 msgid "Password (optional)"
 msgstr "Senha"
