@@ -1036,13 +1036,20 @@ class Participant(Model, MixinTeam):
         if not getattr(self.get_email(email), 'verified', False):
             raise EmailNotVerified(email)
         check_email_blacklist(email)
-        id = self.id
+        p_id = self.id
+        current_session_id = getattr(self.session, 'id', 0)
         with self.db.get_cursor() as c:
             self.add_event(c, 'set_primary_email', email)
             c.run("""
                 UPDATE participants
-                   SET email=%(email)s
-                 WHERE id=%(id)s
+                   SET email = %(email)s
+                 WHERE id = %(p_id)s;
+
+                DELETE FROM user_secrets
+                 WHERE participant = %(p_id)s
+                   AND id >= 1001 AND id <= 1010
+                   AND id <> %(current_session_id)s
+                   AND secret LIKE '%%.em';
             """, locals())
         self.set_attributes(email=email)
         self.update_avatar()
