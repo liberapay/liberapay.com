@@ -2371,3 +2371,6 @@ ALTER TABLE payin_transfers
 
 -- migration #107
 ALTER TABLE payin_refunds ALTER COLUMN reason DROP NOT NULL;
+
+-- migration #108
+UPDATE emails SET verified = null WHERE participant IS null AND verified IS true;
