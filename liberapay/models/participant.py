@@ -826,7 +826,11 @@ class Participant(Model, MixinTeam):
 
             DELETE FROM community_memberships WHERE participant=%(id)s;
             DELETE FROM subscriptions WHERE subscriber=%(id)s;
-            UPDATE emails SET participant = NULL WHERE participant=%(id)s AND address <> %(email)s;
+            UPDATE emails
+               SET participant = NULL
+                 , verified = NULL
+             WHERE participant = %(id)s
+               AND address <> %(email)s;
             DELETE FROM notifications WHERE participant=%(id)s;
             DELETE FROM statements WHERE participant=%(id)s;
 
@@ -942,7 +946,7 @@ class Participant(Model, MixinTeam):
             self.close(None)
         with self.db.get_cursor() as cursor:
             cursor.run("""
-                UPDATE emails SET participant = NULL WHERE participant = %(p_id)s;
+                UPDATE emails SET participant = NULL, verified = NULL WHERE participant = %(p_id)s;
                 DELETE FROM events WHERE participant = %(p_id)s;
                 DELETE FROM user_secrets
                       WHERE participant = %(p_id)s
@@ -1086,12 +1090,17 @@ class Participant(Model, MixinTeam):
             try:
                 cursor.run("""
                     UPDATE emails
+                       SET verified = NULL
+                     WHERE lower(address) = lower(%s)
+                       AND participant IS NULL;
+
+                    UPDATE emails
                        SET verified = true
                          , verified_time = now()
                          , disavowed = false
                      WHERE participant = %s
                        AND id = %s
-                """, (self.id, email_id))
+                """, (r.address, self.id, email_id))
             except IntegrityError:
                 return EmailVerificationResult.STYMIED
         if not self.email:
@@ -1147,6 +1156,7 @@ class Participant(Model, MixinTeam):
             c.run("""
                 UPDATE emails
                    SET participant = NULL
+                     , verified = NULL
                  WHERE participant = %s
                    AND address = %s
             """, (self.id, address))
