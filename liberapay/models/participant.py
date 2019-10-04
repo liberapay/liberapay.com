@@ -336,6 +336,7 @@ class Participant(Model, MixinTeam):
             raise BadPasswordSize
         hashed = self.hash_password(password)
         p_id = self.id
+        current_session_id = getattr(self.session, 'id', 0)
         with self.db.get_cursor(cursor) as c:
             c.run("""
                 INSERT INTO user_secrets
@@ -343,7 +344,13 @@ class Participant(Model, MixinTeam):
                      VALUES (%(p_id)s, 0, %(hashed)s)
                 ON CONFLICT (participant, id) DO UPDATE
                         SET secret = excluded.secret
-                          , mtime = current_timestamp
+                          , mtime = current_timestamp;
+
+                DELETE FROM user_secrets
+                 WHERE participant = %(p_id)s
+                   AND id >= 1 AND id <= 20
+                   AND id <> %(current_session_id)s
+                   AND secret NOT LIKE '%%.%%';
             """, locals())
             if checked:
                 self.add_event(c, 'password-check', None)
