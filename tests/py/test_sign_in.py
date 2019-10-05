@@ -267,6 +267,61 @@ class TestLogIn(EmailHarness):
         assert r.code == 400
         assert SESSION not in r.headers.cookie
 
+    def test_email_sessions_are_invalidated_when_primary_email_is_changed(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        email2 = self.insert_email('alice@example.com', alice.id, verified=True)
+        password = self.db.one("""
+            INSERT INTO user_secrets
+                        (participant, id, secret)
+                 VALUES (%s, %s, %s)
+              RETURNING *
+        """, (alice.id, 0, 'irrelevant'))
+
+        # Get a first active email session
+        alice.session = alice.start_session(suffix='.em', id_min=1001, id_max=1010)
+        assert alice.session.id == 1001
+
+        # Initiate a second email session, to be invalidated
+        session2 = alice.start_session(suffix='.em', id_min=1001, id_max=1010)
+        assert session2.id == 1002
+
+        # Change the primary email address
+        alice.update_email(email2.address)
+
+        # The second email session should no longer be valid, but the first
+        # session should still be valid, and the account's password should not
+        # have been deleted
+        secrets = dict(self.db.all(
+            "SELECT id, secret FROM user_secrets WHERE participant = %s", (alice.id,)
+        ))
+        assert secrets == {
+            0: password.secret,
+            1001: alice.session.secret,
+        }
+
+    def test_normal_sessions_are_invalidated_when_password_is_changed(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        alice.update_password('password')
+
+        # Get an initial session
+        alice.session = alice.start_session()
+        assert alice.session.id == 1
+
+        # Initiate a normal session, to be invalidated
+        session2 = alice.start_session()
+        assert session2.id == 2
+
+        # Change the password
+        alice.update_password('correct horse battery staple')
+
+        # The second session should no longer be valid, but the initial session
+        # should still be valid, and the account's password should not have
+        # been deleted
+        secret_ids = set(self.db.all(
+            "SELECT id FROM user_secrets WHERE participant = %s", (alice.id,)
+        ))
+        assert secret_ids == {0, 1}
+
 
 class TestSignIn(EmailHarness):
 

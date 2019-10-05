@@ -376,6 +376,15 @@ class Harness(unittest.TestCase):
               RETURNING *
         """, data)
 
+    def insert_email(self, address, participant_id, verified=True):
+        verified_time = utcnow() if verified else None
+        return self.db.one("""
+            INSERT INTO emails
+                        (address, verified, verified_time, participant)
+                 VALUES (%(address)s, %(verified)s, %(verified_time)s, %(participant_id)s)
+              RETURNING *
+        """, locals())
+
     def upsert_route(self, participant, network,
                      status='chargeable', one_off=False, address='x', remote_user_id='x'):
         r = self.db.one("""
