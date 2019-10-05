@@ -35,7 +35,7 @@ Note: This webapp is not self-hostable.
 
 ## Contact
 
-You want to chat? [Join us on Gitter](https://gitter.im/liberapay/salon). (If you use IRC, [Gitter has a gateway](https://irc.gitter.im/), and we're also in the #liberapay channel on Freenode.)
+Want to chat? [Join us on Gitter](https://gitter.im/liberapay/salon). (If you use IRC, [Gitter has a gateway](https://irc.gitter.im/), and we're also in the #liberapay channel on Freenode.)
 
 Alternatively you can post a message in [our GitHub salon](https://github.com/liberapay/salon).
 
@@ -73,7 +73,7 @@ The python code inside simplates is only for request-specific logic, common back
 
 ### Installation
 
-Firstly, make sure you have the following dependencies installed:
+Make sure you have the following dependencies installed first:
 
 - python ≥ 3.6
   - including the C headers of python and libffi, which are packaged separately in many Linux distributions
@@ -111,7 +111,7 @@ Once you've installed everything and set up the database, you can run the app:
 
 It should now be accessible at [http://localhost:8339/](http://localhost:8339/).
 
-By default there are no users. You can create accounts like you would on the real website, and if you want you can also create a bunch of fake users (but they're not great):
+There are no users provided by default. You can create accounts as you would on the real website, and if you want you can also create a bunch of fake users (but they're not great):
 
     make data
 
@@ -137,7 +137,7 @@ That process is semi-automated by `release.sh`.
 
 ### CSS and JavaScript
 
-For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3](https://getbootstrap.com/). Stylesheets are in the `style/` directory and our JavaScript code is in `js/`. Our policy for both is to have as little as possible of them: the website should be almost entirely usable without JS, and our CSS should leverage Bootstrap as much as possible instead of containing lots of custom rules that would become a burden to maintain.
+For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3](https://getbootstrap.com/). Stylesheets are in the `style/` directory and our JavaScript code is in `js/`. Our policy for both is to include as little as possible of them: the website should be almost entirely usable without JS, and our CSS should leverage Bootstrap as much as possible instead of containing lots of custom rules that would become a burden to maintain.
 
 We compile Bootstrap ourselves from the SASS source in the `style/bootstrap/`
 directory. We do that to be able to easily customize it by changing values in
@@ -150,11 +150,11 @@ The easiest way to run the test suite is:
 
     make test
 
-That recreates the test DB's schema and runs all the tests. To speed things up
+This recreates the test DB's schema and runs all the tests. To speed things up
 you can also use the following commands:
 
 - `make pytest` only runs the python tests without recreating the test DB
-- `make pytest-re` does the same but only runs the tests that failed in the previous run
+- `make pytest-re` only runs the tests that failed previously
 
 #### Updating test fixtures
 
@@ -166,17 +166,17 @@ If the new interactions are with MangoPay you have to delete the file `tests/py/
 
 #### Speeding up the tests
 
-PostgreSQL is designed to prevent data loss, so by default it does a lot of synchronous disk writes. To reduce the number of those blocking writes our `recreate-schema.sh` script automatically switches the `synchronous_commit` option to `off` for the test database, however this doesn't completely disable syncing. If your PostgreSQL instance only contains data that you can afford to lose, then you can speed things up further by setting `fsync` to `off` in the server's configuration file (`postgresql.conf`).
+PostgreSQL is designed to prevent data loss, so it does a lot of synchronous disk writes by default. To reduce the number of those blocking writes, our `recreate-schema.sh` script automatically switches the `synchronous_commit` option to `off` for the test database, however this doesn't completely disable syncing. If your PostgreSQL instance only contains data that you can afford to lose, then you can speed things up further by setting `fsync` to `off` in the server's configuration file (`postgresql.conf`).
 
 ### Tinkering with payments
 
-Liberapay was built on top of [MangoPay](https://www.mangopay.com/) for payments, however they [kicked us out](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82) so we've shifted to integrating with multiple payment processors. We currently support [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/). Support for Mangopay hasn't been completely removed yet.
+Liberapay was built on top of [MangoPay](https://www.mangopay.com/) for payments, however they [kicked us out](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82) so we've shifted to integrating with multiple payment processors. We currently support [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/). However, support for Mangopay hasn't been completely removed yet.
 
 ### Modifying python dependencies
 
 All new dependencies need to be audited to check that they don't contain malicious code or security vulnerabilities.
 
-We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_install/#hash-checking-mode) to protect ourselves from dependency tampering. Thus when adding or upgrading a dependency the new hashes need to computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
+We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_install/#hash-checking-mode) to protect ourselves from dependency tampering. Thus, when adding or upgrading a dependency the new hashes need to be computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
 
     pip install hashin
     hashin package==x.y -r requirements_base.txt -p 3.4 -p 3.6
@@ -186,7 +186,7 @@ If for some reason you need to rehash all requirements, run `make rehash-require
 
 ### Processing personal data
 
-When writing code that handles personal information keep in mind the principles enshrined in the [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
+When writing code that handles personal information, keep in mind the principles enshrined in the [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
 ### Deploying the app
 
@@ -198,7 +198,7 @@ To deploy the app simply run `release.sh`, it'll guide you through it. Of course
 
 ### Setting up a development environment using Docker
 
-If you don't want to install directly dependencies on your machine, you can spin up a development environment easily, assuming you have [Docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/) installed:
+If you don't want to install the dependencies directly on your machine, you can spin up a development environment easily, assuming you have [Docker](https://docs.docker.com/engine/installation/) and [docker-compose](https://docs.docker.com/compose/install/) installed:
 
     # build the local container
     docker-compose build
