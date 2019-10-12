@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Turkish (https://hosted.weblate.org/projects/liberapay/core/tr/)\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"PO-Revision-Date: 2019-10-12 22:52+0000\n"
+"Last-Translator: Veli Tasalı <veli.tasali@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.9-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -236,7 +239,7 @@ msgstr "{0}'den Liberaplay'a fatura"
 
 #, python-brace-format
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
-msgstr ""
+msgstr "{sender_name} {amount} tutarında bir fatura oluşturdu."
 
 #, python-brace-format
 msgid "Description: {0}"
@@ -289,7 +292,7 @@ msgstr "Liberapay cüzdanınıza banka havalesi yapın"
 
 #, python-brace-format
 msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr ""
+msgstr "Ödemeleri almaya hazırız. Lütfen tam olarak {0} miktarını takip eden hesaba aşağıdaki referans koduyla beraber gönderin böylece paranın sizden gelmiş olduğunu bileceğiz:"
 
 msgid "IBAN (International Bank Account Number)"
 msgstr "IBAN (Uluslararası Banka Hesap Numarası)"
@@ -314,7 +317,7 @@ msgstr "Liberapay cüzdanınızın banka havalesi süresi doldu"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr ""
+msgstr "{date} tarihinde banka hesabınızdan Liberapay cüzdanınıza {money_amount} göndereceğinizi bildirmiştiniz, ancak para hiç gelmedi."
 
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "Eğer yapmayı unuttuysanız, yeni bir ödeme başlatabilirsiniz:"
@@ -353,7 +356,7 @@ msgstr "Ödemeniz başarısız oldu"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
-msgstr ""
+msgstr "Liberapay üzerinden {date} tarihinde başlattığınız {money_amount} ödemesi başarısız oldu."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -361,41 +364,41 @@ msgstr "{provider} ödeme işlemcisi tarafından sağlanan hata mesajı:"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
-msgstr ""
+msgstr "{money_amount} iadesi işlemi başlatıldı"
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr ""
+msgstr "{date} tarihinde başlattığınız {money_amount} ödemesi iade ediliyor."
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr ""
+msgstr "{date} tarihinde başlattığınız {money_amount} ödemesi bölümler halinde iade ediliyor."
 
 msgid "Reason: the payment was a duplicate."
-msgstr ""
+msgstr "Sebep: ödeme zaten vardı."
 
 msgid "Reason: the payment has been deemed fraudulent."
-msgstr ""
+msgstr "Sebep: ödeme geçersiz sayıldı."
 
 msgid "Reason: the refund was requested by you."
-msgstr ""
+msgstr "Sebep: geri ödeme tarafınızca istendi."
 
 msgid "Please contact us to obtain more information."
-msgstr ""
+msgstr "Lütfen daha fazla bilgi için bizimle iletişime geçin."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
-msgstr ""
+msgstr "İadelerin banka hesabınızda yeniden görünmesi birkaç iş günü sürebilir."
 
 msgid "Your bank account is going to be debited"
 msgstr "Banka hesabınız borçlandırılacak"
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "{bank_name} {partial_account_number} hesabınızdan {money_amount} otomatik ödemesi başlattık."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "{partial_account_number} hesabınızdan {money_amount} otomatik ödemesi başlattık."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
@@ -413,7 +416,7 @@ msgstr "Ödemeniz başarılı oldu"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
-msgstr ""
+msgstr "{date} tarihinde başlatılan Liberapay üzerinde {money_amount} ödemesi başarıyla gerçekleşmiştir."
 
 msgid "Thank you for this donation!"
 msgstr "Bağış için teşekkürler!"
@@ -436,11 +439,11 @@ msgstr "{platform}'den {user_name} Liberapay'a katıldı!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "{date} tarihinde {user_name} kullanıcısının Liberapay'e katılması halinde {money_amount} bağışlamayı vaat ettiniz."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "{user_name} kullanıcısının {time_ago} {liberapay_username} olarak Liberapay'e katıldığını, dolayısıyla vaadinizi gerçek bağışa döndürebileceğinizi bildirmekten memnuniyet duyarız."
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -451,7 +454,7 @@ msgstr "Üyesi olduğunuz takımda değişiklikler yapıldı"
 
 #, python-brace-format
 msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
-msgstr ""
+msgstr "\"{0}\" takımının kullandığı {1} referans para birimi {3} tarafından {2} birimine değiştirilmiştir."
 
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Liberapay'de bir takıma girmek için davet edildiniz"
