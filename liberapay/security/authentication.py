@@ -249,7 +249,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
               FROM emails e
               JOIN participants p On p.id = e.participant
              WHERE e.id = %s
-        """, (email_id,))
+        """, (email_id,), default=(None, None))
         if email_participant:
             result = email_participant.verify_email(email_id, email_nonce, p)
             state['email.verification-result'] = result
