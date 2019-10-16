@@ -655,7 +655,7 @@ CREATE FUNCTION update_payment_providers() RETURNS trigger AS $$
     BEGIN
         rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
         UPDATE participants
-           SET payment_providers = compute_payment_providers(rec.participant)
+           SET payment_providers = compute_payment_providers(id)
          WHERE id = rec.participant
             OR id IN (
                    SELECT t.team FROM current_takes t WHERE t.member = rec.participant
