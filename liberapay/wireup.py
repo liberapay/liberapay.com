@@ -15,6 +15,7 @@ from babel.numbers import parse_pattern
 import boto3
 from mailshake import AmazonSESMailer, DummyMailer, SMTPMailer
 import pando
+from postgres.cursors import SimpleRowCursor
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 import raven
@@ -31,7 +32,7 @@ from liberapay.i18n.base import (
 )
 from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.i18n.plural_rules import get_function_from_rule
-from liberapay.models import DB, MutableRowCursor
+from liberapay.models import DB
 from liberapay.models.account_elsewhere import _AccountElsewhere, AccountElsewhere
 from liberapay.models.community import _Community, Community
 from liberapay.models.encrypted import Encrypted
@@ -123,7 +124,7 @@ def database(env, tell_sentry):
     dburl = env.database_url
     maxconn = env.database_maxconn
     try:
-        db = DB(dburl, maxconn=maxconn, cursor_factory=MutableRowCursor)
+        db = DB(dburl, maxconn=maxconn, cursor_factory=SimpleRowCursor)
     except psycopg2.OperationalError as e:
         tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()

@@ -36,10 +36,12 @@ class AccountElsewhere(Model):
 
     typname = "elsewhere_with_participant"
 
-    def __init__(self, raw_record):
-        record = raw_record['e'].__dict__
-        record['participant'] = raw_record['p']
-        super(AccountElsewhere, self).__init__(record)
+    def __init__(self, values):
+        if self.__class__.attnames is not _AccountElsewhere.attnames:
+            self.__class__.attnames = _AccountElsewhere.attnames
+        elsewhere, participant = values
+        self.__dict__.update(elsewhere.__dict__)
+        self.set_attributes(participant=participant)
         self.platform_data = getattr(website.platforms, self.platform)
 
     def __repr__(self):

@@ -110,7 +110,7 @@ class Cryptograph(object):
         dic = self.randomize_dict(dic, allow_single_key=allow_single_key)
         serialized = cbor.dumps(dic, canonical=False)
         encrypted = self.fernet.encrypt(serialized)
-        return Encrypted(dict(scheme='fernet', payload=encrypted, ts=utcnow()))
+        return Encrypted(('fernet', encrypted, utcnow()))
 
     def decrypt(self, scheme, payload):
         """Decrypt and reconstruct an object stored in the database.

@@ -406,14 +406,8 @@ class Foobar(Exception): pass
 
 @contextmanager
 def postgres_readonly(db):
-    dbname = db.one("SELECT current_database()")
-    db.run("ALTER DATABASE {0} SET default_transaction_read_only = true".format(dbname))
+    db.readonly = True
     try:
         yield
     finally:
-        db.run("SET default_transaction_read_only = false")
-        db.run("""
-            BEGIN READ WRITE;
-                ALTER DATABASE {0} SET default_transaction_read_only = false;
-            END;
-        """.format(dbname))
+        db.readonly = False

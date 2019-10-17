@@ -8,9 +8,9 @@ class Encrypted(Model):
 
     typname = "encrypted"
 
-    def __init__(self, data):
-        data['payload'] = bytes(data['payload'])
-        Model.__init__(self, data)
+    def __init__(self, values):
+        Model.__init__(self, values)
+        self.set_attributes(payload=bytes(self.payload))
 
     def __conform__(self, protocol):
         return AsIs(
