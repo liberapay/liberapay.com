@@ -179,7 +179,7 @@ All new dependencies need to be audited to check that they don't contain malicio
 We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_install/#hash-checking-mode) to protect ourselves from dependency tampering. Thus, when adding or upgrading a dependency the new hashes need to be computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
 
     pip install hashin
-    hashin package==x.y -r requirements_base.txt -p 3.4 -p 3.6
+    hashin package==x.y -r requirements_base.txt -p 3.6 -p 3.7
     # note: we have several requirements files, use the right one
 
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
