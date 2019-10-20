@@ -28,10 +28,12 @@ class Community(Model):
     subtitle_maxlength = 120
     sidebar_maxlength = 4096
 
-    def __init__(self, raw_record):
-        record = raw_record['c'].__dict__
-        record['participant'] = raw_record['p']
-        super(Community, self).__init__(record)
+    def __init__(self, values):
+        if self.__class__.attnames is not _Community.attnames:
+            self.__class__.attnames = _Community.attnames
+        community, participant = values
+        self.__dict__.update(community.__dict__)
+        self.set_attributes(participant=participant)
 
     @classmethod
     def create(cls, name, creator_id, lang='mul'):
