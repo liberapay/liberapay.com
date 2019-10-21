@@ -460,6 +460,17 @@ msgstr "{user_name}이(가) {liberapay_username}라는 이름으로 Liberapay에
 msgid "Donate to {0}"
 msgstr "{0} 에(게) 기부"
 
+msgid "You can make it easier for your patrons to support you through Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr "{platform_name} 계정 연결"
+
 msgid "A team you're a member of has been modified"
 msgstr "당신이 소속된 팀의 정보가 수정되었습니다"
 
@@ -1302,6 +1313,9 @@ msgstr "소개"
 msgid "Global"
 msgstr "글로벌"
 
+msgid "Payment Processors"
+msgstr "지불 처리자"
+
 msgid "Teams"
 msgstr "팀"
 
@@ -1367,9 +1381,6 @@ msgstr "수익"
 
 msgid "Ledger"
 msgstr "장부"
-
-msgid "Payment Processors"
-msgstr "지불 처리자"
 
 msgid "Identity"
 msgstr "신원"
@@ -2764,10 +2775,6 @@ msgstr "{country}에서 사용 가능."
 msgid "Not available in {country}."
 msgstr "{country}에서 사용할 수 없음."
 
-#, python-brace-format
-msgid "Connect {platform_name} account"
-msgstr "{platform_name} 계정 연결"
-
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal은 Stripe보다 더 많은 나라에서 돈을 받을 수 있지만, Liberapay에 잘 호환되지 않습니다."
 
@@ -3875,6 +3882,29 @@ msgstr "안전"
 
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "저희의 보호 하에 있는 자금은 저희 또는 저희의 자금을 위탁받은 제3자가 파산하더라도 안전함을 보증합니다."
+
+msgid "Here is a list of differences between them:"
+msgstr ""
+
+msgid "The payment processing fees are usually lower with Stripe than with PayPal."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
+msgstr ""
+
+msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
+msgstr ""
+
+msgid "Stripe makes SEPA Direct Debits easy for European donors."
+msgstr ""
+
+msgid "Stripe allows creators to configure automatic payouts to their bank accounts."
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
+msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
+msgstr[0] ""
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."

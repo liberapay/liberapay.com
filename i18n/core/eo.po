@@ -466,6 +466,17 @@ msgstr "Ni ĝojas informi vin ke {user_name} aliĝi al Liberapay {time_ago}, kie
 msgid "Donate to {0}"
 msgstr "Donaci al {0}"
 
+msgid "You can make it easier for your patrons to support you through Liberapay"
+msgstr ""
+
+#, python-brace-format
+msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
+msgstr ""
+
+#, python-brace-format
+msgid "Connect {platform_name} account"
+msgstr "Konekti konton de {platform_name}"
+
 msgid "A team you're a member of has been modified"
 msgstr "Teamo kie vi membras estis ŝanĝita"
 
@@ -1315,6 +1326,9 @@ msgstr "Enkonduko"
 msgid "Global"
 msgstr "Tutmonda"
 
+msgid "Payment Processors"
+msgstr "Provizantoj de Pagservo"
+
 msgid "Teams"
 msgstr "Teamoj"
 
@@ -1380,9 +1394,6 @@ msgstr "Ricevado"
 
 msgid "Ledger"
 msgstr "Kontoregistro"
-
-msgid "Payment Processors"
-msgstr "Provizantoj de Pagservo"
 
 msgid "Identity"
 msgstr "Identeco"
@@ -2788,10 +2799,6 @@ msgstr "Disponebla en {country}."
 msgid "Not available in {country}."
 msgstr "Maldisponebla en {country}."
 
-#, python-brace-format
-msgid "Connect {platform_name} account"
-msgstr "Konekti konton de {platform_name}"
-
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal permesas ricevi monon en multaj pli landoj ol Stripe, sed ĝi ne estas tiel bone integrita en Liberapay."
 
@@ -3912,6 +3919,30 @@ msgstr "Sekureco"
 
 msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr "Ni garantias, ke la mono, kiun vi metas al nia prizorgo, ne estos perdita okaze de bankroto, kiu efikus al ni aŭ al ekstera servo al kiu ni delegus la monan prizorgon."
+
+msgid "Here is a list of differences between them:"
+msgstr ""
+
+msgid "The payment processing fees are usually lower with Stripe than with PayPal."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
+msgstr ""
+
+msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
+msgstr ""
+
+msgid "Stripe makes SEPA Direct Debits easy for European donors."
+msgstr ""
+
+msgid "Stripe allows creators to configure automatic payouts to their bank accounts."
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
+msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
