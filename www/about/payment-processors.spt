@@ -1,0 +1,33 @@
+[---]
+title = _("Payment Processors")
+[---] text/html
+% extends "templates/about.html"
+% block content
+
+<p>{{ _(
+    "We currently support processing payments through {payment_processors_list}.",
+    payment_processors_list=[
+        '<a href="https://stripe.com/">Stripe</a>'|safe,
+        '<a href="https://paypal.com/">PayPal</a>'|safe,
+    ]
+) }}</p>
+
+<p>{{ _("Here is a list of differences between them:") }}</p>
+
+<ul>
+    <li>{{ _("The payment processing fees are usually lower with Stripe than with PayPal.") }}</li>
+    <li>{{ _("Stripe allows donating to multiple creators at once, PayPal doesn't.") }}</li>
+    <li>{{ _("PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay.") }}</li>
+    <li>{{ _("Stripe makes SEPA Direct Debits easy for European donors.") }}</li>
+    <li>{{ _("Stripe allows creators to configure automatic payouts to their bank accounts.") }}</li>
+    <li>{{ ngettext(
+        "",
+        "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}.",
+        n=len(constants.PAYOUT_COUNTRIES['stripe']),
+        paypal_link_open='<a href="https://www.paypal.com/webapps/mpp/country-worldwide">'|safe,
+        stripe_link_open='<a href="https://stripe.com/global">'|safe,
+        link_close='</a>'|safe,
+    ) }}</li>
+</ul>
+
+% endblock
