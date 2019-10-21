@@ -237,11 +237,11 @@ elif cls:
     elif event == 'PAYIN_NORMAL' and payio.PaymentType == 'DIRECT_DEBIT':
         p.notify('payin_directdebit_'+status, exchange=e._asdict(), force_email=reopen)
     elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
-        p.notify('withdrawal_'+status, exchange=e._asdict(), force_email=reopen)
+        p.notify('withdrawal_'+status, exchange=e._asdict(), force_email=True)
     elif event == 'PAYOUT_REFUND' and status == 'succeeded':
         d = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e.refund_ref,))._asdict()
         d['note'] = e.note
-        p.notify('withdrawal_failed', exchange=d, force_email=reopen)
+        p.notify('withdrawal_failed', exchange=d, force_email=True)
 
     # Check balances
     check_wallet_balance(website.db.one(
