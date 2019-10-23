@@ -43,7 +43,7 @@ if request.method == 'POST':
         response.render('templates/confirm.spt', state,
                         msg=msg, back_to=back_to, cls='warning')
     if exchange:
-        participant.notify('withdrawal_'+exchange.status, web=False, exchange=exchange)
+        participant.notify('withdrawal_'+exchange.status, force_email=True, web=False, exchange=exchange)
         response.redirect(request.path.raw+'?exchange_id=%s' % exchange.id)
 
 elif 'exchange_id' in request.qs:
