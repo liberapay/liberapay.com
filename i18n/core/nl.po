@@ -65,21 +65,6 @@ msgstr "Wij sturen geen e-mails meer naar je adres {email_address}, omdat wij ee
 msgid "Manage your email addresses"
 msgstr "Beheer je e-mailadressen"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "Iemand wil aan je doneren op Liberapay"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "Iemand wil aan je doneren op Liberapay, maar je moet eerst je identiteitsformulier invullen voordat we legaal het geld voor je kunnen inzamelen."
-
-msgid "Fill identity form"
-msgstr "Identiteitsformulier invullen"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Als je geen donaties wilt ontvangen op Liberapay kan je dit aangeven in je profiel."
-
-msgid "Reject donations"
-msgstr "Weiger donaties"
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "Je hebt ongeveer {0} ontvangen deze week"
@@ -438,6 +423,21 @@ msgstr "De betaling van {money_amount} via Liberapay die op {date} werd geïniti
 msgid "Thank you for this donation!"
 msgstr "Bedankt voor deze donatie!"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "Configureer betalingsverwerking"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "Als je geen donaties wilt ontvangen op Liberapay kan je dit aangeven in je profiel."
+
+msgid "Reject donations"
+msgstr "Weiger donaties"
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} van {1} is lid geworden van Liberapay!"
@@ -575,12 +575,6 @@ msgstr "Elke week zolang ik donaties ontvang"
 
 msgid "When it's time to renew my donations"
 msgstr "Wanneer het tijd is om mijn donaties te vernieuwen"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "Wanneer een overschrijving naar mijn bankrekening gestart wordt"
-
-msgid "When a transfer to my bank account fails"
-msgstr "Wanneer een overschrijving naar mijn bankrekening mislukt"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Als iemand aan wie ik een donatie heb toegezegd zich aanmeld op Liberapay"
@@ -2118,6 +2112,9 @@ msgstr "Toevoegen"
 msgid "Send me notifications via email:"
 msgstr "Stuur me notificaties per e-mail voor:"
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "Taal"
 
@@ -2897,9 +2894,6 @@ msgstr "Afwikkelingsdatum: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Je kunt geen nieuwe donaties ontvangen totdat je de betalingsverwerking hebt geconfigureerd."
-
-msgid "Configure payment processing"
-msgstr "Configureer betalingsverwerking"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."

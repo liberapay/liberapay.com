@@ -64,21 +64,6 @@ msgstr "Kami tidak akan menghantar emel ke alamat anda {email_address}, kerana k
 msgid "Manage your email addresses"
 msgstr "Uruskan alamat emel anda"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "Seseorang ingin menderma kepada anda menggunakan Liberapay"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "Seseorang ingin menderma kepada anda melalui Liberapay, tetapi anda perlu mengisi borang identiti sebelum kami boleh mula menerima wang bagi pihak anda."
-
-msgid "Fill identity form"
-msgstr "Isi borang identiti"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Jika anda tidak ingin menerima derma melalui Liberapay, anda boleh menolak dengan menyunting profil anda mengikut kesesuaian."
-
-msgid "Reject donations"
-msgstr "Tolak derma"
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "Anda telah menerima lebih kurang {0} minggu ini"
@@ -437,6 +422,21 @@ msgstr "Pembayaran {money_amount} melalui Liberapay yang dimulakan pada {date} t
 msgid "Thank you for this donation!"
 msgstr "Terima kasih atas derma ini!"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "Tetapkan pemprosesan pembayaran"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "Jika anda tidak ingin menerima derma melalui Liberapay, anda boleh menolak dengan menyunting profil anda mengikut kesesuaian."
+
+msgid "Reject donations"
+msgstr "Tolak derma"
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} dari {1} telah sertai Liberapay!"
@@ -576,12 +576,6 @@ msgstr "Setiap minggu selagi saya menerima derma"
 
 msgid "When it's time to renew my donations"
 msgstr "Apabila tiba masa untuk memperbaharui derma-derma saya"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "Apabila pindahan wang ke akaun bank saya dimulakan"
-
-msgid "When a transfer to my bank account fails"
-msgstr "Apabila pindahan wang ke akaun bank saya gagal"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Apabila seseorang yang saya janjikan derma sertai Liberapay"
@@ -2119,6 +2113,9 @@ msgstr "Tambah"
 msgid "Send me notifications via email:"
 msgstr "Hantar pemberitahuan kepada saya melalui emel:"
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "Bahasa"
 
@@ -2898,9 +2895,6 @@ msgstr "Tarikh pembayaran: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Anda tidak boleh menerima derma baru sehingga anda menetapkan pemprosesan pembayaran."
-
-msgid "Configure payment processing"
-msgstr "Tetapkan pemprosesan pembayaran"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."

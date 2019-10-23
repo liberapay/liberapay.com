@@ -65,21 +65,6 @@ msgstr "Wir schicken keine weiteren Emails an Ihre Adresse {email_address}, weil
 msgid "Manage your email addresses"
 msgstr "E-Mail-Adressen verwalten"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "Jemand will Ihnen auf Liberapay etwas spenden"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "Jemand möchte Ihnen auf Liberapay Geld spenden. Sie müssen das Identitätsformular ausfüllen, bevor wir für Sie Geld einsammeln dürfen."
-
-msgid "Fill identity form"
-msgstr "Identitätsformular ausfüllen"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Wenn Sie lieber keine Spenden auf Liberapay erhalten möchten, können Sie diese ablehnen, indem Sie Ihr Profil entsprechend bearbeiten."
-
-msgid "Reject donations"
-msgstr "Spenden ablehnen"
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "Sie haben etwa {0} in dieser Woche bekommen"
@@ -438,6 +423,21 @@ msgstr "Die Zahlung von {money_amount} durch Liberapay, die am {date} eingeleite
 msgid "Thank you for this donation!"
 msgstr "Vielen Dank für diese Spende!"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "Zahlungsabwicklung konfigurieren"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "Wenn Sie lieber keine Spenden auf Liberapay erhalten möchten, können Sie diese ablehnen, indem Sie Ihr Profil entsprechend bearbeiten."
+
+msgid "Reject donations"
+msgstr "Spenden ablehnen"
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} von {1} ist jetzt bei Liberapay!"
@@ -575,12 +575,6 @@ msgstr "Jede Woche, so lange wie ich Spenden empfange"
 
 msgid "When it's time to renew my donations"
 msgstr "Wenn es an der Zeit ist meine Spenden zu erneuern"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "Wenn ein Geldtransfer auf mein Bankkonto eingeleitet wird"
-
-msgid "When a transfer to my bank account fails"
-msgstr "Wenn die Überweisung auf mein Bankkonto fehlschlägt"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Wenn jemand, dem ich eine Spende verspreche, sich bei Liberapay anmeldet"
@@ -2118,6 +2112,9 @@ msgstr "Hinzufügen"
 msgid "Send me notifications via email:"
 msgstr "Senden sie mir Benachrichtigungen per E-Mail:"
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "Sprache"
 
@@ -2897,9 +2894,6 @@ msgstr "Abrechnungstag: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Sie können erst neue Spenden erhalten, wenn Sie einen Zahlungsdienstleister konfigurieren."
-
-msgid "Configure payment processing"
-msgstr "Zahlungsabwicklung konfigurieren"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."

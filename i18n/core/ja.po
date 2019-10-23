@@ -62,21 +62,6 @@ msgstr "私たちはこれ以上お使いのアドレス {email_address} にメ�
 msgid "Manage your email addresses"
 msgstr "メールアドレスを管理"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "Liberapay であなたに寄付したい人がいます"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "誰かが Liberapay であなたに寄付をしたいと思っていますが、合法的に資金集めを開始するためには身分証明を登録する必要があります。"
-
-msgid "Fill identity form"
-msgstr "身分証明を入力"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Liberapay で寄付を受けたくない場合は、プロフィールを設定して受付を拒否してください。"
-
-msgid "Reject donations"
-msgstr "寄付を拒否"
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "今週およそ {0} を受け取りました"
@@ -432,6 +417,21 @@ msgstr "{date} に開始された Liberapay を通じての {money_amount} の�
 msgid "Thank you for this donation!"
 msgstr "寄付していただき、ありがとうございます！"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "決済サービスの設定"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "Liberapay で寄付を受けたくない場合は、プロフィールを設定して受付を拒否してください。"
+
+msgid "Reject donations"
+msgstr "寄付を拒否"
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{1} から {0} さんが Liberapay に参加しました！"
@@ -569,12 +569,6 @@ msgstr "寄付を受け取っている限り、毎週"
 
 msgid "When it's time to renew my donations"
 msgstr "寄付を更新する必要がある場合"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "自分の銀行口座への振り込みが開始された場合"
-
-msgid "When a transfer to my bank account fails"
-msgstr "自分の銀行口座への振り込みが失敗した場合"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "寄付の約束をした人が Liberapay に参加した場合"
@@ -2100,6 +2094,9 @@ msgstr "追加"
 msgid "Send me notifications via email:"
 msgstr "メールで通知を送信："
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "言語"
 
@@ -2874,9 +2871,6 @@ msgstr "決済日：{0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "決済サービスを設定するまで、新しい寄付を受け取ることはできません。"
-
-msgid "Configure payment processing"
-msgstr "決済サービスの設定"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."

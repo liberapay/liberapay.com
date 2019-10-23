@@ -63,21 +63,6 @@ msgstr "由於收到電郵服務商的抱怨，我們不會再寄送郵件到您
 msgid "Manage your email addresses"
 msgstr "管理你的電郵地址"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "有人想通过Liberapay上捐款给你"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "有人想在Liberapay上向你捐款，但你需要填写身份证明表，然后才能合法开始为你收钱."
-
-msgid "Fill identity form"
-msgstr "填寫身份表單"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "如果您不希望在Liberapay上收到捐款，您可以通过编辑您的相应的个人资料来拒绝捐款。"
-
-msgid "Reject donations"
-msgstr ""
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "您本周已收到大约{0}个"
@@ -433,6 +418,21 @@ msgstr "{money_amount} 透過 LiberaPay 在 {date} 發動的捐款已成功完�
 msgid "Thank you for this donation!"
 msgstr "感謝您的捐款！"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "設定付款方法"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "如果您不希望在Liberapay上收到捐款，您可以通过编辑您的相应的个人资料来拒绝捐款。"
+
+msgid "Reject donations"
+msgstr ""
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} 來自{1} 已加入 Liberapay！"
@@ -570,12 +570,6 @@ msgstr "只要我每週收取捐款"
 
 msgid "When it's time to renew my donations"
 msgstr "到須更新捐款的時間"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "當轉 帳到銀行帳戶的請求啟動時"
-
-msgid "When a transfer to my bank account fails"
-msgstr "當轉帳到銀行的交易失敗"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "當我想捐款的對象加入了 Liberapay"
@@ -2101,6 +2095,9 @@ msgstr "新增"
 msgid "Send me notifications via email:"
 msgstr "透過電郵傳送通知給我："
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "语言"
 
@@ -2875,9 +2872,6 @@ msgstr "結算日期：{0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "你必須設定支付方法才能收取新的捐款。"
-
-msgid "Configure payment processing"
-msgstr "設定付款方法"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."

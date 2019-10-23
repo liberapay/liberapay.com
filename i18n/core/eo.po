@@ -65,21 +65,6 @@ msgstr "Ni ne plu sendos retmesaĝojn al via retadreso {email_address}, pro plen
 msgid "Manage your email addresses"
 msgstr "Prizorgi viajn retadresojn"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "Iu volas donaci al vi en Liberapay"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "Iu volas donaci al vi en Liberapay, sed vi bezonas plenigi la identecan formularon antaŭ ol ni povas laŭleĝe komenci kolekti monon por vi."
-
-msgid "Fill identity form"
-msgstr "Plenigi la identecan formularon"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Se vi ne deziras ricevi donacojn en Liberapay, vi povas malakcepti ilin ŝanĝante vian profilon laŭe."
-
-msgid "Reject donations"
-msgstr "Malakcepti donacojn"
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "Vi ricevis ĉirkaŭ {0} tiusemajne"
@@ -438,6 +423,21 @@ msgstr "La pago de {money_amount} per Liberapay ekigita je {date} estis sukcesa.
 msgid "Thank you for this donation!"
 msgstr "Dankon por tiu donaco!"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "Agordi pagan traktadon"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "Se vi ne deziras ricevi donacojn en Liberapay, vi povas malakcepti ilin ŝanĝante vian profilon laŭe."
+
+msgid "Reject donations"
+msgstr "Malakcepti donacojn"
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} el {1} ĵus aliĝis al Liberapay!"
@@ -575,12 +575,6 @@ msgstr "Ĉiu semajno tiel longe kiel mi ricevas donacojn"
 
 msgid "When it's time to renew my donations"
 msgstr "Kiam tempas refari miajn donacojn"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "Kiam transdono al mia bankokonto estas komencita"
-
-msgid "When a transfer to my bank account fails"
-msgstr "Kiam transdono al mia bankokonto malsukcesas"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Kiam iu, al kiu mi promesis monon aliĝas al Liberapay"
@@ -2120,6 +2114,9 @@ msgstr "Aldoni"
 msgid "Send me notifications via email:"
 msgstr "Sendi al mi sciigojn retmesaĝe:"
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "Lingvo"
 
@@ -2899,9 +2896,6 @@ msgstr "Pagdato: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Vi ne povas ricevi novajn donacojn ĝis vi agordas pagan traktadon."
-
-msgid "Configure payment processing"
-msgstr "Agordi pagan traktadon"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."

@@ -64,21 +64,6 @@ msgstr "Vi sender ikke længere e-mails til din adresse {email_address}, fordi v
 msgid "Manage your email addresses"
 msgstr "Administrer dine e-mail-adresser"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "Der er nogen der vil donere til dig på Liberapay"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "Nogen vil donere til dig på Liberapay, men du er først nødt til at udfylde identitets-formularen for at vi legalt kan begynde at indsamle penge til dig."
-
-msgid "Fill identity form"
-msgstr "Udfyld identitets-formularen"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "hvis du ikke ønsker at modtage donationer via Liberapay, kan du afvise donationer ved at sætte indstillingerne på din profildside."
-
-msgid "Reject donations"
-msgstr "Afvis donationer"
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "Du har modtaget omtrent {0} denne uge"
@@ -437,6 +422,21 @@ msgstr "Betalingen af {money_amount} gennem Liberapay der blev påbegyndt {date}
 msgid "Thank you for this donation!"
 msgstr "Tak for din donation!"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "Konfigurer betalingsbehandling"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "hvis du ikke ønsker at modtage donationer via Liberapay, kan du afvise donationer ved at sætte indstillingerne på din profildside."
+
+msgid "Reject donations"
+msgstr "Afvis donationer"
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} fra {1} har tilsluttet sig Liberapay!"
@@ -574,12 +574,6 @@ msgstr "Hver uge så længe jeg modtager donationer"
 
 msgid "When it's time to renew my donations"
 msgstr "Når det er tid til at forny mine donationer"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "Når en overførsel til min bankkonto bliver påbegyndt"
-
-msgid "When a transfer to my bank account fails"
-msgstr "Når en overførsel til min bankkonto mislykkes"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Når nogen jeg har givet et donationstilbud melder sig ind i Liberapay"
@@ -2117,6 +2111,9 @@ msgstr "Tilføj"
 msgid "Send me notifications via email:"
 msgstr "Send mig notifikationer via e-mail:"
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "Sprog"
 
@@ -2896,9 +2893,6 @@ msgstr "Afregningsdato: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Du kan ikke modtage nye donationer, før du har konfigureret betalingsbehandling."
-
-msgid "Configure payment processing"
-msgstr "Konfigurer betalingsbehandling"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."

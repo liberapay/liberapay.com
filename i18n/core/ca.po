@@ -64,21 +64,6 @@ msgstr "No enviarem més correus a l'adreça electrònica {email_address}, perqu
 msgid "Manage your email addresses"
 msgstr "Gestioneu les adreces de correu electrònic"
 
-msgid "Someone wants to donate to you on Liberapay"
-msgstr "Algú vol fer-vos un donatiu via Liberapay"
-
-msgid "Someone wants to donate to you on Liberapay, but you need to fill out the identity form before we can legally start to collect money for you."
-msgstr "Algú vol fer-vos un donatiu via Liberapay, però heu de completar el formulari d'identificació abans que legalment puguem començar a rebre diners per a vós."
-
-msgid "Fill identity form"
-msgstr "Empleneu el formulari d'identitat"
-
-msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Si no voleu rebre donatius a través de Liberapay, podeu rebutjar-los editant l'opció corresponent del vostre perfil."
-
-msgid "Reject donations"
-msgstr "Rebutja els donatius"
-
 #, python-brace-format
 msgid "You have received approximately {0} this week"
 msgstr "Aquesta setmana heu rebut aproximadament {0}"
@@ -437,6 +422,21 @@ msgstr "El pagament de {money_amount} via Liberapay que es va iniciar amb data {
 msgid "Thank you for this donation!"
 msgstr "Gràcies per aquest donatiu!"
 
+msgid "You're missing out on donations through Liberapay"
+msgstr ""
+
+msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
+msgstr ""
+
+msgid "Configure payment processing"
+msgstr "Configuració del processador de pagaments"
+
+msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
+msgstr "Si no voleu rebre donatius a través de Liberapay, podeu rebutjar-los editant l'opció corresponent del vostre perfil."
+
+msgid "Reject donations"
+msgstr "Rebutja els donatius"
+
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
 msgstr "{0} de {1} s'ha unit a Liberapay!"
@@ -574,12 +574,6 @@ msgstr "Cada setmana, mentre rebi donatius"
 
 msgid "When it's time to renew my donations"
 msgstr "Si és l'hora de renovar les meus donatius"
-
-msgid "When a transfer to my bank account is initiated"
-msgstr "Si s'inicia una transferència al meu compte bancari"
-
-msgid "When a transfer to my bank account fails"
-msgstr "Si falla una transferència al meu compte bancari"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Si algú amb qui m'he compromès a finançar s'uneix a Liberapay"
@@ -2117,6 +2111,9 @@ msgstr "Afegeix"
 msgid "Send me notifications via email:"
 msgstr "Envia notificacions per correu electrònic:"
 
+msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
+msgstr ""
+
 msgid "Language"
 msgstr "Llengua"
 
@@ -2896,9 +2893,6 @@ msgstr "Data de l'operació: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "No podreu rebre donatius nous fins que configureu un processador de pagaments."
-
-msgid "Configure payment processing"
-msgstr "Configuració del processador de pagaments"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
