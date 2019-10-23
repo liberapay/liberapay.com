@@ -282,7 +282,7 @@ msgstr ""
 "\n"
 "Det andre valget er å ta ut pengene dine, det er mulig som tilbakebetaling, ellers som uttak til din bankkonto.\n"
 "\n"
-"Hvis du mottar donasjoner på Liberapay, er det nyttig å vente én uke før du tar ut din inntekt for å gi dine bidragsytere en mulighet til å overføre resten av deres donasjoner fra deres lommebok til din.\n"
+"Hvis du mottar donasjoner på Liberapay, er det nyttig å vente én uke før du tar ut din inntekt for å gi dine kronerullere en mulighet til å overføre resten av deres donasjoner fra deres lommebok til din.\n"
 "\n"
 "Vi vil informere deg så snart integrasjonen av en ny betalingsformidler er ferdig, og fortelle deg om det er noe du trenger å gjøre for å begynne å motta donasjoner på Liberapay igjen.\n"
 "\n"
@@ -466,11 +466,11 @@ msgid "Donate to {0}"
 msgstr "Doner til {0}"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr ""
+msgstr "Du kan gjøre det enklere for dine kronerullere å støtte deg gjennom Liberapay"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr ""
+msgstr "Du har koblet til en PayPal-konto, men ingen Stripe-konto. Vi anbefaler sterkt at du også kobler til en Stripe-konto, fordi det er {link_open}bedre enn PayPal{link_close} på mange vis, for både deg og dine donatorer."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -1530,7 +1530,7 @@ msgid "Address within the city"
 msgstr "Adresse inne i byen"
 
 msgid "Patrons"
-msgstr "Givere"
+msgstr "Kronerullere"
 
 msgid "Income"
 msgstr "Inntekt"
@@ -1589,8 +1589,8 @@ msgstr "Denne brukeren godtar ikke donasjoner."
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] "{0} har {n} giver."
-msgstr[1] "{0} har {n} givere."
+msgstr[0] "{0} har én kroneruller."
+msgstr[1] "{0} har {n} kronerullere."
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
@@ -1599,8 +1599,8 @@ msgstr "{0}s mål er å motta {1} per uke."
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] "{0} mottar {1} hver uke fra {n} giver."
-msgstr[1] "{0} mottar {1} hver uke fra {n} givere."
+msgstr[0] "{0} mottar {1} hver uke fra én kroneruller."
+msgstr[1] "{0} mottar {1} hver uke fra {n} kronerullere."
 
 #, python-brace-format
 msgid "Donating ({amount})"
@@ -2495,7 +2495,7 @@ msgid "Income Per Week (in {currency})"
 msgstr "Inntekt per uke (i {currency})."
 
 msgid "Number of Patrons Per Week"
-msgstr "Ukentlig antall givere"
+msgstr "Ukentlig antall kronerullere"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
@@ -2915,7 +2915,7 @@ msgstr "Sett opp betalingsformidling"
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
-msgstr "Donasjoner fra lag utgjør {income_percent} av din inntekt ({team_income} av {total_income}) fra {patrons_percent} av dine donorer ({nteampatrons} av {npatrons})."
+msgstr "Donasjoner fra lag utgjør {income_percent} av din inntekt ({team_income} av {total_income}) fra {patrons_percent} av dine kronerullere ({nteampatrons} av {npatrons})."
 
 msgid "You are not a member of any team."
 msgstr "Du er ikke medlem av noe lag."
@@ -3760,7 +3760,7 @@ msgstr "Det minste du kan gi noen bruker er {0} per uke, men for å kunne minime
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
-msgstr "Den øvre grensen for hva du kan gi en bruker er {0} i uken. Dette for å stabilisere inntekten ved å ikke belage den på noen få store bidragsytere."
+msgstr "Den øvre grensen for hva du kan gi en bruker er {0} i uken. Dette for å stabilisere inntekten ved å ikke belage den på noen få kronerullere med dype lommer."
 
 msgid "Do I have to pay taxes on the income I receive from Liberapay?"
 msgstr "Må jeg betale skatt på inntekt jeg mottar fra Liberapay?"
@@ -3943,28 +3943,31 @@ msgid "We guarantee that the funds you put in our custody will not be lost in ca
 msgstr "Det garanteres at pengene som kommer i vår varetekt ikke vil gå tapt i fall konkurs, enten det påvirker Liberapay eller en tredjepart Liberapay har overlevnet myndigheten pengene til."
 
 msgid "Here is a list of differences between them:"
-msgstr ""
+msgstr "Her er en liste over forskjeller mellom dem:"
 
+#, fuzzy
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
-msgstr ""
+msgstr "Betalingsformidlingsgebyrer er vanligvis lavere med Stripe enn med PayPal."
 
+#, fuzzy
 msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr ""
+msgstr "Stripe tillater donasjoner til flerfoldige skapere samtidig, PayPal gjør ikke det."
 
+#, fuzzy
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
-msgstr ""
+msgstr "PayPal-betalinger krever videresending av donatoren til PayPal sin nettside, mens Stripe er integrert i Liberapay."
 
 msgid "Stripe makes SEPA Direct Debits easy for European donors."
-msgstr ""
+msgstr "Stripe gjør SEPA direktedebit enklere for Europeiske givere."
 
 msgid "Stripe allows creators to configure automatic payouts to their bank accounts."
-msgstr ""
+msgstr "Stripe tillater skapere å sette opp automatiske utbetalinger til sine bankkontoer."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
 msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
+msgstr[1] "PayPal er tilgjengelig for skapere i {paypal_link_open}mer enn 200 land{link_close}, dog støtter Stripe kun {stripe_link_open}{n} land{link_close}."
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
