@@ -111,6 +111,9 @@
                         &nbsp;
                         <span class="text-muted">{{ payment_methods_icons(participant) }}</span>
                     % endif
+                    <a class="btn btn-report btn-lg" href="{{ participant.path('report') }}">
+                        {{ _("Report") }}
+                    </a>
                 </div>
             </div>
         </div>

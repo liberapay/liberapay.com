@@ -1,0 +1,114 @@
+from liberapay.exceptions import UserDoesntAcceptTips
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=False)
+if participant.goal == -1:
+    raise response.error(403, UserDoesntAcceptTips(participant.username))
+
+full_title = _("Report {0}", participant.username)
+
+[---] text/html
+% extends "templates/profile-base.html"
+
+% from 'templates/elsewhere.html' import account_elsewhere with context
+
+% block head_early
+{{ super() }}
+    <meta property="og:description"
+          content="{{ _('Support {username}\'s work with a recurrent donation.',
+                        username=participant.username) }}">
+% endblock
+
+{% block heading %}{% endblock %}
+
+% block content
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    <h2>{{ _("Report {0}", ('<a href="/{0}">{0}</a>'|safe).format(participant.username)) }}</h2>
+
+    % if not participant.hide_receiving
+        % set goal, receiving = participant.goal, participant.receiving
+        % if goal
+            % if receiving
+            <p>{{ _(
+                "{0} currently receives {1} per week, they need your help to reach "
+                "their funding goal ({2} per week)."
+                , participant.username, receiving, goal
+            ) }}</p>
+            % else
+            <p>{{ _(
+                "{0}'s goal is to receive {1} per week."
+                , participant.username, goal
+            ) }} {{ _("Be the first to contribute!") }}</p>
+            % endif
+        % else
+            <p>{{ _(
+                "{0} currently receives {1} per week."
+                , participant.username, receiving
+            ) }}</p>
+        % endif
+    % endif
+
+    <br>
+
+    % set e_accounts = participant.get_accounts_elsewhere()
+    % if e_accounts
+        <h3>{{ _("Recipient Identity") }}</h3>
+        <p>{{ _(
+            "We have confirmed through an automated verification process that "
+            "{0} has control of the following accounts on other platforms:",
+            participant.username
+        ) }}</p>
+        % for platform in website.platforms if platform.name in e_accounts
+            {{ account_elsewhere(platform, e_accounts, None) }}
+        % endfor
+        <br>
+    % endif
+
+    % block form
+    <p>{{ _(
+        "Please describe why you want to report this account:"
+    ) }}</p>
+
+    <form action="" method="POST" class="report">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+        <div class="form-group">
+        <textarea name="report" rows="15"
+                  class="form-control report vertical-resize"
+                  placeholder={{ _("Say something.") }}
+                  data-confirm-discard="{{ confirm_discard }}"
+            ></textarea>
+        <p class="help-block pull-right">{{ _("Markdown supported.") }}
+            <a href="https://daringfireball.net/projects/markdown/basics"
+               target="_blank" rel="noopener noreferrer">{{ _("What is Markdown?") }}</a>
+        </p>
+        </div>
+
+        <button class="report btn btn-success" name="report" value="true">{{ _("Report") }}</button>
+    % endblock
+
+    <h3>{{ _("Frequently Asked Questions") }}</h3>
+
+    <h4>{{ _("What happens when I report a user?") }}</h4>
+    <p>{{ _(
+        "The profile will be reviewed by a moderator. "
+    ) }}</p>
+
+    <h4>{{ _("Who are the moderators?") }}</h4>
+    <p>{{ _(
+        "There is ten moderators who have been elected by the ten most funded projects on Liberapay. "
+        "This ensure that Liberapay moderation is made by independent people concerned by the plateform safety. "
+    ) }}</p>
+
+    <h4>{{ _("What is the moderating process?") }}</h4>
+    <p>{{ _(
+        "Once at least half of the moderators confirm that the account is suspicious,"
+        "its account is closed and it can not receive donation anymore. "
+        "All donations to the account are then cancelled."
+    ) }}</p>
+
+</div>
+</div>
+% endblock

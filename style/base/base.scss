@@ -142,6 +142,16 @@ body {
     }
 }
 
+.btn-report {
+    $base-color: #aaa;
+    background-color: $base-color;
+    color: #1a171b;
+    &:hover {
+        background-color: #f00;
+        color: #fff;
+    }
+}
+
 input.amount {
     min-width: 5em;
     max-width: 8em;
