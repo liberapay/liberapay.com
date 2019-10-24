@@ -5,7 +5,7 @@ import traceback
 
 from postgres import Postgres
 from postgres.cursors import SimpleCursorBase
-from psycopg2 import IntegrityError, ProgrammingError
+from psycopg2 import IntegrityError, InterfaceError, ProgrammingError
 
 from liberapay.constants import RATE_LIMITS
 
@@ -316,18 +316,18 @@ DB_LOCKS = {
 @contextmanager
 def acquire_db_lock(db, lock_name, blocking=True):
     lock_id = DB_LOCKS[lock_name]
-    with db.get_cursor() as cursor:
+    with db.get_cursor(autocommit=True) as cursor:
         if blocking:
             cursor.run("SELECT pg_advisory_lock(%s)", (lock_id,))
         else:
             locked = cursor.one("SELECT pg_try_advisory_lock(%s)", (lock_id,))
             assert locked, "failed to acquire the %s lock" % lock_name
         try:
-            yield cursor
+            yield
         finally:
             try:
                 cursor.run("SELECT pg_advisory_unlock(%s)", (lock_id,))
-            except Exception:
+            except InterfaceError:
                 pass
 
 DB.lock = acquire_db_lock
