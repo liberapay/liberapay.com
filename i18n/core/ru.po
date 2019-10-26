@@ -370,30 +370,30 @@ msgstr "Сообщение об ошибке, выданное платежно�
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
-msgstr ""
+msgstr "Возврат денежных средств на сумму {money_amount} совершён"
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr ""
+msgstr "Платеж на сумму {money_amount}, совершённый Вами {date}, был возвращен."
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr ""
+msgstr "Платеж на сумму {money_amount}, совершённый Вами {date}, был частично возвращен."
 
 msgid "Reason: the payment was a duplicate."
-msgstr ""
+msgstr "Причина: платеж был продублирован."
 
 msgid "Reason: the payment has been deemed fraudulent."
-msgstr ""
+msgstr "Причина: платеж был признан мошенническим."
 
 msgid "Reason: the refund was requested by you."
-msgstr ""
+msgstr "Причина: Вами был запрошен возврат."
 
 msgid "Please contact us to obtain more information."
-msgstr ""
+msgstr "Пожалуйста, свяжитесь с нами для получения дополнительной информации."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
-msgstr ""
+msgstr "Повторное появление средств на вашем банковском счете может занять несколько рабочих дней."
 
 msgid "Your bank account is going to be debited"
 msgstr "Ваш банковский счёт на грани истощения"
@@ -428,19 +428,19 @@ msgid "Thank you for this donation!"
 msgstr "Спасибо за пожертвование!"
 
 msgid "You're missing out on donations through Liberapay"
-msgstr ""
+msgstr "Вы пропускаете пожертвование через Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr ""
+msgstr "В настоящее время ваши спонсоры не могут отправить вам деньги через Liberapay, потому что обработка платежей не настроена для вашей учетной записи."
 
 msgid "Configure payment processing"
-msgstr ""
+msgstr "Настройка обработки платежей"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Если вы не хотите получать пожертвования на Liberapay, вы можете отказаться от них, отредактировав свой профиль."
 
 msgid "Reject donations"
-msgstr ""
+msgstr "Отклонить пожертвования"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -462,16 +462,17 @@ msgstr "{user_name} из {platform} присоединился к Liberapay!"
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
 msgstr "{date} Вы хотели пожертвовать {money_amount} в адрес {user_name}, если он присоединится к Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr "Уведомляем, что {user_name} присоединился к Liberapay под именем {liberapay_username}, {time_ago}. Теперь Вы можете пожертвовать ему средства:"
+msgstr "Рады сообщить, что {user_name} присоединился {time_ago} к Liberapay под именем {liberapay_username}. Поэтому Вы можете превратить свое обещание в настоящее пожертвование:"
 
 #, python-brace-format
 msgid "Donate to {0}"
 msgstr "Сделать пожертвование для {0}"
 
+#, fuzzy
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr ""
+msgstr "Вы можете упростить поддержку спонсорам Вас через Liberapay."
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
