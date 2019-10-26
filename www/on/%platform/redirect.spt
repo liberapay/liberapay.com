@@ -36,7 +36,7 @@ if user_id:
         if body.get('user_id_type') == 'user_name':
             user_id = '>' + user_id.lstrip('@')
     else:
-        user_id = user_id.lstrip('@')
+        user_id = user_id.strip().lstrip('@')
         split = user_id.rsplit('@', 1)
         if len(split) < 2:
             raise response.error(400, _("The address you provided is not valid: it doesn't contain any “@” symbol."))

@@ -1236,12 +1236,7 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def dequeue_emails(cls):
-        with cls.db.get_cursor() as cursor:
-            cls._dequeue_emails(cursor)
-
-    @classmethod
-    def _dequeue_emails(cls, cursor):
-        fetch_messages = lambda last_id: cursor.all("""
+        fetch_messages = lambda last_id: cls.db.all("""
             SELECT *
               FROM notifications
              WHERE id > %s
