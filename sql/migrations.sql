@@ -2394,3 +2394,6 @@ UPDATE participants
    SET payment_providers = compute_payment_providers(id)
  WHERE kind = 'group'
    AND payment_providers <> compute_payment_providers(id);
+
+-- migration #110
+DELETE FROM notifications WHERE event = 'identity_required';
