@@ -1155,6 +1155,7 @@ class Payday(object):
                           AND (t.paid_in_advance IS NULL OR t.paid_in_advance < t.amount)
                           AND tipper.email IS NOT NULL
                           AND tipper.is_suspended IS NOT true
+                          AND tipper.status = 'active'
                    ) OR EXISTS (
                        SELECT 1
                          FROM current_takes take
