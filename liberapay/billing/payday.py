@@ -1161,7 +1161,7 @@ class Payday(object):
                          FROM current_takes take
                          JOIN participants team ON team.id = take.team
                         WHERE take.member = p.id
-                          AND take.amount > 0
+                          AND take.amount <> 0
                           AND team.receiving > 0
                    ) )
                AND NOT EXISTS (
