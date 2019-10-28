@@ -73,12 +73,13 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    Object, deserialize, erase_cookie, serialize, set_cookie, urlquote,
+    deserialize, erase_cookie, serialize, set_cookie, urlquote,
     markdown,
 )
 from liberapay.utils.emails import (
     EmailVerificationResult, check_email_blacklist, normalize_email_address
 )
+from liberapay.utils.types import Object
 from liberapay.website import website
 
 

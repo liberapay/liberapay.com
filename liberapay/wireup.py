@@ -41,10 +41,11 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.security.crypto import Cryptograph
-from liberapay.utils import Object, find_files, markdown, mkdir_p, resolve, urlquote
+from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.query_cache import QueryCache
+from liberapay.utils.types import Object
 from liberapay.version import get_version
 from liberapay.website import CustomUndefined
 
