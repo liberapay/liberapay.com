@@ -2,6 +2,7 @@ from decimal import Decimal
 from ipaddress import ip_network
 import json
 import logging
+from operator import itemgetter
 import os
 import re
 import socket
@@ -40,7 +41,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.repository import Repository
 from liberapay.security.crypto import Cryptograph
-from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
+from liberapay.utils import Object, find_files, markdown, mkdir_p, resolve, urlquote
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.query_cache import QueryCache
@@ -129,6 +130,13 @@ def database(env, tell_sentry):
         tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()
         return {'db': db, 'db_qc1': db, 'db_qc5': db}
+
+    itemgetter0 = itemgetter(0)
+
+    def back_as_Object(cols, vals):
+        return Object(zip(map(itemgetter0, cols), vals))
+
+    db.back_as_registry[Object] = db.back_as_registry['Object'] = back_as_Object
 
     models = (
         _AccountElsewhere, AccountElsewhere, _Community, Community,
