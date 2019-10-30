@@ -73,12 +73,13 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    Object, deserialize, erase_cookie, serialize, set_cookie, urlquote,
+    deserialize, erase_cookie, serialize, set_cookie, urlquote,
     markdown,
 )
 from liberapay.utils.emails import (
     EmailVerificationResult, check_email_blacklist, normalize_email_address
 )
+from liberapay.utils.types import Object
 from liberapay.website import website
 
 
@@ -2304,7 +2305,7 @@ class Participant(Model, MixinTeam):
                 raise BadDonationCurrency(tippee, amount.currency)
 
         # Insert tip
-        t = Object((cursor or self.db).one("""\
+        t = (cursor or self.db).one("""\
 
             WITH current_tip AS (
                      SELECT *
@@ -2322,8 +2323,10 @@ class Participant(Model, MixinTeam):
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
 
-        """, dict(tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
-                  period=period, periodic_amount=periodic_amount)).__dict__)
+        """, dict(
+            tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
+            period=period, periodic_amount=periodic_amount,
+        ), back_as='Object')
 
         if update_self:
             # Update giving amount of tipper
@@ -2364,7 +2367,7 @@ class Participant(Model, MixinTeam):
                     AND renewal_mode > 0
               RETURNING *
                       , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
-        """, dict(tipper=self.id, tippee=tippee.id))
+        """, dict(tipper=self.id, tippee=tippee.id), back_as='Object')
         if not t:
             return
         if t.amount > (t.paid_in_advance or 0):
@@ -2372,7 +2375,7 @@ class Participant(Model, MixinTeam):
             self.update_giving(cursor)
             # Update receiving amount of tippee
             tippee.update_receiving(cursor)
-        return Object(t.__dict__)
+        return t
 
 
 
@@ -2388,9 +2391,9 @@ class Participant(Model, MixinTeam):
                AND tippee=%s
           ORDER BY mtime DESC
              LIMIT 1
-        """, (self.id, tippee.id), back_as=dict)
+        """, (self.id, tippee.id), back_as='Object')
         if r:
-            return Object(r)
+            return r
         return self._zero_tip(tippee, currency)
 
 

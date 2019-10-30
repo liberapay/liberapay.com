@@ -19,7 +19,7 @@ from liberapay.exceptions import (
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.testing import EUR, USD, Harness
-from liberapay.utils import Object
+from liberapay.utils.types import Object
 
 
 class TestNeedConfirmation(Harness):

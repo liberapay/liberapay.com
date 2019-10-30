@@ -2,8 +2,10 @@ from datetime import date, timedelta
 from decimal import Decimal
 
 import cbor2
+from markupsafe import Markup
 
 from ..i18n.currencies import Money, MoneyBasket
+from .types import Object
 
 
 CBORTag = cbor2.encoder.CBORTag
@@ -33,6 +35,15 @@ def decode_date(decoder, value, shareable_index=None):
 
 cbor2.encoder.default_encoders[date] = encode_date
 cbor2.decoder.semantic_decoders[100] = decode_date
+
+
+# Markup
+# ======
+
+def encode_Markup(encoder, value):
+    raise NotImplementedError()
+
+cbor2.encoder.default_encoders[Markup] = encode_Markup
 
 
 # Money and MoneyBasket
@@ -89,6 +100,15 @@ cbor2.encoder.default_encoders[MoneyBasket] = encode_MoneyBasket
 
 cbor2.decoder.semantic_decoders[77111] = decode_Money
 cbor2.decoder.semantic_decoders[77112] = decode_MoneyBasket
+
+
+# Object
+# ======
+
+def encode_Object(encoder, value):
+    cbor2.encoder.encode_map(encoder, value.__dict__)
+
+cbor2.encoder.default_encoders[Object] = encode_Object
 
 
 dumps = cbor2.dumps

@@ -38,7 +38,7 @@ from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
-    Object, b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
+    b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
 )
 from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
@@ -48,6 +48,7 @@ from liberapay.utils.state_chain import (
     bypass_csp_for_form_redirects, delegate_error_to_simplate, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
+from liberapay.utils.types import Object
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
 from liberapay.website import Website, website
 

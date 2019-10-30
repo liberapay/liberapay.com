@@ -142,9 +142,12 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
     & > label {
         display: block;
         margin: 0;
+        position: relative;
         & > input[type="radio"] {
-            float: right;
-            margin: 25px 15px 4px;
+            position: absolute;
+            margin-top: -0.45em;
+            right: 15px;
+            top: 50%;
         }
         & > .radio-label {
             padding: 10px 15px;
