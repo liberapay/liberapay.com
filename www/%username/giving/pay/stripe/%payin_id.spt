@@ -13,8 +13,8 @@ from liberapay.payin.common import (
     prepare_donation, prepare_payin, prepare_payin_transfer, resolve_amounts,
 )
 from liberapay.payin.stripe import (
-    charge_and_transfer, destination_charge, get_partial_iban, Money_to_int,
-    repr_stripe_error, settle_payin,
+    charge_and_transfer, create_source_from_token, destination_charge,
+    get_partial_iban, repr_stripe_error, settle_payin,
 )
 from liberapay.utils import get_participant
 
@@ -69,89 +69,24 @@ if request.method == 'POST':
         if 'token' in body:
             return_url = payer.url('giving/pay/stripe/complete')
             one_off = body.get('keep') != 'true'
-
             owner_address = {
                 k: body.get('owner.address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_STRIPE
             }
             if 'line1' not in owner_address:
                 owner_address = None
-
-            token = stripe.Token.retrieve(body['token'])
-            if token.type == 'bank_account':
-                network = 'stripe-sdd'
-                source_type = 'sepa_debit'
-            elif token.type == 'card':
-                network = 'stripe-card'
-                source_type = 'card'
-            else:
-                raise response.error(400, "unknown token type")
-
-            source = stripe.Source.create(
-                amount=Money_to_int(payin_amount) if one_off else None,
-                owner={
-                    'address': owner_address,
-                    'email': payer.get_email_address(),
-                    'name': body.get('owner.name'),
-                },
-                redirect={'return_url': return_url},
-                token=token.id,
-                type=source_type,
-                usage=('single_use' if one_off and source_type == 'card' else 'reusable'),
+            owner_info = {
+                'address': owner_address,
+                'email': payer.get_email_address(),
+                'name': body.get('owner.name'),
+            }
+            source = create_source_from_token(
+                body['token'], one_off, payin_amount, owner_info, return_url
             )
-            customer_id = website.db.one("""
-                SELECT remote_user_id
-                  FROM exchange_routes
-                 WHERE participant = %s
-                   AND network::text LIKE 'stripe-%%'
-                 LIMIT 1
-            """, (payer.id,))
-            if customer_id:
-                customer = stripe.Customer.retrieve(customer_id)
-                customer.sources.create(source=source.id)
-                del customer
-            else:
-                customer_id = stripe.Customer.create(
-                    email=source.owner.email,
-                    source=source.id,
-                ).id
-            source_country = getattr(getattr(source, source.type), 'country', None)
-            source_currency = getattr(getattr(source, source.type), 'currency', None)
-            route = ExchangeRoute.insert(
-                payer, network, source.id, source.status,
-                one_off=one_off, remote_user_id=customer_id,
-                country=source_country, currency=source_currency,
-            )
+            route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
         elif 'stripe_pm_id' in body:
-            return_url = payer.url('giving/pay/stripe/complete')
             one_off = body.get('keep') != 'true'
-
             pm = stripe.PaymentMethod.retrieve(body['stripe_pm_id'])
-            if pm.type == 'card':
-                network = 'stripe-card'
-            else:
-                raise response.error(400, "unknown PaymentMethod type")
-
-            customer_id = website.db.one("""
-                SELECT remote_user_id
-                  FROM exchange_routes
-                 WHERE participant = %s
-                   AND network::text LIKE 'stripe-%%'
-                 LIMIT 1
-            """, (payer.id,))
-            if customer_id:
-                pm = stripe.PaymentMethod.attach(pm.id, customer=customer_id)
-            else:
-                customer_id = stripe.Customer.create(
-                    email=payer.get_email_address(),
-                    payment_method=pm.id,
-                ).id
-            pm_country = getattr(getattr(pm, pm.type), 'country', None)
-            pm_currency = getattr(getattr(pm, pm.type), 'currency', None)
-            route = ExchangeRoute.insert(
-                payer, network, pm.id, 'chargeable',
-                one_off=one_off, remote_user_id=customer_id,
-                country=pm_country, currency=pm_currency,
-            )
+            route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:

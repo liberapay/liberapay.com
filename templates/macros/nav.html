@@ -7,7 +7,8 @@
         % set options = item[2] or {}
         % set icon = options['icon']
         % set icon = icon_span(icon) if icon else ''
-        % set classes = (options['class'] or '') + (' active' if slug.strip('/') == current else '')
+        % set active = slug.strip('/') == current
+        % set classes = (options['class'] or '') + (' active' if active else '')
         <li{% if classes %} class="{{ classes }}"{% endif %}>
             % if options['dropdown']
                 % set button_extra_cls = 'dropdown-toggle-form' if options['form'] else ''
@@ -24,9 +25,14 @@
                     % endif
                 </div>
             % elif options['subnav']
-                <input id="subnav-{{ id(item) }}" class="subnav-toggler sr-only" type="checkbox" {% if slug.strip('/') == current %} checked {% endif %} />
-                <label for="subnav-{{ id(item) }}">{{ icon }} {{ item[1] }} <span class="caret"></span></label>
-                <ul class="nav level2">{{ options['subnav'] }}</ul>
+                % if options['togglable']
+                    <input id="subnav-{{ id(item) }}" class="subnav-toggler sr-only" type="checkbox" {% if active %} checked {% endif %} />
+                    <label for="subnav-{{ id(item) }}">{{ icon }} {{ item[1] }} <span class="caret"></span></label>
+                    <ul class="nav level2 togglable">{{ options['subnav'] }}</ul>
+                % else
+                    <a href="{{ base }}{{ slug }}">{{ icon }} {{ item[1] }}</a>
+                    <ul class="nav level2">{{ options['subnav'] }}</ul>
+                % endif
             % elif slug
                 <a href="{{ base }}{{ slug }}">{{ icon }} {{ item[1] }}</a>
             % else
@@ -94,12 +100,20 @@
                 ('/teams', _("Teams")),
                 ('/communities', _("Communities")),
                 ('/privacy', _("Privacy"))
-            ], base=participant.path('edit'))
+            ], base=participant.path('edit')),
+            'togglable': True,
         }),
-        ('/giving/', _("Giving")),
-        ('/receiving/', _("Receiving")),
+        ('/giving/', _("Giving"), {
+            'subnav': nav([
+                ('/routes/', _("Instruments")),
+            ], base=base)
+        }),
+        ('/receiving/', _("Receiving"), {
+            'subnav': nav([
+                ('/payment/', _("Payment Processors")),
+            ], base=base)
+        }),
         ('/ledger/', _("Ledger")),
-        ('/payment/', _("Payment Processors")),
         ('/identity', _("Identity")),
         ('/settings/', _("Account")),
         ('/emails/', _("Emails")),
@@ -117,7 +131,8 @@
                 ('/repositories', _("Repositories")),
                 ('/members', _("Members")),
                 ('/privacy', _("Privacy")),
-            ], base=participant.path('edit'))
+            ], base=participant.path('edit')),
+            'togglable': True,
         }),
         ('/receiving/', _("Receiving")),
         ('/emails/', _("Emails")),

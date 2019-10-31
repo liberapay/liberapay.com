@@ -146,14 +146,14 @@
                 transition: transform 0.2s linear;
             }
         }
-        & > .level2 {
+        & > .togglable {
             display: none;
         }
         & > .subnav-toggler:checked {
             & ~ label > .caret {
                 transform: rotate(-180deg);
             }
-            & ~ .level2 {
+            & ~ .togglable {
                 display: block;
                 margin-bottom: 0.5em;
             }

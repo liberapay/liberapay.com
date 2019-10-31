@@ -54,7 +54,15 @@ class List(list):
         self.pattern = pattern
 
 
+class Month(int):
+    __slots__ = ()
+
+
 class Percent(Decimal):
+    __slots__ = ()
+
+
+class Year(int):
     __slots__ = ()
 
 
@@ -147,6 +155,10 @@ class Locale(babel.core.Locale):
                 elif isinstance(o, (Decimal, int)):
                     if isinstance(o, Percent):
                         o = self.format_percent(o)
+                    elif isinstance(o, Month):
+                        o = self.months['stand-alone']['wide'][o]
+                    elif isinstance(o, Year):
+                        o = str(o)
                     else:
                         o = self.format_decimal(o)
                 elif isinstance(o, Money):
