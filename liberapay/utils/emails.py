@@ -1,6 +1,7 @@
 from datetime import timedelta
 from enum import Enum, auto
 import json
+import logging
 from time import sleep
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
@@ -153,8 +154,16 @@ def _handle_ses_notification(msg):
         complaint = data['complaint']
         report_id = complaint['feedbackId']
         recipients = complaint['complainedRecipients']
-        complaint_type = complaint['complaintFeedbackType']
-        if complaint_type not in ('abuse', 'fraud'):
+        complaint_type = complaint.get('complaintFeedbackType')
+        if complaint_type is None:
+            # This complaint is invalid, ignore it.
+            logging.info(
+                "Received an invalid email complaint without a Feedback-Type. ID: %s" %
+                report_id
+            )
+            msg.delete()
+            return
+        elif complaint_type not in ('abuse', 'fraud'):
             # We'll figure out how to deal with that when it happens.
             raise ValueError(complaint_type)
     else:
