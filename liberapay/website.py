@@ -8,7 +8,16 @@ import os
 
 from environment import Environment, is_yesish
 from jinja2 import StrictUndefined
-from pando.website import Website
+from pando.website import Website as _Website
+
+
+class Website(_Website):
+
+    def warning(self, msg, state={}):
+        try:
+            raise Warning(msg)
+        except Warning as e:
+            self.tell_sentry(state, e)
 
 
 env = Environment(

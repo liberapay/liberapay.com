@@ -1,3 +1,4 @@
+from datetime import timedelta
 from enum import Enum, auto
 import json
 from time import sleep
@@ -8,6 +9,7 @@ import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, Resolver
 from jinja2 import Environment
+from pando.utils import utcnow
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
@@ -136,10 +138,17 @@ def _handle_ses_notification(msg):
     # Doc: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html
     data = json.loads(json.loads(msg.body)['Message'])
     notif_type = data['notificationType']
+    ignore_after = None
     if notif_type == 'Bounce':
         bounce = data['bounce']
         report_id = bounce['feedbackId']
         recipients = bounce['bouncedRecipients']
+        if bounce.get('bounceType') == 'Transient':
+            bounce_subtype = bounce.get('bounceSubType')
+            if bounce_subtype in ('General', 'MailboxFull'):
+                ignore_after = utcnow() + timedelta(days=5)
+            else:
+                website.warning("unhandled bounce subtype: %r" % bounce_subtype)
     elif notif_type == 'Complaint':
         complaint = data['complaint']
         report_id = complaint['feedbackId']
@@ -157,11 +166,11 @@ def _handle_ses_notification(msg):
         # Add the address to our blacklist
         r = website.db.one("""
             INSERT INTO email_blacklist
-                        (address, reason, ses_data, report_id)
-                 VALUES (%s, %s, %s, %s)
+                        (address, reason, ses_data, report_id, ignore_after)
+                 VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (report_id, address) DO NOTHING
               RETURNING *
-        """, (address, notif_type.lower(), json.dumps(data), report_id))
+        """, (address, notif_type.lower(), json.dumps(data), report_id, ignore_after))
         if r is None:
             # Already done
             continue
