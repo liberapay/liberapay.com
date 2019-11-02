@@ -408,6 +408,8 @@ def resolve_team_donation(
             for t in members:
                 if t.member not in sepa_accounts:
                     continue
+                if t.amount == 0:
+                    continue
                 t.weeks_of_advance = (t.received_sum - t.takes_sum) / t.amount
                 if t.weeks_of_advance < -1:
                     # Dampen the effect of past takes, because they can't be changed.
@@ -415,19 +417,20 @@ def resolve_team_donation(
                 elif t.weeks_of_advance > max_weeks_of_advance:
                     max_weeks_of_advance = t.weeks_of_advance
                 selected_takes.append(t)
-            del members
-            base_amounts = {t.member: t.amount for t in selected_takes}
-            convergence_amounts = {
-                t.member: (
-                    t.amount * (max_weeks_of_advance - t.weeks_of_advance)
-                ).round_up()
-                for t in selected_takes
-            }
-            tr_amounts = resolve_amounts(payment_amount, base_amounts, convergence_amounts)
-            return [
-                Donation(tr_amount, Participant.from_id(p_id), sepa_accounts[p_id])
-                for p_id, tr_amount in sorted(tr_amounts.items()) if tr_amount != 0
-            ]
+            if selected_takes:
+                del members
+                base_amounts = {t.member: t.amount for t in selected_takes}
+                convergence_amounts = {
+                    t.member: (
+                        t.amount * (max_weeks_of_advance - t.weeks_of_advance)
+                    ).round_up()
+                    for t in selected_takes
+                }
+                tr_amounts = resolve_amounts(payment_amount, base_amounts, convergence_amounts)
+                return [
+                    Donation(tr_amount, Participant.from_id(p_id), sepa_accounts[p_id])
+                    for p_id, tr_amount in sorted(tr_amounts.items()) if tr_amount != 0
+                ]
     # Fall back to sending the entire donation to the member who "needs" it most.
     member = Participant.from_id(members[0].member)
     account = resolve_destination(db, member, provider, payer, payer_country, payment_amount)

@@ -210,11 +210,12 @@ class Harness(unittest.TestCase):
               RETURNING participants.*::participants
         """.format(cols, placeholders), vals)
 
-        self.db.run("""
-            INSERT INTO elsewhere
-                        (platform, user_id, user_name, participant, domain)
-                 VALUES (%s,%s,%s,%s,%s)
-        """, (platform, participant.id, username, participant.id, domain))
+        if platform:
+            self.db.run("""
+                INSERT INTO elsewhere
+                            (platform, user_id, user_name, participant, domain)
+                     VALUES (%s,%s,%s,%s,%s)
+            """, (platform, participant.id, username, participant.id, domain))
 
         if is_person and participant.mangopay_user_id:
             wallet_id = kw2.get('mangopay_wallet_id', -participant.id)

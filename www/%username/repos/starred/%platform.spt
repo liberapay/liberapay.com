@@ -29,7 +29,7 @@ if platform_name:
             sess = None
         else:
             repos, total_count, next_page = r[0], r[1], r[2].get('next')
-            repos = [Repository(repo.__dict__) for repo in repos]
+            repos = [Repository.from_repo_info(repo) for repo in repos]
     title = _("Starred Repositories on {platform}", platform=platform.display_name)
 else:
     title = _("Starred Repositories")

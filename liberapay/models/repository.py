@@ -17,6 +17,14 @@ class Repository(Model):
 
     typname = "repositories"
 
+    @classmethod
+    def from_repo_info(cls, info):
+        r = object.__new__(cls)
+        _setattr = object.__setattr__
+        for attr in cls.attnames:
+            _setattr(r, attr, getattr(info, attr, None))
+        return r
+
     @property
     def url(self):
         platform = getattr(website.platforms, self.platform)
