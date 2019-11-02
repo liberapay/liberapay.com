@@ -306,3 +306,21 @@ class TestElsewhereDelete(Harness):
         data = dict(platform=platform, user_id=str(alice.id))
         response = self.client.PxST('/alice/elsewhere/delete', data, auth_as=alice)
         assert response.code == 302
+
+
+class TestRepositories(Harness):
+
+    def test_viewing_starred_repos(self):
+        Changaco = self.make_participant('Changaco', elsewhere=None)
+        token = (
+            '{"access_token": "f1300c4f73ed9ca1547f4a483770d0a498ba36db",'
+            ' "token_type": "bearer",'
+            ' "scope": [""]}'
+        )
+        self.db.run("""
+            INSERT INTO elsewhere
+                        (platform, user_id, user_name, participant, domain, token)
+                 VALUES ('github', '1581590', 'Changaco', %s, '', %s)
+        """, (Changaco.id, token))
+        r = self.client.GET('/Changaco/repos/starred/github', auth_as=Changaco)
+        assert r.code == 200
