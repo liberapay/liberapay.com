@@ -522,6 +522,8 @@ class PlatformOAuth2(Platform):
         credentials = dict(client_id=client_id, client_secret=client_secret)
         if token and token.get('refresh_token'):
             refresh_url = getattr(self, 'refresh_token_url', self.access_token_url)
+            if refresh_url and domain:
+                refresh_url = refresh_url.format(domain=domain)
         else:
             refresh_url = None
         return self.session_class(
