@@ -57,7 +57,7 @@ def sign_in_with_form_data(body, state):
         src_addr, src_country = request.source, request.country
         website.db.hit_rate_limit('log-in.ip-addr', str(src_addr), TooManyLogInAttempts)
         website.db.hit_rate_limit('log-in.country', src_country, TooManyLogInAttempts)
-        id = body.pop('log-in.id').strip()
+        id = body['log-in.id'].strip()
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
         if password:
