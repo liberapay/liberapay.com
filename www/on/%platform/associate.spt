@@ -33,8 +33,14 @@ except KeyError:
     raise response.error(400, 'Missing cookie')
 if not cookie_value:
     raise response.error(400, 'Empty cookie')
-cookie_obj = json.loads(b64decode_s(cookie_value))
-query_data, action, then, action_user_id = cookie_obj[:4]
+try:
+    cookie_obj = json.loads(b64decode_s(cookie_value))
+except json.JSONDecodeError as e:
+    raise response.error(400, 'Invalid cookie value: ' + str(e))
+try:
+    query_data, action, then, action_user_id = cookie_obj[:4]
+except ValueError as e:
+    raise response.error(400, 'Invalid cookie value: ' + str(e))
 p_id = cookie_obj[4] if len(cookie_obj) > 4 else None
 then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
