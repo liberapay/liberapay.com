@@ -139,16 +139,15 @@ def _handle_ses_notification(msg):
     # Doc: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html
     data = json.loads(json.loads(msg.body)['Message'])
     notif_type = data['notificationType']
-    ignore_after = None
+    transient = False
     if notif_type == 'Bounce':
         bounce = data['bounce']
         report_id = bounce['feedbackId']
         recipients = bounce['bouncedRecipients']
         if bounce.get('bounceType') == 'Transient':
+            transient = True
             bounce_subtype = bounce.get('bounceSubType')
-            if bounce_subtype in ('General', 'MailboxFull'):
-                ignore_after = utcnow() + timedelta(days=5)
-            else:
+            if bounce_subtype not in ('General', 'MailboxFull'):
                 website.warning("unhandled bounce subtype: %r" % bounce_subtype)
     elif notif_type == 'Complaint':
         complaint = data['complaint']
@@ -172,6 +171,20 @@ def _handle_ses_notification(msg):
         address = recipient['emailAddress']
         if address[-1] == '>':
             address = address[:-1].rsplit('<', 1)[1]
+        # Check for recurrent "transient" errors
+        if transient:
+            ignore_after = utcnow() + timedelta(days=5)
+            n_previous_bounces = website.db.one("""
+                SELECT count(*)
+                  FROM email_blacklist
+                 WHERE lower(address) = lower(%s)
+                   AND ts > (current_timestamp - interval '90 days')
+                   AND reason = 'bounce'
+            """, (address))
+            if n_previous_bounces >= 2:
+                ignore_after = utcnow() + timedelta(days=180)
+        else:
+            ignore_after = None
         # Add the address to our blacklist
         r = website.db.one("""
             INSERT INTO email_blacklist
