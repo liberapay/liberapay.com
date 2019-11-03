@@ -226,7 +226,7 @@ elif payin_id:
             else:
                 payin = charge_and_transfer(
                     website.db, payin, payer,
-                    statement_descriptor=('p%i' % payin.id)
+                    statement_descriptor=('Liberapay %i' % payin.id)
                 )
         elif payin.status == 'awaiting_payer_action':
             payin = settle_payin(website.db, payin)
