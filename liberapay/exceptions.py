@@ -465,21 +465,6 @@ class PayinMethodIsUnavailable(LazyResponseXXX):
         return _("This payment method is currently unavailable. We apologize for the inconvenience.")
 
 
-class PayinsAreDisabled(LazyResponse):
-
-    def __init__(self):
-        Response.__init__(self, 403, '')
-        self.html_template = 'templates/exceptions/PayinsAreDisabled.html'
-
-    def lazy_body(self, _):
-        return _(
-            "We're very sorry but incoming payments are currently disabled. "
-            "You can read {link_start}this blog post{link_end} to learn why.",
-            link_start='[',
-            link_end='](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82)'
-        )
-
-
 class PaymentError(LazyResponseXXX):
     code = 500
     def msg(self, _):
