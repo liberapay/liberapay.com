@@ -460,7 +460,7 @@ class UnableToSendEmail(LazyResponseXXX):
 
 
 class PayinMethodIsUnavailable(LazyResponseXXX):
-    code = 403
+    code = 503
     def msg(self, _):
         return _("This payment method is currently unavailable. We apologize for the inconvenience.")
 
