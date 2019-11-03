@@ -61,7 +61,7 @@
                 % endblock
             % if user
                 % include "templates/navbar-logged-in.html"
-            % elif response.html_template != 'templates/auth-required.html' and not no_navbar_sign_in
+            % elif response.html_template != 'templates/exceptions/AuthRequired.html' and not no_navbar_sign_in
                 % from "templates/sign-in-link.html" import sign_in_link with context
                 <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
             % endif

@@ -46,7 +46,7 @@ class AuthRequired(LazyResponse):
 
     def __init__(self):
         Response.__init__(self, 403, '')
-        self.html_template = 'templates/auth-required.html'
+        self.html_template = 'templates/exceptions/AuthRequired.html'
 
     def lazy_body(self, _):
         return _("You need to sign in first")
@@ -56,7 +56,7 @@ class LoginRequired(LazyResponse):
 
     def __init__(self):
         Response.__init__(self, 403, '')
-        self.html_template = 'templates/log-in-required.html'
+        self.html_template = 'templates/exceptions/LoginRequired.html'
 
     def lazy_body(self, _):
         return _("You need to log in")
@@ -66,7 +66,7 @@ class NeedDatabase(LazyResponse):
 
     def __init__(self):
         Response.__init__(self, 503, '')
-        self.html_template = 'templates/no-db.html'
+        self.html_template = 'templates/exceptions/NeedDatabase.html'
 
     def lazy_body(self, _):
         return _("We're unable to process your request right now, sorry.")
@@ -230,7 +230,7 @@ class TooManyPasswordLogins(LazyResponse):
 
     def __init__(self, participant_id):
         Response.__init__(self, 429, '')
-        self.html_template = 'templates/too-many-password-logins.html'
+        self.html_template = 'templates/exceptions/TooManyPasswordLogins.html'
 
     def lazy_body(self, _):
         return _(
@@ -469,7 +469,7 @@ class PayinsAreDisabled(LazyResponse):
 
     def __init__(self):
         Response.__init__(self, 403, '')
-        self.html_template = 'templates/no-payins.html'
+        self.html_template = 'templates/exceptions/PayinsAreDisabled.html'
 
     def lazy_body(self, _):
         return _(
