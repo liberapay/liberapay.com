@@ -51,7 +51,7 @@ def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
         try:
             amount = amount.quantize(minimum, rounding=rounding)
         except InvalidOperation:
-            raise InvalidNumber(amount)
+            raise InvalidNumber(str(amount))
     if amount > D_MAX:
         raise InvalidNumber(amount)
     self.amount = amount
