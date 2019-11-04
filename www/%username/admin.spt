@@ -20,7 +20,7 @@ events = website.db.all("""
 """, (participant.id,))
 
 [---] text/html
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 % block content
 
 <h3>Admin flags</h3>

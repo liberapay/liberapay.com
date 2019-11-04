@@ -10,7 +10,7 @@ title = participant.username
 subhead = _("Income Shares")
 
 [-----------------------------------------------------------------------------]
-% extends "templates/profile.html"
+% extends "templates/layouts/profile.html"
 % from "templates/team-members.html" import team_takes_table with context
 
 % block head_early

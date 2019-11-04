@@ -71,7 +71,7 @@ if user.is_admin:
     """, (participant.id,))
 
 [-----------------------------------------------------------------------------]
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 % block content
 
 <p>{{ BALANCE }}</p>

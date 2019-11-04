@@ -2,7 +2,7 @@
 response.redirect('/about/faq')
 title = _("Money")
 [---] text/html
-% extends "templates/about.html"
+% extends "templates/layouts/about.html"
 % block content
 
 % if constants.QUARANTINE.days > 0

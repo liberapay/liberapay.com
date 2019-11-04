@@ -97,7 +97,7 @@ if result == EmailVerificationResult.SUCCEEDED:
     """, (email_row.address,))
 
 [---] text/html
-% extends "templates/base-thin.html"
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
     % if request.method == 'POST'

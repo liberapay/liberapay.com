@@ -85,7 +85,7 @@ if not freeload:
 next_payday = compute_next_payday_date()
 
 [-----------------------------------------------------------------------------]
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 
 % from "templates/avatar-url.html" import avatar_img with context
 % from 'templates/elsewhere.html' import platform_icon

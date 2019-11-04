@@ -60,7 +60,7 @@ if user_id or (not team and platform.single_domain) or action != 'connect':
 title = _("Which account?")
 
 [---] text/html
-% extends "templates/panel.html"
+% extends "templates/layouts/panel.html"
 
 % block panel_body
 <form action="" method="POST">

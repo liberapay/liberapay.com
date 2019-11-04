@@ -91,7 +91,7 @@ if query:
         """, locals(), back_as=dict)
 
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 % from 'templates/avatar-url.html' import avatar_url, avatar_img with context
 % from 'templates/search.html' import search_form with context
 % block content

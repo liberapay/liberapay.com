@@ -27,7 +27,7 @@ langs = participant.get_statement_langs()
 show_income = not participant.hide_receiving and participant.accepts_tips
 
 [-----------------------------------------------------------------------------]
-% extends "templates/profile.html"
+% extends "templates/layouts/profile.html"
 
 % from "templates/repos.html" import show_repo with context
 

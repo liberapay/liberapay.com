@@ -59,7 +59,7 @@ recent = query_cache.one("""
 % from "templates/icons.html" import fontawesome, glyphicon
 
 % set page_id = 'homepage'
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 
 % block head
     <link type="application/opensearchdescription+xml" rel="search" href="/opensearch.osdd" />

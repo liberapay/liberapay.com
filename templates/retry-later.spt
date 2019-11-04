@@ -2,7 +2,7 @@
 assert request.method == 'POST'
 title = _("Service Unavailable")
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 
 {% block heading %}{% endblock %}
 

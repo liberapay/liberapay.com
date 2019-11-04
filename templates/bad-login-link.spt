@@ -10,7 +10,7 @@ request.qs.pop('log-in.id', None)
 request.qs.pop('log-in.key', None)
 request.qs.pop('log-in.token', None)
 [---] text/html
-% extends "templates/base-thin.html"
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
     % if already_logged_in

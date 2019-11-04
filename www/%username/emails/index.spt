@@ -18,7 +18,7 @@ base_path = participant.path('emails/')
 email_locale = website.locales.get(participant.email_lang) or website.locales['en']
 
 [---] text/html
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 
 % from "templates/select-lang.html" import lang_options with context
 

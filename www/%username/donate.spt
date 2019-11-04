@@ -9,7 +9,7 @@ if participant.goal == -1:
 full_title = _("Donate to {0} via Liberapay", participant.username)
 
 [---] text/html
-% extends "templates/profile-base.html"
+% extends "templates/layouts/profile-base.html"
 
 % from 'templates/elsewhere.html' import account_elsewhere with context
 % from "templates/payment-methods.html" import describe_payment_methods with context

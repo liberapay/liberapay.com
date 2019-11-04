@@ -97,7 +97,7 @@ if user == participant:
 title = _("Withdrawing Money")
 
 [---] text/html
-% extends "templates/base-thin.html"
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
 <form id="payout" action="javascript:" method="POST"

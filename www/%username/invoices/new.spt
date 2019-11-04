@@ -86,7 +86,7 @@ title = _("Invoice {someone}", someone=addressee.username)
 [---] text/html
 % from "templates/currencies.html" import currency_buttons with context
 
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 
 % block content
 

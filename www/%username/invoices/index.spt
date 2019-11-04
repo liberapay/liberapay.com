@@ -22,7 +22,7 @@ invoices = website.db.all("""
 title = _("Invoices - {username}", username=participant.username)
 
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 
 % block content
 

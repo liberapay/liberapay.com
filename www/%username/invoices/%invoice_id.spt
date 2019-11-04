@@ -107,7 +107,7 @@ invoice_events = website.db.all("""
 title = _("Invoice #{0}", i_id)
 
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 
 {% block heading %}{% endblock %}
 

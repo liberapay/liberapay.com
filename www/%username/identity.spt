@@ -79,7 +79,7 @@ elif participant.mangopay_user_id and (participant.balance or not identity):
 [---] text/html
 % from "templates/identity.html" import identity_form with context
 
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 
 % block content
 <div class="paragraph">
