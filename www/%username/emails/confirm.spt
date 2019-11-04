@@ -54,7 +54,8 @@ else:
     % if result == EmailVerificationResult.SUCCEEDED and user == participant and not participant.has_password
         <br><br>
         <h2>{{ _("Password") }}</h2>
-        % include "templates/password-form.html"
+        % from "templates/macros/password-form.html" import password_form with context
+        {{ password_form(participant) }}
     % else
         <a class="btn btn-primary" href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a>
     % endif
