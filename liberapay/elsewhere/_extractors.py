@@ -82,8 +82,16 @@ def drop_keys(*keys):
     return f
 
 
-def not_available(self, extracted, info, default):
-    return default
+class _NotAvailable:
+
+    def __bool__(self):
+        return False
+
+    def __call__(self, extracted, info, default):
+        return default
+
+
+not_available = _NotAvailable()
 
 
 def xpath(path, attr=None, clean=lambda a: a):

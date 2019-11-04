@@ -331,8 +331,13 @@ def get_account_elsewhere(website, state, api_lookup=True):
             raise response.error(404)
         try:
             user_info = platform.get_user_info(domain, key, uid)
-        except NotImplementedError as e:
-            raise response.error(400, e.args[0])
+        except NotImplementedError:
+            _ = state['_']
+            raise response.error(404, _(
+                "The {platform} user you're looking for hasn't joined Liberapay, "
+                "and it's not possible to create a stub profile for them.",
+                platform=platform.display_name
+            ))
         except (BadUserId, UserNotFound) as e:
             _ = state['_']
             if isinstance(e, BadUserId):

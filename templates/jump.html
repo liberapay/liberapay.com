@@ -3,9 +3,9 @@
     <input name="user_name" placeholder="{{ _('username') }}" autocorrect="off"
            spellcheck="false" size="12" type="text" class="form-control">
     <select class="form-control" name="platform">
-        <option value="twitter">Twitter</option>
-        <option value="github">GitHub</option>
-        <option value="bitbucket">Bitbucket</option>
+        % for platform in website.platforms.hasattr('x_user_name')
+        <option value="{{ platform.name }}">{{ platform.display_name }}</option>
+        % endfor
     </select>
     <button class="btn btn-default">{{ _("Go") }}</button>
 </div>

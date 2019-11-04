@@ -249,7 +249,7 @@ class Platform(object):
         if not self.single_domain:
             assert r.domain
         r.user_name = self.x_user_name(r, info, None)
-        if self.x_user_id.__func__ is not_available:
+        if not self.x_user_id:
             r.user_id = r.user_name
         elif source == r.domain:
             r.user_id = self.x_user_id(r, info)
