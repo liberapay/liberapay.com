@@ -57,10 +57,10 @@
                     </a>
                 </li>
                 % block navbar_alternates
-                % include "templates/navbar-common.html"
+                % include "templates/layouts/components/navbar-common.html"
                 % endblock
             % if user
-                % include "templates/navbar-logged-in.html"
+                % include "templates/layouts/components/navbar-logged-in.html"
             % elif response.html_template != 'templates/exceptions/AuthRequired.html' and not no_navbar_sign_in
                 % from "templates/macros/sign-in-link.html" import sign_in_link with context
                 <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
