@@ -20,7 +20,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 [---] text/html
 % extends "templates/layouts/settings.html"
 
-% from "templates/select-lang.html" import lang_options with context
+% from "templates/macros/select-lang.html" import lang_options with context
 
 % block content
 

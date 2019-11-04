@@ -25,7 +25,7 @@ lang = lang or next(iter(select_langs.keys()))
 title = _("Start a new community")
 
 [---] text/html
-% from "templates/select-lang.html" import lang_options with context
+% from "templates/macros/select-lang.html" import lang_options with context
 
 % extends "templates/layouts/panel.html"
 

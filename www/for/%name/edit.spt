@@ -33,7 +33,7 @@ if lang not in select_langs:
 title = _("{0} community settings", c.name)
 
 [---] text/html
-% from "templates/select-lang.html" import lang_options with context
+% from "templates/macros/select-lang.html" import lang_options with context
 
 % extends "templates/layouts/panel.html"
 

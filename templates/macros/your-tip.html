@@ -1,5 +1,5 @@
-% from "templates/icons.html" import fontawesome, glyphicon
-% from "templates/payment-methods.html" import payment_methods_icons with context
+% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/payment-methods.html" import payment_methods_icons with context
 
 % macro tip_form(tippee, tip=None, inline=False, disabled='')
     % set tippee_is_stub = tippee.__class__.__name__ == 'AccountElsewhere'

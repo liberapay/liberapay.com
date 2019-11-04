@@ -87,10 +87,10 @@ next_payday = compute_next_payday_date()
 [-----------------------------------------------------------------------------]
 % extends "templates/layouts/settings.html"
 
-% from "templates/avatar-url.html" import avatar_img with context
-% from 'templates/elsewhere.html' import platform_icon
-% from "templates/icons.html" import glyphicon
-% from "templates/payment-methods.html" import payment_methods_icons with context
+% from "templates/macros/avatar-url.html" import avatar_img with context
+% from 'templates/macros/elsewhere.html' import platform_icon
+% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/payment-methods.html" import payment_methods_icons with context
 
 % block content
 

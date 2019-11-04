@@ -55,8 +55,8 @@ recent = query_cache.one("""
 """, (currency, currency))
 
 [---]
-% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
-% from "templates/icons.html" import fontawesome, glyphicon
+% from 'templates/macros/avatar-url.html' import avatar_img, avatar_default with context
+% from "templates/macros/icons.html" import fontawesome, glyphicon
 
 % set page_id = 'homepage'
 % extends "templates/layouts/base.html"
@@ -85,7 +85,7 @@ recent = query_cache.one("""
     <div class="col-md-6">
         <h2 class="text-primary">{{ _("Donate") }}</h2>
         % include "templates/pitch-donors.html"
-        % from "templates/buttons.html" import find_donees with context
+        % from "templates/macros/buttons.html" import find_donees with context
         <div class="buttons">{{ find_donees() }}</div>
     </div>
 

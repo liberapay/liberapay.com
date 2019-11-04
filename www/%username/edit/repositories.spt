@@ -76,9 +76,9 @@ title = participant.username
 subhead = _("Repositories")
 
 [---] text/html
-% from "templates/auth.html" import auth_button with context
-% from "templates/avatar-url.html" import avatar_img with context
-% from "templates/repos.html" import show_repo with context
+% from "templates/macros/auth.html" import auth_button with context
+% from "templates/macros/avatar-url.html" import avatar_img with context
+% from "templates/macros/repos.html" import show_repo with context
 
 % extends "templates/layouts/profile-edit.html"
 

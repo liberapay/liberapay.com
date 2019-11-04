@@ -10,7 +10,7 @@
            placeholder="{{ _('Email of the team (optional)') }}" />
     </div>
     <div class="form-group">
-    % from "templates/currencies.html" import currency_buttons with context
+    % from "templates/macros/currencies.html" import currency_buttons with context
     {{ currency_buttons('main_currency', currency) }}
     </div>
     <div class="form-group">

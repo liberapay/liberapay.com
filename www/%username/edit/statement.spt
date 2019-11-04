@@ -42,7 +42,7 @@ title = participant.username
 subhead = _("Statement")
 
 [---] text/html
-% from "templates/select-lang.html" import lang_options with context
+% from "templates/macros/select-lang.html" import lang_options with context
 
 % extends "templates/layouts/profile-edit.html"
 

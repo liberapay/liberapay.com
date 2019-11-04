@@ -34,7 +34,7 @@ members = query_cache.all("""
 title = pretty_name = community.pretty_name
 
 [---]
-% from 'templates/profile-box.html' import profile_box_embedded with context
+% from 'templates/macros/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/layouts/profile-base.html"
 

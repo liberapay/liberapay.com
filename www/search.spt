@@ -92,8 +92,8 @@ if query:
 
 [---] text/html
 % extends "templates/layouts/base.html"
-% from 'templates/avatar-url.html' import avatar_url, avatar_img with context
-% from 'templates/search.html' import search_form with context
+% from 'templates/macros/avatar-url.html' import avatar_url, avatar_img with context
+% from 'templates/macros/search.html' import search_form with context
 % block content
 
     % set usernames = results.get('usernames')

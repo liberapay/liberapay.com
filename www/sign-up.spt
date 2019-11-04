@@ -15,7 +15,7 @@ title = _("Sign Up")
                 "You are already logged in as {0}.", user.username
             ) }}</div>
         % endif
-        % from "templates/sign-up-form.html" import sign_up_form with context
+        % from "templates/macros/sign-up-form.html" import sign_up_form with context
         {{ sign_up_form(select_currency=True) }}
     </form>
 </div>

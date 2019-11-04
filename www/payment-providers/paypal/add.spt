@@ -44,7 +44,7 @@ if request.method == 'POST':
 title = _("Connecting a {platform} account", platform='PayPal')
 
 [---] text/html
-% from "templates/icons.html" import glyphicon
+% from "templates/macros/icons.html" import glyphicon
 
 % extends "templates/layouts/base-thin.html"
 

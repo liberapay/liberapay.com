@@ -1,4 +1,4 @@
-% from "templates/icons.html" import fontawesome, icon_span
+% from "templates/macros/icons.html" import fontawesome, icon_span
 
 % macro nav(items, base='')
     % set current = request.path.raw.startswith(base) and request.path.raw[len(base):].lstrip('/').split('/', 1)[0]

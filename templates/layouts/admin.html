@@ -2,7 +2,7 @@
 
 % block main
 <div class="content-with-nav nav-right">
-    % from "templates/nav.html" import nav_admin with context
+    % from "templates/macros/nav.html" import nav_admin with context
     <div class="content-col">{% block content %}{% endblock %}</div>
     <div class="nav-col">
         <input id="subnav-admin" class="subnav-toggler sr-only" type="checkbox" />

@@ -1,4 +1,4 @@
-% from "templates/icons.html" import icon_span
+% from "templates/macros/icons.html" import icon_span
 
 % macro sign_in_link(icon_cls='', btn_cls='link')
     <form action="/sign-in" method="GET" {% if request.method not in ('GET', 'HEAD')

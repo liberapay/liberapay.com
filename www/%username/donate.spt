@@ -11,10 +11,10 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 [---] text/html
 % extends "templates/layouts/profile-base.html"
 
-% from 'templates/elsewhere.html' import account_elsewhere with context
-% from "templates/payment-methods.html" import describe_payment_methods with context
-% from 'templates/profile-goal-bar.html' import profile_goal_bar with context
-% from 'templates/your-tip.html' import tip_form with context
+% from 'templates/macros/elsewhere.html' import account_elsewhere with context
+% from "templates/macros/payment-methods.html" import describe_payment_methods with context
+% from 'templates/macros/profile-goal-bar.html' import profile_goal_bar with context
+% from 'templates/macros/your-tip.html' import tip_form with context
 
 % block head_early
 {{ super() }}

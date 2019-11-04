@@ -137,7 +137,7 @@ title = _("Adding Money")
                 "prompted to add money to your account."
             ) }}
             </p><p>
-            % from "templates/buttons.html" import find_donees with context
+            % from "templates/macros/buttons.html" import find_donees with context
             {{ find_donees() }}
         % elif weekly <= 0
             {{ _(

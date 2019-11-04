@@ -27,9 +27,9 @@
     % endif
     {% block head %}{% endblock %}
 </head>
-% from "templates/icons.html" import fontawesome, glyphicon
-% from 'templates/nav.html' import nav, nav_about, nav_explore with context
-% from 'templates/search.html' import search_form with context
+% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from 'templates/macros/nav.html' import nav, nav_about, nav_explore with context
+% from 'templates/macros/search.html' import search_form with context
 <body id="{{ page_id or '' }}">
 
 % if not website.db
@@ -62,7 +62,7 @@
             % if user
                 % include "templates/navbar-logged-in.html"
             % elif response.html_template != 'templates/exceptions/AuthRequired.html' and not no_navbar_sign_in
-                % from "templates/sign-in-link.html" import sign_in_link with context
+                % from "templates/macros/sign-in-link.html" import sign_in_link with context
                 <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
             % endif
             </ul>

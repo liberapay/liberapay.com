@@ -176,7 +176,7 @@ if user == participant:
 title = _("Adding Money")
 
 [---] text/html
-% from "templates/icons.html" import glyphicon
+% from "templates/macros/icons.html" import glyphicon
 
 % extends "templates/layouts/base-thin.html"
 
@@ -213,7 +213,7 @@ title = _("Adding Money")
                 "prompted to add money to your account."
             ) }}
             </p><p>
-            % from "templates/buttons.html" import find_donees with context
+            % from "templates/macros/buttons.html" import find_donees with context
             {{ find_donees() }}
         % elif weekly <= 0
             {{ _(
@@ -337,7 +337,7 @@ title = _("Adding Money")
                    value="{{ get_owner_name(mp_account) }}" />
         </label><br>
 
-        % from "templates/postal-addresses.html" import postal_address_form with context
+        % from "templates/macros/postal-addresses.html" import postal_address_form with context
         {{ postal_address_form(prefix='Owner', saved=get_owner_address(bank_account, mp_account), country=request.country) }}
     </fieldset>
 

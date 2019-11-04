@@ -37,8 +37,8 @@ else:
 [---] text/html
 % extends "templates/layouts/base.html"
 
-% from "templates/repos.html" import show_repo with context
-% from "templates/auth.html" import auth_button with context
+% from "templates/macros/repos.html" import show_repo with context
+% from "templates/macros/auth.html" import auth_button with context
 
 % block content
 % if not platform_name

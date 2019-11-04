@@ -29,7 +29,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 [-----------------------------------------------------------------------------]
 % extends "templates/layouts/profile.html"
 
-% from "templates/repos.html" import show_repo with context
+% from "templates/macros/repos.html" import show_repo with context
 
 % block head_early
 {{ super() }}

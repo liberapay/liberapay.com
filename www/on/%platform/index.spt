@@ -43,12 +43,12 @@ limited = getattr(platform, 'api_friends_limited', False)
 [---] text/html
 % extends "templates/layouts/base.html"
 
-% from 'templates/auth.html' import auth_button with context
-% from 'templates/profile-box.html' import profile_box_embedded_elsewhere with context
-% from "templates/your-tip.html" import tip_form with context
+% from 'templates/macros/auth.html' import auth_button with context
+% from 'templates/macros/profile-box.html' import profile_box_embedded_elsewhere with context
+% from "templates/macros/your-tip.html" import tip_form with context
 
 % block subnav
-    % from "templates/nav.html" import nav with context
+    % from "templates/macros/nav.html" import nav with context
     <nav class="nav nav-pills">
         {{ nav(platforms_nav, base='/on') }}
     </nav>
@@ -65,7 +65,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 % block content
 
 % if user.ANON
-    % from "templates/sign-in-link.html" import sign_in_link with context
+    % from "templates/macros/sign-in-link.html" import sign_in_link with context
     <p>{{ sign_in_link() }}</p>
 % elif need_reconnect
 <div class="paragraph">
@@ -102,7 +102,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 % endfor
 </div>
 % if pages_urls
-    % from 'templates/pagination.html' import pages_links with context
+    % from 'templates/macros/pagination.html' import pages_links with context
     {{ pages_links(pages_urls) }}
 % endif
 

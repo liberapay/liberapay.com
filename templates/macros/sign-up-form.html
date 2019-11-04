@@ -13,7 +13,7 @@
 % if select_currency
 <p>{{ _("and select your preferred currency:") }}</p>
 <div class="form-group">
-% from "templates/currencies.html" import currency_buttons with context
+% from "templates/macros/currencies.html" import currency_buttons with context
 {{ currency_buttons('sign-in.currency', currency) }}
 </div>
 % endif

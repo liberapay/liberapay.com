@@ -77,7 +77,7 @@ elif participant.mangopay_user_id and (participant.balance or not identity):
     raise response.redirect(participant.path('identity-v1'))
 
 [---] text/html
-% from "templates/identity.html" import identity_form with context
+% from "templates/macros/identity.html" import identity_form with context
 
 % extends "templates/layouts/settings.html"
 

@@ -84,7 +84,7 @@ if request.method == 'POST':
 title = _("Invoice {someone}", someone=addressee.username)
 
 [---] text/html
-% from "templates/currencies.html" import currency_buttons with context
+% from "templates/macros/currencies.html" import currency_buttons with context
 
 % extends "templates/layouts/base.html"
 
@@ -142,7 +142,7 @@ title = _("Invoice {someone}", someone=addressee.username)
     <p>{{ _("A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened.") }}</p>
     <p>{{ _("Only the administrators of {0} will be able to download these files.", addressee.username) }}</p>
     <p>{{ _("Allowed file extensions: {0}. Maximum file size: {1}MB.", ALLOWED_EXTENSIONS_STR, MAX_SIZE_MB) }}</p>
-    % from "templates/fine-uploader.html" import fine_uploader with context
+    % from "templates/macros/fine-uploader.html" import fine_uploader with context
     {{ fine_uploader() }}
     <br>
     <p class="alert alert-warning">{{ _("We will not store these documents forever, archiving them for the long term is your responsibility.") }}</p>

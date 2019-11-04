@@ -2,7 +2,7 @@
     % if not edit
     <h3>{{ _("Members") }}</h3>
     % endif
-    % from "templates/avatar-url.html" import avatar_img with context
+    % from "templates/macros/avatar-url.html" import avatar_img with context
     % set takes = participant.get_current_takes()
     % for t in takes
         <div class="mini-user">
