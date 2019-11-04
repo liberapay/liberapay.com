@@ -291,7 +291,7 @@ title = _("Adding Money")
 
     <fieldset id="identity">
     % set account = None
-    % include "templates/identity-form.html"
+    % include "templates/mangopay/identity-form.html"
     </fieldset>
     % endif
 
@@ -324,7 +324,7 @@ title = _("Adding Money")
     </div>
     <fieldset id="billing-address" class="hidden">
         % include "templates/sandbox-warning.html"
-        % from "templates/macros/postal-addresses.html" import postal_address_form with context
+        % from "templates/mangopay/postal-addresses.html" import postal_address_form with context
         {{ postal_address_form('Billing', saved=billing_address, country=request.country) }}
     </fieldset>
 

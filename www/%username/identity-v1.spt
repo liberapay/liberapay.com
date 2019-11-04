@@ -220,7 +220,7 @@ else:
 
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
-    % include "templates/identity-form.html"
+    % include "templates/mangopay/identity-form.html"
 
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 
@@ -255,7 +255,7 @@ else:
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-    % include "templates/identity-form-2.html"
+    % include "templates/mangopay/identity-form-2.html"
 
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 

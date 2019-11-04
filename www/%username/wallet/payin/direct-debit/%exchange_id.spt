@@ -302,7 +302,7 @@ title = _("Adding Money")
 
     <fieldset id="identity">
     % set account = None
-    % include "templates/identity-form.html"
+    % include "templates/mangopay/identity-form.html"
     </fieldset>
     % endif
 
@@ -337,7 +337,7 @@ title = _("Adding Money")
                    value="{{ get_owner_name(mp_account) }}" />
         </label><br>
 
-        % from "templates/macros/postal-addresses.html" import postal_address_form with context
+        % from "templates/mangopay/postal-addresses.html" import postal_address_form with context
         {{ postal_address_form(prefix='Owner', saved=get_owner_address(bank_account, mp_account), country=request.country) }}
     </fieldset>
 
