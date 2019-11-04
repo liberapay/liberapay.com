@@ -22,6 +22,9 @@ else:
 statement = markdown.render(statement) if statement else None
 summary = participant.get_statement(lang, 'summary')
 
+teams = participant.get_teams_data_for_display(locale)
+communities = participant.get_communities()
+
 langs = participant.get_statement_langs()
 
 show_income = not participant.hide_receiving and participant.accepts_tips
@@ -29,6 +32,8 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 [-----------------------------------------------------------------------------]
 % extends "templates/layouts/profile.html"
 
+% from "templates/macros/elsewhere.html" import account_elsewhere with context
+% from "templates/macros/profile-box.html" import profile_box_embedded with context
 % from "templates/macros/repos.html" import show_repo with context
 
 % block head_early
@@ -82,10 +87,23 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             {{ statement }}
         </section>
     % endif
+
     % if participant.kind == 'group'
-    % include "templates/members-listing.html"
+        <h3>{{ _("Members") }}</h3>
+        % from "templates/macros/profile.html" import members_listing with context
+        {{ members_listing(participant) }}
     % endif
-    % include "templates/connected-accounts.html"
+
+    % set e_accounts = participant.get_accounts_elsewhere()
+    % if e_accounts
+        <h3>{{ _("Linked Accounts") }}</h3>
+        <p>{{ _("{0} owns the following accounts on other platforms:", participant.username) }}</p>
+        <div class="accounts">
+            % for platform in website.platforms if platform.name in e_accounts
+                {{ account_elsewhere(platform, e_accounts) }}
+            % endfor
+        </div>
+    % endif
 
     % set repos = participant.get_repos_for_profile()
     % if repos
@@ -96,8 +114,32 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % endif
 
     % if participant.kind != 'group'
-    % include "templates/team-listing.html"
-    % include "templates/community-listing.html"
+        % if teams
+            <h3>{{ _("Teams") }}</h3>
+            <p>{{ ngettext(
+                "{username} is a member of {n} team:",
+                "{username} is a member of {n} teams:",
+                n=len(teams), username=participant.username
+            ) }}</p>
+            <div class="inline-boxes">
+                % for team in teams
+                    {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
+                % endfor
+            </div>
+        % endif
+        % if communities
+            <h3 id="communities">{{ _("Communities") }}</h3>
+            <ul class="communities memberships">
+                % for community in communities
+                <li>
+                    <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
+                    <div class="nmembers">{{
+                        ngettext("with {n} other", "with {n} others", community.nmembers - 1)
+                    }}</div>
+                </li>
+                % endfor
+            </ul>
+        % endif
     % endif
 
     % if participant.accepts_tips

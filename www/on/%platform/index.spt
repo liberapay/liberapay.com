@@ -43,7 +43,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 [---] text/html
 % extends "templates/layouts/base.html"
 
-% from 'templates/macros/auth.html' import auth_button with context
+% from 'templates/macros/elsewhere.html' import auth_button with context
 % from 'templates/macros/profile-box.html' import profile_box_embedded_elsewhere with context
 % from "templates/macros/your-tip.html" import tip_form with context
 

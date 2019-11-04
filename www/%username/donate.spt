@@ -13,7 +13,6 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 
 % from 'templates/macros/elsewhere.html' import account_elsewhere with context
 % from "templates/macros/payment-methods.html" import describe_payment_methods with context
-% from 'templates/macros/profile-goal-bar.html' import profile_goal_bar with context
 % from 'templates/macros/your-tip.html' import tip_form with context
 
 % block head_early
@@ -77,7 +76,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
             participant.username
         ) }}</p>
         % for platform in website.platforms if platform.name in e_accounts
-            {{ account_elsewhere(platform, e_accounts, None) }}
+            {{ account_elsewhere(platform, e_accounts) }}
         % endfor
         <br>
     % endif

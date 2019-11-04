@@ -1,6 +1,6 @@
 % from 'templates/macros/avatar-url.html' import avatar_img with context
 
-% macro account_elsewhere(platform, accounts, auth_button)
+% macro account_elsewhere(platform, accounts, edit=False)
     % set account = accounts.get(platform.name, None)
     <div class="account">
         % if account
@@ -37,6 +37,25 @@
             % endif
         % endif
     </div>
+% endmacro
+
+% macro auth_button(platform, action, user_id='', user_id_type=None, btn_cls='btn btn-primary', participant=None, extra_scopes=())
+    <form action="/on/{{ platform }}/redirect" method="post"
+          class="auth-button {{ platform }}">
+        <input type="hidden" name="action" value="{{ action }}" />
+        % set then=b64encode_s(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip()
+        <input type="hidden" name="then" value="{{ then }}" />
+        <input type="hidden" name="user_id" value="{{ user_id }}" />
+        % if user_id_type
+        <input type="hidden" name="user_id_type" value="{{ user_id_type }}" />
+        % endif
+        <input type="hidden" name="p_id" value="{{ participant and participant.id or '' }}" />
+        % if any(extra_scopes)
+        <input type="hidden" name="extra_scopes" value="{{ ' '.join(filter(None, extra_scopes)) }}" />
+        % endif
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="{{ btn_cls }}">{{ caller() }}</button>
+    </form>
 % endmacro
 
 % macro platform_icon(platform)

@@ -22,8 +22,8 @@ title = participant.username
 subhead = _("Avatar")
 
 [---] text/html
-% from "templates/macros/auth.html" import auth_button with context
 % from 'templates/macros/avatar-url.html' import avatar_img, avatar_url with context
+% from "templates/macros/elsewhere.html" import auth_button with context
 % from 'templates/macros/icons.html' import glyphicon
 
 % extends "templates/layouts/profile-edit.html"

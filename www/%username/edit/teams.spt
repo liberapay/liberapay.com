@@ -2,16 +2,28 @@ from liberapay.utils import get_participant
 
 [---]
 participant = get_participant(state, restrict=True)
-
+teams = participant.get_teams_data_for_display(locale)
 title = participant.username
 subhead = _("Teams")
 
 [---] text/html
 % extends "templates/layouts/profile-edit.html"
 
+% from "templates/macros/profile-box.html" import profile_box_embedded with context
+
 % block form
 
-    % set edit = True
-    % include "templates/team-listing.html"
+    <div class="inline-boxes">
+        % for team in teams
+        <div class="inline-box text-center">
+            {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
+            <a href="{{ team.participant.path('membership/leave') }}?back_to={{ urlquote(request.line.uri) }}"
+               class="btn btn-default">{{ _('Leave') }}</a>
+        </div>
+        % endfor
+    </div>
+    <br>
+    <p><a href="/explore/teams/">{{ _("Explore teams") }}</a></p>
+    <p><a href="/about/teams">{{ _("About teams") }}</a></p>
 
 % endblock
