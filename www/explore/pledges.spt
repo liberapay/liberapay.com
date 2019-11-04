@@ -58,7 +58,8 @@ subhead = _("Unclaimed Donations")
 
     <h3 class="banderole success">{{ _("Make a pledge") }}</h3>
     <p>{{ _("Do you have someone in mind?") }}</p>
-    % include "templates/jump.html"
+    % from "templates/macros/elsewhere.html" import user_lookup_form with context
+    {{ user_lookup_form() }}
 
     <p>{{ _("We can help you find pledgees if you connect your accounts:") }}</p>
     <p class="buttons">
