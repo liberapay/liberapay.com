@@ -50,7 +50,33 @@ title = _("Teams")
             '</a>'|safe
     ) }}</p>
 % else
-    % include "templates/create-team.html"
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <div class="form-group">
+    <input class="form-control" name="name" size=30
+           placeholder="{{ _('Name of the team') }}" />
+    </div>
+    <div class="form-group">
+    <input class="form-control" name="email" type="email" size=30
+           placeholder="{{ _('Email of the team (optional)') }}" />
+    </div>
+    <div class="form-group">
+    % from "templates/macros/currencies.html" import currency_buttons with context
+    {{ currency_buttons('main_currency', currency) }}
+    </div>
+    <div class="form-group">
+    <label>
+        <input type="checkbox" name="throttle_takes" checked />
+        <span>{{ _(
+            "Enable {0}limits on team takes{1}",
+            '<a href="/about/teams#throttling">'|safe,
+            '</a>'|safe
+        ) }}</span>
+    </label>
+    </div>
+    <button class="btn btn-success">{{ _("Create") }}</button>
+</form>
 % endif
 
 <h3>{{ _("Becoming a team member") }}</h3>
