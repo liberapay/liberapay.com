@@ -42,7 +42,7 @@ if request.method == 'POST':
                     "reasons we will have to create a new account for you in our payment "
                     "partner's system, and transfer the money from your old account."
                 )
-                response.render('templates/confirm.spt', state, msg=confirm, back_to='')
+                response.render('simplates/confirm.spt', state, msg=confirm, back_to='')
             payday_is_running = website.db.one("""
                 SELECT ts_start FROM paydays WHERE ts_start > ts_end
             """) is not None
@@ -51,7 +51,7 @@ if request.method == 'POST':
                     "We can't change the type of your account during payday, please "
                     "try again in a few minutes."
                 )
-                response.render('templates/retry-later.spt', state, msg=msg)
+                response.render('simplates/retry-later.spt', state, msg=msg)
             old_account = account
             account = NaturalUser() if new_kind == 'individual' else LegalUser()
             last_change = participant.get_last_event_of_type('mangopay-account-change')
@@ -76,7 +76,7 @@ if request.method == 'POST':
             "do, you may have to go through the identity verification process "
             "again."
         )
-        response.render('templates/confirm.spt', state, msg=confirm, back_to='', cls='warning')
+        response.render('simplates/confirm.spt', state, msg=confirm, back_to='', cls='warning')
 
     if not account.Tag:
         account.Tag = website.canonical_url + '/~%i/' % participant.id

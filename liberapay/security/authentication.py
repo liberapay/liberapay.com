@@ -230,14 +230,14 @@ def authenticate_user_if_possible(request, response, state, user, _):
         session_id = request.qs.get('log-in.key')
         token = request.qs.get('log-in.token')
         if not (token and token.endswith('.em')):
-            raise response.render('templates/bad-login-link.spt', state)
+            raise response.render('simplates/bad-login-link.spt', state)
         p = Participant.authenticate(id, session_id, token)
         if p:
             redirect = True
             session_p = p
             session_suffix = '.em'
         else:
-            raise response.render('templates/bad-login-link.spt', state)
+            raise response.render('simplates/bad-login-link.spt', state)
         del request.qs['log-in.id'], request.qs['log-in.key'], request.qs['log-in.token']
 
     # Handle email verification

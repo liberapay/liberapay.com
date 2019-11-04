@@ -57,7 +57,7 @@ if platform_name:
                     try:
                         r = platform.get_repos(account, page_url=next_page, sess=sess)
                     except (InvalidGrantError, TokenExpiredError):
-                        response.render('templates/reconnect-elsewhere-account.spt', state, platform=platform)
+                        response.render('simplates/reconnect-elsewhere-account.spt', state, platform=platform)
                     repos += upsert_repos(cursor, r[0], participant, utcnow())
                     next_page = r[2].get('next')
                     if not next_page:

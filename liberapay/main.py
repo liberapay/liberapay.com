@@ -380,7 +380,7 @@ if hasattr(pando.Response, 'refresh'):
     raise Warning('pando.Response.refresh() already exists')
 def _refresh(response, state, **extra):
     # https://en.wikipedia.org/wiki/Meta_refresh
-    raise response.render('templates/refresh.spt', state, **extra)
+    raise response.render('simplates/refresh.spt', state, **extra)
 pando.Response.refresh = _refresh
 
 if hasattr(pando.Response, 'render'):

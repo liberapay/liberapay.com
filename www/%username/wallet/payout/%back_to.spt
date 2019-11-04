@@ -40,7 +40,7 @@ if request.method == 'POST':
             "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?",
             (e.args[0] * 100).quantize(D('0.1')), *e.args[1:]
         )
-        response.render('templates/confirm.spt', state,
+        response.render('simplates/confirm.spt', state,
                         msg=msg, back_to=back_to, cls='warning')
     if exchange:
         participant.notify('withdrawal_'+exchange.status, force_email=True, web=False, exchange=exchange)

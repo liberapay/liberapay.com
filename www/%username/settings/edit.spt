@@ -37,7 +37,7 @@ if 'new-password' in body:
             website.tell_sentry(e, state)
         if password_status and password_status != 'okay':
             raise response.render(
-                'templates/password-warning.spt', state,
+                'simplates/password-warning.spt', state,
                 password_status=password_status, back_to=p.path('settings'),
             )
 

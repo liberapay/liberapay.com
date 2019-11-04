@@ -104,6 +104,6 @@ if not confirm:
         back_to = _modify_query(back_to, 'success', b64encode_s(msg))
     response.redirect(back_to, trusted_url=False)
 
-response.render('templates/confirm.spt', state, msg=confirm, back_to=back_to)
+response.render('simplates/confirm.spt', state, msg=confirm, back_to=back_to)
 
 [---] text/html

@@ -32,7 +32,7 @@ if request.method == 'POST':
                 "foreign currencies. These donations will not be converted to your main currency.",
                 money_amount=total
             )
-            raise response.render('templates/confirm.spt', state, cls='info', msg=msg, back_to=back_to)
+            raise response.render('simplates/confirm.spt', state, cls='info', msg=msg, back_to=back_to)
     if change_currency:
         participant.change_main_currency(new_currency, user)
     if change_policy:
