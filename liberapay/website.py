@@ -14,7 +14,7 @@ from pando.website import Website
 env = Environment(
     ASPEN_CHANGES_RELOAD=is_yesish,
     ASPEN_PROJECT_ROOT=str,
-    ASPEN_SHOW_TRACEBACKS=str,
+    ASPEN_SHOW_TRACEBACKS=is_yesish,
     ASPEN_WWW_ROOT=str,
     AWS_ACCESS_KEY_ID=str,
     AWS_SECRET_ACCESS_KEY=str,

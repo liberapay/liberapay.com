@@ -49,7 +49,7 @@ referer = request.headers.get(b'Referer')
         % endif
 
         % if err
-            % if website.show_tracebacks
+            % if '\n' in err
                 <pre>{{ err }}</pre>
             % else
                 <p>{{ _("Error message:") }}</p>
