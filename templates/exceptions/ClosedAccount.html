@@ -1,7 +1,7 @@
 <div class="text-center">
 <br>
 <h1>{{ _("This account is closed") }}</h1>
-% if user.ANON and not closed_account.is_suspended
+% if user.ANON and not response.closed_account.is_suspended
 <br>
 <h3>{{ _("Are you the account owner?") }}</h3>
 <p>{{ _("Log in to reopen your account.") }}</p>

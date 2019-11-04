@@ -18,7 +18,7 @@ from postgres.cursors import SimpleCursorBase
 
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import (
-    AccountSuspended, AuthRequired, LoginRequired, TooManyAdminActions
+    AccountSuspended, AuthRequired, ClosedAccount, LoginRequired, TooManyAdminActions
 )
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
@@ -84,9 +84,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     status = participant.status
     if status == 'closed':
         if not user.is_admin:
-            state['closed_account'] = participant
-            response.html_template = 'templates/account-closed.html'
-            raise response.error(410)
+            raise ClosedAccount(participant)
     elif status == 'stub':
         if redirect_stub:
             to = participant.resolve_stub()

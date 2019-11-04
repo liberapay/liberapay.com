@@ -52,6 +52,17 @@ class AuthRequired(LazyResponse):
         return _("You need to sign in first")
 
 
+class ClosedAccount(LazyResponse):
+
+    def __init__(self, participant):
+        Response.__init__(self, 410, '')
+        self.closed_account = participant
+        self.html_template = 'templates/exceptions/ClosedAccount.html'
+
+    def lazy_body(self, _):
+        return _("This account is closed")
+
+
 class LoginRequired(LazyResponse):
 
     def __init__(self):
