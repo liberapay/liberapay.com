@@ -29,7 +29,8 @@
     <li><a href="/about/teams">{{ _("Create a new team") }}</a></li>
     <li class="divider"></li>
     <li>
-        <form action="/sign-out" method="POST" {% if request.method not in ('GET', 'HEAD') %} target="_blank" {% endif %}>
+        <form action="/sign-out" method="POST" {% if request.method not in constants.SAFE_METHODS
+              %} target="_blank" {% endif %}>
             <input name="back_to" type="hidden" value="{{ request.line.uri.decoded }}" />
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
             <button class="btn navbar-btn" type="submit">

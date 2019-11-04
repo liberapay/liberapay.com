@@ -1,6 +1,6 @@
 % from "templates/macros/icons.html" import glyphicon
 
-% if request.method in ('GET', 'HEAD')
+% if request.method in constants.SAFE_METHODS
 <li class="dropdown dropdown-hover locale">
     <button class="dropdown-toggle navbar-btn" type="button"
             data-toggle="dropdown"
