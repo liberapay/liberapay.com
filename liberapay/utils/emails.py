@@ -10,12 +10,15 @@ import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, Resolver
 from jinja2 import Environment
+from pando import Response
 from pando.utils import utcnow
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
     BadEmailAddress, BadEmailDomain, DuplicateNotification, EmailAddressIsBlacklisted,
+    TooManyAttempts,
 )
+from liberapay.utils import deserialize
 from liberapay.website import website, JINJA_ENV_COMMON
 
 
@@ -108,15 +111,39 @@ def check_email_blacklist(address):
     """Raises `EmailAddressIsBlacklisted` if the given email address is blacklisted.
     """
     r = website.db.one("""
-        SELECT reason, ts
+        SELECT reason, ts, details, ses_data
           FROM email_blacklist
          WHERE lower(address) = lower(%s)
            AND (ignore_after IS NULL OR ignore_after > current_timestamp)
-      ORDER BY ts DESC
+      ORDER BY reason = 'complaint' DESC, ts DESC
          LIMIT 1
     """, (address,))
     if r:
-        raise EmailAddressIsBlacklisted(address, r.reason, r.ts)
+        raise EmailAddressIsBlacklisted(address, r.reason, r.ts, r.details, r.ses_data)
+
+
+class EmailError:
+    """Represents an email bounce or complaint.
+    """
+
+    __slots__ = ('email_address', 'reason', 'ts', 'details', 'ses_data')
+
+    def __init__(self, email_address, reason, ts, details, ses_data):
+        self.email_address = email_address
+        self.reason = reason
+        self.ts = ts
+        self.details = details
+        self.ses_data = ses_data
+
+    def get_bounce_message(self):
+        if self.reason != 'bounce':
+            return
+        if self.ses_data:
+            bouncedRecipients = self.ses_data.get('bounce', {}).get('bouncedRecipients')
+            if bouncedRecipients:
+                return bouncedRecipients[0].get('diagnosticCode')
+        elif self.details:
+            return self.details
 
 
 def handle_email_bounces():
@@ -223,3 +250,45 @@ def clean_up_emails():
            SET nonce = NULL
          WHERE added_time < (current_timestamp - interval '1 year');
     """)
+
+
+def remove_email_address_from_blacklist(address, user, request):
+    """
+    This function allows anyone to remove an email address from the blacklist,
+    but with rate limits for non-admins in order to prevent abuse.
+    """
+    with website.db.get_cursor() as cursor:
+        if not user.is_admin:
+            source = user.id or request.source
+            website.db.hit_rate_limit('email.unblacklist.source', source, TooManyAttempts)
+        r = cursor.all("""
+            UPDATE email_blacklist
+               SET ignore_after = current_timestamp
+                 , ignored_by = %(user_id)s
+             WHERE lower(address) = lower(%(address)s)
+               AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+         RETURNING *
+        """, dict(address=address, user_id=user.id))
+        if not r:
+            return
+        if not user.is_admin:
+            if any(bl.reason == 'complaint' for bl in r):
+                raise Response(403, (
+                    "Only admins are allowed to unblock an address which is "
+                    "blacklisted because of a complaint."
+                ))
+            website.db.hit_rate_limit('email.unblacklist.target', address, TooManyAttempts)
+    # Mark the matching `email_blacklisted` notifications as read
+    participant = website.db.Participant.from_email(address)
+    if participant:
+        notifications = website.db.all("""
+            SELECT id, context
+              FROM notifications
+             WHERE participant = %s
+               AND event = 'email_blacklisted'
+               AND is_new
+        """, (participant.id,))
+        for notif in notifications:
+            context = deserialize(notif.context)
+            if context['blacklisted_address'].lower() == address.lower():
+                participant.mark_notification_as_read(notif.id)

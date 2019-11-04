@@ -16,6 +16,7 @@ from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import b64encode_s, get_ip_net
 from liberapay.utils.emails import (
     EmailVerificationResult, check_email_blacklist, normalize_email_address,
+    remove_email_address_from_blacklist,
 )
 
 
@@ -99,24 +100,24 @@ def sign_in_with_form_data(body, state):
         kind = body.pop('sign-in.kind', 'individual')
         if kind not in ('individual', 'organization'):
             raise response.invalid_input(kind, 'sign-in.kind', 'body')
-        email = body.pop('sign-in.email')
+        email = body['sign-in.email']
         if not email:
             raise response.error(400, 'email is required')
         email = normalize_email_address(email)
         check_email_blacklist(email)
-        currency = body.pop('sign-in.currency', 'EUR')
+        currency = body.get('sign-in.currency', 'EUR')
         if currency not in CURRENCIES:
             raise response.invalid_input(currency, 'sign-in.currency', 'body')
-        password = body.pop('sign-in.password', None)
+        password = body.get('sign-in.password')
         if password:
             l = len(password)
             if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
                 raise BadPasswordSize
-        username = body.pop('sign-in.username', None)
+        username = body.get('sign-in.username')
         if username:
             username = username.strip()
             Participant.check_username(username)
-        session_token = body.pop('sign-in.token', '')
+        session_token = body.get('sign-in.token', '')
         if session_token:
             Participant.check_session_token(session_token)
         # Check for an existing account
@@ -171,6 +172,12 @@ def sign_in_with_form_data(body, state):
             p.check_password(password, context='login')
         p.authenticated = True
         p.sign_in(response.headers.cookie, token=session_token)
+        # We're done, we can clean up the body now
+        body.pop('sign-in.email')
+        body.pop('sign-in.currency', None)
+        body.pop('sign-in.password', None)
+        body.pop('sign-in.username', None)
+        body.pop('sign-in.token', None)
 
     return p
 
@@ -208,9 +215,14 @@ def authenticate_user_if_possible(request, response, state, user, _):
     redirect = False
     redirect_url = None
     if request.method == 'POST':
-        # Password auth
+        # Form auth
         body = _get_body(request)
         if body:
+            # Remove email address from blacklist if requested
+            email_address = body.pop('email.unblacklist', None)
+            if email_address:
+                remove_email_address_from_blacklist(email_address, user, request)
+            # Proceed with form auth
             carry_on = body.pop('log-in.carry-on', None)
             if carry_on:
                 p_email = session_p and session_p.get_email_address()

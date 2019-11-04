@@ -178,16 +178,21 @@ class BadEmailDomain(ProblemChangingEmail):
         return _("'{domain_name}' is not a valid email domain.", domain_name=self.args[0])
 
 class EmailAddressIsBlacklisted(ProblemChangingEmail):
-    def msg(self, _):
+
+    def __init__(self, email_address, reason, ts, details, ses_data=None):
+        Response.__init__(self, 400, '')
+        self.html_template = 'templates/exceptions/EmailAddressIsBlacklisted.html'
+        from liberapay.utils.emails import EmailError
+        self.email_error = EmailError(email_address, reason, ts, details, ses_data)
+
+    def lazy_body(self, _):
         from liberapay.i18n.base import to_age
-        address, reason, ts = self.args
-        if reason == 'bounce':
+        error = self.email_error
+        if error.reason == 'bounce':
             return _(
                 "The email address {email_address} is blacklisted because an "
-                "attempt to send a message to it failed {timespan_ago}. Please "
-                "send an email from that address to support@liberapay.com if "
-                "you want us to remove it from the blacklist.",
-                email_address=address, timespan_ago=to_age(ts)
+                "attempt to send a message to it failed {timespan_ago}.",
+                email_address=error.email_address, timespan_ago=to_age(error.ts)
             )
         else:
             return _(
@@ -195,7 +200,7 @@ class EmailAddressIsBlacklisted(ProblemChangingEmail):
                 "complaint received {timespan_ago}. Please send an email "
                 "from that address to support@liberapay.com if you want us to "
                 "remove it from the blacklist.",
-                email_address=address, timespan_ago=to_age(ts)
+                email_address=error.email_address, timespan_ago=to_age(error.ts)
             )
 
 class EmailAlreadyAttachedToSelf(ProblemChangingEmail):

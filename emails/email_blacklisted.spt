@@ -3,8 +3,7 @@
 [---] text/html
 <p>{{ _(
     "We will no longer send emails to your address {email_address}, because a "
-    "recent attempt to do so has failed. Please send an email from that address "
-    "to support@liberapay.com if you want us to remove it from the blacklist.",
+    "recent attempt to do so has failed.",
     email_address=blacklisted_address
 ) if reason == 'bounce' else _(
     "We will no longer send emails to your address {email_address}, because "

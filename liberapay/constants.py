@@ -425,6 +425,8 @@ RATE_LIMITS = {
     'change_password': (7, 60*60*24*7),  # 7 per week
     'change_username': (7, 60*60*24*7),  # 7 per week
     'check_password': (25, 60*60*24*7),  # 25 per week
+    'email.unblacklist.source': (5, 60*60*24*7),  # 5 per week
+    'email.unblacklist.target': (3, 60*60*24*7),  # 3 per week
     'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
     'http-unsafe.user': (10, 10),  # 10 per 10 seconds
     'insert_identity': (7, 60*60*24*7),  # 7 per week

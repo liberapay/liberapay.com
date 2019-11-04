@@ -1,0 +1,36 @@
+% set error = response.email_error
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+<p class="alert alert-danger">{{ _(
+    "The email address {email_address} is blacklisted because an attempt to send "
+    "a message to it failed {timespan_ago}.",
+    email_address=error.email_address, timespan_ago=to_age(error.ts)
+) if error.reason == 'bounce' else _(
+    "The email address {email_address} is blacklisted because of a complaint "
+    "received {timespan_ago}. Please send an email from that address to "
+    "support@liberapay.com if you want us to remove it from the blacklist.",
+    email_address=error.email_address, timespan_ago=to_age(error.ts)
+) }}</p>
+% if error.reason == 'bounce'
+    % set bounce_message = error.get_bounce_message()
+    % if bounce_message
+        <p>{{ _("The error message from the email system was:") }}</p>
+        <pre>{{ bounce_message }}</pre>
+        <br>
+    % endif
+    <p>{{ _(
+        "If you believe that emails sent by us to {email_address} will no "
+        "longer bounce back, then you can remove this address from the "
+        "blacklist and try again:",
+        email_address=error.email_address
+    ) }}</p>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-primary" name="email.unblacklist" value="{{ error.email_address }}">{{ _(
+            "Bypass the blacklist and retry"
+        ) }}</button>
+    </form>
+% endif
+</div>
+</div>

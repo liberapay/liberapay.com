@@ -1057,7 +1057,7 @@ class Participant(Model, MixinTeam):
             """, (email, str(uuid.uuid4()), self.id))
             if email_row.disavowed:
                 raise EmailAddressIsBlacklisted(
-                    email, 'complaint', email_row.disavowed_time
+                    email, 'complaint', email_row.disavowed_time, 'disavowed'
                 )
             if email_row.verified:
                 return 0
@@ -1222,7 +1222,7 @@ class Participant(Model, MixinTeam):
         email = email_row.address
         check_email_blacklist(email)
         if email_row.disavowed:
-            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time)
+            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time, 'disavowed')
         self.fill_notification_context(context)
         context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
