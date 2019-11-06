@@ -16,8 +16,8 @@ teams = website.db.all("""
 """, (participant.id,))
 
 recent_donation_changes = website.db.all("""
-    SELECT t.mtime, t.amount AS new_amount, t.renewal_mode AS new_renewal_mode
-         , old_t.amount AS old_amount
+    SELECT t.mtime, old_t.amount AS old_amount, t.amount AS new_amount
+         , old_t.renewal_mode AS old_renewal_mode, t.renewal_mode AS new_renewal_mode
       FROM ( SELECT DISTINCT ON (tipper, mtime) t.*
                FROM tips t
               WHERE t.tippee = %(p_id)s
@@ -119,39 +119,44 @@ recent_donation_changes = website.db.all("""
     ) }}</p>
 % endif
 
+% macro show_change(change, symbol, cls, description)
+    <span class="text-muted">{{ locale.format_date(change.mtime.date(), format='short_yearless') }}</span> &nbsp;
+    <span class="text-{{ cls }} symbol">{{ symbol }}</span> &nbsp;
+    {{ description }}<br>
+% endmacro
+
 <h4>{{ _("Recent Changes") }}</h4>
 % for change in recent_donation_changes
-    <span class="text-muted">{{ locale.format_date(change.mtime.date(), format='short_yearless') }}</span>
-    &nbsp;
     % if change.old_amount is none
-        <span class="text-info symbol">+</span>
-        &nbsp;
-        {{ _(
+        {{ show_change(change, '+', 'info', _(
             "A new donation of {amount} per week has been created.",
             amount=change.new_amount
-        ) }}
+        )) }}
     % else
         % if change.new_renewal_mode <= 0
-            <span class="text-danger symbol">✖</span> &nbsp;
-            {{ _(
+            {{ show_change(change, '✖', 'danger', _(
                 "A donation of {amount} per week has been stopped.",
-                amount=change.old_amount
-            ) }}
-        % elif change.new_amount > change.old_amount.convert(change.new_amount.currency)
-            <span class="text-success symbol">↗</span> &nbsp;
-            {{ _(
+                amount=change.new_amount
+            )) }}
+        % endif
+        % if change.new_amount > change.old_amount.convert(change.new_amount.currency)
+            {{ show_change(change, '↗', 'success', _(
                 "A donation has been raised from {old_amount} to {new_amount} per week.",
                 old_amount=change.old_amount, new_amount=change.new_amount
-            ) }}
-        % else
-            <span class="text-danger symbol">↘</span> &nbsp;
-            {{ _(
+            )) }}
+        % elif change.new_amount < change.old_amount.convert(change.new_amount.currency)
+            {{ show_change(change, '↘', 'danger', _(
                 "A donation has been lowered from {old_amount} per week to {new_amount}.",
                 old_amount=change.old_amount, new_amount=change.new_amount
-            ) }}
+            )) }}
+        % endif
+        % if change.old_renewal_mode <= 0 and change.new_renewal_mode > 0
+            {{ show_change(change, '⟳', 'info', _(
+                "A donation of {amount} per week has been restarted.",
+                amount=change.old_amount
+            )) }}
         % endif
     % endif
-    <br>
 % else
     <p>{{ _("Nothing to show.") }}</p>
 % endfor
