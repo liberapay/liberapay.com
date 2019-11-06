@@ -1,0 +1,90 @@
+% from 'templates/macros/avatar-url.html' import avatar_img with context
+
+% macro account_elsewhere(platform, accounts, edit=False)
+    % set account = accounts.get(platform.name, None)
+    <div class="account">
+        % if account
+            <a class="account-link" rel="me" href="{{ account.html_url }}">
+                {{ platform_logo(platform) }}
+                <span class="sr-only">{{ platform.display_name }}:</span>
+                <span class="account-username">{{ account.friendly_name_long }}</span>
+            </a>
+        % else
+            <span class="account-link">
+                {{ platform_logo(platform) }}
+                <span class="account-username">{{ platform.display_name }}</span>
+            </span>
+        % endif
+        % if edit
+            &nbsp;&nbsp;&nbsp;
+            % if account
+            <form action="/{{ account.participant.username }}/elsewhere/delete"
+                  method="POST" class="inline-block js-submit">
+                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                 <input type="hidden" name="platform" value="{{ platform.name }}">
+                 <input type="hidden" name="domain" value="{{ account.domain }}">
+                 <input type="hidden" name="user_id" value="{{ account.user_id }}">
+                 <button class="btn btn-danger btn-sm">{{ _('Disconnect') }}</button>
+            </form>
+            % elif participant.kind == 'group' and platform.has_teams and not hasattr(platform, 'is_team_member')
+                <button class="btn btn-default btn-sm" disabled
+                        title="{{ _('This is not supported yet') }}"
+                        >{{ _("Connect") }}</button>
+            % else
+                % call auth_button(platform.name, 'connect', btn_cls='btn btn-default btn-sm', participant=participant)
+                    {{ _("Connect") }}
+                % endcall
+            % endif
+        % endif
+    </div>
+% endmacro
+
+% macro auth_button(platform, action, user_id='', user_id_type=None, btn_cls='btn btn-primary', participant=None, extra_scopes=())
+    <form action="/on/{{ platform }}/redirect" method="post"
+          class="auth-button {{ platform }}">
+        <input type="hidden" name="action" value="{{ action }}" />
+        % set then=b64encode_s(request.path.raw + ('?' + request.qs.raw if request.qs else '')).strip()
+        <input type="hidden" name="then" value="{{ then }}" />
+        <input type="hidden" name="user_id" value="{{ user_id }}" />
+        % if user_id_type
+        <input type="hidden" name="user_id_type" value="{{ user_id_type }}" />
+        % endif
+        <input type="hidden" name="p_id" value="{{ participant and participant.id or '' }}" />
+        % if any(extra_scopes)
+        <input type="hidden" name="extra_scopes" value="{{ ' '.join(filter(None, extra_scopes)) }}" />
+        % endif
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="{{ btn_cls }}">{{ caller() }}</button>
+    </form>
+% endmacro
+
+% macro platform_icon(platform)
+    % if platform.fontawesome_name
+        <i class="platform-icon fa fa-{{ platform.fontawesome_name }} fa-brand-color" aria-hidden="true"></i>
+    % else
+        <img class="platform-icon" src="{{ platform.icon }}" aria-hidden="true" />
+    % endif
+% endmacro
+
+% macro platform_logo(platform)
+    % if platform.fontawesome_name
+        <i class="account-type fa fa-{{ platform.fontawesome_name }} fa-brand-color" aria-hidden="true"></i>
+    % else
+        <img class="account-type" src="{{ platform.logo }}" aria-hidden="true" />
+    % endif
+% endmacro
+
+% macro user_lookup_form()
+    <form action="/on/" class="form-group">
+    <div class="form-inline">
+        <input name="user_name" placeholder="{{ _('username') }}" autocorrect="off"
+               spellcheck="false" size="12" type="text" class="form-control">
+        <select class="form-control" name="platform">
+            % for platform in website.platforms.hasattr('x_user_name')
+            <option value="{{ platform.name }}">{{ platform.display_name }}</option>
+            % endfor
+        </select>
+        <button class="btn btn-default">{{ _("Go") }}</button>
+    </div>
+    </form>
+% endmacro

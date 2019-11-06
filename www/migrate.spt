@@ -287,7 +287,7 @@ elif step == '3':
 title = _("Migrating from Gratipay")
 
 [---] text/html
-% extends "templates/base-thin.html"
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
     % if step == '1' and not username

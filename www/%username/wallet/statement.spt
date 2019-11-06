@@ -42,7 +42,7 @@ translated_status = {
 output.body = render(globals(), allow_partial_i18n=False)
 
 [---] text/html
-% extends "templates/paper.html"
+% extends "templates/layouts/paper.html"
 
 % block content
 

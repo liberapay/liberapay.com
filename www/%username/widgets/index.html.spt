@@ -13,7 +13,7 @@ csp = csp.allow(b'style-src', b"'unsafe-inline'")
 response.headers[b'Content-Security-Policy'] = csp
 
 [---]
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 % block content
 
     <h3>{{ _("Donation Button") }}</h3>

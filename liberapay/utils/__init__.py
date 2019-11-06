@@ -16,13 +16,13 @@ from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
 from postgres.cursors import SimpleCursorBase
 
+from liberapay.constants import SAFE_METHODS
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import (
-    AccountSuspended, AuthRequired, LoginRequired, TooManyAdminActions
+    AccountSuspended, AuthRequired, ClosedAccount, LoginRequired, TooManyAdminActions
 )
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
-from liberapay.security.csrf import SAFE_METHODS
 from liberapay.website import website
 from liberapay.utils import cbor
 
@@ -84,9 +84,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
     status = participant.status
     if status == 'closed':
         if not user.is_admin:
-            state['closed_account'] = participant
-            response.html_template = 'templates/account-closed.html'
-            raise response.error(410)
+            raise ClosedAccount(participant)
     elif status == 'stub':
         if redirect_stub:
             to = participant.resolve_stub()
@@ -119,7 +117,7 @@ def get_community(state, restrict=False):
     name = request.path['name']
 
     c = Community.from_name(name)
-    if request.method in ('GET', 'HEAD'):
+    if request.method in SAFE_METHODS:
         if not c:
             response.redirect('/for/new?name=' + urlquote(name))
         if c.name != name:

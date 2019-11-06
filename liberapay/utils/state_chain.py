@@ -8,7 +8,6 @@ from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
 from ..exceptions import LazyResponse, TooManyRequests
-from ..security.csrf import SAFE_METHODS
 from . import urlquote
 
 
@@ -72,7 +71,7 @@ def canonize(request, website):
             bad_host = True
     if bad_scheme or bad_host:
         url = '%s://%s' % (canonical_scheme, canonical_host if bad_host else host)
-        if request.method in SAFE_METHODS:
+        if request.method in constants.SAFE_METHODS:
             # Redirect to a particular path for idempotent methods.
             url += request.line.uri.path.decoded
             if request.line.uri.querystring:
@@ -90,7 +89,7 @@ def insert_constants():
 
 
 def enforce_rate_limits(request, user, website):
-    if request.method in ('GET', 'HEAD'):
+    if request.method in constants.SAFE_METHODS:
         return
     if user.id:
         website.db.hit_rate_limit('http-unsafe.user', user.id, TooManyRequests)

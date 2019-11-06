@@ -1,0 +1,55 @@
+% from 'templates/macros/avatar-url.html' import avatar_img with context
+
+<li class="dropdown dropdown-hover">
+<button class="dropdown-toggle navbar-btn" type="button"
+        data-toggle="dropdown">
+    {{ avatar_img(user, size=28) }}
+    <span class="caret"></span>
+</button>
+<ul class="dropdown-menu dropdown-menu-right" role="menu">
+    <li><a href="/{{ user.username }}/">{{ _("Profile") }}</a></li>
+    <li><a href="/{{ user.username }}/giving/">{{ _("Giving") }}</a></li>
+    <li><a href="/{{ user.username }}/receiving/">{{ _("Receiving") }}</a></li>
+    <li><a href="/{{ user.username }}/ledger/">{{ _("Ledger") }}</a></li>
+    % if user.mangopay_user_id
+    <li><a href="/{{ user.username }}/wallet/">{{ _("Wallet") }}</a></li>
+    % if user.balance
+    <li class="level2"><a href="/{{ user.username }}/wallet/empty">{{ _("Emptying your wallet") }}</a></li>
+    <li class="level2"><a href="/{{ user.username }}/wallet/payout">{{ _("Withdraw money") }}</a></li>
+    % endif
+    % endif
+    <li><a href="/{{ user.username }}/payment/">{{ _("Payment Processors") }}</a></li>
+    <li><a href="/{{ user.username }}/identity">{{ _("Identity") }}</a></li>
+    <li><a href="/{{ user.username }}/settings/">{{ _("Account") }}</a></li>
+    <li><a href="/{{ user.username }}/emails/">{{ _("Emails") }}</a></li>
+    <li><a href="/{{ user.username }}/notifications">{{ _("Notifications") }}</a></li>
+    <li><a href="/{{ user.username }}/widgets/">{{ _("Widgets") }}</a></li>
+    <li class="divider"></li>
+    <li><a href="/for/new">{{ _("Create a new community") }}</a></li>
+    <li><a href="/about/teams">{{ _("Create a new team") }}</a></li>
+    <li class="divider"></li>
+    <li>
+        <form action="/sign-out" method="POST" {% if request.method not in constants.SAFE_METHODS
+              %} target="_blank" {% endif %}>
+            <input name="back_to" type="hidden" value="{{ request.line.uri.decoded }}" />
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <button class="btn navbar-btn" type="submit">
+                <span class="glyphicon glyphicon-log-out"></span>
+                <span>{{ _("Sign out") }}</span>
+            </button>
+        </form>
+    </li>
+</ul>
+</li>
+
+% if user.pending_notifs
+<li><a href="/{{ user.username }}/notifications"
+       title="{{ _('Notifications') }}"
+       class="{{ 'navbar-warning' if user.pending_notifs else '' }}">
+    <span class="glyphicon glyphicon-info-sign"></span>
+    <span class="sr-only">{{ _("Notifications") }}</span>
+    % if user.pending_notifs
+        <span class="pending-notifs">{{ user.pending_notifs }}</span>
+    % endif
+</a></li>
+% endif

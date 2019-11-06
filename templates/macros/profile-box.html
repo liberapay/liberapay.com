@@ -1,0 +1,94 @@
+% from 'templates/macros/avatar-url.html' import avatar_img with context
+% from 'templates/macros/elsewhere.html' import platform_icon
+
+% macro profile_box_embedded_wrapper(participant, path, style='default')
+<div class="inline-box">
+    <div class="panel panel-{{ style }} profile-box-embedded"
+         href="{{ path }}">
+        <div class="panel-body">
+            <a href="{{ path }}" class="avatar-inline">{{
+                avatar_img(participant, size=120)
+            }}</a>
+            {{ caller() }}
+        </div>
+    </div>
+</div>
+% endmacro
+
+% macro profile_box_embedded(participant, summary, nmembers=None)
+    % call profile_box_embedded_wrapper(participant, participant.path(''))
+        {{ profile_box_embedded_participant(participant, summary, nmembers=nmembers) }}
+    % endcall
+% endmacro
+
+% macro profile_box_embedded_participant(participant, summary, nmembers=None)
+    % set username = participant.username
+
+    <h4><a href="/{{ username }}/">{{ username }}</a></h4>
+
+    <p class="summary">{{ summary or '' }}</p>
+
+    <div class="numbers">
+        <dl>
+            <dt>{{ _("Patrons") }}</dt>
+            <dd>{{ locale.format_decimal(participant.npatrons + participant.nteampatrons) }}</dd>
+        </dl>
+        % if not participant.hide_receiving
+        <dl>
+            <dt>{{ _("Income") }}</dt>
+            <dd>{{ locale.format_money(participant.receiving) }}<br>
+                <small>{{ _("per week") }}</small></dd>
+        </dl>
+        % endif
+        % if nmembers
+        <dl>
+            <dt>{{ _("Members") }}</dt>
+            <dd>{{ locale.format_decimal(nmembers) }}</dd>
+        </dl>
+        % endif
+    </div>
+% endmacro
+
+% macro profile_box_embedded_elsewhere(
+    e, has_tip=None, show_button=False, show_numbers=True, show_platform_icon=True
+)
+    % set tippee_is_stub = e.participant.status == 'stub'
+    % set panel_style = 'default' if tippee_is_stub else 'primary'
+    % set path = e.liberapay_path
+    % call profile_box_embedded_wrapper(e.participant, path, style=panel_style)
+        % set p = e.participant
+
+        <h4><a href="{{ path }}">
+            {{ platform_icon(e.platform_data) if show_platform_icon else '' }}
+            <span>{{ e.friendly_name }}</span>
+            <span class="sr-only">({{ e.platform_data.display_name }})</span>
+        </a></h4>
+
+        <p class="summary">{{ e.get_excerpt() or '' }}</p>
+
+        % if show_button
+        <a class="btn btn-{{ 'primary' if has_tip else 'pledge' if tippee_is_stub else 'donate' }}"
+           href="{{ path if tippee_is_stub else e.participant.path('donate') }}">{{
+            (_("Modify your pledge") if has_tip else _("Pledge"))
+            if tippee_is_stub else
+            (_("Modify your donation") if has_tip else _("Donate"))
+        }}</a>
+        % endif
+
+        % if show_numbers
+        <div class="numbers">
+            <dl>
+                <dt>{{ _("Pledges") }}</dt>
+                <dd>{{ locale.format_decimal(p.npatrons) }}</dd>
+            </dl>
+            % if not p.hide_receiving
+            <dl>
+                <dt>{{ _("Sum") }}</dt>
+                <dd>{{ locale.format_money(p.receiving) }}<br>
+                    <small>{{ _("per week") }}</small></dd>
+            </dl>
+            % endif
+        </div>
+        % endif
+    % endcall
+% endmacro

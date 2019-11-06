@@ -22,7 +22,7 @@ if code == 500 and not err:
 referer = request.headers.get(b'Referer')
 
 [----------------------------------------] text/html
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 
 % set title = '' if response.html_template else msg
 

@@ -24,9 +24,9 @@ refundable_balances = participant.get_refundable_balances()
 title = _("Emptying your wallet")
 
 [---] text/html
-% from "templates/icons.html" import glyphicon
+% from "templates/macros/icons.html" import glyphicon
 
-% extends "templates/base-thin.html"
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
 

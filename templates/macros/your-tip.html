@@ -1,0 +1,210 @@
+% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/payment-methods.html" import payment_methods_icons with context
+
+% macro tip_form(tippee, tip=None, inline=False, disabled='')
+    % set tippee_is_stub = tippee.__class__.__name__ == 'AccountElsewhere'
+    % set tippee_p = tippee.participant if tippee_is_stub else tippee
+    % set pledging = tippee_p.payment_providers == 0
+    % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
+    % set tip = tip or user.get_tip_to(tippee_p, currency)
+    % set tip_currency = tip.amount.currency
+    % set new_currency, accepted_currencies = user.get_currencies_for(tippee, tip)
+    % if request.qs.get('currency') in accepted_currencies
+        % set new_currency = request.qs['currency']
+    % endif
+    % set currency_mismatch = tip_currency not in accepted_currencies
+    % if inline
+    <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="back_to" value="{{ request.line.uri.decoded }}" />
+        % if currency_mismatch
+            <p class="text-warning small">{{ _(
+                "You are currently donating {money_amount} per week to {name}, "
+                "but they no longer accept donations in {currency}. You can "
+                "input a new amount in {new_currency} below, or stop the "
+                "donation."
+                , money_amount=tip.amount, name=tippee_name
+                , currency=Currency(tip_currency), new_currency=Currency(new_currency)
+            ) }}</p>
+        % endif
+        {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch,
+                     accepted_currencies=accepted_currencies) }}
+        <button class="btn btn-{{ 'primary' if tip.renewal_mode > 0 else 'donate' }}
+                       btn-sm" {{ disabled }}>{{
+            _("Modify") if tip.renewal_mode > 0 else _("Pledge") if pledging else _("Donate")
+        }}</button>
+        % if tip.renewal_mode > 0
+        &nbsp;&nbsp;
+        <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Stop") }}</button>
+        % endif
+    </form>
+    % else
+        % if tip.renewal_mode > 0
+            % if currency_mismatch
+            <p class="alert alert-warning">{{ _(
+                "You are currently donating {money_amount} per week to {name}, but "
+                "they no longer accept donations in {currency}. You can select or "
+                "input a new amount in {new_currency} below, or stop the donation "
+                "by clicking on the Stop button."
+                , money_amount=tip.amount, name=tippee_name
+                , currency=Currency(tip.amount.currency), new_currency=Currency(c)
+            ) }}</p>
+            % else
+            <p>{{ _(
+                "You are currently donating {0} per week to {1}. You can select or "
+                "input a different amount below, or stop the donation by clicking "
+                "on the Stop button."
+                , tip.amount, tippee_name
+            ) }}</p>
+            % endif
+        % else
+            <p>{{ _("Please select or input an amount:") }}</p>
+        % endif
+        <form action="/~{{ assert(tip.tippee) }}/tip" method="POST" class="your-tip">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="currency" value="{{ new_currency }}" />
+            <div class="form-group">
+                {{ tip_select(tip, new_currency, tippee, disabled) }}
+            </div>
+        </form>
+        % if len(accepted_currencies) > 1
+            <br>
+            <p>{{ ngettext(
+                "The {currency_name} isn't your preferred currency? {n} other is supported:",
+                "The {currency_name} isn't your preferred currency? {n} others are supported:",
+                n=len(accepted_currencies) - 1, currency_name=Currency(new_currency)
+            ) if tippee_is_stub else ngettext(
+                "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:",
+                "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:",
+                n=len(accepted_currencies) - 1, currency_name=Currency(new_currency), username=tippee_name
+            ) }}</p>
+            <form action="" method="GET" class="form-inline">
+                <select class="form-control" name="currency">
+                % set paypal = tippee_p.payment_providers.__and__(2)
+                % for c in accepted_currencies
+                    % if c != new_currency
+                    <option value="{{ c }}">
+                        {{ locale.title(locale.currencies.get(c, c)) }}
+                        ({{ locale.currency_symbols.get(c, c) }})
+                        % if paypal and c not in constants.PAYPAL_CURRENCIES
+                            ({{ _("not supported by PayPal") }})
+                        % endif
+                    </option>
+                    % endif
+                % endfor
+                </select>
+                <button class="btn btn-default">{{ _("Switch") }}</button>
+            </form>
+        % endif
+    % endif
+% endmacro
+
+% macro tip_input(tip, new_currency, disabled='', small=False, hide_amount=False, accepted_currencies=None)
+    <div class="form-inline inline-block">
+    <div class="input-group {{ 'input-group-sm' if small else '' }}">
+        % if accepted_currencies and len(accepted_currencies) > 1
+        <div class="input-group-btn">
+            <select class="btn btn-default" name="currency">
+            % for c in constants.CURRENCIES
+                <option value="{{ c }}" {{ 'selected' if c == new_currency }}
+                        {{ 'disabled' if c not in accepted_currencies }}>{{
+                    locale.currency_symbols.get(c, c)
+                }}</option>
+            % endfor
+            </select>
+        </div>
+        % else
+        <div class="input-group-addon">{{ locale.currency_symbols.get(new_currency, new_currency) }}</div>
+        <input type="hidden" name="currency" value="{{ new_currency }}" />
+        % endif
+        <input type="tel" inputmode="decimal" name="amount" id="amount" placeholder="{{ _('Amount') }}"
+               class="amount form-control {{ 'input-sm' if small else '' }}"
+               value="{{ locale.format_money(tip.periodic_amount, format='amount_only')
+                         if tip.periodic_amount and not hide_amount else '' }}"
+               {{ disabled }} />
+    </div>
+    % set period = request.qs.get('period') or tip.period or 'weekly'
+    % if small
+        <select name="period" class="form-control {{ 'input-sm' if small else '' }}">
+            <option value="weekly">{{ _("per week") }}</option>
+            <option value="monthly" {{ 'selected' if period == 'monthly' }}>{{ _("per month") }}</option>
+            <option value="yearly" {{ 'selected' if period == 'yearly' }}>{{ _("per year") }}</option>
+        </select>
+    % else
+        <div class="btn-group btn-group-radio">
+            {% set periods = [
+                ('weekly', _("per week")),
+                ('monthly', _("per month")),
+                ('yearly', _("per year")),
+            ] %}
+            % for value, label in periods
+                <label class="btn btn-default">
+                    <input type="radio" name="period" value="{{ value }}" {{ 'checked' if period == value }} />
+                    <div class="btn-text">{{ label }}</div>
+                </label>
+            % endfor
+        </div>
+    % endif
+    </div>
+% endmacro
+
+% macro tip_select(tip, new_currency, tippee, disabled='', small=False)
+    % set tippee_is_stub = tippee.__class__.__name__ == 'AccountElsewhere'
+    % set tippee_p = tippee.participant if tippee_is_stub else tippee
+    % set pledging = tippee_p.payment_providers == 0
+    % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
+    % set tip_is_standard = []
+    <ul class="list-group radio-group">
+    % for std_tip in constants.STANDARD_TIPS[new_currency]
+        % set amount_is_a_match = std_tip.weekly == tip.amount
+        % if amount_is_a_match
+            {{ tip_is_standard.append(True) or '' }}
+        % endif
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="selected_amount" value="{{ std_tip.weekly.amount }}"
+                   class="hidden-xs" {{ 'checked' if amount_is_a_match }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(std_tip.label) }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "{0} per week ~ {1} per month ~ {2} per year",
+                    std_tip.weekly,
+                    std_tip.monthly,
+                    std_tip.yearly,
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+    % endfor
+        % set period = request.qs.get('period') or tip.period
+        % set hide_amount = tip_is_standard or tip.amount.currency != new_currency
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="selected_amount" value="custom" required
+                   class="hidden-xs" {{ 'checked' if tip.amount and not hide_amount }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
+                {{ tip_input(tip, new_currency, disabled, small=small, hide_amount=hide_amount) }}
+            </div>
+        </label>
+        </li>
+    </ul>
+    <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
+        _("Modify the donation") if tip.renewal_mode > 0 else
+        _("Pledge") if pledging else
+        _("Donate")
+    }}</button>
+    % if tip.renewal_mode > 0
+    <br>
+    <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{ _("Stop the donation") }}</button>
+    % elif tippee_p.payment_providers == 0
+    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
+        "{username} hasn't configured any payment method yet, so your donation "
+        "cannot actually be processed right now. We will notify you when payment "
+        "becomes possible.",
+        username=tippee_name
+    ) }}</p>
+    % else
+    <p class="text-center">{{ payment_methods_icons(tippee_p) }}</p>
+    % endif
+% endmacro

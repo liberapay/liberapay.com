@@ -112,7 +112,7 @@ if user == participant:
 title = _("Adding Money")
 
 [---] text/html
-% extends "templates/base-thin.html"
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
 
@@ -137,7 +137,7 @@ title = _("Adding Money")
                 "prompted to add money to your account."
             ) }}
             </p><p>
-            % from "templates/buttons.html" import find_donees with context
+            % from "templates/macros/buttons.html" import find_donees with context
             {{ find_donees() }}
         % elif weekly <= 0
             {{ _(
@@ -290,7 +290,7 @@ title = _("Adding Money")
 
     <fieldset id="identity">
     % set account = None
-    % include "templates/identity-form.html"
+    % include "templates/mangopay/identity-form.html"
     </fieldset>
     % endif
 

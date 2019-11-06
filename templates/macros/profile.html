@@ -1,0 +1,35 @@
+% macro profile_goal_bar(p)
+    % if p.goal and p.goal > 0
+        <div class="profile-goal-bar">
+            <span class="goal pull-right">{{ _("Goal: {0}", p.goal) }}</span>
+            {{ _("Income: {0}/week", p.receiving) }}
+            % set progress_cls = 'success' if p.receiving >= p.goal else 'info'
+            % set width = min(int(p.receiving / p.goal * 100), 100)
+            <div class="progress">
+                <div class="progress-bar progress-bar-{{ progress_cls }} width-{{ width }}">{{
+                    _("Mission accomplished!") if p.receiving >= p.goal else ''
+                }}</div>
+            </div>
+        </div>
+    % else
+        <p>{{ _("Income: {0}/week", p.receiving) }}</p>
+    % endif
+% endmacro
+
+% macro members_listing(participant)
+    % from "templates/macros/avatar-url.html" import avatar_img with context
+    <div>
+        % for t in participant.get_current_takes()
+            <div class="mini-user">
+                <a href="/{{ t.member_name }}/">
+                    {{ avatar_img(t) }}
+                    <span class="name">{{ t.member_name }}</span>
+                </a>
+            </div>
+        % endfor
+        <br>
+        <a class="btn btn-default" href="{{ participant.path('income/') }}">{{
+            _("View income shares")
+        }}</a><br>
+    </div>
+% endmacro

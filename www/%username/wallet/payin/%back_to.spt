@@ -66,7 +66,7 @@ if user == participant:
 title = _("Adding Money")
 
 [---] text/html
-% extends "templates/base-thin.html"
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
 
@@ -120,7 +120,7 @@ title = _("Adding Money")
     <p>{{ _("Please choose a payment method to add money:") }}</p>
 
     <div class="row payment-methods">
-    % from "templates/icons.html" import fontawesome
+    % from "templates/macros/icons.html" import fontawesome
     % set base_path = participant.path('wallet/payin')
     % set direct_debit_available = currency in constants.FEE_PAYIN_DIRECT_DEBIT
 
@@ -199,7 +199,7 @@ title = _("Adding Money")
         "You haven't set up any donations yet, once you do you'll be "
         "prompted to add money to your account."
     ) }}</p>
-    % from "templates/buttons.html" import find_donees with context
+    % from "templates/macros/buttons.html" import find_donees with context
     {{ find_donees() }}
 
 % endfor

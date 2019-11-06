@@ -1740,6 +1740,27 @@ class Participant(Model, MixinTeam):
              WHERE take.member = %s
         """, (self.id,))
 
+    def get_teams_data_for_display(self, locale):
+        return self.db.all("""
+            SELECT team_p AS participant
+                 , take.team AS id
+                 , ( SELECT s.content
+                       FROM statements s
+                      WHERE s.participant = take.team
+                        AND s.type = 'summary'
+                   ORDER BY s.lang = %s DESC, s.id
+                      LIMIT 1
+                   ) AS summary
+                 , ( SELECT count(*)
+                       FROM current_takes take2
+                      WHERE take2.team = take.team
+                    ) AS nmembers
+              FROM current_takes take
+              JOIN participants team_p ON team_p.id = take.team
+             WHERE take.member = %s
+          ORDER BY team_p.username
+        """, (locale.language, self.id))
+
     @cached_property
     def team_names(self):
         return sorted(self.db.all("""

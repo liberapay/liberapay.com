@@ -151,12 +151,12 @@ else:
 title = "Users Admin"
 
 [---] text/html
-% from 'templates/avatar-url.html' import avatar_img with context
-% from 'templates/icons.html' import fontawesome, glyphicon
-% from 'templates/nav.html' import querystring_nav
-% from "templates/payment-methods.html" import payment_method_icon with context
+% from 'templates/macros/avatar-url.html' import avatar_img with context
+% from 'templates/macros/icons.html' import fontawesome, glyphicon
+% from 'templates/macros/nav.html' import querystring_nav
+% from "templates/macros/payment-methods.html" import payment_method_icon with context
 
-% extends "templates/admin.html"
+% extends "templates/layouts/admin.html"
 
 % block content
 

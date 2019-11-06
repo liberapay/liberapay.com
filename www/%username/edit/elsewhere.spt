@@ -7,12 +7,22 @@ title = participant.username
 subhead = _("Linked Accounts")
 
 [---] text/html
-% extends "templates/profile-edit.html"
+% extends "templates/layouts/profile-edit.html"
+
+% from "templates/macros/elsewhere.html" import account_elsewhere with context
 
 % block form
 
     % set accounts = participant.get_accounts_elsewhere()
-    % set edit = True
-    % include "templates/connected-accounts.html"
+    <p>{{ _(
+        "Connecting the accounts you own on other platforms makes your Liberapay "
+        "profile easier to find, and helps to demonstrate that you are who you "
+        "claim to be."
+    ) }}</p>
+    <div class="accounts">
+        % for platform in website.platforms
+            {{ account_elsewhere(platform, accounts, edit=True) }}
+        % endfor
+    </div>
 
 % endblock

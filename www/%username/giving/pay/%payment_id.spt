@@ -137,8 +137,8 @@ if user == payer:
 title = _("Funding your donations")
 
 [---] text/html
-% from "templates/icons.html" import fontawesome, glyphicon
-% extends "templates/base-thin.html"
+% from "templates/macros/icons.html" import fontawesome, glyphicon
+% extends "templates/layouts/base-thin.html"
 
 % block thin_content
 

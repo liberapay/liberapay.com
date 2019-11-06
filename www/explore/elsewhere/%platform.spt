@@ -70,9 +70,9 @@ title = _("Explore")
 subhead = _("Social Networks")
 
 [---] text/html
-% from 'templates/profile-box.html' import profile_box_embedded with context
+% from 'templates/macros/profile-box.html' import profile_box_embedded with context
 
-% extends "templates/explore.html"
+% extends "templates/layouts/explore.html"
 
 % block content
 
@@ -149,7 +149,7 @@ subhead = _("Social Networks")
 
     <br>
     <p>{{ _("Explore other platforms:") }}</p>
-    % from "templates/nav.html" import nav with context
+    % from "templates/macros/nav.html" import nav with context
     <nav class="buttons">
     % for name, display_name in get_other_platforms()
         <a class="btn btn-default btn-lg" href="/explore/elsewhere/{{ name }}">{{ display_name }}</a>

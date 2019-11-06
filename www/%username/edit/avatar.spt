@@ -22,11 +22,11 @@ title = participant.username
 subhead = _("Avatar")
 
 [---] text/html
-% from "templates/auth.html" import auth_button with context
-% from 'templates/avatar-url.html' import avatar_img, avatar_url with context
-% from 'templates/icons.html' import glyphicon
+% from 'templates/macros/avatar-url.html' import avatar_img, avatar_url with context
+% from "templates/macros/elsewhere.html" import auth_button with context
+% from 'templates/macros/icons.html' import glyphicon
 
-% extends "templates/profile-edit.html"
+% extends "templates/layouts/profile-edit.html"
 
 % block form
 

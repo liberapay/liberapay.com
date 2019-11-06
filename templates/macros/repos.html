@@ -1,0 +1,41 @@
+% from "templates/macros/icons.html" import glyphicon
+
+% macro show_repo(repo, donate=False, edit=False, unlist=False)
+<div class="repo {{ 'edit' if edit or unlist else '' }}">
+    <h4>
+        <span class="inline-block">
+        <a href="{{ repo.url }}">{{ repo.name }}</a>
+        {{ _("(fork)") if repo.is_fork else '' }}
+        </span>
+        % if repo.stars_count != None
+        <span class="inline-block text-nowrap"><small>{{ glyphicon('star') }} {{ repo.stars_count }}</small></span>
+        % endif
+        % set last_update = to_age(repo.last_update, granularity='week')
+        <span class="inline-block"><small>{{
+            _("Updated this week") if last_update.days > -7 else
+            _("Updated {timespan_ago}", timespan_ago=last_update)
+        }}</small></span>
+        % if unlist
+        <span class="inline-block">
+        <button class="btn btn-warning btn-sm" name="show_on_profile:{{ repo.id }}"
+                value="off">{{ _("Unlist") }}</button>
+        </span>
+        % endif
+    </h4>
+    <p>{{ repo.description or '' }}</p>
+    % if edit
+    <p><label>
+        <input type="checkbox" name="show_on_profile:{{ repo.id }}" value="on"
+               {{ 'checked' if repo.show_on_profile }} />
+        {{ _("Show on your profile") }}
+    </label></p>
+    % elif donate
+        % set owner = repo.get_owner()
+        % set claimed = bool(owner) and owner.participant.status == 'active'
+        <a class="btn btn-donate {{ 'btn-lg' if claimed }}"
+           href="{{ owner.participant.path('donate') if claimed else
+                    '/on/%s/%s' % (repo.platform, repo.slug.replace('/', '?repo=')) }}"
+           >{{ _("Donate") if claimed else _("Pledge") }}</a>
+    % endif
+</div>
+% endmacro

@@ -29,9 +29,9 @@ abandoned_account = user_accounts_dict.get(account.platform, None)
 title = _("Please Confirm")
 
 [--------]
-% from 'templates/elsewhere.html' import platform_icon
+% from 'templates/macros/elsewhere.html' import platform_icon
 
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 % block content
 <div class="on-confirm">
 

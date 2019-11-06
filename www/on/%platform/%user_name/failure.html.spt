@@ -10,7 +10,7 @@ team = request.qs.get('team', '').lower() == 'true'
 title = _("Failure")
 
 [---]
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 % block content
 <div class="alert alert-danger">
 

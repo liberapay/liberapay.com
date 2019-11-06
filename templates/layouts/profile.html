@@ -1,0 +1,131 @@
+% extends "templates/layouts/profile-base.html"
+
+% from 'templates/macros/avatar-url.html' import avatar_img with context
+% from "templates/macros/icons.html" import fontawesome
+% from "templates/macros/payment-methods.html" import payment_methods_icons with context
+
+{% block head_alternates %}{% endblock %}
+
+{% block navbar_alternates %}{% endblock %}
+
+% block before_container
+<div class="container">
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+% if participant.accepts_tips
+    <div class="profile-header">
+        {{ avatar_img(participant, size=120) }}
+        % if participant.public_name
+            <h1>{{ participant.public_name }}<br><small>@{{ participant.username }}</small></h1>
+        % else
+            <h1>{{ participant.username }}</h1>
+        % endif
+        <p class="summary">{{ summary or '' }}</p>
+    </div>
+% else
+    <div class="panel panel-default profile-box">
+        <div class="panel-body">
+            <div class="avatar-col">
+                {{ avatar_img(participant, size=120) }}
+
+                % if participant.join_time
+                <p class="join-time">{{ _(
+                    "Joined {timespan_ago}.",
+                    timespan_ago=to_age(participant.join_time)
+                ) }}</p>
+                % endif
+                % if participant.status == 'closed'
+                <p>{{ _(
+                    "Closed {timespan_ago}.",
+                    timespan_ago=to_age(participant.closed_time)
+                ) }}</p>
+                % endif
+            </div>
+
+            <div class="col-right">
+                % set username = participant.username
+                % if participant.hide_giving
+                    <p>{{ _("{0} doesn't publish how much they give.", username) }}</p>
+                % else
+                    <p>{{ _("{0} gives {1} per week.", username, participant.giving) }}</p>
+                % endif
+
+                <p>{{ _("This user doesn't accept donations.") }}</p>
+            </div>
+        </div>
+    </div>
+% endif
+</div>
+<div class="col-md-1 col-lg-2">
+{% block profile_btn %}{% endblock %}
+</div>
+</div>
+</div>
+% if participant.accepts_tips
+    <div class="profile-header-bar">
+        <div class="container">
+        <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <div class="flex-row align-items-center space-between wrap">
+                % set username = participant.username
+                % set npatrons = Bold(participant.npatrons + participant.nteampatrons)
+                % set receiving = participant.receiving
+                % set goal = participant.goal
+
+                <div class="flex-col expand-xs text-center-xs">
+                % if participant.hide_receiving or participant.payment_providers == 0
+                    {{ ngettext(
+                        "{0} has {n} patron.",
+                        "{0} has {n} patrons.",
+                        npatrons, username
+                    ) }}
+                % elif goal and not receiving
+                    {{ _("{0}'s goal is to receive {1} per week.", username, Bold(goal)) }}
+                % else
+                    {{ ngettext(
+                        "{0} receives {1} per week from {n} patron.",
+                        "{0} receives {1} per week from {n} patrons.",
+                        npatrons, username, Bold(receiving)
+                    ) }}
+                    % if goal
+                        {{ _("Goal: {0}", Bold(goal)).replace(' ', '&nbsp;'|safe) }}
+                    % endif
+                % endif
+                </div>
+
+                <div class="flex-col expand-xs text-center-xs">
+                    % set tip = user.get_tip_to(participant)
+                    % set donate_path = participant.path('donate')
+                    % if tip.renewal_mode > 0
+                        <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
+                            _("Donating ({amount})", amount=tip.amount)
+                        }}</a>
+                    % elif participant.payment_providers == 0
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
+                            _("Pledge")
+                        }}</a>
+                    % else
+                        <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
+                            _("Donate")
+                        }}</a>
+                        &nbsp;
+                        <span class="text-muted">{{ payment_methods_icons(participant) }}</span>
+                    % endif
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </div>
+% endif
+% endblock
+
+% block before_content
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+% endblock
+
+% block after_content
+</div>
+</div>
+% endblock

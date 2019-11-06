@@ -12,13 +12,13 @@ from datetime import timedelta
 
 from pando.exceptions import UnknownBodyType
 
+from ..constants import SAFE_METHODS
 from .crypto import constant_time_compare, get_random_string
 
 
 TOKEN_LENGTH = 32
 CSRF_TOKEN = 'csrf_token'
 CSRF_TIMEOUT = timedelta(days=7)
-SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS', 'TRACE'}
 
 
 def reject_forgeries(state, request, response, website, _):

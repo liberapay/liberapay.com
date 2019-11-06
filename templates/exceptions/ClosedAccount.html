@@ -1,0 +1,10 @@
+<div class="text-center">
+<br>
+<h1>{{ _("This account is closed") }}</h1>
+% if user.ANON and not response.closed_account.is_suspended
+<br>
+<h3>{{ _("Are you the account owner?") }}</h3>
+<p>{{ _("Log in to reopen your account.") }}</p>
+<p><a class="btn btn-default" href="/log-in?back_to={{ urlquote(request.line.uri) }}" rel="nofollow">{{ _("Log in") }}</a></p>
+% endif
+</div>

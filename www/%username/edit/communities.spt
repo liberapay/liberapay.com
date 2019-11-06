@@ -18,15 +18,31 @@ if request.method == 'POST':
     user.upsert_community_membership(is_on, c_id)
     form_post_success(state)
 
+communities = participant.get_communities()
+
 title = participant.username
 subhead = _("Communities")
 
 [---] text/html
-% extends "templates/profile-edit.html"
+% extends "templates/layouts/profile-edit.html"
 
 % block form
 
-    % set edit = True
-    % include "templates/community-listing.html"
+    <form action="" method="POST" class="js-submit" data-on-success="fadeOut:li">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <ul class="communities memberships">
+            % for community in communities
+            <li>
+                <a href="/for/{{ community.name }}/">{{ community.pretty_name }}</a>
+                <div class="nmembers">{{
+                    ngettext("with {n} other", "with {n} others", community.nmembers - 1)
+                }}</div>
+                <button name="do" value="leave:{{ community.id }}"
+                        class="btn btn-default btn-xs">{{ _('Leave') }}</button>
+            </li>
+            % endfor
+        </ul>
+    </form>
+    <p><a class="btn btn-default" href="/explore/communities">{{ _("Explore communities") }}</a></p>
 
 % endblock

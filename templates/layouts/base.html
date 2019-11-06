@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="{{ locale.language }}">
+<head prefix="og: http://ogp.me/ns#">
+    % if locale.completion < 0.5
+        <meta name="robots" content="noindex,nofollow" />
+    % endif
+    % set full_title = full_title or ' - '.join(map(str, filter(None, (subhead, title, 'Liberapay'))))
+    {% block head_early %}{% endblock %}
+    <title>{{ full_title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ website.asset('liberapay/icon-v2_white-on-yellow.200.png') }}">
+    <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset('forkawesome/1.0.11/css/fork-awesome.min.css') }}" type="text/css">
+    % block head_alternates
+    % if request.method in constants.SAFE_METHODS and response.code == 200
+        <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri.decoded }}" />
+        % for l_completion, l_code, l_name, l_url in website.lang_list
+            <link rel="alternate" hreflang="{{ l_code }}" href="{{ l_url }}{{ request.line.uri.decoded }}" />
+        % endfor
+    % endif
+    % endblock
+    <meta name="theme-color" content="#f6c915">
+    % if dispatch_result.canonical
+        <link rel="canonical" href="{{ website.canonical_scheme + '://' + request.hostname + dispatch_result.canonical }}" />
+    % endif
+    {% block head %}{% endblock %}
+</head>
+% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from 'templates/macros/nav.html' import nav, nav_about, nav_explore with context
+% from 'templates/macros/search.html' import search_form with context
+<body id="{{ page_id or '' }}">
+
+% if not website.db
+<div class="notification notification-error">{{ _(
+    "We're currently experiencing technical failures. As a result most things don't work. "
+    "Sorry for the inconvenience, we'll get everything back to normal ASAP."
+) }}</div>
+% elif db_is_readonly
+<div class="notification notification-error">{{ _(
+    "Liberapay is currently in read-only mode as we are migrating the database. "
+    "This shouldn't take more than a few minutes."
+) }}</div>
+% endif
+
+    <nav class="navbar navbar-liberapay navbar-static-top navbar-collapse"
+         id="navbar">
+        <div class="container">
+            <ul class="nav navbar-nav pull-right navbar-always">
+                <li class="collapsed">
+                    <a role="button" class="collapsed" data-toggle="collapse"
+                       data-target="#navbar-liberapay-collapse" data-parent="#navbar"
+                       aria-expanded="false">
+                        <span class="sr-only">{{ _("Toggle navigation") }}</span>
+                        {{ glyphicon('menu-hamburger') }}
+                    </a>
+                </li>
+                % block navbar_alternates
+                % include "templates/layouts/components/navbar-common.html"
+                % endblock
+            % if user
+                % include "templates/layouts/components/navbar-logged-in.html"
+            % elif response.html_template != 'templates/exceptions/AuthRequired.html' and not no_navbar_sign_in
+                % from "templates/macros/sign-in-link.html" import sign_in_link with context
+                <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
+            % endif
+            </ul>
+            <div class="collapse navbar-collapse navbar-left" id="navbar-liberapay-collapse">
+            <ul class="nav navbar-nav">
+                % if page_id != 'homepage'
+                <li class="hidden-xs">
+                    <a class="navbar-brand" href="/">{{ fontawesome('liberapay', _("Homepage")) }}</a></li>
+                <li class="visible-xs">
+                    <a href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
+                % endif
+                {{ nav([
+                    ('/explore/', _('Explore'), {
+                        'icon': 'glyphicon glyphicon-globe',
+                        'dropdown': nav_explore(),
+                    }),
+                    ('/search', _('Search'), {
+                        'icon': 'glyphicon glyphicon-search',
+                        'form': True,
+                        'role': 'search',
+                        'dropdown': search_form(autocomplete=False),
+                    }),
+                    ('/about/', _('About'), {
+                        'icon': 'glyphicon glyphicon-question-sign',
+                        'dropdown': nav_about(),
+                    }),
+                ]) }}
+            </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="main">
+    % block main
+        {% block before_container %}{% endblock %}
+        <div class="container">
+        % block before_content
+            % block heading
+                % if title
+                    <h1 class="main-title {{ 'hidden-xs hidden-sm' if subhead else '' }}">{{ title }}</h1>
+                % endif
+            % endblock
+            <div id="subnav">{% block subnav %}{% endblock %}</div>
+        % endblock
+        {% block content %}{% endblock %}
+        {% block after_content %}{% endblock %}
+        </div>
+    % endblock
+    </div>
+
+    <footer class="container" role="navigation">
+        <ul>
+            <li><a href="/about/">{{ _("About") }}</a></li>
+            <li><a href="/about/contact">{{ _("Contact Us") }}</a></li>
+            <li><a href="/about/faq">{{ _("FAQ") }}</a></li>
+            <li><a href="/about/legal">{{ _("Legal") }}</a></li>
+        </ul>
+        <ul class="icons">
+            <li><a href="https://medium.com/liberapay-blog">{{ fontawesome('medium', 'Medium') }}</a></li>
+            <li><a href="https://mastodon.xyz/@Liberapay">{{ fontawesome('mastodon', 'Mastodon') }}</a></li>
+            <li><a href="https://framasphere.org/u/liberapay">{{ fontawesome('diaspora', 'Diaspora*') }}</a></li>
+            <li><a href="https://github.com/liberapay/liberapay.com">{{ fontawesome('github', 'GitHub') }}</a></li>
+            <li><a href="https://twitter.com/liberapay">{{ fontawesome('twitter', 'Twitter') }}</a></li>
+            <li><a href="https://www.facebook.com/Liberapay-472128142945598/">{{ fontawesome('facebook', 'Facebook') }}</a></li>
+        </ul>
+    </footer>
+
+<script src="{{ website.asset('jquery.min.js') }}"></script>
+<script src="{{ website.asset('bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ website.asset('base.js') }}"></script>
+
+{% block scripts %}{% endblock %}
+
+% set _success = request.qs.get('success')
+% if _success
+% set _success = _success and b64decode_s(_success, default=None)
+<div id="notification-area-bottom"><div class="notification notification-success">{{
+    _success
+}}<span class="close">&times;</span></div></div>
+% endif
+
+% if state['partial_translation']
+    % include "_i18n_warning.html"
+% endif
+
+</body>
+</html>

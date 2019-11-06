@@ -1,0 +1,137 @@
+% from "templates/macros/icons.html" import fontawesome, icon_span
+
+% macro nav(items, base='')
+    % set current = request.path.raw.startswith(base) and request.path.raw[len(base):].lstrip('/').split('/', 1)[0]
+    % for item in items
+        % set slug = item[0]
+        % set options = item[2] or {}
+        % set icon = options['icon']
+        % set icon = icon_span(icon) if icon else ''
+        % set classes = (options['class'] or '') + (' active' if slug.strip('/') == current else '')
+        <li{% if classes %} class="{{ classes }}"{% endif %}>
+            % if options['dropdown']
+                % set button_extra_cls = 'dropdown-toggle-form' if options['form'] else ''
+                <div class="dropdown dropdown-hover">
+                    <a class="dropdown-toggle navbar-btn {{ button_extra_cls }}"
+                       href="{{ base }}{{ slug }}" data-toggle="dropdown" aria-expanded="true">
+                        {{ icon }}
+                        <span>{{ item[1] }}</span>
+                    </a>
+                    % if options['role']
+                        <div class="dropdown-menu" role="{{ options['role'] }}">{{ options['dropdown'] }}</div>
+                    % else
+                        <ul class="dropdown-menu" role="menu">{{ options['dropdown'] }}</ul>
+                    % endif
+                </div>
+            % elif options['subnav']
+                <input id="subnav-{{ id(item) }}" class="subnav-toggler sr-only" type="checkbox" {% if slug.strip('/') == current %} checked {% endif %} />
+                <label for="subnav-{{ id(item) }}">{{ icon }} {{ item[1] }} <span class="caret"></span></label>
+                <ul class="nav level2">{{ options['subnav'] }}</ul>
+            % elif slug
+                <a href="{{ base }}{{ slug }}">{{ icon }} {{ item[1] }}</a>
+            % else
+                <span>{{ icon }} {{ item[1] }}</span>
+            % endif
+        </li>
+    % endfor
+% endmacro
+
+% macro nav_about()
+    {{ nav([
+        ('/', _('Introduction')),
+        ('/faq', _('FAQ')),
+        ('/global', _('Global')),
+        ('/payment-processors', _('Payment Processors')),
+        ('/teams', _('Teams')),
+        ('/stats', _('Stats')),
+        ('/legal', _('Legal')),
+        ('/feeds', _('Feeds')),
+        ('/contact', _('Contact')),
+        ('/security', _('Security')),
+        ('/logos', _('Logos')),
+    ], base='/about') }}
+% endmacro
+
+% macro nav_admin()
+    {{ nav([
+        ('/', fontawesome('home', "Index")),
+        ('/admins', "Audit Log"),
+        ('/debug', "Debugging"),
+        ('/emails', "Email Addresses"),
+        ('/notifications', "Notifications"),
+        ('/payday', "Payday"),
+        ('/payments', "Payments"),
+        ('/rate-limiting', "Rate Limiting"),
+        ('/users', "Users"),
+    ], base='/admin') }}
+% endmacro
+
+% macro nav_explore()
+    {{ nav([
+        ('/', _('Overview')),
+        ('/teams', _('Teams')),
+        ('/organizations', _('Organizations')),
+        ('/individuals', _('Individuals')),
+        ('/pledges', _('Unclaimed Donations')),
+        ('/repositories', _('Repositories')),
+        ('/elsewhere', _('Social Networks')),
+        ('/communities', _('Communities')),
+    ], base='/explore') }}
+% endmacro
+
+% macro nav_settings(participant)
+    % set base = '/'+participant.username
+    {{ nav(([
+        ('/edit', _("Profile"), {
+            'subnav': nav([
+                ('/username', _("Name")),
+                ('/avatar', _("Avatar")),
+                ('/currencies', _("Currencies")),
+                ('/goal', _("Goal")),
+                ('/statement', _("Statement")),
+                ('/elsewhere', _("Linked Accounts")),
+                ('/repositories', _("Repositories")),
+                ('/teams', _("Teams")),
+                ('/communities', _("Communities")),
+                ('/privacy', _("Privacy"))
+            ], base=participant.path('edit'))
+        }),
+        ('/giving/', _("Giving")),
+        ('/receiving/', _("Receiving")),
+        ('/ledger/', _("Ledger")),
+        ('/payment/', _("Payment Processors")),
+        ('/identity', _("Identity")),
+        ('/settings/', _("Account")),
+        ('/emails/', _("Emails")),
+        ('/notifications/', _("Notifications")),
+        ('/widgets/', _("Widgets")),
+    ] if participant.is_person else [
+        ('/edit', _("Profile"), {
+            'subnav': nav([
+                ('/username', _("Name")),
+                ('/avatar', _("Avatar")),
+                ('/currencies', _("Currencies")),
+                ('/goal', _("Goal")),
+                ('/statement', _("Statement")),
+                ('/elsewhere', _("Linked Accounts")),
+                ('/repositories', _("Repositories")),
+                ('/members', _("Members")),
+                ('/privacy', _("Privacy")),
+            ], base=participant.path('edit'))
+        }),
+        ('/receiving/', _("Receiving")),
+        ('/emails/', _("Emails")),
+        ('/widgets/', _("Widgets")),
+    ]), base=base) }}
+    % if user.is_admin
+    {{ nav([('/admin', "Admin")], base=base) }}
+    % endif
+% endmacro
+
+% macro querystring_nav(key, values, current)
+    % for value, title in values
+        <li{% if value == current %} class="active"{% endif %}>
+            <a href="?{{ key }}={{ value }}">{{ title }}</a>
+        </li>
+    % endfor
+% endmacro

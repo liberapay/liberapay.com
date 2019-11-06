@@ -42,7 +42,7 @@ if request.method == 'POST':
                     "reasons we will have to create a new account for you in our payment "
                     "partner's system, and transfer the money from your old account."
                 )
-                response.render('templates/confirm.spt', state, msg=confirm, back_to='')
+                response.render('simplates/confirm.spt', state, msg=confirm, back_to='')
             payday_is_running = website.db.one("""
                 SELECT ts_start FROM paydays WHERE ts_start > ts_end
             """) is not None
@@ -51,7 +51,7 @@ if request.method == 'POST':
                     "We can't change the type of your account during payday, please "
                     "try again in a few minutes."
                 )
-                response.render('templates/retry-later.spt', state, msg=msg)
+                response.render('simplates/retry-later.spt', state, msg=msg)
             old_account = account
             account = NaturalUser() if new_kind == 'individual' else LegalUser()
             last_change = participant.get_last_event_of_type('mangopay-account-change')
@@ -76,7 +76,7 @@ if request.method == 'POST':
             "do, you may have to go through the identity verification process "
             "again."
         )
-        response.render('templates/confirm.spt', state, msg=confirm, back_to='', cls='warning')
+        response.render('simplates/confirm.spt', state, msg=confirm, back_to='', cls='warning')
 
     if not account.Tag:
         account.Tag = website.canonical_url + '/~%i/' % participant.id
@@ -204,7 +204,7 @@ else:
 {"msg": success}
 
 [---] text/html
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 
 % block content
 <div class="paragraph">
@@ -220,7 +220,7 @@ else:
 
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
-    % include "templates/identity-form.html"
+    % include "templates/mangopay/identity-form.html"
 
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 
@@ -255,7 +255,7 @@ else:
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
-    % include "templates/identity-form-2.html"
+    % include "templates/mangopay/identity-form-2.html"
 
     <button class="btn btn-primary" type="submit">{{ _("Save") }}</button>
 

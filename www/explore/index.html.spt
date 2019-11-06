@@ -5,10 +5,10 @@ query_cache = website.db_qc5
 title = _("Explore")
 
 [---]
-% from 'templates/avatar-url.html' import avatar_img, avatar_default with context
-% from 'templates/icons.html' import glyphicon
+% from 'templates/macros/avatar-url.html' import avatar_img, avatar_default with context
+% from 'templates/macros/icons.html' import glyphicon
 
-% extends "templates/explore.html"
+% extends "templates/layouts/explore.html"
 
 % block content
 

@@ -10,7 +10,7 @@ subhead = _("Account")
 is_a_person = participant.kind not in ('group', 'community')
 
 [-----------------------------------------------------------------------------]
-% extends "templates/settings.html"
+% extends "templates/layouts/settings.html"
 
 % block content
 
@@ -31,7 +31,8 @@ is_a_person = participant.kind not in ('group', 'community')
 
         % if is_a_person
         <h3>{{ _("Password") }}</h3>
-        % include "templates/password-form.html"
+        % from "templates/macros/password-form.html" import password_form with context
+        {{ password_form(participant) }}
 
         <div>
             <h3>{{ _("Close") }}</h3>

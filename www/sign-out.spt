@@ -21,7 +21,7 @@ if request.method == 'POST':
 
 title = _("Sign Out")
 [---] text/html
-% extends "templates/base.html"
+% extends "templates/layouts/base.html"
 % block content
     <form id="sign-out" method="POST">
         <input name="back_to" type="hidden" value="/" />

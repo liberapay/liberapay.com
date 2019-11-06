@@ -27,7 +27,7 @@ from pando.utils import maybe_encode
 from liberapay import utils, wireup
 from liberapay.billing.payday import Payday, create_payday_issue
 from liberapay.cron import Cron, Daily, Weekly
-from liberapay.exceptions import PayinMethodIsUnavailable, PayinsAreDisabled, TooManyAttempts
+from liberapay.exceptions import PayinMethodIsUnavailable, TooManyAttempts
 from liberapay.i18n.base import (
     Bold, Country, Currency, add_currency_to_state, set_up_i18n, to_age
 )
@@ -224,10 +224,8 @@ def check_payin_allowed(website, request, user, method=None):
     # Check permission
     if user.is_admin:
         pass
-    elif website.app_conf.payin_methods['*'] is False:
-        raise PayinsAreDisabled
     elif website.app_conf.payin_methods.get(method) is False:
-        raise PayinMethodIsUnavailable
+        raise PayinMethodIsUnavailable(method)
     # Limit payment attempts
     if request.method == 'POST':
         website.db.hit_rate_limit('payin.from-user', user.id, TooManyAttempts)
@@ -382,7 +380,7 @@ if hasattr(pando.Response, 'refresh'):
     raise Warning('pando.Response.refresh() already exists')
 def _refresh(response, state, **extra):
     # https://en.wikipedia.org/wiki/Meta_refresh
-    raise response.render('templates/refresh.spt', state, **extra)
+    raise response.render('simplates/refresh.spt', state, **extra)
 pando.Response.refresh = _refresh
 
 if hasattr(pando.Response, 'render'):

@@ -1,0 +1,16 @@
+% extends "templates/layouts/base.html"
+
+% block head_early
+    % set nofollow = ['nofollow'] if participant.profile_nofollow else []
+    % set noindex = ['noindex'] if participant.profile_noindex else []
+    % if nofollow or noindex
+    <meta name="robots" content="{{ ','.join(noindex + nofollow) }}" />
+    % endif
+    <meta property="og:title" content="{{ full_title }}">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="{{ website.canonical_scheme + '://' + request.hostname + '/' + participant.username }}">
+    <meta property="og:image" content="{{ participant.avatar_url }}">
+    <meta property="og:site_name" content="Liberapay">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@liberapay">
+% endblock

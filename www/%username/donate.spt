@@ -9,12 +9,11 @@ if participant.goal == -1:
 full_title = _("Donate to {0} via Liberapay", participant.username)
 
 [---] text/html
-% extends "templates/profile-base.html"
+% extends "templates/layouts/profile-base.html"
 
-% from 'templates/elsewhere.html' import account_elsewhere with context
-% from "templates/payment-methods.html" import describe_payment_methods with context
-% from 'templates/profile-goal-bar.html' import profile_goal_bar with context
-% from 'templates/your-tip.html' import tip_form with context
+% from 'templates/macros/elsewhere.html' import account_elsewhere with context
+% from "templates/macros/payment-methods.html" import describe_payment_methods with context
+% from 'templates/macros/your-tip.html' import tip_form with context
 
 % block head_early
 {{ super() }}
@@ -77,7 +76,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
             participant.username
         ) }}</p>
         % for platform in website.platforms if platform.name in e_accounts
-            {{ account_elsewhere(platform, e_accounts, None) }}
+            {{ account_elsewhere(platform, e_accounts) }}
         % endfor
         <br>
     % endif

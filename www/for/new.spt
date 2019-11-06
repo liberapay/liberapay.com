@@ -25,9 +25,9 @@ lang = lang or next(iter(select_langs.keys()))
 title = _("Start a new community")
 
 [---] text/html
-% from "templates/select-lang.html" import lang_options with context
+% from "templates/macros/select-lang.html" import lang_options with context
 
-% extends "templates/panel.html"
+% extends "templates/layouts/panel.html"
 
 % block panel_body
 <form action="" class="block-labels" method="POST">
