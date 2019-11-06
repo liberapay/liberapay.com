@@ -4,7 +4,7 @@ from liberapay.utils import get_participant
 [---]
 participant = get_participant(state, restrict=False)
 if participant.goal == -1:
-    raise response.error(403, UserDoesntAcceptTips(participant.username))
+    raise UserDoesntAcceptTips(participant.username)
 
 full_title = _("Donate to {0} via Liberapay", participant.username)
 
