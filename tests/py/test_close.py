@@ -63,7 +63,7 @@ class TestClosing(FakeTransfersHarness):
 
     # dbtd - distribute_balances_to_donees
 
-    def test_dbtd_distributes_balance_as_final_gift(self):
+    def test_dbtd_distributes_balance(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')

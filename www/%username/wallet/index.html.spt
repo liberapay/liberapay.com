@@ -283,7 +283,7 @@ if user.is_admin:
                 % if event['team']
                     for team <a href="/{{ event['team_name'] }}/">{{ event['team_name'] }}</a>
                 % endif
-            % elif context in ('take', 'take-in-advance')
+            % elif context in ('take', 'take-in-advance', 'take-in-arrears')
                 {{ _("anonymous donation for your role in the {0} team",
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
                 % if event['unit_amount']
@@ -294,6 +294,9 @@ if user.is_admin:
                         weeks, money_amount=event['unit_amount']
                     ) }})
                 % endif
+                % if context == 'take-in-arrears'
+                    ({{ _("in arrears") }})
+                % endif
             % elif context == 'refund'
                 {{ _("donation refund") }}
             % elif context == 'expense'
@@ -303,7 +306,7 @@ if user.is_admin:
                      link_close='</a>'|safe,
                      payer=('<a href="/{0}/">{0}</a>'|safe).format(event['username']),
                 ) }}
-            % elif context in ('tip', 'tip-in-advance')
+            % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears')
                 {{ _("anonymous donation") }}
                 % if event['unit_amount']
                     % set weeks = int(event['amount'] / event['unit_amount'])
@@ -312,6 +315,9 @@ if user.is_admin:
                         "{n} weeks of {money_amount}",
                         weeks, money_amount=event['unit_amount']
                     ) }})
+                % endif
+                % if context == 'tip-in-arrears'
+                    ({{ _("in arrears") }})
                 % endif
             % elif context == 'final-gift'
                 {{ _("one-off donation from someone closing their account") }}
@@ -331,7 +337,7 @@ if user.is_admin:
             % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
             % if context == 'final-gift'
                 {{ _("final gift to {0}", to) }}
-            % elif context in ('take', 'take-in-advance')
+            % elif context in ('take', 'take-in-advance', 'take-in-arrears')
                 {{ _("donation to {0} for their role in the {1} team", to,
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
                 % if event['unit_amount']
@@ -342,6 +348,9 @@ if user.is_admin:
                         weeks, money_amount=event['unit_amount']
                     ) }})
                 % endif
+                % if context == 'tip-in-arrears'
+                    ({{ _("in arrears") }})
+                % endif
             % elif context == 'refund'
                 {{ _("refund of anonymous donation") }}
             % elif context == 'expense'
@@ -351,7 +360,7 @@ if user.is_admin:
                      link_close='</a>'|safe,
                      payee=to,
                 ) }}
-            % elif context in ('tip', 'tip-in-advance')
+            % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears')
                 {{ _("donation to {0}", to) }}
                 % if event['unit_amount']
                     % set weeks = int(abs(event['amount'] / event['unit_amount']))
@@ -360,6 +369,9 @@ if user.is_admin:
                         "{n} weeks of {money_amount}",
                         weeks, money_amount=event['unit_amount']
                     ) }})
+                % endif
+                % if context == 'tip-in-arrears'
+                    ({{ _("in arrears") }})
                 % endif
             % elif context == 'chargeback'
                 {{ _("chargeback") }}

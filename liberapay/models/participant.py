@@ -631,35 +631,79 @@ class Participant(Model, MixinTeam):
             self.final_check(cursor)
             self.update_status('closed', cursor)
 
-    def distribute_balances_to_donees(self, final_gift=True):
+    def distribute_balances_to_donees(self, arrears_only=False):
         """Distribute the user's balance(s) downstream.
         """
         if self.balance == 0:
             return
 
         tips = self.db.all("""
-            SELECT amount, tippee, t.ctime, p.kind
-              FROM current_tips t
-              JOIN participants p ON p.id = t.tippee
-             WHERE tipper = %s
-               AND renewal_mode > 0
-               AND p.status = 'active'
-               AND (p.mangopay_user_id IS NOT NULL OR kind = 'group')
-               AND p.is_suspended IS NOT TRUE
+            SELECT tip.amount, tip.tippee, tip.ctime, tippee_p.kind
+                 , coalesce_currency_amount((
+                       SELECT sum(tip_at_the_time.amount, tip.amount::currency)
+                         FROM paydays payday
+                         JOIN LATERAL (
+                                  SELECT tip2.*
+                                    FROM tips tip2
+                                   WHERE tip2.tipper = tip.tipper
+                                     AND tip2.tippee = tip.tippee
+                                     AND tip2.mtime < payday.ts_start
+                                ORDER BY tip2.mtime DESC
+                                   LIMIT 1
+                              ) tip_at_the_time ON true
+                        WHERE payday.ts_start > tip.ctime
+                          AND payday.ts_start > '2018-08-15'
+                          AND payday.ts_end > payday.ts_start
+                          AND NOT EXISTS (
+                                  SELECT 1
+                                    FROM transfers tr
+                                   WHERE tr.tipper = tip.tipper
+                                     AND coalesce(tr.team, tr.tippee) = tip.tippee
+                                     AND tr.context IN ('tip', 'take')
+                                     AND tr.timestamp >= payday.ts_start
+                                     AND tr.timestamp <= payday.ts_end
+                                     AND tr.status = 'succeeded'
+                              )
+                   ), tip.amount::currency) AS arrears_due
+                 , coalesce_currency_amount((
+                       SELECT sum(tr.amount, tip.amount::currency)
+                         FROM transfers tr
+                        WHERE tr.tipper = tip.tipper
+                          AND coalesce(tr.team, tr.tippee) = tip.tippee
+                          AND tr.context IN ('tip-in-arrears', 'take-in-arrears')
+                          AND tr.status = 'succeeded'
+                   ), tip.amount::currency) AS arrears_paid
+              FROM current_tips tip
+              JOIN participants tippee_p ON tippee_p.id = tip.tippee
+             WHERE tip.tipper = %s
+               AND tip.renewal_mode > 0
+               AND tippee_p.status = 'active'
+               AND (tippee_p.mangopay_user_id IS NOT NULL OR tippee_p.kind = 'group')
+               AND tippee_p.is_suspended IS NOT TRUE
         """, (self.id,))
 
         for tip in tips:
             if tip.kind == 'group':
                 tip.team = Participant.from_id(tip.tippee)
-                takes = tip.team.get_current_takes()
+                unfiltered_takes = tip.team.get_current_takes()
                 tip.takes = [
-                    t for t in takes
-                    if t['is_identified'] and not t['is_suspended'] and t['member_id'] != self.id
+                    t for t in unfiltered_takes
+                    if t.is_identified and not t.is_suspended and t.member_id != self.id
                 ]
-                if len(takes) == 1 and len(tip.takes) == 1 and tip.takes[0]['amount'] == 0:
+                if len(unfiltered_takes) == 1 and tip.takes and tip.takes[0].amount == 0:
                     # Team of one with a zero take
-                    tip.takes[0]['amount'].amount = Decimal('1')
-                tip.total_takes = MoneyBasket(*[t['amount'] for t in tip.takes])
+                    tip.takes[0].amount.amount = Decimal('1')
+                currency = tip.amount.currency
+                income_amount = tip.team.receiving.convert(currency) + tip.amount
+                if income_amount == 0:
+                    income_amount = Money.MINIMUMS[currency]
+                manual_takes_sum = MoneyBasket(t.amount for t in tip.takes if t.amount > 0)
+                auto_take = income_amount - manual_takes_sum.fuzzy_sum(currency)
+                if auto_take < 0:
+                    auto_take = Money.ZEROS[currency]
+                for t in tip.takes:
+                    t.amount = auto_take if t.amount < 0 else t.amount.convert(currency)
+                tip.total_takes = MoneyBasket(t.amount for t in tip.takes)
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
         transfers = []
 
@@ -684,12 +728,18 @@ class Participant(Model, MixinTeam):
                 pro_rated = (initial_balance * rate).round_down()
                 if pro_rated == 0:
                     continue
+                arrears = min(max(tip.arrears_due - tip.arrears_paid, 0), pro_rated)
+                advance = pro_rated - arrears
+                assert arrears > 0 or advance > 0
+                assert (arrears + advance) == pro_rated
+                arrears_percentage = arrears / (arrears + advance)
+                advance_percentage = 1 - arrears_percentage
                 if tip.kind == 'group':
                     team_id = tip.tippee
                     balance = pro_rated
                     fuzzy_takes_sum = tip.total_takes.fuzzy_sum(tip.amount.currency)
                     for take in tip.takes:
-                        nominal = take['amount']
+                        nominal = take.amount
                         fuzzy_nominal = nominal.convert(tip.amount.currency)
                         take_percentage = fuzzy_nominal / fuzzy_takes_sum
                         actual = min(
@@ -700,18 +750,33 @@ class Participant(Model, MixinTeam):
                             continue
                         balance -= actual
                         unit_amount = (tip.amount * take_percentage).round_up()
+                        arr = min(
+                            (actual * arrears_percentage).round_up(),
+                            actual
+                        )
+                        adv = min(
+                            (actual * advance_percentage).round_up(),
+                            actual - arr
+                        )
+                        assert arr > 0 or adv > 0
+                        assert (arr + adv) == actual
                         transfers_in_this_currency.append(
-                            [take['member_id'], actual, team_id, wallet, unit_amount]
+                            [take.member_id, adv, arr, team_id, wallet, unit_amount]
                         )
                 else:
                     transfers_in_this_currency.append(
-                        [tip.tippee, pro_rated, None, wallet, tip.amount]
+                        [tip.tippee, advance, arrears, None, wallet, tip.amount]
                     )
                 distributed += pro_rated
 
             diff = initial_balance - distributed
             if diff != 0 and transfers_in_this_currency:
-                transfers_in_this_currency[0][1] += diff  # Give it to the first receiver.
+                # Give it to the first recipient.
+                tr = transfers_in_this_currency[0]
+                if tr[1]:
+                    tr[1] += diff
+                else:
+                    tr[2] += diff
 
             transfers.extend(transfers_in_this_currency)
 
@@ -721,15 +786,23 @@ class Participant(Model, MixinTeam):
         from liberapay.billing.transactions import transfer
         db = self.db
         tipper = self.id
-        for tippee, amount, team, wallet, unit_amount in transfers:
-            if final_gift:
-                context = 'final-gift'
-            else:
+        for tippee, advance, arrears, team, wallet, unit_amount in transfers:
+            if arrears:
+                context = 'take-in-arrears' if team else 'tip-in-arrears'
+                balance = transfer(
+                    db, tipper, tippee, arrears, context,
+                    team=team, unit_amount=unit_amount,
+                    tipper_mango_id=self.mangopay_user_id,
+                    tipper_wallet_id=wallet.remote_id
+                )[0]
+            if advance and not arrears_only:
                 context = 'take-in-advance' if team else 'tip-in-advance'
-            balance = transfer(
-                db, tipper, tippee, amount, context, team=team, unit_amount=unit_amount,
-                tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
-            )[0]
+                balance = transfer(
+                    db, tipper, tippee, advance, context,
+                    team=team, unit_amount=unit_amount,
+                    tipper_mango_id=self.mangopay_user_id,
+                    tipper_wallet_id=wallet.remote_id
+                )[0]
 
         self.set_attributes(balance=balance)
 
@@ -747,28 +820,83 @@ class Participant(Model, MixinTeam):
         tip = self.get_tip_to(LiberapayOrg)
         if not tip.amount:
             tip = self.get_tip_to(Liberapay)
-        if tip.amount and donate:
-            if tip.tippee == Liberapay.id:
-                context = 'take-in-advance'
-                team = Liberapay.id
+        context, team = None, None
+        if donate:
+            if tip.amount:
+                if tip.tippee == Liberapay.id:
+                    team = Liberapay.id
             else:
-                context = 'tip-in-advance'
-                team = None
-            unit_amount = tip.amount
+                context = 'final-gift'
         else:
-            context = 'final-gift' if donate else 'indirect-payout'
-            team = None
-            unit_amount = None
+            context = 'indirect-payout'
         from liberapay.billing.transactions import transfer
         for wallet in self.get_current_wallets():
             if wallet.balance == 0:
                 continue
-            balance = transfer(
-                self.db, self.id, LiberapayOrg.id, wallet.balance, context,
-                team=team, unit_amount=unit_amount.convert(wallet.balance.currency) if unit_amount else None,
-                tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
-            )[0]
-            self.set_attributes(balance=balance)
+            if context:
+                balance = transfer(
+                    self.db, self.id, LiberapayOrg.id, wallet.balance, context,
+                    team=team, unit_amount=tip.amount.convert(wallet.balance.currency) or None,
+                    tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
+                )[0]
+            else:
+                row = self.db.one("""
+                    SELECT coalesce_currency_amount((
+                               SELECT sum(tip_at_the_time.amount, tip.amount::currency)
+                                 FROM paydays payday
+                                 JOIN LATERAL (
+                                          SELECT tip2.*
+                                            FROM tips tip2
+                                           WHERE tip2.tipper = tip.tipper
+                                             AND tip2.tippee = tip.tippee
+                                             AND tip2.mtime < payday.ts_start
+                                        ORDER BY tip2.mtime DESC
+                                           LIMIT 1
+                                      ) tip_at_the_time ON true
+                                WHERE payday.ts_start > tip.ctime
+                                  AND payday.ts_start > '2018-08-15'
+                                  AND payday.ts_end > payday.ts_start
+                                  AND NOT EXISTS (
+                                          SELECT 1
+                                            FROM transfers tr
+                                           WHERE tr.tipper = tip.tipper
+                                             AND coalesce(tr.team, tr.tippee) = tip.tippee
+                                             AND tr.context IN ('tip', 'take')
+                                             AND tr.timestamp >= payday.ts_start
+                                             AND tr.timestamp <= payday.ts_end
+                                             AND tr.status = 'succeeded'
+                                      )
+                           ), tip.amount::currency) AS arrears_due
+                         , coalesce_currency_amount((
+                               SELECT sum(tr.amount, tip.amount::currency)
+                                 FROM transfers tr
+                                WHERE tr.tipper = tip.tipper
+                                  AND coalesce(tr.team, tr.tippee) = tip.tippee
+                                  AND tr.context IN ('tip-in-arrears', 'take-in-arrears')
+                                  AND tr.status = 'succeeded'
+                           ), tip.amount::currency) AS arrears_paid
+                      FROM tips tip
+                     WHERE tip.id = %s
+                """, (tip.id,))
+                arrears = min(max(row.arrears_due - row.arrears_paid, 0), wallet.balance)
+                advance = wallet.balance - arrears
+                assert arrears > 0 or advance > 0
+                assert (arrears + advance) == wallet.balance
+                if arrears:
+                    context = 'take-in-arrears' if team else 'tip-in-arrears'
+                    balance = transfer(
+                        self.db, self.id, LiberapayOrg.id, arrears, context,
+                        team=team, unit_amount=tip.amount.convert(wallet.balance.currency) or None,
+                        tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
+                    )[0]
+                if advance:
+                    context = 'take-in-advance' if team else 'tip-in-advance'
+                    balance = transfer(
+                        self.db, self.id, LiberapayOrg.id, advance, context,
+                        team=team, unit_amount=tip.amount.convert(wallet.balance.currency) or None,
+                        tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
+                    )[0]
+        self.set_attributes(balance=balance)
 
     def clear_tips_giving(self, cursor):
         """Turn off the renewal of all tips from a given user.

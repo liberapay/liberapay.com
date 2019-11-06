@@ -182,8 +182,7 @@ class MixinTeam(object):
              WHERE t.team=%(team)s
           ORDER BY p.username
         """
-        records = (cursor or self.db).all(TAKES, dict(team=self.id))
-        return [r._asdict() for r in records]
+        return (cursor or self.db).all(TAKES, dict(team=self.id))
 
     def recompute_actual_takes(self, cursor, member=None):
         """Get the tips and takes for this team and recompute the actual amounts.

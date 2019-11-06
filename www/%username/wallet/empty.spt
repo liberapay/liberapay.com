@@ -12,7 +12,7 @@ if request.method == 'POST':
         participant.refund_balances()
     elif disburse_to == 'downstream':
         raise response.error(403, _("This is no longer possible, sorry."))
-        participant.distribute_balances_to_donees(final_gift=False)
+        participant.distribute_balances_to_donees()
     elif disburse_to == 'liberapay':
         participant.donate_remaining_balances_to_liberapay()
     else:
