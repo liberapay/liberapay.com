@@ -32,6 +32,9 @@ has_paypal_but_not_stripe = (
     country in constants.PAYOUT_COUNTRIES['stripe']
 )
 
+if participant.payment_providers > 0:
+    participant.mark_notifications_as_read('payment_account_required')
+
 title = participant.username
 subhead = _("Payment Processors")
 
