@@ -688,6 +688,9 @@ msgstr "Naozaj je {0} {1} server? Práve teraz sa tak nespráva."
 msgid "You need to sign in first"
 msgstr "Najprv sa musíte prihlásiť"
 
+msgid "This account is closed"
+msgstr "Tento účet bol uzavretý"
+
 msgid "You need to log in"
 msgstr "Musíte sa prihlásiť"
 
@@ -890,10 +893,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr "Táto platobná metóda je momentálne nedostupná.Ospravedlňujeme sa za nepríjemnosti."
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr "veľmi sa ospravelňujeme ale prichádzajúce platby sú momentálne vypnuté. Môžete si prečítať {link_start}tento príspevok{link_end} aby ste sa dozvedeli prečo."
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr "Platobný systém {name} vrátil chybu. Prosím skúste znova a kontaktujte support@liberapay.com ak problém pretrváva."
 
@@ -923,6 +922,10 @@ msgstr "Služba nie je k dispozícii"
 
 msgid "Gateway Timeout"
 msgstr "Vypršal časový limit brány"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -986,24 +989,6 @@ msgstr "Nemáte oprávnenie k prístupu na túto stránku."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Spracovávanie vašej požiadavky zlyhalo pretože náš server nebol schopný komunikovať so službou nachádzajúcou sa na ďalšom stroji. Toto je dočasná chyba, prosím skúste neskôr."
 
-msgid "This account is closed"
-msgstr "Tento účet bol uzavretý"
-
-msgid "Are you the account owner?"
-msgstr "Ste vlastníkom účtu?"
-
-msgid "Log in to reopen your account."
-msgstr "Prihláste sa pre obnovenie účtu."
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "Pre toto budete potrebovať účet. Prosím vyplňte jeden z formulárov nižšie."
-
-msgid "Create an account"
-msgstr "Vytvoriť účet"
-
-msgid "Use an existing account"
-msgstr "Použiť existujúci účet"
-
 msgid "Bad Request"
 msgstr ""
 
@@ -1028,6 +1013,65 @@ msgstr "Emailová adresa"
 
 msgid "Go"
 msgstr "Odoslať"
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid "Confirm"
+msgstr "Potvrdiť"
+
+msgid "This new password is not safe"
+msgstr "Toto nové heslo nie je bezpečné"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr "Zistili sme, že vaše heslo je jednoduché uhádnutelné a preto nie je bezpečné."
+
+msgid "Do you still want to use this password?"
+msgstr "Chcete aj tak toto heslo použiť?"
+
+msgid "No, cancel"
+msgstr "Nie, zrušiť"
+
+msgid "Yes, proceed"
+msgstr "Áno, pokračovať"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr "{platform} odmietla našu požiadavku o získanie vašich dát. Znovu pripojením vášho {platform} účtu by malo opraviť problém."
+
+msgid "Reconnect"
+msgstr "Znovu pripojiť"
+
+msgid "Redirecting…"
+msgstr "Presmerovávam…"
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr "Ak používate exotický prehliadač a nič sa nedeje tak {link_start}kliknite sem pre pokračovanie{link_end}."
+
+msgid "Retry"
+msgstr "Skúsiť znova"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "Pre toto budete potrebovať účet. Prosím vyplňte jeden z formulárov nižšie."
+
+msgid "Create an account"
+msgstr "Vytvoriť účet"
+
+msgid "Use an existing account"
+msgstr "Použiť existujúci účet"
+
+msgid "Are you the account owner?"
+msgstr "Ste vlastníkom účtu?"
+
+msgid "Log in to reopen your account."
+msgstr "Prihláste sa pre obnovenie účtu."
+
+msgid "Please try again in a few minutes."
+msgstr "Prosím skúste to znova za pár minút."
+
+msgid "Log in via email"
+msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Momentálne máme technické problémy. Dôsledkom toho väčšina vecí nefunguje. Ospravelňujem sa za nepríjemnosti, budeme sa snažiť všetko opraviť čo najskôr."
@@ -1059,333 +1103,18 @@ msgstr "Časté otázky"
 msgid "Legal"
 msgstr "Právne informácie"
 
-msgid "Find great people to donate to"
-msgstr "Nájdite skvelých ludí ktorým môžete prispieť"
-
-msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "Koho prácu si ceníte? Pozrite sa, či sú na Liberapay"
-
-msgid "Communities"
-msgstr "Komunity"
+msgid "Switch to another language"
+msgstr "Prepnúť do iného jazyka"
 
 #, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] "s {n} ďalším"
-msgstr[1] "s {n} ďalšími"
-msgstr[2] "s {n} ďalšími"
-
-msgid "Leave"
-msgstr "Opustiť"
-
-msgid "Explore communities"
-msgstr "Prechádzať komunity"
-
-msgid "Cancel"
-msgstr "Zrušiť"
-
-msgid "Confirm"
-msgstr "Potvrdiť"
-
-msgid "Linked Accounts"
-msgstr "Prepojené účty"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr "Spojením s účtami, ktoré vlastníte na iných platformách, uľahčíte hľadanie vášho Liberapay profilu a lepšie ukážete, že ste, za koho sa vydávate."
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0} vlastní na iných platformách nasledovné účty:"
-
-msgid "Name of the team"
-msgstr "Názov tímu"
-
-msgid "Email of the team (optional)"
-msgstr "Email tímu (volitelné)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr "Povoliť {0}obmedzenia pre tímové zárobky{1}"
-
-msgid "Create"
-msgstr "Vytvoriť"
-
-msgid "Disconnect"
-msgstr "Odpojiť"
-
-msgid "This is not supported yet"
-msgstr "Toto ešte nie je podporované"
-
-msgid "Connect"
-msgstr "Pripojiť sa"
-
-msgid "Drop files here"
-msgstr "Sem pretiahnite súbory"
-
-msgid "Processing dropped files…"
-msgstr "Spracovávam pretiahnuté súbory…"
-
-msgid "Add a file"
-msgstr "Pridať súbor"
-
-msgid "Edit filename"
-msgstr "Upraviť názov súboru"
-
-msgid "Retry"
-msgstr "Skúsiť znova"
-
-msgid "Delete"
-msgstr "Odstrániť"
-
-msgid "Close"
-msgstr "Zrušiť"
-
-msgid "No"
-msgstr "Nie"
-
-msgid "Yes"
-msgstr "Áno"
-
-msgid "Ok"
-msgstr "Ok"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Nahrali ste {n} dokument tohto typu:"
-msgstr[1] "Nahrali ste {n} dokumentov tohto typu:"
-msgstr[2] "Nahrali ste {n} dokumenty tohto typu:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "Dokument #{id} čaká na validáciu."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "Dokument #{id} bol overený."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Dokument #{id} bol zamietnutý: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Pokiaľ potrebujete pomoc, môžete poslať email na support@liberapay.com."
-
-msgid "Occupation"
-msgstr "Povolanie"
-
-msgid "Your main professional activity."
-msgstr "Vaša hlavná profesíjna činnosť."
-
-msgid "Income Range"
-msgstr "Príjem"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Menej než {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Viac než {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Medzi {0} a {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Koľko peňazí približne zarobíte za rok."
-
-msgid "Postal Address"
-msgstr "Poštová adresa"
-
-msgid "Identity Proof"
-msgstr "Doklad totožnosti"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Cestovný pas, občiansky preukaz (predná a zadná strana) alebo vodičský preukaz."
-
-msgid "Organization Information"
-msgstr "Informácie o organizácii"
-
-msgid "Headquarters Address"
-msgstr "Adresa sídla"
-
-msgid "Articles of Association"
-msgstr "Stanovy"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Certifikované články spoločnosti, formálne memorandum vydané podnikateľmi v ktorom sa spomína nasledujúca informácia: názov, aktivita, registrovaná adresa, podiel."
-
-msgid "Registration Proof"
-msgstr "Dôkaz registrácie"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Výpis z obchodného registra vydaný behom posledných troch mesiacov."
-
-msgid "Proof of registration from the official authority."
-msgstr "Doklad o registrácií od úradného orgánu."
-
-msgid "Shareholder Declaration"
-msgstr "Deklarácia akcionára"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Prosím stiahnite a vyplnte {link_start}formulár o deklarácii akcionára{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Informácie o právnom zástupcovi"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "Nasledujúce pole je o zákonnom zástupcovy (pravdepodobne o vás)."
-
-msgid "Email"
-msgstr "Email"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Sú podporované nasledovné formáty súborov: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Maximálna velkosť každého súboru je {0} MB."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Musíme vedieť kto ste aby sme vyhoveli finančným nariadeniam. Iba autorizovaný personál bude schopný vidieť túto informáciu, neukážeme to nikomu pokiaľ to nebude vyžadovať zákon."
-
-msgid "Given Name"
-msgstr "Krstné meno"
-
-msgid "Family Name"
-msgstr "Priezvisko"
-
-msgid "Country (residence)"
-msgstr "Zem trvalého pobytu"
-
-msgid "Country (nationality)"
-msgstr "Občianstvo"
-
-msgid "Date of Birth"
-msgstr "Dátum narodenia"
-
-msgid "YYYY-MM-DD"
-msgstr "RRRR-MM-DD"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "Jednáte ako zástupca organizácie?"
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Áno, zastupujem firmu alebo neziskovú organizáciu."
-
-msgid "Organization Type"
-msgstr "Druh organizácie"
-
-msgid "Business"
-msgstr "Firma"
-
-msgid "Organization Name"
-msgstr "Názov organizácie"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Súhlasím s {0}podmienkami služby MangoPay{1}"
-
-msgid "Personal Information"
-msgstr "Osobné informácie"
-
-msgid "Full Name"
-msgstr "Celé meno"
-
-msgid "Nationality"
-msgstr "Národnosť"
-
-msgid "username"
-msgstr "užívateľské meno"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "Poslali sme vám jednorázový prihlasovací odkaz. Skontrolujte schránku doručenej pošty, otvorte zaslaný odkaz v novom panely a kliknite na tlačidlo nižšie pre pokračovanie, v tom čo ste chceli spraviť."
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Stále nie ste prihlásený ako {0}."
-
-msgid "Password (optional)"
-msgstr "Heslo (volitelné)"
-
-#, fuzzy, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Predchádzajúce pole ponechajte prázdne, pokiaľ Váš účet nemá heslo alebo ste heslo zabudli. Pošleme Vám odkaz na prihlásenie prostredníctvom emailu."
-
-msgid "Members"
-msgstr "Členovia"
-
-msgid "View income shares"
-msgstr "Zobraziť podiely vo firmách"
-
-msgid "Introduction"
-msgstr "Predstavenie"
-
-msgid "Global"
-msgstr "Globálny"
-
-msgid "Payment Processors"
-msgstr "Platobné Systémy"
-
-msgid "Teams"
-msgstr "Tímy"
-
-msgid "Stats"
-msgstr "Štatistiky"
-
-msgid "Feeds"
-msgstr "Kanály"
-
-msgid "Contact"
-msgstr "Kontakt"
-
-msgid "Security"
-msgstr "Bezpečnosť"
-
-msgid "Logos"
-msgstr "Logá"
-
-msgid "Overview"
-msgstr "Prehľad"
-
-msgid "Organizations"
-msgstr "Organizácia"
-
-msgid "Individuals"
-msgstr "Jednotlivci"
-
-msgid "Unclaimed Donations"
-msgstr "Neprivlastnené dary"
-
-msgid "Repositories"
-msgstr "Repozitáre"
-
-msgid "Social Networks"
-msgstr "Sociálne siete"
+msgid "({x_percent} translated)"
+msgstr "(preložené {x_percent})"
+
+msgid "Help us translate Liberapay"
+msgstr "Pomôžte nám prekladať Liberapay"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Name"
-msgstr "Meno"
-
-msgid "Avatar"
-msgstr "Avatar"
-
-msgid "Currencies"
-msgstr "Meny"
-
-msgid "Goal"
-msgstr "Cieľ"
-
-msgid "Statement"
-msgstr "Prehlásenie"
-
-msgid "Privacy"
-msgstr "Súkromie"
 
 msgid "Giving"
 msgstr "Dávate"
@@ -1395,6 +1124,15 @@ msgstr "Dostávate"
 
 msgid "Ledger"
 msgstr "Účtovná kniha"
+
+msgid "Wallet"
+msgstr "Peňaženka"
+
+msgid "Emptying your wallet"
+msgstr "Vyprázdnite vašu peňaženku"
+
+msgid "Payment Processors"
+msgstr "Platobné Systémy"
 
 msgid "Identity"
 msgstr "Identita"
@@ -1411,162 +1149,17 @@ msgstr "Upozornenia"
 msgid "Widgets"
 msgstr "Tlačidlá"
 
-msgid "Switch to another language"
-msgstr "Prepnúť do iného jazyka"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "(preložené {x_percent})"
-
-msgid "Help us translate Liberapay"
-msgstr "Pomôžte nám prekladať Liberapay"
-
-msgid "Wallet"
-msgstr "Peňaženka"
-
-msgid "Emptying your wallet"
-msgstr "Vyprázdnite vašu peňaženku"
-
 msgid "Create a new community"
 msgstr "Vytvorte novú komunitu"
 
 msgid "Create a new team"
 msgstr "Vytvorte nový tím"
 
-msgid "Please try again in a few minutes."
-msgstr "Prosím skúste to znova za pár minút."
-
-msgid "Previous"
-msgstr "Predchádzajúce"
-
-msgid "Next"
-msgstr "Nasledujúce"
-
-msgid "First"
-msgstr "Prvý"
-
-msgid "Last"
-msgstr "Posledný"
-
-msgid "View More"
-msgstr "Zobraziť viac"
+msgid "Sign out"
+msgstr "Odhlásiť sa"
 
 msgid "Print"
 msgstr "Vytlačiť"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Nastavením hesla sa môžete prihlásiť priamo, namiesto čakania na zaslanie jednorázového prihlásovacieho odkazu prostredníctvom emailu. Majte na pamäti, že Liberapay je finančná služba, použite silné heslo!"
-
-msgid "Current password"
-msgstr "Súčasné heslo"
-
-msgid "New password"
-msgstr "Nové heslo"
-
-msgid "This new password is not safe"
-msgstr "Toto nové heslo nie je bezpečné"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Zistili sme, že vaše heslo je jednoduché uhádnutelné a preto nie je bezpečné."
-
-msgid "Do you still want to use this password?"
-msgstr "Chcete aj tak toto heslo použiť?"
-
-msgid "No, cancel"
-msgstr "Nie, zrušiť"
-
-msgid "Yes, proceed"
-msgstr "Áno, pokračovať"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} nemá nastavený spôsob platby, takže Váš dar sa momentálne nedá spracovať. Oznámime Vám, keď bude platba možná."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Dary pre {username} možu byť zaplatené prostredníctvom debetnej karty (Visa, MasterCard, American Express) alebo priamou platbou v eurách na bankový účet (pre dary iba v eurách)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Dary pre {username} sú vykonané cez PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Dary pre {username} sa dajú zaplatiť pomocou kreditnej alebo debetnej karty (Visa, MasterCard, American Express) alebo prostredníctvom PayPal."
-
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "Ľudia, ktorí prispievajú spoločnosti, potrebujú Vašu podporu pre svoju prácu. Činnosti ako tvorba slobodného software, alebo bezplatné rozširovanie znalostí zaberajú čas a stoja peniaze. Nie len ich tvorba ale aj ich údržba v priebehu času."
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "Liberapay systém opakujúcich sa prispévkov je navrhnutý tak aby poskytol stabilný hromadne financovaný základný príjem tvorcom. To im umožnuje robiť skvelú prácu, ktorá prinesie úžitok všetkým. Ste pripravený prispieť? Potom môžeme začať:"
-
-msgid "Address"
-msgstr "Adresa"
-
-msgid "Address (second line)"
-msgstr "Adresa (druhý riadok)"
-
-msgid "City"
-msgstr "Mesto"
-
-msgid "Region"
-msgstr "Lokalita"
-
-msgid "Postal Code"
-msgstr "Poštové smerovacie číslo"
-
-msgid "Country"
-msgstr "Zem"
-
-msgid "Region (state, province, island…)"
-msgstr "Región (štát, kraj, ostrov...)"
-
-msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr "Môžete toto pole nechať prázdne ak vaša krajina nepoužíva kraje v poštových adresách."
-
-msgid "Postal code"
-msgstr "Poštové smerovacie číslo"
-
-msgid "Address within the city"
-msgstr "Adresa vo vnútri mesta"
-
-msgid "Patrons"
-msgstr "Patróni"
-
-msgid "Income"
-msgstr "Príjem"
-
-msgid "per week"
-msgstr "týždenne"
-
-msgid "Modify your pledge"
-msgstr ""
-
-msgid "Pledge"
-msgstr "Prísľub"
-
-msgid "Modify your donation"
-msgstr ""
-
-msgid "Donate"
-msgstr "Prispievajte"
-
-msgid "Pledges"
-msgstr "Prísľuby"
-
-msgid "Sum"
-msgstr "Celkom"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Cieľ: {0}"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Príjem: {0}/týždeň"
-
-msgid "Mission accomplished!"
-msgstr "Misia splnená!"
 
 #, python-brace-format
 msgid "Joined {timespan_ago}."
@@ -1606,22 +1199,283 @@ msgstr[1] "{0} dostáva {1} za týždeň od {n} patrónov."
 msgstr[2] "{0} dostáva {1} za týždeň od {n} patrónov."
 
 #, python-brace-format
+msgid "Goal: {0}"
+msgstr "Cieľ: {0}"
+
+#, python-brace-format
 msgid "Donating ({amount})"
 msgstr "Prispieva ({amount})"
 
+msgid "Pledge"
+msgstr "Prísľub"
+
+msgid "Donate"
+msgstr "Prispievajte"
+
+msgid "Switch to a different account"
+msgstr "Prepnúť na iný účet"
+
+msgid "The changes have been saved."
+msgstr "Zmeny boli uložené."
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr "Poslali sme vám jednorázový prihlasovací odkaz. Skontrolujte schránku doručenej pošty, otvorte zaslaný odkaz v novom panely a kliknite na tlačidlo nižšie pre pokračovanie, v tom čo ste chceli spraviť."
+
 #, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "{platform} odmietla našu požiadavku o získanie vašich dát. Znovu pripojením vášho {platform} účtu by malo opraviť problém."
+msgid "You're still not logged in as {0}."
+msgstr "Stále nie ste prihlásený ako {0}."
 
-msgid "Reconnect"
-msgstr "Znovu pripojiť"
+msgid "Password (optional)"
+msgstr "Heslo (volitelné)"
 
-msgid "Redirecting…"
-msgstr "Presmerovávam…"
+#, fuzzy, python-brace-format
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr "Predchádzajúce pole ponechajte prázdne, pokiaľ Váš účet nemá heslo alebo ste heslo zabudli. Pošleme Vám odkaz na prihlásenie prostredníctvom emailu."
+
+msgid "Find great people to donate to"
+msgstr "Nájdite skvelých ludí ktorým môžete prispieť"
+
+msgid "Whose work do you appreciate? See if they're on Liberapay"
+msgstr "Koho prácu si ceníte? Pozrite sa, či sú na Liberapay"
+
+msgid "Disconnect"
+msgstr "Odpojiť"
+
+msgid "This is not supported yet"
+msgstr "Toto ešte nie je podporované"
+
+msgid "Connect"
+msgstr "Pripojiť sa"
+
+msgid "username"
+msgstr "užívateľské meno"
+
+msgid "Drop files here"
+msgstr "Sem pretiahnite súbory"
+
+msgid "Processing dropped files…"
+msgstr "Spracovávam pretiahnuté súbory…"
+
+msgid "Add a file"
+msgstr "Pridať súbor"
+
+msgid "Edit filename"
+msgstr "Upraviť názov súboru"
+
+msgid "Delete"
+msgstr "Odstrániť"
+
+msgid "Close"
+msgstr "Zrušiť"
+
+msgid "No"
+msgstr "Nie"
+
+msgid "Yes"
+msgstr "Áno"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Personal Information"
+msgstr "Osobné informácie"
+
+msgid "Full Name"
+msgstr "Celé meno"
+
+msgid "Country (residence)"
+msgstr "Zem trvalého pobytu"
+
+msgid "Nationality"
+msgstr "Národnosť"
+
+msgid "Date of Birth"
+msgstr "Dátum narodenia"
+
+msgid "YYYY-MM-DD"
+msgstr "RRRR-MM-DD"
+
+msgid "Occupation"
+msgstr "Povolanie"
+
+msgid "Your main professional activity."
+msgstr "Vaša hlavná profesíjna činnosť."
+
+msgid "Postal Address"
+msgstr "Poštová adresa"
+
+msgid "Organization Information"
+msgstr "Informácie o organizácii"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Jednáte ako zástupca organizácie?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Áno, zastupujem firmu alebo neziskovú organizáciu."
+
+msgid "Organization Name"
+msgstr "Názov organizácie"
+
+msgid "Headquarters Address"
+msgstr "Adresa sídla"
+
+msgid "Introduction"
+msgstr "Predstavenie"
+
+msgid "Global"
+msgstr "Globálny"
+
+msgid "Teams"
+msgstr "Tímy"
+
+msgid "Stats"
+msgstr "Štatistiky"
+
+msgid "Feeds"
+msgstr "Kanály"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Security"
+msgstr "Bezpečnosť"
+
+msgid "Logos"
+msgstr "Logá"
+
+msgid "Overview"
+msgstr "Prehľad"
+
+msgid "Organizations"
+msgstr "Organizácia"
+
+msgid "Individuals"
+msgstr "Jednotlivci"
+
+msgid "Unclaimed Donations"
+msgstr "Neprivlastnené dary"
+
+msgid "Repositories"
+msgstr "Repozitáre"
+
+msgid "Social Networks"
+msgstr "Sociálne siete"
+
+msgid "Communities"
+msgstr "Komunity"
+
+msgid "Name"
+msgstr "Meno"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Meny"
+
+msgid "Goal"
+msgstr "Cieľ"
+
+msgid "Statement"
+msgstr "Prehlásenie"
+
+msgid "Linked Accounts"
+msgstr "Prepojené účty"
+
+msgid "Privacy"
+msgstr "Súkromie"
+
+msgid "Members"
+msgstr "Členovia"
+
+msgid "Previous"
+msgstr "Predchádzajúce"
+
+msgid "Next"
+msgstr "Nasledujúce"
+
+msgid "First"
+msgstr "Prvý"
+
+msgid "Last"
+msgstr "Posledný"
+
+msgid "View More"
+msgstr "Zobraziť viac"
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr "Nastavením hesla sa môžete prihlásiť priamo, namiesto čakania na zaslanie jednorázového prihlásovacieho odkazu prostredníctvom emailu. Majte na pamäti, že Liberapay je finančná služba, použite silné heslo!"
+
+msgid "Current password"
+msgstr "Súčasné heslo"
+
+msgid "New password"
+msgstr "Nové heslo"
 
 #, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr "Ak používate exotický prehliadač a nič sa nedeje tak {link_start}kliknite sem pre pokračovanie{link_end}."
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} nemá nastavený spôsob platby, takže Váš dar sa momentálne nedá spracovať. Oznámime Vám, keď bude platba možná."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Dary pre {username} možu byť zaplatené prostredníctvom debetnej karty (Visa, MasterCard, American Express) alebo priamou platbou v eurách na bankový účet (pre dary iba v eurách)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Dary pre {username} sú vykonané cez PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Dary pre {username} sa dajú zaplatiť pomocou kreditnej alebo debetnej karty (Visa, MasterCard, American Express) alebo prostredníctvom PayPal."
+
+msgid "Country"
+msgstr "Zem"
+
+msgid "Region (state, province, island…)"
+msgstr "Región (štát, kraj, ostrov...)"
+
+msgid "You can leave this field empty if your country does not use regions in postal addresses."
+msgstr "Môžete toto pole nechať prázdne ak vaša krajina nepoužíva kraje v poštových adresách."
+
+msgid "City"
+msgstr "Mesto"
+
+msgid "Postal code"
+msgstr "Poštové smerovacie číslo"
+
+msgid "Address within the city"
+msgstr "Adresa vo vnútri mesta"
+
+msgid "Patrons"
+msgstr "Patróni"
+
+msgid "Income"
+msgstr "Príjem"
+
+msgid "per week"
+msgstr "týždenne"
+
+msgid "Modify your pledge"
+msgstr ""
+
+msgid "Modify your donation"
+msgstr ""
+
+msgid "Pledges"
+msgstr "Prísľuby"
+
+msgid "Sum"
+msgstr "Celkom"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Príjem: {0}/týždeň"
+
+msgid "Mission accomplished!"
+msgstr "Misia splnená!"
+
+msgid "View income shares"
+msgstr "Zobraziť podiely vo firmách"
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1639,26 +1493,17 @@ msgstr "Odobrať"
 msgid "Show on your profile"
 msgstr "Zobraziť na profile"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "Ste v móde pieskovisko, nevpisujte žiadne reálne platby ani personálne dáta!"
-
 msgid "Search Liberapay"
 msgstr "Hladať na Liberapay"
-
-msgid "Switch to a different account"
-msgstr "Prepnúť na iný účet"
-
-msgid "The changes have been saved."
-msgstr "Zmeny boli uložené."
 
 msgid "Log In or Create Account"
 msgstr "Prihlásiť sa alebo vytvoriť účet"
 
-msgid "Sign out"
-msgstr "Odhlásiť sa"
-
 msgid "Please input your email address:"
 msgstr "Prosím zadajte vašu emailovú adresu:"
+
+msgid "Email"
+msgstr "Email"
 
 msgid "and select your preferred currency:"
 msgstr "a vyberte uprostredňovanú menu:"
@@ -1666,25 +1511,6 @@ msgstr "a vyberte uprostredňovanú menu:"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Vytvorením účtu na Liberapay prijímate naše {0}podmienky služby{1}."
-
-msgid "Enter a username"
-msgstr "Zadajte uživateľské meno"
-
-msgid "Invite"
-msgstr "Pozvať"
-
-msgid "Explore teams"
-msgstr "Preskúmajte tímy"
-
-msgid "About teams"
-msgstr "O tímoch"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1719,9 +1545,6 @@ msgstr "Nepoužitý zárobok bude použitý nasledujúce týždne, nenarastá v 
 
 msgid "Leftover"
 msgstr "Prebytok"
-
-msgid "Log in via email"
-msgstr ""
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1785,6 +1608,131 @@ msgstr "Upraviť príspevok"
 
 msgid "Stop the donation"
 msgstr "Zastaviť príspevok"
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] "Nahrali ste {n} dokument tohto typu:"
+msgstr[1] "Nahrali ste {n} dokumentov tohto typu:"
+msgstr[2] "Nahrali ste {n} dokumenty tohto typu:"
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr "Dokument #{id} čaká na validáciu."
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr "Dokument #{id} bol overený."
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr "Dokument #{id} bol zamietnutý: {refused_reason_type} - {refused_reason_message}."
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "Pokiaľ potrebujete pomoc, môžete poslať email na support@liberapay.com."
+
+msgid "Income Range"
+msgstr "Príjem"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "Menej než {0}"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "Viac než {0}"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "Medzi {0} a {1}"
+
+msgid "How much money you earn per year, approximately."
+msgstr "Koľko peňazí približne zarobíte za rok."
+
+msgid "Identity Proof"
+msgstr "Doklad totožnosti"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "Cestovný pas, občiansky preukaz (predná a zadná strana) alebo vodičský preukaz."
+
+msgid "Articles of Association"
+msgstr "Stanovy"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr "Certifikované články spoločnosti, formálne memorandum vydané podnikateľmi v ktorom sa spomína nasledujúca informácia: názov, aktivita, registrovaná adresa, podiel."
+
+msgid "Registration Proof"
+msgstr "Dôkaz registrácie"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr "Výpis z obchodného registra vydaný behom posledných troch mesiacov."
+
+msgid "Proof of registration from the official authority."
+msgstr "Doklad o registrácií od úradného orgánu."
+
+msgid "Shareholder Declaration"
+msgstr "Deklarácia akcionára"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr "Prosím stiahnite a vyplnte {link_start}formulár o deklarácii akcionára{link_end}."
+
+msgid "Legal Representative Information"
+msgstr "Informácie o právnom zástupcovi"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr "Nasledujúce pole je o zákonnom zástupcovy (pravdepodobne o vás)."
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "Sú podporované nasledovné formáty súborov: {0}."
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "Maximálna velkosť každého súboru je {0} MB."
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr "Musíme vedieť kto ste aby sme vyhoveli finančným nariadeniam. Iba autorizovaný personál bude schopný vidieť túto informáciu, neukážeme to nikomu pokiaľ to nebude vyžadovať zákon."
+
+msgid "Given Name"
+msgstr "Krstné meno"
+
+msgid "Family Name"
+msgstr "Priezvisko"
+
+msgid "Country (nationality)"
+msgstr "Občianstvo"
+
+msgid "Organization Type"
+msgstr "Druh organizácie"
+
+msgid "Business"
+msgstr "Firma"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "Súhlasím s {0}podmienkami služby MangoPay{1}"
+
+msgid "Address"
+msgstr "Adresa"
+
+msgid "Address (second line)"
+msgstr "Adresa (druhý riadok)"
+
+msgid "Region"
+msgstr "Lokalita"
+
+msgid "Postal Code"
+msgstr "Poštové smerovacie číslo"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr "Ľudia, ktorí prispievajú spoločnosti, potrebujú Vašu podporu pre svoju prácu. Činnosti ako tvorba slobodného software, alebo bezplatné rozširovanie znalostí zaberajú čas a stoja peniaze. Nie len ich tvorba ale aj ich údržba v priebehu času."
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr "Liberapay systém opakujúcich sa prispévkov je navrhnutý tak aby poskytol stabilný hromadne financovaný základný príjem tvorcom. To im umožnuje robiť skvelú prácu, ktorá prinesie úžitok všetkým. Ste pripravený prispieť? Potom môžeme začať:"
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "Ste v móde pieskovisko, nevpisujte žiadne reálne platby ani personálne dáta!"
 
 msgid "Save"
 msgstr "Uložiť"
@@ -1885,6 +1833,12 @@ msgstr "Zdroj avatara"
 msgid "Avatar email (for Libravatar only)"
 msgstr "Email avatara (len pre Libravatar)"
 
+msgid "Leave"
+msgstr "Opustiť"
+
+msgid "Explore communities"
+msgstr "Prechádzať komunity"
+
 msgid "The submitted settings are incoherent."
 msgstr "Odoslané nastavenia nie sú koherentné."
 
@@ -1911,6 +1865,9 @@ msgstr "Prijímanie cudzích mien môže zvýšiť Váš príjem tým, že presv
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe automaticky konvertuje prostriedky do vašej hlavnej meny, ale PayPal štandardne drží platby v cudzej mene, kým nerozhodnete, čo má v takom prípade robiť. Ak máte Business PayPal účet, môžete si vybrať automatickú konverziu všetkých prichádzajúcich platieb v cudzej mene na hlavnú menu. Táto možnosť sa momentálne nachádza na stránke \"{link_open} Preferencie pre príjem platieb {link_close}\"."
 
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgstr "Spojením s účtami, ktoré vlastníte na iných platformách, uľahčíte hľadanie vášho Liberapay profilu a lepšie ukážete, že ste, za koho sa vydávate."
+
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Som vďačný za dary ale nemám konkrétny finančný cieľ."
 
@@ -1936,6 +1893,12 @@ msgstr "Sme tu ako patróni a zdvorilo odmietame prijímanie darov."
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr "Náš cieľ je dostávať {0}"
+
+msgid "Enter a username"
+msgstr "Zadajte uživateľské meno"
+
+msgid "Invite"
+msgstr "Pozvať"
 
 msgid "Your privacy settings have been changed."
 msgstr "Nastavenie ochrany osobných údajov bolo zmenené."
@@ -2021,6 +1984,12 @@ msgstr "Náhľad"
 
 msgid "Switch to another language:"
 msgstr "Prepnúť do iného jazyka:"
+
+msgid "Explore teams"
+msgstr "Preskúmajte tímy"
+
+msgid "About teams"
+msgstr "O tímoch"
 
 msgid "Username"
 msgstr "Uživateľské meno"
@@ -2486,6 +2455,24 @@ msgstr "Profil {username}"
 
 msgid "Edit"
 msgstr "Upraviť"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr "{0} vlastní na iných platformách nasledovné účty:"
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] "s {n} ďalším"
+msgstr[1] "s {n} ďalšími"
+msgstr[2] "s {n} ďalšími"
 
 msgid "History"
 msgstr "História"
@@ -4097,6 +4084,19 @@ msgstr "Vytvorenie tímu"
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr "Najprv sa budete musieť {0}prihlásiť do vášho účtu{1}."
+
+msgid "Name of the team"
+msgstr "Názov tímu"
+
+msgid "Email of the team (optional)"
+msgstr "Email tímu (volitelné)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr "Povoliť {0}obmedzenia pre tímové zárobky{1}"
+
+msgid "Create"
+msgstr "Vytvoriť"
 
 msgid "Becoming a team member"
 msgstr "Ako sa stať členom tímu"

@@ -684,6 +684,9 @@ msgstr ""
 msgid "You need to sign in first"
 msgstr ""
 
+msgid "This account is closed"
+msgstr ""
+
 msgid "You need to log in"
 msgstr ""
 
@@ -886,10 +889,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr ""
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr ""
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr ""
 
@@ -918,6 +917,10 @@ msgid "Service Unavailable"
 msgstr "الخدمة غير متاحة"
 
 msgid "Gateway Timeout"
+msgstr ""
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
 msgstr ""
 
 #, python-brace-format
@@ -991,24 +994,6 @@ msgstr ""
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr ""
 
-msgid "This account is closed"
-msgstr ""
-
-msgid "Are you the account owner?"
-msgstr ""
-
-msgid "Log in to reopen your account."
-msgstr ""
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr ""
-
-msgid "Create an account"
-msgstr "أنشئ حسابًا"
-
-msgid "Use an existing account"
-msgstr ""
-
 msgid "Bad Request"
 msgstr ""
 
@@ -1032,6 +1017,65 @@ msgid "Email address"
 msgstr "عنوان البريد الإلكتروني"
 
 msgid "Go"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "This new password is not safe"
+msgstr "كلمة المرور الجديدة هذه ليست آمنة"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr ""
+
+msgid "Do you still want to use this password?"
+msgstr ""
+
+msgid "No, cancel"
+msgstr "لا، إلغاء"
+
+msgid "Yes, proceed"
+msgstr "نعم ، تابع"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr ""
+
+msgid "Reconnect"
+msgstr "إعادة الاتصال"
+
+msgid "Redirecting…"
+msgstr ""
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr ""
+
+msgid "Create an account"
+msgstr "أنشئ حسابًا"
+
+msgid "Use an existing account"
+msgstr ""
+
+msgid "Are you the account owner?"
+msgstr ""
+
+msgid "Log in to reopen your account."
+msgstr ""
+
+msgid "Please try again in a few minutes."
+msgstr "الرجاء إعادة المحاولة بعد بضع دقائق."
+
+msgid "Log in via email"
 msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
@@ -1064,340 +1108,18 @@ msgstr "الأسئلة المتداولة"
 msgid "Legal"
 msgstr "قانوني"
 
-msgid "Find great people to donate to"
-msgstr ""
-
-msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr ""
-
-msgid "Communities"
-msgstr "المجتمعات"
-
-#, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
-
-msgid "Leave"
-msgstr ""
-
-msgid "Explore communities"
-msgstr "استكشاف المجتمعات"
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Confirm"
-msgstr ""
-
-#, fuzzy
-msgid "Linked Accounts"
-msgstr "حسابات في مكان آخر"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgid "Switch to another language"
 msgstr ""
 
 #, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
+msgid "({x_percent} translated)"
 msgstr ""
 
-msgid "Name of the team"
-msgstr "إسم الفريق"
-
-msgid "Email of the team (optional)"
-msgstr "عنوان البريد الإلكتروني للفريق (اختياري)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr ""
-
-msgid "Create"
-msgstr "إنشاء"
-
-msgid "Disconnect"
-msgstr ""
-
-msgid "This is not supported yet"
-msgstr ""
-
-msgid "Connect"
-msgstr ""
-
-msgid "Drop files here"
-msgstr ""
-
-msgid "Processing dropped files…"
-msgstr ""
-
-msgid "Add a file"
-msgstr ""
-
-msgid "Edit filename"
-msgstr "تعديل إسم الملف"
-
-msgid "Retry"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "Ok"
-msgstr ""
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr ""
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr ""
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr ""
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr ""
-
-msgid "Occupation"
-msgstr ""
-
-msgid "Your main professional activity."
-msgstr ""
-
-msgid "Income Range"
-msgstr ""
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr ""
-
-msgid "How much money you earn per year, approximately."
-msgstr ""
-
-msgid "Postal Address"
-msgstr "العنوان البريدي"
-
-msgid "Identity Proof"
-msgstr ""
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr ""
-
-msgid "Organization Information"
-msgstr "معلومات عن المنظمة"
-
-msgid "Headquarters Address"
-msgstr ""
-
-msgid "Articles of Association"
-msgstr ""
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr ""
-
-msgid "Registration Proof"
-msgstr ""
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr ""
-
-msgid "Proof of registration from the official authority."
-msgstr ""
-
-msgid "Shareholder Declaration"
-msgstr ""
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr ""
-
-msgid "Legal Representative Information"
-msgstr ""
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr ""
-
-msgid "Email"
-msgstr "البريد الإلكتروني"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr ""
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr ""
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr ""
-
-msgid "Given Name"
-msgstr "الاسم الأول"
-
-msgid "Family Name"
-msgstr "اللقب"
-
-msgid "Country (residence)"
-msgstr "البلد (الإقامة)"
-
-msgid "Country (nationality)"
-msgstr "البلد (الجنسية)"
-
-msgid "Date of Birth"
-msgstr "تاريخ الإزدياد"
-
-msgid "YYYY-MM-DD"
-msgstr ""
-
-msgid "Are you acting as the representative of an organization?"
-msgstr ""
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr ""
-
-msgid "Organization Type"
-msgstr "نوع المنظمة"
-
-msgid "Business"
-msgstr ""
-
-msgid "Organization Name"
-msgstr "إسم المنظمة"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr ""
-
-msgid "Personal Information"
-msgstr ""
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Nationality"
-msgstr ""
-
-msgid "username"
-msgstr "إسم المستخدم"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr ""
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr ""
-
-msgid "Password (optional)"
-msgstr "كلمة المرور (اختيارية)"
-
-#, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr ""
-
-msgid "Members"
-msgstr "الأعضاء"
-
-msgid "View income shares"
-msgstr ""
-
-msgid "Introduction"
-msgstr "المقدمة"
-
-msgid "Global"
-msgstr ""
-
-msgid "Payment Processors"
-msgstr ""
-
-msgid "Teams"
-msgstr "الفِرق"
-
-msgid "Stats"
-msgstr "الإحصائيات"
-
-msgid "Feeds"
-msgstr "المستجدات"
-
-msgid "Contact"
-msgstr "للتواصل"
-
-msgid "Security"
-msgstr "الأمان"
-
-msgid "Logos"
-msgstr ""
-
-msgid "Overview"
-msgstr "لمحة عامة"
-
-msgid "Organizations"
-msgstr "المنظمات"
-
-msgid "Individuals"
-msgstr "الأفراد"
-
-msgid "Unclaimed Donations"
-msgstr "التبرعات التي لم يطالب بها"
-
-msgid "Repositories"
-msgstr "المستودعات"
-
-msgid "Social Networks"
-msgstr "الشبكات الاجتماعية"
+msgid "Help us translate Liberapay"
+msgstr "ساعدنا في ترجمة ليبراباي"
 
 msgid "Profile"
 msgstr "الملف الشخصي"
-
-msgid "Name"
-msgstr "الإسم"
-
-msgid "Avatar"
-msgstr ""
-
-msgid "Currencies"
-msgstr "العملات"
-
-msgid "Goal"
-msgstr ""
-
-msgid "Statement"
-msgstr ""
-
-msgid "Privacy"
-msgstr ""
 
 msgid "Giving"
 msgstr ""
@@ -1406,6 +1128,15 @@ msgid "Receiving"
 msgstr "جاري الإستلام"
 
 msgid "Ledger"
+msgstr ""
+
+msgid "Wallet"
+msgstr "المحفظة"
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Payment Processors"
 msgstr ""
 
 msgid "Identity"
@@ -1423,162 +1154,17 @@ msgstr "الإشعارات"
 msgid "Widgets"
 msgstr "الإضافات"
 
-msgid "Switch to another language"
-msgstr ""
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr ""
-
-msgid "Help us translate Liberapay"
-msgstr "ساعدنا في ترجمة ليبراباي"
-
-msgid "Wallet"
-msgstr "المحفظة"
-
-msgid "Emptying your wallet"
-msgstr ""
-
 msgid "Create a new community"
 msgstr "إنشاء مجتمع جديد"
 
 msgid "Create a new team"
 msgstr "إنشاء فريق جديد"
 
-msgid "Please try again in a few minutes."
-msgstr "الرجاء إعادة المحاولة بعد بضع دقائق."
-
-msgid "Previous"
-msgstr "السابق"
-
-msgid "Next"
-msgstr "التالي"
-
-msgid "First"
-msgstr ""
-
-msgid "Last"
-msgstr ""
-
-msgid "View More"
-msgstr "عرض المزيد"
+msgid "Sign out"
+msgstr "خروج"
 
 msgid "Print"
 msgstr "طباعة"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr ""
-
-msgid "Current password"
-msgstr "كلمة السر الحالية"
-
-msgid "New password"
-msgstr "كلمة سر جديدة"
-
-msgid "This new password is not safe"
-msgstr "كلمة المرور الجديدة هذه ليست آمنة"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr ""
-
-msgid "Do you still want to use this password?"
-msgstr ""
-
-msgid "No, cancel"
-msgstr "لا، إلغاء"
-
-msgid "Yes, proceed"
-msgstr "نعم ، تابع"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
-
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr ""
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr ""
-
-msgid "Address"
-msgstr "العنوان"
-
-msgid "Address (second line)"
-msgstr "العنوان (السطر الثاني)"
-
-msgid "City"
-msgstr "المدينة"
-
-msgid "Region"
-msgstr "المنطقة"
-
-msgid "Postal Code"
-msgstr "الرمز البريدي"
-
-msgid "Country"
-msgstr "البلد"
-
-msgid "Region (state, province, island…)"
-msgstr ""
-
-msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
-
-msgid "Postal code"
-msgstr ""
-
-msgid "Address within the city"
-msgstr ""
-
-msgid "Patrons"
-msgstr "الرعاة"
-
-msgid "Income"
-msgstr "الدخل"
-
-msgid "per week"
-msgstr "كل أسبوع"
-
-msgid "Modify your pledge"
-msgstr ""
-
-msgid "Pledge"
-msgstr "تعهد"
-
-msgid "Modify your donation"
-msgstr ""
-
-msgid "Donate"
-msgstr "تبرع"
-
-msgid "Pledges"
-msgstr "الوعود"
-
-msgid "Sum"
-msgstr ""
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "الهدف : {0}"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr ""
-
-msgid "Mission accomplished!"
-msgstr "أُنجِزت المهمّة !"
 
 #, python-brace-format
 msgid "Joined {timespan_ago}."
@@ -1624,21 +1210,283 @@ msgstr[4] ""
 msgstr[5] ""
 
 #, python-brace-format
+msgid "Goal: {0}"
+msgstr "الهدف : {0}"
+
+#, python-brace-format
 msgid "Donating ({amount})"
 msgstr ""
 
-#, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgid "Pledge"
+msgstr "تعهد"
+
+msgid "Donate"
+msgstr "تبرع"
+
+msgid "Switch to a different account"
 msgstr ""
 
-msgid "Reconnect"
-msgstr "إعادة الاتصال"
+msgid "The changes have been saved."
+msgstr "تم حفظ التعديلات."
 
-msgid "Redirecting…"
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr ""
 
 #, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgid "You're still not logged in as {0}."
+msgstr ""
+
+msgid "Password (optional)"
+msgstr "كلمة المرور (اختيارية)"
+
+#, python-brace-format
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr ""
+
+msgid "Find great people to donate to"
+msgstr ""
+
+msgid "Whose work do you appreciate? See if they're on Liberapay"
+msgstr ""
+
+msgid "Disconnect"
+msgstr ""
+
+msgid "This is not supported yet"
+msgstr ""
+
+msgid "Connect"
+msgstr ""
+
+msgid "username"
+msgstr "إسم المستخدم"
+
+msgid "Drop files here"
+msgstr ""
+
+msgid "Processing dropped files…"
+msgstr ""
+
+msgid "Add a file"
+msgstr ""
+
+msgid "Edit filename"
+msgstr "تعديل إسم الملف"
+
+msgid "Delete"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Personal Information"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Country (residence)"
+msgstr "البلد (الإقامة)"
+
+msgid "Nationality"
+msgstr ""
+
+msgid "Date of Birth"
+msgstr "تاريخ الإزدياد"
+
+msgid "YYYY-MM-DD"
+msgstr ""
+
+msgid "Occupation"
+msgstr ""
+
+msgid "Your main professional activity."
+msgstr ""
+
+msgid "Postal Address"
+msgstr "العنوان البريدي"
+
+msgid "Organization Information"
+msgstr "معلومات عن المنظمة"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr ""
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr ""
+
+msgid "Organization Name"
+msgstr "إسم المنظمة"
+
+msgid "Headquarters Address"
+msgstr ""
+
+msgid "Introduction"
+msgstr "المقدمة"
+
+msgid "Global"
+msgstr ""
+
+msgid "Teams"
+msgstr "الفِرق"
+
+msgid "Stats"
+msgstr "الإحصائيات"
+
+msgid "Feeds"
+msgstr "المستجدات"
+
+msgid "Contact"
+msgstr "للتواصل"
+
+msgid "Security"
+msgstr "الأمان"
+
+msgid "Logos"
+msgstr ""
+
+msgid "Overview"
+msgstr "لمحة عامة"
+
+msgid "Organizations"
+msgstr "المنظمات"
+
+msgid "Individuals"
+msgstr "الأفراد"
+
+msgid "Unclaimed Donations"
+msgstr "التبرعات التي لم يطالب بها"
+
+msgid "Repositories"
+msgstr "المستودعات"
+
+msgid "Social Networks"
+msgstr "الشبكات الاجتماعية"
+
+msgid "Communities"
+msgstr "المجتمعات"
+
+msgid "Name"
+msgstr "الإسم"
+
+msgid "Avatar"
+msgstr ""
+
+msgid "Currencies"
+msgstr "العملات"
+
+msgid "Goal"
+msgstr ""
+
+msgid "Statement"
+msgstr ""
+
+#, fuzzy
+msgid "Linked Accounts"
+msgstr "حسابات في مكان آخر"
+
+msgid "Privacy"
+msgstr ""
+
+msgid "Members"
+msgstr "الأعضاء"
+
+msgid "Previous"
+msgstr "السابق"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "First"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "View More"
+msgstr "عرض المزيد"
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr ""
+
+msgid "Current password"
+msgstr "كلمة السر الحالية"
+
+msgid "New password"
+msgstr "كلمة سر جديدة"
+
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
+
+msgid "Country"
+msgstr "البلد"
+
+msgid "Region (state, province, island…)"
+msgstr ""
+
+msgid "You can leave this field empty if your country does not use regions in postal addresses."
+msgstr ""
+
+msgid "City"
+msgstr "المدينة"
+
+msgid "Postal code"
+msgstr ""
+
+msgid "Address within the city"
+msgstr ""
+
+msgid "Patrons"
+msgstr "الرعاة"
+
+msgid "Income"
+msgstr "الدخل"
+
+msgid "per week"
+msgstr "كل أسبوع"
+
+msgid "Modify your pledge"
+msgstr ""
+
+msgid "Modify your donation"
+msgstr ""
+
+msgid "Pledges"
+msgstr "الوعود"
+
+msgid "Sum"
+msgstr ""
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr ""
+
+msgid "Mission accomplished!"
+msgstr "أُنجِزت المهمّة !"
+
+msgid "View income shares"
 msgstr ""
 
 msgid "(fork)"
@@ -1657,26 +1505,17 @@ msgstr ""
 msgid "Show on your profile"
 msgstr "اعرض على ملفك الشخصي"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr ""
-
 msgid "Search Liberapay"
 msgstr "البحث في ليبيراباي"
-
-msgid "Switch to a different account"
-msgstr ""
-
-msgid "The changes have been saved."
-msgstr "تم حفظ التعديلات."
 
 msgid "Log In or Create Account"
 msgstr "تسجيل الدخول أو إنشاء حساب"
 
-msgid "Sign out"
-msgstr "خروج"
-
 msgid "Please input your email address:"
 msgstr "يرجى إدخال عنوان بريدك الإلكتروني :"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
 
 msgid "and select your preferred currency:"
 msgstr "و القيام بتحديد عملتك المفضلة :"
@@ -1684,28 +1523,6 @@ msgstr "و القيام بتحديد عملتك المفضلة :"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "بإنشائكم لحسابٍ على ليبيراباي فإنكم توافقون على {0}شروط الخدمة{1}."
-
-msgid "Enter a username"
-msgstr "أدخل اسم المستخدم"
-
-msgid "Invite"
-msgstr "دعوة"
-
-msgid "Explore teams"
-msgstr "استكشاف الفِرَق"
-
-msgid "About teams"
-msgstr "عن الفِرَق"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1739,9 +1556,6 @@ msgid "Unused income will be consumed in following weeks, it does not accrue in 
 msgstr ""
 
 msgid "Leftover"
-msgstr ""
-
-msgid "Log in via email"
 msgstr ""
 
 #, python-brace-format
@@ -1811,6 +1625,134 @@ msgid "Modify the donation"
 msgstr "تعديل الهبة"
 
 msgid "Stop the donation"
+msgstr ""
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr ""
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr ""
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr ""
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr ""
+
+msgid "Income Range"
+msgstr ""
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr ""
+
+msgid "How much money you earn per year, approximately."
+msgstr ""
+
+msgid "Identity Proof"
+msgstr ""
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr ""
+
+msgid "Articles of Association"
+msgstr ""
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr ""
+
+msgid "Registration Proof"
+msgstr ""
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr ""
+
+msgid "Proof of registration from the official authority."
+msgstr ""
+
+msgid "Shareholder Declaration"
+msgstr ""
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr ""
+
+msgid "Legal Representative Information"
+msgstr ""
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr ""
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr ""
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr ""
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr ""
+
+msgid "Given Name"
+msgstr "الاسم الأول"
+
+msgid "Family Name"
+msgstr "اللقب"
+
+msgid "Country (nationality)"
+msgstr "البلد (الجنسية)"
+
+msgid "Organization Type"
+msgstr "نوع المنظمة"
+
+msgid "Business"
+msgstr ""
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr ""
+
+msgid "Address"
+msgstr "العنوان"
+
+msgid "Address (second line)"
+msgstr "العنوان (السطر الثاني)"
+
+msgid "Region"
+msgstr "المنطقة"
+
+msgid "Postal Code"
+msgstr "الرمز البريدي"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr ""
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr ""
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr ""
 
 msgid "Save"
@@ -1912,6 +1854,12 @@ msgstr ""
 msgid "Avatar email (for Libravatar only)"
 msgstr ""
 
+msgid "Leave"
+msgstr ""
+
+msgid "Explore communities"
+msgstr "استكشاف المجتمعات"
+
 msgid "The submitted settings are incoherent."
 msgstr ""
 
@@ -1936,6 +1884,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
+msgstr ""
+
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr ""
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
@@ -1963,6 +1914,12 @@ msgstr ""
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr ""
+
+msgid "Enter a username"
+msgstr "أدخل اسم المستخدم"
+
+msgid "Invite"
+msgstr "دعوة"
 
 msgid "Your privacy settings have been changed."
 msgstr ""
@@ -2051,6 +2008,12 @@ msgstr ""
 
 msgid "Switch to another language:"
 msgstr ""
+
+msgid "Explore teams"
+msgstr "استكشاف الفِرَق"
+
+msgid "About teams"
+msgstr "عن الفِرَق"
 
 msgid "Username"
 msgstr "إسم المستخدم"
@@ -2531,6 +2494,30 @@ msgstr "الملف الشخصي لـ {username}"
 
 msgid "Edit"
 msgstr "تعديل"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr ""
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 msgid "History"
 msgstr "التأريخ"
@@ -4198,6 +4185,19 @@ msgstr "إنشاء فريق"
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr ""
+
+msgid "Name of the team"
+msgstr "إسم الفريق"
+
+msgid "Email of the team (optional)"
+msgstr "عنوان البريد الإلكتروني للفريق (اختياري)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr ""
+
+msgid "Create"
+msgstr "إنشاء"
 
 msgid "Becoming a team member"
 msgstr ""

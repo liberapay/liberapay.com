@@ -669,6 +669,9 @@ msgstr "Chiar este {0} un server {1}? Momentan nu se comportă ca un server."
 msgid "You need to sign in first"
 msgstr "Trebuie să vă autentificați mai întâi"
 
+msgid "This account is closed"
+msgstr "Aceast cont este închis"
+
 msgid "You need to log in"
 msgstr "Trebuie să vă autentificați"
 
@@ -871,10 +874,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr "Această metodă de plată este momentan indisponibilă. Ne cerem scuze pentru inconveniență."
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr ""
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr ""
 
@@ -904,6 +903,10 @@ msgstr "Serviciu indisponibil"
 
 msgid "Gateway Timeout"
 msgstr "Gateway Timeout"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -967,24 +970,6 @@ msgstr "Nu aveți autorizația de a accesa această pagină."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Procesarea cererii dumneavoastră a eșuat pentru că serverul nostru nu a putut comunica cu un serviciu localizat pe altă mașină. Aceasta este o problemă temporară, reîncercați mai târziu."
 
-msgid "This account is closed"
-msgstr "Aceast cont este închis"
-
-msgid "Are you the account owner?"
-msgstr "Sunteți deținătorul contului?"
-
-msgid "Log in to reopen your account."
-msgstr "Autentificați-vă pentru a redeschide contul."
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "Aveți nevoie de un cont pentru asta. Completați unul din formularele de mai jos."
-
-msgid "Create an account"
-msgstr "Creează un cont"
-
-msgid "Use an existing account"
-msgstr "Utilizați un cont existent"
-
 msgid "Bad Request"
 msgstr ""
 
@@ -1009,6 +994,65 @@ msgstr "Adresă e-mail"
 
 msgid "Go"
 msgstr "Execută"
+
+msgid "Cancel"
+msgstr "Anulează"
+
+msgid "Confirm"
+msgstr "Confirmă"
+
+msgid "This new password is not safe"
+msgstr "Această parolă nouă nu este sigură"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr "Am detectat că parola curentă a dumneavoastră este ușoară de ghicit, și de aceea nesigură."
+
+msgid "Do you still want to use this password?"
+msgstr "Totuși, doriți să utilizați această parolă?"
+
+msgid "No, cancel"
+msgstr "Nu, anulează"
+
+msgid "Yes, proceed"
+msgstr "Da, continuă"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr "{platform} a respins cererea noastră de a accesa datele dumneavoastră. Reconectarea la contul din {platform} ar trebui să rezolve problema."
+
+msgid "Reconnect"
+msgstr "Reconectează"
+
+msgid "Redirecting…"
+msgstr "Se redirecționează…"
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr ""
+
+msgid "Retry"
+msgstr "Reîncearcă"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "Aveți nevoie de un cont pentru asta. Completați unul din formularele de mai jos."
+
+msgid "Create an account"
+msgstr "Creează un cont"
+
+msgid "Use an existing account"
+msgstr "Utilizați un cont existent"
+
+msgid "Are you the account owner?"
+msgstr "Sunteți deținătorul contului?"
+
+msgid "Log in to reopen your account."
+msgstr "Autentificați-vă pentru a redeschide contul."
+
+msgid "Please try again in a few minutes."
+msgstr "Încercați din nou în câteva minute."
+
+msgid "Log in via email"
+msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "În momentul de față trecem printr-un rând de defecte tehnice. Prin urmare, majoritatea acțiunilor nu vor funcționa. Ne pare rău pentru inconveniență, vom restaura totul la normal pe cât de repede posibil."
@@ -1040,333 +1084,18 @@ msgstr "Întrebări frecvente"
 msgid "Legal"
 msgstr "Legale"
 
-msgid "Find great people to donate to"
-msgstr "Găsiți oameni măreți cărora să le donați"
-
-msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "A cui muncă apreciați? Vedeți dacă îi găsiți pe Liberapay"
-
-msgid "Communities"
-msgstr "Comunități"
+msgid "Switch to another language"
+msgstr "Comutați la altă limbă"
 
 #, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] "cu {n} altul"
-msgstr[1] "cu {n} alții"
-msgstr[2] "cu {n} alții"
-
-msgid "Leave"
-msgstr "Părăsește"
-
-msgid "Explore communities"
-msgstr "Explorează comunități"
-
-msgid "Cancel"
-msgstr "Anulează"
-
-msgid "Confirm"
-msgstr "Confirmă"
-
-msgid "Linked Accounts"
-msgstr "Conturi conectate"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr "Conectând conturile, de pe alte platforme, pe care le dețineți va facilita găsirea profilului dumneavoastră de Liberapay, și vă va ajuta să demonstrați că sunteți persoana care pretindeți a fi."
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0} deține următoarele conturi pe alte platforme:"
-
-msgid "Name of the team"
-msgstr "Numele echipei"
-
-msgid "Email of the team (optional)"
-msgstr "E-mailul echipei (opțional)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr "Activează {0}limite pentru beneficiile echipei{1}"
-
-msgid "Create"
-msgstr "Creează"
-
-msgid "Disconnect"
-msgstr "Deconectează"
-
-msgid "This is not supported yet"
-msgstr "Aceasta nu este suportată încă"
-
-msgid "Connect"
-msgstr "Conectează"
-
-msgid "Drop files here"
-msgstr "Plasați fișiere aici"
-
-msgid "Processing dropped files…"
-msgstr "Se procesează fișierele plasate…"
-
-msgid "Add a file"
-msgstr "Adaugă un fișier"
-
-msgid "Edit filename"
-msgstr "Editează numele de fișier"
-
-msgid "Retry"
-msgstr "Reîncearcă"
-
-msgid "Delete"
-msgstr "Șterge"
-
-msgid "Close"
-msgstr "Închide"
-
-msgid "No"
-msgstr "Nu"
-
-msgid "Yes"
-msgstr "Da"
-
-msgid "Ok"
-msgstr "Ok"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Ați încărcat {n} document de tipul:"
-msgstr[1] "Ați încărcat {n} documente de tipul:"
-msgstr[2] "Ați încărcat {n} de documente de tipul:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "Documentul nr.{id} este în așteptarea vaildării."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "Documentul nr.{id} a fost validat."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Documentul nr.{id} a fost respins: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Dacă aveți nevoie de asistență puteți trimite un e-mail la support@liberapay.com."
-
-msgid "Occupation"
-msgstr "Ocupație"
-
-msgid "Your main professional activity."
-msgstr "Activitatea dumneavoastră profesională principală."
-
-msgid "Income Range"
-msgstr "Intervalul venitului"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Mai puțin de {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Mai mult de {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Între {0} și {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Câți bani câștigați pe an, aproximativ."
-
-msgid "Postal Address"
-msgstr "Adresă poștală"
-
-msgid "Identity Proof"
-msgstr "Dovadă de identitate"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Pașaport, sau card de identitate (față și spate), sau un carnet de șofer din Marea Britanie."
-
-msgid "Organization Information"
-msgstr "Informații despre organizație"
-
-msgid "Headquarters Address"
-msgstr "Adresa sediului"
-
-msgid "Articles of Association"
-msgstr "Articole de Asociație"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Articole de asociație (statut) verificate - memorandum oficial declarat de antreprenori, în care următoarele informații sunt menționate: denumirea firmei, activitatea, adresa înregistrată, acționariatul."
-
-msgid "Registration Proof"
-msgstr "Dovada înregistrării"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Extract de la registrul de companii emisă în ultimele trei luni."
-
-msgid "Proof of registration from the official authority."
-msgstr "Dovadă de înregistrare de la o autoritate oficială."
-
-msgid "Shareholder Declaration"
-msgstr "Declarație de acționar"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Descărcați și completați {link_start}declarația de acționar{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Informații despre reprezentatul legal"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "Următoarele câmpuri sunt despre reprezentatul legal al organizației (probabil dumneavoastră)."
-
-msgid "Email"
-msgstr "E-mail"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Următoarele formate de fișiere sunt suportate: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Dimensiunea maximă a fiecărui fișier este de {0}MB."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Conform regulilor financiare, trebuie să știm cine sunteți. Numai personal autorizat va putea vizualiza aceste informații, nu le vom arăta altor utilizatori sau oricine altcineva decât dacă acest lucru este cerut prin lege."
-
-msgid "Given Name"
-msgstr "Prenume"
-
-msgid "Family Name"
-msgstr "Nume"
-
-msgid "Country (residence)"
-msgstr "Țara (de rezidență)"
-
-msgid "Country (nationality)"
-msgstr "Țara (naționalitate)"
-
-msgid "Date of Birth"
-msgstr "Data nașterii"
-
-msgid "YYYY-MM-DD"
-msgstr "AAAA-LL-ZZ"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "Acționați ca un reprezentat al unei organizații?"
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Da, reprezint o companie sau o organizație non-profit."
-
-msgid "Organization Type"
-msgstr "Tipul organizației"
-
-msgid "Business"
-msgstr "Companie"
-
-msgid "Organization Name"
-msgstr "Numele organizației"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Sunt de acord cu {0}condițiile serviciului MangoPay{1}"
-
-msgid "Personal Information"
-msgstr "Informații personale"
-
-msgid "Full Name"
-msgstr "Nume complet"
-
-msgid "Nationality"
-msgstr "Naționalitate"
-
-msgid "username"
-msgstr "nume de utilizator"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "V-am trimis o legătură de autentificare valabilă doar o dată. Verificați-vă e-mailul, deschideți legătura oferită într-un nou tab, apoi reveniți la această pagină și apăsați pe butonul de mai jos pentru a continua acțiunea dorită."
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Încă nu sunteți autentificat ca {0}."
-
-msgid "Password (optional)"
-msgstr "Parolă (opțională)"
-
-#, fuzzy, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Lăsați câmpul precedent gol dacă contul dumneavoastră nu are o parolă, sau dacă ați pierdut-o. Vă vom trimite o legătură de autentificare prin e-mail."
-
-msgid "Members"
-msgstr "Membri"
-
-msgid "View income shares"
-msgstr "Vizualizează cotele de venit"
-
-msgid "Introduction"
-msgstr "Introducere"
-
-msgid "Global"
-msgstr "Globală"
-
-msgid "Payment Processors"
-msgstr "Furnizori de plăți"
-
-msgid "Teams"
-msgstr "Echipe"
-
-msgid "Stats"
-msgstr "Statistici"
-
-msgid "Feeds"
-msgstr "Fluxuri"
-
-msgid "Contact"
-msgstr "Contact"
-
-msgid "Security"
-msgstr "Securitate"
-
-msgid "Logos"
-msgstr "Logouri"
-
-msgid "Overview"
-msgstr "Vedere de ansamblu"
-
-msgid "Organizations"
-msgstr "Organizații"
-
-msgid "Individuals"
-msgstr "Indivizi"
-
-msgid "Unclaimed Donations"
-msgstr "Donări Nerevendicate"
-
-msgid "Repositories"
-msgstr "Depozite"
-
-msgid "Social Networks"
-msgstr "Rețele sociale"
+msgid "({x_percent} translated)"
+msgstr "(tradusă {x_percent})"
+
+msgid "Help us translate Liberapay"
+msgstr "Ajutați-ne să traducem Liberapay"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Name"
-msgstr "Nume"
-
-msgid "Avatar"
-msgstr "Avatar"
-
-msgid "Currencies"
-msgstr "Valute"
-
-msgid "Goal"
-msgstr "Țel"
-
-msgid "Statement"
-msgstr "Declarație"
-
-msgid "Privacy"
-msgstr "Confidențialitate"
 
 msgid "Giving"
 msgstr "Dăruire"
@@ -1376,6 +1105,15 @@ msgstr "Primire"
 
 msgid "Ledger"
 msgstr "Registru contabil"
+
+msgid "Wallet"
+msgstr "Portofel"
+
+msgid "Emptying your wallet"
+msgstr "Golirea portofelului"
+
+msgid "Payment Processors"
+msgstr "Furnizori de plăți"
 
 msgid "Identity"
 msgstr "Identitate"
@@ -1392,162 +1130,17 @@ msgstr "Notificări"
 msgid "Widgets"
 msgstr "Widget-uri"
 
-msgid "Switch to another language"
-msgstr "Comutați la altă limbă"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "(tradusă {x_percent})"
-
-msgid "Help us translate Liberapay"
-msgstr "Ajutați-ne să traducem Liberapay"
-
-msgid "Wallet"
-msgstr "Portofel"
-
-msgid "Emptying your wallet"
-msgstr "Golirea portofelului"
-
 msgid "Create a new community"
 msgstr "Creează o comunitate nouă"
 
 msgid "Create a new team"
 msgstr "Creează o echipă nouă"
 
-msgid "Please try again in a few minutes."
-msgstr "Încercați din nou în câteva minute."
-
-msgid "Previous"
-msgstr "Precedentul"
-
-msgid "Next"
-msgstr "Următorul"
-
-msgid "First"
-msgstr "Primul"
-
-msgid "Last"
-msgstr "Ultimul"
-
-msgid "View More"
-msgstr "Vizualizează mai multe"
+msgid "Sign out"
+msgstr "Deconectare"
 
 msgid "Print"
 msgstr "Tipărește"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Stabilirea unei parole vă permite să vă autentificați în mod direct, în loc de a aștepta după o legătură unică trimisă prin e-mail. Luați aminte că Liberapay este un seviciu financiar, deci folosiți o parolă puternică!"
-
-msgid "Current password"
-msgstr "Parola curentă"
-
-msgid "New password"
-msgstr "Noua parolă"
-
-msgid "This new password is not safe"
-msgstr "Această parolă nouă nu este sigură"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Am detectat că parola curentă a dumneavoastră este ușoară de ghicit, și de aceea nesigură."
-
-msgid "Do you still want to use this password?"
-msgstr "Totuși, doriți să utilizați această parolă?"
-
-msgid "No, cancel"
-msgstr "Nu, anulează"
-
-msgid "Yes, proceed"
-msgstr "Da, continuă"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Donațiile către {username} sunt procesate prin PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
-
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "Oamenii ce contribuie la cultura publică au nevoie de dumneavoastră pentru a-și susține munca. Dezvoltarea programelor libere, distribuirea liberă a cunoștiințelor, sunt acțiuni ce durează timp și costă bani, nu numai pentru a face munca inițială, dar și pentru a o întreține de-alungul timpului."
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "Sistemul de donații recurent al Liberapay este conceput pentru a oferi creatorilor un venit stabil, finanțat de mulțime, permițându-le să continue munca lor fantastică care folosește tuturor. Sunteți gata să contribuiți? Atunci haide să începem:"
-
-msgid "Address"
-msgstr "Adresă"
-
-msgid "Address (second line)"
-msgstr "Adresă (linia a două)"
-
-msgid "City"
-msgstr "Oraș"
-
-msgid "Region"
-msgstr "Regiune"
-
-msgid "Postal Code"
-msgstr "Cod poștal"
-
-msgid "Country"
-msgstr "Țară"
-
-msgid "Region (state, province, island…)"
-msgstr "Regiune (stat, provincie, insulă…)"
-
-msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr ""
-
-msgid "Postal code"
-msgstr ""
-
-msgid "Address within the city"
-msgstr "Adresa în interiorul orașului"
-
-msgid "Patrons"
-msgstr "Susținători"
-
-msgid "Income"
-msgstr "Venit"
-
-msgid "per week"
-msgstr "pe săptămână"
-
-msgid "Modify your pledge"
-msgstr "Modificați angajamentul"
-
-msgid "Pledge"
-msgstr "Angajament"
-
-msgid "Modify your donation"
-msgstr "Modificați donația"
-
-msgid "Donate"
-msgstr "Donează"
-
-msgid "Pledges"
-msgstr "Angajamente"
-
-msgid "Sum"
-msgstr "Sumă"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Țel: {0}"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Venit: {0}/săptămână"
-
-msgid "Mission accomplished!"
-msgstr "Misiune împlinită!"
 
 #, python-brace-format
 msgid "Joined {timespan_ago}."
@@ -1587,22 +1180,283 @@ msgstr[1] "{0} primește {1} pe săptămână de la {n} susținători."
 msgstr[2] "{0} primește {1} pe săptămână de la {n} de susținători."
 
 #, python-brace-format
+msgid "Goal: {0}"
+msgstr "Țel: {0}"
+
+#, python-brace-format
 msgid "Donating ({amount})"
 msgstr "Donați ({amount})"
 
+msgid "Pledge"
+msgstr "Angajament"
+
+msgid "Donate"
+msgstr "Donează"
+
+msgid "Switch to a different account"
+msgstr "Comută la un cont diferit"
+
+msgid "The changes have been saved."
+msgstr "Schimbările au fost înregistrate."
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr "V-am trimis o legătură de autentificare valabilă doar o dată. Verificați-vă e-mailul, deschideți legătura oferită într-un nou tab, apoi reveniți la această pagină și apăsați pe butonul de mai jos pentru a continua acțiunea dorită."
+
 #, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "{platform} a respins cererea noastră de a accesa datele dumneavoastră. Reconectarea la contul din {platform} ar trebui să rezolve problema."
+msgid "You're still not logged in as {0}."
+msgstr "Încă nu sunteți autentificat ca {0}."
 
-msgid "Reconnect"
-msgstr "Reconectează"
+msgid "Password (optional)"
+msgstr "Parolă (opțională)"
 
-msgid "Redirecting…"
-msgstr "Se redirecționează…"
+#, fuzzy, python-brace-format
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr "Lăsați câmpul precedent gol dacă contul dumneavoastră nu are o parolă, sau dacă ați pierdut-o. Vă vom trimite o legătură de autentificare prin e-mail."
+
+msgid "Find great people to donate to"
+msgstr "Găsiți oameni măreți cărora să le donați"
+
+msgid "Whose work do you appreciate? See if they're on Liberapay"
+msgstr "A cui muncă apreciați? Vedeți dacă îi găsiți pe Liberapay"
+
+msgid "Disconnect"
+msgstr "Deconectează"
+
+msgid "This is not supported yet"
+msgstr "Aceasta nu este suportată încă"
+
+msgid "Connect"
+msgstr "Conectează"
+
+msgid "username"
+msgstr "nume de utilizator"
+
+msgid "Drop files here"
+msgstr "Plasați fișiere aici"
+
+msgid "Processing dropped files…"
+msgstr "Se procesează fișierele plasate…"
+
+msgid "Add a file"
+msgstr "Adaugă un fișier"
+
+msgid "Edit filename"
+msgstr "Editează numele de fișier"
+
+msgid "Delete"
+msgstr "Șterge"
+
+msgid "Close"
+msgstr "Închide"
+
+msgid "No"
+msgstr "Nu"
+
+msgid "Yes"
+msgstr "Da"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Personal Information"
+msgstr "Informații personale"
+
+msgid "Full Name"
+msgstr "Nume complet"
+
+msgid "Country (residence)"
+msgstr "Țara (de rezidență)"
+
+msgid "Nationality"
+msgstr "Naționalitate"
+
+msgid "Date of Birth"
+msgstr "Data nașterii"
+
+msgid "YYYY-MM-DD"
+msgstr "AAAA-LL-ZZ"
+
+msgid "Occupation"
+msgstr "Ocupație"
+
+msgid "Your main professional activity."
+msgstr "Activitatea dumneavoastră profesională principală."
+
+msgid "Postal Address"
+msgstr "Adresă poștală"
+
+msgid "Organization Information"
+msgstr "Informații despre organizație"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Acționați ca un reprezentat al unei organizații?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Da, reprezint o companie sau o organizație non-profit."
+
+msgid "Organization Name"
+msgstr "Numele organizației"
+
+msgid "Headquarters Address"
+msgstr "Adresa sediului"
+
+msgid "Introduction"
+msgstr "Introducere"
+
+msgid "Global"
+msgstr "Globală"
+
+msgid "Teams"
+msgstr "Echipe"
+
+msgid "Stats"
+msgstr "Statistici"
+
+msgid "Feeds"
+msgstr "Fluxuri"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Security"
+msgstr "Securitate"
+
+msgid "Logos"
+msgstr "Logouri"
+
+msgid "Overview"
+msgstr "Vedere de ansamblu"
+
+msgid "Organizations"
+msgstr "Organizații"
+
+msgid "Individuals"
+msgstr "Indivizi"
+
+msgid "Unclaimed Donations"
+msgstr "Donări Nerevendicate"
+
+msgid "Repositories"
+msgstr "Depozite"
+
+msgid "Social Networks"
+msgstr "Rețele sociale"
+
+msgid "Communities"
+msgstr "Comunități"
+
+msgid "Name"
+msgstr "Nume"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Valute"
+
+msgid "Goal"
+msgstr "Țel"
+
+msgid "Statement"
+msgstr "Declarație"
+
+msgid "Linked Accounts"
+msgstr "Conturi conectate"
+
+msgid "Privacy"
+msgstr "Confidențialitate"
+
+msgid "Members"
+msgstr "Membri"
+
+msgid "Previous"
+msgstr "Precedentul"
+
+msgid "Next"
+msgstr "Următorul"
+
+msgid "First"
+msgstr "Primul"
+
+msgid "Last"
+msgstr "Ultimul"
+
+msgid "View More"
+msgstr "Vizualizează mai multe"
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr "Stabilirea unei parole vă permite să vă autentificați în mod direct, în loc de a aștepta după o legătură unică trimisă prin e-mail. Luați aminte că Liberapay este un seviciu financiar, deci folosiți o parolă puternică!"
+
+msgid "Current password"
+msgstr "Parola curentă"
+
+msgid "New password"
+msgstr "Noua parolă"
 
 #, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Donațiile către {username} sunt procesate prin PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
+
+msgid "Country"
+msgstr "Țară"
+
+msgid "Region (state, province, island…)"
+msgstr "Regiune (stat, provincie, insulă…)"
+
+msgid "You can leave this field empty if your country does not use regions in postal addresses."
+msgstr ""
+
+msgid "City"
+msgstr "Oraș"
+
+msgid "Postal code"
+msgstr ""
+
+msgid "Address within the city"
+msgstr "Adresa în interiorul orașului"
+
+msgid "Patrons"
+msgstr "Susținători"
+
+msgid "Income"
+msgstr "Venit"
+
+msgid "per week"
+msgstr "pe săptămână"
+
+msgid "Modify your pledge"
+msgstr "Modificați angajamentul"
+
+msgid "Modify your donation"
+msgstr "Modificați donația"
+
+msgid "Pledges"
+msgstr "Angajamente"
+
+msgid "Sum"
+msgstr "Sumă"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Venit: {0}/săptămână"
+
+msgid "Mission accomplished!"
+msgstr "Misiune împlinită!"
+
+msgid "View income shares"
+msgstr "Vizualizează cotele de venit"
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1620,26 +1474,17 @@ msgstr "Delistează"
 msgid "Show on your profile"
 msgstr "Arată pe profilul dumneavoastră"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "Sunteți în modul de test, nu introduceți plăți reale sau date personale!"
-
 msgid "Search Liberapay"
 msgstr "Caută Liberapay"
-
-msgid "Switch to a different account"
-msgstr "Comută la un cont diferit"
-
-msgid "The changes have been saved."
-msgstr "Schimbările au fost înregistrate."
 
 msgid "Log In or Create Account"
 msgstr "Autentificați-vă sau creați-vă un cont"
 
-msgid "Sign out"
-msgstr "Deconectare"
-
 msgid "Please input your email address:"
 msgstr "Introduceți adreasa de e-mail:"
+
+msgid "Email"
+msgstr "E-mail"
 
 msgid "and select your preferred currency:"
 msgstr "și selectați valuta preferată:"
@@ -1647,25 +1492,6 @@ msgstr "și selectați valuta preferată:"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Prin crearea unui cont Liberapay sunteți de acord cu {0}Termenii și condițiile{1}."
-
-msgid "Enter a username"
-msgstr "Introduceți un nume de utilizator"
-
-msgid "Invite"
-msgstr "Invită"
-
-msgid "Explore teams"
-msgstr "Explorează echipe"
-
-msgid "About teams"
-msgstr "Despre echipe"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} este membru în {n} echipă:"
-msgstr[1] "{username} este membru în {n} echipe:"
-msgstr[2] "{username} este membru în {n} de echipe:"
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1700,9 +1526,6 @@ msgstr ""
 
 msgid "Leftover"
 msgstr "Exces"
-
-msgid "Log in via email"
-msgstr ""
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1766,6 +1589,131 @@ msgstr "Modifică donația"
 
 msgid "Stop the donation"
 msgstr "Oprește donația"
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] "Ați încărcat {n} document de tipul:"
+msgstr[1] "Ați încărcat {n} documente de tipul:"
+msgstr[2] "Ați încărcat {n} de documente de tipul:"
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr "Documentul nr.{id} este în așteptarea vaildării."
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr "Documentul nr.{id} a fost validat."
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr "Documentul nr.{id} a fost respins: {refused_reason_type} - {refused_reason_message}."
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "Dacă aveți nevoie de asistență puteți trimite un e-mail la support@liberapay.com."
+
+msgid "Income Range"
+msgstr "Intervalul venitului"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "Mai puțin de {0}"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "Mai mult de {0}"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "Între {0} și {1}"
+
+msgid "How much money you earn per year, approximately."
+msgstr "Câți bani câștigați pe an, aproximativ."
+
+msgid "Identity Proof"
+msgstr "Dovadă de identitate"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "Pașaport, sau card de identitate (față și spate), sau un carnet de șofer din Marea Britanie."
+
+msgid "Articles of Association"
+msgstr "Articole de Asociație"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr "Articole de asociație (statut) verificate - memorandum oficial declarat de antreprenori, în care următoarele informații sunt menționate: denumirea firmei, activitatea, adresa înregistrată, acționariatul."
+
+msgid "Registration Proof"
+msgstr "Dovada înregistrării"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr "Extract de la registrul de companii emisă în ultimele trei luni."
+
+msgid "Proof of registration from the official authority."
+msgstr "Dovadă de înregistrare de la o autoritate oficială."
+
+msgid "Shareholder Declaration"
+msgstr "Declarație de acționar"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr "Descărcați și completați {link_start}declarația de acționar{link_end}."
+
+msgid "Legal Representative Information"
+msgstr "Informații despre reprezentatul legal"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr "Următoarele câmpuri sunt despre reprezentatul legal al organizației (probabil dumneavoastră)."
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "Următoarele formate de fișiere sunt suportate: {0}."
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "Dimensiunea maximă a fiecărui fișier este de {0}MB."
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr "Conform regulilor financiare, trebuie să știm cine sunteți. Numai personal autorizat va putea vizualiza aceste informații, nu le vom arăta altor utilizatori sau oricine altcineva decât dacă acest lucru este cerut prin lege."
+
+msgid "Given Name"
+msgstr "Prenume"
+
+msgid "Family Name"
+msgstr "Nume"
+
+msgid "Country (nationality)"
+msgstr "Țara (naționalitate)"
+
+msgid "Organization Type"
+msgstr "Tipul organizației"
+
+msgid "Business"
+msgstr "Companie"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "Sunt de acord cu {0}condițiile serviciului MangoPay{1}"
+
+msgid "Address"
+msgstr "Adresă"
+
+msgid "Address (second line)"
+msgstr "Adresă (linia a două)"
+
+msgid "Region"
+msgstr "Regiune"
+
+msgid "Postal Code"
+msgstr "Cod poștal"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr "Oamenii ce contribuie la cultura publică au nevoie de dumneavoastră pentru a-și susține munca. Dezvoltarea programelor libere, distribuirea liberă a cunoștiințelor, sunt acțiuni ce durează timp și costă bani, nu numai pentru a face munca inițială, dar și pentru a o întreține de-alungul timpului."
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr "Sistemul de donații recurent al Liberapay este conceput pentru a oferi creatorilor un venit stabil, finanțat de mulțime, permițându-le să continue munca lor fantastică care folosește tuturor. Sunteți gata să contribuiți? Atunci haide să începem:"
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "Sunteți în modul de test, nu introduceți plăți reale sau date personale!"
 
 msgid "Save"
 msgstr "Salvează"
@@ -1866,6 +1814,12 @@ msgstr "Sursă de avatar"
 msgid "Avatar email (for Libravatar only)"
 msgstr "E-mail avatar (numai pentru Libravatar)"
 
+msgid "Leave"
+msgstr "Părăsește"
+
+msgid "Explore communities"
+msgstr "Explorează comunități"
+
 msgid "The submitted settings are incoherent."
 msgstr "Configurările trimise sunt incoerente."
 
@@ -1892,6 +1846,9 @@ msgstr ""
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr ""
 
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgstr "Conectând conturile, de pe alte platforme, pe care le dețineți va facilita găsirea profilului dumneavoastră de Liberapay, și vă va ajuta să demonstrați că sunteți persoana care pretindeți a fi."
+
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Sunt deschis la daruri, dar nu am un țel de finanțare specific."
 
@@ -1917,6 +1874,12 @@ msgstr "Suntem aici ca susținători, și refuzăm politicos primirea darurilor.
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr "Țelul nostru este să primim {0}"
+
+msgid "Enter a username"
+msgstr "Introduceți un nume de utilizator"
+
+msgid "Invite"
+msgstr "Invită"
 
 msgid "Your privacy settings have been changed."
 msgstr "Configurările de confidențialitate au fost modificate."
@@ -2002,6 +1965,12 @@ msgstr "Previzualizează"
 
 msgid "Switch to another language:"
 msgstr "Comută la altă limbă:"
+
+msgid "Explore teams"
+msgstr "Explorează echipe"
+
+msgid "About teams"
+msgstr "Despre echipe"
 
 msgid "Username"
 msgstr "Nume de utilizator"
@@ -2467,6 +2436,24 @@ msgstr "Profilul lui {username}"
 
 msgid "Edit"
 msgstr "Editează"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr "{0} deține următoarele conturi pe alte platforme:"
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] "{username} este membru în {n} echipă:"
+msgstr[1] "{username} este membru în {n} echipe:"
+msgstr[2] "{username} este membru în {n} de echipe:"
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] "cu {n} altul"
+msgstr[1] "cu {n} alții"
+msgstr[2] "cu {n} alții"
 
 msgid "History"
 msgstr "Istoric"
@@ -4074,6 +4061,19 @@ msgstr "Creearea unei echipe"
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr "Trebuie să vă {0}înregistrați propriul cont{1} mai întâi."
+
+msgid "Name of the team"
+msgstr "Numele echipei"
+
+msgid "Email of the team (optional)"
+msgstr "E-mailul echipei (opțional)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr "Activează {0}limite pentru beneficiile echipei{1}"
+
+msgid "Create"
+msgstr "Creează"
 
 msgid "Becoming a team member"
 msgstr "Devenire membru de echipă"

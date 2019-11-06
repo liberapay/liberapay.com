@@ -683,6 +683,9 @@ msgstr "Er {0} virkelig en {1} server? Den opfører sig ikke som en sådan for t
 msgid "You need to sign in first"
 msgstr "Du skal først logge ind"
 
+msgid "This account is closed"
+msgstr "Denne konto er lukket"
+
 msgid "You need to log in"
 msgstr "Du skal logge ind"
 
@@ -885,10 +888,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr "Denne betalingsmetode er i øjeblikket utilgængelig. Vi beklager ulejligheden."
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr "Vi beklager, men indgående betalinger er i øjeblikket deaktiveret. Du kan læse {link_start}dette blogindlæg{link_end} for at forstå hvorfor."
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr "Betalingsformidleren {name} returnerede en fejl. Prøv igen og kontakt support@liberapay.com, hvis problemet fortsætter."
 
@@ -918,6 +917,10 @@ msgstr "Tjenesten er ikke tilgængelig"
 
 msgid "Gateway Timeout"
 msgstr "Gateway tidsudløb"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -978,24 +981,6 @@ msgstr "Du har ikke tilladelse til at åbne denne side."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Behandlingen af din forespørgsel mislykkedes, fordi vores server ikke kunne kommunikere med en tjeneste på en anden maskine. Dette er et midlertidigt problem, prøv igen senere."
 
-msgid "This account is closed"
-msgstr "Denne konto er lukket"
-
-msgid "Are you the account owner?"
-msgstr "Er du kontoens ejer?"
-
-msgid "Log in to reopen your account."
-msgstr "Log ind for at genåbne kontoen."
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "Du skal bruge en konto for at gøre dette. Udfyld venligst en af formularerne nedenfor."
-
-msgid "Create an account"
-msgstr "Lav en konto"
-
-msgid "Use an existing account"
-msgstr "Brug en eksisterende konto"
-
 msgid "Bad Request"
 msgstr ""
 
@@ -1020,6 +1005,65 @@ msgstr "E-mailadresse"
 
 msgid "Go"
 msgstr "Kør"
+
+msgid "Cancel"
+msgstr "Annuller"
+
+msgid "Confirm"
+msgstr "Bekræft"
+
+msgid "This new password is not safe"
+msgstr "Denne nye adgangskode er ikke sikker"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr "Vi har opdaget at din nuværende adgangskode er let at gætte og dermed usikker."
+
+msgid "Do you still want to use this password?"
+msgstr "Vil du stadig bruge denne adgangskode?"
+
+msgid "No, cancel"
+msgstr "Nej, afbryd"
+
+msgid "Yes, proceed"
+msgstr "Ja, fortsæt"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr "{platform} afviste vores anmodning om adgang til dine data. Hvis du genforbinder til din {platform}-konto skulle det kunne løse problemet."
+
+msgid "Reconnect"
+msgstr "Genforbind"
+
+msgid "Redirecting…"
+msgstr "Videredirigerer…"
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr "Hvis du bruger en sjælden browser og der ikke sker noget, så{link_start}klik på dette link for at komme videre{link_end}."
+
+msgid "Retry"
+msgstr "Prøv igen"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "Du skal bruge en konto for at gøre dette. Udfyld venligst en af formularerne nedenfor."
+
+msgid "Create an account"
+msgstr "Lav en konto"
+
+msgid "Use an existing account"
+msgstr "Brug en eksisterende konto"
+
+msgid "Are you the account owner?"
+msgstr "Er du kontoens ejer?"
+
+msgid "Log in to reopen your account."
+msgstr "Log ind for at genåbne kontoen."
+
+msgid "Please try again in a few minutes."
+msgstr "Prøv venligst igen om et par minutter."
+
+msgid "Log in via email"
+msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Vi oplever i øjeblikket tekniske fejl. Som følge heraf virker de fleste ting ikke. Beklager ulejligheden, vi arbejder på at få alt tilbage til det normale hurtigst muligt."
@@ -1051,331 +1095,18 @@ msgstr "FAQ"
 msgid "Legal"
 msgstr "Juridisk"
 
-msgid "Find great people to donate to"
-msgstr "Find nogen at donere til"
-
-msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "Hvis arbejde kan du lide? Se om de er på Liberapay"
-
-msgid "Communities"
-msgstr "Fælleskaber"
+msgid "Switch to another language"
+msgstr "Skift til et andet sprog"
 
 #, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] "med {n} anden"
-msgstr[1] "med {n} andre"
-
-msgid "Leave"
-msgstr "Forlad"
-
-msgid "Explore communities"
-msgstr "Udforsk fælleskaber"
-
-msgid "Cancel"
-msgstr "Annuller"
-
-msgid "Confirm"
-msgstr "Bekræft"
-
-msgid "Linked Accounts"
-msgstr "Linkede kontoer"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr "Forbinde de kontoer du ejer på andre platforme gør din Liberapay profil nemmere at finde og hjælper med at vise at du er hvem du udgiver dig for at være."
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0} ejer følgende konti på andre platforme:"
-
-msgid "Name of the team"
-msgstr "Teamets navn"
-
-msgid "Email of the team (optional)"
-msgstr "Teamets e-mail (valgfri)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr "Aktiver {0}grænser for hvad teams kan modtage{1}"
-
-msgid "Create"
-msgstr "Opret"
-
-msgid "Disconnect"
-msgstr "Log af"
-
-msgid "This is not supported yet"
-msgstr "Dette er ikke understøttet endnu"
-
-msgid "Connect"
-msgstr "Forbind"
-
-msgid "Drop files here"
-msgstr "Drop filer her"
-
-msgid "Processing dropped files…"
-msgstr "Behandler droppede filer …"
-
-msgid "Add a file"
-msgstr "Tilføj en fil"
-
-msgid "Edit filename"
-msgstr "Rediger filnavn"
-
-msgid "Retry"
-msgstr "Prøv igen"
-
-msgid "Delete"
-msgstr "Slet"
-
-msgid "Close"
-msgstr "Luk"
-
-msgid "No"
-msgstr "Nej"
-
-msgid "Yes"
-msgstr "Ja"
-
-msgid "Ok"
-msgstr "Ok"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Du har uploadet {n} dokument af denne type:"
-msgstr[1] "Du har uploadet {n} dokumenter af denne type:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "Dokument #{id} afventer validering."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "Dokument #{id} er blevet valideret."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Dokument #{id} er blevet afvist: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Hvis du har brug for hjælp, kan du sende en email til support@liberapay.com."
-
-msgid "Occupation"
-msgstr "Erhverv"
-
-msgid "Your main professional activity."
-msgstr "Din primære profession."
-
-msgid "Income Range"
-msgstr "Indkomst Rækkevidde"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Mindre end {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Mere end {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Mellem {0} og {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Hvor mange penge du tjener per år, tilnærmelsesvis."
-
-msgid "Postal Address"
-msgstr "Post adresse"
-
-msgid "Identity Proof"
-msgstr "identitetsbevis"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Pas, eller ID Kort (front og bag), eller Britisk kørekort."
-
-msgid "Organization Information"
-msgstr "Information om organisation"
-
-msgid "Headquarters Address"
-msgstr "Hovedkvarters Adresse"
-
-msgid "Articles of Association"
-msgstr "Artikler om Association"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Certificeret artikler om association (Vedtægt) - Formel notat meddelt af entrepenørerne, i hvilket følgende information er nævnt: forretnings navn, aktivitet, registrerede adresse, aktiepost."
-
-msgid "Registration Proof"
-msgstr "Registrerings Bevis"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Uddrag fra Selskabets Register udstedt indenfor de sidste 3 måneder."
-
-msgid "Proof of registration from the official authority."
-msgstr "Bevis af registration fra den officielle autoritet."
-
-msgid "Shareholder Declaration"
-msgstr "Aktionær Erklæring"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Venligst hent og udfyld dette {link_start} aktionærens erkæring fra {link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Lovlig Repræsentantiv Information"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "De følgende felter handler om organisationens juridiske repræsentant (dig sandsynligvis)."
-
-msgid "Email"
-msgstr "E-mail"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Følgende fil formater er understøttede: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Den maksimale størrelse af enkelte filer er {0}MB."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Vi skal vide, hvem du er for at overholde de finansielle bestemmelser. Kun autoriseret personale vil kunne se disse oplysninger, vi vil ikke vise det til andre brugere eller andre i det hele taget, medmindre det kræves af loven."
-
-msgid "Given Name"
-msgstr "Fornavn"
-
-msgid "Family Name"
-msgstr "Efternavn"
-
-msgid "Country (residence)"
-msgstr "Land (residens)"
-
-msgid "Country (nationality)"
-msgstr "Land (nationalitet)"
-
-msgid "Date of Birth"
-msgstr "Fødselsdag"
-
-msgid "YYYY-MM-DD"
-msgstr "ÅÅÅÅ-MM-DD"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "Optræder du som repræsentant for en organisation?"
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Ja, jeg repræsenterer en virksomhed eller nonprofit organisation."
-
-msgid "Organization Type"
-msgstr "Organisations type"
-
-msgid "Business"
-msgstr "Forretning"
-
-msgid "Organization Name"
-msgstr "Organisations navn"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Jeg tilslutter mig hermed {0}MangoPays Servicevilkår{1}"
-
-msgid "Personal Information"
-msgstr "Personlig information"
-
-msgid "Full Name"
-msgstr "Fuldt navn"
-
-msgid "Nationality"
-msgstr "Nationalitet"
-
-msgid "username"
-msgstr "brugernavn"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "Vi har sendt dig et enkeltbruger login-link. Tjek din indbakke, åbn det medfølgende link i en ny fane, og kom så tilbage til denne side og klik på knappen nedenfor for at fortsætte med det du ønskede at gøre."
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Du er stadig ikke logget ind som {0}."
-
-msgid "Password (optional)"
-msgstr "Adgangskode (valgfrit)"
-
-#, fuzzy, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Lad det foregående felt stå tomt hvis din konto ikke har en adgangskode eller hvis du har mistet den. Vi sender dig et login-link via e-mail."
-
-msgid "Members"
-msgstr "Medlemmer"
-
-msgid "View income shares"
-msgstr "Se indkomne delinger"
-
-msgid "Introduction"
-msgstr "Introduktion"
-
-msgid "Global"
-msgstr "Global"
-
-msgid "Payment Processors"
-msgstr "Betalingsprocessor"
-
-msgid "Teams"
-msgstr "Team"
-
-msgid "Stats"
-msgstr "Statistik"
-
-msgid "Feeds"
-msgstr "Feeds"
-
-msgid "Contact"
-msgstr "Kontakt"
-
-msgid "Security"
-msgstr "Sikkerhed"
-
-msgid "Logos"
-msgstr "Logoer"
-
-msgid "Overview"
-msgstr "Oversigt"
-
-msgid "Organizations"
-msgstr "Organisationer"
-
-msgid "Individuals"
-msgstr "Individer"
-
-msgid "Unclaimed Donations"
-msgstr "Ikke opkrævede donationer"
-
-msgid "Repositories"
-msgstr "Arkiver"
-
-msgid "Social Networks"
-msgstr "Sociale netværk"
+msgid "({x_percent} translated)"
+msgstr "({x_percent} oversat)"
+
+msgid "Help us translate Liberapay"
+msgstr "Hjælp os med at oversætte Liberapay"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Name"
-msgstr "Navn"
-
-msgid "Avatar"
-msgstr "Avatar"
-
-msgid "Currencies"
-msgstr "Valutaer"
-
-msgid "Goal"
-msgstr "Mål"
-
-msgid "Statement"
-msgstr "Erklæring"
-
-msgid "Privacy"
-msgstr "Privatlivsindstillinger"
 
 msgid "Giving"
 msgstr "Givet"
@@ -1385,6 +1116,15 @@ msgstr "Modtaget"
 
 msgid "Ledger"
 msgstr "Bogføring"
+
+msgid "Wallet"
+msgstr "Tegnebog"
+
+msgid "Emptying your wallet"
+msgstr "Tøm din tegnebog"
+
+msgid "Payment Processors"
+msgstr "Betalingsprocessor"
 
 msgid "Identity"
 msgstr "Identitet"
@@ -1401,162 +1141,17 @@ msgstr "Notifikationer"
 msgid "Widgets"
 msgstr "Widgets"
 
-msgid "Switch to another language"
-msgstr "Skift til et andet sprog"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "({x_percent} oversat)"
-
-msgid "Help us translate Liberapay"
-msgstr "Hjælp os med at oversætte Liberapay"
-
-msgid "Wallet"
-msgstr "Tegnebog"
-
-msgid "Emptying your wallet"
-msgstr "Tøm din tegnebog"
-
 msgid "Create a new community"
 msgstr "Skab et nyt fælleskab"
 
 msgid "Create a new team"
 msgstr "Skab et nyt team"
 
-msgid "Please try again in a few minutes."
-msgstr "Prøv venligst igen om et par minutter."
-
-msgid "Previous"
-msgstr "Forrige"
-
-msgid "Next"
-msgstr "Næste"
-
-msgid "First"
-msgstr "Første"
-
-msgid "Last"
-msgstr "Sidste"
-
-msgid "View More"
-msgstr "Se Mere"
+msgid "Sign out"
+msgstr "Log ud"
 
 msgid "Print"
 msgstr "Udskriv"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Brug af adgangskode giver dig mulighed for at logge ind direkte i stedet for at vente på et engangs-link der sendes via e-mail. Husk, at Liberapay er en finansiel tjeneste, brug en stærkt adgangskode!"
-
-msgid "Current password"
-msgstr "Nuværende adgangskode"
-
-msgid "New password"
-msgstr "Ny adgangskode"
-
-msgid "This new password is not safe"
-msgstr "Denne nye adgangskode er ikke sikker"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Vi har opdaget at din nuværende adgangskode er let at gætte og dermed usikker."
-
-msgid "Do you still want to use this password?"
-msgstr "Vil du stadig bruge denne adgangskode?"
-
-msgid "No, cancel"
-msgstr "Nej, afbryd"
-
-msgid "Yes, proceed"
-msgstr "Ja, fortsæt"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donationer til {username} kan betales ved hjælp af et kredit- eller betalingskort (Visa, MasterCard, American Express) eller ved direkte debitering af en Euro bankkonto (kun til donationer i Euro)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Donationer til {username} bliver håndteret gennem PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort (Visa, MasterCard, American Express), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
-
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "Folk der bidrager til almenheden, har brug for at få støtte til deres arbejde. At skabe gratis software, sprede fri viden – disse ting tager tid og koster penge, ikke kun det indledende arbejde, men også vedligeholdelsen over længere tid."
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "Liberapays donationssystem er designet til at give stabile grundindtægter, hvilket gør det muligt for dem at fortsætte med at udføre et godt arbejde der gavner alle. Klar til at bidrage? Så lad os komme i gang:"
-
-msgid "Address"
-msgstr "Adresse"
-
-msgid "Address (second line)"
-msgstr "Adresse (ekstra linje)"
-
-msgid "City"
-msgstr "By"
-
-msgid "Region"
-msgstr "Region"
-
-msgid "Postal Code"
-msgstr "Postnummer"
-
-msgid "Country"
-msgstr "Land"
-
-msgid "Region (state, province, island…)"
-msgstr "Region (stat, provins, ø...)"
-
-msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr "Du kan lade dette felt stå tomt, hvis dit land ikke bruger regioner i postadresser."
-
-msgid "Postal code"
-msgstr "Postnummer"
-
-msgid "Address within the city"
-msgstr "Adresse i byen"
-
-msgid "Patrons"
-msgstr "Bidragsydere"
-
-msgid "Income"
-msgstr "Indkomst"
-
-msgid "per week"
-msgstr "per uge"
-
-msgid "Modify your pledge"
-msgstr "Lav om på dit donationstilbud"
-
-msgid "Pledge"
-msgstr "Donationstilbud"
-
-msgid "Modify your donation"
-msgstr "Lav om på din donation"
-
-msgid "Donate"
-msgstr "Doner"
-
-msgid "Pledges"
-msgstr "Donationstilbud"
-
-msgid "Sum"
-msgstr "Sum"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Mål: {0}"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "indkomst: {0}/uge"
-
-msgid "Mission accomplished!"
-msgstr "Missionen er lykkedes!"
 
 #, python-brace-format
 msgid "Joined {timespan_ago}."
@@ -1594,22 +1189,283 @@ msgstr[0] "{0} modtager {1} hver uge fra {n} bidragsyder."
 msgstr[1] "{0} modtager {1} hver uge fra {n} bidragsydere."
 
 #, python-brace-format
+msgid "Goal: {0}"
+msgstr "Mål: {0}"
+
+#, python-brace-format
 msgid "Donating ({amount})"
 msgstr "Doner ({amount})"
 
+msgid "Pledge"
+msgstr "Donationstilbud"
+
+msgid "Donate"
+msgstr "Doner"
+
+msgid "Switch to a different account"
+msgstr "Skift til en anden konto"
+
+msgid "The changes have been saved."
+msgstr "Ændringerne er blevet gemt."
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr "Vi har sendt dig et enkeltbruger login-link. Tjek din indbakke, åbn det medfølgende link i en ny fane, og kom så tilbage til denne side og klik på knappen nedenfor for at fortsætte med det du ønskede at gøre."
+
 #, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "{platform} afviste vores anmodning om adgang til dine data. Hvis du genforbinder til din {platform}-konto skulle det kunne løse problemet."
+msgid "You're still not logged in as {0}."
+msgstr "Du er stadig ikke logget ind som {0}."
 
-msgid "Reconnect"
-msgstr "Genforbind"
+msgid "Password (optional)"
+msgstr "Adgangskode (valgfrit)"
 
-msgid "Redirecting…"
-msgstr "Videredirigerer…"
+#, fuzzy, python-brace-format
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr "Lad det foregående felt stå tomt hvis din konto ikke har en adgangskode eller hvis du har mistet den. Vi sender dig et login-link via e-mail."
+
+msgid "Find great people to donate to"
+msgstr "Find nogen at donere til"
+
+msgid "Whose work do you appreciate? See if they're on Liberapay"
+msgstr "Hvis arbejde kan du lide? Se om de er på Liberapay"
+
+msgid "Disconnect"
+msgstr "Log af"
+
+msgid "This is not supported yet"
+msgstr "Dette er ikke understøttet endnu"
+
+msgid "Connect"
+msgstr "Forbind"
+
+msgid "username"
+msgstr "brugernavn"
+
+msgid "Drop files here"
+msgstr "Drop filer her"
+
+msgid "Processing dropped files…"
+msgstr "Behandler droppede filer …"
+
+msgid "Add a file"
+msgstr "Tilføj en fil"
+
+msgid "Edit filename"
+msgstr "Rediger filnavn"
+
+msgid "Delete"
+msgstr "Slet"
+
+msgid "Close"
+msgstr "Luk"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Personal Information"
+msgstr "Personlig information"
+
+msgid "Full Name"
+msgstr "Fuldt navn"
+
+msgid "Country (residence)"
+msgstr "Land (residens)"
+
+msgid "Nationality"
+msgstr "Nationalitet"
+
+msgid "Date of Birth"
+msgstr "Fødselsdag"
+
+msgid "YYYY-MM-DD"
+msgstr "ÅÅÅÅ-MM-DD"
+
+msgid "Occupation"
+msgstr "Erhverv"
+
+msgid "Your main professional activity."
+msgstr "Din primære profession."
+
+msgid "Postal Address"
+msgstr "Post adresse"
+
+msgid "Organization Information"
+msgstr "Information om organisation"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Optræder du som repræsentant for en organisation?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Ja, jeg repræsenterer en virksomhed eller nonprofit organisation."
+
+msgid "Organization Name"
+msgstr "Organisations navn"
+
+msgid "Headquarters Address"
+msgstr "Hovedkvarters Adresse"
+
+msgid "Introduction"
+msgstr "Introduktion"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Teams"
+msgstr "Team"
+
+msgid "Stats"
+msgstr "Statistik"
+
+msgid "Feeds"
+msgstr "Feeds"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Security"
+msgstr "Sikkerhed"
+
+msgid "Logos"
+msgstr "Logoer"
+
+msgid "Overview"
+msgstr "Oversigt"
+
+msgid "Organizations"
+msgstr "Organisationer"
+
+msgid "Individuals"
+msgstr "Individer"
+
+msgid "Unclaimed Donations"
+msgstr "Ikke opkrævede donationer"
+
+msgid "Repositories"
+msgstr "Arkiver"
+
+msgid "Social Networks"
+msgstr "Sociale netværk"
+
+msgid "Communities"
+msgstr "Fælleskaber"
+
+msgid "Name"
+msgstr "Navn"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Valutaer"
+
+msgid "Goal"
+msgstr "Mål"
+
+msgid "Statement"
+msgstr "Erklæring"
+
+msgid "Linked Accounts"
+msgstr "Linkede kontoer"
+
+msgid "Privacy"
+msgstr "Privatlivsindstillinger"
+
+msgid "Members"
+msgstr "Medlemmer"
+
+msgid "Previous"
+msgstr "Forrige"
+
+msgid "Next"
+msgstr "Næste"
+
+msgid "First"
+msgstr "Første"
+
+msgid "Last"
+msgstr "Sidste"
+
+msgid "View More"
+msgstr "Se Mere"
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr "Brug af adgangskode giver dig mulighed for at logge ind direkte i stedet for at vente på et engangs-link der sendes via e-mail. Husk, at Liberapay er en finansiel tjeneste, brug en stærkt adgangskode!"
+
+msgid "Current password"
+msgstr "Nuværende adgangskode"
+
+msgid "New password"
+msgstr "Ny adgangskode"
 
 #, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr "Hvis du bruger en sjælden browser og der ikke sker noget, så{link_start}klik på dette link for at komme videre{link_end}."
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donationer til {username} kan betales ved hjælp af et kredit- eller betalingskort (Visa, MasterCard, American Express) eller ved direkte debitering af en Euro bankkonto (kun til donationer i Euro)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Donationer til {username} bliver håndteret gennem PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort (Visa, MasterCard, American Express), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Region (state, province, island…)"
+msgstr "Region (stat, provins, ø...)"
+
+msgid "You can leave this field empty if your country does not use regions in postal addresses."
+msgstr "Du kan lade dette felt stå tomt, hvis dit land ikke bruger regioner i postadresser."
+
+msgid "City"
+msgstr "By"
+
+msgid "Postal code"
+msgstr "Postnummer"
+
+msgid "Address within the city"
+msgstr "Adresse i byen"
+
+msgid "Patrons"
+msgstr "Bidragsydere"
+
+msgid "Income"
+msgstr "Indkomst"
+
+msgid "per week"
+msgstr "per uge"
+
+msgid "Modify your pledge"
+msgstr "Lav om på dit donationstilbud"
+
+msgid "Modify your donation"
+msgstr "Lav om på din donation"
+
+msgid "Pledges"
+msgstr "Donationstilbud"
+
+msgid "Sum"
+msgstr "Sum"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "indkomst: {0}/uge"
+
+msgid "Mission accomplished!"
+msgstr "Missionen er lykkedes!"
+
+msgid "View income shares"
+msgstr "Se indkomne delinger"
 
 msgid "(fork)"
 msgstr "(forgrene)"
@@ -1627,26 +1483,17 @@ msgstr "Fjern fra liste"
 msgid "Show on your profile"
 msgstr "Vis på din profil"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "Du er i sandkasse tilstand, lad vær med at indtaste nogen ægte betalings eller personlige data!"
-
 msgid "Search Liberapay"
 msgstr "Søg på Liberapay"
-
-msgid "Switch to a different account"
-msgstr "Skift til en anden konto"
-
-msgid "The changes have been saved."
-msgstr "Ændringerne er blevet gemt."
 
 msgid "Log In or Create Account"
 msgstr "Log ind eller lav en konto"
 
-msgid "Sign out"
-msgstr "Log ud"
-
 msgid "Please input your email address:"
 msgstr "Skriv venligst din e-mailadresse:"
+
+msgid "Email"
+msgstr "E-mail"
 
 msgid "and select your preferred currency:"
 msgstr "og vælg din foretrukne møntfod:"
@@ -1654,24 +1501,6 @@ msgstr "og vælg din foretrukne møntfod:"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Når du laver en Liberapay-konto accepterer du samtidigt vores{0}Servicevilkår{1}."
-
-msgid "Enter a username"
-msgstr "Indtast et brugernavn"
-
-msgid "Invite"
-msgstr "Inviter"
-
-msgid "Explore teams"
-msgstr "Udforsk teams"
-
-msgid "About teams"
-msgstr "Om teams"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} er medlem af {n} team:"
-msgstr[1] "{username} er medlem af {n} team:"
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1706,9 +1535,6 @@ msgstr "Ubrugt indkomst vil blive brugt i løbet af de følgende uger, det akkum
 
 msgid "Leftover"
 msgstr "Overskydende"
-
-msgid "Log in via email"
-msgstr ""
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1770,6 +1596,130 @@ msgstr "Ændre bidraget"
 
 msgid "Stop the donation"
 msgstr "Stoppe bidraget"
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] "Du har uploadet {n} dokument af denne type:"
+msgstr[1] "Du har uploadet {n} dokumenter af denne type:"
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr "Dokument #{id} afventer validering."
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr "Dokument #{id} er blevet valideret."
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr "Dokument #{id} er blevet afvist: {refused_reason_type} - {refused_reason_message}."
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "Hvis du har brug for hjælp, kan du sende en email til support@liberapay.com."
+
+msgid "Income Range"
+msgstr "Indkomst Rækkevidde"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "Mindre end {0}"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "Mere end {0}"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "Mellem {0} og {1}"
+
+msgid "How much money you earn per year, approximately."
+msgstr "Hvor mange penge du tjener per år, tilnærmelsesvis."
+
+msgid "Identity Proof"
+msgstr "identitetsbevis"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "Pas, eller ID Kort (front og bag), eller Britisk kørekort."
+
+msgid "Articles of Association"
+msgstr "Artikler om Association"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr "Certificeret artikler om association (Vedtægt) - Formel notat meddelt af entrepenørerne, i hvilket følgende information er nævnt: forretnings navn, aktivitet, registrerede adresse, aktiepost."
+
+msgid "Registration Proof"
+msgstr "Registrerings Bevis"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr "Uddrag fra Selskabets Register udstedt indenfor de sidste 3 måneder."
+
+msgid "Proof of registration from the official authority."
+msgstr "Bevis af registration fra den officielle autoritet."
+
+msgid "Shareholder Declaration"
+msgstr "Aktionær Erklæring"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr "Venligst hent og udfyld dette {link_start} aktionærens erkæring fra {link_end}."
+
+msgid "Legal Representative Information"
+msgstr "Lovlig Repræsentantiv Information"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr "De følgende felter handler om organisationens juridiske repræsentant (dig sandsynligvis)."
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "Følgende fil formater er understøttede: {0}."
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "Den maksimale størrelse af enkelte filer er {0}MB."
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr "Vi skal vide, hvem du er for at overholde de finansielle bestemmelser. Kun autoriseret personale vil kunne se disse oplysninger, vi vil ikke vise det til andre brugere eller andre i det hele taget, medmindre det kræves af loven."
+
+msgid "Given Name"
+msgstr "Fornavn"
+
+msgid "Family Name"
+msgstr "Efternavn"
+
+msgid "Country (nationality)"
+msgstr "Land (nationalitet)"
+
+msgid "Organization Type"
+msgstr "Organisations type"
+
+msgid "Business"
+msgstr "Forretning"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "Jeg tilslutter mig hermed {0}MangoPays Servicevilkår{1}"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Address (second line)"
+msgstr "Adresse (ekstra linje)"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Postal Code"
+msgstr "Postnummer"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr "Folk der bidrager til almenheden, har brug for at få støtte til deres arbejde. At skabe gratis software, sprede fri viden – disse ting tager tid og koster penge, ikke kun det indledende arbejde, men også vedligeholdelsen over længere tid."
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr "Liberapays donationssystem er designet til at give stabile grundindtægter, hvilket gør det muligt for dem at fortsætte med at udføre et godt arbejde der gavner alle. Klar til at bidrage? Så lad os komme i gang:"
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "Du er i sandkasse tilstand, lad vær med at indtaste nogen ægte betalings eller personlige data!"
 
 msgid "Save"
 msgstr "Gem"
@@ -1870,6 +1820,12 @@ msgstr "Avatar kilde"
 msgid "Avatar email (for Libravatar only)"
 msgstr "Avatar e-mail (kun for Libravatar)"
 
+msgid "Leave"
+msgstr "Forlad"
+
+msgid "Explore communities"
+msgstr "Udforsk fælleskaber"
+
 msgid "The submitted settings are incoherent."
 msgstr "De indsendte indstillinger passer ikke sammen."
 
@@ -1896,6 +1852,9 @@ msgstr "At acceptere udenlandske valutaer kan øge din indkomst ved at overbevis
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe konverterer automatisk penge til din hovedvaluta, men som standard tilbageholder PayPal betalinger i fremmed valuta, indtil du fortæller dem hvad der skal gøre. Hvis du har en PayPal-konto, kan du vælge at automatisk konvertere alle indgående betalinger i fremmed valuta til din hovedvaluta. Denne indstilling findes i øjeblikket på siden “{link_open}Præferencer for modtagelse af betalinger {link_close}”."
 
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgstr "Forbinde de kontoer du ejer på andre platforme gør din Liberapay profil nemmere at finde og hjælper med at vise at du er hvem du udgiver dig for at være."
+
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Jeg er taknemmelig for gaver, men har ikke et specifikt finansieringsmål."
 
@@ -1921,6 +1880,12 @@ msgstr "Vi er her som bidragsydere, og takker venligt nej tak til gaver."
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr "Vores mål er at modtage {0}"
+
+msgid "Enter a username"
+msgstr "Indtast et brugernavn"
+
+msgid "Invite"
+msgstr "Inviter"
 
 msgid "Your privacy settings have been changed."
 msgstr "Dine privatlivsindstillinger er blevet ændret."
@@ -2005,6 +1970,12 @@ msgstr "Forhåndsvisning"
 
 msgid "Switch to another language:"
 msgstr "Skift til et andet sprog:"
+
+msgid "Explore teams"
+msgstr "Udforsk teams"
+
+msgid "About teams"
+msgstr "Om teams"
 
 msgid "Username"
 msgstr "Brugernavn"
@@ -2465,6 +2436,22 @@ msgstr "{username}'s profil"
 
 msgid "Edit"
 msgstr "Rediger"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr "{0} ejer følgende konti på andre platforme:"
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] "{username} er medlem af {n} team:"
+msgstr[1] "{username} er medlem af {n} team:"
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] "med {n} anden"
+msgstr[1] "med {n} andre"
 
 msgid "History"
 msgstr "Historie"
@@ -4052,6 +4039,19 @@ msgstr "At skabe et team"
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr "Du skal {0}logge ind på din egen konto{1} først."
+
+msgid "Name of the team"
+msgstr "Teamets navn"
+
+msgid "Email of the team (optional)"
+msgstr "Teamets e-mail (valgfri)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr "Aktiver {0}grænser for hvad teams kan modtage{1}"
+
+msgid "Create"
+msgstr "Opret"
 
 msgid "Becoming a team member"
 msgstr "Hvordan man bliver medlem af et team"

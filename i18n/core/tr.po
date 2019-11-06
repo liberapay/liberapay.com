@@ -664,6 +664,9 @@ msgstr ""
 msgid "You need to sign in first"
 msgstr "İlk önce giriş yapmalısınız"
 
+msgid "This account is closed"
+msgstr "Bu hesap kapalı"
+
 msgid "You need to log in"
 msgstr "Giriş yapmalısınız"
 
@@ -866,10 +869,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr "Bu ödeme yöntemi şu anda kullanılamıyor. Bunun için özür dileriz."
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr ""
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr ""
 
@@ -899,6 +898,10 @@ msgstr "Hizmet Kullanılamıyor"
 
 msgid "Gateway Timeout"
 msgstr "Ağ Geçidi Zaman Aşımı"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -959,24 +962,6 @@ msgstr "Bu sayfaya erişim yetkiniz yok."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr ""
 
-msgid "This account is closed"
-msgstr "Bu hesap kapalı"
-
-msgid "Are you the account owner?"
-msgstr "Hesap sahibi siz misiniz?"
-
-msgid "Log in to reopen your account."
-msgstr "Hesabınızı yeniden açmak için giriş yapın."
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "Bunun için bir hesaba gereksiniminiz var. Lütfen aşağıdaki formlardan birini doldurunuz."
-
-msgid "Create an account"
-msgstr "Bir hesap oluştur"
-
-msgid "Use an existing account"
-msgstr "Var olan bir hesabı kullan"
-
 msgid "Bad Request"
 msgstr ""
 
@@ -1001,6 +986,65 @@ msgstr "E-posta adresi"
 
 msgid "Go"
 msgstr "Git"
+
+msgid "Cancel"
+msgstr "İptal"
+
+msgid "Confirm"
+msgstr "Onay"
+
+msgid "This new password is not safe"
+msgstr "Bu yeni parola güvenli değil"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr ""
+
+msgid "Do you still want to use this password?"
+msgstr "Hala bu parolayı kullanmak istiyor musun?"
+
+msgid "No, cancel"
+msgstr "Hayır, iptal"
+
+msgid "Yes, proceed"
+msgstr "Evet, devam et"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr ""
+
+msgid "Reconnect"
+msgstr "Yeniden Bağlan"
+
+msgid "Redirecting…"
+msgstr "Yönlendiriliyor…"
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr ""
+
+msgid "Retry"
+msgstr "Yeniden dene"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "Bunun için bir hesaba gereksiniminiz var. Lütfen aşağıdaki formlardan birini doldurunuz."
+
+msgid "Create an account"
+msgstr "Bir hesap oluştur"
+
+msgid "Use an existing account"
+msgstr "Var olan bir hesabı kullan"
+
+msgid "Are you the account owner?"
+msgstr "Hesap sahibi siz misiniz?"
+
+msgid "Log in to reopen your account."
+msgstr "Hesabınızı yeniden açmak için giriş yapın."
+
+msgid "Please try again in a few minutes."
+msgstr "Lütfen birkaç dakika içinde yeniden deneyin."
+
+msgid "Log in via email"
+msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr ""
@@ -1032,331 +1076,18 @@ msgstr "SSS"
 msgid "Legal"
 msgstr "Yasal"
 
-msgid "Find great people to donate to"
-msgstr "Bağış için hevesli insanlar bulun"
-
-msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "Kimin işini beğeniyorsun? Liberapay'da mı bir bak"
-
-msgid "Communities"
-msgstr "Topluluklar"
+msgid "Switch to another language"
+msgstr "Başka bir dile geç"
 
 #, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Leave"
-msgstr "Ayrıl"
-
-msgid "Explore communities"
-msgstr "Toplulukları keşfet"
-
-msgid "Cancel"
-msgstr "İptal"
-
-msgid "Confirm"
-msgstr "Onay"
-
-msgid "Linked Accounts"
-msgstr "Bağlantılı Hesaplar"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr ""
-
-msgid "Name of the team"
-msgstr "Takımın adı"
-
-msgid "Email of the team (optional)"
-msgstr "Takımın eposta adresi (isteğe bağlı)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr ""
-
-msgid "Create"
-msgstr "Oluştur"
-
-msgid "Disconnect"
-msgstr "Bağlantıyı kes"
-
-msgid "This is not supported yet"
-msgstr "Bu henüz desteklenmiyor"
-
-msgid "Connect"
-msgstr "Bağlan"
-
-msgid "Drop files here"
-msgstr "Dosyaları buraya bırak"
-
-msgid "Processing dropped files…"
-msgstr "Bırakılan dosyalar işleniyor…"
-
-msgid "Add a file"
-msgstr "Bir dosya ekle"
-
-msgid "Edit filename"
-msgstr "Dosya adını düzenle"
-
-msgid "Retry"
-msgstr "Yeniden dene"
-
-msgid "Delete"
-msgstr "Sil"
-
-msgid "Close"
-msgstr "Kapatma"
-
-msgid "No"
-msgstr "Hayır"
-
-msgid "Yes"
-msgstr "Evet"
-
-msgid "Ok"
-msgstr "Tamam"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr ""
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr ""
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr ""
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Yardıma gereksiniminiz olursa support@liberapay.com adresine e-posta gönderebilirsiniz."
-
-msgid "Occupation"
-msgstr "Uğraşı"
-
-msgid "Your main professional activity."
-msgstr "Ana mesleğiniz."
-
-msgid "Income Range"
-msgstr "Gelir Aralığı"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "{0}dan daha az"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "{0}'dan daha çok"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "{0} ve {1} arasında"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Yıllık geliriniz yaklaşık olarak."
-
-msgid "Postal Address"
-msgstr "Posta Adresi"
-
-msgid "Identity Proof"
-msgstr "Kimlik Kartı"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Pasaport, Kimlik Kartı ( ön ve arka yüzü) veya Birleşik Krallık sürücü belgesi."
-
-msgid "Organization Information"
-msgstr "Kuruluş Bilgisi"
-
-msgid "Headquarters Address"
-msgstr "Genel Merkez Adresi"
-
-msgid "Articles of Association"
-msgstr "Ana Sözleşme"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr ""
-
-msgid "Registration Proof"
-msgstr "Kayıt Belgesi"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr ""
-
-msgid "Proof of registration from the official authority."
-msgstr "Resmi makamdan tescil belgesi."
-
-msgid "Shareholder Declaration"
-msgstr "Hissedar Açıklaması"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr ""
-
-msgid "Legal Representative Information"
-msgstr "Yasal Temsilcilik Bilgisi"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr ""
-
-msgid "Email"
-msgstr "E-posta"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Aşağıdaki dosya biçimleri desteklenir: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Her bir dosyanın en çok boyutu {0} MB'dır."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr ""
-
-msgid "Given Name"
-msgstr "Adı"
-
-msgid "Family Name"
-msgstr "Soyadı"
-
-msgid "Country (residence)"
-msgstr "Ülke (yerleşim)"
-
-msgid "Country (nationality)"
-msgstr "Ülke (uyruk)"
-
-msgid "Date of Birth"
-msgstr "Doğum Tarihi"
-
-msgid "YYYY-MM-DD"
-msgstr "YYYY-AA-GG"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "Bir kuruluşun temsilcisi olarak mı hareket ediyorsunuz?"
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Evet, bir işletmeyi  veya kar amacı gütmeyen bir kuruluşu temsil ediyorum."
-
-msgid "Organization Type"
-msgstr "Kuruluş Türü"
-
-msgid "Business"
-msgstr "İş"
-
-msgid "Organization Name"
-msgstr "Kuruluş Adı"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr ""
-
-msgid "Personal Information"
-msgstr "Kişisel Bilgi"
-
-msgid "Full Name"
-msgstr "Tam Ad"
-
-msgid "Nationality"
-msgstr "Uyruk"
-
-msgid "username"
-msgstr "kullanıcı adı"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr ""
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Hala {0} olarak giriş yapmadınız."
-
-msgid "Password (optional)"
-msgstr "Parola (isteğe bağlı)"
-
-#, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr ""
-
-msgid "Members"
-msgstr "Üyeler"
-
-msgid "View income shares"
-msgstr "Gelir paylarını görüntüle"
-
-msgid "Introduction"
-msgstr "Sunuş"
-
-msgid "Global"
-msgstr "Küresel"
-
-msgid "Payment Processors"
-msgstr ""
-
-msgid "Teams"
-msgstr "Takımlar"
-
-msgid "Stats"
-msgstr "İstatistikler"
-
-msgid "Feeds"
-msgstr ""
-
-msgid "Contact"
-msgstr "İletişim"
-
-msgid "Security"
-msgstr "Güvenlik"
-
-msgid "Logos"
-msgstr ""
-
-msgid "Overview"
-msgstr "Genel Görünüm"
-
-msgid "Organizations"
-msgstr "Kuruluşlar"
-
-msgid "Individuals"
-msgstr "Bireysel"
-
-msgid "Unclaimed Donations"
-msgstr "Sahipsiz Bağışlar"
-
-msgid "Repositories"
-msgstr "Depolar"
-
-msgid "Social Networks"
-msgstr "Sosyal Ağlar"
+msgid "({x_percent} translated)"
+msgstr "({x_percent} çevrildi)"
+
+msgid "Help us translate Liberapay"
+msgstr "Liberapay çevirisine yardım et"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Name"
-msgstr "Ad"
-
-msgid "Avatar"
-msgstr ""
-
-msgid "Currencies"
-msgstr "Para birimi"
-
-msgid "Goal"
-msgstr "Hedef"
-
-msgid "Statement"
-msgstr "Sözce"
-
-msgid "Privacy"
-msgstr "Gizlilik"
 
 msgid "Giving"
 msgstr ""
@@ -1366,6 +1097,15 @@ msgstr ""
 
 msgid "Ledger"
 msgstr "Hesap Defteri"
+
+msgid "Wallet"
+msgstr "Cüzdan"
+
+msgid "Emptying your wallet"
+msgstr "Cüzdanınız boş"
+
+msgid "Payment Processors"
+msgstr ""
 
 msgid "Identity"
 msgstr "Kimlik"
@@ -1382,162 +1122,17 @@ msgstr "Bildirimler"
 msgid "Widgets"
 msgstr "Gereçler"
 
-msgid "Switch to another language"
-msgstr "Başka bir dile geç"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "({x_percent} çevrildi)"
-
-msgid "Help us translate Liberapay"
-msgstr "Liberapay çevirisine yardım et"
-
-msgid "Wallet"
-msgstr "Cüzdan"
-
-msgid "Emptying your wallet"
-msgstr "Cüzdanınız boş"
-
 msgid "Create a new community"
 msgstr "Yeni bir topluluk oluştur"
 
 msgid "Create a new team"
 msgstr "yeni bir takım oluştur"
 
-msgid "Please try again in a few minutes."
-msgstr "Lütfen birkaç dakika içinde yeniden deneyin."
-
-msgid "Previous"
-msgstr "Önceki"
-
-msgid "Next"
-msgstr "Sonraki"
-
-msgid "First"
-msgstr "İlk"
-
-msgid "Last"
-msgstr "En son"
-
-msgid "View More"
-msgstr "Daha Fazla Göster"
+msgid "Sign out"
+msgstr "Oturumu kapat"
 
 msgid "Print"
 msgstr "Yazdır"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr ""
-
-msgid "Current password"
-msgstr "Şimdiki parola"
-
-msgid "New password"
-msgstr "Yeni parola"
-
-msgid "This new password is not safe"
-msgstr "Bu yeni parola güvenli değil"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr ""
-
-msgid "Do you still want to use this password?"
-msgstr "Hala bu parolayı kullanmak istiyor musun?"
-
-msgid "No, cancel"
-msgstr "Hayır, iptal"
-
-msgid "Yes, proceed"
-msgstr "Evet, devam et"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "{username}'ye yapılan bağışlar PayPal üzerinden gerçekleştirilir."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
-
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr ""
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr ""
-
-msgid "Address"
-msgstr "Adres"
-
-msgid "Address (second line)"
-msgstr "Adres (ikinci satır)"
-
-msgid "City"
-msgstr "Şehir"
-
-msgid "Region"
-msgstr "Bölge"
-
-msgid "Postal Code"
-msgstr "Posta Kodu"
-
-msgid "Country"
-msgstr "Ülke"
-
-msgid "Region (state, province, island…)"
-msgstr "Bölge (eyalet, şehir, ada...)"
-
-msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr "Ülkeniz posta adreslerinde bölgeleri kullanmıyorsa, bu alanı boş bırakabilirsiniz."
-
-msgid "Postal code"
-msgstr "Posta kodu"
-
-msgid "Address within the city"
-msgstr "Şehir içindeki adres"
-
-msgid "Patrons"
-msgstr ""
-
-msgid "Income"
-msgstr "Gelir"
-
-msgid "per week"
-msgstr "haftada"
-
-msgid "Modify your pledge"
-msgstr ""
-
-msgid "Pledge"
-msgstr ""
-
-msgid "Modify your donation"
-msgstr ""
-
-msgid "Donate"
-msgstr "Bağış"
-
-msgid "Pledges"
-msgstr ""
-
-msgid "Sum"
-msgstr "Toplam"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Hedef: {0}"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Gelir: {0}/hafta"
-
-msgid "Mission accomplished!"
-msgstr "Görev tamamlandı!"
 
 #, python-brace-format
 msgid "Joined {timespan_ago}."
@@ -1575,22 +1170,283 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, python-brace-format
+msgid "Goal: {0}"
+msgstr "Hedef: {0}"
+
+#, python-brace-format
 msgid "Donating ({amount})"
 msgstr ""
 
-#, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgid "Pledge"
 msgstr ""
 
-msgid "Reconnect"
-msgstr "Yeniden Bağlan"
+msgid "Donate"
+msgstr "Bağış"
 
-msgid "Redirecting…"
-msgstr "Yönlendiriliyor…"
+msgid "Switch to a different account"
+msgstr "Farklı bir hesaba geç"
+
+msgid "The changes have been saved."
+msgstr "Değişiklikler kaydedildi."
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr ""
 
 #, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgid "You're still not logged in as {0}."
+msgstr "Hala {0} olarak giriş yapmadınız."
+
+msgid "Password (optional)"
+msgstr "Parola (isteğe bağlı)"
+
+#, python-brace-format
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
 msgstr ""
+
+msgid "Find great people to donate to"
+msgstr "Bağış için hevesli insanlar bulun"
+
+msgid "Whose work do you appreciate? See if they're on Liberapay"
+msgstr "Kimin işini beğeniyorsun? Liberapay'da mı bir bak"
+
+msgid "Disconnect"
+msgstr "Bağlantıyı kes"
+
+msgid "This is not supported yet"
+msgstr "Bu henüz desteklenmiyor"
+
+msgid "Connect"
+msgstr "Bağlan"
+
+msgid "username"
+msgstr "kullanıcı adı"
+
+msgid "Drop files here"
+msgstr "Dosyaları buraya bırak"
+
+msgid "Processing dropped files…"
+msgstr "Bırakılan dosyalar işleniyor…"
+
+msgid "Add a file"
+msgstr "Bir dosya ekle"
+
+msgid "Edit filename"
+msgstr "Dosya adını düzenle"
+
+msgid "Delete"
+msgstr "Sil"
+
+msgid "Close"
+msgstr "Kapatma"
+
+msgid "No"
+msgstr "Hayır"
+
+msgid "Yes"
+msgstr "Evet"
+
+msgid "Ok"
+msgstr "Tamam"
+
+msgid "Personal Information"
+msgstr "Kişisel Bilgi"
+
+msgid "Full Name"
+msgstr "Tam Ad"
+
+msgid "Country (residence)"
+msgstr "Ülke (yerleşim)"
+
+msgid "Nationality"
+msgstr "Uyruk"
+
+msgid "Date of Birth"
+msgstr "Doğum Tarihi"
+
+msgid "YYYY-MM-DD"
+msgstr "YYYY-AA-GG"
+
+msgid "Occupation"
+msgstr "Uğraşı"
+
+msgid "Your main professional activity."
+msgstr "Ana mesleğiniz."
+
+msgid "Postal Address"
+msgstr "Posta Adresi"
+
+msgid "Organization Information"
+msgstr "Kuruluş Bilgisi"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Bir kuruluşun temsilcisi olarak mı hareket ediyorsunuz?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Evet, bir işletmeyi  veya kar amacı gütmeyen bir kuruluşu temsil ediyorum."
+
+msgid "Organization Name"
+msgstr "Kuruluş Adı"
+
+msgid "Headquarters Address"
+msgstr "Genel Merkez Adresi"
+
+msgid "Introduction"
+msgstr "Sunuş"
+
+msgid "Global"
+msgstr "Küresel"
+
+msgid "Teams"
+msgstr "Takımlar"
+
+msgid "Stats"
+msgstr "İstatistikler"
+
+msgid "Feeds"
+msgstr ""
+
+msgid "Contact"
+msgstr "İletişim"
+
+msgid "Security"
+msgstr "Güvenlik"
+
+msgid "Logos"
+msgstr ""
+
+msgid "Overview"
+msgstr "Genel Görünüm"
+
+msgid "Organizations"
+msgstr "Kuruluşlar"
+
+msgid "Individuals"
+msgstr "Bireysel"
+
+msgid "Unclaimed Donations"
+msgstr "Sahipsiz Bağışlar"
+
+msgid "Repositories"
+msgstr "Depolar"
+
+msgid "Social Networks"
+msgstr "Sosyal Ağlar"
+
+msgid "Communities"
+msgstr "Topluluklar"
+
+msgid "Name"
+msgstr "Ad"
+
+msgid "Avatar"
+msgstr ""
+
+msgid "Currencies"
+msgstr "Para birimi"
+
+msgid "Goal"
+msgstr "Hedef"
+
+msgid "Statement"
+msgstr "Sözce"
+
+msgid "Linked Accounts"
+msgstr "Bağlantılı Hesaplar"
+
+msgid "Privacy"
+msgstr "Gizlilik"
+
+msgid "Members"
+msgstr "Üyeler"
+
+msgid "Previous"
+msgstr "Önceki"
+
+msgid "Next"
+msgstr "Sonraki"
+
+msgid "First"
+msgstr "İlk"
+
+msgid "Last"
+msgstr "En son"
+
+msgid "View More"
+msgstr "Daha Fazla Göster"
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr ""
+
+msgid "Current password"
+msgstr "Şimdiki parola"
+
+msgid "New password"
+msgstr "Yeni parola"
+
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr ""
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "{username}'ye yapılan bağışlar PayPal üzerinden gerçekleştirilir."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
+
+msgid "Country"
+msgstr "Ülke"
+
+msgid "Region (state, province, island…)"
+msgstr "Bölge (eyalet, şehir, ada...)"
+
+msgid "You can leave this field empty if your country does not use regions in postal addresses."
+msgstr "Ülkeniz posta adreslerinde bölgeleri kullanmıyorsa, bu alanı boş bırakabilirsiniz."
+
+msgid "City"
+msgstr "Şehir"
+
+msgid "Postal code"
+msgstr "Posta kodu"
+
+msgid "Address within the city"
+msgstr "Şehir içindeki adres"
+
+msgid "Patrons"
+msgstr ""
+
+msgid "Income"
+msgstr "Gelir"
+
+msgid "per week"
+msgstr "haftada"
+
+msgid "Modify your pledge"
+msgstr ""
+
+msgid "Modify your donation"
+msgstr ""
+
+msgid "Pledges"
+msgstr ""
+
+msgid "Sum"
+msgstr "Toplam"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Gelir: {0}/hafta"
+
+msgid "Mission accomplished!"
+msgstr "Görev tamamlandı!"
+
+msgid "View income shares"
+msgstr "Gelir paylarını görüntüle"
 
 msgid "(fork)"
 msgstr "(çatal)"
@@ -1608,26 +1464,17 @@ msgstr ""
 msgid "Show on your profile"
 msgstr "Profilinde göster"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "Deneme kipindesiniz, hiçbir gerçek ödeme veya kişisel veri girmeyin!"
-
 msgid "Search Liberapay"
 msgstr "Liberapay Ara"
-
-msgid "Switch to a different account"
-msgstr "Farklı bir hesaba geç"
-
-msgid "The changes have been saved."
-msgstr "Değişiklikler kaydedildi."
 
 msgid "Log In or Create Account"
 msgstr "Oturum Aç veya Hesap Oluştur"
 
-msgid "Sign out"
-msgstr "Oturumu kapat"
-
 msgid "Please input your email address:"
 msgstr "Lütfen e-posta adresinizi giriniz:"
+
+msgid "Email"
+msgstr "E-posta"
 
 msgid "and select your preferred currency:"
 msgstr "ve tercih ettiğiniz para birimini seçin:"
@@ -1635,24 +1482,6 @@ msgstr "ve tercih ettiğiniz para birimini seçin:"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Bir Liberapay hesabı oluşturarak bizim {0} Hizmet Şartlarını{1} kabul etmiş olursunuz."
-
-msgid "Enter a username"
-msgstr "Bir kullanıcı adı girin"
-
-msgid "Invite"
-msgstr "Davet et"
-
-msgid "Explore teams"
-msgstr "Takımları keşfet"
-
-msgid "About teams"
-msgstr "Takımlar hakkında"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] ""
-msgstr[1] ""
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1687,9 +1516,6 @@ msgstr ""
 
 msgid "Leftover"
 msgstr "Kalan"
-
-msgid "Log in via email"
-msgstr ""
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1751,6 +1577,130 @@ msgstr ""
 
 msgid "Stop the donation"
 msgstr ""
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr ""
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr ""
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr ""
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "Yardıma gereksiniminiz olursa support@liberapay.com adresine e-posta gönderebilirsiniz."
+
+msgid "Income Range"
+msgstr "Gelir Aralığı"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "{0}dan daha az"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "{0}'dan daha çok"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "{0} ve {1} arasında"
+
+msgid "How much money you earn per year, approximately."
+msgstr "Yıllık geliriniz yaklaşık olarak."
+
+msgid "Identity Proof"
+msgstr "Kimlik Kartı"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "Pasaport, Kimlik Kartı ( ön ve arka yüzü) veya Birleşik Krallık sürücü belgesi."
+
+msgid "Articles of Association"
+msgstr "Ana Sözleşme"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr ""
+
+msgid "Registration Proof"
+msgstr "Kayıt Belgesi"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr ""
+
+msgid "Proof of registration from the official authority."
+msgstr "Resmi makamdan tescil belgesi."
+
+msgid "Shareholder Declaration"
+msgstr "Hissedar Açıklaması"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr ""
+
+msgid "Legal Representative Information"
+msgstr "Yasal Temsilcilik Bilgisi"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr ""
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "Aşağıdaki dosya biçimleri desteklenir: {0}."
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "Her bir dosyanın en çok boyutu {0} MB'dır."
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr ""
+
+msgid "Given Name"
+msgstr "Adı"
+
+msgid "Family Name"
+msgstr "Soyadı"
+
+msgid "Country (nationality)"
+msgstr "Ülke (uyruk)"
+
+msgid "Organization Type"
+msgstr "Kuruluş Türü"
+
+msgid "Business"
+msgstr "İş"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr ""
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Address (second line)"
+msgstr "Adres (ikinci satır)"
+
+msgid "Region"
+msgstr "Bölge"
+
+msgid "Postal Code"
+msgstr "Posta Kodu"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr ""
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr ""
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "Deneme kipindesiniz, hiçbir gerçek ödeme veya kişisel veri girmeyin!"
 
 msgid "Save"
 msgstr "Kaydet"
@@ -1851,6 +1801,12 @@ msgstr ""
 msgid "Avatar email (for Libravatar only)"
 msgstr ""
 
+msgid "Leave"
+msgstr "Ayrıl"
+
+msgid "Explore communities"
+msgstr "Toplulukları keşfet"
+
 msgid "The submitted settings are incoherent."
 msgstr "Sunulan ayarlar tutarsız."
 
@@ -1875,6 +1831,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
+msgstr ""
+
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr ""
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
@@ -1902,6 +1861,12 @@ msgstr ""
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr ""
+
+msgid "Enter a username"
+msgstr "Bir kullanıcı adı girin"
+
+msgid "Invite"
+msgstr "Davet et"
 
 msgid "Your privacy settings have been changed."
 msgstr "Gizlilik ayarlarınız değiştirildi."
@@ -1986,6 +1951,12 @@ msgstr ""
 
 msgid "Switch to another language:"
 msgstr ""
+
+msgid "Explore teams"
+msgstr "Takımları keşfet"
+
+msgid "About teams"
+msgstr "Takımlar hakkında"
 
 msgid "Username"
 msgstr ""
@@ -2446,6 +2417,22 @@ msgstr ""
 
 msgid "Edit"
 msgstr "Düzenle"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr ""
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "History"
 msgstr ""
@@ -4033,6 +4020,19 @@ msgstr ""
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr ""
+
+msgid "Name of the team"
+msgstr "Takımın adı"
+
+msgid "Email of the team (optional)"
+msgstr "Takımın eposta adresi (isteğe bağlı)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr ""
+
+msgid "Create"
+msgstr "Oluştur"
 
 msgid "Becoming a team member"
 msgstr ""

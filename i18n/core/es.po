@@ -683,6 +683,9 @@ msgstr "¿Es {0} realmente un servidor {1}? Actualmente no está actuando como t
 msgid "You need to sign in first"
 msgstr "Tienes que acceder primero"
 
+msgid "This account is closed"
+msgstr "Esta cuenta está cerrada"
+
 msgid "You need to log in"
 msgstr "Necesitas acceder"
 
@@ -885,10 +888,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr "Este método de pago no está disponible actualmente. Pedimos perdón por la molestia."
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr "Lo sentimos mucho, pero los pagos entrantes están deshabilitados actualmente. Puedes leer {link_start}este artículo{link_end} (solo en inglés) para saber por qué."
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr "El procesador de pago {name} devolvió un error. Inténtalo de nuevo y contacta support@liberapay.com si el problema persiste."
 
@@ -918,6 +917,10 @@ msgstr "El servicio no está disponible"
 
 msgid "Gateway Timeout"
 msgstr "Se agotó el tiempo de espera de la puerta de enlace"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -978,24 +981,6 @@ msgstr "No estás autorizado para acceder a esta página."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "El procesamiento de tu petición ha fallado porque nuestro servidor no ha podido comunicarse con un servicio ubicado en otra máquina. Esto es un problema temporal; por favor, inténtalo más tarde."
 
-msgid "This account is closed"
-msgstr "Esta cuenta está cerrada"
-
-msgid "Are you the account owner?"
-msgstr "¿Eres el propietario de la cuenta?"
-
-msgid "Log in to reopen your account."
-msgstr "Accede para volver a abrir tu cuenta."
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "Necesitas una cuenta para esto. Rellena uno de los formularios más abajo."
-
-msgid "Create an account"
-msgstr "Crear una cuenta"
-
-msgid "Use an existing account"
-msgstr "Usar una cuenta existente"
-
 msgid "Bad Request"
 msgstr "Solicitud Incorrecta"
 
@@ -1020,6 +1005,65 @@ msgstr "Dirección de correo electrónico"
 
 msgid "Go"
 msgstr "Ir"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "This new password is not safe"
+msgstr "Esta nueva contraseña no es segura"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr "Hemos detectado que tu contraseña actual es fácil de adivinar, y por lo tanto insegura."
+
+msgid "Do you still want to use this password?"
+msgstr "¿Todavía quieres usar esta contraseña?"
+
+msgid "No, cancel"
+msgstr "No, cancelar"
+
+msgid "Yes, proceed"
+msgstr "Sí, continuar"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr "{platform} rechazó nuestra petición para acceder a tus datos. Reconectar tu cuenta de {platform} debería solucionar el problema."
+
+msgid "Reconnect"
+msgstr "Reconectar"
+
+msgid "Redirecting…"
+msgstr "Redireccionando…"
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr "Si estás usando un navegador poco habitual y no sucede nada, {link_start}haz clic en este enlace para proceder{link_end}."
+
+msgid "Retry"
+msgstr "Reintentar"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "Necesitas una cuenta para esto. Rellena uno de los formularios más abajo."
+
+msgid "Create an account"
+msgstr "Crear una cuenta"
+
+msgid "Use an existing account"
+msgstr "Usar una cuenta existente"
+
+msgid "Are you the account owner?"
+msgstr "¿Eres el propietario de la cuenta?"
+
+msgid "Log in to reopen your account."
+msgstr "Accede para volver a abrir tu cuenta."
+
+msgid "Please try again in a few minutes."
+msgstr "Por favor, inténtalo de nuevo en unos minutos."
+
+msgid "Log in via email"
+msgstr "Iniciar sesión por correo electrónico"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Ahora mismo estamos experimentando problemas técnicos. Como resultado, la mayoría de las cosas no funcionan. Disculpa las molestias; volveremos a dejarlo todo normal tan pronto como podamos."
@@ -1051,331 +1095,18 @@ msgstr "Preguntas frecuentes"
 msgid "Legal"
 msgstr "Legal"
 
-msgid "Find great people to donate to"
-msgstr "Encuentra personas geniales a las que donar"
-
-msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "¿Hay alguien cuyo trabajo aprecies mucho? Comprueba si está en Liberapay"
-
-msgid "Communities"
-msgstr "Comunidades"
+msgid "Switch to another language"
+msgstr "Cambiar idioma"
 
 #, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] "con {n} otro"
-msgstr[1] "con {n} más"
-
-msgid "Leave"
-msgstr "Salir"
-
-msgid "Explore communities"
-msgstr "Explora comunidades"
-
-msgid "Cancel"
-msgstr "Cancelar"
-
-msgid "Confirm"
-msgstr "Confirmar"
-
-msgid "Linked Accounts"
-msgstr "Cuentas enlazadas"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr "Conectar las cuentas que posees en otras plataformas hace tu perfil de Liberapay más fácil de encontrar, y sirve para demostrar que eres quien dices ser."
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0} posee las siguientes cuentas en otras plataformas:"
-
-msgid "Name of the team"
-msgstr "Nombre del equipo"
-
-msgid "Email of the team (optional)"
-msgstr "Correo electrónico del equipo (opcional)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr "Habilita {0}límites en las tomas del equipo{1}"
-
-msgid "Create"
-msgstr "Crear"
-
-msgid "Disconnect"
-msgstr "Desconectar"
-
-msgid "This is not supported yet"
-msgstr "Esto no está soportado aún"
-
-msgid "Connect"
-msgstr "Conectar"
-
-msgid "Drop files here"
-msgstr "Arrastra los archivos aquí"
-
-msgid "Processing dropped files…"
-msgstr "Procesando los archivos…"
-
-msgid "Add a file"
-msgstr "Añade un archivo"
-
-msgid "Edit filename"
-msgstr "Edita el nombre de archivo"
-
-msgid "Retry"
-msgstr "Reintentar"
-
-msgid "Delete"
-msgstr "Eliminar"
-
-msgid "Close"
-msgstr "Cerrar"
-
-msgid "No"
-msgstr "No"
-
-msgid "Yes"
-msgstr "Sí"
-
-msgid "Ok"
-msgstr "Vale"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Has cargado {n} documento de este tipo:"
-msgstr[1] "Has cargado {n} documentos de este tipo:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "El documento n.º {id} está en espera de validación."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "El documento n.º {id} ha sido validado."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "El documento n.º {id} ha sido rechazado: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Si necesitas asistencia, puedes mandar un mensaje a support@liberapay.com."
-
-msgid "Occupation"
-msgstr "Ocupación"
-
-msgid "Your main professional activity."
-msgstr "Tu principal actividad profesional."
-
-msgid "Income Range"
-msgstr "Escala de ingresos"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Menos de {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Más de {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Entre {0} y {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Cuánto dinero ganas al año, aproximadamente."
-
-msgid "Postal Address"
-msgstr "Dirección postal"
-
-msgid "Identity Proof"
-msgstr "Prueba de identidad"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Pasaporte, o documento de identidad, o carnet de conducir de Reino Unido."
-
-msgid "Organization Information"
-msgstr "Información de la organización"
-
-msgid "Headquarters Address"
-msgstr "Dirección de la sede principal"
-
-msgid "Articles of Association"
-msgstr "Estatutos"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Artículos de asociación certificados (estatuto) - la escritura formal declarada por los emprendedores, en la que la siguiente información sea mencionada: nombre del negocio, actividad, dirección registrada, participación."
-
-msgid "Registration Proof"
-msgstr "Prueba de registro"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Extracto del registro mercantil emitido en los últimos tres meses."
-
-msgid "Proof of registration from the official authority."
-msgstr "Prueba de registro de la autoridad oficial."
-
-msgid "Shareholder Declaration"
-msgstr "Declaración de accionistas"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Descarga y rellena el {link_start}formulario de la declaración de accionistas{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Información de representantes legales"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "Los siguientes campos son sobre el representante legal de la organización (probablemente tú)."
-
-msgid "Email"
-msgstr "Correo electrónico"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Se admiten los formatos de archivo siguientes: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "El tamaño máximo de cada archivo es {0} MB."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Necesitamos saber quién eres para cumplir con las regulaciones financieras. Solo el personal autorizado podrá ver esta información, no se la mostraremos a otros usuarios ni a ninguna otra persona a no ser que sea requerido por ley."
-
-msgid "Given Name"
-msgstr "Nombre"
-
-msgid "Family Name"
-msgstr "Apellidos"
-
-msgid "Country (residence)"
-msgstr "País (residencia)"
-
-msgid "Country (nationality)"
-msgstr "País (nacionalidad)"
-
-msgid "Date of Birth"
-msgstr "Fecha de nacimiento"
-
-msgid "YYYY-MM-DD"
-msgstr "AAAA-MM-DD"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "¿Estás actuando como el representante de una organización?"
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Sí, represento un negocio o una organización sin ánimo de lucro."
-
-msgid "Organization Type"
-msgstr "Tipo de organización"
-
-msgid "Business"
-msgstr "Negocio"
-
-msgid "Organization Name"
-msgstr "Nombre de organización"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Acepto las {0}condiciones de servicio de MangoPay{1}"
-
-msgid "Personal Information"
-msgstr "Información Personal"
-
-msgid "Full Name"
-msgstr "Nombre Completo"
-
-msgid "Nationality"
-msgstr "Nacionalidad"
-
-msgid "username"
-msgstr "nombre de usuario"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "Te hemos enviado un enlace de un solo uso para iniciar sesión. Comprueba tu bandeja de entrada, abre el enlace suministrado en una nueva pestaña, después vuelve a esta página y pulsa en el botón que hay más abajo para continuar con lo que querías hacer."
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Todavía no has accedido como {0}."
-
-msgid "Password (optional)"
-msgstr "Contraseña (opcional)"
-
-#, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Si has {bold}perdido tu contraseña{bold_end}, o si tu cuenta no tiene contraseña, deja el campo de la contraseña vacío. Te enviaremos un enlace para iniciar sesión por correo electrónico."
-
-msgid "Members"
-msgstr "Miembros"
-
-msgid "View income shares"
-msgstr "Conoce cómo se reparten los ingresos"
-
-msgid "Introduction"
-msgstr "Introducción"
-
-msgid "Global"
-msgstr "Global"
-
-msgid "Payment Processors"
-msgstr "Procesadores de pago"
-
-msgid "Teams"
-msgstr "Equipos"
-
-msgid "Stats"
-msgstr "Estadísticas"
-
-msgid "Feeds"
-msgstr "Suministros"
-
-msgid "Contact"
-msgstr "Contacto"
-
-msgid "Security"
-msgstr "Seguridad"
-
-msgid "Logos"
-msgstr "Logos"
-
-msgid "Overview"
-msgstr "Vista general"
-
-msgid "Organizations"
-msgstr "Organizaciones"
-
-msgid "Individuals"
-msgstr "Individuos"
-
-msgid "Unclaimed Donations"
-msgstr "Donaciones no Reclamadas"
-
-msgid "Repositories"
-msgstr "Repositorios"
-
-msgid "Social Networks"
-msgstr "Redes sociales"
+msgid "({x_percent} translated)"
+msgstr "({x_percent} traducido)"
+
+msgid "Help us translate Liberapay"
+msgstr "Ayúdanos a traducir Liberapay"
 
 msgid "Profile"
 msgstr "Perfil"
-
-msgid "Name"
-msgstr "Nombre"
-
-msgid "Avatar"
-msgstr "Avatar"
-
-msgid "Currencies"
-msgstr "Monedas"
-
-msgid "Goal"
-msgstr "Objetivo"
-
-msgid "Statement"
-msgstr "Presentación"
-
-msgid "Privacy"
-msgstr "Privacidad"
 
 msgid "Giving"
 msgstr "Donando"
@@ -1385,6 +1116,15 @@ msgstr "Recibiendo"
 
 msgid "Ledger"
 msgstr "Libro de contabilidad"
+
+msgid "Wallet"
+msgstr "Cartera"
+
+msgid "Emptying your wallet"
+msgstr "Vaciando tu cartera"
+
+msgid "Payment Processors"
+msgstr "Procesadores de pago"
 
 msgid "Identity"
 msgstr "Identidad"
@@ -1401,162 +1141,17 @@ msgstr "Notificaciones"
 msgid "Widgets"
 msgstr "Widgets"
 
-msgid "Switch to another language"
-msgstr "Cambiar idioma"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "({x_percent} traducido)"
-
-msgid "Help us translate Liberapay"
-msgstr "Ayúdanos a traducir Liberapay"
-
-msgid "Wallet"
-msgstr "Cartera"
-
-msgid "Emptying your wallet"
-msgstr "Vaciando tu cartera"
-
 msgid "Create a new community"
 msgstr "Crear una comunidad nueva"
 
 msgid "Create a new team"
 msgstr "Crear un equipo nuevo"
 
-msgid "Please try again in a few minutes."
-msgstr "Por favor, inténtalo de nuevo en unos minutos."
-
-msgid "Previous"
-msgstr "Anterior"
-
-msgid "Next"
-msgstr "Siguiente"
-
-msgid "First"
-msgstr "Primero"
-
-msgid "Last"
-msgstr "Último"
-
-msgid "View More"
-msgstr "Ver más"
+msgid "Sign out"
+msgstr "Salir"
 
 msgid "Print"
 msgstr "Imprimir"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Establecer una contraseña te permite iniciar sesión directamente, en vez de esperar a un enlace de un solo uso enviado por correo electrónico. Ten en cuenta que Liberapay es un servicio financiero, ¡usa una contraseña fuerte!"
-
-msgid "Current password"
-msgstr "Contraseña actual"
-
-msgid "New password"
-msgstr "Contraseña nueva"
-
-msgid "This new password is not safe"
-msgstr "Esta nueva contraseña no es segura"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Hemos detectado que tu contraseña actual es fácil de adivinar, y por lo tanto insegura."
-
-msgid "Do you still want to use this password?"
-msgstr "¿Todavía quieres usar esta contraseña?"
-
-msgid "No, cancel"
-msgstr "No, cancelar"
-
-msgid "Yes, proceed"
-msgstr "Sí, continuar"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} no ha configurado un método de pago todavía, así que tu donación no puede ser procesada ahora mismo. Te notificaremos cuando sea posible hacer el pago."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Las donaciones a {username} se pueden pagar usando tarjeta de crédito o de débito (Visa, MasterCard, American Express) o mediante pago domiciliado de una cuenta bancaria de euro (solo para donaciones con euros)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Las donaciones a {username} se procesan a través de PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Las donaciones a {username} se pueden pagar usando una tarjeta de crédito o de débito (Visa, MasterCard, American Express), una cuenta bancaria de euro (Pago Domiciliado SEPA) o una cuenta de PayPal."
-
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "Las personas que contribuyen a los bienes comunes necesitan que les apoyen en su trabajo. La construcción de software libre, la difusión del conocimiento libre, son cosas que llevan tiempo y cuestan dinero, no solo para hacer el trabajo inicial, sino también para mantenerlo en el tiempo."
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "El sistema de donaciones recurrentes de Liberapay está diseñado para proporcionar a los creadores un ingreso básico estable de financiación colectiva, permitiéndoles seguir haciendo un gran trabajo que beneficia a todos. ¿Dispuesto a contribuir? Entonces empecemos:"
-
-msgid "Address"
-msgstr "Dirección"
-
-msgid "Address (second line)"
-msgstr "Dirección (segundo renglón)"
-
-msgid "City"
-msgstr "Ciudad"
-
-msgid "Region"
-msgstr "Región"
-
-msgid "Postal Code"
-msgstr "Código postal"
-
-msgid "Country"
-msgstr "País"
-
-msgid "Region (state, province, island…)"
-msgstr "Región (estado, provincia, isla…)"
-
-msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr "Puedes dejar este campo vacío si tu país no usa regiones en las direcciones postales."
-
-msgid "Postal code"
-msgstr "Código postal"
-
-msgid "Address within the city"
-msgstr "Dirección en la ciudad"
-
-msgid "Patrons"
-msgstr "Mecenas"
-
-msgid "Income"
-msgstr "Ingresos"
-
-msgid "per week"
-msgstr "por semana"
-
-msgid "Modify your pledge"
-msgstr "Modifica tu promesa"
-
-msgid "Pledge"
-msgstr "Prometer donar"
-
-msgid "Modify your donation"
-msgstr "Modifica tu donación"
-
-msgid "Donate"
-msgstr "Donar"
-
-msgid "Pledges"
-msgstr "Promesas"
-
-msgid "Sum"
-msgstr "Total"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Objetivo: {0}"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Ingresos: {0} / semana"
-
-msgid "Mission accomplished!"
-msgstr "¡Misión cumplida!"
 
 #, python-brace-format
 msgid "Joined {timespan_ago}."
@@ -1594,22 +1189,283 @@ msgstr[0] "{0} recibe {1} semanalmente de {n} mecenas."
 msgstr[1] "{0} recibe {1} semanalmente de {n} mecenas."
 
 #, python-brace-format
+msgid "Goal: {0}"
+msgstr "Objetivo: {0}"
+
+#, python-brace-format
 msgid "Donating ({amount})"
 msgstr "Donando ({amount})"
 
+msgid "Pledge"
+msgstr "Prometer donar"
+
+msgid "Donate"
+msgstr "Donar"
+
+msgid "Switch to a different account"
+msgstr "Cambiar a otra cuenta"
+
+msgid "The changes have been saved."
+msgstr "Se han guardado los cambios."
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr "Te hemos enviado un enlace de un solo uso para iniciar sesión. Comprueba tu bandeja de entrada, abre el enlace suministrado en una nueva pestaña, después vuelve a esta página y pulsa en el botón que hay más abajo para continuar con lo que querías hacer."
+
 #, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "{platform} rechazó nuestra petición para acceder a tus datos. Reconectar tu cuenta de {platform} debería solucionar el problema."
+msgid "You're still not logged in as {0}."
+msgstr "Todavía no has accedido como {0}."
 
-msgid "Reconnect"
-msgstr "Reconectar"
-
-msgid "Redirecting…"
-msgstr "Redireccionando…"
+msgid "Password (optional)"
+msgstr "Contraseña (opcional)"
 
 #, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr "Si estás usando un navegador poco habitual y no sucede nada, {link_start}haz clic en este enlace para proceder{link_end}."
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr "Si has {bold}perdido tu contraseña{bold_end}, o si tu cuenta no tiene contraseña, deja el campo de la contraseña vacío. Te enviaremos un enlace para iniciar sesión por correo electrónico."
+
+msgid "Find great people to donate to"
+msgstr "Encuentra personas geniales a las que donar"
+
+msgid "Whose work do you appreciate? See if they're on Liberapay"
+msgstr "¿Hay alguien cuyo trabajo aprecies mucho? Comprueba si está en Liberapay"
+
+msgid "Disconnect"
+msgstr "Desconectar"
+
+msgid "This is not supported yet"
+msgstr "Esto no está soportado aún"
+
+msgid "Connect"
+msgstr "Conectar"
+
+msgid "username"
+msgstr "nombre de usuario"
+
+msgid "Drop files here"
+msgstr "Arrastra los archivos aquí"
+
+msgid "Processing dropped files…"
+msgstr "Procesando los archivos…"
+
+msgid "Add a file"
+msgstr "Añade un archivo"
+
+msgid "Edit filename"
+msgstr "Edita el nombre de archivo"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "No"
+msgstr "No"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "Ok"
+msgstr "Vale"
+
+msgid "Personal Information"
+msgstr "Información Personal"
+
+msgid "Full Name"
+msgstr "Nombre Completo"
+
+msgid "Country (residence)"
+msgstr "País (residencia)"
+
+msgid "Nationality"
+msgstr "Nacionalidad"
+
+msgid "Date of Birth"
+msgstr "Fecha de nacimiento"
+
+msgid "YYYY-MM-DD"
+msgstr "AAAA-MM-DD"
+
+msgid "Occupation"
+msgstr "Ocupación"
+
+msgid "Your main professional activity."
+msgstr "Tu principal actividad profesional."
+
+msgid "Postal Address"
+msgstr "Dirección postal"
+
+msgid "Organization Information"
+msgstr "Información de la organización"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "¿Estás actuando como el representante de una organización?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Sí, represento un negocio o una organización sin ánimo de lucro."
+
+msgid "Organization Name"
+msgstr "Nombre de organización"
+
+msgid "Headquarters Address"
+msgstr "Dirección de la sede principal"
+
+msgid "Introduction"
+msgstr "Introducción"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Teams"
+msgstr "Equipos"
+
+msgid "Stats"
+msgstr "Estadísticas"
+
+msgid "Feeds"
+msgstr "Suministros"
+
+msgid "Contact"
+msgstr "Contacto"
+
+msgid "Security"
+msgstr "Seguridad"
+
+msgid "Logos"
+msgstr "Logos"
+
+msgid "Overview"
+msgstr "Vista general"
+
+msgid "Organizations"
+msgstr "Organizaciones"
+
+msgid "Individuals"
+msgstr "Individuos"
+
+msgid "Unclaimed Donations"
+msgstr "Donaciones no Reclamadas"
+
+msgid "Repositories"
+msgstr "Repositorios"
+
+msgid "Social Networks"
+msgstr "Redes sociales"
+
+msgid "Communities"
+msgstr "Comunidades"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Monedas"
+
+msgid "Goal"
+msgstr "Objetivo"
+
+msgid "Statement"
+msgstr "Presentación"
+
+msgid "Linked Accounts"
+msgstr "Cuentas enlazadas"
+
+msgid "Privacy"
+msgstr "Privacidad"
+
+msgid "Members"
+msgstr "Miembros"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Next"
+msgstr "Siguiente"
+
+msgid "First"
+msgstr "Primero"
+
+msgid "Last"
+msgstr "Último"
+
+msgid "View More"
+msgstr "Ver más"
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr "Establecer una contraseña te permite iniciar sesión directamente, en vez de esperar a un enlace de un solo uso enviado por correo electrónico. Ten en cuenta que Liberapay es un servicio financiero, ¡usa una contraseña fuerte!"
+
+msgid "Current password"
+msgstr "Contraseña actual"
+
+msgid "New password"
+msgstr "Contraseña nueva"
+
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} no ha configurado un método de pago todavía, así que tu donación no puede ser procesada ahora mismo. Te notificaremos cuando sea posible hacer el pago."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Las donaciones a {username} se pueden pagar usando tarjeta de crédito o de débito (Visa, MasterCard, American Express) o mediante pago domiciliado de una cuenta bancaria de euro (solo para donaciones con euros)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Las donaciones a {username} se procesan a través de PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Las donaciones a {username} se pueden pagar usando una tarjeta de crédito o de débito (Visa, MasterCard, American Express), una cuenta bancaria de euro (Pago Domiciliado SEPA) o una cuenta de PayPal."
+
+msgid "Country"
+msgstr "País"
+
+msgid "Region (state, province, island…)"
+msgstr "Región (estado, provincia, isla…)"
+
+msgid "You can leave this field empty if your country does not use regions in postal addresses."
+msgstr "Puedes dejar este campo vacío si tu país no usa regiones en las direcciones postales."
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "Postal code"
+msgstr "Código postal"
+
+msgid "Address within the city"
+msgstr "Dirección en la ciudad"
+
+msgid "Patrons"
+msgstr "Mecenas"
+
+msgid "Income"
+msgstr "Ingresos"
+
+msgid "per week"
+msgstr "por semana"
+
+msgid "Modify your pledge"
+msgstr "Modifica tu promesa"
+
+msgid "Modify your donation"
+msgstr "Modifica tu donación"
+
+msgid "Pledges"
+msgstr "Promesas"
+
+msgid "Sum"
+msgstr "Total"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Ingresos: {0} / semana"
+
+msgid "Mission accomplished!"
+msgstr "¡Misión cumplida!"
+
+msgid "View income shares"
+msgstr "Conoce cómo se reparten los ingresos"
 
 msgid "(fork)"
 msgstr "(fork)"
@@ -1627,26 +1483,17 @@ msgstr "Sacar de la lista"
 msgid "Show on your profile"
 msgstr "Mostrar en tu perfil"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "Estás en el modo de prueba, ¡no introduzcas ningún pago real o dato personal!"
-
 msgid "Search Liberapay"
 msgstr "Buscar en Liberapay"
-
-msgid "Switch to a different account"
-msgstr "Cambiar a otra cuenta"
-
-msgid "The changes have been saved."
-msgstr "Se han guardado los cambios."
 
 msgid "Log In or Create Account"
 msgstr "Acceder o crear una cuenta"
 
-msgid "Sign out"
-msgstr "Salir"
-
 msgid "Please input your email address:"
 msgstr "Proporciona tu dirección de correo electrónico:"
+
+msgid "Email"
+msgstr "Correo electrónico"
 
 msgid "and select your preferred currency:"
 msgstr "y selecciona tu moneda preferida:"
@@ -1654,24 +1501,6 @@ msgstr "y selecciona tu moneda preferida:"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Al crear una cuenta en Liberapay aceptas nuestros {0}términos de servicio{1}."
-
-msgid "Enter a username"
-msgstr "Proporciona un nombre de usuario"
-
-msgid "Invite"
-msgstr "Invitación"
-
-msgid "Explore teams"
-msgstr "Explora equipos"
-
-msgid "About teams"
-msgstr "Acerca de los equipos"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} es miembro de {n} equipo:"
-msgstr[1] "{username} es miembro de {n} equipos:"
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1706,9 +1535,6 @@ msgstr "Los ingresos no utilizados se consumirán en las siguientes semanas, no 
 
 msgid "Leftover"
 msgstr "Sobrante"
-
-msgid "Log in via email"
-msgstr "Iniciar sesión por correo electrónico"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1770,6 +1596,130 @@ msgstr "Modifica la donación"
 
 msgid "Stop the donation"
 msgstr "Detener la donación"
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] "Has cargado {n} documento de este tipo:"
+msgstr[1] "Has cargado {n} documentos de este tipo:"
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr "El documento n.º {id} está en espera de validación."
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr "El documento n.º {id} ha sido validado."
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr "El documento n.º {id} ha sido rechazado: {refused_reason_type} - {refused_reason_message}."
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "Si necesitas asistencia, puedes mandar un mensaje a support@liberapay.com."
+
+msgid "Income Range"
+msgstr "Escala de ingresos"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "Menos de {0}"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "Más de {0}"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "Entre {0} y {1}"
+
+msgid "How much money you earn per year, approximately."
+msgstr "Cuánto dinero ganas al año, aproximadamente."
+
+msgid "Identity Proof"
+msgstr "Prueba de identidad"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "Pasaporte, o documento de identidad, o carnet de conducir de Reino Unido."
+
+msgid "Articles of Association"
+msgstr "Estatutos"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr "Artículos de asociación certificados (estatuto) - la escritura formal declarada por los emprendedores, en la que la siguiente información sea mencionada: nombre del negocio, actividad, dirección registrada, participación."
+
+msgid "Registration Proof"
+msgstr "Prueba de registro"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr "Extracto del registro mercantil emitido en los últimos tres meses."
+
+msgid "Proof of registration from the official authority."
+msgstr "Prueba de registro de la autoridad oficial."
+
+msgid "Shareholder Declaration"
+msgstr "Declaración de accionistas"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr "Descarga y rellena el {link_start}formulario de la declaración de accionistas{link_end}."
+
+msgid "Legal Representative Information"
+msgstr "Información de representantes legales"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr "Los siguientes campos son sobre el representante legal de la organización (probablemente tú)."
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "Se admiten los formatos de archivo siguientes: {0}."
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "El tamaño máximo de cada archivo es {0} MB."
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr "Necesitamos saber quién eres para cumplir con las regulaciones financieras. Solo el personal autorizado podrá ver esta información, no se la mostraremos a otros usuarios ni a ninguna otra persona a no ser que sea requerido por ley."
+
+msgid "Given Name"
+msgstr "Nombre"
+
+msgid "Family Name"
+msgstr "Apellidos"
+
+msgid "Country (nationality)"
+msgstr "País (nacionalidad)"
+
+msgid "Organization Type"
+msgstr "Tipo de organización"
+
+msgid "Business"
+msgstr "Negocio"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "Acepto las {0}condiciones de servicio de MangoPay{1}"
+
+msgid "Address"
+msgstr "Dirección"
+
+msgid "Address (second line)"
+msgstr "Dirección (segundo renglón)"
+
+msgid "Region"
+msgstr "Región"
+
+msgid "Postal Code"
+msgstr "Código postal"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr "Las personas que contribuyen a los bienes comunes necesitan que les apoyen en su trabajo. La construcción de software libre, la difusión del conocimiento libre, son cosas que llevan tiempo y cuestan dinero, no solo para hacer el trabajo inicial, sino también para mantenerlo en el tiempo."
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr "El sistema de donaciones recurrentes de Liberapay está diseñado para proporcionar a los creadores un ingreso básico estable de financiación colectiva, permitiéndoles seguir haciendo un gran trabajo que beneficia a todos. ¿Dispuesto a contribuir? Entonces empecemos:"
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "Estás en el modo de prueba, ¡no introduzcas ningún pago real o dato personal!"
 
 msgid "Save"
 msgstr "Guardar"
@@ -1870,6 +1820,12 @@ msgstr "Origen del avatar"
 msgid "Avatar email (for Libravatar only)"
 msgstr "Avatar de correo electrónico (para Libravatar solamente)"
 
+msgid "Leave"
+msgstr "Salir"
+
+msgid "Explore communities"
+msgstr "Explora comunidades"
+
 msgid "The submitted settings are incoherent."
 msgstr "Los ajustes enviados son incoherentes."
 
@@ -1896,6 +1852,9 @@ msgstr "Aceptar monedas extranjeras puede aumentar tus ingresos al convencer a p
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe convierte automáticamente los fondos a tu moneda principal, pero Paypal mantiene por defecto los pagos en monedas extranjeras hasta que le dices qué hacer. Si tienes una cuenta Business de PayPal, puedes optar por convertir automáticamente todos los pagos entrantes en monedas extranjeras a tu moneda principal. Esta opción se encuentra actualmente en la página «{link_open}Preferencias para recibir pagos{link_close}»."
 
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgstr "Conectar las cuentas que posees en otras plataformas hace tu perfil de Liberapay más fácil de encontrar, y sirve para demostrar que eres quien dices ser."
+
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Agradezco los regalos, pero no tengo un objetivo de financiación específico."
 
@@ -1921,6 +1880,12 @@ msgstr "Estamos aquí como mecenas, y rehusamos educadamente recibir regalos."
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr "Nuestro objetivo es recibir {0}"
+
+msgid "Enter a username"
+msgstr "Proporciona un nombre de usuario"
+
+msgid "Invite"
+msgstr "Invitación"
 
 msgid "Your privacy settings have been changed."
 msgstr "Los ajustes de privacidad han sido cambiados."
@@ -2005,6 +1970,12 @@ msgstr "Previsualización"
 
 msgid "Switch to another language:"
 msgstr "Cambiar a otro idioma:"
+
+msgid "Explore teams"
+msgstr "Explora equipos"
+
+msgid "About teams"
+msgstr "Acerca de los equipos"
 
 msgid "Username"
 msgstr "Nombre de usuario"
@@ -2465,6 +2436,22 @@ msgstr "Perfil de {username}"
 
 msgid "Edit"
 msgstr "Editar"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr "{0} posee las siguientes cuentas en otras plataformas:"
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] "{username} es miembro de {n} equipo:"
+msgstr[1] "{username} es miembro de {n} equipos:"
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] "con {n} otro"
+msgstr[1] "con {n} más"
 
 msgid "History"
 msgstr "Historial"
@@ -4053,6 +4040,19 @@ msgstr "Crear un equipo"
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr "Primero necesitas {0}iniciar sesión en tu propia cuenta{1}."
+
+msgid "Name of the team"
+msgstr "Nombre del equipo"
+
+msgid "Email of the team (optional)"
+msgstr "Correo electrónico del equipo (opcional)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr "Habilita {0}límites en las tomas del equipo{1}"
+
+msgid "Create"
+msgstr "Crear"
 
 msgid "Becoming a team member"
 msgstr "Convertirse en un miembro del equipo"

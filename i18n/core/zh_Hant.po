@@ -679,6 +679,9 @@ msgstr "{0} 真的是一個 {1} 的伺服器？它目前看來似乎不像。"
 msgid "You need to sign in first"
 msgstr "你必須要先進行登入"
 
+msgid "This account is closed"
+msgstr "這個帳戶已被關閉"
+
 msgid "You need to log in"
 msgstr "你必須登入"
 
@@ -881,10 +884,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr "此付款方法目前無法使用，很抱歉造成不便。"
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr "很抱歉目前收入支付無法進行，請參考{link_start}這則文章{link_end}了解詳情。"
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr "支付工具{name}傳回錯誤訊息，請重試，若問題無法解決可聯絡 support@liberapay.com。"
 
@@ -914,6 +913,10 @@ msgstr "服務無法使用"
 
 msgid "Gateway Timeout"
 msgstr "閘道逾時"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -971,24 +974,6 @@ msgstr "你無權限讀取這個頁面。"
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "處理你的請求失敗，因為我們的伺服器無法與其它機器上的服務進行通訊。這是暫時性的狀況，請稍候再試。"
 
-msgid "This account is closed"
-msgstr "這個帳戶已被關閉"
-
-msgid "Are you the account owner?"
-msgstr "你是此帳戶的所有人嗎？"
-
-msgid "Log in to reopen your account."
-msgstr "登入重新開啟帳戶。"
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "你需要一個帳戶，請填寫以下的表格。"
-
-msgid "Create an account"
-msgstr "註冊新帳戶"
-
-msgid "Use an existing account"
-msgstr "使用已有的帳戶"
-
 msgid "Bad Request"
 msgstr ""
 
@@ -1013,6 +998,65 @@ msgstr "電子郵件地址"
 
 msgid "Go"
 msgstr "前往"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Confirm"
+msgstr "確認"
+
+msgid "This new password is not safe"
+msgstr "这个新密码不安全"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr "我们检测到您的密码容易被猜测，因此不安全。"
+
+msgid "Do you still want to use this password?"
+msgstr "您是否仍旧希望使用该密码？"
+
+msgid "No, cancel"
+msgstr "不，取消"
+
+msgid "Yes, proceed"
+msgstr "是的，請繼續"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr "我们想要在 {platform} 那儿得到您的资料，但是我们被拒绝了。若您重新连接您在 {platform} 的户口，这问题可能会被解决。"
+
+msgid "Reconnect"
+msgstr "重新连接"
+
+msgid "Redirecting…"
+msgstr "重新指向.…"
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr "如果您使用外國瀏覽器且沒發生異常，那麼{link_start}請點擊此連結{link_end}以繼續操作。"
+
+msgid "Retry"
+msgstr "重試"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "你需要一個帳戶，請填寫以下的表格。"
+
+msgid "Create an account"
+msgstr "註冊新帳戶"
+
+msgid "Use an existing account"
+msgstr "使用已有的帳戶"
+
+msgid "Are you the account owner?"
+msgstr "你是此帳戶的所有人嗎？"
+
+msgid "Log in to reopen your account."
+msgstr "登入重新開啟帳戶。"
+
+msgid "Please try again in a few minutes."
+msgstr "請在幾分鐘後再試一次。"
+
+msgid "Log in via email"
+msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "目前我們遇到了技術故障，因此無法正常運作。很抱歉造成不便，我們會儘快修復以回歸正常。"
@@ -1044,54 +1088,136 @@ msgstr "常見問題"
 msgid "Legal"
 msgstr "法律規範"
 
+msgid "Switch to another language"
+msgstr "切換其它語言"
+
+#, python-brace-format
+msgid "({x_percent} translated)"
+msgstr "({x_percent} 已翻译)"
+
+msgid "Help us translate Liberapay"
+msgstr "協助翻譯 Liberapay"
+
+msgid "Profile"
+msgstr "個人檔案"
+
+msgid "Giving"
+msgstr "捐贈"
+
+msgid "Receiving"
+msgstr "收取"
+
+msgid "Ledger"
+msgstr "總帳"
+
+msgid "Wallet"
+msgstr "錢包"
+
+msgid "Emptying your wallet"
+msgstr "清空電子錢包"
+
+msgid "Payment Processors"
+msgstr "支付處理工具"
+
+msgid "Identity"
+msgstr "身份"
+
+msgid "Account"
+msgstr "帳戶"
+
+msgid "Emails"
+msgstr "電子郵件"
+
+msgid "Notifications"
+msgstr "通知"
+
+msgid "Widgets"
+msgstr "小工具"
+
+msgid "Create a new community"
+msgstr "建立新社群"
+
+msgid "Create a new team"
+msgstr "建立新團隊"
+
+msgid "Sign out"
+msgstr "登出"
+
+msgid "Print"
+msgstr "列印"
+
+#, python-brace-format
+msgid "Joined {timespan_ago}."
+msgstr "{timespan_ago} 之前加入。"
+
+#, python-brace-format
+msgid "Closed {timespan_ago}."
+msgstr "{timespan_ago} 關閉。"
+
+#, python-brace-format
+msgid "{0} doesn't publish how much they give."
+msgstr "{0}並未公開其向他人捐款的金額。"
+
+#, python-brace-format
+msgid "{0} gives {1} per week."
+msgstr "{0} 每週捐款 {1}。"
+
+msgid "This user doesn't accept donations."
+msgstr "這名用户不接受捐款。"
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] "{0}有{n}個贊助者。"
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "{0} 的目標是每週收到 {1} 的捐款。"
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] "{0}每週從{n}個贊助者收到{1}捐款。"
+
+#, python-brace-format
+msgid "Goal: {0}"
+msgstr "目標: {0}"
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr "正在捐助{amount}"
+
+msgid "Pledge"
+msgstr "承諾"
+
+msgid "Donate"
+msgstr "捐款"
+
+msgid "Switch to a different account"
+msgstr "切換到不同的帳號"
+
+msgid "The changes have been saved."
+msgstr "更改已保存。"
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr "我們剛寄給你一封一次用的登入連結信郵，請 檢查你的信箱，然後在新分頁上開啟所提供的連結，再重回到本頁並點擊以下的按鈕以便繼續要進行的作業。"
+
+#, python-brace-format
+msgid "You're still not logged in as {0}."
+msgstr "你仍未以 {0} 身份登入。"
+
+msgid "Password (optional)"
+msgstr "密碼 (可選)"
+
+#, fuzzy, python-brace-format
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr "如果你的帳戶沒有密碼請將先前的欄位維持空白。我們將透過電子郵件傳送登入連結。"
+
 msgid "Find great people to donate to"
 msgstr "找到有趣的人予以支持"
 
 msgid "Whose work do you appreciate? See if they're on Liberapay"
 msgstr "有哪些讓你心存感謝的專案工作？找找看他們是否有在 Liberapay 上"
-
-msgid "Communities"
-msgstr "社群"
-
-#, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] "與 {n} 其它"
-
-msgid "Leave"
-msgstr "離開"
-
-msgid "Explore communities"
-msgstr "探索社區"
-
-msgid "Cancel"
-msgstr "取消"
-
-msgid "Confirm"
-msgstr "確認"
-
-msgid "Linked Accounts"
-msgstr "已連結的帳號"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr "連結你擁有的帳號使你的 Liberapay 個人檔案更容易被找到，且幫助證明你是你所聲稱的那個人。"
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0}在其他平台擁有以下帳號："
-
-msgid "Name of the team"
-msgstr "團隊的名稱"
-
-msgid "Email of the team (optional)"
-msgstr "團隊的聯絡電郵 (可選項目)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr "啟用 {0}限制團隊分成{1}"
-
-msgid "Create"
-msgstr "建立"
 
 msgid "Disconnect"
 msgstr "中斷連結"
@@ -1101,6 +1227,9 @@ msgstr "尚未支持該功能"
 
 msgid "Connect"
 msgstr "連結"
+
+msgid "username"
+msgstr "用戶名稱"
 
 msgid "Drop files here"
 msgstr "將檔案拖曳至此"
@@ -1113,9 +1242,6 @@ msgstr "新增檔案"
 
 msgid "Edit filename"
 msgstr "編輯檔名"
-
-msgid "Retry"
-msgstr "重試"
 
 msgid "Delete"
 msgstr "刪除"
@@ -1132,118 +1258,17 @@ msgstr "是"
 msgid "Ok"
 msgstr "確定"
 
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "你已經上傳了{n}個此類文件："
+msgid "Personal Information"
+msgstr "個人資訊"
 
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "文件#{id}正在等待確認。"
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "文件#{id}正在被確認。"
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "文件#{id}已被拒絕：{refused_reason_type} - {refused_reason_message}。"
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "若需要幫助，請聯繫 support@liberapay.com。"
-
-msgid "Occupation"
-msgstr "職業"
-
-msgid "Your main professional activity."
-msgstr "你的主要職業活動。"
-
-msgid "Income Range"
-msgstr "收入範圍"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "少於{0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "多於{0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "{0}和{1}之間"
-
-msgid "How much money you earn per year, approximately."
-msgstr "你的大概年收入。"
-
-msgid "Postal Address"
-msgstr "郵寄地址"
-
-msgid "Identity Proof"
-msgstr "身分證件"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "護照，或身分證（正反面），或英國駕照。"
-
-msgid "Organization Information"
-msgstr "組織信息"
-
-msgid "Headquarters Address"
-msgstr "公司地址"
-
-msgid "Articles of Association"
-msgstr "公司章程"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "認證的公司章程 - 由股東書面固定下來的正式文件，需有以下信息：公司名稱、經營活動、註冊地址、持股信息。"
-
-msgid "Registration Proof"
-msgstr "公司註冊證明"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "最近三個月內的公司名冊摘要。"
-
-msgid "Proof of registration from the official authority."
-msgstr "官方的公司註冊證明。"
-
-msgid "Shareholder Declaration"
-msgstr "股東聲明"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "請下載並填寫{link_start}股東聲明表{link_end}。"
-
-msgid "Legal Representative Information"
-msgstr "法定代表信息"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "底下欄位是關於組織的法定代表(可能是你 )."
-
-msgid "Email"
-msgstr "電子郵件"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "支持以下文件格式：{0}。"
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "文件最大小不得超過{0}MB。"
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "由於財務規定我們需要知道你的身份。我们具有高级权限的员工才可以看见此信息，除非违背法律，否则我们永远不会透露给其他人。"
-
-msgid "Given Name"
-msgstr "名字"
-
-msgid "Family Name"
-msgstr "姓氏"
+msgid "Full Name"
+msgstr "全名"
 
 msgid "Country (residence)"
 msgstr "國家 (居留地)"
 
-msgid "Country (nationality)"
-msgstr "國家 (國籍)"
+msgid "Nationality"
+msgstr "國籍"
 
 msgid "Date of Birth"
 msgstr "出生日期"
@@ -1251,65 +1276,35 @@ msgstr "出生日期"
 msgid "YYYY-MM-DD"
 msgstr "西元年份-月-日"
 
+msgid "Occupation"
+msgstr "職業"
+
+msgid "Your main professional activity."
+msgstr "你的主要職業活動。"
+
+msgid "Postal Address"
+msgstr "郵寄地址"
+
+msgid "Organization Information"
+msgstr "組織信息"
+
 msgid "Are you acting as the representative of an organization?"
 msgstr "你是某組織的代表人嗎？"
 
 msgid "Yes, I represent a business or nonprofit."
 msgstr "是的，我代表某個企業或某非營利組織。"
 
-msgid "Organization Type"
-msgstr "組織類型"
-
-msgid "Business"
-msgstr "商业"
-
 msgid "Organization Name"
 msgstr "組織名稱"
 
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "我同意 {0}MangoPay的服務條款{1}"
-
-msgid "Personal Information"
-msgstr "個人資訊"
-
-msgid "Full Name"
-msgstr "全名"
-
-msgid "Nationality"
-msgstr "國籍"
-
-msgid "username"
-msgstr "用戶名稱"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "我們剛寄給你一封一次用的登入連結信郵，請 檢查你的信箱，然後在新分頁上開啟所提供的連結，再重回到本頁並點擊以下的按鈕以便繼續要進行的作業。"
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "你仍未以 {0} 身份登入。"
-
-msgid "Password (optional)"
-msgstr "密碼 (可選)"
-
-#, fuzzy, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "如果你的帳戶沒有密碼請將先前的欄位維持空白。我們將透過電子郵件傳送登入連結。"
-
-msgid "Members"
-msgstr "成員"
-
-msgid "View income shares"
-msgstr "查看收入分配"
+msgid "Headquarters Address"
+msgstr "公司地址"
 
 msgid "Introduction"
 msgstr "介紹"
 
 msgid "Global"
 msgstr "全球"
-
-msgid "Payment Processors"
-msgstr "支付處理工具"
 
 msgid "Teams"
 msgstr "團隊"
@@ -1347,8 +1342,8 @@ msgstr "代碼庫"
 msgid "Social Networks"
 msgstr "社交網站"
 
-msgid "Profile"
-msgstr "個人檔案"
+msgid "Communities"
+msgstr "社群"
 
 msgid "Name"
 msgstr "名字"
@@ -1365,57 +1360,14 @@ msgstr "目標"
 msgid "Statement"
 msgstr "聲明"
 
+msgid "Linked Accounts"
+msgstr "已連結的帳號"
+
 msgid "Privacy"
 msgstr "隱私"
 
-msgid "Giving"
-msgstr "捐贈"
-
-msgid "Receiving"
-msgstr "收取"
-
-msgid "Ledger"
-msgstr "總帳"
-
-msgid "Identity"
-msgstr "身份"
-
-msgid "Account"
-msgstr "帳戶"
-
-msgid "Emails"
-msgstr "電子郵件"
-
-msgid "Notifications"
-msgstr "通知"
-
-msgid "Widgets"
-msgstr "小工具"
-
-msgid "Switch to another language"
-msgstr "切換其它語言"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "({x_percent} 已翻译)"
-
-msgid "Help us translate Liberapay"
-msgstr "協助翻譯 Liberapay"
-
-msgid "Wallet"
-msgstr "錢包"
-
-msgid "Emptying your wallet"
-msgstr "清空電子錢包"
-
-msgid "Create a new community"
-msgstr "建立新社群"
-
-msgid "Create a new team"
-msgstr "建立新團隊"
-
-msgid "Please try again in a few minutes."
-msgstr "請在幾分鐘後再試一次。"
+msgid "Members"
+msgstr "成員"
 
 msgid "Previous"
 msgstr "上一頁"
@@ -1432,9 +1384,6 @@ msgstr "最後"
 msgid "View More"
 msgstr "檢視更多"
 
-msgid "Print"
-msgstr "列印"
-
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
 msgstr "設定密碼可讓你直接登入而無需等候收取單次使用之登入連結。但請記住，Liberapay乃是一項財務服務，故請挑選高強度的密碼！"
 
@@ -1443,21 +1392,6 @@ msgstr "目前的密碼"
 
 msgid "New password"
 msgstr "新密碼"
-
-msgid "This new password is not safe"
-msgstr "这个新密码不安全"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "我们检测到您的密码容易被猜测，因此不安全。"
-
-msgid "Do you still want to use this password?"
-msgstr "您是否仍旧希望使用该密码？"
-
-msgid "No, cancel"
-msgstr "不，取消"
-
-msgid "Yes, proceed"
-msgstr "是的，請繼續"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1475,27 +1409,6 @@ msgstr "給{username}捐款透過 PayPal 支付，如果沒有 PayPal 帳號還�
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "捐助給{username}可使用信用卡或簽帳金融卡(Visa, MasterCard, American Express)，或是透過 PayPal 支付。"
 
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "Liberapay  重覆定期的捐款統系是設計用來提供穩定的眾資收入來源給一些創作者，讓他們可以持續優秀的作品 好讓更多人受惠。等不及要捐款了嗎？那就立即開始吧："
-
-msgid "Address"
-msgstr "地址"
-
-msgid "Address (second line)"
-msgstr "地址 (第二行)"
-
-msgid "City"
-msgstr "城市"
-
-msgid "Region"
-msgstr "地區"
-
-msgid "Postal Code"
-msgstr "郵政編號"
-
 msgid "Country"
 msgstr "國家"
 
@@ -1504,6 +1417,9 @@ msgstr "地區(州、省或島....)"
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
 msgstr "如果此欄位留白，則您的國別不會在郵件地址中用到區域。"
+
+msgid "City"
+msgstr "城市"
 
 msgid "Postal code"
 msgstr "郵編代碼"
@@ -1523,14 +1439,8 @@ msgstr "每週"
 msgid "Modify your pledge"
 msgstr "修改您的承諾"
 
-msgid "Pledge"
-msgstr "承諾"
-
 msgid "Modify your donation"
 msgstr "修改您的捐款"
-
-msgid "Donate"
-msgstr "捐款"
 
 msgid "Pledges"
 msgstr "捐款承諾"
@@ -1539,66 +1449,14 @@ msgid "Sum"
 msgstr "總和"
 
 #, python-brace-format
-msgid "Goal: {0}"
-msgstr "目標: {0}"
-
-#, python-brace-format
 msgid "Income: {0}/week"
 msgstr "收入: {0} /每週"
 
 msgid "Mission accomplished!"
 msgstr "達成任務！"
 
-#, python-brace-format
-msgid "Joined {timespan_ago}."
-msgstr "{timespan_ago} 之前加入。"
-
-#, python-brace-format
-msgid "Closed {timespan_ago}."
-msgstr "{timespan_ago} 關閉。"
-
-#, python-brace-format
-msgid "{0} doesn't publish how much they give."
-msgstr "{0}並未公開其向他人捐款的金額。"
-
-#, python-brace-format
-msgid "{0} gives {1} per week."
-msgstr "{0} 每週捐款 {1}。"
-
-msgid "This user doesn't accept donations."
-msgstr "這名用户不接受捐款。"
-
-#, python-brace-format
-msgid "{0} has {n} patron."
-msgid_plural "{0} has {n} patrons."
-msgstr[0] "{0}有{n}個贊助者。"
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "{0} 的目標是每週收到 {1} 的捐款。"
-
-#, python-brace-format
-msgid "{0} receives {1} per week from {n} patron."
-msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] "{0}每週從{n}個贊助者收到{1}捐款。"
-
-#, python-brace-format
-msgid "Donating ({amount})"
-msgstr "正在捐助{amount}"
-
-#, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "我们想要在 {platform} 那儿得到您的资料，但是我们被拒绝了。若您重新连接您在 {platform} 的户口，这问题可能会被解决。"
-
-msgid "Reconnect"
-msgstr "重新连接"
-
-msgid "Redirecting…"
-msgstr "重新指向.…"
-
-#, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr "如果您使用外國瀏覽器且沒發生異常，那麼{link_start}請點擊此連結{link_end}以繼續操作。"
+msgid "View income shares"
+msgstr "查看收入分配"
 
 msgid "(fork)"
 msgstr "（分支）"
@@ -1616,26 +1474,17 @@ msgstr "刪除"
 msgid "Show on your profile"
 msgstr "在你的個人資料上顯示"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "你正在使用沙盒模式，請勿輸入真實的付款或個人信息！"
-
 msgid "Search Liberapay"
 msgstr "在 Liberapay 上搜尋"
-
-msgid "Switch to a different account"
-msgstr "切換到不同的帳號"
-
-msgid "The changes have been saved."
-msgstr "更改已保存。"
 
 msgid "Log In or Create Account"
 msgstr "登入或建立帳戶"
 
-msgid "Sign out"
-msgstr "登出"
-
 msgid "Please input your email address:"
 msgstr "請輸入電子郵件："
+
+msgid "Email"
+msgstr "電子郵件"
 
 msgid "and select your preferred currency:"
 msgstr "並且選擇你傾向於使用的幣種："
@@ -1643,23 +1492,6 @@ msgstr "並且選擇你傾向於使用的幣種："
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "建立 Liberapay 帳戶你必須同意我們的 {0} 服務條款 {1}。"
-
-msgid "Enter a username"
-msgstr "輸入用戶名稱"
-
-msgid "Invite"
-msgstr "邀請"
-
-msgid "Explore teams"
-msgstr "探索團隊"
-
-msgid "About teams"
-msgstr "關於團隊"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} 是 {n} 個團隊的成員："
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1694,9 +1526,6 @@ msgstr "未使用的收入會在未來數週內被消費掉，它不會累積在
 
 msgid "Leftover"
 msgstr "餘額"
-
-msgid "Log in via email"
-msgstr ""
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1756,6 +1585,129 @@ msgstr "修改捐款"
 
 msgid "Stop the donation"
 msgstr "停止捐款"
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] "你已經上傳了{n}個此類文件："
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr "文件#{id}正在等待確認。"
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr "文件#{id}正在被確認。"
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr "文件#{id}已被拒絕：{refused_reason_type} - {refused_reason_message}。"
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "若需要幫助，請聯繫 support@liberapay.com。"
+
+msgid "Income Range"
+msgstr "收入範圍"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "少於{0}"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "多於{0}"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "{0}和{1}之間"
+
+msgid "How much money you earn per year, approximately."
+msgstr "你的大概年收入。"
+
+msgid "Identity Proof"
+msgstr "身分證件"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "護照，或身分證（正反面），或英國駕照。"
+
+msgid "Articles of Association"
+msgstr "公司章程"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr "認證的公司章程 - 由股東書面固定下來的正式文件，需有以下信息：公司名稱、經營活動、註冊地址、持股信息。"
+
+msgid "Registration Proof"
+msgstr "公司註冊證明"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr "最近三個月內的公司名冊摘要。"
+
+msgid "Proof of registration from the official authority."
+msgstr "官方的公司註冊證明。"
+
+msgid "Shareholder Declaration"
+msgstr "股東聲明"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr "請下載並填寫{link_start}股東聲明表{link_end}。"
+
+msgid "Legal Representative Information"
+msgstr "法定代表信息"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr "底下欄位是關於組織的法定代表(可能是你 )."
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "支持以下文件格式：{0}。"
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "文件最大小不得超過{0}MB。"
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr "由於財務規定我們需要知道你的身份。我们具有高级权限的员工才可以看见此信息，除非违背法律，否则我们永远不会透露给其他人。"
+
+msgid "Given Name"
+msgstr "名字"
+
+msgid "Family Name"
+msgstr "姓氏"
+
+msgid "Country (nationality)"
+msgstr "國家 (國籍)"
+
+msgid "Organization Type"
+msgstr "組織類型"
+
+msgid "Business"
+msgstr "商业"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "我同意 {0}MangoPay的服務條款{1}"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Address (second line)"
+msgstr "地址 (第二行)"
+
+msgid "Region"
+msgstr "地區"
+
+msgid "Postal Code"
+msgstr "郵政編號"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr "Liberapay  重覆定期的捐款統系是設計用來提供穩定的眾資收入來源給一些創作者，讓他們可以持續優秀的作品 好讓更多人受惠。等不及要捐款了嗎？那就立即開始吧："
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "你正在使用沙盒模式，請勿輸入真實的付款或個人信息！"
 
 msgid "Save"
 msgstr "儲存"
@@ -1856,6 +1808,12 @@ msgstr "大頭像來源"
 msgid "Avatar email (for Libravatar only)"
 msgstr "大頭像電郵 (僅為Libravatar 使用)"
 
+msgid "Leave"
+msgstr "離開"
+
+msgid "Explore communities"
+msgstr "探索社區"
+
 msgid "The submitted settings are incoherent."
 msgstr "您提交的设定不连贯。"
 
@@ -1882,6 +1840,9 @@ msgstr "接受外幣可以提高收入說服其它國家的人捐款支助，不
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe 可自動將基金轉成您主動使用的貨幣，而 PayPal 除非有明白告之則預設為外幣支付。如果是商務級 PayPal 帳戶則可選擇自動將收入支付的外幣轉成主要使用貨幣。此選項目前放在{link_open}收款頁的偏好設定{link_close}之下。"
 
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgstr "連結你擁有的帳號使你的 Liberapay 個人檔案更容易被找到，且幫助證明你是你所聲稱的那個人。"
+
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "我很感謝能收到禮物，並沒有特定的籌款目標。"
 
@@ -1907,6 +1868,12 @@ msgstr "在這裏我們是贊助者，禮帽地婉謝別人的捐款贈禮。"
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr "我們的目標是收到 {0}"
+
+msgid "Enter a username"
+msgstr "輸入用戶名稱"
+
+msgid "Invite"
+msgstr "邀請"
 
 msgid "Your privacy settings have been changed."
 msgstr "你的隱私設定已做變更。"
@@ -1990,6 +1957,12 @@ msgstr "預覽"
 
 msgid "Switch to another language:"
 msgstr "切換到另一個語言："
+
+msgid "Explore teams"
+msgstr "探索團隊"
+
+msgid "About teams"
+msgstr "關於團隊"
 
 msgid "Username"
 msgstr "用戶名稱"
@@ -2445,6 +2418,20 @@ msgstr "{username}的個人檔案"
 
 msgid "Edit"
 msgstr "編輯"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr "{0}在其他平台擁有以下帳號："
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] "{username} 是 {n} 個團隊的成員："
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] "與 {n} 其它"
 
 msgid "History"
 msgstr "記錄"
@@ -4012,6 +3999,19 @@ msgstr "建立團"
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr "你必須先要 {0}登入自己本身的帳戶{1} 。"
+
+msgid "Name of the team"
+msgstr "團隊的名稱"
+
+msgid "Email of the team (optional)"
+msgstr "團隊的聯絡電郵 (可選項目)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr "啟用 {0}限制團隊分成{1}"
+
+msgid "Create"
+msgstr "建立"
 
 msgid "Becoming a team member"
 msgstr "成為團隊成員"

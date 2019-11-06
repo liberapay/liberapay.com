@@ -685,6 +685,9 @@ msgstr "Adakah {0} memang pelayan {1}? Ia tidak bertindak seperti sepatutnya ket
 msgid "You need to sign in first"
 msgstr "Anda perlu log masuk dahulu"
 
+msgid "This account is closed"
+msgstr "Akaun ini telah ditutup"
+
 msgid "You need to log in"
 msgstr "Anda perlu log masuk"
 
@@ -887,10 +890,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr "Kaedah pembayaran ini belum ada ketika ini. Kami mohon maaf atas kesulitan yang berlaku."
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr "Harap maaf, bayaran masuk kini tidak boleh dilakukan. Anda boleh membaca {link_start}hantaran blog ini{link_end} untuk ketahui sebabnya."
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr "Pemproses pembayaran {name} mengembalikan ralat. Sila cuba lagi dan hubungi support@liberapay.com jika masalah berterusan."
 
@@ -920,6 +919,10 @@ msgstr "Tidak Terdapat Perkhidmatan"
 
 msgid "Gateway Timeout"
 msgstr "Tempoh Get Laluan Tamat"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -980,24 +983,6 @@ msgstr "Anda tidak dibenarkan mencapai halaman ini."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Permintaan anda gagal diproses kerana pelayan kami tidak mampu berhubung dengan perkhidmatan yang terletak di mesin yang lain. Ini isu sementara sahaja, sila cuba lagi kemudian."
 
-msgid "This account is closed"
-msgstr "Akaun ini telah ditutup"
-
-msgid "Are you the account owner?"
-msgstr "Adakah anda pemilik akaun?"
-
-msgid "Log in to reopen your account."
-msgstr "Log masuk untuk membuka semula akaun anda."
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "Anda perlukan akaun untuk membuat perkara ini. Sila isi salah satu borang berikut."
-
-msgid "Create an account"
-msgstr "Cipta akaun"
-
-msgid "Use an existing account"
-msgstr "Guna akaun sedia ada"
-
 msgid "Bad Request"
 msgstr "Permintaan Buruk"
 
@@ -1022,6 +1007,65 @@ msgstr "Alamat emel"
 
 msgid "Go"
 msgstr "Teruskan"
+
+msgid "Cancel"
+msgstr "Batal"
+
+msgid "Confirm"
+msgstr "Sahkan"
+
+msgid "This new password is not safe"
+msgstr "Kata laluan baru ini tidak selamat"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr "Kami mengesan kata laluan semasa anda sangat mudah untuk diteka, oleh itu ianya tidak selamat."
+
+msgid "Do you still want to use this password?"
+msgstr "Adakah anda masih ingin gunakan kata laluan ini?"
+
+msgid "No, cancel"
+msgstr "Tidak, batalkan"
+
+msgid "Yes, proceed"
+msgstr "Ya, teruskan"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr "{platform} menolak permintaan kami untuk mencapai data anda. Masalah ini sepatutnya boleh dibaiki hanya dengan mengaitkan semula akaun {platform} anda."
+
+msgid "Reconnect"
+msgstr "Kait semula"
+
+msgid "Redirecting…"
+msgstr "Mengubah hala…"
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr "Jika anda menggunakan pelayar lama dan tiada apa yang berlaku, sila {link_start}klik pautan ini untuk teruskan{link_end}."
+
+msgid "Retry"
+msgstr "Cuba lagi"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "Anda perlukan akaun untuk membuat perkara ini. Sila isi salah satu borang berikut."
+
+msgid "Create an account"
+msgstr "Cipta akaun"
+
+msgid "Use an existing account"
+msgstr "Guna akaun sedia ada"
+
+msgid "Are you the account owner?"
+msgstr "Adakah anda pemilik akaun?"
+
+msgid "Log in to reopen your account."
+msgstr "Log masuk untuk membuka semula akaun anda."
+
+msgid "Please try again in a few minutes."
+msgstr "Sila cuba lagi dalam beberapa minit."
+
+msgid "Log in via email"
+msgstr "Log masuk pakai emel"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Kami sedang mengalami kegagalan teknikal. Oleh itu kebanyakan benda tidak berfungsi. Maaf atas segala kesulitan, kami akan pulihkan segalanya secepat mungkin."
@@ -1053,331 +1097,18 @@ msgstr "FAQ"
 msgid "Legal"
 msgstr "Legal"
 
-msgid "Find great people to donate to"
-msgstr "Cari orang hebat untuk menderma"
-
-msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "Kerja siapa yang anda hargai? Lihat jika mereka ada di Liberapay"
-
-msgid "Communities"
-msgstr "Komuniti"
+msgid "Switch to another language"
+msgstr "Tukar ke bahasa lain"
 
 #, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] "dan {n} yang lain"
-msgstr[1] "dan {n} yang lain"
-
-msgid "Leave"
-msgstr "Tinggal"
-
-msgid "Explore communities"
-msgstr "Teroka komuniti"
-
-msgid "Cancel"
-msgstr "Batal"
-
-msgid "Confirm"
-msgstr "Sahkan"
-
-msgid "Linked Accounts"
-msgstr "Akaun Terpaut"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr "Kaitkan akaun yang anda miliki di platform lain membuatkan profil Liberapay anda lebih mudah dicari, dan membantu menunjukkan anda memang anda yang sebenar."
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0} memiliki akaun berikut di platform lain:"
-
-msgid "Name of the team"
-msgstr "Nama kumpulan"
-
-msgid "Email of the team (optional)"
-msgstr "Emel kumpulan (tidak wajib isi)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr "Tetapkan {0}had pada perolehan kumpulan{1}"
-
-msgid "Create"
-msgstr "Cipta"
-
-msgid "Disconnect"
-msgstr "Putuskan"
-
-msgid "This is not supported yet"
-msgstr "Perkara ini belum boleh dibuat"
-
-msgid "Connect"
-msgstr "Kaitkan"
-
-msgid "Drop files here"
-msgstr "Jatuhkan fail di sini"
-
-msgid "Processing dropped files…"
-msgstr "Memproses fail yang dijatuhkan…"
-
-msgid "Add a file"
-msgstr "Tambah fail"
-
-msgid "Edit filename"
-msgstr "Edit nama fail"
-
-msgid "Retry"
-msgstr "Cuba lagi"
-
-msgid "Delete"
-msgstr "Padam"
-
-msgid "Close"
-msgstr "Tutup"
-
-msgid "No"
-msgstr "Tidak"
-
-msgid "Yes"
-msgstr "Ya"
-
-msgid "Ok"
-msgstr "OK"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Anda telah memuat naik {n} dokumen jenis ini:"
-msgstr[1] "Anda telah memuat naik {n} dokumen jenis ini:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "Dokumen #{id} sedang menunggu pengesahan."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "Dokumen #{id} telah disahkan."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Dokumen #{id} telah ditolak: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Jika anda perlukan bantuan anda boleh hantar emel ke support@liberapay.com."
-
-msgid "Occupation"
-msgstr "Pekerjaan"
-
-msgid "Your main professional activity."
-msgstr "Aktiviti profesional utama anda."
-
-msgid "Income Range"
-msgstr "Julat Pendapatan"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Kurang dari {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Lebih dari {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Di antara {0} dan {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Anggaran jumlah wang anda peroleh setiap tahun."
-
-msgid "Postal Address"
-msgstr "Alamat Surat-Menyurat"
-
-msgid "Identity Proof"
-msgstr "Bukti Identiti"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Pasport, atau Kad Pengenalan (hadapan dan belakang), atau lesen memandu UK."
-
-msgid "Organization Information"
-msgstr "Maklumat Organisasi"
-
-msgid "Headquarters Address"
-msgstr "Alamat Ibu Pejabat"
-
-msgid "Articles of Association"
-msgstr "Tataurusan Persatuan"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Tataurusan persatuan yang disahkan (Statut) - memorandum formal yang dinyatakan oleh usahawan, di mana maklumat berikut disebut: nama bisnes, aktiviti, alamat berdaftar, pemegang saham."
-
-msgid "Registration Proof"
-msgstr "Bukti Pendaftaran"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Ekstrak daripada Daftar Syarikat yang dikeluarkan dalam masa tiga bulan terakhir."
-
-msgid "Proof of registration from the official authority."
-msgstr "Bukti pendaftaran daripada pihak berkuasa rasmi."
-
-msgid "Shareholder Declaration"
-msgstr "Deklarasi Pemegang Saham"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Sila muat turun dan isikan {link_start}borang deklarasi pemegang saham{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Maklumat Wakil Sah"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "Medan-medan berikut berkaitan dengan wakil sah untuk organisasi (kemungkinan ianya anda)."
-
-msgid "Email"
-msgstr "Emel"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Format fail berikut disokong: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Saiz maksimum setiap fail ialah {0}MB."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Kami perlu tahu siapa anda untuk mematuhi peraturan kewangan. Hanya pegawai yang dibenarkan sahaja mampu melihat maklumat ini, kami tidak akan menunjukkannya kepada pengguna lain atau sesiapa sahaja melainkan diperlukan oleh undang-undang."
-
-msgid "Given Name"
-msgstr "Nama Hadapan"
-
-msgid "Family Name"
-msgstr "Nama Belakang"
-
-msgid "Country (residence)"
-msgstr "Negara (mastautin)"
-
-msgid "Country (nationality)"
-msgstr "Negara (warganegara)"
-
-msgid "Date of Birth"
-msgstr "Tarikh Lahir"
-
-msgid "YYYY-MM-DD"
-msgstr "TTTT-BB-HH"
-
-msgid "Are you acting as the representative of an organization?"
-msgstr "Adakah anda bertindak sebagai wakil sebuah organisasi?"
-
-msgid "Yes, I represent a business or nonprofit."
-msgstr "Ya, saya mewakili sebuah bisnes atau organisasi bukan untung."
-
-msgid "Organization Type"
-msgstr "Jenis Organisasi"
-
-msgid "Business"
-msgstr "Bisnes"
-
-msgid "Organization Name"
-msgstr "Nama Organisasi"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Saya bersetuju dengan {0}Syarat Perkhidmatan MangoPay{1}"
-
-msgid "Personal Information"
-msgstr "Maklumat Peribadi"
-
-msgid "Full Name"
-msgstr "Nama Penuh"
-
-msgid "Nationality"
-msgstr "Warganegara"
-
-msgid "username"
-msgstr "nama pengguna"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "Kami telah menghantar pautan log masuk guna sekali. Periksa peti masuk emel anda, buka pautan yang diberi dalam tab baru, kemudian kembali semula ke halaman ini dan klik pada butang di bawah untuk teruskan apa yang anda ingin lakukan."
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Anda masih belum log masuk sebagai {0}."
-
-msgid "Password (optional)"
-msgstr "Kata Laluan (tidak wajib isi)"
-
-#, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Jika anda {bold}terlupa kata laluan{bold_end}, atau jika akaun anda tiada kata laluan langsung, maka tinggal kosong medan kata laluan. Kami akan hantar pautan log masuk kepada anda melalui emel."
-
-msgid "Members"
-msgstr "Ahli"
-
-msgid "View income shares"
-msgstr "Lihat syer pendapatan"
-
-msgid "Introduction"
-msgstr "Pengenalan"
-
-msgid "Global"
-msgstr "Global"
-
-msgid "Payment Processors"
-msgstr "Pemprosesan Pembayaran"
-
-msgid "Teams"
-msgstr "Kumpulan"
-
-msgid "Stats"
-msgstr "Statistik"
-
-msgid "Feeds"
-msgstr "Suapan"
-
-msgid "Contact"
-msgstr "Hubungi Kami"
-
-msgid "Security"
-msgstr "Keselamatan"
-
-msgid "Logos"
-msgstr "Logo"
-
-msgid "Overview"
-msgstr "Keseluruhan"
-
-msgid "Organizations"
-msgstr "Organisasi"
-
-msgid "Individuals"
-msgstr "Individu"
-
-msgid "Unclaimed Donations"
-msgstr "Derma Tidak Dituntut"
-
-msgid "Repositories"
-msgstr "Repositori"
-
-msgid "Social Networks"
-msgstr "Rangkaian Sosial"
+msgid "({x_percent} translated)"
+msgstr "({x_percent} diterjemah)"
+
+msgid "Help us translate Liberapay"
+msgstr "Bantu kami menterjemah Liberapay"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Name"
-msgstr "Nama"
-
-msgid "Avatar"
-msgstr "Avatar"
-
-msgid "Currencies"
-msgstr "Mata wang"
-
-msgid "Goal"
-msgstr "Matlamat"
-
-msgid "Statement"
-msgstr "Kenyataan"
-
-msgid "Privacy"
-msgstr "Privasi"
 
 msgid "Giving"
 msgstr "Pemberian"
@@ -1387,6 +1118,15 @@ msgstr "Penerimaan"
 
 msgid "Ledger"
 msgstr "Lejar"
+
+msgid "Wallet"
+msgstr "Dompet"
+
+msgid "Emptying your wallet"
+msgstr "Kosongkan dompet anda"
+
+msgid "Payment Processors"
+msgstr "Pemprosesan Pembayaran"
 
 msgid "Identity"
 msgstr "Identiti"
@@ -1403,162 +1143,17 @@ msgstr "Pemberitahuan"
 msgid "Widgets"
 msgstr "Widget"
 
-msgid "Switch to another language"
-msgstr "Tukar ke bahasa lain"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "({x_percent} diterjemah)"
-
-msgid "Help us translate Liberapay"
-msgstr "Bantu kami menterjemah Liberapay"
-
-msgid "Wallet"
-msgstr "Dompet"
-
-msgid "Emptying your wallet"
-msgstr "Kosongkan dompet anda"
-
 msgid "Create a new community"
 msgstr "Cipta komuniti baharu"
 
 msgid "Create a new team"
 msgstr "Cipta kumpulan baharu"
 
-msgid "Please try again in a few minutes."
-msgstr "Sila cuba lagi dalam beberapa minit."
-
-msgid "Previous"
-msgstr "Sebelum"
-
-msgid "Next"
-msgstr "Selepas"
-
-msgid "First"
-msgstr "Pertama"
-
-msgid "Last"
-msgstr "Terakhir"
-
-msgid "View More"
-msgstr "Lihat Lagi"
+msgid "Sign out"
+msgstr "Log Keluar"
 
 msgid "Print"
 msgstr "Cetak"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Menetapkan kata laluan membolehkan anda log masuk secara terus, supaya anda tidak perlu menunggu pautan guna sekali dihantar melalui emel. Sila ingat bahawa Liberapay ialah perkhidmatan kewangan, gunakan kata laluan yang kuat!"
-
-msgid "Current password"
-msgstr "Kata laluan semasa"
-
-msgid "New password"
-msgstr "Kata laluan baru"
-
-msgid "This new password is not safe"
-msgstr "Kata laluan baru ini tidak selamat"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Kami mengesan kata laluan semasa anda sangat mudah untuk diteka, oleh itu ianya tidak selamat."
-
-msgid "Do you still want to use this password?"
-msgstr "Adakah anda masih ingin gunakan kata laluan ini?"
-
-msgid "No, cancel"
-msgstr "Tidak, batalkan"
-
-msgid "Yes, proceed"
-msgstr "Ya, teruskan"
-
-#, python-brace-format
-msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr "{username} masih belum menetapkan kaedah pembayaran, jadi derma anda tidak boleh diproses pada waktu ini. Kami akan maklumkan anda apabila pembayaran boleh diproses."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Derma ke {username} boleh dibayar menggunakan kad kredit atau debit (Visa, MasterCard, American Express), atau debit terus akaun bank Euro (untuk derma dalam mata wang Euro sahaja)."
-
-#, python-brace-format
-msgid "Donations to {username} are processed through PayPal."
-msgstr "Derma ke {username} diproses melalui PayPal."
-
-#, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Derma ke {username} boleh dibayar menggunakan: kad kredit atau debit (Visa, MasterCard, American Express), akaun bank Euro (Debit Terus SEPA), atau melalui PayPal."
-
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "Mereka yang menyumbang kepada khalayak ramai perlukan anda untuk menyokong kerja mereka. Membina perisian percuma dan menyebarkan pengetahuan secara percuma mengambil banyak masa dan menggunakan banyak wang, bukan sahaja ketika baru bermula tetapi juga ketika mengekalkannya."
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "Sistem derma berulang Liberapay direka untuk menyediakan pendapatan asas yang stabil daripada dana khalayak kepada para pencipta, membolehkan mereka terus mencipta sesuatu yang menguntungkan semua orang. Sedia untuk menyumbang? Maka mari mulakan:"
-
-msgid "Address"
-msgstr "Alamat"
-
-msgid "Address (second line)"
-msgstr "Alamat (baris kedua)"
-
-msgid "City"
-msgstr "Bandar"
-
-msgid "Region"
-msgstr "Negeri"
-
-msgid "Postal Code"
-msgstr "Poskod"
-
-msgid "Country"
-msgstr "Negara"
-
-msgid "Region (state, province, island…)"
-msgstr "Negeri"
-
-msgid "You can leave this field empty if your country does not use regions in postal addresses."
-msgstr "Anda boleh biarkan kosong jika negara anda tidak menggunakan negeri dalam alamat surat."
-
-msgid "Postal code"
-msgstr "Poskod"
-
-msgid "Address within the city"
-msgstr "Alamat dalam bandar"
-
-msgid "Patrons"
-msgstr "Pelanggan"
-
-msgid "Income"
-msgstr "Pendapatan"
-
-msgid "per week"
-msgstr "setiap minggu"
-
-msgid "Modify your pledge"
-msgstr "Ubah janji derma anda"
-
-msgid "Pledge"
-msgstr "Janji"
-
-msgid "Modify your donation"
-msgstr "Ubah derma anda"
-
-msgid "Donate"
-msgstr "Derma"
-
-msgid "Pledges"
-msgstr "Perjanjian"
-
-msgid "Sum"
-msgstr "Jumlah"
-
-#, python-brace-format
-msgid "Goal: {0}"
-msgstr "Matlamat: {0}"
-
-#, python-brace-format
-msgid "Income: {0}/week"
-msgstr "Pendapatan: {0}/minggu"
-
-msgid "Mission accomplished!"
-msgstr "Matlamat berjaya dicapai!"
 
 #, python-brace-format
 msgid "Joined {timespan_ago}."
@@ -1596,22 +1191,283 @@ msgstr[0] "{0} menerima {1} setiap minggu daripada {n} pelanggan."
 msgstr[1] "{0} menerima {1} setiap minggu daripada {n} pelanggan."
 
 #, python-brace-format
+msgid "Goal: {0}"
+msgstr "Matlamat: {0}"
+
+#, python-brace-format
 msgid "Donating ({amount})"
 msgstr "Menderma ({amount})"
 
+msgid "Pledge"
+msgstr "Janji"
+
+msgid "Donate"
+msgstr "Derma"
+
+msgid "Switch to a different account"
+msgstr "Tukar ke akaun lain"
+
+msgid "The changes have been saved."
+msgstr "Anda masih belum simpan perubahan yang dilakukan."
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr "Kami telah menghantar pautan log masuk guna sekali. Periksa peti masuk emel anda, buka pautan yang diberi dalam tab baru, kemudian kembali semula ke halaman ini dan klik pada butang di bawah untuk teruskan apa yang anda ingin lakukan."
+
 #, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "{platform} menolak permintaan kami untuk mencapai data anda. Masalah ini sepatutnya boleh dibaiki hanya dengan mengaitkan semula akaun {platform} anda."
+msgid "You're still not logged in as {0}."
+msgstr "Anda masih belum log masuk sebagai {0}."
 
-msgid "Reconnect"
-msgstr "Kait semula"
-
-msgid "Redirecting…"
-msgstr "Mengubah hala…"
+msgid "Password (optional)"
+msgstr "Kata Laluan (tidak wajib isi)"
 
 #, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr "Jika anda menggunakan pelayar lama dan tiada apa yang berlaku, sila {link_start}klik pautan ini untuk teruskan{link_end}."
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr "Jika anda {bold}terlupa kata laluan{bold_end}, atau jika akaun anda tiada kata laluan langsung, maka tinggal kosong medan kata laluan. Kami akan hantar pautan log masuk kepada anda melalui emel."
+
+msgid "Find great people to donate to"
+msgstr "Cari orang hebat untuk menderma"
+
+msgid "Whose work do you appreciate? See if they're on Liberapay"
+msgstr "Kerja siapa yang anda hargai? Lihat jika mereka ada di Liberapay"
+
+msgid "Disconnect"
+msgstr "Putuskan"
+
+msgid "This is not supported yet"
+msgstr "Perkara ini belum boleh dibuat"
+
+msgid "Connect"
+msgstr "Kaitkan"
+
+msgid "username"
+msgstr "nama pengguna"
+
+msgid "Drop files here"
+msgstr "Jatuhkan fail di sini"
+
+msgid "Processing dropped files…"
+msgstr "Memproses fail yang dijatuhkan…"
+
+msgid "Add a file"
+msgstr "Tambah fail"
+
+msgid "Edit filename"
+msgstr "Edit nama fail"
+
+msgid "Delete"
+msgstr "Padam"
+
+msgid "Close"
+msgstr "Tutup"
+
+msgid "No"
+msgstr "Tidak"
+
+msgid "Yes"
+msgstr "Ya"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Personal Information"
+msgstr "Maklumat Peribadi"
+
+msgid "Full Name"
+msgstr "Nama Penuh"
+
+msgid "Country (residence)"
+msgstr "Negara (mastautin)"
+
+msgid "Nationality"
+msgstr "Warganegara"
+
+msgid "Date of Birth"
+msgstr "Tarikh Lahir"
+
+msgid "YYYY-MM-DD"
+msgstr "TTTT-BB-HH"
+
+msgid "Occupation"
+msgstr "Pekerjaan"
+
+msgid "Your main professional activity."
+msgstr "Aktiviti profesional utama anda."
+
+msgid "Postal Address"
+msgstr "Alamat Surat-Menyurat"
+
+msgid "Organization Information"
+msgstr "Maklumat Organisasi"
+
+msgid "Are you acting as the representative of an organization?"
+msgstr "Adakah anda bertindak sebagai wakil sebuah organisasi?"
+
+msgid "Yes, I represent a business or nonprofit."
+msgstr "Ya, saya mewakili sebuah bisnes atau organisasi bukan untung."
+
+msgid "Organization Name"
+msgstr "Nama Organisasi"
+
+msgid "Headquarters Address"
+msgstr "Alamat Ibu Pejabat"
+
+msgid "Introduction"
+msgstr "Pengenalan"
+
+msgid "Global"
+msgstr "Global"
+
+msgid "Teams"
+msgstr "Kumpulan"
+
+msgid "Stats"
+msgstr "Statistik"
+
+msgid "Feeds"
+msgstr "Suapan"
+
+msgid "Contact"
+msgstr "Hubungi Kami"
+
+msgid "Security"
+msgstr "Keselamatan"
+
+msgid "Logos"
+msgstr "Logo"
+
+msgid "Overview"
+msgstr "Keseluruhan"
+
+msgid "Organizations"
+msgstr "Organisasi"
+
+msgid "Individuals"
+msgstr "Individu"
+
+msgid "Unclaimed Donations"
+msgstr "Derma Tidak Dituntut"
+
+msgid "Repositories"
+msgstr "Repositori"
+
+msgid "Social Networks"
+msgstr "Rangkaian Sosial"
+
+msgid "Communities"
+msgstr "Komuniti"
+
+msgid "Name"
+msgstr "Nama"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Currencies"
+msgstr "Mata wang"
+
+msgid "Goal"
+msgstr "Matlamat"
+
+msgid "Statement"
+msgstr "Kenyataan"
+
+msgid "Linked Accounts"
+msgstr "Akaun Terpaut"
+
+msgid "Privacy"
+msgstr "Privasi"
+
+msgid "Members"
+msgstr "Ahli"
+
+msgid "Previous"
+msgstr "Sebelum"
+
+msgid "Next"
+msgstr "Selepas"
+
+msgid "First"
+msgstr "Pertama"
+
+msgid "Last"
+msgstr "Terakhir"
+
+msgid "View More"
+msgstr "Lihat Lagi"
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
+msgstr "Menetapkan kata laluan membolehkan anda log masuk secara terus, supaya anda tidak perlu menunggu pautan guna sekali dihantar melalui emel. Sila ingat bahawa Liberapay ialah perkhidmatan kewangan, gunakan kata laluan yang kuat!"
+
+msgid "Current password"
+msgstr "Kata laluan semasa"
+
+msgid "New password"
+msgstr "Kata laluan baru"
+
+#, python-brace-format
+msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
+msgstr "{username} masih belum menetapkan kaedah pembayaran, jadi derma anda tidak boleh diproses pada waktu ini. Kami akan maklumkan anda apabila pembayaran boleh diproses."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Derma ke {username} boleh dibayar menggunakan kad kredit atau debit (Visa, MasterCard, American Express), atau debit terus akaun bank Euro (untuk derma dalam mata wang Euro sahaja)."
+
+#, python-brace-format
+msgid "Donations to {username} are processed through PayPal."
+msgstr "Derma ke {username} diproses melalui PayPal."
+
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Derma ke {username} boleh dibayar menggunakan: kad kredit atau debit (Visa, MasterCard, American Express), akaun bank Euro (Debit Terus SEPA), atau melalui PayPal."
+
+msgid "Country"
+msgstr "Negara"
+
+msgid "Region (state, province, island…)"
+msgstr "Negeri"
+
+msgid "You can leave this field empty if your country does not use regions in postal addresses."
+msgstr "Anda boleh biarkan kosong jika negara anda tidak menggunakan negeri dalam alamat surat."
+
+msgid "City"
+msgstr "Bandar"
+
+msgid "Postal code"
+msgstr "Poskod"
+
+msgid "Address within the city"
+msgstr "Alamat dalam bandar"
+
+msgid "Patrons"
+msgstr "Pelanggan"
+
+msgid "Income"
+msgstr "Pendapatan"
+
+msgid "per week"
+msgstr "setiap minggu"
+
+msgid "Modify your pledge"
+msgstr "Ubah janji derma anda"
+
+msgid "Modify your donation"
+msgstr "Ubah derma anda"
+
+msgid "Pledges"
+msgstr "Perjanjian"
+
+msgid "Sum"
+msgstr "Jumlah"
+
+#, python-brace-format
+msgid "Income: {0}/week"
+msgstr "Pendapatan: {0}/minggu"
+
+msgid "Mission accomplished!"
+msgstr "Matlamat berjaya dicapai!"
+
+msgid "View income shares"
+msgstr "Lihat syer pendapatan"
 
 msgid "(fork)"
 msgstr "(cabangkan)"
@@ -1629,26 +1485,17 @@ msgstr "Padam dari senarai"
 msgid "Show on your profile"
 msgstr "Tunjuk di profil anda"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "Anda dalam mod kotak pasir, jangan masukkan sebarang pembayaran sebenar atau data peribadi!"
-
 msgid "Search Liberapay"
 msgstr "Cari Liberapay"
-
-msgid "Switch to a different account"
-msgstr "Tukar ke akaun lain"
-
-msgid "The changes have been saved."
-msgstr "Anda masih belum simpan perubahan yang dilakukan."
 
 msgid "Log In or Create Account"
 msgstr "Log Masuk atau Cipta Akaun"
 
-msgid "Sign out"
-msgstr "Log Keluar"
-
 msgid "Please input your email address:"
 msgstr "Sila tulis alamat emel anda:"
+
+msgid "Email"
+msgstr "Emel"
 
 msgid "and select your preferred currency:"
 msgstr "dan pilih mata wang pilihan anda:"
@@ -1656,24 +1503,6 @@ msgstr "dan pilih mata wang pilihan anda:"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Dengan mencipta akaun Liberapay anda menerima {0}Syarat Perkhidmatan{1} kami."
-
-msgid "Enter a username"
-msgstr "Tulis nama pengguna"
-
-msgid "Invite"
-msgstr "Ajak"
-
-msgid "Explore teams"
-msgstr "Teroka kumpulan"
-
-msgid "About teams"
-msgstr "Tentang kumpulan"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} ialah ahli {n} kumpulan:"
-msgstr[1] "{username} ialah ahli {n} kumpulan:"
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1708,9 +1537,6 @@ msgstr "Baki pendapatan sesuatu minggu akan digunakan pada minggu berikutnya, ia
 
 msgid "Leftover"
 msgstr "Baki"
-
-msgid "Log in via email"
-msgstr "Log masuk pakai emel"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1772,6 +1598,130 @@ msgstr "Ubah suai derma"
 
 msgid "Stop the donation"
 msgstr "Hentikan derma"
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] "Anda telah memuat naik {n} dokumen jenis ini:"
+msgstr[1] "Anda telah memuat naik {n} dokumen jenis ini:"
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr "Dokumen #{id} sedang menunggu pengesahan."
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr "Dokumen #{id} telah disahkan."
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr "Dokumen #{id} telah ditolak: {refused_reason_type} - {refused_reason_message}."
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "Jika anda perlukan bantuan anda boleh hantar emel ke support@liberapay.com."
+
+msgid "Income Range"
+msgstr "Julat Pendapatan"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "Kurang dari {0}"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "Lebih dari {0}"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "Di antara {0} dan {1}"
+
+msgid "How much money you earn per year, approximately."
+msgstr "Anggaran jumlah wang anda peroleh setiap tahun."
+
+msgid "Identity Proof"
+msgstr "Bukti Identiti"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "Pasport, atau Kad Pengenalan (hadapan dan belakang), atau lesen memandu UK."
+
+msgid "Articles of Association"
+msgstr "Tataurusan Persatuan"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr "Tataurusan persatuan yang disahkan (Statut) - memorandum formal yang dinyatakan oleh usahawan, di mana maklumat berikut disebut: nama bisnes, aktiviti, alamat berdaftar, pemegang saham."
+
+msgid "Registration Proof"
+msgstr "Bukti Pendaftaran"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr "Ekstrak daripada Daftar Syarikat yang dikeluarkan dalam masa tiga bulan terakhir."
+
+msgid "Proof of registration from the official authority."
+msgstr "Bukti pendaftaran daripada pihak berkuasa rasmi."
+
+msgid "Shareholder Declaration"
+msgstr "Deklarasi Pemegang Saham"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr "Sila muat turun dan isikan {link_start}borang deklarasi pemegang saham{link_end}."
+
+msgid "Legal Representative Information"
+msgstr "Maklumat Wakil Sah"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr "Medan-medan berikut berkaitan dengan wakil sah untuk organisasi (kemungkinan ianya anda)."
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "Format fail berikut disokong: {0}."
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "Saiz maksimum setiap fail ialah {0}MB."
+
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr "Kami perlu tahu siapa anda untuk mematuhi peraturan kewangan. Hanya pegawai yang dibenarkan sahaja mampu melihat maklumat ini, kami tidak akan menunjukkannya kepada pengguna lain atau sesiapa sahaja melainkan diperlukan oleh undang-undang."
+
+msgid "Given Name"
+msgstr "Nama Hadapan"
+
+msgid "Family Name"
+msgstr "Nama Belakang"
+
+msgid "Country (nationality)"
+msgstr "Negara (warganegara)"
+
+msgid "Organization Type"
+msgstr "Jenis Organisasi"
+
+msgid "Business"
+msgstr "Bisnes"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "Saya bersetuju dengan {0}Syarat Perkhidmatan MangoPay{1}"
+
+msgid "Address"
+msgstr "Alamat"
+
+msgid "Address (second line)"
+msgstr "Alamat (baris kedua)"
+
+msgid "Region"
+msgstr "Negeri"
+
+msgid "Postal Code"
+msgstr "Poskod"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr "Mereka yang menyumbang kepada khalayak ramai perlukan anda untuk menyokong kerja mereka. Membina perisian percuma dan menyebarkan pengetahuan secara percuma mengambil banyak masa dan menggunakan banyak wang, bukan sahaja ketika baru bermula tetapi juga ketika mengekalkannya."
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr "Sistem derma berulang Liberapay direka untuk menyediakan pendapatan asas yang stabil daripada dana khalayak kepada para pencipta, membolehkan mereka terus mencipta sesuatu yang menguntungkan semua orang. Sedia untuk menyumbang? Maka mari mulakan:"
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "Anda dalam mod kotak pasir, jangan masukkan sebarang pembayaran sebenar atau data peribadi!"
 
 msgid "Save"
 msgstr "Simpan"
@@ -1872,6 +1822,12 @@ msgstr "Sumber avatar"
 msgid "Avatar email (for Libravatar only)"
 msgstr "Emel avatar (untuk Libravatar sahaja)"
 
+msgid "Leave"
+msgstr "Tinggal"
+
+msgid "Explore communities"
+msgstr "Teroka komuniti"
+
 msgid "The submitted settings are incoherent."
 msgstr "Tetapan yang anda cuba simpan mempunyai ketidakserasian."
 
@@ -1898,6 +1854,9 @@ msgstr "Menerima mata wang asing boleh meningkatkan kemungkinan pendapatan denga
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe akan menukarkan dana ke dalam mata wang utama anda secara automatik, tetapi PayPal selalunya pegang pembayaran dalam mata wang asing sehingga anda tetapkan apa hendak dibuat. Jika anda ada akaun Business PayPal, anda boleh pilih untuk tukarkan kesemua pembayaran akan datang ke mata wang utama anda secara automatik. Pilihan tersebut berada di halaman “{link_open}Keutamaan penerimaan pembayaran{link_close}”."
 
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgstr "Kaitkan akaun yang anda miliki di platform lain membuatkan profil Liberapay anda lebih mudah dicari, dan membantu menunjukkan anda memang anda yang sebenar."
+
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Kalau dapat sedikit wang pun jadilah, saya tiada matlamat khusus."
 
@@ -1923,6 +1882,12 @@ msgstr "Kami di sini sebagai penderma, dan menolak sebarang pemberian wang kepad
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr "Matlamat kami ialah untuk menerima {0}"
+
+msgid "Enter a username"
+msgstr "Tulis nama pengguna"
+
+msgid "Invite"
+msgstr "Ajak"
 
 msgid "Your privacy settings have been changed."
 msgstr "Tetapan privasi anda telah ditukar."
@@ -2007,6 +1972,12 @@ msgstr "Pratonton"
 
 msgid "Switch to another language:"
 msgstr "Tukar ke bahasa lain:"
+
+msgid "Explore teams"
+msgstr "Teroka kumpulan"
+
+msgid "About teams"
+msgstr "Tentang kumpulan"
 
 msgid "Username"
 msgstr "Nama pengguna"
@@ -2467,6 +2438,22 @@ msgstr "Profil {username}"
 
 msgid "Edit"
 msgstr "Edit"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr "{0} memiliki akaun berikut di platform lain:"
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] "{username} ialah ahli {n} kumpulan:"
+msgstr[1] "{username} ialah ahli {n} kumpulan:"
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] "dan {n} yang lain"
+msgstr[1] "dan {n} yang lain"
 
 msgid "History"
 msgstr "Sejarah"
@@ -4055,6 +4042,19 @@ msgstr "Mencipta kumpulan"
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr "Anda perlu {0}log masuk ke akaun anda sendiri{1} terlebih dahulu."
+
+msgid "Name of the team"
+msgstr "Nama kumpulan"
+
+msgid "Email of the team (optional)"
+msgstr "Emel kumpulan (tidak wajib isi)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr "Tetapkan {0}had pada perolehan kumpulan{1}"
+
+msgid "Create"
+msgstr "Cipta"
 
 msgid "Becoming a team member"
 msgstr "Menjadi ahli kumpulan"

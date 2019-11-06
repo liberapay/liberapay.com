@@ -660,6 +660,9 @@ msgstr "A(z) {0} valóban egy {1} kiszolgáló? Jelenleg nem így tűnik."
 msgid "You need to sign in first"
 msgstr "Előbb be kell jelentkeznie"
 
+msgid "This account is closed"
+msgstr "Ez a fiók le van zárva"
+
 msgid "You need to log in"
 msgstr "Bejelentkezés szükséges"
 
@@ -862,10 +865,6 @@ msgid "This payment method is currently unavailable. We apologize for the inconv
 msgstr ""
 
 #, python-brace-format
-msgid "We're very sorry but incoming payments are currently disabled. You can read {link_start}this blog post{link_end} to learn why."
-msgstr ""
-
-#, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
 msgstr ""
 
@@ -895,6 +894,10 @@ msgstr "A Szolgáltatás Nem Elérhető"
 
 msgid "Gateway Timeout"
 msgstr "Átjáró Időtúllépés"
+
+#, python-brace-format
+msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -952,24 +955,6 @@ msgstr "Ön nincs bejelentkezve, hogy hozzáférhessen ehhez a laphoz."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Az Ön kérésének a feldolgozása meghiúsult, mivel egy kiszolgálónk nem tudott kommunikálni egy külső szolgáltatással. Ez egy átmeneti hiba, kérjük próbálja újra később."
 
-msgid "This account is closed"
-msgstr "Ez a fiók le van zárva"
-
-msgid "Are you the account owner?"
-msgstr "Ön a fiók tulajdonosa?"
-
-msgid "Log in to reopen your account."
-msgstr "Jelentkezzen be a fiókja újbóli megnyitásához."
-
-msgid "You need an account for this. Please fill one of the forms below."
-msgstr "Ehhez egy fiókra lesz szüksége. Kérjük töltse ki az alábbi űrlapok egyikét."
-
-msgid "Create an account"
-msgstr "Fiók létrehozása"
-
-msgid "Use an existing account"
-msgstr "Létező fiók használata"
-
 msgid "Bad Request"
 msgstr ""
 
@@ -994,6 +979,65 @@ msgstr "E-mail cím"
 
 msgid "Go"
 msgstr "Mehet"
+
+msgid "Cancel"
+msgstr "Mégse"
+
+msgid "Confirm"
+msgstr "Jóváhagyás"
+
+msgid "This new password is not safe"
+msgstr "Ez az új jelszó nem biztonságos"
+
+msgid "We have detected that your current password is easy to guess, and thus insecure."
+msgstr "Az Ön jelszavát könnyű kitalálni, emiatt biztonságtalan."
+
+msgid "Do you still want to use this password?"
+msgstr "Továbbra is szeretné ezt a jelszót használni?"
+
+msgid "No, cancel"
+msgstr "Nem, mégse"
+
+msgid "Yes, proceed"
+msgstr "Igen, folytassa"
+
+#, python-brace-format
+msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
+msgstr "A(z) {platform} visszautasította a kérésünket, hogy hozzáférjünk az adataihoz. Az újrakapcsolódás a(z) {platform} fiókjához várhatóan megoldja a problémát."
+
+msgid "Reconnect"
+msgstr "Újrakapcsolódás"
+
+msgid "Redirecting…"
+msgstr ""
+
+#, python-brace-format
+msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
+msgstr ""
+
+msgid "Retry"
+msgstr "Próbálja újra"
+
+msgid "You need an account for this. Please fill one of the forms below."
+msgstr "Ehhez egy fiókra lesz szüksége. Kérjük töltse ki az alábbi űrlapok egyikét."
+
+msgid "Create an account"
+msgstr "Fiók létrehozása"
+
+msgid "Use an existing account"
+msgstr "Létező fiók használata"
+
+msgid "Are you the account owner?"
+msgstr "Ön a fiók tulajdonosa?"
+
+msgid "Log in to reopen your account."
+msgstr "Jelentkezzen be a fiókja újbóli megnyitásához."
+
+msgid "Please try again in a few minutes."
+msgstr "Kérjük próbálja újból pár perc múlva."
+
+msgid "Log in via email"
+msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Jelenleg technikai problémáink vannak. Emiatt a legtöbb dolog jelenleg nem használható. Elnézését kérjük a kellemetlenségért, mielőbb visszaállítjuk a normális működést."
@@ -1025,55 +1069,138 @@ msgstr "Gy.I.K."
 msgid "Legal"
 msgstr "Jogi információk"
 
+msgid "Switch to another language"
+msgstr "Nyelv átváltása"
+
+#, python-brace-format
+msgid "({x_percent} translated)"
+msgstr "({x_percent} lefordítva)"
+
+msgid "Help us translate Liberapay"
+msgstr "Kérjük segítsen a Liberapay lefordításában"
+
+msgid "Profile"
+msgstr "Adatlap"
+
+msgid "Giving"
+msgstr "Adomány"
+
+msgid "Receiving"
+msgstr "Bevétel"
+
+msgid "Ledger"
+msgstr ""
+
+msgid "Wallet"
+msgstr "Tárca"
+
+msgid "Emptying your wallet"
+msgstr ""
+
+msgid "Payment Processors"
+msgstr ""
+
+#, fuzzy
+msgid "Identity"
+msgstr "Azonosító"
+
+msgid "Account"
+msgstr "Fiók"
+
+msgid "Emails"
+msgstr "E-mail-ek"
+
+msgid "Notifications"
+msgstr "Értesítések"
+
+msgid "Widgets"
+msgstr "Eszközök"
+
+msgid "Create a new community"
+msgstr "Közösség létrehozása"
+
+msgid "Create a new team"
+msgstr "Csapat létrehozása"
+
+msgid "Sign out"
+msgstr "Kijelentkezés"
+
+msgid "Print"
+msgstr "Nyomtatás"
+
+#, fuzzy, python-brace-format
+msgid "Joined {timespan_ago}."
+msgstr "Csatlakozott {timespan_ago}."
+
+#, fuzzy, python-brace-format
+msgid "Closed {timespan_ago}."
+msgstr "Zárt {timespan_ago}."
+
+#, python-brace-format
+msgid "{0} doesn't publish how much they give."
+msgstr "A(z) {0} nem teszi közzé, hogy mennyit adnak."
+
+#, python-brace-format
+msgid "{0} gives {1} per week."
+msgstr "{0} hetente {1}-t ad."
+
+msgid "This user doesn't accept donations."
+msgstr "Ez a felhasználó nem fogad adományokat."
+
+#, python-brace-format
+msgid "{0} has {n} patron."
+msgid_plural "{0} has {n} patrons."
+msgstr[0] "{0}-nak {n} támogatója van."
+
+#, python-brace-format
+msgid "{0}'s goal is to receive {1} per week."
+msgstr "{0} célja, hogy {1}-t kapjon hetente."
+
+#, python-brace-format
+msgid "{0} receives {1} per week from {n} patron."
+msgid_plural "{0} receives {1} per week from {n} patrons."
+msgstr[0] "{0} {1}-t kap hetente {n} támogatótól."
+
+#, python-brace-format
+msgid "Goal: {0}"
+msgstr "Cél: {0}"
+
+#, python-brace-format
+msgid "Donating ({amount})"
+msgstr "Adományozás ({amount})"
+
+#, fuzzy
+msgid "Pledge"
+msgstr "Letét"
+
+msgid "Donate"
+msgstr "Adományozás"
+
+msgid "Switch to a different account"
+msgstr ""
+
+msgid "The changes have been saved."
+msgstr "A módosítások mentése megtörtént."
+
+msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
+msgstr "Küldtünk Önnek egy egyszer használható hivatkozást a bejelentkezéshez. Kérjük nézze meg a postaládáját, nyissa meg a kapott hivatkozást egy új lapon, majd jöjjön vissza erre a lapra, és kattintson az alábbi gombra, hogy folytathassa amit elkezdett."
+
+#, python-brace-format
+msgid "You're still not logged in as {0}."
+msgstr "Ön még mindig nem jelentkezett be mint {0}."
+
+msgid "Password (optional)"
+msgstr "Jelszó (nem kötelező)"
+
+#, fuzzy, python-brace-format
+msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
+msgstr "Hagyja üresen az előző mezőt amennyiben a fiókjának nincsen jelszava, vagy elfelejtette. Küldeni fogunk egy bejelentkezési hivatkozást e-mail-ben."
+
 msgid "Find great people to donate to"
 msgstr "Találjon remek embereket akiknek adományozhat"
 
 msgid "Whose work do you appreciate? See if they're on Liberapay"
 msgstr "Kinek a munkáját értékeli? Nézze meg, hogy elérhetőek-e a Liberapay-en"
-
-msgid "Communities"
-msgstr "Közösségek"
-
-#, python-brace-format
-msgid "with {n} other"
-msgid_plural "with {n} others"
-msgstr[0] "{n} továbbival"
-
-msgid "Leave"
-msgstr "Kilépés"
-
-msgid "Explore communities"
-msgstr "Közösségek felfedezése"
-
-msgid "Cancel"
-msgstr "Mégse"
-
-msgid "Confirm"
-msgstr "Jóváhagyás"
-
-#, fuzzy
-msgid "Linked Accounts"
-msgstr "Fiókok Máshol"
-
-msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
-msgstr "Más helyeken levő fiókjainak csatolásával egyszerűbbé teheti a Liberapay fiókjának könnyebb megtalálását, és segít megmutatni másoknak, hogy Ön az, akinek állítja magát."
-
-#, python-brace-format
-msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0} a következő fiókokat birtokolja más helyeken:"
-
-msgid "Name of the team"
-msgstr "Csapat neve"
-
-msgid "Email of the team (optional)"
-msgstr "Csapat e-mail címe (nem kötelező)"
-
-#, python-brace-format
-msgid "Enable {0}limits on team takes{1}"
-msgstr "Engedélyezés {0}a csapat bevételének korlátozására{1}"
-
-msgid "Create"
-msgstr "Létrehozás"
 
 msgid "Disconnect"
 msgstr "Leválasztás"
@@ -1083,6 +1210,9 @@ msgstr "Ez még nem támogatott"
 
 msgid "Connect"
 msgstr "Csatlakozás"
+
+msgid "username"
+msgstr "felhasználónév"
 
 msgid "Drop files here"
 msgstr "Húzza ide a fájlokat"
@@ -1095,9 +1225,6 @@ msgstr "Fájl hozzáadása"
 
 msgid "Edit filename"
 msgstr "Fájlnév szerkesztése"
-
-msgid "Retry"
-msgstr "Próbálja újra"
 
 msgid "Delete"
 msgstr "Törlés"
@@ -1114,119 +1241,17 @@ msgstr "Igen"
 msgid "Ok"
 msgstr "Rendben"
 
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "{n} dokumentumot töltött fel ebből a típusból:"
+msgid "Personal Information"
+msgstr ""
 
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "A(z) {id}. dokumentum hitelesítésre vár."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "A(z) {id}. dokumentum hitelesítve lett."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "A(z) {id}. dokumentum vissza lett utasítva: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Ha segítségre van szüksége küldhet egy e-mail-t a support@liberapay.com címre."
-
-msgid "Occupation"
-msgstr "Foglalkozás"
-
-msgid "Your main professional activity."
-msgstr "Az Ön fő szakmai tevékenysége."
-
-msgid "Income Range"
-msgstr "Jövedelem Tartomány"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Kevesebb mint {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Több mint {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "{0} és {1} között"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Mennyit keres egy évben körülbelül."
-
-msgid "Postal Address"
-msgstr "Postacím"
-
-msgid "Identity Proof"
-msgstr "Személyiség Bizonyítéka"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Útlevél, személyi igazolvány (mindkét oldala) vagy Egyesült Királyság béli vezetői engedély."
-
-msgid "Organization Information"
-msgstr "Szervezet adatai"
-
-msgid "Headquarters Address"
-msgstr "Székhely Címe"
-
-msgid "Articles of Association"
-msgstr "Alapító okirat"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Hitelesített alapító okirat (társasági szerződés) - hivatalos tájékoztató a vállalkozók nyilatkozata szerint, amelyben ezek szerepelnek: cégnév, tevékenység, regisztrált cím és részesedés."
-
-msgid "Registration Proof"
-msgstr "Regisztráció Igazolása"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Kivonat a Társaság Nyilvántartásból az utóbbi három hónapon belülről."
-
-msgid "Proof of registration from the official authority."
-msgstr "Regisztráció bizonyítéka a hivatalos hatóságoktól."
-
-msgid "Shareholder Declaration"
-msgstr "Részvényes Nyilatkozat"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Kérjük töltse le és töltse ki a {link_start}részvényes nyilatkozati űrlapot{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Jogi Képviselet Információi"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "A következő mezők a szervezet jogi képviselőjére vonatkoznak (vélhetően Önre)."
-
-msgid "Email"
-msgstr "E-mail cím"
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "A következő fájlformátumok támogatottak: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Az önálló fájlok maximális mérete {0}MB."
-
-#, fuzzy
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "A pénzügyi szabályozások miatt tudnunk kell, hogy ki Ön."
-
-msgid "Given Name"
-msgstr "Keresztnév"
-
-msgid "Family Name"
-msgstr "Vezetéknév"
+msgid "Full Name"
+msgstr ""
 
 msgid "Country (residence)"
 msgstr "Ország (tartózkodási)"
 
-msgid "Country (nationality)"
-msgstr "Ország (nemzetiségi)"
+msgid "Nationality"
+msgstr ""
 
 msgid "Date of Birth"
 msgstr "Születési dátum"
@@ -1234,64 +1259,34 @@ msgstr "Születési dátum"
 msgid "YYYY-MM-DD"
 msgstr "ÉÉÉÉ-HH-NN"
 
+msgid "Occupation"
+msgstr "Foglalkozás"
+
+msgid "Your main professional activity."
+msgstr "Az Ön fő szakmai tevékenysége."
+
+msgid "Postal Address"
+msgstr "Postacím"
+
+msgid "Organization Information"
+msgstr "Szervezet adatai"
+
 msgid "Are you acting as the representative of an organization?"
 msgstr "Ön egy szervezet képviseletében jár el?"
 
 msgid "Yes, I represent a business or nonprofit."
 msgstr "Igen, egy üzletet vagy nonprofit vállalkozást képviselek."
 
-msgid "Organization Type"
-msgstr "Szervezet Típusa"
-
-msgid "Business"
-msgstr "Vállalkozás"
-
 msgid "Organization Name"
 msgstr "Szervezet Neve"
 
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Elfogadom a {0}MangoPay felhasználási feltételeit{1}"
-
-msgid "Personal Information"
-msgstr ""
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Nationality"
-msgstr ""
-
-msgid "username"
-msgstr "felhasználónév"
-
-msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "Küldtünk Önnek egy egyszer használható hivatkozást a bejelentkezéshez. Kérjük nézze meg a postaládáját, nyissa meg a kapott hivatkozást egy új lapon, majd jöjjön vissza erre a lapra, és kattintson az alábbi gombra, hogy folytathassa amit elkezdett."
-
-#, python-brace-format
-msgid "You're still not logged in as {0}."
-msgstr "Ön még mindig nem jelentkezett be mint {0}."
-
-msgid "Password (optional)"
-msgstr "Jelszó (nem kötelező)"
-
-#, fuzzy, python-brace-format
-msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Hagyja üresen az előző mezőt amennyiben a fiókjának nincsen jelszava, vagy elfelejtette. Küldeni fogunk egy bejelentkezési hivatkozást e-mail-ben."
-
-msgid "Members"
-msgstr "Tagok"
-
-msgid "View income shares"
-msgstr "Bevételek részesedéseinek megtekintése"
+msgid "Headquarters Address"
+msgstr "Székhely Címe"
 
 msgid "Introduction"
 msgstr "Bemutatkozás"
 
 msgid "Global"
-msgstr ""
-
-msgid "Payment Processors"
 msgstr ""
 
 msgid "Teams"
@@ -1331,8 +1326,8 @@ msgstr "Tárolók"
 msgid "Social Networks"
 msgstr "Közösségi Hálózatok"
 
-msgid "Profile"
-msgstr "Adatlap"
+msgid "Communities"
+msgstr "Közösségek"
 
 msgid "Name"
 msgstr ""
@@ -1350,58 +1345,15 @@ msgstr "Cél"
 msgid "Statement"
 msgstr "Nyilatkozat"
 
+#, fuzzy
+msgid "Linked Accounts"
+msgstr "Fiókok Máshol"
+
 msgid "Privacy"
 msgstr "Adatvédelem"
 
-msgid "Giving"
-msgstr "Adomány"
-
-msgid "Receiving"
-msgstr "Bevétel"
-
-msgid "Ledger"
-msgstr ""
-
-#, fuzzy
-msgid "Identity"
-msgstr "Azonosító"
-
-msgid "Account"
-msgstr "Fiók"
-
-msgid "Emails"
-msgstr "E-mail-ek"
-
-msgid "Notifications"
-msgstr "Értesítések"
-
-msgid "Widgets"
-msgstr "Eszközök"
-
-msgid "Switch to another language"
-msgstr "Nyelv átváltása"
-
-#, python-brace-format
-msgid "({x_percent} translated)"
-msgstr "({x_percent} lefordítva)"
-
-msgid "Help us translate Liberapay"
-msgstr "Kérjük segítsen a Liberapay lefordításában"
-
-msgid "Wallet"
-msgstr "Tárca"
-
-msgid "Emptying your wallet"
-msgstr ""
-
-msgid "Create a new community"
-msgstr "Közösség létrehozása"
-
-msgid "Create a new team"
-msgstr "Csapat létrehozása"
-
-msgid "Please try again in a few minutes."
-msgstr "Kérjük próbálja újból pár perc múlva."
+msgid "Members"
+msgstr "Tagok"
 
 msgid "Previous"
 msgstr "Előző"
@@ -1418,9 +1370,6 @@ msgstr "Utolsó"
 msgid "View More"
 msgstr "Nézet"
 
-msgid "Print"
-msgstr "Nyomtatás"
-
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
 msgstr "A jelszó megadása lehetővé teszi a közvetlen belépést, így nem kell várnia az egyszer használható hivatkozások fogadására e-mail-ben. Vegye figyelembe, hogy a Loberapay egy pénzügyi szolgáltatás, használjon erős jelszót!"
 
@@ -1429,21 +1378,6 @@ msgstr "Jelenlegi jelszó"
 
 msgid "New password"
 msgstr "Új jelszó"
-
-msgid "This new password is not safe"
-msgstr "Ez az új jelszó nem biztonságos"
-
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Az Ön jelszavát könnyű kitalálni, emiatt biztonságtalan."
-
-msgid "Do you still want to use this password?"
-msgstr "Továbbra is szeretné ezt a jelszót használni?"
-
-msgid "No, cancel"
-msgstr "Nem, mégse"
-
-msgid "Yes, proceed"
-msgstr "Igen, folytassa"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1461,28 +1395,6 @@ msgstr ""
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr ""
 
-msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "Az embereknek, akik hozzájárulnak a közjavakhoz, szüksége van az Ön támogatására a munkájukhoz. A szabad szoftverek építése, és az ingyenes tudás közzététele időigényes és pénzbe kerül, nem pusztán a létrehozásuk, de a további karbantartásuk is."
-
-msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "A Liberapay ismétlődő adományozási rendszere arra lett tervezve, hogy stabil tömegfinanszírozású alapjövedelmet biztosítson az alkotóknak, lehetővé téve számukra, hogy tovább végezzék a nagyszerű munkájukat, amiből mindenki profitál. Készen áll a folytatásra? Akkor, kezdjünk neki:"
-
-msgid "Address"
-msgstr "Cím"
-
-msgid "Address (second line)"
-msgstr "Cím (második sor)"
-
-msgid "City"
-msgstr "Város"
-
-#, fuzzy
-msgid "Region"
-msgstr "Régió"
-
-msgid "Postal Code"
-msgstr "irányítószám"
-
 msgid "Country"
 msgstr "Ország"
 
@@ -1491,6 +1403,9 @@ msgstr ""
 
 msgid "You can leave this field empty if your country does not use regions in postal addresses."
 msgstr ""
+
+msgid "City"
+msgstr "Város"
 
 msgid "Postal code"
 msgstr ""
@@ -1510,15 +1425,8 @@ msgstr "hetente"
 msgid "Modify your pledge"
 msgstr ""
 
-#, fuzzy
-msgid "Pledge"
-msgstr "Letét"
-
 msgid "Modify your donation"
 msgstr ""
-
-msgid "Donate"
-msgstr "Adományozás"
 
 msgid "Pledges"
 msgstr "Felajánlások"
@@ -1527,66 +1435,14 @@ msgid "Sum"
 msgstr "Összeg"
 
 #, python-brace-format
-msgid "Goal: {0}"
-msgstr "Cél: {0}"
-
-#, python-brace-format
 msgid "Income: {0}/week"
 msgstr "Bevétel: {0}/hét"
 
 msgid "Mission accomplished!"
 msgstr "Küldetés teljesítve!"
 
-#, fuzzy, python-brace-format
-msgid "Joined {timespan_ago}."
-msgstr "Csatlakozott {timespan_ago}."
-
-#, fuzzy, python-brace-format
-msgid "Closed {timespan_ago}."
-msgstr "Zárt {timespan_ago}."
-
-#, python-brace-format
-msgid "{0} doesn't publish how much they give."
-msgstr "A(z) {0} nem teszi közzé, hogy mennyit adnak."
-
-#, python-brace-format
-msgid "{0} gives {1} per week."
-msgstr "{0} hetente {1}-t ad."
-
-msgid "This user doesn't accept donations."
-msgstr "Ez a felhasználó nem fogad adományokat."
-
-#, python-brace-format
-msgid "{0} has {n} patron."
-msgid_plural "{0} has {n} patrons."
-msgstr[0] "{0}-nak {n} támogatója van."
-
-#, python-brace-format
-msgid "{0}'s goal is to receive {1} per week."
-msgstr "{0} célja, hogy {1}-t kapjon hetente."
-
-#, python-brace-format
-msgid "{0} receives {1} per week from {n} patron."
-msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] "{0} {1}-t kap hetente {n} támogatótól."
-
-#, python-brace-format
-msgid "Donating ({amount})"
-msgstr "Adományozás ({amount})"
-
-#, python-brace-format
-msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
-msgstr "A(z) {platform} visszautasította a kérésünket, hogy hozzáférjünk az adataihoz. Az újrakapcsolódás a(z) {platform} fiókjához várhatóan megoldja a problémát."
-
-msgid "Reconnect"
-msgstr "Újrakapcsolódás"
-
-msgid "Redirecting…"
-msgstr ""
-
-#, python-brace-format
-msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgid "View income shares"
+msgstr "Bevételek részesedéseinek megtekintése"
 
 #, fuzzy
 msgid "(fork)"
@@ -1605,26 +1461,17 @@ msgstr "Eltávolítás a listáról"
 msgid "Show on your profile"
 msgstr "Megjelenítés az adatlapján"
 
-msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "Ön jelenleg tesztüzemben van, kérjük ne adjon meg semmilyen valós fizetési vagy személyes adatot!"
-
 msgid "Search Liberapay"
 msgstr "Keresés a Liberapay-en"
-
-msgid "Switch to a different account"
-msgstr ""
-
-msgid "The changes have been saved."
-msgstr "A módosítások mentése megtörtént."
 
 msgid "Log In or Create Account"
 msgstr "Bejelentkezés vagy új fiók létrehozása"
 
-msgid "Sign out"
-msgstr "Kijelentkezés"
-
 msgid "Please input your email address:"
 msgstr "Kérjük, adja meg e-mail címét:"
+
+msgid "Email"
+msgstr "E-mail cím"
 
 msgid "and select your preferred currency:"
 msgstr "és válassza ki a preferált pénznemet:"
@@ -1632,23 +1479,6 @@ msgstr "és válassza ki a preferált pénznemet:"
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
 msgstr "Azzal, hogy létrehoz egy Liberapay fiókot, elfogadja a {0}Szolgáltatás feltételeit{1}."
-
-msgid "Enter a username"
-msgstr "Adjon meg egy felhasználónevet"
-
-msgid "Invite"
-msgstr "Meghívás"
-
-msgid "Explore teams"
-msgstr "Csapatok felfedezése"
-
-msgid "About teams"
-msgstr "A csapatokról"
-
-#, python-brace-format
-msgid "{username} is a member of {n} team:"
-msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] ""
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
@@ -1683,9 +1513,6 @@ msgstr ""
 
 msgid "Leftover"
 msgstr "Maradék"
-
-msgid "Log in via email"
-msgstr ""
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
@@ -1746,6 +1573,131 @@ msgstr "Adomány módosítása"
 
 msgid "Stop the donation"
 msgstr "Adományozás beszűntetése"
+
+#, python-brace-format
+msgid "You have uploaded {n} document of this type:"
+msgid_plural "You have uploaded {n} documents of this type:"
+msgstr[0] "{n} dokumentumot töltött fel ebből a típusból:"
+
+#, python-brace-format
+msgid "Document #{id} is awaiting validation."
+msgstr "A(z) {id}. dokumentum hitelesítésre vár."
+
+#, python-brace-format
+msgid "Document #{id} has been validated."
+msgstr "A(z) {id}. dokumentum hitelesítve lett."
+
+#, python-brace-format
+msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
+msgstr "A(z) {id}. dokumentum vissza lett utasítva: {refused_reason_type} - {refused_reason_message}."
+
+msgid "If you need assistance you can send an email to support@liberapay.com."
+msgstr "Ha segítségre van szüksége küldhet egy e-mail-t a support@liberapay.com címre."
+
+msgid "Income Range"
+msgstr "Jövedelem Tartomány"
+
+#, python-brace-format
+msgid "Less than {0}"
+msgstr "Kevesebb mint {0}"
+
+#, python-brace-format
+msgid "More than {0}"
+msgstr "Több mint {0}"
+
+#, python-brace-format
+msgid "Between {0} and {1}"
+msgstr "{0} és {1} között"
+
+msgid "How much money you earn per year, approximately."
+msgstr "Mennyit keres egy évben körülbelül."
+
+msgid "Identity Proof"
+msgstr "Személyiség Bizonyítéka"
+
+msgid "Passport, or ID Card (front and back), or UK driving licence."
+msgstr "Útlevél, személyi igazolvány (mindkét oldala) vagy Egyesült Királyság béli vezetői engedély."
+
+msgid "Articles of Association"
+msgstr "Alapító okirat"
+
+msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
+msgstr "Hitelesített alapító okirat (társasági szerződés) - hivatalos tájékoztató a vállalkozók nyilatkozata szerint, amelyben ezek szerepelnek: cégnév, tevékenység, regisztrált cím és részesedés."
+
+msgid "Registration Proof"
+msgstr "Regisztráció Igazolása"
+
+msgid "Extract from the Company Register issued within the last three months."
+msgstr "Kivonat a Társaság Nyilvántartásból az utóbbi három hónapon belülről."
+
+msgid "Proof of registration from the official authority."
+msgstr "Regisztráció bizonyítéka a hivatalos hatóságoktól."
+
+msgid "Shareholder Declaration"
+msgstr "Részvényes Nyilatkozat"
+
+#, python-brace-format
+msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
+msgstr "Kérjük töltse le és töltse ki a {link_start}részvényes nyilatkozati űrlapot{link_end}."
+
+msgid "Legal Representative Information"
+msgstr "Jogi Képviselet Információi"
+
+msgid "The following fields are about the organization's legal representative (you, probably)."
+msgstr "A következő mezők a szervezet jogi képviselőjére vonatkoznak (vélhetően Önre)."
+
+#, python-brace-format
+msgid "The following file formats are supported: {0}."
+msgstr "A következő fájlformátumok támogatottak: {0}."
+
+#, python-brace-format
+msgid "The maximum size of each file is {0}MB."
+msgstr "Az önálló fájlok maximális mérete {0}MB."
+
+#, fuzzy
+msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
+msgstr "A pénzügyi szabályozások miatt tudnunk kell, hogy ki Ön."
+
+msgid "Given Name"
+msgstr "Keresztnév"
+
+msgid "Family Name"
+msgstr "Vezetéknév"
+
+msgid "Country (nationality)"
+msgstr "Ország (nemzetiségi)"
+
+msgid "Organization Type"
+msgstr "Szervezet Típusa"
+
+msgid "Business"
+msgstr "Vállalkozás"
+
+#, python-brace-format
+msgid "I agree to {0}MangoPay's Terms of Service{1}"
+msgstr "Elfogadom a {0}MangoPay felhasználási feltételeit{1}"
+
+msgid "Address"
+msgstr "Cím"
+
+msgid "Address (second line)"
+msgstr "Cím (második sor)"
+
+#, fuzzy
+msgid "Region"
+msgstr "Régió"
+
+msgid "Postal Code"
+msgstr "irányítószám"
+
+msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
+msgstr "Az embereknek, akik hozzájárulnak a közjavakhoz, szüksége van az Ön támogatására a munkájukhoz. A szabad szoftverek építése, és az ingyenes tudás közzététele időigényes és pénzbe kerül, nem pusztán a létrehozásuk, de a további karbantartásuk is."
+
+msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
+msgstr "A Liberapay ismétlődő adományozási rendszere arra lett tervezve, hogy stabil tömegfinanszírozású alapjövedelmet biztosítson az alkotóknak, lehetővé téve számukra, hogy tovább végezzék a nagyszerű munkájukat, amiből mindenki profitál. Készen áll a folytatásra? Akkor, kezdjünk neki:"
+
+msgid "You are in sandbox mode, do not input any real payment or personal data!"
+msgstr "Ön jelenleg tesztüzemben van, kérjük ne adjon meg semmilyen valós fizetési vagy személyes adatot!"
 
 msgid "Save"
 msgstr "Mentés"
@@ -1847,6 +1799,12 @@ msgstr "Profilkép forrása"
 msgid "Avatar email (for Libravatar only)"
 msgstr "E-mail profilkép (csak a Libravatar-hoz)"
 
+msgid "Leave"
+msgstr "Kilépés"
+
+msgid "Explore communities"
+msgstr "Közösségek felfedezése"
+
 msgid "The submitted settings are incoherent."
 msgstr "A beküldött beállítások önellentmondásosak."
 
@@ -1873,6 +1831,9 @@ msgstr ""
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr ""
 
+msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
+msgstr "Más helyeken levő fiókjainak csatolásával egyszerűbbé teheti a Liberapay fiókjának könnyebb megtalálását, és segít megmutatni másoknak, hogy Ön az, akinek állítja magát."
+
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Hálás vagyok az ajándékokért, de nincs kötött gyűjtési célom."
 
@@ -1898,6 +1859,12 @@ msgstr "Támogatókként vagyunk jelen, és udvariasan visszautasítjuk az aján
 #, python-brace-format
 msgid "Our goal is to receive {0}"
 msgstr "A célunk {0}-t gyűjteni"
+
+msgid "Enter a username"
+msgstr "Adjon meg egy felhasználónevet"
+
+msgid "Invite"
+msgstr "Meghívás"
 
 msgid "Your privacy settings have been changed."
 msgstr "Az Ön adatvédelmi beállításai meg lettek változtatva."
@@ -1981,6 +1948,12 @@ msgstr "Előnézet"
 
 msgid "Switch to another language:"
 msgstr "Váltás egy másik nyelvre:"
+
+msgid "Explore teams"
+msgstr "Csapatok felfedezése"
+
+msgid "About teams"
+msgstr "A csapatokról"
 
 msgid "Username"
 msgstr "Felhasználónév"
@@ -2437,6 +2410,20 @@ msgstr "{username} adatlapja"
 
 msgid "Edit"
 msgstr "Szerkesztés"
+
+#, python-brace-format
+msgid "{0} owns the following accounts on other platforms:"
+msgstr "{0} a következő fiókokat birtokolja más helyeken:"
+
+#, python-brace-format
+msgid "{username} is a member of {n} team:"
+msgid_plural "{username} is a member of {n} teams:"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "with {n} other"
+msgid_plural "with {n} others"
+msgstr[0] "{n} továbbival"
 
 msgid "History"
 msgstr "Előzmények"
@@ -4007,6 +3994,19 @@ msgstr ""
 #, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
 msgstr ""
+
+msgid "Name of the team"
+msgstr "Csapat neve"
+
+msgid "Email of the team (optional)"
+msgstr "Csapat e-mail címe (nem kötelező)"
+
+#, python-brace-format
+msgid "Enable {0}limits on team takes{1}"
+msgstr "Engedélyezés {0}a csapat bevételének korlátozására{1}"
+
+msgid "Create"
+msgstr "Létrehozás"
 
 msgid "Becoming a team member"
 msgstr ""
