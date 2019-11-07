@@ -107,6 +107,7 @@ subhead = _("Payment Processors")
             {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
+            <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.charges_enabled
             <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("This account cannot receive payments.")
@@ -156,6 +157,7 @@ subhead = _("Payment Processors")
             {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
+            <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.verified
             <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("The email address '{0}' is not verified.", account.id)
