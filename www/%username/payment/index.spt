@@ -39,7 +39,7 @@ title = participant.username
 subhead = _("Payment Processors")
 
 [---] text/html
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import fontawesome, glyphicon
 
 % extends "templates/layouts/settings.html"
 
@@ -109,10 +109,14 @@ subhead = _("Payment Processors")
             </p>
             <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.charges_enabled
-            <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("This account cannot receive payments.")
-            }}</span>
+            }}</p>
             % endif
+            <a href="https://dashboard.stripe.com/{{ account.id }}" target="_blank" rel="noopener noreferrer">{{
+                fontawesome("external-link") }} {{ _(
+                "Manage this {platform} account", platform="Stripe"
+            ) }}</a>
         </div>
         % endfor
     </form>
@@ -159,10 +163,14 @@ subhead = _("Payment Processors")
             </p>
             <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.verified
-            <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("The email address '{0}' is not verified.", account.id)
-            }}</span>
+            }}</p>
             % endif
+            <a href="https://www.paypal.com/signin" target="_blank" rel="noopener noreferrer">{{
+                fontawesome("external-link") }} {{ _(
+                "Manage this {platform} account", platform="PayPal"
+            ) }}</a>
         </div>
         % endfor
     </form>
