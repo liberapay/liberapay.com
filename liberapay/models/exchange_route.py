@@ -7,6 +7,8 @@ import stripe
 
 from ..constants import CARD_BRANDS
 from ..exceptions import InvalidId, TooManyAttempts
+from ..utils import utcnow
+from ..website import website
 
 
 class ExchangeRoute(Model):
@@ -144,6 +146,35 @@ class ExchangeRoute(Model):
             country=pm_country, currency=pm_currency,
         )
         route.stripe_payment_method = pm
+        if network == 'stripe-sdd':
+            state = website.state.get()
+            request, response = state['request'], state['response']
+            user_agent = request.headers.get(b'User-Agent', b'')
+            try:
+                user_agent = user_agent.decode('ascii', 'backslashreplace')
+            except UnicodeError:
+                raise response.error(400, "User-Agent must be ASCII only")
+            si = stripe.SetupIntent.create(
+                confirm=True,
+                customer=route.remote_user_id,
+                mandate_data={
+                    "customer_acceptance": {
+                        "type": "online",
+                        "accepted_at": int(utcnow().timestamp()),
+                        "online": {
+                            "ip_address": str(request.source),
+                            "user_agent": user_agent,
+                        },
+                    },
+                },
+                metadata={"route_id": route.id},
+                payment_method=pm.id,
+                payment_method_types=[pm.type],
+                usage='off_session',
+                idempotency_key='create_SI_for_route_%i' % route.id,
+            )
+            route.set_mandate(si.mandate)
+            assert not si.next_action, si.next_action
         return route
 
     @classmethod
@@ -268,7 +299,7 @@ class ExchangeRoute(Model):
                 return self.stripe_source.card.brand
         elif self.network == 'stripe-sdd':
             if self.address.startswith('pm_'):
-                raise NotImplementedError()
+                return getattr(self.stripe_payment_method.sepa_debit, 'bank_name', '')
             else:
                 return getattr(self.stripe_source.sepa_debit, 'bank_name', '')
         else:
@@ -292,7 +323,8 @@ class ExchangeRoute(Model):
             return
         elif self.network == 'stripe-sdd':
             if self.address.startswith('pm_'):
-                raise NotImplementedError()
+                mandate = stripe.Mandate.retrieve(self.mandate)
+                return mandate.payment_method_details.sepa_debit.url
             else:
                 return self.stripe_source.sepa_debit.mandate_url
         else:
@@ -307,7 +339,7 @@ class ExchangeRoute(Model):
         elif self.network == 'stripe-sdd':
             from ..payin.stripe import get_partial_iban
             if self.address.startswith('pm_'):
-                raise NotImplementedError()
+                return get_partial_iban(self.stripe_payment_method.sepa_debit)
             else:
                 return get_partial_iban(self.stripe_source.sepa_debit)
         else:

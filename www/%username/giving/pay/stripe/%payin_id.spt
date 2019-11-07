@@ -500,6 +500,7 @@ title = _("Funding your donations")
         </div>
         % endif
 
+        <input type="hidden" name="owner.email" value="{{ payer.get_email_address() }}" />
         % if payment_type == 'card'
         <fieldset id="card-form" class="form-group {{ 'hidden' if routes else '' }}">
             <p>{{ _("Please input your name and card number:") }}</p>
@@ -576,6 +577,10 @@ title = _("Funding your donations")
         % endif
 
         <br>
+        <output class="alert alert-danger hidden msg-postal-address-required">{{ _(
+            "Please fill in your postal address. It's required because the IBAN "
+            "you've provided emanates from outside the European Union."
+        ) }}</output>
         <button class="btn btn-primary btn-lg btn-block">{{ _(
             "Initiate the payment"
         ) }}</button>

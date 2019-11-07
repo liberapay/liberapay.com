@@ -367,9 +367,14 @@ def send_payin_notification(db, payin, payer, charge, route):
     """
     if route.network == 'stripe-sdd' and charge.status != 'failed':
         if route.address.startswith('pm_'):
-            raise NotImplementedError()
+            sepa_debit = stripe.PaymentMethod.retrieve(route.address).sepa_debit
+            mandate = stripe.Mandate.retrieve(route.mandate)
+            mandate_url = mandate.payment_method_details.sepa_debit.url
+            mandate_reference = mandate.payment_method_details.sepa_debit.reference
         else:
             sepa_debit = stripe.Source.retrieve(route.address).sepa_debit
+            mandate_url = sepa_debit.mandate_url
+            mandate_reference = sepa_debit.mandate_reference
         tippees = db.all("""
             SELECT DISTINCT tippee_p.id AS tippee_id, tippee_p.username AS tippee_username
               FROM payin_transfers pt
@@ -384,8 +389,8 @@ def send_payin_notification(db, payin, payer, charge, route):
             payin_amount=payin.amount,
             bank_name=getattr(sepa_debit, 'bank_name', None),
             partial_bank_account_number=get_partial_iban(sepa_debit),
-            mandate_url=sepa_debit.mandate_url,
-            mandate_id=sepa_debit.mandate_reference,
+            mandate_url=mandate_url,
+            mandate_id=mandate_reference,
             mandate_creation_date=route.ctime.date(),
             creditor_identifier=website.app_conf.sepa_creditor_identifier,
             average_settlement_seconds=PAYIN_SETTLEMENT_DELAYS['stripe-sdd'].total_seconds(),

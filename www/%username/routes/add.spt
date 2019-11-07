@@ -15,7 +15,6 @@ if request.method == 'POST':
         raise AccountSuspended()
     body = request.body
     one_off = body.get('one_off') == 'true'
-    return_url = participant.url('routes/')
     try:
         if 'token' in body:
             owner_info = {
@@ -23,25 +22,12 @@ if request.method == 'POST':
                 'name': body.get('owner.name'),
             }
             source = create_source_from_token(
-                body.word('token'), one_off, None, owner_info, return_url
+                body.word('token'), one_off, None, owner_info, participant.url('routes/')
             )
             route = ExchangeRoute.attach_stripe_source(participant, source, one_off)
         else:
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
-            si = stripe.SetupIntent.create(
-                confirm=True,
-                customer=route.remote_user_id,
-                payment_method=pm.id,
-                metadata={"route_id": route.id},
-                return_url=return_url,
-                usage='off_session',
-                idempotency_key='create_SI_for_route_%i' % route.id,
-            )
-            if si.next_action:
-                if si.next_action.type != 'redirect_to_url':
-                    raise NotImplementedError(si.next_action.type)
-                raise response.redirect(si.next_action.redirect_to_url.url)
     except stripe.error.StripeError as e:
         raise response.error(e.http_status or 500, _(
             "The payment processor {name} returned an error: “{error_message}”.",
@@ -143,6 +129,10 @@ title = _("Add a payment instrument")
             postal_address_form_v2(saved=identity.get('postal_address'), required=False)
         }}</div>
         <br>
+        <output class="alert alert-danger hidden msg-postal-address-required">{{ _(
+            "Please fill in your postal address. It's required because the IBAN "
+            "you've provided emanates from outside the European Union."
+        ) }}</output>
         <button class="btn btn-primary btn-lg">{{ _("Save") }}</button>
     </form>
 
