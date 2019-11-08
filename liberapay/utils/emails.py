@@ -1,5 +1,7 @@
+from datetime import timedelta
 from enum import Enum, auto
 import json
+import logging
 from time import sleep
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
@@ -8,6 +10,7 @@ import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, Resolver
 from jinja2 import Environment
+from pando.utils import utcnow
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
@@ -136,16 +139,30 @@ def _handle_ses_notification(msg):
     # Doc: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html
     data = json.loads(json.loads(msg.body)['Message'])
     notif_type = data['notificationType']
+    transient = False
     if notif_type == 'Bounce':
         bounce = data['bounce']
         report_id = bounce['feedbackId']
         recipients = bounce['bouncedRecipients']
+        if bounce.get('bounceType') == 'Transient':
+            transient = True
+            bounce_subtype = bounce.get('bounceSubType')
+            if bounce_subtype not in ('General', 'MailboxFull'):
+                website.warning("unhandled bounce subtype: %r" % bounce_subtype)
     elif notif_type == 'Complaint':
         complaint = data['complaint']
         report_id = complaint['feedbackId']
         recipients = complaint['complainedRecipients']
-        complaint_type = complaint['complaintFeedbackType']
-        if complaint_type not in ('abuse', 'fraud'):
+        complaint_type = complaint.get('complaintFeedbackType')
+        if complaint_type is None:
+            # This complaint is invalid, ignore it.
+            logging.info(
+                "Received an invalid email complaint without a Feedback-Type. ID: %s" %
+                report_id
+            )
+            msg.delete()
+            return
+        elif complaint_type not in ('abuse', 'fraud'):
             # We'll figure out how to deal with that when it happens.
             raise ValueError(complaint_type)
     else:
@@ -154,14 +171,28 @@ def _handle_ses_notification(msg):
         address = recipient['emailAddress']
         if address[-1] == '>':
             address = address[:-1].rsplit('<', 1)[1]
+        # Check for recurrent "transient" errors
+        if transient:
+            ignore_after = utcnow() + timedelta(days=5)
+            n_previous_bounces = website.db.one("""
+                SELECT count(*)
+                  FROM email_blacklist
+                 WHERE lower(address) = lower(%s)
+                   AND ts > (current_timestamp - interval '90 days')
+                   AND reason = 'bounce'
+            """, (address))
+            if n_previous_bounces >= 2:
+                ignore_after = utcnow() + timedelta(days=180)
+        else:
+            ignore_after = None
         # Add the address to our blacklist
         r = website.db.one("""
             INSERT INTO email_blacklist
-                        (address, reason, ses_data, report_id)
-                 VALUES (%s, %s, %s, %s)
+                        (address, reason, ses_data, report_id, ignore_after)
+                 VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (report_id, address) DO NOTHING
               RETURNING *
-        """, (address, notif_type.lower(), json.dumps(data), report_id))
+        """, (address, notif_type.lower(), json.dumps(data), report_id, ignore_after))
         if r is None:
             # Already done
             continue
