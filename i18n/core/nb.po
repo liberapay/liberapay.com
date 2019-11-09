@@ -420,14 +420,13 @@ msgid "The payment of {money_amount} through Liberapay that was initiated on {da
 msgstr "Betalingen på {money_amount} gjennom Liberapay som ble igangsatt på {date} har blitt utført."
 
 msgid "Thank you for this donation!"
-msgstr "Takk for din støtte."
+msgstr "Takk for denne donasjonen!"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Du går glipp av donasjoner på Liberapay"
 
-#, fuzzy
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr "Dine givere kan for tiden ikke sende deg penger gjennom Liberapay, fordi betalingsformidling ikke er satt opp på kontoen din."
+msgstr "Dine givere kan for øyeblikket ikke sende deg penger gjennom Liberapay fordi betalingsbehandlingen ikke er konfigurert for kontoen din."
 
 msgid "Configure payment processing"
 msgstr "Sett opp betalingsformidling"
@@ -469,9 +468,9 @@ msgstr "Doner til {0}"
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Du kan gjøre det enklere for dine kronerullere å støtte deg gjennom Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr "Du har koblet til en PayPal-konto, men ingen Stripe-konto. Vi anbefaler sterkt at du også kobler til en Stripe-konto, fordi det er {link_open}bedre enn PayPal{link_close} på mange vis, for både deg og dine donatorer."
+msgstr "Du har koblet til en PayPal-konto, men ingen Stripe-konto. Vi anbefaler på det sterkeste at du også kobler til en Stripe-konto, fordi den er {link_open}bedre enn PayPal{link_close} på flere måter, både for deg og giverne dine."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -861,9 +860,8 @@ msgstr "Overføringen av pengene mislyktes dessverre. Ta kontakt med support@lib
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Du kan ikke gjøre dette, fordi kontoen din er suspendert inntil videre."
 
-#, fuzzy
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
-msgstr "Betalingen kan ikke behandles fordi mottakerens konto for øyeblikket er utestengt."
+msgstr "Denne betalingen kan ikke behandles fordi mottakers konto for øyeblikket er suspendert."
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
@@ -1155,11 +1153,11 @@ msgstr "Logg ut"
 msgid "Print"
 msgstr "Skriv ut"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
-msgstr "Registrerte seg {timespan_ago}."
+msgstr "Ble med {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
 msgstr "Lukket {timespan_ago}."
 
@@ -1372,9 +1370,8 @@ msgstr "Mål"
 msgid "Statement"
 msgstr "Budskap"
 
-#, fuzzy
 msgid "Linked Accounts"
-msgstr "Kontoer andre steder"
+msgstr "Koblede kontoer"
 
 msgid "Privacy"
 msgstr "Personvern"
@@ -1410,17 +1407,17 @@ msgstr "Nytt passord"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} har ikke satt opp noen betalingsmetode enda, så din donasjon kan ikke gjennomføres akkurat nå. Du vil få en merknad når betaling blir mulig."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donasjoner til {username} kan betales ved bruk av et kreditt- eller debet-kort (Visa, MasterCard, American Express)."
+msgstr "Donasjoner til {username} kan betales med et kreditt- eller debetkort (Visa, MasterCard, American Express), eller ved direkte debet av en Euro-bankkonto (kun for donasjoner i Euro)."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "Donasjoner til {username} håndteres gjennom PayPal. Du kan betale med kreditt eller debetkort, selv om du ikke har en PayPal-konto."
+msgstr "Donasjoner til {username} behandles gjennom PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donasjoner til {username} kan betales med kreditt- eller debet-kort (Visa, MasterCard, American Express), eller gjennom PayPal."
+msgstr "Donasjoner til {username} kan betales med kreditt- eller debet-kort (Visa, MasterCard, American Express), en Euro-bankkonto (SEPA Direct Debit), eller en PayPal-konto."
 
 msgid "Country"
 msgstr "Land"
@@ -1477,7 +1474,7 @@ msgstr "(forgreining)"
 msgid "Updated this week"
 msgstr "Oppdatert denne uken"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Oppdatert {timespan_ago}"
 
@@ -1815,9 +1812,8 @@ msgstr "Modifiser din Libravatar"
 msgid "What is Libravatar?"
 msgstr "Hva er Libravatar?"
 
-#, fuzzy
 msgid "Refresh"
-msgstr "Gjenoppfrisk"
+msgstr "Oppdater"
 
 msgid "Avatar source"
 msgstr "Avatarkilde"
@@ -1850,9 +1846,8 @@ msgstr "godta"
 msgid "prefer"
 msgstr "foretrekk"
 
-#, fuzzy
 msgid "Accepting foreign currencies can increase your income by convincing people in other countries to donate to you, but international payments usually result in a higher percentage of fees, and fluctuations in exchange rates can lessen the stability of your income."
-msgstr "Å godta andre valutaer kan høyne din inntekt ved å overbevise folk i andre land til å donere til deg, men internasjonale betalinger betyr vanligvis høyere gebyrsatser, og svigninger i vekslingsrater kan føre til at din inntekt oppleves mindre stabil."
+msgstr "Å akseptere utenlandsk valuta kan øke inntektene dine ved å overbevise folk i andre land til å gi deg, men internasjonale betalinger fører vanligvis til en høyere prosentandel av avgifter, og svingninger i valutakurser kan redusere stabiliteten i inntekten."
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
@@ -2036,7 +2031,7 @@ msgid "Password"
 msgstr "Passord"
 
 msgid "Your email address is now blacklisted."
-msgstr "Din e-postadresse er nå svartelistet"
+msgstr "E-postadressen din er nå svartelistet."
 
 msgid "Your email address is no longer blacklisted."
 msgstr "Din e-postadresse er ikke lenger svartelistet."
@@ -2050,9 +2045,8 @@ msgstr "Legg til min e-postadresse til i svartelisten"
 msgid "You have successfully disavowed having connected your email address to this Liberapay account."
 msgstr "Du har nektet fremtidig tilknytning av din e-postadresse til denne Liberapay-kontoen."
 
-#, fuzzy
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
-msgstr "Ønsker du å blokkere fremtidige forsøk på å koble  din e-postadresse til en Liberapay-konto, ved å legge den til på vår svarteliste?"
+msgstr "Vil du blokkere ethvert fremtidig forsøk på å koble e-postadressen din til en Liberapay-konto ved å legge den til svartelisten vår?"
 
 msgid "Email settings"
 msgstr "E-postinnstillinger"
@@ -2143,7 +2137,7 @@ msgstr "{money_amount}{small}/måned{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/år{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Startet {timespan_ago}."
 
@@ -2163,7 +2157,7 @@ msgstr "Uaktiv fordi mottageren ikke lenger godtar donasjoner."
 msgid "Active"
 msgstr "Aktiv"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
 msgstr "Neste betaling {in_N_weeks_months_or_years}."
 
@@ -2173,7 +2167,6 @@ msgstr "Forny nå"
 msgid "Pending payment completion."
 msgstr "Ventende betalingsfullføring."
 
-#, fuzzy
 msgid "Awaiting payment."
 msgstr "Avventer betaling."
 
@@ -2238,13 +2231,11 @@ msgstr "Kort"
 msgid "Currently unavailable"
 msgstr "Ikke tilgjengelig nå"
 
-#, fuzzy
 msgid "Euro donations only"
-msgstr "Kun Euro-donasjoner"
+msgstr "Bare euro-donasjoner"
 
-#, fuzzy
 msgid "Euro bank accounts only"
-msgstr "Kun Euro-bankkontoer"
+msgstr "Kun bankkontoer i euro"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
@@ -2355,9 +2346,8 @@ msgstr "Din {bank_name}-konto {partial_account_number} vil belastes."
 msgid "Use another bank account"
 msgstr "Bruk en annen bankkonto"
 
-#, fuzzy
 msgid "Please input your name and card number:"
-msgstr "Skriv inn ditt kortnummer:"
+msgstr "Skriv inn ditt navn og kortnummer:"
 
 msgid "Jane Doe"
 msgstr "Ola Nordmann"
@@ -2376,9 +2366,8 @@ msgstr "Skriv inn ditt navn og din IBAN (Internasjonalt bankkontonummer):"
 msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
 msgstr "Ved å oppgi din IBAN, og bekrefte denne betalinger, godkjenner du {platform} og {provider}, vår betalingstjenestetilbyder, å sende deg instruksjoner til din bank for å debitere din konto og din bank til å debitere din konto, i henhold til disse instruksjonene. Du har krav på erstatning fra din bank i henhold til vilkår betingelser for avtalen med din bank. En erstatning må kreves innen åtte uker fra din bankkonto ble debitert."
 
-#, fuzzy
 msgid "Remember the bank account number for future payments"
-msgstr "Husk dette bankkontonummeret for fremtidige betalinger."
+msgstr "Husk bankkontonummeret for fremtidige betalinger"
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på at du ønsker å endre din kontotype? Av juridiske hensyn må vi opprette en ny konto for deg i systemet til vår betalingspartner, og overføre pengene fra din nåværende konto."
@@ -2457,7 +2446,7 @@ msgstr "{0} eier følgende kontoer på andre plattformer:"
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
 msgstr[0] "{username} er med i {n} lag:"
-msgstr[1] "{username} er med i {n} lag:"
+msgstr[1] "{username} er med i {n} lagene:"
 
 #, python-brace-format
 msgid "with {n} other"
@@ -2770,9 +2759,8 @@ msgstr "Donorer trenger ikke å koble til noen betalingskonto nedenfor, de er ku
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Det anbefales på koble til både Stripe og PayPal hvis begge deler er tilgjengelig i ditt land."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Med Stripe kan donorer betale per kort direkte fra Liberapay-nettsiden. SEPA direkte debit vil også støttes snart."
+msgstr "Med Stripe kan donorer betale per kort direkte fra Liberapay-nettsiden. (Direkte belastning støttes foreløpig bare fra Euro-bankkontoer.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -2932,7 +2920,7 @@ msgstr "En donasjon har blitt senket fra {old_amount} per uke til {new_amount}."
 
 #, python-brace-format
 msgid "A donation of {amount} per week has been restarted."
-msgstr ""
+msgstr "En donasjon på {amount} har blitt startet opp igjen."
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "Tabellen nedenfor viser donasjoner du mottar, gruppert etter beløp."
