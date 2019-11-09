@@ -2425,3 +2425,9 @@ CREATE OPERATOR / (
     rightarg = currency_amount,
     procedure = currency_amount_div
 );
+
+-- migration #112
+UPDATE email_blacklist
+   SET ignore_after = ts + interval '5 days'
+ WHERE ignore_after IS NULL
+   AND ses_data->'bounce'->>'bounceType' = 'Transient';
