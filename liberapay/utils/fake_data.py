@@ -4,7 +4,7 @@ import random
 import string
 import sys
 
-from faker import Factory
+from faker import Faker
 from psycopg2 import IntegrityError
 
 from liberapay.billing.transactions import (
@@ -19,7 +19,7 @@ from liberapay.models import community
 DONATION_PERIODS = tuple(PERIOD_CONVERSION_RATES.keys())
 
 
-faker = Factory.create()
+faker = Faker()
 
 
 def _fake_thing(db, tablename, **kw):
