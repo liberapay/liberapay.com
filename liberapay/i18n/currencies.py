@@ -169,7 +169,7 @@ class MoneyBasket(object):
         return self._compare(operator.gt, other)
 
     def __add__(self, other):
-        if other is 0:
+        if other == 0:
             return self
         r = self.__class__(**self.amounts)
         if isinstance(other, self.__class__):
@@ -184,8 +184,6 @@ class MoneyBasket(object):
                 r.amounts[currency] += other.amount
             else:
                 r.amounts[currency] = other.amount
-        elif other == 0:
-            return r
         else:
             raise TypeError(other)
         return r
@@ -194,7 +192,7 @@ class MoneyBasket(object):
         return self.__add__(other)
 
     def __sub__(self, other):
-        if other is 0:
+        if other == 0:
             return self
         r = self.__class__(**self.amounts)
         if isinstance(other, self.__class__):
