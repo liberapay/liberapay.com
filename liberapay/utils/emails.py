@@ -180,7 +180,7 @@ def _handle_ses_notification(msg):
                  WHERE lower(address) = lower(%s)
                    AND ts > (current_timestamp - interval '90 days')
                    AND reason = 'bounce'
-            """, (address))
+            """, (address,))
             if n_previous_bounces >= 2:
                 ignore_after = utcnow() + timedelta(days=180)
         else:
