@@ -194,6 +194,24 @@ openstreetmap = lambda: ET.fromstring("""
  </osm>
 """)
 
+pleroma = lambda: ('pleroma.site', {
+    "id": 3,
+    "username": "administration",
+    "acct": "administration",
+    "display_name": "pleroma.site administration",
+    "locked": False,
+    "created_at": "2018-04-18T13:55:24.000Z",
+    "followers_count": 36,
+    "following_count": 0,
+    "statuses_count": 1,
+    "note": "pleroma.site administration notices go here",
+    "url": "https://pleroma.site/users/administration",
+    "avatar": "https://pleroma.site/images/avi.png",
+    "avatar_static": "https://pleroma.site/images/avi.png",
+    "header": "https://pleroma.site/images/banner.png",
+    "header_static": "https://pleroma.site/images/banner.png"
+})
+
 twitter = lambda: {
     "lang": "en",
     "utc_offset": 3600,
