@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Danish (https://hosted.weblate.org/projects/liberapay/core/da/)\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2019-11-11 08:59+0000\n"
+"Last-Translator: Katharsisdrill <katharsisdrill@phillfromgchq.co.uk>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/liberapay/core/da/>\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -267,7 +270,7 @@ msgstr ""
 "\n"
 "Den anden mulighed er at få pengene tilbage, hvis det er muligt gennem en refusion, ellers ved at trække det tilbage til din bankkonto.\n"
 "\n"
-"Hvis du modtager donationer på Liberapay, kan du vente en uge før du trækker din indkomst tilbage for at give dine lånere en chance for at overføre de resterende donationer fra deres tegnebøger til din.\n"
+"Hvis du modtager donationer på Liberapay, kan du vente en uge før du trækker din indkomst tilbage for at give dem der støtter dig en chance for at overføre de resterende donationer fra deres tegnebøger til din.\n"
 "\n"
 "Vi informerer dig så snart integrationen af en ny Betalingsformidleren er færdig, og fortæller dig om der er noget du skal gøre for at begynde at modtage donationer på Liberapay igen.\n"
 "\n"
@@ -423,10 +426,10 @@ msgid "Thank you for this donation!"
 msgstr "Tak for din donation!"
 
 msgid "You're missing out on donations through Liberapay"
-msgstr ""
+msgstr "Du går glip af donationer på Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr ""
+msgstr "Dem der støtter dig kan i øjeblikket ikke sende dig penge gennem Liberapay, fordi betalingsbehandling  til din konto ikke er sat op."
 
 msgid "Configure payment processing"
 msgstr "Konfigurer betalingsbehandling"
@@ -466,11 +469,11 @@ msgid "Donate to {0}"
 msgstr "Doner til {0}"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr ""
+msgstr "Du kan gøre det nemmere for dem der støtter dig at yde bidrag gennem Liberapay"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr ""
+msgstr "Du har tilsluttet en PayPal-konto, men ingen Stripe-konto. Vi anbefaler kraftigt, at du også opretter forbindelse til en Stripe-konto, fordi den er {link_open}bedre end PayPa{link_close} på flere måder, både for dig og dine bidragsydere."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -920,7 +923,7 @@ msgstr "Gateway tidsudløb"
 
 #, python-brace-format
 msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
-msgstr ""
+msgstr "Den {platform} bruger, du leder efter, er ikke tilmelsdt Liberapay, og det er ikke muligt at oprette en profil til dem."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -982,10 +985,10 @@ msgid "Processing your request failed because our server was unable to communica
 msgstr "Behandlingen af din forespørgsel mislykkedes, fordi vores server ikke kunne kommunikere med en tjeneste på en anden maskine. Dette er et midlertidigt problem, prøv igen senere."
 
 msgid "Bad Request"
-msgstr ""
+msgstr "Fejlagtig forespørgsel"
 
 msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
-msgstr ""
+msgstr "Dette login-link er udløbet eller ugyldigt. Du er dog allerede logget ind, så det betyder ikke noget."
 
 msgid "Carry on"
 msgstr "Fortsæt"
@@ -995,10 +998,10 @@ msgstr "Dette login er udløbet eller ugyldigt."
 
 #, python-brace-format
 msgid "A login link is only valid for {x_hours} and can only be used once."
-msgstr ""
+msgstr "Et login-link er kun gyldigt for {x_hours} og kan kun bruges én gang."
 
 msgid "To request a new login link, input your email address:"
-msgstr ""
+msgstr "For at anmode om et nyt login-link skal du indtaste din e-mail-adresse:"
 
 msgid "Email address"
 msgstr "E-mailadresse"
@@ -1063,7 +1066,7 @@ msgid "Please try again in a few minutes."
 msgstr "Prøv venligst igen om et par minutter."
 
 msgid "Log in via email"
-msgstr ""
+msgstr "Log ind via e-mail"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Vi oplever i øjeblikket tekniske fejl. Som følge heraf virker de fleste ting ikke. Beklager ulejligheden, vi arbejder på at få alt tilbage til det normale hurtigst muligt."
@@ -1218,9 +1221,9 @@ msgstr "Du er stadig ikke logget ind som {0}."
 msgid "Password (optional)"
 msgstr "Adgangskode (valgfrit)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Lad det foregående felt stå tomt hvis din konto ikke har en adgangskode eller hvis du har mistet den. Vi sender dig et login-link via e-mail."
+msgstr "Lad det foregående felt stå tomt hvis {bold}du har mistet dit kodeord{bold_end} eller din konto ikke har en adgangskode. Vi sender dig et login-link via e-mail."
 
 msgid "Find great people to donate to"
 msgstr "Find nogen at donere til"
@@ -2086,7 +2089,7 @@ msgid "Send me notifications via email:"
 msgstr "Send mig notifikationer via e-mail:"
 
 msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
-msgstr ""
+msgstr "Nogle typer underretninger kan ikke slås fra, så de er ikke nævnt ovenfor. For eksempel får du altid besked, når vi forbereder os på at debitere din bankkonto."
 
 msgid "Language"
 msgstr "Sprog"
@@ -2471,7 +2474,7 @@ msgid "Income Per Week (in {currency})"
 msgstr "Indkomst per uge (i {currency})"
 
 msgid "Number of Patrons Per Week"
-msgstr "Antal Mæcener Per Uge"
+msgstr "Antal bidragsydere per Uge"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
@@ -2886,7 +2889,7 @@ msgstr "Du kan ikke modtage nye donationer, før du har konfigureret betalingsbe
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
-msgstr "Donationer gennem teams udgør {income_percent} af din indkomst ({team_income} af {total_income}) og {patrons_percent} af dine donorer ({nteampatrons} af {npatrons})."
+msgstr "Donationer gennem teams udgør {income_percent} af din indkomst ({team_income} af {total_income}) og {patrons_percent} af dine bidragsydere ({nteampatrons} af {npatrons})."
 
 msgid "You are not a member of any team."
 msgstr "Du er ikke medlem a noget team."
@@ -2918,7 +2921,7 @@ msgstr "En donation er blevet sænket fra {old_amount} til {new_amount} per uge.
 
 #, python-brace-format
 msgid "A donation of {amount} per week has been restarted."
-msgstr ""
+msgstr "En donation på {amount} pr. uge er blevet fornyet."
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "Tabellen nedenfor viser de donationer, du modtager, grupperet efter beløb."
@@ -3725,7 +3728,7 @@ msgstr "Det mindste du kan give nogen bruger er {0} om ugen, men for at minimere
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
-msgstr "Du kan maksimalt give en bruger er {0} om ugen. Dette hjælper med at stabilisere indkomsten ved at reducere afhængighed af nogle få store mæcener."
+msgstr "Du kan maksimalt give en bruger er {0} om ugen. Dette hjælper med at stabilisere indkomsten ved at reducere afhængighed af nogle få store bidragsydere."
 
 msgid "Do I have to pay taxes on the income I receive from Liberapay?"
 msgstr "Skal jeg betale skat af den indkomst jeg modtager fra Liberapay?"
@@ -3906,43 +3909,43 @@ msgid "We guarantee that the funds you put in our custody will not be lost in ca
 msgstr "Vi garanterer at de midler du stiller i vores varetægt ikke går tabt i tilfælde af konkurs, uanset om det påvirker os eller en tredjepart, som vi har delegeret myndighed over pengene til."
 
 msgid "Here is a list of differences between them:"
-msgstr ""
+msgstr "Her er en liste af forskellene mellem dem:"
 
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
-msgstr ""
+msgstr "Overførslesgebyret er normalt lavere hos Stripe end hos Paypal."
 
 msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr ""
+msgstr "Stripe tillader at donere til flere af gangen. Det gør Paypal ikke."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
-msgstr ""
+msgstr "PayPal-betalinger kræver omdirigering af giveren til PayPal's hjemmeside, hvorimod Stripe er integreret i Liberapay."
 
 msgid "Stripe makes SEPA Direct Debits easy for European donors."
-msgstr ""
+msgstr "Stripe gør SEPA Direkte Debiteringer nemt for europæiske bidragydere."
 
 msgid "Stripe allows creators to configure automatic payouts to their bank accounts."
-msgstr ""
+msgstr "Stripe giver skabere mulighed for at konfigurere automatiske udbetalinger til deres bankkonti."
 
 #, python-brace-format
 msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
 msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "PayPal er tilgængeligt for skabere i {paypal_link_open}mere end 200 lande{link_close}, mens Stripe kun understøtter {stripe_link_open}{n} lande{link_close}."
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr ""
+msgstr "Hvis du tror at du har fundet et sikkerhedsproblem, og det ikke allerede er på vores liste over {known_issues_link}kendte lavsikkerheds problemer{link_close},så skriv det venligst til os {hackerone_report_link}gennem HackerOne{link_close}."
 
 msgid "Policy"
-msgstr ""
+msgstr "Retningslinier"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr ""
+msgstr "Detaljerne i vores sikkerhedspolitik (omfang, belønninger ...) er tilgængelige i {link_open}vores HackerOne-profil{link_close}."
 
 #, python-brace-format
 msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
-msgstr ""
+msgstr "Tak til {link_open}alle, der har sendt os en rapport gennem HackerOne{link_close}."
 
 #, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
