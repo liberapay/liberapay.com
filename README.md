@@ -184,6 +184,8 @@ We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_in
 
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
 
+To upgrade all the dependencies in a requirements file, run `hashin -u -r requirements_XXX.txt -p 3.6 -p 3.7`. You may have to run extra `hashin` commands if new subdependencies are missing.
+
 ### Processing personal data
 
 When writing code that handles personal information, keep in mind the principles enshrined in the [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
