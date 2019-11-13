@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon" href="{{ website.asset('liberapay/icon-v2_white-on-yellow.200.png') }}">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ website.asset('forkawesome/1.0.11/css/fork-awesome.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ website.asset('forkawesome/1.1.7/css/fork-awesome.min.css') }}" type="text/css">
     % block head_alternates
     % if request.method in constants.SAFE_METHODS and response.code == 200
         <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri.decoded }}" />

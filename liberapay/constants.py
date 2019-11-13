@@ -85,7 +85,7 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
 
 AVATAR_QUERY = '?s=160&d=404'
 AVATAR_SOURCES = (
-    'libravatar bitbucket facebook github gitlab google mastodon twitch twitter youtube'
+    'libravatar bitbucket facebook github gitlab google mastodon pleroma twitch twitter youtube'
 ).split()
 
 BASE64URL_CHARS = set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_')
