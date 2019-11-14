@@ -1,7 +1,6 @@
 from datetime import timedelta
 from decimal import ROUND_HALF_UP
 from math import floor
-from types import SimpleNamespace
 
 import stripe
 import stripe.error
@@ -12,6 +11,7 @@ from liberapay.models.participant import Participant
 from liberapay.payin.common import (
     prepare_donation, prepare_payin, prepare_payin_transfer, resolve_amounts,
 )
+from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import (
     charge_and_transfer, create_source_from_token, destination_charge,
     repr_stripe_error, settle_payin,
@@ -57,8 +57,11 @@ if request.method == 'POST':
         raise response.invalid_input(body.get('tips'), 'tips', 'body')
 
     tips_weekly_sum = Money.sum((tip.amount for tip in tips), payin_currency)
-    amount_min = max(constants.PAYIN_STRIPE_MIN_ACCEPTABLE[payin_currency], tips_weekly_sum)
-    amount_max = constants.PAYIN_STRIPE_MAX_ACCEPTABLE[payin_currency]
+    amount_min = max(
+        constants.PAYIN_AMOUNTS['stripe']['min_acceptable'][payin_currency],
+        tips_weekly_sum
+    )
+    amount_max = constants.PAYIN_AMOUNTS['stripe']['max_acceptable'][payin_currency]
     if payin_amount < amount_min or payin_amount > amount_max:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",
@@ -180,76 +183,7 @@ if tippees:
     ]
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
-    payment_currency = tips[0].amount.currency
-    payment = SimpleNamespace()
-    payment.recipient_links = [tip.tippee_p.link() for tip in tips]
-    payment.recipient_names = [tip.tippee_p.username for tip in tips]
-    payment.tips = tips
-    payment.tip_ids = ','.join(str(tip.id) for tip in tips)
-    payment.period = set(tip.period for tip in tips)
-    payment.period = (
-        tuple(payment.period)[0] if len(payment.period) == 1 else
-        'monthly' if 'monthly' in payment.period else
-        'weekly'
-    )
-    CONVERSION_MAP = constants.PERIOD_CONVERSION_MAP
-    payment.one_periods_worth = sum(
-        tip.periodic_amount * CONVERSION_MAP[(tip.period, payment.period)] for tip in tips
-    ).round()
-    payment.one_weeks_worth = sum(tip.amount for tip in tips).round()
-    payment.one_years_worth = sum(
-        tip.periodic_amount * CONVERSION_MAP[(tip.period, 'yearly')] for tip in tips
-    ).round()
-    payment.twelve_years_worth = payment.one_years_worth * 12
-    if payment.period == 'weekly':
-        payment.one_months_worth = (payment.one_weeks_worth * 4).round()
-    elif payment.period == 'monthly':
-        payment.one_months_worth = payment.one_periods_worth
-    else:
-        payment.one_months_worth = (payment.one_years_worth / 12).round()
-    payment.min_acceptable_amount = max(
-        constants.PAYIN_STRIPE_MIN_ACCEPTABLE[payment_currency],
-        payment.one_weeks_worth
-    )
-    payment.moderate_fee_amount = max(
-        constants.PAYIN_STRIPE_MIN_RECOMMENDED[payment_currency],
-        payment.one_weeks_worth
-    )
-    payment.low_fee_amount = constants.PAYIN_STRIPE_LOW_FEE[payment_currency]
-    payment.max_acceptable_amount = min(
-        constants.PAYIN_STRIPE_MAX_ACCEPTABLE[payment_currency],
-        payment.twelve_years_worth
-    )
-    payment.min_proposed_amount = max(
-        payment.min_acceptable_amount,
-        payment.one_months_worth,
-        payment.one_periods_worth
-    )
-    payment.moderate_proposed_amount = min(
-        max(
-            payment.moderate_fee_amount,
-            payment.one_months_worth,
-            payment.one_periods_worth
-        ),
-        payment.twelve_years_worth
-    )
-    periodic_amounts = [
-        payment.one_months_worth,
-        (payment.one_years_worth / 4).round(),
-        (payment.one_years_worth / 2).round(),
-        payment.one_years_worth,
-    ]
-    recommended_amounts = [
-        a for a in periodic_amounts
-        if a >= payment.low_fee_amount and
-           a >= payment.moderate_proposed_amount * 2 and
-           a <= payment.max_acceptable_amount
-    ]
-    payment.amounts = sorted(set((
-        payment.min_proposed_amount,
-        payment.moderate_proposed_amount,
-        *recommended_amounts
-    )))
+    payment = PayinProspect(tips, 'stripe')
     del tips
 
 elif not payin_id:
@@ -367,11 +301,14 @@ title = _("Funding your donations")
         <p>{{ _("Please select or input a payment amount:") }}</p>
         <fieldset id="amount">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <input type="hidden" name="currency" value="{{ payment_currency }}" />
+            <input type="hidden" name="currency" value="{{ payment.currency }}" />
             <input type="hidden" name="tips" value="{{ payment.tip_ids }}" />
             <ul class="list-group radio-group">
-            % set show_fee_notice = len(payment.amounts) > 1 and payment.amounts[0] < payment.low_fee_amount
-            % for charge_amount in payment.amounts
+            % set show_fee_notice = (
+                len(payment.suggested_amounts) > 1 and
+                payment.suggested_amounts[0] < payment.low_fee_amount
+            )
+            % for charge_amount in payment.suggested_amounts
                 <li class="list-group-item">
                 <label>
                     <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" required />
@@ -409,7 +346,7 @@ title = _("Funding your donations")
                     ) }}</h5>
                     <div class="input-group">
                         <div class="input-group-addon">{{
-                            locale.currency_symbols.get(payment_currency, payment_currency)
+                            locale.currency_symbols.get(payment.currency, payment.currency)
                         }}</div>
                         <input type="tel" inputmode="decimal" class="form-control amount"
                                name="amount_custom" placeholder="{{ _('Amount') }}" />
