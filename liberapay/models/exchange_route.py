@@ -51,7 +51,7 @@ class ExchangeRoute(Model):
                AND status = 'chargeable'
                AND COALESCE(currency::text, '') = COALESCE(%(currency)s::text, '')
                AND (one_off IS FALSE OR ctime > (current_timestamp - interval '6 hours'))
-          ORDER BY r.id DESC
+          ORDER BY r.is_default NULLS LAST, r.id DESC
         """, locals())
         for route in r:
             route.__dict__['participant'] = participant
@@ -85,6 +85,18 @@ class ExchangeRoute(Model):
                          %(one_off)s, %(remote_user_id)s, %(country)s, %(currency)s)
               RETURNING r
         """, locals())
+        if status == 'chargeable' and network.startswith('stripe-'):
+            cls.db.run("""
+                DO $$
+                BEGIN
+                    UPDATE exchange_routes
+                       SET is_default = true
+                     WHERE id = %s;
+                EXCEPTION
+                    WHEN unique_violation THEN RETURN;
+                END;
+                $$
+            """, (r.id,))
         r.__dict__['participant'] = participant
         return r
 
@@ -201,6 +213,22 @@ class ExchangeRoute(Model):
             if mandate.Status in ('SUBMITTED', 'ACTIVE'):
                 mandate.cancel()
         self.update_status('canceled')
+
+    def set_as_default(self):
+        with self.db.get_cursor() as cursor:
+            cursor.run("""
+                UPDATE exchange_routes
+                   SET is_default = NULL
+                 WHERE participant = %(p_id)s
+                   AND is_default IS NOT NULL;
+                UPDATE exchange_routes
+                   SET is_default = true
+                 WHERE participant = %(p_id)s
+                   AND id = %(route_id)s
+            """, dict(p_id=self.participant.id, route_id=self.id))
+            self.participant.add_event(cursor, 'set_default_route', dict(
+                id=self.id, network=self.network
+            ))
 
     def set_mandate(self, mandate_id):
         self.db.run("""

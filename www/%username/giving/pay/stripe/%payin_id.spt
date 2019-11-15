@@ -256,22 +256,18 @@ if tippees:
 elif not payin_id:
     response.redirect(payer.path('giving/pay'))
 
-if payment_type:
-    route = ExchangeRoute.from_network(payer, 'stripe-' + payment_type)
-    route = route[0] if route else None
-else:
-    route = website.db.one("""
-        SELECT r
-          FROM exchange_routes r
-         WHERE r.participant = %s
-           AND r.status = 'chargeable'
-           AND r.network::text LIKE 'stripe-%%'
-           AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
-      ORDER BY r.network = 'stripe-sdd' DESC
-             , r.id DESC
-         LIMIT 1
-    """, (payer.id,))
-    route = None
+route = website.db.one("""
+    SELECT r
+      FROM exchange_routes r
+     WHERE r.participant = %s
+       AND r.status = 'chargeable'
+       AND r.network::text LIKE %s
+       AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
+  ORDER BY r.is_default NULLS LAST
+         , r.network = 'stripe-sdd' DESC
+         , r.id DESC
+     LIMIT 1
+""", (payer.id, 'stripe-' + (payment_type or '%')))
 if route:
     payment_type = route.network.split('-', 1)[-1]
     if route.address.startswith('pm_'):

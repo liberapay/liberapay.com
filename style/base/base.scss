@@ -1032,11 +1032,16 @@ code.gray {
     line-height: 1.5em;
     margin: 1.5em 0;
     & > span {
+        display: inline;
+        margin-bottom: 0.5em;
         &:first-child {
             text-align: center;
         }
         &:last-child {
             display: block;
+            & > .btn {
+                margin: 5px 5px 10px 0;
+            }
         }
     }
 }
@@ -1058,6 +1063,13 @@ code.gray {
             }
             &:last-child {
                 margin-right: 0;
+                & > .btn {
+                    display: block;
+                    margin: 0;
+                }
+                & > .btn + .btn {
+                    margin-top: 10px;
+                }
             }
         }
     }
