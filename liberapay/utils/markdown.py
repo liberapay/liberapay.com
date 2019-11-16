@@ -31,7 +31,7 @@ class CustomRenderer(m.HtmlRenderer):
             return escape('<%s>' % link)
 
 
-renderer = CustomRenderer(flags=m.HTML_SKIP_HTML)
+renderer = CustomRenderer(flags=['skip-html'])
 md = m.Markdown(renderer, extensions=(
     'autolink', 'strikethrough', 'no-intra-emphasis', 'tables',
 ))
