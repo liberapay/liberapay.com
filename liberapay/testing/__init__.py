@@ -39,6 +39,10 @@ def EUR(amount):
     return Money(amount, 'EUR')
 
 
+def KRW(amount):
+    return Money(amount, 'KRW')
+
+
 def JPY(amount):
     return Money(amount, 'JPY')
 

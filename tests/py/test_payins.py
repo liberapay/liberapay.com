@@ -7,12 +7,13 @@ from pando.utils import utcnow
 import stripe
 
 from liberapay.billing.payday import Payday
-from liberapay.constants import EPOCH
+from liberapay.constants import DONATION_LIMITS, EPOCH, PAYIN_AMOUNTS, STANDARD_TIPS
 from liberapay.exceptions import MissingPaymentAccount, NoSelfTipping
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.paypal import sync_all_pending_payments
-from liberapay.testing import Harness, EUR, JPY, USD
+from liberapay.payin.prospect import PayinProspect
+from liberapay.testing import Harness, EUR, KRW, JPY, USD
 
 
 class TestResolveAmounts(Harness):
@@ -168,6 +169,234 @@ class TestResolveTeamDonation(Harness):
         assert payin_transfers[0].destination == stripe_account_bob.pk
         assert payin_transfers[1].amount == EUR('2.00')
         assert payin_transfers[1].destination == stripe_account_carl.pk
+
+
+class TestPayinAmountSuggestions(Harness):
+
+    def setUp(self):
+        self.alice = self.make_participant('alice')
+        self.bob = self.make_participant('bob', accepted_currencies=None)
+        self.carl = self.make_participant('carl', accepted_currencies=None)
+        self.dana = self.make_participant('dana', accepted_currencies=None)
+
+    def test_minimum_weekly_EUR_tip(self):
+        tip_amount = DONATION_LIMITS['EUR']['weekly'][0]
+        tip = self.alice.set_tip_to(self.bob, tip_amount)
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'weekly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == tip_amount
+        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_years_worth == tip_amount * 52
+        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
+        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+
+    def test_minimum_monthly_EUR_tip(self):
+        tip_amount = DONATION_LIMITS['EUR']['monthly'][0]
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'monthly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == DONATION_LIMITS['EUR']['weekly'][0]
+        assert pp.one_months_worth == tip_amount
+        assert pp.one_years_worth == tip_amount * 12
+        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
+        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+
+    def test_minimum_yearly_EUR_tip(self):
+        tip_amount = DONATION_LIMITS['EUR']['yearly'][0]
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'yearly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == DONATION_LIMITS['EUR']['weekly'][0]
+        assert pp.one_months_worth == (tip_amount / 12).round()
+        assert pp.one_years_worth == tip_amount
+        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
+        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+
+    def test_small_weekly_USD_tip(self):
+        tip_amount = STANDARD_TIPS['USD'][1].weekly
+        tip = self.alice.set_tip_to(self.bob, tip_amount)
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'USD'
+        assert pp.period == 'weekly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == tip_amount
+        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_years_worth == tip_amount * 52
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
+        assert pp.suggested_amounts == [USD('2.00'), USD('12.00')]
+
+    def test_small_monthly_USD_tip(self):
+        tip_amount = USD('1.00')
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'USD'
+        assert pp.period == 'monthly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == USD('0.23')
+        assert pp.one_months_worth == tip_amount
+        assert pp.one_years_worth == tip_amount * 12
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
+        assert pp.suggested_amounts == [USD('2.00'), USD('12.00')]
+
+    def test_small_yearly_USD_tip(self):
+        tip_amount = USD('10.00')
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'USD'
+        assert pp.period == 'yearly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == USD('0.19')
+        assert pp.one_months_worth == USD('0.83')
+        assert pp.one_years_worth == tip_amount
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
+        assert pp.suggested_amounts == [USD('10.00'), USD('12.00')]
+
+    def test_medium_weekly_JPY_tip(self):
+        tip_amount = STANDARD_TIPS['JPY'][2].weekly
+        tip = self.alice.set_tip_to(self.bob, tip_amount)
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'JPY'
+        assert pp.period == 'weekly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == tip_amount
+        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_years_worth == tip_amount * 52
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['JPY']
+        assert pp.suggested_amounts == [JPY('520'), JPY('1000'), JPY('6760')]
+
+    def test_medium_monthly_JPY_tip(self):
+        tip_amount = JPY('500')
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'JPY'
+        assert pp.period == 'monthly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == JPY('115')
+        assert pp.one_months_worth == tip_amount
+        assert pp.one_years_worth == tip_amount * 12
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['JPY']
+        assert pp.suggested_amounts == [JPY('500'), JPY('1000'), JPY('6000')]
+
+    def test_medium_yearly_JPY_tip(self):
+        tip_amount = JPY('5000')
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'JPY'
+        assert pp.period == 'yearly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == JPY('96')
+        assert pp.one_months_worth == JPY('417')
+        assert pp.one_years_worth == tip_amount
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['JPY']
+        assert pp.suggested_amounts == [JPY('5000')]
+
+    def test_large_weekly_EUR_tip(self):
+        tip_amount = STANDARD_TIPS['EUR'][3].weekly
+        tip = self.alice.set_tip_to(self.bob, tip_amount)
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'weekly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == tip_amount
+        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_years_worth == tip_amount * 52
+        assert pp.suggested_amounts == [
+            EUR('20.00'), EUR('65.00'), EUR('130.00'), EUR('260.00')
+        ]
+
+    def test_large_monthly_EUR_tip(self):
+        tip_amount = EUR('25.00')
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'monthly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == EUR('5.76')
+        assert pp.one_months_worth == tip_amount
+        assert pp.one_years_worth == tip_amount * 12
+        assert pp.suggested_amounts == [
+            EUR('25.00'), EUR('75.00'), EUR('150.00'), EUR('300.00')
+        ]
+
+    def test_large_yearly_EUR_tip(self):
+        tip_amount = EUR('500.00')
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'yearly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == EUR('9.61')
+        assert pp.one_months_worth == EUR('41.67')
+        assert pp.one_years_worth == tip_amount
+        assert pp.suggested_amounts == [EUR('500.00')]
+
+    def test_two_small_monthly_USD_tips(self):
+        tip_amount = USD('1.00')
+        tip1 = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
+        tip2 = self.alice.set_tip_to(self.carl, tip_amount, period='monthly')
+        pp = PayinProspect([tip1, tip2], 'stripe')
+        assert pp.currency == 'USD'
+        assert pp.period == 'monthly'
+        assert pp.one_periods_worth == tip_amount * 2
+        assert pp.one_weeks_worth == USD('0.46')
+        assert pp.one_months_worth == pp.one_periods_worth
+        assert pp.one_years_worth == tip_amount * 24
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
+        assert pp.suggested_amounts == [USD('2.00'), USD('12.00')]
+
+    def test_two_medium_yearly_KRW_tips(self):
+        tip_amount = KRW('50000')
+        tip1 = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
+        tip2 = self.alice.set_tip_to(self.carl, tip_amount, period='yearly')
+        pp = PayinProspect([tip1, tip2], 'stripe')
+        assert pp.currency == 'KRW'
+        assert pp.period == 'yearly'
+        assert pp.one_periods_worth == tip_amount * 2
+        assert pp.one_weeks_worth == KRW('1922')
+        assert pp.one_months_worth == KRW('8333')
+        assert pp.one_years_worth == pp.one_periods_worth
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['KRW']
+        assert pp.suggested_amounts == [KRW('100000')]
+
+    def test_two_very_different_EUR_tips(self):
+        tip1 = self.alice.set_tip_to(self.bob, EUR('0.24'), period='weekly')
+        tip2 = self.alice.set_tip_to(self.carl, EUR('240.00'), period='yearly')
+        pp = PayinProspect([tip1, tip2], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'weekly'
+        assert pp.one_periods_worth == EUR('4.86')
+        assert pp.one_weeks_worth == pp.one_weeks_worth
+        assert pp.one_months_worth == pp.one_weeks_worth * 4
+        assert pp.one_years_worth == EUR('252.48')
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
+        assert pp.suggested_amounts == [
+            EUR('19.40'), EUR('63.12'), EUR('126.24'), EUR('252.48')
+        ]
+
+    def test_three_very_different_EUR_tips(self):
+        tip1 = self.alice.set_tip_to(self.bob, EUR('0.01'), period='weekly')
+        tip2 = self.alice.set_tip_to(self.carl, EUR('1.00'), period='monthly')
+        tip3 = self.alice.set_tip_to(self.dana, EUR('5200.00'), period='yearly')
+        pp = PayinProspect([tip1, tip2, tip3], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'monthly'
+        assert pp.one_periods_worth == EUR('434.38')
+        assert pp.one_weeks_worth == EUR('100.24')
+        assert pp.one_months_worth == pp.one_periods_worth
+        assert pp.one_years_worth == EUR('5212.52')
+        assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
+        assert pp.suggested_amounts == [
+            EUR('434.38'), EUR('1303.13'), EUR('2606.26')
+        ]
 
 
 class TestPayins(Harness):
