@@ -345,7 +345,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         # At this point we should have an automatic renewal scheduled one week from now
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins")
         assert len(scheduled_payins) == 1
-        assert scheduled_payins[0].amount == EUR('10.00')
+        assert scheduled_payins[0].amount == EUR('10.12')
         assert scheduled_payins[0].automatic is True
         payment_timedelta = scheduled_payins[0].execution_date - utcnow().date()
         assert payment_timedelta.days in (6, 7)
@@ -384,7 +384,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert tip.renewal_mode == 2
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
         assert len(scheduled_payins) == 1
-        assert scheduled_payins[0].amount == EUR('10.00')
+        assert scheduled_payins[0].amount == EUR('10.12')
         assert scheduled_payins[0].automatic is True
         payment_timedelta = scheduled_payins[0].execution_date - utcnow().date()
         assert payment_timedelta.days in (6, 7)
