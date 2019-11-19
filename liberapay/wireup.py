@@ -41,6 +41,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.payin import Payin
 from liberapay.models.repository import Repository
+from liberapay.models.tip import Tip
 from liberapay.security.crypto import Cryptograph
 from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
 from liberapay.utils.emails import compile_email_spt
@@ -143,7 +144,7 @@ def database(env, tell_sentry):
 
     models = (
         _AccountElsewhere, AccountElsewhere, _Community, Community,
-        Encrypted, ExchangeRoute, Participant, Payin, Repository,
+        Encrypted, ExchangeRoute, Participant, Payin, Repository, Tip,
     )
     for model in models:
         db.register_model(model)

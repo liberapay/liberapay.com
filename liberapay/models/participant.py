@@ -73,6 +73,7 @@ from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
+from liberapay.models.tip import Tip
 from liberapay.payin.common import resolve_amounts
 from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
@@ -2414,9 +2415,7 @@ class Participant(Model, MixinTeam):
         tip from this user to that. I believe this is used to determine the
         order of transfers during payday.
 
-        Returns an `Object` representing the row inserted in the tips table,
-        with two additional boolean attributes: `first_time_tipper` and
-        `is_pledge`.
+        Returns a `Tip` object.
 
         """
         assert self.status == 'active'  # sanity check
@@ -2466,28 +2465,21 @@ class Participant(Model, MixinTeam):
                               (SELECT renewal_mode FROM current_tip WHERE renewal_mode > 0),
                               1
                           ) )
-              RETURNING *
-                      , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
-                      , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
-                      , ( SELECT count(DISTINCT pi.id)
-                            FROM payin_transfers pt
-                            JOIN payins pi ON pi.id = pt.payin
-                           WHERE pt.payer = %(tipper)s
-                             AND coalesce(pt.team, pt.recipient) = %(tippee)s
-                             AND (pt.status = 'pending' OR pi.status = 'pending')
-                        ) AS pending_payins_count
+              RETURNING tips
 
         """, dict(
             tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
             period=period, periodic_amount=periodic_amount, renewal_mode=renewal_mode,
-        ), back_as='Object')
+        ))
+        t.tipper_p = self
+        t.tippee_p = tippee
 
         if update_self:
             # Update giving amount of tipper
             updated = self.update_giving()
             for u in updated:
                 if u.id == t.id:
-                    t.is_funded = u.is_funded
+                    t.set_attributes(is_funded=u.is_funded)
             self.schedule_renewals()
         if update_tippee:
             # Update receiving amount of tippee
@@ -2503,9 +2495,9 @@ class Participant(Model, MixinTeam):
         if currency is i18n.DEFAULT_CURRENCY or currency not in tippee.accepted_currencies_set:
             currency = tippee.main_currency
         zero = Money.ZEROS[currency]
-        return Object(
-            amount=zero, is_funded=False, tippee=tippee.id,
-            period='weekly', periodic_amount=zero, renewal_mode=0
+        return Tip(
+            amount=zero, is_funded=False, tippee=tippee.id, tippee_p=tippee,
+            period='weekly', periodic_amount=zero, renewal_mode=0,
         )
 
 
@@ -2520,9 +2512,8 @@ class Participant(Model, MixinTeam):
                   WHERE tipper = %(tipper)s
                     AND tippee = %(tippee)s
                     AND renewal_mode > 0
-              RETURNING *
-                      , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
-        """, dict(tipper=self.id, tippee=tippee.id), back_as='Object')
+              RETURNING tips
+        """, dict(tipper=self.id, tippee=tippee.id))
         if not t:
             return
         if t.amount > (t.paid_in_advance or 0):
@@ -2549,8 +2540,8 @@ class Participant(Model, MixinTeam):
                     AND tippee = %(tippee)s
                     AND renewal_mode = 0
                     AND hidden IS NOT %(hide)s
-              RETURNING *
-        """, dict(tipper=self.id, tippee=tippee_id, hide=hide), back_as='Object')
+              RETURNING tips
+        """, dict(tipper=self.id, tippee=tippee_id, hide=hide))
 
 
     def schedule_renewals(self, save=True, new_dates={}, new_amounts={}):
@@ -2897,13 +2888,13 @@ class Participant(Model, MixinTeam):
         if not isinstance(tippee, Participant):
             tippee = Participant.from_id(tippee)
         r = self.db.one("""\
-            SELECT *
+            SELECT tips
               FROM tips
              WHERE tipper=%s
                AND tippee=%s
           ORDER BY mtime DESC
              LIMIT 1
-        """, (self.id, tippee.id), back_as='Object')
+        """, (self.id, tippee.id))
         if r:
             return r
         return self._zero_tip(tippee, self.main_currency)

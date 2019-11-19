@@ -20,8 +20,8 @@ from liberapay.exceptions import (
 )
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import NeedConfirmation, Participant
+from liberapay.models.tip import Tip
 from liberapay.testing import EUR, USD, Harness
-from liberapay.utils.types import Object
 
 
 class TestTakeOver(Harness):
@@ -269,12 +269,11 @@ class Tests(Harness):
         alice = self.make_participant('alice')
         bob = self.make_stub()
         t = alice.set_tip_to(bob, EUR('10.00'))
-        assert type(t) is Object
+        assert type(t) is Tip
         assert isinstance(t.amount, Money)
         assert t['amount'] == EUR(10)
         assert t['is_funded'] is False
         assert t['is_pledge'] is True
-        assert t['first_time_tipper'] is True
 
     def test_stt_works_for_donations(self):
         alice = self.make_participant('alice')
@@ -284,7 +283,6 @@ class Tests(Harness):
         assert t['amount'] == 1
         assert t['is_funded'] is False
         assert t['is_pledge'] is False
-        assert t['first_time_tipper'] is True
 
     def test_stt_converts_monthly_and_yearly_amounts_correctly(self):
         alice = self.make_participant('alice')
@@ -301,14 +299,6 @@ class Tests(Harness):
 
         t = alice.set_tip_to(bob, EUR('5200.00'), 'yearly')
         assert t['amount'] == EUR('100.00')
-
-    def test_stt_returns_False_for_second_time_tipper(self):
-        alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
-        alice.set_tip_to(bob, EUR('1.00'))
-        actual = alice.set_tip_to(bob, EUR('2.00'))
-        assert actual['amount'] == 2
-        assert actual['first_time_tipper'] is False
 
     def test_stt_doesnt_allow_self_tipping(self):
         alice = self.make_participant('alice')
