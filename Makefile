@@ -10,7 +10,7 @@ test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := pip --disable-pip-version-check
 with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
 with_tests_env := $(env_bin)/honcho run -e $(test_env_files)
-py_test := $(with_tests_env) $(env_bin)/python -m pytest -Wd
+py_test := $(with_tests_env) $(env_bin)/python -m pytest -Wd $$PYTEST_ARGS
 
 echo:
 	@echo $($(var))
