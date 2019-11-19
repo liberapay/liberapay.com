@@ -58,11 +58,11 @@ msgstr "Twój adres e-mail został umieszczony na czarnej liście"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Nie będziemy już wysyłać maili na adres {email_address}, ponieważ ostatnia próba nie powiodła się. Wyślij e-mail z tamtego adresu na support@liberapay.com, jeżeli chcesz abyśmy usunęli go z czarnej listy."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Nie będziemy już wysyłać maili na adres {email_address}, ponieważ otrzymaliśmy skargi od dostawcy maila. Wyślij e-mail z tamtego adresu na support@liberapay.com, jeżeli chcesz abyśmy usunęli go z czarnej listy."
 
 msgid "Manage your email addresses"
 msgstr "Zarządzaj swoimi adresami e-mail"
@@ -344,38 +344,38 @@ msgstr "Twoja płatność nie powiodła się"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
-msgstr ""
+msgstr "Wypłata {money_amount} przez Liberapay zapoczątkowana {date} nie powiodła się."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr ""
+msgstr "Wiadomość błędu od pośrednika płatności {provider} to:"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
-msgstr ""
+msgstr "Zwrot {money_amount} został rozpoczęty"
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr ""
+msgstr "Płatność {money_amount} którą rozpoczęto {date} zostanie zwrócona."
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
 msgstr ""
 
 msgid "Reason: the payment was a duplicate."
-msgstr ""
+msgstr "Przyczyna: płatność została wykonana podwójnie."
 
 msgid "Reason: the payment has been deemed fraudulent."
 msgstr ""
 
 msgid "Reason: the refund was requested by you."
-msgstr ""
+msgstr "Przyczyna: zażądałeś(-aś) zwrotu."
 
 msgid "Please contact us to obtain more information."
-msgstr ""
+msgstr "Skontaktuj się z nami, aby otrzymać więcej informacji."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
-msgstr ""
+msgstr "Ponowne pojawienie się środków na Twoim koncie bankowym może zająć kilka dni roboczych."
 
 msgid "Your bank account is going to be debited"
 msgstr "Twoje konto bankowe zostanie obciążone"
@@ -393,14 +393,14 @@ msgid "This operation is being carried out based on {link_start}the mandate {man
 msgstr ""
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Jeżeli nie zezwoliłeś(-aś) na tą płatność, poinformuj nas, zwrócimy pieniądze."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
 msgstr ""
 
 msgid "Your payment has succeeded"
-msgstr ""
+msgstr "Płatność powiodła się"
 
 #, python-brace-format
 msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
@@ -413,16 +413,16 @@ msgid "You're missing out on donations through Liberapay"
 msgstr ""
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr ""
+msgstr "Patroni nie mogą Ci obecnie wysyłać pieniędzy przez Liberapay, ponieważ nie skonfigurowałeś(-aś) pośrednika płatności."
 
 msgid "Configure payment processing"
-msgstr ""
+msgstr "Skonfiguruj pośrednika płatności"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Jeśli nie chcesz otrzymywać darowizn przez Liberapay, możesz je odrzucić edytując swój profil."
 
 msgid "Reject donations"
-msgstr ""
+msgstr "Odrzucaj darowizny"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -3796,7 +3796,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Each creator can select which of these currencies to accept."
-msgstr ""
+msgstr "Każdy twórca może wybrać, które waluty przyjmuje."
 
 msgid "What is Liberapay?"
 msgstr "Czym jest Liberapay?"
@@ -3873,7 +3873,7 @@ msgid "The Liberapay yellow is {yellow_color_code}, the black is {black_color_co
 msgstr ""
 
 msgid "Legal information"
-msgstr ""
+msgstr "Informacje prawne"
 
 #, python-brace-format
 msgid "The Liberapay logo is pretty much free of copyright thanks to {CC0_link_start}the CC0 Public Domain Dedication{link_end}, so you are allowed to distribute it and modify it without asking our permission. However, the Liberapay logo is part of the Liberapay trademark, so you can't use it to represent your own products."
@@ -3881,7 +3881,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "You can view and download our logos below or {link_start}on GitHub{link_end}."
-msgstr ""
+msgstr "Możesz zobaczyć i pobrać nasze logo poniżej lub {link_start}na GitHubie{link_end}."
 
 msgid "Download the white-on-yellow SVG"
 msgstr ""
@@ -3905,7 +3905,7 @@ msgid "Download the black-on-yellow PNG ({x_y} pixels)"
 msgstr ""
 
 msgid "Fonts"
-msgstr ""
+msgstr "Czcionki"
 
 #, python-brace-format
 msgid "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}."
@@ -3930,13 +3930,13 @@ msgid "We guarantee that the funds you put in our custody will not be lost in ca
 msgstr "Gwarantujemy, że pieniądze które nam powierzasz nie zostaną utracone w wynika bankructwa, zarówno naszego jak i podmiotu trzeciego do którego je delegujemy."
 
 msgid "Here is a list of differences between them:"
-msgstr ""
+msgstr "Oto lista różnic pomiędzy nimi:"
 
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
-msgstr ""
+msgstr "Koszty przetwarzania płatności na Stripe są zwykle niższe niż na PayPalu."
 
 msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr ""
+msgstr "Stripe pozwala na przekazywanie darowizn wielu twórcom jednocześnie, PayPal nie."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr ""
@@ -4053,7 +4053,7 @@ msgstr "Cotygodniowe darowizny"
 
 #, python-brace-format
 msgid "The sum of active donations for each week, expressed in {currency}."
-msgstr ""
+msgstr "Suma aktywnych darowizn w każdym tygodniu, przedstawiona w {currency}."
 
 msgid "Donor Debits"
 msgstr ""
@@ -4144,10 +4144,10 @@ msgid "Kicking a member out of a team is not implemented yet. Please contact sup
 msgstr "Nie ma jeszcze możliwości wyrzucenia członka z zespołu. Jeśli posiadasz dowód, że dany członek powinien zostać wyrzucony z zespołu i istnieje wśród członków zespołu co do tego konsensus skontaktuj się z obsługą."
 
 msgid "Closing a team account"
-msgstr ""
+msgstr "Zamknięcie konta zespołu"
 
 msgid "A team account is automatically closed when its last member leaves."
-msgstr ""
+msgstr "Konto zespołu jest automatycznie zamykane, gdy opuszcza je ostatni członek."
 
 #, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
@@ -4423,7 +4423,7 @@ msgstr "{0}Uzupełnij swój profil{1}."
 
 #, python-brace-format
 msgid "{0}Configure a payment account{1}."
-msgstr ""
+msgstr "{0}Skonfiguruj konto płatności{1}."
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
@@ -4458,17 +4458,17 @@ msgid "How it works for creators"
 msgstr "Z punktu widzenia twórcy"
 
 msgid "1. Create your profile"
-msgstr ""
+msgstr "1. Utwórz profil"
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
 msgstr "Wyjaśnij czym się zajmujesz, dlaczego zdecydowałeś się prosić o darowizny, jak wykorzystasz zebrane pieniądze, itp."
 
 msgid "2. Configure payment processing"
-msgstr ""
+msgstr "2. Skonfiguruj przetwarzanie płatności"
 
 #, python-brace-format
 msgid "We currently support processing payments through {payment_processors_list}."
-msgstr ""
+msgstr "Obecnie obsługujemy przetwarzanie płatności przez {payment_processors_list}."
 
 msgid "3. Reach out to your audience"
 msgstr "3. Wyjdź naprzeciw publiki"
@@ -4822,7 +4822,7 @@ msgid "This page is dedicated to the {platform} user {user_name}:"
 msgstr "To strona zadedykowana użytkownikowi serwisu {platform} o nazwie {user_name}:"
 
 msgid "No description available."
-msgstr ""
+msgstr "Opis nie jest dostępny."
 
 #, python-brace-format
 msgid "Profile on {0}"
@@ -4962,7 +4962,7 @@ msgid "How the accounts are now"
 msgstr "Jak konta wyglądają teraz"
 
 msgid "No connected accounts."
-msgstr ""
+msgstr "Brak połączonych kont."
 
 msgid "How the accounts will be after the transfer"
 msgstr "Jak konta będą wyglądały po wykonaniu transferu"
@@ -4975,13 +4975,13 @@ msgstr "Przetransferuj to konto"
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
-msgstr ""
+msgstr "Łączenie z kontem {platform}"
 
 msgid "Please input the email address and country of the PayPal account you want to connect:"
-msgstr ""
+msgstr "Wprowadź adres e-mail i kraj konta PayPal które chcesz połączyć:"
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr ""
+msgstr "Kod potwierdzenia zostanie wysłany na adres e-mail, jeżeli nie jest już przypisany do Twojego konta Liberapay."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
 msgstr ""
