@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Hungarian "
-"<https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2019-11-22 10:04+0000\n"
+"Last-Translator: Eretnek Hippi Messiás <szbnwer@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.10-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -641,7 +643,7 @@ msgstr "Maximális"
 
 #, fuzzy, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Ön elérte a kérési korlátját, újra próbálhatja {in_N_minutes}."
+msgstr "Ön elérte a kérési korlátját, újra próbálhatja {in_N_minutes} perc múlva."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Túl gyorsan tesz kéréseket, kérjük próbálja később."
@@ -1130,13 +1132,13 @@ msgstr "Kijelentkezés"
 msgid "Print"
 msgstr "Nyomtatás"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Joined {timespan_ago}."
 msgstr "Csatlakozott {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Closed {timespan_ago}."
-msgstr "Zárt {timespan_ago}."
+msgstr "Lezárva {timespan_ago}."
 
 #, python-brace-format
 msgid "{0} doesn't publish how much they give."
@@ -1171,9 +1173,8 @@ msgstr "Cél: {0}"
 msgid "Donating ({amount})"
 msgstr "Adományozás ({amount})"
 
-#, fuzzy
 msgid "Pledge"
-msgstr "Letét"
+msgstr "Adomány"
 
 msgid "Donate"
 msgstr "Adományozás"
@@ -1347,9 +1348,8 @@ msgstr "Cél"
 msgid "Statement"
 msgstr "Nyilatkozat"
 
-#, fuzzy
 msgid "Linked Accounts"
-msgstr "Fiókok Máshol"
+msgstr "Csatolt szolgáltatások"
 
 msgid "Privacy"
 msgstr "Adatvédelem"
@@ -1453,7 +1453,7 @@ msgstr "(származtatás)"
 msgid "Updated this week"
 msgstr "Frissítve ezen a héten"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Updated {timespan_ago}"
 msgstr "Frissítve {timespan_ago}"
 
@@ -1542,15 +1542,14 @@ msgid "The {currency_name} isn't your preferred currency? {n} other is supported
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
 msgstr[0] ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] ""
+msgstr[0] "A {currency_name} nem a preferált pénzneme? {username} elfogad {n} másikat is:"
 
 msgid "not supported by PayPal"
 msgstr ""
 
-#, fuzzy
 msgid "Switch"
 msgstr "Kapcsoló"
 
@@ -1729,7 +1728,7 @@ msgstr "A(z) {0} jelenleg {1}-t fogad hetente, szükségük van az Ön segítsé
 msgid "Be the first to contribute!"
 msgstr "Legyen Ön az első, aki hozzájárul!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} currently receives {1} per week."
 msgstr "{0} jelenleg {1}-t kap hetente."
 
@@ -1777,7 +1776,7 @@ msgstr "Az Ön új profilképének az elérhetősége: {0}"
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Connect {0} account"
 msgstr "{0} fiók csatolása"
 
@@ -1785,7 +1784,6 @@ msgstr "{0} fiók csatolása"
 msgid "We were unable to get an avatar for you from {0}."
 msgstr "Nem tudtunk profilképet szerezni Önnek {0}-ról."
 
-#, fuzzy
 msgid "Modify your Libravatar"
 msgstr "Az Ön Libravatar-ának (profilkép) módosítása"
 
@@ -1994,9 +1992,8 @@ msgstr "Már Ellenőrzött"
 msgid "This email address has already been verified."
 msgstr "Ezt az e-mail címet már ellenőrizték."
 
-#, fuzzy
 msgid "Address Taken"
-msgstr "A Cím Foglalt"
+msgstr "A cím foglalt"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Ezt az e-mail címet már használja egy másik Liberapay fiók."
@@ -2390,7 +2387,7 @@ msgstr ""
 msgid "Income Shares"
 msgstr "Jövedelem Részesedés"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} receives {1} per week"
 msgstr "{0} hetente {1}-t kap"
 
@@ -2583,7 +2580,6 @@ msgstr "Nem fogjuk ezeket a dokumentumokat örökké tárolni, a hosszú távú 
 msgid "preparing"
 msgstr "előkészítés"
 
-#, fuzzy
 msgid "awaiting confirmation"
 msgstr "várakozás a megerősítésre"
 
@@ -2634,7 +2630,7 @@ msgstr "névtelen adományozás"
 msgid "anonymous donation for your role in the {0} team"
 msgstr "névtelen adomány az Ön szerepéért a(z) {0} csapatban"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "donation to {0}"
 msgstr "adomány {0}-nak"
 
@@ -2680,11 +2676,11 @@ msgstr "Nem lehet inaktív felhasználót meghívni egy csoportba."
 
 #, fuzzy, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
-msgstr "{username} már meg lett hívva, hogy csatlakozzon ehhez a csoporthoz {timespan_ago}."
+msgstr "{username} már meg lett hívva, hogy csatlakozzon ehhez a csoporthoz {timespan_ago} ideje."
 
 #, fuzzy, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
-msgstr "{username} már elutasította a csatlakozást ehhez a csoporthoz {timespan_ago}."
+msgstr "{username} már elutasította a csatlakozást ehhez a csoporthoz {timespan_ago} ideje."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
