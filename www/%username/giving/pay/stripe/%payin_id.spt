@@ -255,7 +255,7 @@ if tippees:
 elif not payin_id:
     response.redirect(payer.path('giving/pay'))
 
-route = website.db.one("""
+routes = website.db.all("""
     SELECT r
       FROM exchange_routes r
      WHERE r.participant = %s
@@ -265,17 +265,17 @@ route = website.db.one("""
   ORDER BY r.is_default NULLS LAST
          , r.network = 'stripe-sdd' DESC
          , r.id DESC
-     LIMIT 1
 """, (payer.id, 'stripe-' + (payment_type or '%')))
-if route:
+if routes:
+    route = None
+    while routes:
+        route = routes[0]
+        route.sync_status()
+        if route:
+            break
+        routes = routes[1:]
     payment_type = route.network.split('-', 1)[-1]
-    if route.address.startswith('pm_'):
-        pm = stripe.PaymentMethod.retrieve(route.address)
-    else:
-        source = stripe.Source.retrieve(route.address)
-        route.update_status(source.status)
-    if not route:
-        response.redirect(request.line.uri)
+    del route
 if not payment_type:
     response.redirect(payer.path('giving/pay'))
 
@@ -367,7 +367,6 @@ title = _("Funding your donations")
         <p>{{ _("Please select or input a payment amount:") }}</p>
         <fieldset id="amount">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <input type="hidden" name="route" value="{{ route.id or '' }}" />
             <input type="hidden" name="currency" value="{{ payment_currency }}" />
             <input type="hidden" name="tips" value="{{ payment.tip_ids }}" />
             <ul class="list-group radio-group">
@@ -421,8 +420,10 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        % if route
+        % if len(routes) == 1
         <div class="form-group">
+            % set route = routes[0]
+            <input type="hidden" name="route" value="{{ route.id or '' }}" />
             % if route.network == 'stripe-card'
             <p>{{ _(
                 "We will charge your {brand} card (last four digits: {last4}).",
@@ -443,10 +444,31 @@ title = _("Funding your donations")
             % endif
             <br><br>
         </div>
+        % elif len(routes) > 1
+        <div class="form-group">
+            <p>{{ _("Payment instrument:") }}</p>
+            <div class="form-group">
+                <select class="form-control" name="route">
+                % for route in routes
+                    <option value="{{ route.id }}">{{ route.get_brand() }} {{ route.get_partial_number() }}</option>
+                % endfor
+                </select>
+            </div>
+            % if payment_type == 'card'
+            <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
+                _("Use another card")
+            }}</button>
+            % elif payment_type == 'sdd'
+            <button class="btn btn-default btn-sm" type="button" data-modify="#iban-form">{{
+                _("Use another bank account")
+            }}</button>
+            % endif
+            <br><br>
+        </div>
         % endif
 
         % if payment_type == 'card'
-        <fieldset id="card-form" class="form-group {{ 'hidden' if route else '' }}">
+        <fieldset id="card-form" class="form-group {{ 'hidden' if routes else '' }}">
             <p>{{ _("Please input your name and card number:") }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
                    class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
@@ -464,7 +486,7 @@ title = _("Funding your donations")
             <br><br>
         </fieldset>
         % elif payment_type == 'sdd'
-        <fieldset id="iban-form" class="form-group {{ 'hidden' if route else '' }}">
+        <fieldset id="iban-form" class="form-group {{ 'hidden' if routes else '' }}">
             <p>{{ _(
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>
