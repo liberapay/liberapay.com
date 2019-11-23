@@ -14,7 +14,7 @@ from liberapay.payin.common import (
 )
 from liberapay.payin.stripe import (
     charge_and_transfer, create_source_from_token, destination_charge,
-    get_partial_iban, repr_stripe_error, settle_payin,
+    repr_stripe_error, settle_payin,
 )
 from liberapay.utils import get_participant
 
@@ -91,12 +91,7 @@ if request.method == 'POST':
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
                 raise response.invalid_input(body.get('route'), 'route', 'body')
-            if route.address.startswith('pm_'):
-                # A PaymentMethod doesn't have a status.
-                pass
-            else:
-                source = stripe.Source.retrieve(route.address)
-                route.update_status(source.status)
+            route.sync_status()
 
     except stripe.error.StripeError as e:
         raise response.error(e.http_status, _(
@@ -104,6 +99,10 @@ if request.method == 'POST':
             name='Stripe', error_message=repr_stripe_error(e)
         ))
 
+    if not route:
+        raise response.error(400, _(
+            "The payment instrument is invalid, please select or add another one."
+        ))
     transfer_amounts = resolve_amounts(
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
@@ -422,43 +421,21 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        % if pm
+        % if route
         <div class="form-group">
-            % if pm.type == 'card'
+            % if route.network == 'stripe-card'
             <p>{{ _(
                 "We will charge your {brand} card (last four digits: {last4}).",
-                brand=constants.CARD_BRANDS.get(pm.card.brand, pm.card.brand), last4=pm.card.last4
+                brand=route.get_brand(), last4=route.get_partial_number()
             ) }}</p>
             <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
                 _("Use another card")
             }}</button>
-            % elif pm.type == 'sepa_debit'
+            % elif route.network == 'stripe-sdd'
             <p>{{ _(
                 "We will charge your {bank_name} account ({partial_account_number}).",
-                bank_name=pm.sepa_debit.bank_name,
-                partial_account_number=get_partial_iban(pm.sepa_debit)
-            ) }}</p>
-            <button class="btn btn-default btn-sm" type="button" data-modify="#iban-form">{{
-                _("Use another bank account")
-            }}</button>
-            % endif
-            <br><br>
-        </div>
-        % elif source
-        <div class="form-group">
-            % if source.type == 'card'
-            <p>{{ _(
-                "We will charge your {brand} card (last four digits: {last4}).",
-                brand=source.card.brand, last4=source.card.last4
-            ) }}</p>
-            <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
-                _("Use another card")
-            }}</button>
-            % elif source.type == 'sepa_debit'
-            <p>{{ _(
-                "We will charge your {bank_name} account ({partial_account_number}).",
-                bank_name=source.sepa_debit.bank_name,
-                partial_account_number=get_partial_iban(source.sepa_debit)
+                bank_name=route.get_brand(),
+                partial_account_number=route.get_partial_number()
             ) }}</p>
             <button class="btn btn-default btn-sm" type="button" data-modify="#iban-form">{{
                 _("Use another bank account")
@@ -469,7 +446,7 @@ title = _("Funding your donations")
         % endif
 
         % if payment_type == 'card'
-        <fieldset id="card-form" class="form-group {{ 'hidden' if source or pm else '' }}">
+        <fieldset id="card-form" class="form-group {{ 'hidden' if route else '' }}">
             <p>{{ _("Please input your name and card number:") }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
                    class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
@@ -487,7 +464,7 @@ title = _("Funding your donations")
             <br><br>
         </fieldset>
         % elif payment_type == 'sdd'
-        <fieldset id="iban-form" class="form-group {{ 'hidden' if source or pm else '' }}">
+        <fieldset id="iban-form" class="form-group {{ 'hidden' if route else '' }}">
             <p>{{ _(
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>
