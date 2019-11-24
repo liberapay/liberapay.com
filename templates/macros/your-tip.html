@@ -158,7 +158,7 @@
     % for std_tip in constants.STANDARD_TIPS[new_currency]
         % set amount_is_a_match = std_tip.weekly == tip.amount
         % if amount_is_a_match
-            {{ tip_is_standard.append(True) or '' }}
+            % do tip_is_standard.append(True)
         % endif
         <li class="list-group-item">
         <label>

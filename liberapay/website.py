@@ -98,5 +98,6 @@ JINJA_ENV_COMMON = dict(
     trim_blocks=True, lstrip_blocks=True,
     line_statement_prefix='%',
     auto_reload=env.aspen_changes_reload,
+    extensions=['jinja2.ext.do'],
     # undefined=CustomUndefined,
 )
