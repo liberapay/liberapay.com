@@ -215,11 +215,9 @@ def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, pay
         a list of the rows created in the `payin_transfers` table
 
     Raises:
+        AccountSuspended: if the payer's account is suspended
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the donor would end up sending money to themself
-
-    Raises:
-        AccountSuspended: if the payer's account is suspended
         RecipientAccountSuspended: if the tippee's account is suspended
 
     """
