@@ -84,11 +84,17 @@ class TestPages(Harness):
         assert response.code == 302
         assert response.headers[b'Location'] == b'/'
 
-    def test_sign_out_overwrites_session_cookie(self):
+    def test_sign_out_expires_session(self):
         alice = self.make_participant('alice')
-        response = self.client.PxST('/sign-out.html', auth_as=alice)
+        sess = alice.session = alice.start_session()
+        cookies = {SESSION: '%i:%i:%s' % (alice.id, sess.id, sess.secret)}
+        response = self.client.GET('/alice/giving', cookies=cookies)
+        assert response.code == 200
+        response = self.client.PxST('/sign-out.html', cookies=cookies)
         assert response.code == 302
         assert response.headers.cookie[SESSION].value == ''
+        response = self.client.GET('/alice/giving', cookies=cookies, raise_immediately=False)
+        assert response.code == 403
 
     def test_sign_out_doesnt_redirect_xhr(self):
         alice = self.make_participant('alice')
