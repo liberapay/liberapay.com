@@ -15,9 +15,6 @@ py_test := $(with_tests_env) $(env_bin)/python -m pytest -Wd $$PYTEST_ARGS
 echo:
 	@echo $($(var))
 
-_warning:
-	@echo -e "\nWarning: you're using an old version of python, you really should upgrade!\n"
-
 $(env): requirements*.txt
 	$(python) -m venv $(env)
 	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
