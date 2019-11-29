@@ -638,7 +638,8 @@ class Participant(Model, MixinTeam):
             return
 
         tips = self.db.all("""
-            SELECT tip.amount, tip.tippee, tip.ctime, tippee_p.kind
+            SELECT tip.amount, tip.tippee, tip.ctime, tip.periodic_amount
+                 , tippee_p.kind
                  , coalesce_currency_amount((
                        SELECT sum(tip_at_the_time.amount, tip.amount::currency)
                          FROM paydays payday
@@ -684,25 +685,18 @@ class Participant(Model, MixinTeam):
 
         for tip in tips:
             if tip.kind == 'group':
+                currency = tip.amount.currency
                 tip.team = Participant.from_id(tip.tippee)
-                unfiltered_takes = tip.team.get_current_takes()
+                unfiltered_takes = tip.team.get_current_takes_for_payment(
+                    currency, 'mangopay', tip.amount
+                )
                 tip.takes = [
                     t for t in unfiltered_takes
-                    if t.is_identified and not t.is_suspended and t.member_id != self.id
+                    if t.has_payment_account and not t.is_suspended and t.member != self.id
                 ]
                 if len(unfiltered_takes) == 1 and tip.takes and tip.takes[0].amount == 0:
                     # Team of one with a zero take
                     tip.takes[0].amount.amount = Decimal('1')
-                currency = tip.amount.currency
-                income_amount = tip.team.receiving.convert(currency) + tip.amount
-                if income_amount == 0:
-                    income_amount = Money.MINIMUMS[currency]
-                manual_takes_sum = MoneyBasket(t.amount for t in tip.takes if t.amount > 0)
-                auto_take = income_amount - manual_takes_sum.fuzzy_sum(currency)
-                if auto_take < 0:
-                    auto_take = Money.ZEROS[currency]
-                for t in tip.takes:
-                    t.amount = auto_take if t.amount < 0 else t.amount.convert(currency)
                 tip.total_takes = MoneyBasket(t.amount for t in tip.takes)
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
         transfers = []
@@ -735,21 +729,15 @@ class Participant(Model, MixinTeam):
                 arrears_percentage = arrears / (arrears + advance)
                 advance_percentage = 1 - arrears_percentage
                 if tip.kind == 'group':
+                    n_periods = pro_rated / tip.periodic_amount
                     team_id = tip.tippee
-                    balance = pro_rated
-                    fuzzy_takes_sum = tip.total_takes.fuzzy_sum(tip.amount.currency)
+                    from liberapay.payin.common import resolve_take_amounts
+                    resolve_take_amounts(pro_rated, tip.takes)
                     for take in tip.takes:
-                        nominal = take.amount
-                        fuzzy_nominal = nominal.convert(tip.amount.currency)
-                        take_percentage = fuzzy_nominal / fuzzy_takes_sum
-                        actual = min(
-                            (pro_rated * take_percentage).round_up(),
-                            balance
-                        )
+                        actual = take.resolved_amount
                         if actual == 0:
                             continue
-                        balance -= actual
-                        unit_amount = (tip.amount * take_percentage).round_up()
+                        unit_amount = (actual / n_periods).round_up()
                         arr = min(
                             (actual * arrears_percentage).round_up(),
                             actual
@@ -761,7 +749,7 @@ class Participant(Model, MixinTeam):
                         assert arr > 0 or adv > 0
                         assert (arr + adv) == actual
                         transfers_in_this_currency.append(
-                            [take.member_id, adv, arr, team_id, wallet, unit_amount]
+                            [take.member, adv, arr, team_id, wallet, unit_amount]
                         )
                 else:
                     transfers_in_this_currency.append(
