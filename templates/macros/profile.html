@@ -19,7 +19,7 @@
 % macro members_listing(participant)
     % from "templates/macros/avatar-url.html" import avatar_img with context
     <div>
-        % for t in participant.get_current_takes()
+        % for t in participant.get_current_takes_for_display()
             <div class="mini-user">
                 <a href="/{{ t.member_name }}/">
                     {{ avatar_img(t) }}

@@ -169,13 +169,13 @@ class MixinTeam(object):
 
         return take
 
-    def get_current_takes(self, cursor=None):
+    def get_current_takes_for_display(self, cursor=None):
         """Return a list of member takes for a team.
         """
         assert self.kind == 'group'
         TAKES = """
             SELECT p.id AS member_id, p.username AS member_name, p.avatar_url
-                 , (p.mangopay_user_id IS NOT NULL) AS is_identified, p.is_suspended
+                 , p.is_suspended
                  , t.amount, t.actual_amount, t.ctime, t.mtime
               FROM current_takes t
               JOIN participants p ON p.id = member
@@ -356,7 +356,7 @@ class MixinTeam(object):
     def get_members(self):
         """Return an OrderedDict of member dicts.
         """
-        takes = self.get_current_takes()
+        takes = self.get_current_takes_for_display()
         nmembers = len(takes)
         last_week = self.get_takes_last_week()
         compute_max = self.throttle_takes and nmembers > 1 and last_week.nonzero

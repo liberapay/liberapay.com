@@ -23,13 +23,13 @@ class TestClosing(FakeTransfersHarness):
 
         team.add_member(alice)
         team.add_member(bob)
-        assert len(team.get_current_takes()) == 2  # sanity check
+        assert len(team.get_current_takes_for_display()) == 2  # sanity check
 
         alice.close('downstream')
 
         assert carl.get_tip_to(alice).amount == EUR(2)
         assert alice.balance == 0
-        assert len(team.get_current_takes()) == 1
+        assert len(team.get_current_takes_for_display()) == 1
 
     def test_close_raises_for_unknown_disbursement_strategy(self):
         alice = self.make_participant('alice', balance=EUR('0.00'))
