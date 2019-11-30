@@ -570,3 +570,74 @@ class TestMangopayWatcher(Harness):
         with mock.patch.object(self.website, 'tell_sentry') as tell_sentry:
             watcher.on_response(None, result=None)
             assert tell_sentry.called
+
+
+class TestEmptyingWallets(FakeTransfersHarness, MangopayHarness):
+
+    def setUp(self):
+        super().setUp()
+        self.LiberapayOrg = self.make_participant(
+            'LiberapayOrg', kind='organization',
+            mangopay_user_id='0', mangopay_wallet_id='0',
+        )
+        self.Liberapay = self.make_participant('Liberapay', kind='group')
+        self.Liberapay.add_member(self.LiberapayOrg)
+
+    def test_donate_remaining_balances_to_liberapay(self):
+        self.make_exchange('mango-cc', 1, 0, self.homer)
+        self.homer.donate_remaining_balances_to_liberapay()
+        transfers = self.db.all("SELECT * FROM transfers")
+        assert len(transfers) == 1
+        assert transfers[0].context == 'final-gift'
+        assert transfers[0].tipper == self.homer.id
+        assert transfers[0].tippee == self.LiberapayOrg.id
+        assert transfers[0].team is None
+        assert self.homer.balance == 0
+        LiberapayOrg = self.LiberapayOrg.refetch()
+        assert LiberapayOrg.balance == EUR('1.00')
+
+    def test_donate_remaining_balances_to_the_Liberapay_team(self):
+        self.make_exchange('mango-cc', 1, 0, self.homer)
+        self.homer.set_tip_to(self.Liberapay, EUR('0.01'))
+        self.homer.donate_remaining_balances_to_liberapay()
+        transfers = self.db.all("SELECT * FROM transfers")
+        assert len(transfers) == 1
+        assert transfers[0].context == 'take-in-advance'
+        assert transfers[0].tipper == self.homer.id
+        assert transfers[0].tippee == self.LiberapayOrg.id
+        assert transfers[0].team == self.Liberapay.id
+        assert self.homer.balance == 0
+        LiberapayOrg = self.LiberapayOrg.refetch()
+        assert LiberapayOrg.balance == EUR('1.00')
+
+    def test_donate_remaining_balances_to_LiberapayOrg_with_arrears(self):
+        self.homer.set_tip_to(self.LiberapayOrg, EUR('0.25'))
+        Payday.start().run()
+        self.make_exchange('mango-cc', 1, 0, self.homer)
+        self.homer.donate_remaining_balances_to_liberapay()
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 2
+        assert transfers[0].context == 'tip-in-arrears'
+        assert transfers[0].tipper == self.homer.id
+        assert transfers[0].tippee == self.LiberapayOrg.id
+        assert transfers[0].team is None
+        assert transfers[1].context == 'tip-in-advance'
+        assert transfers[1].tipper == self.homer.id
+        assert transfers[1].tippee == self.LiberapayOrg.id
+        assert transfers[1].team is None
+        assert self.homer.balance == 0
+        LiberapayOrg = self.LiberapayOrg.refetch()
+        assert LiberapayOrg.balance == EUR('1.00')
+
+    def test_indirect_payout(self):
+        self.make_exchange('mango-cc', 2, 0, self.homer)
+        self.homer.transfer_remaining_balances_to_liberapay()
+        transfers = self.db.all("SELECT * FROM transfers")
+        assert len(transfers) == 1
+        assert transfers[0].context == 'indirect-payout'
+        assert transfers[0].tipper == self.homer.id
+        assert transfers[0].tippee == self.LiberapayOrg.id
+        assert transfers[0].team is None
+        assert self.homer.balance == 0
+        LiberapayOrg = self.LiberapayOrg.refetch()
+        assert LiberapayOrg.balance == EUR('2.00')
