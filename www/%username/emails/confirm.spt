@@ -8,7 +8,8 @@ from liberapay.utils.emails import EmailVerificationResult
 
 [---]
 
-participant = get_participant(state, restrict=False)
+# Redirecting this request can lead to confusing situations, so we ask `get_participant` to avoid redirecting it.
+participant = get_participant(state, restrict=False, redirect_canon=False, redirect_stub=False)
 
 if 'email.verification-result' in state:
     result = state['email.verification-result']
