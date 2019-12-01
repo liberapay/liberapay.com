@@ -40,12 +40,14 @@ class TestEmail(EmailHarness):
 
     def hit_verify(self, email, nonce):
         addr_id = self.get_address_id(email) or ''
-        url = '/alice/emails/verify.html?email=%s&nonce=%s' % (addr_id, nonce)
-        return self.client.GET(url, auth_as=self.alice, raise_immediately=False)
+        url = '/~1/emails/verify.html?email=%s&nonce=%s' % (addr_id, nonce)
+        return self.client.GET(url, raise_immediately=False)
 
     def verify_email(self, email):
         nonce = self.alice.get_email(email).nonce
-        self.hit_verify(email, nonce)
+        r = self.hit_verify(email, nonce)
+        assert r.code == 200
+        assert "Your email address is now verified." in r.text
 
     def add_and_verify_email(self, email):
         self.hit_email_spt('add-email', email)
