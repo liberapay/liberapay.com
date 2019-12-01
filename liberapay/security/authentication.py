@@ -243,18 +243,18 @@ def authenticate_user_if_possible(request, response, state, user, _):
     # Handle email verification
     email_id = request.qs.get_int('email.id', default=None)
     email_nonce = request.qs.get('email.nonce', '')
-    if email_id and not request.path.raw.endswith('/disavow'):
+    if email_id and not request.path.raw.endswith('/emails/disavow'):
         email_participant, email_is_already_verified = db.one("""
             SELECT p, e.verified
               FROM emails e
-              JOIN participants p On p.id = e.participant
+              JOIN participants p ON p.id = e.participant
              WHERE e.id = %s
         """, (email_id,), default=(None, None))
         if email_participant:
             result = email_participant.verify_email(email_id, email_nonce, p)
             state['email.verification-result'] = result
-            if result == EmailVerificationResult.SUCCEEDED or email_is_already_verified:
-                del request.qs['email.id'], request.qs['email.nonce']
+            request.qs.pop('email.id', None)
+            request.qs.pop('email.nonce', None)
         del email_participant
 
     # Set up the new session
