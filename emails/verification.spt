@@ -5,7 +5,7 @@
     "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?",
     ('<b>%s</b>'|safe) % email,
     ('<b>%s</b>'|safe) % old_email,
-) if old_email else _(
+) if old_email and old_email != email else _(
     "A Liberapay account was created on {0} with the email address {1}. Was it you?",
     participant.join_time,
     ('<b>%s</b>'|safe) % email,
@@ -19,7 +19,7 @@
 {{ _(
     "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?",
     email, old_email,
-) if old_email else _(
+) if old_email and old_email != email else _(
     "A Liberapay account was created on {0} with the email address {1}. Was it you?",
     participant.join_time, email,
 ) }}
