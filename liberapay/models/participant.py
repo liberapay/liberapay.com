@@ -640,40 +640,7 @@ class Participant(Model, MixinTeam):
         tips = self.db.all("""
             SELECT tip.amount, tip.tippee, tip.ctime, tip.periodic_amount
                  , tippee_p.kind
-                 , coalesce_currency_amount((
-                       SELECT sum(tip_at_the_time.amount, tip.amount::currency)
-                         FROM paydays payday
-                         JOIN LATERAL (
-                                  SELECT tip2.*
-                                    FROM tips tip2
-                                   WHERE tip2.tipper = tip.tipper
-                                     AND tip2.tippee = tip.tippee
-                                     AND tip2.mtime < payday.ts_start
-                                ORDER BY tip2.mtime DESC
-                                   LIMIT 1
-                              ) tip_at_the_time ON true
-                        WHERE payday.ts_start > tip.ctime
-                          AND payday.ts_start > '2018-08-15'
-                          AND payday.ts_end > payday.ts_start
-                          AND NOT EXISTS (
-                                  SELECT 1
-                                    FROM transfers tr
-                                   WHERE tr.tipper = tip.tipper
-                                     AND coalesce(tr.team, tr.tippee) = tip.tippee
-                                     AND tr.context IN ('tip', 'take')
-                                     AND tr.timestamp >= payday.ts_start
-                                     AND tr.timestamp <= payday.ts_end
-                                     AND tr.status = 'succeeded'
-                              )
-                   ), tip.amount::currency) AS arrears_due
-                 , coalesce_currency_amount((
-                       SELECT sum(tr.amount, tip.amount::currency)
-                         FROM transfers tr
-                        WHERE tr.tipper = tip.tipper
-                          AND coalesce(tr.team, tr.tippee) = tip.tippee
-                          AND tr.context IN ('tip-in-arrears', 'take-in-arrears')
-                          AND tr.status = 'succeeded'
-                   ), tip.amount::currency) AS arrears_paid
+                 , compute_arrears(tip) AS arrears_due
               FROM current_tips tip
               JOIN participants tippee_p ON tippee_p.id = tip.tippee
              WHERE tip.tipper = %s
@@ -722,7 +689,7 @@ class Participant(Model, MixinTeam):
                 pro_rated = (initial_balance * rate).round_down()
                 if pro_rated == 0:
                     continue
-                arrears = min(max(tip.arrears_due - tip.arrears_paid, 0), pro_rated)
+                arrears = min(max(tip.arrears_due, 0), pro_rated)
                 advance = pro_rated - arrears
                 assert arrears > 0 or advance > 0
                 assert (arrears + advance) == pro_rated
@@ -828,45 +795,12 @@ class Participant(Model, MixinTeam):
                     tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
                 )[0]
             else:
-                row = self.db.one("""
-                    SELECT coalesce_currency_amount((
-                               SELECT sum(tip_at_the_time.amount, tip.amount::currency)
-                                 FROM paydays payday
-                                 JOIN LATERAL (
-                                          SELECT tip2.*
-                                            FROM tips tip2
-                                           WHERE tip2.tipper = tip.tipper
-                                             AND tip2.tippee = tip.tippee
-                                             AND tip2.mtime < payday.ts_start
-                                        ORDER BY tip2.mtime DESC
-                                           LIMIT 1
-                                      ) tip_at_the_time ON true
-                                WHERE payday.ts_start > tip.ctime
-                                  AND payday.ts_start > '2018-08-15'
-                                  AND payday.ts_end > payday.ts_start
-                                  AND NOT EXISTS (
-                                          SELECT 1
-                                            FROM transfers tr
-                                           WHERE tr.tipper = tip.tipper
-                                             AND coalesce(tr.team, tr.tippee) = tip.tippee
-                                             AND tr.context IN ('tip', 'take')
-                                             AND tr.timestamp >= payday.ts_start
-                                             AND tr.timestamp <= payday.ts_end
-                                             AND tr.status = 'succeeded'
-                                      )
-                           ), tip.amount::currency) AS arrears_due
-                         , coalesce_currency_amount((
-                               SELECT sum(tr.amount, tip.amount::currency)
-                                 FROM transfers tr
-                                WHERE tr.tipper = tip.tipper
-                                  AND coalesce(tr.team, tr.tippee) = tip.tippee
-                                  AND tr.context IN ('tip-in-arrears', 'take-in-arrears')
-                                  AND tr.status = 'succeeded'
-                           ), tip.amount::currency) AS arrears_paid
+                arrears_due = self.db.one("""
+                    SELECT compute_arrears(tip)
                       FROM tips tip
                      WHERE tip.id = %s
                 """, (tip.id,))
-                arrears = min(max(row.arrears_due - row.arrears_paid, 0), wallet.balance)
+                arrears = min(max(arrears_due, 0), wallet.balance)
                 advance = wallet.balance - arrears
                 assert arrears > 0 or advance > 0
                 assert (arrears + advance) == wallet.balance
