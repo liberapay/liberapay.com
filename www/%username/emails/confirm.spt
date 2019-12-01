@@ -51,13 +51,13 @@ else:
         }}</p>
         % endif
     % endif
+    <a class="btn btn-{{ 'default' if result == EmailVerificationResult.SUCCEEDED else 'primary' }}"
+       href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a>
 
-    % if result == EmailVerificationResult.SUCCEEDED and user == participant and not participant.has_password
+    % if user == participant and not participant.has_password
         <br><br>
         <h2>{{ _("Password") }}</h2>
         % from "templates/macros/password-form.html" import password_form with context
         {{ password_form(participant) }}
-    % else
-        <a class="btn btn-primary" href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a>
     % endif
 % endblock
