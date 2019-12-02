@@ -136,12 +136,15 @@
 
 {% block scripts %}{% endblock %}
 
-% set _success = request.qs.get('success')
-% if _success
-% set _success = _success and b64decode_s(_success, default=None)
-<div id="notification-area-bottom"><div class="notification notification-success">{{
-    _success
-}}<span class="close">&times;</span></div></div>
+% set _successes = request.qs.all('success')
+% if _successes
+    <div id="notification-area-bottom">
+    % for _success in _successes if _success
+        <div class="notification notification-success">{{
+            b64decode_s(_success, default=None)
+        }}<span class="close">&times;</span></div>
+    % endfor
+    </div>
 % endif
 
 % if state['partial_translation']

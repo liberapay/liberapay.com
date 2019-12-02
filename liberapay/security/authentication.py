@@ -14,7 +14,7 @@ from liberapay.exceptions import (
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
-from liberapay.utils import get_ip_net
+from liberapay.utils import b64encode_s, get_ip_net
 from liberapay.utils.emails import (
     EmailVerificationResult, check_email_blacklist, normalize_email_address,
 )
@@ -255,6 +255,10 @@ def authenticate_user_if_possible(request, response, state, user, _):
             state['email.verification-result'] = result
             request.qs.pop('email.id', None)
             request.qs.pop('email.nonce', None)
+            if result == EmailVerificationResult.SUCCEEDED:
+                request.qs.add('success', b64encode_s(
+                    _("Your email address is now verified.")
+                ))
         del email_participant
 
     # Set up the new session
