@@ -15,6 +15,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
+from liberapay.security.csrf import require_cookie
 from liberapay.utils import b64encode_s, get_ip_net
 from liberapay.utils.emails import (
     EmailVerificationResult, normalize_and_check_email_address,
@@ -260,6 +261,12 @@ def authenticate_user_if_possible(request, response, state, user, _):
                     redirect = body.get('form.repost', None) != 'true'
                     redirect_url = body.get('sign-in.back-to') or request.line.uri.decoded
     elif request.method == 'GET':
+        if request.qs.get('log-in.id') or request.qs.get('email.id'):
+            # Prevent email software from messing up an email log-in or confirmation
+            # with a single GET request. Also, show a proper warning to someone trying
+            # to log in while cookies are disabled.
+            require_cookie(state)
+
         if request.qs.get('log-in.id'):
             # Email auth
             id = request.qs.get('log-in.id')

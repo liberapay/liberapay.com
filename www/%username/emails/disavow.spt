@@ -6,6 +6,7 @@ been deleted or renamed.
 
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
+from liberapay.security.csrf import require_cookie
 from liberapay.utils.emails import EmailVerificationResult
 
 [---]
@@ -13,6 +14,8 @@ from liberapay.utils.emails import EmailVerificationResult
 # Don't allow HEAD requests.
 if request.method == 'HEAD':
     raise response.error(405, request.method)
+
+require_cookie(state)
 
 slug = request.path['username']
 if slug.startswith('~'):
