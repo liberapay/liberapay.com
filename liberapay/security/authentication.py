@@ -224,42 +224,43 @@ def authenticate_user_if_possible(request, response, state, user, _):
                 if p_email != carry_on:
                     state['log-in.carry-on'] = carry_on
                     raise LoginRequired
-    elif request.method == 'GET' and request.qs.get('log-in.id'):
-        # Email auth
-        id = request.qs.get('log-in.id')
-        session_id = request.qs.get('log-in.key')
-        token = request.qs.get('log-in.token')
-        if not (token and token.endswith('.em')):
-            raise response.render('simplates/bad-login-link.spt', state)
-        p = Participant.authenticate(id, session_id, token)
-        if p:
-            redirect = True
-            session_p = p
-            session_suffix = '.em'
-        else:
-            raise response.render('simplates/bad-login-link.spt', state)
-        del request.qs['log-in.id'], request.qs['log-in.key'], request.qs['log-in.token']
+    elif request.method == 'GET':
+        if request.qs.get('log-in.id'):
+            # Email auth
+            id = request.qs.get('log-in.id')
+            session_id = request.qs.get('log-in.key')
+            token = request.qs.get('log-in.token')
+            if not (token and token.endswith('.em')):
+                raise response.render('simplates/bad-login-link.spt', state)
+            p = Participant.authenticate(id, session_id, token)
+            if p:
+                redirect = True
+                session_p = p
+                session_suffix = '.em'
+            else:
+                raise response.render('simplates/bad-login-link.spt', state)
+            del request.qs['log-in.id'], request.qs['log-in.key'], request.qs['log-in.token']
 
-    # Handle email verification
-    email_id = request.qs.get_int('email.id', default=None)
-    email_nonce = request.qs.get('email.nonce', '')
-    if email_id and not request.path.raw.endswith('/emails/disavow'):
-        email_participant, email_is_already_verified = db.one("""
-            SELECT p, e.verified
-              FROM emails e
-              JOIN participants p ON p.id = e.participant
-             WHERE e.id = %s
-        """, (email_id,), default=(None, None))
-        if email_participant:
-            result = email_participant.verify_email(email_id, email_nonce, p)
-            state['email.verification-result'] = result
-            request.qs.pop('email.id', None)
-            request.qs.pop('email.nonce', None)
-            if result == EmailVerificationResult.SUCCEEDED:
-                request.qs.add('success', b64encode_s(
-                    _("Your email address is now verified.")
-                ))
-        del email_participant
+        # Handle email verification
+        email_id = request.qs.get_int('email.id', default=None)
+        email_nonce = request.qs.get('email.nonce', '')
+        if email_id and not request.path.raw.endswith('/disavow'):
+            email_participant, email_is_already_verified = db.one("""
+                SELECT p, e.verified
+                  FROM emails e
+                  JOIN participants p On p.id = e.participant
+                 WHERE e.id = %s
+            """, (email_id,), default=(None, None))
+            if email_participant:
+                result = email_participant.verify_email(email_id, email_nonce, p)
+                state['email.verification-result'] = result
+                request.qs.pop('email.id', None)
+                request.qs.pop('email.nonce', None)
+                if result == EmailVerificationResult.SUCCEEDED:
+                    request.qs.add('success', b64encode_s(
+                        _("Your email address is now verified.")
+                    ))
+            del email_participant
 
     # Set up the new session
     if p:
