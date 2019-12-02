@@ -326,7 +326,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         team = self.make_participant('team', kind='group')
         team.set_take_for(self.homer, EUR('0.40'), team)
         self.janet.set_tip_to(team, EUR('0.40'))
-        self.janet.distribute_balances_to_donees(final_gift=False)
+        self.janet.distribute_balances_to_donees()
 
         self.db.run("UPDATE participants SET payment_providers = 1")  # dirty trick
 

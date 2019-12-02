@@ -215,11 +215,9 @@ def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, pay
         a list of the rows created in the `payin_transfers` table
 
     Raises:
+        AccountSuspended: if the payer's account is suspended
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the donor would end up sending money to themself
-
-    Raises:
-        AccountSuspended: if the payer's account is suspended
         RecipientAccountSuspended: if the tippee's account is suspended
 
     """
@@ -312,72 +310,18 @@ def resolve_team_donation(
     Raises:
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the payer would end up sending money to themself
+        RecipientAccountSuspended: if the team or all of its members are suspended
 
     """
+    if team.is_suspended:
+        raise RecipientAccountSuspended(team)
     currency = payment_amount.currency
-    members = db.all("""
-        SELECT t.member
-             , t.ctime
-             , t.amount
-             , (coalesce_currency_amount((
-                   SELECT sum(pt.amount - coalesce(pt.reversed_amount, zero(pt.amount)), %(currency)s)
-                     FROM payin_transfers pt
-                    WHERE pt.recipient = t.member
-                      AND pt.team = t.team
-                      AND pt.context = 'team-donation'
-                      AND pt.status = 'succeeded'
-               ), %(currency)s) + coalesce_currency_amount((
-                   SELECT sum(tr.amount, %(currency)s)
-                     FROM transfers tr
-                    WHERE tr.tippee = t.member
-                      AND tr.team = t.team
-                      AND tr.context IN ('take', 'take-in-advance')
-                      AND tr.status = 'succeeded'
-                      AND tr.virtual IS NOT true
-               ), %(currency)s)) AS received_sum
-             , (coalesce_currency_amount((
-                   SELECT sum(t2.amount, %(currency)s)
-                     FROM ( SELECT ( SELECT t2.amount
-                                       FROM takes t2
-                                      WHERE t2.member = t.member
-                                        AND t2.team = t.team
-                                        AND t2.mtime < coalesce(
-                                                payday.ts_start, current_timestamp
-                                            )
-                                   ORDER BY t2.mtime DESC
-                                      LIMIT 1
-                                   ) AS amount
-                              FROM paydays payday
-                          ) t2
-                    WHERE t2.amount > 0
-               ), %(currency)s)) AS takes_sum
-          FROM current_takes t
-          JOIN participants p ON p.id = t.member
-         WHERE t.team = %(team_id)s
-           AND t.amount <> 0
-           AND p.is_suspended IS NOT true
-           AND EXISTS (
-                   SELECT true
-                     FROM payment_accounts a
-                    WHERE a.participant = t.member
-                      AND a.provider = %(provider)s
-                      AND a.is_current
-                      AND a.verified
-                      AND coalesce(a.charges_enabled, true)
-               )
-    """, dict(currency=currency, team_id=team.id, provider=provider))
+    members = team.get_current_takes_for_payment(currency, provider, weekly_amount)
+    if all(m.is_suspended for m in members):
+        raise RecipientAccountSuspended(members)
+    members = [m for m in members if m.has_payment_account and not m.is_suspended]
     if not members:
         raise MissingPaymentAccount(team)
-    zero = Money.ZEROS[currency]
-    income_amount = team.receiving.convert(currency) + weekly_amount.convert(currency)
-    if income_amount == 0:
-        income_amount = Money.MINIMUMS[currency]
-    manual_takes_sum = MoneyBasket(t.amount for t in members if t.amount > 0)
-    auto_take = income_amount - manual_takes_sum.fuzzy_sum(currency)
-    if auto_take < 0:
-        auto_take = zero
-    for t in members:
-        t.amount = auto_take if t.amount < 0 else t.amount.convert(currency)
     members = sorted(members, key=lambda t: (
         int(t.member == payer.id),
         -(
@@ -387,6 +331,8 @@ def resolve_team_donation(
         t.received_sum,
         t.ctime
     ))
+    if members[0].member == payer.id:
+        raise NoSelfTipping()
     # Try to distribute the donation to multiple members.
     other_members = set(t.member for t in members if t.member != payer.id)
     if other_members and provider == 'stripe':
@@ -402,39 +348,56 @@ def resolve_team_donation(
                  , a.connection_ts
         """, dict(members=other_members, SEPA=SEPA, currency=currency))}
         if len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
-            exp = Decimal('0.7')
-            selected_takes = []
-            max_weeks_of_advance = 0
-            for t in members:
-                if t.member not in sepa_accounts:
-                    continue
-                if t.amount == 0:
-                    continue
-                t.weeks_of_advance = (t.received_sum - t.takes_sum) / t.amount
-                if t.weeks_of_advance < -1:
-                    # Dampen the effect of past takes, because they can't be changed.
-                    t.weeks_of_advance = -((-t.weeks_of_advance) ** exp)
-                elif t.weeks_of_advance > max_weeks_of_advance:
-                    max_weeks_of_advance = t.weeks_of_advance
-                selected_takes.append(t)
+            selected_takes = [
+                t for t in members if t.member in sepa_accounts and t.amount != 0
+            ]
             if selected_takes:
-                del members
-                base_amounts = {t.member: t.amount for t in selected_takes}
-                convergence_amounts = {
-                    t.member: (
-                        t.amount * (max_weeks_of_advance - t.weeks_of_advance)
-                    ).round_up()
-                    for t in selected_takes
-                }
-                tr_amounts = resolve_amounts(payment_amount, base_amounts, convergence_amounts)
+                resolve_take_amounts(payment_amount, selected_takes)
+                selected_takes.sort(key=lambda t: t.member)
                 return [
-                    Donation(tr_amount, Participant.from_id(p_id), sepa_accounts[p_id])
-                    for p_id, tr_amount in sorted(tr_amounts.items()) if tr_amount != 0
+                    Donation(
+                        t.resolved_amount,
+                        Participant.from_id(t.member),
+                        sepa_accounts[t.member]
+                    )
+                    for t in selected_takes if t.resolved_amount != 0
                 ]
     # Fall back to sending the entire donation to the member who "needs" it most.
     member = Participant.from_id(members[0].member)
     account = resolve_destination(db, member, provider, payer, payer_country, payment_amount)
     return [Donation(payment_amount, member, account)]
+
+
+def resolve_take_amounts(payment_amount, takes):
+    """Compute team transfer amounts.
+
+    Args:
+        payment_amount (Money): the total amount of money to transfer
+        takes (list): rows returned by `team.get_current_takes_for_payment(...)`
+
+    This function doesn't return anything, instead it mutates the given takes,
+    adding a `resolved_amount` attribute to each one.
+
+    """
+    exp = Decimal('0.7')
+    max_weeks_of_advance = 0
+    for t in takes:
+        t.weeks_of_advance = (t.received_sum - t.takes_sum) / t.amount
+        if t.weeks_of_advance < -1:
+            # Dampen the effect of past takes, because they can't be changed.
+            t.weeks_of_advance = -((-t.weeks_of_advance) ** exp)
+        elif t.weeks_of_advance > max_weeks_of_advance:
+            max_weeks_of_advance = t.weeks_of_advance
+    base_amounts = {t.member: t.amount for t in takes}
+    convergence_amounts = {
+        t.member: (
+            t.amount * (max_weeks_of_advance - t.weeks_of_advance)
+        ).round_up()
+        for t in takes
+    }
+    tr_amounts = resolve_amounts(payment_amount, base_amounts, convergence_amounts)
+    for t in takes:
+        t.resolved_amount = tr_amounts.get(t.member, payment_amount.zero())
 
 
 def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):

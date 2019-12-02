@@ -23,13 +23,13 @@ class TestClosing(FakeTransfersHarness):
 
         team.add_member(alice)
         team.add_member(bob)
-        assert len(team.get_current_takes()) == 2  # sanity check
+        assert len(team.get_current_takes_for_display()) == 2  # sanity check
 
         alice.close('downstream')
 
         assert carl.get_tip_to(alice).amount == EUR(2)
         assert alice.balance == 0
-        assert len(team.get_current_takes()) == 1
+        assert len(team.get_current_takes_for_display()) == 1
 
     def test_close_raises_for_unknown_disbursement_strategy(self):
         alice = self.make_participant('alice', balance=EUR('0.00'))
@@ -63,7 +63,7 @@ class TestClosing(FakeTransfersHarness):
 
     # dbtd - distribute_balances_to_donees
 
-    def test_dbtd_distributes_balance_as_final_gift(self):
+    def test_dbtd_distributes_balance(self):
         alice = self.make_participant('alice', balance=EUR('10.00'))
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
@@ -72,6 +72,20 @@ class TestClosing(FakeTransfersHarness):
         alice.distribute_balances_to_donees()
         assert Participant.from_username('bob').balance == EUR('6.00')
         assert Participant.from_username('carl').balance == EUR('4.00')
+        assert Participant.from_username('alice').balance == EUR('0.00')
+
+    def test_dbtd_with_arrears(self):
+        alice = self.make_participant('alice', balance=EUR('5.00'))
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
+        alice.set_tip_to(bob, EUR('3.00'))
+        alice.set_tip_to(carl, EUR('2.00'))
+        Payday.start().run()
+        Payday.start().run()
+        self.make_exchange('mango-cc', EUR('3.00'), 0, alice)
+        alice.distribute_balances_to_donees()
+        assert Participant.from_username('bob').balance == EUR('4.80')
+        assert Participant.from_username('carl').balance == EUR('3.20')
         assert Participant.from_username('alice').balance == EUR('0.00')
 
     def test_dbtd_needs_claimed_tips(self):
@@ -151,7 +165,7 @@ class TestClosing(FakeTransfersHarness):
         alice = self.make_participant('alice', balance=EUR('0.12'))
         bob = self.make_participant('bob')
         alice.set_tip_to(team, EUR('3.00'))
-        team.add_member(bob)
+        team.set_take_for(bob, EUR('0.00'), team)
         alice.distribute_balances_to_donees()
         assert alice.balance == 0
         assert bob.refetch().balance == EUR('0.12')

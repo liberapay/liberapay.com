@@ -15,8 +15,6 @@ if request.method == 'POST' and not payday_is_running:
                   "choose a disbursement method below or contact support.")
     elif disburse_to == 'payout':
         response.redirect(participant.path('wallet/payout/'+b64encode_s(request.path.raw)))
-    elif disburse_to == 'downstream':
-        raise response.error(403, _("This is no longer possible, sorry."))
     elif disburse_to == 'liberapay':
         participant.donate_remaining_balances_to_liberapay()
     else:
@@ -79,13 +77,9 @@ subhead = participant.username
         <div class="paragraph">
             <label>
                 <input type="radio" name="disburse_to" value="downstream"
-                       disabled />
+                       {{ 'disabled' if not participant.giving else '' }} />
                 {{ _("Give it to the {0}people I donate to{1}",
                      '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
-                <p class="text-danger">
-                    {{ glyphicon('info-sign') }}
-                    {{ _("This is no longer possible, sorry.") }}
-                </p>
             </label><br>
             <label>
                 <input type="radio" name="disburse_to" value="liberapay" />

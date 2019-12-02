@@ -11,8 +11,7 @@ if request.method == 'POST':
     elif disburse_to == 'payin-refund':
         participant.refund_balances()
     elif disburse_to == 'downstream':
-        raise response.error(403, _("This is no longer possible, sorry."))
-        participant.distribute_balances_to_donees(final_gift=False)
+        participant.distribute_balances_to_donees()
     elif disburse_to == 'liberapay':
         participant.donate_remaining_balances_to_liberapay()
     else:
@@ -46,13 +45,9 @@ title = _("Emptying your wallet")
             <div class="paragraph">
                 <label>
                     <input type="radio" name="disburse_to" value="downstream"
-                           disabled />
+                           {{ 'disabled' if not participant.giving else '' }} />
                     {{ _("Give it to the {0}people I donate to{1}",
                          '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
-                    <p class="text-danger">
-                        {{ glyphicon('info-sign') }}
-                        {{ _("This is no longer possible, sorry.") }}
-                    </p>
                 </label><br>
                 <label>
                     <input type="radio" name="disburse_to" value="liberapay" />

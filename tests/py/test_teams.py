@@ -30,9 +30,9 @@ class Tests(Harness):
 
     def test_remove_all_members(self):
         self.a_team.add_member(self.bob)
-        assert len(self.a_team.get_current_takes()) == 2  # sanity check
+        assert len(self.a_team.get_current_takes_for_display()) == 2  # sanity check
         self.a_team.remove_all_members()
-        assert len(self.a_team.get_current_takes()) == 0
+        assert len(self.a_team.get_current_takes_for_display()) == 0
 
     def test_invite_accept_leave(self):
         r = self.client.PxST(

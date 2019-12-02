@@ -169,21 +169,91 @@ class MixinTeam(object):
 
         return take
 
-    def get_current_takes(self, cursor=None):
+    def get_current_takes_for_display(self, cursor=None):
         """Return a list of member takes for a team.
         """
         assert self.kind == 'group'
         TAKES = """
             SELECT p.id AS member_id, p.username AS member_name, p.avatar_url
-                 , (p.mangopay_user_id IS NOT NULL) AS is_identified, p.is_suspended
+                 , p.is_suspended
                  , t.amount, t.actual_amount, t.ctime, t.mtime
               FROM current_takes t
               JOIN participants p ON p.id = member
              WHERE t.team=%(team)s
           ORDER BY p.username
         """
-        records = (cursor or self.db).all(TAKES, dict(team=self.id))
-        return [r._asdict() for r in records]
+        return (cursor or self.db).all(TAKES, dict(team=self.id))
+
+    def get_current_takes_for_payment(self, currency, provider, weekly_amount):
+        """
+        Return the list of current takes with the extra information that the
+        `liberapay.payin.common.resolve_take_amounts` function needs to compute
+        transfer amounts.
+        """
+        takes = self.db.all("""
+            SELECT t.member
+                 , t.ctime
+                 , t.amount
+                 , (coalesce_currency_amount((
+                       SELECT sum(pt.amount - coalesce(pt.reversed_amount, zero(pt.amount)), %(currency)s)
+                         FROM payin_transfers pt
+                        WHERE pt.recipient = t.member
+                          AND pt.team = t.team
+                          AND pt.context = 'team-donation'
+                          AND pt.status = 'succeeded'
+                   ), %(currency)s) + coalesce_currency_amount((
+                       SELECT sum(tr.amount, %(currency)s)
+                         FROM transfers tr
+                        WHERE tr.tippee = t.member
+                          AND tr.team = t.team
+                          AND tr.context IN ('take', 'take-in-advance')
+                          AND tr.status = 'succeeded'
+                          AND tr.virtual IS NOT true
+                   ), %(currency)s)) AS received_sum
+                 , (coalesce_currency_amount((
+                       SELECT sum(t2.amount, %(currency)s)
+                         FROM ( SELECT ( SELECT t2.amount
+                                           FROM takes t2
+                                          WHERE t2.member = t.member
+                                            AND t2.team = t.team
+                                            AND t2.mtime < coalesce(
+                                                    payday.ts_start, current_timestamp
+                                                )
+                                       ORDER BY t2.mtime DESC
+                                          LIMIT 1
+                                       ) AS amount
+                                  FROM paydays payday
+                              ) t2
+                        WHERE t2.amount > 0
+                   ), %(currency)s)) AS takes_sum
+                 , p.is_suspended
+                 , ( CASE WHEN %(provider)s = 'mangopay' THEN p.mangopay_user_id IS NOT NULL
+                     ELSE EXISTS (
+                       SELECT true
+                         FROM payment_accounts a
+                        WHERE a.participant = t.member
+                          AND a.provider = %(provider)s
+                          AND a.is_current
+                          AND a.verified
+                          AND coalesce(a.charges_enabled, true)
+                     )
+                     END
+                   ) AS has_payment_account
+              FROM current_takes t
+              JOIN participants p ON p.id = t.member
+             WHERE t.team = %(team_id)s
+        """, dict(currency=currency, team_id=self.id, provider=provider))
+        zero = Money.ZEROS[currency]
+        income_amount = self.receiving.convert(currency) + weekly_amount.convert(currency)
+        if income_amount == 0:
+            income_amount = Money.MINIMUMS[currency]
+        manual_takes_sum = MoneyBasket(t.amount for t in takes if t.amount > 0)
+        auto_take = income_amount - manual_takes_sum.fuzzy_sum(currency)
+        if auto_take < 0:
+            auto_take = zero
+        for t in takes:
+            t.amount = auto_take if t.amount < 0 else t.amount.convert(currency)
+        return takes
 
     def recompute_actual_takes(self, cursor, member=None):
         """Get the tips and takes for this team and recompute the actual amounts.
@@ -286,7 +356,7 @@ class MixinTeam(object):
     def get_members(self):
         """Return an OrderedDict of member dicts.
         """
-        takes = self.get_current_takes()
+        takes = self.get_current_takes_for_display()
         nmembers = len(takes)
         last_week = self.get_takes_last_week()
         compute_max = self.throttle_takes and nmembers > 1 and last_week.nonzero
