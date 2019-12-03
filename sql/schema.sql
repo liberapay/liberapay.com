@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '112'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '113'::jsonb);
 
 
 -- app configuration
@@ -221,6 +221,8 @@ CREATE VIEW current_tips AS
       FROM tips
   ORDER BY tipper, tippee, mtime DESC;
 
+CREATE CAST (current_tips AS tips) WITH INOUT;
+
 
 -- invoices
 
@@ -281,7 +283,8 @@ $$ LANGUAGE SQL STRICT;
 
 CREATE TYPE transfer_context AS ENUM (
     'tip', 'take', 'final-gift', 'refund', 'expense', 'chargeback', 'debt', 'account-switch', 'swap',
-    'tip-in-advance', 'take-in-advance', 'fee-refund', 'indirect-payout'
+    'tip-in-advance', 'take-in-advance', 'fee-refund', 'indirect-payout',
+    'tip-in-arrears', 'take-in-arrears'
 );
 
 CREATE TYPE transfer_status AS ENUM ('pre', 'failed', 'succeeded');
@@ -1007,6 +1010,7 @@ CREATE TABLE identities
 CREATE UNIQUE INDEX ON identities (participant, ctime DESC);
 
 
--- composite types, keep this at the end of the file
+-- composites and functions, keep this at the end of the file
 
+\i sql/accounting.sql
 \i sql/composites.sql
