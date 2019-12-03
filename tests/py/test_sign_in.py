@@ -167,7 +167,9 @@ class TestLogIn(EmailHarness):
         # Log in
         r = self.client.GxT('/alice/?foo=bar&' + qs)
         assert r.code == 302
-        assert r.headers[b'Location'] == b'http://localhost/alice/?foo=bar'
+        assert r.headers[b'Location'].startswith(
+            b'http://localhost/alice/?foo=bar&success='
+        )
         # ↑ checks that original path and query are preserved
 
         old_secret = self.db.one("""
