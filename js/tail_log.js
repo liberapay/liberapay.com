@@ -54,7 +54,7 @@ Liberapay.stream_lines = function(url, data_cb, error_cb) {
 Liberapay.tail_log = function($pre) {
     var file_was_partial = false;
     Liberapay.stream_lines($pre.data('log-url'), function(data, final, file_is_partial){
-        $pre.append(data);
+        $pre.append(document.createTextNode(data));
         if (final && file_was_partial) {
             Liberapay.notification($pre.data('msg-success'), 'success', -1);
         }
