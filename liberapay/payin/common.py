@@ -382,6 +382,9 @@ def resolve_take_amounts(payment_amount, takes):
     exp = Decimal('0.7')
     max_weeks_of_advance = 0
     for t in takes:
+        if t.amount == 0:
+            t.weeks_of_advance = 0
+            continue
         t.weeks_of_advance = (t.received_sum - t.takes_sum) / t.amount
         if t.weeks_of_advance < -1:
             # Dampen the effect of past takes, because they can't be changed.
