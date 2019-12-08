@@ -2138,7 +2138,7 @@ class Participant(Model, MixinTeam):
         if avatar_url and avatar_url != self.avatar_url and website.app_conf.check_avatar_urls:
             # Check that the new avatar URL returns a 200.
             try:
-                r = requests.head(avatar_url, allow_redirects=True, timeout=3)
+                r = requests.head(avatar_url, allow_redirects=True, timeout=5)
                 if r.status_code != 200:
                     avatar_url = None
             except requests.exceptions.RequestException:
