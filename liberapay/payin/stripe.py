@@ -283,7 +283,7 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
                 )
             elif pt.status == 'pre':
                 execute_transfer(db, pt, pt.destination_id, charge.id)
-            elif refunded_amount:
+            elif refunded_amount and pt.remote_id:
                 sync_transfer(db, pt)
     elif charge.status == 'failed':
         for pt in payin_transfers:
@@ -334,6 +334,7 @@ def sync_transfer(db, pt):
         Record: the row updated in the `payin_transfers` table
 
     """
+    assert pt.remote_id, "can't sync a transfer lacking a `remote_id`"
     tr = stripe.Transfer.retrieve(pt.remote_id)
     if tr.amount_reversed:
         reversed_amount = min(int_to_Money(tr.amount_reversed, tr.currency), pt.amount)
