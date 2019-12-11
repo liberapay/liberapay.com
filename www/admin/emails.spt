@@ -1,4 +1,5 @@
 from pando import json
+from pando.utils import utcnow
 
 from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
@@ -47,7 +48,10 @@ if request.method == 'POST':
       ORDER BY ts DESC
          LIMIT 10
     """, (email,))
-    blacklisted = any(True for e in blacklist_entries if e.ignore_after is None)
+    now = utcnow()
+    blacklisted = any(
+        e.ignore_after is None or e.ignore_after > now for e in blacklist_entries
+    )
 
 else:
     blacklist_entries = website.db.all("""

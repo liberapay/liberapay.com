@@ -3,10 +3,10 @@
 [---] text/html
 <p>{{ _(
     "The payment of {money_amount} that you initiated on {date} is being refunded.",
-    money_amount=payin_amount, time_ago=payin_ctime.date(),
+    money_amount=payin_amount, date=payin_ctime.date(),
 ) if refund_amount == payin_amount else _(
     "The payment of {money_amount} that you initiated on {date} is being partially refunded.",
-    money_amount=payin_amount, time_ago=payin_ctime.date(),
+    money_amount=payin_amount, date=payin_ctime.date(),
 ) }}</p>
 
 <p>{{ _(

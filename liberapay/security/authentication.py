@@ -214,16 +214,17 @@ def authenticate_user_if_possible(request, response, state, user, _):
         # Password auth
         body = _get_body(request)
         if body:
-            p = sign_in_with_form_data(body, state)
             carry_on = body.pop('log-in.carry-on', None)
-            if p:
-                redirect = body.get('form.repost', None) != 'true'
-                redirect_url = body.get('sign-in.back-to') or request.line.uri.decoded
-            elif carry_on:
+            if carry_on:
                 p_email = session_p and session_p.get_email_address()
                 if p_email != carry_on:
                     state['log-in.carry-on'] = carry_on
                     raise LoginRequired
+            else:
+                p = sign_in_with_form_data(body, state)
+                if p:
+                    redirect = body.get('form.repost', None) != 'true'
+                    redirect_url = body.get('sign-in.back-to') or request.line.uri.decoded
     elif request.method == 'GET':
         if request.qs.get('log-in.id'):
             # Email auth
