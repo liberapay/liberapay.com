@@ -36,6 +36,7 @@ from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
+from liberapay.payin import paypal
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
@@ -149,7 +150,8 @@ if conf:
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
     cron(intervals.get('clean_up_counters', 3600), website.db.clean_up_counters, True)
     cron(Daily(hour=16), lambda: fetch_currency_exchange_rates(website.db), True)
-    cron(Daily(hour=17), Payday.update_cached_amounts, True)
+    cron(Daily(hour=17), lambda: paypal.sync_all_pending_payments(website.db), True)
+    cron(Daily(hour=18), Payday.update_cached_amounts, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)
     cron(intervals.get('notify_patrons', 1200), Participant.notify_patrons, True)
     cron(intervals.get('migrate_identities', 120), Participant.migrate_identities, True)
