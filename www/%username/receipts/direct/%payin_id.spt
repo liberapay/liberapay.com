@@ -97,6 +97,7 @@ payin_transfers = website.db.all("""
       JOIN participants recipient ON recipient.id = pt.recipient
  LEFT JOIN participants team ON team.id = pt.team
      WHERE pt.payin = %s
+       AND pt.status = 'succeeded'
 """, (payin.id,))
 
 today = date.today()

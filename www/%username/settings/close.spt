@@ -76,8 +76,7 @@ subhead = participant.username
                 balances) }}</p>
         <div class="paragraph">
             <label>
-                <input type="radio" name="disburse_to" value="downstream"
-                       {{ 'disabled' if not participant.giving else '' }} />
+                <input type="radio" name="disburse_to" value="downstream" />
                 {{ _("Give it to the {0}people I donate to{1}",
                      '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
             </label><br>
