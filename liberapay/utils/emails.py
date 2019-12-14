@@ -122,6 +122,17 @@ def check_email_blacklist(address):
         raise EmailAddressIsBlacklisted(address, r.reason, r.ts, r.details, r.ses_data)
 
 
+def get_bounce_message(reason, ses_data, details):
+    if reason != 'bounce':
+        return
+    if ses_data:
+        bouncedRecipients = ses_data.get('bounce', {}).get('bouncedRecipients')
+        if bouncedRecipients:
+            return bouncedRecipients[0].get('diagnosticCode')
+    elif details:
+        return details
+
+
 class EmailError:
     """Represents an email bounce or complaint.
     """
@@ -136,14 +147,7 @@ class EmailError:
         self.ses_data = ses_data
 
     def get_bounce_message(self):
-        if self.reason != 'bounce':
-            return
-        if self.ses_data:
-            bouncedRecipients = self.ses_data.get('bounce', {}).get('bouncedRecipients')
-            if bouncedRecipients:
-                return bouncedRecipients[0].get('diagnosticCode')
-        elif self.details:
-            return self.details
+        return get_bounce_message(self.reason, self.ses_data, self.details)
 
 
 def handle_email_bounces():
@@ -225,6 +229,7 @@ def _handle_ses_notification(msg):
             # Already done
             continue
         # Attempt to notify the user(s)
+        bounce_message = get_bounce_message(r.reason, r.ses_data, r.details)
         participants = website.db.all("""
             SELECT p
               FROM emails e
@@ -234,8 +239,11 @@ def _handle_ses_notification(msg):
         """, (address,))
         for p in participants:
             try:
-                p.notify('email_blacklisted', email=False, web=True, type='warning',
-                         blacklisted_address=address, reason=r.reason)
+                p.notify(
+                    'email_blacklisted', email=False, web=True, type='warning',
+                    blacklisted_address=address, reason=r.reason,
+                    ignore_after=r.ignore_after, bounce_message=bounce_message,
+                )
             except DuplicateNotification:
                 continue
     msg.delete()
