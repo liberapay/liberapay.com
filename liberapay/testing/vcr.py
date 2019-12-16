@@ -1,3 +1,4 @@
+import logging
 from os.path import join, dirname, realpath
 
 from vcr import VCR
@@ -6,6 +7,10 @@ from vcr.serializers import yamlserializer
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
 FIXTURES_ROOT = join(TOP, 'tests', 'py', 'fixtures')
+
+
+_logger = logging.getLogger('vcr.matchers')
+_logger.setLevel(logging.INFO)
 
 
 def filter_x_headers(headers):
