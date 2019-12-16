@@ -341,9 +341,12 @@ class TestPayinsStripe(Harness):
             country='CH',
             type='custom',
         )
+        cls.offset = 1300
 
     def setUp(self):
         super().setUp()
+        self.__class__.offset += 10
+        self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH %s", (self.offset,))
         self.donor = self.make_participant('donor', email='donor@example.com')
         self.creator_0 = self.make_participant(
             'creator_0', email='zero@example.com', accepted_currencies=None
@@ -359,8 +362,8 @@ class TestPayinsStripe(Harness):
         )
 
     def test_00_payin_stripe_card(self):
-        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 100")
-        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 100")
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe')
         tip = self.donor.set_tip_to(self.creator_1, EUR('0.02'))
 
@@ -375,12 +378,13 @@ class TestPayinsStripe(Harness):
         form_data = {
             'amount': '24.99',
             'currency': 'EUR',
+            'keep': 'true',
             'tips': str(tip['id']),
             'token': 'tok_visa',
         }
         r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
         assert r.code == 200, r.text
-        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/100'
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
         assert payin.amount == EUR('24.99')
@@ -389,7 +393,7 @@ class TestPayinsStripe(Harness):
         assert pt.amount == EUR('24.99')
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/100', auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded'
@@ -400,8 +404,8 @@ class TestPayinsStripe(Harness):
         assert pt.amount == EUR('24.02')
 
     def test_02_payin_stripe_card_one_to_many(self):
-        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 102")
-        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 102")
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe', id=self.acct_switzerland.id)
         self.add_payment_account(self.creator_3, 'stripe')
         self.add_payment_account(self.creator_3, 'paypal')
@@ -427,7 +431,7 @@ class TestPayinsStripe(Harness):
         }
         r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
         assert r.code == 200, r.text
-        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/102'
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
         assert payin.amount == JPY('10000')
@@ -440,7 +444,7 @@ class TestPayinsStripe(Harness):
         assert pt2.amount == JPY('5000')
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/102', auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded'
@@ -457,8 +461,8 @@ class TestPayinsStripe(Harness):
         assert pt2.amount == (net_amount / 2).round_down()
 
     def test_01_payin_stripe_sdd(self):
-        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 101")
-        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 101")
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe')
         tip = self.donor.set_tip_to(self.creator_1, EUR('1.00'))
 
@@ -478,7 +482,7 @@ class TestPayinsStripe(Harness):
         }
         r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
         assert r.code == 200, r.text
-        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/101'
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
         assert payin.amount == EUR('52.00')
@@ -487,7 +491,7 @@ class TestPayinsStripe(Harness):
         assert pt.amount == EUR('52.00')
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/101', auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pending'
@@ -497,9 +501,16 @@ class TestPayinsStripe(Harness):
         assert pt.status == 'pending'
         assert pt.amount == EUR('52.00')
 
+        # 4th request: test getting the payment page again
+        r = self.client.GET(
+            '/donor/giving/pay/stripe?method=sdd&beneficiary=%i' % self.creator_1.id,
+            auth_as=self.donor
+        )
+        assert r.code == 200, r.text
+
     def test_03_payin_stripe_sdd_one_to_many(self):
-        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 203")
-        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 203")
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe', id=self.acct_switzerland.id)
         self.add_payment_account(self.creator_3, 'stripe')
         self.add_payment_account(self.creator_3, 'paypal')
@@ -507,7 +518,7 @@ class TestPayinsStripe(Harness):
         tip3 = self.donor.set_tip_to(self.creator_3, EUR('12.00'))
 
         # 1st request: test getting the payment pages
-        expected_uri = '/donor/giving/pay/stripe/?beneficiary=%i,%i&method=card' % (
+        expected_uri = '/donor/giving/pay/stripe/?beneficiary=%i,%i&method=sdd' % (
             self.creator_1.id, self.creator_3.id
         )
         r = self.client.GET('/donor/giving/pay/', auth_as=self.donor)
@@ -526,12 +537,13 @@ class TestPayinsStripe(Harness):
         form_data = {
             'amount': '100.00',
             'currency': 'EUR',
+            'keep': 'true',
             'tips': '%i,%i' % (tip1['id'], tip3['id']),
             'token': sepa_direct_debit_token.id,
         }
         r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
         assert r.code == 200, r.text
-        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/203'
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
         assert payin.amount == EUR('100.00')
@@ -544,7 +556,7 @@ class TestPayinsStripe(Harness):
         assert pt2.amount == EUR('50.00')
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/203', auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pending'
@@ -560,9 +572,23 @@ class TestPayinsStripe(Harness):
         assert pt2.amount == EUR('50.00')
         assert pt2.remote_id is None
 
+        # 4th request: test getting the payment page again
+        r = self.client.GET(expected_uri, auth_as=self.donor)
+        assert r.code == 200, r.text
+
+        # 5th request: test getting another payment page now that the donor has connected a bank account
+        self.add_payment_account(self.creator_2, 'stripe')
+        self.donor.set_tip_to(self.creator_2, EUR('0.50'))
+        r = self.client.GET(
+            '/donor/giving/pay/stripe?method=sdd&beneficiary=%i' % self.creator_2.id,
+            auth_as=self.donor
+        )
+        assert r.code == 200, r.text
+        assert "Use another bank account" in r.text
+
     def test_04_payin_intent_stripe_card(self):
-        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 304")
-        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 304")
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe')
         tip = self.donor.set_tip_to(self.creator_1, EUR('0.25'))
 
@@ -574,16 +600,16 @@ class TestPayinsStripe(Harness):
         assert r.code == 200, r.text
 
         # 2nd request: prepare the payment
-        pm = stripe.PaymentMethod.create(type='card', card={'token': 'tok_visa'})
         form_data = {
             'amount': '25',
             'currency': 'EUR',
+            'keep': 'true',
             'tips': str(tip['id']),
-            'stripe_pm_id': pm.id,
+            'stripe_pm_id': 'pm_card_visa',
         }
         r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
         assert r.code == 200, r.text
-        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/304'
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
         assert payin.amount == EUR('25.00')
@@ -592,7 +618,7 @@ class TestPayinsStripe(Harness):
         assert pt.amount == EUR('25.00')
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/304', auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded', payin
@@ -602,9 +628,26 @@ class TestPayinsStripe(Harness):
         assert pt.status == 'succeeded'
         assert pt.amount == EUR('24.02')
 
+        # 4th request: test getting the payment page again
+        r = self.client.GET(
+            '/donor/giving/pay/stripe?method=card&beneficiary=%i' % self.creator_1.id,
+            auth_as=self.donor
+        )
+        assert r.code == 200, r.text
+
+        # 5th request: test getting another payment page now that the donor has connected a card
+        self.add_payment_account(self.creator_2, 'stripe')
+        self.donor.set_tip_to(self.creator_2, EUR('0.50'))
+        r = self.client.GET(
+            '/donor/giving/pay/stripe?method=card&beneficiary=%i' % self.creator_2.id,
+            auth_as=self.donor
+        )
+        assert r.code == 200, r.text
+        assert "We will charge your Visa card " in r.text
+
     def test_05_payin_intent_stripe_card_one_to_many(self):
-        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH 105")
-        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH 105")
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe', id=self.acct_switzerland.id)
         self.add_payment_account(self.creator_3, 'stripe')
         self.add_payment_account(self.creator_3, 'paypal')
@@ -622,16 +665,15 @@ class TestPayinsStripe(Harness):
         assert r.code == 200, r.text
 
         # 2nd request: prepare the payment
-        pm = stripe.PaymentMethod.create(type='card', card={'token': 'tok_visa'})
         form_data = {
             'amount': '100.00',
             'currency': 'EUR',
             'tips': '%i,%i' % (tip1['id'], tip3['id']),
-            'stripe_pm_id': pm.id,
+            'stripe_pm_id': 'pm_card_jp',
         }
         r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
         assert r.code == 200, r.text
-        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/105'
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'pre'
         assert payin.amount == EUR('100.00')
@@ -644,7 +686,7 @@ class TestPayinsStripe(Harness):
         assert pt2.amount == EUR('50.00')
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/105', auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded'
@@ -658,6 +700,10 @@ class TestPayinsStripe(Harness):
         assert pt1.remote_id
         assert pt2.status == 'succeeded'
         assert pt2.amount == EUR('48.42')
+
+        # 4th request: test getting the payment page again
+        r = self.client.GET(expected_uri, auth_as=self.donor)
+        assert r.code == 200, r.text
 
 
 class TestRefundsStripe(Harness):
