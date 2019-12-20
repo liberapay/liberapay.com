@@ -25,6 +25,14 @@ if request.method == 'POST':
 
 routes = website.db.all("""
     SELECT r
+         , ( SELECT pi
+               FROM payins pi
+              WHERE pi.payer = r.participant
+                AND pi.route = r.id
+                AND pi.status::text NOT LIKE 'pre%%'
+           ORDER BY pi.ctime DESC
+              LIMIT 1
+           ) AS last_payin
       FROM exchange_routes r
      WHERE r.participant = %s
        AND r.network IN ('stripe-card', 'stripe-sdd')
@@ -59,7 +67,7 @@ title = _("Payment Instruments")
     ) }}</p>
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    % for route in routes
+    % for route, last_payin in routes
         <div class="payment-instrument">
             <span>{{
                 fontawesome('credit-card', _("Credit/Debit Card")) if route.network == 'stripe-card' else
@@ -93,6 +101,26 @@ title = _("Payment Instruments")
                                     '' }}">{{
                         _("Expires in {month} {year}", month=Month(exp_date.month), year=Year(exp_date.year))
                     }}</span>
+                % endif
+                % if last_payin
+                    % if last_payin.status == 'failed'
+                        <br><span class="text-danger">{{ _(
+                            "The last payment initiated on {date} failed.",
+                            date=last_payin.ctime.date()
+                        ) }}</span>
+                    % elif last_payin.status == 'pending'
+                        <br><span class="text-info">{{ _(
+                            "The last payment initiated on {date} is pending.",
+                            date=last_payin.ctime.date()
+                        ) }}</span>
+                    % elif last_payin.status == 'succeeded'
+                        <br><span class="text-success">{{ _(
+                            "The last payment initiated on {date} was successful.",
+                            date=last_payin.ctime.date()
+                        ) }}</span>
+                    % endif
+                % else
+                    <br><span class="text-muted">{{ _("This payment instrument hasn't been used yet.") }}</span>
                 % endif
             </span>
             <span>
