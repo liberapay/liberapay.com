@@ -8,8 +8,9 @@ from liberapay.utils.emails import EmailVerificationResult
 
 [---]
 
-# Don't allow anything other than GET, not even HEAD.
-request.allow('GET')
+# Don't allow HEAD requests.
+if request.method == 'HEAD':
+    raise response.error(405, request.method)
 
 # Redirecting this request can lead to confusing situations, so we ask `get_participant` to avoid redirecting it.
 participant = get_participant(state, restrict=False, redirect_canon=False, redirect_stub=False)
