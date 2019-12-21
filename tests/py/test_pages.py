@@ -287,3 +287,60 @@ class TestPages(BrowseTestHarness):
         r = self.client.GET('/about/me/edit/username', auth_as=alice, raise_immediately=False)
         assert r.code == 302
         assert r.headers[b'Location'] == b'/alice/edit/username'
+
+    def test_payment_instruments_page(self):
+        offset = 1000
+        self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH %s", (offset,))
+        self.db.run("ALTER SEQUENCE exchange_routes_id_seq RESTART WITH %s", (offset,))
+        alice = self.make_participant('alice')
+        r = self.client.GET('/alice/routes/', raise_immediately=False)
+        assert r.code == 403, r.text
+        r = self.client.GET('/alice/routes/', auth_as=alice)
+        assert r.code == 200, r.text
+        assert "You don&#39;t have any valid payment instrument." in r.text, r.text
+        r = self.client.GET('/alice/routes/add?type=stripe-card', auth_as=alice)
+        assert r.code == 200, r.text
+        r = self.client.POST(
+            '/alice/routes/add',
+            {'stripe_pm_id': 'pm_card_visa', 'one_off': 'true'},
+            auth_as=alice, raise_immediately=False,
+        )
+        assert r.code == 302, r.text
+        r = self.client.GET('/alice/routes/', auth_as=alice)
+        assert r.code == 200, r.text
+        assert "You have 1 connected payment instrument." in r.text, r.text
+        sepa_direct_debit_token = stripe.Token.create(bank_account=dict(
+            country='BE',
+            currency='EUR',
+            account_number='BE62510007547061',
+            account_holder_name='Dupond et Dupont',
+        ))
+        r = self.client.POST(
+            '/alice/routes/add?type=stripe-sdd',
+            {'token': sepa_direct_debit_token.id},
+            auth_as=alice, raise_immediately=False,
+        )
+        assert r.code == 302, r.text
+        r = self.client.GET('/alice/routes/', auth_as=alice)
+        assert r.code == 200, r.text
+        assert "You have 2 connected payment instruments." in r.text, r.text
+        r = self.client.POST(
+            '/alice/routes/',
+            {'set_as_default': str(offset + 1)},
+            auth_as=alice, raise_immediately=False,
+        )
+        assert r.code == 302, r.text
+        r = self.client.POST(
+            '/alice/routes/',
+            {'remove': str(offset + 1)},
+            auth_as=alice, raise_immediately=False,
+        )
+        assert r.code == 302, r.text
+        r = self.client.POST(
+            '/alice/routes/',
+            {'remove': str(offset)},
+            auth_as=alice, raise_immediately=False,
+        )
+        assert r.code == 302, r.text
+        routes = self.db.all("SELECT r FROM exchange_routes r WHERE r.status = 'chargeable'")
+        assert not routes
