@@ -115,6 +115,21 @@ class TestPayouts(MangopayHarness):
         with self.assertRaises(AccountSuspended):
             payout(self.db, self.homer_route, EUR('10.00'))
 
+    def test_can_see_payout_failure_page(self):
+        error = 'error message #94355731569'
+        eid = self.make_exchange('mango-ba', 19, 0, self.david, 'failed', error)
+        r = self.client.GET('/david/wallet/payout/?exchange_id=%s' % eid,
+                            auth_as=self.david)
+        assert r.code == 200
+        assert error in r.body.decode('utf8')
+
+    def test_can_see_payout_success_page(self):
+        eid = self.make_exchange('mango-ba', 19, 0, self.david)
+        r = self.client.GET('/david/wallet/payout/?exchange_id=%s' % eid,
+                            auth_as=self.david)
+        assert r.code == 200
+        assert '€19' in r.body.decode('utf8')
+
 
 class TestCharge(MangopayHarness):
 

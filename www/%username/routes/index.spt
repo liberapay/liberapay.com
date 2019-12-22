@@ -1,0 +1,167 @@
+from datetime import timedelta
+
+from liberapay.i18n.base import Month, Year
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import form_post_success, get_participant, utcnow
+
+SIXTY_DAYS = timedelta(days=60)
+
+[---]
+
+participant = get_participant(state, restrict=True)
+
+if request.method == 'POST':
+    if 'remove' in request.body:
+        route = ExchangeRoute.from_id(participant, request.body.get_int('remove'), _raise=False)
+        if route:
+            route.invalidate()
+    elif 'set_as_default' in request.body:
+        route = ExchangeRoute.from_id(participant, request.body.get_int('set_as_default'), _raise=False)
+        if route:
+            route.set_as_default()
+    else:
+        raise response.error(400, "no known action found in request body")
+    form_post_success(state)
+
+routes = website.db.all("""
+    SELECT r
+         , ( SELECT pi
+               FROM payins pi
+              WHERE pi.payer = r.participant
+                AND pi.route = r.id
+                AND pi.status::text NOT LIKE 'pre%%'
+           ORDER BY pi.ctime DESC
+              LIMIT 1
+           ) AS last_payin
+      FROM exchange_routes r
+     WHERE r.participant = %s
+       AND r.network IN ('stripe-card', 'stripe-sdd')
+       AND r.status IN ('chargeable', 'pending')
+  ORDER BY r.ctime DESC
+""", (participant.id,))
+
+today = utcnow().date()
+
+has_euro_donations = website.db.one("""
+    SELECT count(*)
+      FROM current_tips
+     WHERE tipper = %s
+       AND renewal_mode > 0
+       AND (amount).currency = 'EUR'
+""", (participant.id,)) > 0
+
+title = _("Payment Instruments")
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% from "templates/macros/icons.html" import fontawesome
+
+% block content
+
+% if routes
+    <p>{{ ngettext(
+        "You have {n} connected payment instrument.",
+        "You have {n} connected payment instruments.",
+        n=len(routes)
+    ) }}</p>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    % for route, last_payin in routes
+        <div class="payment-instrument">
+            <span>{{
+                fontawesome('credit-card', _("Credit/Debit Card")) if route.network == 'stripe-card' else
+                fontawesome('bank', _("Bank Account")) if route.network == 'stripe-sdd' else
+                ''
+            }}</span>
+            <span>
+                <strong>{{ route.get_brand() }} {{ route.get_partial_number() }}</strong>
+                % if route.country
+                    <span class="text-muted">({{ locale.countries.get(route.country, route.country) }})</span>
+                % endif
+                % if route.currency
+                    <span class="text-muted">({{ locale.currencies.get(route.currency, route.currency) }})</span>
+                % endif
+                % if route.is_default
+                    &nbsp; <span class="label label-primary">{{ _("default") }}</span>
+                % endif
+                % if route.status == 'pending'
+                    &nbsp; <span class="label label-warning">{{ _("pending") }}</span>
+                % endif
+                <br>{{ _("Added on {date}", date=route.ctime.date()) }}
+                % set mandate_url = route.get_mandate_url()
+                % if mandate_url
+                    (<a href="{{ mandate_url }}">{{ _("view mandate") }}</a>)
+                % endif
+                % set exp_date = route.get_expiration_date()
+                % if exp_date
+                    <br>
+                    <span class="{{ 'text-danger' if exp_date <= today else
+                                    'text-warning' if exp_date <= (today - SIXTY_DAYS) else
+                                    '' }}">{{
+                        _("Expires in {month} {year}", month=Month(exp_date.month), year=Year(exp_date.year))
+                    }}</span>
+                % endif
+                % if last_payin
+                    % if last_payin.status == 'failed'
+                        <br><span class="text-danger">{{ _(
+                            "The last payment initiated on {date} failed.",
+                            date=last_payin.ctime.date()
+                        ) }}</span>
+                    % elif last_payin.status == 'pending'
+                        <br><span class="text-info">{{ _(
+                            "The last payment initiated on {date} is pending.",
+                            date=last_payin.ctime.date()
+                        ) }}</span>
+                    % elif last_payin.status == 'succeeded'
+                        <br><span class="text-success">{{ _(
+                            "The last payment initiated on {date} was successful.",
+                            date=last_payin.ctime.date()
+                        ) }}</span>
+                    % endif
+                % else
+                    <br><span class="text-muted">{{ _("This payment instrument hasn't been used yet.") }}</span>
+                % endif
+            </span>
+            <span>
+                <button class="btn btn-danger btn-xs" name="remove" value="{{ route.id }}">{{ _("Remove") }}</button>
+            % if not route.is_default
+                <button class="btn btn-primary btn-xs" name="set_as_default" value="{{ route.id }}">{{ _("Set as default") }}</button>
+            % endif
+            </span>
+        </div>
+    % endfor
+    </form>
+% else
+    <p>{{ _("You don't have any valid payment instrument.") }}</p>
+% endif
+
+<br>
+<p>{{ _("Add a payment instrument:") }}</p>
+<div class="payment-methods">
+    <div class="panel panel-default">
+        <div class="panel-body overlaid">
+            <p class="payment-icon">{{ fontawesome('credit-card') }}</p>
+            <h4>{{ _("Credit/Debit Card") }}<br>
+                <small>Visa, MasterCard, American Express</small>
+            </h4>
+            <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-card"></a>
+        </div>
+    </div>
+    % set warn = request.country not in constants.SEPA
+    <div class="panel panel-default {{ '' if has_euro_donations else 'muted' }}">
+        <div class="panel-body overlaid">
+            <p class="payment-icon">{{ fontawesome('bank') }}</p>
+            <h4>{{ _("Bank Account") }}<br>
+                % if not has_euro_donations
+                <small class="text-warning">{{ _("Euro donations only") }}</small>
+                % else
+                <small class="text-{{ 'warning' if warn else 'info' }}">{{ _("Euro bank accounts only") }}</small>
+                % endif
+            </h4>
+            <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-sdd"></a>
+        </div>
+    </div>
+</div>
+
+% endblock

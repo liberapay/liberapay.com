@@ -855,7 +855,15 @@ span.help-title {
 }
 
 .payment-methods {
-    text-align: center;
+    margin-right: -10px;
+    & > div {
+        display: inline-block;
+        margin-right: 10px;
+        min-height: 145px;
+        text-align: center;
+        width: 350px;
+        max-width: 100%;
+    }
     .payment-icon {
         font-size: 2em;
     }
@@ -1018,4 +1026,51 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
 code.gray {
     background-color: rgba(27,31,35,.05);
     color: inherit;
+}
+
+.payment-instrument {
+    line-height: 1.5em;
+    margin: 1.5em 0;
+    & > span {
+        display: inline;
+        margin-bottom: 0.5em;
+        &:first-child {
+            text-align: center;
+        }
+        &:last-child {
+            display: block;
+            & > .btn {
+                margin: 5px 5px 10px 0;
+            }
+        }
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .payment-instrument {
+        align-items: center;
+        display: flex;
+        margin: 0.5em 0;
+        padding-top: 0.5em;
+        & + & {
+            border-top: 1px dashed #ccc;
+        }
+        & > span {
+            margin: 10px 10px 10px 0;
+            &:first-child {
+                font-size: 2em;
+                width: 1.5em;
+            }
+            &:last-child {
+                margin-right: 0;
+                & > .btn {
+                    display: block;
+                    margin: 0;
+                }
+                & > .btn + .btn {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
 }

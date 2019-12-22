@@ -1,3 +1,4 @@
+from os.path import abspath
 from unittest.mock import patch
 
 from mangopay.resources import BankWirePayOut, Dispute, PayIn, Refund
@@ -13,14 +14,17 @@ from liberapay.utils import utcnow
 
 class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
-    def setUp(self):
-        super(TestMangopayCallbacks, self).setUp()
-        self.cwp_patch = patch('liberapay.billing.transactions.check_wallet_balance')
-        self.cwp_patch.__enter__()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.website.request_processor.resources.cache.pop(abspath('www/callbacks/mangopay.spt'), None)
+        cls.cwp_patch = patch('liberapay.billing.transactions.check_wallet_balance')
+        cls.cwp_patch.__enter__()
 
-    def tearDown(self):
-        self.cwp_patch.__exit__()
-        super(TestMangopayCallbacks, self).tearDown()
+    @classmethod
+    def tearDownClass(cls):
+        cls.cwp_patch.__exit__()
+        super().tearDownClass()
 
     def callback(self, qs, **kw):
         kw.setdefault('HTTP_ACCEPT', b'application/json')

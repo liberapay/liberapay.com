@@ -13,7 +13,7 @@ from liberapay.payin.common import (
     prepare_donation, prepare_payin, prepare_payin_transfer, resolve_amounts,
 )
 from liberapay.payin.stripe import (
-    charge_and_transfer, destination_charge, get_partial_iban, Money_to_int,
+    charge_and_transfer, create_source_from_token, destination_charge,
     repr_stripe_error, settle_payin,
 )
 from liberapay.utils import get_participant
@@ -69,99 +69,29 @@ if request.method == 'POST':
         if 'token' in body:
             return_url = payer.url('giving/pay/stripe/complete')
             one_off = body.get('keep') != 'true'
-
             owner_address = {
                 k: body.get('owner.address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_STRIPE
             }
             if 'line1' not in owner_address:
                 owner_address = None
-
-            token = stripe.Token.retrieve(body['token'])
-            if token.type == 'bank_account':
-                network = 'stripe-sdd'
-                source_type = 'sepa_debit'
-            elif token.type == 'card':
-                network = 'stripe-card'
-                source_type = 'card'
-            else:
-                raise response.error(400, "unknown token type")
-
-            source = stripe.Source.create(
-                amount=Money_to_int(payin_amount) if one_off else None,
-                owner={
-                    'address': owner_address,
-                    'email': payer.get_email_address(),
-                    'name': body.get('owner.name'),
-                },
-                redirect={'return_url': return_url},
-                token=token.id,
-                type=source_type,
-                usage=('single_use' if one_off and source_type == 'card' else 'reusable'),
+            owner_info = {
+                'address': owner_address,
+                'email': payer.get_email_address(),
+                'name': body.get('owner.name'),
+            }
+            source = create_source_from_token(
+                body['token'], one_off, payin_amount, owner_info, return_url
             )
-            customer_id = website.db.one("""
-                SELECT remote_user_id
-                  FROM exchange_routes
-                 WHERE participant = %s
-                   AND network::text LIKE 'stripe-%%'
-                 LIMIT 1
-            """, (payer.id,))
-            if customer_id:
-                customer = stripe.Customer.retrieve(customer_id)
-                customer.sources.create(source=source.id)
-                del customer
-            else:
-                customer_id = stripe.Customer.create(
-                    email=source.owner.email,
-                    source=source.id,
-                ).id
-            source_country = getattr(getattr(source, source.type), 'country', None)
-            source_currency = getattr(getattr(source, source.type), 'currency', None)
-            route = ExchangeRoute.insert(
-                payer, network, source.id, source.status,
-                one_off=one_off, remote_user_id=customer_id,
-                country=source_country, currency=source_currency,
-            )
+            route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
         elif 'stripe_pm_id' in body:
-            return_url = payer.url('giving/pay/stripe/complete')
             one_off = body.get('keep') != 'true'
-
             pm = stripe.PaymentMethod.retrieve(body['stripe_pm_id'])
-            if pm.type == 'card':
-                network = 'stripe-card'
-            else:
-                raise response.error(400, "unknown PaymentMethod type")
-
-            customer_id = website.db.one("""
-                SELECT remote_user_id
-                  FROM exchange_routes
-                 WHERE participant = %s
-                   AND network::text LIKE 'stripe-%%'
-                 LIMIT 1
-            """, (payer.id,))
-            if customer_id:
-                pm = stripe.PaymentMethod.attach(pm.id, customer=customer_id)
-            else:
-                customer_id = stripe.Customer.create(
-                    email=payer.get_email_address(),
-                    payment_method=pm.id,
-                ).id
-            pm_country = getattr(getattr(pm, pm.type), 'country', None)
-            pm_currency = getattr(getattr(pm, pm.type), 'currency', None)
-            route = ExchangeRoute.insert(
-                payer, network, pm.id, 'chargeable',
-                one_off=one_off, remote_user_id=customer_id,
-                country=pm_country, currency=pm_currency,
-            )
+            route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
                 raise response.invalid_input(body.get('route'), 'route', 'body')
-            if route.address.startswith('pm_'):
-                # A PaymentMethod doesn't have a status.
-                pass
-            else:
-                source = stripe.Source.retrieve(route.address)
-                route.update_status(source.status)
+            route.sync_status()
 
     except stripe.error.StripeError as e:
         raise response.error(e.http_status, _(
@@ -169,6 +99,10 @@ if request.method == 'POST':
             name='Stripe', error_message=repr_stripe_error(e)
         ))
 
+    if not route:
+        raise response.error(400, _(
+            "The payment instrument is invalid, please select or add another one."
+        ))
     transfer_amounts = resolve_amounts(
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
@@ -321,31 +255,27 @@ if tippees:
 elif not payin_id:
     response.redirect(payer.path('giving/pay'))
 
-if payment_type:
-    route = ExchangeRoute.from_network(payer, 'stripe-' + payment_type)
-    route = route[0] if route else None
-else:
-    route = website.db.one("""
-        SELECT r
-          FROM exchange_routes r
-         WHERE r.participant = %s
-           AND r.status = 'chargeable'
-           AND r.network::text LIKE 'stripe-%%'
-           AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
-      ORDER BY r.network = 'stripe-sdd' DESC
-             , r.id DESC
-         LIMIT 1
-    """, (payer.id,))
+routes = website.db.all("""
+    SELECT r
+      FROM exchange_routes r
+     WHERE r.participant = %s
+       AND r.status = 'chargeable'
+       AND r.network::text LIKE %s
+       AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
+  ORDER BY r.is_default NULLS LAST
+         , r.network = 'stripe-sdd' DESC
+         , r.id DESC
+""", (payer.id, 'stripe-' + (payment_type or '%')))
+if routes:
     route = None
-if route:
+    while routes:
+        route = routes[0]
+        route.sync_status()
+        if route:
+            break
+        routes = routes[1:]
     payment_type = route.network.split('-', 1)[-1]
-    if route.address.startswith('pm_'):
-        pm = stripe.PaymentMethod.retrieve(route.address)
-    else:
-        source = stripe.Source.retrieve(route.address)
-        route.update_status(source.status)
-    if not route:
-        response.redirect(request.line.uri)
+    del route
 if not payment_type:
     response.redirect(payer.path('giving/pay'))
 
@@ -437,7 +367,6 @@ title = _("Funding your donations")
         <p>{{ _("Please select or input a payment amount:") }}</p>
         <fieldset id="amount">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            <input type="hidden" name="route" value="{{ route.id or '' }}" />
             <input type="hidden" name="currency" value="{{ payment_currency }}" />
             <input type="hidden" name="tips" value="{{ payment.tip_ids }}" />
             <ul class="list-group radio-group">
@@ -491,21 +420,23 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        % if pm
+        % if len(routes) == 1
         <div class="form-group">
-            % if pm.type == 'card'
+            % set route = routes[0]
+            <input type="hidden" name="route" value="{{ route.id or '' }}" />
+            % if route.network == 'stripe-card'
             <p>{{ _(
                 "We will charge your {brand} card (last four digits: {last4}).",
-                brand=constants.CARD_BRANDS.get(pm.card.brand, pm.card.brand), last4=pm.card.last4
+                brand=route.get_brand(), last4=route.get_partial_number()
             ) }}</p>
             <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
                 _("Use another card")
             }}</button>
-            % elif pm.type == 'sepa_debit'
+            % elif route.network == 'stripe-sdd'
             <p>{{ _(
                 "We will charge your {bank_name} account ({partial_account_number}).",
-                bank_name=pm.sepa_debit.bank_name,
-                partial_account_number=get_partial_iban(pm.sepa_debit)
+                bank_name=route.get_brand(),
+                partial_account_number=route.get_partial_number()
             ) }}</p>
             <button class="btn btn-default btn-sm" type="button" data-modify="#iban-form">{{
                 _("Use another bank account")
@@ -513,22 +444,21 @@ title = _("Funding your donations")
             % endif
             <br><br>
         </div>
-        % elif source
+        % elif len(routes) > 1
         <div class="form-group">
-            % if source.type == 'card'
-            <p>{{ _(
-                "We will charge your {brand} card (last four digits: {last4}).",
-                brand=source.card.brand, last4=source.card.last4
-            ) }}</p>
+            <p>{{ _("Payment instrument:") }}</p>
+            <div class="form-group">
+                <select class="form-control" name="route">
+                % for route in routes
+                    <option value="{{ route.id }}">{{ route.get_brand() }} {{ route.get_partial_number() }}</option>
+                % endfor
+                </select>
+            </div>
+            % if payment_type == 'card'
             <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
                 _("Use another card")
             }}</button>
-            % elif source.type == 'sepa_debit'
-            <p>{{ _(
-                "We will charge your {bank_name} account ({partial_account_number}).",
-                bank_name=source.sepa_debit.bank_name,
-                partial_account_number=get_partial_iban(source.sepa_debit)
-            ) }}</p>
+            % elif payment_type == 'sdd'
             <button class="btn btn-default btn-sm" type="button" data-modify="#iban-form">{{
                 _("Use another bank account")
             }}</button>
@@ -538,7 +468,7 @@ title = _("Funding your donations")
         % endif
 
         % if payment_type == 'card'
-        <fieldset id="card-form" class="form-group {{ 'hidden' if source or pm else '' }}">
+        <fieldset id="card-form" class="form-group {{ 'hidden' if routes else '' }}">
             <p>{{ _("Please input your name and card number:") }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
                    class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
@@ -556,7 +486,7 @@ title = _("Funding your donations")
             <br><br>
         </fieldset>
         % elif payment_type == 'sdd'
-        <fieldset id="iban-form" class="form-group {{ 'hidden' if source or pm else '' }}">
+        <fieldset id="iban-form" class="form-group {{ 'hidden' if routes else '' }}">
             <p>{{ _(
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>

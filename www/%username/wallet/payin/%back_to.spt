@@ -119,13 +119,12 @@ title = _("Adding Money")
 
     <p>{{ _("Please choose a payment method to add money:") }}</p>
 
-    <div class="row payment-methods">
+    <div class="payment-methods">
     % from "templates/macros/icons.html" import fontawesome
     % set base_path = participant.path('wallet/payin')
     % set direct_debit_available = currency in constants.FEE_PAYIN_DIRECT_DEBIT
 
-        <div class="col-sm-6">
-            <div class="panel panel-default {{ '' if allow_card else 'muted' }}">
+        <div class="panel panel-default {{ '' if allow_card else 'muted' }}">
             <div class="panel-body {{ 'overlaid' if allow_card else '' }}">
                 <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
                 <h4>{{ _("Credit/Debit Card") }}<br>
@@ -140,11 +139,10 @@ title = _("Adding Money")
                     {{ _("Fees: {0}% + {1}", *constants.FEE_PAYIN_CARD[currency].with_vat) }}
                 </p>
                 <a class="overlay" href="{{ base_path }}/card/{{ b64encode_s(back_to) }}?currency={{ currency }}"></a>
-            </div></div>
+            </div>
         </div>
 
-        <div class="col-sm-6">
-            <div class="panel panel-default {{ '' if allow_bankwire else 'muted' }}">
+        <div class="panel panel-default {{ '' if allow_bankwire else 'muted' }}">
             <div class="panel-body {{ 'overlaid' if allow_bankwire else '' }}">
                 <p class="payment-icon">{{ fontawesome('bank') }}</p>
                 <h4>{{ _("Bank Wire") }}<br>
@@ -161,13 +159,11 @@ title = _("Adding Money")
                 </p>
                 <a class="overlay" href="{{ base_path }}/bankwire/{{ b64encode_s(back_to) }}?currency={{ currency }}"></a>
             </div>
-            </div>
         </div>
 
         % if direct_debit_available
         % set recommended = request.country in constants.PAYIN_DIRECT_DEBIT_COUNTRIES[currency]
-        <div class="col-sm-6">
-            <div class="panel panel-default {{ '' if recommended and allow_directdebit else 'muted' }}">
+        <div class="panel panel-default {{ '' if recommended and allow_directdebit else 'muted' }}">
             <div class="panel-body {{ 'overlaid' if allow_directdebit else '' }}">
                 <p class="payment-icon">{{ fontawesome('exchange') }}</p>
                 <h4>{{ _("Direct Debit") }}<br>
@@ -182,7 +178,6 @@ title = _("Adding Money")
                     {{ _("Fee: {0}", constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat) }}
                 </p>
                 <a class="overlay" href="{{ base_path }}/direct-debit/?currency={{ currency }}"></a>
-            </div>
             </div>
         </div>
         % endif

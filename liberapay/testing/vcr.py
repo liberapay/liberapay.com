@@ -1,11 +1,16 @@
+import logging
 from os.path import join, dirname, realpath
 
 from vcr import VCR
-from vcr.serializers import yamlserializer
+import yaml
 
 
 TOP = realpath(join(dirname(dirname(__file__)), '..'))
 FIXTURES_ROOT = join(TOP, 'tests', 'py', 'fixtures')
+
+
+_logger = logging.getLogger('vcr.matchers')
+_logger.setLevel(logging.INFO)
 
 
 def filter_x_headers(headers):
@@ -27,11 +32,11 @@ class CustomSerializer:
             response_headers.pop('date', None)
             response_headers.pop('server', None)
             filter_x_headers(response_headers)
-        return yamlserializer.serialize(cassette_dict)
+        return yaml.dump(cassette_dict, default_flow_style=None, Dumper=yaml.Dumper)
 
     @staticmethod
     def deserialize(cassette_str):
-        return yamlserializer.deserialize(cassette_str)
+        return yaml.load(cassette_str, Loader=yaml.Loader)
 
 
 vcr = VCR(
