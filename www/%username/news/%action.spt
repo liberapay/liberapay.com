@@ -44,11 +44,12 @@ if request.method == 'POST':
 else:
     back_to = response.sanitize_untrusted_url(request.qs.get('back_to') or publisher.path(''))
 
+title = _("Subscribe") if subscribe else _("Unsubscribe")
+
 [---] text/html
 % extends "templates/layouts/base.html"
 
 {% block heading %}{% endblock %}
-{% set title = _("Subscribe") if subscribe else _("Unsubscribe") %}
 
 % block content
     <form action="" class="text-center" method="POST">
