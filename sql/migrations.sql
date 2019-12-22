@@ -2474,3 +2474,8 @@ $$ LANGUAGE sql;
 CREATE FUNCTION compute_arrears(tip current_tips) RETURNS currency_amount AS $$
     SELECT compute_arrears(tip::tips);
 $$ LANGUAGE sql;
+
+-- migration #114
+ALTER TABLE exchange_routes DROP CONSTRAINT currency_chk;
+ALTER TABLE exchange_routes ADD COLUMN is_default boolean;
+CREATE UNIQUE INDEX exchange_routes_is_default_key ON exchange_routes (participant, is_default) WHERE is_default IS TRUE;

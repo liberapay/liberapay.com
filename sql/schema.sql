@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '113'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '114'::jsonb);
 
 
 -- app configuration
@@ -364,9 +364,12 @@ CREATE TABLE exchange_routes
 , currency         currency
 , country          text
 , status           route_status   NOT NULL
+, is_default       boolean
 , UNIQUE (participant, network, address)
-, CONSTRAINT currency_chk CHECK ((currency IS NULL) = (network <> 'mango-cc'))
 );
+
+CREATE UNIQUE INDEX exchange_routes_is_default_key
+    ON exchange_routes (participant, is_default) WHERE is_default IS TRUE;
 
 
 -- exchanges -- when a participant moves cash between Liberapay and their bank
