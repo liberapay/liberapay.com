@@ -9,7 +9,7 @@ from liberapay.testing import EUR, Harness
 from liberapay.utils import find_files
 
 
-overescaping_re = re.compile(r'&amp;(#[0-9]{4}|[a-z]+);')
+overescaping_re = re.compile(r'&amp;(#[0-9]+|#x[0-9a-f]+|[a-z0-9]+);')
 
 
 class BrowseTestHarness(Harness):
