@@ -1110,8 +1110,14 @@ msgstr "個人檔案"
 msgid "Giving"
 msgstr "捐贈"
 
+msgid "Payment Instruments"
+msgstr ""
+
 msgid "Receiving"
 msgstr "收取"
+
+msgid "Payment Processors"
+msgstr "支付處理工具"
 
 msgid "Ledger"
 msgstr "總帳"
@@ -1121,9 +1127,6 @@ msgstr "錢包"
 
 msgid "Emptying your wallet"
 msgstr "清空電子錢包"
-
-msgid "Payment Processors"
-msgstr "支付處理工具"
 
 msgid "Identity"
 msgstr "身份"
@@ -1371,6 +1374,9 @@ msgstr "已連結的帳號"
 
 msgid "Privacy"
 msgstr "隱私"
+
+msgid "Instruments"
+msgstr ""
 
 msgid "Members"
 msgstr "成員"
@@ -2313,6 +2319,9 @@ msgstr "啟動支付"
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "{name}支付方式傳回出錯訊息：\"{error_message}\"。"
 
+msgid "The payment instrument is invalid, please select or add another one."
+msgstr ""
+
 msgid "More information is required in order to process this payment."
 msgstr "需要更多資訊來處理這次付款。"
 
@@ -2329,6 +2338,9 @@ msgstr "我們會向您的{bank_name}帳戶收取{partial_account_number}的金�
 
 msgid "Use another bank account"
 msgstr "使用其它的銀行帳戶"
+
+msgid "Payment instrument:"
+msgstr ""
 
 msgid "Please input your name and card number:"
 msgstr "請輸入姓名和卡號："
@@ -2941,8 +2953,70 @@ msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
 msgstr[0] "你在{platform}上已經星標{n}個代碼庫。"
 
+msgid "The payment instrument has been successfully added."
+msgstr ""
+
+msgid "Add a payment instrument"
+msgstr ""
+
+msgid "Forget this card number after one payment."
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Forget this bank account number after one payment."
+msgstr ""
+
 msgid "The BIC you provided appears to be invalid."
 msgstr "你提供的BIC似乎無效。"
+
+#, python-brace-format
+msgid "You have {n} connected payment instrument."
+msgid_plural "You have {n} connected payment instruments."
+msgstr[0] ""
+
+msgid "Bank Account"
+msgstr "銀行帳號"
+
+msgid "default"
+msgstr ""
+
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
+msgid "view mandate"
+msgstr ""
+
+#, python-brace-format
+msgid "Expires in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} is pending."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} was successful."
+msgstr ""
+
+msgid "This payment instrument hasn't been used yet."
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "You don't have any valid payment instrument."
+msgstr ""
+
+msgid "Add a payment instrument:"
+msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "你在這個 Liberapay帳戶還有剩錢，請選擇要花費的方式或是聯絡用戶支援。"
@@ -3387,9 +3461,6 @@ msgstr "直接扣款大約要４個工作天。"
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr "使用自動撥款向Liberapay充值會產生{0}的費用。"
-
-msgid "Bank Account"
-msgstr "銀行帳號"
 
 msgid "IBAN"
 msgstr "IBAN"

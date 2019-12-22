@@ -1109,8 +1109,14 @@ msgstr "프로필"
 msgid "Giving"
 msgstr "기부"
 
+msgid "Payment Instruments"
+msgstr ""
+
 msgid "Receiving"
 msgstr "수익"
+
+msgid "Payment Processors"
+msgstr "지불 처리자"
 
 msgid "Ledger"
 msgstr "장부"
@@ -1120,9 +1126,6 @@ msgstr "지갑"
 
 msgid "Emptying your wallet"
 msgstr "지갑 비우기"
-
-msgid "Payment Processors"
-msgstr "지불 처리자"
 
 msgid "Identity"
 msgstr "신원"
@@ -1370,6 +1373,9 @@ msgstr "다른 곳의 계정"
 
 msgid "Privacy"
 msgstr "개인 정보"
+
+msgid "Instruments"
+msgstr ""
 
 msgid "Members"
 msgstr "회원"
@@ -2312,6 +2318,9 @@ msgstr "지불 시작"
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "결제 프로세서 {name}에서 \"{error_message}\" 오류를 반환했습니다."
 
+msgid "The payment instrument is invalid, please select or add another one."
+msgstr ""
+
 msgid "More information is required in order to process this payment."
 msgstr "이 지불을 처리하기 위해서는 더 많은 정보가 필요합니다."
 
@@ -2328,6 +2337,9 @@ msgstr "{bank_name} 계정({partial_account_number})에서 청구됩니다."
 
 msgid "Use another bank account"
 msgstr "다른 은행 계좌 사용"
+
+msgid "Payment instrument:"
+msgstr ""
 
 msgid "Please input your name and card number:"
 msgstr "이름과 카드 번호를 입력해 주십시오:"
@@ -2940,8 +2952,70 @@ msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
 msgstr[0] "{platform} 에서 {n} 개의 저장소에 별표했습니다."
 
+msgid "The payment instrument has been successfully added."
+msgstr ""
+
+msgid "Add a payment instrument"
+msgstr ""
+
+msgid "Forget this card number after one payment."
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Forget this bank account number after one payment."
+msgstr ""
+
 msgid "The BIC you provided appears to be invalid."
 msgstr "제공한 BIC는 유효하지 않은 것으로 보입니다."
+
+#, python-brace-format
+msgid "You have {n} connected payment instrument."
+msgid_plural "You have {n} connected payment instruments."
+msgstr[0] ""
+
+msgid "Bank Account"
+msgstr "은행 계좌"
+
+msgid "default"
+msgstr ""
+
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
+msgid "view mandate"
+msgstr ""
+
+#, python-brace-format
+msgid "Expires in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} is pending."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} was successful."
+msgstr ""
+
+msgid "This payment instrument hasn't been used yet."
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "You don't have any valid payment instrument."
+msgstr ""
+
+msgid "Add a payment instrument:"
+msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Liberapay 계정에 잔액이 존재합니다. 지출 방식을 선택하거나 고객지원에 연락하십시오."
@@ -3386,9 +3460,6 @@ msgstr "계좌 이체 처리에는 4영업일이 걸립니다."
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr "Liberapay로 자동 이체로 입금하게 되면 {0} 만큼의 수수료가 부과됩니다."
-
-msgid "Bank Account"
-msgstr "은행 계좌"
 
 msgid "IBAN"
 msgstr "IBAN"

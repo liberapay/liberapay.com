@@ -1117,8 +1117,14 @@ msgstr "Perfil"
 msgid "Giving"
 msgstr "Donando"
 
+msgid "Payment Instruments"
+msgstr ""
+
 msgid "Receiving"
 msgstr "Recibiendo"
+
+msgid "Payment Processors"
+msgstr "Procesadores de pago"
 
 msgid "Ledger"
 msgstr "Libro de contabilidad"
@@ -1128,9 +1134,6 @@ msgstr "Cartera"
 
 msgid "Emptying your wallet"
 msgstr "Vaciando tu cartera"
-
-msgid "Payment Processors"
-msgstr "Procesadores de pago"
 
 msgid "Identity"
 msgstr "Identidad"
@@ -1380,6 +1383,9 @@ msgstr "Cuentas enlazadas"
 
 msgid "Privacy"
 msgstr "Privacidad"
+
+msgid "Instruments"
+msgstr ""
 
 msgid "Members"
 msgstr "Miembros"
@@ -2331,6 +2337,9 @@ msgstr "Iniciar el pago"
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "El procesador de pagos {name} devolvió un error: «{error_message}»."
 
+msgid "The payment instrument is invalid, please select or add another one."
+msgstr ""
+
 msgid "More information is required in order to process this payment."
 msgstr "Se requiere más información para procesar este pago."
 
@@ -2347,6 +2356,9 @@ msgstr "Cargaremos tu cuenta ({partial_account_number}) de {bank_name}."
 
 msgid "Use another bank account"
 msgstr "Usar otra cuenta bancaria"
+
+msgid "Payment instrument:"
+msgstr ""
 
 msgid "Please input your name and card number:"
 msgstr "Por favor, introduce tu nombre y tu número de tarjeta:"
@@ -2963,8 +2975,71 @@ msgid_plural "You have starred {n} repositories on {platform}."
 msgstr[0] "Mas marcado con estrella {n} repositorio en {platform}."
 msgstr[1] "Has marcado con estrella {n} repositorios en {platform}."
 
+msgid "The payment instrument has been successfully added."
+msgstr ""
+
+msgid "Add a payment instrument"
+msgstr ""
+
+msgid "Forget this card number after one payment."
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Forget this bank account number after one payment."
+msgstr ""
+
 msgid "The BIC you provided appears to be invalid."
 msgstr "El BIC que has proporcionado es inválido."
+
+#, python-brace-format
+msgid "You have {n} connected payment instrument."
+msgid_plural "You have {n} connected payment instruments."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Bank Account"
+msgstr "Cuenta bancaria"
+
+msgid "default"
+msgstr ""
+
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
+msgid "view mandate"
+msgstr ""
+
+#, python-brace-format
+msgid "Expires in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} is pending."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} was successful."
+msgstr ""
+
+msgid "This payment instrument hasn't been used yet."
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "You don't have any valid payment instrument."
+msgstr ""
+
+msgid "Add a payment instrument:"
+msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Todavía tienes dinero en esta cuenta de Liberapay, elige abajo un método de desembolso o contacta al servicio de soporte."
@@ -3418,9 +3493,6 @@ msgstr "Los pagos domiciliados tardan aproximadamente 4 días laborables en comp
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr "Añadir dinero a Liberapay a través de pago domiciliado incurre en una comisión de {0}."
-
-msgid "Bank Account"
-msgstr "Cuenta bancaria"
 
 msgid "IBAN"
 msgstr "IBAN"

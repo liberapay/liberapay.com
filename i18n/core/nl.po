@@ -1118,8 +1118,14 @@ msgstr "Profiel"
 msgid "Giving"
 msgstr "Geven"
 
+msgid "Payment Instruments"
+msgstr ""
+
 msgid "Receiving"
 msgstr "Ontvangen"
+
+msgid "Payment Processors"
+msgstr "Betalingsverwerkers"
 
 msgid "Ledger"
 msgstr "Grootboek"
@@ -1129,9 +1135,6 @@ msgstr "Portemonnee"
 
 msgid "Emptying your wallet"
 msgstr "Je portemonnee legen"
-
-msgid "Payment Processors"
-msgstr "Betalingsverwerkers"
 
 msgid "Identity"
 msgstr "Identiteit"
@@ -1381,6 +1384,9 @@ msgstr "Gekoppelde accounts"
 
 msgid "Privacy"
 msgstr "Privacy"
+
+msgid "Instruments"
+msgstr ""
 
 msgid "Members"
 msgstr "Leden"
@@ -2332,6 +2338,9 @@ msgstr "Start de betaling"
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "De betalingsverwerker {name} geeft een fout: \"{error_message}\"."
 
+msgid "The payment instrument is invalid, please select or add another one."
+msgstr ""
+
 msgid "More information is required in order to process this payment."
 msgstr "Meer informatie is nodig om deze betaling te verwerken."
 
@@ -2348,6 +2357,9 @@ msgstr "Wij brengen je {bank_name}-rekening in rekening ({partial_account_number
 
 msgid "Use another bank account"
 msgstr "Gebruik een andere bankrekening"
+
+msgid "Payment instrument:"
+msgstr ""
 
 msgid "Please input your name and card number:"
 msgstr "Voer a.j.b. je naam en kaartnummer in:"
@@ -2964,8 +2976,71 @@ msgid_plural "You have starred {n} repositories on {platform}."
 msgstr[0] "Je hebt {n} ster repository op {platform}."
 msgstr[1] "Je hebt {n} ster repositories op {platform}."
 
+msgid "The payment instrument has been successfully added."
+msgstr ""
+
+msgid "Add a payment instrument"
+msgstr ""
+
+msgid "Forget this card number after one payment."
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Forget this bank account number after one payment."
+msgstr ""
+
 msgid "The BIC you provided appears to be invalid."
 msgstr "De BIC die je hebt opgegeven lijkt ongeldig."
+
+#, python-brace-format
+msgid "You have {n} connected payment instrument."
+msgid_plural "You have {n} connected payment instruments."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Bank Account"
+msgstr "Bankrekening"
+
+msgid "default"
+msgstr ""
+
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
+msgid "view mandate"
+msgstr ""
+
+#, python-brace-format
+msgid "Expires in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} is pending."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} was successful."
+msgstr ""
+
+msgid "This payment instrument hasn't been used yet."
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "You don't have any valid payment instrument."
+msgstr ""
+
+msgid "Add a payment instrument:"
+msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Er staat nog geld op dit Liberapay-account, kies alsjeblieft een methode voor uitbetaling of neem contact op."
@@ -3419,9 +3494,6 @@ msgstr "Automatische incasso's duren ongeveer 4 werkdagen om te voltooien."
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr "Geld toevoegen aan Liberapay via een automatische incasso heeft een provisie van {0}."
-
-msgid "Bank Account"
-msgstr "Bankrekening"
 
 msgid "IBAN"
 msgstr "IBAN"

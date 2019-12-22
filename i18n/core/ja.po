@@ -1109,8 +1109,14 @@ msgstr "プロフィール"
 msgid "Giving"
 msgstr "寄付"
 
+msgid "Payment Instruments"
+msgstr ""
+
 msgid "Receiving"
 msgstr "受け取り"
+
+msgid "Payment Processors"
+msgstr "決済サービス"
 
 msgid "Ledger"
 msgstr "元帳"
@@ -1120,9 +1126,6 @@ msgstr "ウォレット"
 
 msgid "Emptying your wallet"
 msgstr "ウォレットを空にしています"
-
-msgid "Payment Processors"
-msgstr "決済サービス"
 
 msgid "Identity"
 msgstr "ID"
@@ -1370,6 +1373,9 @@ msgstr "リンクされているアカウント"
 
 msgid "Privacy"
 msgstr "プライバシー"
+
+msgid "Instruments"
+msgstr ""
 
 msgid "Members"
 msgstr "メンバー"
@@ -2312,6 +2318,9 @@ msgstr "支払いを開始する"
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "決済サービス {name} はエラーを返しました：「{error_message}」。"
 
+msgid "The payment instrument is invalid, please select or add another one."
+msgstr ""
+
 msgid "More information is required in order to process this payment."
 msgstr "この支払いを処理するには、より詳細な情報が必要です。"
 
@@ -2328,6 +2337,9 @@ msgstr "あなたの {bank_name} の口座に課金されます（{partial_accou
 
 msgid "Use another bank account"
 msgstr "別の銀行口座を使用する"
+
+msgid "Payment instrument:"
+msgstr ""
 
 msgid "Please input your name and card number:"
 msgstr "お名前とカード番号を入力してください："
@@ -2940,8 +2952,70 @@ msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
 msgstr[0] "{platform} の {n} 個のリポジトリにスターを付けています。"
 
+msgid "The payment instrument has been successfully added."
+msgstr ""
+
+msgid "Add a payment instrument"
+msgstr ""
+
+msgid "Forget this card number after one payment."
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Forget this bank account number after one payment."
+msgstr ""
+
 msgid "The BIC you provided appears to be invalid."
 msgstr "指定した BIC は無効です。"
+
+#, python-brace-format
+msgid "You have {n} connected payment instrument."
+msgid_plural "You have {n} connected payment instruments."
+msgstr[0] ""
+
+msgid "Bank Account"
+msgstr "銀行口座"
+
+msgid "default"
+msgstr ""
+
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
+msgid "view mandate"
+msgstr ""
+
+#, python-brace-format
+msgid "Expires in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} is pending."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} was successful."
+msgstr ""
+
+msgid "This payment instrument hasn't been used yet."
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "You don't have any valid payment instrument."
+msgstr ""
+
+msgid "Add a payment instrument:"
+msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "まだこの Liberapay アカウントには残金があります。以下の支払い方法から選択するか、サポートに連絡してください。"
@@ -3386,9 +3460,6 @@ msgstr "口座自動振替は約4営業日以内に完了します。"
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr "自動口座振替でLiberapayに入金すると手数料として{0}がかかります。"
-
-msgid "Bank Account"
-msgstr "銀行口座"
 
 msgid "IBAN"
 msgstr "IBAN"

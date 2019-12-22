@@ -1107,8 +1107,14 @@ msgstr "Profil"
 msgid "Giving"
 msgstr "Przekazuję"
 
+msgid "Payment Instruments"
+msgstr ""
+
 msgid "Receiving"
 msgstr "Otrzymuję"
+
+msgid "Payment Processors"
+msgstr ""
 
 msgid "Ledger"
 msgstr ""
@@ -1117,9 +1123,6 @@ msgid "Wallet"
 msgstr "Portfel"
 
 msgid "Emptying your wallet"
-msgstr ""
-
-msgid "Payment Processors"
 msgstr ""
 
 msgid "Identity"
@@ -1373,6 +1376,9 @@ msgstr "Konta w innych serwisach"
 
 msgid "Privacy"
 msgstr "Prywatność"
+
+msgid "Instruments"
+msgstr ""
 
 msgid "Members"
 msgstr "Członkowie"
@@ -2335,6 +2341,9 @@ msgstr "Rozpocznij płatność"
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "Pośrednik płatności {name} zwrócił błąd: „{error_message}”."
 
+msgid "The payment instrument is invalid, please select or add another one."
+msgstr ""
+
 msgid "More information is required in order to process this payment."
 msgstr ""
 
@@ -2351,6 +2360,9 @@ msgstr ""
 
 msgid "Use another bank account"
 msgstr "Użyj innego konta bankowego"
+
+msgid "Payment instrument:"
+msgstr ""
 
 #, fuzzy
 msgid "Please input your name and card number:"
@@ -2972,8 +2984,72 @@ msgstr[0] "Oznaczyłeś gwiazdką {n} repozytorium w serwisie {platform}."
 msgstr[1] "Oznaczyłeś gwiazdką {n} repozytoria w serwisie {platform}."
 msgstr[2] "Oznaczyłeś gwiazdką {n} repozytoriów w serwisie {platform}."
 
+msgid "The payment instrument has been successfully added."
+msgstr ""
+
+msgid "Add a payment instrument"
+msgstr ""
+
+msgid "Forget this card number after one payment."
+msgstr ""
+
+#, python-brace-format
+msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
+msgstr ""
+
+msgid "Forget this bank account number after one payment."
+msgstr ""
+
 msgid "The BIC you provided appears to be invalid."
 msgstr "Kod BIC który podałeś zdaje się być niepoprawny."
+
+#, python-brace-format
+msgid "You have {n} connected payment instrument."
+msgid_plural "You have {n} connected payment instruments."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Bank Account"
+msgstr "Konto bankowe"
+
+msgid "default"
+msgstr ""
+
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
+msgid "view mandate"
+msgstr ""
+
+#, python-brace-format
+msgid "Expires in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} failed."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} is pending."
+msgstr ""
+
+#, python-brace-format
+msgid "The last payment initiated on {date} was successful."
+msgstr ""
+
+msgid "This payment instrument hasn't been used yet."
+msgstr ""
+
+msgid "Set as default"
+msgstr ""
+
+msgid "You don't have any valid payment instrument."
+msgstr ""
+
+msgid "Add a payment instrument:"
+msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Nadal masz pieniądze na swoim koncie Liberapay, prosimy o wybranie sposobu ich wydania lub o skontaktowanie się z obsługą."
@@ -3436,9 +3512,6 @@ msgstr "Przekazy bezpośrednie trafiają w ciągu około 4 dni roboczych."
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
 msgstr "Dodanie pieniędzy do Liberapay za pomocą polecenia zapłaty wymaga opłaty w wysokości {0}."
-
-msgid "Bank Account"
-msgstr "Konto bankowe"
 
 msgid "IBAN"
 msgstr "IBAN"
