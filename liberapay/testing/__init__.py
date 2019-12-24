@@ -9,6 +9,7 @@ from os.path import dirname, join, realpath
 from pando.utils import utcnow
 from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
+import stripe
 
 from liberapay.billing import transactions
 from liberapay.billing.transactions import (
@@ -404,6 +405,10 @@ class Harness(unittest.TestCase):
         """, (participant.id, network, address, status, one_off, remote_user_id))
         r.__dict__['participant'] = participant
         return r
+
+    def attach_stripe_payment_method(self, participant, stripe_pm_id, one_off=False):
+        pm = stripe.PaymentMethod.retrieve(stripe_pm_id)
+        return ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
 
 
 class Foobar(Exception): pass
