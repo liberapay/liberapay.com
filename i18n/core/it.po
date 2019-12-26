@@ -678,10 +678,10 @@ msgstr "esempio@mastodon.social"
 
 #, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
-msgstr "{0} non sembra essere un server di {1}."
+msgstr "È {0} veramente un server {1}? Attualmente non sembra esserlo."
 
 msgid "example@pleroma.site"
-msgstr ""
+msgstr "esempio@pleroma.site"
 
 msgid "You need to sign in first"
 msgstr "Prima è necessario effettuare l'accesso"
@@ -1118,7 +1118,7 @@ msgid "Giving"
 msgstr "Donazioni"
 
 msgid "Payment Instruments"
-msgstr ""
+msgstr "Strumenti di pagamento"
 
 msgid "Receiving"
 msgstr "Guadagni"
@@ -1385,7 +1385,7 @@ msgid "Privacy"
 msgstr "Privacy"
 
 msgid "Instruments"
-msgstr ""
+msgstr "Strumenti"
 
 msgid "Members"
 msgstr "Membri"
@@ -2173,7 +2173,7 @@ msgid "Renew now"
 msgstr "Rinnova adesso"
 
 msgid "Pending payment completion."
-msgstr "Completamento del pagamento in attesa."
+msgstr "Completamento del pagamento in corso."
 
 msgid "Awaiting payment."
 msgstr "In attesa del pagamento."
@@ -2338,7 +2338,7 @@ msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "L'elaboratore di pagamenti {name} ha riportato un errore: \"{error_message}\"."
 
 msgid "The payment instrument is invalid, please select or add another one."
-msgstr ""
+msgstr "Lo strumento di pagamento non è valido, si prega di selezionare o aggiungere un altro strumento."
 
 msgid "More information is required in order to process this payment."
 msgstr "Sono necessarie ulteriori informazioni per poter elaborare questo pagamento."
@@ -2358,7 +2358,7 @@ msgid "Use another bank account"
 msgstr "Utilizza un altro conto corrente"
 
 msgid "Payment instrument:"
-msgstr ""
+msgstr "Strumento di pagamento:"
 
 msgid "Please input your name and card number:"
 msgstr "Inserisci il tuo nome ed il numero della tua carta:"
@@ -2976,20 +2976,20 @@ msgstr[0] "Hai selezionato come preferito {n} repository su {platform}."
 msgstr[1] "Hai selezionato come preferiti {n} repository su {platform}."
 
 msgid "The payment instrument has been successfully added."
-msgstr ""
+msgstr "Lo strumento di pagamento è stato aggiunto con successo."
 
 msgid "Add a payment instrument"
-msgstr ""
+msgstr "Aggiungi uno strumento di pagamento"
 
 msgid "Forget this card number after one payment."
-msgstr ""
+msgstr "Dimentica questo numero di carta dopo un singolo pagamento."
 
 #, python-brace-format
 msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "Fornendo il tuo numero IBAN stai autorizzando {platform} e {provider}, il nostro fornitore di servizi di pagamento, ad inviare istruzioni alla tua banca per addebitare il tuo conto. Hai diritto ad un rimborso dalla tua banca in base ai termini e le condizioni dell'accordo con la tua banca. Il rimborso deve essere richiesto entro 8 settimane a decorrere della data in cui il tuo conto è stato addebitato."
 
 msgid "Forget this bank account number after one payment."
-msgstr ""
+msgstr "Dimentica questo numero di conto bancario dopo un singolo pagamento."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "Il BIC fornito sembra non essere valido."
@@ -2997,49 +2997,49 @@ msgstr "Il BIC fornito sembra non essere valido."
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hai {n} strumento di pagamento collegato."
+msgstr[1] "Hai {n} strumenti di pagamento collegati."
 
 msgid "Bank Account"
 msgstr "Conto bancario"
 
 msgid "default"
-msgstr ""
+msgstr "predefinito"
 
 #, python-brace-format
 msgid "Added on {date}"
-msgstr ""
+msgstr "Aggiunto il {date}"
 
 msgid "view mandate"
-msgstr ""
+msgstr "visualizza mandato"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
-msgstr ""
+msgstr "Scade il {month} {year}"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} failed."
-msgstr ""
+msgstr "Il pagamento precedente avviato il {date} non è andato a buon fine."
 
 #, python-brace-format
 msgid "The last payment initiated on {date} is pending."
-msgstr ""
+msgstr "Il pagamento precedente avviato il {date} è in elaborazione."
 
 #, python-brace-format
 msgid "The last payment initiated on {date} was successful."
-msgstr ""
+msgstr "Il pagamento precedente avviato il {date} è andato a buon fine."
 
 msgid "This payment instrument hasn't been used yet."
-msgstr ""
+msgstr "Questo strumento di pagamento non è ancora stato usato."
 
 msgid "Set as default"
-msgstr ""
+msgstr "Imposta come predefinito"
 
 msgid "You don't have any valid payment instrument."
-msgstr ""
+msgstr "Non hai nessuno strumento di pagamento valido."
 
 msgid "Add a payment instrument:"
-msgstr ""
+msgstr "Aggiungi uno strumento di pagamento:"
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Hai ancora denaro su questo account Liberapay, per favore scegli un metodo di esborso qua sotto oppure contatta l'assistenza."
@@ -3235,7 +3235,7 @@ msgid "canceled"
 msgstr "operazione annullata"
 
 msgid "in arrears"
-msgstr ""
+msgstr "in arretrati"
 
 msgid "donation refund"
 msgstr "rimborso donazione"
@@ -3305,7 +3305,7 @@ msgstr "Devi trasferire del denaro nel tuo portafoglio per finanziare le tue don
 
 #, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "Hai un pagamento {payment_method} di {money_amount} in attesa. {link_open}Dettagli{link_close}"
+msgstr "Hai un pagamento {payment_method} di {money_amount} in elaborazione. {link_open}Dettagli{link_close}"
 
 msgid "Please choose a payment method to add money:"
 msgstr "Per favore, scegli un metodo di pagamento per aggiungere denaro:"
