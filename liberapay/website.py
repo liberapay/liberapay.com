@@ -17,7 +17,7 @@ class Website(_Website):
         try:
             raise Warning(msg)
         except Warning as e:
-            self.tell_sentry(state, e)
+            self.tell_sentry(e, state)
 
 
 env = Environment(
