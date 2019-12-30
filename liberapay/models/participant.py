@@ -837,24 +837,6 @@ class Participant(Model, MixinTeam):
         for tippee in tippees:
             tippee.update_receiving(cursor=cursor)
 
-    def clear_tips_receiving(self, cursor):
-        """Zero out tips to a given user.
-        """
-        tippers = cursor.all("""
-
-            SELECT ( SELECT p.*::participants
-                       FROM participants p
-                      WHERE p.id=t.tipper
-                    ) AS tipper
-                 , t.amount
-              FROM current_tips t
-             WHERE tippee = %s
-               AND amount > 0
-
-        """, (self.id,))
-        for tipper, amount in tippers:
-            tipper.set_tip_to(self, amount.zero(), update_tippee=False, cursor=cursor)
-
     def clear_takes(self, cursor):
         """Leave all teams by zeroing all takes.
         """
@@ -2338,7 +2320,7 @@ class Participant(Model, MixinTeam):
 
 
     def set_tip_to(self, tippee, periodic_amount, period='weekly', renewal_mode=None,
-                   update_self=True, update_tippee=True, cursor=None):
+                   update_self=True, update_tippee=True):
         """Given a Participant or username, and amount as str, returns a dict.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
@@ -2365,7 +2347,7 @@ class Participant(Model, MixinTeam):
             raise NoSelfTipping
 
         if periodic_amount == 0:
-            return self.stop_tip_to(tippee, cursor=cursor)
+            return self.stop_tip_to(tippee)
 
         amount = (periodic_amount * PERIOD_CONVERSION_RATES[period]).round_down()
 
@@ -2379,7 +2361,7 @@ class Participant(Model, MixinTeam):
                 raise BadDonationCurrency(tippee, amount.currency)
 
         # Insert tip
-        t = (cursor or self.db).one("""\
+        t = self.db.one("""\
 
             WITH current_tip AS (
                      SELECT *
@@ -2410,13 +2392,13 @@ class Participant(Model, MixinTeam):
 
         if update_self:
             # Update giving amount of tipper
-            updated = self.update_giving(cursor)
+            updated = self.update_giving()
             for u in updated:
                 if u.id == t.id:
                     t.is_funded = u.is_funded
         if update_tippee:
             # Update receiving amount of tippee
-            tippee.update_receiving(cursor)
+            tippee.update_receiving()
 
         return t
 
@@ -2434,8 +2416,8 @@ class Participant(Model, MixinTeam):
         )
 
 
-    def stop_tip_to(self, tippee, cursor=None):
-        t = (cursor or self.db).one("""
+    def stop_tip_to(self, tippee):
+        t = self.db.one("""
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
                       , paid_in_advance, is_funded, renewal_mode )
@@ -2452,9 +2434,9 @@ class Participant(Model, MixinTeam):
             return
         if t.amount > (t.paid_in_advance or 0):
             # Update giving amount of tipper
-            self.update_giving(cursor)
+            self.update_giving()
             # Update receiving amount of tippee
-            tippee.update_receiving(cursor)
+            tippee.update_receiving()
         return t
 
 
