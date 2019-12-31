@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from liberapay.payin.cron import (
     execute_scheduled_payins, send_upcoming_debit_notifications,
 )
@@ -259,3 +261,106 @@ class TestScheduledPayins(EmailHarness):
         assert payins[0].payer == alice.id
         assert payins[0].amount == EUR('30.00')
         assert payins[0].off_session is False
+        emails = self.get_emails()
+        assert len(emails) == 0
+
+    def test_cancelling_a_scheduled_payin(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
+        dana = self.make_participant('dana')
+        alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
+        alice.set_tip_to(carl, EUR('0.01'), renewal_mode=1)
+        self.make_payin_and_transfer(alice_card, carl, EUR('6.00'))
+        alice.set_tip_to(dana, EUR('5.00'), renewal_mode=2)
+        self.make_payin_and_transfer(alice_card, dana, EUR('25.00'))
+
+        scheduled_payins = self.db.all(
+            "SELECT * FROM scheduled_payins ORDER BY execution_date"
+        )
+        assert len(scheduled_payins) == 2
+        assert scheduled_payins[0].amount == EUR('37.00')
+        assert scheduled_payins[1].amount is None
+
+        sp_id = scheduled_payins[0].id
+        r = self.client.GET("/alice/giving/schedule", auth_as=alice)
+        assert r.code == 200
+        r = self.client.GET(
+            "/alice/giving/schedule?id=%i&action=cancel" % sp_id, auth_as=alice
+        )
+        assert r.code == 200
+        r = self.client.PxST(
+            "/alice/giving/schedule?id=%i&action=cancel" % sp_id, auth_as=alice
+        )
+        assert r.code == 302
+
+        scheduled_payins = self.db.all(
+            "SELECT * FROM scheduled_payins ORDER BY execution_date"
+        )
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount is None
+
+        tips = self.db.all("""
+            SELECT tipper, tippee, renewal_mode
+              FROM current_tips
+          ORDER BY ctime
+        """, back_as=dict)
+        assert tips == [
+            {'tipper': alice.id, 'tippee': bob.id, 'renewal_mode': 0},
+            {'tipper': alice.id, 'tippee': carl.id, 'renewal_mode': 1},
+            {'tipper': alice.id, 'tippee': dana.id, 'renewal_mode': 0},
+        ]
+
+        emails = self.get_emails()
+        assert len(emails) == 0
+
+    def test_rescheduling(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
+        dana = self.make_participant('dana')
+        alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
+        alice.set_tip_to(carl, EUR('0.01'), renewal_mode=1)
+        self.make_payin_and_transfer(alice_card, carl, EUR('6.00'))
+        alice.set_tip_to(dana, EUR('5.00'), renewal_mode=2)
+        self.make_payin_and_transfer(alice_card, dana, EUR('25.00'))
+
+        scheduled_payins = self.db.all(
+            "SELECT * FROM scheduled_payins ORDER BY execution_date"
+        )
+        assert len(scheduled_payins) == 2
+        assert scheduled_payins[0].amount == EUR('37.00')
+        assert scheduled_payins[1].amount is None
+
+        sp_id = scheduled_payins[0].id
+        r = self.client.GET("/alice/giving/schedule", auth_as=alice)
+        assert r.code == 200
+        r = self.client.GET(
+            "/alice/giving/schedule?id=%i&action=reschedule" % sp_id,
+            auth_as=alice
+        )
+        assert r.code == 200
+        new_date = scheduled_payins[0].execution_date + timedelta(days=21)
+        r = self.client.PxST(
+            "/alice/giving/schedule?id=%i&action=reschedule" % sp_id,
+            {'new_date': new_date.isoformat()}, auth_as=alice
+        )
+        assert r.code == 302
+
+        sp = self.db.one(
+            "SELECT * FROM scheduled_payins WHERE id = %s", (sp_id,)
+        )
+        assert sp.amount == EUR('37.00')
+        assert sp.execution_date == new_date
+
+        schedule = alice.schedule_renewals()
+        assert len(schedule) == 2
+        assert schedule[0].amount == EUR('37.00')
+        assert schedule[0].execution_date == new_date
+
+        emails = self.get_emails()
+        assert len(emails) == 0
