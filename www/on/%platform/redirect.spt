@@ -70,7 +70,13 @@ title = _("Which account?")
     <p>{{ _("Please enter the name of the {0} account you would like to connect:",
             platform.display_name) }}</p>
     <input class="form-control" name="user_id" required
-           placeholder="{{ _('{0} username', platform.display_name) }}" />
+           placeholder="{{ _(
+               'Name of the team\'s account on {platform}', platform=platform.display_name
+           ) if p and p.kind == 'group' else _(
+               'Name of the organization\'s account on {platform}', platform=platform.display_name
+           ) if p and p.kind == 'organization' else _(
+               '{0} username', platform.display_name)
+           }}" />
     % else
     <p>{{ _("Please enter the address of the {0} account you would like to connect:",
             platform.display_name) }}</p>
