@@ -477,7 +477,11 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None, maximum=None):
 
 def parse_date(mapping, k, default=NO_DEFAULT, sep='-'):
     try:
-        r = mapping[k].split(sep)
+        r = mapping[k]
+        if r:
+            r = r.split(sep)
+        elif default is not NO_DEFAULT:
+            return default
     except (KeyError, Response):
         if default is NO_DEFAULT:
             raise

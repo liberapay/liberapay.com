@@ -74,6 +74,7 @@ from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
+from liberapay.payin.common import resolve_amounts
 from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
@@ -2447,7 +2448,7 @@ class Participant(Model, MixinTeam):
         return t
 
 
-    def schedule_renewals(self, save=True, new_dates={}):
+    def schedule_renewals(self, save=True, new_dates={}, new_amounts={}):
         """(Re)schedule this donor's future payments.
         """
 
@@ -2610,15 +2611,33 @@ class Participant(Model, MixinTeam):
                     cur_sp = current_schedule_map.pop(tippees, None)
                     if cur_sp:
                         # Found it, now we check if the two are different
-                        if cur_sp.id in new_dates:
-                            new_sp.execution_date = new_dates[cur_sp.id]
-                            new_sp.rescheduled = True
-                            updates.append((cur_sp, new_sp))
-                        elif cur_sp.rescheduled:
+                        if cur_sp.id in new_dates or cur_sp.id in new_amounts:
+                            new_sp.customized = cur_sp.customized
+                            new_date = new_dates.get(cur_sp.id)
+                            if new_date and new_sp.execution_date != new_date:
+                                new_sp.execution_date = new_date
+                                new_sp.customized = True
+                            new_amount = new_amounts.get(cur_sp.id)
+                            if new_amount and new_sp.amount != new_amount:
+                                new_sp.amount = new_amount
+                                tr_amounts = resolve_amounts(new_amount, {
+                                    tr['tippee_id']: tr['amount']
+                                    for tr in new_sp.transfers
+                                })
+                                for tr in new_sp.transfers:
+                                    tr['amount'] = tr_amounts[tr['tippee_id']]
+                                new_sp.customized = True
+                            if has_scheduled_payment_changed(cur_sp, new_sp):
+                                updates.append((cur_sp, new_sp))
+                            else:
+                                unchanged.append(cur_sp)
+                        elif cur_sp.customized:
                             # Don't modify a payment that has been explicitly
-                            # rescheduled by the donor.
+                            # customized by the donor.
                             new_sp.execution_date = cur_sp.execution_date
-                            new_sp.rescheduled = True
+                            new_sp.amount = cur_sp.amount
+                            new_sp.transfers = cur_sp.transfers
+                            new_sp.customized = True
                             unchanged.append(cur_sp)
                         elif has_scheduled_payment_changed(cur_sp, new_sp):
                             is_short_delay = (
@@ -2681,7 +2700,7 @@ class Participant(Model, MixinTeam):
                          , automatic = %s
                          , notifs_count = 0
                          , last_notif_ts = NULL
-                         , rescheduled = %s
+                         , customized = %s
                          , mtime = current_timestamp
                      WHERE id = %s
                 """, [
@@ -2689,7 +2708,7 @@ class Participant(Model, MixinTeam):
                      json.dumps(new_sp.transfers),
                      new_sp.execution_date,
                      new_sp.automatic,
-                     getattr(new_sp, 'rescheduled', None),
+                     getattr(new_sp, 'customized', None),
                      cur_sp.id)
                     for cur_sp, new_sp in updates
                 ])
