@@ -1077,6 +1077,8 @@ class Payday(object):
         log("Sent %i income notifications." % n)
 
         # Donation renewal reminders
+        from liberapay.payin.cron import send_donation_reminder_notifications
+        send_donation_reminder_notifications()
         n = 0
         participants = self.db.all("""
             SELECT (SELECT p FROM participants p WHERE p.id = t.tipper) AS p
