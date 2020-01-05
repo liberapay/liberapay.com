@@ -42,7 +42,7 @@ subhead = _("Privacy")
             <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name].__and__(1) else '' }} />
             {{ _(label) }}
             % if participant[name] == 2
-                {{ has_override.add(True) or '' }}
+                % do has_override.add(True)
                 <span class="text-warning">({{ _("Admin override is on.*") }})</span>
             % endif
         </label>
