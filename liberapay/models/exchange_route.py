@@ -143,7 +143,9 @@ class ExchangeRoute(Model):
             customer_id = stripe.Customer.create(
                 email=participant.get_email_address(),
                 payment_method=pm.id,
-                idempotency_key='create_customer_for_participant_%i' % participant.id,
+                idempotency_key='create_customer_for_participant_%i_with_%s' % (
+                    participant.id, pm.id
+                ),
             ).id
         pm_country = getattr(getattr(pm, pm.type), 'country', None)
         pm_currency = getattr(getattr(pm, pm.type), 'currency', None)
@@ -181,7 +183,9 @@ class ExchangeRoute(Model):
             customer_id = stripe.Customer.create(
                 email=source.owner.email,
                 source=source.id,
-                idempotency_key='create_customer_for_participant_%i' % participant.id,
+                idempotency_key='create_customer_for_participant_%i_with_%s' % (
+                    participant.id, source.id
+                ),
             ).id
         source_country = getattr(getattr(source, source.type), 'country', None)
         source_currency = getattr(getattr(source, source.type), 'currency', None)
