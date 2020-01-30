@@ -11,6 +11,7 @@ BEGIN;
     , notifs_count     int               NOT NULL DEFAULT 0
     , last_notif_ts    timestamptz
     , customized       boolean
+    , payin            bigint            REFERENCES payins
     , CONSTRAINT amount_is_null_when_not_automatic CHECK ((amount IS NULL) = (NOT automatic))
     , CONSTRAINT notifs CHECK ((notifs_count = 0) = (last_notif_ts IS NULL))
     );

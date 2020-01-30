@@ -2,6 +2,7 @@ from collections import namedtuple
 from datetime import timedelta
 from decimal import Decimal
 
+from pando import json
 from pando.utils import utcnow
 from psycopg2.extras import execute_batch
 
@@ -112,6 +113,84 @@ def update_payin(
                  WHERE id = %s
                    AND one_off IS TRUE
             """, (payin.route,))
+
+        # Lock to avoid concurrent updates
+        cursor.run("SELECT * FROM participants WHERE id = %s FOR UPDATE",
+                   (payin.payer,))
+
+        # Update scheduled payins, if appropriate
+        if payin.status in ('pending', 'succeeded'):
+            sp = cursor.one("""
+                SELECT *
+                  FROM scheduled_payins
+                 WHERE payer = %s
+                   AND payin = %s
+            """, (payin.payer, payin.id))
+            if not sp:
+                schedule = cursor.all("""
+                    SELECT *
+                      FROM scheduled_payins
+                     WHERE payer = %s
+                       AND payin IS NULL
+                """, (payin.payer,))
+                today = utcnow().date()
+                schedule.sort(key=lambda sp: abs((sp.execution_date - today).days))
+                payin_tippees = set(cursor.all("""
+                    SELECT coalesce(team, recipient) AS tippee
+                      FROM payin_transfers
+                     WHERE payer = %s
+                       AND payin = %s
+                """, (payin.payer, payin.id)))
+                for sp in schedule:
+                    matching_tippees_count = 0
+                    other_transfers = []
+                    for tr in sp.transfers:
+                        if tr['tippee_id'] in payin_tippees:
+                            matching_tippees_count += 1
+                        else:
+                            other_transfers.append(tr)
+                    if matching_tippees_count > 0:
+                        if other_transfers:
+                            cursor.run("""
+                                UPDATE scheduled_payins
+                                   SET payin = %s
+                                     , mtime = current_timestamp
+                                 WHERE id = %s
+                            """, (payin.id, sp.id))
+                            other_transfers_sum = Money.sum(
+                                (Money(**tr['amount']) for tr in other_transfers),
+                                sp['amount'].currency
+                            ),
+                            cursor.run("""
+                                INSERT INTO scheduled_payins
+                                            (ctime, mtime, execution_date, payer,
+                                             amount, transfers, automatic,
+                                             notifs_count, last_notif_ts,
+                                             customized, payin)
+                                     VALUES (%(ctime)s, now(), %(execution_date)s, %(payer)s,
+                                             %(amount)s, %(transfers)s, %(automatic)s,
+                                             %(notifs_count)s, %(last_notif_ts)s,
+                                             %(customized)s, NULL)
+                            """, dict(
+                                sp._asdict(),
+                                amount=other_transfers_sum,
+                                transfers=json.dumps(other_transfers),
+                            ))
+                        else:
+                            cursor.run("""
+                                UPDATE scheduled_payins
+                                   SET payin = %s
+                                     , mtime = current_timestamp
+                                 WHERE id = %s
+                            """, (payin.id, sp.id))
+                        break
+        elif payin.status == 'failed':
+            cursor.run("""
+                UPDATE scheduled_payins
+                   SET payin = NULL
+                 WHERE payer = %s
+                   AND payin = %s
+            """, (payin.payer, payin.id))
 
         return payin
 

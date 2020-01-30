@@ -65,6 +65,13 @@ class TestScheduledPayins(EmailHarness):
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == "Your payment has succeeded"
 
+        scheduled_payins = self.db.all(
+            "SELECT * FROM scheduled_payins ORDER BY execution_date"
+        )
+        assert len(scheduled_payins) == 2
+        assert scheduled_payins[0].payin == payins[1].id
+        assert scheduled_payins[1].payin is None
+
     def test_multiple_scheduled_payins(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -140,6 +147,47 @@ class TestScheduledPayins(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == "Your payment has succeeded"
+
+    def test_early_manual_renewal_of_automatic_donations(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
+        dana = self.make_participant('dana')
+        alice.set_tip_to(bob, EUR('4.10'), renewal_mode=2)
+        alice_card = self.attach_stripe_payment_method(alice, 'pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('16.40'))
+        alice.set_tip_to(carl, EUR('4.20'), renewal_mode=2)
+        self.make_payin_and_transfer(alice_card, carl, EUR('16.80'))
+        alice.set_tip_to(dana, EUR('4.30'), renewal_mode=2)
+        self.make_payin_and_transfer(alice_card, dana, EUR('17.20'))
+
+        scheduled_payins = self.db.all(
+            "SELECT * FROM scheduled_payins ORDER BY execution_date"
+        )
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('50.40')
+        assert scheduled_payins[0].automatic is True
+        renewal_date = scheduled_payins[0].execution_date
+
+        manual_renewal_1 = self.make_payin_and_transfer(alice_card, bob, EUR('16.40'))[0]
+        manual_renewal_2 = self.make_payin_and_transfers(alice_card, EUR('34.00'), [
+            (carl, EUR('16.80'), {}),
+            (dana, EUR('17.20'), {}),
+        ])[0]
+        scheduled_payins = self.db.all(
+            "SELECT * FROM scheduled_payins ORDER BY mtime"
+        )
+        assert len(scheduled_payins) == 3
+        assert scheduled_payins[0].payin == manual_renewal_1.id
+        assert scheduled_payins[1].payin == manual_renewal_2.id
+        assert scheduled_payins[2].amount == EUR('50.40')
+        assert scheduled_payins[2].automatic is True
+        assert scheduled_payins[2].execution_date > renewal_date
+
+        send_donation_reminder_notifications()
+        send_upcoming_debit_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 0
 
     def test_canceled_and_impossible_transfers(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')

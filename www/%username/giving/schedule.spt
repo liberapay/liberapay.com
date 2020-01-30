@@ -17,6 +17,7 @@ if request.method == 'POST':
           FROM scheduled_payins
          WHERE payer = %s
            AND id = %s
+           AND payin IS NULL
     """, (payer.id, sp_id))
     if sp is None:
         raise response.invalid_input(sp_id, 'id', 'querystring')
@@ -59,6 +60,7 @@ scheduled_payins = website.db.all("""
     SELECT sp.*
       FROM scheduled_payins sp
      WHERE sp.payer = %s
+       AND sp.payin IS NULL
   ORDER BY sp.execution_date ASC
 """, (payer.id,))
 

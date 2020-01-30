@@ -2507,7 +2507,7 @@ class Participant(Model, MixinTeam):
                 SELECT sp.*
                   FROM scheduled_payins sp
                  WHERE sp.payer = %s
-                   AND sp.execution_date > current_date
+                   AND sp.payin IS NULL
               ORDER BY sp.execution_date, sp.id
             """, (self.id,))
             current_schedule_map = {get_tippees_tuple(sp): sp for sp in current_schedule}

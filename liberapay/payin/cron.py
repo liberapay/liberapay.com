@@ -26,6 +26,7 @@ def send_donation_reminder_notifications():
           FROM scheduled_payins sp
          WHERE sp.execution_date <= (current_date + interval '14 days')
            AND sp.automatic IS NOT true
+           AND sp.payin IS NULL
       GROUP BY sp.payer
         HAVING count(*) FILTER (
                    WHERE sp.notifs_count = 0
@@ -76,6 +77,7 @@ def send_upcoming_debit_notifications():
          WHERE sp.execution_date <= (current_date + interval '45 days')
            AND sp.automatic
            AND sp.notifs_count = 0
+           AND sp.payin IS NULL
       GROUP BY sp.payer, (sp.amount).currency
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
     """)
@@ -157,6 +159,7 @@ def execute_scheduled_payins():
                  r.network = 'stripe-card' AND sp.execution_date = current_date )
            AND sp.last_notif_ts < (current_date - interval '2 days')
            AND sp.automatic
+           AND sp.payin IS NULL
            AND p.is_suspended IS NOT TRUE
     """)
     for sp_id, execution_date, transfers, payer, route in rows:
@@ -180,7 +183,14 @@ def execute_scheduled_payins():
             if payin.status in ('failed', 'succeeded'):
                 payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
                 counts['payin_' + payin.status] += 1
-        db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
+            db.run("""
+                UPDATE scheduled_payins
+                   SET payin = %s
+                     , mtime = current_timestamp
+                 WHERE id = %s
+            """, (payin.id, sp_id))
+        else:
+            db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
     for k, n in sorted(counts.items()):
         logger.info("Sent %i %s notifications." % (n, k))
 
