@@ -139,8 +139,9 @@ recent = query_cache.one("""
                     {{ _("1. Set up a donation") }}
                 </dt>
                 <dd>{{ _(
-                    "Find someone you want to give money to, then choose an amount "
-                    "and a period (weekly, monthly, or yearly)."
+                    "Find someone you want to give money to, then choose an amount, "
+                    "a period (weekly, montly, or yearly), and a renewal method "
+                    "(manual or automatic)."
                 ) }}</dd>
             </div>
             <div class="col-sm-4">
@@ -162,8 +163,9 @@ recent = query_cache.one("""
                     {{ _("3. Keep your donation funded") }}
                 </dt>
                 <dd>{{ _(
-                    "When a donation needs to be renewed we send you a notification "
-                    "via email so that you can fund it again, or discontinue it."
+                    "We will notify you whenever a donation needs to be renewed. "
+                    "If you've opted for automatic renewals, then we will attempt "
+                    "to debit your card or bank account as agreed."
                 ) }}</dd>
             </div>
         </dl>
