@@ -1,7 +1,8 @@
 from datetime import timedelta
 
 from liberapay.payin.cron import (
-    execute_scheduled_payins, send_upcoming_debit_notifications,
+    execute_scheduled_payins,
+    send_donation_reminder_notifications, send_upcoming_debit_notifications,
 )
 from liberapay.testing import EUR
 from liberapay.testing.emails import EmailHarness
@@ -13,6 +14,7 @@ class TestScheduledPayins(EmailHarness):
         self.make_participant('alice')
         send_upcoming_debit_notifications()
         execute_scheduled_payins()
+        send_donation_reminder_notifications()
         notifs = self.db.all("SELECT * FROM notifications")
         assert not notifs
         payins = self.db.all("SELECT * FROM payins")
@@ -37,6 +39,10 @@ class TestScheduledPayins(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €12.00'
+
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 0
 
         self.db.run("""
             UPDATE scheduled_payins
@@ -78,6 +84,7 @@ class TestScheduledPayins(EmailHarness):
         assert len(scheduled_payins) == 2
         assert scheduled_payins[0].amount == EUR('37.00')
         assert scheduled_payins[1].amount is None
+        manual_payin = scheduled_payins[1]
 
         self.db.run("""
             UPDATE scheduled_payins
@@ -89,11 +96,27 @@ class TestScheduledPayins(EmailHarness):
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €37.00'
 
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == "It's time to renew your donation to carl on Liberapay"
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 0
+
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = current_date
                  , last_notif_ts = (last_notif_ts - interval '14 days')
         """)
+        # Restore the correct date of the manual payin to avoid triggering a
+        # `payment_schedule_modified` notification
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET execution_date = %(execution_date)s
+             WHERE id = %(id)s
+        """, manual_payin.__dict__)
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 4
@@ -152,6 +175,10 @@ class TestScheduledPayins(EmailHarness):
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debits totaling €28.00'
 
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 0
+
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = current_date
@@ -189,6 +216,7 @@ class TestScheduledPayins(EmailHarness):
                SET execution_date = (current_date + interval '14 days')
         """)
         send_upcoming_debit_notifications()
+        send_donation_reminder_notifications()
         emails = self.get_emails()
         assert len(emails) == 0
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
@@ -210,6 +238,7 @@ class TestScheduledPayins(EmailHarness):
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
         """)
+        send_donation_reminder_notifications()
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 0
@@ -244,6 +273,7 @@ class TestScheduledPayins(EmailHarness):
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
         """)
+        send_donation_reminder_notifications()
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
