@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Esperanto "
-"<https://hosted.weblate.org/projects/liberapay/core/eo/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2020-02-05 08:50+0000\n"
+"Last-Translator: Jorge Maldonado Ventura <jorgesumle@freakspot.net>\n"
+"Language-Team: Esperanto <https://hosted.weblate.org/projects/liberapay/core/eo/>\n"
+"Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.11-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -216,33 +218,34 @@ msgstr "Restas {0} en via Liberapay-monujo, sed vi bezonas almenaŭ {1} por pagi
 msgid "Add money"
 msgstr "Aldoni monon"
 
+#, fuzzy
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Refaro de donaco de Liberapay: neniu valida pagilo"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Vi havas pagon de {amount} planita en {payment_date} por refari vian donacon al {recipient}, sed ni ne povas trakti ĝin, ĉar mankas valida pagilo."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Vi havas pagon de {amount} planita en {payment_date} por refari viajn donacojn al {recipients}, sed ni ne povas trakti ĝin, ĉar mankas valida pagilo."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
+msgstr[1] "Vi havas {n} pagojn planitajn por refari viajn donacojn, sed ni ne povas trakti ilin, ĉar mankas valida pagilo."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr ""
+msgstr "La datoj, kvantoj kaj ricevantoj de pagoj estas:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {money_amount} al {recipient}"
 
 #, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {money_amount} dividita inter {recipients}"
 
 msgid "Add a payment instrument"
 msgstr "Aldoni pagilon"
@@ -393,7 +396,7 @@ msgstr "La pago de {money_amount} per Liberapay ekigita je {date} estis malsukce
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "La pago de {money_amount} ekigita en {date} fiaskis."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -457,7 +460,7 @@ msgstr "La pago de {money_amount} per Liberapay ekigita je {date} estis sukcesa.
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "La pago de {money_amount} ekigita en {date} sukcesis."
 
 msgid "Thank you for this donation!"
 msgstr "Dankon por tiu donaco!"
@@ -485,7 +488,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "La pago de {money_amount} planita en {date} estis nuligita."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
@@ -2583,7 +2586,7 @@ msgstr[1] "Sekva pago post {n} semajnoj ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Venonta pago {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
