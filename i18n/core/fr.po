@@ -355,8 +355,8 @@ msgstr "Le prélèvement bancaire vers votre compte Liberapay a réussi"
 msgid "Your payment has failed"
 msgstr "Votre paiement a échoué"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has failed."
 msgstr "Le paiement de {money_amount} via Liberapay qui a été initié le {date} a échoué."
 
 #, python-brace-format
@@ -415,8 +415,8 @@ msgstr "Une fois ce paiement traité, il devrait apparaître sur votre extrait d
 msgid "Your payment has succeeded"
 msgstr "Votre paiement a réussi"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has succeeded."
 msgstr "Le paiement de {money_amount} via Liberapay qui a été initié le {date} a réussi."
 
 msgid "Thank you for this donation!"
@@ -2165,8 +2165,8 @@ msgstr "Inactif car le destinataire n'accepte plus les dons."
 msgid "Active"
 msgstr "Actif"
 
-#, python-brace-format
-msgid "Next payment {in_N_weeks_months_or_years}."
+#, fuzzy, python-brace-format
+msgid "Next payment due {in_N_weeks_months_or_years}."
 msgstr "Prochain paiement {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
@@ -4472,7 +4472,8 @@ msgstr "Comment cela fonctionne pour les donateurs"
 msgid "1. Set up a donation"
 msgstr "1. Décidez d'un don"
 
-msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
+#, fuzzy
+msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
 msgstr "Trouvez quelqu'un à qui vous voulez donner de l'argent, puis choisissez un montant et une périodicité (hebdomadaire, mensuelle ou annuelle)."
 
 msgid "2. Fund your donation"
@@ -4485,7 +4486,8 @@ msgstr "Sur Liberapay les dons sont financés à l'avance. Vous avez le contrôl
 msgid "3. Keep your donation funded"
 msgstr "3. Continuez à financer votre don"
 
-msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+#, fuzzy
+msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
 msgstr "Lorsqu'un don doit être renouvelé, nous vous envoyons une notification par courriel afin que vous puissiez le financer à nouveau, ou l'arrêter."
 
 msgid "How it works for creators"

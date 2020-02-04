@@ -350,8 +350,8 @@ msgstr "Liberapay ウォレットへの口座自動振替による支払いが�
 msgid "Your payment has failed"
 msgstr "支払いに失敗しました"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has failed."
 msgstr "{date} に開始された Liberapay を通じての {money_amount} の支払いに失敗しました。"
 
 #, python-brace-format
@@ -410,8 +410,8 @@ msgstr "この支払いが処理されると、お手持ちの通帳（取引明
 msgid "Your payment has succeeded"
 msgstr "支払いに成功しました"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has succeeded."
 msgstr "{date} に開始された Liberapay を通じての {money_amount} の支払いに成功しました。"
 
 msgid "Thank you for this donation!"
@@ -2149,8 +2149,8 @@ msgstr "受領者が寄付を受け付けなくなったため、無効になっ
 msgid "Active"
 msgstr "アクティブ"
 
-#, python-brace-format
-msgid "Next payment {in_N_weeks_months_or_years}."
+#, fuzzy, python-brace-format
+msgid "Next payment due {in_N_weeks_months_or_years}."
 msgstr "{in_N_weeks_months_or_years} で次の支払いです。"
 
 msgid "Renew now"
@@ -4419,7 +4419,8 @@ msgstr "支援者ができること"
 msgid "1. Set up a donation"
 msgstr "1. 寄付を設定"
 
-msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
+#, fuzzy
+msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
 msgstr "まず寄付をしたい相手を見つけましょう。次に金額と期間（週間、月間、年間）を選びます。"
 
 msgid "2. Fund your donation"
@@ -4432,7 +4433,8 @@ msgstr "Liberapay において、寄付は前もって行われます。皆さ�
 msgid "3. Keep your donation funded"
 msgstr "3. 寄付をし続ける"
 
-msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+#, fuzzy
+msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
 msgstr "寄付の更新が必要な際はメールで通知を送信します。もう一度寄付をするか、やめるかを決めることができます。"
 
 msgid "How it works for creators"

@@ -356,8 +356,8 @@ msgstr "Suoraveloitus Liberapay-lompakkoosi on onnistunut"
 msgid "Your payment has failed"
 msgstr "Maksusi epäonnistui"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has failed."
 msgstr "Liberapay-palvelussa {date} toimeenpanemasi {money_amount} maksu on epäonnistunut."
 
 #, python-brace-format
@@ -416,8 +416,8 @@ msgstr "Kun maksu on käsitelty, se näkyy tiliotteellasi merkinnällä ”{desc
 msgid "Your payment has succeeded"
 msgstr "Maksusi onnistui"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has succeeded."
 msgstr "Liberapay-palvelussa {date} aloittamasi {money_amount} maksu onnistui."
 
 msgid "Thank you for this donation!"
@@ -2166,8 +2166,8 @@ msgstr "Poissa toiminnasta, koska vastaanottaja ei enää ota vastaan lahjoituks
 msgid "Active"
 msgstr "Aktiivinen"
 
-#, python-brace-format
-msgid "Next payment {in_N_weeks_months_or_years}."
+#, fuzzy, python-brace-format
+msgid "Next payment due {in_N_weeks_months_or_years}."
 msgstr "Seuraava maksu {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
@@ -4473,7 +4473,8 @@ msgstr "Toiminta lahjoittajien näkökulmasta"
 msgid "1. Set up a donation"
 msgstr "1. Aloita lahjoitus"
 
-msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
+#, fuzzy
+msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
 msgstr "Löydä joku, jolle antaa rahaa, ja valitse määrä ja aikaväli (viikoittain, kuukausittain, tai vuosittain)."
 
 msgid "2. Fund your donation"
@@ -4486,7 +4487,8 @@ msgstr "Liberapay-palvelussa lahjoitukset rahoitetaan etukäteen. Voit valita, p
 msgid "3. Keep your donation funded"
 msgstr "3. Huolehdi lahjoituksesi katteesta"
 
-msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+#, fuzzy
+msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
 msgstr "Kun tulee aika uusia lahjoitus, lähetämme sinulle sähköpostitse muistutuksen lisätä katetta. Voit myös lopettaa lahjoituksen."
 
 msgid "How it works for creators"

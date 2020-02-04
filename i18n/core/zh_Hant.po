@@ -351,8 +351,8 @@ msgstr "銀行已順利自動撥款到你的 Liberapay 錢包"
 msgid "Your payment has failed"
 msgstr "支付未能順利完成"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has failed."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has failed."
 msgstr "透過 Liberapay 在{date}啟動的{money_amount}捐款無法順利完成支付。"
 
 #, python-brace-format
@@ -411,8 +411,8 @@ msgstr "一旦此筆付款已被受理，它會在銀行記錄上顯示成\"{des
 msgid "Your payment has succeeded"
 msgstr "您的捐款支付已順利完成"
 
-#, python-brace-format
-msgid "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded."
+#, fuzzy, python-brace-format
+msgid "The payment of {money_amount} initiated earlier today has succeeded."
 msgstr "{money_amount} 透過 LiberaPay 在 {date} 發動的捐款已成功完成支付。"
 
 msgid "Thank you for this donation!"
@@ -2150,8 +2150,8 @@ msgstr "由於收款人不再接受捐款故無動靜。"
 msgid "Active"
 msgstr "活躍"
 
-#, python-brace-format
-msgid "Next payment {in_N_weeks_months_or_years}."
+#, fuzzy, python-brace-format
+msgid "Next payment due {in_N_weeks_months_or_years}."
 msgstr "下次付款時間在{in_N_weeks_months_or_years}。"
 
 msgid "Renew now"
@@ -4420,7 +4420,8 @@ msgstr "如何為捐款者工作"
 msgid "1. Set up a donation"
 msgstr "1. 設定捐款"
 
-msgid "Find someone you want to give money to, then choose an amount and a period (weekly, monthly, or yearly)."
+#, fuzzy
+msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
 msgstr "找到你希望資助的對象，然後選擇合適的金額和週期（每週、每月或每年）。"
 
 msgid "2. Fund your donation"
@@ -4433,7 +4434,8 @@ msgstr "Liberapay 的捐款是事先付錢，您可以決定何時、要放入�
 msgid "3. Keep your donation funded"
 msgstr "3. 讓你的捐獻有持維資金"
 
-msgid "When a donation needs to be renewed we send you a notification via email so that you can fund it again, or discontinue it."
+#, fuzzy
+msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
 msgstr "當捐款需更新，我們會以電子郵件通知好讓您可以繼續資助它或終止資助。"
 
 msgid "How it works for creators"
