@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Spanish (https://hosted.weblate.org/projects/liberapay/core/es/)\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2020-02-05 08:50+0000\n"
+"Last-Translator: Jorge Maldonado Ventura <jorgesumle@freakspot.net>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/liberapay/core/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.11-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -215,8 +218,9 @@ msgstr "Te quedan {0} en tu cartera Liberapay, pero necesitas al menos {1} para 
 msgid "Add money"
 msgstr "Añadir dinero"
 
+#, fuzzy
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Renovación de donaciones de Liberapay: sin instrumento de pago válido"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
@@ -630,17 +634,17 @@ msgstr[1] ""
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "Este mensaje es un recordatorio de que {amount} van a ser adeudados de tu instrumento de pago predeterminado el {debit_date} para renovar tu donación a {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "Este mensaje es un recordatorio de que {amount} van a ser adeudados de tu instrumento de pago predeterminado el {debit_date} para renovar tus donaciones a {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
+msgstr[1] "Este mensaje es un recordatorio de que un total de {amount} va a ser adeudado de tu instrumento de pago predeterminado dentro del plazo de {n} días para renovar tus donaciones."
 
 #, python-brace-format
 msgid "If you wish to delay this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
@@ -650,7 +654,7 @@ msgstr[1] ""
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Si deseas modificar tus donaciones, haz clic en el siguiente enlace: {link_start}gestionar mis donaciones{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Verificación de correo electrónico - Liberapay"
@@ -737,7 +741,7 @@ msgid "When money is being refunded back to me"
 msgstr "Cuando me están reembolsando el dinero"
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "Cuando un pago de renovación de donación automática es inminente"
 
 msgid "When I no longer have any valid payment instrument"
 msgstr ""
@@ -2580,7 +2584,7 @@ msgstr[1] "Siguiente pago en {n} semanas ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Siguiente pago {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
