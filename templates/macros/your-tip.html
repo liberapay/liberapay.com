@@ -163,7 +163,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="selected_amount" value="{{ std_tip.weekly.amount }}"
-                   class="hidden-xs" {{ 'checked' if amount_is_a_match }} />
+                   {{ 'checked' if amount_is_a_match }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _(std_tip.label) }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -181,7 +181,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="selected_amount" value="custom" required
-                   class="hidden-xs" {{ 'checked' if tip.amount and not hide_amount }} />
+                   {{ 'checked' if tip.amount and not hide_amount }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
                 {{ tip_input(tip, new_currency, disabled, small=small, hide_amount=hide_amount) }}
@@ -194,7 +194,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="renewal_mode" value="2" required
-                   class="hidden-xs" {{ 'checked' if tip.renewal_mode == 2 else '' }} />
+                   {{ 'checked' if tip.renewal_mode == 2 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Automatic renewal") }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -206,7 +206,7 @@
         <li class="list-group-item">
         <label>
             <input type="radio" name="renewal_mode" value="1" required
-                   class="hidden-xs" {{ 'checked' if tip.renewal_mode == 1 else '' }} />
+                   {{ 'checked' if tip.renewal_mode == 1 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Manual renewal") }}</h5>
                 <p class="list-group-item-text">{{ _(

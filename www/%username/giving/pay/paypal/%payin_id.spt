@@ -208,7 +208,7 @@ title = _("Funding your donations")
             % for charge_amount in payment.suggested_amounts
                 <li class="list-group-item">
                 <label>
-                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" class="hidden-xs" required />
+                    <input type="radio" name="amount" value="{{ charge_amount.amount }}" required />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ locale.format_money(charge_amount) }}
                     % if show_fee_notice
@@ -234,7 +234,7 @@ title = _("Funding your donations")
             % endfor
                 <li class="list-group-item">
                 <label>
-                    <input type="radio" name="amount" value="custom" class="hidden-xs" required />
+                    <input type="radio" name="amount" value="custom" required />
                     <div class="radio-label">
                     <h5 class="list-group-item-heading">{{ _(
                         "Custom amount (min={0}, max={1})",

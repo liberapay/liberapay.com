@@ -144,10 +144,8 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
         margin: 0;
         position: relative;
         & > input[type="radio"] {
-            position: absolute;
-            margin-top: -0.45em;
-            right: 15px;
-            top: 50%;
+            float: right;
+            margin: 10px;
         }
         & > .radio-label {
             padding: 10px 15px;
@@ -161,7 +159,22 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
             background-color: $list-group-hover-bg;
         }
         & > input[type="radio"]:checked + .radio-label {
-            background-color: #fafafa;
+            background-color: $list-group-hover-bg;
+        }
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .radio-group .list-group-item > label {
+        & > input[type="radio"] {
+            float: none;
+            position: absolute;
+            margin: -0.45em 0 0;
+            right: 15px;
+            top: 50%;
+        }
+        & > .radio-label {
+            padding: 10px 30px 10px 15px;
         }
     }
 }
