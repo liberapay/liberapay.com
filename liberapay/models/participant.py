@@ -22,7 +22,7 @@ from pando import json, Response
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
-from psycopg2.extras import execute_batch
+from psycopg2.extras import execute_batch, execute_values
 import requests
 
 from liberapay.billing.payday import compute_next_payday_date
@@ -1529,20 +1529,48 @@ class Participant(Model, MixinTeam):
     @classmethod
     def _notify_patrons(cls, elsewhere, tips):
         assert elsewhere.participant.payment_providers > 0
-        for t in tips:
-            Participant.from_id(t['tipper']).notify(
+        for tip in tips:
+            tipper = Participant.from_id(tip['tipper'])
+            if tip['paid_in_advance'] is None and tip['renewal_mode'] == 2:
+                # Trick `schedule_renewals` into believing that this donation is
+                # awaiting renewal, when in fact it's awaiting its first payment.
+                cls.db.run("""
+                    WITH current_tip AS (
+                             SELECT id
+                               FROM current_tips
+                              WHERE tipper = %(tipper)s
+                                AND tippee = %(tippee)s
+                         )
+                    UPDATE tips
+                       SET paid_in_advance = zero(amount)
+                     WHERE id = (SELECT id FROM current_tip)
+                """, tip)
+            schedule = tipper.schedule_renewals()
+            sp = next((
+                sp for sp in schedule
+                if any(tr['tippee_id'] == tip['tippee'] for tr in sp.transfers)
+            ), None)
+            tipper.notify(
                 'pledgee_joined~v2',
                 idem_key=str(elsewhere.participant.id),
                 user_name=elsewhere.user_name,
                 platform=elsewhere.platform_data.display_name,
-                pledge_date=parse_date(t['ctime']).date(),
-                periodic_amount=Money(**t['periodic_amount']),
+                pledge_date=parse_date(tip['ctime']).date(),
+                periodic_amount=Money(**tip['periodic_amount']),
                 elsewhere_profile_url=elsewhere.html_url,
                 join_time=elsewhere.participant.join_time,
                 liberapay_profile_url=elsewhere.participant.url(),
                 liberapay_username=elsewhere.participant.username,
                 tippee_id=elsewhere.participant.id,
+                scheduled_payin=sp,
             )
+            if sp:
+                cls.db.run("""
+                    UPDATE scheduled_payins
+                       SET notifs_count = notifs_count + 1
+                         , last_notif_ts = current_timestamp
+                     WHERE id = %s
+                """, (sp.id,))
 
 
     # Wallets and balances
@@ -2543,10 +2571,13 @@ class Participant(Model, MixinTeam):
                          , pt.ctime DESC
                 """, dict(payer=self.id, tippees=tippees)))
                 for tip in list(renewable_tips):
-                    last_payment_amount = last_payments.get(tip.tippee)
-                    if tip.renewal_mode == 2 and last_payment_amount:
-                        tip.renewal_amount = last_payment_amount.convert(tip.amount.currency)
-                        if tip.renewal_amount < (tip.amount * 2):
+                    if tip.renewal_mode == 2:
+                        last_payment_amount = last_payments.get(tip.tippee)
+                        if last_payment_amount:
+                            tip.renewal_amount = last_payment_amount.convert(tip.amount.currency)
+                        else:
+                            tip.renewal_amount = None
+                        if not tip.renewal_amount or tip.renewal_amount < (tip.amount * 2):
                             pp = PayinProspect([tip], 'stripe')
                             tip.renewal_amount = pp.moderate_proposed_amount
                     else:
@@ -2576,7 +2607,7 @@ class Participant(Model, MixinTeam):
                       ORDER BY pt.ctime DESC
                          LIMIT 1
                     """, (tip.tipper, tip.tippee))
-                    tip.due_date = last_transfer_date + timedelta(weeks=1)
+                    tip.due_date = (last_transfer_date or next_payday) + timedelta(weeks=1)
                 else:
                     tip.due_date = next_payday + timedelta(weeks=tip.weeks_left - 1)
                 renewal_quarter = tip.weeks_left // 13
@@ -2683,15 +2714,20 @@ class Participant(Model, MixinTeam):
                 execute_batch(cursor, """
                     DELETE FROM scheduled_payins WHERE id = %s
                 """, [(sp.id,) for sp in deletions])
-                execute_batch(cursor, """
+                new_ids = execute_values(cursor, """
                     INSERT INTO scheduled_payins
                                 (execution_date, payer, amount, transfers, automatic)
-                         VALUES (%s, %s, %s, %s, %s)
+                         VALUES %s
+                      RETURNING id
                 """, [
                     (sp.execution_date, self.id, sp.amount, json.dumps(sp.transfers),
                      sp.automatic)
                     for sp in insertions
-                ])
+                ], fetch=True)
+                for i, row in enumerate(new_ids):
+                    insertions[i].id = row.id
+                for cur_sp, new_sp in updates:
+                    new_sp.id = cur_sp.id
                 execute_batch(cursor, """
                     UPDATE scheduled_payins
                        SET amount = %s

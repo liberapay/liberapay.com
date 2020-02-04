@@ -674,7 +674,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['to'][0] == 'alice <alice@liberapay.com>'
         assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €5.00'
-        sp = self.db.one("SELECT * FROM scheduled_payins")
+        sp = self.db.one("SELECT * FROM scheduled_payins WHERE payin IS NULL")
         assert sp.notifs_count == 1
         # Tweak the amount of the first donation. The renewal shouldn't be
         # pushed back and the payer shouldn't be notified.
