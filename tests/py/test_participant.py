@@ -601,6 +601,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
+        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -669,6 +670,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
+        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 1

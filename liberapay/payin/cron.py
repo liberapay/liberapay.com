@@ -27,6 +27,7 @@ def send_donation_reminder_notifications():
          WHERE sp.execution_date <= (current_date + interval '14 days')
            AND sp.automatic IS NOT true
            AND sp.payin IS NULL
+           AND sp.ctime < (current_timestamp - interval '6 hours')
       GROUP BY sp.payer
         HAVING count(*) FILTER (
                    WHERE sp.notifs_count = 0
@@ -78,6 +79,7 @@ def send_upcoming_debit_notifications():
            AND sp.automatic
            AND sp.notifs_count = 0
            AND sp.payin IS NULL
+           AND sp.ctime < (current_timestamp - interval '6 hours')
       GROUP BY sp.payer, (sp.amount).currency
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
     """)

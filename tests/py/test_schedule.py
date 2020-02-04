@@ -33,6 +33,7 @@ class TestScheduledPayins(EmailHarness):
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         send_upcoming_debit_notifications()
         emails = self.get_emails()
@@ -96,6 +97,7 @@ class TestScheduledPayins(EmailHarness):
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         send_upcoming_debit_notifications()
         emails = self.get_emails()
@@ -216,6 +218,7 @@ class TestScheduledPayins(EmailHarness):
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         send_upcoming_debit_notifications()
         emails = self.get_emails()
@@ -231,6 +234,7 @@ class TestScheduledPayins(EmailHarness):
             UPDATE scheduled_payins
                SET execution_date = current_date
                  , last_notif_ts = (last_notif_ts - interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
@@ -262,6 +266,7 @@ class TestScheduledPayins(EmailHarness):
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         send_upcoming_debit_notifications()
         send_donation_reminder_notifications()
@@ -285,6 +290,7 @@ class TestScheduledPayins(EmailHarness):
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         send_donation_reminder_notifications()
         send_upcoming_debit_notifications()
@@ -295,6 +301,7 @@ class TestScheduledPayins(EmailHarness):
             UPDATE scheduled_payins
                SET execution_date = current_date
                  , last_notif_ts = (last_notif_ts - interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
@@ -320,6 +327,7 @@ class TestScheduledPayins(EmailHarness):
         self.db.run("""
             UPDATE scheduled_payins
                SET execution_date = (current_date + interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
         """)
         send_donation_reminder_notifications()
         send_upcoming_debit_notifications()
