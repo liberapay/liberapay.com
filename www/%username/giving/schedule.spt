@@ -1,0 +1,214 @@
+from datetime import timedelta
+from decimal import ROUND_HALF_UP
+from math import floor
+
+from liberapay.payin.prospect import PayinProspect
+from liberapay.utils import form_post_success, get_participant, utcnow
+
+[---]
+
+payer = participant = get_participant(state, restrict=True)
+
+if request.method == 'POST':
+    action = request.qs['action']
+    sp_id = request.qs.get_int('id')
+    sp = website.db.one("""
+        SELECT *
+          FROM scheduled_payins
+         WHERE payer = %s
+           AND id = %s
+           AND payin IS NULL
+    """, (payer.id, sp_id))
+    if sp is None:
+        raise response.invalid_input(sp_id, 'id', 'querystring')
+    if action == 'cancel':
+        for tr in sp.transfers:
+            tippee = website.db.Participant.from_id(tr['tippee_id'])
+            payer.stop_tip_to(tippee, update_schedule=False)
+            payer.schedule_renewals()
+    elif action == 'modify':
+        new_amount = request.body.get('amount')
+        if new_amount:
+            payin_currency = request.body['currency']
+            if payin_currency != sp.amount.currency:
+                raise response.invalid_input(payin_currency, 'currency', 'body')
+            if new_amount == 'custom':
+                new_amount = locale.parse_money_amount(request.body['amount_custom'], payin_currency)
+            else:
+                new_amount = Money(new_amount, payin_currency, rounding=ROUND_HALF_UP)
+            tips = payer.get_tips_to([tr['tippee_id'] for tr in sp.transfers])
+            prospect = PayinProspect(tips, 'stripe')
+            amount_min = prospect.min_acceptable_amount
+            amount_max = prospect.max_acceptable_amount
+            if new_amount < amount_min or new_amount > amount_max:
+                raise response.error(400, _(
+                    "'{0}' is not an acceptable amount (min={1}, max={2})",
+                    new_amount, amount_min, amount_max
+                ))
+        new_date = request.body.parse_date('new_date', default=None)
+        if new_date and new_date <= utcnow().date():
+            raise response.error(400, _("The date must be in the future."))
+        payer.schedule_renewals(new_amounts={sp.id: new_amount}, new_dates={sp.id: new_date})
+    else:
+        raise response.invalid_input(action, 'action', 'querystring')
+    form_post_success(state, redirect_url=payer.path('giving/schedule'))
+
+title = payer.username
+subhead = _("Schedule")
+
+scheduled_payins = website.db.all("""
+    SELECT sp.*
+      FROM scheduled_payins sp
+     WHERE sp.payer = %s
+       AND sp.payin IS NULL
+  ORDER BY sp.execution_date ASC
+""", (payer.id,))
+
+action = request.qs.get('action')
+if action:
+    sp_id = request.qs.get_int('id')
+    sp = [sp for sp in scheduled_payins if sp.id == sp_id]
+    if sp:
+        sp = sp[0]
+    else:
+        raise response.invalid_input(sp_id, 'id', 'querystring')
+    if action == 'modify':
+        sp.tips = payer.get_tips_to([tr['tippee_id'] for tr in sp.transfers])
+        sp.prospect = PayinProspect(sp.tips, 'stripe')
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% from "templates/macros/icons.html" import glyphicon
+
+% block content
+
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+% if action == 'cancel'
+    <p>{{ _(
+        "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}.",
+        recipient=website.tippee_links(sp.transfers)[0]
+    ) if len(sp.transfers) == 1 else _(
+        "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}.",
+        recipients=website.tippee_links(sp.transfers)
+    ) }}</p>
+    <div class="buttons">
+        <button class="btn btn-danger">{{ _("Confirm") }}</button>
+        <a class="btn btn-default" href="?">{{ _("Go back") }}</a>
+    </div>
+% elif action == 'modify'
+    % if sp.automatic
+    <p>{{ _("If you want to modify the amount of this scheduled payment, please select or input a new one:") }}</p>
+    % set payment = sp.prospect
+    <fieldset id="amount">
+        <input type="hidden" name="currency" value="{{ payment.currency }}" />
+        <ul class="list-group radio-group">
+        % set show_fee_notice = (
+            len(payment.suggested_amounts) > 1 and
+            payment.suggested_amounts[0] < payment.low_fee_amount
+        )
+        % set custom_amount = sp.amount not in payment.suggested_amounts
+        % for charge_amount in payment.suggested_amounts
+            <li class="list-group-item">
+            <label>
+                <input type="radio" name="amount" value="{{ charge_amount.amount }}" required
+                       {{ 'checked' if charge_amount == sp.amount else '' }} />
+                <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ locale.format_money(charge_amount) }}
+                % if show_fee_notice
+                % if charge_amount < payment.moderate_fee_amount
+                    <small class="text-warning">{{ _("(not recommended, high fee percentage)") }}</small>
+                % elif charge_amount < payment.low_fee_amount
+                    <small class="text-info">{{ _("(okay, moderate fee percentage)") }}</small>
+                % else
+                    <small class="text-success">{{ _("(recommended, low fee percentage)") }}</small>
+                % endif
+                % endif
+                </h5>
+                % set weeks = int(floor(charge_amount / payment.one_weeks_worth))
+                <p class="list-group-item-text">{{ ngettext(
+                    "", "Next payment in {n} weeks ({timedelta}).", n=weeks, timedelta=timedelta(weeks=weeks)
+                ) if payment.period == 'weekly' and weeks > 7 else _(
+                    "Next payment {in_N_weeks_months_or_years}.",
+                    in_N_weeks_months_or_years=to_age(timedelta(weeks=weeks))
+                ) }}</p>
+                </div>
+            </label>
+            </li>
+        % endfor
+            <li class="list-group-item">
+            <label>
+                <input type="radio" name="amount" value="custom" required
+                       {{ 'checked' if custom_amount else '' }} />
+                <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _(
+                    "Custom amount (min={0}, max={1})",
+                    payment.min_acceptable_amount,
+                    payment.max_acceptable_amount,
+                ) }}</h5>
+                <div class="input-group">
+                    <div class="input-group-addon">{{
+                        locale.currency_symbols.get(payment.currency, payment.currency)
+                    }}</div>
+                    <input type="tel" inputmode="decimal" class="form-control amount"
+                           name="amount_custom" placeholder="{{ _('Amount') }}"
+                           value="{{ locale.format_money(sp.amount, format='amount_only')
+                                     if custom_amount else '' }}" />
+                </div>
+                </div>
+            </label>
+            </li>
+        </ul>
+    </fieldset>
+    <br>
+    % endif
+    <p>{{ _("If you want to modify the date of this scheduled payment, please select or input a new one:") }}</p>
+    <div class="form-group">
+        <input type="date" name="new_date" value="{{ sp.execution_date }}"
+               class="form-control" placeholder="{{ _('YYYY-MM-DD') }}" />
+    </div>
+    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+        "Delaying your payment beyond its normal date will result in your donation "
+        "being inactive during that time."
+    ) }}</p>
+    <br>
+    <div class="buttons">
+        <button class="btn btn-primary">{{ _("Modify") }}</button>
+        <a class="btn btn-default" href="?">{{ _("Go back") }}</a>
+    </div>
+% elif scheduled_payins
+    <p>{{ ngettext(
+        "You have {n} scheduled payment:",
+        "You have {n} scheduled payments:",
+        n=len(scheduled_payins)
+    ) }}</p>
+    <ul class="timeline">
+    % for sp in scheduled_payins
+        <li>{{ (_(
+                "{date}: automatic payment of {money_amount} to {recipient}",
+                date=sp.execution_date, money_amount=sp.amount, recipient=website.tippee_links(sp.transfers)[0]
+            ) if len(sp.transfers) == 1 else _(
+                "{date}: automatic payment of {money_amount} split between {recipients}",
+                date=sp.execution_date, money_amount=sp.amount, recipients=website.tippee_links(sp.transfers)
+            )) if sp.automatic else _(
+                "{date}: manual payment to {recipients}",
+                date=sp.execution_date, recipients=website.tippee_links(sp.transfers)
+            ) }}
+            &nbsp;&nbsp;&nbsp;
+            <a class="btn btn-primary btn-xs" href="?id={{ sp.id }}&amp;action=modify">{{
+                _("Modify")
+            }}</a>
+            &nbsp;&nbsp;
+            <a class="btn btn-warning btn-xs" href="?id={{ sp.id }}&amp;action=cancel">{{
+                _("Cancel")
+            }}</a>
+        </li>
+    % endfor
+    </ul>
+% else
+    <p>{{ _("You currently don't have any scheduled payment.") }}</p>
+% endif
+</form>
+
+% endblock

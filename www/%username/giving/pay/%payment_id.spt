@@ -128,6 +128,7 @@ else:
         del _provider_bits
 
 if payment:
+    payment.auto_renewal = any(tip.renewal_mode == 2 for tip in payment.tips)
     payment.beneficiary = 'beneficiary=' + ','.join(str(t.tippee) for t in payment.tips)
     payment.recipient_links = [tip.tippee_p.link() for tip in payment.tips]
 
@@ -233,6 +234,8 @@ title = _("Funding your donations")
                     <small class="text-danger">{{ _(
                         "Doesn't support the {currency}", currency=Currency(payment.currency)
                     ) }}</small>
+                    % elif payment.auto_renewal
+                    <small class="text-warning">{{ _("Doesn't support automatic renewal") }}</small>
                     % else
                     <small class="text-warning">{{ _("Not anonymous") }}</small>
                     % endif

@@ -103,8 +103,9 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
         '</a>'|safe,
     ) }}</p>
     <p>{{ _(
-        "When a donation needs to be renewed we send you a notification "
-        "via email so that you can fund it again, or discontinue it."
+        "We will notify you whenever a donation needs to be renewed. "
+        "If you've opted for automatic renewals, then we will attempt "
+        "to debit your card or bank account as agreed."
     ) }}</p>
 
     <h4>{{ _("Can I make a one-time donation?") }}</h4>

@@ -59,17 +59,16 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
         raise response.error(404)
 
     if participant is None:
-        from liberapay.models.participant import Participant  # avoid circular import
         if type(value) is int:
-            participant = Participant.from_id(value, _raise=False)
+            participant = website.db.Participant.from_id(value, _raise=False)
         else:
-            participant = Participant.from_username(value)
+            participant = website.db.Participant.from_username(value)
         if participant is None:
             if type(value) is str:
                 look_up_redirections(request, response)
             raise response.error(404)
         elif participant.kind == 'community':
-            c_name = Participant.db.one("""
+            c_name = website.db.one("""
                 SELECT name
                   FROM communities
                  WHERE participant = %s
@@ -458,7 +457,7 @@ def build_s3_object_url(key):
 NO_DEFAULT = object()
 
 
-def get_int(d, k, default=NO_DEFAULT, minimum=None):
+def get_int(d, k, default=NO_DEFAULT, minimum=None, maximum=None):
     try:
         r = d[k]
     except (KeyError, Response):
@@ -471,6 +470,29 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None):
         raise Response().error(400, "`%s` value %r is not a valid integer" % (k, r))
     if minimum is not None and r < minimum:
         raise Response().error(400, "`%s` value %r is less than %i" % (k, r, minimum))
+    if maximum is not None and r > maximum:
+        raise Response().error(400, "`%s` value %r is greater than %i" % (k, r, maximum))
+    return r
+
+
+def parse_date(mapping, k, default=NO_DEFAULT, sep='-'):
+    try:
+        r = mapping[k]
+        if r:
+            r = r.split(sep)
+        elif default is not NO_DEFAULT:
+            return default
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    try:
+        year, month, day = map(int, r)
+        # the above raises ValueError if the number of parts isn't 3
+        # or if any part isn't an integer
+        r = date(year, month, day)
+    except (ValueError, TypeError):
+        raise Response().error(400, "`%s` value %r is invalid" % (k, mapping[k]))
     return r
 
 

@@ -22,7 +22,6 @@ from liberapay.exceptions import (
     AccountSuspended, Redirect,
 )
 from liberapay.models import check_db
-from liberapay.models.participant import Participant
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import group_by
 
@@ -275,7 +274,7 @@ def record_unexpected_payin(db, payin):
     paid_fee = payin.Fees / Decimal(100)
     vat = skim_bank_wire(debited_amount)[2]
     wallet_id = payin.CreditedWalletId
-    participant = Participant.from_mangopay_user_id(payin.AuthorId)
+    participant = db.Participant.from_mangopay_user_id(payin.AuthorId)
     current_wallet = participant.get_current_wallet(debited_amount.currency)
     assert current_wallet.remote_id == wallet_id
     route = ExchangeRoute.upsert_generic_route(participant, 'mango-bw')
@@ -298,7 +297,7 @@ def record_payout_refund(db, payout_refund):
     amount, fee, vat = -e_origin.amount, -e_origin.fee, -e_origin.vat
     assert payout_refund.DebitedFunds / 100 == amount
     assert payout_refund.Fees / 100 == fee
-    participant = Participant.from_id(e_origin.participant)
+    participant = db.Participant.from_id(e_origin.participant)
     route = ExchangeRoute.from_id(participant, e_origin.route)
     remote_id = payout_refund.Id
     wallet_id = e_origin.wallet_id
@@ -499,13 +498,13 @@ def transfer(db, tipper, tippee, amount, context, **kw):
         remote_owner_id=kw.get('tipper_mango_id')
     )
     if not all(tipper_wallet.__dict__.values()):
-        tipper_wallet = Participant.from_id(tipper).get_current_wallet(amount.currency)
+        tipper_wallet = db.Participant.from_id(tipper).get_current_wallet(amount.currency)
     tippee_wallet = SimpleNamespace(
         remote_id=kw.get('tippee_wallet_id'),
         remote_owner_id=kw.get('tippee_mango_id')
     )
     if not all(tippee_wallet.__dict__.values()):
-        tippee_wallet = Participant.from_id(tippee).get_current_wallet(amount.currency, create=True)
+        tippee_wallet = db.Participant.from_id(tippee).get_current_wallet(amount.currency, create=True)
     wallet_from = tipper_wallet.remote_id
     wallet_to = tippee_wallet.remote_id
     t_id = prepare_transfer(
@@ -879,7 +878,7 @@ def refund_disputed_payin(db, exchange, create_debts=False, refund_fee=False, dr
             try_to_swap_bundle(cursor, b, original_owner)
 
     # Move the funds back to the original wallet
-    LiberapayOrg = Participant.from_username('LiberapayOrg')
+    LiberapayOrg = db.Participant.from_username('LiberapayOrg')
     assert LiberapayOrg
     return_payin_bundles_to_origin(db, exchange, LiberapayOrg, create_debts)
 
@@ -910,7 +909,7 @@ def refund_disputed_payin(db, exchange, create_debts=False, refund_fee=False, dr
         return msg, None
 
     # Record the refund attempt
-    participant = Participant.from_id(exchange.participant)
+    participant = db.Participant.from_id(exchange.participant)
     if not (e_refund and e_refund.status == 'pre'):
         with db.get_cursor() as cursor:
             cursor.run("LOCK TABLE cash_bundles IN EXCLUSIVE MODE")
@@ -956,7 +955,7 @@ def return_payin_bundles_to_origin(db, exchange, last_resort_payer, create_debts
     """Transfer money linked to a specific payin back to the original owner.
     """
     currency = exchange.amount.currency
-    chargebacks_account = Participant.get_chargebacks_account(currency)[0]
+    chargebacks_account = db.Participant.get_chargebacks_account(currency)[0]
     original_owner = exchange.participant
     origin_wallet = db.one("SELECT * FROM wallets WHERE remote_id = %s", (exchange.wallet_id,))
     transfer_kw = dict(
@@ -1012,8 +1011,8 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
             try_to_swap_bundle(cursor, b, original_owner)
     # Move the funds back to the original wallet
     currency = exchange.amount.currency
-    chargebacks_account, credit_wallet = Participant.get_chargebacks_account(currency)
-    LiberapayOrg = Participant.from_username('LiberapayOrg')
+    chargebacks_account, credit_wallet = db.Participant.get_chargebacks_account(currency)
+    LiberapayOrg = db.Participant.from_username('LiberapayOrg')
     assert LiberapayOrg
     return_payin_bundles_to_origin(db, exchange, LiberapayOrg, create_debts=True)
     # Add a debt for the fee
@@ -1021,7 +1020,7 @@ def recover_lost_funds(db, exchange, lost_amount, repudiation_id):
     # Send the funds to the credit wallet
     # We have to do a SettlementTransfer instead of a normal Transfer. The amount
     # can't exceed the original payin amount, so we can't settle the fee debt.
-    original_owner = Participant.from_id(original_owner)
+    original_owner = db.Participant.from_id(original_owner)
     from_wallet = original_owner.get_current_wallet(currency).remote_id
     to_wallet = credit_wallet.remote_id
     t_id = prepare_transfer(
@@ -1197,7 +1196,7 @@ def sync_with_mangopay(db):
          WHERE e.status = 'pre'
     """)
     for e in exchanges:
-        p = Participant.from_id(e.participant)
+        p = db.Participant.from_id(e.participant)
         transactions = [x for x in User(id=p.mangopay_user_id).transactions.all(
             Sort='CreationDate:DESC', Type=('PAYIN' if e.amount > 0 else 'PAYOUT')
         ) if x.Tag == str(e.id)]
@@ -1218,7 +1217,7 @@ def sync_with_mangopay(db):
          WHERE t.status = 'pre'
     """)
     for t in transfers:
-        tipper = Participant.from_id(t.tipper)
+        tipper = db.Participant.from_id(t.tipper)
         transactions = [x for x in User(id=tipper.mangopay_user_id).transactions.all(
             Sort='CreationDate:DESC', Type='TRANSFER'
         ) if x.Tag == str(t.id)]

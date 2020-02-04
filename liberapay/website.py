@@ -6,12 +6,29 @@ To avoid circular imports this module should not import any other liberapay subm
 import logging
 import os
 
+from cached_property import cached_property
 from environment import Environment, is_yesish
 from jinja2 import StrictUndefined
+from markupsafe import Markup
 from pando.website import Website as _Website
 
 
 class Website(_Website):
+
+    @cached_property
+    def _html_link(self):
+        return Markup('<a href="{}://{}/%s">%s</a>').format(
+            self.canonical_scheme, self.canonical_host
+        )
+
+    def link(self, path, text):
+        return self._html_link % (path, text)
+
+    def tippee_links(self, transfers):
+        return [
+            self._html_link % ('~%i/' % tr['tippee_id'], tr['tippee_username'])
+            for tr in transfers
+        ]
 
     def warning(self, msg, state={}):
         try:

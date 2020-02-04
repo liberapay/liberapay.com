@@ -17,7 +17,6 @@ from liberapay import constants
 from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.i18n.currencies import MoneyBasket
-from liberapay.models.participant import Participant
 from liberapay.utils import group_by
 from liberapay.website import website
 
@@ -1045,7 +1044,7 @@ class Payday(object):
           ORDER BY tippee
         """, (previous_ts_end, self.ts_end))
         for tippee_id, transfers in r:
-            p = Participant.from_id(tippee_id)
+            p = self.db.Participant.from_id(tippee_id)
             if p.status != 'active' or not p.accepts_tips:
                 continue
             for t in transfers:
@@ -1077,7 +1076,9 @@ class Payday(object):
             n += 1
         log("Sent %i income notifications." % n)
 
-        # Donation renewal notifications
+        # Donation renewal reminders
+        from liberapay.payin.cron import send_donation_reminder_notifications
+        send_donation_reminder_notifications()
         n = 0
         participants = self.db.all("""
             SELECT (SELECT p FROM participants p WHERE p.id = t.tipper) AS p
@@ -1088,7 +1089,7 @@ class Payday(object):
                      SELECT t.*, tippee_p.username AS tippee_username
                        FROM current_tips t
                        JOIN participants tippee_p ON tippee_p.id = t.tippee
-                      WHERE t.renewal_mode > 0
+                      WHERE t.renewal_mode = 1
                         AND ( t.paid_in_advance IS NULL OR
                               t.paid_in_advance < t.amount
                             )

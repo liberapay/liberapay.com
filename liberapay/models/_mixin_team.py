@@ -6,6 +6,7 @@ from statistics import median
 
 import mangopay
 
+from liberapay.billing.payday import Payday
 from liberapay.constants import TAKE_THROTTLING_THRESHOLD
 from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.utils import group_by
@@ -261,7 +262,6 @@ class MixinTeam(object):
         To avoid deadlocks the given `cursor` should have already acquired an
         exclusive lock on the `takes` table.
         """
-        from liberapay.billing.payday import Payday
         tips = cursor.all("""
             SELECT t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
                  , ( SELECT basket_sum(w.balance)

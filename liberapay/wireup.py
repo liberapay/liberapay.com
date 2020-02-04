@@ -146,6 +146,7 @@ def database(env, tell_sentry):
     )
     for model in models:
         db.register_model(model)
+        setattr(db, model.__name__, model)
     liberapay.billing.payday.Payday.db = db
 
     def adapt_set(s):

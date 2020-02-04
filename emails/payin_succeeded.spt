@@ -2,7 +2,10 @@
 
 [---] text/html
 <p>{{ _(
-    "The payment of {money_amount} through Liberapay that was initiated on {date} has succeeded.",
+    "The payment of {money_amount} initiated earlier today has succeeded.",
+    money_amount=payin.amount,
+) if payin.ctime.date() == notification_ts.date() else _(
+    "The payment of {money_amount} initiated on {date} has succeeded.",
     money_amount=payin.amount, date=payin.ctime.date(),
 ) }}</p>
 

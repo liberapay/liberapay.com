@@ -219,54 +219,6 @@ class TestClosing(FakeTransfersHarness):
         assert ntips() == 0
 
 
-    # ctr - clear_tips_receiving
-
-    def test_ctr_clears_tips_receiving(self):
-        alice = self.make_participant('alice')
-        self.make_participant('bob').set_tip_to(alice, EUR('1.00'))
-        ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tippee=%s AND renewal_mode > 0",
-                                    (alice.id,))
-        assert ntips() == 1
-        with self.db.get_cursor() as cursor:
-            alice.clear_tips_receiving(cursor)
-        assert ntips() == 0
-
-    def test_ctr_doesnt_duplicate_stopped_tips(self):
-        alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
-        bob.set_tip_to(alice, EUR('1.00'))
-        bob.set_tip_to(alice, EUR('0.00'))
-        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (alice.id,))
-        assert ntips() == 2
-        with self.db.get_cursor() as cursor:
-            alice.clear_tips_receiving(cursor)
-        assert ntips() == 2
-
-    def test_ctr_doesnt_insert_when_theres_no_tip(self):
-        alice = self.make_participant('alice')
-        ntips = lambda: self.db.one("SELECT count(*) FROM tips WHERE tippee=%s", (alice.id,))
-        assert ntips() == 0
-        with self.db.get_cursor() as cursor:
-            alice.clear_tips_receiving(cursor)
-        assert ntips() == 0
-
-    def test_ctr_clears_multiple_tips_receiving(self):
-        alice = self.make_stub()
-        self.make_participant('bob').set_tip_to(alice, EUR('1.00'))
-        self.make_participant('carl').set_tip_to(alice, EUR('2.00'))
-        self.make_participant('darcy').set_tip_to(alice, EUR('3.00'))
-        self.make_participant('evelyn').set_tip_to(alice, EUR('4.00'))
-        self.make_participant('francis').set_tip_to(alice, EUR('5.00'))
-        ntips = lambda: self.db.one("SELECT count(*) FROM current_tips "
-                                    "WHERE tippee=%s AND renewal_mode > 0",
-                                    (alice.id,))
-        assert ntips() == 5
-        with self.db.get_cursor() as cursor:
-            alice.clear_tips_receiving(cursor)
-        assert ntips() == 0
-
-
     # epi - erase_personal_information
 
     def test_epi_deletes_personal_information(self):

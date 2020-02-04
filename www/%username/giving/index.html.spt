@@ -1,5 +1,6 @@
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal
+from itertools import chain
 
 from pando.utils import utcnow
 
@@ -8,6 +9,7 @@ from liberapay.models.participant import Participant
 from liberapay.utils import get_participant, group_by
 
 
+RENEWAL_MODE_START_DATE = date(2020, 2, 5)
 THIRTY_DAYS = timedelta(days=30)
 
 [-----------------------------------------------------------------------------]
@@ -18,13 +20,32 @@ recently = utcnow() - THIRTY_DAYS
 freeload = participant.get_last_event_of_type('freeload')
 if freeload and freeload.ts < recently:
     freeload = None
+auto_renewal_hint = participant.get_last_event_of_type('auto_renewal_hint')
 if request.method == 'POST':
-    if request.body['freeload'] == 'yes':
+    if request.body.get('freeload') == 'yes':
         if not freeload:
             participant.add_event(website.db, 'freeload', None)
-        response.redirect(request.line.uri)
+    elif 'auto_renewal' in request.body:
+        auto_renewal = request.body['auto_renewal']
+        if auto_renewal == 'yes':
+            website.db.run("""
+                INSERT INTO tips
+                          ( ctime, tipper, tippee, amount, period, periodic_amount
+                          , paid_in_advance, renewal_mode )
+                     SELECT ctime, tipper, tippee, amount, period, periodic_amount
+                          , paid_in_advance, 2
+                       FROM current_tips
+                      WHERE tipper = %s
+                        AND renewal_mode = 1
+            """, (participant.id,))
+            participant.add_event(website.db, 'auto_renewal_hint', 'accepted')
+        elif auto_renewal == 'no':
+            participant.add_event(website.db, 'auto_renewal_hint', 'rejected')
+        else:
+            raise response.invalid_input(auto_renewal, 'auto_renewal', 'body')
     else:
         raise response.error(400)
+    response.redirect(request.line.uri)
 
 has_pending_transfer = set(website.db.all("""
     SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
@@ -52,6 +73,11 @@ ntips_awaiting_renewal = sum(
         t.tippee_p.payment_providers > 0 and
         t.tippee not in has_pending_transfer
     )
+)
+show_automatic_renewal_hint = (
+    auto_renewal_hint is None and
+    any(tip.renewal_mode == 1 and tip.mtime.date() <= RENEWAL_MODE_START_DATE
+        for tip in chain(tips, pledges))
 )
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
@@ -120,6 +146,25 @@ next_payday = compute_next_payday_date()
         % endif
     </div>
 </div>
+% endif
+
+% if show_automatic_renewal_hint
+    <div class="text-info">
+        {{ glyphicon('info-sign') }} {{ _(
+            "Liberapay now supports automatic renewals, do you want to switch it "
+            "on for all your donations?"
+        ) }}
+        &nbsp;
+        <form action="" class="inline-block buttons" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <button class="btn btn-primary" name="auto_renewal" value="yes">{{ _(
+                "Yes, activate automatic renewals"
+            ) }}</button>
+            <button class="btn btn-default" name="auto_renewal" value="no">{{ _(
+                "No"
+            ) }}</button>
+        </form>
+    </div>
 % endif
 
     <h3>{{ _("Donations") }} ({{ ntips }})</h3>
@@ -208,12 +253,20 @@ next_payday = compute_next_payday_date()
                         "Inactive because the recipient no longer accepts donations."
                     ) }}</p>
                 % elif tip.paid_in_advance and tip.paid_in_advance >= tip.amount
-                    <p class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</p>
+                    <p>
+                        <span class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</span>
+                        &nbsp;&nbsp;
+                        % if tip.renewal_mode == 2
+                            {{ glyphicon('repeat') }} {{ _("Automatic renewal") }}
+                        % else
+                            {{ glyphicon('user') }} {{ _("Manual renewal") }}
+                        % endif
+                    </p>
                     % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
                     <p>
                         % set delta = timedelta(weeks=weeks_remaning - 1)
                         {{ _(
-                            "Next payment {in_N_weeks_months_or_years}.",
+                            "Next payment due {in_N_weeks_months_or_years}.",
                             in_N_weeks_months_or_years=to_age(next_payday + delta)
                         ) }}
                         % if weeks_remaning < 4

@@ -1,0 +1,60 @@
+{{ ngettext(
+    "Liberapay donation renewal: upcoming debit of {money_amount}",
+    "Liberapay donation renewal: upcoming debits totaling {money_amount}",
+    len(payins), money_amount=total_amount
+) }}
+
+[---] text/html
+% if len(payins) == 1
+    % set sp = payins[0]
+    <p>{{ _(
+        "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}.",
+        amount=sp.amount, debit_date=sp.execution_date, recipient=website.tippee_links(sp.transfers)[0]
+    ) if len(sp.transfers) == 1 else _(
+        "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}.",
+        amount=sp.amount, debit_date=sp.execution_date, recipients=website.tippee_links(sp.transfers)
+    ) }}</p>
+% else
+    <p>{{ ngettext(
+        "",
+        "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations.",
+        n=ndays, amount=total_amount,
+    ) }}</p>
+    <p>{{ _("The payment dates, amounts and recipients are:") }}</p>
+    <ul>
+    % for sp in payins
+        <li>{{ _(
+            "{date}: {money_amount} to {recipient}",
+            date=sp.execution_date, money_amount=sp.amount, recipient=website.tippee_links(sp.transfers)[0]
+        ) if len(sp.transfers) == 1 else _(
+            "{date}: {money_amount} split between {recipients}",
+            date=sp.execution_date, money_amount=sp.amount, recipients=website.tippee_links(sp.transfers)
+        ) }}</li>
+    % endfor
+    </ul>
+% endif
+
+% if mandate_url
+<p>{{ _(
+    "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions.",
+    link_start='<a href="%s">'|safe % mandate_url,
+    mandate_id=mandate_id,
+    link_end='</a>'|safe,
+    acceptance_date=mandate_creation_date,
+    creditor_identifier=creditor_identifier,
+) }}</p>
+% endif
+
+<p>{{ ngettext(
+    "If you wish to delay this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}.",
+    "If you wish to delay these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}.",
+    n=len(payins),
+    link_start='<a href="%s">'|safe % participant.url('giving/schedule'),
+    link_end='</a>'|safe
+) }}</p>
+
+<p>{{ _(
+    "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}.",
+    link_start='<a href="%s">'|safe % participant.url('giving/'),
+    link_end='</a>'|safe
+) }}</p>
