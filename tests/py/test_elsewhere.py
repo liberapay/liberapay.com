@@ -229,6 +229,48 @@ class TestElsewhere(EmailHarness):
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
 
+    def test_patrons_are_charged_after_pledgee_joins(self):
+        bob = self.make_participant('bob', email='bob@example.com')
+        dan = self.make_participant('dan', email='dan@example.com')
+        alice = self.make_participant('alice', email='alice@example.com')
+        dan_twitter = self.make_elsewhere('twitter', 1, 'dan')
+        alice.set_tip_to(dan, EUR('100'), renewal_mode=2)
+        bob.set_tip_to(dan_twitter, EUR('100'), renewal_mode=2)
+        dan.take_over(dan_twitter, have_confirmation=True)
+
+        # dan hasn't connected any payment account yet, so nothing should happen
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 0
+
+        # add a payment account and check again, but it's still too early
+        self.add_payment_account(dan, 'stripe')
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 0
+
+        # simulate skipping one day ahead, now there should be a notification
+        # and a scheduled payin
+        self.db.run("UPDATE events SET ts = ts - interval '24 hours'")
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 1
+        last_email = self.get_last_email()
+        assert last_email['to'][0] == 'bob <bob@example.com>'
+        assert last_email['subject'] == "dan from Twitter has joined Liberapay!"
+        scheduled_payins = self.db.all(
+            "SELECT * FROM scheduled_payins WHERE payer = %s", (bob.id,)
+        )
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('400.00')
+        assert scheduled_payins[0].automatic is True
+
+        # check that the notification isn't sent again
+        self.mailer.reset_mock()
+        Participant.notify_patrons()
+        Participant.dequeue_emails()
+        assert self.mailer.call_count == 0
+
 
 class TestConfirmTakeOver(Harness):
 
