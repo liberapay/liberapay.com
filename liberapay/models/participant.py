@@ -1503,8 +1503,11 @@ class Participant(Model, MixinTeam):
                AND tip.paid_in_advance IS NULL
                AND tippee_p.payment_providers > 0
                AND tippee_p.join_time >= (current_date - interval '30 days')
+               AND tippee_p.status = 'active'
+               AND tipper_p.status = 'active'
                AND tippee_p.is_suspended IS NOT TRUE
                AND tipper_p.is_suspended IS NOT TRUE
+               AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                AND event.ts < (current_timestamp - interval '6 hours')
                AND EXISTS (
                        SELECT 1

@@ -36,7 +36,7 @@ def send_donation_reminder_notifications():
                ) > 0
     """)
     for payer, payins in rows:
-        if payer.is_suspended:
+        if payer.is_suspended or payer.status != 'active':
             continue
         _check_scheduled_payins(db, payer, payins, automatic=False)
         if not payins:
@@ -84,7 +84,7 @@ def send_upcoming_debit_notifications():
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
     """)
     for payer, payins in rows:
-        if payer.is_suspended:
+        if payer.is_suspended or payer.status != 'active':
             continue
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
