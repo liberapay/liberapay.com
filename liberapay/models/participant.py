@@ -1349,6 +1349,12 @@ class Participant(Model, MixinTeam):
         """, locals())
         if n > 0:
             raise DuplicateNotification(p_id, event, idem_key)
+        # Check that the participant is active
+        if self.status != 'active':
+            website.warning(
+                f"A {event!r} notification is being inserted for inactive participant ~{self.id}"
+            )
+            email = False
         # Okay, add the notification to the queue
         n_id = self.db.one("""
             INSERT INTO notifications
