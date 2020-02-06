@@ -160,7 +160,7 @@ def update_payin(
                             other_transfers_sum = Money.sum(
                                 (Money(**tr['amount']) for tr in other_transfers),
                                 sp['amount'].currency
-                            ),
+                            ) if sp['amount'] else None
                             cursor.run("""
                                 INSERT INTO scheduled_payins
                                             (ctime, mtime, execution_date, payer,
