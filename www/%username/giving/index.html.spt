@@ -39,6 +39,7 @@ if request.method == 'POST':
                         AND renewal_mode = 1
             """, (participant.id,))
             participant.add_event(website.db, 'auto_renewal_hint', 'accepted')
+            participant.schedule_renewals()
         elif auto_renewal == 'no':
             participant.add_event(website.db, 'auto_renewal_hint', 'rejected')
         else:
