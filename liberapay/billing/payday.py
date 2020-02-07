@@ -1184,7 +1184,7 @@ def compute_next_payday_date():
     days_till_wednesday = (3 - today.isoweekday()) % 7
     if days_till_wednesday == 0:
         payday_is_already_done = website.db.one("""
-            SELECT true
+            SELECT count(*) > 0
               FROM paydays
              WHERE ts_start::date = %s
                AND ts_end > ts_start

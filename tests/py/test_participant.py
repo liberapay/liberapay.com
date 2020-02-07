@@ -601,6 +601,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
+        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -669,12 +670,13 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
+        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
         assert emails[0]['to'][0] == 'alice <alice@liberapay.com>'
         assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €5.00'
-        sp = self.db.one("SELECT * FROM scheduled_payins")
+        sp = self.db.one("SELECT * FROM scheduled_payins WHERE payin IS NULL")
         assert sp.notifs_count == 1
         # Tweak the amount of the first donation. The renewal shouldn't be
         # pushed back and the payer shouldn't be notified.

@@ -27,6 +27,7 @@ def send_donation_reminder_notifications():
          WHERE sp.execution_date <= (current_date + interval '14 days')
            AND sp.automatic IS NOT true
            AND sp.payin IS NULL
+           AND sp.ctime < (current_timestamp - interval '6 hours')
       GROUP BY sp.payer
         HAVING count(*) FILTER (
                    WHERE sp.notifs_count = 0
@@ -35,7 +36,7 @@ def send_donation_reminder_notifications():
                ) > 0
     """)
     for payer, payins in rows:
-        if payer.is_suspended:
+        if payer.is_suspended or payer.status != 'active':
             continue
         _check_scheduled_payins(db, payer, payins, automatic=False)
         if not payins:
@@ -78,11 +79,12 @@ def send_upcoming_debit_notifications():
            AND sp.automatic
            AND sp.notifs_count = 0
            AND sp.payin IS NULL
+           AND sp.ctime < (current_timestamp - interval '6 hours')
       GROUP BY sp.payer, (sp.amount).currency
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
     """)
     for payer, payins in rows:
-        if payer.is_suspended:
+        if payer.is_suspended or payer.status != 'active':
             continue
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
