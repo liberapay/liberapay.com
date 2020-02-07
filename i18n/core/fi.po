@@ -217,32 +217,32 @@ msgid "Add money"
 msgstr "Katteen lisäys"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Liberapay-lahjoituksen uusiminen: ei voimassaolevaa maksuvälinettä"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Sinulla on {amount} maksu ajastettu tapahtumaan {payment_date} lahjoituksesi uusimiseksi vastaanottajalle {recipient}, mutta emme voi käsitellä sitä, koska sinulla ei ole voimassaolevaa maksuvälinettä."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Sinulla on {amount} maksu ajastettu tapahtumaan {payment_date} lahjoituksesi uusimiseksi vastaanottajille {recipients}, mutta emme voi käsitellä sitä, koska sinulla ei ole voimassaolevaa maksuvälinettä."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mörgö"
+msgstr[1] "Sinulla on {n} maksua ajastettu tapahtumaan {payment_date} lahjoitustesi uusimiseksi, mutta emme voi käsitellä niitä, koska sinulla ei ole voimassaolevaa maksuvälinettä."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr ""
+msgstr "Maksupäivät, -summat ja vastaanottajat ovat:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {recipient} {money_amount}"
 
 #, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {recipients} jakavat {money_amount}"
 
 msgid "Add a payment instrument"
 msgstr "Lisää maksuväline"
@@ -387,13 +387,13 @@ msgstr "Suoraveloitus Liberapay-lompakkoosi on onnistunut"
 msgid "Your payment has failed"
 msgstr "Maksusi epäonnistui"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Liberapay-palvelussa {date} toimeenpanemasi {money_amount} maksu on epäonnistunut."
+msgstr "Aiemmin tänään toimeenpanemasi {money_amount} maksu on epäonnistunut."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "{date} toimeenpanemasi {money_amount} maksu on epäonnistunut."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -451,13 +451,13 @@ msgstr "Kun maksu on käsitelty, se näkyy tiliotteellasi merkinnällä ”{desc
 msgid "Your payment has succeeded"
 msgstr "Maksusi onnistui"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "Liberapay-palvelussa {date} aloittamasi {money_amount} maksu onnistui."
+msgstr "Aiemmin tänään aloittamasi {money_amount} maksu onnistui."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "{date} aloittamasi {money_amount} maksu onnistunut."
 
 msgid "Thank you for this donation!"
 msgstr "Kiitos tästä lahjoituksesta!"
@@ -478,71 +478,71 @@ msgid "Reject donations"
 msgstr "Hylkää lahjoitukset"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
-msgstr ""
+msgstr "Liberapay-lahjoituksen uusiminen: odottava maksusi on muuttunut"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr ""
+msgstr "Sinun tai jonkun lahjoituskohteesi tekemien muutosten takia lahjoitusaikataulusi on muuttunut seuraavasti:"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "{date} ajastettu {money_amount} maksu on peruttu."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "{date} ajastettu manuaalinen maksu on peruttu."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr ""
+msgstr "Uusi {money_amount} maksu on ajastettu {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr ""
+msgstr "Uusi manuaalinen maksu on ajastettu {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "{old_date} ajastettu {money_amount} maksu on siirretty päivälle {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "{old_date} ajastettu manuaalinen maksu on siirretty päivälle {new_date}."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "{date} ajastetun maksun summa on muuttunut {old_money_amount} → {new_money_amount}."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "{old_date} ajastettu {old_money_amount} maksu on korvattu uudella {new_money_amount} maksulla {new_date}."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "Automaattinen {old_money_amount} maksu {old_date} on korvattu manuaalisella maksulla {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Manuaalinen maksu {old_date} on korvattu automaattisella {new_money_amount} maksulla {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sinulla on nyt {n} ajastettu maksu:"
+msgstr[1] "Sinulla on nyt {n} ajastettua maksua:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: automaattinen {money_amount} maksu vastaanottajalle {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: automaattinen {money_amount} maksu, jonka jakavat {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: manuaalinen maksu vastaanottajille {recipients}"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Hallinnoi maksuaikatauluasi"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -573,14 +573,14 @@ msgid "Donate to {0}"
 msgstr "Lahjoita käyttäjälle {0}"
 
 msgid "Liberapay donation renewal: payment aborted"
-msgstr ""
+msgstr "Liberapay-lahjoituksen uusiminen: maksu keskeytetty"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr ""
+msgstr "{money_amount} lahjoituksen vastaanottajalle {recipient} {date} maksu on keskeytetty, koska vastaanottaja ei kykene vastaanottamaan sitä."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "Nämä lahjoituksen uusimismaksut on peruttu, koska vastaanottajat eivät kykene vastaanottamaan niitä:"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Voit helpottaa lahjoittajiesi toimintaa Liberapay-palvelussa"
@@ -626,32 +626,32 @@ msgstr "Ryhmä ”{0}” on nyt nimeltään ”{1}”. Vaihtaja: {2}."
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Liberapay-lahjoituksen uusiminen: tuleva {money_amount} veloitus"
+msgstr[1] "Liberapay-lahjoituksen uusiminen: tuleva {money_amount} yhteisveloitus"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "Tällä viestillä muistutetaan, että {amount} veloitetaan oletusmaksuvälineeltäsi {debit_date} lahjoituksen uusimiseksi vastaanottajalle {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "Tällä viestillä muistutetaan, että {amount} veloitetaan oletusmaksuvälineeltäsi {debit_date} lahjoitusten uusimiseksi vastaanottajille {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mörgö"
+msgstr[1] "Tällä viestillä muistutetaan, että {amount} veloitetaan oletusmaksuvälineeltäsi seuraavan {n} päivän sisällä lahjoitustesi uusimiseksi."
 
 #, python-brace-format
 msgid "If you wish to delay this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to delay these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mikäli haluat viivästyttää tätä maksua, klikkaa seuraavaa linkkiä: {link_start}hallinnoi maksuaikatauluani{link_end}."
+msgstr[1] "Mikäli haluat viivästyttää näitä maksuja, klikkaa seuraavaa linkkiä: {link_start}hallinnoi maksuaikatauluani{link_end}."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Mikäli haluat muuttaa lahjoituksiasi, klikkaa seuraavaa linkkiä: {link_start}hallinnoi lahjoituksiani{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Sähköpostiosoitteen tarkistus – Liberapay"
@@ -738,13 +738,13 @@ msgid "When money is being refunded back to me"
 msgstr "Kun maksuni hyvitetään"
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "Kun automaattinen lahjoituksen uusimismaksu koittaa"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr ""
+msgstr "Kun minulla ei enää ole voimassaolevaa maksuvälinettä"
 
 msgid "When a donation renewal payment has been aborted"
-msgstr ""
+msgstr "Kun lahjoituksen uusimismaksu on keskeytetty"
 
 msgid "Expense Report"
 msgstr "Kustannusraportti"
@@ -1277,7 +1277,7 @@ msgid "Payment Instruments"
 msgstr "Maksuvälineet"
 
 msgid "Payment Schedule"
-msgstr ""
+msgstr "Maksuaikataulu"
 
 msgid "Receiving"
 msgstr "Vastaanottaminen"
@@ -1547,7 +1547,7 @@ msgid "Instruments"
 msgstr "Välineet"
 
 msgid "Schedule"
-msgstr ""
+msgstr "Aikataulu"
 
 msgid "Members"
 msgstr "Jäseniä"
@@ -1766,19 +1766,19 @@ msgid "Custom"
 msgstr "Vapaavalintainen"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr ""
+msgstr "Valitse, kuinka tämä lahjoitus uusitaan:"
 
 msgid "Automatic renewal"
-msgstr ""
+msgstr "Automaattinen uusiminen"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr ""
+msgstr "Veloitamme korttiasi tai pankkitiliäsi. Saat asiasta ilmoituksen vähintään kaksi päivää etukäteen."
 
 msgid "Manual renewal"
-msgstr ""
+msgstr "Manuaalinen uusiminen"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr ""
+msgstr "Muistutus lahjoituksesi uusimisesta lähetetään sinulle sähköpostitse."
 
 msgid "Modify the donation"
 msgstr "Muuta lahjoitusta"
@@ -2305,10 +2305,10 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Liberapay-palvelun rakentaminen on työlästä, ja on vielä paljon tehtävää, mutta kehittäjämme, kääntäjämme ja muut osallistujamme eivät saa hommasta paljoakaan rahaa, mikä hidastaa edistymistämme."
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
-msgstr ""
+msgstr "Liberapay-palvelussa on nyt mahdollista uusituttaa lahjoitukset automaattisesti. Haluatko ottaa sen käyttöön kaikille lahjoituksillesi?"
 
 msgid "Yes, activate automatic renewals"
-msgstr ""
+msgstr "Kyllä, aktivoi automaattiset lahjoitukset"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2348,9 +2348,9 @@ msgstr "Poissa toiminnasta, koska vastaanottaja ei enää ota vastaan lahjoituks
 msgid "Active"
 msgstr "Aktiivinen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Seuraava maksu {in_N_weeks_months_or_years}."
+msgstr "Seuraava maksu erääntyy {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Uudista nyt"
@@ -2433,7 +2433,7 @@ msgid "Doesn't support the {currency}"
 msgstr "{currency} ei kelpaa"
 
 msgid "Doesn't support automatic renewal"
-msgstr ""
+msgstr "Automaattinen uusiminen ei ole tuettu"
 
 msgid "Not anonymous"
 msgstr "Ei nimetön"
@@ -2551,18 +2551,18 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "”{0}” ei ole kelvollinen määrä. Sallitut rajat: {1}—{2}"
 
 msgid "The date must be in the future."
-msgstr ""
+msgstr "Päivämäärän pitää olla tulevaisuudessa."
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}."
-msgstr ""
+msgstr "Haluatko varmasti perua tämän ajastetun maksun? Se lopettaisi lahjoituksesi vastaanottajalle {recipient}."
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
-msgstr ""
+msgstr "Haluatko varmasti perua tämän ajastetun maksun? Se lopettaisi lahjoituksesi vastaanottajille {recipients}."
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Mikäli haluat muuttaa tämän ajastetun maksun summaa, valitse tai syötä uusi:"
 
 msgid "(not recommended, high fee percentage)"
 msgstr "(ei suositella korkeiden kulujen takia)"
@@ -2581,26 +2581,26 @@ msgstr[1] "Seuraava maksu {n} viikon kuluttua ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Seuraava maksu {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Oma määrä ({0}—{1})"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Mikäli haluat muuttaa tämän ajastetun maksun päiväystä, valitse tai syötä uusi:"
 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
-msgstr ""
+msgstr "Maksusi viivästyttäminen sen normaalia ajankohtaa pitemmälle aiheuttaa sen, että lahjoituksesi ei ole tuona aikana voimassa."
 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sinulla on {n} ajastettu maksu:"
+msgstr[1] "Sinulla on {n} ajastettua maksua:"
 
 msgid "You currently don't have any scheduled payment."
-msgstr ""
+msgstr "Sinulla ei ole ajastettuja maksuja."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Haluatko varmasti muuttaa tilin tyyppiä? Lakiteknisistä syistä meidän pitää tehdä sinulle uusi tili maksukumppanimme järjestelmässä, ja siirtää raha vanhalta tililtäsi."
@@ -4688,9 +4688,8 @@ msgstr "Toiminta lahjoittajien näkökulmasta"
 msgid "1. Set up a donation"
 msgstr "1. Aloita lahjoitus"
 
-#, fuzzy
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr "Löydä joku, jolle antaa rahaa, ja valitse määrä ja aikaväli (viikoittain, kuukausittain, tai vuosittain)."
+msgstr "Löydä joku, jolle antaa rahaa, ja valitse määrä ja aikaväli (viikoittain, kuukausittain, tai vuosittain) sekä uusimistapa (manuaalinen tai automaattinen)."
 
 msgid "2. Fund your donation"
 msgstr "2. Rahoita lahjoituksesi"
@@ -4702,9 +4701,8 @@ msgstr "Liberapay-palvelussa lahjoitukset rahoitetaan etukäteen. Voit valita, p
 msgid "3. Keep your donation funded"
 msgstr "3. Huolehdi lahjoituksesi katteesta"
 
-#, fuzzy
 msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
-msgstr "Kun tulee aika uusia lahjoitus, lähetämme sinulle sähköpostitse muistutuksen lisätä katetta. Voit myös lopettaa lahjoituksen."
+msgstr "Kun tulee aika uusia lahjoitus, lähetämme sinulle sähköpostitse muistutuksen lisätä katetta. Mikäli olet valinnut automaattiset uusimiset, yritämme veloittaa korttiasi tai pankkitiliäsi sovitun mukaisesti."
 
 msgid "How it works for creators"
 msgstr "Toiminta sisällöntuottajien näkökulmasta"
