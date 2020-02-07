@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '114'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '115'::jsonb);
 
 
 -- app configuration
@@ -448,6 +448,7 @@ CREATE TABLE payins
 , fee              currency_amount   CHECK (fee >= 0)
 , intent_id        text
 , refunded_amount  currency_amount   CHECK (NOT (refunded_amount <= 0))
+, off_session      boolean           NOT NULL
 , CONSTRAINT fee_currency_chk CHECK (fee::currency = amount_settled::currency)
 , CONSTRAINT refund_currency_chk CHECK (refunded_amount::currency = amount::currency)
 );
@@ -536,6 +537,28 @@ CREATE TABLE payin_transfer_reversals
 , amount           currency_amount       NOT NULL CHECK (amount > 0)
 , UNIQUE (payin_transfer, remote_id)
 );
+
+
+-- scheduled payins
+
+CREATE TABLE scheduled_payins
+( id               bigserial         PRIMARY KEY
+, ctime            timestamptz       NOT NULL DEFAULT current_timestamp
+, mtime            timestamptz       NOT NULL DEFAULT current_timestamp
+, execution_date   date              NOT NULL
+, payer            bigint            NOT NULL REFERENCES participants
+, amount           currency_amount   CHECK (amount IS NULL OR amount > 0)
+, transfers        json              NOT NULL
+, automatic        boolean           NOT NULL DEFAULT FALSE
+, notifs_count     int               NOT NULL DEFAULT 0
+, last_notif_ts    timestamptz
+, customized       boolean
+, payin            bigint            REFERENCES payins
+, CONSTRAINT amount_is_null_when_not_automatic CHECK ((amount IS NULL) = (NOT automatic))
+, CONSTRAINT notifs CHECK ((notifs_count = 0) = (last_notif_ts IS NULL))
+);
+
+CREATE INDEX scheduled_payins_payer_idx ON scheduled_payins (payer);
 
 
 -- communities -- groups of participants
