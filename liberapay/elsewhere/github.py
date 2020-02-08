@@ -18,12 +18,13 @@ class GitHub(PlatformOAuth2):
     auth_url = 'https://github.com/login/oauth/authorize'
     access_token_url = 'https://github.com/login/oauth/access_token'
     oauth_email_scope = 'user:email'
+    can_auth_with_client_credentials = True
+    use_basic_auth_for_app_session = True
 
     # API attributes
     api_format = 'json'
     api_paginator = header_links_paginator()
     api_url = 'https://api.github.com'
-    api_app_auth_params = 'client_id={api_key}&client_secret={api_secret}'
     api_user_info_path = '/user/{user_id}'
     api_user_name_info_path = '/users/{user_name}'
     api_user_self_info_path = '/user'

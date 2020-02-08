@@ -10,6 +10,7 @@ from dateutil.parser import parse as parse_date
 from pando import Response
 from pando.utils import utc
 from oauthlib.oauth2 import BackendApplicationClient, InvalidGrantError, TokenExpiredError
+from requests import Session
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.exceptions import LazyResponse
@@ -121,10 +122,6 @@ class Platform(object):
         is_user_session = bool(sess)
         if not sess:
             sess = self.get_app_session(domain)
-            api_app_auth_params = getattr(self, 'api_app_auth_params', None)
-            if api_app_auth_params:
-                url += '?' if '?' not in url else '&'
-                url += api_app_auth_params.format(**self.__dict__)
         kw.setdefault('timeout', self.api_timeout)
         if hasattr(self, 'api_headers'):
             kw.setdefault('headers', {}).update(self.api_headers)
@@ -491,6 +488,7 @@ class PlatformOAuth2(Platform):
     oauth_friends_scope = ''
 
     can_auth_with_client_credentials = None
+    use_basic_auth_for_app_session = False
 
     session_class = OAuth2Session
 
@@ -504,9 +502,13 @@ class PlatformOAuth2(Platform):
             sess = self.app_sessions.get(domain)
             if not sess:
                 client_id = self.get_credentials(domain)[0]
-                sess = self.session_class(client=BackendApplicationClient(client_id))
+                if self.use_basic_auth_for_app_session:
+                    sess = Session()
+                    sess.auth = self.get_credentials(domain)
+                else:
+                    sess = self.session_class(client=BackendApplicationClient(client_id))
                 self.app_sessions[domain] = sess
-            if not sess.token:
+            if not sess.auth and not sess.token:
                 access_token_url = self.access_token_url.format(domain=domain)
                 client_id, client_secret = self.get_credentials(domain)
                 sess.fetch_token(access_token_url, client_id=client_id,
