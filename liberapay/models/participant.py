@@ -1,6 +1,6 @@
 from base64 import b64decode, b64encode
 from collections import defaultdict
-from datetime import timedelta
+from datetime import date, timedelta
 from decimal import Decimal
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5, sha1
@@ -2626,11 +2626,14 @@ class Participant(Model, MixinTeam):
                 key: self.group_tips_into_payments(tips)[0]['fundable']
                 for key, tips in tip_groups.items()
             }
+            min_automatic_debit_date = date(2020, 2, 14)
             new_schedule = []
             insertions, updates, deletions, unchanged = [], [], [], []
             for (renewal_mode, payin_currency, ignored), groups in tip_groups.items():
                 for payin_tips in groups:
                     execution_date = min(t.due_date for t in payin_tips)
+                    if renewal_mode == 2:
+                        execution_date = max(execution_date, min_automatic_debit_date)
                     new_sp = Object(
                         amount=Money.sum(
                             (t.renewal_amount for t in payin_tips),
