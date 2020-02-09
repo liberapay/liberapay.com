@@ -6,7 +6,6 @@ from operator import itemgetter
 import os
 import re
 import socket
-import signal
 from tempfile import mkstemp
 from time import time
 import traceback
@@ -473,8 +472,6 @@ def make_sentry_teller(env):
                     website.db = NoDB()
                     # Show the proper 503 error page
                     state['exception'] = NeedDatabase()
-                    # Tell gunicorn to gracefully restart this worker
-                    os.kill(os.getpid(), signal.SIGTERM)
 
                 if 'read-only' in str(exception):
                     # DB is in read only mode
