@@ -88,8 +88,6 @@ class QueryCache(object):
         return self._do_query(self.db.one, query, params, process)
 
     def all(self, query, params=None, process=None):
-        if process is None:
-            process = lambda g: list(g)
         return self._do_query(self.db.all, query, params, process)
 
     def _do_query(self, fetchfunc, query, params, process):
@@ -161,7 +159,7 @@ class QueryCache(object):
                 return entry.result
 
             else:                                               # cache miss
-                try:                    # XXX uses postgres.py api, not dbapi2!
+                try:
                     entry.result = fetchfunc(query, params)
                     if process is not None:
                         entry.result = process(entry.result)
