@@ -1,15 +1,9 @@
-import sys
 import threading
 import time
-import traceback
 
 
 # Define a query cache.
 # ==========================
-
-class FormattingError(Exception):
-    """Represent a problem with a format callable.
-    """
 
 
 class Entry(object):
@@ -172,12 +166,9 @@ class QueryCache(object):
                     if process is not None:
                         entry.result = process(entry.result)
                     entry.exc = None
-                except Exception:
+                except Exception as exc:
                     entry.result = None
-                    entry.exc = (
-                        FormattingError(traceback.format_exc()),
-                        sys.exc_info()[2]
-                    )
+                    entry.exc = exc
 
 
             # Check the queryset back in.
@@ -188,7 +179,7 @@ class QueryCache(object):
                 entry.timestamp = time.time()
                 self.cache[key] = entry
                 if entry.exc is not None:
-                    raise entry.exc[0]
+                    raise entry.exc
                 else:
                     return entry.result
             finally:
