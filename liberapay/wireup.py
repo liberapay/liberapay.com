@@ -467,11 +467,15 @@ def make_sentry_teller(env):
             if getattr(website, 'db', None):
                 try:
                     website.db.one('SELECT 1 AS x')
-                except psycopg2.Error:
+                except psycopg2.Error as e:
                     # If it can't answer this simple query, then it's either
                     # down or unreachable. Show the proper 503 error page.
                     website.db.okay = False
                     state['exception'] = NeedDatabase()
+                    if sentry:
+                        # Record the exception raised above instead of the
+                        # original one, to avoid duplicate issues.
+                        return tell_sentry(e, state, allow_reraise=True)
 
                 if 'read-only' in str(exception):
                     # DB is in read only mode
