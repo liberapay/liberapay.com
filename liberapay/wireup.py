@@ -468,9 +468,9 @@ def make_sentry_teller(env):
                 try:
                     website.db.one('SELECT 1 AS x')
                 except psycopg2.Error:
-                    # If it can't answer this simple query, it's down.
-                    website.db = NoDB()
-                    # Show the proper 503 error page
+                    # If it can't answer this simple query, then it's either
+                    # down or unreachable. Show the proper 503 error page.
+                    website.db.okay = False
                     state['exception'] = NeedDatabase()
 
                 if 'read-only' in str(exception):
