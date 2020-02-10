@@ -1,9 +1,15 @@
+import psycopg2
+
 from liberapay.exceptions import NeedDatabase
 
 [---]
 
-if not website.db:
+# Check that the DB is up, reachable, and not empty
+try:
+    n = website.db.one("SELECT count(*) FROM db_meta")
+except psycopg2.Error:
     raise NeedDatabase()
+assert n
 
 [---] text/plain
 OK
