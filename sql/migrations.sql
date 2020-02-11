@@ -2500,3 +2500,15 @@ CREATE TABLE scheduled_payins
 CREATE INDEX scheduled_payins_payer_idx ON scheduled_payins (payer);
 ALTER TABLE payins ADD COLUMN off_session boolean NOT NULL DEFAULT FALSE;
 ALTER TABLE payins ALTER COLUMN off_session DROP DEFAULT;
+
+-- migration #116
+UPDATE scheduled_payins
+   SET execution_date = '2020-02-14'
+ WHERE execution_date < '2020-02-14'::date
+   AND automatic IS TRUE
+   AND payin IS NULL;
+UPDATE scheduled_payins
+   SET execution_date = (SELECT pi.ctime::date FROM payins pi WHERE pi.id = payin)
+ WHERE execution_date < '2020-02-14'::date
+   AND automatic IS TRUE
+   AND payin IS NOT NULL;
