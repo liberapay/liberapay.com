@@ -118,6 +118,8 @@ class NoDB(object):
     __bool__ = lambda self: False
     __nonzero__ = __bool__
 
+    back_as_registry = {}
+
     def register_model(self, model):
         model.db = self
 
@@ -130,7 +132,6 @@ def database(env, tell_sentry):
     except psycopg2.OperationalError as e:
         tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()
-        return {'db': db, 'db_qc1': db, 'db_qc5': db}
 
     itemgetter0 = itemgetter(0)
 
@@ -161,7 +162,7 @@ def database(env, tell_sentry):
     try:
         oid = db.one("SELECT 'currency_amount'::regtype::oid")
         register_type(new_type((oid,), 'currency_amount', cast_currency_amount))
-    except psycopg2.ProgrammingError:
+    except (psycopg2.ProgrammingError, NeedDatabase):
         pass
 
     def adapt_money_basket(b):
@@ -193,7 +194,7 @@ def database(env, tell_sentry):
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
         register_type(new_type((oid,), 'currency_basket', cast_currency_basket))
-    except psycopg2.ProgrammingError:
+    except (psycopg2.ProgrammingError, NeedDatabase):
         pass
 
     use_qc = not env.override_query_cache
@@ -573,7 +574,7 @@ class PlatformRegistry(object):
 
 def accounts_elsewhere(app_conf, asset, canonical_url, db):
     if not app_conf:
-        return
+        return {'platforms': db, 'friends_platforms': db}
     platforms = []
     for cls in elsewhere.CLASSES:
         conf = {
