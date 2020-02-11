@@ -216,32 +216,32 @@ msgid "Add money"
 msgstr "Aggiungere denaro"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Rinnovo della donazione Liberapay: nessuno strumento di pagamento valido"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Hai un pagamento di {amount} programmato il {payment_date} per rinnovare la tua donazione a {recipient}, ma non possiamo elaborarlo perché manca uno strumento di pagamento valido."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Hai un pagamento di {amount} programmato il {payment_date} per rinnovare la tua donazione a {recipients}, ma non possiamo elaborarlo perché manca uno strumento di pagamento valido."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
+msgstr[1] "Hai {n} pagamenti programmati per rinnovare le tue donazioni, ma non possiamo elaborarli perché manca uno strumento di pagamento valido."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr ""
+msgstr "Le date di pagamento, le somme e i destinatari sono:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {money_amount} a {recipient}"
 
 #, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {money_amount} diviso tra {recipients}"
 
 msgid "Add a payment instrument"
 msgstr "Aggiungi uno strumento di pagamento"
@@ -386,13 +386,13 @@ msgstr "Il pagamento con addebito diretto sul tuo portafoglio Liberapay è riusc
 msgid "Your payment has failed"
 msgstr "Il tuo pagamento non è andato a buon fine"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Il pagamento di {money_amount} attraverso Liberapay, avviato in data {date}, non è andato a buon fine."
+msgstr "Il pagamento di {money_amount} avviato in data odierna non è andato a buon fine."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Il pagamento di {money_amount} avviato in data {date} non è andato a buon fine."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -450,13 +450,13 @@ msgstr "Quando questo pagamento sarà stato elaborato dovrebbe comparire nel tuo
 msgid "Your payment has succeeded"
 msgstr "Il tuo pagamento è andato a buon fine"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "Il pagamento di {money_amount} attraverso Liberapay, avviato in data {date}, è andato a buon fine."
+msgstr "Il pagamento di {money_amount} avviato in data odierna è andato a buon fine."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Il pagamento di {money_amount} avviato in data {date} è andato a buon fine."
 
 msgid "Thank you for this donation!"
 msgstr "Grazie per la donazione!"
@@ -477,95 +477,95 @@ msgid "Reject donations"
 msgstr "Rifiuta donazioni"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
-msgstr ""
+msgstr "Rinnovo della donazione Liberapay: il tuo pagamento in arrivo è cambiato"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr ""
+msgstr "A causa di cambiamenti effettuati da te o da qualcuno che riceve tue donazioni, il piano dei tuoi pagamenti è stato modificato come segue:"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Il pagamento di {money_amount} programmato per la data {date} è stato cancellato."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Il pagamento manuale programmato per la data {date} è stato cancellato."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr ""
+msgstr "Un nuovo pagamento di {money_amount} è stato programmato per la data {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr ""
+msgstr "Un nuovo pagamento manuale è stato programmato per la data {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Il pagamento di {money_amount} programmato per la data {old_date} è stato riprogrammato per la data {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Il pagamento manuale programmato per la data {old_date} è stato riprogammato per la data {new_date}."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "La somma del pagamento programmato per la data {date} è stata cambiata da {old_money_amount} a {new_money_amount}."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Il pagamento di {old_money_amount} programmato per la data {old_date} è stato sostituito da un pagamento di {new_money_amount} nella data {new_date}."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "Il pagamento automatico di {old_money_amount} programmato per la data {old_date} è stato sostituito da un pagamento manuale nella data {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Il pagamento manuale programmato per la data {old_date} è stato sostituito da un pagamento automatico di {new_money_amount} nella data {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Attualmente hai {n} pagamento programmato:"
+msgstr[1] "Attualmente hai {n} pagamenti programmati:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: pagamento automatico di {money_amount} verso {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: pagamento automatico di {money_amount} diviso tra {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: pagamento manuale verso {recipients}"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Gestisci il piano dei tuoi pagamenti"
 
 #, python-brace-format
 msgid "Your donation to {username} on Liberapay can now be processed"
-msgstr ""
+msgstr "La tua donazione verso {username} su Liberapay ora può essere elaborata"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {username} through Liberapay."
-msgstr ""
+msgstr "Nella data {date} ti sei impegnato/a a donare {money_amount} a {username} attraverso Liberapay."
 
 msgid "We're pleased to inform you that this donation can now be processed."
-msgstr ""
+msgstr "Siamo lieti di informarti che ora questa donazione può essere elaborata."
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
-msgstr ""
+msgstr "Perciò, un pagamento automatico di {money_amount} è stato programmato nella data {date}, per mettere in atto il tuo impegno a donare."
 
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Se desideri modificare o cancellare questo pagamento in arrivo, fai clic sul seguente collegamento: {link_start}gestisci il piano dei miei pagamenti{link_end}."
+msgstr[1] "Se desideri modificare o cancellare questi pagamenti in arrivo, fai clic sul seguente collegamento: {link_start}gestisci il piano dei miei pagamenti{link_end}."
 
 msgid "We're pleased to inform you can now turn this pledge into action:"
-msgstr ""
+msgstr "Siamo lieti di informarti che ora puoi mettere in atto questo impegno a donare:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -593,21 +593,21 @@ msgstr "Il {date} ti sei impegnato a donare {money_amount} a {user_name} in caso
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
-msgstr ""
+msgstr "Siamo lieti di informarti che {user_name} si è unito/a a Liberapay {time_ago}, come {liberapay_username}."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
 msgstr "Siamo lieti di informarti che {user_name} si è unito a Liberapay {time_ago} come {liberapay_username}, quindi ora puoi convertire il tuo impegno in una vera e propria donazione:"
 
 msgid "Liberapay donation renewal: payment aborted"
-msgstr ""
+msgstr "Rinnovo della donazione Liberapay: pagamento annullato"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr ""
+msgstr "Il rinnovo del pagamento di {money_amount} verso {recipient} programmato per la data {date} è stato annullato perché il destinatario non è in grado di riceverlo."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "I seguenti pagamenti di rinnovo di donazioni sono stati annullati perché i destinatari non sono in grado di riceverli:"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Puoi facilitare le donazioni dei tuoi sostenitori attraverso Liberapay"
@@ -653,26 +653,26 @@ msgstr "La squadra “{0}” ha cambiato nome in “{1}” per iniziativa di  {2
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Rinnovo della donazione Liberapay: addebito in arrivo di {money_amount}"
+msgstr[1] "Rinnovo della donazione Liberapay: addebiti in arrivo per un totale di {money_amount}"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "Questo messaggio è un promemoria che {amount} saranno addebitati tramite il tuo strumento di pagamento predefinito in data {debit_date} per rinnovare la tua donazione a {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "Questo messaggio è un promemoria che {amount} saranno addebitati tramite il tuo strumento di pagamento predefinito in data {debit_date} per rinnovare le tue donazioni a {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
+msgstr[1] "Questo messaggio è un promemoria che una somma totale di {amount} verrà addebitata tramite il tuo strumento di pagamento predefinito entro i prossimi {n} giorni per rinnovare le tue donazioni."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Se desideri modificare le tue donazioni, fai clic sul seguente collegamento: {link_start}gestisci le mie donazioni{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Verifica indirizzo e-mail - Liberapay"
@@ -759,13 +759,13 @@ msgid "When money is being refunded back to me"
 msgstr "Quando mi viene rimborsato del denaro"
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "Quando il pagamento automatico per il rinnovo di una donazione è in arrivo"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr ""
+msgstr "Quando non ho più alcuno strumento di pagamento valido"
 
 msgid "When a donation renewal payment has been aborted"
-msgstr ""
+msgstr "Quando un pagamento per il rinnovo di una donazione è stato annullato"
 
 msgid "Expense Report"
 msgstr "Rapporto spese"
@@ -1298,7 +1298,7 @@ msgid "Payment Instruments"
 msgstr "Strumenti di pagamento"
 
 msgid "Payment Schedule"
-msgstr ""
+msgstr "Programma di pagamento"
 
 msgid "Receiving"
 msgstr "Guadagni"
@@ -1568,7 +1568,7 @@ msgid "Instruments"
 msgstr "Strumenti"
 
 msgid "Schedule"
-msgstr ""
+msgstr "Programma"
 
 msgid "Members"
 msgstr "Membri"
@@ -1733,7 +1733,7 @@ msgstr "Avanzo"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Attualmente stai donando {money_amount} ogni settimana a {name}, ma questo soggetto non accetta più donazioni in {currency}. Puoi inserire un nuovo ammontare in {new_currency} qui sotto, o interrompere la donazione."
+msgstr "Attualmente stai donando {money_amount} ogni settimana a {name}, ma questo soggetto non accetta più donazioni in {currency}. Puoi inserire una nuova somma in {new_currency} qui sotto, o interrompere la donazione."
 
 msgid "Modify"
 msgstr "Modifica"
@@ -1743,7 +1743,7 @@ msgstr "Interrompi"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Attualmente stai donando {money_amount} ogni settimana a {name}, ma questo soggetto non accetta più donazioni in {currency}. Puoi selezionare o inserire un nuovo ammontare in {new_currency} qui sotto, o interrompere la donazione facendo clic sul tasto \"Interrompi\"."
+msgstr "Attualmente stai donando {money_amount} ogni settimana a {name}, ma questo soggetto non accetta più donazioni in {currency}. Puoi selezionare o inserire una nuova somma in {new_currency} qui sotto, o interrompere la donazione facendo clic sul tasto \"Interrompi\"."
 
 #, python-brace-format
 msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
@@ -1787,19 +1787,19 @@ msgid "Custom"
 msgstr "Personalizzato"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr ""
+msgstr "Scegli come rinnovare questa donazione:"
 
 msgid "Automatic renewal"
-msgstr ""
+msgstr "Rinnovo automatico"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr ""
+msgstr "Tenteremo di addebitare la tua carta o il tuo conto bancario. Sarai notificato con almeno due giorni di anticipo."
 
 msgid "Manual renewal"
-msgstr ""
+msgstr "Rinnovo manuale"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr ""
+msgstr "Ti verrà inviato un promemoria per rinnovare la tua donazione tramite e-mail."
 
 msgid "Modify the donation"
 msgstr "Modifica la donazione"
@@ -2326,10 +2326,10 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Costruire Liberapay richiede molto lavoro, e c'è ancora molto da fare, ma i nostri sviluppatori, traduttori, e altri collaboratori sono significativamente sottopagati, e questo sta rallentando i nostri progressi."
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
-msgstr ""
+msgstr "Adesso Liberapay è compatibile con il rinnovo automatico, desideri attivarlo per tutte le tue donazioni?"
 
 msgid "Yes, activate automatic renewals"
-msgstr ""
+msgstr "Sì, attiva il rinnovo automatico"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2369,9 +2369,9 @@ msgstr "Inattivo perché il ricevente non accetta più donazioni."
 msgid "Active"
 msgstr "Attivo"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Prossimo pagamento {in_N_weeks_months_or_years}."
+msgstr "Prossimo pagamento tra {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Rinnova adesso"
@@ -2454,7 +2454,7 @@ msgid "Doesn't support the {currency}"
 msgstr "Non è compatibile con {currency}"
 
 msgid "Doesn't support automatic renewal"
-msgstr ""
+msgstr "Non è compatibile con il rinnovo automatico"
 
 msgid "Not anonymous"
 msgstr "Non anonimo"
@@ -2501,7 +2501,7 @@ msgstr "Per favore, seleziona o inserisci una somma di pagamento:"
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "L'intero ammontare del tuo pagamento sarà inviato immediatamente sui conti {payment_provider} di {recipient_names}."
+msgstr "L'intera somma del tuo pagamento sarà inviata immediatamente sui conti {payment_provider} di {recipient_names}."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
@@ -2572,18 +2572,18 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "\"{0}\" non è una somma accettabile (min={1}, max={2})"
 
 msgid "The date must be in the future."
-msgstr ""
+msgstr "La data deve essere nel futuro."
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}."
-msgstr ""
+msgstr "Sei sicuro/a di voler cancellare questo pagamento programmato? Bloccherà la tua donazione a {recipient}."
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
-msgstr ""
+msgstr "Sei sicuro/a di voler cancellare questo pagamento programmato? Bloccherà le tue donazioni a {recipients}."
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Se desideri modificare la somma di questo pagamento programmato, per favore seleziona o inseriscine una nuova:"
 
 msgid "(not recommended, high fee percentage)"
 msgstr "(non raccomandato, percentuale di commissioni elevata)"
@@ -2602,26 +2602,26 @@ msgstr[1] "Prossimo pagamento tra {n} settimane ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Prossimo pagamento {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
-msgstr "Ammontare personalizzato (min={0}, max={1})"
+msgstr "Somma personalizzata (min={0}, max={1})"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Se desideri modificare la data di questo pagamento programmato, per favore seleziona od inseriscine una nuova:"
 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
-msgstr ""
+msgstr "Ritardare il tuo pagamento oltre la sua solita data risulterà nella disattivazione della tua donazione durante quel lasso di tempo."
 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hai {n} pagamento programmato:"
+msgstr[1] "Hai {n} pagamenti programmati:"
 
 msgid "You currently don't have any scheduled payment."
-msgstr ""
+msgstr "Attualmente non hai alcun pagamento programmato."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Sei sicuro di voler cambiare il tipo di conto? Per ragioni legali dovremo creare un nuovo conto nel sistema del nostro partner di pagamento, e trasferire il denaro dal vecchio conto."
@@ -2654,7 +2654,7 @@ msgid "Level 2"
 msgstr "Livello 2"
 
 msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr "Hai completato il processo di verifica dell'identità, l'ammontare di denaro che puoi donare e ricevere nell'arco dell'anno non è più limitato."
+msgstr "Hai completato il processo di verifica dell'identità, la somma di denaro che puoi donare e ricevere nell'arco dell'anno non è più limitata."
 
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
@@ -3381,7 +3381,7 @@ msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
 msgstr "Ti sei impegnato/a a donare {0} ogni anno a {1}. Grazie!"
 
 msgid "The donation amount is missing."
-msgstr "L'ammontare della donazione è mancante."
+msgstr "La somma della donazione è mancante."
 
 msgid "This donation doesn't exist or has already been stopped."
 msgstr "Questa donazione non esiste o è già stata terminata."
@@ -4709,9 +4709,8 @@ msgstr "Come funziona per i donatori"
 msgid "1. Set up a donation"
 msgstr "1. Imposta una donazione"
 
-#, fuzzy
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr "Cerca qualcuno a cui vuoi donare soldi, poi seleziona un ammontare e un periodo di ricorrenza (settimanale, mensile, annuale)."
+msgstr "Cerca qualcuno a cui vuoi donare denaro, poi seleziona una somma, un periodo di ricorrenza (settimanale, mensile, annuale) ed un metodo di rinnovo (manuale o automatico)."
 
 msgid "2. Fund your donation"
 msgstr "2. Finanzia la tua donazione"
@@ -4723,9 +4722,8 @@ msgstr "Su Liberapay le donazioni sono finanziate in anticipo. Tu controlli quan
 msgid "3. Keep your donation funded"
 msgstr "3. Mantieni coperte le tue donazioni"
 
-#, fuzzy
 msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
-msgstr "Quando una donazione deve essere rinnovata ti invieremo una notifica tramite e-mail così che tu possa finanziarla di nuovo, oppure terminarla."
+msgstr "Ti invieremo una notifica quando una donazione deve essere rinnovata. Se hai scelto il rinnovo automatico tenteremo di addebitare la tua carta o il tuo conto bancario come concordato."
 
 msgid "How it works for creators"
 msgstr "Come funziona per gli autori"
