@@ -6,7 +6,6 @@ from operator import itemgetter
 import os
 import re
 import socket
-import signal
 from tempfile import mkstemp
 from time import time
 import traceback
@@ -26,7 +25,6 @@ from state_chain import StateChain
 
 from liberapay import elsewhere
 import liberapay.billing.payday
-import liberapay.billing.watcher
 from liberapay.exceptions import NeedDatabase
 from liberapay.i18n.base import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES, Locale, make_sorted_dict
@@ -119,6 +117,8 @@ class NoDB(object):
     __bool__ = lambda self: False
     __nonzero__ = __bool__
 
+    back_as_registry = {}
+
     def register_model(self, model):
         model.db = self
 
@@ -131,7 +131,6 @@ def database(env, tell_sentry):
     except psycopg2.OperationalError as e:
         tell_sentry(e, {}, allow_reraise=False)
         db = NoDB()
-        return {'db': db, 'db_qc1': db, 'db_qc5': db}
 
     itemgetter0 = itemgetter(0)
 
@@ -162,7 +161,7 @@ def database(env, tell_sentry):
     try:
         oid = db.one("SELECT 'currency_amount'::regtype::oid")
         register_type(new_type((oid,), 'currency_amount', cast_currency_amount))
-    except psycopg2.ProgrammingError:
+    except (psycopg2.ProgrammingError, NeedDatabase):
         pass
 
     def adapt_money_basket(b):
@@ -194,7 +193,7 @@ def database(env, tell_sentry):
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
         register_type(new_type((oid,), 'currency_basket', cast_currency_basket))
-    except psycopg2.ProgrammingError:
+    except (psycopg2.ProgrammingError, NeedDatabase):
         pass
 
     use_qc = not env.override_query_cache
@@ -414,6 +413,7 @@ def billing(app_conf):
     mangopay.resources.LegalUser.person_type = 'LEGAL'
 
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/144
+    import liberapay.billing.watcher
     mangopay.signals.request_finished.connect(liberapay.billing.watcher.on_response)
 
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/157
@@ -468,13 +468,15 @@ def make_sentry_teller(env):
             if getattr(website, 'db', None):
                 try:
                     website.db.one('SELECT 1 AS x')
-                except psycopg2.Error:
-                    # If it can't answer this simple query, it's down.
-                    website.db = NoDB()
-                    # Show the proper 503 error page
+                except psycopg2.Error as e:
+                    # If it can't answer this simple query, then it's either
+                    # down or unreachable. Show the proper 503 error page.
+                    website.db.okay = False
                     state['exception'] = NeedDatabase()
-                    # Tell gunicorn to gracefully restart this worker
-                    os.kill(os.getpid(), signal.SIGTERM)
+                    if sentry:
+                        # Record the exception raised above instead of the
+                        # original one, to avoid duplicate issues.
+                        return tell_sentry(e, state, allow_reraise=True)
 
                 if 'read-only' in str(exception):
                     # DB is in read only mode
@@ -572,7 +574,7 @@ class PlatformRegistry(object):
 
 def accounts_elsewhere(app_conf, asset, canonical_url, db):
     if not app_conf:
-        return
+        return {'platforms': db, 'friends_platforms': db}
     platforms = []
     for cls in elsewhere.CLASSES:
         conf = {

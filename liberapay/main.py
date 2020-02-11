@@ -6,7 +6,7 @@ if _init_modules:
         if name not in _init_modules:
             sys.modules.pop(name, None)
 else:
-    _init_modules = sys.modules.keys()
+    _init_modules = set(sys.modules.keys())
 
 import builtins
 from ipaddress import ip_address
@@ -117,16 +117,18 @@ for k, v in d.items():
 env = website.env
 tell_sentry = website.tell_sentry
 
+timers = []
 if not website.db:
     # Re-exec in 30 second to see if the DB is back up
     if 'gunicorn' in sys.modules:
         # SIGTERM is used to tell gunicorn to gracefully stop the worker
         # http://docs.gunicorn.org/en/stable/signals.html
-        Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGTERM)).start()
+        timers.append(Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGTERM)))
     else:
         # SIGUSR1 is used to tell apache to gracefully restart this worker
         # https://httpd.apache.org/docs/current/stopping.html
-        Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGUSR1)).start()
+        timers.append(Timer(30.0, lambda: os.kill(os.getpid(), signal.SIGUSR1)))
+    timers[-1].start()
 
 if env.cache_static:
     http_caching.compile_assets(website)

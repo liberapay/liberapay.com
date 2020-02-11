@@ -1,15 +1,9 @@
-import sys
 import threading
 import time
-import traceback
 
 
 # Define a query cache.
 # ==========================
-
-class FormattingError(Exception):
-    """Represent a problem with a format callable.
-    """
 
 
 class Entry(object):
@@ -94,8 +88,6 @@ class QueryCache(object):
         return self._do_query(self.db.one, query, params, process)
 
     def all(self, query, params=None, process=None):
-        if process is None:
-            process = lambda g: list(g)
         return self._do_query(self.db.all, query, params, process)
 
     def _do_query(self, fetchfunc, query, params, process):
@@ -167,17 +159,14 @@ class QueryCache(object):
                 return entry.result
 
             else:                                               # cache miss
-                try:                    # XXX uses postgres.py api, not dbapi2!
+                try:
                     entry.result = fetchfunc(query, params)
                     if process is not None:
                         entry.result = process(entry.result)
                     entry.exc = None
-                except Exception:
+                except Exception as exc:
                     entry.result = None
-                    entry.exc = (
-                        FormattingError(traceback.format_exc()),
-                        sys.exc_info()[2]
-                    )
+                    entry.exc = exc
 
 
             # Check the queryset back in.
@@ -188,7 +177,7 @@ class QueryCache(object):
                 entry.timestamp = time.time()
                 self.cache[key] = entry
                 if entry.exc is not None:
-                    raise entry.exc[0]
+                    raise entry.exc
                 else:
                     return entry.result
             finally:

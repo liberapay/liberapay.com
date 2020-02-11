@@ -5,12 +5,39 @@ import traceback
 
 from postgres import Postgres
 from postgres.cursors import SimpleCursorBase
+import psycopg2
 from psycopg2 import IntegrityError, InterfaceError, ProgrammingError
+from psycopg2_pool import ThreadSafeConnectionPool
 
 from liberapay.constants import RATE_LIMITS
 
 
+class CustomConnectionPool(ThreadSafeConnectionPool):
+
+    __slots__ = ('okay',)
+
+    def __init__(self, *a, **kw):
+        self.okay = None
+        super().__init__(*a, **kw)
+
+    def _connect(self, *a, **kw):
+        try:
+            r = super()._connect(*a, **kw)
+            self.okay = True
+            return r
+        except psycopg2.Error:
+            self.okay = False
+            raise
+
+
 class DB(Postgres):
+
+    def __init__(self, *a, **kw):
+        kw.setdefault('pool_class', CustomConnectionPool)
+        super().__init__(*a, **kw)
+
+    def __bool__(self):
+        return self.pool.okay
 
     def self_check(self):
         with self.get_cursor() as cursor:
