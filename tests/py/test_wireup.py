@@ -1,3 +1,4 @@
+from importlib import reload
 import unittest
 from unittest.mock import patch
 import sys
@@ -26,8 +27,6 @@ class Test(unittest.TestCase):
             # Check that the website.platforms attribute exists
             assert website.platforms is website.db
 
-    def test_99_main_is_reentrant(self):
-        from liberapay.main import website
-        assert website
-        from liberapay.main import website
-        assert website
+    def test_99_main_can_be_reloaded(self):
+        import liberapay.main
+        reload(liberapay.main)
