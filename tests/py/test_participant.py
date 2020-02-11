@@ -727,3 +727,14 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(scheduled_payins) == 2
         assert scheduled_payins[0].amount == EUR('49.50')
         assert scheduled_payins[1].amount == EUR('24.00')
+
+    def test_schedule_renewals_marks_paypal_payment_as_manual(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('5.99'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'paypal')
+        self.make_payin_and_transfer(alice_card, bob, EUR('60.00'))
+        scheduled_payins = alice.schedule_renewals()
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount is None
+        assert scheduled_payins[0].automatic is False
