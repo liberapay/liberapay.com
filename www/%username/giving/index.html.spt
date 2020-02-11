@@ -75,6 +75,16 @@ ntips_awaiting_renewal = sum(
         t.tippee not in has_pending_transfer
     )
 )
+show_missing_route_warning = (
+    any(tip.renewal_mode == 2 for tip in tips) and
+    website.db.one("""
+        SELECT count(*)
+          FROM exchange_routes
+         WHERE participant = %s
+           AND status = 'chargeable'
+           AND network::text LIKE 'stripe-%%'
+    """, (participant.id,)) == 0
+)
 show_automatic_renewal_hint = (
     auto_renewal_hint is None and
     any(tip.renewal_mode == 1 and tip.mtime.date() <= RENEWAL_MODE_START_DATE
@@ -165,6 +175,22 @@ next_payday = compute_next_payday_date()
                 "No"
             ) }}</button>
         </form>
+    </div>
+    % if show_missing_route_warning
+    <br>
+    % endif
+% endif
+
+% if show_missing_route_warning
+    <div class="alert alert-warning">
+        <p>{{ _(
+            "You have enabled automatic renewals for some or all of your donations, "
+            "but you don't have any valid payment instrument that would allow us "
+            "to initiate the automatic payments when the time comes."
+        ) }}</p>
+        <p><a class="btn btn-primary" href="{{ participant.path('routes/') }}">{{
+            _("Add a payment instrument")
+        }}</a></p>
     </div>
 % endif
 
