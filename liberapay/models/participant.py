@@ -2580,6 +2580,9 @@ class Participant(Model, MixinTeam):
                          , pt.ctime DESC
                 """, dict(payer=self.id, tippees=tippees)))
                 for tip in list(renewable_tips):
+                    if tip.renewal_mode == 2 and tip.tippee_p.payment_providers & 1 == 0:
+                        # Automatic payments are only possible through Stripe.
+                        tip.renewal_mode = 1
                     if tip.renewal_mode == 2:
                         last_payment_amount = last_payments.get(tip.tippee)
                         if last_payment_amount:
