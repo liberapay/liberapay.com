@@ -6,7 +6,7 @@ if _init_modules:
         if name not in _init_modules:
             sys.modules.pop(name, None)
 else:
-    _init_modules = sys.modules.keys()
+    _init_modules = set(sys.modules.keys())
 
 import builtins
 from ipaddress import ip_address

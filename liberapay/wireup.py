@@ -25,7 +25,6 @@ from state_chain import StateChain
 
 from liberapay import elsewhere
 import liberapay.billing.payday
-import liberapay.billing.watcher
 from liberapay.exceptions import NeedDatabase
 from liberapay.i18n.base import (
     ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES, Locale, make_sorted_dict
@@ -414,6 +413,7 @@ def billing(app_conf):
     mangopay.resources.LegalUser.person_type = 'LEGAL'
 
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/144
+    import liberapay.billing.watcher
     mangopay.signals.request_finished.connect(liberapay.billing.watcher.on_response)
 
     # https://github.com/Mangopay/mangopay2-python-sdk/issues/157
