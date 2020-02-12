@@ -19,7 +19,7 @@ before_install:
  - tar -xaf ../../liberapay-liberapay.com.tar.gz --strip-components=1
 install:
  - if [ "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" ]; then rm -rf .tox; fi
- - pip install tox
+ - pip install tox "six>=1.14.0"
 before_script:
  - psql -U postgres -c 'CREATE DATABASE liberapay_tests;'
  - DATABASE_URL=liberapay_tests ./recreate-schema.sh test
