@@ -766,6 +766,8 @@ class Participant(Model, MixinTeam):
 
         self.set_attributes(balance=balance)
 
+        self.schedule_renewals()
+
         if balance != 0:
             raise UnableToDistributeBalance(balance)
 
