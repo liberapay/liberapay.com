@@ -45,7 +45,7 @@ class Tests(Harness):
                 INSERT INTO transfers (tipper, tippee, amount, context, status, team, wallet_from, wallet_to)
                 VALUES (%(tipper)s, %(tippee)s, %(amount)s, 'take', 'succeeded', %(team)s, '-1', '-2')
             """, dict(tipper=self.warbucks.id, tippee=member.id, amount=actual_amount, team=team.id))
-        self.db.run("UPDATE paydays SET ts_end=now() WHERE ts_end < ts_start")
+        self.db.run("UPDATE paydays SET ts_end=now(), stage=NULL WHERE ts_end < ts_start")
 
     def test_random_schmoe_is_not_member_of_team(self):
         team = self.make_team()

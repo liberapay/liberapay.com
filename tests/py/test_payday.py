@@ -321,6 +321,8 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert new_balances[self.david.id] == [EUR('5')]
 
     def test_payday_handles_paid_in_advance(self):
+        self.add_payment_account(self.david, 'stripe')
+        self.add_payment_account(self.homer, 'paypal')
         self.make_exchange('mango-cc', EUR('2.00'), 0, self.janet)
         self.janet.set_tip_to(self.david, EUR('0.60'))
         team = self.make_participant('team', kind='group')
@@ -328,7 +330,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.janet.set_tip_to(team, EUR('0.40'))
         self.janet.distribute_balances_to_donees()
 
-        self.db.run("UPDATE participants SET payment_providers = 1")  # dirty trick
+        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
 
         # Preliminary checks
         janet = self.janet.refetch()
@@ -364,11 +366,14 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert len(transfers) == 4
 
         emails = self.get_emails()
-        assert len(emails) == 2
+        assert len(emails) == 3
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
         assert '0.60' in emails[0]['subject']
         assert emails[1]['to'][0] == 'homer <%s>' % self.homer.email
         assert '0.40' in emails[1]['text']
+        assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
+        assert 'renew your donation' in emails[2]['subject']
+        assert '2 donations' in emails[2]['text']
 
         # Now run a second payday and check the results again
         self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
@@ -386,14 +391,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert len(transfers) == 6
 
         emails = self.get_emails()
-        assert len(emails) == 3
+        assert len(emails) == 2
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
         assert '0.60' in emails[0]['subject']
         assert emails[1]['to'][0] == 'homer <%s>' % self.homer.email
         assert '0.40' in emails[1]['text']
-        assert emails[2]['to'][0] == 'janet <%s>' % self.janet.email
-        assert 'renew your donation' in emails[2]['subject']
-        assert '2 donations' in emails[2]['text']
 
 
 class TestPaydayForTeams(FakeTransfersHarness):
@@ -1076,29 +1078,27 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert debt2.status == 'due'
 
     def test_it_notifies_participants(self):
-        self.make_exchange('mango-cc', 10, 0, self.janet)
         self.janet.set_tip_to(self.david, EUR('4.50'))
         self.janet.set_tip_to(self.homer, EUR('3.50'))
         team = self.make_participant('team', kind='group', email='team@example.com')
         self.janet.set_tip_to(team, EUR('0.25'))
         team.add_member(self.david)
         team.set_take_for(self.david, EUR('0.23'), team)
+        janet_card = self.upsert_route(self.janet, 'stripe-card')
+        self.make_payin_and_transfer(janet_card, self.david, EUR('4.50'))
+        self.make_payin_and_transfer(janet_card, self.homer, EUR('3.50'))
+        self.make_payin_and_transfer(janet_card, team, EUR('25.00'))
         self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
                          data={'fields': 'income', 'income': ''}, xhr=True)
-        self.db.run("UPDATE participants SET payment_providers = 1")  # dirty trick
+        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
         Payday.start().run()
-        david = self.david.refetch()
-        assert david.balance == EUR('4.73')
-        janet = self.janet.refetch()
-        assert janet.balance == EUR('1.77')
-        assert janet.giving == EUR('0.25')
         emails = self.get_emails()
         assert len(emails) == 2
         assert emails[0]['to'][0] == 'david <%s>' % self.david.email
         assert '4.73' in emails[0]['subject']
         assert emails[1]['to'][0] == 'janet <%s>' % self.janet.email
         assert 'renew your donation' in emails[1]['subject']
-        assert '3 donations' in emails[1]['text']
+        assert '2 donations' in emails[1]['text']
 
     def test_log_upload(self):
         payday = Payday.start()
