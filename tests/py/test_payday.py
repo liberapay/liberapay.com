@@ -230,8 +230,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         Payday.start().update_cached_amounts()
         check()
 
-    @mock.patch('liberapay.billing.payday.log')
-    def test_start_prepare(self, log):
+    def test_prepare(self):
         self.clear_tables()
         self.make_participant('carl', balance=EUR(10))
 
@@ -243,17 +242,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, ts_start)
             participants = get_participants(cursor)
-
-        expected_logging_call_args = [
-            ('Running payday #1.'),
-            ('Payday started at {}.'.format(ts_start)),
-            ('Prepared the DB.'),
-        ]
-        expected_logging_call_args.reverse()
-        for args, _ in log.call_args_list:
-            assert args[0] == expected_logging_call_args.pop()
-
-        log.reset_mock()
 
         # run a second time, we should see it pick up the existing payday
         payday = Payday.start()
@@ -269,15 +257,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         # carl is the only participant
         assert len(participants) == 1
         assert participants == second_participants
-
-        expected_logging_call_args = [
-            ('Running payday #1.'),
-            ('Payday started at {}.'.format(second_ts_start)),
-            ('Prepared the DB.'),
-        ]
-        expected_logging_call_args.reverse()
-        for args, _ in log.call_args_list:
-            assert args[0] == expected_logging_call_args.pop()
 
     def test_end(self):
         Payday.start().end()

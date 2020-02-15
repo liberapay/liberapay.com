@@ -62,12 +62,7 @@ class Payday(object):
                     SET ts_start = COALESCE(paydays.ts_start, excluded.ts_start)
               RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
         """, (public_log,), back_as=dict)
-        log("Running payday #%s." % d['id'])
-
         d['ts_start'] = d['ts_start'].replace(tzinfo=pando.utils.utc)
-
-        log("Payday started at %s." % d['ts_start'])
-
         payday = Payday()
         payday.__dict__.update(d)
         return payday
@@ -82,7 +77,7 @@ class Payday(object):
         self.db.self_check()
 
         _start = pando.utils.utcnow()
-        log("Greetings, program! It's PAYDAY!!!!")
+        log("Running payday #%(id)s, started at %(ts_start)s." % self.__dict__)
 
         self.shuffle(log_dir)
 
