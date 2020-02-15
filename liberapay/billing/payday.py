@@ -41,29 +41,28 @@ class Payday(object):
     def start(cls, public_log=''):
         """Try to start a new Payday.
 
-        If there is a Payday that hasn't finished yet, then the UNIQUE
-        constraint on ts_end will kick in and notify us of that. In that case
-        we load the existing Payday and work on it some more. We use the start
-        time of the current Payday to synchronize our work.
+        If there is a Payday that hasn't finished yet, then we work on it some
+        more. We use the start time of that Payday to synchronize our work.
 
         """
         d = cls.db.one("""
             INSERT INTO paydays
                         (id, public_log, ts_start)
-                 VALUES ( COALESCE((SELECT id FROM paydays ORDER BY id DESC LIMIT 1), 0) + 1
+                 VALUES ( COALESCE((
+                              SELECT id
+                                FROM paydays
+                               WHERE ts_end > ts_start
+                                 AND stage IS NULL
+                            ORDER BY id DESC LIMIT 1
+                          ), 0) + 1
                         , %s
                         , now()
                         )
-            ON CONFLICT (ts_end) DO UPDATE
+            ON CONFLICT (id) DO UPDATE
                     SET ts_start = COALESCE(paydays.ts_start, excluded.ts_start)
               RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
         """, (public_log,), back_as=dict)
-        log("Running payday #%s." % d['id'])
-
         d['ts_start'] = d['ts_start'].replace(tzinfo=pando.utils.utc)
-
-        log("Payday started at %s." % d['ts_start'])
-
         payday = Payday()
         payday.__dict__.update(d)
         return payday
@@ -78,11 +77,9 @@ class Payday(object):
         self.db.self_check()
 
         _start = pando.utils.utcnow()
-        log("Greetings, program! It's PAYDAY!!!!")
+        log("Running payday #%(id)s, started at %(ts_start)s." % self.__dict__)
 
         self.shuffle(log_dir)
-
-        self.end()
 
         self.recompute_stats(limit=recompute_stats)
         if update_cached_amounts:
@@ -106,6 +103,7 @@ class Payday(object):
             os.rename(output_log_path+'.part', output_log_path)
 
         self.db.run("UPDATE paydays SET stage = NULL WHERE id = %s", (self.id,))
+        self.stage = None
 
     def shuffle(self, log_dir='.'):
         if self.stage > 2:
@@ -154,6 +152,7 @@ class Payday(object):
         self.settle_debts(self.db)
 
         self.db.self_check()
+        self.end()
         self.mark_stage_done()
         self.db.run("DROP TABLE payday_transfers")
 
@@ -1023,6 +1022,18 @@ class Payday(object):
         """, default=NoPayday).replace(tzinfo=pando.utils.utc)
 
     def notify_participants(self):
+        if self.stage == 3:
+            self.generate_income_notifications()
+            self.mark_stage_done()
+        if self.stage == 4:
+            from liberapay.payin.cron import send_donation_reminder_notifications
+            send_donation_reminder_notifications()
+            self.mark_stage_done()
+        if self.stage == 5:
+            self.generate_payment_account_required_notifications()
+            self.mark_stage_done()
+
+    def generate_income_notifications(self):
         previous_ts_end = self.db.one("""
             SELECT ts_end
               FROM paydays
@@ -1030,19 +1041,24 @@ class Payday(object):
           ORDER BY ts_end DESC
              LIMIT 1
         """, (self.ts_start,), default=constants.BIRTHDAY)
-
-        # Income notifications
         n = 0
         r = self.db.all("""
             SELECT tippee, json_agg(t) AS transfers
               FROM transfers t
-             WHERE "timestamp" > %s
-               AND "timestamp" <= %s
+             WHERE "timestamp" > %(previous_ts_end)s
+               AND "timestamp" <= %(ts_end)s
                AND context IN ('tip', 'take', 'final-gift')
                AND status = 'succeeded'
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM notifications n
+                        WHERE n.participant = tippee
+                          AND n.event LIKE 'income~%%'
+                          AND n.ts > %(ts_end)s
+                   )
           GROUP BY tippee
           ORDER BY tippee
-        """, (previous_ts_end, self.ts_end))
+        """, dict(previous_ts_end=previous_ts_end, ts_end=self.ts_end))
         for tippee_id, transfers in r:
             p = self.db.Participant.from_id(tippee_id)
             if p.status != 'active' or not p.accepts_tips:
@@ -1076,67 +1092,7 @@ class Payday(object):
             n += 1
         log("Sent %i income notifications." % n)
 
-        # Donation renewal reminders
-        from liberapay.payin.cron import send_donation_reminder_notifications
-        send_donation_reminder_notifications()
-        n = 0
-        participants = self.db.all("""
-            SELECT (SELECT p FROM participants p WHERE p.id = t.tipper) AS p
-                 , json_agg((SELECT a FROM (
-                       SELECT t.periodic_amount, t.tippee_username
-                   ) a))
-              FROM (
-                     SELECT t.*, tippee_p.username AS tippee_username
-                       FROM current_tips t
-                       JOIN participants tippee_p ON tippee_p.id = t.tippee
-                      WHERE t.renewal_mode = 1
-                        AND ( t.paid_in_advance IS NULL OR
-                              t.paid_in_advance < t.amount
-                            )
-                        AND tippee_p.status = 'active'
-                        AND tippee_p.is_suspended IS NOT true
-                        AND tippee_p.payment_providers > 0
-                        AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
-                   ) t
-             WHERE EXISTS (
-                     SELECT 1
-                       FROM transfers tr
-                      WHERE tr.tipper = t.tipper
-                        AND COALESCE(tr.team, tr.tippee) = t.tippee
-                        AND tr.context IN ('tip', 'take')
-                        AND tr.status = 'succeeded'
-                        AND tr.timestamp >= (current_date - interval '26 weeks')
-                   )
-               AND NOT EXISTS (
-                     SELECT 1
-                       FROM notifications n
-                      WHERE n.participant = t.tipper
-                        AND n.event = 'donate_reminder'
-                        AND n.ts >= (current_date - interval '30 days')
-                        AND n.is_new
-                   )
-               AND NOT EXISTS (
-                     SELECT 1
-                       FROM payin_transfers pt
-                      WHERE pt.payer = t.tipper
-                        AND COALESCE(pt.team, pt.recipient) = t.tippee
-                        AND pt.context IN ('personal-donation', 'team-donation')
-                        AND pt.status = 'pending'
-                        AND pt.ctime >= (current_date - interval '30 days')
-                   )
-          GROUP BY t.tipper
-          ORDER BY t.tipper
-        """)
-        for p, donations in participants:
-            if p.status != 'active' or p.is_suspended:
-                continue
-            for tip in donations:
-                tip['periodic_amount'] = Money(**tip['periodic_amount'])
-            p.notify('donate_reminder', donations=donations, email_unverified_address=True)
-            n += 1
-        log("Sent %i donate_reminder notifications." % n)
-
-        # Missing payment account notifications
+    def generate_payment_account_required_notifications(self):
         n = 0
         participants = self.db.all("""
             SELECT p
@@ -1280,6 +1236,7 @@ def main(override_payday_checks=False):
               FROM paydays
              WHERE ts_start >= now() - INTERVAL '6 days'
                AND ts_end >= ts_start
+               AND stage IS NULL
         """)
         assert not r, "payday has already been run this week"
 
