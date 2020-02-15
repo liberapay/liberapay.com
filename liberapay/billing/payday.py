@@ -86,8 +86,6 @@ class Payday(object):
 
         self.shuffle(log_dir)
 
-        self.end()
-
         self.recompute_stats(limit=recompute_stats)
         if update_cached_amounts:
             self.update_cached_amounts()
@@ -110,6 +108,7 @@ class Payday(object):
             os.rename(output_log_path+'.part', output_log_path)
 
         self.db.run("UPDATE paydays SET stage = NULL WHERE id = %s", (self.id,))
+        self.stage = None
 
     def shuffle(self, log_dir='.'):
         if self.stage > 2:
@@ -158,6 +157,7 @@ class Payday(object):
         self.settle_debts(self.db)
 
         self.db.self_check()
+        self.end()
         self.mark_stage_done()
         self.db.run("DROP TABLE payday_transfers")
 

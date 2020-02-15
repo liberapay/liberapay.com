@@ -57,6 +57,36 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             id = self.db.one("SELECT id FROM paydays ORDER BY id DESC LIMIT 1")
             assert id == i
 
+    def test_payday_start(self):
+        payday1 = Payday.start()
+        payday2 = Payday.start()
+        assert payday1.__dict__ == payday2.__dict__
+
+    def test_payday_can_be_resumed_at_any_stage(self):
+        payday = Payday.start()
+        with mock.patch.object(Payday, 'clean_up') as f:
+            f.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                payday.run()
+        assert payday.stage == 2
+        with mock.patch.object(Payday, 'recompute_stats') as f:
+            f.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                payday.run()
+        assert payday.stage == 3
+        with mock.patch('liberapay.payin.cron.send_donation_reminder_notifications') as f:
+            f.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                payday.run()
+        assert payday.stage == 4
+        with mock.patch.object(Payday, 'generate_payment_account_required_notifications') as f:
+            f.side_effect = Foobar
+            with self.assertRaises(Foobar):
+                payday.run()
+        assert payday.stage == 5
+        payday.run()
+        assert payday.stage is None
+
     def test_payday_moves_money(self):
         self.janet.set_tip_to(self.homer, EUR('6.00'))  # under $10!
         self.make_exchange('mango-cc', 10, 0, self.janet)
