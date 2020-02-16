@@ -10,20 +10,36 @@ class TestNotifications(Harness):
         alice.notify('1234', email=False)
         assert alice.pending_notifs == 2
 
-    def test_remove_notification(self):
+    def test_remove_and_restore_notification(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         alice.notify('abcd', email=False)
-        id = alice.notify('1234', email=False)
+        n_id = alice.notify('1234', email=False)
         alice.notify('bcde', email=False)
 
         # check that bob can't remove alice's notification
-        bob.remove_notification(id)
-        alice = alice.from_id(alice.id)
+        r = self.client.PxST('/alice/notifications', {'remove': str(n_id)}, auth_as=bob)
+        assert r.code == 403
+        alice = alice.refetch()
         assert alice.pending_notifs == 3
 
-        alice.remove_notification(id)
+        # but alice can
+        r = self.client.PxST('/alice/notifications', {'remove': str(n_id)}, auth_as=alice)
+        assert r.code == 302
+        alice = alice.refetch()
         assert alice.pending_notifs == 2
+
+        # check that bob can't restore alice's notification
+        r = self.client.PxST('/alice/notifications', {'restore': str(n_id)}, auth_as=bob)
+        assert r.code == 403
+        notif = self.db.one("SELECT * FROM notifications WHERE id = %s", (n_id,))
+        assert notif.hidden_since is not None
+
+        # but alice can
+        r = self.client.PxST('/alice/notifications', {'restore': str(n_id)}, auth_as=alice)
+        assert r.code == 302
+        notif = self.db.one("SELECT * FROM notifications WHERE id = %s", (n_id,))
+        assert notif.hidden_since is None
 
     def test_render_notifications(self):
         self.client.website.emails['test_event'] = {
