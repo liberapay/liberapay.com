@@ -2751,8 +2751,6 @@ class Participant(Model, MixinTeam):
                          , transfers = %s
                          , execution_date = %s
                          , automatic = %s
-                         , notifs_count = 0
-                         , last_notif_ts = NULL
                          , customized = %s
                          , mtime = current_timestamp
                      WHERE id = %s
