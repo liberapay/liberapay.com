@@ -57,10 +57,10 @@ participant.render_notifications(state, before=before, limit=limit)
                 <span class="title">{{ notif.subject|safe }}</span>
                 <small>{{ locale.format_datetime(notif.ts) if notif.ts }}</small>
                 <span class="actions">
-                    <button class="hover-info" name="mark_as_read" value="{{ notif.id }}" title="{{
-                            _('Mark as read') }}">&check;</button>
-                    <button class="hover-danger" name="remove" value="{{ notif.id }}" title="{{
-                            _('Remove') }}">&times;</button>
+                    <button class="glyphicon glyphicon-ok hover-info" name="mark_as_read" value="{{ notif.id }}" title="{{
+                            _('Mark as read') }}"></button>&nbsp;
+                    <button class="glyphicon glyphicon-remove hover-danger" name="remove" value="{{ notif.id }}" title="{{
+                            _('Remove') }}"></button>
                 </span>
             </h3>
             {{ notif.html|safe }}
