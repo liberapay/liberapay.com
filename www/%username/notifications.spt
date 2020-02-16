@@ -1,4 +1,4 @@
-from liberapay.utils import get_int, get_participant
+from liberapay.utils import get_participant
 
 get_unread = lambda notifs: [n for n in notifs if n['is_new']]
 
@@ -11,10 +11,12 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     body = request.body
     if body.get('mark_all_as_read') == 'true':
-        until = get_int(body, 'until', 0)
+        until = body.get_int('until', default=0)
         participant.mark_notifications_as_read(until=until)
+    elif 'mark_as_read' in body:
+        participant.mark_notification_as_read(body.get_int('mark_as_read'))
     else:
-        participant.remove_notification(body['remove'])
+        participant.remove_notification(body.get_int('remove'))
     response.redirect(request.line.uri)
 
 title = participant.username
@@ -54,7 +56,12 @@ participant.render_notifications(state, before=before, limit=limit)
             <h3 class="alert-header">
                 <span class="title">{{ notif.subject|safe }}</span>
                 <small>{{ locale.format_datetime(notif.ts) if notif.ts }}</small>
-                <button class="close" name="remove" value="{{ notif.id }}">&times;</button>
+                <span class="actions">
+                    <button class="hover-info" name="mark_as_read" value="{{ notif.id }}" title="{{
+                            _('Mark as read') }}">&check;</button>
+                    <button class="hover-danger" name="remove" value="{{ notif.id }}" title="{{
+                            _('Remove') }}">&times;</button>
+                </span>
             </h3>
             {{ notif.html|safe }}
         </div>
