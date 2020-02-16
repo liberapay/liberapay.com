@@ -108,3 +108,23 @@ class TestNotifications(Harness):
         """, (alice.id,))
         assert len(notifications) == 1
         assert notifications[0].id == n2
+
+    def test_marking_a_specific_notification_as_read(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        alice.notify('a', email=False)
+        n_id = alice.notify('b', email=False)
+        alice.notify('c', email=False)
+
+        # check that bob can't make alice's notification as read
+        form_data = {'mark_as_read': str(n_id)}
+        r = self.client.PxST('/alice/notifications', form_data, auth_as=bob)
+        assert r.code == 403
+        alice = alice.refetch()
+        assert alice.pending_notifs == 3
+
+        # but alice can
+        r = self.client.PxST('/alice/notifications', form_data, auth_as=alice)
+        assert r.code == 302
+        alice = alice.refetch()
+        assert alice.pending_notifs == 2
