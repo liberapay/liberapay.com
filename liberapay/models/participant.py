@@ -1424,8 +1424,10 @@ class Participant(Model, MixinTeam):
     def remove_notification(self, n_id):
         p_id = self.id
         r = self.db.one("""
-            WITH deleted AS (
-                DELETE FROM notifications
+            WITH updated AS (
+                UPDATE notifications
+                   SET web = false
+                     , hide = true
                  WHERE id = %(n_id)s
                    AND participant = %(p_id)s
                    AND web
@@ -1433,7 +1435,7 @@ class Participant(Model, MixinTeam):
             )
             UPDATE participants
                SET pending_notifs = pending_notifs - (
-                       SELECT count(*) FROM deleted WHERE is_new
+                       SELECT count(*) FROM updated WHERE is_new
                    )
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
