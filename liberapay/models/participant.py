@@ -1379,17 +1379,20 @@ class Participant(Model, MixinTeam):
     def mark_notification_as_read(self, n_id):
         p_id = self.id
         r = self.db.one("""
-            WITH updated AS (
-                UPDATE notifications
-                   SET is_new = false
-                 WHERE participant = %(p_id)s
-                   AND id = %(n_id)s
-                   AND is_new
-                   AND web
-             RETURNING id
-            )
+            UPDATE notifications
+               SET is_new = false
+             WHERE participant = %(p_id)s
+               AND id = %(n_id)s
+               AND is_new
+               AND web;
             UPDATE participants
-               SET pending_notifs = pending_notifs - (SELECT count(*) FROM updated)
+               SET pending_notifs = (
+                       SELECT count(*)
+                         FROM notifications
+                        WHERE participant = %(p_id)s
+                          AND web
+                          AND is_new
+                   )
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
         """, locals())
@@ -1405,17 +1408,20 @@ class Participant(Model, MixinTeam):
             sql_filter += ' AND id <= %(until)s'
 
         r = self.db.one("""
-            WITH updated AS (
-                UPDATE notifications
-                   SET is_new = false
-                 WHERE participant = %(p_id)s
-                   AND is_new
-                   AND web
-                   {0}
-             RETURNING id
-            )
+            UPDATE notifications
+               SET is_new = false
+             WHERE participant = %(p_id)s
+               AND is_new
+               AND web
+               {0};
             UPDATE participants
-               SET pending_notifs = pending_notifs - (SELECT count(*) FROM updated)
+               SET pending_notifs = (
+                       SELECT count(*)
+                         FROM notifications
+                        WHERE participant = %(p_id)s
+                          AND web
+                          AND is_new
+                   )
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
         """.format(sql_filter), locals())
@@ -1424,18 +1430,19 @@ class Participant(Model, MixinTeam):
     def remove_notification(self, n_id):
         p_id = self.id
         r = self.db.one("""
-            WITH updated AS (
-                UPDATE notifications
-                   SET web = false
-                     , hide = true
-                 WHERE id = %(n_id)s
-                   AND participant = %(p_id)s
-                   AND web
-             RETURNING is_new
-            )
+            UPDATE notifications
+               SET web = false
+                 , hide = true
+             WHERE id = %(n_id)s
+               AND participant = %(p_id)s
+               AND web;
             UPDATE participants
-               SET pending_notifs = pending_notifs - (
-                       SELECT count(*) FROM updated WHERE is_new
+               SET pending_notifs = (
+                       SELECT count(*)
+                         FROM notifications
+                        WHERE participant = %(p_id)s
+                          AND web
+                          AND is_new
                    )
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
