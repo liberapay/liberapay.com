@@ -347,6 +347,7 @@ class Harness(unittest.TestCase):
             SELECT *
               FROM payin_transfers
              WHERE payin = %s
+          ORDER BY ctime
         """, (payin.id,))
         for tippee, pt_amount, opt in transfers:
             for i, pt in enumerate(payin_transfers):

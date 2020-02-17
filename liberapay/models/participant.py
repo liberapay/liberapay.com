@@ -2751,8 +2751,6 @@ class Participant(Model, MixinTeam):
                          , transfers = %s
                          , execution_date = %s
                          , automatic = %s
-                         , notifs_count = 0
-                         , last_notif_ts = NULL
                          , customized = %s
                          , mtime = current_timestamp
                      WHERE id = %s
@@ -2768,7 +2766,14 @@ class Participant(Model, MixinTeam):
                 # Determine if we need to notify the user
                 notify = (
                     any(sp.notifs_count for sp in deletions) or
-                    any(old_sp.notifs_count for old_sp, new_sp in updates)
+                    any(
+                        old_sp.notifs_count and (
+                            new_sp.amount != old_sp.amount or
+                            new_sp.execution_date != old_sp.execution_date or
+                            new_sp.automatic != old_sp.automatic
+                        )
+                        for old_sp, new_sp in updates
+                    )
                 )
         new_schedule.sort(key=lambda sp: sp.execution_date)
 
@@ -2783,10 +2788,10 @@ class Participant(Model, MixinTeam):
                 force_email=True,
                 added_payments=[sp_to_dict(new_sp) for new_sp in insertions],
                 cancelled_payments=[sp_to_dict(old_sp) for old_sp in deletions],
-                modified_payments=[
+                modified_payments=[t for t in (
                     (sp_to_dict(old_sp), sp_to_dict(new_sp))
                     for old_sp, new_sp in updates
-                ],
+                ) if t[0] != t[1]],
                 new_schedule=new_schedule,
             )
 
