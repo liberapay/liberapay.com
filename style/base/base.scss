@@ -822,15 +822,25 @@ span.help-title {
     & > .title {
         margin-right: 2ex;
     }
-    .close {
+    .actions {
         position: absolute;
         right: 10px;
         top: 8px;
+        & > button {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: #aaa;
+            cursor: pointer;
+            padding: 0.5ex 0.75ex;
+        }
     }
     & > small {
         font-size: 90%;
         line-height: inherit;
-        margin-right: 5ex;
+        margin-right: 11ex;
     }
 }
 .alert-danger > .alert-header {
@@ -844,6 +854,13 @@ span.help-title {
 }
 .alert-warning > .alert-header {
     border-bottom-color: $state-warning-border;
+}
+
+.hover-danger:hover {
+    color: $state-danger-text !important;
+}
+.hover-info:hover {
+    color: $state-info-text !important;
 }
 
 .overlaid {

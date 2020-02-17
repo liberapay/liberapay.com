@@ -1379,17 +1379,20 @@ class Participant(Model, MixinTeam):
     def mark_notification_as_read(self, n_id):
         p_id = self.id
         r = self.db.one("""
-            WITH updated AS (
-                UPDATE notifications
-                   SET is_new = false
-                 WHERE participant = %(p_id)s
-                   AND id = %(n_id)s
-                   AND is_new
-                   AND web
-             RETURNING id
-            )
+            UPDATE notifications
+               SET is_new = false
+             WHERE participant = %(p_id)s
+               AND id = %(n_id)s
+               AND is_new
+               AND web;
             UPDATE participants
-               SET pending_notifs = pending_notifs - (SELECT count(*) FROM updated)
+               SET pending_notifs = (
+                       SELECT count(*)
+                         FROM notifications
+                        WHERE participant = %(p_id)s
+                          AND web
+                          AND is_new
+                   )
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
         """, locals())
@@ -1405,17 +1408,20 @@ class Participant(Model, MixinTeam):
             sql_filter += ' AND id <= %(until)s'
 
         r = self.db.one("""
-            WITH updated AS (
-                UPDATE notifications
-                   SET is_new = false
-                 WHERE participant = %(p_id)s
-                   AND is_new
-                   AND web
-                   {0}
-             RETURNING id
-            )
+            UPDATE notifications
+               SET is_new = false
+             WHERE participant = %(p_id)s
+               AND is_new
+               AND web
+               {0};
             UPDATE participants
-               SET pending_notifs = pending_notifs - (SELECT count(*) FROM updated)
+               SET pending_notifs = (
+                       SELECT count(*)
+                         FROM notifications
+                        WHERE participant = %(p_id)s
+                          AND web
+                          AND is_new
+                   )
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
         """.format(sql_filter), locals())
@@ -1424,21 +1430,33 @@ class Participant(Model, MixinTeam):
     def remove_notification(self, n_id):
         p_id = self.id
         r = self.db.one("""
-            WITH deleted AS (
-                DELETE FROM notifications
-                 WHERE id = %(n_id)s
-                   AND participant = %(p_id)s
-                   AND web
-             RETURNING is_new
-            )
+            UPDATE notifications
+               SET is_new = false
+                 , hidden_since = current_timestamp
+             WHERE id = %(n_id)s
+               AND participant = %(p_id)s
+               AND web;
             UPDATE participants
-               SET pending_notifs = pending_notifs - (
-                       SELECT count(*) FROM deleted WHERE is_new
+               SET pending_notifs = (
+                       SELECT count(*)
+                         FROM notifications
+                        WHERE participant = %(p_id)s
+                          AND web
+                          AND is_new
                    )
              WHERE id = %(p_id)s
          RETURNING pending_notifs;
         """, locals())
         self.set_attributes(pending_notifs=r)
+
+    def restore_notification(self, n_id):
+        self.db.run("""
+            UPDATE notifications
+               SET hidden_since = NULL
+             WHERE id = %(n_id)s
+               AND participant = %(p_id)s
+               AND hidden_since IS NOT NULL
+        """, dict(n_id=n_id, p_id=self.id))
 
     def fill_notification_context(self, context):
         context.update(aspen_jinja2_renderer.Renderer.global_context)
@@ -1459,10 +1477,12 @@ class Participant(Model, MixinTeam):
 
     def get_notifs(self, before=None, limit=None):
         return self.db.all("""
-            SELECT id, event, context, is_new, ts
+            SELECT id, event, context, is_new, ts, hidden_since
               FROM notifications
              WHERE participant = %s
                AND web
+               AND ( hidden_since IS NULL OR
+                     hidden_since > (current_timestamp - interval '6 hours') )
                AND coalesce(id < %s, true)
           ORDER BY id DESC
              LIMIT %s
@@ -1477,16 +1497,19 @@ class Participant(Model, MixinTeam):
         notifs = notifs or self.get_notifs(before=before, limit=limit)
 
         r = []
-        for id, event, notif_context, is_new, ts in notifs:
+        for id, event, notif_context, is_new, ts, hidden_since in notifs:
             try:
                 notif_context = deserialize(notif_context)
-                context = dict(state)
-                self.fill_notification_context(context)
-                context.update(notif_context)
-                context['notification_ts'] = ts
                 spt = website.emails[event]
-                subject = spt['subject'].render(context).strip()
-                html = spt['text/html'].render(context).strip()
+                if hidden_since:
+                    subject, html = None, None
+                else:
+                    context = dict(state)
+                    self.fill_notification_context(context)
+                    context.update(notif_context)
+                    context['notification_ts'] = ts
+                    subject = spt['subject'].render(context).strip()
+                    html = spt['text/html'].render(context).strip()
                 typ = notif_context.get('type', 'info')
                 r.append(dict(id=id, subject=subject, html=html, type=typ, is_new=is_new, ts=ts))
             except Exception as e:
