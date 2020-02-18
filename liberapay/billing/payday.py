@@ -881,7 +881,9 @@ class Payday(object):
             cursor.run("""
             UPDATE participants p
                SET receiving = p2.receiving
+                 , npatrons = p2.npatrons
               FROM ( SELECT p2.id
+                          , count(*) AS npatrons
                           , coalesce_currency_amount(
                                 sum(t.amount, p2.main_currency),
                                 p2.main_currency
@@ -894,6 +896,7 @@ class Payday(object):
                    ) p2
              WHERE p.id = p2.id
                AND p.receiving <> p2.receiving
+               AND p.npatrons <> p2.npatrons
                AND p.status = 'stub';
             """)
             cursor.run("""
