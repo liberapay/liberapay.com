@@ -15,3 +15,8 @@
         <span class="sr-only">{{ sr }}</span>
     % endif
 % endmacro
+
+% macro unicode_symbol(symbol, title, classes="")
+    <span class="symbol {{ classes }}" aria-hidden="true" title="{{ title }}">{{ symbol }}</span>
+    <span class="sr-only">{{ title }}</span>
+% endmacro
