@@ -2512,3 +2512,6 @@ UPDATE scheduled_payins
  WHERE execution_date < '2020-02-14'::date
    AND automatic IS TRUE
    AND payin IS NOT NULL;
+
+-- migration #117
+ALTER TABLE notifications ADD COLUMN hidden_since timestamptz;
