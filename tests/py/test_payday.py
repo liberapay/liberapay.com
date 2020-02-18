@@ -192,8 +192,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
              WHERE mangopay_user_id IS NOT NULL;
             UPDATE participants
                SET npatrons = 10000
-                 , receiving = (10000,'EUR')
-             WHERE status = 'active';
+                 , receiving = (10000,'EUR');
         """)
         Payday.start().update_cached_amounts()
         check()
