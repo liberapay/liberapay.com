@@ -16,6 +16,8 @@ if user.ANON:
 if not user.is_admin:
     raise response.error(403)
 
+before = request.qs.get_int('before', default=None)
+status = request.qs.get('status')
 payins = website.db.all("""
     SELECT pi.*, p.username AS payer_name, r.network AS payin_method
          , ( SELECT json_agg((SELECT x FROM ( SELECT
@@ -33,18 +35,29 @@ payins = website.db.all("""
       JOIN exchange_routes r ON r.id = pi.route
       JOIN participants p ON p.id = pi.payer
      WHERE coalesce(pi.id < %s, true)
+       AND coalesce(pi.status::text = %s, true)
   ORDER BY pi.id DESC
      LIMIT %s
-""", (request.qs.get('before'), PAGE_SIZE))
+""", (before, status, PAGE_SIZE))
 
 title = "Payments Admin"
 
 [---] text/html
+% from "templates/macros/icons.html" import unicode_symbol
+% from 'templates/macros/nav.html' import querystring_nav
 % from "templates/macros/payment-methods.html" import payment_method_icon with context
 
 % extends "templates/layouts/admin.html"
 
 % block content
+
+<ul class="nav nav-pills">{{ querystring_nav('status', [
+    (None, "All"),
+    ('failed', "Failed"),
+    ('pending', "Pending"),
+    ('succeeded', "Succeeded"),
+], status) }}</ul>
+<br><br>
 
 % if payins
     <table class="table">
@@ -65,7 +78,11 @@ title = "Payments Admin"
             <td>{{ pi.id }}</td>
             <td>{{ pi.ctime.replace(microsecond=0, tzinfo=None) }}</td>
             <td><a href="/~{{ pi.payer }}/">{{ pi.payer_name }}</a></td>
-            <td class="text-center">{{ payment_method_icon(pi.payin_method) }}</td>
+            <td class="text-center">{{
+                payment_method_icon(pi.payin_method) }}&nbsp;{{
+                unicode_symbol('A', "Automatic payment") if pi.off_session else
+                unicode_symbol('M', "Manual payment", "text-muted")
+            }}</td>
             <td class="text-right">{{ locale.format_money(pi.amount) }}</td>
             <td>
                 % for pt in pi.transfers or ()
