@@ -230,7 +230,7 @@ msgstr "Du har en betaling på {amount} sat til {payment_date} for at forny din 
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
-msgstr[1] "Du har {n} betalinger sat klar til fornyelse af dine donationer,  men vi kan ikke behandle dem, fordi der mangler et gyldigt betalingsmiddel."
+msgstr[1] "Du har {n} betalinger sat klar til fornyelse af dine donationer, men vi kan ikke behandle dem, fordi der mangler et gyldigt betalingsmiddel."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "Betalingsdatoer, beløb og modtagere er:"
@@ -456,7 +456,7 @@ msgstr "Betalingen af {money_amount} gennem Liberapay der blev påbegyndt tidlig
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Betalingen af {money_amount} påbegyndt {date} er lykkedes."
 
 msgid "Thank you for this donation!"
 msgstr "Tak for din donation!"
@@ -465,7 +465,7 @@ msgid "You're missing out on donations through Liberapay"
 msgstr "Du går glip af donationer på Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr "Dem der støtter dig kan i øjeblikket ikke sende dig penge gennem Liberapay, fordi betalingsbehandling  til din konto ikke er sat op."
+msgstr "Dem der støtter dig kan i øjeblikket ikke sende dig penge gennem Liberapay, fordi betalingsbehandling til din konto ikke er sat op."
 
 msgid "Configure payment processing"
 msgstr "Konfigurer betalingsbehandling"
@@ -477,71 +477,71 @@ msgid "Reject donations"
 msgstr "Afvis donationer"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
-msgstr ""
+msgstr "Fornyelse af Liberapay-donation: din kommende betaling er ændret"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr ""
+msgstr "På grund af ændringer foretaget af dig eller af en du donerer til, er din betalingsplan ændret som følger:"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Betalingen af {money_amount} sat til {date} er blevet annulleret."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Den manuelle betaling af {money_amount} sat til {date} er blevet annulleret."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr ""
+msgstr "En ny betaling af {money_amount} er blevet sat til {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr ""
+msgstr "En ny manuel betaling er blevet sat til {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Betalingen af {money_amount} sat til {old_date} er blevet omlagt til {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Den manuelle betaling, sat til {old_date}, er omlagt til {new_date}."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "Beløbet af betalingen der er planlagt til {date}, er ændret fra {old_money_amount} til {new_money_amount}."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Betalingen af {old_money_amount} sat til {old_date} er blevet erstattet af en betaling af {new_money_amount} den {new_date}."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "Den automatiske betaling af {old_money_amount} planlagt til {old_date} er blevet erstattet af en betaling den {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Den manuelle betaling, der er sat til {old_date}, er blevet erstattet af en automatisk betaling på {new_money_amount} den {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har nu {n} planlagt betalinger:"
+msgstr[1] "Du har nu {n} planlagte betalinger:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: automatisk betaling af {money_amount} til {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: automatisk betaling af {money_amount} delt mellem {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: manuel betaling til {recipients}"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Administrer din betalingsplan"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -565,17 +565,17 @@ msgstr "{date} gav du et donationstilbud på {money_amount} til {user_name} hvis
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
-msgstr ""
+msgstr "Vi kan med glæde informere dig om at {user_name} tilsluttede sig Liberapay {time_ago}, som {liberapay_username}."
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
-msgstr ""
+msgstr "Derfor er en automatisk betaling på {money_amount} planlagt til {date} for at sætte dit donationstilbud i værk."
 
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hvis du ønsker at ændre eller annullere denne kommende betaling, skal du klikke på følgende link: {link_start}administrer min betalingsplan{link_end}."
+msgstr[1] "Hvis du ønsker at ændre eller annullere disse kommende betalinger, skal du klikke på følgende link: {link_start}administrer min betalingsplan{link_end}."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
@@ -586,14 +586,14 @@ msgid "Donate to {0}"
 msgstr "Doner til {0}"
 
 msgid "Liberapay donation renewal: payment aborted"
-msgstr ""
+msgstr "Fornyelse af Liberapay-donation: betaling afbrudt"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr ""
+msgstr "fornyelsen af donationen af {money_amount} til {recipient} planlagt til {date} er afbrudt, fordi modtageren ikke er i stand til at modtage den."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "Følgende fornyelse af donationsbetalinger er afbrudt, fordi modtagerne ikke er i stand til at modtage dem:"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Du kan gøre det nemmere for dem der støtter dig at yde bidrag gennem Liberapay"
@@ -639,26 +639,26 @@ msgstr "Holdet {0} er blevet omdøbt til {1} af {2}."
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Fornyelse af Liberapay donation: kommende debitering af {money_amount}"
+msgstr[1] "Fornyelse af Liberapay donationer: kommende debitering af ialt {money_amount}"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "Denne meddelelse er en påmindelse om, at {amount} debiteres fra dit standard betalingsmiddel den {debit_date} for at forny din donation til {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "Denne meddelelse er en påmindelse om, at {amount} debiteres fra dit standard betalingsmiddel den {debit_date} for at forny dine donationer til {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
+msgstr[1] "Denne meddelelse er en påmindelse om, at ialt {amount} vil blive debiteret fra dit standard betalingsmiddel for de næste {n} dage for at forny dine donationer."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Hvis du ønsker at ændre dine donationer, skal du klikke på følgende link: {link_start}administrer mine donationer{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "E-mailadresse verifikation - Liberapay"
@@ -745,13 +745,13 @@ msgid "When money is being refunded back to me"
 msgstr "Når pengene tilbagebetales til mig"
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "Når en automatisk donationsfornyelse er forestående"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr ""
+msgstr "Når jeg ikke længere har et gyldigt betalingsmiddel"
 
 msgid "When a donation renewal payment has been aborted"
-msgstr ""
+msgstr "Når en donationsfornyelse er blevet afbrudt"
 
 msgid "Expense Report"
 msgstr "Udgift rapport"
@@ -1284,7 +1284,7 @@ msgid "Payment Instruments"
 msgstr "Betalingsmetoder"
 
 msgid "Payment Schedule"
-msgstr ""
+msgstr "Betalingsplan"
 
 msgid "Receiving"
 msgstr "Modtaget"
@@ -1554,7 +1554,7 @@ msgid "Instruments"
 msgstr "Metode"
 
 msgid "Schedule"
-msgstr ""
+msgstr "Plan"
 
 msgid "Members"
 msgstr "Medlemmer"
@@ -1773,19 +1773,19 @@ msgid "Custom"
 msgstr "Brugerdefineret"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr ""
+msgstr "Vælg venligst hvordan denne donation skal fornys:"
 
 msgid "Automatic renewal"
-msgstr ""
+msgstr "Automatisk fornyelse"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr ""
+msgstr "Vi forsøger at opkræve pengene fra dit kort eller din bankkonto. Du får besked mindst to dage før."
 
 msgid "Manual renewal"
-msgstr ""
+msgstr "Manuel fornyelse"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr ""
+msgstr "En påmindelse om at forny din donation sendes til dig via e-mail."
 
 msgid "Modify the donation"
 msgstr "Ændre bidraget"
@@ -2309,13 +2309,13 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Arbejdet med at skabe Liberapay er omfattende, og der er stadig meget der skal gøres. Men vores udviklere, oversættere, og andre bidragydere er voldsomt underbetalt, og det forsinker processen."
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
-msgstr ""
+msgstr "Liberapay understøtter nu automatisk fornyelse. Vil du slå den til for alle dine donationer?"
 
 msgid "Yes, activate automatic renewals"
-msgstr ""
+msgstr "Ja, slå automatisk fornyelse til"
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
-msgstr ""
+msgstr "Du har aktiveret automatisk fornyelse af nogle af eller alle dine donationer, men du har ikke noget gyldigt betalingsmiddel der giver os mulighed for at starte de automatiske betalinger når tiden er inde."
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2355,9 +2355,9 @@ msgstr "Inaktiv, fordi modtagerens konto ikke længere accepterer donationer."
 msgid "Active"
 msgstr "Aktiv"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Næste betaling {in_N_weeks_months_or_years}."
+msgstr "Næste betaling er {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Forny nu"
@@ -2440,7 +2440,7 @@ msgid "Doesn't support the {currency}"
 msgstr "Understøtter ikke {currency}"
 
 msgid "Doesn't support automatic renewal"
-msgstr ""
+msgstr "Understøtter ikke automatisk betaling"
 
 msgid "Not anonymous"
 msgstr "Ikke anonym"
@@ -2558,18 +2558,18 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}' er ikke et accepteret beløb (min={1}, max={2})"
 
 msgid "The date must be in the future."
-msgstr ""
+msgstr "Datoen skal være engang i fremtiden."
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}."
-msgstr ""
+msgstr "Er du sikker på, at du vil annullere denne planlagte betaling? Det vil stoppe din donation til {recipient}."
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
-msgstr ""
+msgstr "Er du sikker på, at du vil annullere denne planlagte betaling? Det vil stoppe din donation til {recipients}."
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Hvis du vil ændre beløbet for denne planlagte betaling, skal du vælge eller indtaste en ny:"
 
 msgid "(not recommended, high fee percentage)"
 msgstr "(anbefales ikke, høj gebyrprocent)"
@@ -2588,26 +2588,26 @@ msgstr[1] "Næste betaling om {n} uger ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Næste betaling {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
 msgstr "Valgfrit beløb (min={0}, max={1})"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Hvis du vil ændre datoen for denne planlagte betaling, skal du vælge eller indtaste en ny:"
 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
-msgstr ""
+msgstr "Ved at forsinke din betaling ud over dens normale dato vil det resultere i at din donation er inaktiv i løbet af dette tidsrum."
 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har {n} planalagt betaling:"
+msgstr[1] "Du har {n} planalagte betalinger:"
 
 msgid "You currently don't have any scheduled payment."
-msgstr ""
+msgstr "Du har i øjeblikket ingen planlagt betaling."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Er du sikker på du vil ændre typen af din konto? På grund af juridiske grunde bliver vi nød til at oprette en ny konto på dine vegne hos vores partners betalingssystem og overføre pengene fra din gamle konto."
@@ -2686,7 +2686,7 @@ msgstr "{0} ejer følgende konti på andre platforme:"
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
 msgstr[0] "{username} er medlem af {n} team:"
-msgstr[1] "{username} er medlem af {n} team:"
+msgstr[1] "{username} er medlem af {n} teams:"
 
 #, python-brace-format
 msgid "with {n} other"
@@ -2980,16 +2980,16 @@ msgid "Mark all notifications as read"
 msgstr "Marker alle notifikationer som læst"
 
 msgid "Mark as read"
-msgstr ""
+msgstr "Marker som læst"
 
 msgid "Remove"
 msgstr "Fjern"
 
 msgid "This notification is marked for deletion."
-msgstr ""
+msgstr "Denne notifikation er markeret til sletning."
 
 msgid "Restore"
-msgstr ""
+msgstr "Genskab"
 
 msgid "No notifications to show."
 msgstr "Ingen notifikationer at vise."
@@ -4706,9 +4706,8 @@ msgstr "Hvordan det virker for donorer"
 msgid "1. Set up a donation"
 msgstr "1. Opret en donation"
 
-#, fuzzy
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr "Find nogen du vil give penge til, og vælg derefter et beløb og en periode (ugentlig, månedlig eller årlig)."
+msgstr "Find nogen du ønsker at give penge til, og vælg derefter et beløb og en periode (ugentlig, månedlig eller årlig), og en betalingsmetode (manuel eller automatisk)."
 
 msgid "2. Fund your donation"
 msgstr "2. Finansiere din donation"
@@ -4720,9 +4719,8 @@ msgstr "På Liberapay er donationer finansieret på forhånd. Du har kontrol ove
 msgid "3. Keep your donation funded"
 msgstr "3. Hold dine donationer finansieret"
 
-#, fuzzy
 msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
-msgstr "Når en donation skal fornys, sender vi dig en besked via e-mail, så du kan finansiere den igen eller afbryde den."
+msgstr "Når en donation skal fornys, sender vi dig en besked. Hvis du har valgt automatisk fornyelse, forsøger vi at debitere dit kort eller din bankkonto som aftalt."
 
 msgid "How it works for creators"
 msgstr "Hvordan det fungere for skabere"
