@@ -120,7 +120,12 @@ _i18n_rebase:
 	@read a
 
 _i18n_fetch:
-	@git remote | grep weblate >/dev/null || git remote add weblate git://git.weblate.org/liberapay.com.git
+	@current_url=$$(git remote get-url weblate); \
+	if [ "$$current_url" = "" ]; then \
+	    git remote add weblate "https://hosted.weblate.org/git/liberapay/core/"; \
+	elif [ "$$current_url" != "https://hosted.weblate.org/git/liberapay/core/" ]; then \
+	    git remote set-url weblate "https://hosted.weblate.org/git/liberapay/core/"; \
+	fi
 	git fetch weblate
 
 _i18n_pull: _i18n_fetch
