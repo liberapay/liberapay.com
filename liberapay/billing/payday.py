@@ -849,13 +849,13 @@ class Payday(object):
             cls.prepare(cursor, now)
             cls.transfer_virtually(cursor, now)
             cursor.run("""
-
             UPDATE tips t
                SET is_funded = t2.is_funded
               FROM payday_tips t2
              WHERE t.id = t2.id
                AND t.is_funded <> t2.is_funded;
-
+            """)
+            cursor.run("""
             WITH active_donors AS (
                      SELECT DISTINCT tr.tipper AS id
                        FROM transfers tr
@@ -877,10 +877,13 @@ class Payday(object):
                    ) t2
              WHERE t2.id = t.id
                AND t.is_funded <> t2.is_funded;
-
+            """)
+            cursor.run("""
             UPDATE participants p
                SET receiving = p2.receiving
+                 , npatrons = p2.npatrons
               FROM ( SELECT p2.id
+                          , count(*) AS npatrons
                           , coalesce_currency_amount(
                                 sum(t.amount, p2.main_currency),
                                 p2.main_currency
@@ -893,8 +896,10 @@ class Payday(object):
                    ) p2
              WHERE p.id = p2.id
                AND p.receiving <> p2.receiving
+               AND p.npatrons <> p2.npatrons
                AND p.status = 'stub';
-
+            """)
+            cursor.run("""
             UPDATE takes t
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
@@ -909,7 +914,8 @@ class Payday(object):
                    ) t2
              WHERE t.id = t2.id
                AND t.actual_amount <> t2.actual_amount;
-
+            """)
+            cursor.run("""
             UPDATE participants p
                SET giving = p2.giving
               FROM ( SELECT p2.id
@@ -923,7 +929,8 @@ class Payday(object):
                    ) p2
              WHERE p.id = p2.id
                AND p.giving <> p2.giving;
-
+            """)
+            cursor.run("""
             UPDATE participants p
                SET taking = p2.taking
               FROM ( SELECT p2.id
@@ -937,7 +944,8 @@ class Payday(object):
                    ) p2
              WHERE p.id = p2.id
                AND p.taking <> p2.taking;
-
+            """)
+            cursor.run("""
             UPDATE participants p
                SET receiving = p2.receiving
               FROM ( SELECT p2.id
@@ -952,7 +960,8 @@ class Payday(object):
              WHERE p.id = p2.id
                AND p.receiving <> p2.receiving
                AND p.status <> 'stub';
-
+            """)
+            cursor.run("""
             UPDATE participants p
                SET leftover = p2.leftover
               FROM ( SELECT p2.id
@@ -971,7 +980,8 @@ class Payday(object):
                    ) p2
              WHERE p.id = p2.id
                AND p.leftover <> p2.leftover;
-
+            """)
+            cursor.run("""
             UPDATE participants p
                SET nteampatrons = p2.nteampatrons
               FROM ( SELECT p2.id
@@ -986,7 +996,8 @@ class Payday(object):
                    ) p2
              WHERE p.id = p2.id
                AND p.nteampatrons <> p2.nteampatrons;
-
+            """)
+            cursor.run("""
             UPDATE participants p
                SET npatrons = p2.npatrons
               FROM ( SELECT p2.id
@@ -1000,7 +1011,6 @@ class Payday(object):
                    ) p2
              WHERE p.id = p2.id
                AND p.npatrons <> p2.npatrons;
-
             """)
         cls.clean_up()
         log("Updated receiving amounts.")
