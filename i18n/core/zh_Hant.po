@@ -583,17 +583,17 @@ msgstr "Liberapay 捐款更新：支付終止"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr ""
+msgstr "因對象無法收款，原安排在{date}付給{recipient}的捐款金額 {money_amount}已被終止。"
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "由於收款對象無法收款，以下的重覆捐款已遭停止："
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "透過 Liberapay 讓贊助者更方便支持您"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr ""
+msgstr "您已連結了 PayPal 帳號而非 Stripe 帳號，我們強烈推薦您設置 Stripe ，因為它{link_open}比 PayPal 更好用{link_close}。"
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -2580,10 +2580,10 @@ msgstr ""
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] ""
+msgstr[0] "您有{n}筆排定的付款："
 
 msgid "You currently don't have any scheduled payment."
-msgstr ""
+msgstr "您目前無任何排定的付款。"
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "你確定切換帳戶種類？由於法律原因我們會在支付夥伴的系統中重新註冊帳號，並將錢從舊帳號中轉移出來。"
@@ -2837,10 +2837,10 @@ msgid "succeeded"
 msgstr "成功"
 
 msgid "partially refunded"
-msgstr ""
+msgstr "部份退款"
 
 msgid "refunded"
-msgstr ""
+msgstr "退款"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -2954,16 +2954,16 @@ msgid "Mark all notifications as read"
 msgstr "所有的通知標為已讀"
 
 msgid "Mark as read"
-msgstr ""
+msgstr "標示為已讀"
 
 msgid "Remove"
 msgstr "移除"
 
 msgid "This notification is marked for deletion."
-msgstr ""
+msgstr "此通知被標示要刪除。"
 
 msgid "Restore"
-msgstr ""
+msgstr "恢復"
 
 msgid "No notifications to show."
 msgstr "無通知可顯示。"
@@ -3186,17 +3186,17 @@ msgid_plural "You have starred {n} repositories on {platform}."
 msgstr[0] "你在{platform}上已經星標{n}個代碼庫。"
 
 msgid "The payment instrument has been successfully added."
-msgstr ""
+msgstr "已成功新增此支付方式。"
 
 msgid "Forget this card number after one payment."
-msgstr ""
+msgstr "一次性付款後不保留此信用卡號碼。"
 
 #, python-brace-format
 msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
 msgstr ""
 
 msgid "Forget this bank account number after one payment."
-msgstr ""
+msgstr "一次性付款後不保留此銀行帳號。"
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "你提供的BIC似乎無效。"
@@ -3204,24 +3204,24 @@ msgstr "你提供的BIC似乎無效。"
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
-msgstr[0] ""
+msgstr[0] "您已連結了{n}種付款方式。"
 
 msgid "Bank Account"
 msgstr "銀行帳號"
 
 msgid "default"
-msgstr ""
+msgstr "預設"
 
 #, python-brace-format
 msgid "Added on {date}"
-msgstr ""
+msgstr "{date}所作的新增"
 
 msgid "view mandate"
-msgstr ""
+msgstr "檢視授權要求"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
-msgstr ""
+msgstr "到期日在{month}{year}"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} failed."
@@ -3236,16 +3236,16 @@ msgid "The last payment initiated on {date} was successful."
 msgstr ""
 
 msgid "This payment instrument hasn't been used yet."
-msgstr ""
+msgstr "此支付方式尚未被用過。"
 
 msgid "Set as default"
-msgstr ""
+msgstr "設成預設"
 
 msgid "You don't have any valid payment instrument."
-msgstr ""
+msgstr "您無任何有效的支付方式。"
 
 msgid "Add a payment instrument:"
-msgstr ""
+msgstr "新增支付方式："
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "你在這個 Liberapay帳戶還有剩錢，請選擇要花費的方式或是聯絡用戶支援。"
@@ -3437,7 +3437,7 @@ msgid "canceled"
 msgstr "已取消"
 
 msgid "in arrears"
-msgstr ""
+msgstr "到期未付款"
 
 msgid "donation refund"
 msgstr "捐贈退款"
@@ -4176,10 +4176,10 @@ msgid "We guarantee that the funds you put in our custody will not be lost in ca
 msgstr "我們保證你存放的基金在我們的監管下不會因為破產而遭到損失，無論破產有沒有影響到我們或是我們所委託代理監管基金的第三方。"
 
 msgid "Here is a list of differences between them:"
-msgstr ""
+msgstr "這裏整理了其差異比較表："
 
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
-msgstr ""
+msgstr "通常 Stripe 手續費較 PayPal 便宜。"
 
 msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
 msgstr ""
@@ -4203,7 +4203,7 @@ msgid "If you think you've found a security issue, and it's not already in our l
 msgstr ""
 
 msgid "Policy"
-msgstr ""
+msgstr "政策"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
