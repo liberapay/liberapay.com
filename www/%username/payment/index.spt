@@ -154,7 +154,12 @@ subhead = _("Payment Processors")
         <div class="card card-default">
             <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
                     title="{{ _('Disconnect') }}">&times;</button>
+            % if account.display_name
+            <h4>{{ account.display_name }}</h4>
+            {{ _("Account ID: {0}", account.id) }}<br>
+            % else
             <h4>{{ account.id }}</h4>
+            % endif
             <p>
             {{ _("Country: {0}", Country(account.country)) }}<br>
             % if account.default_currency
