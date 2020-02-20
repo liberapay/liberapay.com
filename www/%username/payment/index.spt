@@ -166,6 +166,10 @@ subhead = _("Payment Processors")
             <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("The email address '{0}' is not verified.", account.id)
             }}</p>
+            % elif account.charges_enabled == False
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+                _("This account cannot receive payments.")
+            }}</p>
             % endif
             <a href="https://www.paypal.com/signin" target="_blank" rel="noopener noreferrer">{{
                 fontawesome("external-link") }} {{ _(
