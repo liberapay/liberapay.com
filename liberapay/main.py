@@ -37,7 +37,7 @@ from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
-from liberapay.payin.cron import send_upcoming_debit_notifications
+from liberapay.payin.cron import execute_scheduled_payins, send_upcoming_debit_notifications
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
@@ -153,6 +153,7 @@ if conf:
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
     cron(intervals.get('clean_up_counters', 3600), website.db.clean_up_counters, True)
     cron(Daily(hour=3), send_upcoming_debit_notifications, True)
+    cron(Daily(hour=4), execute_scheduled_payins, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)
     cron(Daily(hour=16), lambda: fetch_currency_exchange_rates(website.db), True)
     cron(Daily(hour=17), lambda: paypal.sync_all_pending_payments(website.db), True)
