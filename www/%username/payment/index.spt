@@ -136,9 +136,15 @@ subhead = _("Payment Processors")
     <form action="/payment-providers/stripe/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        <button class="btn btn-{{ 'default' if stripe_accounts else 'primary' }}">{{
+        % if stripe_accounts
+        <button class="btn btn-default">{{
+            _("Connect another {platform_name} account", platform_name='Stripe')
+        }}</button>
+        % else
+        <button class="btn btn-primary">{{
             _("Connect {platform_name} account", platform_name='Stripe')
         }}</button>
+        % endif
     </form>
 
     <br>
@@ -196,16 +202,27 @@ subhead = _("Payment Processors")
         % endif
     % endif
 
-    <a class="btn btn-{{ 'default' if paypal_accounts else 'primary' }}"
-       href="/payment-providers/paypal/add">{{
+    % if paypal_accounts
+    <a class="btn btn-default" href="/payment-providers/paypal/add">{{
+        _("Connect another {platform_name} account", platform_name='PayPal')
+    }}</a>
+    % else
+    <a class="btn btn-primary" href="/payment-providers/paypal/add">{{
         _("Connect {platform_name} account", platform_name='PayPal')
     }}</a>
+   % endif
 
     {#<form action="/payment-providers/paypal/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        <button class="btn btn-{{ 'default' if paypal_accounts else 'primary' }}">{{
+        % if paypal_accounts
+        <button class="btn btn-default">{{
+            _("Connect another {platform_name} account", platform_name='PayPal')
+        }}</button>
+        % else
+        <button class="btn btn-primary">{{
             _("Connect {platform_name} account", platform_name='PayPal')
         }}</button>
+        % endif
     </form>#}
 % endblock
