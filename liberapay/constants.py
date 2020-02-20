@@ -221,7 +221,7 @@ IDENTITY_FIELDS = set("""
 
 INVOICE_DOC_MAX_SIZE = 5000000
 INVOICE_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'png']
-INVOICE_DOCS_LIMIT = 10
+INVOICE_DOCS_LIMIT = 25
 
 INVOICE_NATURES = {
     'expense': _("Expense Report"),
