@@ -39,7 +39,7 @@ title = participant.username
 subhead = _("Payment Processors")
 
 [---] text/html
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import fontawesome, glyphicon
 
 % extends "templates/layouts/settings.html"
 
@@ -107,11 +107,16 @@ subhead = _("Payment Processors")
             {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
+            <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.charges_enabled
-            <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("This account cannot receive payments.")
-            }}</span>
+            }}</p>
             % endif
+            <a href="https://dashboard.stripe.com/{{ account.id }}" target="_blank" rel="noopener noreferrer">{{
+                fontawesome("external-link") }} {{ _(
+                "Manage this {platform} account", platform="Stripe"
+            ) }}</a>
         </div>
         % endfor
     </form>
@@ -131,9 +136,15 @@ subhead = _("Payment Processors")
     <form action="/payment-providers/stripe/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        <button class="btn btn-{{ 'default' if stripe_accounts else 'primary' }}">{{
+        % if stripe_accounts
+        <button class="btn btn-default">{{
+            _("Connect another {platform_name} account", platform_name='Stripe')
+        }}</button>
+        % else
+        <button class="btn btn-primary">{{
             _("Connect {platform_name} account", platform_name='Stripe')
         }}</button>
+        % endif
     </form>
 
     <br>
@@ -149,18 +160,32 @@ subhead = _("Payment Processors")
         <div class="card card-default">
             <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
                     title="{{ _('Disconnect') }}">&times;</button>
+            % if account.display_name
+            <h4>{{ account.display_name }}</h4>
+            {{ _("Account ID: {0}", account.id) }}<br>
+            % else
             <h4>{{ account.id }}</h4>
+            % endif
             <p>
             {{ _("Country: {0}", Country(account.country)) }}<br>
             % if account.default_currency
             {{ _("Currency: {0}", Currency(account.default_currency)) }}<br>
             % endif
             </p>
+            <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.verified
-            <span class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
                 _("The email address '{0}' is not verified.", account.id)
-            }}</span>
+            }}</p>
+            % elif account.charges_enabled == False
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+                _("This account cannot receive payments.")
+            }}</p>
             % endif
+            <a href="https://www.paypal.com/signin" target="_blank" rel="noopener noreferrer">{{
+                fontawesome("external-link") }} {{ _(
+                "Manage this {platform} account", platform="PayPal"
+            ) }}</a>
         </div>
         % endfor
     </form>
@@ -177,16 +202,27 @@ subhead = _("Payment Processors")
         % endif
     % endif
 
-    <a class="btn btn-{{ 'default' if paypal_accounts else 'primary' }}"
-       href="/payment-providers/paypal/add">{{
+    % if paypal_accounts
+    <a class="btn btn-default" href="/payment-providers/paypal/add">{{
+        _("Connect another {platform_name} account", platform_name='PayPal')
+    }}</a>
+    % else
+    <a class="btn btn-primary" href="/payment-providers/paypal/add">{{
         _("Connect {platform_name} account", platform_name='PayPal')
     }}</a>
+   % endif
 
     {#<form action="/payment-providers/paypal/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        <button class="btn btn-{{ 'default' if paypal_accounts else 'primary' }}">{{
+        % if paypal_accounts
+        <button class="btn btn-default">{{
+            _("Connect another {platform_name} account", platform_name='PayPal')
+        }}</button>
+        % else
+        <button class="btn btn-primary">{{
             _("Connect {platform_name} account", platform_name='PayPal')
         }}</button>
+        % endif
     </form>#}
 % endblock
