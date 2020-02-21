@@ -2998,8 +2998,16 @@ msgstr "국가: {0}"
 msgid "Currency: {0}"
 msgstr "통화: {0}"
 
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
 msgid "This account cannot receive payments."
 msgstr "이 계정은 지급을 받을 수 없습니다."
+
+#, python-brace-format
+msgid "Manage this {platform} account"
+msgstr ""
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3008,6 +3016,10 @@ msgstr "{country}에서 사용 가능."
 #, python-brace-format
 msgid "Not available in {country}."
 msgstr "{country}에서 사용할 수 없음."
+
+#, python-brace-format
+msgid "Connect another {platform_name} account"
+msgstr ""
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal은 Stripe보다 더 많은 나라에서 돈을 받을 수 있지만, Liberapay에 잘 호환되지 않습니다."
@@ -3209,10 +3221,6 @@ msgid "Bank Account"
 msgstr "은행 계좌"
 
 msgid "default"
-msgstr ""
-
-#, python-brace-format
-msgid "Added on {date}"
 msgstr ""
 
 msgid "view mandate"

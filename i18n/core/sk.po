@@ -3052,8 +3052,16 @@ msgstr "Zem: {0}"
 msgid "Currency: {0}"
 msgstr "Mena: {0}"
 
+#, python-brace-format
+msgid "Added on {date}"
+msgstr ""
+
 msgid "This account cannot receive payments."
 msgstr "Tento účet neprijíma platby."
+
+#, python-brace-format
+msgid "Manage this {platform} account"
+msgstr ""
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3062,6 +3070,10 @@ msgstr "Dostupné v {country}."
 #, python-brace-format
 msgid "Not available in {country}."
 msgstr "Nedostupné v {country}."
+
+#, python-brace-format
+msgid "Connect another {platform_name} account"
+msgstr ""
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal dovoľuje prijímanie peňazí vo viac krajinách ako Stripe, ale nie je veľmi dobre integrovaný do Liberapay."
@@ -3269,10 +3281,6 @@ msgid "Bank Account"
 msgstr "Bankový účet"
 
 msgid "default"
-msgstr ""
-
-#, python-brace-format
-msgid "Added on {date}"
 msgstr ""
 
 msgid "view mandate"

@@ -3026,8 +3026,16 @@ msgstr "Maa: {0}"
 msgid "Currency: {0}"
 msgstr "Valuutta: {0}"
 
+#, python-brace-format
+msgid "Added on {date}"
+msgstr "Lisätty {date}"
+
 msgid "This account cannot receive payments."
 msgstr "Tämä tili ei voi vastaanottaa maksuja."
+
+#, python-brace-format
+msgid "Manage this {platform} account"
+msgstr ""
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3036,6 +3044,10 @@ msgstr "Käytettävissä maassa: {country}."
 #, python-brace-format
 msgid "Not available in {country}."
 msgstr "Ei ole käytettävissä maassa: {country}."
+
+#, python-brace-format
+msgid "Connect another {platform_name} account"
+msgstr ""
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal mahdollistaa rahan vastaanottamisen useammassa maassa kuin Stripe, mutta se on toiminnoiltaan hieman rajoittuneempi Liberapay-palvelussa."
@@ -3241,10 +3253,6 @@ msgstr "Pankkitili"
 
 msgid "default"
 msgstr "oletus"
-
-#, python-brace-format
-msgid "Added on {date}"
-msgstr "Lisätty {date}"
 
 msgid "view mandate"
 msgstr "näytä mandaatti"

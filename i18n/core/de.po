@@ -3026,8 +3026,16 @@ msgstr "Land: {0}"
 msgid "Currency: {0}"
 msgstr "Währung: {0}"
 
+#, python-brace-format
+msgid "Added on {date}"
+msgstr "Hinzugefügt am {date}"
+
 msgid "This account cannot receive payments."
 msgstr "Dieses Konto kann keine Zahlungen empfangen."
+
+#, python-brace-format
+msgid "Manage this {platform} account"
+msgstr ""
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3036,6 +3044,10 @@ msgstr "Verfügbar in {country}."
 #, python-brace-format
 msgid "Not available in {country}."
 msgstr "Nicht verfügbar in {country}."
+
+#, python-brace-format
+msgid "Connect another {platform_name} account"
+msgstr ""
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal erlaubt das Empfangen von Geld aus mehr Ländern als Stripe. Es ist aber nicht so gut in Liberapay integriert."
@@ -3241,10 +3253,6 @@ msgstr "Bankkonto"
 
 msgid "default"
 msgstr "Standard"
-
-#, python-brace-format
-msgid "Added on {date}"
-msgstr "Hinzugefügt am {date}"
 
 msgid "view mandate"
 msgstr "Mandat anzeigen"
