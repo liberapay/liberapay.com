@@ -1,5 +1,7 @@
+from liberapay.constants import CURRENCIES, PAYPAL_CURRENCIES
 from liberapay.exceptions import AmbiguousNumber, InvalidNumber
 from liberapay.i18n.base import CURRENCIES_MAP, DEFAULT_CURRENCY, LOCALE_EN, Money
+from liberapay.security.authentication import ANON
 from liberapay.testing import Harness
 
 
@@ -70,3 +72,41 @@ class Tests(Harness):
         assert state['locale'] == self.website.locales['zh']
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh-CN', want='state')
         assert state['locale'] == self.website.locales['zh']
+
+    def test_get_currencies_for(self):
+        # Unidentified donor with a Swiss IP address, giving to a creator in France.
+        alice = self.make_participant('alice', main_currency='EUR', accepted_currencies='EUR,USD')
+        self.add_payment_account(alice, 'stripe', 'FR', default_currency='EUR')
+        self.add_payment_account(alice, 'paypal', 'FR', default_currency='EUR')
+        alice = alice.refetch()
+        assert alice.payment_providers == 3
+        tip = ANON.get_tip_to(alice, currency='CHF')
+        recommended_currency, accepted_currencies = ANON.get_currencies_for(alice, tip)
+        assert recommended_currency == 'EUR'
+        assert accepted_currencies == {'EUR', 'USD'}
+
+        # Unidentified donor with an Indonesian IP address, giving to a creator in Iceland.
+        # The PayPal API we're using doesn't support the Icelandic Króna, so we fall back to USD.
+        bob = self.make_participant('bob', main_currency='ISK', accepted_currencies='ISK')
+        self.add_payment_account(bob, 'paypal', 'IS', default_currency='ISK')
+        bob = bob.refetch()
+        assert bob.payment_providers == 2
+        tip = ANON.get_tip_to(bob, currency='IDR')
+        recommended_currency, accepted_currencies = ANON.get_currencies_for(bob, tip)
+        assert recommended_currency == 'USD'
+        assert accepted_currencies == PAYPAL_CURRENCIES
+
+        # Logged-in Russian donor with a Swedish IP address, giving to a creator in France.
+        zarina = self.make_participant('zarina', main_currency='RUB')
+        tip = zarina.get_tip_to(alice, currency='SEK')
+        recommended_currency, accepted_currencies = zarina.get_currencies_for(alice, tip)
+        assert recommended_currency == 'EUR'
+        assert accepted_currencies == {'EUR', 'USD'}
+
+        # Logged-in Russian donor with a German IP address,
+        # giving to a creator in Mexico who accepts all currencies.
+        carl = self.make_participant('carl', main_currency='MXN', accepted_currencies=None)
+        tip = zarina.get_tip_to(carl, currency='EUR')
+        recommended_currency, accepted_currencies = zarina.get_currencies_for(carl, tip)
+        assert recommended_currency == 'RUB'
+        assert accepted_currencies == CURRENCIES
