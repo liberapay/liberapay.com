@@ -2004,7 +2004,8 @@ class Participant(Model, MixinTeam):
                 new_currency=new_currency, old_currency=old_currency
             ), recorder=recorder_id)
 
-    def get_currencies_for(self, tippee, tip):
+    @staticmethod
+    def get_currencies_for(tippee, tip):
         if isinstance(tippee, AccountElsewhere):
             tippee = tippee.participant
         tip_currency = tip.amount.currency

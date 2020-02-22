@@ -11,7 +11,6 @@ from liberapay.exceptions import (
     TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps,
     UsernameAlreadyTaken,
 )
-from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import b64encode_s, get_ip_net
@@ -25,14 +24,12 @@ class _ANON(object):
     is_admin = False
     session = None
     id = None
+
     __bool__ = __nonzero__ = lambda *a: False
-    get_tip_to = staticmethod(Participant._zero_tip)
     __repr__ = lambda self: '<ANON>'
 
-    def get_currencies_for(self, tippee, tip):
-        if isinstance(tippee, AccountElsewhere):
-            tippee = tippee.participant
-        return tip.amount.currency, tippee.accepted_currencies_set
+    get_currencies_for = staticmethod(Participant.get_currencies_for)
+    get_tip_to = staticmethod(Participant._zero_tip)
 
 
 ANON = _ANON()
