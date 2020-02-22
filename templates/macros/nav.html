@@ -9,7 +9,7 @@
         % set icon = icon_span(icon) if icon else ''
         % set active = (
             current == slug or
-            slug and current.startswith(slug) and not options['subnav']
+            slug and current.startswith(slug) and (options['togglable'] or not options['subnav'])
         )
         % set classes = (options['class'] or '') + (' active' if active else '')
         <li{% if classes %} class="{{ classes }}"{% endif %}>
