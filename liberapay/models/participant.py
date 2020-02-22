@@ -2837,7 +2837,7 @@ class Participant(Model, MixinTeam):
         """, (self.id, tippee.id), back_as='Object')
         if r:
             return r
-        return self._zero_tip(tippee, currency)
+        return self._zero_tip(tippee, self.main_currency)
 
 
     def get_tip_distribution(self):
