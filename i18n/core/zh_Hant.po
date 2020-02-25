@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-02-25 04:32+0000\n"
+"PO-Revision-Date: 2020-02-25 18:32+0000\n"
 "Last-Translator: jxt <chihsun.tsai@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/liberapay/core/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -222,7 +222,7 @@ msgstr "您有一筆{amount}金額的捐款預計在{payment_date}要支付給{r
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "您有一筆{amount}金額的捐款預計在{payment_date}要支付給{recipient}，但因遺失了有效的支付指示我們無法完成此次流程。"
+msgstr "您有一筆{amount}金額的捐款預計在{payment_date}要支付給{recipients}，但因遺失有效的支付指示我們無法完成此次流程。"
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
@@ -634,7 +634,7 @@ msgstr "團隊“{0}”已由{2}改名為“{1}”。"
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] "Liberapay  捐款更新：近期扣款全部金額 {money_amount}"
+msgstr[0] "Liberapay 捐款更新：近期扣款全部金額 {money_amount}"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
@@ -642,7 +642,7 @@ msgstr "本訊息為提醒即將在 {debit_date}自您提供的付款方式中�
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr "本訊息為提醒即將在 {debit_date}自您提供的付款方式中扣款{amount}金額以捐款給{recipient}。"
+msgstr "本訊息為提醒即將在 {debit_date}自您提供的付款方式中扣款{amount}金額以捐款給{recipients}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
@@ -3207,7 +3207,7 @@ msgstr "一次性付款後不保留此信用卡號碼。"
 
 #, python-brace-format
 msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "提供您的銀行帳戶資料代表將授權同意我們的支付服務商{platform}與{provider}，向該銀行要求對您的帳戶扣款。依照您與銀行之間的協議條款，您有權可請求返還扣款。通常此類請求必須在扣款後的八日內提出。"
 
 msgid "Forget this bank account number after one payment."
 msgstr "一次性付款後不保留此銀行帳號。"
@@ -3235,15 +3235,15 @@ msgstr "到期日在{month}{year}"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} failed."
-msgstr ""
+msgstr "近一筆應在{date}支付的捐款失敗了。"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} is pending."
-msgstr ""
+msgstr "近一筆應在{date}進行的支付仍在處理中。"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} was successful."
-msgstr ""
+msgstr "近一筆應在{date}支付的捐款已順利完成。"
 
 msgid "This payment instrument hasn't been used yet."
 msgstr "此支付方式尚未被用過。"
@@ -4192,36 +4192,36 @@ msgid "The payment processing fees are usually lower with Stripe than with PayPa
 msgstr "通常 Stripe 手續費較 PayPal 便宜。"
 
 msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr ""
+msgstr "Stripe 一次可捐款給多名創作者，而 PayPal 不行。"
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
-msgstr ""
+msgstr "PayPal 支付會將捐款者重新指向到其官網，Stripe 則已更好地整合於 Liberapay 的服務裏。"
 
 msgid "Stripe makes SEPA Direct Debits easy for European donors."
-msgstr ""
+msgstr "Stripe 可提供歐洲地區的捐款人使用直接的 SEPA 扣款方式。"
 
 msgid "Stripe allows creators to configure automatic payouts to their bank accounts."
-msgstr ""
+msgstr "Stripe 可讓創作者設定自動轉帳入他們自己的銀行帳戶。"
 
 #, python-brace-format
 msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
 msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] ""
+msgstr[0] "Paypal 目前在全球{paypal_link_open}200多個國家{link_close}通行，而 Stripe 僅支援{stripe_link_open}{n} 個國家{link_close}。"
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr ""
+msgstr "若您發現安全問題，且尚未在{known_issues_link}目前已知的問題清單{link_close}找到解答，請{hackerone_report_link}利用 HackerOne 提出問題{link_close}。"
 
 msgid "Policy"
 msgstr "政策"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr ""
+msgstr "詳細的安全政策 (範圍, 獎賞....)都在我們的{link_open} HackerOne 資料頁{link_close}。"
 
 #, python-brace-format
 msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
-msgstr ""
+msgstr "感謝利用{link_open}HackerOne 回報問題的每位使用者{link_close}。"
 
 #, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
@@ -5136,11 +5136,11 @@ msgstr "請輪入你要連結的 {0} 帳戶名字："
 
 #, python-brace-format
 msgid "Name of the team's account on {platform}"
-msgstr ""
+msgstr "在{platform} 上團體的帳號名稱"
 
 #, python-brace-format
 msgid "Name of the organization's account on {platform}"
-msgstr ""
+msgstr "在{platform} 上組織的帳號名稱"
 
 #, python-brace-format
 msgid "{0} username"
