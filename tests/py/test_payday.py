@@ -1,4 +1,3 @@
-import json
 from unittest import mock
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
@@ -1008,47 +1007,17 @@ class TestPaydayForTeams(FakeTransfersHarness):
 
 class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
-    def make_invoice(self, sender, addressee, amount, status):
-        invoice_data = {
-            'nature': 'expense',
-            'amount': amount,
-            'currency': 'EUR',
-            'description': 'lorem ipsum',
-            'details': '',
-        }
-        r = self.client.PxST(
-            '/~%s/invoices/new' % addressee.id, auth_as=sender,
-            data=invoice_data, xhr=True,
-        )
-        assert r.code == 200, r.text
-        invoice_id = json.loads(r.text)['invoice_id']
-        if status == 'pre':
-            return invoice_id
-        r = self.client.PxST(
-            '/~%s/invoices/%s' % (addressee.id, invoice_id), auth_as=sender,
-            data={'action': 'send'},
-        )
-        assert r.code == 302, r.text
-        if status == 'new':
-            return invoice_id
-        r = self.client.PxST(
-            '/~%s/invoices/%s' % (addressee.id, invoice_id), auth_as=addressee,
-            data={'action': status[:-2], 'message': 'a message'},
-        )
-        assert r.code == 302, r.text
-        return invoice_id
-
     def test_it_handles_invoices_correctly(self):
         org = self.make_participant('org', kind='organization', allow_invoices=True)
         self.make_exchange('mango-cc', 60, 0, self.janet)
         self.janet.set_tip_to(org, EUR('50.00'))
         self.db.run("UPDATE participants SET allow_invoices = true WHERE id = %s",
                     (self.janet.id,))
-        self.make_invoice(self.janet, org, '40.02', 'accepted')
-        self.make_invoice(self.janet, org, '80.04', 'accepted')
-        self.make_invoice(self.janet, org, '5.16', 'rejected')
-        self.make_invoice(self.janet, org, '3.77', 'new')
-        self.make_invoice(self.janet, org, '1.23', 'pre')
+        self.make_invoice(self.janet, org, EUR('40.02'), 'accepted')
+        self.make_invoice(self.janet, org, EUR('80.04'), 'accepted')
+        self.make_invoice(self.janet, org, EUR('5.16'), 'rejected')
+        self.make_invoice(self.janet, org, EUR('3.77'), 'new')
+        self.make_invoice(self.janet, org, EUR('1.23'), 'pre')
         Payday.start().run()
         expense_transfers = self.db.all("SELECT * FROM transfers WHERE context = 'expense'")
         assert len(expense_transfers) == 1

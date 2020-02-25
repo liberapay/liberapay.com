@@ -7,6 +7,8 @@ BEGIN
     PERFORM update_app_conf('check_avatar_urls', 'false'::jsonb);
     PERFORM update_app_conf('check_email_domains', 'false'::jsonb);
     PERFORM update_app_conf('payin_methods', '{"*": true}'::jsonb);
+    PERFORM update_app_conf('s3_endpoint', '"https://tests.liberapay.org"'::jsonb);
+    PERFORM update_app_conf('s3_secret_key', '"fake"'::jsonb);
 END;
 $$;
 
