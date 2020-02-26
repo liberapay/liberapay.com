@@ -23,7 +23,7 @@ request.allow('POST')
 if user.ANON:
     raise AuthRequired
 
-invoice_id = request.headers['X-Invoice-Id']
+invoice_id = request.headers.get_int(b'X-Invoice-Id')
 invoice = website.db.one("""
     SELECT *
       FROM invoices
@@ -37,7 +37,10 @@ if not invoice:
 if invoice.status != 'pre':
     raise response.error(409, "This invoice has already been submitted.")
 
-body = request.body
+try:
+    body = json.loads(request.body_bytes)
+except Exception as e:
+    raise response.error(400, str(e))
 step = request.qs['step']
 
 result = {}
@@ -68,7 +71,7 @@ if step == 'sign':
     key = 'invoice_docs/%s/%s' % (invoice.id, name)
     if urlquote(conditions.get('key', '')) != key:
         raise response.error(400, "`conditions.key` must be '%s'" % key)
-    policy = b64encode(json.dumps(body))
+    policy = b64encode(json.dumps(body).encode('ascii'))
     try:
         empty, date, region, s3, aws4_request = conditions['x-amz-credential'].encode('ascii').split(b'/')
     except ValueError:

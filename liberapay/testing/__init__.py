@@ -3,6 +3,7 @@
 
 from contextlib import contextmanager
 import itertools
+import json
 import unittest
 from os.path import dirname, join, realpath
 
@@ -410,6 +411,36 @@ class Harness(unittest.TestCase):
     def attach_stripe_payment_method(self, participant, stripe_pm_id, one_off=False):
         pm = stripe.PaymentMethod.retrieve(stripe_pm_id)
         return ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
+
+    def make_invoice(self, sender, addressee, amount, status):
+        invoice_data = {
+            'nature': 'expense',
+            'amount': str(amount.amount),
+            'currency': amount.currency,
+            'description': 'lorem ipsum',
+            'details': '',
+        }
+        r = self.client.PxST(
+            '/~%s/invoices/new' % addressee.id, auth_as=sender,
+            data=invoice_data, xhr=True,
+        )
+        assert r.code == 200, r.text
+        invoice_id = json.loads(r.text)['invoice_id']
+        if status == 'pre':
+            return invoice_id
+        r = self.client.PxST(
+            '/~%s/invoices/%s' % (addressee.id, invoice_id), auth_as=sender,
+            data={'action': 'send'},
+        )
+        assert r.code == 302, r.text
+        if status == 'new':
+            return invoice_id
+        r = self.client.PxST(
+            '/~%s/invoices/%s' % (addressee.id, invoice_id), auth_as=addressee,
+            data={'action': status[:-2], 'message': 'a message'},
+        )
+        assert r.code == 302, r.text
+        return invoice_id
 
 
 class Foobar(Exception): pass
