@@ -132,7 +132,7 @@ if participant.join_time:
     % elif event['kind'] == 'payin'
     <tr class="{{ 'zero' if event['status'] == 'failed' }}">
         <td class="description">
-        {{ _("charge") }}
+        {{ _("automatic charge") if event['off_session'] else _("charge") }}
         &mdash;
         % set status = (
             'refunded' if event['refunded_amount'] == event['amount'] else

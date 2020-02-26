@@ -19,6 +19,7 @@ accounts = website.db.all("""
       FROM payment_accounts
      WHERE participant = %s
        AND is_current IS true
+  ORDER BY connection_ts
 """, (participant.id,))
 accounts_by_provider = group_by(accounts, lambda a: a.provider)
 paypal_accounts = accounts_by_provider.get('paypal')
