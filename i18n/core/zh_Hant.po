@@ -220,7 +220,7 @@ msgstr "您有一筆{amount}金額的捐款預計在{payment_date}要支付給{r
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "您有一筆{amount}金額的捐款預計在{payment_date}要支付給{recipient}，但因遺失了有效的支付指示我們無法完成此次流程。"
+msgstr "您有一筆{amount}金額的捐款預計在{payment_date}要支付給{recipients}，但因遺失有效的支付指示我們無法完成此次流程。"
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
@@ -445,9 +445,9 @@ msgstr "一旦此筆付款已被受理，它會在銀行記錄上顯示成\"{des
 msgid "Your payment has succeeded"
 msgstr "您的捐款支付已順利完成"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "{money_amount} 透過 LiberaPay 在 {date} 發動的捐款已成功完成支付。"
+msgstr "已於今日完成金額 {money_amount}之支付 。"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
@@ -632,24 +632,24 @@ msgstr "團隊“{0}”已由{2}改名為“{1}”。"
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
+msgstr[0] "Liberapay 捐款更新：近期扣款全部金額 {money_amount}"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "本訊息為提醒即將在 {debit_date}自您提供的付款方式中扣款{amount}金額以捐款給{recipient}。"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "本訊息為提醒即將在 {debit_date}自您提供的付款方式中扣款{amount}金額以捐款給{recipients}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
+msgstr[0] "本訊息為提醒即將在 {n} 天內自您提供的付款方式中扣款 {amount}金額以支付捐款。"
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "如您想修改捐款，請點擊以下連結：{link_start}管理捐款頁{link_end}。"
 
 msgid "Email address verification - Liberapay"
 msgstr "電郵信箱認證 - Liberapay"
@@ -802,7 +802,7 @@ msgid "Prevent this profile from being listed on Liberapay."
 msgstr "不要把我個人的介紹頁列在 Liberapay上。"
 
 msgid "Symbolic"
-msgstr "象徵的"
+msgstr "象徵性"
 
 msgid "Small"
 msgstr "小"
@@ -1077,7 +1077,7 @@ msgstr "閘道逾時"
 
 #, python-brace-format
 msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
-msgstr ""
+msgstr "您所找尋的 {platform} 用戶尚未加入 Liberapay，故無法為他們建立個人小檔。"
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1379,9 +1379,9 @@ msgstr "你仍未以 {0} 身份登入。"
 msgid "Password (optional)"
 msgstr "密碼 (可選)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "如果你的帳戶沒有密碼請將先前的欄位維持空白。我們將透過電子郵件傳送登入連結。"
+msgstr "如果您已{bold}遺失密碼{bold_end}或帳戶根本無密碼，請將先前的欄位維持空白。我們將透過電子郵件傳送登入連結。"
 
 msgid "Find great people to donate to"
 msgstr "找到有趣的人予以支持"
@@ -1763,13 +1763,13 @@ msgid "Automatic renewal"
 msgstr "自動付款"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr ""
+msgstr "我們將自您的信用卡或銀行帳戶扣款，您會在前兩天接到通知。"
 
 msgid "Manual renewal"
 msgstr "手動支付"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr ""
+msgstr "會以郵件寄給您捐款支付通知。"
 
 msgid "Modify the donation"
 msgstr "修改捐款"
@@ -1919,7 +1919,7 @@ msgstr "這個帳戶暫時被停權，因此目前無法受理捐款事宜。"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr ""
+msgstr "{0}目前每週接獲{1}之金額，他們已達成其每週籌資{2}之目標，但您的捐款仍對他們大有幫助。"
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
@@ -2257,7 +2257,7 @@ msgid "Send me notifications via email:"
 msgstr "透過電郵傳送通知給我："
 
 msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
-msgstr ""
+msgstr "某些種類的通知無法關閉故未列在上頭，例如當準備將自您的銀行帳戶扣款時，您一定會收到事前通知。"
 
 msgid "Language"
 msgstr "语言"
@@ -2290,13 +2290,13 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "建置Liberapay要花許多心力，還有許多未竟事宜，但我們的開發人員，翻譯者以及其它的貢獻者卻是幾乎未得到任何報償，這也讓我們的進展慢了下來。"
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
-msgstr ""
+msgstr "Liberapay 現支援自動定期扣款，您是否要將所有的捐款改成此種設定？"
 
 msgid "Yes, activate automatic renewals"
-msgstr ""
+msgstr "好，激活自動定期付款"
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
-msgstr ""
+msgstr "您已啟動自動定期付款功能，但您並未設置有效的付款方式可讓我們代為自動在指定日期扣款。"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2335,9 +2335,9 @@ msgstr "由於收款人不再接受捐款故無動靜。"
 msgid "Active"
 msgstr "活躍"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "下次付款時間在{in_N_weeks_months_or_years}。"
+msgstr "下次付款時間在 {in_N_weeks_months_or_years}。"
 
 msgid "Renew now"
 msgstr "立即更新"
@@ -2419,7 +2419,7 @@ msgid "Doesn't support the {currency}"
 msgstr "不支援 {currency}"
 
 msgid "Doesn't support automatic renewal"
-msgstr ""
+msgstr "不支援自動付款"
 
 msgid "Not anonymous"
 msgstr "非匿名"
@@ -2486,7 +2486,7 @@ msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "{name}支付方式傳回出錯訊息：\"{error_message}\"。"
 
 msgid "The payment instrument is invalid, please select or add another one."
-msgstr ""
+msgstr "支付方式無效，請另選或新增其它方式。"
 
 msgid "More information is required in order to process this payment."
 msgstr "需要更多資訊來處理這次付款。"
@@ -2506,7 +2506,7 @@ msgid "Use another bank account"
 msgstr "使用其它的銀行帳戶"
 
 msgid "Payment instrument:"
-msgstr ""
+msgstr "付款方式："
 
 msgid "Please input your name and card number:"
 msgstr "請輸入姓名和卡號："
@@ -2536,18 +2536,18 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "'{0}'不是可接受的額數 (min={1}, max={2})"
 
 msgid "The date must be in the future."
-msgstr ""
+msgstr "日期需設為未到日。"
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}."
-msgstr ""
+msgstr "您確定要取消原排定的付款？這將會停止捐款給{recipient}。"
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
-msgstr ""
+msgstr "您確定要取消原排定的付款？這將會停止捐款給{recipients}。"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "若想要修改此排定捐款的金額，請選擇或直接輸入新數字："
 
 msgid "(not recommended, high fee percentage)"
 msgstr "(不推薦，高手收續費率)"
@@ -2565,17 +2565,17 @@ msgstr[0] "下次支付在{n}星期({timedelta})"
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "下次支付時間在 {in_N_weeks_months_or_years}後。"
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
 msgstr "自定金額 (min={0}, max={1})"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "若想要修改此排定捐款的日期，請選擇或直接輸入新數字："
 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
-msgstr ""
+msgstr "將付款日期延後到正常原訂日期則該次扣款不會執行。"
 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
@@ -3008,7 +3008,7 @@ msgstr "這個帳戶無法收款。"
 
 #, python-brace-format
 msgid "Manage this {platform} account"
-msgstr ""
+msgstr "管理 {platform}帳號"
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3020,7 +3020,7 @@ msgstr "不可用國家{country}。"
 
 #, python-brace-format
 msgid "Connect another {platform_name} account"
-msgstr ""
+msgstr "聯絡另一個{platform_name}帳號"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "比起 Stripe，PayPal 可接受收款的國家數量更多，但它並未完全整合在 Liberapay 。"
@@ -3089,7 +3089,7 @@ msgstr "資金自動從 {presentment_currency} 轉換為 {settlement_currency}�
 
 #, python-brace-format
 msgid "However, the payment was fully refunded on {refund_date}."
-msgstr ""
+msgstr "此次付款將會在{refund_date} 全部退還。"
 
 #, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
@@ -3097,7 +3097,7 @@ msgstr "{0} 支付了處理費，{1} 分發如下。"
 
 #, python-brace-format
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
-msgstr ""
+msgstr "將會在{refund_date}退款{refund_amount}，為{x_percent}比例之金額。"
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
@@ -3156,7 +3156,7 @@ msgstr "這筆捐款已從每週 {old_amount} 調整為 {new_amount}."
 
 #, python-brace-format
 msgid "A donation of {amount} per week has been restarted."
-msgstr ""
+msgstr "每週捐款{amount}已重新啟動。"
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "下列表格列出了您收到的捐款，以數額分類。"
@@ -3205,7 +3205,7 @@ msgstr "一次性付款後不保留此信用卡號碼。"
 
 #, python-brace-format
 msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "提供您的銀行帳戶資料代表將授權同意我們的支付服務商{platform}與{provider}，向該銀行要求對您的帳戶扣款。依照您與銀行之間的協議條款，您有權可請求返還扣款。通常此類請求必須在扣款後的八日內提出。"
 
 msgid "Forget this bank account number after one payment."
 msgstr "一次性付款後不保留此銀行帳號。"
@@ -3233,15 +3233,15 @@ msgstr "到期日在{month}{year}"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} failed."
-msgstr ""
+msgstr "近一筆應在{date}支付的捐款失敗了。"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} is pending."
-msgstr ""
+msgstr "近一筆應在{date}進行的支付仍在處理中。"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} was successful."
-msgstr ""
+msgstr "近一筆應在{date}支付的捐款已順利完成。"
 
 msgid "This payment instrument hasn't been used yet."
 msgstr "此支付方式尚未被用過。"
@@ -4190,36 +4190,36 @@ msgid "The payment processing fees are usually lower with Stripe than with PayPa
 msgstr "通常 Stripe 手續費較 PayPal 便宜。"
 
 msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr ""
+msgstr "Stripe 一次可捐款給多名創作者，而 PayPal 不行。"
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
-msgstr ""
+msgstr "PayPal 支付會將捐款者重新指向到其官網，Stripe 則已更好地整合於 Liberapay 的服務裏。"
 
 msgid "Stripe makes SEPA Direct Debits easy for European donors."
-msgstr ""
+msgstr "Stripe 可提供歐洲地區的捐款人使用直接的 SEPA 扣款方式。"
 
 msgid "Stripe allows creators to configure automatic payouts to their bank accounts."
-msgstr ""
+msgstr "Stripe 可讓創作者設定自動轉帳入他們自己的銀行帳戶。"
 
 #, python-brace-format
 msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
 msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] ""
+msgstr[0] "Paypal 目前在全球{paypal_link_open}200多個國家{link_close}通行，而 Stripe 僅支援{stripe_link_open}{n} 個國家{link_close}。"
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr ""
+msgstr "若您發現安全問題，且尚未在{known_issues_link}目前已知的問題清單{link_close}找到解答，請{hackerone_report_link}利用 HackerOne 提出問題{link_close}。"
 
 msgid "Policy"
 msgstr "政策"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr ""
+msgstr "詳細的安全政策 (範圍, 獎賞....)都在我們的{link_open} HackerOne 資料頁{link_close}。"
 
 #, python-brace-format
 msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
-msgstr ""
+msgstr "感謝利用{link_open}HackerOne 回報問題的每位使用者{link_close}。"
 
 #, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
@@ -4657,9 +4657,8 @@ msgstr "如何為捐款者工作"
 msgid "1. Set up a donation"
 msgstr "1. 設定捐款"
 
-#, fuzzy
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr "找到你希望資助的對象，然後選擇合適的金額和週期（每週、每月或每年）。"
+msgstr "找到您希望資助的對象，然後選擇合適的金額、週期（每週、每月或每年）或和更新方式（手動或自動扣款）。"
 
 msgid "2. Fund your donation"
 msgstr "2. 資助您的捐款"
@@ -4671,9 +4670,8 @@ msgstr "Liberapay 的捐款是事先付錢，您可以決定何時、要放入�
 msgid "3. Keep your donation funded"
 msgstr "3. 讓你的捐獻有持維資金"
 
-#, fuzzy
 msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
-msgstr "當捐款需更新，我們會以電子郵件通知好讓您可以繼續資助它或終止資助。"
+msgstr "當捐款需更新，我們會以電子郵件通知好讓您可以繼續資助它或終止資助。若您已選擇定期自動扣款，我們會依約定自您的信用卡或銀行帳戶扣款。"
 
 msgid "How it works for creators"
 msgstr "它如何為創作者服務"
@@ -5136,11 +5134,11 @@ msgstr "請輪入你要連結的 {0} 帳戶名字："
 
 #, python-brace-format
 msgid "Name of the team's account on {platform}"
-msgstr ""
+msgstr "在{platform} 上團體的帳號名稱"
 
 #, python-brace-format
 msgid "Name of the organization's account on {platform}"
-msgstr ""
+msgstr "在{platform} 上組織的帳號名稱"
 
 #, python-brace-format
 msgid "{0} username"
