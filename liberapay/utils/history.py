@@ -10,6 +10,11 @@ from ..website import website
 from . import group_by
 
 
+DONATION_CONTEXTS = {
+    'tip', 'take', 'final-gift',
+    'tip-in-advance', 'take-in-advance',
+    'tip-in-arrears', 'take-in-arrears',
+}
 ONE_SECOND = timedelta(seconds=1)
 
 
@@ -196,19 +201,19 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
 
     if transfers:
         successes = [t for t in transfers if t['status'] == 'succeeded' and not t['refund_ref']]
-        regular_donations = [t for t in successes if t['context'] in ('tip', 'take')]
+        donations = [t for t in successes if t['context'] in DONATION_CONTEXTS]
         reimbursements = [t for t in successes if t['context'] == 'expense']
-        regular_donations_by_currency = group_by(regular_donations, lambda t: t['amount'].currency)
+        donations_by_currency = group_by(donations, lambda t: t['amount'].currency)
         reimbursements_by_currency = group_by(reimbursements, lambda t: t['amount'].currency)
         yield dict(
             kind='totals',
-            regular_donations=dict(
-                sent=MoneyBasket(t['amount'] for t in regular_donations if t['tipper'] == id),
-                received=MoneyBasket(t['amount'] for t in regular_donations if t['tippee'] == id),
+            donations=dict(
+                sent=MoneyBasket(t['amount'] for t in donations if t['tipper'] == id),
+                received=MoneyBasket(t['amount'] for t in donations if t['tippee'] == id),
                 npatrons={k: len(set(t['tipper'] for t in transfers if t['tippee'] == id))
-                          for k, transfers in regular_donations_by_currency.items()},
+                          for k, transfers in donations_by_currency.items()},
                 ntippees={k: len(set(t['tippee'] for t in transfers if t['tipper'] == id))
-                          for k, transfers in regular_donations_by_currency.items()},
+                          for k, transfers in donations_by_currency.items()},
             ),
             reimbursements=dict(
                 sent=MoneyBasket(t['amount'] for t in reimbursements if t['tipper'] == id),
@@ -219,7 +224,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
                              for k, transfers in reimbursements_by_currency.items()},
             ),
         )
-        del successes, regular_donations, reimbursements
+        del successes, donations, reimbursements
 
     payday_dates = db.all("""
         SELECT ts_start::date
