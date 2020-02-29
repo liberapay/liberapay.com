@@ -126,20 +126,20 @@ if user.is_admin:
 
 <div class="row col-lg-10">
 % if totals
-    % set regular_donations = totals['regular_donations']
+    % set donations = totals['donations']
     % set reimbursements = totals['reimbursements']
-    % set total_sent = regular_donations['sent'] + reimbursements['sent']
+    % set total_sent = donations['sent'] + reimbursements['sent']
     {{ _("Total money sent: {0}", total_sent) }}<br>
     % if total_sent
     <ul>
-    % if regular_donations['sent']
-    % for money_amount in regular_donations['sent']
+    % if donations['sent']
+    % for money_amount in donations['sent']
     % if money_amount
     <li>
     {{ ngettext(
-        "{money_amount} in recurrent donations to {n} person",
-        "{money_amount} in recurrent donations to {n} people",
-        regular_donations['ntippees'][money_amount.currency],
+        "{money_amount} in donations to {n} person",
+        "{money_amount} in donations to {n} people",
+        donations['ntippees'][money_amount.currency],
         money_amount=money_amount
     ) }}
         (<a href="{{ participant.path('wallet/export.csv') }}?year={{ year }}&amp;key=given&amp;mode=aggregate">{{
@@ -168,17 +168,17 @@ if user.is_admin:
     % endif
     </ul>
     % endif
-    % set total_received = regular_donations['received'] + reimbursements['received']
+    % set total_received = donations['received'] + reimbursements['received']
     {{ _("Total money received: {0}", total_received) }}
     % if total_received
     <ul>
-    % if regular_donations['received']
-    % for money_amount in regular_donations['received']
+    % if donations['received']
+    % for money_amount in donations['received']
     % if money_amount
     <li>{{ ngettext(
-        "{money_amount} in recurrent donations from {n} donor",
-        "{money_amount} in recurrent donations from {n} donors",
-        regular_donations['npatrons'][money_amount.currency],
+        "{money_amount} in donations from {n} donor",
+        "{money_amount} in donations from {n} donors",
+        donations['npatrons'][money_amount.currency],
         money_amount=money_amount
     ) }}</li>
     % endif

@@ -91,8 +91,8 @@ class TestHistory(FakeTransfersHarness):
 
         totals, start, end, events = get_wallet_ledger(self.db, bob, now.year)
         assert totals['kind'] == 'totals'
-        assert not totals['regular_donations']['sent']
-        assert totals['regular_donations']['received'] == EUR(12)
+        assert not totals['donations']['sent']
+        assert totals['donations']['received'] == EUR(12)
         assert len(events) == 8
         assert events[0]['kind'] == 'day-end'
         assert events[0]['payday_number'] == 3
@@ -103,7 +103,7 @@ class TestHistory(FakeTransfersHarness):
         alice = Participant.from_id(alice.id)
         assert alice.balance == 4990
         totals, start, end, events = get_wallet_ledger(self.db, alice, now.year)
-        assert totals['regular_donations']['sent'] == EUR(10)
+        assert totals['donations']['sent'] == EUR(10)
         assert len(events) == 10
 
         carl = Participant.from_id(carl.id)
