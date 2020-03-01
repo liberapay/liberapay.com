@@ -1157,6 +1157,20 @@ class Participant(Model, MixinTeam):
                 """, (r.address, self.id, email_id))
             except IntegrityError:
                 return EmailVerificationResult.STYMIED
+        # At this point we assume that the user is in fact the owner of the email
+        # address and has received the verification email, so we can remove the
+        # address from our blacklist if it was mistakenly blocked.
+        self.db.run("""
+            UPDATE email_blacklist
+               SET ignore_after = current_timestamp
+             WHERE lower(address) = lower(%(address)s)
+               AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+               AND (reason = 'bounce' AND ts > %(added_time)s
+                                      AND ts < (%(added_time)s + interval '24 hours') OR
+                    reason = 'complaint' AND details = 'disavowed')
+        """, r._asdict())
+        # Finally, we set this newly verified address as the primary one if the
+        # account doesn't have a primary email address yet.
         if not self.email:
             self.update_email(r.address)
         return EmailVerificationResult.SUCCEEDED
