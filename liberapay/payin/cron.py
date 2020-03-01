@@ -98,17 +98,23 @@ def send_upcoming_debit_notifications():
                 del tr['tip'], tr['beneficiary']
         if len(payins) > 1:
             context['ndays'] = (payins[-1]['execution_date'] - utcnow().date()).days
-        route = db.one("""
-            SELECT r
-              FROM exchange_routes r
-             WHERE r.participant = %s
-               AND r.status = 'chargeable'
-               AND r.network::text LIKE 'stripe-%%'
-          ORDER BY r.is_default NULLS LAST
-                 , r.network = 'stripe-sdd' DESC
-                 , r.ctime DESC
-             LIMIT 1
-        """, (payer.id,))
+        while True:
+            route = db.one("""
+                SELECT r
+                  FROM exchange_routes r
+                 WHERE r.participant = %s
+                   AND r.status = 'chargeable'
+                   AND r.network::text LIKE 'stripe-%%'
+              ORDER BY r.is_default NULLS LAST
+                     , r.network = 'stripe-sdd' DESC
+                     , r.ctime DESC
+                 LIMIT 1
+            """, (payer.id,))
+            if route is None:
+                break
+            route.sync_status()
+            if route.status == 'chargeable':
+                break
         if route:
             event = 'upcoming_debit'
             context['instrument_brand'] = route.get_brand()
@@ -141,6 +147,7 @@ def execute_scheduled_payins():
     """
     db = website.db
     counts = defaultdict(int)
+    retry = False
     rows = db.all("""
         SELECT sp.id, sp.execution_date, sp.transfers
              , p AS payer, r.*::exchange_routes AS route
@@ -166,6 +173,10 @@ def execute_scheduled_payins():
     """)
     for sp_id, execution_date, transfers, payer, route in rows:
         route.__dict__['participant'] = payer
+        route.sync_status()
+        if route.status != 'chargeable':
+            retry = True
+            continue
         transfers, canceled, impossible = _filter_transfers(payer, transfers, automatic=True)
         if impossible:
             for tr in impossible:
@@ -195,6 +206,8 @@ def execute_scheduled_payins():
             db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
     for k, n in sorted(counts.items()):
         logger.info("Sent %i %s notifications." % (n, k))
+    if retry:
+        execute_scheduled_payins()
 
 
 def _check_scheduled_payins(db, payer, payins, automatic):
