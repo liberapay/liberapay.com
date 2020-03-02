@@ -81,11 +81,11 @@ if user.is_admin:
           >{{ _("Withdraw money") }}</a></p>
 % endif
 
-% if year == 2018
+% if year >= 2018
     <p class="alert alert-warning">{{ _(
         "This page only shows transactions processed by Mangopay, to view other "
         "payments {link_start}go to the Ledger page{link_end}."
-        , link_start=('<a href="%s">'|safe) % participant.path('ledger/')
+        , link_start=('<a href="%s">'|safe) % participant.path('ledger/?year=%i' % year)
         , link_end='</a>'|safe
     ) }}</p>
 % endif
