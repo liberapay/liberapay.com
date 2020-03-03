@@ -186,7 +186,9 @@ def _handle_ses_notification(msg):
         report_id = complaint['feedbackId']
         recipients = complaint['complainedRecipients']
         complaint_type = complaint.get('complaintFeedbackType')
-        if complaint_type is None:
+        if complaint.get('complaintSubType') == 'OnAccountSuppressionList':
+            pass
+        elif complaint_type is None:
             # This complaint is invalid, ignore it.
             logging.info(
                 "Received an invalid email complaint without a Feedback-Type. ID: %s" %
