@@ -32,38 +32,38 @@ msgstr "لقد حان الوقت لتجديد تبرعاتكم على Liberapay"
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
 msgstr "تبرعك بقيمة {amount} لـ{recipient} بانتظار الدفع."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
-msgstr[0] "لا تبرّعات تنتظر التجديد."
-msgstr[1] "يوجد تبرّع ينتظر التجديد."
-msgstr[2] "يوجد تبرعّان ينتظران التجديد."
-msgstr[3] "توجد بضعة تبرّعات تنتظر التجديد."
+msgstr[0] "لا تبرّعات تنتظر التجديد. "
+msgstr[1] "لديك تبرّع ينتظر التجديد:"
+msgstr[2] "لديك تبرّعان ينتظران التجديد:"
+msgstr[3] "لديك {n} تبرّعات تنتظر التجديد:"
 msgstr[4] "توجد عدّة تبرعات تنتظر التجديد."
 msgstr[5] ""
 
 #, python-brace-format
 msgid "{amount} to {username}"
-msgstr ""
+msgstr "مبلغ {amount} لـ{username}"
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[1] "جدّد هذا التبرّع"
+msgstr[2] "جدّد هذان التبرّعان"
+msgstr[3] "جدّد هذه التبرّعات"
+msgstr[4] "جدّد هذه التبرّعات"
 msgstr[5] ""
 
 msgid "Manage your donations"
 msgstr "إدارة تبرعاتكم"
 
 msgid "Your email address has been blacklisted"
-msgstr "إيميلك الإلكترونى قد وضع فى القائمة السوداء"
+msgstr "لقد تم وضع بريدك الإلكتروني في القائمة السوداء"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "لن نقوم بعد الآن بإرسال إيميلات لبريدك {email_address{، وذلك بسبب فشل الإرسال لك في محاولة قريبة. الرجاء إرسال إيميل من نفس البريد لـ support@liberpay.com إذا أردت إزالته من القائمة السوداء."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -85,7 +85,7 @@ msgid "{0} was given to you personally."
 msgstr ""
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr ""
+msgstr "لست عضوًا في أي فريق، لذلك لم تستلم أي نقود للمساهمة في الفِرَق."
 
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
@@ -114,7 +114,7 @@ msgid "You now have {0} in your wallet."
 msgstr "لديك الآن {0} في محفظتك."
 
 msgid "See your account's transaction logs"
-msgstr ""
+msgstr "تصفّح سجل التعاملات لحسابك"
 
 #, python-brace-format
 msgid "- {0}: {1}"
@@ -126,10 +126,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your Liberapay income is {money_amount} this week"
-msgstr ""
+msgstr "دخل Liberapay الخاص بك هذا الأسبوع هو {money_amount}"
 
 msgid "Here is the breakdown of your income this week:"
-msgstr ""
+msgstr "هذه تفاصيل دخلك في هذا الأسبوع:"
 
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
@@ -142,7 +142,7 @@ msgstr[4] ""
 msgstr[5] ""
 
 msgid "Personal donations: none."
-msgstr ""
+msgstr "تبرّعات شخصية: لا يوجد."
 
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
@@ -155,14 +155,14 @@ msgstr[4] ""
 msgstr[5] ""
 
 msgid "Donations through teams: none (you are not a member of any team)."
-msgstr ""
+msgstr "تبرّعات من الفِرَق: لا يوجد (لست عضوًا في أي فريق)."
 
 msgid "NB: Donations through Liberapay are now paid in advance instead of being transferred weekly. The numbers above match what you would have received this week under the old system."
 msgstr ""
 
 #, python-brace-format
 msgid "You have {money_amount} in your Mangopay wallet."
-msgstr ""
+msgstr "لديك مبلغ {money_amount} في محفة Mangopay الخاصة بك."
 
 msgid "Withdraw money"
 msgstr "سحب الأموال"
@@ -173,14 +173,14 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr ""
+msgstr "طلبك لدفع مبلغ {amount} من {addressee_name} قد تم قبوله."
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
 msgstr ""
 
 msgid "View the invoice"
-msgstr "عرض الفاتورة"
+msgstr "عرض الإيصال"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been accepted and paid - Liberapay"
@@ -188,28 +188,28 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr ""
+msgstr "طلبك لدفع مبلغ {amount} من {addressee_name} قد تم قبوله، وتم تحويل الأموال إلى محفظتك."
 
 msgid "Withdraw the money"
 msgstr "سحب الأموال"
 
 msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr ""
+msgstr "ولكن لا تستطيع سحب الأموال حتى الآن لأنها ما زالت في الحجر."
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
-msgstr ""
+msgstr "إيصالك إلى {0} قد تم رفضه - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
-msgstr ""
+msgstr "طلبك لدفع مبلغ {amount} من {addressee_name} قد تم رفضه."
 
 #, python-brace-format
 msgid "Reason: “{0}”"
 msgstr "السبب : \"{0}\""
 
 msgid "Log in to Liberapay"
-msgstr "تسجيل الدخول إلى ليبيراباي"
+msgstr "تسجيل الدخول إلى Liberapay"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
@@ -219,7 +219,7 @@ msgid "Follow this link to proceed:"
 msgstr "اتبع هذا الرابط للمواصلة:"
 
 msgid "Log in"
-msgstr ""
+msgstr "تسجيل الدخول"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
