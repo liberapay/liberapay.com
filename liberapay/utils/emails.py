@@ -205,6 +205,25 @@ def _handle_ses_notification(msg):
         address = recipient['emailAddress']
         if address[-1] == '>':
             address = address[:-1].rsplit('<', 1)[1]
+        if notif_type == 'Bounce':
+            # Check the reported delivery status
+            # Spec: https://tools.ietf.org/html/rfc3464#section-2.3.3
+            action = recipient.get('action')
+            if action is None:
+                # This isn't a standard bounce. It may be a misdirected automatic reply.
+                continue
+            elif action == 'failed':
+                # This is the kind of DSN we're interested in.
+                pass
+            elif action == 'delivered':
+                # The reporting MTA claims that the message has been successfully delivered.
+                continue
+            elif action in ('delayed', 'relayed', 'expanded'):
+                # Ignore non-final DSNs.
+                continue
+            else:
+                # This is a new or non-standard type of DSN, ignore it.
+                continue
         # Check for recurrent "transient" errors
         if transient:
             ignore_after = utcnow() + timedelta(days=5)
