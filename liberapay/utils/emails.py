@@ -128,7 +128,8 @@ def get_bounce_message(reason, ses_data, details):
     if ses_data:
         bouncedRecipients = ses_data.get('bounce', {}).get('bouncedRecipients')
         if bouncedRecipients:
-            return bouncedRecipients[0].get('diagnosticCode')
+            recipient = bouncedRecipients[0]
+            return recipient.get('diagnosticCode') or recipient.get('status')
     elif details:
         return details
 
