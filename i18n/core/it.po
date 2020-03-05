@@ -50,16 +50,26 @@ msgstr[1] "Rinnova queste donazioni"
 msgid "Manage your donations"
 msgstr "Gestisci le tue donazioni"
 
+msgid "Your email address is temporarily blacklisted"
+msgstr ""
+
 msgid "Your email address has been blacklisted"
 msgstr "Il tuo indirizzo e-mail è stato inserito nella lista nera"
 
 #, python-brace-format
-msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Non invieremo più e-mail al tuo indirizzo {email_address}, poiché recentemente è fallito un tentativo di invio. Per favore, invia una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
+msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
+msgstr ""
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Non invieremo più e-mail al tuo indirizzo {email_address}, poiché abbiamo ricevuto un reclamo dal provider e-mail. Per favore, invia una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
+
+msgid "The error message from the email system was:"
+msgstr ""
 
 msgid "Manage your email addresses"
 msgstr "Gestisci i tuoi indirizzi e-mail"
@@ -919,8 +929,8 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "\"{domain_name}\" non è un profilo e-mail valido."
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "L'indirizzo e-mail {email_address} è nella lista nera poiché {timespan_ago} è fallito un tentativo di inviare un messaggio verso di esso.Per favore, invia una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -1227,6 +1237,13 @@ msgstr "Sei il/la titolare del conto?"
 
 msgid "Log in to reopen your account."
 msgstr "Accedi per riaprire il tuo conto."
+
+#, python-brace-format
+msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
+msgstr ""
+
+msgid "Bypass the blacklist and retry"
+msgstr ""
 
 msgid "Please try again in a few minutes."
 msgstr "Per favore riprova tra qualche minuto."

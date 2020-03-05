@@ -51,16 +51,26 @@ msgstr[1] "Ανανεώσετε αυτές τις δωρεές"
 msgid "Manage your donations"
 msgstr "Διαχειριστείτε τις δωρεές σας"
 
+msgid "Your email address is temporarily blacklisted"
+msgstr ""
+
 msgid "Your email address has been blacklisted"
 msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου σας βρίσκεται στη μαύρη λίστα"
 
 #, python-brace-format
-msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Δεν θα μπορούμε πλέον να στείλουμε μηνύματα ηλεκτρονικού ταχυδρομείου στη διεύθυνση σας {email_address}, επειδή μια πρόσφατη προσπάθεια απέτυχε. Παρακαλούμε να στείλετε ένα e-mail από την διεύθυνση σας στο support@liberapay.com αν θέλετε να σας αφαιρέσουμε από τη μαύρη λίστα."
+msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
+msgstr ""
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Δεν θα μπορούμε πλέον να στείλουμε μηνύματα ηλεκτρονικού ταχυδρομείου στη διεύθυνση σας {email_address}, επειδή λάβαμε παράπονα από τον πάροχο email. Παρακαλούμε να στείλετε ένα e-mail από την διεύθυνση σας στο support@liberapay.com αν θέλετε να σας αφαιρέσουμε από τη μαύρη λίστα."
+
+msgid "The error message from the email system was:"
+msgstr ""
 
 msgid "Manage your email addresses"
 msgstr "Διαχειριστείτε τις διευθύνσεις ηλεκτρονικού ταχυδρομείου σας"
@@ -920,8 +930,8 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "Το '{domain_name}' δεν είναι έγκυρος τομέας email."
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου {email_address} είναι στη μαύρη λίστα, διότι απέτυχε μια προσπάθεια να στείλουμε ένα μήνυμα {timespan_ago}. Παρακαλούμε να στείλετε ένα e-mail από την διεύθυνση σας στο support@liberapay.com αν θέλετε να την αφαιρέσουμε από τη μαύρη λίστα."
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -1228,6 +1238,13 @@ msgstr "Σας ανήκει αυτός ο λογαριασμός;"
 
 msgid "Log in to reopen your account."
 msgstr "Συνδέσου για να ξανανοίξεις τον λογαριασμό σου."
+
+#, python-brace-format
+msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
+msgstr ""
+
+msgid "Bypass the blacklist and retry"
+msgstr ""
 
 msgid "Please try again in a few minutes."
 msgstr "Παρακαλούμε δοκίμασε ξανά σε λίγα λεπτά."

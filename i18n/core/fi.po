@@ -51,16 +51,26 @@ msgstr[1] "Uusi nämä lahjoitukset"
 msgid "Manage your donations"
 msgstr "Hallinnoi lahjoituksiasi"
 
+msgid "Your email address is temporarily blacklisted"
+msgstr ""
+
 msgid "Your email address has been blacklisted"
 msgstr "Sähköpostiosoitteesi on joutunut mustalle listalle"
 
 #, python-brace-format
-msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Emme enää lähetä sähköpostia osoitteeseesi {email_address}, koska hiljattainen yrityksemme lähettää epäonnistui. Jos haluat osoitteen pois sulkulistalta, lähetä kyseistä osoitettasi käyttäen sähköpostia osoitteeseen support@liberapay.com."
+msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
+msgstr ""
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Emme enää lähetä sähköpostia osoitteeseen {email_address}, koska saimme sähköpostipalvelun tarjoajalta valituksen. Jos haluat osoitteen pois sulkulistalta, lähetä kyseistä osoitettasi käyttäen sähköpostia osoitteeseen support@liberapay.com."
+
+msgid "The error message from the email system was:"
+msgstr ""
 
 msgid "Manage your email addresses"
 msgstr "Hallinnoi sähköpostiosoitteitasi"
@@ -920,8 +930,8 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "Sähköpostidomainia ’{domain_name}’ ei hyväksytä."
 
 #, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Sähköpostiosoite {email_address} on sulkulistalla, koska yritys lähettää viesti sinne epäonnistui {timespan_ago}. Jos haluat osoitteen pois sulkulistalta, lähetä kyseistä osoitettasi käyttäen sähköpostia osoitteeseen support@liberapay.com."
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
+msgstr ""
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -1228,6 +1238,13 @@ msgstr "Oletko tilin omistaja?"
 
 msgid "Log in to reopen your account."
 msgstr "Kirjaudu avataksesi tili uudelleen."
+
+#, python-brace-format
+msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
+msgstr ""
+
+msgid "Bypass the blacklist and retry"
+msgstr ""
 
 msgid "Please try again in a few minutes."
 msgstr "Yritä uudelleen muutaman minuutin kuluttua."

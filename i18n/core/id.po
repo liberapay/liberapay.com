@@ -48,16 +48,26 @@ msgstr[0] "Perbarukan donasi ini"
 msgid "Manage your donations"
 msgstr "Atur donasi saya"
 
+msgid "Your email address is temporarily blacklisted"
+msgstr ""
+
 msgid "Your email address has been blacklisted"
 msgstr "Alamat email anda telah masuk daftar hitam"
 
 #, python-brace-format
-msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Kami tidak akan mengirim email ke alamat anda {email_address} lagi, karena upaya kami barusan gagal. Mohon kirim email dari alamat itu ke support@liberapay.com jika anda ingin kami hapus alamat itu dari daftar hitam."
+msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
+msgstr ""
+
+#, python-brace-format
+msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
+msgstr ""
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Kami tidak lagi mengirim email ke alamat email anda {email_address}, karena kami telah menerima keluhan dari penyedia email. Silakan kirim email dari alamat itu ke support@liberapay.com jika Anda ingin kami menghapusnya dari daftar hitam."
+
+msgid "The error message from the email system was:"
+msgstr ""
 
 msgid "Manage your email addresses"
 msgstr "Atur alamat email anda"
@@ -891,9 +901,9 @@ msgstr "'{0}' adalah alamat email yang tidak valid."
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' adalah domain email yang tidak  valid."
 
-#, fuzzy, python-brace-format
-msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Alamat email {email_address} dimasukkan dalam daftar hitam karena upaya untuk mengirim pesan gagal {timespan_ago}. Silakan kirim email dari alamat itu ke support@liberapay.com jika anda ingin kami menghapusnya dari daftar hitam."
+#, python-brace-format
+msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -1197,6 +1207,13 @@ msgstr "Apakah anda pemilik akun?"
 
 msgid "Log in to reopen your account."
 msgstr "Masuk untuk membuka kembali akun anda."
+
+#, python-brace-format
+msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
+msgstr ""
+
+msgid "Bypass the blacklist and retry"
+msgstr ""
 
 msgid "Please try again in a few minutes."
 msgstr "Harap coba lagi dalam beberapa menit."
