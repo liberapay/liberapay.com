@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '117'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '118'::jsonb);
 
 
 -- app configuration
@@ -779,6 +779,7 @@ CREATE TABLE email_blacklist
 , ses_data       jsonb
 , ignore_after   timestamptz
 , report_id      text
+, ignored_by     bigint             REFERENCES participants
 );
 
 CREATE INDEX email_blacklist_idx ON email_blacklist (lower(address));
