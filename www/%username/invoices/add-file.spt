@@ -4,6 +4,8 @@ import hmac
 import json
 from urllib.parse import urlsplit
 
+from pando.exceptions import UnknownBodyType
+
 from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
 from liberapay.exceptions import AuthRequired
 from liberapay.utils import get_participant, urlquote
@@ -38,9 +40,12 @@ if invoice.status != 'pre':
     raise response.error(409, "This invoice has already been submitted.")
 
 try:
-    body = json.loads(request.body_bytes)
-except Exception as e:
-    raise response.error(400, str(e))
+    body = request.body
+except UnknownBodyType:
+    try:
+        body = json.loads(request.body_bytes)
+    except Exception as e:
+        raise response.error(400, str(e))
 step = request.qs['step']
 
 result = {}

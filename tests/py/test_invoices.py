@@ -38,8 +38,7 @@ class TestInvoices(Harness):
 
         r = self.client.POST(
             '/org/invoices/add-file?step=success',
-            body=json.dumps({"name": "Invoice_121150818.pdf"}).encode('ascii'),
-            content_type=b'application/json',
+            {"name": "Invoice_121150818.pdf"},
             HTTP_X_INVOICE_ID=str(invoice_id),
             auth_as=alice,
         )
