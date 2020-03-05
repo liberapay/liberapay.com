@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: French (https://hosted.weblate.org/projects/liberapay/core/fr/)\n"
-"Plural-Forms: nplurals=2; plural=n > 1\n"
+"PO-Revision-Date: 2020-03-06 06:32+0000\n"
+"Last-Translator: Olivier Humbert <trebmuh@tuxfamily.org>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/liberapay/core/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.0-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -51,25 +54,25 @@ msgid "Manage your donations"
 msgstr "Gérer vos dons"
 
 msgid "Your email address is temporarily blacklisted"
-msgstr ""
+msgstr "Votre adresse électronique est temporairement mise sur liste noire"
 
 msgid "Your email address has been blacklisted"
 msgstr "Votre adresse de courriel a été mise en liste noire"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
-msgstr ""
+msgstr "Nous suspendons l'envoi de notifications à votre adresse {email_address} jusqu'au {date}, car une récente tentative de vous envoyer un courriel a échoué."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
-msgstr ""
+msgstr "Nous n'enverrons plus de courriels à votre adresse {email_address}, car une récente tentative en ce sens a échoué."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Nous n'enverrons plus de courriels à votre adresse {email_address}, car nous avons reçu une plainte du fournisseur de courriel. Veuillez envoyer un courriel à partir de cette adresse à support@liberapay.com si vous voulez que nous la retirions de la liste noire."
 
 msgid "The error message from the email system was:"
-msgstr ""
+msgstr "Le message d'erreur du système de courriel était :"
 
 msgid "Manage your email addresses"
 msgstr "Gérer vos adresses de courriel"
@@ -930,7 +933,7 @@ msgstr "'{domain_name}' n'est pas un domaine de courriel valide."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr ""
+msgstr "L'adresse électronique {email_address} est sur liste noire car une tentative de lui envoyer un message a échoué {timespan_ago}."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -1240,10 +1243,10 @@ msgstr "Connectez-vous pour réouvrir votre compte."
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
-msgstr ""
+msgstr "Si vous pensez que les courriels envoyés par nos soins à {email_address} ne rebondiront plus, vous pouvez alors supprimer cette adresse de la liste noire et réessayer :"
 
 msgid "Bypass the blacklist and retry"
-msgstr ""
+msgstr "Court-circuiter la liste noire et réessayer"
 
 msgid "Please try again in a few minutes."
 msgstr "Veuillez réessayer dans quelques minutes."
@@ -4248,10 +4251,10 @@ msgid "Here is a list of differences between them:"
 msgstr "Voici une liste des différences entre eux :"
 
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
-msgstr "Les frais de traitement des paiements sont généralement plus bas avec Stripe qu'avec PayPal."
+msgstr "Les frais de traitement des paiements sont généralement plus faibles avec Stripe qu'avec PayPal."
 
 msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr "Stripe permet de faire un don à plusieurs créateurs à la fois, pas PayPal."
+msgstr "Stripe permet de faire un don à plusieurs créateurs à la fois, PayPal non."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "Les paiements PayPal nécessitent de rediriger le donateur vers le site de PayPal, alors que Stripe est intégré à Liberapay."
