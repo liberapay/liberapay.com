@@ -3,6 +3,7 @@ from pando.utils import utcnow
 
 from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
+from liberapay.utils.emails import remove_email_address_from_blacklist
 
 PAGE_SIZE = 20
 
@@ -20,11 +21,7 @@ if request.method == 'POST':
     if action == 'lookup':
         pass
     elif action == 'remove_from_blacklist':
-        website.db.run("""
-            UPDATE email_blacklist
-               SET ignore_after = current_timestamp
-             WHERE lower(address) = lower(%s)
-        """, (email,))
+        remove_email_address_from_blacklist(email, user, request)
     elif action == 'readd_to_blacklist':
         website.db.run("""
             UPDATE email_blacklist

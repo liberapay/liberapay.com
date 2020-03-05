@@ -82,8 +82,12 @@ if request.method == 'POST':
         website.db.run("""
             UPDATE email_blacklist
                SET ignore_after = current_timestamp
+                 , ignored_by = %s
              WHERE lower(address) = lower(%s)
-        """, (email_row.address,))
+               AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+               AND reason = 'complaint'
+               AND details = 'disavowed'
+        """, (user.id, email_row.address))
     else:
         raise response.invalid_input(action, 'action', 'body')
 

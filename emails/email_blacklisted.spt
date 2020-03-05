@@ -1,10 +1,14 @@
-{{ _("Your email address has been blacklisted") }}
+{{ _("Your email address is temporarily blacklisted") if ignore_after else
+   _("Your email address has been blacklisted") }}
 
 [---] text/html
 <p>{{ _(
+    "We are suspending sending notifications to your address {email_address} "
+    "until {date}, because a recent attempt to email you has failed.",
+    email_address=blacklisted_address, date=ignore_after
+) if ignore_after else _(
     "We will no longer send emails to your address {email_address}, because a "
-    "recent attempt to do so has failed. Please send an email from that address "
-    "to support@liberapay.com if you want us to remove it from the blacklist.",
+    "recent attempt to do so has failed.",
     email_address=blacklisted_address
 ) if reason == 'bounce' else _(
     "We will no longer send emails to your address {email_address}, because "
@@ -13,6 +17,12 @@
     "from the blacklist.",
     email_address=blacklisted_address
 ) }}</p>
+
+% if bounce_message
+<p>{{ _("The error message from the email system was:") }}</p>
+<pre>{{ bounce_message }}</pre>
+<br>
+% endif
 
 <p><a href="{{ participant.url('emails/') }}" style="{{ button_style('default') }}">{{
     _("Manage your email addresses") }}</a></p>

@@ -10,12 +10,15 @@ import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, Resolver
 from jinja2 import Environment
+from pando import Response
 from pando.utils import utcnow
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
     BadEmailAddress, BadEmailDomain, DuplicateNotification, EmailAddressIsBlacklisted,
+    TooManyAttempts,
 )
+from liberapay.utils import deserialize
 from liberapay.website import website, JINJA_ENV_COMMON
 
 
@@ -108,15 +111,44 @@ def check_email_blacklist(address):
     """Raises `EmailAddressIsBlacklisted` if the given email address is blacklisted.
     """
     r = website.db.one("""
-        SELECT reason, ts
+        SELECT reason, ts, details, ses_data
           FROM email_blacklist
          WHERE lower(address) = lower(%s)
            AND (ignore_after IS NULL OR ignore_after > current_timestamp)
-      ORDER BY ts DESC
+      ORDER BY reason = 'complaint' DESC, ts DESC
          LIMIT 1
     """, (address,))
     if r:
-        raise EmailAddressIsBlacklisted(address, r.reason, r.ts)
+        raise EmailAddressIsBlacklisted(address, r.reason, r.ts, r.details, r.ses_data)
+
+
+def get_bounce_message(reason, ses_data, details):
+    if reason != 'bounce':
+        return
+    if ses_data:
+        bouncedRecipients = ses_data.get('bounce', {}).get('bouncedRecipients')
+        if bouncedRecipients:
+            recipient = bouncedRecipients[0]
+            return recipient.get('diagnosticCode') or recipient.get('status')
+    elif details:
+        return details
+
+
+class EmailError:
+    """Represents an email bounce or complaint.
+    """
+
+    __slots__ = ('email_address', 'reason', 'ts', 'details', 'ses_data')
+
+    def __init__(self, email_address, reason, ts, details, ses_data):
+        self.email_address = email_address
+        self.reason = reason
+        self.ts = ts
+        self.details = details
+        self.ses_data = ses_data
+
+    def get_bounce_message(self):
+        return get_bounce_message(self.reason, self.ses_data, self.details)
 
 
 def handle_email_bounces():
@@ -155,7 +187,9 @@ def _handle_ses_notification(msg):
         report_id = complaint['feedbackId']
         recipients = complaint['complainedRecipients']
         complaint_type = complaint.get('complaintFeedbackType')
-        if complaint_type is None:
+        if complaint.get('complaintSubType') == 'OnAccountSuppressionList':
+            pass
+        elif complaint_type is None:
             # This complaint is invalid, ignore it.
             logging.info(
                 "Received an invalid email complaint without a Feedback-Type. ID: %s" %
@@ -172,6 +206,25 @@ def _handle_ses_notification(msg):
         address = recipient['emailAddress']
         if address[-1] == '>':
             address = address[:-1].rsplit('<', 1)[1]
+        if notif_type == 'Bounce':
+            # Check the reported delivery status
+            # Spec: https://tools.ietf.org/html/rfc3464#section-2.3.3
+            action = recipient.get('action')
+            if action is None:
+                # This isn't a standard bounce. It may be a misdirected automatic reply.
+                continue
+            elif action == 'failed':
+                # This is the kind of DSN we're interested in.
+                pass
+            elif action == 'delivered':
+                # The reporting MTA claims that the message has been successfully delivered.
+                continue
+            elif action in ('delayed', 'relayed', 'expanded'):
+                # Ignore non-final DSNs.
+                continue
+            else:
+                # This is a new or non-standard type of DSN, ignore it.
+                continue
         # Check for recurrent "transient" errors
         if transient:
             ignore_after = utcnow() + timedelta(days=5)
@@ -198,6 +251,7 @@ def _handle_ses_notification(msg):
             # Already done
             continue
         # Attempt to notify the user(s)
+        bounce_message = get_bounce_message(r.reason, r.ses_data, r.details)
         participants = website.db.all("""
             SELECT p
               FROM emails e
@@ -207,8 +261,11 @@ def _handle_ses_notification(msg):
         """, (address,))
         for p in participants:
             try:
-                p.notify('email_blacklisted', email=False, web=True, type='warning',
-                         blacklisted_address=address, reason=r.reason)
+                p.notify(
+                    'email_blacklisted', email=False, web=True, type='warning',
+                    blacklisted_address=address, reason=r.reason,
+                    ignore_after=r.ignore_after, bounce_message=bounce_message,
+                )
             except DuplicateNotification:
                 continue
     msg.delete()
@@ -223,3 +280,45 @@ def clean_up_emails():
            SET nonce = NULL
          WHERE added_time < (current_timestamp - interval '1 year');
     """)
+
+
+def remove_email_address_from_blacklist(address, user, request):
+    """
+    This function allows anyone to remove an email address from the blacklist,
+    but with rate limits for non-admins in order to prevent abuse.
+    """
+    with website.db.get_cursor() as cursor:
+        if not user.is_admin:
+            source = user.id or request.source
+            website.db.hit_rate_limit('email.unblacklist.source', source, TooManyAttempts)
+        r = cursor.all("""
+            UPDATE email_blacklist
+               SET ignore_after = current_timestamp
+                 , ignored_by = %(user_id)s
+             WHERE lower(address) = lower(%(address)s)
+               AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+         RETURNING *
+        """, dict(address=address, user_id=user.id))
+        if not r:
+            return
+        if not user.is_admin:
+            if any(bl.reason == 'complaint' for bl in r):
+                raise Response(403, (
+                    "Only admins are allowed to unblock an address which is "
+                    "blacklisted because of a complaint."
+                ))
+            website.db.hit_rate_limit('email.unblacklist.target', address, TooManyAttempts)
+    # Mark the matching `email_blacklisted` notifications as read
+    participant = website.db.Participant.from_email(address)
+    if participant:
+        notifications = website.db.all("""
+            SELECT id, context
+              FROM notifications
+             WHERE participant = %s
+               AND event = 'email_blacklisted'
+               AND is_new
+        """, (participant.id,))
+        for notif in notifications:
+            context = deserialize(notif.context)
+            if context['blacklisted_address'].lower() == address.lower():
+                participant.mark_notification_as_read(notif.id)

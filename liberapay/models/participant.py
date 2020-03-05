@@ -1057,7 +1057,7 @@ class Participant(Model, MixinTeam):
             """, (email, str(uuid.uuid4()), self.id))
             if email_row.disavowed:
                 raise EmailAddressIsBlacklisted(
-                    email, 'complaint', email_row.disavowed_time
+                    email, 'complaint', email_row.disavowed_time, 'disavowed'
                 )
             if email_row.verified:
                 return 0
@@ -1157,7 +1157,30 @@ class Participant(Model, MixinTeam):
                 """, (r.address, self.id, email_id))
             except IntegrityError:
                 return EmailVerificationResult.STYMIED
-        if not self.email:
+        # At this point we assume that the user is in fact the owner of the email
+        # address and has received the verification email, so we can remove the
+        # address from our blacklist if it was mistakenly blocked.
+        self.db.run("""
+            UPDATE email_blacklist
+               SET ignore_after = current_timestamp
+             WHERE lower(address) = lower(%(address)s)
+               AND (ignore_after IS NULL OR ignore_after > current_timestamp)
+               AND (reason = 'bounce' AND ts > %(added_time)s
+                                      AND ts < (%(added_time)s + interval '24 hours') OR
+                    reason = 'complaint' AND details = 'disavowed')
+        """, r._asdict())
+        # Finally, we set this newly verified address as the primary one if it's
+        # the one the account was created with recently, or if the account
+        # doesn't have a primary email address yet.
+        initial_address = self.db.one("""
+            SELECT address
+              FROM emails
+             WHERE participant = %s
+               AND added_time > (current_timestamp - interval '7 days')
+          ORDER BY added_time
+             LIMIT 1
+        """, (self.id,))
+        if r.address == initial_address or not self.email:
             self.update_email(r.address)
         return EmailVerificationResult.SUCCEEDED
 
@@ -1222,7 +1245,7 @@ class Participant(Model, MixinTeam):
         email = email_row.address
         check_email_blacklist(email)
         if email_row.disavowed:
-            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time)
+            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time, 'disavowed')
         self.fill_notification_context(context)
         context['email'] = email
         langs = i18n.parse_accept_lang(self.email_lang or 'en')
