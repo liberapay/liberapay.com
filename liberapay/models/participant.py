@@ -111,7 +111,7 @@ class Participant(Model, MixinTeam):
         return self.id != other.id
 
     def __repr__(self):
-        return '<Participant #%s "%s">' % (repr(self.id), repr(self.username))
+        return '<Participant #%r %r>' % (self.id, self.username)
 
 
     # Constructors
