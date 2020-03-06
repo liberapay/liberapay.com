@@ -229,6 +229,48 @@
         </label>
         </li>
     </ul>
+    <p>{{ _("Please select a privacy level for this donation:") }}</p>
+    <ul class="list-group radio-group">
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="secrecy_level" value="2" required
+                   {{ 'checked' if tip.secrecy_level in (2, None) else '' }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Secret donation") }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "Only you will know that you donate to {username}.",
+                    username=tippee_name
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="secrecy_level" value="1" required
+                   {{ 'checked' if tip.secrecy_level == 1 else '' }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Private donation") }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "You will appear in {username}'s private list of patrons.",
+                    username=tippee_name
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="secrecy_level" value="0" required
+                   {{ 'checked' if tip.secrecy_level == 0 else '' }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Public donation") }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "Everybody will be able to see that you support {username}.",
+                    username=tippee_name
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+    </ul>
     <br>
     <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
         (_("Modify your pledge") if pledging else _("Modify your donation"))

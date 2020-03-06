@@ -982,9 +982,9 @@ class Participant(Model, MixinTeam):
         tippees = cursor.all("""
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode )
+                      , paid_in_advance, is_funded, renewal_mode, secrecy_level )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, 0
+                      , paid_in_advance, is_funded, 0, secrecy_level
                    FROM current_tips
                   WHERE tipper = %s
                     AND renewal_mode > 0
@@ -2551,7 +2551,7 @@ class Participant(Model, MixinTeam):
 
 
     def set_tip_to(self, tippee, periodic_amount, period='weekly', renewal_mode=None,
-                   update_self=True, update_tippee=True):
+                   secrecy_level=None, update_self=True, update_tippee=True):
         """Given a Participant or username, and amount as str, returns a dict.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
@@ -2599,7 +2599,8 @@ class Participant(Model, MixinTeam):
             INSERT INTO tips
                         ( ctime, tipper, tippee, amount, period, periodic_amount
                         , paid_in_advance
-                        , renewal_mode )
+                        , renewal_mode
+                        , secrecy_level )
                  VALUES ( COALESCE((SELECT ctime FROM current_tip), CURRENT_TIMESTAMP)
                         , %(tipper)s, %(tippee)s, %(amount)s, %(period)s, %(periodic_amount)s
                         , (SELECT convert(paid_in_advance, %(currency)s) FROM current_tip)
@@ -2607,12 +2608,18 @@ class Participant(Model, MixinTeam):
                               %(renewal_mode)s,
                               (SELECT renewal_mode FROM current_tip WHERE renewal_mode > 0),
                               1
+                          )
+                        , coalesce(
+                              %(secrecy_level)s,
+                              (SELECT secrecy_level FROM current_tip),
+                              2
                           ) )
               RETURNING tips
 
         """, dict(
             tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
             period=period, periodic_amount=periodic_amount, renewal_mode=renewal_mode,
+            secrecy_level=secrecy_level,
         ))
         t.tipper_p = self
         t.tippee_p = tippee
@@ -2641,6 +2648,7 @@ class Participant(Model, MixinTeam):
         return Tip(
             amount=zero, is_funded=False, tippee=tippee.id, tippee_p=tippee,
             period='weekly', periodic_amount=zero, renewal_mode=0,
+            secrecy_level=-1,
         )
 
 
@@ -2648,9 +2656,9 @@ class Participant(Model, MixinTeam):
         t = self.db.one("""
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode )
+                      , paid_in_advance, is_funded, renewal_mode, secrecy_level )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, 0
+                      , paid_in_advance, is_funded, 0, secrecy_level
                    FROM current_tips
                   WHERE tipper = %(tipper)s
                     AND tippee = %(tippee)s
@@ -3603,11 +3611,13 @@ class Participant(Model, MixinTeam):
             -- maximum allowed.
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period
-                      , periodic_amount, is_funded, renewal_mode, hidden
+                      , periodic_amount, is_funded, renewal_mode, secrecy_level
+                      , hidden
                       , paid_in_advance )
                  SELECT DISTINCT ON (tipper)
                         ctime, tipper, %(live)s AS tippee, amount, period
-                      , periodic_amount, is_funded, renewal_mode, hidden
+                      , periodic_amount, is_funded, renewal_mode, secrecy_level
+                      , hidden
                       , ( SELECT sum(t2.paid_in_advance, t.amount::currency)
                             FROM temp_tips t2
                            WHERE t2.tipper = t.tipper
@@ -3624,9 +3634,9 @@ class Participant(Model, MixinTeam):
         ZERO_OUT_OLD_TIPS_RECEIVING = """
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode, hidden )
+                      , secrecy_level, paid_in_advance, is_funded, renewal_mode, hidden )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
-                      , NULL, false, 0, true
+                      , secrecy_level, NULL, false, 0, true
                    FROM temp_tips
                   WHERE tippee = %(dead)s
                     AND ( coalesce_currency_amount(paid_in_advance, amount::currency) > 0 OR

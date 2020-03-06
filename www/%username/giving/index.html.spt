@@ -31,9 +31,9 @@ if request.method == 'POST':
             website.db.run("""
                 INSERT INTO tips
                           ( ctime, tipper, tippee, amount, period, periodic_amount
-                          , paid_in_advance, renewal_mode )
+                          , paid_in_advance, renewal_mode, secrecy_level )
                      SELECT ctime, tipper, tippee, amount, period, periodic_amount
-                          , paid_in_advance, 2
+                          , paid_in_advance, 2, secrecy_level
                        FROM current_tips
                       WHERE tipper = %s
                         AND renewal_mode = 1
