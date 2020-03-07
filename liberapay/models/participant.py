@@ -3269,6 +3269,7 @@ class Participant(Model, MixinTeam):
                      , t.is_funded
                      , t.paid_in_advance
                      , t.renewal_mode
+                     , t.secrecy_level
                      , p.payment_providers
                      , ( t.paid_in_advance IS NULL OR
                          t.paid_in_advance < (t.amount * 3)
@@ -3291,6 +3292,7 @@ class Participant(Model, MixinTeam):
                      , t.ctime
                      , t.mtime
                      , t.renewal_mode
+                     , t.secrecy_level
                      , (e, p)::elsewhere_with_participant AS e_account
                   FROM current_tips t
                   JOIN participants p ON p.id = t.tippee
