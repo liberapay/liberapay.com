@@ -10,6 +10,7 @@ from liberapay.utils import form_post_success, get_participant, group_by
 
 
 RENEWAL_MODE_START_DATE = date(2020, 2, 7)
+SECRECY_LEVEL_START_DATE = date(2021, 9, 28)
 THIRTY_DAYS = timedelta(days=30)
 
 [-----------------------------------------------------------------------------]
@@ -21,6 +22,7 @@ freeload = participant.get_last_event_of_type('freeload')
 if freeload and freeload.ts < recently:
     freeload = None
 auto_renewal_hint = participant.get_last_event_of_type('auto_renewal_hint')
+secrecy_level_hint = participant.get_last_event_of_type('secrecy_level_hint')
 if request.method == 'POST':
     if request.body.get('freeload') == 'yes':
         if not freeload:
@@ -47,6 +49,21 @@ if request.method == 'POST':
     elif 'hide' in request.body:
         tippee_id = request.body.get_int('hide')
         participant.hide_tip_to(tippee_id)
+    elif 'secrecy_level' in request.body:
+        secrecy_level = request.body.get_int('secrecy_level', minimum=-1, maximum=2)
+        if secrecy_level > 0:
+            website.db.run("""
+                INSERT INTO tips
+                          ( ctime, tipper, tippee, amount, period, periodic_amount
+                          , paid_in_advance, renewal_mode, secrecy_level )
+                     SELECT ctime, tipper, tippee, amount, period, periodic_amount
+                          , paid_in_advance, renewal_mode, %(new_secrecy_level)s
+                       FROM current_tips
+                      WHERE tipper = %(p_id)s
+                        AND secrecy_level <> %(new_secrecy_level)s
+                        AND renewal_mode > 0
+            """, dict(p_id=participant.id, new_secrecy_level=secrecy_level))
+        participant.add_event(website.db, 'secrecy_level', secrecy_level)
     else:
         raise response.error(400)
     form_post_success(state)
@@ -88,6 +105,11 @@ show_missing_route_warning = (
 show_automatic_renewal_hint = (
     auto_renewal_hint is None and
     any(tip.renewal_mode == 1 and tip.mtime.date() <= RENEWAL_MODE_START_DATE
+        for tip in chain(tips, pledges))
+)
+show_secrecy_level_hint = (
+    secrecy_level_hint is None and
+    any(tip.secrecy_level == 2 and tip.mtime.date() <= SECRECY_LEVEL_START_DATE
         for tip in chain(tips, pledges))
 )
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
@@ -173,6 +195,31 @@ next_payday = compute_next_payday_date()
             ) }}</button>
             <button class="btn btn-default" name="auto_renewal" value="no">{{ _(
                 "No"
+            ) }}</button>
+        </form>
+    </div>
+    % if show_secrecy_level_hint
+    <br>
+    % endif
+% endif
+
+% if show_secrecy_level_hint
+    <div class="text-info">
+        {{ glyphicon('info-sign') }} {{ _(
+            "Liberapay now supports non-anonymous donations, do you want to "
+            "modify the secrecy level of all your donations at once?"
+        ) }}
+        &nbsp;
+        <form action="" class="inline-block buttons" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <button class="btn btn-primary" name="secrecy_level" value="0">{{ _(
+                "Reveal my donations to everyone"
+            ) }}</button>
+            <button class="btn btn-primary" name="secrecy_level" value="1">{{ _(
+                "Reveal my donations to the beneficiaries only"
+            ) }}</button>
+            <button class="btn btn-default" name="secrecy_level" value="-1">{{ _(
+                "Keep my donations as they are"
             ) }}</button>
         </form>
     </div>
