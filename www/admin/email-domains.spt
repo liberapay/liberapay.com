@@ -246,9 +246,11 @@ title = "Email Domains"
     % endif
 
     <h3>Look up a domain</h3>
-    <form action="" class="form-inline" method="GET">
-        <input class="form-control" type="text" name="domain" placeholder="example.net" />
-        <button class="btn btn-primary">Look up</button>
+    <form action="" method="GET">
+        <div class="input-group">
+            <input class="form-control" type="text" name="domain" placeholder="example.net" />
+            <div class="input-group-btn"><button class="btn btn-primary">Look up</button></div>
+        </div>
     </form>
 
 % endif
