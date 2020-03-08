@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from liberapay.exceptions import (
     BadEmailAddress, BadEmailDomain, CannotRemovePrimaryEmail,
-    EmailAddressIsBlacklisted, EmailAlreadyTaken, EmailNotVerified,
+    EmailAddressIsBlacklisted, EmailAlreadyTaken, EmailDomainIsBlacklisted, EmailNotVerified,
     TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
@@ -388,3 +388,19 @@ class TestEmail(EmailHarness):
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
         assert self.db.one("SELECT email_sent FROM notifications") is False
+
+    def test_blacklisting_email_domain(self):
+        admin = self.make_participant('admin', privileges=1)
+        check_email_blacklist('example@example.com')
+        r = self.client.GET('/admin/email-domains?domain=example.com', auth_as=admin)
+        assert r.code == 200, r.text
+        r = self.client.PxST(
+            '/admin/email-domains?domain=example.com',
+            {'action': 'add_to_blacklist', 'reason': 'bounce'},
+            auth_as=admin,
+        )
+        assert r.code == 302, r.text
+        r = self.client.GET('/admin/email-domains?domain=example.com', auth_as=admin)
+        assert r.code == 200, r.text
+        with self.assertRaises(EmailDomainIsBlacklisted):
+            check_email_blacklist('example@example.com')
