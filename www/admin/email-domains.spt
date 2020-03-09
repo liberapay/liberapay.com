@@ -35,7 +35,7 @@ if domain:
                 UPDATE email_blacklist
                    SET ignore_after = current_timestamp
                      , ignored_by = %s
-                 WHERE address = '@' || %s
+                 WHERE lower(address) = '@' || %s
             """, (user.id, domain))
         elif action == 'add_to_blacklist':
             reason = request.body['reason']
@@ -61,7 +61,7 @@ if domain:
           FROM email_blacklist bl
      LEFT JOIN participants added_by_p ON added_by_p.id = bl.added_by
      LEFT JOIN participants ignored_by_p ON ignored_by_p.id = bl.ignored_by
-         WHERE bl.address = '@' || %s
+         WHERE lower(bl.address) = '@' || %s
       ORDER BY bl.ts DESC
          LIMIT 10
     """, (domain,))
@@ -71,60 +71,76 @@ else:
     show = request.qs.get_choice('show', {'all', 'blacklisted'}, default='all')
     offset = request.qs.get_int('offset', minimum=0, default=0)
     email_domains = website.db.all("""
+        WITH domain_stats AS (
+                SELECT e.domain
+                     , count(DISTINCT lower(e.address)) AS n_addresses
+                     , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
+                  FROM ( SELECT e.*, regexp_replace(lower(e.address), '.+@', '') AS domain
+                           FROM emails e
+                       ) e
+              GROUP BY e.domain
+            )
         SELECT *
-             , ( SELECT count(DISTINCT bl.address)
+             , ( SELECT count(DISTINCT lower(bl.address))
                    FROM email_blacklist bl
-                  WHERE bl.address LIKE ('%%_@' || d.domain)
+                  WHERE lower(bl.address) LIKE ('%%_@' || d.domain)
                     AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
                ) AS n_blacklisted_addresses
              , ( SELECT count(bl) > 0
                    FROM email_blacklist bl
-                  WHERE bl.address = '@' || d.domain
+                  WHERE lower(bl.address) = '@' || d.domain
                     AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
                ) AS is_blacklisted
           FROM (
             SELECT d.domain
-                 , count(DISTINCT lower(e.address)) AS n_addresses
-                 , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
-              FROM ( SELECT regexp_replace(lower(e.address), '.+@', '') AS domain
-                       FROM emails e
-                     UNION
+                 , coalesce(s.n_addresses, 0) AS n_addresses
+                 , coalesce(s.n_verified, 0) AS n_verified
+              FROM ( SELECT e.domain FROM domain_stats e
+                      UNION
                      SELECT substr(bl.address, 2) AS domain
                        FROM email_blacklist bl
-                      WHERE bl.address LIKE '@%%'
+                      WHERE lower(bl.address) LIKE '@%%'
+                        AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
                    ) d
-         LEFT JOIN emails e ON e.address LIKE ('%%_@' || d.domain)
-          GROUP BY d.domain
+         LEFT JOIN domain_stats s ON s.domain = d.domain
           ORDER BY n_addresses DESC, domain
              LIMIT %s
             OFFSET %s
                ) d
     """, (PAGE_SIZE, offset)) if show == 'all' else website.db.all("""
+        WITH domain_stats AS (
+                SELECT e.domain
+                     , count(DISTINCT lower(e.address)) AS n_addresses
+                     , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
+                  FROM ( SELECT e.*, regexp_replace(lower(e.address), '.+@', '') AS domain
+                           FROM emails e
+                       ) e
+              GROUP BY e.domain
+            )
         SELECT *
-             , ( SELECT count(DISTINCT bl.address)
+             , ( SELECT count(DISTINCT lower(bl.address))
                    FROM email_blacklist bl
-                  WHERE bl.address LIKE ('%%_@' || d.domain)
+                  WHERE lower(bl.address) LIKE ('%%_@' || d.domain)
                     AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
                ) AS n_blacklisted_addresses
              , ( SELECT count(bl) > 0
                    FROM email_blacklist bl
-                  WHERE bl.address = '@' || d.domain
+                  WHERE lower(bl.address) = '@' || d.domain
                     AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
                ) AS is_blacklisted
           FROM (
             SELECT d.domain
-                 , count(DISTINCT lower(e.address)) AS n_addresses
-                 , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
+                 , coalesce(s.n_addresses, 0) AS n_addresses
+                 , coalesce(s.n_verified, 0) AS n_verified
               FROM ( SELECT substr(bl.address, 2) AS domain
                        FROM email_blacklist bl
-                      WHERE bl.address LIKE '@%%'
+                      WHERE lower(bl.address) LIKE '@%%'
                         AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
                    ) d
-         LEFT JOIN emails e ON e.address LIKE ('%%_@' || d.domain)
-          GROUP BY d.domain
+         LEFT JOIN domain_stats s ON s.domain = d.domain
           ORDER BY n_addresses DESC, domain
              LIMIT %s
-             OFFSET %s
+            OFFSET %s
                ) d
     """, (PAGE_SIZE, offset))
 
