@@ -2527,3 +2527,8 @@ UPDATE email_blacklist AS bl
    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
    AND (bl.reason = 'bounce' AND bl.ts < (e.added_time + interval '24 hours') OR
         bl.reason = 'complaint' AND bl.details = 'disavowed');
+
+-- migration #119
+ALTER TYPE blacklist_reason ADD VALUE IF NOT EXISTS 'throwaway';
+ALTER TYPE blacklist_reason ADD VALUE IF NOT EXISTS 'other';
+ALTER TABLE email_blacklist ADD COLUMN added_by bigint REFERENCES participants;

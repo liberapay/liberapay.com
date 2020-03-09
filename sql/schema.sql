@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '118'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '119'::jsonb);
 
 
 -- app configuration
@@ -769,7 +769,7 @@ CREATE TRIGGER update_payment_accounts
 
 -- email addresses blacklist
 
-CREATE TYPE blacklist_reason AS ENUM ('bounce', 'complaint');
+CREATE TYPE blacklist_reason AS ENUM ('bounce', 'complaint', 'throwaway', 'other');
 
 CREATE TABLE email_blacklist
 ( address        text               NOT NULL
@@ -780,6 +780,7 @@ CREATE TABLE email_blacklist
 , ignore_after   timestamptz
 , report_id      text
 , ignored_by     bigint             REFERENCES participants
+, added_by       bigint             REFERENCES participants
 );
 
 CREATE INDEX email_blacklist_idx ON email_blacklist (lower(address));
