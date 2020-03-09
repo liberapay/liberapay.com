@@ -61,6 +61,7 @@ def compile_email_spt(fpath):
 
 
 DNS = Resolver()
+DNS.lifetime = 5.0  # limit queries to 5 seconds
 DNS.cache = Cache()
 
 
