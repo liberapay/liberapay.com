@@ -55,6 +55,7 @@ else:
         SELECT address, ts, reason
           FROM email_blacklist bl
          WHERE coalesce(bl.ts < %s, true)
+           AND bl.address LIKE '%%_@%%'
       ORDER BY bl.ts DESC
          LIMIT %s
     """, (request.qs.get('before'), PAGE_SIZE))

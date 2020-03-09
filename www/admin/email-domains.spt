@@ -1,0 +1,258 @@
+# coding: utf8
+
+from collections import OrderedDict
+
+from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import LOCALE_EN as locale
+from liberapay.utils import partition
+
+PAGE_SIZE = 50
+
+REASONS = OrderedDict([
+    ("bounce", "This domain bounces back all messages."),
+    ("complaint", "The domain's admin asked us to blacklist it."),
+    ("throwaway", "This domain provides throwaway addresses."),
+    ("other", "Other"),
+])
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403)
+
+domain = request.qs.get('domain', '').lower()
+
+if domain:
+    if request.method == 'POST':
+        if not domain:
+            raise response.invalid_input(domain, 'domain', 'querystring')
+        action = request.body['action']
+        if action == 'remove_from_blacklist':
+            website.db.run("""
+                UPDATE email_blacklist
+                   SET ignore_after = current_timestamp
+                     , ignored_by = %s
+                 WHERE address = '@' || %s
+            """, (user.id, domain))
+        elif action == 'add_to_blacklist':
+            reason = request.body['reason']
+            if reason not in REASONS:
+                raise response.invalid_input(reason, 'reason', 'body')
+            details = request.body.get('details')
+            if details and len(details) > 1024:
+                raise response.invalid_input(details, 'details', 'body')
+            if reason == 'other' and len(details) < 10:
+                raise response.error(400, "Please specify the reason.")
+            website.db.run("""
+                INSERT INTO email_blacklist
+                            (address, reason, details, added_by)
+                     VALUES ('@' || %s, %s, %s, %s)
+            """, (domain, reason, details, user.id))
+        else:
+            raise response.invalid_input(action, 'action', 'body')
+        raise response.redirect(request.line.uri.decoded)
+
+    blacklist_entries = website.db.all("""
+        SELECT bl.ts, bl.reason, bl.details, bl.ignore_after
+             , added_by_p AS added_by, ignored_by_p AS ignored_by
+          FROM email_blacklist bl
+     LEFT JOIN participants added_by_p ON added_by_p.id = bl.added_by
+     LEFT JOIN participants ignored_by_p ON ignored_by_p.id = bl.ignored_by
+         WHERE bl.address = '@' || %s
+      ORDER BY bl.ts DESC
+         LIMIT 10
+    """, (domain,))
+    blacklisted = any(e.ignore_after is None for e in blacklist_entries)
+
+else:
+    show = request.qs.get_choice('show', {'all', 'blacklisted'}, default='all')
+    offset = request.qs.get_int('offset', minimum=0, default=0)
+    email_domains = website.db.all("""
+        SELECT *
+             , ( SELECT count(DISTINCT bl.address)
+                   FROM email_blacklist bl
+                  WHERE bl.address LIKE ('%%_@' || d.domain)
+                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+               ) AS n_blacklisted_addresses
+             , ( SELECT count(bl) > 0
+                   FROM email_blacklist bl
+                  WHERE bl.address = '@' || d.domain
+                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+               ) AS is_blacklisted
+          FROM (
+            SELECT d.domain
+                 , count(DISTINCT lower(e.address)) AS n_addresses
+                 , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
+              FROM ( SELECT regexp_replace(lower(e.address), '.+@', '') AS domain
+                       FROM emails e
+                     UNION
+                     SELECT substr(bl.address, 2) AS domain
+                       FROM email_blacklist bl
+                      WHERE bl.address LIKE '@%%'
+                   ) d
+         LEFT JOIN emails e ON e.address LIKE ('%%_@' || d.domain)
+          GROUP BY d.domain
+          ORDER BY n_addresses DESC, domain
+             LIMIT %s
+            OFFSET %s
+               ) d
+    """, (PAGE_SIZE, offset)) if show == 'all' else website.db.all("""
+        SELECT *
+             , ( SELECT count(DISTINCT bl.address)
+                   FROM email_blacklist bl
+                  WHERE bl.address LIKE ('%%_@' || d.domain)
+                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+               ) AS n_blacklisted_addresses
+             , ( SELECT count(bl) > 0
+                   FROM email_blacklist bl
+                  WHERE bl.address = '@' || d.domain
+                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+               ) AS is_blacklisted
+          FROM (
+            SELECT d.domain
+                 , count(DISTINCT lower(e.address)) AS n_addresses
+                 , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
+              FROM ( SELECT substr(bl.address, 2) AS domain
+                       FROM email_blacklist bl
+                      WHERE bl.address LIKE '@%%'
+                        AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+                   ) d
+         LEFT JOIN emails e ON e.address LIKE ('%%_@' || d.domain)
+          GROUP BY d.domain
+          ORDER BY n_addresses DESC, domain
+             LIMIT %s
+             OFFSET %s
+               ) d
+    """, (PAGE_SIZE, offset))
+
+title = "Email Domains"
+
+[---] text/html
+% from 'templates/macros/nav.html' import querystring_nav
+
+% extends "templates/layouts/admin.html"
+
+% block content
+
+% if domain
+
+    % if blacklist_entries
+        % if blacklisted
+            <p class="text-danger">The domain <span class="monospace">{{ domain }}</span> is currently blocked.</p>
+        % else
+            <p>The domain <span class="monospace">{{ domain }}</span> was blacklisted in the past, but it has been unblocked.</p>
+        % endif
+        <h3>Blacklist log</h3>
+        <ul>
+        % for e in blacklist_entries
+            <li>
+            The domain <span class="monospace">{{ domain }}</span> was added to the blacklist by {{ e.added_by.link() }}
+            at {{ locale.format_time(e.ts.time()) }} on {{ locale.format_date(e.ts.date(), format='long') }}.
+            <br>
+            Reason: <code class="gray">{{ REASONS.get(e.reason, e.reason) }}</code>
+            % if e.details
+                <br>
+                Details: <code class="gray">{{ e.details }}</code>
+            % endif
+            % if e.ignored_by
+                <br>
+                However, it was unblocked by {{ e.ignored_by.link() }}
+                at {{ locale.format_time(e.ignore_after.time()) }}
+                on {{ locale.format_date(e.ignore_after.date(), format='long') }}.
+            % endif
+            </li>
+        % endfor
+        </ul>
+        <br>
+    % else
+        <p>The domain <span class="monospace">{{ domain }}</span> is not blacklisted.</p>
+    % endif
+
+    <form action="" method="POST" class="block-labels">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    % if blacklisted
+        <input type="hidden" name="action" value="remove_from_blacklist" />
+        <h3>Removing <span class="monospace">{{ domain }}</span> from the blacklist</h3>
+        <button class="btn btn-warning">Unblock <span class="monospace">{{ domain }}</span></button>
+    % else
+        <input type="hidden" name="action" value="add_to_blacklist" />
+        % if blacklist_entries
+        <h3>Putting <span class="monospace">{{ domain }}</span> back onto the blacklist</h3>
+        % else
+        <h3>Adding <span class="monospace">{{ domain }}</span> to the blacklist</h3>
+        % endif
+        <label>
+            <span>Reason:</span>
+            <select class="form-control" name="reason">
+                <option></option>
+            % for value, label in REASONS.items()
+                <option value="{{ value }}">{{ label }}</option>
+            % endfor
+            </select>
+        </label>
+        <label>
+            <span>Details (optional, unless "Other" is selected above):</span>
+            <textarea class="form-control" name="details" placeholder="Additional information about the blacklisting of this domain."></textarea>
+        </label>
+        <button class="btn btn-danger">Blacklist <span class="monospace">{{ domain }}</span></button>
+    % endif
+    </form>
+
+    <br><br>
+    <a class="btn btn-default" href="{{ request.qs.derive(domain=None) }}">← Back to browsing email domains</a>
+
+% else
+
+    <ul class="nav nav-pills">{{ querystring_nav('show', [
+        ('all', "All"),
+        ('blacklisted', "Blacklisted"),
+    ], show) }}</ul>
+    <br><br>
+
+    % if email_domains
+        <form action="" method="GET">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th class="text-center">Connected addresses</th>
+                        <th class="text-center">Verified addresses</th>
+                        <th class="text-center">Blacklisted addresses</th>
+                        <th class="text-center">Blacklisted entirely?</th>
+                    </tr>
+                <tbody>
+                % for d in email_domains
+                    <tr>
+                        <td><button class="link" name="domain" value="{{ d.domain }}">{{ d.domain }}</button></td>
+                        <td class="text-center">{{ d.n_addresses }}</td>
+                        % set percent_verified = d.n_verified / d.n_addresses if d.n_addresses else 1
+                        <td class="text-center {{ 'danger' if percent_verified <= 0.2 else 'warning' if percent_verified <= 0.5 else '' }}">{{ d.n_verified }}</td>
+                        % set percent_blacklisted = d.n_blacklisted_addresses / d.n_addresses if d.n_addresses else 0
+                        <td class="text-center {{ 'danger' if percent_blacklisted > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}">{{ d.n_blacklisted_addresses }}</td>
+                        <td class="text-center {{ 'danger' if d.is_blacklisted else '' }}">{{ 'Yes' if d.is_blacklisted else 'No' }}</td>
+                    </tr>
+                % endfor
+                </tbody>
+            </table>
+        </form>
+        % if len(email_domains) == PAGE_SIZE
+            <a class="btn btn-primary" href="{{ request.qs.derive(offset=offset + PAGE_SIZE) }}">Next page →</a>
+        % endif
+    % else
+        No email domains found.
+    % endif
+
+    <h3>Look up a domain</h3>
+    <form action="" method="GET">
+        <div class="input-group">
+            <input class="form-control" type="text" name="domain" placeholder="example.net" />
+            <div class="input-group-btn"><button class="btn btn-primary">Look up</button></div>
+        </div>
+    </form>
+
+% endif
+
+% endblock

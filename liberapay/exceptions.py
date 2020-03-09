@@ -203,6 +203,39 @@ class EmailAddressIsBlacklisted(ProblemChangingEmail):
                 email_address=error.email_address, timespan_ago=to_age(error.ts)
             )
 
+class EmailDomainIsBlacklisted(ProblemChangingEmail):
+    def msg(self, _, to_age):
+        domain, reason, ts, details = self.args
+        if reason == 'bounce':
+            return _(
+                "The email domain {domain} was blacklisted on {date} because "
+                "it was bouncing back all messages. Please contact us if that "
+                "is no longer true and you want us to remove this domain from "
+                "the blacklist.",
+                domain=domain, date=ts.date()
+            )
+        elif reason == 'complaint':
+            return _(
+                "The email domain {domain} is blacklisted because of a complaint "
+                "received {timespan_ago}. Please contact us if this domain is "
+                "yours and you want us to remove it from the blacklist.",
+                domain=domain, timespan_ago=to_age(ts)
+            )
+        elif reason == 'throwaway':
+            return _(
+                "The email domain {domain} was blacklisted on {date} because "
+                "it provided disposable addresses. Please contact us if that "
+                "is no longer true and you want us to remove this domain from "
+                "the blacklist.",
+                domain=domain, date=ts.date()
+            )
+        else:
+            return _(
+                "The email domain {domain} is blacklisted. Please contact us if "
+                "you want us to remove it from the blacklist.",
+                domain=domain
+            )
+
 class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
     code = 409
     def msg(self, _):

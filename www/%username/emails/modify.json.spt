@@ -1,4 +1,5 @@
 from liberapay.utils import get_participant
+from liberapay.utils.emails import check_email_blacklist, normalize_email_address
 
 [-----------------------------------------]
 
@@ -12,6 +13,8 @@ body = request.body
 out = {}
 if 'email' in body or 'resend' in body:
     address = body.get('email') or body['resend']
+    address = normalize_email_address(address)
+    check_email_blacklist(address)
     r = participant.add_email(address)
     if not r:
         raise response.error(400, _("You have already added and verified this address."))

@@ -7,6 +7,7 @@ from liberapay.exceptions import LoginRequired, UsernameAlreadyTaken
 from liberapay.i18n.base import SEARCH_CONFS
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation, Participant
+from liberapay.utils.emails import normalize_email_address
 
 pledge_platforms = {'github', 'twitter'}
 
@@ -67,6 +68,7 @@ elif step == '2':
             if user.ANON:
                 email = body['email_address']
                 email_is_verified = email == data['email_address']
+                email = normalize_email_address(email)
                 p = Participant.make_stub(
                     cursor=cursor,
                     status='active',

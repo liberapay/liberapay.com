@@ -159,15 +159,18 @@ class Participant(Model, MixinTeam):
         return p
 
     def make_team(self, name, currency, email=None, email_lang=None, throttle_takes=True):
-        if email and not self.email:
-            email_is_attached_to_self = self.db.one("""
-                SELECT true AS a
-                  FROM emails
-                 WHERE participant = %s
-                   AND address = %s
-            """, (self.id, email))
-            if email_is_attached_to_self:
-                raise EmailAlreadyAttachedToSelf(email)
+        if email:
+            email = normalize_email_address(email)
+            if not self.email:
+                email_is_attached_to_self = self.db.one("""
+                    SELECT true AS a
+                      FROM emails
+                     WHERE participant = %s
+                       AND address = %s
+                """, (self.id, email))
+                if email_is_attached_to_self:
+                    raise EmailAlreadyAttachedToSelf(email)
+            check_email_blacklist(email)
         with self.db.get_cursor() as c:
             c.hit_rate_limit('make_team', self.id, TooManyTeamsCreated)
             t = c.one("""
@@ -1082,7 +1085,7 @@ class Participant(Model, MixinTeam):
     def update_email(self, email):
         if not getattr(self.get_email(email), 'verified', False):
             raise EmailNotVerified(email)
-        check_email_blacklist(email)
+        check_email_blacklist(email, check_domain=False)
         p_id = self.id
         current_session_id = getattr(self.session, 'id', 0)
         with self.db.get_cursor() as c:
@@ -1243,7 +1246,7 @@ class Participant(Model, MixinTeam):
 
     def send_email(self, spt_name, email_row, **context):
         email = email_row.address
-        check_email_blacklist(email)
+        check_email_blacklist(email, check_domain=False)
         if email_row.disavowed:
             raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time, 'disavowed')
         self.fill_notification_context(context)
