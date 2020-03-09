@@ -172,6 +172,7 @@ class ValueContainsForbiddenCharacters(LazyResponse400):
 
 
 class EmailAddressError(LazyResponse400):
+    bypass_allowed = False
 
     def __init__(self, address, exception_or_message=None):
         super().__init__()
@@ -219,6 +220,26 @@ class InvalidEmailDomain(EmailAddressError):
 
     def msg(self, _):
         return _("{0} is not a valid domain name.", repr(self.invalid_domain))
+
+
+class BrokenEmailDomain(EmailAddressError):
+    bypass_allowed = True
+
+    def msg(self, _):
+        return _(
+            "Our attempt to establish a connection with the {domain_name} email "
+            "server failed (error message: “{error_message}”).",
+            domain_name=self.email_address,
+            error_message=str(self.exception_or_message),
+        )
+
+
+class NonEmailDomain(EmailAddressError):
+    def msg(self, _):
+        return _(
+            "'{domain_name}' is not a valid email domain name.",
+            domain_name=self.email_address
+        )
 
 
 class EmailAddressIsBlacklisted(LazyResponse400):

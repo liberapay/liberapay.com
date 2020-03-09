@@ -1,23 +1,26 @@
 from datetime import timedelta
 from enum import Enum, auto
+from ipaddress import ip_address
 import json
 import logging
+from random import random
+from smtplib import SMTP, SMTPException, SMTPResponseException
 from time import sleep
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
 import boto3
 from dns.exception import DNSException
-from dns.resolver import Cache, Resolver
+from dns.resolver import Cache, NXDOMAIN, Resolver
 from jinja2 import Environment
 from pando import Response
 from pando.utils import utcnow
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
-    BadEmailAddress, DuplicateNotification,
+    BadEmailAddress, BrokenEmailDomain, DuplicateNotification, EmailAddressError,
     EmailAddressIsBlacklisted, EmailDomainIsBlacklisted, InvalidEmailDomain,
-    TooManyAttempts,
+    NonEmailDomain, TooManyAttempts,
 )
 from liberapay.utils import deserialize
 from liberapay.website import website, JINJA_ENV_COMMON
@@ -65,15 +68,47 @@ DNS.lifetime = 5.0  # limit queries to 5 seconds
 DNS.cache = Cache()
 
 
-def normalize_email_address(email):
-    """Normalize an email address.
+class NormalizedEmailAddress(str):
 
-    Returns:
-        str: the normalized email address
+    def __new__(cls, email):
+        raise NotImplementedError("call the `normalize_email_address` function instead")
+
+    @property
+    def domain(self):
+        return self[self.rfind('@')+1:]
+
+    @property
+    def local_part(self):
+        return self[:self.rfind('@')]
+
+
+def normalize_and_check_email_address(email: str, state: dict) -> NormalizedEmailAddress:
+    """Normalize and check an email address.
+
+    Returns a `NormalizedEmailAddress` object.
 
     Raises:
-        BadEmailAddress: if the address appears to be invalid
-        InvalidEmailDomain: if the domain name is invalid
+        BadEmailAddress: if the address is syntactically unacceptable
+        BrokenEmailDomain: if we're unable to establish an SMTP connection
+        EmailAddressIsBlacklisted: if the address is in our blacklist
+        EmailDomainIsBlacklisted: if the domain name is in our blacklist
+        InvalidEmailDomain: if the domain name is syntactically invalid
+        NonEmailDomain: if the domain doesn't accept email
+
+    """
+    email = normalize_email_address(email)
+    check_email_address(email, state)
+    return email
+
+
+def normalize_email_address(email: str) -> NormalizedEmailAddress:
+    """Normalize an email address.
+
+    Returns a `NormalizedEmailAddress` object.
+
+    Raises:
+        BadEmailAddress: if the address is syntactically unacceptable
+        InvalidEmailDomain: if the domain name is syntactically invalid
 
     """
     # Remove any surrounding whitespace
@@ -97,16 +132,194 @@ def normalize_email_address(email):
         # The length limit is from https://tools.ietf.org/html/rfc3696#section-3
         raise BadEmailAddress(email)
 
-    # Check that the domain has at least one MX record
+    return str.__new__(NormalizedEmailAddress, email)
+
+
+def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
+    """Check that an email address isn't blacklisted and has a valid domain.
+
+    Raises:
+        BrokenEmailDomain: if we're unable to establish an SMTP connection
+        EmailAddressIsBlacklisted: if the address is in our blacklist
+        EmailDomainIsBlacklisted: if the domain name is in our blacklist
+        NonEmailDomain: if the domain doesn't accept email
+
+    """
+    # Check that the address isn't in our blacklist
+    check_email_blacklist(email)
+
+    # Check that we can send emails to this domain
     if website.app_conf.check_email_domains:
+        # First, we look in our database for addresses matching this domain and
+        # added in the last two years. If the percentage of verified addresses
+        # is high enough and the percentage of blacklisted addresses is low
+        # enough, then it's reasonable to conclude that this is a valid email
+        # domain.
+        stats = website.db.one("""
+            SELECT count(DISTINCT lower(e.address)) AS n_addresses
+                 , count(1) FILTER (WHERE e.verified) AS n_verified
+                 , ( SELECT count(DISTINCT lower(bl.address))
+                       FROM email_blacklist bl
+                      WHERE lower(bl.address) LIKE ('%%_@' || %(domain)s)
+                        AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+                   ) AS n_blacklisted_addresses
+              FROM emails e
+             WHERE e.address LIKE ('%%_@' || %(domain)s)
+               AND e.added_time > (current_timestamp - interval '2 years')
+        """, dict(domain=email.domain))
+        is_known_good_domain = (
+            stats.n_addresses > 0 and
+            stats.n_verified / stats.n_addresses > 0.2 and
+            stats.n_blacklisted_addresses / stats.n_addresses < 0.2
+        )
+        if not is_known_good_domain:
+            # Try to resolve the domain and connect to its SMTP server(s).
+            bypass_error = state['request'].body.get('email.bypass_error') == 'yes'
+            try:
+                test_email_domain(email.domain)
+            except EmailAddressError as e:
+                if not (bypass_error and e.bypass_allowed):
+                    raise
+            except Exception as e:
+                website.tell_sentry(e, {})
+
+
+def test_email_domain(domain: str):
+    """Attempt to resolve an email domain and connect to one of its SMTP servers.
+
+    Raises:
+        BrokenEmailDomain: if we're unable to establish an SMTP connection
+        NonEmailDomain: if the domain doesn't accept email (RFC 7505)
+
+    """
+    try:
+        ip_addresses = get_email_server_addresses(domain)
+        exceptions = []
+        n_ip_addresses = 0
+        n_attempts = 0
+        success = False
+        for ip_addr in ip_addresses:
+            n_ip_addresses += 1
+            try:
+                test_email_server(str(ip_addr))
+                success = True
+                break
+            except (SMTPException, OSError) as e:
+                exceptions.append(e)
+            except Exception as e:
+                website.tell_sentry(e, {})
+                exceptions.append(e)
+            n_attempts += 1
+            if n_attempts >= 3:
+                break
+        if not success:
+            if n_ip_addresses == 0:
+                raise BrokenEmailDomain(domain, (
+                    "didn't find any public IP address to deliver emails to"
+                ))
+            raise BrokenEmailDomain(domain, exceptions[0])
+    except EmailAddressError:
+        raise
+    except NXDOMAIN:
+        raise BrokenEmailDomain(domain, "no such domain (NXDOMAIN)")
+    except DNSException as e:
+        raise BrokenEmailDomain(domain, str(e))
+
+
+def get_email_server_addresses(domain):
+    """Resolve an email domain to IP addresses.
+
+    Yields `IPv4Address` and `IPv6Address` objects.
+
+    Raises:
+        NonEmailDomain: if the domain doesn't accept email (RFC 7505)
+        DNSException: if a DNS query fails
+
+    Spec: https://tools.ietf.org/html/rfc5321#section-5.1
+
+    """
+    rrset = DNS.query(domain, 'MX', raise_on_no_answer=False).rrset
+    if rrset:
+        if len(rrset) == 1 and str(rrset[0].exchange) == '.':
+            # This domain doesn't accept email. https://tools.ietf.org/html/rfc7505
+            raise NonEmailDomain(
+                domain, f"the domain {domain} has a 'null MX' record (RFC 7505)"
+            )
+        # Sort the returned MX records
+        records = sorted(rrset, key=lambda rec: (rec.preference, random()))
+        mx_domains = [str(rec.exchange).rstrip('.') for rec in records]
+    else:
+        mx_domains = [domain]
+    # Yield the IP addresses, in order, without duplicates
+    # We limit ourselves to looking up a maximum of 5 domains
+    exceptions = []
+    seen = set()
+    for mx_domain in mx_domains[:5]:
         try:
-            DNS.query(domain, 'MX')
-        except DNSException:
-            raise BadEmailDomain(domain)
+            mx_ip_addresses = get_public_ip_addresses(mx_domain)
+        except (DNSException, OSError) as e:
+            exceptions.append(e)
+            continue
         except Exception as e:
             website.tell_sentry(e, {})
+            exceptions.append(e)
+            continue
+        for addr in mx_ip_addresses:
+            if addr not in seen:
+                yield addr
+                seen.add(addr)
+    if exceptions:
+        raise exceptions[0]
 
-    return email
+
+def get_public_ip_addresses(domain):
+    """Resolve a domain name to public IP addresses.
+
+    Returns a list of `IPv4Address` and `IPv6Address` objects.
+
+    Raises `DNSException` if the `A` or `AAAA` query fails.
+
+    """
+    records = (
+        list(DNS.query(domain, 'A', raise_on_no_answer=False).rrset or ()) +
+        list(DNS.query(domain, 'AAAA', raise_on_no_answer=False).rrset or ())
+    )
+    # Return the list of valid global IP addresses found
+    addresses = []
+    for rec in records:
+        try:
+            addr = ip_address(rec.address)
+        except ValueError:
+            continue
+        if addr.is_global:
+            addresses.append(addr)
+    return addresses
+
+
+def test_email_server(ip_address: str) -> None:
+    """Attempt to connect to an SMTP server.
+
+    Raises:
+        OSError: if a network-related system error occurs, for example if the IP
+                 address is a v6 address but the system lacks an IPv6 route, or
+                 if the connection times out
+        SMTPResponseException: if the server sends an invalid response
+        SMTPServerDisconnected: if the server hangs up on us or fails to respond
+                                both correctly and quickly enough
+
+    """
+    smtp = SMTP(timeout=website.app_conf.socket_timeout)
+    if website.env.logging_level == 'debug':
+        smtp.set_debuglevel(2)
+    try:
+        code = smtp.connect(ip_address)[0]
+        if code < 0:
+            raise SMTPResponseException(code, "first line received from server is invalid")
+    finally:
+        try:
+            smtp.close()
+        except Exception:
+            pass
 
 
 def check_email_blacklist(address, check_domain=True):

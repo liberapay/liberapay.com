@@ -1,5 +1,8 @@
-from liberapay.exceptions import AuthRequired, UsernameAlreadyTaken
+from liberapay.exceptions import (
+    AuthRequired, EmailAlreadyAttachedToSelf, UsernameAlreadyTaken,
+)
 from liberapay.models.participant import Participant
+from liberapay.utils.emails import check_email_address, normalize_email_address
 
 [---]
 
@@ -21,6 +24,17 @@ if request.method == 'POST':
         if team_currency not in constants.CURRENCIES:
             raise response.invalid_input(team_currency, 'main_currency', 'body')
         team_email = request.body.get('email')
+        if team_email:
+            team_email = normalize_email_address(team_email)
+            email_is_attached_to_self = user.db.one("""
+                SELECT true AS a
+                  FROM emails
+                 WHERE participant = %s
+                   AND address = %s
+            """, (user.id, team_email))
+            if email_is_attached_to_self:
+                raise EmailAlreadyAttachedToSelf(team_email)
+            check_email_address(team_email, state)
         throttle_takes = request.body.get('throttle_takes') == 'on'
         t = user.make_team(name, team_currency, team_email, email_lang, throttle_takes)
     response.redirect('/'+t.username+'/edit')

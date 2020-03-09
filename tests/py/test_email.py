@@ -1,9 +1,11 @@
 from unittest.mock import patch
 
 from liberapay.exceptions import (
-    BadEmailAddress, CannotRemovePrimaryEmail,
-    EmailAddressIsBlacklisted, EmailAlreadyTaken, EmailDomainIsBlacklisted, EmailNotVerified,
-    InvalidEmailDomain, TooManyEmailAddresses, TooManyEmailVerifications,
+    BadEmailAddress, BrokenEmailDomain, CannotRemovePrimaryEmail,
+    EmailAddressIsBlacklisted, EmailAlreadyTaken,
+    EmailDomainIsBlacklisted, EmailNotVerified,
+    InvalidEmailDomain, NonEmailDomain,
+    TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
 from liberapay.security.authentication import ANON
@@ -58,6 +60,10 @@ class TestEmail(EmailHarness):
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
         assert response.text == '{}'
+        with patch.object(self.website, 'app_conf') as app_conf:
+            app_conf.check_email_domains = True
+            response = self.hit_email_spt('add-email', 'support@liberapay.com')
+            assert response.text == '{}'
 
     def test_participant_can_add_email_with_unicode_domain_name(self):
         punycode_email = 'alice@' + 'accentué.com'.encode('idna').decode()
@@ -76,20 +82,26 @@ class TestEmail(EmailHarness):
         )
         for blob in bad:
             with self.assertRaises(BadEmailAddress):
-                self.alice.add_email(blob)
-            self.hit_email_spt('add-email', blob, expected_code=400)
+                self.client.POST(
+                    '/alice/emails/modify.json', {'add-email': blob},
+                    auth_as=self.alice,
+                )
 
     def test_participant_cant_add_email_with_bad_domain(self):
         bad = (
-            'alice@phantom.liberapay.com',  # no MX record
-            'alice@nonexistent.liberapay.com',  # NXDOMAIN
+            ('alice@invalid\uffffdomain.com', InvalidEmailDomain),
+            ('alice@phantom.liberapay.com', BrokenEmailDomain),  # no MX, A or AAAA record
+            ('alice@nonexistent.oy.lc', BrokenEmailDomain),  # NXDOMAIN
+            ('alice@nullmx.liberapay.com', NonEmailDomain),  # null MX record, per RFC 7505
         )
         with patch.object(self.website, 'app_conf') as app_conf:
             app_conf.check_email_domains = True
-            for email in bad:
-                with self.assertRaises(BadEmailDomain):
-                    self.alice.add_email(email)
-                self.hit_email_spt('add-email', email, expected_code=400)
+            for email, expected_exception in bad:
+                with self.assertRaises(expected_exception):
+                    self.client.POST(
+                        '/alice/emails/modify.json', {'add-email': email},
+                        auth_as=self.alice,
+                    )
 
     def test_verification_link_uses_address_id(self):
         address = 'alice@gratipay.com'

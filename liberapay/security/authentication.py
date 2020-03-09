@@ -15,7 +15,7 @@ from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import b64encode_s, get_ip_net
 from liberapay.utils.emails import (
-    EmailVerificationResult, check_email_blacklist, normalize_email_address,
+    EmailVerificationResult, normalize_and_check_email_address,
     remove_email_address_from_blacklist,
 )
 
@@ -103,8 +103,7 @@ def sign_in_with_form_data(body, state):
         email = body['sign-in.email']
         if not email:
             raise response.error(400, 'email is required')
-        email = normalize_email_address(email)
-        check_email_blacklist(email)
+        email = normalize_and_check_email_address(email, state)
         currency = body.get('sign-in.currency', 'EUR')
         if currency not in CURRENCIES:
             raise response.invalid_input(currency, 'sign-in.currency', 'body')

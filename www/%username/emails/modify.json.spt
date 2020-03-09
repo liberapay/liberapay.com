@@ -1,5 +1,5 @@
 from liberapay.utils import get_participant
-from liberapay.utils.emails import check_email_blacklist, normalize_email_address
+from liberapay.utils.emails import check_email_blacklist, normalize_and_check_email_address
 
 [-----------------------------------------]
 
@@ -16,7 +16,7 @@ if 'email' in body:
     body['add-email'] = body.pop('email')
 if 'add-email' in body or 'resend' in body:
     address = body.get('add-email') or body['resend']
-    address = normalize_email_address(address)
+    address = normalize_and_check_email_address(address, state)
     check_email_blacklist(address)
     r = participant.add_email(address)
     if not r:
