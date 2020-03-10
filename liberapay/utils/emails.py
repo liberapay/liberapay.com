@@ -15,8 +15,9 @@ from pando.utils import utcnow
 
 from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
-    BadEmailAddress, BadEmailDomain, DuplicateNotification,
-    EmailAddressIsBlacklisted, EmailDomainIsBlacklisted, TooManyAttempts,
+    BadEmailAddress, DuplicateNotification,
+    EmailAddressIsBlacklisted, EmailDomainIsBlacklisted, InvalidEmailDomain,
+    TooManyAttempts,
 )
 from liberapay.utils import deserialize
 from liberapay.website import website, JINJA_ENV_COMMON
@@ -71,7 +72,7 @@ def normalize_email_address(email):
 
     Raises:
         BadEmailAddress: if the address appears to be invalid
-        BadEmailDomain: if the domain name is invalid
+        InvalidEmailDomain: if the domain name is invalid
 
     """
     # Remove any surrounding whitespace
@@ -86,8 +87,8 @@ def normalize_email_address(email):
     # Lowercase and encode the domain name
     try:
         domain = domain.lower().encode('idna').decode()
-    except UnicodeError:
-        raise BadEmailDomain(domain)
+    except UnicodeError as e:
+        raise InvalidEmailDomain(email, domain, e)
 
     # Check the syntax and length of the address
     email = local_part + '@' + domain

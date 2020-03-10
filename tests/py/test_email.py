@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
 from liberapay.exceptions import (
-    BadEmailAddress, BadEmailDomain, CannotRemovePrimaryEmail,
+    BadEmailAddress, CannotRemovePrimaryEmail,
     EmailAddressIsBlacklisted, EmailAlreadyTaken, EmailDomainIsBlacklisted, EmailNotVerified,
-    TooManyEmailAddresses, TooManyEmailVerifications,
+    InvalidEmailDomain, TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
 from liberapay.security.authentication import ANON
@@ -18,7 +18,7 @@ class TestEmail(EmailHarness):
         self.alice = self.make_participant('alice')
 
     def hit_email_spt(self, action, address, auth_as='alice', expected_code=200):
-        data = {('email' if action == 'add-email' else action): address}
+        data = {action: address}
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         auth_as = self.alice if auth_as == 'alice' else auth_as
         r = self.client.POST(

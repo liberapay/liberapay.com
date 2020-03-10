@@ -11,8 +11,11 @@ if not participant.email_lang:
 
 body = request.body
 out = {}
-if 'email' in body or 'resend' in body:
-    address = body.get('email') or body['resend']
+if 'email' in body:
+    # Temporary backward compatibility
+    body['add-email'] = body.pop('email')
+if 'add-email' in body or 'resend' in body:
+    address = body.get('add-email') or body['resend']
     address = normalize_email_address(address)
     check_email_blacklist(address)
     r = participant.add_email(address)
