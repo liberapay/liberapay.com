@@ -2075,6 +2075,7 @@ class Participant(Model, MixinTeam):
 
     def change_username(self, suggested, cursor=None, recorder=None):
         self.check_username(suggested)
+        recorder_id = getattr(recorder, 'id', None)
 
         if suggested != self.username:
             with self.db.get_cursor(cursor) as c:
@@ -2123,7 +2124,7 @@ class Participant(Model, MixinTeam):
                                           , mtime = now()
                             """, prefixes)
 
-                self.add_event(c, 'set_username', suggested)
+                self.add_event(c, 'set_username', suggested, recorder=recorder_id)
                 self.set_attributes(username=suggested)
 
             if last_rename and self.kind == 'group':
