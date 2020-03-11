@@ -49,25 +49,25 @@ msgid "Manage your donations"
 msgstr "寄付を管理"
 
 msgid "Your email address is temporarily blacklisted"
-msgstr ""
+msgstr "お使いのメールアドレスは、一時的にブラックリストに登録されています"
 
 msgid "Your email address has been blacklisted"
-msgstr "お使いのメールアドレスは、ブラックリストに含まれています"
+msgstr "お使いのメールアドレスは、ブラックリストに登録されています"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
-msgstr ""
+msgstr "最近メールを送信できなかったため、{date} まで、お使いのメールアドレス {email_address} に通知を送信しません。"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
-msgstr ""
+msgstr "最近メールを送信できなかったため、今後一切お使いのメールアドレス {email_address} に通知を送信しません。"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "私たちはこれ以上お使いのアドレス {email_address} にメールを送信しません。メールプロバイダから苦情を受け取ったためです。ブラックリストからそのアドレスを削除したい場合は、そのアドレスから support@liberapay.com にメールを送信してください。"
+msgstr "メールプロバイダから苦情を受け取ったため、今後一切お使いのメールアドレス {email_address} に通知を送信しません。ブラックリストからそのアドレスを削除したい場合は、そのアドレスから support@liberapay.com にメールを送信してください。"
 
 msgid "The error message from the email system was:"
-msgstr ""
+msgstr "メールシステムからのエラーメッセージは以下のとおりです："
 
 msgid "Manage your email addresses"
 msgstr "メールアドレスを管理"
@@ -924,7 +924,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "{timespan_ago} に苦情を受けたため、メールアドレス {email_address} はブラックリストに掲載されています。ブラックリストから削除するには、そのメールアドレスから support@liberapay.com 宛にメールを送信してください。"
+msgstr "{timespan_ago} に苦情を受けたため、メールアドレス {email_address} はブラックリストに登録されています。ブラックリストから削除するには、そのメールアドレスから support@liberapay.com 宛にメールを送信してください。"
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
