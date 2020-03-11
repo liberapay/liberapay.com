@@ -70,6 +70,16 @@ if domain:
 else:
     show = request.qs.get_choice('show', {'all', 'blacklisted'}, default='all')
     offset = request.qs.get_int('offset', minimum=0, default=0)
+    domains_query = """
+        SELECT substr(bl.address, 2) AS domain
+          FROM email_blacklist bl
+         WHERE lower(bl.address) LIKE '@%%'
+           AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+    """
+    if show == 'all':
+        domains_query += """
+         UNION SELECT e.domain FROM domain_stats e
+        """
     email_domains = website.db.all("""
         WITH domain_stats AS (
                 SELECT e.domain
@@ -95,54 +105,14 @@ else:
             SELECT d.domain
                  , coalesce(s.n_addresses, 0) AS n_addresses
                  , coalesce(s.n_verified, 0) AS n_verified
-              FROM ( SELECT e.domain FROM domain_stats e
-                      UNION
-                     SELECT substr(bl.address, 2) AS domain
-                       FROM email_blacklist bl
-                      WHERE lower(bl.address) LIKE '@%%'
-                        AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+              FROM ( {domains_query}
                    ) d
          LEFT JOIN domain_stats s ON s.domain = d.domain
           ORDER BY n_addresses DESC, domain
              LIMIT %s
             OFFSET %s
                ) d
-    """, (PAGE_SIZE, offset)) if show == 'all' else website.db.all("""
-        WITH domain_stats AS (
-                SELECT e.domain
-                     , count(DISTINCT lower(e.address)) AS n_addresses
-                     , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
-                  FROM ( SELECT e.*, regexp_replace(lower(e.address), '.+@', '') AS domain
-                           FROM emails e
-                       ) e
-              GROUP BY e.domain
-            )
-        SELECT *
-             , ( SELECT count(DISTINCT lower(bl.address))
-                   FROM email_blacklist bl
-                  WHERE lower(bl.address) LIKE ('%%_@' || d.domain)
-                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
-               ) AS n_blacklisted_addresses
-             , ( SELECT count(bl) > 0
-                   FROM email_blacklist bl
-                  WHERE lower(bl.address) = '@' || d.domain
-                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
-               ) AS is_blacklisted
-          FROM (
-            SELECT d.domain
-                 , coalesce(s.n_addresses, 0) AS n_addresses
-                 , coalesce(s.n_verified, 0) AS n_verified
-              FROM ( SELECT substr(bl.address, 2) AS domain
-                       FROM email_blacklist bl
-                      WHERE lower(bl.address) LIKE '@%%'
-                        AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
-                   ) d
-         LEFT JOIN domain_stats s ON s.domain = d.domain
-          ORDER BY n_addresses DESC, domain
-             LIMIT %s
-            OFFSET %s
-               ) d
-    """, (PAGE_SIZE, offset))
+    """.format(domains_query=domains_query), (PAGE_SIZE, offset))
 
 title = "Email Domains"
 
