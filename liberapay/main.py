@@ -49,6 +49,7 @@ from liberapay.utils import (
 from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
     add_content_disposition_header,
+    add_state_to_context,
     attach_environ_to_request,
     bypass_csp_for_form_redirects,
     canonize,
@@ -190,6 +191,7 @@ if conf:
 noop = lambda: None
 algorithm = website.state_chain
 algorithm.functions = [
+    add_state_to_context,
     insert_constants,
     algorithm['parse_environ_into_request'],
     attach_environ_to_request,
