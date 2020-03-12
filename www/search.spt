@@ -44,11 +44,11 @@ if query:
                    ) a)) AS excerpts
               FROM (
                        SELECT participant, lang, content, search_conf, query
-                            , ts_rank_cd(search_vector, query) AS rank
+                            , ts_rank_cd(to_tsvector(search_conf, content), query) AS rank
                          FROM statements NATURAL JOIN queries
                         WHERE lang IN %(langs)s
                           AND type IN ('profile', 'summary')
-                          AND search_vector @@ query
+                          AND to_tsvector(search_conf, content) @@ query
                      ORDER BY rank DESC
                         LIMIT 10
                    ) s
