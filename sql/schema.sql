@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '119'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '120'::jsonb);
 
 
 -- app configuration
@@ -796,20 +796,18 @@ CREATE TABLE statements
 , type           stmt_type   NOT NULL
 , lang           text        NOT NULL
 , content        text        NOT NULL CHECK (content <> '')
-, search_vector  tsvector
-, search_conf    regconfig   NOT NULL
+, search_conf    text        NOT NULL
 , id             bigserial   PRIMARY KEY
 , ctime          timestamptz NOT NULL
 , mtime          timestamptz NOT NULL
 , UNIQUE (participant, type, lang)
 );
 
-CREATE INDEX statements_fts_idx ON statements USING gist(search_vector);
+CREATE FUNCTION to_tsvector(text, text) RETURNS tsvector AS $$
+    SELECT to_tsvector($1::regconfig, $2);
+$$ LANGUAGE sql STRICT IMMUTABLE;
 
-CREATE TRIGGER search_vector_update
-    BEFORE INSERT OR UPDATE ON statements
-    FOR EACH ROW EXECUTE PROCEDURE
-    tsvector_update_trigger_column(search_vector, search_conf, content);
+CREATE INDEX statements_fts_idx ON statements USING GIN (to_tsvector(search_conf, content));
 
 
 -- notifications, waiting to be displayed or sent via email

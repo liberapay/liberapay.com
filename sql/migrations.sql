@@ -2532,3 +2532,14 @@ UPDATE email_blacklist AS bl
 ALTER TYPE blacklist_reason ADD VALUE IF NOT EXISTS 'throwaway';
 ALTER TYPE blacklist_reason ADD VALUE IF NOT EXISTS 'other';
 ALTER TABLE email_blacklist ADD COLUMN added_by bigint REFERENCES participants;
+
+-- migration #120
+DROP TRIGGER search_vector_update ON statements;
+DROP INDEX IF EXISTS statements_fts_idx;
+ALTER TABLE statements
+        ALTER COLUMN search_conf SET DATA TYPE text USING (search_conf::text),
+        DROP COLUMN search_vector;
+CREATE FUNCTION to_tsvector(text, text) RETURNS tsvector AS $$
+        SELECT to_tsvector($1::regconfig, $2);
+    $$ LANGUAGE sql STRICT IMMUTABLE;
+CREATE INDEX statements_fts_idx ON statements USING GIN (to_tsvector(search_conf, content));
