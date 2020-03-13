@@ -29,7 +29,7 @@ if query:
         search_confs = list(set(SEARCH_CONFS.get(lang, 'simple') for lang in langs))
         results['statements'] = website.db.all("""
             WITH queries AS (
-                     SELECT search_conf::regconfig
+                     SELECT search_conf
                           , plainto_tsquery(search_conf::regconfig, %(q)s) AS query
                        FROM unnest(%(search_confs)s) search_conf
                  )
@@ -39,16 +39,16 @@ if query:
                  , json_agg((SELECT a FROM (
                        SELECT rank
                             , lang
-                            , ts_headline(search_conf, content, query,
+                            , ts_headline(search_conf::regconfig, content, query,
                                           'StartSel=**,StopSel=**,MaxFragments=1,ShortWord=0') AS excerpt
                    ) a)) AS excerpts
               FROM (
                        SELECT participant, lang, content, search_conf, query
-                            , ts_rank_cd(search_vector, query) AS rank
+                            , ts_rank_cd(to_tsvector(search_conf, content), query) AS rank
                          FROM statements NATURAL JOIN queries
                         WHERE lang IN %(langs)s
                           AND type IN ('profile', 'summary')
-                          AND search_vector @@ query
+                          AND to_tsvector(search_conf, content) @@ query
                      ORDER BY rank DESC
                         LIMIT 10
                    ) s
