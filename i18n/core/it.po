@@ -1,11 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Italian (https://hosted.weblate.org/projects/liberapay/core/it/)\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2020-03-14 05:32+0000\n"
+"Last-Translator: Davide Neri <davnerix@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/liberapay/core/it/>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.0-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -51,25 +54,25 @@ msgid "Manage your donations"
 msgstr "Gestisci le tue donazioni"
 
 msgid "Your email address is temporarily blacklisted"
-msgstr ""
+msgstr "Il tuo indirizzo e-mail è temporaneamente sulla lista nera"
 
 msgid "Your email address has been blacklisted"
 msgstr "Il tuo indirizzo e-mail è stato inserito nella lista nera"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
-msgstr ""
+msgstr "Abbiamo sospeso l'invio di notifiche al tuo indirizzo {email_address} fino a {date}, perché un tentativo recente di contattarti tramite e-mail non è andato a buon fine."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
-msgstr ""
+msgstr "Non invieremo più e-mail al tuo indirizzo {email_address}, perché un tentativo recente di contattarti non è andato a buon fine."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Non invieremo più e-mail al tuo indirizzo {email_address}, poiché abbiamo ricevuto un reclamo dal provider e-mail. Per favore, invia una e-mail da quell'indirizzo a support@liberapay.com se desideri essere rimosso/a dalla lista nera."
 
 msgid "The error message from the email system was:"
-msgstr ""
+msgstr "Il messaggio di errore del sistema e-mail è:"
 
 msgid "Manage your email addresses"
 msgstr "Gestisci i tuoi indirizzi e-mail"
@@ -930,7 +933,7 @@ msgstr "\"{domain_name}\" non è un profilo e-mail valido."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr ""
+msgstr "L'indirizzo e-mail {email_address} è nella lista nera perché un tentativo di inviarvi un messaggio {timespan_ago} non è andato a buon fine."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -938,19 +941,19 @@ msgstr "L'indirizzo e-mail {email_address} è nella lista nera a causa di un rec
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Il dominio e-mail {domain} è stato inserito nella lista nera il {date} perché respingeva tutti i messaggi. Si prega di contattarci se non è più così e desideri rimuovere questo dominio dalla lista nera."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr ""
+msgstr "L'indirizzo e-mail {domain} è nella lista nera a causa di un reclamo ricevuto {timespan_ago}. Si prega di contattarci se questo dominio è tuo e desideri che sia rimosso dalla lista nera."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Il dominio e-mail {domain} è stato inserito nella lista nera il {date} perché forniva indirizzi usa e getta. Si prega di contattarci se non è più così e desideri che questo dominio sia rimosso dalla lista nera."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "L'indirizzo e-mail {domain} è nella lista nera. Si prega di contattarci se desideri che l'indirizzo sia rimosso dalla lista nera."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1256,10 +1259,10 @@ msgstr "Accedi per riaprire il tuo conto."
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
-msgstr ""
+msgstr "Se credi che le e-mail inviate da noi a {email_address} non saranno più rimosse, puoi rimuovere questo indirizzo dalla lista nera e riprovare:"
 
 msgid "Bypass the blacklist and retry"
-msgstr ""
+msgstr "Ignora la lista nera e riprova"
 
 msgid "Please try again in a few minutes."
 msgstr "Per favore riprova tra qualche minuto."
@@ -3457,7 +3460,7 @@ msgstr "Questa pagina mostra solo le transazioni elaborate da Mangopay, per visu
 msgid "Account Statement"
 msgstr "Estratto conto"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
 msgstr[0] "{money_amount} come donazione a {n} persona"
