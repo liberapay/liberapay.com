@@ -6,7 +6,7 @@ jobs:
     - python: 3.9
       env: TOXENV=py39
 addons:
-  postgresql: 9.6
+  postgresql: 13
 branches:
   only:
     - master
@@ -31,6 +31,6 @@ notifications:
     on_success: change  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: never     # options: [always|never|change] default: always
-dist: xenial
+dist: focal
 git:
   strategy: tarball
