@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-16 08:14+0000\n"
+"PO-Revision-Date: 2020-03-16 08:21+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
 "Language: de\n"
@@ -61,7 +61,7 @@ msgstr "Ihre Email-Adresse wurde auf die Sperrliste gesetzt"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
-msgstr "Wir stellen das Senden von Benachrichtigungen an deine Adresse {email_address} bis {date} ein, da die Letzten Zustellversuche fehlschlugen."
+msgstr "Wir setzen den Versand von Benachrichtigungen an Ihre Adresse {email_address} bis zum {date} aus, da ein kürzlich unternommener Versuch, Ihnen eine E-Mail zu schicken, fehlgeschlagen ist."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
@@ -229,11 +229,13 @@ msgid "Add money"
 msgstr "Geld hinzufügen"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr "Liberapay Verlängerung der Spende: keine gültiges Zahlungsmittel"
+msgstr "Liberapay Spenden-Verlängerung: kein gültiges Zahlungsmittel"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Sie haben eine Zahlung von {amount} am {payment_date} geplant, um Ihre Spende an {recipient} zu erneuern, aber wir können sie nicht bearbeiten, weil ein gültiges Zahlungsmittel fehlt."
+msgstr ""
+"\n"
+"Sie haben eine Zahlung von {amount} am {payment_date} geplant, um Ihre Spende an {recipient} zu erneuern, aber wir können sie nicht bearbeiten, weil ein gültiges Zahlungsmittel fehlt."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
