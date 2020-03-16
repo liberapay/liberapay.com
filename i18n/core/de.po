@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-16 07:53+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-03-16 08:13+0000\n"
+"Last-Translator: SB <weblate@dakunier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -246,7 +246,7 @@ msgstr[0] "Sie haben eine Zahlung geplant, um Ihre Spenden zu erneuern, aber wir
 msgstr[1] "Sie haben {n} Zahlungen geplant, um Ihre Spenden zu erneuern, aber wir können sie nicht bearbeiten, weil ein gültiges Zahlungsmittel fehlt."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr "Die Zahlungsdaten, Beträge und Empfänger sind:"
+msgstr "Das Zahlungsdatum, Beträge und Empfänger sind:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
@@ -399,13 +399,13 @@ msgstr "Das Lastschrifteinzugsverfahren für Ihre Liberapay-Konto war erfolgreic
 msgid "Your payment has failed"
 msgstr "Ihre Zahlung ist fehlgeschlagen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Die Zahlung über {money_amount} durch Liberapay, die am {date} initiiert wurde, ist fehlgeschlagen."
+msgstr "Die zuvor getätigte Zahlung über {money_amount}, ist fehlgeschlagen."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Die am {Datum} eingeleitete Zahlung des {Geldbetrags} ist fehlgeschlagen."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -463,9 +463,9 @@ msgstr "Sobald diese Zahlung bearbeitet wurde, sollte sie auf Ihrem Kontoauszug 
 msgid "Your payment has succeeded"
 msgstr "Ihre Zahlung ist erfolgt"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "Die Zahlung von {money_amount} durch Liberapay, die am {date} eingeleitet wurde, ist erfolgt."
+msgstr "Die zuvor getätigte Zahlung von {money_amount}, ist erfolgt."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
@@ -2391,9 +2391,9 @@ msgstr "Inaktiv, weil der Empfänger keine Spenden mehr akzeptiert."
 msgid "Active"
 msgstr "Aktiv"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Nächste Zahlung {in_N_weeks_months_or_years}."
+msgstr "Nächste Zahlung findet {in_N_weeks_months_or_years} statt."
 
 msgid "Renew now"
 msgstr "Jetzt erneuern"
@@ -2624,7 +2624,7 @@ msgstr[1] "Nächste Zahlung in {n} Wochen ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Die nächste Zahlung {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -3460,10 +3460,10 @@ msgstr "Die Seite zeigt nur Transaktionen über Mangopay. Um andere Zahlungen zu
 msgid "Account Statement"
 msgstr "Kontoauszug"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
-msgstr[0] "{money_amount} als Spenden an {n} Person"
+msgstr[0] "{money_amount} als Spende an {n} Person"
 msgstr[1] "{money_amount} als Spenden an {n} Personen"
 
 msgid "Export as CSV"
@@ -3475,7 +3475,7 @@ msgid_plural "{money_amount} in expense reimbursements to {n} people"
 msgstr[0] "{money_amount} als erstatte Ausgaben an {n} Person"
 msgstr[1] "{money_amount} als erstatte Ausgaben an {n} Personen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} in donations from {n} donor"
 msgid_plural "{money_amount} in donations from {n} donors"
 msgstr[0] "{money_amount} als Spende von {n} Spender"
@@ -4754,9 +4754,8 @@ msgstr "Der Ablauf für Spender"
 msgid "1. Set up a donation"
 msgstr "1. Eine Spende einrichten"
 
-#, fuzzy
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr "Suchen Sie jemanden, dem Sie Geld geben möchten. Wählen Sie einen Betrag und einen Rhythmus (wöchentlich, monatlich oder jährlich) aus."
+msgstr "Finden Sie jemanden, dem Sie Geld spenden möchten. Wählen Sie einen Betrag und einen Rhythmus (wöchentlich, monatlich oder jährlich) aus und wählen sie eine Wiederholung aus (Automatisch oder Manuell)."
 
 msgid "2. Fund your donation"
 msgstr "2. Ihre Spenden finanzieren"
@@ -4770,9 +4769,8 @@ msgstr ""
 msgid "3. Keep your donation funded"
 msgstr "3. Halten Sie ihre Spende am Laufen"
 
-#, fuzzy
 msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
-msgstr "Wenn eine Spende erneuert werden muss, senden wir Ihnen eine Benachrichtigung per Email. Sie können die Spende dann erneuern oder beenden."
+msgstr "Wir werden sie Benachrichtigen sobald eine Spende Verlängert werden muss. Wenn sie die Automatische Verlängerung aktiviert haben, werden wir wie vereinbart von ihrer Bank-Karte oder ihrem Bank Konto abbuchen."
 
 msgid "How it works for creators"
 msgstr "Ablauf für Urheber/Kreative"
