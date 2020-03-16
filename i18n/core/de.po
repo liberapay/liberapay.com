@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-03-16 08:22+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-03-16 08:33+0000\n"
+"Last-Translator: SB <weblate@dakunier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -233,7 +233,7 @@ msgstr "Liberapay Spenden-Verlängerung: kein gültiges Zahlungsmittel"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Sie haben eine Zahlung von {amount} am {payment_date} geplant, um Ihre Spende an {recipient} zu erneuern, aber wir können sie nicht bearbeiten, weil ein gültiges Zahlungsmittel fehlt."
+msgstr "Sie haben eine Zahlung von {amount} am {payment_date} geplant, um Ihre Spende an {recipient} zu erneuern, aber wir können sie nicht bearbeiten, da ein gültiges Zahlungsmittel fehlt."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
@@ -501,7 +501,7 @@ msgstr "Die für den {date} vorgesehene Zahlung über {money_amount} wurde annul
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr "Die für den {Datum} vorgesehene manuelle Zahlung wurde annulliert."
+msgstr "Die für den {date} vorgesehene manuelle Zahlung wurde annulliert."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
@@ -513,19 +513,19 @@ msgstr "Eine neue manuelle Zahlung ist für den {date} vorgesehen."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Die Zahlung von {money_amount} geplant für {old_date} wurde auf den {new_date} verschoben."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Die Manuell geplante Zahlung für den {old_date} wurde auf den {new_date} verschoben."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "Die Höhe der geplanten Zahlung für den {date} wurde von {old_money_amount} auf {new_money_amount} geändert."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Die für {old_date} geplante Zahlung von {old_money_amount} wurde durch eine Zahlung von {new_money_amount} am {new_date} ersetzt."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
