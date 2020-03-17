@@ -94,7 +94,7 @@ class Cron(object):
                         if r is CRON_STOP:
                             return
                     sleep(period)
-        t = threading.Thread(target=f)
+        t = threading.Thread(target=f, name=func.__name__)
         t.daemon = True
         t.start()
 

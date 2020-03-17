@@ -240,7 +240,8 @@ class MoneyBasket(object):
         return r
 
 
-def fetch_currency_exchange_rates(db):
+def fetch_currency_exchange_rates(db=None):
+    db = db or website.db
     currencies = set(db.one("SELECT array_to_json(enum_range(NULL::currency))"))
     r = requests.get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
     rates = xmltodict.parse(r.text)['gesmes:Envelope']['Cube']['Cube']['Cube']
