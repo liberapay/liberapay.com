@@ -2543,3 +2543,8 @@ CREATE FUNCTION to_tsvector(text, text) RETURNS tsvector AS $$
         SELECT to_tsvector($1::regconfig, $2);
     $$ LANGUAGE sql STRICT IMMUTABLE;
 CREATE INDEX statements_fts_idx ON statements USING GIN (to_tsvector(search_conf, content));
+
+-- migration #121
+CREATE INDEX repositories_participant_idx ON repositories (participant, show_on_profile);
+CREATE INDEX repositories_info_fetched_at_idx ON repositories (info_fetched_at ASC)
+    WHERE participant IS NOT NULL AND show_on_profile;

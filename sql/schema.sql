@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '120'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '121'::jsonb);
 
 
 -- app configuration
@@ -187,6 +187,11 @@ CREATE TABLE repositories
 , UNIQUE (platform, remote_id)
 , UNIQUE (platform, slug)
 );
+
+CREATE INDEX repositories_participant_idx ON repositories (participant, show_on_profile);
+
+CREATE INDEX repositories_info_fetched_at_idx ON repositories (info_fetched_at ASC)
+    WHERE participant IS NOT NULL AND show_on_profile;
 
 CREATE INDEX repositories_trgm_idx ON repositories
     USING gist(name gist_trgm_ops);
