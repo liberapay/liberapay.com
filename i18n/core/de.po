@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "PO-Revision-Date: 2020-03-19 20:36+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Sascha Bohrmann <github@dakunier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -233,7 +233,7 @@ msgstr "Liberapay Spenden-Verlängerung: kein gültiges Zahlungsmittel"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Sie haben eine Zahlung von {amount} am {payment_date} geplant, um Ihre Spende an {recipient} zu erneuern, aber wir können sie nicht bearbeiten, da ein gültiges Zahlungsmittel fehlt."
+msgstr "Sie haben eine Zahlung von {amount} am {payment_date} geplant, um Ihre Spende an {recipient} zu erneuern, aber wir können sie nicht bearbeiten, weil ein gültiges Zahlungsmittel fehlt."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
@@ -529,32 +529,32 @@ msgstr "Die für {old_date} geplante Zahlung von {old_money_amount} wurde durch 
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "Die automatische Zahlung von {old_money_amount} geplant für {old_date} wurde ersetzt durch eine manuelle Zahlung am {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Die für {old_date} geplante manuelle Zahlung wurde durch eine automatische Zahlung von {new_money_amount} am {new_date} ersetzt."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sie haben jetzt {n} geplante Zahlung:"
+msgstr[1] "Sie haben jetzt {n} geplante Zahlungen:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: automatische Zahlung von {money_amount} an {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: automatische Bezahlung von {money_amount} aufgeteilt zwischen{recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: manuelle Bezahlung an {recipients}"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Verwalte deine geplanten Zahlungen"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
