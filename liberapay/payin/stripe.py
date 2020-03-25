@@ -232,6 +232,7 @@ def send_payin_notification(payin, payer, charge, route):
         payer.notify(
             'payin_sdd_created',
             force_email=True,
+            email_unverified_address=True,
             payin_id=payin.id,  # unused but required for uniqueness
             payin_amount=payin.amount,
             bank_name=getattr(sepa_debit, 'bank_name', None),
