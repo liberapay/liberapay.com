@@ -1175,15 +1175,15 @@ class Participant(Model, MixinTeam):
         # Finally, we set this newly verified address as the primary one if it's
         # the one the account was created with recently, or if the account
         # doesn't have a primary email address yet.
-        initial_address = self.db.one("""
+        initial_address, added_recently = self.db.one("""
             SELECT address
+                 , (added_time > (current_timestamp - interval '7 days')) AS added_recently
               FROM emails
              WHERE participant = %s
-               AND added_time > (current_timestamp - interval '7 days')
           ORDER BY added_time
              LIMIT 1
-        """, (self.id,))
-        if r.address == initial_address or not self.email:
+        """, (self.id,), default=(None, None))
+        if not self.email or (r.address == initial_address and added_recently):
             self.update_email(r.address)
         return EmailVerificationResult.SUCCEEDED
 
