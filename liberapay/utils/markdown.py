@@ -1,37 +1,19 @@
 import re
 
-from markupsafe import Markup, escape
+from markupsafe import Markup
 import misaka as m  # http://misaka.61924.nl/
 
 
 url_re = re.compile(r'^(https?|xmpp):')
 
 
-class CustomRenderer(m.HtmlRenderer):
+class CustomRenderer(m.SaferHtmlRenderer):
 
-    def image(self, link, title='', alt=''):
-        if url_re.match(link):
-            maybe_alt = Markup(' alt="%s"') % alt if alt else ''
-            maybe_title = Markup(' title="%s"') % title if title else ''
-            return Markup('<img src="%s"%s%s />') % (link, maybe_alt, maybe_title)
-        else:
-            return escape("![%s](%s)" % (alt, link))
-
-    def link(self, content, link, title=''):
-        if url_re.match(link):
-            maybe_title = Markup(' title="%s"') % title if title else ''
-            return Markup('<a href="%s"%s>' + content + '</a>') % (link, maybe_title)
-        else:
-            return escape("[%s](%s)" % (content, link))
-
-    def autolink(self, link, is_email):
-        if url_re.match(link):
-            return Markup('<a href="%s">%s</a>') % (link, link)
-        else:
-            return escape('<%s>' % link)
+    def check_url(self, url, is_image_src=False):
+        return bool(url_re.match(url))
 
 
-renderer = CustomRenderer(flags=m.HTML_SKIP_HTML)
+renderer = CustomRenderer()
 md = m.Markdown(renderer, extensions=(
     'autolink', 'strikethrough', 'no-intra-emphasis', 'tables',
 ))
