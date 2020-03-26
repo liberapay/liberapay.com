@@ -1595,15 +1595,21 @@ class Participant(Model, MixinTeam):
                 # Trick `schedule_renewals` into believing that this donation is
                 # awaiting renewal, when in fact it's awaiting its first payment.
                 cls.db.run("""
-                    WITH current_tip AS (
-                             SELECT id
-                               FROM current_tips
+                    WITH latest_tip AS (
+                             SELECT *
+                               FROM tips
                               WHERE tipper = %(tipper)s
                                 AND tippee = %(tippee)s
+                           ORDER BY mtime DESC
+                              LIMIT 1
                          )
-                    UPDATE tips
-                       SET paid_in_advance = zero(amount)
-                     WHERE id = (SELECT id FROM current_tip)
+                    UPDATE tips t
+                       SET paid_in_advance = zero(t.amount)
+                      FROM latest_tip lt
+                     WHERE t.tipper = lt.tipper
+                       AND t.tippee = lt.tippee
+                       AND t.mtime >= lt.mtime
+                       AND t.paid_in_advance IS NULL
                 """, tip)
             schedule = tipper.schedule_renewals()
             sp = next((

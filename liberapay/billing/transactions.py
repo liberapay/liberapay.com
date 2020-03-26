@@ -692,41 +692,52 @@ def _record_transfer_result(db, t_id, status, error=None):
             if context in ('tip-in-advance', 'take-in-advance'):
                 tip_target = team if context == 'take-in-advance' else tippee
                 assert tip_target
-                r = c.one("""
-                    WITH current_tip AS (
-                             SELECT id
-                               FROM current_tips
+                updated_tips = c.all("""
+                    WITH latest_tip AS (
+                             SELECT *
+                               FROM tips
                               WHERE tipper = %(tipper)s
                                 AND tippee = %(tip_target)s
+                           ORDER BY mtime DESC
+                              LIMIT 1
                          )
-                    UPDATE tips
+                    UPDATE tips t
                        SET paid_in_advance = (
-                               coalesce_currency_amount(paid_in_advance, amount::currency) +
-                               convert(%(amount)s, amount::currency)
+                               coalesce_currency_amount(t.paid_in_advance, t.amount::currency) +
+                               convert(%(amount)s, t.amount::currency)
                            )
                          , is_funded = true
-                     WHERE id = (SELECT id FROM current_tip)
-                 RETURNING paid_in_advance
+                      FROM latest_tip lt
+                     WHERE t.tipper = lt.tipper
+                       AND t.tippee = lt.tippee
+                       AND t.mtime >= lt.mtime
+                 RETURNING t.*
                 """, locals())
-                assert r, locals()
+                assert 0 < len(updated_tips) < 10, locals()
                 # Update the `takes.paid_in_advance` column
                 if context == 'take-in-advance':
-                    r = c.one("""
-                        WITH current_take AS (
-                                 SELECT id
-                                   FROM current_takes
+                    updated_takes = c.all("""
+                        WITH latest_take AS (
+                                 SELECT *
+                                   FROM takes
                                   WHERE team = %(team)s
                                     AND member = %(tippee)s
+                                    AND amount IS NOT NULL
+                               ORDER BY mtime DESC
+                                  LIMIT 1
                              )
-                        UPDATE takes
+                        UPDATE takes t
                            SET paid_in_advance = (
-                                   coalesce_currency_amount(paid_in_advance, amount::currency) +
-                                   convert(%(amount)s, amount::currency)
+                                   coalesce_currency_amount(lt.paid_in_advance, lt.amount::currency) +
+                                   convert(%(amount)s, lt.amount::currency)
                                )
-                         WHERE id = (SELECT id FROM current_take)
-                     RETURNING paid_in_advance
+                          FROM latest_take lt
+                         WHERE t.team = lt.team
+                           AND t.member = lt.member
+                           AND t.mtime >= lt.mtime
+                     RETURNING t.*
                     """, locals())
-                    assert r, locals()
+                    assert 0 < len(updated_takes) < 10, locals()
         else:
             # Unlock the bundles
             bundles = c.all("""
