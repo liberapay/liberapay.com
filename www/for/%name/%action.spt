@@ -22,6 +22,11 @@ if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
     response.redirect(request.body.get('back_to') or '/for/'+community.name, trusted_url=False)
 
 [---] text/html
+% extends "templates/layouts/base-thin.html"
+
+% block thin_content
+    <p class="alert alert-danger">These aren't the droids you're looking for.</p>
+% endblock
 
 [---] application/json
 {}
