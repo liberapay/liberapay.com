@@ -2,6 +2,7 @@ from collections import OrderedDict
 import os
 import re
 
+import html5lib
 from pando import Response
 import pytest
 
@@ -57,6 +58,7 @@ class BrowseTestHarness(Harness):
         """, (self.david.id, self.org.id))
 
     def browse(self, **kw):
+        html5parser = html5lib.HTMLParser(strict=True)
         for url in self.urls:
             if url.endswith('/%exchange_id') or '/receipts/' in url:
                 continue
@@ -72,6 +74,16 @@ class BrowseTestHarness(Harness):
             assert r.code != 404
             assert r.code < 500
             assert not overescaping_re.search(r.text)
+            if r.headers.get(b'Content-Type', b'').startswith(b'text/html'):
+                # Check the HTML
+                try:
+                    html5parser.parse(r.text)
+                except Exception as e:
+                    print(r.text)
+                    raise Exception(
+                        f"parsing HTML output of request for {url} failed:"
+                        f"\n{str(e)}"
+                    )
 
 
 class TestBrowsing(BrowseTestHarness):
