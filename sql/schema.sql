@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '121'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '122'::jsonb);
 
 
 -- app configuration
@@ -153,6 +153,7 @@ CREATE TABLE elsewhere
 
 CREATE UNIQUE INDEX elsewhere_user_id_key ON elsewhere (platform, domain, user_id);
 CREATE UNIQUE INDEX elsewhere_user_name_key ON elsewhere (lower(user_name), platform, domain);
+CREATE INDEX elsewhere_info_fetched_at_idx ON elsewhere (info_fetched_at ASC);
 
 
 -- oauth credentials
@@ -635,6 +636,7 @@ CREATE TABLE takes
  );
 
 CREATE INDEX takes_team_idx ON takes (team);
+CREATE INDEX takes_member_idx ON takes (member);
 
 CREATE OR REPLACE FUNCTION check_member() RETURNS trigger AS $$
     DECLARE

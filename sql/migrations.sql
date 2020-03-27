@@ -2548,3 +2548,7 @@ CREATE INDEX statements_fts_idx ON statements USING GIN (to_tsvector(search_conf
 CREATE INDEX repositories_participant_idx ON repositories (participant, show_on_profile);
 CREATE INDEX repositories_info_fetched_at_idx ON repositories (info_fetched_at ASC)
     WHERE participant IS NOT NULL AND show_on_profile;
+
+-- migration #122
+CREATE INDEX elsewhere_info_fetched_at_idx ON elsewhere (info_fetched_at ASC);
+CREATE INDEX takes_member_idx ON takes (member);
