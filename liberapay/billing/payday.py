@@ -636,32 +636,41 @@ class Payday(object):
                                  %(team)s, %(invoice)s, 'succeeded',
                                  'x', 'y', true);
 
-                    WITH current_tip AS (
-                             SELECT t.id
-                               FROM current_tips t
-                              WHERE t.tipper = %(tipper)s
-                                AND t.tippee = COALESCE(%(team)s, %(tippee)s)
+                    WITH latest_tip AS (
+                             SELECT *
+                               FROM tips
+                              WHERE tipper = %(tipper)s
+                                AND tippee = coalesce(%(team)s, %(tippee)s)
+                           ORDER BY mtime DESC
+                              LIMIT 1
                          )
                     UPDATE tips t
                        SET paid_in_advance = (t.paid_in_advance - %(in_advance)s)
-                      FROM current_tip t2
-                     WHERE t.id = t2.id;
+                      FROM latest_tip lt
+                     WHERE t.tipper = lt.tipper
+                       AND t.tippee = lt.tippee
+                       AND t.mtime >= lt.mtime;
                 """, t.__dict__)
                 if t.team:
                     db.run("""
-                        WITH current_take AS (
-                                 SELECT t.id
-                                   FROM current_takes t
+                        WITH latest_take AS (
+                                 SELECT t.*
+                                   FROM takes t
                                   WHERE t.team = %(team)s
                                     AND t.member = %(tippee)s
+                                    AND t.amount IS NOT NULL
+                               ORDER BY t.mtime DESC
+                                  LIMIT 1
                              )
                         UPDATE takes t
                            SET paid_in_advance = (
-                                   coalesce_currency_amount(t.paid_in_advance, t.amount::currency) -
-                                   convert(%(in_advance)s, t.amount::currency)
+                                   coalesce_currency_amount(lt.paid_in_advance, lt.amount::currency) -
+                                   convert(%(in_advance)s, lt.amount::currency)
                                )
-                          FROM current_take t2
-                         WHERE t.id = t2.id;
+                          FROM latest_take lt
+                         WHERE t.team = lt.team
+                           AND t.member = lt.member
+                           AND t.mtime >= lt.mtime;
                     """, t.__dict__)
             if t.amount:
                 transfer(db, **t.__dict__)

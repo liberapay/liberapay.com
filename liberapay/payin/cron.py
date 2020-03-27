@@ -129,7 +129,7 @@ def send_upcoming_debit_notifications():
                 })
         else:
             event = 'missing_route'
-        payer.notify(event, **context)
+        payer.notify(event, email_unverified_address=True, **context)
         counts[event] += 1
         db.run("""
             UPDATE scheduled_payins

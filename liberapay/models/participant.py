@@ -1175,15 +1175,15 @@ class Participant(Model, MixinTeam):
         # Finally, we set this newly verified address as the primary one if it's
         # the one the account was created with recently, or if the account
         # doesn't have a primary email address yet.
-        initial_address = self.db.one("""
+        initial_address, added_recently = self.db.one("""
             SELECT address
+                 , (added_time > (current_timestamp - interval '7 days')) AS added_recently
               FROM emails
              WHERE participant = %s
-               AND added_time > (current_timestamp - interval '7 days')
           ORDER BY added_time
              LIMIT 1
-        """, (self.id,))
-        if r.address == initial_address or not self.email:
+        """, (self.id,), default=(None, None))
+        if not self.email or (r.address == initial_address and added_recently):
             self.update_email(r.address)
         return EmailVerificationResult.SUCCEEDED
 
@@ -1595,15 +1595,21 @@ class Participant(Model, MixinTeam):
                 # Trick `schedule_renewals` into believing that this donation is
                 # awaiting renewal, when in fact it's awaiting its first payment.
                 cls.db.run("""
-                    WITH current_tip AS (
-                             SELECT id
-                               FROM current_tips
+                    WITH latest_tip AS (
+                             SELECT *
+                               FROM tips
                               WHERE tipper = %(tipper)s
                                 AND tippee = %(tippee)s
+                           ORDER BY mtime DESC
+                              LIMIT 1
                          )
-                    UPDATE tips
-                       SET paid_in_advance = zero(amount)
-                     WHERE id = (SELECT id FROM current_tip)
+                    UPDATE tips t
+                       SET paid_in_advance = zero(t.amount)
+                      FROM latest_tip lt
+                     WHERE t.tipper = lt.tipper
+                       AND t.tippee = lt.tippee
+                       AND t.mtime >= lt.mtime
+                       AND t.paid_in_advance IS NULL
                 """, tip)
             schedule = tipper.schedule_renewals()
             sp = next((
@@ -2075,6 +2081,7 @@ class Participant(Model, MixinTeam):
 
     def change_username(self, suggested, cursor=None, recorder=None):
         self.check_username(suggested)
+        recorder_id = getattr(recorder, 'id', None)
 
         if suggested != self.username:
             with self.db.get_cursor(cursor) as c:
@@ -2123,7 +2130,7 @@ class Participant(Model, MixinTeam):
                                           , mtime = now()
                             """, prefixes)
 
-                self.add_event(c, 'set_username', suggested)
+                self.add_event(c, 'set_username', suggested, recorder=recorder_id)
                 self.set_attributes(username=suggested)
 
             if last_rename and self.kind == 'group':

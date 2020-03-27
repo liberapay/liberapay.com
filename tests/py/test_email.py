@@ -206,9 +206,16 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = self.alice.get_email('alice@example.com').nonce
         self.hit_verify('alice@example.com', nonce)
-        expected = 'alice@example.com'
-        actual = Participant.from_username('alice').email
-        assert expected == actual
+        alice = Participant.from_username('alice')
+        assert alice.email == 'alice@example.com'
+        # Add and verify a second email address a year later, the primary email
+        # address should stay the same.
+        self.db.run("UPDATE emails SET added_time = added_time - interval '1 year'")
+        self.hit_email_spt('add-email', 'alice@example.net')
+        nonce = self.alice.get_email('alice@example.net').nonce
+        self.hit_verify('alice@example.net', nonce)
+        alice = alice.refetch()
+        assert alice.email == 'alice@example.com'
 
     def test_verify_email_with_unicode_domain(self):
         punycode_email = 'alice@' + 'accentué.fr'.encode('idna').decode()
