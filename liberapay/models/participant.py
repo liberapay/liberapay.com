@@ -2639,7 +2639,7 @@ class Participant(Model, MixinTeam):
                   ORDER BY coalesce(pt.team, pt.recipient)
                          , pt.ctime DESC
                 """, dict(payer=self.id, tippees=tippees)))
-                for tip in list(renewable_tips):
+                for tip in renewable_tips:
                     if tip.renewal_mode == 2 and tip.tippee_p.payment_providers & 1 == 0:
                         # Automatic payments are only possible through Stripe.
                         tip.renewal_mode = 1
