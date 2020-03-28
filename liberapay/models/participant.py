@@ -2596,6 +2596,7 @@ class Participant(Model, MixinTeam):
                    AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                    AND tippee_p.is_suspended IS NOT TRUE
                    AND tippee_p.payment_providers > 0
+              ORDER BY t.tippee
             """, (self.id,))
 
             # Get the existing schedule
