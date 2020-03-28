@@ -123,7 +123,7 @@ class Tests2(Harness):
         url = self.client.website.asset('jquery.min.js')
         assert url.startswith('http://localhost/assets/jquery.min.js?etag=')
         r = self.client.GET(url[len('http://localhost'):])
-        assert r.headers[b'Cache-Control'] == b'public, max-age=31536000'
+        assert r.headers[b'Cache-Control'] == b'public, max-age=31536000, immutable'
         assert b'Vary' not in r.headers
         assert not r.headers.cookie
 
