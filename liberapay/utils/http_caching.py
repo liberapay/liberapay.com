@@ -100,7 +100,7 @@ def try_to_serve_304(dispatch_result, request, response, etag):
     raise response.success(304)
 
 
-def add_caching_to_response(response, request=None, etag=None):
+def add_caching_to_response(state, website, response, request=None, etag=None):
     """Set caching headers.
     """
     if response.code not in (200, 304):
@@ -109,6 +109,11 @@ def add_caching_to_response(response, request=None, etag=None):
         # The caching policy has already been defined somewhere else
         return
     if etag:
+        try:
+            assert not response.headers.cookie
+        except Exception as e:
+            website.tell_sentry(e, state)
+            response.headers.cookie.clear()
         # https://developers.google.com/speed/docs/best-practices/caching
         response.headers[b'Etag'] = etag.encode('ascii')
         if request.qs.get('etag'):
