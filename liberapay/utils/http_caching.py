@@ -103,23 +103,20 @@ def try_to_serve_304(dispatch_result, request, response, etag):
 def add_caching_to_response(response, request=None, etag=None):
     """Set caching headers.
     """
-    if not etag:
-        # This is a dynamic resource, disable caching by default
-        if b'Cache-Control' not in response.headers:
-            response.headers[b'Cache-Control'] = b'no-cache'
-        return
-
-    assert request is not None  # sanity check
-
     if response.code not in (200, 304):
         return
-
-    # https://developers.google.com/speed/docs/best-practices/caching
-    response.headers[b'Etag'] = etag.encode('ascii')
-
-    if request.qs.get('etag'):
-        # We can cache "indefinitely" when the querystring contains the etag.
-        response.headers[b'Cache-Control'] = b'public, max-age=31536000, immutable'
+    if b'Cache-Control' in response.headers:
+        # The caching policy has already been defined somewhere else
+        return
+    if etag:
+        # https://developers.google.com/speed/docs/best-practices/caching
+        response.headers[b'Etag'] = etag.encode('ascii')
+        if request.qs.get('etag'):
+            # We can cache "indefinitely" when the querystring contains the etag.
+            response.headers[b'Cache-Control'] = b'public, max-age=31536000, immutable'
+        else:
+            # Otherwise we cache for 1 hour
+            response.headers[b'Cache-Control'] = b'public, max-age=3600'
     else:
-        # Otherwise we cache for 1 hour
-        response.headers[b'Cache-Control'] = b'public, max-age=3600'
+        # This is a dynamic resource, disable caching by default
+        response.headers[b'Cache-Control'] = b'no-cache'
