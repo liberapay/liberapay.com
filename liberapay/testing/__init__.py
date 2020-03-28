@@ -7,6 +7,7 @@ import json
 import unittest
 from os.path import dirname, join, realpath
 
+import html5lib
 from pando.utils import utcnow
 from pando.testing.client import Client
 from psycopg2 import IntegrityError, InternalError
@@ -53,6 +54,9 @@ def USD(amount):
     return Money(amount, 'USD')
 
 
+html5parser = html5lib.HTMLParser(strict=True)
+
+
 class ClientWithAuth(Client):
 
     def __init__(self, *a, **kw):
@@ -81,20 +85,53 @@ class ClientWithAuth(Client):
 
         return Client.build_wsgi_environ(self, *a, **kw)
 
-    def hit(self, *a, **kw):
+    def hit(self, method, url, *a, **kw):
         if kw.pop('xhr', False):
             kw['HTTP_X_REQUESTED_WITH'] = b'XMLHttpRequest'
 
         # prevent tell_sentry from reraising errors
-        if not kw.pop('sentry_reraise', True):
-            env = self.website.env
-            old_reraise, env.sentry_reraise = env.sentry_reraise, False
-            try:
-                return super(ClientWithAuth, self).hit(*a, **kw)
-            finally:
-                env.sentry_reraise = old_reraise
+        sentry_reraise = kw.pop('sentry_reraise', True)
+        env = self.website.env
+        old_reraise = env.sentry_reraise
+        if sentry_reraise != old_reraise:
+            env.sentry_reraise = sentry_reraise
 
-        return super(ClientWithAuth, self).hit(*a, **kw)
+        want = kw.get('want', 'response')
+        try:
+            wanted = super().hit(method, url, *a, **kw)
+            r = None
+            if want == 'response':
+                r = wanted
+            elif want == 'state':
+                r = wanted.get('response')
+            if not r or not r.body:
+                return wanted
+            # Attempt to validate the response body
+            r_type = r.headers[b'Content-Type']
+            try:
+                if r_type.startswith(b'text/html'):
+                    html5parser.parse(r.text)
+                elif r_type.startswith(b'application/json'):
+                    json.loads(r.body)
+                elif r_type.startswith(b'application/javascript'):
+                    pass
+                elif r_type.startswith(b'text/css'):
+                    pass
+                elif r_type.startswith(b'image/'):
+                    pass
+                elif r_type.startswith(b'text/'):
+                    pass
+                else:
+                    raise ValueError(f"unknown response media type {r_type!r}")
+            except Exception as e:
+                print(r.text)
+                raise Exception(
+                    f"parsing body of {r.code} response to `{method} {url}` failed:"
+                    f"\n{str(e)}"
+                )
+            return wanted
+        finally:
+            env.sentry_reraise = old_reraise
 
 
 class Harness(unittest.TestCase):

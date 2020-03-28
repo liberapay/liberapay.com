@@ -48,7 +48,7 @@ class TestNotifications(Harness):
             """).load(jinja_env_html, None),
             'text/html': SimplateLoader(None, """
                 Test that builtins are available: len([]) = {{ len([]) }}.
-                Test escaping: {{ _("{0}", '<test-escaping>'|safe) }}
+                Test escaping: {{ _("{0}", '<test></test>'|safe) }}
             """).load(jinja_env_html, None)
         }
         alice = self.make_participant('alice')
@@ -66,7 +66,7 @@ class TestNotifications(Harness):
         assert 'bob' in r
         assert ' alert-&lt;type ' not in r
         assert 'alert-info' in r
-        assert '<test-escaping>' in r, r
+        assert '<test></test>' in r, r
         assert 'Test notification subject' in r
 
     def test_render_unknown_notification(self):
