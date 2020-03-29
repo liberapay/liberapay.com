@@ -66,7 +66,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 
 % if user.ANON
     % from "templates/macros/sign-in-link.html" import sign_in_link with context
-    <p>{{ sign_in_link() }}</p>
+    {{ sign_in_link() }}<br>
 % elif need_reconnect
 <div class="paragraph">
     <p>{{ _(

@@ -181,3 +181,8 @@ elif 'state' in request.qs:
     response.redirect(back_to)
 
 [---] text/html
+% extends "templates/layouts/base-thin.html"
+
+% block thin_content
+    <p class="alert alert-danger">These aren't the droids you're looking for.</p>
+% endblock

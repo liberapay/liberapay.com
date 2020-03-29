@@ -218,7 +218,7 @@ title = "Users Admin"
             % endif
             </p>
 
-        <p><strong>Elsewhere accounts:</strong>
+        <div><strong>Elsewhere accounts:</strong>
         % set elsewhere = p.get_accounts_elsewhere().values()
         % if elsewhere
             % for account in elsewhere
@@ -232,7 +232,7 @@ title = "Users Admin"
         % else
             none. <span class="text-danger">{{ glyphicon('warning-sign') }}</span>
         % endif
-        </p>
+        </div>
         % endif
 
         % if row.payments

@@ -104,6 +104,11 @@ if 'ctime' not in out:
     out["ctime"] = out["mtime"] = None
 
 [---] text/html
+% extends "templates/layouts/base-thin.html"
+
+% block thin_content
+    <p class="alert alert-danger">These aren't the droids you're looking for.</p>
+% endblock
 
 [---] application/json via json_dump
 out

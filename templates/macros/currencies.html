@@ -1,7 +1,7 @@
 % macro currency_buttons(name, selected)
     <select class="form-control" name="{{ name }}">
         % for c in list(constants.CURRENCIES)
-        <option value="{{ c }}" {{ 'selected' if c == selected else '' }} />
+        <option value="{{ c }}" {{ 'selected' if c == selected else '' }}>
             {{ locale.title(locale.currencies.get(c, c)) }}
             ({{ locale.currency_symbols.get(c, c) }})
         </option>
