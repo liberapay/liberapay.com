@@ -79,12 +79,13 @@ class Tests(Harness):
 
     def test_csrf_cookie_properties(self):
         r = self.client.GET(
-            '/',
+            '/log-in',
             HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'en.example.com',
             csrf_token=None, raise_immediately=False,
         )
-        assert r.code == 200
+        assert r.code == 200, r.text
         cookie = r.headers.cookie[csrf.CSRF_TOKEN]
+        assert len(cookie.value) == 32
         assert cookie['domain'] == '.example.com'
         assert cookie['expires'][-4:] == ' GMT'
         assert cookie['path'] == '/'
@@ -135,45 +136,51 @@ class Tests2(Harness):
         r = self.client.POST('/', csrf_token=False, raise_immediately=False)
         assert r.code == 403
         assert "cookie" in r.text
-        assert csrf.CSRF_TOKEN in r.headers.cookie
+        assert csrf.CSRF_TOKEN not in r.headers.cookie
 
     def test_no_csrf_cookie_unknown_method_on_asset(self):
         r = self.client.hit('UNKNOWN', '/assets/base.css', csrf_token=False,
                             raise_immediately=False)
-        assert r.code == 405
+        assert r.code == 403
 
-    def test_bad_csrf_cookie(self):
-        r = self.client.POST('/', csrf_token='bad_token', raise_immediately=False)
+    def test_csrf_cookie_mismatch(self):
+        r = self.client.POST('/', {'csrf_token': 'a'*32}, csrf_token='b'*32, raise_immediately=False)
         assert r.code == 403
         assert "The anti-CSRF tokens don't match." in r.text
-        assert r.headers.cookie[csrf.CSRF_TOKEN].value != 'bad_token'
 
-    def test_csrf_cookie_set_for_most_requests(self):
-        r = self.client.GET('/')
+    def test_csrf_cookie_set_for_log_in_page(self):
+        r = self.client.GET('/log-in')
         assert csrf.CSRF_TOKEN in r.headers.cookie
+
+    def test_no_csrf_cookie_set_for_homepage(self):
+        r = self.client.GET('/')
+        assert csrf.CSRF_TOKEN not in r.headers.cookie
 
     def test_no_csrf_cookie_set_for_assets(self):
         r = self.client.GET('/assets/base.css')
         assert csrf.CSRF_TOKEN not in r.headers.cookie
 
-    def test_reject_forgeries_accepts_good_token(self):
+    def test_CSRF_Token_accepts_good_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeeffff'
-        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        state = self.client.GET('/log-in', csrf_token=token, want='state')
         assert state['csrf_token'] == token
+        assert token in state['response'].text
 
-    def test_reject_forgeries_rejects_overlong_token(self):
+    def test_CSRF_Token_rejects_overlong_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeefffff'
-        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        state = self.client.GET('/log-in', csrf_token=token, want='state')
+        assert state['csrf_token']
         assert state['csrf_token'] != token
 
-    def test_reject_forgeries_rejects_underlong_token(self):
+    def test_CSRF_Token_rejects_underlong_token(self):
         token = 'ddddeeeeaaaaddddbbbbeeeeeeeefff'
-        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        state = self.client.GET('/log-in', csrf_token=token, want='state')
+        assert state['csrf_token']
         assert state['csrf_token'] != token
 
-    def test_reject_forgeries_accepts_token_with_non_base64_chars(self):
+    def test_CSRF_Token_accepts_token_with_non_base64_chars(self):
         token = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
-        state = self.client.GET('/', csrf_token=token, return_after='reject_forgeries', want='state')
+        state = self.client.GET('/log-in', csrf_token=token, want='state')
         assert state['csrf_token'] == token
 
     def test_malformed_body(self):
