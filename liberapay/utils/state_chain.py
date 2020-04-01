@@ -113,7 +113,9 @@ def add_content_disposition_header(request, response):
         response.headers[b'Content-Disposition'] = b"attachment; filename*=UTF-8''" + save_as
 
 
-def merge_exception_into_response(state, exception, response=None):
+def merge_responses(state, exception, response=None):
+    """Merge the initial Response object with the one raised later in the chain.
+    """
     if response is None or not isinstance(exception, Response):
         return
     # clear the exception
@@ -123,18 +125,21 @@ def merge_exception_into_response(state, exception, response=None):
     # render response if it's lazy
     if isinstance(exception, LazyResponse):
         exception.render_body(state)
-        exception.__dict__.pop('lazy_body', None)
     # there's nothing else to do if the exception is the response
     if exception is response:
         return
     # merge cookies
-    response.headers.cookie.update(exception.headers.cookie)
+    for k, v in response.headers.cookie.items():
+        exception.headers.cookie.setdefault(k, v)
     # merge headers
-    for k, values in exception.__dict__.pop('headers').items():
-        for v in values:
-            response.headers.add(k, v)
+    for k, values in response.__dict__.pop('headers').items():
+        exception.headers.setdefault(k, values)
     # copy the rest
-    response.__dict__.update(exception.__dict__)
+    if hasattr(response, '__dict__'):
+        for k, v in response.__dict__.items():
+            exception.__dict__.setdefault(k, v)
+    # set response
+    state['response'] = exception
 
 
 def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None):

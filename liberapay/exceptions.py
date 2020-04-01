@@ -44,41 +44,41 @@ class LazyResponse(Response):
 
 
 class AuthRequired(LazyResponse):
+    html_template = 'templates/exceptions/AuthRequired.html'
 
     def __init__(self):
         Response.__init__(self, 403, '')
-        self.html_template = 'templates/exceptions/AuthRequired.html'
 
     def lazy_body(self, _):
         return _("You need to sign in first")
 
 
 class ClosedAccount(LazyResponse):
+    html_template = 'templates/exceptions/ClosedAccount.html'
 
     def __init__(self, participant):
         Response.__init__(self, 410, '')
         self.closed_account = participant
-        self.html_template = 'templates/exceptions/ClosedAccount.html'
 
     def lazy_body(self, _):
         return _("This account is closed")
 
 
 class LoginRequired(LazyResponse):
+    html_template = 'templates/exceptions/LoginRequired.html'
 
     def __init__(self):
         Response.__init__(self, 403, '')
-        self.html_template = 'templates/exceptions/LoginRequired.html'
 
     def lazy_body(self, _):
         return _("You need to log in")
 
 
 class NeedDatabase(LazyResponse):
+    html_template = 'templates/exceptions/NeedDatabase.html'
 
     def __init__(self):
         Response.__init__(self, 503, '')
-        self.html_template = 'templates/exceptions/NeedDatabase.html'
 
     def lazy_body(self, _):
         return _("We're unable to process your request right now, sorry.")
@@ -173,10 +173,10 @@ class ValueContainsForbiddenCharacters(LazyResponse400):
 
 class EmailAddressError(LazyResponse400):
     bypass_allowed = False
+    html_template = 'templates/exceptions/EmailAddressError.html'
 
     def __init__(self, address, exception_or_message=None):
         super().__init__()
-        self.html_template = 'templates/exceptions/EmailAddressError.html'
         self.email_address = address
         self.exception_or_message = exception_or_message
 
@@ -243,10 +243,10 @@ class NonEmailDomain(EmailAddressError):
 
 
 class EmailAddressIsBlacklisted(LazyResponse400):
+    html_template = 'templates/exceptions/EmailAddressIsBlacklisted.html'
 
     def __init__(self, email_address, reason, ts, details, ses_data=None):
         Response.__init__(self, 400, '')
-        self.html_template = 'templates/exceptions/EmailAddressIsBlacklisted.html'
         from liberapay.utils.emails import EmailError
         self.email_error = EmailError(email_address, reason, ts, details, ses_data)
 
@@ -347,10 +347,10 @@ class TooManyLoginEmails(LazyResponseXXX):
 
 
 class TooManyPasswordLogins(LazyResponse):
+    html_template = 'templates/exceptions/TooManyPasswordLogins.html'
 
     def __init__(self, participant_id):
         Response.__init__(self, 429, '')
-        self.html_template = 'templates/exceptions/TooManyPasswordLogins.html'
 
     def lazy_body(self, _):
         return _(
