@@ -18,11 +18,11 @@ teams = website.db.all("""
 recent_donation_changes = website.db.all("""
     SELECT t.mtime, old_t.amount AS old_amount, t.amount AS new_amount
          , old_t.renewal_mode AS old_renewal_mode, t.renewal_mode AS new_renewal_mode
-      FROM ( SELECT DISTINCT ON (tipper, mtime) t.*
+      FROM ( SELECT DISTINCT ON (mtime, tipper) t.*
                FROM tips t
               WHERE t.tippee = %(p_id)s
                 AND t.mtime > current_timestamp - interval '30 days'
-           ORDER BY t.tipper, t.mtime DESC
+           ORDER BY t.mtime DESC, t.tipper
               LIMIT 10
            ) t
  LEFT JOIN LATERAL (
