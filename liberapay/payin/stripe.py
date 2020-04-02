@@ -326,7 +326,7 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
                 execute_transfer(db, pt, pt.destination_id, charge.id)
             elif refunded_amount and pt.remote_id:
                 sync_transfer(db, pt)
-    elif charge.status == 'failed':
+    elif charge.status in ('failed', 'pending'):
         for pt in payin_transfers:
             update_payin_transfer(db, pt.id, None, charge.status, error)
 
