@@ -23,7 +23,7 @@ recent_donation_changes = website.db.all("""
               WHERE t.tippee = %(p_id)s
                 AND t.mtime > current_timestamp - interval '30 days'
            ORDER BY t.mtime DESC, t.tipper
-              LIMIT 10
+              LIMIT 30
            ) t
  LEFT JOIN LATERAL (
              SELECT old_t.*
