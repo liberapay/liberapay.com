@@ -2596,6 +2596,7 @@ class Participant(Model, MixinTeam):
                    AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                    AND tippee_p.is_suspended IS NOT TRUE
                    AND tippee_p.payment_providers > 0
+              ORDER BY t.tippee
             """, (self.id,))
 
             # Get the existing schedule
@@ -2638,7 +2639,7 @@ class Participant(Model, MixinTeam):
                   ORDER BY coalesce(pt.team, pt.recipient)
                          , pt.ctime DESC
                 """, dict(payer=self.id, tippees=tippees)))
-                for tip in list(renewable_tips):
+                for tip in renewable_tips:
                     if tip.renewal_mode == 2 and tip.tippee_p.payment_providers & 1 == 0:
                         # Automatic payments are only possible through Stripe.
                         tip.renewal_mode = 1

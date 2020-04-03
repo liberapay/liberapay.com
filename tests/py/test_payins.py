@@ -794,10 +794,10 @@ class TestPayinsStripe(Harness):
         payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
         assert len(payin_transfers) == 2
         pt1, pt2 = payin_transfers
-        assert pt1.status == 'pre'
+        assert pt1.status == 'pending'
         assert pt1.amount == EUR('50.00')
         assert pt1.remote_id is None
-        assert pt2.status == 'pre'
+        assert pt2.status == 'pending'
         assert pt2.amount == EUR('50.00')
         assert pt2.remote_id is None
 

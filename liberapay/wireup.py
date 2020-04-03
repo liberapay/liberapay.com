@@ -18,6 +18,7 @@ import pando
 from postgres.cursors import SimpleRowCursor
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
+from psycopg2_pool import PoolError
 import raven
 import requests
 import sass
@@ -462,6 +463,10 @@ def make_sentry_teller(env):
         if isinstance(exception, NeedDatabase):
             # Don't flood Sentry when DB is down
             return
+
+        if isinstance(exception, PoolError):
+            # If this happens, then the `DATABASE_MAXCONN` value is too low.
+            state['exception'] = NeedDatabase()
 
         if isinstance(exception, psycopg2.Error):
             from liberapay.website import website
