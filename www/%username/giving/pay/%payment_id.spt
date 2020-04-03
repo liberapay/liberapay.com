@@ -79,6 +79,7 @@ if tippee_id:
         donations_not_fundable = [tip]
 
 elif retry_id:
+    allow_stripe_sdd = request.qs.get('sdd') != 'no'
     tips = website.db.all("""
         SELECT tip.*, tippee_p
           FROM payin_transfers pt
