@@ -230,11 +230,19 @@ title = _("Funding your donations")
         <a class="btn btn-default" href="{{ payer.path('receipts/direct/%s' % payin.id) }}">{{
             _("View receipt")
         }}</a>
+    % elif status == 'failed' and payin.error.startswith("For 'sepa_debit' payments, we currently require ")
+        {# https://github.com/liberapay/liberapay.com/issues/1525 #}
+        <div class="alert alert-danger">{{ _(
+            "The payment processor ({name}) isn't able to process {currency} direct debits "
+            "for this recipient yet. Please retry with a different payment method.",
+            name='Stripe', currency=Currency(payin.amount.currency),
+        ) }}</div>
+        <p><a class="btn btn-primary btn-lg" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}&amp;sdd=no">{{ _("Try again") }}</a></p>
     % elif status == 'failed'
         <div class="alert alert-danger">{{ _(
             "The payment failed. Error message: “{0}”", payin.error
         ) }}</div>
-        <p><a class="btn btn-primary" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
+        <p><a class="btn btn-primary btn-lg" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
     % elif status == 'pending'
         <div class="alert alert-info">{{ _("The payment has been initiated.") }}</div>
     % endif
