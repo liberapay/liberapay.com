@@ -1392,14 +1392,7 @@ class Participant(Model, MixinTeam):
         """, locals())
         if not web:
             return n_id
-        # Update the participant's `pending_notifs` count
-        pending_notifs = self.db.one("""
-            UPDATE participants
-               SET pending_notifs = pending_notifs + 1
-             WHERE id = %(p_id)s
-         RETURNING pending_notifs;
-        """, locals())
-        self.set_attributes(pending_notifs=pending_notifs)
+        self.set_attributes(pending_notifs=self.pending_notifs + 1)
         return n_id
 
     def mark_notification_as_read(self, n_id):
@@ -1411,16 +1404,7 @@ class Participant(Model, MixinTeam):
                AND id = %(n_id)s
                AND is_new
                AND web;
-            UPDATE participants
-               SET pending_notifs = (
-                       SELECT count(*)
-                         FROM notifications
-                        WHERE participant = %(p_id)s
-                          AND web
-                          AND is_new
-                   )
-             WHERE id = %(p_id)s
-         RETURNING pending_notifs;
+            SELECT pending_notifs FROM participants WHERE id = %(p_id)s;
         """, locals())
         self.set_attributes(pending_notifs=r)
 
@@ -1440,16 +1424,7 @@ class Participant(Model, MixinTeam):
                AND is_new
                AND web
                {0};
-            UPDATE participants
-               SET pending_notifs = (
-                       SELECT count(*)
-                         FROM notifications
-                        WHERE participant = %(p_id)s
-                          AND web
-                          AND is_new
-                   )
-             WHERE id = %(p_id)s
-         RETURNING pending_notifs;
+            SELECT pending_notifs FROM participants WHERE id = %(p_id)s;
         """.format(sql_filter), locals())
         self.set_attributes(pending_notifs=r)
 
@@ -1462,16 +1437,7 @@ class Participant(Model, MixinTeam):
              WHERE id = %(n_id)s
                AND participant = %(p_id)s
                AND web;
-            UPDATE participants
-               SET pending_notifs = (
-                       SELECT count(*)
-                         FROM notifications
-                        WHERE participant = %(p_id)s
-                          AND web
-                          AND is_new
-                   )
-             WHERE id = %(p_id)s
-         RETURNING pending_notifs;
+            SELECT pending_notifs FROM participants WHERE id = %(p_id)s;
         """, locals())
         self.set_attributes(pending_notifs=r)
 
