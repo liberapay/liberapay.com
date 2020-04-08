@@ -322,7 +322,7 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
                     db, pt.id, None, charge.status, error,
                     reversed_amount=pt_reversed_amount,
                 )
-            elif pt.status == 'pre':
+            elif pt.remote_id is None and pt.status in ('pre', 'pending'):
                 execute_transfer(db, pt, pt.destination_id, charge.id)
             elif refunded_amount and pt.remote_id:
                 sync_transfer(db, pt)
@@ -345,6 +345,7 @@ def execute_transfer(db, pt, destination, source_transaction):
         Record: the row updated in the `payin_transfers` table
 
     """
+    assert pt.remote_id is None
     try:
         tr = stripe.Transfer.create(
             amount=Money_to_int(pt.amount),
