@@ -31,7 +31,7 @@ msgstr "Ideje megújítania az adományait a Liberapay oldalán"
 
 #, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr ""
+msgstr "Az Ön {amount} összegű adománya {recipient} számára fizetésre várakozik."
 
 #, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
@@ -118,37 +118,37 @@ msgstr "- {0}: {1}"
 
 #, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
-msgstr ""
+msgstr "Az Ön jövedelme a Liberapay-en megközelítőleg {money_amount} ezen a héten"
 
 #, python-brace-format
 msgid "Your Liberapay income is {money_amount} this week"
-msgstr ""
+msgstr "Az Ön jövedelme a Liberapay-en {money_amount} ezen a héten"
 
 msgid "Here is the breakdown of your income this week:"
-msgstr ""
+msgstr "Itt van az eheti jövedelme részletezve:"
 
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
 msgid_plural "Personal donations: {money_amount} from {n} donors."
-msgstr[0] ""
+msgstr[0] "Személyes adományok: {money_amount} {n} adományozótól."
 
 msgid "Personal donations: none."
-msgstr ""
+msgstr "Személyes adományok: nincs."
 
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] ""
+msgstr[0] "Adományok az Ön szerepére a(z) {team_name} csoportban: {money_amount} {n} adományozótól."
 
 msgid "Donations through teams: none (you are not a member of any team)."
-msgstr ""
+msgstr "Csoportok általi adományok: nincs (Ön egyetlen csoportnak sem tagja)."
 
 msgid "NB: Donations through Liberapay are now paid in advance instead of being transferred weekly. The numbers above match what you would have received this week under the old system."
-msgstr ""
+msgstr "Megjegyzés: Az adományok a Liberapay-en jelenleg előre vannak fizetve heti utalás helyett. A fenti számok azt mutatják, amit a korábbi rendszer szerint kapna ezen a héten."
 
 #, python-brace-format
 msgid "You have {money_amount} in your Mangopay wallet."
-msgstr ""
+msgstr "Önnek {money_amount}-ja van a Mangopay tárcájában."
 
 msgid "Withdraw money"
 msgstr "Pénz kivétele"
@@ -222,34 +222,34 @@ msgid "Add money"
 msgstr "Pénz hozzáadása"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Liberapay adomány megújítás: nem áll rendelkezésre érvényes fizetési eszköz"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Önnek van egy fizetése {amount}-ra {payment_date}-ra időzítve hogy megújítsa az adományát {recipient} számára, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Önnek van egy fizetése {amount}-ra {payment_date}-ra időzítve hogy megújítsa az adományait {recipients} számaira, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
+msgstr[0] "Önnek van {n} fizetése időzítve hogy megújítsa az adományait, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr ""
+msgstr "A fizetési dátumok, összegek és fogadók:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {money_amount} {recipient} részére"
 
 #, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {money_amount} megosztva {recipients} között"
 
 msgid "Add a payment instrument"
-msgstr ""
+msgstr "Fizetési eszköz hozzáadása"
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
@@ -267,7 +267,7 @@ msgid "Unsubscribe"
 msgstr "Leiratkozás"
 
 msgid "Liberapay is in trouble"
-msgstr ""
+msgstr "A Liberapay gondban van"
 
 #, python-brace-format
 msgid ""
@@ -291,6 +291,25 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
+"A fizetés feldolgozónk (Mangopay) kidob minket, ezért azt javasoljuk {link1_start}menekítse a pénzt a fiókjából{link_end} Július 26 előtt.\n"
+"\n"
+"A fenti linkre kattintva egy új lapra kerül, \"Tárca ürítése\" és megkéri Önt, hogy válasszon két lehetőség közül.\n"
+"\n"
+"Amennyiben Ön adományozóként használja a Liberapay-t, az első lehetőséget ajánljuk, különöseb ha szeretné tovább használni a Liberapay-t. Ez a lehetőség szétosztja a tárjájában levő összeget az emberek számára akik egyébként idővel megkapnák azt. A fogadók látni fogják a hirtelen nagy összegű adomány érkezését, ami több heti adománynak felel meg.\n"
+"\n"
+"Például, ha Ön 1$-t adományoz 2 alkotónak hetente, és 40$ van a tárcájában, akkor mindkét alkotó kap 20$-t, és Ön 20 hét múlva megkapja a szokásos emlékeztető e-mail-ünket, hogy itt az ideje feltöltenie a tárcáját.\n"
+"\n"
+"Kérjük vegye figyelembe, hogy a kifizetés több okból meghiúsulhat. Amennyiben Ön kap egy olyasmi hibaüzenetet, hogy „A kísérlet az összes pénzének a szétosztására meghiúsult: XX.XX maradt.”, akkor a probléma valószínűleg a fogadó felek részéről áll fent, például ha valaki nem töltötte ki személyazonosságára vonatkozó űrlapot, vagy ha egy csoport nem határozta meg hogy hogyan legyen felosztva a bevételük a tagjai között.\n"
+"\n"
+"A második lehetőség hogy visszaszerezze a pénzét, visszatérítéssel, amennyiben az lehetséges, máskülönben a bankszámlájára való kivonással.\n"
+"\n"
+"Amennyiben Ön adományokat kap a Liberapay-en keresztül, várhat egy hetet a jövedelme kivonásával, hogy ezzel esélyt adjon a támogatóinak, hogy átutalják a tárcájukban maradt pénzüket az Ön számára.\n"
+"\n"
+"Értesíteni fogjuk Önt, amint egy új fizetési feldolgozó integrálását befejeztük, és közöljük, ha bármi szükséges tennivalója van, hogy újból adományokat fogadhasson a Liberapy-en.\n"
+"\n"
+"Amennyiben Ön egy csoport tagja, bizonyosodjon meg róla, hogy a részesedése be van állítva, és naprakész. Ezt megteheti {link2_start}az Ön \"Bevételei\" lapon{link_end}.\n"
+"\n"
+"További információkat találhat {link3_start}ebben a blogbejegyzésben{link_end}, és mint mindig, válaszolhat erre az üzenetre amennyiben segítségre van szüksége.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "Gyegne a jelszava a Liberapay fiókjának"
@@ -310,13 +329,13 @@ msgstr "Banki átutalás az Ön Liberapay tárcájába"
 
 #, python-brace-format
 msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr ""
+msgstr "Készen állunk adományok fogadására. Kérjük küldjön pontosan {0}-t a következő fiókra az alábbi referencia kód használatával, így tudni fogjuk hogy a pénzt Ön küldte:"
 
 msgid "IBAN (International Bank Account Number)"
-msgstr ""
+msgstr "IBAN (nemzetközi bankszámlaszám)"
 
 msgid "BIC (Bank Identifier Code)"
-msgstr ""
+msgstr "BIC (bank azonosító kód)"
 
 msgid "Wire Reference Code"
 msgstr ""
