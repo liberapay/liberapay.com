@@ -3561,6 +3561,7 @@ class Participant(Model, MixinTeam):
         Bits are used for email notification preferences and privacy settings.
         """
         assert isinstance(getattr(self, column), int)  # anti sql injection
+        assert column != 'privileges'  # protection against privilege escalation
         if on:
             mask = bit
             op = '|'
