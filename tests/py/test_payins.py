@@ -571,7 +571,7 @@ class TestPayinsStripe(Harness):
             country='CH',
             type='custom',
         )
-        cls.offset = 1300
+        cls.offset = 1400
 
     def setUp(self):
         super().setUp()
