@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-04-08 08:50+0000\n"
+"PO-Revision-Date: 2020-04-08 12:15+0000\n"
 "Last-Translator: Michal Čihař <michal@cihar.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
 "Language: cs\n"
@@ -153,14 +153,14 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Donations through teams: none (you are not a member of any team)."
-msgstr "Týmové příspěvky: žádné (nejste členem žádného týmu)."
+msgstr "Příspěvky skrze týmy: žádné (nejste členem žádného týmu)."
 
 msgid "NB: Donations through Liberapay are now paid in advance instead of being transferred weekly. The numbers above match what you would have received this week under the old system."
 msgstr "Pozn.: Dary prostřednictvím Liberapay jsou nyní placeny předem, místo aby byly převáděny týdně. Výše uvedená čísla odpovídají tomu, co byste tento týden obdrželi v rámci starého systému."
 
 #, python-brace-format
 msgid "You have {money_amount} in your Mangopay wallet."
-msgstr "Máte {money_amount} ve vaší in Mangopay peněžence."
+msgstr "Máte {money_amount} ve vaší peněžence Mangopay."
 
 msgid "Withdraw money"
 msgstr "Vybrat peníze"
@@ -3475,12 +3475,12 @@ msgstr "Tato stránka se zobrazí pouze transakce zpracovávané Mangopay, chcet
 msgid "Account Statement"
 msgstr "Výpis z účtu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
-msgstr[0] "{money_amount} v dary pro {n} osobu"
-msgstr[1] "{money_amount} v dary pro {n} osoby"
-msgstr[2] "{money_amount} v dary pro {n} osob"
+msgstr[0] "{money_amount} v příspěvcích pro {n} osobu"
+msgstr[1] "{money_amount} v příspěvcích pro {n} osoby"
+msgstr[2] "{money_amount} v příspěvcích pro {n} osob"
 
 msgid "Export as CSV"
 msgstr "Exportovat jako CSV"
@@ -3492,12 +3492,12 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} in donations from {n} donor"
 msgid_plural "{money_amount} in donations from {n} donors"
-msgstr[0] "{money_amount} v dary od {n} osoby"
-msgstr[1] "{money_amount} v dary od {n} osob"
-msgstr[2] "{money_amount} v dary od {n} osob"
+msgstr[0] "{money_amount} v příspěvcích od {n} osoby"
+msgstr[1] "{money_amount} v příspěvcích od {n} osob"
+msgstr[2] "{money_amount} v příspěvcích od {n} osob"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
@@ -4328,29 +4328,29 @@ msgstr ""
 msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] "Liberapay byl spuštěný {timespan_ago} a má {n} uživatelů."
-msgstr[1] "Liberapay byl spuštěný {timespan_ago} a má {n} uživatelů."
+msgstr[0] "Liberapay byl spuštěný {timespan_ago} a má {n} uživatele."
+msgstr[1] "Liberapay byl spuštěný {timespan_ago} a má {n} uživatele."
 msgstr[2] "Liberapay byl spuštěný {timespan_ago} a má {n} uživatelů."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
 msgstr "Na Liberapay je uloženo {0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] "Poslední výplata proběhla {timespan_ago} a převedla {money_amount} mezi {n} uživateli."
+msgstr[0] "Poslední výplata proběhla {timespan_ago} a převedla {money_amount} mezi {n} uživatelem."
 msgstr[1] "Poslední výplata proběhla {timespan_ago} a převedla {money_amount} mezi {n} uživateli."
 msgstr[2] "Poslední výplata proběhla {timespan_ago} a převedla {money_amount} mezi {n} uživateli."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] "{n} účastníků dalo peníze."
-msgstr[1] "{n} účastníků dalo peníze."
+msgstr[0] "{n} účastník dalo peníze."
+msgstr[1] "{n} účastníci dalo peníze."
 msgstr[2] "{n} účastníků dalo peníze."
 
 #, python-brace-format
@@ -4702,12 +4702,12 @@ msgstr "{0} nastavení společenství"
 msgid "Sidebar text"
 msgstr "Postranní text"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
 msgstr[0] "Společenství bylo vytvořeno {timespan_ago} a má {n} člena."
 msgstr[1] "Společenství bylo vytvořeno {timespan_ago} a má {n} členy."
-msgstr[2] "Společenství bylo vytvořeno {timespan_ago} a má {n} členy."
+msgstr[2] "Společenství bylo vytvořeno {timespan_ago} a má {n} členů."
 
 #, python-brace-format
 msgid ""
@@ -4796,9 +4796,8 @@ msgstr "Jak to funguje pro dárce"
 msgid "1. Set up a donation"
 msgstr "1. Nastavte svůj příspěvek"
 
-#, fuzzy
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr "Najděte někoho komu chcete přispívat, zvolte částku a období (týdně, měsíčně nebo ročně)."
+msgstr "Najděte někoho komu chcete přispívat, zvolte částku a období (týdně, měsíčně nebo ročně) a možnost obnovování (ručně nebo automaticky)."
 
 msgid "2. Fund your donation"
 msgstr ""
