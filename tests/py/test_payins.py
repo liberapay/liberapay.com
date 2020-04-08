@@ -13,6 +13,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.paypal import sync_all_pending_payments
 from liberapay.payin.prospect import PayinProspect
+from liberapay.payin.stripe import settle_charge_and_transfers
 from liberapay.testing import Harness, EUR, KRW, JPY, USD
 
 
@@ -570,7 +571,7 @@ class TestPayinsStripe(Harness):
             country='CH',
             type='custom',
         )
-        cls.offset = 1300
+        cls.offset = 1400
 
     def setUp(self):
         super().setUp()
@@ -814,6 +815,33 @@ class TestPayinsStripe(Harness):
         )
         assert r.code == 200, r.text
         assert "Use another bank account" in r.text
+
+        # 6th request: test getting the receipt before the payment settles
+        r = self.client.GxT('/donor/receipts/direct/%i' % payin.id, auth_as=self.donor)
+        assert r.code == 404, r.text
+
+        # Settle
+        charge = stripe.Charge.retrieve(payin.remote_id)
+        assert charge.status == 'succeeded'
+        assert charge.balance_transaction
+        payin = settle_charge_and_transfers(self.db, payin, charge)
+        assert payin.status == 'succeeded'
+        assert payin.amount_settled
+        assert payin.fee
+        payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
+        assert len(payin_transfers) == 2
+        pt1, pt2 = payin_transfers
+        assert pt1.status == 'succeeded'
+        assert pt1.amount == EUR('49.48')
+        assert pt1.remote_id is not None
+        assert pt2.status == 'succeeded'
+        assert pt2.amount == EUR('49.47')
+        assert pt2.remote_id is None
+
+        # 7th request: test getting the receipt after the payment is settled
+        r = self.client.GET('/donor/receipts/direct/%i' % payin.id, auth_as=self.donor)
+        assert r.code == 200, r.text
+        assert "2606" in r.text
 
     def test_04_payin_intent_stripe_card(self):
         self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))

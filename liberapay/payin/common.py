@@ -211,7 +211,7 @@ def adjust_payin_transfers(db, payin, net_amount):
     # avoid ending up in an inconsistent state.
     with db.get_cursor() as cursor:
         payin_transfers = cursor.all("""
-            SELECT pt.id, pt.amount, pt.status, pt.team, pt.recipient, team_p
+            SELECT pt.id, pt.amount, pt.status, pt.remote_id, pt.team, pt.recipient, team_p
               FROM payin_transfers pt
          LEFT JOIN participants team_p ON team_p.id = pt.team
              WHERE pt.payin = %s
@@ -219,7 +219,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                FOR UPDATE OF pt
         """, (payin.id,))
         assert payin_transfers
-        if all(pt.status != 'pre' for pt in payin_transfers):
+        if all(pt.remote_id is not None or pt.status == 'failed' for pt in payin_transfers):
             # It's too late to adjust anything.
             return
         transfers_by_tippee = group_by(
@@ -247,17 +247,17 @@ def adjust_payin_transfers(db, payin, net_amount):
                     })
                     for pt in transfers:
                         if pt.amount != team_amounts.get(pt.id):
-                            assert pt.status == 'pre'
+                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((team_amounts[pt.id], pt.id))
                 else:
                     team_donations = {d.recipient.id: d for d in team_donations}
                     for pt in transfers:
                         d = team_donations.pop(pt.recipient, None)
                         if d is None:
-                            assert pt.status == 'pre'
+                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             cursor.run("DELETE FROM payin_transfers WHERE id = %s", (pt.id,))
                         elif pt.amount != d.amount:
-                            assert pt.status == 'pre'
+                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((d.amount, pt.id))
                     for d in team_donations.values():
                         prepare_payin_transfer(
@@ -268,7 +268,7 @@ def adjust_payin_transfers(db, payin, net_amount):
             else:
                 pt = transfers[0]
                 if pt.amount != prorated_amount:
-                    assert pt.status == 'pre'
+                    assert pt.remote_id is None and pt.status in ('pre', 'pending')
                     updates.append((prorated_amount, pt.id))
         if updates:
             execute_batch(cursor, """

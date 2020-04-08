@@ -94,7 +94,7 @@ title = "Payments Admin"
                     % if pt.period
                         ({{ locale.format_money(Money(**pt.unit_amount)) }}/{{ pt.period[:-2] }} × {{ pt.n_units }})
                     % endif
-                    % if pt.status != pi.status and pt.status not in ('pre', 'pending')
+                    % if pt.status != pi.status
                         ‒ <span class="text-{{ STATUS_MAP.get(pt.status, 'info') }}">{{ pt.status }}</span>
                         % if pt.error
                             ‒ error: <code>{{ pt.error }}</code>
