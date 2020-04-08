@@ -267,6 +267,20 @@ next_payday = compute_next_payday_date()
                         timespan_ago_2=to_age(tip.mtime)
                     ) }}</p>
                 % endif
+                <p>
+                    % if tip.renewal_mode == 2
+                        % if tip.tippee_p.payment_providers == 2
+                            <span class="text-warning">{{ glyphicon('repeat') }} {{ _(
+                                "Automatic renewals are enabled for this donation, but are "
+                                "currently impossible due to payment processor limitations."
+                            ) }}</span>
+                        % else
+                            {{ glyphicon('repeat') }} {{ _("Automatic renewal") }}
+                        % endif
+                    % else
+                        {{ glyphicon('user') }} {{ _("Manual renewal") }}
+                    % endif
+                </p>
                 % if tippee.is_suspended
                     <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
                         "Inactive because the account of the recipient is blacklisted."
@@ -280,17 +294,10 @@ next_payday = compute_next_payday_date()
                         "Inactive because the recipient no longer accepts donations."
                     ) }}</p>
                 % elif tip.paid_in_advance and tip.paid_in_advance >= tip.amount
+                    % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
                     <p>
                         <span class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</span>
                         &nbsp;&nbsp;
-                        % if tip.renewal_mode == 2
-                            {{ glyphicon('repeat') }} {{ _("Automatic renewal") }}
-                        % else
-                            {{ glyphicon('user') }} {{ _("Manual renewal") }}
-                        % endif
-                    </p>
-                    % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
-                    <p>
                         % set delta = timedelta(weeks=weeks_remaning - 1)
                         {{ _(
                             "Next payment due {in_N_weeks_months_or_years}.",
