@@ -137,27 +137,21 @@ _i18n_pull: _i18n_fetch
 		echo "There are unstaged changes in the i18n/ directory." && exit 1; \
 	fi
 	git pull
-	git merge --squash weblate/master
+	git merge -q --no-ff --no-commit -m "merge translations" weblate/master || true
 	@if test $$(git diff HEAD i18n | wc -c) -gt 0; then \
 		$(MAKE) --no-print-directory _i18n_merge; \
 	fi
 
 _i18n_merge:
-	@git reset -q HEAD i18n
+	git reset -q master -- i18n
 	@while true; do \
 		git add -p i18n; \
 		echo -n 'Are you done? (y/n) ' && read done; \
 		test "$$done" = 'y' && break; \
 	done
-	@git diff --cached i18n >new-translations.patch
-	@git checkout -q HEAD i18n
-	@git merge -q --no-ff -m "merge translations" weblate/master
-	@git checkout -q HEAD~ i18n
-	@patch -s -p1 -i new-translations.patch
 	@$(MAKE) --no-print-directory _i18n_clean
-	@git add i18n
-	@git commit --amend i18n
-	rm new-translations.patch
+	git merge --continue
+	git checkout -q HEAD -- i18n
 
 bootstrap-upgrade:
 	@if [ -z "$(version)" ]; then echo "You forgot the 'version=x.x.x' argument."; exit 1; fi
