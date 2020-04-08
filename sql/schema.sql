@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '123'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '124'::jsonb);
 
 
 -- app configuration
@@ -837,6 +837,28 @@ CREATE TABLE notifications
 
 CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
     WHERE (email AND email_sent IS NULL);
+
+CREATE FUNCTION update_pending_notifs() RETURNS trigger AS $$
+    DECLARE
+        rec record;
+    BEGIN
+        rec := (CASE WHEN TG_OP = 'DELETE' THEN OLD ELSE NEW END);
+        UPDATE participants
+           SET pending_notifs = (
+                   SELECT count(*)
+                     FROM notifications
+                    WHERE participant = rec.participant
+                      AND web
+                      AND is_new
+               )
+         WHERE id = rec.participant;
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_pending_notifs
+    AFTER INSERT OR UPDATE OF is_new, web OR DELETE ON notifications
+    FOR EACH ROW EXECUTE PROCEDURE update_pending_notifs();
 
 
 -- cache of participant balances at specific times
