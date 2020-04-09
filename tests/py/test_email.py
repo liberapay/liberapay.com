@@ -1,3 +1,4 @@
+import json
 from unittest.mock import patch
 
 from liberapay.exceptions import (
@@ -24,7 +25,7 @@ class TestEmail(EmailHarness):
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         auth_as = self.alice if auth_as == 'alice' else auth_as
         r = self.client.POST(
-            '/alice/emails/modify.json', data,
+            '/alice/emails/', data,
             auth_as=auth_as, raise_immediately=False,
             **headers
         )
@@ -59,11 +60,13 @@ class TestEmail(EmailHarness):
 
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
-        assert response.text == '{}'
+        msg = json.loads(response.body)['msg']
+        assert msg == "A verification email has been sent to alice@example.com."
         with patch.object(self.website, 'app_conf') as app_conf:
             app_conf.check_email_domains = True
             response = self.hit_email_spt('add-email', 'support@liberapay.com')
-            assert response.text == '{}'
+            msg = json.loads(response.body)['msg']
+            assert msg == "A verification email has been sent to support@liberapay.com."
 
     def test_participant_can_add_email_with_unicode_domain_name(self):
         punycode_email = 'alice@' + 'accentué.com'.encode('idna').decode()
@@ -83,7 +86,7 @@ class TestEmail(EmailHarness):
         for blob in bad:
             with self.assertRaises(BadEmailAddress):
                 self.client.POST(
-                    '/alice/emails/modify.json', {'add-email': blob},
+                    '/alice/emails/', {'add-email': blob},
                     auth_as=self.alice,
                 )
 
@@ -99,7 +102,7 @@ class TestEmail(EmailHarness):
             for email, expected_exception in bad:
                 with self.assertRaises(expected_exception):
                     self.client.POST(
-                        '/alice/emails/modify.json', {'add-email': email},
+                        '/alice/emails/', {'add-email': email},
                         auth_as=self.alice,
                     )
 
@@ -270,7 +273,7 @@ class TestEmail(EmailHarness):
 
         # Check that resending the verification email isn't allowed
         r = self.client.POST(
-            '/bob/emails/modify.json', {'resend': email.address},
+            '/bob/emails/', {'resend': email.address},
             auth_as=bob, raise_immediately=False,
         )
         assert r.code == 400, r.text
