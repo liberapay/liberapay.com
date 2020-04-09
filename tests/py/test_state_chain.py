@@ -152,6 +152,11 @@ class Tests2(Harness):
         r = self.client.GET('/log-in')
         assert csrf.CSRF_TOKEN in r.headers.cookie
 
+    def test_csrf_cookie_set_in_LoginRequired_response(self):
+        r = self.client.GET('/~1/giving/', raise_immediately=False)
+        assert r.code == 403
+        assert csrf.CSRF_TOKEN in r.headers.cookie
+
     def test_no_csrf_cookie_set_for_homepage(self):
         r = self.client.GET('/')
         assert csrf.CSRF_TOKEN not in r.headers.cookie
