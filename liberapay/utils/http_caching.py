@@ -79,25 +79,17 @@ def try_to_serve_304(dispatch_result, request, response, etag):
         # This is a request for a dynamic resource.
         return
 
+    # Compare the etag in the request's querystring to the one we have.
     qs_etag = request.qs.get('etag')
     if qs_etag and qs_etag != etag:
         # Don't serve one version of a file as if it were another.
         raise response.error(410)
 
+    # Compare the etag in the request's headers to the one we have.
     headers_etag = request.headers.get(b'If-None-Match', b'').decode('ascii', 'replace')
-    if not headers_etag:
-        # This client doesn't want a 304.
-        return
-
-    if headers_etag != etag:
-        # Cache miss, the client sent an old or invalid etag.
-        return
-
-    # Huzzah!
-    # =======
-    # We can serve a 304! :D
-
-    raise response.success(304)
+    if headers_etag and headers_etag == etag:
+        # Success! We can serve a 304.
+        raise response.success(304)
 
 
 def add_caching_to_response(state, website, response, request=None, etag=None):
