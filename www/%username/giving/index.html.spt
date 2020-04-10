@@ -6,7 +6,7 @@ from pando.utils import utcnow
 
 from liberapay.billing.payday import compute_next_payday_date
 from liberapay.models.participant import Participant
-from liberapay.utils import get_participant, group_by
+from liberapay.utils import form_post_success, get_participant, group_by
 
 
 RENEWAL_MODE_START_DATE = date(2020, 2, 7)
@@ -44,9 +44,12 @@ if request.method == 'POST':
             participant.add_event(website.db, 'auto_renewal_hint', 'rejected')
         else:
             raise response.invalid_input(auto_renewal, 'auto_renewal', 'body')
+    elif 'hide' in request.body:
+        tippee_id = request.body.get_int('hide')
+        participant.hide_tip_to(tippee_id)
     else:
         raise response.error(400)
-    response.redirect(request.line.uri)
+    form_post_success(state)
 
 has_pending_transfer = set(website.db.all("""
     SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
@@ -63,7 +66,6 @@ title = participant.username
 subhead = _("Giving")
 cancelled_tips = [x for x in tips if x.renewal_mode <= 0 and x.mtime >= recently]
 cancelled_pledges = [x for x in pledges if x.renewal_mode <= 0 and x.mtime >= recently]
-ncancelled = len(cancelled_tips) + len(cancelled_pledges)
 
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.renewal_mode > 0]
@@ -422,9 +424,10 @@ next_payday = compute_next_payday_date()
     % endfor
 % endif
 
-% if ncancelled
-    <h3>{{ _("Recently Cancelled") }} ({{ ncancelled }})
-        <small>{{ _("within the last 30 days") }}</small></h3>
+% if cancelled_tips
+    <h3>{{ _("Stopped donations") }} ({{ len(cancelled_tips) }})</h3>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % for tip in cancelled_tips
         % set tippee = tip.tippee_p
         <div class="card card-default card-xs-vanish donation">
@@ -454,6 +457,10 @@ next_payday = compute_next_payday_date()
                             <a class="btn btn-default btn-xs" href="{{ tippee.path('donate') }}">{{
                                 _("Restart")
                             }}</a>
+                            <button class="btn btn-default btn-xs" name="hide" value="{{ tip.tippee }}"
+                                    title="{{ _('Hide') }}">
+                                <span class="text-danger">{{ glyphicon('remove', _('Hide')) }}</span>
+                            </button>
                         </span>
                     </div>
                 </div>
@@ -465,6 +472,13 @@ next_payday = compute_next_payday_date()
             ) }}</p>
         </div>
     % endfor
+    </form>
+% endif
+
+% if cancelled_pledges
+    <h3>{{ _("Cancelled pledges") }} ({{ len(cancelled_pledges) }})</h3>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % for tip in cancelled_pledges
         % set e = tip.e_account
         <div class="card card-default card-xs-vanish donation">
@@ -497,6 +511,10 @@ next_payday = compute_next_payday_date()
                             <a class="btn btn-default btn-xs" href="{{ e.liberapay_path }}">{{
                                 _("Restart")
                             }}</a>
+                            <button class="btn btn-default btn-xs" name="hide" value="{{ tip.tippee }}"
+                                    title="{{ _('Hide') }}">
+                                <span class="text-danger">{{ glyphicon('remove', _('Hide')) }}</span>
+                            </button>
                         </span>
                     </div>
                 </div>
@@ -508,6 +526,7 @@ next_payday = compute_next_payday_date()
             ) }}</p>
         </div>
     % endfor
+    </form>
 % endif
 
 % endblock

@@ -82,11 +82,17 @@ class TestTakeOver(Harness):
         self.make_payin_and_transfer(alice_card, bob, EUR('10'))
         alice.set_tip_to(carl.participant, EUR('5.00'))
         bob.take_over(carl, have_confirmation=True)
-        tips = self.db.all("select * from tips where renewal_mode > 0 order by id asc")
-        assert len(tips) == 3
-        assert tips[-1].amount == 5
-        assert tips[-1].paid_in_advance == EUR('10')
-        assert tips[-1].is_funded is True
+        tips = self.db.all("select * from tips order by id asc")
+        assert len(tips) == 4
+        assert tips[2].tippee == bob.id
+        assert tips[2].amount == EUR('5.00')
+        assert tips[2].paid_in_advance == EUR('10')
+        assert tips[2].is_funded is True
+        assert tips[3].tippee == carl.participant.id
+        assert tips[3].amount == EUR('5.00')
+        assert tips[3].renewal_mode == 0
+        assert tips[3].paid_in_advance is None
+        assert tips[3].hidden is True
         self.db.self_check()
 
     def test_idempotent(self):

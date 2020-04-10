@@ -119,14 +119,32 @@ class TestPages(Harness):
         assert expected1 in actual
         assert expected2 in actual
 
-    def test_giving_page_shows_cancelled(self):
+    def test_giving_page_shows_stopped_donations(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, EUR('1.00'))
         alice.set_tip_to(bob, EUR('0.00'))
         actual = self.client.GET("/alice/giving/", auth_as=alice).text
         assert "bob" in actual
-        assert "Cancelled" in actual
+        assert "Stopped donations (1)" in actual
+
+    def test_giving_page_allows_hiding_stopped_tip(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        tip1 = alice.set_tip_to(bob, EUR('1.00'))
+        assert tip1.hidden is None
+        tip2 = alice.stop_tip_to(bob)
+        assert tip2.hidden is None
+        r = self.client.PxST('/alice/giving/', {"hide": str(bob.id)}, auth_as=alice)
+        assert r.code == 302, r.text
+        tip3 = alice.get_tip_to(bob)
+        assert tip3.hidden is True
+        assert tip3.amount == tip1.amount
+        assert tip3.mtime > tip2.mtime
+        r = self.client.GET('/alice/giving/', auth_as=alice)
+        assert r.code == 200, r.text
+        assert 'href="/bob' not in r.text
+        assert 'Stopped donations' not in r.text
 
     def test_new_participant_can_edit_profile(self):
         alice = self.make_participant('alice')

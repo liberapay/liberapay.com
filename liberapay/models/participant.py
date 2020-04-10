@@ -2510,6 +2510,24 @@ class Participant(Model, MixinTeam):
         return t
 
 
+    def hide_tip_to(self, tippee_id, hide=True):
+        """Mark a donation as "hidden".
+        """
+        return self.db.one("""
+            INSERT INTO tips
+                      ( ctime, tipper, tippee, amount, period, periodic_amount
+                      , paid_in_advance, is_funded, renewal_mode, hidden )
+                 SELECT ctime, tipper, tippee, amount, period, periodic_amount
+                      , paid_in_advance, is_funded, renewal_mode, %(hide)s
+                   FROM current_tips
+                  WHERE tipper = %(tipper)s
+                    AND tippee = %(tippee)s
+                    AND renewal_mode = 0
+                    AND hidden IS NOT %(hide)s
+              RETURNING *
+        """, dict(tipper=self.id, tippee=tippee_id, hide=hide), back_as='Object')
+
+
     def schedule_renewals(self, save=True, new_dates={}, new_amounts={}):
         """(Re)schedule this donor's future payments.
         """
@@ -2928,8 +2946,7 @@ class Participant(Model, MixinTeam):
 
         tips = self.db.all("""\
 
-                SELECT DISTINCT ON (tippee)
-                       amount
+                SELECT amount
                      , period
                      , periodic_amount
                      , tippee
@@ -2944,19 +2961,18 @@ class Participant(Model, MixinTeam):
                          t.paid_in_advance < (t.periodic_amount * 0.75) OR
                          t.paid_in_advance < (t.amount * 4)
                        ) AS awaits_renewal
-                  FROM tips t
+                  FROM current_tips t
                   JOIN participants p ON p.id = t.tippee
-                 WHERE tipper = %s
+                 WHERE t.tipper = %s
                    AND p.status <> 'stub'
-              ORDER BY tippee
-                     , t.mtime DESC
+                   AND t.hidden IS NOT true
+              ORDER BY tippee, t.mtime DESC
 
         """, (self.id,))
 
         pledges = self.db.all("""\
 
-                SELECT DISTINCT ON (tippee)
-                       amount
+                SELECT amount
                      , period
                      , periodic_amount
                      , tippee
@@ -2964,13 +2980,13 @@ class Participant(Model, MixinTeam):
                      , t.mtime
                      , t.renewal_mode
                      , (e, p)::elsewhere_with_participant AS e_account
-                  FROM tips t
+                  FROM current_tips t
                   JOIN participants p ON p.id = t.tippee
                   JOIN elsewhere e ON e.participant = t.tippee
-                 WHERE tipper = %s
+                 WHERE t.tipper = %s
                    AND p.status = 'stub'
-              ORDER BY tippee
-                     , t.mtime DESC
+                   AND t.hidden IS NOT true
+              ORDER BY tippee, t.mtime DESC
 
         """, (self.id,))
 
@@ -3294,11 +3310,11 @@ class Participant(Model, MixinTeam):
             -- maximum allowed.
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period
-                      , periodic_amount, is_funded, renewal_mode
+                      , periodic_amount, is_funded, renewal_mode, hidden
                       , paid_in_advance )
                  SELECT DISTINCT ON (tipper)
                         ctime, tipper, %(live)s AS tippee, amount, period
-                      , periodic_amount, is_funded, renewal_mode
+                      , periodic_amount, is_funded, renewal_mode, hidden
                       , ( SELECT sum(t2.paid_in_advance, t.amount::currency)
                             FROM temp_tips t2
                            WHERE t2.tipper = t.tipper
@@ -3315,9 +3331,9 @@ class Participant(Model, MixinTeam):
         ZERO_OUT_OLD_TIPS_RECEIVING = """
             INSERT INTO tips
                       ( ctime, tipper, tippee, amount, period, periodic_amount
-                      , paid_in_advance, is_funded, renewal_mode )
+                      , paid_in_advance, is_funded, renewal_mode, hidden )
                  SELECT ctime, tipper, tippee, amount, period, periodic_amount
-                      , NULL, false, 0
+                      , NULL, false, 0, true
                    FROM temp_tips
                   WHERE tippee = %(dead)s
                     AND ( coalesce_currency_amount(paid_in_advance, amount::currency) > 0 OR
