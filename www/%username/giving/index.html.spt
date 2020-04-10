@@ -392,7 +392,7 @@ next_payday = compute_next_payday_date()
                                 }}</a>
                                 <button class="btn btn-default btn-xs" name="tippee" value="{{ tip.tippee }}"
                                         title="{{ _('Cancel the pledge') }}">
-                                    <span class="text-warning">{{ glyphicon('remove') }}</span>
+                                    <span class="text-warning">{{ glyphicon('remove', _('Cancel the pledge')) }}</span>
                                 </button>
                             </span>
                         </div>
