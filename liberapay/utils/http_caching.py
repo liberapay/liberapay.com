@@ -79,47 +79,41 @@ def try_to_serve_304(dispatch_result, request, response, etag):
         # This is a request for a dynamic resource.
         return
 
+    # Compare the etag in the request's querystring to the one we have.
     qs_etag = request.qs.get('etag')
     if qs_etag and qs_etag != etag:
         # Don't serve one version of a file as if it were another.
         raise response.error(410)
 
+    # Compare the etag in the request's headers to the one we have.
     headers_etag = request.headers.get(b'If-None-Match', b'').decode('ascii', 'replace')
-    if not headers_etag:
-        # This client doesn't want a 304.
-        return
-
-    if headers_etag != etag:
-        # Cache miss, the client sent an old or invalid etag.
-        return
-
-    # Huzzah!
-    # =======
-    # We can serve a 304! :D
-
-    raise response.success(304)
+    if headers_etag and headers_etag == etag:
+        # Success! We can serve a 304.
+        raise response.success(304)
 
 
-def add_caching_to_response(response, request=None, etag=None):
+def add_caching_to_response(state, website, response, request=None, etag=None):
     """Set caching headers.
     """
-    if not etag:
-        # This is a dynamic resource, disable caching by default
-        if b'Cache-Control' not in response.headers:
-            response.headers[b'Cache-Control'] = b'no-cache'
-        return
-
-    assert request is not None  # sanity check
-
     if response.code not in (200, 304):
         return
-
-    # https://developers.google.com/speed/docs/best-practices/caching
-    response.headers[b'Etag'] = etag.encode('ascii')
-
-    if request.qs.get('etag'):
-        # We can cache "indefinitely" when the querystring contains the etag.
-        response.headers[b'Cache-Control'] = b'public, max-age=31536000'
+    if b'Cache-Control' in response.headers:
+        # The caching policy has already been defined somewhere else
+        return
+    if etag:
+        try:
+            assert not response.headers.cookie
+        except Exception as e:
+            website.tell_sentry(e, state)
+            response.headers.cookie.clear()
+        # https://developers.google.com/speed/docs/best-practices/caching
+        response.headers[b'Etag'] = etag.encode('ascii')
+        if request.qs.get('etag'):
+            # We can cache "indefinitely" when the querystring contains the etag.
+            response.headers[b'Cache-Control'] = b'public, max-age=31536000, immutable'
+        else:
+            # Otherwise we cache for 1 hour
+            response.headers[b'Cache-Control'] = b'public, max-age=3600'
     else:
-        # Otherwise we cache for 1 hour
-        response.headers[b'Cache-Control'] = b'public, max-age=3600'
+        # This is a dynamic resource, disable caching by default
+        response.headers[b'Cache-Control'] = b'no-cache'
