@@ -214,12 +214,37 @@ class TestDonationRenewalScheduling(EmailHarness):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
         alice.set_tip_to(bob, EUR('5.99'), renewal_mode=2)
-        alice_card = self.upsert_route(alice, 'paypal')
-        self.make_payin_and_transfer(alice_card, bob, EUR('60.00'))
+        alice_paypal = self.upsert_route(alice, 'paypal')
+        self.make_payin_and_transfer(alice_paypal, bob, EUR('60.00'))
         scheduled_payins = alice.schedule_renewals()
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].amount is None
         assert scheduled_payins[0].automatic is False
+
+    def test_no_new_renewal_is_scheduled_when_there_is_a_pending_transfer(self):
+        # Set up a funded manual donation
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('4.16'), renewal_mode=1)
+        alice_sdd = self.upsert_route(alice, 'stripe-sdd')
+        self.make_payin_and_transfer(alice_sdd, bob, EUR('8.32'))
+        # At this point we should have a manual renewal scheduled in two weeks
+        scheduled_payins = alice.schedule_renewals()
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount is None
+        assert scheduled_payins[0].automatic is False
+        # Initiate a new payment. It should "fulfill" the scheduled renewal.
+        self.make_payin_and_transfer(alice_sdd, bob, EUR('77.00'), status='pending')
+        scheduled_payins = alice.schedule_renewals()
+        assert len(scheduled_payins) == 0
+        # Turn on automatic renewals. No new renewal should be scheduled since
+        # there is still a pending payment.
+        r = self.client.PxST("/alice/giving/", {"auto_renewal": "yes"}, auth_as=alice)
+        assert r.code == 302
+        tip = alice.get_tip_to(bob)
+        assert tip.renewal_mode == 2
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        assert len(scheduled_payins) == 0
 
 
 class TestScheduledPayins(EmailHarness):
