@@ -2562,6 +2562,13 @@ class Participant(Model, MixinTeam):
                    AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                    AND tippee_p.is_suspended IS NOT TRUE
                    AND tippee_p.payment_providers > 0
+                   AND NOT EXISTS (
+                           SELECT 1
+                             FROM payin_transfers pt
+                            WHERE pt.payer = t.tipper
+                              AND coalesce(pt.team, pt.recipient) = t.tippee
+                              AND pt.status = 'pending'
+                       )
               ORDER BY t.tippee
             """, (self.id,))
 
