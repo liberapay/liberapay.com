@@ -2748,12 +2748,13 @@ class Participant(Model, MixinTeam):
             deletions = list(current_schedule_map.values())
             del current_schedule_map
 
-            # Make sure any newly scheduled payment is at least a week away
-            ONE_WEEK = timedelta(weeks=1)
-            one_week_from_today = utcnow().date() + ONE_WEEK
+            # Make sure any newly scheduled automatic payment is at least a week away
+            one_week_from_today = utcnow().date() + timedelta(weeks=1)
             for new_sp in insertions:
-                if new_sp.execution_date < one_week_from_today:
-                    new_sp.execution_date += ONE_WEEK
+                if new_sp.automatic:
+                    if new_sp.execution_date < one_week_from_today:
+                        new_sp.execution_date = one_week_from_today
+                        new_sp.customized = True
 
             # Upsert the new schedule
             notify = False
@@ -2764,12 +2765,12 @@ class Participant(Model, MixinTeam):
                 """, [(sp.id,) for sp in deletions])
                 new_ids = execute_values(cursor, """
                     INSERT INTO scheduled_payins
-                                (execution_date, payer, amount, transfers, automatic)
+                                (execution_date, payer, amount, transfers, automatic, customized)
                          VALUES %s
                       RETURNING id
                 """, [
                     (sp.execution_date, self.id, sp.amount, json.dumps(sp.transfers),
-                     sp.automatic)
+                     sp.automatic, getattr(sp, 'customized', None))
                     for sp in insertions
                 ], fetch=True)
                 for i, row in enumerate(new_ids):
