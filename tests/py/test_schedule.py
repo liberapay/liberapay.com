@@ -1,7 +1,10 @@
 from datetime import timedelta
 
+from pando.utils import utcnow
+
 from liberapay.billing.payday import compute_next_payday_date
 from liberapay.i18n.base import LOCALE_EN
+from liberapay.payin.common import update_payin_transfer
 from liberapay.payin.cron import (
     execute_scheduled_payins,
     send_donation_reminder_notifications, send_upcoming_debit_notifications,
@@ -245,6 +248,65 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert tip.renewal_mode == 2
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
         assert len(scheduled_payins) == 0
+
+    def test_newly_scheduled_automatic_payments_are_at_least_a_week_away(self):
+        # Set up an automatic donation funded 4 weeks ago
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('0.23'), renewal_mode=2)
+        alice_sdd = self.upsert_route(alice, 'stripe-sdd')
+        payin, pt = self.make_payin_and_transfer(alice_sdd, bob, EUR('0.22'), status='pending')
+        self.db.run("UPDATE payin_transfers SET ctime = ctime - interval '4 weeks'")
+        update_payin_transfer(self.db, pt.id, pt.remote_id, 'succeeded', None)
+        # At this point we should have an automatic renewal scheduled one week from now
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('10.00')
+        assert scheduled_payins[0].automatic is True
+        payment_timedelta = scheduled_payins[0].execution_date - utcnow().date()
+        assert payment_timedelta.days in (6, 7)
+        assert scheduled_payins[0].customized is True
+        # Running the scheduler again shouldn't change anything.
+        old_scheduled_payins = scheduled_payins
+        alice.schedule_renewals()
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins")
+        assert old_scheduled_payins == scheduled_payins
+
+    def test_late_manual_payment_switched_to_automatic_is_scheduled_a_week_away(self):
+        # Set up a manual donation
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('0.23'), renewal_mode=1)
+        alice_sdd = self.upsert_route(alice, 'stripe-sdd')
+        payin, pt = self.make_payin_and_transfer(alice_sdd, bob, EUR('0.22'), status='pending')
+        self.db.run("UPDATE payin_transfers SET ctime = ctime - interval '3 weeks'")
+        update_payin_transfer(self.db, pt.id, pt.remote_id, 'succeeded', None)
+        # At this point we should have a manual renewal scheduled in the past
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount is None
+        assert scheduled_payins[0].automatic is False
+        payment_timedelta = scheduled_payins[0].execution_date - utcnow().date()
+        assert payment_timedelta.days <= -6
+        # Running the scheduler again shouldn't change anything.
+        old_scheduled_payins = scheduled_payins
+        alice.schedule_renewals()
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins")
+        assert old_scheduled_payins == scheduled_payins
+        # Turn on automatic renewals. The execution date should now be in the future.
+        r = self.client.PxST("/alice/giving/", {"auto_renewal": "yes"}, auth_as=alice)
+        assert r.code == 302
+        tip = alice.get_tip_to(bob)
+        assert tip.renewal_mode == 2
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('10.00')
+        assert scheduled_payins[0].automatic is True
+        payment_timedelta = scheduled_payins[0].execution_date - utcnow().date()
+        assert payment_timedelta.days in (6, 7)
+        assert scheduled_payins[0].customized is True
+        assert scheduled_payins[0].last_notif_ts is None
+        assert scheduled_payins[0].notifs_count == 0
 
 
 class TestScheduledPayins(EmailHarness):
