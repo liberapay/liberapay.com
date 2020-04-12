@@ -2755,6 +2755,11 @@ class Participant(Model, MixinTeam):
                     if new_sp.execution_date < one_week_from_today:
                         new_sp.execution_date = one_week_from_today
                         new_sp.customized = True
+            for cur_sp, new_sp in updates:
+                if new_sp.automatic and not cur_sp.automatic:
+                    if new_sp.execution_date < one_week_from_today:
+                        new_sp.execution_date = one_week_from_today
+                        new_sp.customized = True
 
             # Upsert the new schedule
             notify = False
@@ -2777,6 +2782,12 @@ class Participant(Model, MixinTeam):
                     insertions[i].id = row.id
                 for cur_sp, new_sp in updates:
                     new_sp.id = cur_sp.id
+                    if new_sp.automatic and not cur_sp.automatic:
+                        new_sp.notifs_count = 0
+                        new_sp.last_notif_ts = None
+                    else:
+                        new_sp.notifs_count = cur_sp.notifs_count
+                        new_sp.last_notif_ts = cur_sp.last_notif_ts
                 execute_batch(cursor, """
                     UPDATE scheduled_payins
                        SET amount = %s
@@ -2784,6 +2795,8 @@ class Participant(Model, MixinTeam):
                          , execution_date = %s
                          , automatic = %s
                          , customized = %s
+                         , notifs_count = %s
+                         , last_notif_ts = %s
                          , mtime = current_timestamp
                      WHERE id = %s
                 """, [
@@ -2792,6 +2805,8 @@ class Participant(Model, MixinTeam):
                      new_sp.execution_date,
                      new_sp.automatic,
                      getattr(new_sp, 'customized', None),
+                     new_sp.notifs_count,
+                     new_sp.last_notif_ts,
                      cur_sp.id)
                     for cur_sp, new_sp in updates
                 ])
