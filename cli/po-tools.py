@@ -55,16 +55,16 @@ elif sys.argv[1] == 'fuzz':
     # replace old msg
     m = catalog.get(old_msg)
     if any(m.string):
-        if new_msg_plural:
-            assert isinstance(m.id, tuple)
-            m.id = (new_msg, new_msg_plural)
-        else:
-            assert not isinstance(m.id, tuple)
-            m.id = new_msg
         m.flags.add('fuzzy')
-        # write back
-        with open(po_path, 'wb') as po:
-            write_po(po, catalog, width=0)
+    if new_msg_plural:
+        assert isinstance(m.id, tuple)
+        m.id = (new_msg, new_msg_plural)
+    else:
+        assert not isinstance(m.id, tuple)
+        m.id = new_msg
+    # write back
+    with open(po_path, 'wb') as po:
+        write_po(po, catalog, width=0)
 
 elif sys.argv[1] == 'pluralize':
     po_path = sys.argv[2]
