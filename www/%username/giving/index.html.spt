@@ -470,6 +470,13 @@ next_payday = compute_next_payday_date()
                 timespan_ago_1=to_age(tip.ctime),
                 timespan_ago_2=to_age(tip.mtime)
             ) }}</p>
+            % if tip.paid_in_advance and tip.paid_in_advance >= tip.amount
+                <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+                    "This stopped donation still has {money_amount} paid in advance. "
+                    "That advance will be consumed every week until it reaches zero.",
+                    money_amount=tip.paid_in_advance
+                ) }}</p>
+            % endif
         </div>
     % endfor
     </form>
