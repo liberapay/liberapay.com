@@ -61,7 +61,7 @@ scheduled_payins = website.db.all("""
       FROM scheduled_payins sp
      WHERE sp.payer = %s
        AND sp.payin IS NULL
-  ORDER BY sp.execution_date ASC
+  ORDER BY sp.execution_date ASC, sp.id ASC
 """, (payer.id,))
 
 action = request.qs.get('action')

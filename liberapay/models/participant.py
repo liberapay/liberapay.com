@@ -2822,7 +2822,7 @@ class Participant(Model, MixinTeam):
                         for old_sp, new_sp in updates
                     )
                 )
-        new_schedule.sort(key=lambda sp: sp.execution_date)
+        new_schedule.sort(key=lambda sp: (sp.execution_date, getattr(sp, 'id', id(sp))))
 
         # Notify the donor of important changes in scheduled payments
         if notify:
