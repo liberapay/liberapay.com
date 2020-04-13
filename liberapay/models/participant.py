@@ -2562,6 +2562,13 @@ class Participant(Model, MixinTeam):
                    AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                    AND tippee_p.is_suspended IS NOT TRUE
                    AND tippee_p.payment_providers > 0
+                   AND NOT EXISTS (
+                           SELECT 1
+                             FROM payin_transfers pt
+                            WHERE pt.payer = t.tipper
+                              AND coalesce(pt.team, pt.recipient) = t.tippee
+                              AND pt.status = 'pending'
+                       )
               ORDER BY t.tippee
             """, (self.id,))
 
@@ -2741,12 +2748,18 @@ class Participant(Model, MixinTeam):
             deletions = list(current_schedule_map.values())
             del current_schedule_map
 
-            # Make sure any newly scheduled payment is at least a week away
-            ONE_WEEK = timedelta(weeks=1)
-            one_week_from_today = utcnow().date() + ONE_WEEK
+            # Make sure any newly scheduled automatic payment is at least a week away
+            one_week_from_today = utcnow().date() + timedelta(weeks=1)
             for new_sp in insertions:
-                if new_sp.execution_date < one_week_from_today:
-                    new_sp.execution_date += ONE_WEEK
+                if new_sp.automatic:
+                    if new_sp.execution_date < one_week_from_today:
+                        new_sp.execution_date = one_week_from_today
+                        new_sp.customized = True
+            for cur_sp, new_sp in updates:
+                if new_sp.automatic and not cur_sp.automatic:
+                    if new_sp.execution_date < one_week_from_today:
+                        new_sp.execution_date = one_week_from_today
+                        new_sp.customized = True
 
             # Upsert the new schedule
             notify = False
@@ -2757,18 +2770,24 @@ class Participant(Model, MixinTeam):
                 """, [(sp.id,) for sp in deletions])
                 new_ids = execute_values(cursor, """
                     INSERT INTO scheduled_payins
-                                (execution_date, payer, amount, transfers, automatic)
+                                (execution_date, payer, amount, transfers, automatic, customized)
                          VALUES %s
                       RETURNING id
                 """, [
                     (sp.execution_date, self.id, sp.amount, json.dumps(sp.transfers),
-                     sp.automatic)
+                     sp.automatic, getattr(sp, 'customized', None))
                     for sp in insertions
                 ], fetch=True)
                 for i, row in enumerate(new_ids):
                     insertions[i].id = row.id
                 for cur_sp, new_sp in updates:
                     new_sp.id = cur_sp.id
+                    if new_sp.automatic and not cur_sp.automatic:
+                        new_sp.notifs_count = 0
+                        new_sp.last_notif_ts = None
+                    else:
+                        new_sp.notifs_count = cur_sp.notifs_count
+                        new_sp.last_notif_ts = cur_sp.last_notif_ts
                 execute_batch(cursor, """
                     UPDATE scheduled_payins
                        SET amount = %s
@@ -2776,6 +2795,8 @@ class Participant(Model, MixinTeam):
                          , execution_date = %s
                          , automatic = %s
                          , customized = %s
+                         , notifs_count = %s
+                         , last_notif_ts = %s
                          , mtime = current_timestamp
                      WHERE id = %s
                 """, [
@@ -2784,6 +2805,8 @@ class Participant(Model, MixinTeam):
                      new_sp.execution_date,
                      new_sp.automatic,
                      getattr(new_sp, 'customized', None),
+                     new_sp.notifs_count,
+                     new_sp.last_notif_ts,
                      cur_sp.id)
                     for cur_sp, new_sp in updates
                 ])
@@ -2799,7 +2822,7 @@ class Participant(Model, MixinTeam):
                         for old_sp, new_sp in updates
                     )
                 )
-        new_schedule.sort(key=lambda sp: sp.execution_date)
+        new_schedule.sort(key=lambda sp: (sp.execution_date, getattr(sp, 'id', id(sp))))
 
         # Notify the donor of important changes in scheduled payments
         if notify:
