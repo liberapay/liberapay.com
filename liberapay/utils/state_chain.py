@@ -1,4 +1,3 @@
-import socket
 from urllib.parse import urlsplit, urlunsplit
 
 from pando import Response
@@ -148,7 +147,7 @@ def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None)
     if isinstance(exception, Timeout) or 'timeout' in str(exception).lower():
         response = response or Response()
         response.code = 504
-    elif isinstance(exception, (socket.error, ConnectionError)):
+    elif isinstance(exception, (OSError, ConnectionError)):
         response = response or Response()
         response.code = 502
     else:
