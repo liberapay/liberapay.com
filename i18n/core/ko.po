@@ -2356,6 +2356,9 @@ msgstr "{timespan_ago} 전에 시작됨."
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "{timespan_ago_1} 전에 시작됨. {timespan_ago_2} 전에 수정됨."
 
+msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
+msgstr ""
+
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "수신자의 계정이 블랙리스트되었으므로 비활성화."
 
@@ -2397,18 +2400,25 @@ msgstr "당신은 현재 누구에게도 기부하지 않고 있습니다."
 msgid "Cancel the pledge"
 msgstr "공약 취소"
 
-msgid "Recently Cancelled"
-msgstr "최근 취소됨"
-
-msgid "within the last 30 days"
-msgstr "최근 30일 이내에"
+msgid "Stopped donations"
+msgstr ""
 
 msgid "Restart"
 msgstr "재시작"
 
+msgid "Hide"
+msgstr ""
+
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "{timespan_ago_1} 전에 시작됨. {timespan_ago_2} 전에 중지됨."
+
+#, python-brace-format
+msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
+msgstr ""
+
+msgid "Cancelled pledges"
+msgstr ""
 
 #, python-brace-format
 msgid "You are not donating to {username}."

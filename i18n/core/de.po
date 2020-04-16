@@ -2378,6 +2378,9 @@ msgstr "Begonnen {timespan_ago}."
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Begonnen {timespan_ago_1}. Geändert {timespan_ago_2}."
 
+msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
+msgstr ""
+
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inaktiv, weil das Konto des Empfängers auf der Sperrliste ist."
 
@@ -2419,18 +2422,25 @@ msgstr "Sie spenden derzeit für niemanden."
 msgid "Cancel the pledge"
 msgstr "Versprechen zurückziehen"
 
-msgid "Recently Cancelled"
-msgstr "In letzter Zeit abgebrochen"
-
-msgid "within the last 30 days"
-msgstr "innerhalb der letzten 30 Tage"
+msgid "Stopped donations"
+msgstr ""
 
 msgid "Restart"
 msgstr "Neustart"
 
+msgid "Hide"
+msgstr ""
+
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Begonnen {timespan_ago_1}. Beendet {timespan_ago_2}."
+
+#, python-brace-format
+msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
+msgstr ""
+
+msgid "Cancelled pledges"
+msgstr ""
 
 #, python-brace-format
 msgid "You are not donating to {username}."

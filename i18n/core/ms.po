@@ -2378,6 +2378,9 @@ msgstr "Bermula sejak {timespan_ago}."
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Bermula sejak {timespan_ago_1}. Diubahsuai {timespan_ago_2}."
 
+msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
+msgstr ""
+
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Tidak aktif kerana akaun penerima disenaraihitamkan."
 
@@ -2419,18 +2422,25 @@ msgstr "Anda tidak menderma kepada sesiapa pada ketika ini."
 msgid "Cancel the pledge"
 msgstr "Batalkan perjanjian derma"
 
-msgid "Recently Cancelled"
-msgstr "Dibatalkan Baru-baru Ini"
-
-msgid "within the last 30 days"
-msgstr "dalam 30 hari lepas"
+msgid "Stopped donations"
+msgstr ""
 
 msgid "Restart"
 msgstr "Mula semula"
 
+msgid "Hide"
+msgstr ""
+
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Dimulakan {timespan_ago_1}. Dihentikan {timespan_ago_2}."
+
+#, python-brace-format
+msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
+msgstr ""
+
+msgid "Cancelled pledges"
+msgstr ""
 
 #, python-brace-format
 msgid "You are not donating to {username}."

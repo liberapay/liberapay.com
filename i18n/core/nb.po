@@ -2379,6 +2379,9 @@ msgstr "Startet {timespan_ago}."
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Startet for {timespan_ago_1} siden. Endret for {timespan_ago_2} siden."
 
+msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
+msgstr ""
+
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Uaktiv fordi mottagerkontoen er svartelistet."
 
@@ -2420,18 +2423,25 @@ msgstr "Du donerer for tiden ikke til noen."
 msgid "Cancel the pledge"
 msgstr "Avbryt donasjonstilbudet"
 
-msgid "Recently Cancelled"
-msgstr "Nylig avbrutt"
-
-msgid "within the last 30 days"
-msgstr "i løpet av de siste 30 dagene"
+msgid "Stopped donations"
+msgstr ""
 
 msgid "Restart"
 msgstr "Start på ny"
 
+msgid "Hide"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Startet for {timespan_ago_1} siden. Stoppet for {timespan_ago_2} siden."
+
+#, python-brace-format
+msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
+msgstr ""
+
+msgid "Cancelled pledges"
+msgstr ""
 
 #, python-brace-format
 msgid "You are not donating to {username}."

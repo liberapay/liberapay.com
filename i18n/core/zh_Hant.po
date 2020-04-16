@@ -2357,6 +2357,9 @@ msgstr "自 {timespan_ago} 開始。"
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "始於{timespan_ago_1}，{timespan_ago_2}修改。"
 
+msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
+msgstr ""
+
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "由於收款人的帳戶遭封鎖而無動靜。"
 
@@ -2398,18 +2401,25 @@ msgstr "您目前沒有捐款給任何人。"
 msgid "Cancel the pledge"
 msgstr "取消捐款承諾"
 
-msgid "Recently Cancelled"
-msgstr "最近取消"
-
-msgid "within the last 30 days"
-msgstr "最近30天內"
+msgid "Stopped donations"
+msgstr ""
 
 msgid "Restart"
 msgstr "重新開始"
 
+msgid "Hide"
+msgstr ""
+
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "始於 {timespan_ago_1} ，止於 {timespan_ago_2}。"
+
+#, python-brace-format
+msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
+msgstr ""
+
+msgid "Cancelled pledges"
+msgstr ""
 
 #, python-brace-format
 msgid "You are not donating to {username}."

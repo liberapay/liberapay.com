@@ -2356,6 +2356,9 @@ msgstr "{timespan_ago} に開始しました。"
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "{timespan_ago_1} に開始しました。{timespan_ago_2} に変更されました。"
 
+msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
+msgstr ""
+
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "受領者のアカウントがブラックリストに登録されているため、無効になっています。"
 
@@ -2397,18 +2400,25 @@ msgstr "あなたは現在、誰にも寄付していません。"
 msgid "Cancel the pledge"
 msgstr "寄付の約束を取り消す"
 
-msgid "Recently Cancelled"
-msgstr "最近の取り消し"
-
-msgid "within the last 30 days"
-msgstr "過去 30 日以内"
+msgid "Stopped donations"
+msgstr ""
 
 msgid "Restart"
 msgstr "再開"
 
+msgid "Hide"
+msgstr ""
+
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "{timespan_ago_1} に開始しました。{timespan_ago_2} に停止しました。"
+
+#, python-brace-format
+msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
+msgstr ""
+
+msgid "Cancelled pledges"
+msgstr ""
 
 #, python-brace-format
 msgid "You are not donating to {username}."

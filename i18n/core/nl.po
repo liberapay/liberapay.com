@@ -2377,6 +2377,9 @@ msgstr "Gestart {timespan_ago}."
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Gestart {timespan_ago_1}. Aangepast {timespan_ago_2}."
 
+msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
+msgstr ""
+
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inactief omdat de rekening van de ontvanger op de zwarte lijst staat."
 
@@ -2418,18 +2421,25 @@ msgstr "Je doneert momenteel aan niemand."
 msgid "Cancel the pledge"
 msgstr "Annuleer de toezegging"
 
-msgid "Recently Cancelled"
-msgstr "Recent geannuleerd"
-
-msgid "within the last 30 days"
-msgstr "in de afgelopen 30 dagen"
+msgid "Stopped donations"
+msgstr ""
 
 msgid "Restart"
 msgstr "Opnieuw starten"
 
+msgid "Hide"
+msgstr ""
+
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Gestart {timespan_ago_1}. Gestopt {timespan_ago_2}."
+
+#, python-brace-format
+msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
+msgstr ""
+
+msgid "Cancelled pledges"
+msgstr ""
 
 #, python-brace-format
 msgid "You are not donating to {username}."
