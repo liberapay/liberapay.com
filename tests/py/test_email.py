@@ -1,4 +1,5 @@
 import json
+import os
 from unittest.mock import patch
 
 from liberapay.exceptions import (
@@ -63,7 +64,9 @@ class TestEmail(EmailHarness):
         msg = json.loads(response.body)['msg']
         assert msg == "A verification email has been sent to alice@example.com."
         with patch.object(self.website, 'app_conf') as app_conf:
-            app_conf.check_email_domains = True
+            # Travis drops outgoing SMTP traffic, so we don't turn on the SMTP
+            # check when testing on Travis.
+            app_conf.check_email_domains = os.environ.get('TRAVIS') != 'true'
             response = self.hit_email_spt('add-email', 'support@liberapay.com')
             msg = json.loads(response.body)['msg']
             assert msg == "A verification email has been sent to support@liberapay.com."
