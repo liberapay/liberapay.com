@@ -1,7 +1,8 @@
 from collections import OrderedDict
 
 from liberapay.constants import EVENTS, EVENTS_S
-from liberapay.utils import get_participant
+from liberapay.utils import form_post_success, get_participant
+from liberapay.utils.emails import normalize_and_check_email_address
 
 EMAIL_LANGS = OrderedDict(sorted([
     (l.language, l.language_name.title()) for l in set(website.locales.values())
@@ -10,11 +11,44 @@ EMAIL_LANGS = OrderedDict(sorted([
 [---]
 
 participant = get_participant(state, restrict=True, allow_member=True)
+
+if request.method == 'POST':
+    msg = ''
+    body = request.body
+    if 'set_email_lang' in body:
+        email_lang = body['set_email_lang']
+        if email_lang not in website.locales:
+            raise response.invalid_input(email_lang, 'set_email_lang', 'body')
+        participant.set_email_lang(email_lang)
+    elif 'add-email' in body or 'resend' in body:
+        address = body.get('add-email') or body['resend']
+        address = normalize_and_check_email_address(address, state)
+        r = participant.add_email(address)
+        if not r:
+            raise response.error(400, _("You have already added and verified this address."))
+        msg = _("A verification email has been sent to {0}.", address)
+    elif 'remove' in body:
+        participant.remove_email(body['remove'])
+    elif 'set-primary' in body:
+        participant.update_email(body['set-primary'])
+    elif 'events' in body:
+        fields = body['events'].split()
+        for field in fields:
+            event = EVENTS.get(field)
+            if not event:
+                continue
+            participant.update_bit('email_notif_bits', event.bit, body.get(field) == 'on')
+        msg = _("Your notification settings have been changed.")
+    else:
+        raise response.error(400, "no known action found in request body")
+    form_post_success(state, msg=msg)
+
+if not participant.email_lang:
+    participant.set_email_lang(locale.language)
+
 title = participant.username
 subhead = _("Email settings")
 emails = participant.get_emails()
-base_path = participant.path('emails/')
-
 email_locale = website.locales.get(participant.email_lang) or website.locales['en']
 
 [---] text/html
@@ -26,7 +60,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 
     <h3>{{ ngettext("Email Address (Private)", "Email Addresses (Private)", len(emails)) }}</h3>
 
-    <form action="{{ base_path }}modify.json" method="POST" class="js-submit">
+    <form action="" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <ul class="emails">
         % for email in emails
@@ -60,10 +94,10 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
         </ul>
     </form>
 
-    <form action="{{ base_path }}modify.json" method="POST" class="js-submit">
+    <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <div class="input-group">
-            <input name="email" type="email" class="form-control"
+            <input name="add-email" type="email" class="form-control"
                    placeholder="{{ _('Email address') }}" />
             <div class="input-group-btn">
                 <button name="add-email" class="btn btn-default">{{ _("Add") }}</button>
@@ -73,9 +107,9 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 
     <h3>{{ _("Notifications") }}</h3>
 
-    <form action="{{ base_path }}notifications.json" method="POST" class="js-submit">
+    <form action="" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="fields" value="{{ EVENTS_S }}" />
+        <input type="hidden" name="events" value="{{ EVENTS_S }}" />
         <span>{{ _("Send me notifications via email:") }}</span><br>
         <div class="checkbox">
         % for event in EVENTS.values()
@@ -98,7 +132,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 
     <br>
     <h4>{{ _("Language") }}</h4>
-    <form action="{{ base_path }}modify.json" method="POST" class="form-inline">
+    <form action="" method="POST" class="form-inline js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <select class="form-control" name="set_email_lang">{{
             lang_options(EMAIL_LANGS, email_locale.language)

@@ -1,8 +1,12 @@
+import json
+import os
 from unittest.mock import patch
 
 from liberapay.exceptions import (
-    BadEmailAddress, BadEmailDomain, CannotRemovePrimaryEmail,
-    EmailAddressIsBlacklisted, EmailAlreadyTaken, EmailDomainIsBlacklisted, EmailNotVerified,
+    BadEmailAddress, BrokenEmailDomain, CannotRemovePrimaryEmail,
+    EmailAddressIsBlacklisted, EmailAlreadyTaken,
+    EmailDomainIsBlacklisted, EmailNotVerified,
+    InvalidEmailDomain, NonEmailDomain,
     TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
@@ -18,11 +22,11 @@ class TestEmail(EmailHarness):
         self.alice = self.make_participant('alice')
 
     def hit_email_spt(self, action, address, auth_as='alice', expected_code=200):
-        data = {('email' if action == 'add-email' else action): address}
+        data = {action: address}
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
         auth_as = self.alice if auth_as == 'alice' else auth_as
         r = self.client.POST(
-            '/alice/emails/modify.json', data,
+            '/alice/emails/', data,
             auth_as=auth_as, raise_immediately=False,
             **headers
         )
@@ -57,7 +61,15 @@ class TestEmail(EmailHarness):
 
     def test_participant_can_add_email(self):
         response = self.hit_email_spt('add-email', 'alice@example.com')
-        assert response.text == '{}'
+        msg = json.loads(response.body)['msg']
+        assert msg == "A verification email has been sent to alice@example.com."
+        with patch.object(self.website, 'app_conf') as app_conf:
+            # Travis drops outgoing SMTP traffic, so we don't turn on the SMTP
+            # check when testing on Travis.
+            app_conf.check_email_domains = os.environ.get('TRAVIS') != 'true'
+            response = self.hit_email_spt('add-email', 'support@liberapay.com')
+            msg = json.loads(response.body)['msg']
+            assert msg == "A verification email has been sent to support@liberapay.com."
 
     def test_participant_can_add_email_with_unicode_domain_name(self):
         punycode_email = 'alice@' + 'accentué.com'.encode('idna').decode()
@@ -76,20 +88,26 @@ class TestEmail(EmailHarness):
         )
         for blob in bad:
             with self.assertRaises(BadEmailAddress):
-                self.alice.add_email(blob)
-            self.hit_email_spt('add-email', blob, expected_code=400)
+                self.client.POST(
+                    '/alice/emails/', {'add-email': blob},
+                    auth_as=self.alice,
+                )
 
     def test_participant_cant_add_email_with_bad_domain(self):
         bad = (
-            'alice@phantom.liberapay.com',  # no MX record
-            'alice@nonexistent.liberapay.com',  # NXDOMAIN
+            ('alice@invalid\uffffdomain.com', InvalidEmailDomain),
+            ('alice@phantom.liberapay.com', BrokenEmailDomain),  # no MX, A or AAAA record
+            ('alice@nonexistent.oy.lc', BrokenEmailDomain),  # NXDOMAIN
+            ('alice@nullmx.liberapay.com', NonEmailDomain),  # null MX record, per RFC 7505
         )
         with patch.object(self.website, 'app_conf') as app_conf:
             app_conf.check_email_domains = True
-            for email in bad:
-                with self.assertRaises(BadEmailDomain):
-                    self.alice.add_email(email)
-                self.hit_email_spt('add-email', email, expected_code=400)
+            for email, expected_exception in bad:
+                with self.assertRaises(expected_exception):
+                    self.client.POST(
+                        '/alice/emails/', {'add-email': email},
+                        auth_as=self.alice,
+                    )
 
     def test_verification_link_uses_address_id(self):
         address = 'alice@gratipay.com'
@@ -258,7 +276,7 @@ class TestEmail(EmailHarness):
 
         # Check that resending the verification email isn't allowed
         r = self.client.POST(
-            '/bob/emails/modify.json', {'resend': email.address},
+            '/bob/emails/', {'resend': email.address},
             auth_as=bob, raise_immediately=False,
         )
         assert r.code == 400, r.text

@@ -33,6 +33,7 @@ class LazyResponse(Response):
     def render_body(self, state):
         f = self.lazy_body
         self.body = f(*resolve_dependencies(f, state).as_args)
+        return self.body
 
     def render_in_english(self):
         f = self.lazy_body
@@ -43,41 +44,41 @@ class LazyResponse(Response):
 
 
 class AuthRequired(LazyResponse):
+    html_template = 'templates/exceptions/AuthRequired.html'
 
     def __init__(self):
         Response.__init__(self, 403, '')
-        self.html_template = 'templates/exceptions/AuthRequired.html'
 
     def lazy_body(self, _):
         return _("You need to sign in first")
 
 
 class ClosedAccount(LazyResponse):
+    html_template = 'templates/exceptions/ClosedAccount.html'
 
     def __init__(self, participant):
         Response.__init__(self, 410, '')
         self.closed_account = participant
-        self.html_template = 'templates/exceptions/ClosedAccount.html'
 
     def lazy_body(self, _):
         return _("This account is closed")
 
 
 class LoginRequired(LazyResponse):
+    html_template = 'templates/exceptions/LoginRequired.html'
 
     def __init__(self):
         Response.__init__(self, 403, '')
-        self.html_template = 'templates/exceptions/LoginRequired.html'
 
     def lazy_body(self, _):
         return _("You need to log in")
 
 
 class NeedDatabase(LazyResponse):
+    html_template = 'templates/exceptions/NeedDatabase.html'
 
     def __init__(self):
         Response.__init__(self, 503, '')
-        self.html_template = 'templates/exceptions/NeedDatabase.html'
 
     def lazy_body(self, _):
         return _("We're unable to process your request right now, sorry.")
@@ -85,8 +86,8 @@ class NeedDatabase(LazyResponse):
 
 class LazyResponseXXX(LazyResponse):
 
-    def __init__(self, *args, **kw):
-        Response.__init__(self, self.code, '', **kw)
+    def __init__(self, *args, headers=None):
+        Response.__init__(self, self.code, '', headers=headers)
         self.lazy_body = self.msg
         self.args = args
 
@@ -97,37 +98,58 @@ class LazyResponse400(LazyResponseXXX):
     code = 400
 
 
-class ProblemChangingUsername(LazyResponse400): pass
+class UsernameError(LazyResponse400):
 
-class UsernameIsEmpty(ProblemChangingUsername):
+    def __init__(self, username):
+        super().__init__()
+        self.username = username
+
+    def __str__(self):
+        return self.username
+
+
+class UsernameIsEmpty(UsernameError):
     def msg(self, _):
         return _("You need to provide a username!")
 
-class UsernameTooLong(ProblemChangingUsername):
-    def msg(self, _):
-        return _("The username '{0}' is too long.", *self.args)
 
-class UsernameContainsInvalidCharacters(ProblemChangingUsername):
+class UsernameTooLong(UsernameError):
     def msg(self, _):
-        return _("The username '{0}' contains invalid characters.", *self.args)
+        return _("The username '{0}' is too long.", self.username)
 
-class UsernameIsRestricted(ProblemChangingUsername):
+
+class UsernameContainsInvalidCharacters(UsernameError):
     def msg(self, _):
-        return _("The username '{0}' is restricted.", *self.args)
+        return _("The username '{0}' contains invalid characters.", self.username)
 
-class UsernameAlreadyTaken(ProblemChangingUsername):
+
+class UsernameIsRestricted(UsernameError):
     def msg(self, _):
-        return _("The username '{0}' is already taken.", *self.args)
+        return _("The username '{0}' is restricted.", self.username)
 
-class UsernameBeginsWithRestrictedCharacter(ProblemChangingUsername):
+
+class UsernameAlreadyTaken(UsernameError):
     def msg(self, _):
-        return _("The username '{0}' begins with a restricted character.", *self.args)
+        return _("The username '{0}' is already taken.", self.username)
 
-class UsernameEndsWithForbiddenSuffix(ProblemChangingUsername):
+
+class UsernameBeginsWithRestrictedCharacter(UsernameError):
     def msg(self, _):
-        return _("The username '{0}' ends with the forbidden suffix '{1}'.", *self.args)
+        return _("The username '{0}' begins with a restricted character.", self.username)
 
-class TooManyUsernameChanges(ProblemChangingUsername):
+
+class UsernameEndsWithForbiddenSuffix(UsernameError):
+
+    def __init__(self, username, suffix):
+        super().__init__(username)
+        self.suffix = suffix
+
+    def msg(self, _):
+        return _("The username '{0}' ends with the forbidden suffix '{1}'.",
+                 self.username, self.suffix)
+
+
+class TooManyUsernameChanges(LazyResponseXXX):
     code = 429
     def msg(self, _):
         return _(
@@ -140,6 +162,7 @@ class ValueTooLong(LazyResponse400):
     def msg(self, _):
         return _("The value '{0}' is too long.", self.args[0])
 
+
 class ValueContainsForbiddenCharacters(LazyResponse400):
     def msg(self, _, locale):
         return _(
@@ -148,40 +171,82 @@ class ValueContainsForbiddenCharacters(LazyResponse400):
         )
 
 
-class ProblemChangingEmail(LazyResponse400): pass
+class EmailAddressError(LazyResponse400):
+    bypass_allowed = False
+    html_template = 'templates/exceptions/EmailAddressError.html'
 
-class EmailAlreadyTaken(ProblemChangingEmail):
+    def __init__(self, address, exception_or_message=None):
+        super().__init__()
+        self.email_address = address
+        self.exception_or_message = exception_or_message
+
+    def __str__(self):
+        return self.email_address
+
+
+class EmailAlreadyTaken(EmailAddressError):
     code = 409
     def msg(self, _):
-        return _("{0} is already connected to a different Liberapay account.", *self.args)
+        return _("{0} is already connected to a different Liberapay account.", self.email_address)
 
-class CannotRemovePrimaryEmail(ProblemChangingEmail):
+
+class CannotRemovePrimaryEmail(LazyResponseXXX):
     code = 403
     def msg(self, _):
         return _("You cannot remove your primary email address.")
 
-class EmailNotVerified(ProblemChangingEmail):
-    def msg(self, _):
-        return _("The email address '{0}' is not verified.", *self.args)
 
-class TooManyEmailAddresses(ProblemChangingEmail):
+class EmailNotVerified(EmailAddressError):
+    def msg(self, _):
+        return _("The email address '{0}' is not verified.", self.email_address)
+
+
+class TooManyEmailAddresses(LazyResponseXXX):
     code = 403
     def msg(self, _):
         return _("You've reached the maximum number of email addresses we allow.")
 
-class BadEmailAddress(ProblemChangingEmail):
-    def msg(self, _):
-        return _("'{0}' is not a valid email address.", *self.args)
 
-class BadEmailDomain(ProblemChangingEmail):
+class BadEmailAddress(EmailAddressError):
     def msg(self, _):
-        return _("'{domain_name}' is not a valid email domain.", domain_name=self.args[0])
+        return _("'{0}' is not a valid email address.", self.email_address)
 
-class EmailAddressIsBlacklisted(ProblemChangingEmail):
+
+class InvalidEmailDomain(EmailAddressError):
+
+    def __init__(self, email_address, domain, exception):
+        super().__init__(email_address, exception)
+        self.invalid_domain = domain
+
+    def msg(self, _):
+        return _("{0} is not a valid domain name.", repr(self.invalid_domain))
+
+
+class BrokenEmailDomain(EmailAddressError):
+    bypass_allowed = True
+
+    def msg(self, _):
+        return _(
+            "Our attempt to establish a connection with the {domain_name} email "
+            "server failed (error message: “{error_message}”).",
+            domain_name=self.email_address,
+            error_message=str(self.exception_or_message),
+        )
+
+
+class NonEmailDomain(EmailAddressError):
+    def msg(self, _):
+        return _(
+            "'{domain_name}' is not a valid email domain name.",
+            domain_name=self.email_address
+        )
+
+
+class EmailAddressIsBlacklisted(LazyResponse400):
+    html_template = 'templates/exceptions/EmailAddressIsBlacklisted.html'
 
     def __init__(self, email_address, reason, ts, details, ses_data=None):
         Response.__init__(self, 400, '')
-        self.html_template = 'templates/exceptions/EmailAddressIsBlacklisted.html'
         from liberapay.utils.emails import EmailError
         self.email_error = EmailError(email_address, reason, ts, details, ses_data)
 
@@ -203,7 +268,8 @@ class EmailAddressIsBlacklisted(ProblemChangingEmail):
                 email_address=error.email_address, timespan_ago=to_age(error.ts)
             )
 
-class EmailDomainIsBlacklisted(ProblemChangingEmail):
+
+class EmailDomainIsBlacklisted(LazyResponse400):
     def msg(self, _, to_age):
         domain, reason, ts, details = self.args
         if reason == 'bounce':
@@ -236,10 +302,12 @@ class EmailDomainIsBlacklisted(ProblemChangingEmail):
                 domain=domain
             )
 
-class EmailAlreadyAttachedToSelf(ProblemChangingEmail):
+
+class EmailAlreadyAttachedToSelf(EmailAddressError):
     code = 409
     def msg(self, _):
-        return _("The email address {0} is already connected to your account.", *self.args)
+        return _("The email address {0} is already connected to your account.", self.email_address)
+
 
 class VerificationEmailAlreadySent(LazyResponseXXX):
     code = 429
@@ -248,6 +316,7 @@ class VerificationEmailAlreadySent(LazyResponseXXX):
             "A verification email has already been sent to {email_address} recently.",
             email_address=self.args[0]
         )
+
 
 class TooManyEmailVerifications(LazyResponseXXX):
     code = 429
@@ -267,6 +336,7 @@ class TooManyLogInAttempts(LazyResponseXXX):
             "the problem persists."
         )
 
+
 class TooManyLoginEmails(LazyResponseXXX):
     code = 429
     def msg(self, _):
@@ -275,11 +345,12 @@ class TooManyLoginEmails(LazyResponseXXX):
             "or contact support@liberapay.com."
         )
 
+
 class TooManyPasswordLogins(LazyResponse):
+    html_template = 'templates/exceptions/TooManyPasswordLogins.html'
 
     def __init__(self, participant_id):
         Response.__init__(self, 429, '')
-        self.html_template = 'templates/exceptions/TooManyPasswordLogins.html'
 
     def lazy_body(self, _):
         return _(
@@ -318,9 +389,11 @@ class NoSelfTipping(LazyResponse400):
     def msg(self, _):
         return _("You can't donate to yourself.")
 
+
 class NoTippee(LazyResponse400):
     def msg(self, _):
         return _("There is no user named {0}.", *self.args)
+
 
 _ = lambda a: a
 BAD_AMOUNT_MESSAGES = {
@@ -335,10 +408,12 @@ class BadAmount(LazyResponse400):
         amount, period, limits = self.args
         return _(BAD_AMOUNT_MESSAGES[period], amount, *limits)
 
+
 class UserDoesntAcceptTips(LazyResponseXXX):
     code = 403
     def msg(self, _):
         return _("The user {0} doesn't accept donations.", *self.args)
+
 
 class BadDonationCurrency(LazyResponseXXX):
     code = 403

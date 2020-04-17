@@ -1,0 +1,32 @@
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+<p class="alert alert-danger">{{ response.body }}</p>
+% set input_name = request.find_input_name(response.email_address)
+% if input_name in ('add-email', 'sign-in.email')
+    <p>{{ _("Did you mistype your email address? Fix it and try again, or try a different address.") }}</p>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <div class="form-group">
+            <input class="form-control" type="email" name="{{ input_name }}"
+                   value="{{ response.email_address }}" placeholder="{{ _('Email address') }}" />
+        </div>
+        <button class="btn btn-primary">{{ _("Try again") }}</button>
+    </form>
+% endif
+% if response.bypass_allowed
+    <p>{{ _(
+        "If you're sure that the email address you input is valid, then you can "
+        "bypass this error. However, if we're unable to deliver messages to this "
+        "address, then it will be blacklisted."
+    ) }}</p>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-warning" name="email.bypass_error" value="yes">{{ _(
+            "Ignore the error and proceed"
+        ) }}</button>
+    </form>
+% endif
+</div>
+</div>

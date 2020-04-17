@@ -2,18 +2,20 @@ from http.cookies import SimpleCookie
 
 import pytest
 
-from liberapay.constants import SESSION, SESSION_REFRESH
+from liberapay.constants import SESSION, SESSION_REFRESH, USERNAME_SUFFIX_BLACKLIST
 from liberapay.exceptions import (
     BadAmount,
     InvalidId,
     NoSelfTipping,
     NoTippee,
     NonexistingElsewhere,
-    ProblemChangingUsername,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
+    UsernameBeginsWithRestrictedCharacter,
     UsernameContainsInvalidCharacters,
+    UsernameEndsWithForbiddenSuffix,
     UsernameIsEmpty,
+    UsernameIsRestricted,
     UsernameTooLong,
 )
 from liberapay.i18n.currencies import Money
@@ -184,7 +186,15 @@ class TestStub(Harness):
 
     def test_changing_username_to_restricted_name(self):
         for name in self.client.website.restricted_usernames:
-            with self.assertRaises(ProblemChangingUsername):
+            if name.startswith('%'):
+                expected_exception = UsernameContainsInvalidCharacters
+            elif not name[:1].isalnum():
+                expected_exception = UsernameBeginsWithRestrictedCharacter
+            elif name[name.rfind('.'):] in USERNAME_SUFFIX_BLACKLIST:
+                expected_exception = UsernameEndsWithForbiddenSuffix
+            else:
+                expected_exception = UsernameIsRestricted
+            with self.assertRaises(expected_exception):
                 self.stub.change_username(name)
 
     def test_getting_tips_not_made(self):

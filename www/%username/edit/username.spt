@@ -1,16 +1,27 @@
+from liberapay.exceptions import UsernameError
 from liberapay.utils import form_post_success, get_participant
 
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
+errors = []
 
 if request.method == 'POST':
     new_username = request.body['username'].strip()
     if new_username != participant.username:
-        participant.change_username(new_username, recorder=user)
+        try:
+            participant.change_username(new_username, recorder=user)
+        except UsernameError as r:
+            errors.append(r.render_body(state))
     new_public_name = request.body.get('public_name')
     if new_public_name != participant.public_name:
-        participant.change_public_name(new_public_name, recorder=user)
-    form_post_success(state, redirect_url=participant.path('edit/username'))
+        try:
+            participant.change_public_name(new_public_name, recorder=user)
+        except UsernameError as r:
+            errors.append(r.render_body(state))
+    if errors:
+        response.code = 400
+    else:
+        form_post_success(state, redirect_url=participant.path('edit/username'))
 
 _username = participant.username if participant.username[0] != '~' else ''
 
@@ -21,6 +32,10 @@ subhead = _("Username")
 % extends "templates/layouts/profile-edit.html"
 
 % block form
+
+    % for msg in errors
+        <p class="alert alert-danger">{{ msg }}</p>
+    % endfor
 
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />

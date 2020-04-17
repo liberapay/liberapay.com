@@ -46,7 +46,7 @@ from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
     canonize, insert_constants, enforce_rate_limits, set_output_to_None,
-    add_content_disposition_header, merge_exception_into_response,
+    add_content_disposition_header, merge_responses,
     bypass_csp_for_form_redirects, delegate_error_to_simplate, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
@@ -206,7 +206,7 @@ algorithm.functions = [
     algorithm['handle_negotiation_exception'],
 
     tell_sentry,
-    merge_exception_into_response,
+    merge_responses,
     turn_socket_error_into_50X,
     algorithm['get_response_for_exception'],
 
@@ -328,6 +328,17 @@ def _bypasses_proxy(self):
     self.source
     return self.__dict__['bypasses_proxy']
 pando.http.request.Request.bypasses_proxy = property(_bypasses_proxy)
+
+if hasattr(pando.http.request.Request, 'find_input_name'):
+    raise Warning('pando.http.request.Request.find_input_name already exists')
+def _find_input_name(self, value):
+    assert isinstance(self.body, aspen.http.mapping.Mapping)
+    r = None
+    for k, values in self.body.items():
+        if any(map(value.__eq__, values)):
+            r = k
+    return r
+pando.http.request.Request.find_input_name = _find_input_name
 
 if hasattr(pando.Response, 'encode_url'):
     raise Warning('pando.Response.encode_url() already exists')

@@ -41,7 +41,6 @@ from liberapay.exceptions import (
     CannotRemovePrimaryEmail,
     DuplicateNotification,
     EmailAddressIsBlacklisted,
-    EmailAlreadyAttachedToSelf,
     EmailAlreadyTaken,
     EmailNotVerified,
     InvalidId,
@@ -82,7 +81,8 @@ from liberapay.utils import (
     markdown,
 )
 from liberapay.utils.emails import (
-    EmailVerificationResult, check_email_blacklist, normalize_email_address
+    NormalizedEmailAddress, EmailVerificationResult, check_email_blacklist,
+    normalize_email_address,
 )
 from liberapay.utils.types import Object
 from liberapay.website import website
@@ -159,18 +159,8 @@ class Participant(Model, MixinTeam):
         return p
 
     def make_team(self, name, currency, email=None, email_lang=None, throttle_takes=True):
-        if email:
-            email = normalize_email_address(email)
-            if not self.email:
-                email_is_attached_to_self = self.db.one("""
-                    SELECT true AS a
-                      FROM emails
-                     WHERE participant = %s
-                       AND address = %s
-                """, (self.id, email))
-                if email_is_attached_to_self:
-                    raise EmailAlreadyAttachedToSelf(email)
-            check_email_blacklist(email)
+        if email and not isinstance(email, NormalizedEmailAddress):
+            raise TypeError("expected NormalizedEmailAddress, got %r" % type(email))
         with self.db.get_cursor() as c:
             c.hit_rate_limit('make_team', self.id, TooManyTeamsCreated)
             t = c.one("""
@@ -1018,7 +1008,8 @@ class Participant(Model, MixinTeam):
             Returns the number of emails sent.
         """
 
-        email = normalize_email_address(email)
+        if not isinstance(email, NormalizedEmailAddress):
+            email = normalize_email_address(email)
 
         # Check that this address isn't already verified
         owner = (cursor or self.db).one("""

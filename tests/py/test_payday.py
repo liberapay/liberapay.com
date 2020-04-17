@@ -1065,8 +1065,8 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.make_payin_and_transfer(janet_card, self.david, EUR('4.50'))
         self.make_payin_and_transfer(janet_card, self.homer, EUR('3.50'))
         self.make_payin_and_transfer(janet_card, team, EUR('25.00'))
-        self.client.POST('/homer/emails/notifications.json', auth_as=self.homer,
-                         data={'fields': 'income', 'income': ''}, xhr=True)
+        self.client.PxST('/homer/emails/', auth_as=self.homer,
+                         data={'events': 'income', 'income': ''}, xhr=True)
         self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
         Payday.start().run()
         emails = self.get_emails()
