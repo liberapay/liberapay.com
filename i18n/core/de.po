@@ -926,6 +926,14 @@ msgid "'{0}' is not a valid email address."
 msgstr "„{0}“ ist keine gültige E-Mail-Adresse."
 
 #, python-brace-format
+msgid "{0} is not a valid domain name."
+msgstr ""
+
+#, python-brace-format
+msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
+msgstr ""
+
+#, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name} ist keine gültige E-Mail-Domain."
 
@@ -1255,12 +1263,27 @@ msgstr "Sind Sie der Besitzer des Kontos?"
 msgid "Log in to reopen your account."
 msgstr "Melden Sie sich an, um Ihr Konto wieder zu eröffnen."
 
+msgid "Did you mistype your email address? Fix it and try again, or try a different address."
+msgstr ""
+
+msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
+msgstr ""
+
+msgid "Ignore the error and proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr "Falls Sie glauben, dass von uns nach {email_address} versendete E-Mails nicht mehr mittels Bounce zurückgewiesen werden, dann können Sie diese Addresse von der Sperrliste entfernen und es erneut versuchen:"
 
 msgid "Bypass the blacklist and retry"
 msgstr "Sperrliste umgehen und erneut versuchen"
+
+msgid "Alternatively, you can try a different email address:"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Weiter"
 
 msgid "Please try again in a few minutes."
 msgstr "Bitte versuchen Sie es in ein paar Minuten erneut."
@@ -2275,6 +2298,16 @@ msgstr "Sie haben erfolgreich widersprochen, Ihre E-Mail-Adresse mit diesem Libe
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "Wollen Sie verhindern, dass zukünftig Dritte Ihre E-Mail-Adresse mit einem Liberapay-Konto verknüpfen?"
 
+msgid "You have already added and verified this address."
+msgstr "Sie haben diese Adresse bereits hinzugefügt und bestätigt."
+
+#, python-brace-format
+msgid "A verification email has been sent to {0}."
+msgstr "Eine Überprüfungs-E-Mail wurde an {0} geschickt."
+
+msgid "Your notification settings have been changed."
+msgstr "Ihre Benachrichtigungseinstellungen wurden geändert."
+
 msgid "Email settings"
 msgstr "E-Mail-Einstellungen"
 
@@ -2319,16 +2352,6 @@ msgstr "Sprache"
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
 msgstr "Liberapay ist noch nicht vollständig in {language} übersetzt. Sie erhalten möglicherweise E-Mails in englischer Sprache."
-
-msgid "You have already added and verified this address."
-msgstr "Sie haben diese Adresse bereits hinzugefügt und bestätigt."
-
-#, python-brace-format
-msgid "A verification email has been sent to {0}."
-msgstr "Eine Überprüfungs-E-Mail wurde an {0} geschickt."
-
-msgid "Your notification settings have been changed."
-msgstr "Ihre Benachrichtigungseinstellungen wurden geändert."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay braucht Ihre Unterstützung"
@@ -4990,9 +5013,6 @@ msgstr "die Historie des Kontos (Bestandsbuch, etc.)"
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
 msgstr "Bitte geben Sie eine E-Mail-Adresse an (Ihr {platform} Account hat keine primäre E-Mail-Adresse):"
-
-msgid "Proceed"
-msgstr "Weiter"
 
 msgid "Does this existing account belong to you?"
 msgstr "Gehört dieses Konto zu Ihnen?"

@@ -916,6 +916,14 @@ msgid "'{0}' is not a valid email address."
 msgstr "„{0}“ není platnou emailovou adresou."
 
 #, python-brace-format
+msgid "{0} is not a valid domain name."
+msgstr ""
+
+#, python-brace-format
+msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
+msgstr ""
+
+#, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr ""
 
@@ -1248,12 +1256,27 @@ msgstr "Jste vlastníkem účtu?"
 msgid "Log in to reopen your account."
 msgstr "Přihlaste se pro obnovení účtu."
 
+msgid "Did you mistype your email address? Fix it and try again, or try a different address."
+msgstr ""
+
+msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
+msgstr ""
+
+msgid "Ignore the error and proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr ""
 
 msgid "Bypass the blacklist and retry"
 msgstr ""
+
+msgid "Alternatively, you can try a different email address:"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Pokračovat"
 
 msgid "Please try again in a few minutes."
 msgstr "Prosím zkuste to znovu za pár minut."
@@ -2274,6 +2297,16 @@ msgstr ""
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr ""
 
+msgid "You have already added and verified this address."
+msgstr "Již jste přidali a ověřili tuto adresu."
+
+#, python-brace-format
+msgid "A verification email has been sent to {0}."
+msgstr "Ověřovací e-mail byl odeslán na {0}."
+
+msgid "Your notification settings have been changed."
+msgstr "Vaše nastavení oznámení  bylo změněno."
+
 msgid "Email settings"
 msgstr "Nastavení emailu"
 
@@ -2319,16 +2352,6 @@ msgstr "Jazyk"
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
 msgstr "Překlad Liberapay do jazyka {language} ještě není hotový, můžete dostat některé maily v angličtině."
-
-msgid "You have already added and verified this address."
-msgstr "Již jste přidali a ověřili tuto adresu."
-
-#, python-brace-format
-msgid "A verification email has been sent to {0}."
-msgstr "Ověřovací e-mail byl odeslán na {0}."
-
-msgid "Your notification settings have been changed."
-msgstr "Vaše nastavení oznámení  bylo změněno."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay potřebuje vaši podporu"
@@ -5037,9 +5060,6 @@ msgstr "historie účtu (účetnictví, atd.)"
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
 msgstr ""
-
-msgid "Proceed"
-msgstr "Pokračovat"
 
 msgid "Does this existing account belong to you?"
 msgstr "Patří vám tento existující účet?"

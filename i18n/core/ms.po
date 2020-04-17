@@ -927,6 +927,14 @@ msgid "'{0}' is not a valid email address."
 msgstr "'{0}' bukan alamat emel yang sah."
 
 #, python-brace-format
+msgid "{0} is not a valid domain name."
+msgstr ""
+
+#, python-brace-format
+msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
+msgstr ""
+
+#, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' bukannya domain emel yang sah."
 
@@ -1256,12 +1264,27 @@ msgstr "Adakah anda pemilik akaun?"
 msgid "Log in to reopen your account."
 msgstr "Log masuk untuk membuka semula akaun anda."
 
+msgid "Did you mistype your email address? Fix it and try again, or try a different address."
+msgstr ""
+
+msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
+msgstr ""
+
+msgid "Ignore the error and proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr "Jika anda percaya emel yang kami hantar ke {email_address} tidak akan dikembalikan semula, maka anda boleh membuang alamat ini daripada senarai hitam dan cuba lagi:"
 
 msgid "Bypass the blacklist and retry"
 msgstr "Langkau senarai hitam dan cuba lagi"
+
+msgid "Alternatively, you can try a different email address:"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Teruskan"
 
 msgid "Please try again in a few minutes."
 msgstr "Sila cuba lagi dalam beberapa minit."
@@ -2275,6 +2298,16 @@ msgstr "Anda telah berjaya menafikan sebarang kaitan alamat emel anda dengan aka
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "Adakah anda ingin menyekat sebarang cubaan mengaitkan alamat emel anda ke akaun Liberapay, dengan menambahnya ke senarai hitam kami?"
 
+msgid "You have already added and verified this address."
+msgstr "Anda telah pun menambah dan mengesahkan alamat ini."
+
+#, python-brace-format
+msgid "A verification email has been sent to {0}."
+msgstr "Emel pengesahan telah dihantar ke {0}."
+
+msgid "Your notification settings have been changed."
+msgstr "Tetapan pemberitahuan anda telah diubah."
+
 msgid "Email settings"
 msgstr "Tetapan emel"
 
@@ -2319,16 +2352,6 @@ msgstr "Bahasa"
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
 msgstr "Terjemahan Liberapay dalam {language} masih belum lengkap, anda mungkin terima emel dalam bahasa Inggeris."
-
-msgid "You have already added and verified this address."
-msgstr "Anda telah pun menambah dan mengesahkan alamat ini."
-
-#, python-brace-format
-msgid "A verification email has been sent to {0}."
-msgstr "Emel pengesahan telah dihantar ke {0}."
-
-msgid "Your notification settings have been changed."
-msgstr "Tetapan pemberitahuan anda telah diubah."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay perlukan sokongan anda"
@@ -4990,9 +5013,6 @@ msgstr "sejarah akaun (lejar, dll.)"
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
 msgstr "Sila masukkan alamat emel (akaun {platform} anda masih belum ada emel utama):"
-
-msgid "Proceed"
-msgstr "Teruskan"
 
 msgid "Does this existing account belong to you?"
 msgstr "Adakah akaun sedia ada ini kepunyaan anda?"

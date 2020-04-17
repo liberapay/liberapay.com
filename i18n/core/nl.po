@@ -926,6 +926,14 @@ msgid "'{0}' is not a valid email address."
 msgstr "'{0}' is geen geldig e-mailadres."
 
 #, python-brace-format
+msgid "{0} is not a valid domain name."
+msgstr ""
+
+#, python-brace-format
+msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
+msgstr ""
+
+#, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "{domain_name}\" is geen geldig e-maildomein."
 
@@ -1255,12 +1263,27 @@ msgstr "Ben jij de eigenaar van dit account?"
 msgid "Log in to reopen your account."
 msgstr "Log in om je account te heropenen."
 
+msgid "Did you mistype your email address? Fix it and try again, or try a different address."
+msgstr ""
+
+msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
+msgstr ""
+
+msgid "Ignore the error and proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr "Als u denkt dat door ons verzonden e-mails naar {email_address} niet meer terugkomen, dan kunt u dit adres van de zwarte lijst verwijderen en het opnieuw proberen:"
 
 msgid "Bypass the blacklist and retry"
 msgstr "Omzeil de zwarte lijst en probeer opnieuw"
+
+msgid "Alternatively, you can try a different email address:"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Doorgaan"
 
 msgid "Please try again in a few minutes."
 msgstr "Probeer het opnieuw over een paar minuten."
@@ -2274,6 +2297,16 @@ msgstr "Je hebt met succes geweigerd je e-mailadres te koppelen aan dit Liberapa
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "Wil je een toekomstige poging om je e-mailadres te koppelen aan een Liberapay-account blokkeren, door het toe te voegen aan onze zwarte lijst?"
 
+msgid "You have already added and verified this address."
+msgstr "Je hebt dit e-mailadres al toegevoegd en geverifieerd."
+
+#, python-brace-format
+msgid "A verification email has been sent to {0}."
+msgstr "Een verificatie-e-mail is verzonden naar {0}."
+
+msgid "Your notification settings have been changed."
+msgstr "Je notificatie-instellingen zijn gewijzigd."
+
 msgid "Email settings"
 msgstr "Emailinstellingen"
 
@@ -2318,16 +2351,6 @@ msgstr "Taal"
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
 msgstr "De {language} vertaling van Liberapay is nog niet voltooid, je ontvangt mogelijk e-mails in het Engels."
-
-msgid "You have already added and verified this address."
-msgstr "Je hebt dit e-mailadres al toegevoegd en geverifieerd."
-
-#, python-brace-format
-msgid "A verification email has been sent to {0}."
-msgstr "Een verificatie-e-mail is verzonden naar {0}."
-
-msgid "Your notification settings have been changed."
-msgstr "Je notificatie-instellingen zijn gewijzigd."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay heeft je steun nodig"
@@ -4989,9 +5012,6 @@ msgstr "de account geschiedenis (grootboek, enz.)"
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
 msgstr "Vul je e-mailadres in (je {platform}-account heeft geen primair e-mailadres):"
-
-msgid "Proceed"
-msgstr "Doorgaan"
 
 msgid "Does this existing account belong to you?"
 msgstr "Is dit bestaande account van jou?"

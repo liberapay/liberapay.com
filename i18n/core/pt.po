@@ -925,6 +925,14 @@ msgid "'{0}' is not a valid email address."
 msgstr "'{0}' não é um e-mail válido."
 
 #, python-brace-format
+msgid "{0} is not a valid domain name."
+msgstr ""
+
+#, python-brace-format
+msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
+msgstr ""
+
+#, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' não é um domínio de e-mail válido."
 
@@ -1254,12 +1262,27 @@ msgstr "Você é o dono da conta?"
 msgid "Log in to reopen your account."
 msgstr "Entre para reabrir sua conta."
 
+msgid "Did you mistype your email address? Fix it and try again, or try a different address."
+msgstr ""
+
+msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
+msgstr ""
+
+msgid "Ignore the error and proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr ""
 
 msgid "Bypass the blacklist and retry"
 msgstr ""
+
+msgid "Alternatively, you can try a different email address:"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Continuar"
 
 msgid "Please try again in a few minutes."
 msgstr "Tente novamente em alguns minutos."
@@ -2274,6 +2297,16 @@ msgstr "Você recusou vincular seu e-mail à esta conta Liberapay com sucesso."
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "Gostaria de bloquear qualquer futura tentativa de conectar seu e-mail à uma conta Liberapay, adicionando-o à nossa lista de bloqueio?"
 
+msgid "You have already added and verified this address."
+msgstr "Você já adicionou e verificou esse e-mail."
+
+#, python-brace-format
+msgid "A verification email has been sent to {0}."
+msgstr "Um e-mail de verificação foi enviado para {0}."
+
+msgid "Your notification settings have been changed."
+msgstr "Suas configurações de notificação foram alteradas."
+
 msgid "Email settings"
 msgstr "Configurações de e-mail"
 
@@ -2318,16 +2351,6 @@ msgstr "Idioma"
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
 msgstr "A tradução do Liberapay em {language} ainda está incompleta, você pode acabar recebendo e-mails em inglês."
-
-msgid "You have already added and verified this address."
-msgstr "Você já adicionou e verificou esse e-mail."
-
-#, python-brace-format
-msgid "A verification email has been sent to {0}."
-msgstr "Um e-mail de verificação foi enviado para {0}."
-
-msgid "Your notification settings have been changed."
-msgstr "Suas configurações de notificação foram alteradas."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay precisa do seu apoio"
@@ -4991,9 +5014,6 @@ msgstr "o histórico da conta (registros, ...)"
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
 msgstr "Digite um e-mail (a sua conta {platform} não tem um e-mail principal):"
-
-msgid "Proceed"
-msgstr "Continuar"
 
 msgid "Does this existing account belong to you?"
 msgstr "A conta existente é sua?"

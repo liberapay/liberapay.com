@@ -237,7 +237,7 @@ class BrokenEmailDomain(EmailAddressError):
 class NonEmailDomain(EmailAddressError):
     def msg(self, _):
         return _(
-            "'{domain_name}' is not a valid email domain name.",
+            "'{domain_name}' is not a valid email domain.",
             domain_name=self.email_address
         )
 

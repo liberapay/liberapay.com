@@ -925,6 +925,14 @@ msgid "'{0}' is not a valid email address."
 msgstr "'{0}' är inte en giltig e-postadress."
 
 #, python-brace-format
+msgid "{0} is not a valid domain name."
+msgstr ""
+
+#, python-brace-format
+msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
+msgstr ""
+
+#, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' är inte en giltig e-postdomän."
 
@@ -1254,12 +1262,27 @@ msgstr "Är du kontots ägare?"
 msgid "Log in to reopen your account."
 msgstr "Logga in för att återöppna ditt konto."
 
+msgid "Did you mistype your email address? Fix it and try again, or try a different address."
+msgstr ""
+
+msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
+msgstr ""
+
+msgid "Ignore the error and proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr "Om du tror att e-postmeddelanden skickade av oss till {email_address} inte längre kommer att skickas tillbaka, kan du ta bort den här adressen från svartlistan och försöka igen:"
 
 msgid "Bypass the blacklist and retry"
 msgstr "Gå förbi svartlistan och försök igen"
+
+msgid "Alternatively, you can try a different email address:"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Fortsätt"
 
 msgid "Please try again in a few minutes."
 msgstr "Var god försök igen om några minuter."
@@ -2274,6 +2297,16 @@ msgstr "Du har förnekat att ha anslutit din e-postadress till detta Liberapay-k
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "Skulle du vilja blockera framtida försök att ansluta din e-postaddress till ett Liberapay konto genom att lägga till det i vår svartlista?"
 
+msgid "You have already added and verified this address."
+msgstr "Du har redan lagt till och verifierat denna e-mail adress."
+
+#, python-brace-format
+msgid "A verification email has been sent to {0}."
+msgstr "Ett verifikations e-mail har skickats till {0}."
+
+msgid "Your notification settings have been changed."
+msgstr "Dina notifieringsinställningar har ändrats."
+
 msgid "Email settings"
 msgstr "E-mail inställningar"
 
@@ -2318,16 +2351,6 @@ msgstr "Språk"
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
 msgstr "Den {language} översättningen av Liberapay är ännu inte färdig, det kan hända att du får mejl på engelska istället."
-
-msgid "You have already added and verified this address."
-msgstr "Du har redan lagt till och verifierat denna e-mail adress."
-
-#, python-brace-format
-msgid "A verification email has been sent to {0}."
-msgstr "Ett verifikations e-mail har skickats till {0}."
-
-msgid "Your notification settings have been changed."
-msgstr "Dina notifieringsinställningar har ändrats."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay behöver ditt stöd"
@@ -4988,9 +5011,6 @@ msgstr "kontots historik (huvudbok, etc.)"
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
 msgstr "Var god ange en e-postadress (ditt {platform} konto har inte en primär e-postadress):"
-
-msgid "Proceed"
-msgstr "Fortsätt"
 
 msgid "Does this existing account belong to you?"
 msgstr "Tillhör detta existerande konto dig?"

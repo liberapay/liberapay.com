@@ -926,6 +926,14 @@ msgid "'{0}' is not a valid email address."
 msgstr "”{0}” ei ole kelpuutettu sähköpostiosoite."
 
 #, python-brace-format
+msgid "{0} is not a valid domain name."
+msgstr ""
+
+#, python-brace-format
+msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
+msgstr ""
+
+#, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "Sähköpostidomainia ’{domain_name}’ ei hyväksytä."
 
@@ -1255,12 +1263,27 @@ msgstr "Oletko tilin omistaja?"
 msgid "Log in to reopen your account."
 msgstr "Kirjaudu avataksesi tili uudelleen."
 
+msgid "Did you mistype your email address? Fix it and try again, or try a different address."
+msgstr ""
+
+msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
+msgstr ""
+
+msgid "Ignore the error and proceed"
+msgstr ""
+
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr "Mikäli uskot, etteivät osoitteeseen {email_address} lähetetyt postit enää palaudu lähettäjälle, voit poistaa osoitteen torjuntalistalta ja yrittää uudelleen:"
 
 msgid "Bypass the blacklist and retry"
 msgstr "Ohita torjuntalista ja yritä uudelleen"
+
+msgid "Alternatively, you can try a different email address:"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Toimeksi"
 
 msgid "Please try again in a few minutes."
 msgstr "Yritä uudelleen muutaman minuutin kuluttua."
@@ -2274,6 +2297,16 @@ msgstr "Olet onnistuneesti kiistänyt yhdistäneesi sähköpostiosoitteesi täh�
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "Haluatko torjua kaikki tulevat yritykset kytkeä sähköpostiosoitteesi johonkin Liberapay-tiliin lisäämällä osoite sulkulistalle?"
 
+msgid "You have already added and verified this address."
+msgstr "Olet jo lisännyt ja varmistanut tämän osoitteen."
+
+#, python-brace-format
+msgid "A verification email has been sent to {0}."
+msgstr "Varmistussähköposti on lähetetty osoitteeseen {0}."
+
+msgid "Your notification settings have been changed."
+msgstr "Ilmoitusasetuksesi on tallennettu."
+
 msgid "Email settings"
 msgstr "Sähköpostiasetukset"
 
@@ -2318,16 +2351,6 @@ msgstr "Kieli"
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
 msgstr "Liberapay-palvelun käännös kielellä {language} on vielä puutteellinen; saatat saada englanninkielisiä sähköposteja."
-
-msgid "You have already added and verified this address."
-msgstr "Olet jo lisännyt ja varmistanut tämän osoitteen."
-
-#, python-brace-format
-msgid "A verification email has been sent to {0}."
-msgstr "Varmistussähköposti on lähetetty osoitteeseen {0}."
-
-msgid "Your notification settings have been changed."
-msgstr "Ilmoitusasetuksesi on tallennettu."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay tarvitsee tukeasi"
@@ -4989,9 +5012,6 @@ msgstr "tilin tapahtumahistoriaa (reskontra jne.)"
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
 msgstr "Syötä sähköpostiosoitteesi (tunnuksesi {platform}-palvelussa ei sisällä pääasiallista sähköpostiosoitetta):"
-
-msgid "Proceed"
-msgstr "Toimeksi"
 
 msgid "Does this existing account belong to you?"
 msgstr "Kuuluuko tämä olemassaoleva tili sinulle?"
