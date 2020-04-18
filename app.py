@@ -31,9 +31,3 @@ chdir = env['OPENSHIFT_REPO_DIR'] if _production else ''
 
 if _production:
     pidfile = env['OPENSHIFT_DATA_DIR'] + '/gunicorn.pid'
-
-# Import extra settings from the GUNICORN_OPTS env var
-import shlex
-globals().update(
-    s.split('=', 1) for s in shlex.split(env.get('GUNICORN_OPTS'))
-)

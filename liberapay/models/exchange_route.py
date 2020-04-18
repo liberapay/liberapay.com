@@ -19,6 +19,11 @@ class ExchangeRoute(Model):
 
     __nonzero__ = __bool__
 
+    def __repr__(self):
+        return '<ExchangeRoute id=%r participant=%r network=%r status=%r>' % (
+            self.id, self.participant, self.network, self.status
+        )
+
     @classmethod
     def from_id(cls, participant, id, _raise=True):
         route = cls.db.one("""

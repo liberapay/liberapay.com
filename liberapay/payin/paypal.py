@@ -424,9 +424,10 @@ def sync_payment(db, payin):
 # Multi-version
 # =============
 
-def sync_all_pending_payments(db):
+def sync_all_pending_payments(db=None):
     """Calls `sync_payment` or `sync_order` for every pending payment.
     """
+    db = db or website.db
     payins = db.all("""
         SELECT DISTINCT ON (pi.id) pi.*
           FROM payin_transfers pt

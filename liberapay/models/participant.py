@@ -111,7 +111,7 @@ class Participant(Model, MixinTeam):
         return self.id != other.id
 
     def __repr__(self):
-        return '<Participant #%s "%s">' % (repr(self.id), repr(self.username))
+        return '<Participant #%r %r>' % (self.id, self.username)
 
 
     # Constructors
@@ -3561,6 +3561,7 @@ class Participant(Model, MixinTeam):
         Bits are used for email notification preferences and privacy settings.
         """
         assert isinstance(getattr(self, column), int)  # anti sql injection
+        assert column != 'privileges'  # protection against privilege escalation
         if on:
             mask = bit
             op = '|'
