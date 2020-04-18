@@ -2591,3 +2591,10 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_pending_notifs
     AFTER INSERT OR UPDATE OF is_new, web OR DELETE ON notifications
     FOR EACH ROW EXECUTE PROCEDURE update_pending_notifs();
+
+-- migration #125
+ALTER TABLE tips ADD COLUMN hidden boolean;
+CREATE OR REPLACE VIEW current_tips AS
+    SELECT DISTINCT ON (tipper, tippee) *
+      FROM tips
+  ORDER BY tipper, tippee, mtime DESC;
