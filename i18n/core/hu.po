@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-04-20 12:40+0000\n"
-"Last-Translator: Amor Kalo <amor.kalo@gmail.com>\n"
+"PO-Revision-Date: 2020-04-20 13:08+0000\n"
+"Last-Translator: Eretnek Hippi Messiás <hippi777@pm.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr "Az Ön {amount} összegű adománya {recipient} számára fizetésre vá
 #, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
-msgstr[0] "Van {n} megújításra váró adományod:"
+msgstr[0] "Van {n} megújításra váró adománya:"
 
 #, python-brace-format
 msgid "{amount} to {username}"
@@ -228,16 +228,16 @@ msgstr "Liberapay adomány megújítás: nem áll rendelkezésre érvényes fize
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Önnek van egy fizetése {amount}-ra {payment_date}-ra időzítve hogy megújítsa az adományát {recipient} számára, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
+msgstr "Önnek van egy fizetése {amount} összegre {payment_date} napra időzítve, hogy megújítsa az adományát {recipient} számára, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "Önnek van egy fizetése {amount}-ra {payment_date}-ra időzítve hogy megújítsa az adományait {recipients} számaira, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
+msgstr "Önnek van egy fizetése {amount} összegre {payment_date} napra időzítve, hogy megújítsa az adományait {recipients} számaira, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "Önnek van {n} fizetése időzítve hogy megújítsa az adományait, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
+msgstr[0] "Önnek van {n} fizetése időzítve, hogy megújítsa az adományait, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetési eszköz."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "A fizetési dátumok, összegek és fogadók:"
@@ -595,10 +595,10 @@ msgstr "Liberapay adomány megújítása: fizetés törölve"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr "A(z) {money_amount} összegű, {recipient} számára {date} napra ütemezett adomány kifizetése meghiúsult, mivel a címzett nem tudja azt fogadni."
+msgstr "A(z) {money_amount} összegű, {recipient} számára, {date} napra ütemezett adomány kifizetése meghiúsult, mivel a címzett nem tudja azt fogadni."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr "A következő adomány megújítási kifizetések megszakadtak, mivel a kedvezményezettek nem tudják őket fogadni:"
+msgstr "A következő megújuló adomány kifizetések megszakadtak, mivel a kedvezményezettek nem tudják azokat fogadni:"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr ""
@@ -730,7 +730,7 @@ msgid "Every week as long as I am receiving donations"
 msgstr ""
 
 msgid "When it's time to renew my donations"
-msgstr ""
+msgstr "Mikor van itt az ideje az adományaim megújításának"
 
 msgid "When someone I pledge to joins Liberapay"
 msgstr "Amikor megígérem, hogy valaki csatlakozik a Liberapay-hez"
@@ -748,13 +748,13 @@ msgid "When money is being refunded back to me"
 msgstr ""
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "Mikor következik egy automatikusan ismétlődő adományozás"
 
 msgid "When I no longer have any valid payment instrument"
 msgstr ""
 
 msgid "When a donation renewal payment has been aborted"
-msgstr ""
+msgstr "Mikor szakadt meg egy ismétlődő adományozás kifizetése"
 
 msgid "Expense Report"
 msgstr "Költségjelentés"
@@ -1819,19 +1819,19 @@ msgid "Custom"
 msgstr "Egyéni"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr ""
+msgstr "Kérjük válasszon, hogy miként legyen megújítva ez az adományozás:"
 
 msgid "Automatic renewal"
-msgstr ""
+msgstr "Automatikus megújítás"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
 msgstr ""
 
 msgid "Manual renewal"
-msgstr ""
+msgstr "Manuális megújítás"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr ""
+msgstr "Ki lesz küldve egy emlékeztető az adomány megújításáról az Ön e-mail címére."
 
 msgid "Modify the donation"
 msgstr "Adomány módosítása"
@@ -2354,13 +2354,13 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "A Liberapay építése rengeteg munka, és sok a tennivaló, de a mi fejlesztőink, fordítóink, és egyéb közreműködőink jelentősen alulfizetettek, és ez lelassítja a fejlődésünket."
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
-msgstr ""
+msgstr "A Liberapay immár lehetővé teszi az automatikus megújításokat, szeretne engedélyezni az összes adományozására?"
 
 msgid "Yes, activate automatic renewals"
-msgstr ""
+msgstr "Igen, aktiválja az automatikus megújításokat"
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
-msgstr ""
+msgstr "Ön engedélyezte az automatikus megújításokat néhány vagy az összes adományozására, de nem áll rendelkezésére érvényes fizetési eszköz, amely lehetővé tenné számunkra, hogy megkezdjük az automatikus kifizetéseket, amikor az ideje érkezik."
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2388,7 +2388,7 @@ msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr ""
 
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
-msgstr ""
+msgstr "Az automatikus megújítások engedélyezve vannak ezen a tartományon, de jelenleg a fizetési feldolgozó korlátozásai miatt ez érvényesíthető."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr ""
@@ -2407,7 +2407,7 @@ msgid "Next payment due {in_N_weeks_months_or_years}."
 msgstr ""
 
 msgid "Renew now"
-msgstr ""
+msgstr "Megújítás most"
 
 msgid "Pending payment completion."
 msgstr ""
@@ -2416,10 +2416,10 @@ msgid "Awaiting payment."
 msgstr ""
 
 msgid "Renew"
-msgstr ""
+msgstr "Megújítás"
 
 msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
-msgstr ""
+msgstr "Nem lehet megújítani, mivel a fogadó fél fiókja nem áll készen új fizetések fogadására."
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
@@ -2471,7 +2471,7 @@ msgid "Your donations to {recipients} are awaiting payment."
 msgstr ""
 
 msgid "For now this donation can only be renewed externally through PayPal."
-msgstr ""
+msgstr "Jelenleg ez az adomány kizárólag külsőleg, a PayPal-on keresztül, újítható meg."
 
 msgid "Please choose a payment method:"
 msgstr ""
@@ -2493,7 +2493,7 @@ msgid "Doesn't support the {currency}"
 msgstr ""
 
 msgid "Doesn't support automatic renewal"
-msgstr ""
+msgstr "Nem támogatja az automatikus megújítást"
 
 msgid "Not anonymous"
 msgstr ""
@@ -4739,7 +4739,7 @@ msgid "1. Set up a donation"
 msgstr ""
 
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr ""
+msgstr "Keressen valakit, akinek pénzt szeretne adni, majd válasszon összeget, időszakot (heti, havi vagy éves), és egy megújítási metódust (manuális vagy automatikus)."
 
 msgid "2. Fund your donation"
 msgstr ""
@@ -4752,7 +4752,7 @@ msgid "3. Keep your donation funded"
 msgstr ""
 
 msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
-msgstr ""
+msgstr "Értesíteni fogjuk Önt amikor szükségessé válik megújítani egy adományt. Amennyiben Ön az automatikus megújítást választotta, akkor meg fogjuk kísérelni a bankszámlájára terhelni, megegyezés szerint."
 
 msgid "How it works for creators"
 msgstr ""
