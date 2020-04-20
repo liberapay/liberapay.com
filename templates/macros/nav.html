@@ -118,6 +118,7 @@
         }),
         ('/receiving/', _("Receiving"), {
             'subnav': nav([
+                ('/patrons/', _("Patrons")),
                 ('/payment/', _("Payment Processors")),
             ], base=base)
         }),
@@ -142,7 +143,11 @@
             ], base=participant.path('edit')),
             'togglable': True,
         }),
-        ('/receiving/', _("Receiving")),
+        ('/receiving/', _("Receiving"), {
+            'subnav': nav([
+                ('/patrons/', _("Patrons")),
+            ], base=base)
+        }),
         ('/emails/', _("Emails")),
         ('/widgets/', _("Widgets")),
     ]), base=base) }}

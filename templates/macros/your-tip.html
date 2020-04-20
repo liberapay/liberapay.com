@@ -229,6 +229,12 @@
         </label>
         </li>
     </ul>
+    % if tippee_p.see_patrons == False
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "{username} has chosen not to see who their patrons are, so your donation will be secret.",
+        username=tippee_name
+    ) }}</p>
+    % elif tippee_p.see_patrons or tippee_is_stub
     <p>{{ _("Please select a privacy level for this donation:") }}</p>
     <ul class="list-group radio-group">
         <li class="list-group-item">
@@ -271,6 +277,13 @@
         </label>
         </li>
     </ul>
+    % else
+    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
+        "{username} hasn't yet specified whether they want to see who their patrons are, "
+        "so your donation will be secret.",
+        username=tippee_name
+    ) }}</p>
+    % endif
     <br>
     <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
         (_("Modify your pledge") if pledging else _("Modify your donation"))

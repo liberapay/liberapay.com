@@ -6,6 +6,8 @@ CREATE OR REPLACE VIEW current_tips AS
       FROM tips
   ORDER BY tipper, tippee, mtime DESC;
 
+ALTER TABLE participants ADD COLUMN see_patrons boolean;
+
 SELECT 'after deployment';
 
 ALTER TABLE tips ALTER COLUMN secrecy_level DROP DEFAULT;
