@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-04-20 16:57+0000\n"
-"Last-Translator: Amor Kalo <amor.kalo@gmail.com>\n"
+"PO-Revision-Date: 2020-04-21 08:11+0000\n"
+"Last-Translator: Eretnek Hippi Messiás <hippi777@pm.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -595,7 +595,7 @@ msgstr "Liberapay adomány megújítása: fizetés törölve"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr "A(z) {money_amount} összegű, {recipient} számára, {date} napra ütemezett adomány kifizetése meghiúsult, mivel a címzett nem tudja azt fogadni."
+msgstr "A(z) {money_amount} összegű, {recipient} számára, {date} napra ütemezett adomány megújítási kifizetése meghiúsult, mivel a címzett nem tudja azt fogadni."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "A következő megújuló adomány kifizetések megszakadtak, mivel a kedvezményezettek nem tudják azokat fogadni:"
@@ -1328,10 +1328,10 @@ msgid "Giving"
 msgstr "Adomány"
 
 msgid "Payment Instruments"
-msgstr "Fizetési eszközök"
+msgstr "Fizetési Eszközök"
 
 msgid "Payment Schedule"
-msgstr "Fizetési ütemezés"
+msgstr "Fizetések Ütemezése"
 
 msgid "Receiving"
 msgstr "Bevétel"
@@ -1340,7 +1340,7 @@ msgid "Payment Processors"
 msgstr "Fizetés Feldolgozók"
 
 msgid "Ledger"
-msgstr "Számla előzmények"
+msgstr "Számlaelőzmények"
 
 msgid "Wallet"
 msgstr "Tárca"
@@ -1488,10 +1488,10 @@ msgid "Ok"
 msgstr "Rendben"
 
 msgid "Personal Information"
-msgstr "Személyes adatok"
+msgstr "Személyes Adatok"
 
 msgid "Full Name"
-msgstr "Teljes név"
+msgstr "Teljes Név"
 
 msgid "Country (residence)"
 msgstr "Ország (tartózkodási)"
@@ -3119,7 +3119,7 @@ msgstr "Megerősítjük a nyugtát a {payer} általi fizetésről {date} napján
 
 #, python-brace-format
 msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr "A {0}-ból ami el lett küldve, {1} {owner_name} tárcájába került ({link}), és {2} tranzakciós díjként fel lett számolva."
+msgstr "A {0}-ból, ami el lett küldve, {1} {owner_name} tárcájába került ({link}), és {2} átutalási díjként fel lett számolva."
 
 msgid "Beneficiaries"
 msgstr "Kedvezményezettek"
@@ -3155,7 +3155,7 @@ msgstr "Végrehajtás időpontja: {0}"
 
 #, python-brace-format
 msgid "Transaction ID: {0}"
-msgstr "Tranzakció azonosító: {0}"
+msgstr "Átutalás azonosító: {0}"
 
 msgid "This document is not an invoice."
 msgstr "Ez a dokumentum nem egy számla."
@@ -3468,7 +3468,7 @@ msgstr "Az egyenlegük {0}."
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
-msgstr ""
+msgstr "Ez az oldal csak a Mangopay által feldolgozott átutalásokat mutatja, hogy megtekinthesse az egyéb fizetéseit, {link_start}menjen a Számlaelőzmények lapra{link_end}."
 
 msgid "Account Statement"
 msgstr "Számlakivonat"
@@ -4886,7 +4886,7 @@ msgid "Learn more"
 msgstr "Tudjon meg többet"
 
 msgid "Follow us"
-msgstr "Kövess minket"
+msgstr "Kövessen minket"
 
 msgid "Log In"
 msgstr "Bejelentkezés"
@@ -4940,17 +4940,17 @@ msgid "and what we cannot import:"
 msgstr "és amit nem tudunk importálni:"
 
 msgid "any saved credit card number"
-msgstr "bármely mentett hitelkártya-szám"
+msgstr "bármely mentett hitelkártyaszám"
 
 msgid "any money currently in the account"
-msgstr ""
+msgstr "bármennyi jelenlegi pénz a fiókban"
 
 msgid "the account's history (ledger, etc.)"
-msgstr ""
+msgstr "a fiók előzményei (számlaelőzmények, stb.)"
 
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr ""
+msgstr "Kérjük, hogy adjon meg egy e-mail címet (az Ön {platform} fiókjának nincsen elsődleges e-mail címe):"
 
 msgid "Does this existing account belong to you?"
 msgstr "Ez a meglévő fiók Önhöz tartozik?"
@@ -4963,7 +4963,7 @@ msgstr "Máskülönben kérjük, hogy adjon meg egy e-mail címet amely Önhöz 
 
 #, python-brace-format
 msgid "The data import from {platform} has been successfully completed."
-msgstr "Az adatok importálása a {platform} szolgáltatásból sikeresen befejeződött."
+msgstr "Az adatok importálása a(z) {platform} szolgáltatásból sikeresen befejeződött."
 
 #, python-brace-format
 msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
