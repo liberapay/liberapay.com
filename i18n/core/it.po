@@ -926,11 +926,11 @@ msgstr "\"{0}\" non è un indirizzo e-mail valido."
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0} non è un dominio valido."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Il tentativo di stabilire una connessione con il server e-mail {domain_name} non è andato a buon fine (messaggio di errore:\"{error_message}\"."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -1263,13 +1263,13 @@ msgid "Log in to reopen your account."
 msgstr "Accedi per riaprire il tuo conto."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "Potresti aver digitato in maniera errata il tuo indirizzo e-mail? Correggilo e riprova, oppure prova un indirizzo diverso."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "Se sei sicuro/a che l'indirizzo e-mail che hai inserito è valido, puoi ignorare questo errore. Se invece non sarà possibile recapitare messaggi a questo indirizzo, sarà inserito nella lista nera."
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "Ignora l'errore e procedi"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
@@ -1279,7 +1279,7 @@ msgid "Bypass the blacklist and retry"
 msgstr "Ignora la lista nera e riprova"
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "In alternativa, puoi provare un altro indirizzo e-mail:"
 
 msgid "Proceed"
 msgstr "Procedi"
@@ -1552,9 +1552,8 @@ msgstr "Squadre"
 msgid "Stats"
 msgstr "Statistiche"
 
-#, fuzzy
 msgid "Follow Us"
-msgstr "Feed"
+msgstr "Segui i nostri aggiornamenti"
 
 msgid "Contact"
 msgstr "Contatti"
@@ -2401,7 +2400,7 @@ msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Iniziato {timespan_ago_1}. Modificato {timespan_ago_2}."
 
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
-msgstr ""
+msgstr "Il rinnovo automatico è abilitato per questa donazione, ma non è attualmente possibile eseguirlo a causa di limitazioni dell'elaboratore dei pagamenti."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inattivo perché il conto del ricevente è nella lista nera."
@@ -2445,13 +2444,13 @@ msgid "Cancel the pledge"
 msgstr "Cancella l'impegno"
 
 msgid "Stopped donations"
-msgstr ""
+msgstr "Donazioni bloccate"
 
 msgid "Restart"
 msgstr "Riavvia"
 
 msgid "Hide"
-msgstr ""
+msgstr "Nascondi"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2459,17 +2458,17 @@ msgstr "Iniziato {timespan_ago_1}. Terminato {timespan_ago_2}."
 
 #, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
-msgstr ""
+msgstr "Questa donazione ha ancora {money_amount} pagati in anticipo. Questo anticipo sarà consumato ogni settimana finché non sarà esaurito."
 
 msgid "Cancelled pledges"
-msgstr ""
+msgstr "Impegni a donare cancellati"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
 msgstr "Non stai attualmente donando denaro a {username}."
 
 msgid "Funding your donations"
-msgstr "Finanziando le tue donazioni"
+msgstr "Finanziare le tue donazioni"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
