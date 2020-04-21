@@ -255,7 +255,12 @@ def adjust_payin_transfers(db, payin, net_amount):
                         d = team_donations.pop(pt.recipient, None)
                         if d is None:
                             assert pt.remote_id is None and pt.status in ('pre', 'pending')
-                            cursor.run("DELETE FROM payin_transfers WHERE id = %s", (pt.id,))
+                            cursor.run("""
+                                DELETE FROM payin_transfer_events
+                                 WHERE payin_transfer = %(pt_id)s
+                                   AND status = 'pending';
+                                DELETE FROM payin_transfers WHERE id = %(pt_id)s;
+                            """, dict(pt_id=pt.id))
                         elif pt.amount != d.amount:
                             assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((d.amount, pt.id))
