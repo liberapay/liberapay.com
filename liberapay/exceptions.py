@@ -420,9 +420,8 @@ class BadDonationCurrency(LazyResponseXXX):
     def msg(self, _):
         tippee, rejected_currency = self.args
         return _(
-            "Donations to {username} must be in {main_currency}, not {rejected_currency}.",
-            username=tippee.username, main_currency=tippee.main_currency,
-            rejected_currency=rejected_currency,
+            "{username} doesn't accept donations in {rejected_currency}.",
+            username=tippee.username, rejected_currency=rejected_currency,
         )
 
 
