@@ -206,7 +206,8 @@ def test_email_domain(domain: str):
         for ip_addr in ip_addresses:
             n_ip_addresses += 1
             try:
-                test_email_server(str(ip_addr))
+                if website.app_conf.check_email_servers:
+                    test_email_server(str(ip_addr))
                 success = True
                 break
             except (SMTPException, OSError) as e:
