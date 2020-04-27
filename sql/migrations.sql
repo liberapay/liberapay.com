@@ -2598,3 +2598,6 @@ CREATE OR REPLACE VIEW current_tips AS
     SELECT DISTINCT ON (tipper, tippee) *
       FROM tips
   ORDER BY tipper, tippee, mtime DESC;
+
+-- migration #126
+INSERT INTO app_conf VALUES ('check_email_servers', 'true'::jsonb);
