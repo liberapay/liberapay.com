@@ -174,10 +174,14 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
         )
         if not is_known_good_domain:
             # Try to resolve the domain and connect to its SMTP server(s).
-            bypass_error = state['request'].body.get('email.bypass_error') == 'yes'
             try:
                 test_email_domain(email.domain)
             except EmailAddressError as e:
+                request = state.get('request')
+                if request:
+                    bypass_error = request.body.get('email.bypass_error') == 'yes'
+                else:
+                    bypass_error = False
                 if not (bypass_error and e.bypass_allowed):
                     raise
             except Exception as e:
