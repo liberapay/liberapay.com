@@ -100,7 +100,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
             <input name="add-email" type="email" class="form-control"
                    placeholder="{{ _('Email address') }}" />
             <div class="input-group-btn">
-                <button name="add-email" class="btn btn-default">{{ _("Add") }}</button>
+                <button class="btn btn-default">{{ _("Add") }}</button>
             </div>
         </div>
     </form>
