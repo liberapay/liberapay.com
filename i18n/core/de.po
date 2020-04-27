@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: German "
-"<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2020-04-27 09:39+0000\n"
+"Last-Translator: Jeannette L <j.lavoie@net-c.ca>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.0.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -927,11 +929,11 @@ msgstr "„{0}“ ist keine gültige E-Mail-Adresse."
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0} ist kein gültiger Domainname."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Unser Versuch, eine Verbindung mit dem E-Mail-Server {domain_name} herzustellen, schlug fehl (Fehlermeldung: „{error_message}“)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -1016,7 +1018,7 @@ msgstr "Der Benutzer {0} akzeptiert keine Spenden."
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
-msgstr ""
+msgstr "{username} akzeptiert keine Spenden in {rejected_currency}."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Es scheint so, als ob Sie etwas zu löschen versuchen, das nicht existiert."
@@ -1264,13 +1266,13 @@ msgid "Log in to reopen your account."
 msgstr "Melden Sie sich an, um Ihr Konto wieder zu eröffnen."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "Haben Sie sich bei der Eingabe Ihrer E-Mail-Adresse vertippt? Korrigieren Sie diese und versuchen Sie es erneut, oder versuchen Sie mit einer anderen Adresse."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "Wenn Sie sicher sind, dass die von Ihnen eingegebene E-Mail-Adresse gültig ist, dann können Sie diesen Fehler umgehen. Wenn wir jedoch nicht in der Lage sind, Nachrichten an diese Adresse zuzustellen, dann wird sie auf die schwarze Liste gesetzt."
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "Den Fehler ignorieren und fortfahren"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
@@ -1280,7 +1282,7 @@ msgid "Bypass the blacklist and retry"
 msgstr "Sperrliste umgehen und erneut versuchen"
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "Alternativ können Sie es mit einer anderen E-Mail-Adresse versuchen:"
 
 msgid "Proceed"
 msgstr "Weiter"
@@ -1553,9 +1555,8 @@ msgstr "Teams"
 msgid "Stats"
 msgstr "Statistiken"
 
-#, fuzzy
 msgid "Follow Us"
-msgstr "Feeds"
+msgstr "Uns folgen"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -2401,8 +2402,9 @@ msgstr "Begonnen {timespan_ago}."
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Begonnen {timespan_ago_1}. Geändert {timespan_ago_2}."
 
+#, fuzzy
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
-msgstr ""
+msgstr "Automatische Verlängerungen sind für diese Spende aktiviert, sind aber derzeit aufgrund von Beschränkungen des Zahlungsprozessors nicht möglich."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inaktiv, weil das Konto des Empfängers auf der Sperrliste ist."
@@ -2445,14 +2447,15 @@ msgstr "Sie spenden derzeit für niemanden."
 msgid "Cancel the pledge"
 msgstr "Versprechen zurückziehen"
 
+#, fuzzy
 msgid "Stopped donations"
-msgstr ""
+msgstr "Gestoppte Spenden"
 
 msgid "Restart"
 msgstr "Neustart"
 
 msgid "Hide"
-msgstr ""
+msgstr "Ausblenden"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
