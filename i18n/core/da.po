@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Danish "
-"<https://hosted.weblate.org/projects/liberapay/core/da/>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"PO-Revision-Date: 2020-04-27 15:40+0000\n"
+"Last-Translator: Katharsisdrill <katharsisdrill@phillfromgchq.co.uk>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/liberapay/core/da/>\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.0.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -297,7 +299,7 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
-"Vores Betalingsformidleren (Mangopay) smider os ud, så vi anbefaler at du {link1_start}tømmer din konto{link_end} før 26. juli.\n"
+"Vores Betalingsformidler (Mangopay) smider os ud, så vi anbefaler at du {link1_start}tømmer din konto{link_end} før 26. juli.\n"
 "\n"
 "Ved at klikke på linket ovenfor kommer du til en ny side med titlen \"Tøm din tegnebog\" hvor du kan vælge mellem to muligheder.\n"
 "\n"
@@ -927,11 +929,11 @@ msgstr "'{0}' er ikke en gyldig e-mailadresse."
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0} er ikke et gyldigt domænenavn."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Vores forsøg på at oprette en forbindelse med e-mailserveren {domain_name} mislykkedes (fejlmeddelelse: “{error_message}”)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -1016,7 +1018,7 @@ msgstr "Brugeren {0} accepterer ikke donationer."
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
-msgstr ""
+msgstr "{username} accepterer ikke donationer i {rejected_currency}."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "det ser ud til at du prøver at slette noget der ikke eksisterer."
@@ -1264,13 +1266,13 @@ msgid "Log in to reopen your account."
 msgstr "Log ind for at genåbne kontoen."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "Har du indtastet din e-mailadresse forkert? Fiks det og prøv igen, eller prøv en anden adresse."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "Hvis du er sikker på, at den e-mailadresse du indtastede er gyldig, kan du se bort fra denne fejl. Hvis vi imidlertid ikke er i stand til at levere meddelelser til denne adresse, vil den blive blacklisted."
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "Ignorer denne fejl og fortsæt"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
@@ -1280,7 +1282,7 @@ msgid "Bypass the blacklist and retry"
 msgstr "Omgå blacklisten, og prøv igen"
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "Alternativt kan du prøve med en anden e-mailadresse:"
 
 msgid "Proceed"
 msgstr "Forsæt"
@@ -1553,9 +1555,8 @@ msgstr "Team"
 msgid "Stats"
 msgstr "Statistik"
 
-#, fuzzy
 msgid "Follow Us"
-msgstr "Feeds"
+msgstr "Følg os"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -2402,7 +2403,7 @@ msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Begyndt {timespan_ago_1}. Modificeret {timespan_ago_2}."
 
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
-msgstr ""
+msgstr "Automatisk fornyelse er aktiveret for denne donation, men er i øjeblikket umulig på grund af begrænsninger i betalingsprocessoren."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inaktiv, fordi modtagerens konto er sortlistet."
@@ -2446,13 +2447,13 @@ msgid "Cancel the pledge"
 msgstr "annuller donationstilbuddet"
 
 msgid "Stopped donations"
-msgstr ""
+msgstr "Stoppede donationer"
 
 msgid "Restart"
 msgstr "Genstart"
 
 msgid "Hide"
-msgstr ""
+msgstr "Skjul"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2460,10 +2461,10 @@ msgstr "Begyndt {timespan_ago_1}. Stoppet {timespan_ago_2}."
 
 #, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
-msgstr ""
+msgstr "Denne stoppede donation har stadig {money_amount} betalt i forskud. Dette forskud forbruges hver uge, indtil det når nul."
 
 msgid "Cancelled pledges"
-msgstr ""
+msgstr "Annuller donationstilbud"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
@@ -2583,7 +2584,7 @@ msgstr "Mere information er nødvendig for at gennemføre denne betaling."
 
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
-msgstr ""
+msgstr "Betalingsformidleren {name} er ikke i stand til at behandle {currency} direkte debiteringer for denne modtager endnu. Prøv igen med en anden betalingsmetode."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
