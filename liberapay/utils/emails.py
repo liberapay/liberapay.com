@@ -308,7 +308,7 @@ def test_email_server(ip_address: str) -> None:
                                 both correctly and quickly enough
 
     """
-    smtp = SMTP(timeout=website.app_conf.socket_timeout)
+    smtp = SMTP(timeout=5.0)
     if website.env.logging_level == 'debug':
         smtp.set_debuglevel(2)
     try:
