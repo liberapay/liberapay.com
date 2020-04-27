@@ -5,7 +5,7 @@ import json
 import logging
 from random import random
 from smtplib import SMTP, SMTPException, SMTPResponseException
-from time import sleep
+import time
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
@@ -192,6 +192,7 @@ def test_email_domain(domain: str):
         NonEmailDomain: if the domain doesn't accept email (RFC 7505)
 
     """
+    start_time = time.monotonic()
     try:
         ip_addresses = get_email_server_addresses(domain)
         exceptions = []
@@ -211,6 +212,9 @@ def test_email_domain(domain: str):
                 exceptions.append(e)
             n_attempts += 1
             if n_attempts >= 3:
+                break
+            time_elapsed = time.monotonic() - start_time
+            if time_elapsed >= website.app_conf.socket_timeout:
                 break
         if not success:
             if n_ip_addresses == 0:
@@ -395,7 +399,7 @@ def handle_email_bounces():
                 _handle_ses_notification(msg)
             except Exception as e:
                 website.tell_sentry(e, {})
-        sleep(1)
+        time.sleep(1)
 
 
 def _handle_ses_notification(msg):
