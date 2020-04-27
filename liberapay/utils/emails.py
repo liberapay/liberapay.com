@@ -5,7 +5,7 @@ import json
 import logging
 from random import random
 from smtplib import SMTP, SMTPException, SMTPResponseException
-from time import sleep
+import time
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
 from aspen_jinja2_renderer import SimplateLoader
@@ -174,10 +174,14 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
         )
         if not is_known_good_domain:
             # Try to resolve the domain and connect to its SMTP server(s).
-            bypass_error = state['request'].body.get('email.bypass_error') == 'yes'
             try:
                 test_email_domain(email.domain)
             except EmailAddressError as e:
+                request = state.get('request')
+                if request:
+                    bypass_error = request.body.get('email.bypass_error') == 'yes'
+                else:
+                    bypass_error = False
                 if not (bypass_error and e.bypass_allowed):
                     raise
             except Exception as e:
@@ -192,6 +196,7 @@ def test_email_domain(domain: str):
         NonEmailDomain: if the domain doesn't accept email (RFC 7505)
 
     """
+    start_time = time.monotonic()
     try:
         ip_addresses = get_email_server_addresses(domain)
         exceptions = []
@@ -211,6 +216,9 @@ def test_email_domain(domain: str):
                 exceptions.append(e)
             n_attempts += 1
             if n_attempts >= 3:
+                break
+            time_elapsed = time.monotonic() - start_time
+            if time_elapsed >= website.app_conf.socket_timeout:
                 break
         if not success:
             if n_ip_addresses == 0:
@@ -308,7 +316,7 @@ def test_email_server(ip_address: str) -> None:
                                 both correctly and quickly enough
 
     """
-    smtp = SMTP(timeout=website.app_conf.socket_timeout)
+    smtp = SMTP(timeout=5.0)
     if website.env.logging_level == 'debug':
         smtp.set_debuglevel(2)
     try:
@@ -395,7 +403,7 @@ def handle_email_bounces():
                 _handle_ses_notification(msg)
             except Exception as e:
                 website.tell_sentry(e, {})
-        sleep(1)
+        time.sleep(1)
 
 
 def _handle_ses_notification(msg):

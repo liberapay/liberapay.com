@@ -181,7 +181,7 @@ class EmailAddressError(LazyResponse400):
         self.exception_or_message = exception_or_message
 
     def __str__(self):
-        return self.email_address
+        return "%s (%r)" % (self.email_address, self.exception_or_message)
 
 
 class EmailAlreadyTaken(EmailAddressError):
