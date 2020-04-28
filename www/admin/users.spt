@@ -74,6 +74,20 @@ if mode == 'all':
                   LIMIT 1
                ) AS email
              , ( SELECT json_agg(json_build_object(
+                            'provider', a.provider,
+                            'id', a.id,
+                            'country', a.country,
+                            'charges_enabled', a.charges_enabled,
+                            'verified', a.verified
+                        ))
+                   FROM ( SELECT a.*
+                            FROM payment_accounts a
+                           WHERE a.participant = p.id
+                             AND a.is_current
+                        ORDER BY a.provider DESC, a.id DESC
+                        ) a
+               ) AS payment_accounts
+             , ( SELECT json_agg(json_build_object(
                             'type', s.type, 'content', s.content, 'lang', s.lang
                         ))
                    FROM ( SELECT s.*
@@ -119,6 +133,20 @@ elif mode == 'new_recipients':
                       , e.added_time
                   LIMIT 1
                ) AS email
+             , ( SELECT json_agg(json_build_object(
+                            'provider', a.provider,
+                            'id', a.id,
+                            'country', a.country,
+                            'charges_enabled', a.charges_enabled,
+                            'verified', a.verified
+                        ))
+                   FROM ( SELECT a.*
+                            FROM payment_accounts a
+                           WHERE a.participant = p.id
+                             AND a.is_current
+                        ORDER BY a.provider DESC, a.id DESC
+                        ) a
+               ) AS payment_accounts
              , ( SELECT json_agg(json_build_object(
                             'type', s.type, 'content', s.content, 'lang', s.lang
                         ))
@@ -238,21 +266,47 @@ title = "Users Admin"
             % endif
             </p>
 
-        <div><strong>Elsewhere accounts:</strong>
+        <p><strong>Elsewhere accounts:</strong>
         % if elsewhere
+            <br>
             % for account in elsewhere
-                <div class="account">
-                    <a class="account-link" href="{{ account.html_url }}">
-                        {{ fontawesome(account.platform) }}
-                        <span class="account-username">{{ account.friendly_name_long }}</span>
-                    </a>
-                </div>
+                <a class="account-link" href="{{ account.html_url }}">
+                    <span class="symbol">{{ fontawesome(account.platform) }}</span>
+                    <span>{{ account.friendly_name_long }}</span>
+                </a>
+                <br>
             % endfor
         % else
-            none. <span class="text-danger">{{ glyphicon('warning-sign') }}</span>
+            none. <span class="text-warning">{{ glyphicon('warning-sign') }}</span>
         % endif
-        </div>
+        </p>
         % endif
+
+        % if p.is_person
+        <p><strong>Payment accounts:</strong>
+        % if row.payment_accounts
+            <br>
+            % for account in row.payment_accounts
+                <span class="symbol-3ex">{{
+                    fontawesome('cc-stripe', "Stripe") if account.provider == 'stripe' else
+                    fontawesome('paypal', "PayPal") if account.provider == 'paypal' else
+                    fontawesome(account.provider, account.provider)
+                }}</span>
+                {{ account.id }}
+                ({{ locale.countries.get(account.country, account.country) }})
+                % if account.verified and account.charges_enabled != False
+                    <span class="symbol text-success">{{ glyphicon('ok-sign', "OK") }}</span>
+                % elif account.verified
+                    <span class="symbol text-danger">{{ glyphicon('exclamation-sign', "Disabled") }}</span>
+                % else
+                    <span class="symbol text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
+                % endif
+                <br>
+            % endfor
+        % else
+            none.
+        % endif
+        </p>
 
         % if row.payments
         <p><strong>Incoming payments:</strong><br>
@@ -275,6 +329,7 @@ title = "Users Admin"
                 <br>
             % endfor
         </p>
+        % endif
         % endif
 
         <div><strong>Profile descriptions:</strong>
