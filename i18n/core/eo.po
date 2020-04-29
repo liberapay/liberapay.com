@@ -36,8 +36,8 @@ msgstr "Via donaco de {amount} al {recipient} atendas pagon."
 #, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
-msgstr[0] "Vi havas {n} donaco bezonanta esti refarita:"
-msgstr[1] "Vi havas {n} donacoj bezonantaj esti refaritaj:"
+msgstr[0] "Vi havas {n} donacon kiu atendas renovigon:"
+msgstr[1] "Vi havas {n} donacojn kiuj atendas renovigon:"
 
 #, python-brace-format
 msgid "{amount} to {username}"
@@ -45,29 +45,29 @@ msgstr "{amount} al {username}"
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
-msgstr[0] "Renovigi tiun donacon"
-msgstr[1] "Renovigi tiujn donacojn"
+msgstr[0] "Renovigi ĉi tiun donacon"
+msgstr[1] "Renovigi ĉi tiujn donacojn"
 
 msgid "Manage your donations"
 msgstr "Prizorgi viajn donacojn"
 
 msgid "Your email address is temporarily blacklisted"
-msgstr "Via retadreso estas momente en nigrolisto"
+msgstr "Via retadreso estas portempe en nigra listo"
 
 msgid "Your email address has been blacklisted"
 msgstr "Via retadreso estis listigita je nigra listo"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
-msgstr "Ni ĉesis sendi sciigojn al via adreso {email_address} ĝis {date}, ĉar freŝa klopodo sendi retmesaĝon al vi fiaskis."
+msgstr "Ni ĉesis sendi sciigojn al via adreso {email_address} ĝis {date}, ĉar lastatempa klopodo sendi retmesaĝon al vi fiaskis."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
-msgstr "Ni ne plu sendos retpoŝtojn al via adreso {email_address}, ĉar freŝa klopodo fari tion fiaskis."
+msgstr "Ni ne plu sendos retpoŝtojn al via adreso {email_address}, ĉar lastatempa klopodo fari tion fiaskis."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Ni ne plu sendos retmesaĝojn al via retadreso {email_address}, pro plendo de la retpoŝto-provizanto. Bonvolu sendi retmesaĝojn per tiu adreso al support@liberapay.com se vi volas ke ni foriĝu ĝin el la nigra listo."
+msgstr "Ni ne plu sendos retmesaĝojn al via retadreso {email_address}, pro plendo de la retpoŝto-provizanto. Sendu retmesaĝon per tiu adreso al support@liberapay.com se vi volas ke ni foriĝu ĝin de la nigra listo."
 
 msgid "The error message from the email system was:"
 msgstr "La erarmesaĝo el la retpoŝta sistemo estis:"
@@ -81,7 +81,7 @@ msgstr "Vi ricevis ĉirkaŭ {0} ĉi-semajne"
 
 #, python-brace-format
 msgid "You have received {0} this week"
-msgstr "Vi ricevis {0} tiusemajne"
+msgstr "Vi ricevis {0} ĉi-semajne"
 
 #, python-brace-format
 msgid "{0} was given to you personally."
@@ -93,16 +93,16 @@ msgstr "Vi ne estas membro de teamo, do vi ne ricevis monon pro partopreno en te
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Neniu mono estis donita al vi por via rolo en la teamo {0}."
+msgstr[0] "Neniu mono estis donita al vi pro via rolo en la teamo {0}."
 msgstr[1] "Neniu mono estis donita al vi por viaj roloj en la {n} teamoj, kie vi estas membro."
 
 #, python-brace-format
 msgid "{0} was given to you for your role in the {1} team."
-msgstr "{0} estis donitaj al vi por via rolo en la teamo {1}."
+msgstr "{0} estis donita al vi pro via rolo en la teamo {1}."
 
 #, python-brace-format
 msgid "{0} was given to you for your roles in the following teams:"
-msgstr "{0} estis donitaj al vi por viaj roloj en la jenaj teamoj:"
+msgstr "{0} estis donita al vi pro viaj roloj en la jenaj teamoj:"
 
 #, python-brace-format
 msgid "{0}: {1}"
@@ -1064,7 +1064,7 @@ msgid "You are not allowed to do this because your account is currently suspende
 msgstr "Vi ne rajtas fari tion, ĉar via konto estas haltigita."
 
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
-msgstr "Ĉi tiu pago ne povas esti traktita, ĉar la konto de la ricevanto estas nune haltigita."
+msgstr "Ĉi tiu pago ne povas esti traktita, ĉar la konto de la ricevanto estas nuntempe haltigita."
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
@@ -2680,7 +2680,7 @@ msgstr[0] "Vi havas {n} planitan pagon:"
 msgstr[1] "Vi havas {n} planitajn pagojn:"
 
 msgid "You currently don't have any scheduled payment."
-msgstr "Vi nune havas neniun planitan pagon."
+msgstr "Vi havas neniun planitan pagon."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "Ĉu vi certas, ke vi volas ŝanĝi vian tipon de konto? Pro leĝaj kialoj, ni devos krei novan konton por vi en la sistemo de nia pagpartnero, kaj transdoni la monon el la malnova konto."
@@ -3087,7 +3087,7 @@ msgid "We recommend connecting both Stripe and PayPal if they're both available 
 msgstr "Ni rekomendas konekti je kaj Stripe kaj PayPal, se ili ambaŭ estas disponebla en via lando."
 
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Per Stripe viaj donacantoj povas pagi per karto rekte en la Liberapay-retejo. (Rektaj debetoj estas nun subtenataj nur el Euraj bankokontoj.)"
+msgstr "Per Stripe viaj donacantoj povas pagi per karto rekte en la Liberapay-retejo. (Rektaj debetoj estas nun subtenataj nur el eŭraj bankokontoj.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -4021,7 +4021,7 @@ msgid "Send us an email"
 msgstr "Sendu al ni retmesaĝon"
 
 msgid "We are currently able to answer in English and French."
-msgstr "Ni nune povas respondi en la Angla kaj en la Franca."
+msgstr "Ni nun povas respondi en la angla kaj en la franca."
 
 msgid "We currently don't have a phone number."
 msgstr "Ni ne havas telefonnumeron nun."
@@ -4217,7 +4217,7 @@ msgstr "Tiu retejo estas gastigita en {0} de:"
 
 #, python-brace-format
 msgid "The publication director is Liberapay's legal representative, currently {0}."
-msgstr "La direktoro de publikigado estas la leĝa reprezentanto de Liberapay, nune {0}."
+msgstr "La direktoro de publikigado estas la leĝa reprezentanto de Liberapay, nun {0}."
 
 msgid "Terms of Service"
 msgstr "Uzkondiĉoj"
@@ -4524,8 +4524,8 @@ msgstr "Komenci novan komunumon"
 #, python-brace-format
 msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
-msgstr[0] "Existas {n} komunumo en Liberapay."
-msgstr[1] "Existas {n} komunumoj en Liberapay."
+msgstr[0] "Ekzistas {n} komunumo en Liberapay."
+msgstr[1] "Ekzistas {n} komunumoj en Liberapay."
 
 msgid "Search communities"
 msgstr "Serĉi komunumojn"
@@ -4659,12 +4659,12 @@ msgstr "Ni povas helpi vin trovi promesojn de donaco, se vi konektas viajn konto
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
-msgstr[0] "La plej populara deponejo nune ligita al Liberapay-konto estas:"
-msgstr[1] "La {n} plej popularaj deponejoj nune ligitaj al Liberapay-konto estas:"
+msgstr[0] "La plej populara deponejo nun ligita al Liberapay-konto estas:"
+msgstr[1] "La {n} plej popularaj deponejoj nun ligitaj al Liberapay-konto estas:"
 
 #, python-brace-format
 msgid "List of repositories currently linked to a Liberapay account, page {number} of {total}:"
-msgstr "Listo de deponejoj nune ligitaj al Liberapay-konto, paĝo {number} el {total}:"
+msgstr "Listo de deponejoj nun ligitaj al Liberapay-konto, paĝo {number} el {total}:"
 
 #, python-brace-format
 msgid "by {author_name}"
@@ -4760,7 +4760,7 @@ msgstr[1] "Vi havas {n} aktivajn donacantojn, kiuj donas al vi {money_amount} se
 
 #, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
-msgstr "Vi nune malakceptas donacojn, vi povas aliigi tiun en {0}viaj profilaj agordoj{1}."
+msgstr "Vi nun malakceptas donacojn, vi povas ŝanĝi tion ĉe {0}viaj profilaj agordoj{1}."
 
 #, python-brace-format
 msgid "Congratulations, you have reached your goal of receiving {0} per week!"
@@ -5326,7 +5326,7 @@ msgid "A confirmation code will be sent to this email address, unless it's alrea
 msgstr "Konfirma kodo estos sendita al tiu retadreso, krom se ĝi estas jam ligita kun via Liberapay-konto."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr "Pagoj per PayPay estas nune ne anonimaj, donacantoj vidos vian retadreson, kaj vi vidos iliajn."
+msgstr "Pagoj per PayPay nuntempe ne estas anonimaj; donacantoj vidos vian retadreson, kaj vi vidos ilian."
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "Bedaŭrinde, ni trovis nenion, kio kongruas kun via informpeto."
