@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"PO-Revision-Date: 2020-04-29 20:59+0000\n"
+"Last-Translator: RadRussianRus <radrussianrus@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.0.2\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -72,7 +74,7 @@ msgid "We will no longer send emails to your address {email_address}, because we
 msgstr "Мы больше не будем отправлять письма на ваш адрес {email_address}, потому что мы получили жалобу от почтового провайдера. Отправьте нам письмо с этого адреса на support@liberapay.com, если вы хотите, чтобы мы удалили его из чёрного списка."
 
 msgid "The error message from the email system was:"
-msgstr ""
+msgstr "От почтового провайдера была получена следующая ошибка:"
 
 msgid "Manage your email addresses"
 msgstr "Управление адресами электронной почты"
@@ -236,18 +238,18 @@ msgstr "Продление пожертвования Librepay: нет дост�
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "У вас запланировано продление пожертвования в размере {amount} на {payment_date} пользователю {recipient}, но мы не можем ее обработать из-за отсутствия действующего платежного инструмента."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "У вас запланировано продление пожертвования в размере {amount} на {payment_date} пользователям {recipients}, но мы не можем ее обработать из-за отсутствия действующего платежного инструмента."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "У вас запланировано продление {n} пожертвования, но мы не можем их обработать из-за отсутствия действующего платежного инструмента."
+msgstr[1] "У вас запланировано продление {n} пожертвований, но мы не можем их обработать из-за отсутствия действующего платежного инструмента."
+msgstr[2] "У вас запланировано продление {n} пожертвований, но мы не можем их обработать из-за отсутствия действующего платежного инструмента."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr ""
@@ -261,7 +263,7 @@ msgid "{date}: {money_amount} split between {recipients}"
 msgstr ""
 
 msgid "Add a payment instrument"
-msgstr ""
+msgstr "Добавить платежный инструмент"
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
@@ -409,7 +411,7 @@ msgstr "Платёж при помощи Liberapay на сумму {money_amount
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Платеж в размере {money_amount}, начатый {date}, не прошел."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -473,7 +475,7 @@ msgstr "Платеж на сумму {money_amount}, инициированны�
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Платеж в размере {money_amount}, начатый {date}, прошел успешно."
 
 msgid "Thank you for this donation!"
 msgstr "Спасибо за пожертвование!"
@@ -494,18 +496,18 @@ msgid "Reject donations"
 msgstr "Отклонить пожертвования"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
-msgstr ""
+msgstr "Продление пожертвования Liberapay: размер следующей оплаты изменился"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr ""
+msgstr "В связи с изменениями, сделанными вами, или тем, кому вы жертвуете, ваше расписание оплат было изменено следующим образом:"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Оплата в размере {money_amount}, запланированная на {date}, была отменена."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Ручная оплата, запланированная на {date}, была отменена."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
