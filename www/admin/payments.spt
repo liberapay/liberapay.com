@@ -4,7 +4,9 @@ from liberapay.i18n.base import LOCALE_EN as locale
 PAGE_SIZE = 50
 STATUS_MAP = {
     'failed': 'danger',
+    'partially_refunded': 'warning',
     'pre': 'muted',
+    'refunded': 'danger',
     'succeeded': 'success',
 }
 
@@ -74,6 +76,11 @@ title = "Payments Admin"
     </thead>
     <tbody>
     % for pi in payins
+        % do pi.__setitem__('status', (
+            'refunded' if pi.refunded_amount == pi.amount else
+            'partially_refunded' if pi.refunded_amount else
+            pi.status
+        ))
         <tr>
             <td>{{ pi.id }}</td>
             <td>{{ pi.ctime.replace(microsecond=0, tzinfo=None) }}</td>
@@ -83,9 +90,23 @@ title = "Payments Admin"
                 unicode_symbol('A', "Automatic payment") if pi.off_session else
                 unicode_symbol('M', "Manual payment", "text-muted")
             }}</td>
-            <td class="text-right">{{ locale.format_money(pi.amount) }}</td>
+            <td class="text-right">
+            % if pi.refunded_amount
+                <strike class="text-muted">{{ locale.format_money(pi.amount) }}</strike>
+                % if pi.refunded_amount < pi.amount
+                <br>{{ locale.format_money(pi.amount - pi.refunded_amount) }}
+                % endif
+            % else
+                {{ locale.format_money(pi.amount) }}
+            % endif
+            </td>
             <td>
                 % for pt in pi.transfers or ()
+                    % do pt.__setitem__('status', (
+                        'refunded' if pt.reversed_amount == pt.amount else
+                        'partially_refunded' if pt.reversed_amount else
+                        pt.status
+                    ))
                     → {{ locale.format_money(Money(**pt.amount)) }}
                     to <a href="/~{{ pt.recipient }}/">{{ pt.recipient_name }}</a>
                     % if pt.team
