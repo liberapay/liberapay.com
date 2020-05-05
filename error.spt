@@ -1,4 +1,5 @@
 from pando.http import status_strings
+from pando.utils import utcnow
 
 from liberapay.exceptions import LazyResponse
 from liberapay.i18n.base import HTTP_ERRORS
@@ -25,6 +26,7 @@ filepath, linenum = response.whence_raised
 error_location = '%s:%i' % (filepath, linenum) if filepath else 'unknown'
 
 referer = request.headers.get(b'Referer')
+user_agent = request.headers.get(b'User-Agent')
 
 [----------------------------------------] text/html
 % extends "templates/layouts/base.html"
@@ -74,6 +76,8 @@ referer = request.headers.get(b'Referer')
             <pre>URL: {{ website.canonical_scheme }}://{{ request.hostname }}{{ request.line.uri.decoded }}{{ '\n'
                }}Method: {{ request.method }}{{ '\n'
                }}Referer: {{ repr(referer) }}{{ '\n'
+               }}User-Agent: {{ repr(user_agent) }}{{ '\n'
+               }}Time: {{ utcnow() }}{{ '\n'
                }}Response code: {{ code }}{{ '\n'
                }}Response message: {{ repr(err) }}{{ '\n'
                }}Error location: {{ error_location }}</pre>
