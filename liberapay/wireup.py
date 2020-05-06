@@ -438,18 +438,22 @@ def username_restrictions(www_root):
     return {'restricted_usernames': os.listdir(www_root)}
 
 
-def make_sentry_teller(env):
+def version(env):
+    try:
+        version = get_version()
+    except Exception:
+        if env.instance_type == 'production':
+            raise
+        version = None
+    return {'version': version}
+
+
+def make_sentry_teller(env, version):
     if env.sentry_dsn:
-        try:
-            release = get_version()
-            if '-' in release:
-                release = None
-        except Exception:
-            release = None
         sentry = raven.Client(
             env.sentry_dsn,
             environment=env.instance_type,
-            release=release,
+            release=version,
         )
     else:
         sentry = None
@@ -799,11 +803,13 @@ def currency_exchange_rates(db):
 
 
 minimal_chain = StateChain(
+    version,
     make_sentry_teller,
     database,
 )
 
 full_chain = StateChain(
+    version,
     make_sentry_teller,
     crypto,
     database,
