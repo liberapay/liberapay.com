@@ -222,7 +222,7 @@ msgid "Add money"
 msgstr "お金を追加"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Liberapay での寄付更新: 有効な支払手段がありません"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
@@ -235,18 +235,18 @@ msgstr ""
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
+msgstr[0] "寄付更新のための{n}件の支払い予定がありますが、有効な支払い手段がないため処理できません。"
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr ""
+msgstr "支払いの日程、金額、受け取り相手は以下の通りです。"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {money_amount}を {recipient} へ"
 
 #, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {money_amount}を {recipients} と山分け"
 
 msgid "Add a payment instrument"
 msgstr "支払い手段を追加"
@@ -393,11 +393,11 @@ msgstr "支払いに失敗しました"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr ""
+msgstr "本日開始した{money_amount}の支払いが失敗しました。"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "あなたが{date}に開始した{money_amount}の支払いが失敗しました。"
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -457,7 +457,7 @@ msgstr "支払いに成功しました"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr ""
+msgstr "本日開始した{money_amount}の支払いが成功しました。"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."

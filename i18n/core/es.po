@@ -495,43 +495,43 @@ msgstr "Debido a cambios realizados por ti o alguien a quien donaste, tu planifi
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr "El pago de {money_amount} programado para el {date} ha sido cancelado."
+msgstr "Se ha cancelado el pago de {money_amount} programado para el {date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr "El pago manual programado para el {date} ha sido cancelado."
+msgstr "Se ha cancelado el pago manual programado para el {date}."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr "Un nuevo pago de {money_amount} ha sido programado para el {date}."
+msgstr "Se ha programado un pago nuevo de {money_amount} para el {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr "Un nuevo pago manual ha sido programado para el {date}."
+msgstr "Se ha programado un pago manual nuevo para el {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr "El pago de {money_amount} programado para el {old_date} ha sido reprogramado para el {new_date}."
+msgstr "El pago de {money_amount} programado para el {old_date} se ha reprogramado para el {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr "El pago manual programado para el {old_date} ha sido reprogramado para el {new_date}."
+msgstr "El pago manual programado para el {old_date} se ha reprogramado para el {new_date}."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr "La cantidad del pago programado para el {date} ha sido cambiada de {old_money_amount} a {new_money_amount}."
+msgstr "La cantidad del pago programado para el {date} se ha cambiado de {old_money_amount} a {new_money_amount}."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr "El pago de {old_money_amount} programado para el {old_date} ha sido reemplazado por un pago de {new_money_amount} el {new_date}."
+msgstr "El pago de {old_money_amount} programado para el {old_date} se ha reemplazado por un pago de {new_money_amount} el {new_date}."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr "El pago automático de {old_money_amount} programado para el {old_date} ha sido reemplazado por un pago manual el {new_date}."
+msgstr "El pago automático de {old_money_amount} programado para el {old_date} se ha reemplazado por un pago manual el {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr "El pago manual programado para el {old_date} ha sido reemplazado por un pago automático de {new_money_amount} el {new_date}."
+msgstr "El pago manual programado para el {old_date} se ha reemplazado por un pago automático de {new_money_amount} el {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
@@ -931,7 +931,7 @@ msgstr "{0} no es un nombre de dominio válido."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr "Nuestro intento de establecer una conexión con el servidor de correo {domain_name} falló (mensaje de error: “{error_message}”)."
+msgstr "Nuestro intento de establecer una conexión con el servidor de correo {domain_name} falló (mensaje de error: «{error_message}»)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -1338,10 +1338,10 @@ msgid "Giving"
 msgstr "Donar"
 
 msgid "Payment Instruments"
-msgstr "Instrumentos de Pago"
+msgstr "Instrumentos de pago"
 
 msgid "Payment Schedule"
-msgstr "Programación de Pagos"
+msgstr "Programación de pagos"
 
 msgid "Receiving"
 msgstr "Recibir"
@@ -1464,7 +1464,7 @@ msgid "Disconnect"
 msgstr "Desconectar"
 
 msgid "This is not supported yet"
-msgstr "Esto no está soportado aún"
+msgstr "Esto no está admitido aún"
 
 msgid "Connect"
 msgstr "Conectar"
@@ -1476,7 +1476,7 @@ msgid "Drop files here"
 msgstr "Arrastra los archivos aquí"
 
 msgid "Processing dropped files…"
-msgstr "Procesando los archivos…"
+msgstr "Procesando los archivos colocados…"
 
 msgid "Add a file"
 msgstr "Añade un archivo"
@@ -1830,7 +1830,7 @@ msgid "Custom"
 msgstr "Personalizada"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr "Elije cómo debería renovarse esta donación:"
+msgstr "Elige cómo debería renovarse esta donación:"
 
 msgid "Automatic renewal"
 msgstr "Renovación automática"
@@ -2451,7 +2451,7 @@ msgid "Restart"
 msgstr "Reiniciar"
 
 msgid "Hide"
-msgstr "Esconder"
+msgstr "Ocultar"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2637,7 +2637,7 @@ msgstr "¿Estás seguro de que quieres cancelar este pago programado? Terminará
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
-msgstr "¿Estás seguro de que quieres cancelar este pago programado? Terminará tus donaciones a {recipients}."
+msgstr "¿Confirmas que quieres cancelar este pago programado? Terminará tus donaciones a {recipients}."
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Si quieres modificar la cantidad de este pago programado, selecciona o introduce una nueva:"
@@ -4819,7 +4819,7 @@ msgstr "2. Configurar el procesamiento de pago"
 
 #, python-brace-format
 msgid "We currently support processing payments through {payment_processors_list}."
-msgstr "Actualmente soportamos {payment_processors_list} como procesadores de pago."
+msgstr "Actualmente admitimos {payment_processors_list} como procesadores de pago."
 
 msgid "3. Reach out to your audience"
 msgstr "3. Llega a tu audiencia"
@@ -4829,7 +4829,7 @@ msgstr "Cómo funciona internamente"
 
 #, python-brace-format
 msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
-msgstr "Liberapay está gestionado de forma transparente por una {1}organización sin ánimo de lucro{0}, y {2}su código fuente{0} es público."
+msgstr "Una {1}organización sin ánimo de lucro{0} gestiona de manera transparente Liberapay, cuyo {2}código fuente{0} es público."
 
 #, python-brace-format
 msgid "We rely on your support to keep Liberapay running and {link_start}improving{link_end}."
