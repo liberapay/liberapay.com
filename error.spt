@@ -80,7 +80,8 @@ user_agent = request.headers.get(b'User-Agent')
                }}Time: {{ utcnow() }}{{ '\n'
                }}Response code: {{ code }}{{ '\n'
                }}Response message: {{ repr(err) }}{{ '\n'
-               }}Error location: {{ error_location }}</pre>
+               }}Error location: {{ error_location }}{{ '\n'
+               }}Website version: {{ website.version }}</pre>
         % endif
     % endif
 % endblock
