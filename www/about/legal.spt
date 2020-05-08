@@ -50,7 +50,9 @@ Amazon Data Services Ireland Ltd<br>Burlington Plaza, Burlington Road<br>Dublin 
 
 <h3 id="privacy">{{ _("Privacy Policy") }}</h3>
 
-<p>{{ _("We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone.") }}</p>
+<p><a href="/about/privacy">{{ _(
+    "See the “{page_name}” page.", page_name=_("Privacy")
+) }}</a></p>
 
 % if user and user.mangopay_user_id
 <h3 id="mangopay-terms">MangoPay</h3>
