@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-05-10 17:51+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-05-11 07:41+0000\n"
+"Last-Translator: Szylu <chipolade@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -67,14 +67,14 @@ msgstr "Wstrzymujemy wysyłanie powiadomień na twój adres {email_address} do d
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
-msgstr "Nie będziemy przesyłać dłużej wiadomości email na twój adres {email_address}, ponieważ najnowsza próba zakończyła się niepowodzeniem."
+msgstr "Nie będziemy przesyłać dłużej wiadomości email na twój adres {email_address}, ponieważ ostatnia próba zakończyła się niepowodzeniem."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Nie będziemy już wysyłać maili na adres {email_address}, ponieważ otrzymaliśmy skargi od dostawcy maila. Wyślij e-mail z tamtego adresu na support@liberapay.com, jeżeli chcesz abyśmy usunęli go z czarnej listy."
 
 msgid "The error message from the email system was:"
-msgstr ""
+msgstr "Komunikat o błędzie z systemu e-mail brzmiał:"
 
 msgid "Manage your email addresses"
 msgstr "Zarządzaj swoimi adresami e-mail"
@@ -234,36 +234,36 @@ msgid "Add money"
 msgstr "Dodaj pieniądze"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Odnowienie darowizny Liberapay: brak ważnego instrumentu płatniczego"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Masz zaplanowaną płatność w wysokości {amount} na {payment_date}, aby odnowić darowiznę na rzecz {recipient}, ale nie możemy jej przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Masz zaplanowaną płatność w wysokości {amount} na {payment_date}, aby odnowić darowizny na rzecz {recipients}, ale nie możemy jej przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
+msgstr[1] "Zaplanowano {n} płatności na odnowienie darowizn, ale nie możemy ich przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
+msgstr[2] "Zaplanowano {n} płatności na odnowienie darowizn, ale nie możemy ich przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr ""
+msgstr "Daty płatności, kwoty i odbiorcy to:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {money_amount} dla {recipient}"
 
 #, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {money_amount} podziel pomiędzy {recipients}"
 
 msgid "Add a payment instrument"
-msgstr ""
+msgstr "Dodaj instrument płatniczy"
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
@@ -305,6 +305,25 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
+"Nasz przetwórca płatności (Mangopay) kończy z nami współpracę, dlatego zalecamy {link1_start} ewakuować pieniądze z konta {link_end} przed 26 lipca.\n"
+"\n"
+"Kliknięcie powyższego linku spowoduje przejście do nowej strony zatytułowanej „Opróżnianie portfela” i poproszenie o wybranie jednej z dwóch opcji.\n"
+"\n"
+"Jeśli używasz Liberapay jako donator, zalecany jest pierwszy wybór, szczególnie jeśli chcesz nadal używać Liberapay. Ta pierwsza opcja przekazuje wszystkie pieniądze z Twojego portfela osobom, które normalnie otrzymałyby je z czasem. Odbiorcy będą mogli zobaczyć, że ten nagły wzrost dochodów odpowiada wielotygodniowym datkom.\n"
+"\n"
+"Na przykład, jeśli przekazujesz 1 USD tygodniowo 2 twórcom, a masz 40 USD w portfelu, każdy twórca otrzyma 20 USD, a za 20 tygodni otrzymasz nasz zwykły e-mail przypominający, że nadszedł czas, aby dodać pieniądze jeszcze raz.\n"
+"\n"
+"Należy pamiętać, że wypłata może się nie powieść z różnych powodów. Jeśli pojawi się komunikat o błędzie, taki jak „Próba rozdzielenia wszystkich pieniędzy z portfela nie powiodła się: XX.XX pozostaje”. problem prawdopodobnie leży po stronie odbiorcy, na przykład ktoś, kto nie wypełnił formularza tożsamości lub zespół, który nie zdefiniował, w jaki sposób dochód powinien zostać podzielony między członków.\n"
+"\n"
+"Inną opcją jest odzyskanie pieniędzy, jeśli to możliwe poprzez zwrot pieniędzy, w przeciwnym razie poprzez wypłacenie ich na konto bankowe.\n"
+"\n"
+"Jeśli otrzymujesz darowizny w Liberapay, możesz poczekać tydzień przed wycofaniem swoich dochodów, aby dać swoim patronom szansę na przeniesienie pozostałej części darowizn z portfeli do Ciebie.\n"
+"\n"
+"Poinformujemy Cię, gdy tylko integracja nowego przetwórcy płatności zostanie zakończona, i poinformujemy Cię, czy jest coś, co musisz zrobić, aby ponownie otrzymywać darowizny w Liberapay.\n"
+"\n"
+"Jeśli jesteś członkiem zespołu, upewnij się, że Twoje podejście jest ustawione i aktualne. Możesz to zrobić z {link2_start} strony „Odbieranie” {link_end}.\n"
+"\n"
+"Więcej informacji można znaleźć w {link3_start} w tym poście na blogu {link_end} i jak zawsze możesz odpowiedzieć na tego e-maila, jeśli potrzebujesz pomocy.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "Hasło Twojego konta Liberapay jest zbyt słabe"
@@ -386,13 +405,13 @@ msgstr "Polecenie zapłaty do Twojego portfela Liberapay powiodło się"
 msgid "Your payment has failed"
 msgstr "Twoja płatność nie powiodła się"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Wypłata {money_amount} przez Liberapay zapoczątkowana {date} nie powiodła się."
+msgstr "Zapłata {money_amount} zainicjowana wcześniej nie powiodła się."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Płatność {money_amount} zainicjowana w dniu {date} nie powiodła się."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -408,13 +427,13 @@ msgstr "Płatność {money_amount} którą rozpoczęto {date} zostanie zwrócona
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr ""
+msgstr "Płatność {money_amount} zainicjowana w dniu {date} podlega częściowemu zwrotowi."
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Przyczyna: płatność została wykonana podwójnie."
 
 msgid "Reason: the payment has been deemed fraudulent."
-msgstr ""
+msgstr "Powód: płatność została uznana za nieuczciwą."
 
 msgid "Reason: the refund was requested by you."
 msgstr "Przyczyna: zażądałeś(-aś) zwrotu."
@@ -430,39 +449,39 @@ msgstr "Twoje konto bankowe zostanie obciążone"
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "Zainicjowaliśmy polecenie zapłaty w wysokości {money_amount} z Twojego konta {bank_name} ({partial_account_number})."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Zainicjowaliśmy polecenie zapłaty w wysokości {money_amount} z twojego konta bankowego ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr ""
+msgstr "Ta operacja jest przeprowadzana na podstawie {link_start} mandatu {mandate_id} {link_end} podpisanego w dniu {acceptance_date}, upoważniając Liberapay (wierzyciel SEPA {creditor_identifier}) do wysyłania instrukcji do Twojego banku, aby obciążyć Twoje konto, a Twój bank do obciążenia konta zgodnie z tymi instrukcjami."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
 msgstr "Jeżeli nie zezwoliłeś(-aś) na tą płatność, poinformuj nas, zwrócimy pieniądze."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
-msgstr ""
+msgstr "Po przetworzeniu tej płatności powinna ona pojawić się na wyciągu bankowym jako „{descriptor}”."
 
 msgid "Your payment has succeeded"
 msgstr "Płatność powiodła się"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr ""
+msgstr "Zapłata {money_amount} zainicjowana wcześniej dzisiaj zakończyła się powodzeniem."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Płatność {money_amount} zainicjowana w dniu {date} powiodła się."
 
 msgid "Thank you for this donation!"
 msgstr "Dziękuję za tę darowiznę!"
 
 msgid "You're missing out on donations through Liberapay"
-msgstr ""
+msgstr "Tracisz darowizny za pośrednictwem Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
 msgstr "Patroni nie mogą Ci obecnie wysyłać pieniędzy przez Liberapay, ponieważ nie skonfigurowałeś(-aś) pośrednika płatności."
@@ -477,72 +496,72 @@ msgid "Reject donations"
 msgstr "Odrzucaj darowizny"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
-msgstr ""
+msgstr "Odnowienie darowizny Liberapay: Twoja nadchodząca płatność uległa zmianie"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr ""
+msgstr "Z powodu zmian wprowadzonych przez Ciebie lub przez kogoś, komu przekazujesz darowiznę, harmonogram płatności został zmodyfikowany w następujący sposób:"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Płatność {money_amount} zaplanowana na {date} została anulowana."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Płatność ręczna zaplanowana na {date} została anulowana."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr ""
+msgstr "Nowa płatność w wysokości {money_amount} została zaplanowana na {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr ""
+msgstr "Nowa płatność ręczna została zaplanowana na {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Płatność {money_amount} zaplanowana na {old_date} została przesunięta na {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Ręczna płatność zaplanowana na {old_date} została przesunięta na {new_date}."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "Kwota płatności zaplanowanej na {date} została zmieniona z {old_money_amount} na {new_money_amount}."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Płatność {old_money_amount} zaplanowana na {old_date} została zastąpiona płatnością {new_money_amount} w dniu {new_date}."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "Automatyczna płatność w wysokości {old_money_amount} zaplanowana na {old_date} została zastąpiona płatnością ręczną w dniu {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Ręczna płatność zaplanowana na {old_date} została zastąpiona automatyczną płatnością {new_money_amount} w dniu {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Masz teraz {n} zaplanowaną płatność:"
+msgstr[1] "Masz teraz {n} zaplanowane płatności:"
+msgstr[2] "Masz teraz {n} zaplanowanych płatności:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: automatyczna płatność w wysokości {money_amount} dla {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: automatyczna płatność w wysokości {money_amount} do podziału dla {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: płatność ręczna dla {recipients}"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Zarządzaj swoim harmonogramem płatności"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -558,51 +577,51 @@ msgstr "Kliknij odnośnik, aby wyświetlić profil użytkownika {0}:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr ""
+msgstr "{user_name} z {platform} dołączył do Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "W dniu {date} zobowiązałeś się przekazać {money_amount} {user_name}, jeśli dołączy/ą do Liberapay."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
-msgstr ""
+msgstr "Miło nam poinformować, że {user_name} dołączył do Liberapay {time_ago}, jako {liberapay_username}."
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
-msgstr ""
+msgstr "W związku z tym na {date} zaplanowano automatyczną płatność w wysokości {money_amount}, aby zrealizować Twoje zobowiązanie."
 
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Jeśli chcesz zmodyfikować lub anulować tę nadchodzącą płatność, kliknij następujący link: {link_start} zarządzaj moim harmonogramem płatności {link_end}."
+msgstr[1] "Jeśli chcesz zmodyfikować lub anulować te nadchodzące płatności, kliknij następujący link: {link_start} zarządzaj moim harmonogramem płatności {link_end}."
+msgstr[2] "Jeśli chcesz zmodyfikować lub anulować te nadchodzących płatności, kliknij następujący link: {link_start} zarządzaj moim harmonogramem płatności {link_end}."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr ""
+msgstr "Miło nam poinformować, że {user_name} dołączył do Liberapay {time_ago}, jako {liberapay_username}, dzięki czemu możesz teraz zmienić swoją obietnicę w prawdziwą darowiznę:"
 
 #, python-brace-format
 msgid "Donate to {0}"
 msgstr "Wesprzyj {0}"
 
 msgid "Liberapay donation renewal: payment aborted"
-msgstr ""
+msgstr "Odnowienie darowizny Liberapay: płatność przerwana"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr ""
+msgstr "Płatność za odnowienie darowizny w wysokości {money_amount} na rzecz {recipient} zaplanowana na {date} została przerwana, ponieważ odbiorca nie może jej otrzymać."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "Następujące płatności za przedłużenie darowizny zostały przerwane, ponieważ odbiorcy nie mogą ich otrzymać:"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr ""
+msgstr "Możesz ułatwić swoim patronom wsparcie poprzez Liberapay"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr ""
+msgstr "Podłączyłeś konto PayPal, ale nie masz konta Stripe. Zdecydowanie zalecamy połączenie konta Stripe, ponieważ jest ono {link_open} lepsze niż PayPal {link_close} na kilka sposobów, zarówno dla Ciebie, jak i Twoich dawców."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -647,22 +666,22 @@ msgstr[2] ""
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "Ta wiadomość przypomina, że {amount} zostanie pobrana z Twojego domyślnego instrumentu płatniczego w dniu {debit_date}, aby odnowić darowiznę na rzecz {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "Ta wiadomość przypomina, że {amount} zostanie pobrana z domyślnego instrumentu płatniczego w dniu {debit_date} w celu odnowienia darowizn na rzecz {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
+msgstr[1] "Ta wiadomość przypomina, że w ciągu {n} dni zostanie pobrana kwota {amount} z Twojej domyślnego instrumentu płatniczego w celu odnowienia darowizn."
+msgstr[2] "Ta wiadomość przypomina, że w ciągu {n} dni zostanie pobrana kwota {amount} z Twojej domyślnego instrumentu płatniczego w celu odnowienia darowizn."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Jeśli chcesz zmodyfikować swoje darowizny, kliknij następujący link: {link_start}zarządzaj moimi darowiznami{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Weryfikacja adresu e-mail - Liberapay"
@@ -676,17 +695,17 @@ msgid "A Liberapay account was created on {0} with the email address {1}. Was it
 msgstr "Ktoś używając adresu e-mail {1} założył {0} konto Liberapay. Czy to Ty?"
 
 msgid "Yes, I confirm"
-msgstr ""
+msgstr "Tak, potwierdzam"
 
 msgid "No, it wasn't me"
-msgstr ""
+msgstr "Nie, to nie byłem ja"
 
 msgid "Your Liberapay account is being modified"
-msgstr ""
+msgstr "Twoje konto Liberapay jest modyfikowane"
 
 #, python-brace-format
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
-msgstr ""
+msgstr "Ktoś próbuje powiązać adres e-mail {0} z kontem Liberapay, którego bieżącym adresem jest {1}. Jeśli nie zainicjowałeś tej operacji, kliknij poniższy link i usuń nieprawidłowy adres ze swojego konta."
 
 msgid "Withdrawal initiated"
 msgstr "Zainicjowano wypłacanie pieniędzy"
@@ -711,24 +730,24 @@ msgstr "Wygląda na to, że znalazłeś błąd! Przepraszamy za niedogodności, 
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Żądana strona nie została znaleziona. {link_open}skontaktuj się z nami{link_close}, jeśli potrzebujesz pomocy."
 
 #, python-brace-format
 msgid "Your request has been rejected by our software. Please {link_open}contact us{link_close} if you need assistance."
-msgstr ""
+msgstr "Twoja prośba została odrzucona przez nasze oprogramowanie. {link_open}skontaktuj się z nami{link_close}, jeśli potrzebujesz pomocy."
 
 msgid "Error message:"
-msgstr ""
+msgstr "Komunikat o błędzie:"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
 msgstr "Szczegóły błędu zostały zapisane. Jeśli zdecydujesz się na jego zgłoszenie, prosimy abyś umieścił w wiadomości następujący numer identyfikacyjny błędu: {0}."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
-msgstr ""
+msgstr "Jeśli zdecydujesz się skontaktować z nami, podaj w wiadomości następujące informacje dotyczące debugowania:"
 
 msgid "Every week as long as I am receiving donations"
-msgstr ""
+msgstr "Co tydzień, dopóki otrzymuję darowizny"
 
 msgid "When it's time to renew my donations"
 msgstr "Kiedy nadszedł czas na odnowienie moich darowizn"
@@ -743,19 +762,19 @@ msgid "When a payment I initiated fails"
 msgstr "Gdy zainicjowana płatność nie powiedzie się"
 
 msgid "When a payment I initiated succeeds"
-msgstr ""
+msgstr "Gdy inicjowana przeze mnie płatność powiedzie się"
 
 msgid "When money is being refunded back to me"
-msgstr ""
+msgstr "Kiedy pieniądze są mi zwracane"
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "Gdy zbliża się automatyczna płatność za przedłużenie darowizny"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr ""
+msgstr "Kiedy nie mam już ważnego instrumentu płatniczego"
 
 msgid "When a donation renewal payment has been aborted"
-msgstr ""
+msgstr "Po przerwaniu płatności za przedłużenie darowizny"
 
 msgid "Expense Report"
 msgstr "Raport z wydatków"
@@ -829,9 +848,9 @@ msgstr "Dużo"
 msgid "Maximum"
 msgstr "Maksimum"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Zużyto limit żądań, możesz spróbować ponownie {in_N_minutes}."
+msgstr "Wykorzystałeś swój limit żądań, możesz spróbować ponownie {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Wysyłasz żądania w zbyt krótkich odstępach czasu, spróbuj ponownie później."
@@ -848,7 +867,7 @@ msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr "Czy {0} to na pewno serwer sieci {1}? Nie wygląda na to."
 
 msgid "example@pleroma.site"
-msgstr ""
+msgstr "przykład@cokolwiek.strona"
 
 msgid "You need to sign in first"
 msgstr "Należy się najpierw zalogować"
@@ -920,11 +939,11 @@ msgstr "'{0}' jest nie prawidłowym adresem e-mail."
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0} nie jest prawidłową nazwą domeny."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Nasza próba nawiązania połączenia z serwerem e-mail {domain_name} nie powiodła się (komunikat o błędzie: „{error_message}”)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -932,27 +951,27 @@ msgstr "'{domain_name}' nie jest prawidłową domeną e-mail."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr ""
+msgstr "Adres e-mail {email_address} znajduje się na czarnej liście, ponieważ próba wysłania na niego wiadomości nie powiodła się {timespan_ago}."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Adres e-mail {email_address} znajduje się na czarnej liście z powodu otrzymanej skargi {timespan_ago}. Wyślij e-mail z tego adresu na adres support@liberapay.com, jeśli chcesz, abyśmy usunęli go z czarnej listy."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Domena e-mail {domain} została umieszczona na czarnej liście w dniu {date}, ponieważ odsyłała wszystkie wiadomości. Skontaktuj się z nami, jeśli nie jest to już prawdą, a chcesz, abyśmy usunęli tę domenę z czarnej listy."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Domena e-mail {domain} znajduje się na czarnej liście ze względu na otrzymaną skargę {timespan_ago}. Skontaktuj się z nami, jeśli ta domena należy do Ciebie i chcesz, abyśmy usunęli ją z czarnej listy."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Domena e-mail {domain} została umieszczona na czarnej liście w dniu {date}, ponieważ zawierała adresy jednorazowe. Skontaktuj się z nami, jeśli nie jest to już prawdą, a chcesz, abyśmy usunęli tę domenę z czarnej listy."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Domena e-mail {domain} jest na czarnej liście. Skontaktuj się z nami, jeśli chcesz, abyśmy usunęli go z czarnej listy."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -966,7 +985,7 @@ msgid "You are not allowed to add another email address right now, please try ag
 msgstr "Nie możesz na razie dodać kolejnego adresu e-mail, spróbuj ponownie za kilka dni."
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "Ostatnio próbowano zalogować się z Twojego adresu IP lub kraju. Spróbuj ponownie za godzinę i wyślij wiadomość e-mail na adres support@liberapay.com, jeśli problem będzie się powtarzał."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
 msgstr "Wyczerpałeś limit logowań e-mail: spróbuj ponownie jutro, albo skontaktuj się z support@liberapay.com."
@@ -1009,7 +1028,7 @@ msgstr "Użytkownik {0} nie przyjmuje darowizn."
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
-msgstr ""
+msgstr "{username} nie przyjmuje darowizn w {rejected_currency}."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Wygląda na to, że próbujesz usunąć coś co nie istnieje."
@@ -1059,7 +1078,7 @@ msgstr "Ta płatność nie może zostać przetworzona, ponieważ konto odbiorcy 
 
 #, python-brace-format
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
-msgstr ""
+msgstr "Twoja darowizna na rzecz {recipient} nie może być w tej chwili przetworzona, ponieważ konto beneficjenta nie jest gotowe do otrzymania pieniędzy."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Niedawno zmieniłeś główną walutę, spróbuj ponownie (np. za tydzień) lub skontaktuj się pod adresem support@liberapay.com."
@@ -1072,18 +1091,18 @@ msgstr "Wysyłasz wyjątkowo dużą liczbę żądań. Spróbuj ponownie za kilka
 
 #, python-brace-format
 msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr ""
+msgstr "Próba rozdzielenia wszystkich pieniędzy z portfela nie powiodła się: pozostaje {money_amount}."
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists please contact support@liberapay.com."
-msgstr ""
+msgstr "Próba wysłania wiadomości e-mail na adres {email_address} nie powiodła się. Sprawdź, czy adres jest prawidłowy, i spróbuj ponownie. Jeśli problem będzie się powtarzał, skontaktuj się z support@liberapay.com."
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
 msgstr "Ta metoda płatności jest obecnie niedostępna. Przepraszamy za niedogodności."
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
-msgstr ""
+msgstr "Procesor płatności {name} zwrócił błąd. Spróbuj ponownie i skontaktuj się z support@liberapay.com, jeśli problem będzie się powtarzał."
 
 msgid "Forbidden"
 msgstr "Zabronione"
@@ -1092,10 +1111,10 @@ msgid "Not Found"
 msgstr "Nie znaleziono"
 
 msgid "Conflict"
-msgstr ""
+msgstr "Konflikt"
 
 msgid "Gone"
-msgstr ""
+msgstr "Usunięto"
 
 msgid "Too Many Requests"
 msgstr "Zbyt wiele zapytań"
@@ -1114,7 +1133,7 @@ msgstr "Limit czasu bramki"
 
 #, python-brace-format
 msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
-msgstr ""
+msgstr "Użytkownik {platform}, którego szukasz, nie dołączył do Liberapay i nie jest możliwe utworzenie dla niego profilu pośredniczącego."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1173,7 +1192,7 @@ msgstr "Twój adres e-mail został zweryfikowany."
 
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
-msgstr ""
+msgstr "Kontrola bezpieczeństwa nie powiodła się. Upewnij się, że Twoja przeglądarka jest skonfigurowana do obsługi plików cookie w domenie {domain}, a następnie spróbuj ponownie."
 
 msgid "You are not authorized to access this page."
 msgstr "Nie masz uprawnień by odwiedzić ten obszar serwisu."
@@ -1182,10 +1201,10 @@ msgid "Processing your request failed because our server was unable to communica
 msgstr "Przetwarzanie żądania nie powiodło się, ponieważ nasz serwer nie był w stanie skomunikować się z usługą znajdującą się na innej maszynie. Jest to tymczasowy problem. Prosimy spróbować ponownie później."
 
 msgid "Bad Request"
-msgstr ""
+msgstr "Bad Request"
 
 msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
-msgstr ""
+msgstr "Ten link logowania wygasł lub jest nieprawidłowy. Jednak jesteś już zalogowany, więc to nie ma znaczenia."
 
 msgid "Carry on"
 msgstr "Przejdź dalej"
@@ -1195,10 +1214,10 @@ msgstr "To łącze logowania wygasło lub jest nieważne."
 
 #, python-brace-format
 msgid "A login link is only valid for {x_hours} and can only be used once."
-msgstr ""
+msgstr "Link do logowania jest ważny tylko przez {x_hours} i można go użyć tylko raz."
 
 msgid "To request a new login link, input your email address:"
-msgstr ""
+msgstr "Aby poprosić o nowy link logowania, wprowadź swój adres e-mail:"
 
 msgid "Email address"
 msgstr "Adres e-mail"
@@ -1235,11 +1254,11 @@ msgid "Reconnect"
 msgstr "Połącz ponownie"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Przekierowanie…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
-msgstr ""
+msgstr "Jeśli używasz egzotycznej przeglądarki i nic się nie dzieje, {link_start}kliknij ten link, aby kontynuować{link_end}."
 
 msgid "Retry"
 msgstr "Spróbuj ponownie"
@@ -1260,23 +1279,23 @@ msgid "Log in to reopen your account."
 msgstr "Zaloguj się, aby ponownie otworzyć swoje konto."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "Czy źle wpisałeś swój adres e-mail? Napraw to i spróbuj ponownie lub spróbuj użyć innego adresu."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "Jeśli masz pewność, że wprowadzony adres e-mail jest prawidłowy, możesz pominąć ten błąd. Jeśli jednak nie będziemy w stanie dostarczyć wiadomości na ten adres, zostanie on umieszczony na czarnej liście."
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "Zignoruj błąd i kontynuuj"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
-msgstr ""
+msgstr "Jeśli uważasz, że e-maile wysłane przez nas na adres {email_address} nie będą się już odsyłać, możesz usunąć ten adres z czarnej listy i spróbować ponownie:"
 
 msgid "Bypass the blacklist and retry"
-msgstr ""
+msgstr "Omiń czarną listę i spróbuj ponownie"
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "Alternatywnie możesz wypróbować inny adres e-mail:"
 
 msgid "Proceed"
 msgstr "Przejdź dalej"
