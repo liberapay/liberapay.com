@@ -2,7 +2,7 @@ import json
 
 from urllib.parse import quote as urlquote
 
-from oauthlib.oauth2 import OAuth2Error
+from oauthlib.oauth2 import OAuth2Error, TokenExpiredError
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
 from liberapay.elsewhere._exceptions import BadUserId, CantReadMembership, UserNotFound
@@ -65,7 +65,13 @@ except OAuth2Error as e:
     raise response.error(502, str(e))
 
 # Get the user's info from the platform's API and upsert it in the DB
-account = AccountElsewhere.upsert(platform.get_user_self_info(domain, sess))
+try:
+    account = AccountElsewhere.upsert(platform.get_user_self_info(domain, sess))
+except TokenExpiredError:
+    raise response.error(502, _(
+        "{platform} returned an error, please retry the operation from the beginning.",
+        platform=platform.display_name
+    ))
 participant = account.participant
 
 if action_user_id:
