@@ -858,6 +858,10 @@ class Payday(object):
             cls.prepare(cursor, now)
             cls.transfer_virtually(cursor, now)
             cursor.run("""
+            CREATE INDEX ON payday_transfers (tippee);
+            CREATE INDEX ON payday_transfers (team) WHERE team IS NOT NULL;
+            """)
+            cursor.run("""
             UPDATE tips t
                SET is_funded = t2.is_funded
               FROM payday_tips t2
