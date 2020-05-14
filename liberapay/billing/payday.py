@@ -60,9 +60,8 @@ class Payday(object):
                         )
             ON CONFLICT (id) DO UPDATE
                     SET ts_start = COALESCE(paydays.ts_start, excluded.ts_start)
-              RETURNING id, (ts_start AT TIME ZONE 'UTC') AS ts_start, stage
+              RETURNING id, ts_start, ts_end, stage
         """, (public_log,), back_as=dict)
-        d['ts_start'] = d['ts_start'].replace(tzinfo=pando.utils.utc)
         payday = Payday()
         payday.__dict__.update(d)
         return payday
