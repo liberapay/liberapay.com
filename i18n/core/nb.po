@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-05-15 08:41+0000\n"
+"PO-Revision-Date: 2020-05-16 07:10+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/liberapay/core/nb_NO/>\n"
 "Language: nb\n"
@@ -53,26 +53,27 @@ msgstr[1] "Forny disse donasjonene"
 msgid "Manage your donations"
 msgstr "Administrer dine donasjoner"
 
+#, fuzzy
 msgid "Your email address is temporarily blacklisted"
-msgstr ""
+msgstr "Din e-postadresse er midlertidig svartelistet"
 
 msgid "Your email address has been blacklisted"
 msgstr "Din e-postadresse har blitt svartelistet"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
-msgstr ""
+msgstr "Forsendelse av merknader til din addresse «{email_address}» vil gjenoppta {date}, fordi et nylig forsøk på å sende deg e-post has mislyktes."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
-msgstr ""
+msgstr "Forsendelse av e-poster til din adresse «{email_address}» har opphørt, fordi et nylig forsøk på å sende deg e-post has mislyktes."
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "E-poster vil ikke lenger bli sendt til din adresse {email_address}, fordi vi har mottatt en klage fra e-posttilbyderen. Send en e-post fra den adressen til support@liberapay.com hvis du ønsker å fjerne den fra svartelisten."
 
 msgid "The error message from the email system was:"
-msgstr ""
+msgstr "Feilmeldingen fra e-postsystemet var:"
 
 msgid "Manage your email addresses"
 msgstr "Behandle dine e-postadresser"
@@ -228,12 +229,13 @@ msgstr "Du har {0} igjen i Liberapay-lommeboken din, men du trenger minst {1} fo
 msgid "Add money"
 msgstr "Legg til penger"
 
+#, fuzzy
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr ""
+msgstr "Fornyelse av Liberapay-donasjon: Inget gyldig betalingsmiddel"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "Du har en betaling på {amount} til forfall {payment_date} for fornyelse av din donasjon til {recipient}, men den kan ikke behandles siden et gyldig betalingsmiddel ikke forefinnes."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
@@ -246,7 +248,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr ""
+msgstr "Betalingstadoene, beløp og mottagere er:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
@@ -405,7 +407,7 @@ msgstr "Betalingen på {money_amount} gjennom Liberapay som ble igangsatt på {d
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Betalingen på {money_amount} igangsatt {date} har mislyktes."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -469,7 +471,7 @@ msgstr "Betalingen på {money_amount} gjennom Liberapay som ble igangsatt på {d
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Betalingen på {money_amount} igangsatt på {date} har blitt gjennomført."
 
 msgid "Thank you for this donation!"
 msgstr "Takk for denne donasjonen!"
@@ -551,10 +553,10 @@ msgstr "{date}: Automatisk betaling av {money_amount} delt mellom {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: Manuell betaling til"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Håndter din betalingsplan"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -2456,7 +2458,7 @@ msgid "Restart"
 msgstr "Start på ny"
 
 msgid "Hide"
-msgstr ""
+msgstr "Skjul"
 
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
