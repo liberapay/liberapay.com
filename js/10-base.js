@@ -43,9 +43,13 @@ Liberapay.init = function() {
     Liberapay.s3_uploader_init();
     Liberapay.stripe_init();
 
-    $('div[href]').css('cursor', 'pointer').click(function() {
-        location.href = this.getAttribute('href');
-        return false;
+    $('div[href]').css('cursor', 'pointer').click(function(event) {
+        let url = this.getAttribute('href');
+        if(event.ctrlKey) {
+           window.open(url);
+        } else {
+            location.href = url;
+        }
     });
 
     $('.navbar .dropdown-hover').removeClass('dropdown-hover');
