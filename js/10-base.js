@@ -43,10 +43,21 @@ Liberapay.init = function() {
     Liberapay.s3_uploader_init();
     Liberapay.stripe_init();
 
-    $('div[href]').css('cursor', 'pointer').click(function(event) {
-        let url = this.getAttribute('href');
-        if(event.ctrlKey) {
-           window.open(url);
+    $('div[href]').css('cursor', 'pointer').on('click auxclick', function(event) {
+        if (event.target.tagName == 'A') {
+            // Ignore clicks on links
+            return;
+        }
+        if (event.button == 2) {
+            // Ignore right clicks
+            return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        var url = this.getAttribute('href');
+        if (event.type == 'click' && event.ctrlKey ||
+            event.type == 'auxclick' && event.button == 1) {
+            window.open(url);
         } else {
             location.href = url;
         }
