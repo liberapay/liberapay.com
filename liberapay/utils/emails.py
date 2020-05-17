@@ -175,7 +175,7 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
         if not is_known_good_domain:
             # Try to resolve the domain and connect to its SMTP server(s).
             try:
-                test_email_domain(email.domain)
+                test_email_domain(email)
             except EmailAddressError as e:
                 request = state.get('request')
                 if request:
@@ -191,7 +191,7 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
                 website.tell_sentry(e, {})
 
 
-def test_email_domain(domain: str):
+def test_email_domain(email: NormalizedEmailAddress):
     """Attempt to resolve an email domain and connect to one of its SMTP servers.
 
     Raises:
@@ -201,7 +201,7 @@ def test_email_domain(domain: str):
     """
     start_time = time.monotonic()
     try:
-        ip_addresses = get_email_server_addresses(domain)
+        ip_addresses = get_email_server_addresses(email.domain)
         exceptions = []
         n_ip_addresses = 0
         n_attempts = 0
@@ -226,16 +226,16 @@ def test_email_domain(domain: str):
                 break
         if not success:
             if n_ip_addresses == 0:
-                raise BrokenEmailDomain(domain, (
+                raise BrokenEmailDomain(email, (
                     "didn't find any public IP address to deliver emails to"
                 ))
-            raise BrokenEmailDomain(domain, exceptions[0])
+            raise BrokenEmailDomain(email, exceptions[0])
     except EmailAddressError:
         raise
     except NXDOMAIN:
-        raise BrokenEmailDomain(domain, "no such domain (NXDOMAIN)")
+        raise BrokenEmailDomain(email, "no such domain (NXDOMAIN)")
     except DNSException as e:
-        raise BrokenEmailDomain(domain, str(e))
+        raise BrokenEmailDomain(email, str(e))
 
 
 def get_email_server_addresses(domain):

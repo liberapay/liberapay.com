@@ -229,7 +229,7 @@ class BrokenEmailDomain(EmailAddressError):
         return _(
             "Our attempt to establish a connection with the {domain_name} email "
             "server failed (error message: “{error_message}”).",
-            domain_name=self.email_address,
+            domain_name=self.email_address.domain,
             error_message=str(self.exception_or_message),
         )
 
@@ -238,7 +238,7 @@ class NonEmailDomain(EmailAddressError):
     def msg(self, _):
         return _(
             "'{domain_name}' is not a valid email domain.",
-            domain_name=self.email_address
+            domain_name=self.email_address.domain
         )
 
 
