@@ -182,7 +182,10 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
                     bypass_error = request.body.get('email.bypass_error') == 'yes'
                 else:
                     bypass_error = False
-                if not (bypass_error and e.bypass_allowed):
+                if bypass_error and e.bypass_allowed:
+                    if request:
+                        website.db.hit_rate_limit('email.bypass_error', request.source, TooManyAttempts)
+                else:
                     raise
             except Exception as e:
                 website.tell_sentry(e, {})
