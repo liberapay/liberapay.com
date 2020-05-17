@@ -145,7 +145,8 @@ title = _("Payment Instruments")
             <h4>{{ _("Credit/Debit Card") }}<br>
                 <small>Visa, MasterCard, American Express</small>
             </h4>
-            <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-card"></a>
+            <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-card"
+                ><span class="sr-only">{{ _("Add a card") }}</span></a>
         </div>
     </div>
     % set warn = request.country not in constants.SEPA
@@ -159,7 +160,8 @@ title = _("Payment Instruments")
                 <small class="text-{{ 'warning' if warn else 'info' }}">{{ _("Euro bank accounts only") }}</small>
                 % endif
             </h4>
-            <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-sdd"></a>
+            <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-sdd"
+                ><span class="sr-only">{{ _("Add a bank account") }}</span></a>
         </div>
     </div>
 </div>
