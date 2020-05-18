@@ -3,9 +3,9 @@ import os
 from unittest.mock import patch
 
 from liberapay.exceptions import (
-    BadEmailAddress, BrokenEmailDomain, CannotRemovePrimaryEmail,
+    BadEmailAddress, CannotRemovePrimaryEmail,
     EmailAddressIsBlacklisted, EmailAlreadyTaken,
-    EmailDomainIsBlacklisted, EmailNotVerified,
+    EmailDomainIsBlacklisted, EmailDomainUnresolvable, EmailNotVerified,
     InvalidEmailDomain, NonEmailDomain,
     TooManyEmailAddresses, TooManyEmailVerifications,
 )
@@ -96,8 +96,8 @@ class TestEmail(EmailHarness):
     def test_participant_cant_add_email_with_bad_domain(self):
         bad = (
             ('alice@invalid\uffffdomain.com', InvalidEmailDomain),
-            ('alice@phantom.liberapay.com', BrokenEmailDomain),  # no MX, A or AAAA record
-            ('alice@nonexistent.oy.lc', BrokenEmailDomain),  # NXDOMAIN
+            ('alice@phantom.liberapay.com', EmailDomainUnresolvable),  # no MX, A or AAAA record
+            ('alice@nonexistent.oy.lc', EmailDomainUnresolvable),  # NXDOMAIN
             ('alice@nullmx.liberapay.com', NonEmailDomain),  # null MX record, per RFC 7505
         )
         with patch.object(self.website, 'app_conf') as app_conf:

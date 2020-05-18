@@ -222,6 +222,16 @@ class InvalidEmailDomain(EmailAddressError):
         return _("{0} is not a valid domain name.", repr(self.invalid_domain))
 
 
+class EmailDomainUnresolvable(EmailAddressError):
+    def msg(self, _):
+        return _(
+            "Our attempt to resolve the domain {domain_name} failed "
+            "(error message: “{error_message}”).",
+            domain_name=self.email_address.domain,
+            error_message=str(self.exception_or_message),
+        )
+
+
 class BrokenEmailDomain(EmailAddressError):
     bypass_allowed = True
 
@@ -229,7 +239,7 @@ class BrokenEmailDomain(EmailAddressError):
         return _(
             "Our attempt to establish a connection with the {domain_name} email "
             "server failed (error message: “{error_message}”).",
-            domain_name=self.email_address,
+            domain_name=self.email_address.domain,
             error_message=str(self.exception_or_message),
         )
 
@@ -238,7 +248,7 @@ class NonEmailDomain(EmailAddressError):
     def msg(self, _):
         return _(
             "'{domain_name}' is not a valid email domain.",
-            domain_name=self.email_address
+            domain_name=self.email_address.domain
         )
 
 
