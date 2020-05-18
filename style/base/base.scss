@@ -1030,6 +1030,8 @@ ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
     border: none;
     color: $link-color;
     padding: 0;
+    text-align: inherit;
+    word-break: break-all;
     &:hover {
         color: $link-hover-color;
         text-decoration: $link-hover-decoration;
