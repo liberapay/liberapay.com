@@ -64,8 +64,8 @@ has_pending_transfer = set(website.db.all("""
 tips, pledges = participant.get_giving_details()
 title = participant.username
 subhead = _("Giving")
-cancelled_tips = [x for x in tips if x.renewal_mode <= 0 and x.mtime >= recently]
-cancelled_pledges = [x for x in pledges if x.renewal_mode <= 0 and x.mtime >= recently]
+cancelled_tips = [x for x in tips if x.renewal_mode <= 0]
+cancelled_pledges = [x for x in pledges if x.renewal_mode <= 0]
 
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.renewal_mode > 0]
