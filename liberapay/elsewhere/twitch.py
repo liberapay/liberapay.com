@@ -39,3 +39,7 @@ class Twitch(PlatformOAuth2):
     x_email = key('email')
     x_avatar_url = key('profile_image_url')
     x_description = key('description')
+
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.api_headers = {'Client-ID': self.api_key}
