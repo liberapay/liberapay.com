@@ -428,6 +428,8 @@ RATE_LIMITS = {
     'email.bypass_error': (2, 60*60*24*7),  # 2 per week
     'email.unblacklist.source': (5, 60*60*24*7),  # 5 per week
     'email.unblacklist.target': (3, 60*60*24*7),  # 3 per week
+    'http-query.ip-addr': (10, 10),  # 10 per 10 seconds
+    'http-query.user': (10, 10),  # 10 per 10 seconds
     'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
     'http-unsafe.user': (10, 10),  # 10 per 10 seconds
     'insert_identity': (7, 60*60*24*7),  # 7 per week
