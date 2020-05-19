@@ -112,6 +112,7 @@ class TestElsewhere(EmailHarness):
             get_user_info.side_effect = lambda *a: alice
             response = self.client.GET('/on/%s/alice/' % platform.name)
             assert response.code == 200
+            self.db.run("DELETE FROM rate_limiting")
 
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_page_shows_pledges(self, get_user_info):
