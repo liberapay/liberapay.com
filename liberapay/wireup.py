@@ -513,7 +513,8 @@ def make_sentry_teller(env, version):
             return {'sentry_ident': None}
 
         # Prepare context data
-        sentry_data = {}
+        level = 'warning' if isinstance(exception, Warning) else 'error'
+        sentry_data = {'level': level}
         if state:
             try:
                 sentry_data['tags'] = {

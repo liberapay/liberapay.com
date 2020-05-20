@@ -209,9 +209,7 @@ algorithm.functions = [
     merge_responses,
     turn_socket_error_into_50X,
     algorithm['get_response_for_exception'],
-
     delegate_error_to_simplate,
-    tell_sentry,
 
     bypass_csp_for_form_redirects,
     authentication.add_auth_to_response,
@@ -219,6 +217,7 @@ algorithm.functions = [
     http_caching.add_caching_to_response,
     overwrite_status_code_of_gateway_errors,
 
+    tell_sentry,
     return_500_for_exception,
     tell_sentry,
 ]
