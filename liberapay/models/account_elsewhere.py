@@ -14,7 +14,7 @@ import xmltodict
 from ..constants import AVATAR_QUERY, RATE_LIMITS, SUMMARY_MAX_SIZE
 from ..cron import logger
 from ..elsewhere._exceptions import BadUserId, UserNotFound
-from ..exceptions import InvalidId
+from ..exceptions import InvalidId, TooManyRequests
 from ..security.crypto import constant_time_compare
 from ..utils import excerpt_intro
 from ..website import website
@@ -305,7 +305,8 @@ class AccountElsewhere(Model):
 
 
 def get_account_elsewhere(website, state, api_lookup=True):
-    path = state['request'].path
+    request = state['request']
+    path = request.path
     response = state['response']
     platform = website.platforms.get(path['platform'])
     if platform is None:
@@ -329,6 +330,7 @@ def get_account_elsewhere(website, state, api_lookup=True):
     if not account:
         if not account and not api_lookup:
             raise response.error(404)
+        website.db.hit_rate_limit('elsewhere-lookup.ip-addr', request.source, TooManyRequests)
         try:
             user_info = platform.get_user_info(domain, key, uid)
         except NotImplementedError:

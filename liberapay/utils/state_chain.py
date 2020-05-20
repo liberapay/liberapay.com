@@ -89,11 +89,18 @@ def insert_constants():
 
 def enforce_rate_limits(request, user, website):
     if request.method in constants.SAFE_METHODS:
-        return
-    if user.id:
-        website.db.hit_rate_limit('http-unsafe.user', user.id, TooManyRequests)
+        if request.qs:
+            if request.line.uri.startswith(b'/assets/'):
+                return
+            request_type = 'http-query'
+        else:
+            return
     else:
-        website.db.hit_rate_limit('http-unsafe.ip-addr', request.source, TooManyRequests)
+        request_type = 'http-unsafe'
+    if user.id:
+        website.db.hit_rate_limit(request_type + '.user', user.id, TooManyRequests)
+    else:
+        website.db.hit_rate_limit(request_type + '.ip-addr', request.source, TooManyRequests)
 
 
 def set_output_to_None(state):
