@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2020-05-20 09:23+0000\n"
+"Last-Translator: Cutls <web-pro@cutls.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.1-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -226,11 +228,11 @@ msgstr "Liberapay での寄付の更新通知: 有効な支払手段がありま
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "{recipient}への寄付を更新するために、{payment_date}に{amount}の支払いが予定されていますが、有効な決済手段がないため処理することができません。"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr ""
+msgstr "{recipients}への寄付を更新するために、{payment_date}に{amount}の支払いが予定されていますが、有効な決済手段がないため処理することができません。"
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
@@ -461,7 +463,7 @@ msgstr "本日開始した{money_amount}の支払いが成功しました。"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "{date}に開始した{money_amount}の支払い"
 
 msgid "Thank you for this donation!"
 msgstr "寄付していただき、ありがとうございます！"
@@ -493,7 +495,7 @@ msgstr "{date}に予定された{money_amount}の支払いはキャンセルさ�
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "{date}に予定された手動支払いは削除されました。"
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
@@ -501,7 +503,7 @@ msgstr "{money_amount}の新しい支払いが{date}に予定されました。"
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr ""
+msgstr "新しい手動支払いが{date}に予定されています。"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
@@ -509,43 +511,43 @@ msgstr "{old_date}に予定されていた{money_amount}の支払いは、{new_d
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "{old_date}に予定されていた{money_amount}の手動の支払いは、{new_date}に変更になりました。"
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "{date}に予定されている支払いは{old_money_amount}から{new_money_amount}に変更されました。"
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "{old_date}に予定されていた{old_money_amount}の支払いの日時を{new_date}に、金額を{new_money_amount}に変更しました。"
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "{old_date}に予定されている{old_money_amount}の自動支払いは、日時を{new_date}とした手動支払いに変更されました。"
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "{old_date}に予定されていた手動支払いは、日時を{new_date}に、金額を{new_money_amount}にした自動支払いに変更されました。"
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
+msgstr[0] "現在{n}件の支払い予定があります:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {recipient}への{money_amount}の自動支払い"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {money_amount}の自動支払いは{recipients}の間で山分けされます"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: {recipients}への手動支払い"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "支払いの予定を編集"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -569,16 +571,16 @@ msgstr "あなたは {date}に、{user_name} さんが Liberapay に参加した
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
-msgstr ""
+msgstr "{time_ago}に{user_name}が{liberapay_username}としてLiberapayに参加しました。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
-msgstr ""
+msgstr "結果、支払い約束を実行に移すために、{money_amount}の自動支払いは{date}に予定されています。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
+msgstr[0] "結果、支払い約束を実行に移すために、{money_amount}の自動支払いは{date}に予定されています。"
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
@@ -593,10 +595,10 @@ msgstr "Liberapay での寄付の更新通知: 支払いが中断されました
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr ""
+msgstr "支払いの日時を{date}に、金額を{money_amount}に更新しましたが、{recipient}が受け取れない状態のため取り消されました。"
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "受領者が寄付を受け取れない状態のため、支払いを更新し寄付を継続することができません:"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Liberapay をお使いいただくことで、より簡単にパトロンから支援してもらうことができます"
@@ -646,7 +648,7 @@ msgstr[0] "Liberapay での寄付の更新通知: 近日行われる引き落と
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "このメッセージは{recipient}への寄付を更新するために、{debit_date}にデフォルトの決済手段から{amount}引き落とされることについてのリマインダーです。"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
@@ -655,11 +657,11 @@ msgstr ""
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
+msgstr[0] "このメッセージは寄付を更新するために{n}日以内に計{amount}がデフォルトの決済手段から引き落とされることについてのリマインダーです。"
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "もし支援内容を修正したい場合、{link_start}寄付の管理{link_end}に移動してください。"
 
 msgid "Email address verification - Liberapay"
 msgstr "メールアドレスの認証 - Liberapay"
@@ -746,10 +748,10 @@ msgid "When money is being refunded back to me"
 msgstr "お金が払い戻される日時"
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "自動寄付の更新が近づいている場合"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr ""
+msgstr "有効な決済手段が一つもないとき"
 
 msgid "When a donation renewal payment has been aborted"
 msgstr ""
@@ -917,15 +919,15 @@ msgstr "'{0}' は有効なメールアドレスではありません。"
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0}は無効なドメインです。"
 
 #, python-brace-format
 msgid "Our attempt to resolve the domain {domain_name} failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "ドメイン{domain_name}を名前解決することができませんでした(エラーメッセージ: \"{error_message}\")。"
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "{domain_name}のメールサーバへの接続を確立できませんでした(エラーメッセージ: \"{error_message}\")。"
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -941,7 +943,7 @@ msgstr "{timespan_ago} に苦情を受けたため、メールアドレス {emai
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "ドメイン{domain}はメールを送ってもすべて未達として返ってくるため、{date}にメールドメインのブラックリストに登録されています。この措置が誤りである場合やブラックリストからこのドメインを除外することを望む場合は連絡してください。"
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
@@ -949,7 +951,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "ドメイン{domain}は使い捨てメールアドレス用のドメインと判断されたため、{date}にメールドメインのブラックリストに登録されています。この措置が誤りである場合やブラックリストからこのドメインを除外することを望む場合は連絡してください。"
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
@@ -1010,7 +1012,7 @@ msgstr "ユーザー {0} は寄付を受け付けていません。"
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
-msgstr ""
+msgstr "{username}は{rejected_currency}での寄付を受け付けていません。"
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "存在しないものを削除しようとしているようです。"
