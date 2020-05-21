@@ -10,11 +10,11 @@
         <ul class="nav nav-aside">
             <li class="header">
                 % if state['can_switch_account'] and user.team_names
-                    <input id="subnav-accounts" class="subnav-toggler sr-only" type="checkbox" />
                     <div class="flex">
                         <h1>{{ participant.username }}</h1>
-                        <label for="subnav-accounts" title="{{ _('Switch to a different account') }}"><span class="caret"></span></label>
+                        <label for="subnav-accounts" title="{{ _('Switch to a different account') }}" aria-hidden="true"><span class="caret"></span></label>
                     </div>
+                    <input id="subnav-accounts" class="subnav-toggler sr-only" type="checkbox" aria-label="{{ _('Switch to a different account') }}" />
                     <ul class="nav">
                     % if user != participant
                         <li><a href="{{ request.path.raw.replace(participant.username, user.username) }}">{{ user.username }}</a></li>
