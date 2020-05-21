@@ -46,14 +46,38 @@ title = _("Teams")
 
 <p>{{ _(
     "A Liberapay team coordinates donations from multiple donors to multiple "
-    "donees. Donors choose how much they want to give, donees decide how to "
-    "share the money, Liberapay computes and executes the transfers from "
-    "donors to donees."
+    "donees. The donors choose how much they want to give, the team members "
+    "specify how they want to share the money, and Liberapay attempts to "
+    "distribute the funds accordingly."
 ) }}</p>
 
 <p>{{ _(
-    "Teams are for peer-to-peer donations, they can't be used by a legal "
-    "entity to distribute donations to its members."
+    "A team account isn't meant to be used by the members of single legal entity, "
+    "it is designed for a group of independent individuals or organizations who "
+    "work together on a common project. However, it's also okay to create a team "
+    "account for a project that only has one contributor, as this allows marking "
+    "a donation as being intended to support that project specifically rather "
+    "than the person behind it."
+) }}</p>
+
+<p>{{ _(
+    "A team account {bold}does not store money{end_bold} for later use. Every "
+    "donation is distributed immediately, either to multiple members if "
+    "possible, or to a single member when splitting the money isn't supported "
+    "by the payment processor. Because of these payment processing limitations, "
+    "the amounts received by the members can be temporarily unbalanced, "
+    "especially if the team has fewer patrons than members.",
+    bold='<strong>'|safe, end_bold='</strong>'|safe,
+) }}</p>
+
+<p>{{ _(
+    "If Liberapay team accounts don't fit your needs, you may want to use the "
+    "{link_start}Open Collective{link_end} platform instead, which allows a team "
+    "to be “hosted” by a registered nonprofit. This “fiscal host” is the legal "
+    "owner of the team's funds, oversees how they're used, and takes a 5% fee. "
+    "(We're planning to implement a similar system in Liberapay, but we don't "
+    "know when it will be done.)",
+    link_start='<a href="https://opencollective.com/">'|safe, link_end='</a>'|safe,
 ) }}</p>
 
 <h3>{{ _("Creating a team") }}</h3>
