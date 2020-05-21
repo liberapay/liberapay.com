@@ -445,6 +445,8 @@ RATE_LIMITS = {
     'payin.from-ip-addr': (15, 60*60*24*7),  # 15 per week
     'refetch_elsewhere_data': (1, 60*60*24*7),  # retry after one week
     'refetch_repos': (1, 60*60*24),  # retry after one day
+    'sign-up.email': (1, 5*60),  # this is used to detect near-simultaneous requests,
+                                 # so 5 minutes should be plenty enough
     'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address
     'sign-up.ip-net': (15, 60*60),  # 15 per hour per IP network
     'sign-up.country': (5, 5*60),  # 5 per 5 minutes per country
