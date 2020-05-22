@@ -1,0 +1,43 @@
+{{ _("Your payment of {money_amount} has been disputed", money_amount=payin_amount) }}
+
+[---] text/html
+<p>{{ _(
+    "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank.",
+    money_amount=payin_amount, date=payin_ctime.date(),
+) }}</p>
+
+<p>{{ _(
+    "The reason provided by your bank is: it was unable to process the payment."
+) if dispute_reason == 'bank_cannot_process' else _(
+    "The reason provided by your bank is: you requested a refund."
+) if dispute_reason == 'customer_initiated' else _(
+    "The reason provided by your bank is: the payment wasn't authorized."
+) if dispute_reason == 'debit_not_authorized' else _(
+    "The reason provided by your bank is: the payment was a duplicate."
+) if dispute_reason == 'duplicate' else _(
+    "The reason provided by your bank is: the payment was fraudulent."
+) if dispute_reason == 'fraudulent' else _(
+    "Your bank didn't provide a specific reason for this dispute."
+) if dispute_reason == 'general' else _(
+    "The reason provided by your bank is: the provided account details are incorrect."
+) if dispute_reason == 'incorrect_account_details' else _(
+    "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
+) if dispute_reason == 'insufficient_funds' else _(
+    "The reason provided by your bank is: the account owner didn't recognize the payment."
+) if dispute_reason == 'unrecognized' else _(
+    "The reason provided by your bank is: {reason_code_in_english}.", reason_code_in_english=dispute_reason
+) }}</p>
+
+% if dispute_can_be_withdrawn
+<p>{{ _("If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank.") }}</p>
+<p>{{ _("If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them.") }}</p>
+% else
+<p>{{ _("This dispute is final, it cannot be withdrawn or reversed.") }}</p>
+<p>{{ _("The disputed funds have been automatically reclaimed from the people who had received them.") }}</p>
+<p>{{ _(
+    "If your bank disputed the payment without consulting you, then you should ask them why. "
+    "Once the problem has been sorted out, you can {link_start}redo the payment{link_end}.",
+    link_start='<a href="%s">'|safe % participant.url('giving/pay/?retry_id=' + payin_id),
+    link_end='</a>'|safe,
+) }}</p>
+% endif
