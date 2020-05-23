@@ -1,6 +1,8 @@
 """Defines website authentication helpers.
 """
 
+from time import sleep
+
 from pando import Response
 
 from liberapay.constants import (
@@ -120,17 +122,24 @@ def sign_in_with_form_data(body, state):
         if session_token:
             Participant.check_session_token(session_token)
         # Check for an existing account
-        existing_account = website.db.one("""
-            SELECT p
-              FROM emails e
-              JOIN participants p ON p.id = e.participant
-             WHERE lower(e.address) = lower(%s)
-               AND ( e.verified IS TRUE OR
-                     e.added_time > (current_timestamp - interval '1 day') OR
-                     p.email IS NULL )
-          ORDER BY p.join_time DESC
-             LIMIT 1
-        """, (email,))
+        is_duplicate_request = website.db.hit_rate_limit('sign-up.email', email) is None
+        for i in range(5):
+            existing_account = website.db.one("""
+                SELECT p
+                  FROM emails e
+                  JOIN participants p ON p.id = e.participant
+                 WHERE lower(e.address) = lower(%s)
+                   AND ( e.verified IS TRUE OR
+                         e.added_time > (current_timestamp - interval '1 day') OR
+                         p.email IS NULL )
+              ORDER BY p.join_time DESC
+                 LIMIT 1
+            """, (email,))
+            if is_duplicate_request and not existing_account:
+                # The other thread hasn't created the account yet.
+                sleep(1)
+            else:
+                break
         if existing_account:
             session = website.db.one("""
                 SELECT id, secret, mtime
