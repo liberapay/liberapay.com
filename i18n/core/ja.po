@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2020-05-24 19:41+0000\n"
+"Last-Translator: YorimiMochida <yuuman002@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.1-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -578,7 +580,7 @@ msgstr "結果、支払い約束を実行に移すために、{money_amount}の�
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
+msgstr[0] "これらの次回の支払いを変更またはキャンセルする場合は、次のリンクをクリックしてください: {link_start}支払いスケジュールを管理{link_end}"
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
@@ -650,7 +652,7 @@ msgstr "このメッセージは{recipient}への寄付を更新するために�
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "このメッセージは、{recipients}への寄付を更新するために、{debit_date}に{amount}がデフォルトのお支払い方法から引き落とされることをお知らせしています。"
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
@@ -752,7 +754,7 @@ msgid "When I no longer have any valid payment instrument"
 msgstr "有効な決済手段が一つもないとき"
 
 msgid "When a donation renewal payment has been aborted"
-msgstr ""
+msgstr "寄付更新の支払いが中止されたとき"
 
 msgid "Expense Report"
 msgstr "取引明細書"
@@ -945,7 +947,7 @@ msgstr "ドメイン{domain}はメールを送ってもすべて未達として�
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr ""
+msgstr "メールドメイン{domain}は、{timespan_ago}から受け取った報告のためにブラックリストに登録されています。このドメインがあなたのもので、ブラックリストから削除したい場合はご連絡ください。"
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
@@ -953,7 +955,7 @@ msgstr "ドメイン{domain}は使い捨てメールアドレス用のドメイ�
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "メールドメイン{domain}はブラックリストに登録されています。ブラックリストから削除をリクエストする場合は、お問い合わせください。"
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1255,23 +1257,23 @@ msgid "Log in to reopen your account."
 msgstr "ログインしてアカウントを再開します。"
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "メールアドレスを間違って入力しましたか？修正して再試行するか、別のメールアドレスを試してください。"
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "入力したメールアドレスが有効であることが確認された場合は、このエラーを回避できます。ただし、このアドレスにメッセージを配信できない場合は、メールアドレスはブラックリストに登録されます。"
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "エラーを無視して続行"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
-msgstr ""
+msgstr "{email_address}に送信されたメールが返送されなくなったと思う場合は、このアドレスをブラックリストから削除して、もう一度お試しください。"
 
 msgid "Bypass the blacklist and retry"
-msgstr ""
+msgstr "ブラックリストをバイパスして再試行"
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "または、別のメールアドレスを試すこともできます:"
 
 msgid "Proceed"
 msgstr "処理"
@@ -1332,7 +1334,7 @@ msgid "Payment Instruments"
 msgstr "支払い手段"
 
 msgid "Payment Schedule"
-msgstr ""
+msgstr "支払いスケジュール"
 
 msgid "Receiving"
 msgstr "受け取り"
@@ -1542,9 +1544,8 @@ msgstr "チーム"
 msgid "Stats"
 msgstr "統計"
 
-#, fuzzy
 msgid "Follow Us"
-msgstr "フィード"
+msgstr "フォローする"
 
 msgid "Contact"
 msgstr "お問い合わせ"
@@ -1601,7 +1602,7 @@ msgid "Instruments"
 msgstr "手段"
 
 msgid "Schedule"
-msgstr ""
+msgstr "スケジュール"
 
 msgid "Members"
 msgstr "メンバー"
@@ -1818,19 +1819,19 @@ msgid "Custom"
 msgstr "カスタム"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr ""
+msgstr "この寄付の更新方法を選択してください:"
 
 msgid "Automatic renewal"
-msgstr ""
+msgstr "自動更新"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr ""
+msgstr "カードまたは銀行口座への請求を行います。少なくとも2日前に通知されます。"
 
 msgid "Manual renewal"
-msgstr ""
+msgstr "手動更新"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr ""
+msgstr "寄付を更新するためのリマインダーがメールで送信されます。"
 
 msgid "Modify the donation"
 msgstr "寄付を変更"
@@ -2351,13 +2352,13 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Liberapay の構築は大変な作業であり、まだやるべきことはたくさんあります。しかし、開発者、翻訳者、その他の貢献者は低賃金です。そのために、私たちの進捗は減速の一途をたどっています。"
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
-msgstr ""
+msgstr "Liberapayが自動更新をサポートするようになりました。すべての寄付に対して自動更新を有効にしますか？"
 
 msgid "Yes, activate automatic renewals"
-msgstr ""
+msgstr "はい、自動更新を有効にします"
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
-msgstr ""
+msgstr "寄付の一部またはすべての自動更新を有効にしましたが、自動で支払いを開始できる有効な支払い方法がありません。"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2385,7 +2386,7 @@ msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "{timespan_ago_1} に開始しました。{timespan_ago_2} に変更されました。"
 
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
-msgstr ""
+msgstr "この寄付では自動更新が有効になっていますが、現在、支払い業者の制限により不可能です。"
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "受領者のアカウントがブラックリストに登録されているため、無効になっています。"
@@ -2429,24 +2430,24 @@ msgid "Cancel the pledge"
 msgstr "寄付の約束を取り消す"
 
 msgid "Stopped donations"
-msgstr ""
+msgstr "寄付を停止しました"
 
 msgid "Restart"
 msgstr "再開"
 
 msgid "Hide"
-msgstr ""
+msgstr "隠す"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "{timespan_ago_1} に開始しました。{timespan_ago_2} に停止しました。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
-msgstr ""
+msgstr "この寄付が中止された場合でも、{money_amount}は前払いされています。その進歩は、それがゼロに達するまで毎週消費されます。"
 
 msgid "Cancelled pledges"
-msgstr ""
+msgstr "キャンセルされた誓約"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
@@ -2490,7 +2491,7 @@ msgid "Doesn't support the {currency}"
 msgstr "{currency} は使用できません"
 
 msgid "Doesn't support automatic renewal"
-msgstr ""
+msgstr "自動更新をサポートしていません"
 
 msgid "Not anonymous"
 msgstr "匿名でない"
@@ -2564,7 +2565,7 @@ msgstr "この支払いを処理するには、より詳細な情報が必要で
 
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
-msgstr ""
+msgstr "支払い処理業者（{name}）は、まだこの受取人の{currency}口座振替を処理できません。別のお支払い方法をお試しください。"
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2611,18 +2612,18 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "「{0}」は金額として使用できません（最小＝{1}、最大＝{2}）"
 
 msgid "The date must be in the future."
-msgstr ""
+msgstr "日付は未来にしか設定できません。"
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}."
-msgstr ""
+msgstr "この定期支払いをキャンセルしてもよろしいですか？ {recipient}への寄付が停止されます。"
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
-msgstr ""
+msgstr "この定期支払いをキャンセルしてもよろしいですか？ {recipients}への寄付が停止されます。"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "この予定支払い額を変更する場合は、新しい寄付の値段を選択または入力してください:"
 
 msgid "(not recommended, high fee percentage)"
 msgstr "（非推奨。手数料率が高くなります）"
@@ -2640,25 +2641,25 @@ msgstr[0] "{n} 週間以内の次の支払い（{timedelta}）"
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "次の支払い{in_N_weeks_months_or_years}"
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
 msgstr "カスタム金額（最小＝{0}、最大＝{1}）"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "この予定された支払いの日付を変更する場合は、新しい日付を選択または入力してください:"
 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
-msgstr ""
+msgstr "通常の日付を超えて支払いを遅らせると、その間、寄付は無効になります。"
 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] ""
+msgstr[0] "{n}回の支払いが予定されています:"
 
 msgid "You currently don't have any scheduled payment."
-msgstr ""
+msgstr "現在、予定されている支払いはありません。"
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
 msgstr "アカウントの種類の変更をお考えですか？　法的な理由により、私たちは決済パートナーのシステムにあなたの新しいアカウントを作成し、古いアカウントから金銭を転送する必要があります。"
@@ -2936,7 +2937,7 @@ msgid "Method"
 msgstr "手段"
 
 msgid "automatic charge"
-msgstr ""
+msgstr "自動チャージ"
 
 msgid "charge"
 msgstr "料金"
@@ -3032,16 +3033,16 @@ msgid "Mark all notifications as read"
 msgstr "すべての通知を既読にする"
 
 msgid "Mark as read"
-msgstr ""
+msgstr "既読にする"
 
 msgid "Remove"
 msgstr "削除"
 
 msgid "This notification is marked for deletion."
-msgstr ""
+msgstr "この通知には削除のマークが付けられています。"
 
 msgid "Restore"
-msgstr ""
+msgstr "戻す"
 
 msgid "No notifications to show."
 msgstr "表示する通知はありません。"
@@ -3086,7 +3087,7 @@ msgstr "このアカウントは支払いを受け取ることができません
 
 #, python-brace-format
 msgid "Manage this {platform} account"
-msgstr ""
+msgstr "{platform}アカウントを管理"
 
 #, python-brace-format
 msgid "Available in {country}."
@@ -3098,7 +3099,7 @@ msgstr "{country}で利用可能ではありません。"
 
 #, python-brace-format
 msgid "Connect another {platform_name} account"
-msgstr ""
+msgstr "別の{platform_name}アカウントを接続"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal は Stripe よりも多くの国で金銭を受け取ることができますが、PayPal は Liberapay に十分に統合されていません。"
@@ -3283,7 +3284,7 @@ msgstr "このカード番号を次回の支払いのために保存しない。
 
 #, python-brace-format
 msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr ""
+msgstr "IBANを提供することにより、{platform}および当社の決済サービスプロバイダーである{provider}があなたの銀行にあなたの口座からの引き落としの指示を送信することを承認したことになります。あなたは、銀行との契約条件に基づき、あなたの銀行から返金を受ける権利があります。返金は、あなたのアカウントが引き落とされた日から8週間以内に請求しなければなりません。"
 
 msgid "Forget this bank account number after one payment."
 msgstr "この銀行口座番号を次回の支払いのために保存しない。"
@@ -3302,8 +3303,9 @@ msgstr "銀行口座"
 msgid "default"
 msgstr "デフォルト"
 
+#, fuzzy
 msgid "view mandate"
-msgstr ""
+msgstr "委任状を見る"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -5172,9 +5174,9 @@ msgstr "Liberapay は、毎週少量の寄付をするようにすることで�
 msgid "{0} returned this error message: {1}"
 msgstr "{0} は以下のエラーメッセージを出力しました：{1}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{platform} returned an error, please retry the operation from the beginning."
-msgstr ""
+msgstr "{platform}がエラーを返答しました。操作を最初からやり直してください。"
 
 msgid "Social Explorer"
 msgstr "ソーシャルエクスプローラー"
