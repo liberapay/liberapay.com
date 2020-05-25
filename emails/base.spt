@@ -6,9 +6,9 @@
 $body
 
 <div style="color: #999; padding: 22px 0 0;">
-    <div>
-        {{ _("Something not right? Reply to this email for help.") }}
-    </div>
+    <div>{{
+        _("Something wrong? This email was sent automatically, but you can contact us by replying to it.")
+    }}</div>
     <div style="font-size: 14px; padding-top: 12px;">
         <a href="https://liberapay.com/about/me/emails/"
            style="text-decoration: underline;">{{
@@ -27,6 +27,6 @@ $body
 
 ---
 
-{{ _("Something not right? Reply to this email for help.") }}
+{{ _("Something wrong? This email was sent automatically, but you can contact us by replying to it.") }}
 
 {{ _("Change your email settings") }}: https://liberapay.com/about/me/emails/

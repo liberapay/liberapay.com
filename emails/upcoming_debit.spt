@@ -58,3 +58,9 @@
     link_start='<a href="%s">'|safe % participant.url('giving/'),
     link_end='</a>'|safe
 ) }}</p>
+
+<p>{{ _(
+    "A receipt will be available once the payment has been successfully processed. You can see all your payments and receipts in {link_start}your account's ledger{link_end}.",
+    link_start='<a href="%s">'|safe % participant.url('ledger/'),
+    link_end='</a>'|safe
+) }}</p>
