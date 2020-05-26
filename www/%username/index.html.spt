@@ -43,6 +43,31 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % endif
 % endblock
 
+% block profile_alternates
+% if statement
+    % if len(langs) > 1
+        <nav class="dropdown-hover pull-right">
+            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                {{ locale.languages_2[lang] }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            % for l in langs
+                <li class="{{ 'active' if l == lang else '' }}">
+                    % if l in website.subdomains
+                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}">{{ locale.languages_2[l] }}</a>
+                    % else
+                    <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate">{{ locale.languages_2[l] }}</a>
+                    % endif
+                </li>
+            % endfor
+            </ul>
+        </nav>
+    % else
+        <span class="pull-right btn-sm" title="{{ _('This profile is only available in this language.') }}">{{ locale.languages_2[lang] }}</span>
+    % endif
+% endif
+% endblock
+
 % block profile_btn
 % if user
 <div class="pull-right text-center">
@@ -61,28 +86,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block content
     % if statement
-        <h3 id="statement">{{ _("Statement") }}
-        % if len(langs) > 1
-        <span class="dropdown-hover pull-right">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                {{ locale.languages_2[lang] }} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-            % for l in langs
-                <li class="{{ 'active' if l == lang else '' }}">
-                    % if l in website.subdomains
-                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}">{{ locale.languages_2[l] }}</a>
-                    % else
-                    <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate">{{ locale.languages_2[l] }}</a>
-                    % endif
-                </li>
-            % endfor
-            </ul>
-        </span>
-        % elif lang != locale.language
-        <span class="pull-right btn-sm">{{ locale.languages_2[lang] }}</span>
-        % endif
-        </h3>
+        <h3 id="statement">{{ _("Statement") }}</h3>
         <section class="profile-statement" lang="{{ lang }}">
             {{ statement }}
         </section>
