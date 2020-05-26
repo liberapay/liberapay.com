@@ -4,7 +4,7 @@
 
 % block main
 <div class="content-with-nav nav-left">
-    <div class="nav-col">
+    <nav class="nav-col">
         <input id="subnav-settings" class="subnav-toggler sr-only" type="checkbox" />
         <label for="subnav-settings">{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></label>
         <ul class="nav nav-aside">
@@ -31,7 +31,7 @@
             </li>
             {{ nav_settings(participant) }}
         </ul>
-    </div>
+    </nav>
     <div class="content-col">
         % if 'success' in request.qs
             % set success = request.qs.pop('success')

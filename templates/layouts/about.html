@@ -3,11 +3,11 @@
 % block main
 <div class="content-with-nav tabs-left">
     % from "templates/macros/nav.html" import nav_about with context
-    <div class="nav-col">
+    <nav class="nav-col">
         <input id="subnav-about" class="subnav-toggler sr-only" type="checkbox" />
         <label for="subnav-about">{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></label>
         <ul class="nav nav-tabs-left text-center">{{ nav_about() }}</ul>
-    </div>
+    </nav>
     <div class="content-col">{% block content %}{% endblock %}</div>
 </div>
 % endblock
