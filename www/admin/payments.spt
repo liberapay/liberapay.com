@@ -27,7 +27,7 @@ payins = website.db.all("""
                         pt.team, team.username AS team_name,
                         pt.status, pt.error,
                         pt.amount, pt.unit_amount, pt.n_units, pt.period
-                    ) x))
+                    ORDER BY pt.id ) x))
                FROM payin_transfers pt
                JOIN participants recipient ON recipient.id = pt.recipient
           LEFT JOIN participants team ON team.id = pt.team
