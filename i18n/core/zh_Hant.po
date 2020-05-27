@@ -16,9 +16,8 @@ msgstr "该页面的{language}翻译尚未完成."
 msgid "Greetings,"
 msgstr "欢迎,"
 
-#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
-msgstr "遇到问题了吗？回复此电子邮件以获取帮助。"
+msgstr "遇到問題嗎？這是自動傳送的郵件，您可以利用直接回覆本信來聯絡我們。"
 
 msgid "Change your email settings"
 msgstr "改變電子郵件設定"
@@ -51,25 +50,25 @@ msgid "Manage your donations"
 msgstr "管理你的捐款"
 
 msgid "Your email address is temporarily blacklisted"
-msgstr ""
+msgstr "您的電郵地址暫時被封鎖"
 
 msgid "Your email address has been blacklisted"
 msgstr "您的電郵地址被封鎖了"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
-msgstr ""
+msgstr "在{date}之前我們暫停向您的電郵{email_address}發送通佑，因近期我們無法成功地透過該電郵聯絡上您。"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because a recent attempt to do so has failed."
-msgstr ""
+msgstr "我們不再對您的電郵{email_address}發信，因為近期皆無法成功寄信。"
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "由於收到電郵服務商的抱怨，我們不會再寄送郵件到您的信箱{email_address}。如果您想自封鎖黑名單除名，請寄信到 support@liberapay.com。"
 
 msgid "The error message from the email system was:"
-msgstr ""
+msgstr "來自電郵系統的出錯訊息為："
 
 msgid "Manage your email addresses"
 msgstr "管理你的電郵地址"
@@ -664,7 +663,7 @@ msgstr "如您想修改捐款，請點擊以下連結：{link_start}管理捐款
 
 #, python-brace-format
 msgid "A receipt will be available once the payment has been successfully processed. You can see all your payments and receipts in {link_start}your account's ledger{link_end}."
-msgstr ""
+msgstr "一旦順利完成付款就可取得收據，您可在{link_start}帳戶連結{link_end}底下看到完整的付款與收據資訊。"
 
 msgid "Email address verification - Liberapay"
 msgstr "電郵信箱認證 - Liberapay"
@@ -922,15 +921,15 @@ msgstr "'{0}' 不是一個有效的電子郵件地址。"
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0}為無效的域名。"
 
 #, python-brace-format
 msgid "Our attempt to resolve the domain {domain_name} failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "我們嘗試解析域名{domain_name}失敗 (其錯過訊息為: “{error_message}”)."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "我們試圖連結{domain_name}的郵件伺服器失敗 (其回傳的錯誤訊息: “{error_message}”)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -938,7 +937,7 @@ msgstr "'{domain_name}' 為無效的電郵地址。"
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr ""
+msgstr "電郵{email_address}被封鎖，因為{timespan_ago}無法成功地對它寄出訊息。"
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -958,7 +957,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "網域{domain}已遭封鎖，如欲自黑名單移除請連絡我方。"
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1015,7 +1014,7 @@ msgstr "用戶 {0} 不接受捐款。"
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
-msgstr ""
+msgstr "{username}不接受{rejected_currency}的捐款。"
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "看來你似乎要刪除一些不存在的東西。"
@@ -1260,20 +1259,20 @@ msgid "Log in to reopen your account."
 msgstr "登入重新開啟帳戶。"
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "是否寫錯了電郵地址？請修正再重試，或是提供其它不同的電子郵件。"
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
 msgstr ""
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "忽略錯誤訊息繼續執行"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
 msgstr ""
 
 msgid "Bypass the blacklist and retry"
-msgstr ""
+msgstr "跳過黑名單再重試"
 
 msgid "Alternatively, you can try a different email address:"
 msgstr ""
@@ -1547,9 +1546,8 @@ msgstr "團隊"
 msgid "Stats"
 msgstr "統計"
 
-#, fuzzy
 msgid "Follow Us"
-msgstr "訊息訂閱"
+msgstr "關注我們"
 
 msgid "Contact"
 msgstr "聯絡"
@@ -2434,13 +2432,13 @@ msgid "Cancel the pledge"
 msgstr "取消捐款承諾"
 
 msgid "Stopped donations"
-msgstr ""
+msgstr "停止捐款"
 
 msgid "Restart"
 msgstr "重新開始"
 
 msgid "Hide"
-msgstr ""
+msgstr "隱藏"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2451,7 +2449,7 @@ msgid "This stopped donation still has {money_amount} paid in advance. That adva
 msgstr ""
 
 msgid "Cancelled pledges"
-msgstr ""
+msgstr "取消請款"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
@@ -2941,7 +2939,7 @@ msgid "Method"
 msgstr "方式"
 
 msgid "automatic charge"
-msgstr ""
+msgstr "自動扣款"
 
 msgid "charge"
 msgstr "收費"
