@@ -342,6 +342,12 @@ LANGUAGE_CODES_2 = """
     sr ss st sv sw ta te tg th ti tn to tr ts uk ur uz ve vi vo xh yo zh zu
 """.split()
 
+Locale.LANGUAGE_NAMES = {
+    code: babel.core.Locale(code).language_name
+    for code in LANGUAGE_CODES_2
+    if babel.localedata.exists(code)
+}
+
 LANGUAGES_2 = make_sorted_dict(LANGUAGE_CODES_2, Locale('en').languages)
 
 LOCALES = {}

@@ -45,25 +45,35 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block profile_alternates
 % if statement
+    % set language_name_in_current_locale = locale.languages_2.get(lang, lang)
     % if len(langs) > 1
-        <nav class="dropdown-hover pull-right">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                {{ locale.languages_2[lang] }} <span class="caret"></span>
+        <nav class="dropdown dropdown-hover pull-right" title="{{ ngettext('', 'This profile is available in {n} languages', len(langs)) }}">
+            % if lang != locale.language
+            <span class="btn-sm">{{ language_name_in_current_locale }}</span>
+            % endif
+            <button class="dropdown-toggle btn font-lg" type="button" data-toggle="dropdown">
+                {{ fontawesome('language') }} <span class="caret"></span>
+                <span class="sr-only">{{ _("Show the list of languages") }}</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
             % for l in langs
                 <li class="{{ 'active' if l == lang else '' }}">
                     % if l in website.subdomains
-                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}">{{ locale.languages_2[l] }}</a>
+                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}" lang="{{ l }}">{{
+                        locale.LANGUAGE_NAMES.get(l, l) }}</a>
                     % else
-                    <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate">{{ locale.languages_2[l] }}</a>
+                    <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate" lang="{{ l }}">{{
+                        locale.LANGUAGE_NAMES.get(l, locale.languages_2.get(l, l.upper())) }}</a>
                     % endif
                 </li>
             % endfor
             </ul>
         </nav>
-    % else
-        <span class="pull-right btn-sm" title="{{ _('This profile is only available in this language.') }}">{{ locale.languages_2[lang] }}</span>
+    % elif lang != locale.language
+        <span class="pull-right btn-sm" title="{{ _(
+                  'This profile is only available in {language}',
+                  language=language_name_in_current_locale
+              ) }}">{{ language_name_in_current_locale }}</span>
     % endif
 % endif
 % endblock

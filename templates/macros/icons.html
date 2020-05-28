@@ -3,14 +3,14 @@
 % endmacro
 
 % macro glyphicon(name, sr='')
-    <span class="glyphicon glyphicon-{{ name }}" aria-hidden="true" title="{{ sr }}"></span>
+    <span class="glyphicon glyphicon-{{ name }}" aria-hidden="true" {% if sr %} title="{{ sr }}" {% endif %}></span>
     % if sr
         <span class="sr-only">{{ sr }}</span>
     % endif
 % endmacro
 
 % macro fontawesome(name, sr='')
-    <span class="fa fa-{{ name }}" aria-hidden="true" title="{{ sr }}"></span>
+    <span class="fa fa-{{ name }}" aria-hidden="true" {% if sr %} title="{{ sr }}" {% endif %}></span>
     % if sr
         <span class="sr-only">{{ sr }}</span>
     % endif
