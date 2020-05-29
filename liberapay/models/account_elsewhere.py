@@ -300,7 +300,17 @@ class AccountElsewhere(Model):
             type_of_id, id_value = 'user_name', self.user_name
         else:
             raise UnableToRefreshAccount(self.id, self.platform)
-        info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
+        try:
+            info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
+        except UserNotFound:
+            if not self.missing_since:
+                self.db.run("""
+                    UPDATE elsewhere
+                       SET missing_since = current_timestamp
+                     WHERE id = %s
+                       AND missing_since IS NULL
+                """, (self.id,))
+            raise
         return self.upsert(info)
 
 
