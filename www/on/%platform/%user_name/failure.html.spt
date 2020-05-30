@@ -15,13 +15,14 @@ title = _("Failure")
 <div class="alert alert-danger">
 
     % if request.qs.get('error') == 'CantReadMembership'
+        % set remediation_url = platform.get_CantReadMembership_url(account)
         <p>{{ _(
-            "We were unable to determine if you are a member of the {0} team on {1}."
-            "\n\nPlease {2}check that you gave us the necessary permissions{3}."
-            , name
-            , platform.display_name
-            , '<a href="%s">'|safe % platform.get_CantReadMembership_url()
-            , '</a>'|safe
+            "We were unable to determine if you are a member of the {team_name} team on {platform_name}.\n\n"
+            "Please {link_start}make sure your membership of the team is public{link_end}."
+            , team_name=name
+            , platform_name=platform.display_name
+            , link_start=('<a href="%s">'|safe % remediation_url if remediation_url else '')
+            , link_end=('</a>'|safe if remediation_url else '')
         ).replace('\n', '<br>'|safe) }}</p>
 
     % elif team

@@ -56,8 +56,8 @@ class GitHub(PlatformOAuth2):
     x_repo_owner_id = key('owner', clean=lambda d: d['id'])
     x_repo_extra_info_drop = drop_keys(lambda k: k.endswith('_url'))
 
-    def get_CantReadMembership_url(self, **kw):
-        return 'https://github.com/settings/connections/applications/'+self.api_key
+    def get_CantReadMembership_url(self, account):
+        return 'https://github.com/orgs/%s/people' % account.user_name
 
     def is_team_member(self, org_name, sess, account):
         org_name = org_name.lower()

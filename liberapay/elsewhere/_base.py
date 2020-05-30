@@ -446,6 +446,9 @@ class Platform(object):
                AND domain = %s
         """, (self.name, domain))
 
+    def get_CantReadMembership_url(self, account):
+        return ''
+
 
 class PlatformOAuth1(Platform):
 
