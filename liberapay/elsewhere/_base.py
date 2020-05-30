@@ -381,7 +381,7 @@ class Platform(object):
             from liberapay.models.account_elsewhere import UnableToRefreshAccount
             try:
                 account = account.refresh_user_info()
-            except UnableToRefreshAccount:
+            except (UnableToRefreshAccount, UserNotFound):
                 raise TokenExpiredError()
             # Note: we can't pass the page_url below, because it contains the old user_name
             return self.get_repos(account, page_url=None, sess=sess, refresh=False)
