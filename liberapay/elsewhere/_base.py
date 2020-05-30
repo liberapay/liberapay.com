@@ -343,7 +343,7 @@ class Platform(object):
             count = self.x_friends_count(None, account.extra_info, -1)
         return friends, count, pages_urls
 
-    def extract_repo_info(self, info, source):
+    def extract_repo_info(self, info):
         r = RepoInfo()
         r.platform = self.name
         r.name = self.x_repo_name(r, info)
@@ -373,7 +373,7 @@ class Platform(object):
             sess = None
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
-        repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
+        repos = [self.extract_repo_info(repo) for repo in repos]
         if '{user_id}' in self.api_repos_path:
             for repo in repos:
                 if repo.owner_id is None:
@@ -404,7 +404,7 @@ class Platform(object):
             sess = None
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
-        repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
+        repos = [self.extract_repo_info(repo) for repo in repos]
         return repos, count, pages_urls
 
     def get_credentials(self, domain):
