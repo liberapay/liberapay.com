@@ -56,3 +56,4 @@ class GitLab(PlatformOAuth2):
     x_repo_last_update = key('last_activity_at')
     x_repo_is_fork = key('forked_from_project', clean=bool)
     x_repo_stars_count = key('star_count')
+    x_repo_owner_id = key('owner', clean=lambda d: d['id'])  # not included in responses to unauthenticated requests

@@ -374,7 +374,11 @@ class Platform(object):
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
-        if '{user_name}' in self.api_repos_path and repos and repos[0].owner_id != account.user_id:
+        if '{user_id}' in self.api_repos_path:
+            for repo in repos:
+                if repo.owner_id is None:
+                    repo.owner_id = account.user_id
+        elif '{user_name}' in self.api_repos_path and repos and repos[0].owner_id != account.user_id:
             # https://hackerone.com/reports/452920
             if not refresh:
                 raise TokenExpiredError()
