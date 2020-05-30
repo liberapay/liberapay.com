@@ -13,9 +13,17 @@ if platform is None or platform not in website.friends_platforms:
 title = _("Social Explorer")
 subhead = platform.display_name
 
-account = None
+account, accounts = None, ()
 if not user.ANON:
-    account = user.get_account_elsewhere(platform.name)
+    accounts = user.get_accounts_elsewhere(platform.name, is_team=False)
+    accounts_nav = [(account.user_id, account.friendly_name) for account in accounts]
+    if accounts:
+        selected_account_id = request.qs.get('e_user_id')
+        if selected_account_id:
+            accounts.sort(key=lambda a: -(a.user_id == selected_account_id))
+        account = accounts[0]
+        if not selected_account_id:
+            selected_account_id = account.user_id
 
 sess = None
 if account:
@@ -44,6 +52,7 @@ limited = getattr(platform, 'api_friends_limited', False)
 % extends "templates/layouts/base.html"
 
 % from 'templates/macros/elsewhere.html' import auth_button with context
+% from "templates/macros/nav.html" import querystring_nav with context
 % from 'templates/macros/profile-box.html' import profile_box_embedded_elsewhere with context
 % from "templates/macros/your-tip.html" import tip_form with context
 
@@ -63,6 +72,12 @@ limited = getattr(platform, 'api_friends_limited', False)
 % endmacro
 
 % block content
+
+% if len(accounts) > 1
+    <br>
+    <nav><ul class="nav nav-pills">{{ querystring_nav('e_user_id', accounts_nav, selected_account_id) }}</ul></nav>
+    <br>
+% endif
 
 % if user.ANON
     % from "templates/macros/sign-in-link.html" import sign_in_link with context

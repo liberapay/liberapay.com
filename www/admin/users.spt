@@ -199,7 +199,7 @@ title = "Users Admin"
 [---] text/html
 % from 'templates/macros/avatar-url.html' import avatar_img with context
 % from 'templates/macros/icons.html' import fontawesome, glyphicon
-% from 'templates/macros/nav.html' import querystring_nav
+% from 'templates/macros/nav.html' import querystring_nav with context
 % from "templates/macros/payment-methods.html" import payment_method_icon with context
 
 % extends "templates/layouts/admin.html"
@@ -229,7 +229,7 @@ title = "Users Admin"
         % endif
     </div>
     <div class="col-md-6">
-    % set elsewhere = p.get_accounts_elsewhere().values()
+    % set elsewhere = p.get_accounts_elsewhere()
     % if p.status == 'stub'
         % for account in elsewhere
             <div class="account">

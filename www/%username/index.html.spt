@@ -112,8 +112,8 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         <h3>{{ _("Linked Accounts") }}</h3>
         <p>{{ _("{0} owns the following accounts on other platforms:", participant.username) }}</p>
         <div class="accounts">
-            % for platform in website.platforms if platform.name in e_accounts
-                {{ account_elsewhere(platform, e_accounts) }}
+            % for account in e_accounts
+                {{ account_elsewhere(account) }}
             % endfor
         </div>
     % endif

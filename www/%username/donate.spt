@@ -75,8 +75,8 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
             "{0} has control of the following accounts on other platforms:",
             participant.username
         ) }}</p>
-        % for platform in website.platforms if platform.name in e_accounts
-            {{ account_elsewhere(platform, e_accounts) }}
+        % for account in e_accounts
+            {{ account_elsewhere(account) }}
         % endfor
         <br>
     % endif

@@ -31,7 +31,7 @@ subhead = _("Avatar")
 % block form
 
     % set platform = website.platforms.get(src)
-    % if platform and not participant.get_account_elsewhere(platform.name)
+    % if platform and not participant.get_accounts_elsewhere(platform.name)
         <div class="alert alert-warning">
             <p>{{ _(
                 "You have selected {platform} as your avatar source but you "

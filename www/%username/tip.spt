@@ -45,7 +45,7 @@ else:
 
 tippee_name = tippee.username
 if tippee.status == 'stub':
-    tippee_name = list(tippee.get_accounts_elsewhere().values())[0].friendly_name
+    tippee_name = tippee.get_accounts_elsewhere()[0].friendly_name
 
 
 # Get and maybe set amount.

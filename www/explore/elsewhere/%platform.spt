@@ -63,9 +63,6 @@ if platform:
         p for p, d in platforms.values() if p.name != platform_name
     ]
 
-    if not user.ANON:
-        account = user.get_account_elsewhere(platform.name)
-
 title = _("Explore")
 subhead = _("Social Networks")
 
@@ -96,8 +93,7 @@ subhead = _("Social Networks")
 
     % if platform in website.friends_platforms
     <p class="text-center">
-        <a class="btn btn-{{ 'primary' if account else 'default' }} btn-lg btn-wrap"
-           href="/on/{{ platform_name }}">{{
+        <a class="btn btn-primary btn-lg btn-wrap" href="/on/{{ platform_name }}">{{
             _("Explore Your {0} Contacts", platform.display_name)
         }}</a>
     </p>

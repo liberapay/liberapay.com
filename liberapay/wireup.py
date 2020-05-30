@@ -556,10 +556,12 @@ def make_sentry_teller(env, version):
 class PlatformRegistry(object):
     """Registry of platforms we support.
     """
+
     def __init__(self, platforms):
         self.list = platforms
         self.dict = dict((p.name, p) for p in platforms)
         self.__dict__.update(self.dict)
+        self.order = dict((p.name, i) for i, p in enumerate(platforms))
         self._hasattr_cache = {}
 
     def __contains__(self, platform):
@@ -582,6 +584,9 @@ class PlatformRegistry(object):
     def hasattr(self, attr):
         r = self._hasattr_cache.get(attr)
         return r or self._cache_hasattr(attr)
+
+    def index(self, name):
+        return self.order[name]
 
 
 def accounts_elsewhere(app_conf, asset, canonical_url, db):

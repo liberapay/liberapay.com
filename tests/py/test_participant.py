@@ -24,20 +24,6 @@ from liberapay.testing import EUR, USD, Harness
 from liberapay.utils.types import Object
 
 
-class TestNeedConfirmation(Harness):
-    def test_need_confirmation1(self):
-        assert not NeedConfirmation(False, False)
-
-    def test_need_confirmation2(self):
-        assert NeedConfirmation(False, True)
-
-    def test_need_confirmation3(self):
-        assert NeedConfirmation(True, False)
-
-    def test_need_confirmation4(self):
-        assert NeedConfirmation(True, True)
-
-
 class TestTakeOver(Harness):
 
     def test_empty_stub_is_deleted(self):
@@ -139,12 +125,14 @@ class TestParticipant(Harness):
         alice.take_over(g)
         # test preconditions
         accounts = alice.get_accounts_elsewhere()
-        assert accounts['twitter'] and accounts['github']
+        assert len(accounts) == 2
+        assert set(a.platform for a in accounts) == {'github', 'twitter'}
         # do the thing
         alice.delete_elsewhere('twitter', '', alice.id)
-        # unit test
+        # check the result
         accounts = alice.get_accounts_elsewhere()
-        assert accounts.get('twitter') is None and accounts['github']
+        assert len(accounts) == 1
+        assert set(a.platform for a in accounts) == {'github'}
 
 
 class TestStub(Harness):

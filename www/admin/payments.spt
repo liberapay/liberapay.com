@@ -46,7 +46,7 @@ title = "Payments Admin"
 
 [---] text/html
 % from "templates/macros/icons.html" import unicode_symbol
-% from 'templates/macros/nav.html' import querystring_nav
+% from 'templates/macros/nav.html' import querystring_nav with context
 % from "templates/macros/payment-methods.html" import payment_method_icon with context
 
 % extends "templates/layouts/admin.html"
