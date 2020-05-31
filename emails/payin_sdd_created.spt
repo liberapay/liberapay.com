@@ -28,3 +28,8 @@
     descriptor=statement_descriptor
 ) }}</p>
 % endif
+
+<p>{{ _(
+    "Processing this kind of payment takes {timedelta} on average.",
+    timedelta=constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd']
+) }}</p>

@@ -330,6 +330,10 @@ PAYIN_AMOUNTS = {
     },
 }
 
+PAYIN_SETTLEMENT_DELAYS = {
+    'stripe-sdd': timedelta(days=6),
+}
+
 PAYMENT_METHODS = {
     'mango-ba': _("Direct Debit"),
     'mango-bw': _("Bank Wire"),
