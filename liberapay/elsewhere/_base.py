@@ -374,14 +374,18 @@ class Platform(object):
         r = self.api_get(account.domain, page_url, sess=sess)
         repos, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         repos = [self.extract_repo_info(repo, account.domain) for repo in repos]
-        if '{user_name}' in self.api_repos_path and repos and repos[0].owner_id != account.user_id:
+        if '{user_id}' in self.api_repos_path:
+            for repo in repos:
+                if repo.owner_id is None:
+                    repo.owner_id = account.user_id
+        elif '{user_name}' in self.api_repos_path and repos and repos[0].owner_id != account.user_id:
             # https://hackerone.com/reports/452920
             if not refresh:
                 raise TokenExpiredError()
             from liberapay.models.account_elsewhere import UnableToRefreshAccount
             try:
                 account = account.refresh_user_info()
-            except UnableToRefreshAccount:
+            except (UnableToRefreshAccount, UserNotFound):
                 raise TokenExpiredError()
             # Note: we can't pass the page_url below, because it contains the old user_name
             return self.get_repos(account, page_url=None, sess=sess, refresh=False)
@@ -441,6 +445,9 @@ class Platform(object):
              WHERE platform = %s
                AND domain = %s
         """, (self.name, domain))
+
+    def get_CantReadMembership_url(self, account):
+        return ''
 
 
 class PlatformOAuth1(Platform):
