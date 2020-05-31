@@ -404,9 +404,9 @@ msgstr "Прямой дебетовый платёж на ваш кошелёк 
 msgid "Your payment has failed"
 msgstr "Ваш платеж не прошёл"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Платёж при помощи Liberapay на сумму {money_amount}, инициированный {date}, не прошёл."
+msgstr "Инициированный ранее платёж на сумму {money_amount} провести не удалось."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
@@ -588,7 +588,7 @@ msgstr "Мы рады сообщить вам, что {user_name} присоед
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
-msgstr ""
+msgstr "Поэтому автоматическая оплата {money_amount} была запланирована на {date}, чтобы выполнить ваше поручение."
 
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
@@ -610,10 +610,10 @@ msgstr "Продление пожертвования Liberapay: оплата о
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
-msgstr ""
+msgstr "Платёж прерван, потому что получатель {recipient} не может получить периодический платёж на {money_amount}, запланированный на {date}."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "Следующие платежи на периодические платежи были прерваны, потому что получатели не могут их получить:"
 
 #, fuzzy
 msgid "You can make it easier for your patrons to support you through Liberapay"
@@ -621,7 +621,7 @@ msgstr "Вы можете упростить поддержку спонсора
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr ""
+msgstr "Вы подключили учётку PayPal, но не учётку Stripe. Также мы очень рекомендуем вам подключить учётку Stripe, потому что она {link_open}лучше PayPal{link_close} в некоторых моментах, как для вас, так и для ваших спонсоров."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -660,32 +660,32 @@ msgstr "Команда “{0}” переименована в “{1}” пол�
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Liberapay предстоит запросить периодический платёж на {money_amount}"
+msgstr[1] "Liberapay предстоит запросить периодические платежи на {money_amount}"
+msgstr[2] "Liberapay предстоит запросить периодические платежи на {money_amount}"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "Это сообщение является напоминанием, что {amount} будут списаны с основного платёжного инструмента {debit_date}, чтобы продлить срок действия периодического платежа для {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "Это сообщение является напоминанием, что {amount} будут списаны с основного платёжного инструмента {debit_date}, чтобы продлить срок действия периодических платежей для {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Это сообщение является напоминанием о том, что в течение следующего дня будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
+msgstr[1] "Это сообщение является напоминанием о том, что в течение следующих {n} дней будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
+msgstr[2] "Это сообщение является напоминанием о том, что в течение следующих {n} дней будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Если вы хотите изменить свои платежи, нажмите на ссылку: {link_start}для управления своими платежами{link_end}."
 
 #, python-brace-format
 msgid "A receipt will be available once the payment has been successfully processed. You can see all your payments and receipts in {link_start}your account's ledger{link_end}."
-msgstr ""
+msgstr "Квитанция будет доступна после успешной обработки платежа. Можете просмотреть ваши платежи и зачисления в {link_start}вашей учётной книги{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Подтверждение адреса электронной почты - Liberapay"
@@ -699,17 +699,17 @@ msgid "A Liberapay account was created on {0} with the email address {1}. Was it
 msgstr "{0} был создан аккаунт Liberapay с адресом электронной почты {1}. Это были вы?"
 
 msgid "Yes, I confirm"
-msgstr ""
+msgstr "Да, я подтверждаю"
 
 msgid "No, it wasn't me"
 msgstr ""
 
 msgid "Your Liberapay account is being modified"
-msgstr ""
+msgstr "Ваша учётка Liberapay изменена"
 
 #, python-brace-format
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
-msgstr ""
+msgstr "Кто-то пытается связать адрес электронной почты {0} с учёткой Liberapay, к которой уже привязан адрес {1}. Если вы не связывали адрес {0} с вашей учёткой, нажмите ссылку ниже чтобы удалить адрес."
 
 msgid "Withdrawal initiated"
 msgstr "Инициировано снятие денег"
@@ -768,17 +768,18 @@ msgstr "Когда мой платёж отклонён"
 msgid "When a payment I initiated succeeds"
 msgstr "Когда мой платёж успешно проведён"
 
+#, fuzzy
 msgid "When money is being refunded back to me"
-msgstr ""
+msgstr "Когда деньги будут возвращены обратно ко мне"
 
 msgid "When an automatic donation renewal payment is upcoming"
-msgstr ""
+msgstr "Когда предстоит автоматическая периодическая оплата"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr ""
+msgstr "Когда у меня нет какого-либо платежного инструмента"
 
 msgid "When a donation renewal payment has been aborted"
-msgstr ""
+msgstr "Когда периодический платеж был прерван"
 
 msgid "Expense Report"
 msgstr "Отчёт о расходах"
@@ -941,17 +942,17 @@ msgstr "Вы достигли максимально дозволенного к
 msgid "'{0}' is not a valid email address."
 msgstr "'{0}' не является корректным адресом электронной почты."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0} не является допустимым именем домена."
 
 #, python-brace-format
 msgid "Our attempt to resolve the domain {domain_name} failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Наша попытка получить ответ от домена {domain_name} не удалась (сообщение об ошибке: “{error_message}”)."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Наша попытка установить связь с {domain_name} сервером электронной почты не удалось (сообщение об ошибке: “{error_message}”)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -959,7 +960,7 @@ msgstr "'{domain_name}' не является допустимым почтов�
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr ""
+msgstr "Адрес электронной почты {email_address} занесен в чёрный список, потому что попытка отправить ему сообщение не удалась {timespan_ago}."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
@@ -967,11 +968,11 @@ msgstr "Адрес электронной почты {email_address} занес�
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Домен электронной почты {domain} на {date} был занесен в черный список, потому что сервер отбросил все сообщения. Если поведение не продолжается, пожалуйста, свяжитесь с нами, чтобы мы удалили этот домен из черного списка."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Домен электронной почты {domain} занесен в черный список {timespan_ago} из-за поступившей жалобы. Пожалуйста, свяжитесь с нами, если вы хотите удалить свой домен из чёрного списка."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
@@ -979,7 +980,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "Домен электронной почты {domain} занесен в чёрный список. Пожалуйста, свяжитесь с нами, если вы хотите удалить его из чёрного списка."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1036,7 +1037,7 @@ msgstr "Пользователь {0} не принимает пожертвов�
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
-msgstr ""
+msgstr "{username} не принимает пожертвования в {rejected_currency}."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Похоже, вы пытаетесь удалить что-то, чего не существует."
@@ -1208,11 +1209,12 @@ msgstr "Доступ к этой странице запрещён."
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Обработка вашего запроса завершилась неудачей, потому что наш сервер не смог связаться с сервисом, расположенном на другой машине. Это временная помеха, повторите попытку чуть позже."
 
+#, fuzzy
 msgid "Bad Request"
-msgstr ""
+msgstr "Неправильный Запрос"
 
 msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
-msgstr ""
+msgstr "Эта ссылка для входа просрочена или недействительна. Однако вы уже вошли в систему, так что это не важно."
 
 msgid "Carry on"
 msgstr "Продолжить"
@@ -1222,10 +1224,10 @@ msgstr "Ссылка для входа просрочена или неверн�
 
 #, python-brace-format
 msgid "A login link is only valid for {x_hours} and can only be used once."
-msgstr ""
+msgstr "Ссылка для входа действительна в течение {x_hours} часов, и может быть использован только один раз."
 
 msgid "To request a new login link, input your email address:"
-msgstr ""
+msgstr "Введите адрес электронной почты чтобы получить новую ссылку для входа:"
 
 msgid "Email address"
 msgstr "Адрес электронной почты"
@@ -1287,13 +1289,14 @@ msgid "Log in to reopen your account."
 msgstr "Войдите, чтобы заново открыть ваш аккаунт."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "Ошиблись с вводом адреса электронной почты? Исправьте его и попробуйте еще раз, или попробуйте другой адрес."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
 msgstr ""
 
+#, fuzzy
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "Игнорировать ошибку и продолжить"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
