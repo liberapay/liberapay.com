@@ -4,12 +4,12 @@
 
 {# Using a new value for the size argument below requires creating the
    corresponding avatar-cutter-$size class. #}
-% macro avatar_img(account, size=98)
+% macro avatar_img(account, size=98, alt='')
 <div class="avatar-cutter-{{ size }}"><div class="avatar-centerer">
-<img class="avatar" src="{{ avatar_url(account) }}" />
+<img class="avatar" src="{{ avatar_url(account) }}" alt="{{ alt or _('Avatar') }}" />
 </div></div>
 % endmacro
 
 % macro avatar_default()
-<img class="avatar" src="{{ website.asset('avatar-default.png') }}" />
+<img class="avatar" src="{{ website.asset('avatar-default.png') }}" alt="{{ _('Default avatar') }}" />
 % endmacro
