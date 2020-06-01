@@ -21,7 +21,7 @@
         % else
             <h1>{{ participant.username }}</h1>
         % endif
-        <p class="summary">{{ summary or '' }}</p>
+        <p class="summary" lang="{{ lang or '' }}">{{ summary or '' }}</p>
     </div>
 % else
     <div class="panel panel-default profile-box">
