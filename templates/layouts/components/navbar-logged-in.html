@@ -6,7 +6,7 @@
     {{ avatar_img(user, size=28) }}
     <span class="caret"></span>
 </button>
-<ul class="dropdown-menu dropdown-menu-right" role="menu">
+<ul class="dropdown-menu dropdown-menu-right">
     <li><a href="/{{ user.username }}/">{{ _("Profile") }}</a></li>
     <li><a href="/{{ user.username }}/giving/">{{ _("Giving") }}</a></li>
     <li class="level2"><a href="/{{ user.username }}/routes/">{{ _("Payment Instruments") }}</a></li>

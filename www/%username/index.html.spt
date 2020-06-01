@@ -55,7 +55,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
                 {{ fontawesome('language') }} <span class="caret"></span>
                 <span class="sr-only">{{ _("Show the list of languages") }}</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <ul class="dropdown-menu dropdown-menu-right">
             % for l in langs
                 <li class="{{ 'active' if l == lang else '' }}">
                     % if l in website.subdomains
