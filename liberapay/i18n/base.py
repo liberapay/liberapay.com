@@ -343,7 +343,7 @@ LANGUAGE_CODES_2 = """
 """.split()
 
 Locale.LANGUAGE_NAMES = {
-    code: babel.core.Locale(code).language_name
+    code: babel.localedata.load(code)['languages'][code]
     for code in LANGUAGE_CODES_2
     if babel.localedata.exists(code)
 }

@@ -10,6 +10,7 @@ from tempfile import mkstemp
 from time import time
 import traceback
 
+import babel.localedata
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
@@ -698,6 +699,14 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
         except Exception as e:
             tell_sentry(e, {})
     del source_strings
+
+    # Unload the Babel data that we no longer need
+    # We load a lot of data to populate the LANGUAGE_NAMES dict, we don't want
+    # to keep it all in RAM.
+    used_data_dict_addresses = set(id(l._data._data) for l in locales.values())
+    for key, data_dict in list(babel.localedata._cache.items()):
+        if id(data_dict) not in used_data_dict_addresses:
+            del babel.localedata._cache[key]
 
     # Prepare a unique and sorted list for use in the language switcher
     percent = lambda l, total: sum((percent(s, len(s)) if isinstance(s, tuple) else 1) for s in l if s) / total
