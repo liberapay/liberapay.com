@@ -16,9 +16,8 @@ msgstr "La {language}-traduko de ĉi tiu paĝo ankoraŭ ne estas kompleta."
 msgid "Greetings,"
 msgstr "Saluton,"
 
-#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
-msgstr "Ĉu io misas? Kontaktu nin per ĉi tiu retpoŝtadreso por peti helpon."
+msgstr "Ĉu ĉio en ordo? Ĉi tiu retmesaĝo estis sendita aŭtomate, sed vi povas kontakti nin respondante al ĝi."
 
 msgid "Change your email settings"
 msgstr "Ŝanĝi viajn retmesaĝajn agordojn"
@@ -674,7 +673,7 @@ msgstr "Se vi deziras ŝanĝi viajn donacojn, alklaku la sekvan ligilon: {link_s
 
 #, python-brace-format
 msgid "A receipt will be available once the payment has been successfully processed. You can see all your payments and receipts in {link_start}your account's ledger{link_end}."
-msgstr ""
+msgstr "Kvitanco estos disponebla, kiam la pago estu sukcese traktita. Vi povas vidi ĉiujn viajn pagojn kaj kvitancojn en {link_start}via kontoregistro{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Konfirmo de via retpoŝtadreso - Liberapay"
@@ -4333,34 +4332,35 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr "Ni faras ĉion, kion ni povas por protekti la privatecon de ĉiuj: ni ne provas sekvi signojn de homoj, kiuj vizitas nian retejon, ni provas kolekti nur la personajn informojn, kiujn ni fakte bezonas, kaj ni ne vendas ilin."
 
 msgid "Cookies"
-msgstr ""
+msgstr "Kuketoj"
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
-msgstr ""
+msgstr "La retejo de liberapay.com nur instalas teĥnikajn kuketojn, kiuj necesas por aŭtentigi la uzulon aŭ por plenumi specifajn operaciojn. Ĉi tiuj kuketoj estas limigitaj al petoj de la sama retejo, do ni ne scias, kiu vizitas retejojn, kiuj havas kromprogrametojn de Liberapay."
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
-msgstr ""
+msgstr "En iuj paĝoj de pago, kromaj kuketoj povas esti instalitaj de la provizanto de pagservo. Bonvolu legi ĉi tiujn dokumentojn, se vi volas pli da informo: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s cookie policy"
-msgstr ""
+msgstr "Regularo pri kuketoj de {platform_name}"
 
 msgid "Social networks"
-msgstr ""
+msgstr "Interkonaj retejoj"
 
 #, python-brace-format
 msgid "Liberapay currently has integrations with {list_of_platforms}. When an account from one of those platforms is connected to a Liberapay profile, we retrieve and store some data from that platform, for example the unique identifier of the linked account. We only keep public information about the linked account, no private data."
-msgstr ""
+msgstr "Liberapay nune havas integrado en {list_of_platforms}. Kiam konto de unu el tiuj servoj estas konektita al Liberapay-profilo, ni ricevas kaj konservas kelkajn datumojn el tiu servo, ekzemple la unika identigilo de la konektita konto. Ni nur tenas publikan informacion pri la konektita konto, neniu privata datumo."
 
+#, fuzzy
 msgid "The primary purpose of these integrations is to confirm that a Liberapay account hasn't been created by an impostor attempting to profit from someone's else work."
-msgstr ""
+msgstr "La ĉefa celo de ĉi tiuj integradoj estas konfirmi, ke Liberapay-konto ne estas kreita de impostulo kiu klopodas profiti."
 
 msgid "The second purpose is to help patrons find the Liberapay accounts of the creators they follow on other platforms."
 msgstr ""
 
 msgid "Payment processors"
-msgstr ""
+msgstr "Provizantoj de pagservo"
 
 #, python-brace-format
 msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
@@ -4368,10 +4368,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
-msgstr ""
+msgstr "Regularo pri privateco de {platform_name}"
 
 msgid "Personal information leaks"
-msgstr ""
+msgstr "Likoj de persona informacio"
 
 msgid "Liberapay does not tell creators who their patrons are. However, PayPal allows the recipient of a payment to see the name and email address of the payer, so donors who don't want to reveal themselves should not choose PayPal as the payment method."
 msgstr ""
@@ -4380,10 +4380,10 @@ msgid "Similarly, PayPal allows a donor to see the name and email address of the
 msgstr ""
 
 msgid "Encryption"
-msgstr ""
+msgstr "Ĉifrado"
 
 msgid "All network connections are encrypted, except for some communications between machines located in the same datacenter."
-msgstr ""
+msgstr "Ĉiuj retaj konektoj estas ĉifritaj, krom iuj komunikiĝoj inter maŝinoj, kiuj estas en la sama datumejo."
 
 msgid "As a precaution against identity theft in case of data leak, the identity information of Liberapay account owners is stored encrypted in our database."
 msgstr ""
@@ -5189,6 +5189,9 @@ msgid ""
 "\n"
 "Please {link_start}make sure your membership of the team is public{link_end}."
 msgstr ""
+"Ni ne povis determini, se vi estas ano de la {team_name}-teamo en {platform_name}.\n"
+"\n"
+"Bonvolu {link_start}certigi, ke via aneco de la teamo estas publika{link_end}."
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
