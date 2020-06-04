@@ -172,7 +172,12 @@ class AccountElsewhere(Model):
                     raise
 
         # Return account after propagating avatar_url to participant
-        account.participant.update_avatar()
+        account.participant.set_attributes(avatar_url=cls.db.one("""
+            UPDATE participants
+               SET avatar_url = coalesce(%s, avatar_url)
+             WHERE id = %s
+         RETURNING avatar_url
+        """, (account.avatar_url, account.participant.id)))
         return account
 
 
