@@ -43,17 +43,51 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % endif
 % endblock
 
+% block profile_alternates
+% if statement
+    % set language_name_in_current_locale = locale.languages_2.get(lang, lang)
+    % if len(langs) > 1
+        <nav class="dropdown dropdown-hover pull-right" title="{{ ngettext('', 'This profile is available in {n} languages', len(langs)) }}">
+            % if lang != locale.language
+            <span class="btn-sm">{{ language_name_in_current_locale }}</span>
+            % endif
+            <button class="dropdown-toggle btn font-lg" type="button" data-toggle="dropdown">
+                {{ fontawesome('language') }} <span class="caret"></span>
+                <span class="sr-only">{{ _("Show the list of languages") }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+            % for l in langs
+                <li class="{{ 'active' if l == lang else '' }}">
+                    % if l in website.subdomains
+                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}" lang="{{ l }}">{{
+                        locale.LANGUAGE_NAMES.get(l, l) }}</a>
+                    % else
+                    <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate" lang="{{ l }}">{{
+                        locale.LANGUAGE_NAMES.get(l, locale.languages_2.get(l, l.upper())) }}</a>
+                    % endif
+                </li>
+            % endfor
+            </ul>
+        </nav>
+    % elif lang != locale.language
+        <span class="pull-right btn-sm" title="{{ _(
+                  'This profile is only available in {language}',
+                  language=language_name_in_current_locale
+              ) }}">{{ language_name_in_current_locale }}</span>
+    % endif
+% endif
+% endblock
+
 % block profile_btn
 % if user
-<div class="pull-right text-center">
+<div class="text-center">
 % if user.controls(participant)
     <p><a href="{{ participant.path('edit') }}" class="btn btn-primary btn-lg">{{ _("Edit") }}</a></p>
 % endif
 % if user.is_admin
     % set status = 'success' if not overrides else 'warning' if len(overrides) == 1 else 'danger'
     <p><a class="btn btn-default btn-lg" href="{{ participant.path('admin') }}">Admin</a></p>
-    <p class="text-center"
-        >Current isolation level: {{ len(participant.get_active_overrides()) }}</p>
+    <p>Current isolation level: {{ len(participant.get_active_overrides()) }}</p>
 % endif
 </div>
 % endif
@@ -61,28 +95,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block content
     % if statement
-        <h3 id="statement">{{ _("Statement") }}
-        % if len(langs) > 1
-        <span class="dropdown-hover pull-right">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                {{ locale.languages_2[lang] }} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-            % for l in langs
-                <li class="{{ 'active' if l == lang else '' }}">
-                    % if l in website.subdomains
-                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}">{{ locale.languages_2[l] }}</a>
-                    % else
-                    <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate">{{ locale.languages_2[l] }}</a>
-                    % endif
-                </li>
-            % endfor
-            </ul>
-        </span>
-        % elif lang != locale.language
-        <span class="pull-right btn-sm">{{ locale.languages_2[lang] }}</span>
-        % endif
-        </h3>
+        <h3 id="statement">{{ _("Statement") }}</h3>
         <section class="profile-statement" lang="{{ lang }}">
             {{ statement }}
         </section>

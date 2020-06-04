@@ -11,11 +11,11 @@
 <div class="content-with-nav tabs-left">
 % if request.path.raw != '/explore/'
     % from "templates/macros/nav.html" import nav_explore with context
-    <div class="nav-col">
+    <nav class="nav-col">
         <input id="subnav-explore" class="subnav-toggler sr-only" type="checkbox" />
         <label for="subnav-explore">{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></label>
         <ul class="nav nav-tabs-left text-center">{{ nav_explore() }}</ul>
-    </div>
+    </nav>
 % endif
     <div class="content-col">{% block content %}{% endblock %}</div>
 </div>

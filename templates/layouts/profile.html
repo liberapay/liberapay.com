@@ -12,6 +12,7 @@
 <div class="container">
 <div class="row">
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    {% block profile_alternates %}{% endblock %}
 % if participant.accepts_tips
     <div class="profile-header">
         {{ avatar_img(participant, size=120) }}
@@ -20,7 +21,7 @@
         % else
             <h1>{{ participant.username }}</h1>
         % endif
-        <p class="summary">{{ summary or '' }}</p>
+        <p class="summary" lang="{{ lang or '' }}">{{ summary or '' }}</p>
     </div>
 % else
     <div class="panel panel-default profile-box">
@@ -56,9 +57,7 @@
     </div>
 % endif
 </div>
-<div class="col-md-1 col-lg-2">
-{% block profile_btn %}{% endblock %}
-</div>
+<div class="col-md-offset-1 col-md-10 col-lg-offset-0 col-lg-2">{% block profile_btn %}{% endblock %}</div>
 </div>
 </div>
 % if participant.accepts_tips

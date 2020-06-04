@@ -63,7 +63,7 @@ Liberapay.init = function() {
         }
     });
 
-    $('.navbar .dropdown-hover').removeClass('dropdown-hover');
+    $('.dropdown.dropdown-hover').removeClass('dropdown-hover');
 
     $('.dropdown-toggle-form').click(function() {
         var $this = $(this);

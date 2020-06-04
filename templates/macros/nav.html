@@ -24,12 +24,13 @@
                     % if options['role']
                         <div class="dropdown-menu" role="{{ options['role'] }}">{{ options['dropdown'] }}</div>
                     % else
-                        <ul class="dropdown-menu" role="menu">{{ options['dropdown'] }}</ul>
+                        <ul class="dropdown-menu">{{ options['dropdown'] }}</ul>
                     % endif
                 </div>
             % elif options['subnav']
                 % if options['togglable']
-                    <input id="subnav-{{ id(item) }}" class="subnav-toggler sr-only" type="checkbox" {% if active %} checked {% endif %} />
+                    <input id="subnav-{{ id(item) }}" class="subnav-toggler sr-only" type="checkbox" {% if active %} checked {% endif %}
+                           aria-label="{{ _('Show the {submenu_label} submenu', submenu_label=item[1]) }}" />
                     <label for="subnav-{{ id(item) }}">{{ icon }} {{ item[1] }} <span class="caret"></span></label>
                     <ul class="nav level2 togglable">{{ options['subnav'] }}</ul>
                 % else

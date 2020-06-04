@@ -9,11 +9,11 @@
         <span class="text">{{ locale.language_name }}</span>
         <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+    <ul class="dropdown-menu dropdown-menu-right">
     % for l_completion, l_code, l_name, l_url in website.lang_list
         <li {% if l_code == locale.language %} class="active" {% endif %}
             ><a href="{{ l_url }}{{ request.line.uri.decoded }}" rel="alternate" hreflang="{{ l_code }}"
-                >{{ l_name }}{% if l_completion <= 0.99 %} &nbsp; <small>{{
+                ><span lang="{{ l_code }}">{{ l_name }}</span>{% if l_completion <= 0.99 %} &nbsp; <small>{{
                     _("({x_percent} translated)", x_percent=locale.format_percent(l_completion))
                 }}</small>{% endif %}</a></li>
     % endfor

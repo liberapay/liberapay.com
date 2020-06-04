@@ -201,7 +201,8 @@ title = _("Funding your donations")
                     % endif
                 </h4>
                 % if allow_stripe_card
-                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?{{ payment.beneficiary }}&amp;method=card"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?{{ payment.beneficiary }}&amp;method=card"
+                    ><span class="sr-only">{{ _("Pay by card") }}</span></a>
                 % endif
             </div>
         </div>
@@ -220,7 +221,8 @@ title = _("Funding your donations")
                     % endif
                 </h4>
                 % if possible
-                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?{{ payment.beneficiary }}&amp;method=sdd"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/stripe/') }}?{{ payment.beneficiary }}&amp;method=sdd"
+                    ><span class="sr-only">{{ _("Pay by direct debit") }}</span></a>
                 % endif
             </div>
         </div>
@@ -242,7 +244,8 @@ title = _("Funding your donations")
                     % endif
                 </h4>
                 % if allow_paypal
-                <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?{{ payment.beneficiary }}"></a>
+                <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?{{ payment.beneficiary }}"
+                    ><span class="sr-only">{{ _("Pay with PayPal") }}</span></a>
                 % endif
             </div>
         </div>

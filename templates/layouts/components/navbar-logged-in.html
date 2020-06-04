@@ -3,10 +3,11 @@
 <li class="dropdown dropdown-hover">
 <button class="dropdown-toggle navbar-btn" type="button"
         data-toggle="dropdown">
-    {{ avatar_img(user, size=28) }}
+    <div class="inline-block" aria-hidden="true">{{ avatar_img(user, size=28) }}</div>
+    <span class="sr-only">{{ _("Your account") }}</span>
     <span class="caret"></span>
 </button>
-<ul class="dropdown-menu dropdown-menu-right" role="menu">
+<ul class="dropdown-menu dropdown-menu-right">
     <li><a href="/{{ user.username }}/">{{ _("Profile") }}</a></li>
     <li><a href="/{{ user.username }}/giving/">{{ _("Giving") }}</a></li>
     <li class="level2"><a href="/{{ user.username }}/routes/">{{ _("Payment Instruments") }}</a></li>
