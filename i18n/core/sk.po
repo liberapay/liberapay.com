@@ -465,6 +465,10 @@ msgstr "Ak ste nautorizovali túto platbu, dajte nám vedieť, preplatíme ju."
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
 msgstr "Po spracovaní by táto platba mala byť na Vašom výpise z bankového účtu uvedená ako \"{descriptor}\"."
 
+#, python-brace-format
+msgid "Processing this kind of payment takes {timedelta} on average."
+msgstr ""
+
 msgid "Your payment has succeeded"
 msgstr "Vaša platba bola úspešne zrealizovaná"
 
@@ -2269,6 +2273,13 @@ msgstr "Preskúmajte tímy"
 msgid "About teams"
 msgstr "O tímoch"
 
+#, python-brace-format
+msgid ""
+"When you modify your username, the web address of your profile changes accordingly. A redirect from the old URL to the new one is put in place, but any user can remove it by claiming your old username, so you should update all the links to your profile that you've placed on other websites, unless those links contain your immutable account ID ({account_id}) instead of your username.\n"
+"\n"
+"Are you sure you want to change your username?"
+msgstr ""
+
 msgid "Username"
 msgstr "Uživateľské meno"
 
@@ -2281,9 +2292,6 @@ msgstr "Maximálna dĺžka je {0}."
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Dovolené znaky: latinka písmená a čísla, bodky (.), pomlčky (-), a podtržníky (_)."
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Zdielali ste odkazy na Liberapay na iných stránkach? Nezabudnite tieto odkazy updaviť!"
 
 msgid "Name (optional)"
 msgstr "Názov (volitelný)"
@@ -4100,17 +4108,20 @@ msgstr "Odznaky z {link_open}shields.io{link_close}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Použite tieto kódy aby ste pridali odznak na vašu web stránku alebo súbor README:"
 
-msgid "To contact us privately:"
-msgstr "Kontaktujte nás sukromne:"
+msgid "To contact the Liberapay team privately:"
+msgstr ""
 
 msgid "Send us an email"
 msgstr "Pošlite nám email"
 
-msgid "We are currently able to answer in English and French."
-msgstr "V súčasnej dobe sme schopný odpovedať v angličtine a francúžtine."
+msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
+msgstr ""
 
 msgid "We currently don't have a phone number."
 msgstr "V súčasnej dobe nemáme telefónne číslo."
+
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr ""
 
 msgid "To report a problem or make a suggestion in English:"
 msgstr "Nahlásiť chybu alebo námet v angličtine:"
@@ -4416,6 +4427,9 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr "Robíme všetko preto, aby sme ochránili každého súkromie: nesnažíme sa sledovať ľudí čo navštevujú našu stránku, zbierame iba osobné údaje ktoré nevyhnutne nepotrebujeme a nepredávame ich žiadnej tretej strane."
 
 msgid "Cookies"
+msgstr ""
+
+msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
 msgstr ""
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."

@@ -453,6 +453,10 @@ msgstr "혹시 이 지불을 승인하지 않았다면 알려 주십시오. 환�
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
 msgstr "결제가 처리되면 은행 계좌에 \"{descriptor}\" 라는 내용으로 등장할 것입니다."
 
+#, python-brace-format
+msgid "Processing this kind of payment takes {timedelta} on average."
+msgstr ""
+
 msgid "Your payment has succeeded"
 msgstr "지불이 성공적으로 이루어졌습니다"
 
@@ -2230,6 +2234,13 @@ msgstr "팀 둘러보기"
 msgid "About teams"
 msgstr "팀 소개"
 
+#, python-brace-format
+msgid ""
+"When you modify your username, the web address of your profile changes accordingly. A redirect from the old URL to the new one is put in place, but any user can remove it by claiming your old username, so you should update all the links to your profile that you've placed on other websites, unless those links contain your immutable account ID ({account_id}) instead of your username.\n"
+"\n"
+"Are you sure you want to change your username?"
+msgstr ""
+
 msgid "Username"
 msgstr "사용자 이름"
 
@@ -2242,9 +2253,6 @@ msgstr "최댓값은 {0}입니다."
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "허용되는 단어: 라틴 알파벳과 숫자, 온점(.), 대시 (-), 언더바(_)."
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "혹시 다른 사이트에서 Liberapay 프로필 페이지를 링크하신 적이 있으신가요? 그 링크를 업데이트해주세요!"
 
 msgid "Name (optional)"
 msgstr "이름 (선택)"
@@ -4019,17 +4027,20 @@ msgstr "{link_open}shields.io{link_close} 제공 뱃지"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "웹사이트나 README에 다음 코드 스니핏을 사용해 뱃지를 추가하세요:"
 
-msgid "To contact us privately:"
-msgstr "Liberapay에 연락하려면:"
+msgid "To contact the Liberapay team privately:"
+msgstr ""
 
 msgid "Send us an email"
 msgstr "이메일을 보내세요"
 
-msgid "We are currently able to answer in English and French."
-msgstr "현재는 영어 및 프랑스어로만 질의에 응답할 수 있습니다."
+msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
+msgstr ""
 
 msgid "We currently don't have a phone number."
 msgstr "현재는 전화번호가 없습니다."
+
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr ""
 
 msgid "To report a problem or make a suggestion in English:"
 msgstr "영어로 문제를 보고하거나 제안할 사항이 있다면:"
@@ -4326,6 +4337,9 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr "저희는 모두의 개인정보를 보호하기 위해 최선을 다합니다: 저희 웹사이트를 방문하는 사용자를 추적하지 않으며, 정말 필요한 정보만을 수집하고, 이 정보를 팔지 않습니다."
 
 msgid "Cookies"
+msgstr ""
+
+msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
 msgstr ""
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."

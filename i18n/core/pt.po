@@ -459,6 +459,10 @@ msgstr "Se você não autorizou o pagamento, nos avise para que reembolsemos."
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
 msgstr "Assim que o pagamento for processado, ele aparecerá no seu extrato bancário como “{descriptor}”."
 
+#, python-brace-format
+msgid "Processing this kind of payment takes {timedelta} on average."
+msgstr ""
+
 msgid "Your payment has succeeded"
 msgstr "Seu pagamento foi realizado com sucesso"
 
@@ -2250,6 +2254,13 @@ msgstr "Ver equipes"
 msgid "About teams"
 msgstr "Sobre as equipes"
 
+#, python-brace-format
+msgid ""
+"When you modify your username, the web address of your profile changes accordingly. A redirect from the old URL to the new one is put in place, but any user can remove it by claiming your old username, so you should update all the links to your profile that you've placed on other websites, unless those links contain your immutable account ID ({account_id}) instead of your username.\n"
+"\n"
+"Are you sure you want to change your username?"
+msgstr ""
+
 msgid "Username"
 msgstr "Nome de usuário"
 
@@ -2262,9 +2273,6 @@ msgstr "Tamanho máximo é {0}."
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Caracteres permitidos: alfanuméricos latinos, pontos (.), hífens ( - ) e underline (_)."
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "Você divulgou seu Liberapay em outros lugares? Lembre-se de manter o link atualizado!"
 
 msgid "Name (optional)"
 msgstr "Nome (opcional)"
@@ -4060,17 +4068,20 @@ msgstr "Placas de {link_open}Shields.io{link_close}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Use estes snippets de código para adicionar uma placa ao seu site ou README:"
 
-msgid "To contact us privately:"
-msgstr "Para entrar em contato em particular:"
+msgid "To contact the Liberapay team privately:"
+msgstr ""
 
 msgid "Send us an email"
 msgstr "Envie-nos um e-mail"
 
-msgid "We are currently able to answer in English and French."
-msgstr "Somos capazes de responder em inglês e francês."
+msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
+msgstr ""
 
 msgid "We currently don't have a phone number."
 msgstr "No momento não temos um número de telefone."
+
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr ""
 
 msgid "To report a problem or make a suggestion in English:"
 msgstr "Para relatar um problema ou fazer uma sugestão em inglês:"
@@ -4371,6 +4382,9 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr "Fazemos o nosso melhor para proteger a privacidade de todos: Não tentamos rastrear as pessoas que visitam o nosso site, coletamos apenas dados pessoais que realmente precisamos, e não a vendemos para ninguém."
 
 msgid "Cookies"
+msgstr ""
+
+msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
 msgstr ""
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."

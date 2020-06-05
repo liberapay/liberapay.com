@@ -452,6 +452,10 @@ msgstr "若您未授權此次付款請即通知失我方，我們會退回它。
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
 msgstr "一旦此筆付款已被受理，它會在銀行記錄上顯示成\"{descriptor}\"。"
 
+#, python-brace-format
+msgid "Processing this kind of payment takes {timedelta} on average."
+msgstr ""
+
 msgid "Your payment has succeeded"
 msgstr "您的捐款支付已順利完成"
 
@@ -2229,6 +2233,13 @@ msgstr "探索團隊"
 msgid "About teams"
 msgstr "關於團隊"
 
+#, python-brace-format
+msgid ""
+"When you modify your username, the web address of your profile changes accordingly. A redirect from the old URL to the new one is put in place, but any user can remove it by claiming your old username, so you should update all the links to your profile that you've placed on other websites, unless those links contain your immutable account ID ({account_id}) instead of your username.\n"
+"\n"
+"Are you sure you want to change your username?"
+msgstr ""
+
 msgid "Username"
 msgstr "用戶名稱"
 
@@ -2241,9 +2252,6 @@ msgstr "最大長度是 {0}。"
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "允许字符：拉丁字母及数字，点（.），横杠（-），及下划线（_）。"
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
-msgstr "你是否從其它的網站連到自己的Liberapay介紹頁？確認更新了這些連結！"
 
 msgid "Name (optional)"
 msgstr "名字（可选）"
@@ -4018,17 +4026,20 @@ msgstr "{link_open}Shields.io{link_close}的徽章"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "把這段徵章的代碼加到您的網站或說明檔："
 
-msgid "To contact us privately:"
-msgstr "私下連絡我們："
+msgid "To contact the Liberapay team privately:"
+msgstr ""
 
 msgid "Send us an email"
 msgstr "寄送電子郵件給我們"
 
-msgid "We are currently able to answer in English and French."
-msgstr "我們目前可使用英文和法文回覆。"
+msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
+msgstr ""
 
 msgid "We currently don't have a phone number."
 msgstr "我們目前沒有電話號碼。"
+
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr ""
 
 msgid "To report a problem or make a suggestion in English:"
 msgstr "要用英文回報問題或是提建議："
@@ -4326,6 +4337,9 @@ msgstr "我们尽所能来保护大家的隐私：我们不尝试跟踪我们网
 
 msgid "Cookies"
 msgstr "Cookies"
+
+msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
+msgstr ""
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
 msgstr ""

@@ -440,6 +440,10 @@ msgstr ""
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
 msgstr ""
 
+#, python-brace-format
+msgid "Processing this kind of payment takes {timedelta} on average."
+msgstr ""
+
 msgid "Your payment has succeeded"
 msgstr ""
 
@@ -2230,6 +2234,13 @@ msgstr ""
 msgid "About teams"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"When you modify your username, the web address of your profile changes accordingly. A redirect from the old URL to the new one is put in place, but any user can remove it by claiming your old username, so you should update all the links to your profile that you've placed on other websites, unless those links contain your immutable account ID ({account_id}) instead of your username.\n"
+"\n"
+"Are you sure you want to change your username?"
+msgstr ""
+
 msgid "Username"
 msgstr ""
 
@@ -2241,9 +2252,6 @@ msgid "Maximum length is {0}."
 msgstr ""
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
-msgstr ""
-
-msgid "Have you linked to your Liberapay profile from other websites? Be sure to update those links!"
 msgstr ""
 
 msgid "Name (optional)"
@@ -4040,16 +4048,19 @@ msgstr ""
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr ""
 
-msgid "To contact us privately:"
+msgid "To contact the Liberapay team privately:"
 msgstr ""
 
 msgid "Send us an email"
 msgstr ""
 
-msgid "We are currently able to answer in English and French."
+msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr ""
 
 msgid "We currently don't have a phone number."
+msgstr ""
+
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr ""
 
 msgid "To report a problem or make a suggestion in English:"
@@ -4350,6 +4361,9 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr ""
 
 msgid "Cookies"
+msgstr ""
+
+msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
 msgstr ""
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
