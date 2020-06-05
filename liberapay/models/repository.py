@@ -92,7 +92,7 @@ def refetch_repos():
     website.db.hit_rate_limit(rl_prefix, rl_key)
     participant = Participant.from_id(repo.participant)
     account = participant.get_account_elsewhere(repo.platform)
-    if not account:
+    if not account or account.missing_since is not None:
         return
     sess = account.get_auth_session()
     logger.debug(
