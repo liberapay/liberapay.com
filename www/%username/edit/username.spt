@@ -8,6 +8,18 @@ errors = []
 if request.method == 'POST':
     new_username = request.body['username'].strip()
     if new_username != participant.username:
+        if participant.username[0] != '~' and request.body.get('confirmed') != 'true':
+            msg = _(
+                "When you modify your username, the web address of your profile "
+                "changes accordingly. A redirect from the old URL to the new one "
+                "is put in place, but any user can remove it by claiming your old "
+                "username, so you should update all the links to your profile that "
+                "you've placed on other websites, unless those links contain your "
+                "immutable account ID ({account_id}) instead of your username.\n\n"
+                "Are you sure you want to change your username?"
+                , account_id=participant.id
+            )
+            raise response.render('simplates/confirm.spt', state, cls='warning', msg=msg)
         try:
             participant.change_username(new_username, recorder=user)
         except UsernameError as r:
@@ -52,13 +64,8 @@ subhead = _("Username")
                 _("Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_).")
             }}</p>
         </div>
-        % if _username
-        <div class="alert alert-warning">{{
-            _("Have you linked to your Liberapay profile from other websites? Be sure to update those links!")
-        }}</div>
-        % endif
 
-        <h4 class="no-margin-top">{{ _("Name (optional)") }}</h4>
+        <h4>{{ _("Name (optional)") }}</h4>
         <p>{{ _(
             "A name to show alongside your username on your public profile page. "
             "It doesn't have to be your legal name."

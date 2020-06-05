@@ -52,12 +52,26 @@ class TestPrivacy(Harness):
 
 class TestUsername(Harness):
 
+    def test_participant_can_set_username(self):
+        alice = self.make_participant(None)
+        r = self.client.POST(
+            f'/~{alice.id}/edit/username', {'username': 'alice'},
+            auth_as=alice, raise_immediately=False
+        )
+        assert r.code == 302
+        assert r.headers[b'Location'].startswith(b'/alice/edit/username')
+        alice = alice.refetch()
+        assert alice.username == 'alice'
+
     def change_username(self, new_username, auth_as='alice'):
         if auth_as:
             auth_as = self.make_participant(auth_as)
 
-        r = self.client.POST('/alice/edit/username', {'username': new_username},
-                             auth_as=auth_as, raise_immediately=False)
+        r = self.client.POST(
+            '/alice/edit/username',
+            {'username': new_username, 'confirmed': 'true'},
+            auth_as=auth_as, raise_immediately=False,
+        )
         return r
 
     def test_participant_can_change_their_username(self):
@@ -110,6 +124,10 @@ class TestUsername(Harness):
         bob = self.make_participant('bob')
         team.add_member(bob)
         r = self.client.POST('/team/edit/username', {'username': 'Team'},
+                             auth_as=alice, raise_immediately=False)
+        assert r.code == 200
+        assert ">Confirm</button>" in r.text
+        r = self.client.POST('/team/edit/username', {'username': 'Team', 'confirmed': 'true'},
                              auth_as=alice, raise_immediately=False)
         assert r.code == 302
         assert r.headers[b'Location'].startswith(b'/Team/edit/username')
