@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '126'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '127'::jsonb);
 
 
 -- app configuration
@@ -147,6 +147,7 @@ CREATE TABLE elsewhere
 , domain                text            NOT NULL -- NULL would break the unique indexes
 , info_fetched_at       timestamptz     NOT NULL DEFAULT current_timestamp
 , description           text
+, missing_since         timestamptz
 , UNIQUE (participant, platform)
 , CONSTRAINT user_id_chk CHECK (user_id IS NOT NULL OR domain <> '' AND user_name IS NOT NULL)
 );

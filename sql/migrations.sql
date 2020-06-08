@@ -2601,3 +2601,6 @@ CREATE OR REPLACE VIEW current_tips AS
 
 -- migration #126
 INSERT INTO app_conf VALUES ('check_email_servers', 'true'::jsonb);
+
+-- migration #127
+ALTER TABLE elsewhere ADD COLUMN missing_since timestamptz;
