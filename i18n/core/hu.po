@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Hungarian "
-"<https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2020-06-09 11:12+0000\n"
+"Last-Translator: Balázs Meskó <meskobalazs@mailbox.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.1-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -22,16 +24,16 @@ msgstr "Problémája akadt? Ez az e-mail automatikusan lett küldve, de kapcsola
 msgid "Change your email settings"
 msgstr "E-mail beállítások módosítása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It's time to renew your donation to {username} on Liberapay"
-msgstr "Ideje megújítania a következőnek küldendő adományát a Liberapay oldalán: {username}"
+msgstr "Ideje megújítania a következőnek küldendő adományát a Liberapay-oldalán: {username}"
 
 msgid "It's time to renew your donations on Liberapay"
-msgstr "Ideje megújítania adományait a Liberapay oldalán"
+msgstr "Ideje megújítania adományait a Liberapay-oldalán"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr "Az Ön {amount} összegű, a következőnek szánt adománya fizetésre várakozik: {recipient}."
+msgstr "Az Ön {amount} összegű, a következőnek szánt adománya fizetésre vár: {recipient}."
 
 #, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
@@ -383,10 +385,10 @@ msgid "View receipt"
 msgstr "Számla megtekintése"
 
 msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Az Ön közvetlen beszedési megbízása a Liberapay tárcájába meghiúsult"
+msgstr "A közvetlen átutalás a Liberapay-tárcájába sikertelen"
 
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Az Ön közvetlen beszedési megbízása a Liberapay tárcájába sikerült"
+msgstr "A közvetlen átutalás a Liberapay-tárcájába sikeres"
 
 msgid "Your payment has failed"
 msgstr "A fizetése meghiúsult"
@@ -431,19 +433,19 @@ msgid "It can take several business days for the funds to reappear in your bank 
 msgstr "Több munkanapot is igénybe vehet amíg a pénz újra megjelenik az Ön bankszámláján."
 
 msgid "Your bank account is going to be debited"
-msgstr "Az Ön bankszámlája terhelve lesz"
+msgstr "A bankszámlája terhelve lesz"
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr "Kezdeményeztünk egy közvetlen terhelést {money_amount}-ra az Ön {bank_name} számlájára ({partial_account_number})."
+msgstr "Kezdeményeztünk egy {money_amount} összegű terhelést a(z) {bank_name} számlájára ({partial_account_number})."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr "Kezdeményeztünk egy közvetlen terhelést {money_amount}-ra az Ön bankszámlájáról ({partial_account_number})."
+msgstr "Kezdeményeztünk egy {money_amount} összegű terhelést a bankszámlájára ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "Ez a művelet a(z) {link_start}{mandate_id} megbízás{link_end} alapján megy végbe, amelyet Ön {acceptance_date} napján jóvá hagyott, ezzel felhatalmazva a Liberapay-t (SEPA hitelező {creditor_identifier}), hogy utasításokat küldjön az Ön bankjának a számlája terhelésére, illetve az Ön bankját, hogy megterhelje a számláját az utasításoknak megfelelően."
+msgstr "Ez a művelet a(z) {link_start}{mandate_id} azonosítójú megbízás{link_end} alapján megy végbe, amelyet {acceptance_date} napján jóváhagyott, ezzel felhatalmazva a Liberapayt ({creditor_identifier} azonosítójú SEPA-hitelező) arra, hogy utasításokat küldjön a bankjának, hogy azoknak megfelelően terheljék meg a számláját."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
 msgstr "Amennyiben nem Ön kezdeményezte ezt a fizetést, kérjük tudassa velünk, vissza fogjuk téríteni."
@@ -646,15 +648,15 @@ msgstr "A(z) \"{0}\" csapat át lett nevezve \"{1}\"-ról {2} által."
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] "Liberapay adomány megújítás: a közelgő terhelések összege {money_amount}"
+msgstr[0] "Liberapay-adomány megújítása: a közelgő terhelések összege {money_amount}"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr "Ez egy emlékeztető arról, hogy le fogunk vonni {amount} összeget az alapértelmezett fizetési eszközéről, {debit_date} napján, hogy meg tudjuk újítani a támogatását {recipient} részére."
+msgstr "Ez egy emlékeztető arról, hogy le fogunk vonni {amount} összeget az alapértelmezett fizetési eszközéről, {debit_date} napján, hogy meg tudjuk újítani a következőnek küldött támogatását: {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr "Ez egy emlékeztető arról, hogy le fogunk vonni {amount} összeget az alapértelmezett fizetési eszközéről, {debit_date} napján, hogy meg tudjuk újítani a támogatásait {recipients} részeire."
+msgstr "Ez egy emlékeztető arról, hogy le fogunk vonni {amount} összeget az alapértelmezett fizetési eszközéről, {debit_date} napján, hogy meg tudjuk újítani a következőknek küldendő támogatásait: {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
@@ -1712,9 +1714,8 @@ msgstr "Küldetés teljesítve!"
 msgid "View income shares"
 msgstr "Bevételek részesedéseinek megtekintése"
 
-#, fuzzy
 msgid "(fork)"
-msgstr "(származtatás)"
+msgstr "(fork)"
 
 msgid "Updated this week"
 msgstr "Frissítve ezen a héten"
@@ -2164,10 +2165,10 @@ msgstr "Az Ön adatlapja frissítve lett."
 msgid "You don't have any {platform} account connected to your profile."
 msgstr "Önnek nincs {platform} fiókja csatolva az adatlapjához."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
-msgstr[0] "Importálva lett egy {n} darab tárolóról készült lista az Ön {platform} fiókjából, {timespan_ago}."
+msgstr[0] "{n} tároló került importálásra az Ön {platform}-fiókjából, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "Nincs találat tárolókra."
@@ -2493,7 +2494,7 @@ msgid "For now this donation can only be renewed externally through PayPal."
 msgstr "Jelenleg ez az adomány kizárólag külsőleg, a PayPal-on keresztül újítható meg."
 
 msgid "Please choose a payment method:"
-msgstr "Kérjük, válasszon egy fizetési módot:"
+msgstr "Válasszon fizetési módot:"
 
 msgid "Card"
 msgstr "Kártya"
@@ -2976,7 +2977,7 @@ msgid "Fees"
 msgstr "Illetékek"
 
 msgid "Method"
-msgstr ""
+msgstr "Mód"
 
 msgid "automatic charge"
 msgstr ""
@@ -3153,9 +3154,9 @@ msgstr "liberapay_nyugta_{number}"
 msgid "Receipt"
 msgstr "Nyugta"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr "Megerősítjük a nyugtát a {payer} általi fizetésről {date} napján."
+msgstr "Megerősítjük {payer} átutalásának nyugtáját, az utalás ideje: {date}."
 
 #, python-brace-format
 msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
@@ -3230,11 +3231,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
-msgstr ""
+msgstr "Fizetési mód: következő számokkal végződő {brand} kártya: {last4}"
 
 #, python-brace-format
 msgid "Payment method: direct debit of bank account {partial_account_number}"
-msgstr ""
+msgstr "Fizetési mód: közvetlen terhelés a(z) {partial_account_number} bankszámlán"
 
 #, python-brace-format
 msgid "Settlement date: {0}"
@@ -3291,11 +3292,11 @@ msgstr "Mennyiség"
 msgid "Percentages"
 msgstr "Százalékok"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{x_percent} of donations"
 msgstr "Az adományok {x_percent}-a"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{x_percent} of total income"
 msgstr "A teljes bevétel {x_percent}-a"
 
@@ -3383,7 +3384,7 @@ msgid "Add a bank account"
 msgstr ""
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "Önnek még mindig van pénze ebben a Liberapay fiókban, kérjük válasszon egy kifizetési módot alább, vagy lépjen kapcsolatba az ügyfélszolgálattal."
+msgstr "Még mindig van pénze ebben a Liberapay-fiókban, válasszon egy visszatérítési módot alább, vagy lépjen kapcsolatba az ügyfélszolgálattal."
 
 msgid "Close Account"
 msgstr "Fiók Bezárása"
@@ -3472,17 +3473,17 @@ msgstr "Ön támogatja {0}-val havonta {1}-t. Köszönjük!"
 msgid "You are now donating {0} per year to {1}. Thank you!"
 msgstr "Ön támogatja {0}-val évente {1}-t. Köszönjük!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have now pledged to donate {0} per week to {1}. Thank you!"
-msgstr "Ön most ígéretet tett, hogy adományoz {0}-t hetente {1}-nak. Köszönjük!"
+msgstr "Ön most ígéretet tett, hogy hetente {0} összeget adományoz a következőnek: {1}. Köszönjük!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have now pledged to donate {0} per month to {1}. Thank you!"
-msgstr "Ön most ígéretet tett, hogy adományoz {0}-t havonta {1}-nak. Köszönjük!"
+msgstr "Ön most ígéretet tett, hogy havonta {0} összeget adományoz a következőnek: {1}. Köszönjük!"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
-msgstr "Ön most ígéretet tett, hogy adományoz {0}-t évente {1}-nak. Köszönjük!"
+msgstr "Ön most ígéretet tett, hogy évente {0} összeget adományoz a következőnek: {1}. Köszönjük!"
 
 msgid "The donation amount is missing."
 msgstr "Az adomány összege hiányzik."
@@ -3490,9 +3491,9 @@ msgstr "Az adomány összege hiányzik."
 msgid "This donation doesn't exist or has already been stopped."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation to {0} has been stopped."
-msgstr "Az Ön adományozása {0}-nak le lett állítva."
+msgstr "A következőnek küldendő adománya le lett állítva: {0}."
 
 msgid "Your wallet is empty."
 msgstr ""
@@ -3500,9 +3501,9 @@ msgstr ""
 msgid "Export History"
 msgstr "Előzmények Exportálása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
-msgstr "Önnek megközelítőleg {converted_amount}-ja van a tárcájában (pontosan: {exact_amounts})."
+msgstr "Körülbelül {converted_amount} van a fiókjában (pontosan: {exact_amounts})."
 
 #, python-brace-format
 msgid "You have {money_amount} in your account."
@@ -3519,10 +3520,10 @@ msgstr "Ez az oldal csak a Mangopay által feldolgozott átutalásokat mutatja, 
 msgid "Account Statement"
 msgstr "Számlakivonat"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
-msgstr[0] "{money_amount} átutalás {n} embernek"
+msgstr[0] "{money_amount} összegű átutalás {n} embernek"
 
 msgid "Export as CSV"
 msgstr "Exportálás CSV formátumban"
@@ -3532,10 +3533,10 @@ msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
 msgstr[0] "{money_amount} költség visszatérítés {n} embernek"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{money_amount} in donations from {n} donor"
 msgid_plural "{money_amount} in donations from {n} donors"
-msgstr[0] "{money_amount} átutalás {n} adományozótól"
+msgstr[0] "{money_amount} összegű átutalás {n} adományozótól"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
@@ -3577,14 +3578,13 @@ msgstr ""
 msgid "donation refund"
 msgstr "adomány visszatérítés"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
-msgstr "{link_open}költség #{invoice_id}{link_close} visszatérítése {payer}-tól"
+msgstr "{link_open}költség #{invoice_id}{link_close} visszatérítése a következőtől: {payer}"
 
 msgid "one-off donation from someone closing their account"
 msgstr "egyszeri adomány valakitől, aki bezárta a fiókját"
 
-#, fuzzy
 msgid "chargeback"
 msgstr "visszatérítés"
 
@@ -3597,9 +3597,9 @@ msgstr ""
 msgid "fee refund"
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "final gift to {0}"
-msgstr "végső ajándék {0}-nak"
+msgstr "végső ajándék a következőnek: {0}"
 
 msgid "refund of anonymous donation"
 msgstr "névtelen adomány visszafizetés"
@@ -3639,12 +3639,12 @@ msgstr "Pénzt kéne tennie a tárcájába, hogy megalapozhassa az adományait."
 msgid "You need to transfer money to your wallet to fund your donations in {currency}."
 msgstr "Pénzt kéne küldenie a tárcájába, hogy megalapozhassa a támogatásait {currency}-ban."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "Önnek függőben van egy \"{payment_method}\" fizetése {money_amount}-val. {link_open}Részletek{link_close}"
+msgstr "Egy {money_amount} összegű függőben lévő {payment_method} fizetése van. {link_open}Részletek{link_close}"
 
 msgid "Please choose a payment method to add money:"
-msgstr "Kérjük válasszon egy fizetési módot pénz hozzáadásához:"
+msgstr "Válasszon egy fizetési módot pénz hozzáadásához:"
 
 msgid "Easy and instantaneous"
 msgstr "Könnyű és azonnali"
@@ -3673,7 +3673,7 @@ msgid "You haven't set up any donations yet, once you do you'll be prompted to a
 msgstr "Ön még nem állított be egyetlen adományozást sem, amikor megteszi, akkor a rendszer kérni fogja, hogy tegyen pénzt a tárcájába."
 
 msgid "About Fees"
-msgstr "A Díjakról"
+msgstr "A díjakról"
 
 #, python-brace-format
 msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
@@ -4451,7 +4451,6 @@ msgstr ""
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr ""
 
-#, fuzzy
 msgid "weeks"
 msgstr "hét"
 
@@ -4855,7 +4854,7 @@ msgid "1. Set up a donation"
 msgstr ""
 
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, montly, or yearly), and a renewal method (manual or automatic)."
-msgstr "Keressen valakit, akinek pénzt szeretne adni, majd válasszon összeget, időszakot (heti, havi vagy éves), és egy megújítási metódust (manuális vagy automatikus)."
+msgstr "Keressen valakit, akinek pénzt szeretne adni, majd válasszon összeget, időszakot (heti, havi vagy éves), és egy megújítási módot (kézi vagy automatikus)."
 
 msgid "2. Fund your donation"
 msgstr ""
