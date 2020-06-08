@@ -172,7 +172,12 @@ class AccountElsewhere(Model):
                     raise
 
         # Return account after propagating avatar_url to participant
-        account.participant.update_avatar()
+        account.participant.set_attributes(avatar_url=cls.db.one("""
+            UPDATE participants
+               SET avatar_url = coalesce(%s, avatar_url)
+             WHERE id = %s
+         RETURNING avatar_url
+        """, (account.avatar_url, account.participant.id)))
         return account
 
 
@@ -300,7 +305,17 @@ class AccountElsewhere(Model):
             type_of_id, id_value = 'user_name', self.user_name
         else:
             raise UnableToRefreshAccount(self.id, self.platform)
-        info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
+        try:
+            info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
+        except UserNotFound:
+            if not self.missing_since:
+                self.db.run("""
+                    UPDATE elsewhere
+                       SET missing_since = current_timestamp
+                     WHERE id = %s
+                       AND missing_since IS NULL
+                """, (self.id,))
+            raise
         return self.upsert(info)
 
 
@@ -362,6 +377,7 @@ def refetch_elsewhere_data():
           FROM elsewhere e
           JOIN participants p ON p.id = e.participant
          WHERE e.info_fetched_at < now() - interval '90 days'
+           AND (e.missing_since IS NULL OR e.missing_since > (current_timestamp - interval '30 days'))
            AND (p.status = 'active' OR p.receiving > 0)
            AND (e.token IS NOT NULL OR e.platform <> 'google')
            AND check_rate_limit(%s || e.id::text, %s, %s)

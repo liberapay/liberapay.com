@@ -60,7 +60,7 @@ if platform:
         """, (locale.language, platform_name, last_shown, random, limit))
 
     get_other_platforms = lambda: [
-        (p.name, p.display_name) for p, d in platforms.values() if p.name != platform_name
+        p for p, d in platforms.values() if p.name != platform_name
     ]
 
     if not user.ANON:
@@ -70,6 +70,7 @@ title = _("Explore")
 subhead = _("Social Networks")
 
 [---] text/html
+% from "templates/macros/elsewhere.html" import platform_logo with context
 % from 'templates/macros/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/layouts/explore.html"
@@ -82,11 +83,11 @@ subhead = _("Social Networks")
     % for p, d in platforms.values()
         % set n_connected_accounts = d['n_connected_accounts']
         % if n_connected_accounts or p in website.friends_platforms
-        <div class="card card-default card-md card-narrow text-center">
-            <h2 class="text-info">{{ p.display_name }}</h2>
+        <div class="card card-default card-md card-narrow text-center overlaid">
+            <h2 class="text-info">{{ platform_logo(p) }}<br>{{ p.display_name }}</h2>
             <p>{{ ngettext("{n} connected account", "{n} connected accounts", n_connected_accounts) }}</p>
-            <a class="btn btn-info btn-lg" href="/explore/elsewhere/{{ p.name }}"
-                >{{ _("Explore {0}", p.display_name) }}</a>
+            <a class="overlay" href="/explore/elsewhere/{{ p.name }}" draggable="false"
+                ><span class="sr-only">{{ _("Explore {0}", p.display_name) }}</span></a>
         </div>
         % endif
     % endfor
@@ -151,8 +152,9 @@ subhead = _("Social Networks")
     <p>{{ _("Explore other platforms:") }}</p>
     % from "templates/macros/nav.html" import nav with context
     <nav class="buttons">
-    % for name, display_name in get_other_platforms()
-        <a class="btn btn-default btn-lg" href="/explore/elsewhere/{{ name }}">{{ display_name }}</a>
+    % for platform in get_other_platforms()
+        <a class="btn btn-default" href="/explore/elsewhere/{{ platform.name }}">{{
+            platform_logo(platform) }}<br>{{ platform.display_name }}</a>
     % endfor
     </nav>
 

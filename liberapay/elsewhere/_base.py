@@ -231,7 +231,7 @@ class Platform(object):
         unique non-empty value, except when `source` doesn't match the account's
         domain, in which case `user_id` is `None`.
         """
-        r = UserInfo(platform=self.name)
+        r = UserInfo(platform=self.name, missing_since=None)
         info = self.x_user_info(r, info, info)
         if info is None:
             return
