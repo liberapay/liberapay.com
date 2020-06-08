@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Portuguese "
-"<https://hosted.weblate.org/projects/liberapay/core/pt/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2020-06-09 11:12+0000\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/liberapay/core/pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.1-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -16,9 +18,8 @@ msgstr "A tradução em {language} ainda está incompleta."
 msgid "Greetings,"
 msgstr "Olá,"
 
-#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
-msgstr "Algo errado? Responda a este email para obter ajuda."
+msgstr "Algo errado? Este email foi enviado automaticamente, mas você pode nos contatar respondendo-o."
 
 msgid "Change your email settings"
 msgstr "Alterar configurações de e-mail"
@@ -234,7 +235,7 @@ msgstr "Renovação de donativo Liberapay: método de pagamento inválido"
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
 msgstr "Tem um pagamento de {amount} agendado para {payment_date} para renovar o donativo a {recipient}, mas não conseguimos processá‑lo porque falta um método de pagamento válido."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
 msgstr "Tem um pagamento de {amount} agendado para {payment_date} para renovar os donativos a {recipients}, mas não conseguimos processá‑lo porque falta um método de pagamento válido."
 
@@ -249,11 +250,11 @@ msgstr "As datas de pagamento, quantias e destinatários são:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {money_amount} para {recipient}"
 
 #, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: {money_amount} dividido entre {recipients}"
 
 msgid "Add a payment instrument"
 msgstr "Adicionar uma forma de pagamento"
@@ -398,13 +399,13 @@ msgstr "Pagamento por débito direto para sua carteira Liberapay realizado com s
 msgid "Your payment has failed"
 msgstr "Falha no pagamento"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Falha no pagamento de {money_amount} iniciado em {date} pelo Liberapay."
+msgstr "Falha no pagamento de {money_amount} iniciado hoje."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Falha no pagamento de {money_amount} iniciado em {date}."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -461,18 +462,18 @@ msgstr "Assim que o pagamento for processado, ele aparecerá no seu extrato banc
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Processar este tipo de pagamento leva {timedelta} em média."
 
 msgid "Your payment has succeeded"
 msgstr "Seu pagamento foi realizado com sucesso"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "Pagamento de {money_amount} iniciado em {date} pelo Liberapay realizado com sucesso."
+msgstr "O pagamento de {money_amount} iniciado hoje foi realizado com sucesso."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "O pagamento de {money_amount} iniciado em {date} foi realizado com sucesso."
 
 msgid "Thank you for this donation!"
 msgstr "Obrigado pela doação!"
@@ -493,71 +494,71 @@ msgid "Reject donations"
 msgstr "Rejeitar doações"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
-msgstr ""
+msgstr "Renovação de doações de Liberapay: seu próprio pagamento mudou"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr ""
+msgstr "Devido às alterações feitas por você ou por alguém a quem você doa, seu agendamento de pagamento foi alterado da seguinte forma:"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "O pagamento de {money_amount} agendado para {date} foi cancelado."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "O pagamento manual agendado para {date} foi cancelado."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr ""
+msgstr "Um novo pagamento de {money_amount} foi agendado para {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr ""
+msgstr "Um novo pagamento manual foi agendado para {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "O pagamento de {money_amount} agendado para {old_date} foi reagendado para {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "O pagamento manual agendado para {old_date} foi reagendado para {new_date}."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "A quantia do pagamento agendado para {date} foi alterada de {old_money_amount} para {new_money_amount}."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "O pagamento de {old_money_amount} agendado para {old_date} foi substituído por um pagamento de {new_money_amount} em {new_date}."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "O pagamento automático de {old_money_amount} agendado para {old_date} foi substituído por um pagamento manual em {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "O pagamento manual agendado para {old_date} foi substituído por um pagamento automático de {new_money_amount} em {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Você agora tem {n} pagamento agendado:"
+msgstr[1] "Você agora tem {n} pagamentos agendados:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: pagamento automático de {money_amount} para {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: pagamento automático de {money_amount} dividido entre {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: pagamento manual para {recipients}"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Gerenciar seu agendamento de pagamentos"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -581,11 +582,11 @@ msgstr "Em {date}, você prometeu doar {money_amount} para {user_name} se a pess
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
-msgstr ""
+msgstr "Temos o prazer de informar que {user_name} se juntou a Liberapay {time_ago}, como {liberapay_username}."
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
-msgstr ""
+msgstr "Consequentemente, um pagamento automático de {money_amount} foi agendado para {date}, para concretizar sua promessa."
 
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
