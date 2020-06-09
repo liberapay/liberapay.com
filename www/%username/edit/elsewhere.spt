@@ -9,7 +9,7 @@ subhead = _("Linked Accounts")
 [---] text/html
 % extends "templates/layouts/profile-edit.html"
 
-% from "templates/macros/elsewhere.html" import account_elsewhere with context
+% from "templates/macros/elsewhere.html" import account_elsewhere, auth_button, platform_logo with context
 
 % block form
 
@@ -19,10 +19,28 @@ subhead = _("Linked Accounts")
         "profile easier to find, and helps to demonstrate that you are who you "
         "claim to be."
     ) }}</p>
+    % if accounts
+    <p>{{ ngettext(
+        "You currently have {n} connected account:",
+        "You currently have {n} connected accounts:",
+        n=len(accounts),
+    ) }}
     <div class="accounts">
-        % for platform in website.platforms
-            {{ account_elsewhere(platform, accounts, edit=True) }}
+        % for account in accounts
+            {{ account_elsewhere(account, edit=True) }}
         % endfor
+    </div>
+    <br>
+    % endif
+
+    <h4>{{ _("Connect an account") }}</h4>
+    <div class="buttons">
+    % for platform in website.platforms
+        % set disabled = participant.kind == 'group' and platform.has_teams and not hasattr(platform, 'is_team_member')
+        % call auth_button(platform.name, 'connect', btn_cls='no-default-styles', form_cls='btn btn-default', participant=participant, disabled=disabled)
+            {{ platform_logo(platform) }}<br>{{ platform.display_name }}
+        % endcall
+    % endfor
     </div>
 
 % endblock

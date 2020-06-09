@@ -2176,6 +2176,8 @@ class Participant(Model, MixinTeam):
                  WHERE participant = %s
                    AND platform = %s
                    AND coalesce(user_id = %s, true)
+              ORDER BY id
+                 LIMIT 1
             """, (self.id, platform, user_id or None))
 
         if avatar_url and avatar_url != self.avatar_url and website.app_conf.check_avatar_urls:
@@ -3236,20 +3238,8 @@ class Participant(Model, MixinTeam):
     # Accounts Elsewhere
     # ==================
 
-    def get_account_elsewhere(self, platform):
-        """Return an AccountElsewhere instance.
-        """
-        return self.db.one("""
-
-            SELECT elsewhere.*::elsewhere_with_participant
-              FROM elsewhere
-             WHERE participant=%s
-               AND platform=%s
-
-        """, (self.id, platform))
-
-    def get_accounts_elsewhere(self):
-        """Return a dict of AccountElsewhere instances.
+    def get_accounts_elsewhere(self, platform=None, is_team=None):
+        """Return a sorted list of AccountElsewhere instances.
         """
         accounts = self.db.all("""
 
@@ -3257,10 +3247,12 @@ class Participant(Model, MixinTeam):
               FROM elsewhere e
               JOIN participants p ON p.id = e.participant
              WHERE e.participant = %s
+               AND coalesce(e.platform = %s, true)
+               AND coalesce(e.is_team = %s, true)
 
-        """, (self.id,))
-        accounts_dict = {account.platform: account for account in accounts}
-        return accounts_dict
+        """, (self.id, platform, is_team))
+        accounts.sort(key=lambda a: (website.platforms.index(a.platform), a.is_team, a.user_id))
+        return accounts
 
     def take_over(self, account, have_confirmation=False):
         """Given an AccountElsewhere or a tuple (platform_name, domain, user_id),
@@ -3351,41 +3343,12 @@ class Participant(Model, MixinTeam):
             # Save old tips so we can notify patrons that they've been claimed
             old_tips = other.get_tips_receiving() if other.status == 'stub' else None
 
-            # Make sure we have user confirmation if needed.
-            # ==============================================
-            # We need confirmation if any of these are true:
-            #
-            #   - the other participant is not a stub; we are taking the
-            #       account elsewhere away from another viable participant
-            #
-            #   - we already have an account elsewhere connected from the given
-            #       platform, and it will be handed off to a new stub
-            #       participant
-
+            # Make sure we have user confirmation if the other participant is not
+            # a stub; since we are taking the account elsewhere away from another
+            # viable participant.
             other_is_a_real_participant = other.status != 'stub'
-
-            we_already_have_that_kind_of_account = cursor.one("""
-                SELECT true
-                  FROM elsewhere
-                 WHERE participant=%s AND platform=%s
-            """, (self.id, platform), default=False)
-
-            need_confirmation = NeedConfirmation(
-                other_is_a_real_participant,
-                we_already_have_that_kind_of_account,
-            )
-            if need_confirmation and not have_confirmation:
-                raise need_confirmation
-
-            # Move any old account out of the way
-            if we_already_have_that_kind_of_account:
-                new_stub = Participant.make_stub(cursor)
-                cursor.run("""
-                    UPDATE elsewhere
-                       SET participant=%s
-                     WHERE platform=%s
-                       AND participant=%s
-                """, (new_stub.id, platform, self.id))
+            if other_is_a_real_participant and not have_confirmation:
+                raise NeedConfirmation()
 
             # Do the deal
             cursor.run("""
@@ -3470,16 +3433,17 @@ class Participant(Model, MixinTeam):
              LIMIT 20
         """, (self.id,))
 
-    def get_repos_on_platform(self, platform, limit=50, offset=None):
+    def get_repos_on_platform(self, platform, limit=50, offset=None, owner_id=None):
         return self.db.all("""
             SELECT r
               FROM repositories r
              WHERE r.participant = %s
                AND r.platform = %s
+               AND coalesce(r.owner_id = %s, true)
           ORDER BY r.is_fork ASC NULLS FIRST, r.last_update DESC
              LIMIT %s
             OFFSET %s
-        """, (self.id, platform, limit, offset))
+        """, (self.id, platform, owner_id, limit, offset))
 
 
     # More Random Stuff
@@ -3591,24 +3555,11 @@ class NeedConfirmation(Exception):
 
     """
 
-    def __init__(self, a, c):
-        self.other_is_a_real_participant = a
-        self.we_already_have_that_kind_of_account = c
-        self._all = (a, c)
+    __slots__ = ()
 
     def __repr__(self):
-        return "<NeedConfirmation: %r %r>" % self._all
+        return "<NeedConfirmation>"
     __str__ = __repr__
-
-    def __eq__(self, other):
-        return self._all == other._all
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __bool__(self):
-        return any(self._all)
-    __nonzero__ = __bool__
 
 
 def clean_up_closed_accounts():

@@ -9,7 +9,7 @@ participant = get_participant(state, restrict=True)
 accounts = participant.get_accounts_elsewhere()
 i = 0
 errors = []
-for account in accounts.values():
+for account in accounts:
     try:
         account.refresh_user_info()
     except Exception as e:

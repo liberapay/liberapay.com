@@ -117,7 +117,7 @@ else:
 title = "Email Domains"
 
 [---] text/html
-% from 'templates/macros/nav.html' import querystring_nav
+% from 'templates/macros/nav.html' import querystring_nav with context
 
 % extends "templates/layouts/admin.html"
 

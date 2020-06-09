@@ -39,14 +39,21 @@ if platform_name:
     if participant.kind == 'group' and not hasattr(platform, 'is_team_member'):
         raise response.error(400, "team repos are not implemented for platform '%s'" % platform_name)
 
-    account = participant.get_account_elsewhere(platform.name)
-    if account:
+    accounts = participant.get_accounts_elsewhere(platform.name)
+    accounts_nav = [(account.user_id, account.friendly_name) for account in accounts]
+    if accounts:
+        selected_account_id = request.qs.get('e_user_id')
+        if selected_account_id:
+            accounts.sort(key=lambda a: -(a.user_id == selected_account_id))
+        account = accounts[0]
+        if not selected_account_id:
+            selected_account_id = account.user_id
         event_type = 'fetch_repos:%s' % account.id
         last_fetch = participant.get_last_event_of_type(event_type)
         offset = max(request.qs.get_int('offset', 0), 0)
         if last_fetch and last_fetch.ts > utcnow() - THREE_DAYS:
             repos = participant.get_repos_on_platform(
-                platform.name, limit=LIMIT, offset=offset
+                platform.name, limit=LIMIT, offset=offset, owner_id=account.user_id,
             )
         else:
             repos = []
@@ -70,7 +77,10 @@ if platform_name:
               FROM repositories r
              WHERE r.participant = %s
                AND r.platform = %s
-        """, (participant.id, platform.name))
+               AND r.owner_id = %s
+        """, (participant.id, platform.name, account.user_id))
+    else:
+        account = None
 
 title = participant.username
 subhead = _("Repositories")
@@ -78,6 +88,7 @@ subhead = _("Repositories")
 [---] text/html
 % from "templates/macros/avatar-url.html" import avatar_img with context
 % from "templates/macros/elsewhere.html" import auth_button with context
+% from "templates/macros/nav.html" import querystring_nav with context
 % from "templates/macros/repos.html" import show_repo with context
 
 % extends "templates/layouts/profile-edit.html"
@@ -95,13 +106,16 @@ subhead = _("Repositories")
             {{ _("Connect {0} account", platform.display_name) }}
         % endcall
     % else
-        <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
+        % if len(accounts) > 1
+            <nav><ul class="nav nav-pills">{{ querystring_nav('e_user_id', accounts_nav, selected_account_id) }}</ul></nav><br>
+        % endif
         <p>{{ ngettext(
             "We found {n} repository in your {platform} account, {timespan_ago}.",
             "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}.",
             n=total_count, platform=platform.display_name,
             timespan_ago=to_age(last_fetch.ts)
         ) }}</p>
+        <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
         <form action="javascript:" class="js-submit" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             % for repo in repos

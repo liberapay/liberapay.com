@@ -91,9 +91,16 @@ def refetch_repos():
     rl_key = '%s:%s' % (repo.participant, repo.platform)
     website.db.hit_rate_limit(rl_prefix, rl_key)
     participant = Participant.from_id(repo.participant)
-    account = participant.get_account_elsewhere(repo.platform)
-    if not account or account.missing_since is not None:
+    accounts = participant.get_accounts_elsewhere(repo.platform)
+    if not accounts:
         return
+    for account in accounts:
+        if account.missing_since is not None:
+            continue
+        _refetch_repos_for_account(account)
+
+
+def _refetch_repos_for_account(rl_prefix, rl_key, participant, account):
     sess = account.get_auth_session()
     logger.debug(
         "Refetching profile data for participant ~%s from %s account %s" %

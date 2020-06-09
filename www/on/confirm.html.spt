@@ -21,10 +21,8 @@ if not p:
     raise response.invalid_input(p_id, 'p_id', 'querystring')
 
 other = account.participant
-user_accounts_dict = p.get_accounts_elsewhere()
-user_accounts = user_accounts_dict.values()
-other_accounts = other.get_accounts_elsewhere().values()
-abandoned_account = user_accounts_dict.get(account.platform, None)
+user_accounts = p.get_accounts_elsewhere()
+other_accounts = other.get_accounts_elsewhere()
 
 title = _("Please Confirm")
 
@@ -73,13 +71,11 @@ title = _("Please Confirm")
         <div class="col-sm-4">
             <b>{{ p.username }}</b><br />
             % for user_account in user_accounts
-                % if user_account != abandoned_account
                 <span class="account-elsewhere">
                     {{ platform_icon(user_account.platform_data) }}
                     <span class="sr-only">{{ user_account.platform_data.display_name }}:</span>
                     {{ user_account.friendly_name }}<br />
                 </span>
-                % endif
             % endfor
 
             <span class="account-elsewhere">
@@ -102,16 +98,6 @@ title = _("Please Confirm")
                 % endif
             % endfor
         </div>
-        % if abandoned_account
-        <div class="col-sm-4 abandoned">
-            {{ _("Abandoned:") }}<br/>
-            <span class="account-elsewhere">
-                {{ platform_icon(abandoned_account.platform_data) }}
-                <span class="sr-only">{{ abandoned_account.platform_data.display_name }}:</span>
-                {{ abandoned_account.friendly_name }}<br />
-            </span>
-        </div>
-        % endif
     </div>
 
 

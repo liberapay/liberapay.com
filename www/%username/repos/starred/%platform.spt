@@ -17,7 +17,17 @@ if platform_name:
     if not hasattr(platform, 'api_repos_path'):
         raise response.error(400, "repos are not implemented for platform '%s'" % platform_name)
 
-    account = participant.get_account_elsewhere(platform.name)
+    accounts = participant.get_accounts_elsewhere(platform.name, is_team=False)
+    accounts_nav = [(account.user_id, account.friendly_name) for account in accounts]
+    if accounts:
+        selected_account_id = request.qs.get('e_user_id')
+        if selected_account_id:
+            accounts.sort(key=lambda a: -(a.user_id == selected_account_id))
+        account = accounts[0]
+        if not selected_account_id:
+            selected_account_id = account.user_id
+    else:
+        account = None
     sess = account.get_auth_session() if account else None
     if sess:
         page_url = b64decode_s(request.qs.get('page', ''))
@@ -38,6 +48,7 @@ else:
 % extends "templates/layouts/base.html"
 
 % from "templates/macros/elsewhere.html" import auth_button with context
+% from "templates/macros/nav.html" import querystring_nav with context
 % from "templates/macros/repos.html" import show_repo with context
 
 % block content
@@ -53,6 +64,10 @@ else:
     </p>
 
 % else
+
+    % if len(accounts) > 1
+        <nav><ul class="nav nav-pills">{{ querystring_nav('e_user_id', accounts_nav, selected_account_id) }}</ul></nav>
+    % endif
 
     <p>
     % if not account
