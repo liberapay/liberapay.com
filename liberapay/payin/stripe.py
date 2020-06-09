@@ -4,7 +4,7 @@ from decimal import Decimal
 import stripe
 import stripe.error
 
-from ..constants import EPOCH
+from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS
 from ..exceptions import NextAction
 from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
@@ -241,6 +241,7 @@ def send_payin_notification(payin, payer, charge, route):
             mandate_id=sepa_debit.mandate_reference,
             mandate_creation_date=route.ctime.date(),
             creditor_identifier=website.app_conf.sepa_creditor_identifier,
+            average_settlement_seconds=PAYIN_SETTLEMENT_DELAYS['stripe-sdd'].total_seconds(),
         )
 
 
