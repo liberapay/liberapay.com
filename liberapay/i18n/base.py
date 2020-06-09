@@ -68,14 +68,21 @@ class Year(int):
 
 class Age(timedelta):
 
+    __slots__ = ('format_args',)
+
     def __new__(cls, *a, **kw):
+        format_args = kw.pop('format_args', {})
         if len(a) == 1 and not kw and isinstance(a[0], timedelta):
-            return timedelta.__new__(cls, a[0].days, a[0].seconds, a[0].microseconds)
-        return timedelta.__new__(cls, *a, **kw)
+            r = timedelta.__new__(cls, a[0].days, a[0].seconds, a[0].microseconds)
+        else:
+            r = timedelta.__new__(cls, *a, **kw)
+        r.format_args = format_args
+        return r
 
 
 class Locale(babel.core.Locale):
 
+    Age = Age
     List = List
 
     def __init__(self, *a, **kw):
