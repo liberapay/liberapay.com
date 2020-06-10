@@ -2604,3 +2604,7 @@ INSERT INTO app_conf VALUES ('check_email_servers', 'true'::jsonb);
 
 -- migration #127
 ALTER TABLE elsewhere ADD COLUMN missing_since timestamptz;
+
+-- migration #128
+ALTER TABLE elsewhere DROP CONSTRAINT elsewhere_participant_platform_key;
+CREATE INDEX elsewhere_participant_platform_idx ON elsewhere (participant, platform);
