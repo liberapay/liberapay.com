@@ -475,6 +475,16 @@ def get_int(d, k, default=NO_DEFAULT, minimum=None, maximum=None):
     return r
 
 
+def get_money_amount(d, k, currency, default=NO_DEFAULT):
+    try:
+        r = d[k]
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    return LOCALE_EN.parse_money_amount(r, currency)
+
+
 def get_choice(d, k, choices, default=NO_DEFAULT):
     try:
         r = d[k]
