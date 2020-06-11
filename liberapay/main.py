@@ -173,6 +173,7 @@ if conf:
 noop = lambda: None
 algorithm = website.state_chain
 algorithm.functions = [
+    insert_constants,
     algorithm['parse_environ_into_request'],
     attach_environ_to_request,
     algorithm['raise_200_for_OPTIONS'],
@@ -186,7 +187,6 @@ algorithm.functions = [
     set_default_security_headers,
     csrf.add_csrf_token_to_state,
     set_up_i18n,
-    insert_constants,
     authentication.start_user_as_anon,
     csrf.reject_forgeries,
     authentication.authenticate_user_if_possible,

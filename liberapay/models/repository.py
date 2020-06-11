@@ -97,7 +97,7 @@ def refetch_repos():
     for account in accounts:
         if account.missing_since is not None:
             continue
-        _refetch_repos_for_account(account)
+        _refetch_repos_for_account(rl_prefix, rl_key, participant, account)
 
 
 def _refetch_repos_for_account(rl_prefix, rl_key, participant, account):
