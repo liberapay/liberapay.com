@@ -751,6 +751,12 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     for k, v in list(locales.items()):
         locales.setdefault(k.split('_', 1)[0], v)
 
+    # Add universal strings
+    # These strings don't need to be translated, but they have to be in the catalogs
+    # so that they're counted as translated.
+    for l in locales.values():
+        l.catalog.add("PayPal", "PayPal")
+
     # Patch the locales to look less formal
     locales['fr'].currency_formats['standard'] = parse_pattern('#,##0.00\u202f\xa4')
     locales['fr'].currencies['USD'] = 'dollar états-unien'
