@@ -277,7 +277,7 @@ def _Querystring_derive(self, **kw):
     new_qs = aspen.http.mapping.Mapping(self)
     for k, v in kw.items():
         if v is None:
-            new_qs.pop(k, None)
+            new_qs.popall(k, None)
         else:
             new_qs[k] = v
     return '?' + urlencode(new_qs, doseq=True)
