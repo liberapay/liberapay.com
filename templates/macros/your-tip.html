@@ -27,7 +27,8 @@
                 , currency=Currency(tip_currency), new_currency=Currency(new_currency)
             ) }}</p>
         % endif
-        {{ tip_input(tip, new_currency, disabled, small=True, hide_amount=currency_mismatch,
+        % set periodic_amount = None if currency_mismatch else tip.periodic_amount
+        {{ tip_input(new_currency, tip.period, periodic_amount, disabled, small=True,
                      accepted_currencies=accepted_currencies) }}
         <button class="btn btn-{{ 'primary' if tip.renewal_mode > 0 else 'donate' }}
                        btn-sm" {{ disabled }}>{{
@@ -99,7 +100,7 @@
     % endif
 % endmacro
 
-% macro tip_input(tip, new_currency, disabled='', small=False, hide_amount=False, accepted_currencies=None)
+% macro tip_input(new_currency, period, periodic_amount, disabled='', small=False, accepted_currencies=None)
     <div class="form-inline inline-block">
     <div class="input-group {{ 'input-group-sm' if small else '' }}">
         % if accepted_currencies and len(accepted_currencies) > 1
@@ -119,11 +120,11 @@
         % endif
         <input type="tel" inputmode="decimal" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
-               value="{{ locale.format_money(tip.periodic_amount, format='amount_only')
-                         if tip.periodic_amount and not hide_amount else '' }}"
+               value="{{ locale.format_money(periodic_amount, format='amount_only')
+                         if periodic_amount else '' }}"
                {{ disabled }} />
     </div>
-    % set period = request.qs.get('period') or tip.period or 'weekly'
+    % set period = request.qs.get('period') or period or 'weekly'
     % if small
         <select name="period" class="form-control {{ 'input-sm' if small else '' }}">
             <option value="weekly">{{ _("per week") }}</option>
@@ -177,18 +178,29 @@
         </li>
     % endfor
         % set period = request.qs.get('period') or tip.period
-        % set hide_amount = tip_is_standard or tip.amount.currency != new_currency
+        % set querystring_amount = (
+            request.qs.get_money_amount('amount', new_currency, default=None)
+            if new_currency == request.qs.get('currency') else
+            None
+        )
+        % set periodic_amount = (
+            None if tip_is_standard or tip.amount.currency != new_currency else
+            tip.periodic_amount or querystring_amount
+        )
         <li class="list-group-item">
         <label>
             <input type="radio" name="selected_amount" value="custom" required
-                   {{ 'checked' if tip.amount and not hide_amount }} />
+                   {{ 'checked' if periodic_amount else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
-                {{ tip_input(tip, new_currency, disabled, small=small, hide_amount=hide_amount) }}
+                {{ tip_input(new_currency, period, periodic_amount, disabled, small=small) }}
             </div>
         </label>
         </li>
     </ul>
+    % if 'amount' in request.qs and not 'currency' in request.qs
+        <p class="alert alert-warning">The <code>amount</code> value in the URL was ignored because the <code>currency</code> is missing.</p>
+    % endif
     <p>{{ _("Please choose how this donation should be renewed:") }}</p>
     <ul class="list-group radio-group">
         <li class="list-group-item">
