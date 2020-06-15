@@ -47,13 +47,16 @@ if event_object_type == 'charge':
 
 elif event_object_type == 'charge.dispute':
     dispute = event.data.object
+    charge = stripe.Charge.retrieve(dispute.charge)
+    payin_id = charge.metadata['payin_id']
+    payin = website.db.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
+    route = website.db.one("SELECT r FROM exchange_routes r WHERE id = %s", (payin.route,))
+    if route.status != 'canceled':
+        route.invalidate()
+    payin = settle_charge(website.db, payin, charge)
     if dispute.status == 'lost':
-        charge = stripe.Charge.retrieve(dispute.charge)
         if dispute.amount != charge.amount:
             raise NotImplementedError("partial chargebacks aren't implemented")
-        payin_id = charge.metadata['payin_id']
-        payin = website.db.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
-        payin = settle_charge(website.db, payin, charge)
         transfers = website.db.all("""
             SELECT pt.*
               FROM payin_transfers pt
