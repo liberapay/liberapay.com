@@ -24,8 +24,8 @@ if request.method == 'POST':
             participant.change_username(new_username, recorder=user)
         except UsernameError as r:
             errors.append(r.render_body(state))
-    new_public_name = request.body.get('public_name')
-    if new_public_name != participant.public_name:
+    new_public_name = request.body.get('public_name') or ''
+    if new_public_name != (participant.public_name or ''):
         try:
             participant.change_public_name(new_public_name, recorder=user)
         except UsernameError as r:
