@@ -1674,13 +1674,14 @@ class TestRefundsStripe(Harness):
 
     @patch('stripe.BalanceTransaction.retrieve')
     @patch('stripe.Charge.retrieve')
+    @patch('stripe.Source.detach')
     @patch('stripe.Source.retrieve')
     @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_charge_dispute(
         self, construct_event, tr_retrieve, create_reversal, source_retrieve,
-        ch_retrieve, bt_retrieve,
+        source_detach, ch_retrieve, bt_retrieve,
     ):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
@@ -1939,6 +1940,55 @@ class TestRefundsStripe(Harness):
             }''' % params),
             stripe.api_key
         )
+        chargeable_source = stripe.Source.construct_from(
+            json.loads('''{
+              "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "source",
+              "amount": null,
+              "created": 1563594673,
+              "currency": "eur",
+              "customer": "cus_XXXXXXXXXXXXXX",
+              "flow": "none",
+              "livemode": false,
+              "owner": {
+                "address": {
+                  "city": null,
+                  "country": "FR",
+                  "line1": null,
+                  "line2": null,
+                  "postal_code": null,
+                  "state": null
+                },
+                "email": "xxxxxxxxx@outlook.fr",
+                "name": "Jane Doe",
+                "phone": null,
+                "verified_address": null,
+                "verified_email": null,
+                "verified_name": null,
+                "verified_phone": null
+              },
+              "sepa_debit": {
+                "last4": "0000",
+                "bank_code": "12345",
+                "branch_code": "10000",
+                "fingerprint": "XXXXXXXXXXXXXXXX",
+                "country": "FR",
+                "mandate_reference": "XXXXXXXXXXXXXXXX",
+                "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
+              },
+              "statement_descriptor": null,
+              "status": "consumed",
+              "type": "sepa_debit",
+              "usage": "reusable"
+            }'''),
+            stripe.api_key
+        )
+        source_retrieve.return_value = chargeable_source
+        consumed_source = stripe.Source.construct_from(
+            dict(chargeable_source, status='consumed'),
+            stripe.api_key
+        )
+        source_detach.return_value = consumed_source
         r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
         assert r.code == 200
         assert r.text == 'OK'
@@ -2015,49 +2065,7 @@ class TestRefundsStripe(Harness):
         notifs = alice.get_notifs()
         assert len(notifs) == 0
         # Check that the receipt for this payment has been voided
-        source_retrieve.return_value = stripe.Source.construct_from(
-            json.loads('''{
-              "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
-              "object": "source",
-              "amount": null,
-              "created": 1563594673,
-              "currency": "eur",
-              "customer": "cus_XXXXXXXXXXXXXX",
-              "flow": "none",
-              "livemode": false,
-              "owner": {
-                "address": {
-                  "city": null,
-                  "country": "FR",
-                  "line1": null,
-                  "line2": null,
-                  "postal_code": null,
-                  "state": null
-                },
-                "email": "xxxxxxxxx@outlook.fr",
-                "name": "Jane Doe",
-                "phone": null,
-                "verified_address": null,
-                "verified_email": null,
-                "verified_name": null,
-                "verified_phone": null
-              },
-              "sepa_debit": {
-                "last4": "0000",
-                "bank_code": "12345",
-                "branch_code": "10000",
-                "fingerprint": "XXXXXXXXXXXXXXXX",
-                "country": "FR",
-                "mandate_reference": "XXXXXXXXXXXXXXXX",
-                "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-              },
-              "statement_descriptor": null,
-              "status": "chargeable",
-              "type": "sepa_debit",
-              "usage": "reusable"
-            }'''),
-            stripe.api_key
-        )
+        source_retrieve.return_value = consumed_source
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
         assert r.code == 200
         assert ' fully refunded ' in r.text
