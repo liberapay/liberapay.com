@@ -449,7 +449,7 @@ msgstr "Hem iniciat un càrrec per domiciliació de {money_amount} des del vostr
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "Aquesta operació s'ha fet d'acord amb el {link_start}manament {mandate_id}{link_end} que vau signar en data {acceptance_date}, autoritzant al Liberapay (creditor SEPA {creditor_identifier}) a enviar instruccions al vostre banc per a carregar-vos al compte, i al vostre banc  per a carregar al vostre compte segons aquestes instruccions."
+msgstr "Aquesta operació s'ha fet d'acord amb el {link_start}manament {mandate_id}{link_end} que vau signar en data {acceptance_date}, autoritzant al Liberapay (creditor SEPA {creditor_identifier}) a enviar instruccions al vostre banc per a carregar-vos al compte, i al vostre banc per a carregar al vostre compte segons aquestes instruccions."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
 msgstr "Si no heu autoritzat aquest pagament, feu-nos-ho saber, i us el reemborsarem."
@@ -460,7 +460,7 @@ msgstr "Un cop el pagament s'hagi processat, hauria d'aparèixer el vostre extra
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "El processament d'aquest tipus de pagaments triga {timedelta} de mitjana."
 
 msgid "Your payment has succeeded"
 msgstr "El vostre pagament ha finalitzat correctament"
@@ -645,7 +645,7 @@ msgid "Refuse"
 msgstr "Rebutja"
 
 msgid "A team you're a member of has been renamed"
-msgstr "S'ha canviat el nom a un equip del qual sou  membre"
+msgstr "S'ha canviat el nom a un equip del qual sou membre"
 
 #, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
@@ -1344,7 +1344,7 @@ msgid "Help us translate Liberapay"
 msgstr "Ajudeu-nos a traduir Liberapay"
 
 msgid "Your account"
-msgstr ""
+msgstr "El vostre compte"
 
 msgid "Profile"
 msgstr "Perfil"
@@ -1473,7 +1473,7 @@ msgid "Avatar"
 msgstr "Avatar"
 
 msgid "Default avatar"
-msgstr ""
+msgstr "Avatar predeterminat"
 
 msgid "Find great people to donate to"
 msgstr "Trobeu persones genials a qui fer donatius"
@@ -1561,7 +1561,7 @@ msgstr "Adreça de la seu principal"
 
 #, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr ""
+msgstr "Mostra el submenú {submenu_label}"
 
 msgid "Introduction"
 msgstr "Introducció"
@@ -2130,11 +2130,11 @@ msgstr "Si connecteu comptes que tingueu en altres plataformes, feu que el vostr
 #, python-brace-format
 msgid "You currently have {n} connected account:"
 msgid_plural "You currently have {n} connected accounts:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Actualment teniu {n} compte connectat:"
+msgstr[1] "Actualment teniu {n} comptes connectats:"
 
 msgid "Connect an account"
-msgstr ""
+msgstr "Connecta un compte"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Agraeixo els donatius, però no tinc cap objectiu de finançament concret."
@@ -2264,6 +2264,9 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
+"Si modifiqueu el vostre nom d'usuari, l'adreça web del perfil canvia en conseqüència. S'afegeix una redirecció de l'URL antic al nou, però qualsevol usuari pot suprimir-la reclamant el vostre nom d'usuari antic. Per tant, hauríeu d'actualitzar tots els enllaços del vostre perfil que heu posat en altres llocs web, llevat que aquests enllaços continguin l'ID de compte immutable ({account_id}) en comptes del vostre nom d'usuari.\n"
+"\n"
+"Esteu segur de voler canviar el vostre nom d'usuari?"
 
 msgid "Username"
 msgstr "Nom d'usuari"
@@ -2529,7 +2532,7 @@ msgid "Currently unavailable"
 msgstr "Actualment no disponible"
 
 msgid "Pay by card"
-msgstr ""
+msgstr "Pagament amb targeta"
 
 msgid "Euro donations only"
 msgstr "Només donatius en euros"
@@ -2538,7 +2541,7 @@ msgid "Euro bank accounts only"
 msgstr "Només comptes bancaris en euros"
 
 msgid "Pay by direct debit"
-msgstr ""
+msgstr "Pagament amb càrrec bancari"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
@@ -2551,7 +2554,7 @@ msgid "Not anonymous"
 msgstr "No anònims"
 
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "Pagament amb PayPal"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
@@ -2790,15 +2793,15 @@ msgstr "Perfil de {username}"
 #, python-brace-format
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
+msgstr[1] "Aquest perfil és disponible en {n} llengües"
 
 msgid "Show the list of languages"
-msgstr ""
+msgstr "Mostra la llista de llengües"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr ""
+msgstr "Aquest perfil només és disponible en {language}"
 
 msgid "Edit"
 msgstr "Edita"
@@ -3413,10 +3416,10 @@ msgid "Add a payment instrument:"
 msgstr "Afegeix un instrument de pagament:"
 
 msgid "Add a card"
-msgstr ""
+msgstr "Afegeix una targeta"
 
 msgid "Add a bank account"
-msgstr ""
+msgstr "Afegeix un compte bancari"
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Encara teniu diners en aquest compte Liberapay, trieu a sota un mètode de desemborsament o contacteu amb nosaltres."
@@ -3740,7 +3743,7 @@ msgid "Email me this information"
 msgstr "Envia'm aquesta informació per correu electrònic"
 
 msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Els codis de referència de transferències bancàries no es poden tornar a usar.  Encara no és possible d'establir una transferència periòdica des del vostre compte bancari a Liberapay."
+msgstr "Els codis de referència de transferències bancàries no es poden tornar a usar. Encara no és possible d'establir una transferència periòdica des del vostre compte bancari a Liberapay."
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "Us enviarem un correu electrònic quan sapiguem si el pagament ha reeixit o ha fallat."
@@ -3921,7 +3924,7 @@ msgstr "En quina divisa voleu retirar?"
 
 #, python-brace-format
 msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr "La retirada d'euros és gratuïta. La retirada de dòlars dels EUA té un cost  de {0} per transferència sigui quin sigui el país de destinació."
+msgstr "La retirada d'euros és gratuïta. La retirada de dòlars dels EUA té un cost de {0} per transferència sigui quin sigui el país de destinació."
 
 msgid "There are no fees when withdrawing euros to your bank account."
 msgstr "No hi ha cap comissió en retirar euros al vostre compte bancari."
@@ -4073,19 +4076,19 @@ msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Useu aquests fragments de codi per a afegir un distintiu al vostre lloc web o README:"
 
 msgid "To contact the Liberapay team privately:"
-msgstr ""
+msgstr "Per a contactar amb l'equip del Liberapay de forma privada:"
 
 msgid "Send us an email"
 msgstr "Envieu-nos un correu"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr ""
+msgstr "Si el missatge no és en anglès o francès, aleshores una màquina el traduirà automàticament. De la mateixa manera, la resposta es traduirà a la vostra llengua."
 
 msgid "We currently don't have a phone number."
 msgstr "No tenim cap número de telèfon."
 
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr ""
+msgstr "No contacteu amb nosaltres si esteu intentant de comunicar-vos amb algun dels nostres usuaris. No transmetem missatges, i no podem revelar la identitat o informació de contacte dels nostres usuaris si no teniu una ordre judicial vàlida."
 
 msgid "To report a problem or make a suggestion in English:"
 msgstr "Per a informar d'un problema o fer un suggeriment en anglès:"
@@ -4292,9 +4295,7 @@ msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018.
 msgstr "{0} fa ser, inicialment, un soci de pagaments amb Liberapay, però ens va abandonar el 2018. Tot seguit podeu consultar una còpia del contracte que havíeu d'acceptar per a enviar o rebre diners via Liberapay abans d'agost de 2018: "
 
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
-msgstr ""
-"Aquesta pàgina conté enllaços i informació sobre el logotip del Liberapay. Esperem que us siguin útils si escriviu cap article sobre Liberapay \n"
-"o si voleu afegir enllaços personalitzats al vostre perfil de Liberapay en el vostre lloc web."
+msgstr "Aquesta pàgina conté enllaços i informació sobre el logotip del Liberapay. Esperem que us siguin útils si escriviu cap article sobre Liberapay o si voleu afegir enllaços personalitzats al vostre perfil de Liberapay en el vostre lloc web."
 
 msgid "The Liberapay logo is composed of the two letters “lp”. It's usually colored either white-on-yellow, black-on-yellow, or just black."
 msgstr "El logotip de Liberapay es forma de dues lletres «lp». Habitualment blanques en fons groc, negres en fons groc o simplement negres."
@@ -4391,7 +4392,7 @@ msgid "Cookies"
 msgstr "Galetes"
 
 msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
-msgstr ""
+msgstr "Una galeta és una peça d'informació que envia un lloc web al vostre navegador, emmagatzemada en el vostre equip i reenviada pel navegador al mateix lloc web en cada petició posterior."
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
 msgstr "El lloc web liberapay.com només usa galetes tècniques que són necessàries per a autenticar l'usuari o per fer una operació específica. Aquestes galetes es limiten a peticions del mateix lloc web, i no tenim coneixement sobre qui visita llocs web que continguin els ginys de Liberapay."
@@ -4599,7 +4600,7 @@ msgid "You can change your takes from {0}your teams dashboard{1}. It contains ta
 msgstr "Podeu canviar la fracció des del {0}panell dels vostres equips{1}. Conté taules que mostren la fracció nominal de tots els membres per a l'últim dia de paga i el següent. També mostra una estimació de la quantitat real dels diners que rebreu en el següent dia de paga."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
-msgstr "Les fraccions nominals són els números en brut que els membres introdueixen, les fraccions reals les computa el sistema: primer suma les fraccions nominals, després computa el percentatge que cada fracció representa i, finalment,  aplica aquests percentatges als ingressos disponibles. Les fraccions nominals també actuen com a màxims: les fraccions reals no poden ser més grans que les nominals, fins i tot si hi ha ingressos addicionals disponibles."
+msgstr "Les fraccions nominals són els números en brut que els membres introdueixen, les fraccions reals les computa el sistema: primer suma les fraccions nominals, després computa el percentatge que cada fracció representa i, finalment, aplica aquests percentatges als ingressos disponibles. Les fraccions nominals també actuen com a màxims: les fraccions reals no poden ser més grans que les nominals, fins i tot si hi ha ingressos addicionals disponibles."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the stability of the team's income."
 msgstr "Potser us pregunteu per què tractem les fraccions nominals com a màxims en comptes de com simples percentatges. Això és perquè tenir màxims permet a un equip de tenir ingressos sense usar (anomenat «romanent») i això és bo per diferents motius. Primer, proporciona un «coixí» que estabilitza els ingressos dels membres de l'equip. Segon, facilita la integració de membres nous en l'equip, perquè en augmentar la seva fracció es redueix el romanent en comptes d'afectar els ingressos dels altres membres. Tercer, permet al nostre programa d'ajustar les quantitats que els donants transfereixen als membres de l'equip, de manera que en el temps equilibra les contribucions dels donants, fent que el sistema més just. Finalment, encoratja fer donatius a un equip fins i tot si ja han assolit el seu objectiu de finançament, i això és bo per a l'estabilitat dels ingressos de l'equip."
@@ -4842,7 +4843,7 @@ msgid ""
 "Soon you'll be able to advertise your community projects here and post status updates about your work."
 msgstr ""
 "Sou col·laborador de la comunitat {0}? Uniu-vos-hi en Liberapay!\n"
-"Aviat podreu fer difusió dels vostres projectes de la comunitat  aquí i publicar actualitzacions d'estat sobre la vostra feina."
+"Aviat podreu fer difusió dels vostres projectes de la comunitat aquí i publicar actualitzacions d'estat sobre la vostra feina."
 
 msgid "Join"
 msgstr "Uneix-m'hi"
@@ -5014,7 +5015,7 @@ msgstr "Integracions"
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
 msgstr[0] "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
-msgstr[1] "Podeu associar el  vostre perfil amb els comptes de {platform1}, {platform2}, {platform3} i {n} plataformes més."
+msgstr[1] "Podeu associar el vostre perfil amb els comptes de {platform1}, {platform2}, {platform3} i {n} plataformes més."
 
 #, python-brace-format
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
