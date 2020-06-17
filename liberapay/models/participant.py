@@ -2445,6 +2445,13 @@ class Participant(Model, MixinTeam):
               RETURNING *
                       , ( SELECT count(*) = 0 FROM tips WHERE tipper=%(tipper)s ) AS first_time_tipper
                       , ( SELECT payment_providers = 0 FROM participants WHERE id = %(tippee)s ) AS is_pledge
+                      , ( SELECT count(DISTINCT pi.id)
+                            FROM payin_transfers pt
+                            JOIN payins pi ON pi.id = pt.payin
+                           WHERE pt.payer = %(tipper)s
+                             AND coalesce(pt.team, pt.recipient) = %(tippee)s
+                             AND (pt.status = 'pending' OR pi.status = 'pending')
+                        ) AS pending_payins_count
 
         """, dict(
             tipper=self.id, tippee=tippee.id, amount=amount, currency=amount.currency,
