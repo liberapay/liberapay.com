@@ -40,59 +40,6 @@ bitbucket = lambda: {
     "type": "user"
 }
 
-bountysource = lambda: {
-    "bio": "Code alchemist at Bountysource.",
-    "twitter_account": {
-        "uid": 313084547,
-        "followers": None,
-        "following": None,
-        "image_url": "https://cloudinary-a.akamaihd.net/bountysource/image/twitter_name/d_noaoqqwxegvmulwus0un.png,c_pad,w_100,h_100/corytheboyd.png",
-        "login": "corytheboyd",
-        "id": 2105
-    },
-    "display_name": "corytheboyd",
-    "url": "",
-    "type": "Person",
-    "created_at": "2012-09-14T03:28:07Z",
-    "slug": "6-corytheboyd",
-    "facebook_account": {
-        "uid": 589244295,
-        "followers": 0,
-        "following": 0,
-        "image_url": "https://cloudinary-a.akamaihd.net/bountysource/image/facebook/d_noaoqqwxegvmulwus0un.png,c_pad,w_100,h_100/corytheboyd.jpg",
-        "login": "corytheboyd",
-        "id": 2103
-    },
-    "gratipay_account": {
-        "uid": 17306,
-        "followers": 0,
-        "following": 0,
-        "image_url": "https://cloudinary-a.akamaihd.net/bountysource/image/gravatar/d_noaoqqwxegvmulwus0un.png,c_pad,w_100,h_100/bdeaea505d059ccf23d8de5714ae7f73",
-        "login": "corytheboyd",
-        "id": 2067
-    },
-    "large_image_url": "https://cloudinary-a.akamaihd.net/bountysource/image/twitter_name/d_noaoqqwxegvmulwus0un.png,c_pad,w_400,h_400/corytheboyd.png",
-    "frontend_path": "/users/6-corytheboyd",
-    "image_url": "https://cloudinary-a.akamaihd.net/bountysource/image/twitter_name/d_noaoqqwxegvmulwus0un.png,c_pad,w_100,h_100/corytheboyd.png",
-    "location": "San Francisco, CA",
-    "medium_image_url": "https://cloudinary-a.akamaihd.net/bountysource/image/twitter_name/d_noaoqqwxegvmulwus0un.png,c_pad,w_200,h_200/corytheboyd.png",
-    "frontend_url": "https://www.bountysource.com/users/6-corytheboyd",
-    "github_account": {
-        "uid": 692632,
-        "followers": 11,
-        "following": 4,
-        "image_url": "https://cloudinary-a.akamaihd.net/bountysource/image/gravatar/d_noaoqqwxegvmulwus0un.png,c_pad,w_100,h_100/bdeaea505d059ccf23d8de5714ae7f73",
-        "login": "corytheboyd",
-        "id": 89,
-        "permissions": [
-            "public_repo"
-        ]
-    },
-    "company": "Bountysource",
-    "id": 6,
-    "public_email": "cory@bountysource.com"
-}
-
 github = lambda: {
     "avatar_url": "https://avatars2.githubusercontent.com/u/134455?v=4",
     "bio": None,
