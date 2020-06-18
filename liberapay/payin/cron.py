@@ -84,7 +84,7 @@ def send_upcoming_debit_notifications():
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
     """)
     for payer, payins in rows:
-        if payer.is_suspended or payer.status != 'active':
+        if payer.is_suspended or payer.status != 'active' or not payer.get_email_address():
             continue
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
