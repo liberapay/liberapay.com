@@ -238,7 +238,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                 try:
                     team_donations = resolve_team_donation(
                         db, team, provider, payer, payer_country,
-                        prorated_amount, tip.amount
+                        prorated_amount, tip.amount, sepa_only=True,
                     )
                 except (MissingPaymentAccount, NoSelfTipping):
                     team_amounts = resolve_amounts(prorated_amount, {
@@ -377,7 +377,8 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
 
 
 def resolve_team_donation(
-    db, team, provider, payer, payer_country, payment_amount, weekly_amount
+    db, team, provider, payer, payer_country, payment_amount, weekly_amount,
+    sepa_only=False,
 ):
     """Figure out how to distribute a donation to a team's members.
 
@@ -420,7 +421,7 @@ def resolve_team_donation(
         raise NoSelfTipping()
     # Try to distribute the donation to multiple members.
     other_members = set(t.member for t in members if t.member != payer.id)
-    if other_members and provider == 'stripe':
+    if sepa_only or other_members and provider == 'stripe':
         sepa_accounts = {a.participant: a for a in db.all("""
             SELECT DISTINCT ON (a.participant) a.*
               FROM payment_accounts a
@@ -432,7 +433,7 @@ def resolve_team_donation(
                  , a.default_currency = %(currency)s DESC
                  , a.connection_ts
         """, dict(members=other_members, SEPA=SEPA, currency=currency))}
-        if len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
+        if sepa_only or len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
             selected_takes = [
                 t for t in members if t.member in sepa_accounts and t.amount != 0
             ]
@@ -447,6 +448,8 @@ def resolve_team_donation(
                     )
                     for t in selected_takes if t.resolved_amount != 0
                 ]
+            elif sepa_only:
+                raise MissingPaymentAccount(team)
     # Fall back to sending the entire donation to the member who "needs" it most.
     member = db.Participant.from_id(members[0].member)
     account = resolve_destination(db, member, provider, payer, payer_country, payment_amount)
