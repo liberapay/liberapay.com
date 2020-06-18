@@ -252,6 +252,8 @@ def adjust_payin_transfers(db, payin, net_amount):
                 else:
                     team_donations = {d.recipient.id: d for d in team_donations}
                     for pt in transfers:
+                        if pt.status == 'failed':
+                            continue
                         d = team_donations.pop(pt.recipient, None)
                         if d is None:
                             assert pt.remote_id is None and pt.status in ('pre', 'pending')
