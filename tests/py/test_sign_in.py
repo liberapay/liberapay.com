@@ -139,7 +139,7 @@ class TestLogIn(EmailHarness):
 
     def test_email_login(self):
         email = 'alice@example.net'
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', email=None)
         alice.add_email(email)
         alice.close(None)
 

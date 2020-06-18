@@ -40,7 +40,7 @@ def prepare_payin(db, payer, amount, route, off_session=False):
     assert route.participant == payer, (route.participant, payer)
     assert route.status in ('pending', 'chargeable')
 
-    if payer.is_suspended:
+    if payer.is_suspended or not payer.get_email_address():
         raise AccountSuspended()
 
     with db.get_cursor() as cursor:

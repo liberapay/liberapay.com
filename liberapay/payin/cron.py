@@ -4,6 +4,7 @@ from datetime import date
 from pando import json
 
 from ..cron import logger
+from ..exceptions import AccountSuspended
 from ..i18n.currencies import Money
 from ..website import website
 from ..utils import utcnow
@@ -187,7 +188,10 @@ def execute_scheduled_payins():
             counts['renewal_aborted'] += 1
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
-            payin = prepare_payin(db, payer, payin_amount, route, off_session=True)
+            try:
+                payin = prepare_payin(db, payer, payin_amount, route, off_session=True)
+            except AccountSuspended:
+                continue
             for tr in transfers:
                 prepare_donation(
                     db, payin, tr['tip'], tr['beneficiary'], 'stripe',
