@@ -269,12 +269,13 @@ class Harness(unittest.TestCase):
                      VALUES (%s, %s, %s, %s)
             """, (wallet_id, zero, participant.id, participant.mangopay_user_id))
 
-        if 'email' in kw:
+        email = kw.get('email', participant.username + '@liberapay.com')
+        if email:
             self.db.run("""
                 INSERT INTO emails
                             (participant, address, verified, verified_time)
                      VALUES (%s, %s, true, now())
-            """, (participant.id, kw['email']))
+            """, (participant.id, email))
         if 'balance' in kw2 and kw2['balance'] != 0:
             self.make_exchange('mango-cc', kw2['balance'], 0, participant)
 

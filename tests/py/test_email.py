@@ -19,7 +19,7 @@ class TestEmail(EmailHarness):
 
     def setUp(self):
         EmailHarness.setUp(self)
-        self.alice = self.make_participant('alice')
+        self.alice = self.make_participant('alice', email=None)
 
     def hit_email_spt(self, action, address, auth_as='alice', expected_code=200):
         data = {action: address}

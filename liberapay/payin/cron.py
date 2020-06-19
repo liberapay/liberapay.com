@@ -4,6 +4,7 @@ from datetime import date
 from pando import json
 
 from ..cron import logger
+from ..exceptions import AccountSuspended
 from ..i18n.currencies import Money
 from ..website import website
 from ..utils import utcnow
@@ -84,7 +85,7 @@ def send_upcoming_debit_notifications():
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
     """)
     for payer, payins in rows:
-        if payer.is_suspended or payer.status != 'active':
+        if payer.is_suspended or payer.status != 'active' or not payer.get_email_address():
             continue
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
@@ -187,7 +188,10 @@ def execute_scheduled_payins():
             counts['renewal_aborted'] += 1
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
-            payin = prepare_payin(db, payer, payin_amount, route, off_session=True)
+            try:
+                payin = prepare_payin(db, payer, payin_amount, route, off_session=True)
+            except AccountSuspended:
+                continue
             for tr in transfers:
                 prepare_donation(
                     db, payin, tr['tip'], tr['beneficiary'], 'stripe',
