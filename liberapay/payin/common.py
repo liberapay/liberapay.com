@@ -218,8 +218,8 @@ def adjust_payin_transfers(db, payin, net_amount):
           ORDER BY pt.id
                FOR UPDATE OF pt
         """, (payin.id,))
-        assert payin_transfers
-        if all(pt.remote_id is not None or pt.status == 'failed' for pt in payin_transfers):
+        assert len(payin_transfers) > 1, "this function should only be called for payins with multiple transfers"
+        if all(pt.status == 'succeeded' for pt in payin_transfers):
             # It's too late to adjust anything.
             return
         transfers_by_tippee = group_by(
@@ -229,10 +229,11 @@ def adjust_payin_transfers(db, payin, net_amount):
             tippee: MoneyBasket(pt.amount for pt in grouped).fuzzy_sum(net_amount.currency)
             for tippee, grouped in transfers_by_tippee.items()
         })
+        teams = set(pt.team for pt in payin_transfers if pt.team is not None)
         updates = []
         for tippee, prorated_amount in prorated_amounts.items():
             transfers = transfers_by_tippee[tippee]
-            if len(transfers) > 1:
+            if tippee in teams:
                 team = transfers[0].team_p
                 tip = payer.get_tip_to(team)
                 try:
