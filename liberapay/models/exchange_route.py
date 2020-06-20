@@ -214,10 +214,16 @@ class ExchangeRoute(Model):
             if self.address.startswith('pm_'):
                 stripe.PaymentMethod.detach(self.address)
             else:
-                source = stripe.Source.retrieve(self.address).detach()
-                assert source.status == 'consumed'
-                self.update_status(source.status)
-                return
+                try:
+                    source = stripe.Source.retrieve(self.address).detach()
+                except stripe.error.InvalidRequestError as e:
+                    if "does not appear to be currently attached" in str(e):
+                        pass
+                    raise
+                else:
+                    assert source.status == 'consumed'
+                    self.update_status(source.status)
+                    return
         elif self.network == 'mango-cc':
             card = obj or Card.get(self.address)
             if card.Active:
