@@ -331,10 +331,10 @@ class Harness(unittest.TestCase):
     def make_payin_and_transfer(
         self, route, tippee, amount,
         status='succeeded', error=None, payer_country=None, fee=None,
-        remote_id='fake', **opt
+        remote_id='fake', pt_extra={},
     ):
         payin, payin_transfers = self.make_payin_and_transfers(
-            route, amount, [(tippee, amount, opt)],
+            route, amount, [(tippee, amount, pt_extra)],
             status=status, error=error, payer_country=payer_country, fee=fee,
             remote_id=remote_id,
         )
@@ -351,6 +351,7 @@ class Harness(unittest.TestCase):
         payer = route.participant
         payin = prepare_payin(self.db, payer, amount, route)
         provider = route.network.split('-', 1)[0]
+        payin_transfers = []
         for tippee, pt_amount, opt in transfers:
             tip = opt.get('tip')
             if tip:
@@ -366,9 +367,9 @@ class Harness(unittest.TestCase):
                 assert tip
             for i in range(100):
                 try:
-                    prepare_donation(
+                    payin_transfers.extend(prepare_donation(
                         self.db, payin, tip, tippee, provider, payer, payer_country, pt_amount
-                    )
+                    ))
                 except MissingPaymentAccount as e:
                     if i > 95:
                         # Infinite loop?
@@ -381,17 +382,23 @@ class Harness(unittest.TestCase):
                     break
         payin = update_payin(self.db, payin.id, remote_id, status, error, fee=fee)
         net_amount = payin.amount - (fee or 0)
-        adjust_payin_transfers(self.db, payin, net_amount)
+        if len(payin_transfers) > 1:
+            adjust_payin_transfers(self.db, payin, net_amount)
+        else:
+            pt = payin_transfers[0]
+            pt = update_payin_transfer(self.db, pt.id, None, pt.status, None, amount=net_amount)
+            assert pt.amount == net_amount
         payin_transfers = self.db.all("""
             SELECT *
               FROM payin_transfers
              WHERE payin = %s
           ORDER BY ctime
         """, (payin.id,))
+        fallback_remote_id = 'fake' if payin.status == 'succeeded' else None
         for tippee, pt_amount, opt in transfers:
             for i, pt in enumerate(payin_transfers):
                 payin_transfers[i] = update_payin_transfer(
-                    self.db, pt.id, opt.get('remote_id', 'fake'),
+                    self.db, pt.id, opt.get('remote_id', fallback_remote_id),
                     opt.get('status', status), opt.get('error', error)
                 )
                 if pt.team:
