@@ -88,9 +88,16 @@ class ExchangeRoute(Model):
                          one_off, remote_user_id, country, currency)
                  VALUES (%(p_id)s, %(network)s, %(address)s, %(status)s,
                          %(one_off)s, %(remote_user_id)s, %(country)s, %(currency)s)
+            ON CONFLICT (participant, network, address) DO NOTHING
               RETURNING r
-        """, locals())
-        if status == 'chargeable' and network.startswith('stripe-'):
+        """, locals()) or cls.db.one("""
+            SELECT r
+              FROM exchange_routes r
+             WHERE participant = %s
+               AND network = %s
+               AND address = %s
+        """, (p_id, network, address))
+        if r.status == 'chargeable' and network.startswith('stripe-'):
             cls.db.run("""
                 DO $$
                 BEGIN
@@ -207,10 +214,16 @@ class ExchangeRoute(Model):
             if self.address.startswith('pm_'):
                 stripe.PaymentMethod.detach(self.address)
             else:
-                source = stripe.Source.retrieve(self.address).detach()
-                assert source.status == 'consumed'
-                self.update_status(source.status)
-                return
+                try:
+                    source = stripe.Source.retrieve(self.address).detach()
+                except stripe.error.InvalidRequestError as e:
+                    if "does not appear to be currently attached" in str(e):
+                        pass
+                    raise
+                else:
+                    assert source.status == 'consumed'
+                    self.update_status(source.status)
+                    return
         elif self.network == 'mango-cc':
             card = obj or Card.get(self.address)
             if card.Active:

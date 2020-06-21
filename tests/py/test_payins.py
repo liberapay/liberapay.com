@@ -990,8 +990,9 @@ class TestRefundsStripe(Harness):
         payin, pt = self.make_payin_and_transfer(
             route, bob, EUR(400), fee=EUR('3.45'),
             remote_id='py_XXXXXXXXXXXXXXXXXXXXXXXX',
-            pt_remote_id='tr_XXXXXXXXXXXXXXXXXXXXXXXX',
+            pt_extra=dict(remote_id='tr_XXXXXXXXXXXXXXXXXXXXXXXX'),
         )
+        assert pt.amount == EUR('396.55')
         params = dict(payin_id=payin.id, recent_timestamp=(utcnow() - EPOCH).total_seconds())
         construct_event.return_value = stripe.Event.construct_from(
             json.loads('''{

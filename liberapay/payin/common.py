@@ -83,28 +83,27 @@ def update_payin(
             UPDATE payins
                SET status = %(status)s
                  , error = %(error)s
-                 , remote_id = coalesce(%(remote_id)s, remote_id)
-                 , amount_settled = COALESCE(%(amount_settled)s, amount_settled)
-                 , fee = COALESCE(%(fee)s, fee)
-                 , intent_id = coalesce(%(intent_id)s, intent_id)
+                 , remote_id = coalesce(remote_id, %(remote_id)s)
+                 , amount_settled = coalesce(amount_settled, %(amount_settled)s)
+                 , fee = coalesce(fee, %(fee)s)
+                 , intent_id = coalesce(intent_id, %(intent_id)s)
                  , refunded_amount = coalesce(%(refunded_amount)s, refunded_amount)
              WHERE id = %(payin_id)s
-               AND ( status <> %(status)s OR
-                     coalesce_currency_amount(%(refunded_amount)s, amount::currency) <>
-                     coalesce_currency_amount(refunded_amount, amount::currency)
-                   )
          RETURNING *
                  , (SELECT status FROM old) AS old_status
         """, locals())
         if not payin:
-            return cursor.one("SELECT * FROM payins WHERE id = %s", (payin_id,))
+            return
+        if remote_id and payin.remote_id != remote_id:
+            raise AssertionError(f"the remote IDs don't match: {payin.remote_id!r} != {remote_id!r}")
+        if status == payin.old_status:
+            return payin
 
-        if payin.status != payin.old_status:
-            cursor.run("""
-                INSERT INTO payin_events
-                       (payin, status, error, timestamp)
-                VALUES (%s, %s, %s, current_timestamp)
-            """, (payin_id, status, error))
+        cursor.run("""
+            INSERT INTO payin_events
+                   (payin, status, error, timestamp)
+            VALUES (%s, %s, %s, current_timestamp)
+        """, (payin_id, status, error))
 
         if payin.status in ('pending', 'succeeded'):
             cursor.run("""
@@ -218,8 +217,8 @@ def adjust_payin_transfers(db, payin, net_amount):
           ORDER BY pt.id
                FOR UPDATE OF pt
         """, (payin.id,))
-        assert payin_transfers
-        if all(pt.remote_id is not None or pt.status == 'failed' for pt in payin_transfers):
+        assert len(payin_transfers) > 1, "this function should only be called for payins with multiple transfers"
+        if all(pt.status == 'succeeded' for pt in payin_transfers):
             # It's too late to adjust anything.
             return
         transfers_by_tippee = group_by(
@@ -229,10 +228,11 @@ def adjust_payin_transfers(db, payin, net_amount):
             tippee: MoneyBasket(pt.amount for pt in grouped).fuzzy_sum(net_amount.currency)
             for tippee, grouped in transfers_by_tippee.items()
         })
+        teams = set(pt.team for pt in payin_transfers if pt.team is not None)
         updates = []
         for tippee, prorated_amount in prorated_amounts.items():
             transfers = transfers_by_tippee[tippee]
-            if len(transfers) > 1:
+            if tippee in teams:
                 team = transfers[0].team_p
                 tip = payer.get_tip_to(team)
                 try:
@@ -623,28 +623,27 @@ def update_payin_transfer(
             UPDATE payin_transfers
                SET status = %(status)s
                  , error = %(error)s
-                 , remote_id = coalesce(%(remote_id)s, remote_id)
+                 , remote_id = coalesce(remote_id, %(remote_id)s)
                  , amount = COALESCE(%(amount)s, amount)
                  , fee = COALESCE(%(fee)s, fee)
                  , reversed_amount = coalesce(%(reversed_amount)s, reversed_amount)
              WHERE id = %(pt_id)s
-               AND ( status <> %(status)s OR
-                     coalesce_currency_amount(%(reversed_amount)s, amount::currency) <>
-                     coalesce_currency_amount(reversed_amount, amount::currency)
-                   )
          RETURNING *
                  , (SELECT reversed_amount FROM old) AS old_reversed_amount
                  , (SELECT status FROM old) AS old_status
         """, locals())
         if not pt:
-            return cursor.one("SELECT * FROM payin_transfers WHERE id = %s", (pt_id,))
+            return
+        if remote_id and pt.remote_id != remote_id:
+            raise AssertionError(f"the remote IDs don't match: {pt.remote_id!r} != {remote_id!r}")
+        if pt.status == pt.old_status:
+            return pt
 
-        if pt.status != pt.old_status:
-            cursor.run("""
-                INSERT INTO payin_transfer_events
-                       (payin_transfer, status, error, timestamp)
-                VALUES (%s, %s, %s, current_timestamp)
-            """, (pt_id, status, error))
+        cursor.run("""
+            INSERT INTO payin_transfer_events
+                   (payin_transfer, status, error, timestamp)
+            VALUES (%s, %s, %s, current_timestamp)
+        """, (pt_id, status, error))
 
         # If the payment has failed or hasn't been settled yet, then stop here.
         if status != 'succeeded':
