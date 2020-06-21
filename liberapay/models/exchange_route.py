@@ -219,7 +219,8 @@ class ExchangeRoute(Model):
                 except stripe.error.InvalidRequestError as e:
                     if "does not appear to be currently attached" in str(e):
                         pass
-                    raise
+                    else:
+                        raise
                 else:
                     assert source.status == 'consumed'
                     self.update_status(source.status)
