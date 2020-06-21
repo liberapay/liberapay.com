@@ -266,10 +266,12 @@ def adjust_payin_transfers(db, payin, net_amount):
                         elif pt.amount != d.amount:
                             assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((d.amount, pt.id))
+                    n_periods = prorated_amount / tip.periodic_amount
                     for d in team_donations.values():
+                        unit_amount = (d.amount / n_periods).round_up()
                         prepare_payin_transfer(
                             db, payin, d.recipient, d.destination, 'team-donation',
-                            d.amount, tip.periodic_amount, tip.period,
+                            d.amount, unit_amount, tip.period,
                             team=team.id
                         )
             else:
