@@ -217,7 +217,7 @@ def adjust_payin_transfers(db, payin, net_amount):
           ORDER BY pt.id
                FOR UPDATE OF pt
         """, (payin.id,))
-        assert len(payin_transfers) > 1, "this function should only be called for payins with multiple transfers"
+        assert payin_transfers
         if all(pt.status == 'succeeded' for pt in payin_transfers):
             # It's too late to adjust anything.
             return
@@ -286,7 +286,10 @@ def adjust_payin_transfers(db, payin, net_amount):
             """, updates)
 
 
-def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, payment_amount):
+def prepare_donation(
+    db, payin, tip, tippee, provider, payer, payer_country, payment_amount,
+    sepa_only=False,
+):
     """Prepare to distribute a donation.
 
     Args:
@@ -319,7 +322,8 @@ def prepare_donation(db, payin, tip, tippee, provider, payer, payer_country, pay
     r = []
     if tippee.kind == 'group':
         team_donations = resolve_team_donation(
-            db, tippee, provider, payer, payer_country, payment_amount, tip.amount
+            db, tippee, provider, payer, payer_country, payment_amount, tip.amount,
+            sepa_only=sepa_only
         )
         n_periods = payment_amount / tip.periodic_amount
         for d in team_donations:

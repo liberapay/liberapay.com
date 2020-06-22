@@ -4,13 +4,13 @@ from decimal import Decimal
 import stripe
 import stripe.error
 
-from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS
+from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS, SEPA
 from ..exceptions import NextAction
 from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
 from .common import (
-    abort_payin, adjust_payin_transfers,
+    abort_payin, adjust_payin_transfers, prepare_donation, prepare_payin,
     record_payin_refund, record_payin_transfer_reversal,
     update_payin, update_payin_transfer,
 )
@@ -83,7 +83,7 @@ def create_source_from_token(token_id, one_off, amount, owner_info, return_url):
 def charge(db, payin, payer):
     """Initiate the Charge for the given payin.
 
-    Returns the update payin.
+    Returns the updated payin, or possibly a new payin.
 
     """
     n_transfers = db.one("""
@@ -92,9 +92,38 @@ def charge(db, payin, payer):
          WHERE pt.payin = %(payin)s
     """, dict(payin=payin.id))
     if n_transfers == 1:
-        return destination_charge(
+        payin = destination_charge(
             db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
         )
+        if payin.status == 'failed' and payin.error.startswith("For 'sepa_debit' payments, we currently require "):
+            pt = db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin.id,))
+            tip = db.one("""
+                SELECT t.*, p AS tippee_p
+                  FROM tips t
+                  JOIN participants p ON p.id = t.tippee
+                 WHERE t.tipper = %s
+                   AND t.tippee = %s
+            """, (payer.id, pt.team))
+            route = ExchangeRoute.from_id(payer, payin.route, _raise=False)
+            can_retry = tip and route and db.one("""
+                SELECT count(*)
+                  FROM current_takes t
+                  JOIN payment_accounts a ON a.participant = t.member
+                 WHERE t.team = %(team)s
+                   AND a.provider = 'stripe'
+                   AND a.is_current
+                   AND a.country IN %(SEPA)s
+            """, dict(team=pt.team, SEPA=SEPA)) > 0
+            if can_retry:
+                payin = prepare_payin(db, payer, payin.amount, route)
+                prepare_donation(
+                    db, payin, tip, tip.tippee_p, 'stripe', payer, route.country, payin.amount,
+                    sepa_only=True,
+                )
+                return charge_and_transfer(
+                    db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
+                )
+        return payin
     else:
         return charge_and_transfer(
             db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
