@@ -148,6 +148,11 @@ if participant.join_time:
         % elif event['status'] == 'awaiting_payer_action' and event['payin_method'] == 'paypal'
             &mdash;
             <a href="{{ participant.path('giving/pay/paypal/%s?cancel' % event['id']) }}">{{ _("Cancel").lower() }}</a>
+        % elif event['status'] == 'pending' and event['payin_method'] == 'stripe-sdd'
+            &mdash; {{ _(
+                "Processing this kind of payment takes {timedelta} on average.",
+                timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
+            ) }}
         % endif
         % if event['error']
             &mdash; {{ _("error message: {0}", event['error']) }}
@@ -231,6 +236,11 @@ if participant.join_time:
                 % else
                     {{ _("error message: {0}", event['error']) }}
                 % endif
+            % elif status == 'pending' and event['payin_method'] == 'stripe-sdd'
+                &mdash; {{ _(
+                    "Processing this kind of payment takes {timedelta} on average.",
+                    timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
+                ) }}
             % endif
         % endif
         </td>
