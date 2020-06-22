@@ -466,7 +466,7 @@ msgstr "Po przetworzeniu tej płatności powinna ona pojawić się na wyciągu b
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Przetwarzanie tego rodzaju płatności zajmuje średnio {timedelta}."
 
 msgid "Your payment has succeeded"
 msgstr "Płatność powiodła się"
@@ -1078,7 +1078,7 @@ msgstr "\"{0}\" nie jest prawidłową nazwą społeczności."
 
 #, python-brace-format
 msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr "Przesyłanie pieniędzy nie powiodło się.  Jeśli problem będzie się powtarzał, skontaktuj się z support@liberapay.com. Komunikat o błędzie: {0}"
+msgstr "Przesyłanie pieniędzy nie powiodło się. Jeśli problem będzie się powtarzał, skontaktuj się z support@liberapay.com. Komunikat o błędzie: {0}"
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Nie możesz tego zrobić, ponieważ Twoje konto jest obecnie zawieszone."
@@ -1357,7 +1357,7 @@ msgid "Help us translate Liberapay"
 msgstr "Pomóż nam przetłumaczyć Liberapay"
 
 msgid "Your account"
-msgstr ""
+msgstr "Twoje konto"
 
 msgid "Profile"
 msgstr "Profil"
@@ -1441,7 +1441,7 @@ msgstr[2] "{0} ma {n} patronów."
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
-msgstr "Celem {0}  jest otrzymywanie {1} tygodniowo."
+msgstr "Celem {0} jest otrzymywanie {1} tygodniowo."
 
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
@@ -1488,7 +1488,7 @@ msgid "Avatar"
 msgstr "Awatar"
 
 msgid "Default avatar"
-msgstr ""
+msgstr "Domyślny awatar"
 
 msgid "Find great people to donate to"
 msgstr "Znajdź świetnych ludzi, którym możesz pomóc"
@@ -1576,7 +1576,7 @@ msgstr "Adres siedziby"
 
 #, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr ""
+msgstr "Pokaż {submenu_label} podmenu"
 
 msgid "Introduction"
 msgstr "Wprowadzenie"
@@ -2148,12 +2148,12 @@ msgstr "Dzięki połączeniu kont, które posiadasz na innych platformach, Twój
 #, python-brace-format
 msgid "You currently have {n} connected account:"
 msgid_plural "You currently have {n} connected accounts:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Aktualnie masz {n} połączone konto:"
+msgstr[1] "Aktualnie masz {n} połączone konta:"
+msgstr[2] "Aktualnie masz {n} połączonych kont:"
 
 msgid "Connect an account"
-msgstr ""
+msgstr "Połącz konto"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Jestem wdzięczny za darowizny, ale nie mam określonego celu wysokości finansowania."
@@ -2284,6 +2284,9 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
+"Po zmianie nazwy użytkownika adres internetowy Twojego profilu odpowiednio się zmienia. Wprowadzono przekierowanie ze starego adresu URL na nowy, ale każdy użytkownik może go usunąć, zgłaszając swoją starą nazwę użytkownika, dlatego należy zaktualizować wszystkie linki do swojego profilu, które umieściłeś na innych stronach internetowych, chyba że linki te zawierają niezmienny identyfikator konta ({account_id}) zamiast nazwy użytkownika.\n"
+"\n"
+"Czy na pewno chcesz zmienić swoją nazwę użytkownika?"
 
 msgid "Username"
 msgstr "Nazwa użytkownika"
@@ -2440,9 +2443,7 @@ msgstr "{money_amount}{small}/tydzień{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
-msgstr ""
-"{money_amount}{small}/miesiąc\n"
-"{end_small}"
+msgstr "{money_amount}{small}/miesiąc{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
@@ -2554,7 +2555,7 @@ msgid "Currently unavailable"
 msgstr "Obecnie niedostępna"
 
 msgid "Pay by card"
-msgstr ""
+msgstr "Zapłać za pomocą karty"
 
 msgid "Euro donations only"
 msgstr "Tylko darowizny w euro"
@@ -2563,7 +2564,7 @@ msgid "Euro bank accounts only"
 msgstr "Tylko konta bankowe w euro"
 
 msgid "Pay by direct debit"
-msgstr ""
+msgstr "Zapłać za pomocą polecenia zapłaty"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
@@ -2576,7 +2577,7 @@ msgid "Not anonymous"
 msgstr "Nie anonimowa"
 
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "Zapłać za pomocą PayPal"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
@@ -2818,16 +2819,16 @@ msgstr "Profil {username}"
 #, python-brace-format
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ten profil jest dostępny w {n} języku"
+msgstr[1] "Ten profil jest dostępny w {n} językach"
+msgstr[2] "Ten profil jest dostępny w {n} językach"
 
 msgid "Show the list of languages"
-msgstr ""
+msgstr "Pokaż listę języków"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr ""
+msgstr "Ten profil jest dostępny jedynie w języku {language}"
 
 msgid "Edit"
 msgstr "Edycja"
@@ -3447,10 +3448,10 @@ msgid "Add a payment instrument:"
 msgstr "Dodaj instrument płatniczy:"
 
 msgid "Add a card"
-msgstr ""
+msgstr "Dodaj kartę"
 
 msgid "Add a bank account"
-msgstr ""
+msgstr "Dodaj konto bankowe"
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Nadal masz pieniądze na swoim koncie Liberapay, prosimy o wybranie sposobu ich wydania lub o skontaktowanie się z obsługą."
@@ -4116,19 +4117,19 @@ msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Użyj tych fragmentów kodu, aby dodać odznakę na swoją stronę lub README:"
 
 msgid "To contact the Liberapay team privately:"
-msgstr ""
+msgstr "Aby skontaktować się prywatnie z zespołem Liberapay:"
 
 msgid "Send us an email"
 msgstr "Wyślij nam e-mail"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr ""
+msgstr "Jeśli wiadomość nie jest napisana w języku angielskim lub francuskim, zostanie automatycznie przetłumaczona przez maszynę. Nasza odpowiedź zostanie przetłumaczona na Twój język w ten sam sposób."
 
 msgid "We currently don't have a phone number."
 msgstr "Aktualnie nie posiadamy numeru telefonu."
 
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr ""
+msgstr "Nie kontaktuj się z nami, jeśli próbujesz dotrzeć do jednego z naszych użytkowników. Nie przekazujemy wiadomości i nie możemy ujawnić tożsamości ani danych kontaktowych naszych użytkowników, chyba że masz prawomocne orzeczenie sądowe."
 
 msgid "To report a problem or make a suggestion in English:"
 msgstr "By zgłosić problem lub coś zasugerować w języku angielskim:"
@@ -4435,7 +4436,7 @@ msgid "Cookies"
 msgstr "Ciasteczka"
 
 msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
-msgstr ""
+msgstr "Plik cookie to informacja wysyłana przez witrynę internetową do przeglądarki, przechowywana na twoim komputerze i wysyłana przez twoją przeglądarkę do tej samej strony przy każdym kolejnym żądaniu."
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
 msgstr "Witryna liberapay.com ustawia tylko techniczne pliki cookie, które są wymagane do uwierzytelnienia użytkownika lub wykonania określonej operacji. Te pliki cookie są ograniczone do żądań tej samej witryny, więc nie wiemy, kto odwiedza witryny zawierające widżety Liberapay."
