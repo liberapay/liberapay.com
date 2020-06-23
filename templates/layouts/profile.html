@@ -97,7 +97,7 @@
                     % set donate_path = participant.path('donate')
                     % if tip.renewal_mode > 0
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
-                            _("Donating ({amount})", amount=tip.amount)
+                            _("Modify your donation")
                         }}</a>
                     % elif participant.payment_providers == 0
                         <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
