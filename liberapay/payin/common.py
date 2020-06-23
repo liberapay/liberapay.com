@@ -77,9 +77,6 @@ def update_payin(
     """
     with db.get_cursor() as cursor:
         payin = cursor.one("""
-            WITH old AS (
-                SELECT * FROM payins WHERE id = %(payin_id)s
-            )
             UPDATE payins
                SET status = %(status)s
                  , error = %(error)s
@@ -90,7 +87,7 @@ def update_payin(
                  , refunded_amount = coalesce(%(refunded_amount)s, refunded_amount)
              WHERE id = %(payin_id)s
          RETURNING *
-                 , (SELECT status FROM old) AS old_status
+                 , (SELECT status FROM payins WHERE id = %(payin_id)s) AS old_status
         """, locals())
         if not payin:
             return
@@ -623,9 +620,6 @@ def update_payin_transfer(
     """
     with db.get_cursor() as cursor:
         pt = cursor.one("""
-            WITH old AS (
-                SELECT * FROM payin_transfers WHERE id = %(pt_id)s
-            )
             UPDATE payin_transfers
                SET status = %(status)s
                  , error = %(error)s
@@ -635,8 +629,8 @@ def update_payin_transfer(
                  , reversed_amount = coalesce(%(reversed_amount)s, reversed_amount)
              WHERE id = %(pt_id)s
          RETURNING *
-                 , (SELECT reversed_amount FROM old) AS old_reversed_amount
-                 , (SELECT status FROM old) AS old_status
+                 , (SELECT reversed_amount FROM payin_transfers WHERE id = %(pt_id)s) AS old_reversed_amount
+                 , (SELECT status FROM payin_transfers WHERE id = %(pt_id)s) AS old_status
         """, locals())
         if not pt:
             return
