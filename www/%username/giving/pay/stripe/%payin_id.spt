@@ -150,6 +150,8 @@ elif payin_id:
     try:
         if payin.status == 'pre':
             payin = charge(website.db, payin, payer)
+            if payin.id != int(payin_id):
+                response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
         elif payin.status == 'awaiting_payer_action':
             payin = settle_payin(website.db, payin)
     except NextAction as act:
