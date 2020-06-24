@@ -93,17 +93,24 @@ Liberapay.init = function() {
         ).prop('selected', true);
         history.pushState(null, null, location.pathname + href + location.hash);
     });
+    
+    $('input[data-required-if-checked]').each(function(index, value) {
+        var radio = $(value).attr('data-required-if-checked');
+        $($(radio).parents('form').find('input')).change(function() {
+            $(value).prop('required', $(radio).is(':checked'));
+        });
+    });
 
     $('[data-toggle="tooltip"]').tooltip();
 
     $('.radio input:not([type="radio"])').on('click change', function() {
-        $(this).parents('label').children('input[type="radio"]').prop('checked', true);
+        $(this).parents('label').children('input[type="radio"]').prop('checked', true).trigger('change');
     });
     $('.radio-group input:not([type="radio"])').on('click change', function() {
-        $(this).parents('label').children('input[type="radio"]').prop('checked', true);
+        $(this).parents('label').children('input[type="radio"]').prop('checked', true).trigger('change');
     });
     $('.radio-group .list-group-item > label').on('click', function() {
-        $(this).children('input[type="radio"]').prop('checked', true);
+        $(this).children('input[type="radio"]').prop('checked', true).trigger('change');
     });
 
     $('[data-toggle="enable"]').on('change', function() {
