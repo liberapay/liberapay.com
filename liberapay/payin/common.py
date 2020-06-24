@@ -77,9 +77,6 @@ def update_payin(
     """
     with db.get_cursor() as cursor:
         payin = cursor.one("""
-            WITH old AS (
-                SELECT * FROM payins WHERE id = %(payin_id)s
-            )
             UPDATE payins
                SET status = %(status)s
                  , error = %(error)s
@@ -90,7 +87,7 @@ def update_payin(
                  , refunded_amount = coalesce(%(refunded_amount)s, refunded_amount)
              WHERE id = %(payin_id)s
          RETURNING *
-                 , (SELECT status FROM old) AS old_status
+                 , (SELECT status FROM payins WHERE id = %(payin_id)s) AS old_status
         """, locals())
         if not payin:
             return
@@ -266,10 +263,12 @@ def adjust_payin_transfers(db, payin, net_amount):
                         elif pt.amount != d.amount:
                             assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((d.amount, pt.id))
+                    n_periods = prorated_amount / tip.periodic_amount
                     for d in team_donations.values():
+                        unit_amount = (d.amount / n_periods).round_up()
                         prepare_payin_transfer(
                             db, payin, d.recipient, d.destination, 'team-donation',
-                            d.amount, tip.periodic_amount, tip.period,
+                            d.amount, unit_amount, tip.period,
                             team=team.id
                         )
             else:
@@ -621,9 +620,6 @@ def update_payin_transfer(
     """
     with db.get_cursor() as cursor:
         pt = cursor.one("""
-            WITH old AS (
-                SELECT * FROM payin_transfers WHERE id = %(pt_id)s
-            )
             UPDATE payin_transfers
                SET status = %(status)s
                  , error = %(error)s
@@ -633,8 +629,8 @@ def update_payin_transfer(
                  , reversed_amount = coalesce(%(reversed_amount)s, reversed_amount)
              WHERE id = %(pt_id)s
          RETURNING *
-                 , (SELECT reversed_amount FROM old) AS old_reversed_amount
-                 , (SELECT status FROM old) AS old_status
+                 , (SELECT reversed_amount FROM payin_transfers WHERE id = %(pt_id)s) AS old_reversed_amount
+                 , (SELECT status FROM payin_transfers WHERE id = %(pt_id)s) AS old_status
         """, locals())
         if not pt:
             return

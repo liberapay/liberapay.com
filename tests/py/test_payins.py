@@ -1010,7 +1010,10 @@ class TestPayinsStripe(Harness):
         assert pt.recipient == self.creator_1.id
 
         # 3rd request: execute the payment
-        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
+        r = self.client.GxT('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
+        assert r.code == 302, r.text
+        assert r.headers[b'Location'] == b'/donor/giving/pay/stripe/%i' % (self.offset + 1)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % (self.offset + 1), auth_as=self.donor)
         assert r.code == 200, r.text
         payin1, payin2 = self.db.all("SELECT * FROM payins ORDER BY id")
         assert payin1.status == 'failed'
