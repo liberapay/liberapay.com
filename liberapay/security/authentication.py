@@ -172,7 +172,16 @@ def sign_in_with_form_data(body, state):
         website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
         # Okay, create the account
         with website.db.get_cursor() as c:
-            p = Participant.make_active(kind, currency, username, cursor=c)
+            decode = lambda b: b.decode('ascii', 'backslashreplace')
+            request_data = {
+                'url': request.line.uri.decoded,
+                'headers': {
+                    decode(k): decode(b', '.join(v))
+                    for k, v in request.headers.items()
+                    if k != b'Cookie'
+                },
+            }
+            p = Participant.make_active(kind, currency, username, cursor=c, request_data=request_data)
             p.set_email_lang(state['locale'].language, cursor=c)
             p.add_email(email, cursor=c)
         if password:

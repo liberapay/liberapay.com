@@ -135,7 +135,7 @@ class Participant(Model, MixinTeam):
             """.format(x), vals)
 
     @classmethod
-    def make_active(cls, kind, currency, username=None, cursor=None):
+    def make_active(cls, kind, currency, username=None, cursor=None, request_data=None):
         """Return a new active participant.
         """
         now = utcnow()
@@ -154,6 +154,7 @@ class Participant(Model, MixinTeam):
                 INSERT INTO participants ({0}) VALUES ({1})
                   RETURNING participants.*::participants
             """.format(cols, placeholders), vals)
+            p.add_event(c, 'sign_up_request', request_data)
             if username:
                 p.change_username(username, cursor=c)
         return p
