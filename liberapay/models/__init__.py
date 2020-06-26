@@ -229,6 +229,10 @@ def _check_bundles_grouped_by_withdrawal_against_exchanges(cursor):
 
 def _check_sum_of_payin_transfers(cursor):
     """Check that the sum of a payin's transfers matches its net amount.
+
+    Some transfers can fail and be replaced by new ones, so the check ignores
+    failed transfers, unless the payin has been refunded (because sometimes a
+    failed transfer can't be retried so the payin is refunded instead).
     """
     l = cursor.all("""
         SELECT pi.id AS payin_id, pi.amount_settled, pi.fee
@@ -238,7 +242,10 @@ def _check_sum_of_payin_transfers(cursor):
           JOIN payins pi ON pi.id = pt.payin
          WHERE pi.amount_settled IS NOT NULL
       GROUP BY pi.id
-        HAVING (pi.amount_settled - pi.fee) <> sum(pt.amount);
+        HAVING pi.refunded_amount IS NULL AND
+               (pi.amount_settled - pi.fee) <> (sum(pt.amount) FILTER (WHERE pt.status <> 'failed'))
+            OR pi.refunded_amount IS NOT NULL AND
+               (pi.amount_settled - pi.fee) <> sum(pt.amount);
     """)
     assert len(l) == 0, "payin transfers are out of whack:\n" + '\n'.join(str(r) for r in l)
 
