@@ -205,9 +205,10 @@ algorithm.functions = [
     add_content_disposition_header,
     algorithm['handle_negotiation_exception'],
 
-    tell_sentry,
     merge_responses,
     turn_socket_error_into_50X,
+
+    tell_sentry,
     algorithm['get_response_for_exception'],
     delegate_error_to_simplate,
 
