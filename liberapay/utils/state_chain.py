@@ -130,7 +130,10 @@ def merge_responses(state, exception, response=None):
     exception.set_whence_raised()
     # render response if it's lazy
     if isinstance(exception, LazyResponse):
-        exception.render_body(state)
+        try:
+            exception.render_body(state)
+        except Exception:
+            pass
     # there's nothing else to do if the exception is the response
     if exception is response:
         return
