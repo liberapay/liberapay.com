@@ -628,6 +628,7 @@ def update_payin_transfer(
                  , reversed_amount = coalesce(%(reversed_amount)s, reversed_amount)
              WHERE id = %(pt_id)s
          RETURNING *
+                 , (SELECT amount FROM payin_transfers WHERE id = %(pt_id)s) AS old_amount
                  , (SELECT reversed_amount FROM payin_transfers WHERE id = %(pt_id)s) AS old_reversed_amount
                  , (SELECT status FROM payin_transfers WHERE id = %(pt_id)s) AS old_status
         """, locals())
@@ -649,12 +650,13 @@ def update_payin_transfer(
 
         # Update the `paid_in_advance` value of the donation.
         params = pt._asdict()
+        params['delta'] = pt.amount
+        if pt.old_status == 'succeeded':
+            params['delta'] -= pt.old_amount
         if pt.reversed_amount:
-            params['delta'] = -(pt.reversed_amount - (pt.old_reversed_amount or 0))
-            if params['delta'] == 0:
-                return pt
-        else:
-            params['delta'] = pt.amount
+            params['delta'] += -(pt.reversed_amount - (pt.old_reversed_amount or 0))
+        if params['delta'] == 0:
+            return pt
         updated_tips = cursor.all("""
             WITH latest_tip AS (
                      SELECT *
