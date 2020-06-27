@@ -101,7 +101,7 @@ def update_payin(
                 VALUES (%s, %s, %s, current_timestamp)
             """, (payin_id, status, error))
 
-        if payin.status in ('pending', 'succeeded'):
+        if status in ('pending', 'succeeded'):
             cursor.run("""
                 UPDATE exchange_routes
                    SET status = 'consumed'
@@ -114,7 +114,7 @@ def update_payin(
                    (payin.payer,))
 
         # Update scheduled payins, if appropriate
-        if payin.status in ('pending', 'succeeded'):
+        if status in ('pending', 'succeeded'):
             sp = cursor.one("""
                 SELECT *
                   FROM scheduled_payins
@@ -179,7 +179,7 @@ def update_payin(
                                  WHERE id = %s
                             """, (payin.id, sp.id))
                         break
-        elif payin.status == 'failed':
+        elif status == 'failed':
             cursor.run("""
                 UPDATE scheduled_payins
                    SET payin = NULL
@@ -636,7 +636,7 @@ def update_payin_transfer(
         if remote_id and pt.remote_id != remote_id:
             raise AssertionError(f"the remote IDs don't match: {pt.remote_id!r} != {remote_id!r}")
 
-        if pt.status != pt.old_status:
+        if status != pt.old_status:
             cursor.run("""
                 INSERT INTO payin_transfer_events
                        (payin_transfer, status, error, timestamp)
