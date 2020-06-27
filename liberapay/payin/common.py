@@ -93,14 +93,13 @@ def update_payin(
             return
         if remote_id and payin.remote_id != remote_id:
             raise AssertionError(f"the remote IDs don't match: {payin.remote_id!r} != {remote_id!r}")
-        if status == payin.old_status:
-            return payin
 
-        cursor.run("""
-            INSERT INTO payin_events
-                   (payin, status, error, timestamp)
-            VALUES (%s, %s, %s, current_timestamp)
-        """, (payin_id, status, error))
+        if status != payin.old_status:
+            cursor.run("""
+                INSERT INTO payin_events
+                       (payin, status, error, timestamp)
+                VALUES (%s, %s, %s, current_timestamp)
+            """, (payin_id, status, error))
 
         if payin.status in ('pending', 'succeeded'):
             cursor.run("""
@@ -636,14 +635,13 @@ def update_payin_transfer(
             return
         if remote_id and pt.remote_id != remote_id:
             raise AssertionError(f"the remote IDs don't match: {pt.remote_id!r} != {remote_id!r}")
-        if pt.status == pt.old_status:
-            return pt
 
-        cursor.run("""
-            INSERT INTO payin_transfer_events
-                   (payin_transfer, status, error, timestamp)
-            VALUES (%s, %s, %s, current_timestamp)
-        """, (pt_id, status, error))
+        if pt.status != pt.old_status:
+            cursor.run("""
+                INSERT INTO payin_transfer_events
+                       (payin_transfer, status, error, timestamp)
+                VALUES (%s, %s, %s, current_timestamp)
+            """, (pt_id, status, error))
 
         # If the payment has failed or hasn't been settled yet, then stop here.
         if status != 'succeeded':
