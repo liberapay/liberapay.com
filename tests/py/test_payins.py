@@ -1093,6 +1093,8 @@ class TestRefundsStripe(Harness):
             pt_extra=dict(remote_id='tr_XXXXXXXXXXXXXXXXXXXXXXXX'),
         )
         assert pt.amount == EUR('396.55')
+        tip = alice.get_tip_to(bob)
+        assert tip.paid_in_advance == pt.amount
         params = dict(payin_id=payin.id, recent_timestamp=(utcnow() - EPOCH).total_seconds())
         construct_event.return_value = stripe.Event.construct_from(
             json.loads('''{
@@ -1383,6 +1385,8 @@ class TestRefundsStripe(Harness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund == refund.id
         assert reversal.amount == EUR('396.55')
+        tip = alice.get_tip_to(bob)
+        assert tip.paid_in_advance == 0
         # Check that a notification was sent
         notifs = alice.get_notifs()
         assert len(notifs) == 1
@@ -1458,6 +1462,10 @@ class TestRefundsStripe(Harness):
             ],
             remote_id='py_XXXXXXXXXXXXXXXXXXXXXXXX',
         )
+        tip1 = alice.get_tip_to(bob)
+        tip2 = alice.get_tip_to(LiberapayOrg)
+        assert tip1.paid_in_advance == transfers[0].amount
+        assert tip2.paid_in_advance == transfers[1].amount
         params = dict(payin_id=payin.id, recent_timestamp=(utcnow() - EPOCH).total_seconds())
         construct_event.return_value = stripe.Event.construct_from(
             json.loads('''{
@@ -1721,6 +1729,10 @@ class TestRefundsStripe(Harness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund == refund.id
         assert reversal.amount == EUR('200.00')
+        tip1 = alice.get_tip_to(bob)
+        tip2 = alice.get_tip_to(LiberapayOrg)
+        assert tip1.paid_in_advance == 0
+        assert tip2.paid_in_advance == 0
         # Check that a notification was sent
         notifs = alice.get_notifs()
         assert len(notifs) == 1
@@ -1800,6 +1812,10 @@ class TestRefundsStripe(Harness):
             ],
             remote_id='py_XXXXXXXXXXXXXXXXXXXXXXXX',
         )
+        tip1 = alice.get_tip_to(bob)
+        tip2 = alice.get_tip_to(LiberapayOrg)
+        assert tip1.paid_in_advance == transfers[0].amount
+        assert tip2.paid_in_advance == transfers[1].amount
         params = dict(
             payin_id=payin.id,
             payin_transfer_id=[tr.id for tr in transfers if tr.remote_id][0],
@@ -2162,6 +2178,10 @@ class TestRefundsStripe(Harness):
         assert reversal.remote_id == 'trr_XXXXXXXXXXXXXXXXXXXXXXXX'
         assert reversal.payin_refund is None
         assert reversal.amount == EUR('200.00')
+        tip1 = alice.get_tip_to(bob)
+        tip2 = alice.get_tip_to(LiberapayOrg)
+        assert tip1.paid_in_advance == 0
+        assert tip2.paid_in_advance == 0
         # Check that no notification was sent
         notifs = alice.get_notifs()
         assert len(notifs) == 0

@@ -119,18 +119,23 @@ def add_content_disposition_header(request, response):
         response.headers[b'Content-Disposition'] = b"attachment; filename*=UTF-8''" + save_as
 
 
-def merge_responses(state, exception, response=None):
+def merge_responses(state, exception, website, response=None):
     """Merge the initial Response object with the one raised later in the chain.
     """
     if response is None or not isinstance(exception, Response):
         return
+    # log the exception
+    website.tell_sentry(exception, state)
     # clear the exception
     state['exception'] = None
     # set debug info
     exception.set_whence_raised()
     # render response if it's lazy
     if isinstance(exception, LazyResponse):
-        exception.render_body(state)
+        try:
+            exception.render_body(state)
+        except Exception:
+            pass
     # there's nothing else to do if the exception is the response
     if exception is response:
         return
@@ -148,9 +153,12 @@ def merge_responses(state, exception, response=None):
     state['response'] = exception
 
 
-def turn_socket_error_into_50X(website, exception, _=lambda a: a, response=None):
+def turn_socket_error_into_50X(website, state, exception, _=lambda a: a, response=None):
     # The mangopay module reraises exceptions and stores the original in `__cause__`.
     exception = getattr(exception, '__cause__', exception)
+    # log the exception
+    website.tell_sentry(exception, state, level='warning')
+    # replace the exception with a Response
     if isinstance(exception, Timeout) or 'timeout' in str(exception).lower():
         response = response or Response()
         response.code = 504

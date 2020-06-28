@@ -460,11 +460,15 @@ def make_sentry_teller(env, version):
         sentry = None
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
-    def tell_sentry(exception, state, allow_reraise=True):
+    def tell_sentry(exception, state, allow_reraise=True, level=None):
 
-        if isinstance(exception, pando.Response) and exception.code < 500:
-            # Only log server errors
-            return
+        if isinstance(exception, pando.Response):
+            if exception.code < 500:
+                # Only log server errors
+                return
+            if not level and exception.code in (502, 504):
+                # This kind of error is usually transient and not our fault.
+                level = 'warning'
 
         if isinstance(exception, NeedDatabase):
             # Don't flood Sentry when DB is down
@@ -514,7 +518,8 @@ def make_sentry_teller(env, version):
             return {'sentry_ident': None}
 
         # Prepare context data
-        level = 'warning' if isinstance(exception, Warning) else 'error'
+        if not level:
+            level = 'warning' if isinstance(exception, Warning) else 'error'
         sentry_data = {'level': level}
         if state:
             try:

@@ -280,7 +280,8 @@ class EmailAddressIsBlacklisted(LazyResponse400):
 
 
 class EmailDomainIsBlacklisted(LazyResponse400):
-    def msg(self, _, to_age):
+    def msg(self, _):
+        from liberapay.i18n.base import to_age
         domain, reason, ts, details = self.args
         if reason == 'bounce':
             return _(
