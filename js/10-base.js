@@ -93,11 +93,12 @@ Liberapay.init = function() {
         ).prop('selected', true);
         history.pushState(null, null, location.pathname + href + location.hash);
     });
-    
-    $('input[data-required-if-checked]').each(function(index, value) {
-        var radio = $(value).attr('data-required-if-checked');
-        $($(radio).parents('form').find('input')).change(function() {
-            $(value).prop('required', $(radio).is(':checked'));
+
+    $('input[data-required-if-checked]').each(function() {
+        var $this = $(this);
+        var $requirer = $($this.attr('data-required-if-checked'));
+        $this.parents('form').find('input').on('change', function() {
+            $this.prop('required', $requirer.prop('checked'));
         });
     });
 
