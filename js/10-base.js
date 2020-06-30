@@ -100,6 +100,7 @@ Liberapay.init = function() {
         $this.parents('form').find('input').on('change', function() {
             $this.prop('required', $requirer.prop('checked'));
         });
+        $requirer.trigger('change');
     });
 
     $('[data-toggle="tooltip"]').tooltip();
