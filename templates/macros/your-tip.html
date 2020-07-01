@@ -120,6 +120,7 @@
         % endif
         <input type="tel" inputmode="decimal" name="amount" id="amount" placeholder="{{ _('Amount') }}"
                class="amount form-control {{ 'input-sm' if small else '' }}"
+               data-required-if-checked="#custom-amount-radio"
                value="{{ locale.format_money(periodic_amount, format='amount_only')
                          if periodic_amount else '' }}"
                {{ disabled }} />
@@ -189,7 +190,7 @@
         )
         <li class="list-group-item">
         <label>
-            <input type="radio" name="selected_amount" value="custom" required
+            <input type="radio" id="custom-amount-radio" name="selected_amount" value="custom" required
                    {{ 'checked' if periodic_amount else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Custom") }}</h5>
