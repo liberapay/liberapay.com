@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Indonesian "
-"<https://hosted.weblate.org/projects/liberapay/core/id/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2020-07-02 00:49+0000\n"
+"Last-Translator: Muhammad Taufiq Sumadi <sumadi11895@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/liberapay/core/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -656,9 +658,7 @@ msgstr "Verifikasi alamat email - Liberapay"
 
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
-msgstr ""
-"Kami telah menerima permintaan untuk menghubungkan alamat email {0} ke akun Liberapay dengan alamat {1}.\n"
-"Masih ingat?"
+msgstr "Kami telah menerima permintaan untuk menghubungkan alamat email {0} ke akun Liberapay dengan alamat {1}. Masih ingat?"
 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
@@ -830,7 +830,7 @@ msgid "{0} returned an error, please try again later."
 msgstr "{0} error, silakan coba lagi nanti."
 
 msgid "example@mastodon.social"
-msgstr ""
+msgstr "example@mastodon.social"
 
 #, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
@@ -921,7 +921,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
-msgstr "'{domain_name}' adalah domain email yang tidak  valid."
+msgstr "'{domain_name}' email domain tidak valid."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
@@ -1028,9 +1028,9 @@ msgstr "{0} bukan jumlah yang benar."
 msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
 msgstr "\"{0}\" bukan format yang benar. Mungkin yang anda maksud {list_of_suggestions}?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{0}\" is not a properly formatted number."
-msgstr "\"{0}\" bukan format yang benar."
+msgstr "\"{0}\" bukan format angka yang benar."
 
 #, python-brace-format
 msgid "The \"{0}\" community already exists."
@@ -1128,17 +1128,17 @@ msgstr "Donasi Liberapay untuk {username}"
 #, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
+msgstr[0] "{n} minggu ke {money_amount}"
 
 #, python-brace-format
 msgid "{n} month of {money_amount}"
 msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
+msgstr[0] "{n} bulan ke {money_amount}"
 
 #, python-brace-format
 msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
+msgstr[0] "{n} tahun ke {money_amount}"
 
 msgid "Bad username or password."
 msgstr "Nama pengguna atau kata sandi salah."
@@ -1393,11 +1393,11 @@ msgstr "Pengguna ini tidak menerima donasi."
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
+msgstr[0] "{0} mempunyai {n} patrons."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
-msgstr "Tujuan {0} adalah untuk menerima {1} per minggu."
+msgstr "{0}'s adalah tujuan untuk menerima {1} setiap minggu."
 
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
@@ -1433,9 +1433,9 @@ msgstr "Anda masih belum masuk sebagai {0}."
 msgid "Password (optional)"
 msgstr "Kata sandi (opsional)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Biarkan isian sebelumnya kosong jika akun Anda tidak memiliki kata sandi, atau jika Anda kehilangannya. Kami akan mengirimkan Anda tautan masuk melalui email."
+msgstr "Jika anda{bold}kehilangan password{bold_end}, atau jika akun anda tidak punya password, maka biarkan input password kosong. Kami akan mengirim link login ke email anda."
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1639,9 +1639,9 @@ msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu d
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donasi ke {username} diproses melalui PayPal. Anda dapat membayar dengan kartu kredit atau kartu debit meski anda tidak memiliki akun PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atu kartu debit (Visa, MasterCard, American Express),  atau melalui PayPal."
+msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express), atau melalui PayPal."
 
 msgid "Country"
 msgstr "Negara"
@@ -3094,9 +3094,8 @@ msgstr "Pemberi donasi tidak perlu untuk terhubung dengan akun pembayaran di baw
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Kami menyarankan untuk menghubungkan baik Stripe maupun PayPal jika keduanya tersedia di negara anda."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Dengan Stripe pemberi donasi kepada anda dapat membayar denga kartu secara langsung dari Leberapay website. Debit Langsung SEPA juga akan segera didukung."
+msgstr "Dengan Stripe pemberi donasi kepada anda dapat membayar dengan kartu atau debit secara langsung dari website Liberapay. (Debit langsung saat ini hanya mendukung rekening bank Euro.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3386,7 +3385,7 @@ msgstr "Maaf, kami menjalankan pembayaran hari ini, dan kami tidak menyiapkan un
 
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
-msgstr "Anda memiliki {0} dalam dompet  anda. Apa yang akan kita lakukan dengan jumlah tersebut?"
+msgstr "Anda memiliki {0} dalam dompet anda. Apa yang harus kami lakukan dengannya?"
 
 #, python-brace-format
 msgid "Give it to the {0}people I donate to{1}"
@@ -5004,7 +5003,7 @@ msgid "Migrating from Gratipay"
 msgstr "Migrasi dari Gratipay"
 
 msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Oops, anda perlu menuju kembali dan masuk Gratipay  sebelum memulai migrasi."
+msgstr "Oops, anda perlu menuju kembali dan masuk Gratipay sebelum memulai migrasi."
 
 msgid "Go back"
 msgstr "Kembali"
