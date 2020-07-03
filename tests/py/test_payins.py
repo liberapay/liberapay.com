@@ -1360,6 +1360,7 @@ class TestRefundsStripe(Harness):
             }''' % params),
             stripe.api_key
         )
+        self.db.run("UPDATE payins SET ctime = ctime - interval '24 hours'")
         r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
         assert r.code == 200
         assert r.text == 'OK'
@@ -1705,6 +1706,7 @@ class TestRefundsStripe(Harness):
             }''' % params),
             stripe.api_key
         )
+        self.db.run("UPDATE payins SET ctime = ctime - interval '24 hours'")
         r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
         assert r.code == 200
         assert r.text == 'OK'
