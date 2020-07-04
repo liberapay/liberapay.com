@@ -26,6 +26,16 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
+    {{ dt(_("Can I modify my donations?"), 'modifying-donations') }}
+
+    <dd>{{ _(
+        "Yes, you can modify the amounts, periods and renewal modes of your donations "
+        "at any time through {link_open}your “Giving” page{link_close}.",
+        link_open='<a href="/about/me/giving/">'|safe,
+        link_close='</a>'|safe,
+    ) }}</dd>
+
+
     {{ dt(_("Can I make a one-time donation?"), 'one-time-gift') }}
 
     <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>
