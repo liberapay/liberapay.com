@@ -1,0 +1,11 @@
+{{ _("Liberapay donation renewal: authentication required") }}
+
+[---] text/html
+<p>{{ _(
+    "We haven't been able to complete your scheduled payment of {money_amount}, "
+    "because your bank requested that you confirm it.",
+    money_amount=payin_amount
+) }}</p>
+
+<p><a href="{{ participant.url('giving/pay/%s/%i' % (provider, payin_id)) }}" style="{{ button_style('primary') }}">{{
+    _("Confirm the payment") }}</a></p>

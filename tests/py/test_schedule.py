@@ -651,6 +651,58 @@ class TestScheduledPayins(EmailHarness):
         emails = self.get_emails()
         assert len(emails) == 0
 
+    def test_scheduled_payin_requiring_authentication(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('4.30'), renewal_mode=2)
+        alice_card = self.attach_stripe_payment_method(alice, 'pm_card_threeDSecureRequired')
+        self.make_payin_and_transfer(alice_card, bob, EUR('43.00'))
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('43.00')
+
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET execution_date = (current_date + interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
+        """)
+        send_upcoming_debit_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €43.00'
+
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 0
+
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET execution_date = current_date
+                 , last_notif_ts = (last_notif_ts - interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
+        """)
+        execute_scheduled_payins()
+        payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
+        assert len(payins) == 2
+        assert payins[1].payer == alice.id
+        assert payins[1].amount == EUR('43.00')
+        assert payins[1].off_session is True
+        assert payins[1].status == 'awaiting_payer_action'
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == 'Liberapay donation renewal: authentication required'
+        payin_page_path = f'/alice/giving/pay/stripe/{payins[1].id}'
+        assert payin_page_path in emails[0]['text']
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].payin == payins[1].id
+        # Test the payin page, it should redirect to the 3DSecure page
+        r = self.client.GET(payin_page_path, auth_as=alice, raise_immediately=False)
+        assert r.code == 200
+        assert r.headers[b'Refresh'].startswith(b'0;url=https://hooks.stripe.com/')
+
     def test_cancelling_a_scheduled_payin(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
