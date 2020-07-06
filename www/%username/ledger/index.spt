@@ -236,7 +236,7 @@ if participant.join_time:
                 % else
                     {{ _("error message: {0}", event['error']) }}
                 % endif
-            % elif status == 'pending' and event['payin_method'] == 'stripe-sdd'
+            % elif status == 'pending' and event['payin_method'] == 'stripe-sdd' and 'payer' in event
                 &mdash; {{ _(
                     "Processing this kind of payment takes {timedelta} on average.",
                     timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))

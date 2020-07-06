@@ -204,7 +204,7 @@ def test_email_domain(email: NormalizedEmailAddress):
     """
     start_time = time.monotonic()
     try:
-        ip_addresses = get_email_server_addresses(email.domain)
+        ip_addresses = get_email_server_addresses(email)
         exceptions = []
         n_ip_addresses = 0
         n_attempts = 0
@@ -241,7 +241,7 @@ def test_email_domain(email: NormalizedEmailAddress):
         raise EmailDomainUnresolvable(email, str(e))
 
 
-def get_email_server_addresses(domain):
+def get_email_server_addresses(email):
     """Resolve an email domain to IP addresses.
 
     Yields `IPv4Address` and `IPv6Address` objects.
@@ -253,12 +253,13 @@ def get_email_server_addresses(domain):
     Spec: https://tools.ietf.org/html/rfc5321#section-5.1
 
     """
+    domain = email.domain
     rrset = DNS.query(domain, 'MX', raise_on_no_answer=False).rrset
     if rrset:
         if len(rrset) == 1 and str(rrset[0].exchange) == '.':
             # This domain doesn't accept email. https://tools.ietf.org/html/rfc7505
             raise NonEmailDomain(
-                domain, f"the domain {domain} has a 'null MX' record (RFC 7505)"
+                email, f"the domain {domain} has a 'null MX' record (RFC 7505)"
             )
         # Sort the returned MX records
         records = sorted(rrset, key=lambda rec: (rec.preference, random()))
