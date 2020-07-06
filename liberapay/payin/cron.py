@@ -4,7 +4,7 @@ from datetime import date
 from pando import json
 
 from ..cron import logger
-from ..exceptions import AccountSuspended
+from ..exceptions import AccountSuspended, NextAction
 from ..i18n.currencies import Money
 from ..website import website
 from ..utils import utcnow
@@ -184,7 +184,11 @@ def execute_scheduled_payins():
             for tr in impossible:
                 tr['execution_date'] = execution_date
                 del tr['beneficiary'], tr['tip']
-            payer.notify('renewal_aborted', transfers=impossible)
+            payer.notify(
+                'renewal_aborted',
+                transfers=impossible,
+                email_unverified_address=True,
+            )
             counts['renewal_aborted'] += 1
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
@@ -197,16 +201,27 @@ def execute_scheduled_payins():
                     db, payin, tr['tip'], tr['beneficiary'], 'stripe',
                     payer, route.country, tr['amount']
                 )
-            payin = charge(db, payin, payer)
-            if payin.status in ('failed', 'succeeded'):
-                payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
-                counts['payin_' + payin.status] += 1
             db.run("""
                 UPDATE scheduled_payins
                    SET payin = %s
                      , mtime = current_timestamp
                  WHERE id = %s
             """, (payin.id, sp_id))
+            try:
+                payin = charge(db, payin, payer)
+            except NextAction:
+                payer.notify(
+                    'renewal_unauthorized',
+                    payin_id=payin.id, payin_amount=payin.amount,
+                    provider='stripe',
+                    email_unverified_address=True,
+                    force_email=True,
+                )
+                counts['renewal_unauthorized'] += 1
+                return
+            if payin.status in ('failed', 'succeeded'):
+                payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
+                counts['payin_' + payin.status] += 1
         else:
             db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
     for k, n in sorted(counts.items()):
