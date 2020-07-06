@@ -649,7 +649,7 @@ msgstr "Una squadra di cui fai parte ha cambiato nome"
 
 #, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
-msgstr "La squadra “{0}” ha cambiato nome in “{1}” per iniziativa di  {2}."
+msgstr "La squadra “{0}” ha cambiato nome in “{1}” per iniziativa di {2}."
 
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
@@ -985,7 +985,7 @@ msgid "You are not allowed to add another email address right now, please try ag
 msgstr "Non ti è consentito aggiungere un altro indirizzo e-mail per ora, riprova nei prossimi giorni."
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
-msgstr "Ci sono stati troppi tentativi di accesso dal tuo indirizzo IP o dal tuo Paese di recente. Per favore, ritenta  tra un'ora e di contattare support@liberapay.com via e-mail se il problema persiste."
+msgstr "Ci sono stati troppi tentativi di accesso dal tuo indirizzo IP o dal tuo Paese di recente. Per favore, ritenta tra un'ora e di contattare support@liberapay.com via e-mail se il problema persiste."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
 msgstr "Hai esaurito il numero di accessi via e-mail a tua disposizione, per favore riprova domani o di contattare support@liberapay.com."
@@ -2026,7 +2026,7 @@ msgstr "Identità del ricevente"
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
-msgstr "Abbiamo confermato attraverso un processo di verifica automatizzato che {0} ha il controllo dei seguenti conti  su altre piattaforme:"
+msgstr "Abbiamo confermato attraverso un processo di verifica automatizzato che {0} ha il controllo dei seguenti conti su altre piattaforme:"
 
 msgid "Frequently Asked Questions"
 msgstr "FAQ - Domande Frequenti"
@@ -2260,6 +2260,9 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
+"Quando modifichi il tuo nome utente, l'indirizzo web del tuo profilo cambia di conseguenza. Viene inserito un reindirizzamento dal vecchio URL al nuovo, ma qualsiasi utente può rimuoverlo se richiede il tuo vecchio nome utente, perciò dovresti aggiornare tutti i collegamenti al tuo profilo che hai inserito su altri siti web, a meno che quei collegamenti contengano il tuo ID utente immutabile ({account_id}) invece del tuo nome utente.\n"
+"\n"
+"Sei sicuro/a di voler cambiare il tuo nome utente?"
 
 msgid "Username"
 msgstr "Nome utente"
@@ -2525,7 +2528,7 @@ msgid "Currently unavailable"
 msgstr "Non disponibile al momento"
 
 msgid "Pay by card"
-msgstr ""
+msgstr "Paga tramite carta"
 
 msgid "Euro donations only"
 msgstr "Solo donazioni in euro"
@@ -2534,7 +2537,7 @@ msgid "Euro bank accounts only"
 msgstr "Solo conti bancari in euro"
 
 msgid "Pay by direct debit"
-msgstr ""
+msgstr "Paga tramite addebito diretto"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
@@ -2619,7 +2622,7 @@ msgstr "Sono necessarie ulteriori informazioni per poter elaborare questo pagame
 
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
-msgstr "L'elaboratore di pagamenti ({name}) non è capace ancora di processare addebiti diretti in {currency} per questo questo destinatario. Si prega di riprovare con un metodo di pagamento differente."
+msgstr "L'elaboratore di pagamenti ({name}) non è capace ancora di processare addebiti diretti in {currency} per questo destinatario. Si prega di riprovare con un metodo di pagamento differente."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -3424,7 +3427,7 @@ msgid "Try Again Later"
 msgstr "Riprovare più tardi"
 
 msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Siamo spiacenti, stiamo eseguendo il giorno di paga in questo momento, e non possiamo chiudere conti  mentre il giorno di paga è in esecuzione. Per favore riprova tra qualche ora."
+msgstr "Siamo spiacenti, stiamo eseguendo il giorno di paga in questo momento, e non possiamo chiudere conti mentre il giorno di paga è in esecuzione. Per favore riprova tra qualche ora."
 
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
@@ -3736,7 +3739,7 @@ msgid "Email me this information"
 msgstr "Inviami queste informazioni tramite e-mail"
 
 msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "I codici referenza dei bonifici non sono riutilizzabili. Non è ancora possibile impostare un trasferimento periodico  dal tuo conto bancario a Librepay."
+msgstr "I codici referenza dei bonifici non sono riutilizzabili. Non è ancora possibile impostare un trasferimento periodico dal tuo conto bancario a Librepay."
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
 msgstr "Ti invieremo una e-mail appena sarà accertato se il pagamento ha avuto esito positivo o meno."
@@ -3891,7 +3894,7 @@ msgstr "Ritira denaro"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
-msgstr "Sono stati prelevati {0} dal tuo conto Liberapay. Se il trasferimento andrà a buon fine {1} arriveranno sul tuo  conto bancario e {2} saranno pagati come commissione."
+msgstr "Sono stati prelevati {0} dal tuo conto Liberapay. Se il trasferimento andrà a buon fine {1} arriveranno sul tuo conto bancario e {2} saranno pagati come commissione."
 
 #, python-brace-format
 msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
@@ -4388,57 +4391,57 @@ msgid "A cookie is a piece of information sent by a website to your browser, sto
 msgstr "Un cookie è un'informazione inviata da un sito web al tuo browser, memorizzata sul tuo computer e reinviata dal tuo browser allo stesso sito web in ogni richiesta successiva."
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
-msgstr ""
+msgstr "Il sito web liberapay.com imposta solo cookie tecnice che sono richiesti per autenticare l'utente o per compiere specifiche operazioni. Questi cookie sono confinati a richieste sullo stesso sito, quindi non sappiamo chi visita siti web che contengono widget di Liberapay."
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
-msgstr ""
+msgstr "Su alcune pagine di pagamento, chi elabora i pagamenti potrebbe impostare cookie aggiuntivi. Si prega di leggere questi documenti per maggiori informazioni: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s cookie policy"
-msgstr ""
+msgstr "Politica dei cookie di {platform_name}"
 
 msgid "Social networks"
 msgstr "Reti sociali"
 
 #, python-brace-format
 msgid "Liberapay currently has integrations with {list_of_platforms}. When an account from one of those platforms is connected to a Liberapay profile, we retrieve and store some data from that platform, for example the unique identifier of the linked account. We only keep public information about the linked account, no private data."
-msgstr ""
+msgstr "Attualmente Liberapay contiene integrazioni con {list_of_platforms}. Quando un profilo di una di queste piattaforme è collegato ad un profilo Liberapay, recuperiamo e conserviamo alcuni dati da quella piattaforma, ad esempio l'identificatore univoco del profilo collegato. Conserviamo solo dati pubblici del profilo collegato, nessun dato privato."
 
 msgid "The primary purpose of these integrations is to confirm that a Liberapay account hasn't been created by an impostor attempting to profit from someone's else work."
-msgstr ""
+msgstr "Lo scopo principale di queste integrazioni è di confermare che un conto Liberapay non sia stato creato da un impostore nel tentativo di guadagnare dal lavoro altrui."
 
 msgid "The second purpose is to help patrons find the Liberapay accounts of the creators they follow on other platforms."
-msgstr ""
+msgstr "Lo scopo secondario è di aiutare i patroni a trovare conti Liberapay dei creatori coi quali sono in contatto su altre piattaforme."
 
 msgid "Payment processors"
-msgstr ""
+msgstr "Elaboratori di pagamenti"
 
 #, python-brace-format
 msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
-msgstr ""
+msgstr "Gli intermediari coinvolti nell'elaborazione dei pagamenti raccolgono informazioni per scopi anti-frode, ad esempio il nome e l'indirizzo IP del pagatore. Si prega di leggere questi documenti per maggiori informazioni: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
-msgstr ""
+msgstr "Politica sulla privacy di {platform_name}"
 
 msgid "Personal information leaks"
-msgstr ""
+msgstr "Fuga di informazioni personali"
 
 msgid "Liberapay does not tell creators who their patrons are. However, PayPal allows the recipient of a payment to see the name and email address of the payer, so donors who don't want to reveal themselves should not choose PayPal as the payment method."
-msgstr ""
+msgstr "Liberapay non dice ai creatori chi sono i suoi patroni. Tuttavia, PayPal permette al destinatario di un pagamento di visualizzare il nome e l'indirizzo e-mail del pagatore, perciò i donatori che non vogliono mostrarsi non dovrebbero scegliere PayPal come metodo di pagamento."
 
 msgid "Similarly, PayPal allows a donor to see the name and email address of the recipient, and Stripe may expose the recipient's phone number, so creators who do not want to reveal their identities should not use these payment processors, unless they have carefully configured their accounts to only leak nonsensitive information (a business name instead of the creator's name, a dedicated email address and phone number instead of the creator's personal contact details)."
-msgstr ""
+msgstr "Allo stesso modo, PayPal permette ad un donatore di visualizzare il nome e l'indirizzo e-mail del ricevente, e Stripe potrebbe mostrare il numero di telefono del ricevente, perciò i creatori che non vogliono rivelare le loro identità non dovrebbero usare questi elaboratori di pagamenti, a meno che non abbiano attentamente configurato i loro conti per mostrare solo le informazioni non sensibili (il nome di un'azienda invece del nome del creatore, un indirizzo e-mail e un numero di telefono dedicati invece dei dettagli di contatti personali del creatore)."
 
 msgid "Encryption"
 msgstr "Crittografia"
 
 msgid "All network connections are encrypted, except for some communications between machines located in the same datacenter."
-msgstr ""
+msgstr "Tutte le connessioni di rete sono criptate, tranne alcune comunicazioni tra macchine situate nello stesso centro di elaborazione."
 
 msgid "As a precaution against identity theft in case of data leak, the identity information of Liberapay account owners is stored encrypted in our database."
-msgstr ""
+msgstr "Come precauzione contro il furto di identità in caso di fuga di dati, le informazioni sull'identità dei proprietari di conti Liberapay sono archiviate criptate nel nostro database."
 
 #, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
@@ -4923,7 +4926,7 @@ msgstr "2. Finanzia la tua donazione"
 
 #, python-brace-format
 msgid "On Liberapay donations are funded in advance. You have control over how much money you put in and when. Sending more money at once results in a lower percentage of {0}transaction fees{1}."
-msgstr "Su Liberapay le donazioni sono finanziate in anticipo. Tu controlli quanto denaro aggiungi e quando. Inviare  ulteriore denaro in un'unica soluzione comporta una riduzione in percentuale sulle {0}commissioni delle transazioni{1}."
+msgstr "Su Liberapay le donazioni sono finanziate in anticipo. Tu controlli quanto denaro aggiungi e quando. Inviare ulteriore denaro in un'unica soluzione comporta una riduzione in percentuale sulle {0}commissioni delle transazioni{1}."
 
 msgid "3. Keep your donation funded"
 msgstr "3. Mantieni coperte le tue donazioni"
@@ -5241,6 +5244,9 @@ msgid ""
 "\n"
 "Please {link_start}make sure your membership of the team is public{link_end}."
 msgstr ""
+"Non siamo stati in grado di determinare se sei un membro della squadra {team_name} si {platform_name}.\n"
+"\n"
+"Si prega di {link_start}assicurarsi che l'appartenenza alla squadra sia pubblica{link_end}."
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
