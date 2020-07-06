@@ -26,6 +26,17 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
+    {{ dt(_("Can I modify or stop my donations?"), 'modify-or-stop-donations') }}
+
+    <dd>{{ _(
+        "Yes, you can stop your donations or modify their amounts, periods and renewal modes "
+        "at any time through {link_open}your “Giving” page{link_close}. Stopping a donation "
+        "doesn't trigger any refund, it merely cancels future renewals.",
+        link_open='<a href="/about/me/giving/">'|safe,
+        link_close='</a>'|safe,
+    ) }}</dd>
+
+
     {{ dt(_("Can I make a one-time donation?"), 'one-time-gift') }}
 
     <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>

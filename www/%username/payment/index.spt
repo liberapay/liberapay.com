@@ -110,9 +110,11 @@ subhead = _("Payment Processors")
             </p>
             <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.charges_enabled
-            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
-                _("This account cannot receive payments.")
-            }}</p>
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{ _(
+                "This account cannot receive payments. To fix this, log in to the "
+                "account and complete the verification process. After that, reconnect "
+                "the account if you still see this message."
+            ) }}</p>
             % endif
             <a href="https://dashboard.stripe.com/{{ account.id }}" target="_blank" rel="noopener noreferrer">{{
                 fontawesome("external-link") }} {{ _(
@@ -179,9 +181,11 @@ subhead = _("Payment Processors")
                 _("The email address '{0}' is not verified.", account.id)
             }}</p>
             % elif account.charges_enabled == False
-            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
-                _("This account cannot receive payments.")
-            }}</p>
+            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{ _(
+                "This account cannot receive payments. To fix this, log in to the "
+                "account and complete the verification process. After that, reconnect "
+                "the account if you still see this message."
+            ) }}</p>
             % endif
             <a href="https://www.paypal.com/signin" target="_blank" rel="noopener noreferrer">{{
                 fontawesome("external-link") }} {{ _(

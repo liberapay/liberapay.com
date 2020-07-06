@@ -29,6 +29,14 @@ title = _("Privacy")
 ) }}</p>
 
 <p>{{ _(
+    "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. "
+    "Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} "
+    "if you want to learn more about them.",
+    link_open='<a href="https://support.cloudflare.com/hc/en-us/articles/200170156">'|safe,
+    link_close='</a>'|safe,
+) }}</p>
+
+<p>{{ _(
     "On some payment pages, extra cookies may be set by the payment processor. "
     "Please read these documents if you want more information: {links_to_policies}.",
     links_to_policies=[
