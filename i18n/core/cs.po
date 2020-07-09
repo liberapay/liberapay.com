@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: 2020-07-10 00:41+0000\n"
+"Last-Translator: Michal Čihař <michal@cihar.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 4.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -232,22 +234,22 @@ msgid "Add money"
 msgstr "Přidat peníze"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr "Obnovení příspěvku Liberapay: nenalezen žádný platný platební nástroj"
+msgstr "Obnovení příspěvku Liberapay: nenalezen žádný platný platební prostředek"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Máte platbu částky {amount} naplánovanou na {payment_date} pro obnovení vašeho příspěvku pro {recipient}, ale nejsme schopni ji zpracovat, protože chybí platný platební nástroj."
+msgstr "Máte platbu částky {amount} naplánovanou na {payment_date} pro obnovení vašeho příspěvku pro {recipient}, ale nejsme schopni ji zpracovat, protože chybí platný platební prostředek."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "Máte platbu částky {amount} naplánovanou na {payment_date} pro obnovení vašich příspěvků pro {recipients}, ale nejsme schopni ji zpracovat, protože chybí platný platební nástroj."
+msgstr "Máte platbu částky {amount} naplánovanou na {payment_date} pro obnovení vašich příspěvků pro {recipients}, ale nejsme schopni ji zpracovat, protože chybí platný platební prostředek."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "Máte {n} naplánovanou platbu pro obnovení vašeho příspěvku, ale nejsme schopni ji zpracovat, protože chybí platná platební metoda."
 msgstr[1] "Máte {n} naplánované platby pro obnovení vašich příspěvků, ale nejsme schopni je zpracovat, protože chybí platná platební metoda."
-msgstr[2] "Máte {n} naplánovaných plateb pro obnovení vašich příspěvků, ale nejsme schopni je zpracovat, protože chybí platná platební metoda."
+msgstr[2] "Máte {n} naplánovaných plateb pro obnovení vašich příspěvků, ale nejsme schopni je zpracovat, protože chybí platný platební prostředek."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "Data plateb, částky a příjemci jsou:"
@@ -261,7 +263,7 @@ msgid "{date}: {money_amount} split between {recipients}"
 msgstr "{date}: {money_amount} rozděleno mezi {recipients}"
 
 msgid "Add a payment instrument"
-msgstr "Přidat platební nástroj"
+msgstr "Přidat platební prostředek"
 
 #, python-brace-format
 msgid "Invoice from {0} on Liberapay"
@@ -386,7 +388,7 @@ msgstr "Vaše platba se nezdařila"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Platba ve výši {money_amount} z dnešního data se nezdařila."
+msgstr "Dnešní platba ve výši {money_amount} selhala."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
@@ -447,36 +449,36 @@ msgstr "Jakmile bude tato platba zpracována, měla by se na vašem výpisu z ú
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Zpracování tohoto druhu platby trvá v průměru {timedelta}."
 
 msgid "Your payment has succeeded"
 msgstr "Vaše platba proběhla úspěšně"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr ""
+msgstr "Dnešní platba ve výši {money_amount} proběhla úspěšně."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Platba ze dne {date} ve výši {money_amount} proběhla úspěšně."
 
 msgid "Thank you for this donation!"
 msgstr "Děkujeme za tento dar!"
 
 msgid "You're missing out on donations through Liberapay"
-msgstr ""
+msgstr "Chybějí vám příspěvky prostřednictvím Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
 msgstr ""
 
 msgid "Configure payment processing"
-msgstr ""
+msgstr "Konfigurovat zpracování plateb"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
 msgstr "Pokud si nepřejete dostávat příspěvky na Liberapay, můžete je odmítat nastavením ve svém profilu."
 
 msgid "Reject donations"
-msgstr ""
+msgstr "Odmítat příspěvky"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
 msgstr ""
@@ -486,7 +488,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Platba ve výši {money_amount} plánovaná na {date} byla zrušena."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
@@ -494,7 +496,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr ""
+msgstr "Nová platba ve výši {money_amount} byla naplánována na {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
@@ -502,7 +504,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Platba ve výši {money_amount} původně plánovaná na {old_date} byla přesunuta na {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
@@ -510,11 +512,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "Částka platby plánované na {date} byla změněna z {old_money_amount} na {new_money_amount}."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Platba ve výši {old_money_amount} plánovaná na {old_date} byla nahražena platbou ve výši {new_money_amount} dne {new_date}."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
@@ -618,7 +620,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
-msgstr ""
+msgstr "Připojit účet {platform_name}"
 
 msgid "A team you're a member of has been modified"
 msgstr "Tým, jehož jste členem, byl změněn"
@@ -734,7 +736,7 @@ msgid "Your request has been rejected by our software. Please {link_open}contact
 msgstr ""
 
 msgid "Error message:"
-msgstr ""
+msgstr "Chybová zpráva:"
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
@@ -864,7 +866,7 @@ msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr "Opravdu je {0} server {1}? Právě teď se tak nechová."
 
 msgid "example@pleroma.site"
-msgstr ""
+msgstr "example@pleroma.site"
 
 msgid "You need to sign in first"
 msgstr "Nejdřív se musíte přihlásit"
@@ -1112,10 +1114,10 @@ msgid "Not Found"
 msgstr "Nebylo nalezeno"
 
 msgid "Conflict"
-msgstr ""
+msgstr "Konflikt"
 
 msgid "Gone"
-msgstr ""
+msgstr "Nedostupné"
 
 msgid "Too Many Requests"
 msgstr "Příliš mnoho požadavků"
@@ -1202,7 +1204,7 @@ msgid "Processing your request failed because our server was unable to communica
 msgstr ""
 
 msgid "Bad Request"
-msgstr ""
+msgstr "Chybný požadavek"
 
 msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
 msgstr ""
@@ -1252,10 +1254,10 @@ msgid "{platform} rejected our request to access your data. Reconnecting your {p
 msgstr ""
 
 msgid "Reconnect"
-msgstr ""
+msgstr "Znovu připojit"
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Přesměrovávám…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
@@ -1348,7 +1350,7 @@ msgid "Help us translate Liberapay"
 msgstr "Pomozte nám překládat Liberapay"
 
 msgid "Your account"
-msgstr ""
+msgstr "Váš účet"
 
 msgid "Profile"
 msgstr "Profil"
@@ -1357,16 +1359,16 @@ msgid "Giving"
 msgstr "Dáváte"
 
 msgid "Payment Instruments"
-msgstr ""
+msgstr "Platební prostředky"
 
 msgid "Payment Schedule"
-msgstr ""
+msgstr "Platební kalendář"
 
 msgid "Receiving"
 msgstr "Dostáváte"
 
 msgid "Payment Processors"
-msgstr ""
+msgstr "Zpracovatelé plateb"
 
 msgid "Ledger"
 msgstr "Účetnictví"
@@ -1478,7 +1480,7 @@ msgid "Avatar"
 msgstr "Avatar"
 
 msgid "Default avatar"
-msgstr ""
+msgstr "Výchozí avatar"
 
 msgid "Find great people to donate to"
 msgstr "Najděte skvělé lidi kterým můžete přispět"
@@ -1523,16 +1525,16 @@ msgid "Ok"
 msgstr "Ok"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "Osobní údaje"
 
 msgid "Full Name"
-msgstr ""
+msgstr "Celé jméno"
 
 msgid "Country (residence)"
 msgstr "Země trvalého pobytu"
 
 msgid "Nationality"
-msgstr ""
+msgstr "Státní příslušnost"
 
 msgid "Date of Birth"
 msgstr "Datum narození"
@@ -1572,7 +1574,7 @@ msgid "Introduction"
 msgstr "Představení"
 
 msgid "Global"
-msgstr ""
+msgstr "Celosvětový"
 
 msgid "Teams"
 msgstr "Týmy"
@@ -1593,7 +1595,7 @@ msgid "Security"
 msgstr "Bezpečnost"
 
 msgid "Logos"
-msgstr ""
+msgstr "Loga"
 
 msgid "Overview"
 msgstr "Přehled"
@@ -1632,10 +1634,10 @@ msgid "Linked Accounts"
 msgstr "Propojené účty"
 
 msgid "Instruments"
-msgstr ""
+msgstr "Prostředky"
 
 msgid "Schedule"
-msgstr ""
+msgstr "Plán"
 
 msgid "Members"
 msgstr "Členové"
@@ -1693,7 +1695,7 @@ msgid "City"
 msgstr "Město"
 
 msgid "Postal code"
-msgstr ""
+msgstr "Poštovní směrovací číslo"
 
 msgid "Address within the city"
 msgstr ""
@@ -1781,10 +1783,10 @@ msgid "Actual Take"
 msgstr "Skutečný podíl"
 
 msgid "n/a"
-msgstr ""
+msgstr "n/a"
 
 msgid "auto"
-msgstr ""
+msgstr "automaticky"
 
 msgid "Update my nominal take"
 msgstr "Upravit můj nominální podíl"
@@ -1856,13 +1858,13 @@ msgid "Please choose how this donation should be renewed:"
 msgstr ""
 
 msgid "Automatic renewal"
-msgstr ""
+msgstr "Automatické obnovení"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
 msgstr ""
 
 msgid "Manual renewal"
-msgstr ""
+msgstr "Ruční obnovení"
 
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr ""
@@ -2286,7 +2288,7 @@ msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and unders
 msgstr ""
 
 msgid "Name (optional)"
-msgstr ""
+msgstr "Jméno (volitelné)"
 
 msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
 msgstr ""
@@ -2362,7 +2364,7 @@ msgid "Primary"
 msgstr "Hlavní"
 
 msgid "Disavowed"
-msgstr ""
+msgstr "Distancovaná"
 
 msgid "Unverified"
 msgstr "Neověřená"
@@ -2423,19 +2425,19 @@ msgstr[2] ""
 
 #, python-brace-format
 msgid "{money_amount}{small}/week{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/týden{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/měsíc{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
-msgstr ""
+msgstr "{money_amount}{small}/rok{end_small}"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
-msgstr ""
+msgstr "Začalo {timespan_ago}."
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
@@ -2454,23 +2456,23 @@ msgid "Inactive because the recipient no longer accepts donations."
 msgstr ""
 
 msgid "Active"
-msgstr ""
+msgstr "Aktivní"
 
 #, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
 msgstr ""
 
 msgid "Renew now"
-msgstr ""
+msgstr "Obnovit nyní"
 
 msgid "Pending payment completion."
-msgstr ""
+msgstr "Čeká se na dokončení platby."
 
 msgid "Awaiting payment."
-msgstr ""
+msgstr "Čeká se na platbu."
 
 msgid "Renew"
-msgstr ""
+msgstr "Obnovit"
 
 msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
 msgstr ""
@@ -2483,16 +2485,16 @@ msgid "You are currently not donating to anyone."
 msgstr ""
 
 msgid "Cancel the pledge"
-msgstr ""
+msgstr "Zrušit příslib"
 
 msgid "Stopped donations"
-msgstr ""
+msgstr "Zastavené příspěvky"
 
 msgid "Restart"
-msgstr ""
+msgstr "Začít znovu"
 
 msgid "Hide"
-msgstr ""
+msgstr "Skrýt"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2503,14 +2505,14 @@ msgid "This stopped donation still has {money_amount} paid in advance. That adva
 msgstr ""
 
 msgid "Cancelled pledges"
-msgstr ""
+msgstr "Zrušené přísliby"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
 msgstr ""
 
 msgid "Funding your donations"
-msgstr ""
+msgstr "Financování vašich příspěvků"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2536,13 +2538,13 @@ msgid "Card"
 msgstr "Karta"
 
 msgid "Currently unavailable"
-msgstr ""
+msgstr "Momentálně nedostupné"
 
 msgid "Pay by card"
 msgstr ""
 
 msgid "Euro donations only"
-msgstr ""
+msgstr "Pouze příspěvky v eurech"
 
 msgid "Euro bank accounts only"
 msgstr ""
@@ -2558,7 +2560,7 @@ msgid "Doesn't support automatic renewal"
 msgstr ""
 
 msgid "Not anonymous"
-msgstr ""
+msgstr "Není anonymní"
 
 msgid "Pay with PayPal"
 msgstr ""
@@ -2620,14 +2622,14 @@ msgid "PayPal payments are currently not anonymous, the recipient will see your 
 msgstr ""
 
 msgid "Initiate the payment"
-msgstr ""
+msgstr "Zahajte platbu"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr ""
 
 msgid "The payment instrument is invalid, please select or add another one."
-msgstr ""
+msgstr "Platební prostředek není platný, prosím zvolte nebo vytvořte jiný."
 
 msgid "More information is required in order to process this payment."
 msgstr ""
@@ -2641,7 +2643,7 @@ msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr ""
 
 msgid "Use another card"
-msgstr ""
+msgstr "Použít jinou kartu"
 
 #, python-brace-format
 msgid "We will charge your {bank_name} account ({partial_account_number})."
@@ -2651,13 +2653,13 @@ msgid "Use another bank account"
 msgstr ""
 
 msgid "Payment instrument:"
-msgstr ""
+msgstr "Platební prostředek:"
 
 msgid "Please input your name and card number:"
 msgstr ""
 
 msgid "Jane Doe"
-msgstr ""
+msgstr "Jana Nováková"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
@@ -2712,7 +2714,7 @@ msgstr[2] ""
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Další platba {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
@@ -3004,10 +3006,10 @@ msgid "succeeded"
 msgstr "proběhlo úspěšně"
 
 msgid "partially refunded"
-msgstr ""
+msgstr "částečně vráceno"
 
 msgid "refunded"
-msgstr ""
+msgstr "vráceno"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -3025,13 +3027,13 @@ msgid "Fees"
 msgstr "Poplatky"
 
 msgid "Method"
-msgstr ""
+msgstr "Metoda"
 
 msgid "automatic charge"
-msgstr ""
+msgstr "automatické nabíjení"
 
 msgid "charge"
-msgstr ""
+msgstr "poplatek"
 
 #, python-brace-format
 msgid "error message: {0}"
@@ -3133,7 +3135,7 @@ msgid "This notification is marked for deletion."
 msgstr ""
 
 msgid "Restore"
-msgstr ""
+msgstr "Obnovit"
 
 msgid "No notifications to show."
 msgstr "Žádná oznámení k zobrazení."
@@ -3159,15 +3161,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
-msgstr ""
+msgstr "ID účtu: {0}"
 
 #, python-brace-format
 msgid "Country: {0}"
-msgstr ""
+msgstr "Země: {0}"
 
 #, python-brace-format
 msgid "Currency: {0}"
-msgstr ""
+msgstr "Měna: {0}"
 
 #, python-brace-format
 msgid "Added on {date}"
@@ -3198,7 +3200,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
-msgstr ""
+msgstr "liberapay_účtenka_{number}"
 
 msgid "Receipt"
 msgstr "Účtenka"
@@ -3309,7 +3311,7 @@ msgid "This section doesn't include data on donations through teams, it only sho
 msgstr ""
 
 msgid "Recent Changes"
-msgstr ""
+msgstr "Nedávné změny"
 
 #, python-brace-format
 msgid "A new donation of {amount} per week has been created."
@@ -3356,7 +3358,7 @@ msgid "Starred Repositories on {platform}"
 msgstr ""
 
 msgid "Starred Repositories"
-msgstr ""
+msgstr "Repozitáře označené hvězdičkou"
 
 msgid "We can import a list of repositories you have starred from:"
 msgstr ""
@@ -3373,7 +3375,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "The payment instrument has been successfully added."
-msgstr ""
+msgstr "Platební prostředek byl úspěšně přidán."
 
 msgid "Forget this card number after one payment."
 msgstr ""
@@ -3399,10 +3401,10 @@ msgid "Bank Account"
 msgstr "Bankovní účet"
 
 msgid "default"
-msgstr ""
+msgstr "výchozí"
 
 msgid "view mandate"
-msgstr ""
+msgstr "zobrazit mandát"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3421,16 +3423,16 @@ msgid "The last payment initiated on {date} was successful."
 msgstr ""
 
 msgid "This payment instrument hasn't been used yet."
-msgstr ""
+msgstr "Platební prostředek ještě nebyl použit."
 
 msgid "Set as default"
 msgstr ""
 
 msgid "You don't have any valid payment instrument."
-msgstr ""
+msgstr "Nemáte žádný použitelný platební prostředek."
 
 msgid "Add a payment instrument:"
-msgstr ""
+msgstr "Přidat platební prostředek:"
 
 msgid "Add a card"
 msgstr ""
@@ -3477,7 +3479,7 @@ msgid "You have a pending transfer to your bank account. If it fails, the money 
 msgstr "Máte čekající na převod na váš bankovní účet. Pokud se to nepodaří, peníze se znovu zobrazí ve vaší peněžence a váš účet bude automaticky znovu otevřen."
 
 msgid "Data retention"
-msgstr ""
+msgstr "Uchovávání údajů"
 
 msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
 msgstr "Vaši e-mailovou adresu a heslo neodstraníme okamžitě, takže ještě nějakou dobu nebudete schopni znovu otevřít svůj účet jednoduše přihlášením se. Toto je možné jenom dokud váš účet nebude definitivně archivován."
@@ -3633,10 +3635,10 @@ msgid "refund of failed withdrawal (error message: {0})"
 msgstr "vrácení neúspěšného výběru (došlo k chybě: {0})"
 
 msgid "canceled"
-msgstr ""
+msgstr "zrušeno"
 
 msgid "in arrears"
-msgstr ""
+msgstr "v prodlení"
 
 msgid "donation refund"
 msgstr "vrácení daru"
@@ -3649,16 +3651,16 @@ msgid "one-off donation from someone closing their account"
 msgstr "jednorázový příspěvek od někoho rušícího svůj účet"
 
 msgid "chargeback"
-msgstr ""
+msgstr "zpětné zúčtování"
 
 msgid "debt repayment"
-msgstr ""
+msgstr "splátka dluhu"
 
 msgid "currency exchange"
 msgstr "výměna měny"
 
 msgid "fee refund"
-msgstr ""
+msgstr "vrácení poplatku"
 
 #, python-brace-format
 msgid "final gift to {0}"
@@ -3831,13 +3833,13 @@ msgid "Card payments are instantenous, and we will attempt to pull the full amou
 msgstr ""
 
 msgid "Billing Address (optional)"
-msgstr ""
+msgstr "Fakturační adresa (volitelné)"
 
 msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
 msgstr ""
 
 msgid "Saved address:"
-msgstr ""
+msgstr "Uložená adresa:"
 
 msgid "Input the billing address"
 msgstr ""
@@ -4018,16 +4020,16 @@ msgstr ""
 
 #, python-brace-format
 msgid "Account number: {0}"
-msgstr ""
+msgstr "Číslo účtu: {0}"
 
 msgid "Debit"
-msgstr ""
+msgstr "Debetní"
 
 msgid "Credit"
-msgstr ""
+msgstr "Kreditní"
 
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"
@@ -4043,7 +4045,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Account balance: {0}"
-msgstr ""
+msgstr "Zůstatek na účtu: {0}"
 
 #, python-brace-format
 msgid "I donate {0} per week"
@@ -4231,13 +4233,13 @@ msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Asi ne, ale to záleží na daňových předpisech vaší země."
 
 msgid "What are wallets?"
-msgstr ""
+msgstr "Co jsou peněženky?"
 
 msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
 msgstr ""
 
 msgid "What is “payday”?"
-msgstr ""
+msgstr "Co je to „výplatní den“?"
 
 #, python-brace-format
 msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
@@ -4260,9 +4262,9 @@ msgstr[2] ""
 #, python-brace-format
 msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
 msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Příspěvku mohou být v jakékoliv z této {n} měny:"
+msgstr[1] "Příspěvku mohou být v jakékoliv z těchto {n} měn:"
+msgstr[2] "Příspěvku mohou být v jakékoliv z těchto {n} měn:"
 
 msgid "Each creator can select which of these currencies to accept."
 msgstr ""
@@ -4322,7 +4324,7 @@ msgid "Terms of Service"
 msgstr "Podmínky služby"
 
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Zásady ochrany osobních údajů"
 
 #, python-brace-format
 msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
@@ -4339,7 +4341,7 @@ msgid "The Liberapay yellow is {yellow_color_code}, the black is {black_color_co
 msgstr ""
 
 msgid "Legal information"
-msgstr ""
+msgstr "Právní informace"
 
 #, python-brace-format
 msgid "The Liberapay logo is pretty much free of copyright thanks to {CC0_link_start}the CC0 Public Domain Dedication{link_end}, so you are allowed to distribute it and modify it without asking our permission. However, the Liberapay logo is part of the Liberapay trademark, so you can't use it to represent your own products."
@@ -4371,7 +4373,7 @@ msgid "Download the black-on-yellow PNG ({x_y} pixels)"
 msgstr ""
 
 msgid "Fonts"
-msgstr ""
+msgstr "Písma"
 
 #, python-brace-format
 msgid "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}."
@@ -4424,7 +4426,7 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr ""
 
 msgid "Cookies"
-msgstr ""
+msgstr "Soubory cookie"
 
 msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
 msgstr ""
@@ -4445,7 +4447,7 @@ msgid "{platform_name}'s cookie policy"
 msgstr ""
 
 msgid "Social networks"
-msgstr ""
+msgstr "Sociální sítě"
 
 #, python-brace-format
 msgid "Liberapay currently has integrations with {list_of_platforms}. When an account from one of those platforms is connected to a Liberapay profile, we retrieve and store some data from that platform, for example the unique identifier of the linked account. We only keep public information about the linked account, no private data."
@@ -4458,7 +4460,7 @@ msgid "The second purpose is to help patrons find the Liberapay accounts of the 
 msgstr ""
 
 msgid "Payment processors"
-msgstr ""
+msgstr "Zpracovatelé plateb"
 
 #, python-brace-format
 msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
@@ -4478,7 +4480,7 @@ msgid "Similarly, PayPal allows a donor to see the name and email address of the
 msgstr ""
 
 msgid "Encryption"
-msgstr ""
+msgstr "Šifrování"
 
 msgid "All network connections are encrypted, except for some communications between machines located in the same datacenter."
 msgstr ""
@@ -4491,7 +4493,7 @@ msgid "If you think you've found a security issue, and it's not already in our l
 msgstr ""
 
 msgid "Policy"
-msgstr ""
+msgstr "Zásady"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
@@ -4581,7 +4583,7 @@ msgid "Money moved out of Liberapay"
 msgstr "Peníze vybrané z Liberapay"
 
 msgid "Weekly Donations"
-msgstr ""
+msgstr "Týdenní dary"
 
 #, python-brace-format
 msgid "The sum of active donations for each week, expressed in {currency}."
@@ -4651,7 +4653,7 @@ msgid "You may wonder why we treat nominal takes as maximums instead of simple p
 msgstr ""
 
 msgid "Automatic takes"
-msgstr ""
+msgstr "Automatické podíly"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
 msgstr ""
@@ -4793,7 +4795,7 @@ msgid "See the most popular repositories belonging to Liberapay users, and brows
 msgstr ""
 
 msgid "Explore Repositories"
-msgstr ""
+msgstr "Prozkoumejte repozitáře"
 
 msgid "Browse the accounts that Liberapay users have on other platforms. Find your contacts by connecting your own accounts."
 msgstr "Projděte účty, které mají uživatelé Liberapay na jiných platformách. Najděte vaše kontakty pomocí připojení vlastních účtů."
@@ -4851,10 +4853,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "by {author_name}"
-msgstr ""
+msgstr "od {author_name}"
 
 msgid "Stars"
-msgstr ""
+msgstr "Hvězdy"
 
 msgid "Browse your favorite repositories"
 msgstr ""
@@ -5179,7 +5181,7 @@ msgid "basic account data (username, avatar, some privacy settings, etc.)"
 msgstr ""
 
 msgid "profile descriptions"
-msgstr ""
+msgstr "popisy profilu"
 
 msgid "teams (we will create them for you)"
 msgstr ""
@@ -5388,7 +5390,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} declines donations"
-msgstr ""
+msgstr "{0} odmítá příspěvky"
 
 #, python-brace-format
 msgid "{0} accepts donations"
