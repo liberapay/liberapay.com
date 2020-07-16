@@ -277,7 +277,7 @@ def _filter_transfers(payer, transfers, automatic):
             tr['amount'] = Money(**tr['amount'])
         beneficiary = tr['beneficiary'] = website.db.Participant.from_id(tr['tippee_id'])
         tip = tr['tip'] = payer.get_tip_to(beneficiary)
-        if tip.renewal_mode < 1 or (tip.renewal_mode == 2) != automatic:
+        if tip.renewal_mode < 1 or automatic and (tip.renewal_mode != 2):
             canceled_transfers.append(tr)
         elif beneficiary.status != 'active' or beneficiary.is_suspended or \
              beneficiary.payment_providers & 1 == 0:
