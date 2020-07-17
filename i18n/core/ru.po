@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"PO-Revision-Date: 2020-07-17 17:24+0000\n"
+"Last-Translator: Nikita Epifanov <nikgreens@protonmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -467,7 +469,7 @@ msgstr "После того, как платеж будет обработан, 
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Обработка этого вида оплаты занимает в среднем {timedelta}."
 
 msgid "Your payment has succeeded"
 msgstr "Ваш платеж успешно проведён"
@@ -620,14 +622,14 @@ msgid "The following donation renewal payments have been aborted because the rec
 msgstr "Следующие платежи на периодические платежи были прерваны, потому что получатели не могут их получить:"
 
 msgid "Liberapay donation renewal: authentication required"
-msgstr ""
+msgstr "Возобновление пожертвований Liberapay: требуется аутентификация"
 
 #, python-brace-format
 msgid "We haven't been able to complete your scheduled payment of {money_amount}, because your bank requested that you confirm it."
-msgstr ""
+msgstr "Нам не удалось завершить запланированный платеж {money_amount}, потому что ваш банк потребовал, чтобы вы подтвердили его."
 
 msgid "Confirm the payment"
-msgstr ""
+msgstr "Подтвердите оплату"
 
 #, fuzzy
 msgid "You can make it easier for your patrons to support you through Liberapay"
@@ -990,7 +992,7 @@ msgstr "Домен электронной почты {domain} занесен в 
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Почтовый домен {domain} был занесен в черный список {date}, поскольку он предоставлял одноразовые адреса. Пожалуйста, свяжитесь с нами, если это больше не так, и вы хотите, чтобы мы удалили этот домен из черного списка."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
@@ -1156,7 +1158,7 @@ msgstr "Превышено время ожидания шлюза"
 
 #, python-brace-format
 msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
-msgstr ""
+msgstr "Пользователь {platform}, которого вы ищете, не присоединился к Liberapay, и создать для него профиль-заглушку невозможно."
 
 #, python-brace-format
 msgid "'{0}' doesn't seem to be a valid user id on {platform}."
@@ -1306,7 +1308,7 @@ msgid "Did you mistype your email address? Fix it and try again, or try a differ
 msgstr "Ошиблись с вводом адреса электронной почты? Исправьте его и попробуйте еще раз, или попробуйте другой адрес."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "Если вы уверены, что введенный вами адрес электронной почты действителен, вы можете обойти эту ошибку. Однако если мы не сможем доставить сообщения на этот адрес, он будет занесен в черный список."
 
 #, fuzzy
 msgid "Ignore the error and proceed"
@@ -1314,13 +1316,13 @@ msgstr "Игнорировать ошибку и продолжить"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
-msgstr ""
+msgstr "Если вы считаете, что письма, отправленные нами на {email_address}, больше не будут возвращаться, вы можете удалить этот адрес из черного списка и повторить попытку:"
 
 msgid "Bypass the blacklist and retry"
-msgstr ""
+msgstr "Обойти черный список и повторить попытку"
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "Кроме того, вы можете попробовать другой адрес электронной почты:"
 
 msgid "Proceed"
 msgstr "Продолжить"
@@ -1329,7 +1331,7 @@ msgid "Please try again in a few minutes."
 msgstr "Попробуйте ещё раз через несколько минут."
 
 msgid "Log in via email"
-msgstr ""
+msgstr "Войти по электронной почте"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "В данный момент у нас технические проблемы. В результате почти ничего не работает. Приносим извинения за неудобства, мы всё починим как можно скорее."
@@ -1372,7 +1374,7 @@ msgid "Help us translate Liberapay"
 msgstr "Помогите нам перевести Liberapay"
 
 msgid "Your account"
-msgstr ""
+msgstr "Ваш счёт"
 
 msgid "Profile"
 msgstr "Профиль"
@@ -1381,10 +1383,10 @@ msgid "Giving"
 msgstr "Расходы"
 
 msgid "Payment Instruments"
-msgstr ""
+msgstr "Платёжные инструменты"
 
 msgid "Payment Schedule"
-msgstr ""
+msgstr "График оплаты"
 
 msgid "Receiving"
 msgstr "Доходы"
@@ -1470,7 +1472,7 @@ msgid "Goal: {0}"
 msgstr "Цель: {0}"
 
 msgid "Modify your donation"
-msgstr ""
+msgstr "Изменить ваше пожертвование"
 
 msgid "Pledge"
 msgstr "Подарок"
@@ -1502,7 +1504,7 @@ msgid "Avatar"
 msgstr "Аватар"
 
 msgid "Default avatar"
-msgstr ""
+msgstr "Аватар по умолчанию"
 
 msgid "Find great people to donate to"
 msgstr "Найти достойных людей, чтобы сделать им пожертвование"
@@ -1590,7 +1592,7 @@ msgstr "Адрес головного офиса"
 
 #, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr ""
+msgstr "Показать подменю {submenu_label}"
 
 msgid "Introduction"
 msgstr "Введение"
@@ -1658,10 +1660,10 @@ msgid "Linked Accounts"
 msgstr "Аккаунты в других сервисах"
 
 msgid "Instruments"
-msgstr ""
+msgstr "Инструменты"
 
 msgid "Schedule"
-msgstr ""
+msgstr "График"
 
 msgid "Members"
 msgstr "Участники"
@@ -1734,7 +1736,7 @@ msgid "per week"
 msgstr "в неделю"
 
 msgid "Modify your pledge"
-msgstr ""
+msgstr "Изменить свой залог"
 
 msgid "Pledges"
 msgstr "Подарки"
@@ -1857,7 +1859,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "not supported by PayPal"
-msgstr ""
+msgstr "не поддерживается PayPal"
 
 msgid "Switch"
 msgstr "Переключить"
@@ -1879,19 +1881,19 @@ msgid "Custom"
 msgstr "Произвольная"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr ""
+msgstr "Пожалуйста, выберите способ продления этого пожертвования:"
 
 msgid "Automatic renewal"
-msgstr ""
+msgstr "Автоматическое продление"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr ""
+msgstr "Мы попытаемся снять с вашей карты или банковского счета. Вы будете уведомлены по крайней мере за два дня до."
 
 msgid "Manual renewal"
-msgstr ""
+msgstr "Ручное продление"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr ""
+msgstr "Напоминание о продлении вашего пожертвования будет отправлено вам по электронной почте."
 
 msgid "Modify the donation"
 msgstr "Изменить размер пожертвования"
@@ -2043,7 +2045,7 @@ msgstr "Этот аккаунт временно отключён, пожерт�
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr ""
+msgstr "{0} в настоящее время получает {1} в неделю. Они уже достигли своей цели финансирования ({2} в неделю), но ваше пожертвование все равно поможет им."
 
 #, python-brace-format
 msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
@@ -2098,7 +2100,7 @@ msgstr "URL вашего нового аватара: {0}"
 
 #, python-brace-format
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
-msgstr ""
+msgstr "Вы выбрали {platform} в качестве источника аватара, но не подключили ни одну учетную запись {platform}."
 
 #, python-brace-format
 msgid "Connect {0} account"
@@ -2161,12 +2163,12 @@ msgstr "Подключение аккаунтов, которые у вас ес
 #, python-brace-format
 msgid "You currently have {n} connected account:"
 msgid_plural "You currently have {n} connected accounts:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "В настоящее время у вас есть {n} подключенный аккаунт:"
+msgstr[1] "В настоящее время у вас есть {n} подключенных аккаунта:"
+msgstr[2] "В настоящее время у вас есть {n} подключенных аккаунтов:"
 
 msgid "Connect an account"
-msgstr ""
+msgstr "Подключить аккаунт"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Я благодарен за пожертвования, но у меня нет определённой цели финансирования."
@@ -2297,6 +2299,9 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
+"Когда вы изменяете свое имя пользователя, веб-адрес вашего профиля изменяется соответственно. Перенаправление добавляется со старого URL на новый, но любой пользователь может удалить его, запросив старое имя пользователя, поэтому вам следует обновить все ссылки на свой профиль, которые вы разместили на других веб-страницах, если только эти ссылки не содержат ваш неизменный идентификатор учетной записи ({account_id}) вместо вашего имени пользователя.\n"
+"\n"
+"Вы уверены, что хотите изменить свое имя пользователя?"
 
 msgid "Username"
 msgstr "Имя пользователя"
@@ -2345,22 +2350,22 @@ msgid "Password"
 msgstr "Пароль"
 
 msgid "Your email address is now blacklisted."
-msgstr ""
+msgstr "Ваш адрес электронной почты теперь в чёрном списке."
 
 msgid "Your email address is no longer blacklisted."
-msgstr ""
+msgstr "Ваш адрес электронной почты больше не занесён в чёрный список."
 
 msgid "Remove my email address from the blacklist"
-msgstr ""
+msgstr "Удалить мой адрес электронной почты из чёрного списка"
 
 msgid "Add my email address to the blacklist"
-msgstr ""
+msgstr "Добавить мой адрес электронной почты в чёрный список"
 
 msgid "You have successfully disavowed having connected your email address to this Liberapay account."
-msgstr ""
+msgstr "Вы успешно отказали в подключении своего адреса электронной почты к этой учетной записи Liberapay."
 
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
-msgstr ""
+msgstr "Вы хотите заблокировать любую будущую попытку подключить ваш адрес электронной почты к учётной записи Liberapay, добавив его в наш чёрный список?"
 
 msgid "You have already added and verified this address."
 msgstr "Вы уже добавили и подтвердили этот адрес."
@@ -2388,7 +2393,7 @@ msgid "Primary"
 msgstr "Основной"
 
 msgid "Disavowed"
-msgstr ""
+msgstr "Отказано"
 
 msgid "Unverified"
 msgstr "Неподтверждён"
@@ -2409,7 +2414,7 @@ msgid "Send me notifications via email:"
 msgstr "Отправлять уведомления на почту:"
 
 msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
-msgstr ""
+msgstr "Некоторые типы уведомлений не могут быть отключены, поэтому они не перечислены выше. Например, вы всегда будете уведомлены, когда мы готовимся к списанию средств с вашего банковского счета."
 
 msgid "Language"
 msgstr "Язык"
@@ -2432,13 +2437,13 @@ msgid "Building Liberapay is a lot of work, and there still is much to do, but o
 msgstr "Работать над Liberapay - тяжкий труд, и ещё многое предстоит сделать, но нашим разработчикам, переводчикам и другим участникам платят слишком мало, и это замедляет наш прогресс."
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
-msgstr ""
+msgstr "Liberapay теперь поддерживает автоматическое продление, хотите ли вы включить его для всех ваших пожертвований?"
 
 msgid "Yes, activate automatic renewals"
-msgstr ""
+msgstr "Да, активировать автоматическое продление"
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
-msgstr ""
+msgstr "Вы включили автоматическое продление для некоторых или всех своих пожертвований, но у вас нет действующего платежного инструмента, который позволил бы нам инициировать автоматические платежи, когда придет время."
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2468,7 +2473,7 @@ msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Начат {timespan_ago_1}. Изменён {timespan_ago_2}."
 
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
-msgstr ""
+msgstr "Автоматическое продление включено для этого пожертвования, но в настоящее время невозможно из-за ограничений обработчика платежей."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Неактивно, потому что аккаунт получателя в чёрном списке."
@@ -2506,19 +2511,19 @@ msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
 msgstr "{bold}Итого:{bold_end} {0} в неделю ~ {1} в месяц ~ {2} в год."
 
 msgid "You are currently not donating to anyone."
-msgstr ""
+msgstr "Вы в настоящее время не жертвуете никому."
 
 msgid "Cancel the pledge"
 msgstr "Отменить обещание"
 
 msgid "Stopped donations"
-msgstr ""
+msgstr "Приостановленные пожертвования"
 
 msgid "Restart"
 msgstr "Рестарт"
 
 msgid "Hide"
-msgstr ""
+msgstr "Спрятать"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2526,10 +2531,10 @@ msgstr "Старт {timespan_ago_1}. Остановлено {timespan_ago_2}."
 
 #, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
-msgstr ""
+msgstr "За это остановленное пожертвование по-прежнему выплачивается {money_amount}. Этот аванс будет потребляться каждую неделю, пока не достигнет нуля."
 
 msgid "Cancelled pledges"
-msgstr ""
+msgstr "Отменённые залоги"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
@@ -2565,7 +2570,7 @@ msgid "Currently unavailable"
 msgstr "Недоступно в данный момент"
 
 msgid "Pay by card"
-msgstr ""
+msgstr "Оплатить картой"
 
 msgid "Euro donations only"
 msgstr "Пожертвования только в Евро"
@@ -2574,20 +2579,20 @@ msgid "Euro bank accounts only"
 msgstr "Только аккаунт в Euro bank"
 
 msgid "Pay by direct debit"
-msgstr ""
+msgstr "Оплата прямым дебетом"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
-msgstr ""
+msgstr "Не поддерживает {currency}"
 
 msgid "Doesn't support automatic renewal"
-msgstr ""
+msgstr "Не поддерживает автоматическое продление"
 
 msgid "Not anonymous"
 msgstr "Не анонимно"
 
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "Оплата через PayPal"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
@@ -2632,15 +2637,15 @@ msgstr "Пожалуйста, выберите или введите свою с
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr ""
+msgstr "Вся сумма вашего платежа будет немедленно переведена на {payment_provider} аккаунт {recipient_names}."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Liberapay больше не хранит деньги в кошельках, вся сумма вашего платежа будет немедленно переведена на {payment_provider} аккаунт {recipient_name}."
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr ""
+msgstr "Вся сумма вашего платежа будет немедленно переведена на {payment_provider} аккаунт {recipient_name}."
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
 msgstr ""
