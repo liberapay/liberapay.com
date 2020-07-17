@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-07-17 17:24+0000\n"
-"Last-Translator: Дѣаволъ <h8x@pm.me>\n"
+"PO-Revision-Date: 2020-07-17 19:45+0000\n"
+"Last-Translator: vaartis <vaartis@cock.li>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1844,19 +1844,19 @@ msgstr "В данный момент вы делаете пожертвован�
 msgid "Please select or input an amount:"
 msgstr "Выберите или введите сумму:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] "Неверная валюта? Поддерживается еще {n} другая"
-msgstr[1] "Неверная валюта? Поддерживаются еще {n} другие"
-msgstr[2] "Неверная валюта? Поддерживаются еще {n} других"
+msgstr[0] "Валюта {currency_name} – не та, которую вы предпочитаете? Поддерживается еще {n} другая:"
+msgstr[1] "Валюта {currency_name} – не та, которую вы предпочитаете?  Поддерживаются еще {n} других:"
+msgstr[2] "Валюта {currency_name} – не та, которую вы предпочитаете?  Поддерживаются еще {n} других:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Валюта {currency_name} – не та, которую вы предпочитаете?  {username} также принимает ещё {n} валюту:"
+msgstr[1] "Валюта {currency_name} – не та, которую вы предпочитаете?  {username} также принимает ещё {n} валюты:"
+msgstr[2] "Валюта {currency_name} – не та, которую вы предпочитаете?  {username} также принимает ещё {n} валют:"
 
 msgid "not supported by PayPal"
 msgstr "не поддерживается PayPal"
@@ -2637,15 +2637,15 @@ msgstr "Пожалуйста, выберите или введите свою с
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Вся сумма вашего платежа будет немедленно переведена на {payment_provider} аккаунт {recipient_names}."
+msgstr "Вся сумма вашего пожертвования будет немедленно переведена на счета {recipient_names} в {payment_provider}."
 
 #, python-brace-format
 msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay больше не хранит деньги в кошельках, вся сумма вашего платежа будет немедленно переведена на {payment_provider} аккаунт {recipient_name}."
+msgstr "Liberapay больше не хранит деньги в кошельках, вся сумма пожертвования будет немедленно переведена на счёт {recipient_name} в {payment_provider}."
 
 #, python-brace-format
 msgid "The entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Вся сумма вашего платежа будет немедленно переведена на {payment_provider} аккаунт {recipient_name}."
+msgstr "Вся сумма пожертвования будет немедленно переведена на счёт {recipient_name} в {payment_provider}."
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
 msgstr ""
@@ -2738,9 +2738,9 @@ msgstr "(рекомендуется, комиссия с низким проце
 #, python-brace-format
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Следующее пожертвование через {n} неделю ({timedelta})."
+msgstr[1] "Следующее пожертвование через {n} недели ({timedelta})."
+msgstr[2] "Следующее пожертвование через {n} недель ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
