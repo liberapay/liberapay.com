@@ -330,6 +330,7 @@ class TestScheduledPayins(EmailHarness):
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].amount == EUR('12.00')
+        assert scheduled_payins[0].payin is None
 
         self.db.run("""
             UPDATE scheduled_payins

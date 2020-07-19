@@ -405,6 +405,8 @@ class Harness(unittest.TestCase):
                     Participant.from_id(pt.recipient).update_receiving()
             tippee.update_receiving()
         payer.update_giving()
+        # Call `update_payin` again to uncover bugs
+        payin = update_payin(self.db, payin.id, remote_id, status, error)
         return payin, payin_transfers
 
     def add_payment_account(self, participant, provider, country='FR', **data):
