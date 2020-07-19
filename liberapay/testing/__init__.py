@@ -386,7 +386,9 @@ class Harness(unittest.TestCase):
             adjust_payin_transfers(self.db, payin, net_amount)
         else:
             pt = payin_transfers[0]
+            # Call `update_payin_transfer` twice to uncover bugs
             pt = update_payin_transfer(self.db, pt.id, None, pt.status, None, amount=net_amount)
+            pt = update_payin_transfer(self.db, pt.id, None, pt.status, None)
             assert pt.amount == net_amount
         payin_transfers = self.db.all("""
             SELECT *
