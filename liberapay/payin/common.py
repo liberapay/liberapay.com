@@ -183,13 +183,6 @@ def update_payin(
                             """, (payin.id, sp.id))
                             schedule_has_been_modified = True
                         break
-        elif status == 'failed':
-            cursor.run("""
-                UPDATE scheduled_payins
-                   SET payin = NULL
-                 WHERE payer = %s
-                   AND payin = %s
-            """, (payin.payer, payin.id))
 
     if schedule_has_been_modified:
         payer = db.Participant.from_id(payin.payer)
