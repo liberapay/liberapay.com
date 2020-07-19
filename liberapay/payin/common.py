@@ -127,7 +127,8 @@ def update_payin(
                       FROM scheduled_payins
                      WHERE payer = %s
                        AND payin IS NULL
-                """, (payin.payer,))
+                       AND mtime < %s
+                """, (payin.payer, payin.ctime))
                 today = utcnow().date()
                 schedule.sort(key=lambda sp: abs((sp.execution_date - today).days))
                 payin_tippees = set(cursor.all("""
