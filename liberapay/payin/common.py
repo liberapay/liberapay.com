@@ -75,6 +75,7 @@ def update_payin(
         Record: the row updated in the `payins` table
 
     """
+    schedule_has_been_modified = False
     with db.get_cursor() as cursor:
         payin = cursor.one("""
             UPDATE payins
@@ -127,7 +128,8 @@ def update_payin(
                       FROM scheduled_payins
                      WHERE payer = %s
                        AND payin IS NULL
-                """, (payin.payer,))
+                       AND mtime < %s
+                """, (payin.payer, payin.ctime))
                 today = utcnow().date()
                 schedule.sort(key=lambda sp: abs((sp.execution_date - today).days))
                 payin_tippees = set(cursor.all("""
@@ -171,6 +173,7 @@ def update_payin(
                                 amount=other_transfers_sum,
                                 transfers=json.dumps(other_transfers),
                             ))
+                            schedule_has_been_modified = True
                         else:
                             cursor.run("""
                                 UPDATE scheduled_payins
@@ -178,16 +181,14 @@ def update_payin(
                                      , mtime = current_timestamp
                                  WHERE id = %s
                             """, (payin.id, sp.id))
+                            schedule_has_been_modified = True
                         break
-        elif status == 'failed':
-            cursor.run("""
-                UPDATE scheduled_payins
-                   SET payin = NULL
-                 WHERE payer = %s
-                   AND payin = %s
-            """, (payin.payer, payin.id))
 
-        return payin
+    if schedule_has_been_modified:
+        payer = db.Participant.from_id(payin.payer)
+        payer.schedule_renewals()
+
+    return payin
 
 
 def adjust_payin_transfers(db, payin, net_amount):

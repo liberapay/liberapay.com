@@ -386,7 +386,9 @@ class Harness(unittest.TestCase):
             adjust_payin_transfers(self.db, payin, net_amount)
         else:
             pt = payin_transfers[0]
+            # Call `update_payin_transfer` twice to uncover bugs
             pt = update_payin_transfer(self.db, pt.id, None, pt.status, None, amount=net_amount)
+            pt = update_payin_transfer(self.db, pt.id, None, pt.status, None)
             assert pt.amount == net_amount
         payin_transfers = self.db.all("""
             SELECT *
@@ -405,6 +407,8 @@ class Harness(unittest.TestCase):
                     Participant.from_id(pt.recipient).update_receiving()
             tippee.update_receiving()
         payer.update_giving()
+        # Call `update_payin` again to uncover bugs
+        payin = update_payin(self.db, payin.id, remote_id, status, error)
         return payin, payin_transfers
 
     def add_payment_account(self, participant, provider, country='FR', **data):
