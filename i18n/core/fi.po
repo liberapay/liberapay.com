@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Finnish "
-"<https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2020-07-22 06:41+0000\n"
+"Last-Translator: Joel Yliluoma <bisqwit@iki.fi>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -396,58 +398,58 @@ msgstr "Suoraveloitus Liberapay-lompakkoosi on onnistunut"
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "{money_amount} maksusi on riitautettu"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr ""
+msgstr "Pankkisi on kumonnut {money_amount} siirtosi, jonka toimeenpanit {date}."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "Pankin esittämä syy on: se ei kyennyt käsittelemään maksua."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr ""
+msgstr "Pankin esittämä syy on: pyysit hyvitystä."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr ""
+msgstr "Pankin esittämä syy on: maksuun ei ollut lupaa."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr ""
+msgstr "Pankin esittämä syy on: maksu oli tuplakappale."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr ""
+msgstr "Pankin esittämä syy on: maksu oli petoksellinen."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "Pankkisi ei esittänyt tähän riitautukseen erillistä syytä."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "Pankin esittämä syy on: esitetyt tilitiedot olivat väärin."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "Pankin esittämä syy on: tilillä ei ollut katetta maksun suorittamiseen."
 
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "Pankin esittämä syy on: tilin omistaja ei tunnistanut maksua."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "Pankin esittämä syy on: {reason_code_in_english}."
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "Mikäli tämä riitautus tapahtui vahingossa, voit pyytää pankkiasi peruuttamaan sen. Ilmoita meille mikäli teet näin, koska meidänkin pitää lähettää pankkiisi viesti."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
-msgstr ""
+msgstr "Mikäli riitautus ei selviä sopivalla tavalla, riitautetut varat vedetään takaisin niiden saajilta."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
-msgstr ""
+msgstr "Tämä riitautus on lopullinen, eikä sitä voi kumota."
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "Riitautetut varat on vedetty takaisin niiden saajilta."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "Mikäli pankkisi riitautti maksun sinulle ilmoittamatta, ota heihin yhteyttä ja kysy, miksi. Kun tilanne on selvitetty, voit yrittää {link_start}maksua uudelleen{link_end}."
 
 msgid "Your payment has failed"
 msgstr "Maksusi epäonnistui"
@@ -3221,9 +3223,8 @@ msgstr "Valuutta: {0}"
 msgid "Added on {date}"
 msgstr "Lisätty {date}"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, log in to the account and complete the verification process. After that, reconnect the account if you still see this message."
-msgstr "Tämä tili ei voi vastaanottaa maksuja."
+msgstr "Tämä tili ei voi vastaanottaa maksuja. Asian korjaamiseksi kirjaudu tiliin ja saata tarkistusprosessi loppuun. Sitten yhdistä tili, mikäli tämä viesti ilmenee yhä."
 
 #, python-brace-format
 msgid "Manage this {platform} account"
