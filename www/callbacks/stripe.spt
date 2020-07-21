@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import stripe
 
+from liberapay.exceptions import DuplicateNotification
 from liberapay.models.participant import Participant
 from liberapay.payin.common import update_payin_transfer
 from liberapay.payin.stripe import (
@@ -81,6 +82,25 @@ elif event_object_type == 'charge.dispute':
                     website.db, pt.id, None, pt.status, pt.error,
                     reversed_amount=pt.amount,
                 )
+    # Notify the person who initiated the payment
+    payer = Participant.from_id(payin.payer)
+    if dispute.status in ('needs_response', 'lost'):
+        try:
+            payer.notify(
+                'payin_disputed',
+                email_unverified_address=True,
+                force_email=True,
+                idem_key=dispute.id,
+                payin_id=payin.id,
+                payin_amount=payin.amount,
+                payin_ctime=payin.ctime,
+                dispute_reason=dispute.reason,
+                dispute_can_be_withdrawn=dispute.status == 'needs_response',
+            )
+        except DuplicateNotification:
+            pass
+    else:
+        raise NotImplementedError(dispute.status)
 
 elif event.type == 'transfer.reversed':
     transfer = event.data.object

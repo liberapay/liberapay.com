@@ -2184,9 +2184,10 @@ class TestRefundsStripe(Harness):
         tip2 = alice.get_tip_to(LiberapayOrg)
         assert tip1.paid_in_advance == 0
         assert tip2.paid_in_advance == 0
-        # Check that no notification was sent
+        # Check that the notification was sent
         notifs = alice.get_notifs()
-        assert len(notifs) == 0
+        assert len(notifs) == 1
+        assert notifs[0].event == 'payin_disputed'
         # Check that the receipt for this payment has been voided
         source_retrieve.return_value = consumed_source
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
