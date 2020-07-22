@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Ukrainian "
-"<https://hosted.weblate.org/projects/liberapay/core/uk/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"PO-Revision-Date: 2020-07-22 12:56+0000\n"
+"Last-Translator: Changaco <changaco@changaco.oy.lc>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/liberapay/core/uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -458,9 +460,9 @@ msgstr ""
 msgid "Your payment has failed"
 msgstr "Не вдалося здійснити платіж"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Не вдалося зробити платіж на сумму {money_amount} через Liberapay, яка була зроблена {date}."
+msgstr ""
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
@@ -526,9 +528,9 @@ msgstr ""
 msgid "Your payment has succeeded"
 msgstr "Ваш платіж виконано"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "Платіж на сумму {money_amount} через Liberapay, яка була зроблена {date} виконано."
+msgstr ""
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
@@ -3759,7 +3761,7 @@ msgstr "Ваші пожертвування в валюті {currency} забе�
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Ви не можете додавати гроші, якщо ваші пожертвування повністю забезпечуються за рахунок пожертвувань, які роблять вам. Якщо це проблема для вас, будь ласка, надішліть листа на адресу support@liberapay.com та поясніть чому."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donations are only funded for another week."
 msgid_plural "Your donations are funded for another {n} weeks."
 msgstr[0] "Ваші пожертвування забезпечені грошами тільки на наступний тиждень."
@@ -3872,10 +3874,10 @@ msgstr[0] "Ваші пожертвування забезпечені на {n} �
 msgstr[1] "Ваші пожертвування забезпечені на {n} тижні"
 msgstr[2] "Ваші пожертвування забезпечені на {n} тижнів"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
 msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "unused"
+msgstr[0] ""
 msgstr[1] "Ваші пожертвування забезпечені на {n} тижні ({0})"
 msgstr[2] "Ваші пожертвування забезпечені на {n} тижнів ({0})"
 
@@ -4811,17 +4813,17 @@ msgstr "Перелік {0}"
 msgid "Explore Your {0} Contacts"
 msgstr "Перелік ваших {0} контактів"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=913600022f5361dd8872dc74f6b023e8)>"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
-msgstr[0] "unused"
+msgstr[0] ""
 msgstr[1] "Ось {n} випадкових користувача Liberapay, які підключили свій аккаунт {0}:"
 msgstr[2] "Ось {n} випадкових користувачів Liberapay, який підключили свій аккаунт {0}:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=fa66aed7cc36b8a0d266394a9f2b8fef)>"
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] "unused"
+msgstr[0] ""
 msgstr[1] "{0} на цій сторінці {n} користувача Liberapay, які підключили свій аккаунт {0}, у зворотному хронологічному порядку."
 msgstr[2] "{0} на цій сторінці {n} користувачів Liberapay, які підключили свій аккаунт {0}, у зворотному хронологічному порядку."
 
@@ -4914,7 +4916,7 @@ msgstr "У вас є хто-небудь на прикметі?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Ми можемо допомогти знайти тих, кого ви бажаєте спонсорувати, якщо ви підключите ваші акаунти:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
 msgstr[0] "Найпопулярніший репозиторій, пов'язаний з обліковим записом Liberapay:"
@@ -4938,7 +4940,7 @@ msgstr "Перегляд обраних репозитаріїв"
 msgid "Link your repositories to your profile"
 msgstr "Зв'язати репозитарії з вашим профілем"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The top team on Liberapay is:"
 msgid_plural "The top {n} teams on Liberapay are:"
 msgstr[0] "Найбільш спонсорована команда в Liberapay:"
@@ -5146,10 +5148,10 @@ msgstr[2] ""
 msgid "Integrations"
 msgstr "Інтеграції"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
-msgstr[0] "unused"
+msgstr[0] ""
 msgstr[1] "Ви можете зв'язати ваш профіль з вашими аккаунтами в {platform1}, {platform2}, {platform3} та {n} інших платформах."
 msgstr[2] "Ви можете зв'язати ваш профіль з вашими аккаунтами в {platform1}, {platform2}, {platform3} та {n} іншими платформами."
 
@@ -5193,24 +5195,24 @@ msgstr[0] "Минулого місяця було створено {n} облі�
 msgstr[1] "Минулого місяця було створено {n} обліківок. Остання була створена {timespan_ago}."
 msgstr[2] "Минулого місяця було створено {n} обліківок. Остання була створена {timespan_ago}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] "unused"
+msgstr[0] ""
 msgstr[1] "{n} нових пожертв було розпочато минулого місяця, що збільшило загальне щотижневе фінансування на {money_amount}."
 msgstr[2] "{n} нових пожертв було розпочато минулого місяця, що збільшило загальне щотижневе фінансування на {money_amount}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "unused"
+msgstr[0] ""
 msgstr[1] "{n} нових {link_open}застав{link_close} було зроблено минулого місяця, що додало {money_amount} до щотижневих пожертв, очікуючих на зажадання."
 msgstr[2] "{n} нових {link_open}застав{link_close} було зроблено минулого місяця, що додало {money_amount} до щотижневих пожертв, очікуючих на зажадання."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
 msgid_plural "{money_amount} was transferred last week between {n} users."
-msgstr[0] "unused"
+msgstr[0] ""
 msgstr[1] "{money_amount} було переказано минулого тижня між {n} користувачами."
 msgstr[2] "{money_amount} було переказано минулого тижня між {n} користувачами."
 
