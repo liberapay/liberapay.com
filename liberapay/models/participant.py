@@ -2583,10 +2583,14 @@ class Participant(Model, MixinTeam):
                    AND tippee_p.payment_providers > 0
                    AND NOT EXISTS (
                            SELECT 1
-                             FROM payin_transfers pt
-                            WHERE pt.payer = t.tipper
-                              AND coalesce(pt.team, pt.recipient) = t.tippee
-                              AND pt.status = 'pending'
+                             FROM ( SELECT pt.*
+                                      FROM payin_transfers pt
+                                     WHERE pt.payer = t.tipper
+                                       AND coalesce(pt.team, pt.recipient) = t.tippee
+                                  ORDER BY pt.ctime DESC
+                                     LIMIT 1
+                                  ) pt
+                            WHERE pt.status IN ('pending', 'failed')
                        )
               ORDER BY t.tippee
             """, (self.id,))
