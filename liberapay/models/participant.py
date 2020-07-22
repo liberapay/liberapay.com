@@ -2709,13 +2709,20 @@ class Participant(Model, MixinTeam):
                     cur_sp = current_schedule_map.pop(tippees, None)
                     if cur_sp:
                         # Found it, now we check if the two are different
+                        if cur_sp.customized:
+                            # Don't modify a payment that has been explicitly
+                            # customized by the donor.
+                            new_sp.execution_date = cur_sp.execution_date
+                            new_sp.amount = cur_sp.amount if new_sp.automatic else None
+                            new_sp.transfers = cur_sp.transfers
+                            new_sp.customized = True
                         if cur_sp.id in new_dates or cur_sp.id in new_amounts:
                             new_sp.customized = cur_sp.customized
                             new_date = new_dates.get(cur_sp.id)
                             if new_date and new_sp.execution_date != new_date:
                                 new_sp.execution_date = new_date
                                 new_sp.customized = True
-                            new_amount = new_amounts.get(cur_sp.id)
+                            new_amount = new_amounts.get(cur_sp.id) if new_sp.automatic else None
                             if new_amount and new_sp.amount != new_amount:
                                 new_sp.amount = new_amount
                                 tr_amounts = resolve_amounts(new_amount, {
@@ -2729,14 +2736,6 @@ class Participant(Model, MixinTeam):
                                 updates.append((cur_sp, new_sp))
                             else:
                                 unchanged.append(cur_sp)
-                        elif cur_sp.customized:
-                            # Don't modify a payment that has been explicitly
-                            # customized by the donor.
-                            new_sp.execution_date = cur_sp.execution_date
-                            new_sp.amount = cur_sp.amount
-                            new_sp.transfers = cur_sp.transfers
-                            new_sp.customized = True
-                            unchanged.append(cur_sp)
                         elif has_scheduled_payment_changed(cur_sp, new_sp):
                             is_short_delay = (
                                 new_sp.amount == cur_sp.amount and
