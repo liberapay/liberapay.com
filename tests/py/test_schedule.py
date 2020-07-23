@@ -398,7 +398,7 @@ class TestScheduledPayins(EmailHarness):
 
         self.db.run("""
             UPDATE scheduled_payins
-               SET execution_date = (current_date + interval '14 days')
+               SET execution_date = (current_date + interval '7 days')
                  , ctime = (ctime - interval '12 hours')
         """)
         send_upcoming_debit_notifications()
@@ -664,7 +664,7 @@ class TestScheduledPayins(EmailHarness):
 
         self.db.run("""
             UPDATE scheduled_payins
-               SET execution_date = (current_date + interval '14 days')
+               SET execution_date = (current_date + interval '7 days')
                  , ctime = (ctime - interval '12 hours')
         """)
         send_upcoming_debit_notifications()

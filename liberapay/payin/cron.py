@@ -94,7 +94,19 @@ def send_donation_reminder_notifications():
                    SELECT sp.id, sp.execution_date, sp.amount, sp.transfers
                ) a ORDER BY a.execution_date)) AS payins
           FROM scheduled_payins sp
-         WHERE sp.execution_date <= (current_date + interval '14 days')
+     LEFT JOIN LATERAL (
+                   SELECT pi.*
+                     FROM payins pi
+                    WHERE pi.payer = sp.payer
+                      AND NOT pi.off_session
+                 ORDER BY pi.ctime DESC
+                    LIMIT 1
+               ) last_payin ON true
+         WHERE sp.execution_date <= (current_date + (CASE
+                   WHEN last_payin.ctime >= (current_date - interval '14 days')
+                   THEN interval '7 days'
+                   ELSE interval '14 days'
+               END))
            AND sp.automatic IS NOT true
            AND sp.payin IS NULL
            AND sp.ctime < (current_timestamp - interval '6 hours')
