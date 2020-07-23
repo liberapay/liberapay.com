@@ -144,9 +144,9 @@ elif env.clean_assets:
 # =============
 
 conf = website.app_conf
+cron = website.cron = Cron(website)
 if conf:
     intervals = conf.cron_intervals
-    cron = Cron(website)
     cron(intervals.get('check_db', 600), website.db.self_check, True)
     cron(intervals.get('dequeue_emails', 60), Participant.dequeue_emails, True)
     cron(intervals.get('send_newsletters', 60), Participant.send_newsletters, True)
