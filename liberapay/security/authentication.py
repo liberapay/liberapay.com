@@ -66,6 +66,8 @@ def sign_in_with_form_data(body, state):
             if not p:
                 state['log-in.error'] = _("Bad username or password.")
             else:
+                website.db.decrement_rate_limit('log-in.ip-addr', str(src_addr))
+                website.db.decrement_rate_limit('log-in.country', src_country)
                 try:
                     p.check_password(password, context='login')
                 except Exception as e:

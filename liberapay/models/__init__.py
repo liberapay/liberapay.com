@@ -333,6 +333,19 @@ def hit_rate_limit(db, key_prefix, key_unique, exception=None):
 DB.hit_rate_limit = SimpleCursorBase.hit_rate_limit = hit_rate_limit
 
 
+def decrement_rate_limit(db, key_prefix, key_unique):
+    try:
+        cap, period = RATE_LIMITS[key_prefix]
+        key = '%s:%s' % (key_prefix, key_unique)
+        return db.one("SELECT decrement_rate_limit(%s, %s, %s)", (key, cap, period))
+    except Exception as e:
+        from liberapay.website import website
+        website.tell_sentry(e, {})
+        return -1
+
+DB.decrement_rate_limit = SimpleCursorBase.decrement_rate_limit = decrement_rate_limit
+
+
 def clean_up_counters(db):
     n = 0
     for key_prefix, (cap, period) in RATE_LIMITS.items():

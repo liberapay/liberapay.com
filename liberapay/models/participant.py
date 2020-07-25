@@ -264,6 +264,8 @@ class Participant(Model, MixinTeam):
             salt, hashed = b64decode(salt), b64decode(hashed)
             if constant_time_compare(cls._hash_password(secret, algo, salt, rounds), hashed):
                 p.authenticated = True
+                if context == 'log-in':
+                    cls.db.decrement_rate_limit('log-in.password', p.id)
                 if len(salt) < 32:
                     # Update the password hash in the DB
                     hashed = cls.hash_password(secret)
