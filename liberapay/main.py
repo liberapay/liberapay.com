@@ -37,7 +37,9 @@ from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
-from liberapay.payin.cron import execute_scheduled_payins, send_upcoming_debit_notifications
+from liberapay.payin.cron import (
+    execute_scheduled_payins, reschedule_renewals, send_upcoming_debit_notifications,
+)
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
@@ -142,9 +144,9 @@ elif env.clean_assets:
 # =============
 
 conf = website.app_conf
+cron = website.cron = Cron(website)
 if conf:
     intervals = conf.cron_intervals
-    cron = Cron(website)
     cron(intervals.get('check_db', 600), website.db.self_check, True)
     cron(intervals.get('dequeue_emails', 60), Participant.dequeue_emails, True)
     cron(intervals.get('send_newsletters', 60), Participant.send_newsletters, True)
@@ -152,6 +154,7 @@ if conf:
     cron(intervals.get('refetch_repos', 60), refetch_repos, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
     cron(intervals.get('clean_up_counters', 3600), website.db.clean_up_counters, True)
+    cron(Daily(hour=2), reschedule_renewals, True)
     cron(Daily(hour=3), send_upcoming_debit_notifications, True)
     cron(Daily(hour=4), execute_scheduled_payins, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)

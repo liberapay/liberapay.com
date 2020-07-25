@@ -22,13 +22,13 @@ class Cron(object):
         self.website = website
         self.conn = None
         self.has_lock = False
-        self.exclusive_jobs = []
+        self.jobs = []
 
     def __call__(self, period, func, exclusive=False):
+        self.jobs.append((period, func, exclusive))
         if not self.website.env.run_cron_jobs or not period:
             return
         if exclusive and not self.has_lock:
-            self.exclusive_jobs.append((period, func))
             self._wait_for_lock()
             return
         def f():
@@ -109,8 +109,9 @@ class Cron(object):
                     self.has_lock = True
                     break
                 sleep(300)
-            for job in self.exclusive_jobs:
-                self(*job, exclusive=True)
+            for period, func, exclusive in self.jobs:
+                if exclusive:
+                    self(period, func, exclusive=True)
         t = threading.Thread(target=f)
         t.daemon = True
         t.start()

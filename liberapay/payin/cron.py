@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import date
+from time import sleep
 
 from pando import json
 
@@ -10,6 +11,74 @@ from ..website import website
 from ..utils import utcnow
 from .common import prepare_donation, prepare_payin
 from .stripe import charge
+
+
+def reschedule_renewals():
+    """This function looks for inconsistencies in scheduled payins.
+    """
+    donors = website.db.all("""
+        SELECT p
+          FROM ( SELECT tip.tipper, count(*)
+                   FROM current_tips tip
+                   JOIN participants tippee_p ON tippee_p.id = tip.tippee
+                  WHERE tip.renewal_mode > 0
+                    AND tip.paid_in_advance IS NOT NULL
+                    AND tippee_p.status = 'active'
+                    AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
+                    AND tippee_p.is_suspended IS NOT TRUE
+                    AND tippee_p.payment_providers > 0
+                    AND coalesce((
+                            SELECT pt.status
+                              FROM payin_transfers pt
+                             WHERE pt.payer = tip.tipper
+                               AND coalesce(pt.team, pt.recipient) = tip.tippee
+                          ORDER BY pt.ctime DESC
+                             LIMIT 1
+                        ), 'succeeded') = 'succeeded'
+                    AND ( tippee_p.kind <> 'group' OR EXISTS (
+                            SELECT 1
+                              FROM current_takes take
+                              JOIN participants member_p ON member_p.id = take.member
+                             WHERE take.team = tip.tippee
+                               AND take.member <> tip.tipper
+                               AND take.amount <> 0
+                               AND member_p.is_suspended IS NOT TRUE
+                               AND member_p.payment_providers > 0
+                        ) )
+               GROUP BY tip.tipper
+               ) tips
+          JOIN participants p ON p.id = tips.tipper
+         WHERE p.status = 'active'
+           AND p.is_suspended IS NOT true
+           AND tips.count > coalesce((
+                   SELECT sum(json_array_length(sp.transfers))
+                     FROM scheduled_payins sp
+                    WHERE sp.payer = p.id
+                      AND sp.payin IS NULL
+               ), 0)
+        UNION
+        SELECT ( SELECT p FROM participants p WHERE p.id = tip.tipper )
+          FROM current_tips tip
+          JOIN participants tippee_p ON tippee_p.id = tip.tippee
+         WHERE tip.renewal_mode = 2
+           AND tippee_p.payment_providers & 1 = 1
+           AND EXISTS (
+                   SELECT 1
+                     FROM scheduled_payins sp
+                    WHERE sp.payer = tip.tipper
+                      AND sp.automatic IS false
+                      AND sp.payin IS NULL
+                      AND EXISTS (
+                              SELECT 1
+                                FROM json_array_elements(sp.transfers)
+                               WHERE value->>'tippee_id' = tip.tippee::text
+                          )
+               )
+    """)
+    for p in donors:
+        logger.info(f"Rescheduling the renewals of participant ~{p.id}")
+        p.schedule_renewals()
+        sleep(0.1)
 
 
 def send_donation_reminder_notifications():
