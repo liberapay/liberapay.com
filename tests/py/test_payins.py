@@ -15,6 +15,7 @@ from liberapay.payin.paypal import sync_all_pending_payments
 from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import settle_charge_and_transfers
 from liberapay.testing import Harness, EUR, KRW, JPY, USD
+from liberapay.testing.emails import EmailHarness
 
 
 class TestResolveAmounts(Harness):
@@ -1063,7 +1064,7 @@ class TestPayinsStripe(Harness):
         assert "2606" in r.text
 
 
-class TestRefundsStripe(Harness):
+class TestRefundsStripe(EmailHarness):
 
     def setUp(self):
         super().setUp()
@@ -1083,7 +1084,7 @@ class TestRefundsStripe(Harness):
     def test_refunded_destination_charge(
         self, construct_event, tr_retrieve, source_retrieve, bt_retrieve
     ):
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
         route = self.upsert_route(alice, 'stripe-card')
         alice.set_tip_to(bob, EUR('2.46'))
@@ -1389,9 +1390,9 @@ class TestRefundsStripe(Harness):
         tip = alice.get_tip_to(bob)
         assert tip.paid_in_advance == 0
         # Check that a notification was sent
-        notifs = alice.get_notifs()
-        assert len(notifs) == 1
-        assert notifs[0].event == 'payin_refund_initiated'
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['subject'] == "A refund of €400.00 has been initiated"
         # Check that the receipt for this payment has been voided
         source_retrieve.return_value = stripe.Source.construct_from(
             json.loads('''{
@@ -1447,7 +1448,7 @@ class TestRefundsStripe(Harness):
     def test_refunded_split_charge(
         self, construct_event, tr_retrieve, source_retrieve, bt_retrieve
     ):
-        alice = self.make_participant('alice')
+        alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
         self.add_payment_account(bob, 'stripe', id='acct_XXXXXXXXXXXXXXXX')
         LiberapayOrg = self.make_participant('LiberapayOrg')
@@ -1736,9 +1737,9 @@ class TestRefundsStripe(Harness):
         assert tip1.paid_in_advance == 0
         assert tip2.paid_in_advance == 0
         # Check that a notification was sent
-        notifs = alice.get_notifs()
-        assert len(notifs) == 1
-        assert notifs[0].event == 'payin_refund_initiated'
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['subject'] == "A refund of €400.00 has been initiated"
         # Check that the receipt for this payment has been voided
         source_retrieve.return_value = stripe.Source.construct_from(
             json.loads('''{
@@ -2185,9 +2186,9 @@ class TestRefundsStripe(Harness):
         assert tip1.paid_in_advance == 0
         assert tip2.paid_in_advance == 0
         # Check that the notification was sent
-        notifs = alice.get_notifs()
-        assert len(notifs) == 1
-        assert notifs[0].event == 'payin_disputed'
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['subject'] == "Your payment of €400.00 has been disputed"
         # Check that the receipt for this payment has been voided
         source_retrieve.return_value = consumed_source
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
