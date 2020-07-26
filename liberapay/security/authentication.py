@@ -10,7 +10,7 @@ from liberapay.constants import (
 )
 from liberapay.exceptions import (
     BadPasswordSize, EmailAlreadyTaken, LoginRequired,
-    TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps,
+    TooManyLogInAttempts, TooManyLoginEmails, TooManyRequests, TooManySignUps,
     UsernameAlreadyTaken,
 )
 from liberapay.models.participant import Participant
@@ -61,6 +61,7 @@ def sign_in_with_form_data(body, state):
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
         if password:
+            website.db.hit_rate_limit('hash_password.ip-addr', str(src_addr), TooManyRequests)
             id = Participant.get_id_for(k, id)
             p = Participant.authenticate(id, 0, password)
             if not p:
