@@ -61,10 +61,14 @@ def sign_in_with_form_data(body, state):
         if password:
             website.db.hit_rate_limit('log-in.password.ip-addr', str(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('hash_password.ip-addr', str(src_addr), TooManyRequests)
-            id = Participant.get_id_for(k, id)
-            p = Participant.authenticate(id, 0, password)
+            p_id = Participant.get_id_for(k, id)
+            p = Participant.authenticate(p_id, 0, password)
             if not p:
-                state['log-in.error'] = _("Bad username or password.")
+                state['log-in.error'] = (
+                    _("The submitted password is incorrect.") if p_id is not None else
+                    _("No account has the username “{username}”.", username=id) if k == 'username' else
+                    _("No account has “{email_address}” as its primary email address.", email_address=id)
+                )
             else:
                 website.db.decrement_rate_limit('log-in.password.ip-addr', str(src_addr))
                 try:
@@ -95,8 +99,8 @@ def sign_in_with_form_data(body, state):
                 raise LoginRequired
             else:
                 state['log-in.error'] = _(
-                    "We didn't find any account whose primary email address is {0}.",
-                    email
+                    "No account has “{email_address}” as its primary email address.",
+                    email_address=id
                 )
             p = None
 
