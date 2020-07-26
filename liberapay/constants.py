@@ -439,12 +439,14 @@ RATE_LIMITS = {
     'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
     'http-unsafe.user': (10, 10),  # 10 per 10 seconds
     'insert_identity': (7, 60*60*24*7),  # 7 per week
-    'log-in.country': (10, 60),  # 10 per minute per country
     'log-in.email': (10, 60*60*24),  # 10 per day
+    'log-in.email.ip-addr': (5, 60*60),  # 5 per hour per IP address
+    'log-in.email.ip-net': (15, 60*60),  # 15 per hour per IP network
+    'log-in.email.country': (10, 10*60),  # 10 per 10 minutes per country
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
-    'log-in.ip-addr': (5, 5*60),  # 5 per 5 minutes per IP address
     'log-in.password': (3, 60*60),  # 3 per hour
+    'log-in.password.ip-addr': (3, 60*60),  # 3 per hour per IP address
     'make_team': (5, 60*60*24*7),  # 5 per week
     'payin.from-user': (15, 60*60*24*7),  # 15 per week
     'payin.from-ip-addr': (15, 60*60*24*7),  # 15 per week
