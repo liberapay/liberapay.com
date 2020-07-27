@@ -507,7 +507,7 @@ def make_sentry_teller(env, version):
                 response = state.get('response') or pando.Response()
                 response.code = 400
                 response.body = str(exception)
-                return {'exception': None}
+                return {'exception': None, 'response': response}
 
         if not sentry:
             # No Sentry, log to stderr instead

@@ -37,7 +37,7 @@
 <p>{{ _(
     "If your bank disputed the payment without consulting you, then you should ask them why. "
     "Once the problem has been sorted out, you can {link_start}redo the payment{link_end}.",
-    link_start='<a href="%s">'|safe % participant.url('giving/pay/?retry_id=' + payin_id),
+    link_start='<a href="%s">'|safe % participant.url('giving/pay/?retry_id=%s' % payin_id),
     link_end='</a>'|safe,
 ) }}</p>
 % endif
