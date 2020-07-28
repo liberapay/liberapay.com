@@ -4,8 +4,10 @@
 from contextlib import contextmanager
 import itertools
 import json
-import unittest
 from os.path import dirname, join, realpath
+import threading
+import unittest
+from unittest.mock import patch
 
 import html5lib
 from pando.utils import utcnow
@@ -493,6 +495,26 @@ class Harness(unittest.TestCase):
 
 
 class Foobar(Exception): pass
+
+
+@contextmanager
+def fake_sleep(target='time.sleep', raise_after=None, exception=StopIteration()):
+
+    def no_sleep(seconds):
+        thread = threading.current_thread()
+        sleep_count = getattr(thread, '_liberapay_test_sleep_count', 0)
+        if raise_after is not None and sleep_count >= raise_after:
+            raise exception
+        thread._liberapay_test_sleep_count = sleep_count + 1
+
+    with patch(target) as sleep:
+        sleep.side_effect = no_sleep
+        try:
+            yield sleep
+        finally:
+            thread = threading.current_thread()
+            if hasattr(thread, '_liberapay_test_sleep_count'):
+                del thread._liberapay_test_sleep_count
 
 
 @contextmanager
