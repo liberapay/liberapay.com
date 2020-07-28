@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Ukrainian "
-"<https://hosted.weblate.org/projects/liberapay/core/uk/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"PO-Revision-Date: 2020-07-29 12:37+0000\n"
+"Last-Translator: ihor_ck <igor_ck@outlook.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/liberapay/core/uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -812,7 +814,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us please include the following error identification code in your message: {0}."
-msgstr "Деталі цієї помилки були зафіксовані. Якщо ви вирішите зв'язатися з нами,  будь ласка, додайте наступний ідентіфікатор помилки до вашого повідомлення: {0}."
+msgstr "Деталі цієї помилки записано. Якщо ви вирішите зв'язатися з нами, будь ласка, додайте цей ідентифікатор помилки до вашого повідомлення: {0}."
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
 msgstr ""
@@ -1544,9 +1546,9 @@ msgstr "Ви все ще не увійшли як {0}."
 msgid "Password (optional)"
 msgstr "Пароль (необов'язково)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Не заповнюйте це поле, якщо у вашого аккаунту нема паролю або ви його забули. Ми надішлемо вам посилання для входу через електронну пошту."
+msgstr "Не заповнюйте це поле, якщо ваш обліковий запис не має пароля або ви його  {bold}втратили{bold_end}. Ми надішлемо вам посилання для входу через електронну пошту."
 
 msgid "Avatar"
 msgstr "Аватар"
@@ -3557,7 +3559,7 @@ msgid "We don't erase your email address and password immediately, so for a whil
 msgstr "Ми не стираємо вашу адресу електронної пошти та пароль одразу, так як через деякий час ви зможете знову відкрити свій обліковий запис, просто ввійшовши, доки ваш обліковий запис не буде остаточно заархівований."
 
 msgid "We will start to erase the personal data attached to your account 7 days after it is closed. This delay is meant to protect your account from an accidental or malicious closure."
-msgstr "Ми почнемо видаляти особисті дані, зв'язані з вашим аккаунтом, через 7 днів після його закриття. Ця затримка потрібна, щоби захистити ваш аккаунт від випадкового або навмисного закриття."
+msgstr "Ми почнемо видаляти особисті дані, пов'язані з вашим обліковим записом, через 7 днів після його закриття. Ця затримка потрібна, для захисту вашого облікового запису від випадкового або навмисного закриття."
 
 msgid "Identity information and transaction records are kept for as long as is necessary to comply with all legal obligations."
 msgstr "Інформація про особу та записи переказів зберігаються так довго, як цього потребують усі зобов'язання перед законом."
@@ -3644,7 +3646,7 @@ msgstr "Баланс {0}."
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
-msgstr "На цій сторінці показано лише трансакції, які оброблено Mangopay, щоби переглянути інші платежі {link_start}, перейдіть на сторінку Ledger {link_end}."
+msgstr "На цій сторінці показано лише трансакції, які оброблено Mangopay, щоб переглянути інші платежі {link_start}, перейдіть на сторінку Ledger {link_end}."
 
 msgid "Account Statement"
 msgstr "Виписка з рахунку"
@@ -3759,12 +3761,12 @@ msgstr "Ваші пожертвування в валюті {currency} забе�
 msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
 msgstr "Ви не можете додавати гроші, якщо ваші пожертвування повністю забезпечуються за рахунок пожертвувань, які роблять вам. Якщо це проблема для вас, будь ласка, надішліть листа на адресу support@liberapay.com та поясніть чому."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donations are only funded for another week."
 msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Ваші пожертвування забезпечені грошами тільки на наступний тиждень."
-msgstr[1] "Ваші пожертвування забезпечені грошами тільки на {n} наступні тижні."
-msgstr[2] "Ваші пожертвування забезпечені грошами тільки на {n} наступних тижнів."
+msgstr[0] "Ваші внески забезпечено грошами лише на наступний тиждень."
+msgstr[1] "Ваші внески забезпечено грошами лише на наступні {n} тижні."
+msgstr[2] "Ваші внески забезпечено грошами лише на наступні {n} тижнів."
 
 #, python-brace-format
 msgid "Your donations in {currency} are only funded for another week."
