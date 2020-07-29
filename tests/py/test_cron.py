@@ -18,7 +18,6 @@ class TestCronJobs(Harness):
     def test_cron_jobs_with_empty_db(self, datetime):
         now = utcnow()
         for job in self.website.cron.jobs:
-            print(job)
             with patch.object(job, 'func', autospec=True) as mock_func:
                 if isinstance(job.period, Weekly):
                     datetime.utcnow.return_value = (

@@ -98,6 +98,7 @@ class Job:
                         # tomorrow
                         sleep(3600 * 24 + seconds)
                 try:
+                    logger.info(f"Running {self!r}")
                     test_hook()
                     r = self.func()
                 except Exception as e:
