@@ -2608,3 +2608,20 @@ ALTER TABLE elsewhere ADD COLUMN missing_since timestamptz;
 -- migration #128
 ALTER TABLE elsewhere DROP CONSTRAINT elsewhere_participant_platform_key;
 CREATE INDEX elsewhere_participant_platform_idx ON elsewhere (participant, platform);
+
+-- migration #129
+CREATE TYPE email_status AS ENUM ('queued', 'skipped', 'sending', 'sent', 'failed');
+ALTER TABLE notifications ADD COLUMN email_status email_status;
+UPDATE notifications
+   SET email_status = (CASE
+           WHEN email_sent = true THEN 'sent'
+           WHEN email_sent = false THEN 'skipped'
+           WHEN email = true THEN 'queued'
+           ELSE null
+       END)::email_status
+ WHERE email_sent IS NOT null OR email IS true;
+DROP INDEX queued_emails_idx;
+CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
+    WHERE (email AND email_status = 'queued');
+ALTER TABLE notifications DROP COLUMN email_sent;
+ALTER TABLE notifications ADD CONSTRAINT email_chk CHECK (email = (email_status IS NOT null));

@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '128'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '129'::jsonb);
 
 
 -- app configuration
@@ -821,6 +821,8 @@ CREATE INDEX statements_fts_idx ON statements USING GIN (to_tsvector(search_conf
 
 -- notifications, waiting to be displayed or sent via email
 
+CREATE TYPE email_status AS ENUM ('queued', 'skipped', 'sending', 'sent', 'failed');
+
 CREATE TABLE notifications
 ( id            serial   PRIMARY KEY
 , participant   bigint   NOT NULL REFERENCES participants
@@ -830,15 +832,16 @@ CREATE TABLE notifications
 , ts            timestamptz  DEFAULT now()
 , email         boolean  NOT NULL
 , web           boolean  NOT NULL
-, email_sent    boolean
 , idem_key      text
 , hidden_since  timestamptz
+, email_status  email_status
 , CONSTRAINT destination_chk CHECK (email OR web)
+, CONSTRAINT email_chk CHECK (email = (email_status IS NOT null))
 , UNIQUE (participant, event, idem_key)
 );
 
 CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
-    WHERE (email AND email_sent IS NULL);
+    WHERE (email AND email_status = 'queued');
 
 CREATE FUNCTION update_pending_notifs() RETURNS trigger AS $$
     DECLARE
