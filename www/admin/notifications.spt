@@ -1,6 +1,13 @@
 from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
 
+EMAIL_STATUS_STYLES = {
+    'failed': 'danger text-danger',
+    'skipped': 'warning text-warning',
+    'queued': 'text-info',
+    'sent': 'text-success',
+    None: 'text-muted',
+}
 PAGE_SIZE = 50
 
 [---]
@@ -12,7 +19,7 @@ if not user.is_admin:
     raise response.error(403)
 
 notifications = website.db.all("""
-    SELECT id, participant, event, is_new, ts, email, web, email_sent, idem_key
+    SELECT id, participant, event, is_new, ts, email, web, email_status, idem_key
       FROM notifications
      WHERE coalesce(id < %s, true)
   ORDER BY id DESC
@@ -35,7 +42,7 @@ title = "Notifications Overview"
             <th>Recipient</th>
             <th>Event</th>
             <th class="text-center">Marked as read?</th>
-            <th class="text-center">Email sent?</th>
+            <th class="text-center">Email status</th>
             <th class="text-right">Idempotency key</th>
         </tr>
     </thead>
@@ -47,8 +54,8 @@ title = "Notifications Overview"
             <td><a href="/~{{ notif.participant }}/notifications">~{{ notif.participant }}</a></td>
             <td>{{ notif.event }}</td>
             <td class="text-center">{{ "No" if notif.is_new else "Yes" if notif.web else "n/a" }}</td>
-            <td class="text-center {{ 'danger text-danger' if notif.email and notif.email_sent == False else '' }}">{{
-                "Yes" if notif.email_sent else "No" if notif.email else "n/a"
+            <td class="text-center {{ EMAIL_STATUS_STYLES.get(notif.email_status, '') }}">{{
+                notif.email_status.title() if notif.email_status else "n/a"
             }}</td>
             <td class="text-right">{{ notif.idem_key or '' }}</td>
         </tr>

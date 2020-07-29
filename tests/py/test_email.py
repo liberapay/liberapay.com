@@ -11,6 +11,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.participant import Participant
 from liberapay.security.authentication import ANON
+from liberapay.testing import postgres_readonly
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils.emails import EmailVerificationResult, check_email_blacklist
 
@@ -404,7 +405,7 @@ class TestEmail(EmailHarness):
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'larry <larry@example.com>'
-        assert self.db.one("SELECT email_sent FROM notifications") is True
+        assert self.db.one("SELECT email_status FROM notifications") == 'sent'
 
     def test_dequeueing_an_email_without_address_just_skips_it(self):
         larry = self.make_participant('larry')
@@ -412,7 +413,15 @@ class TestEmail(EmailHarness):
 
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
-        assert self.db.one("SELECT email_sent FROM notifications") is False
+        assert self.db.one("SELECT email_status FROM notifications") == 'skipped'
+
+    def test_emails_are_not_sent_went_database_is_read_only(self):
+        larry = self.make_participant('larry')
+        self.queue_email(larry, 'team_invite', team='team', team_url='fake_url', inviter='bob')
+        with postgres_readonly(self.db):
+            Participant.dequeue_emails()
+            assert self.mailer.call_count == 0
+            assert self.db.one("SELECT email_status FROM notifications") == 'queued'
 
     def test_blacklisting_email_domain(self):
         admin = self.make_participant('admin', privileges=1)

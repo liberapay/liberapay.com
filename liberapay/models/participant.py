@@ -21,7 +21,7 @@ from markupsafe import escape as htmlescape
 from pando import json, Response
 from pando.utils import utcnow
 from postgres.orm import Model
-from psycopg2 import IntegrityError
+from psycopg2.errors import IntegrityError, ReadOnlySqlTransaction
 from psycopg2.extras import execute_batch, execute_values
 import requests
 
@@ -1298,36 +1298,57 @@ class Participant(Model, MixinTeam):
             SELECT *
               FROM notifications
              WHERE id > %s
-               AND email AND email_sent IS NULL
+               AND email AND email_status = 'queued'
           ORDER BY id ASC
              LIMIT 60
         """, (last_id,))
-        dequeue = lambda m, sent: cls.db.run(
-            "UPDATE notifications SET email_sent = %(sent)s WHERE id = %(id)s",
-            dict(id=m.id, sent=sent)
-        )
+        def dequeue(msg, status):
+            try:
+                return cls.db.run(
+                    "UPDATE notifications SET email_status = %(status)s WHERE id = %(id)s",
+                    dict(id=msg.id, status=status)
+                )
+            except Exception as e:
+                website.tell_sentry(e, {})
+                sleep(5)
+                return dequeue(msg, status)
         last_id = 0
         while True:
             messages = fetch_messages(last_id)
             if not messages:
                 break
             for msg in messages:
+                try:
+                    r = cls.db.one("""
+                        UPDATE notifications
+                           SET email_status = 'sending'
+                         WHERE id = %s
+                           AND email_status = 'queued'
+                     RETURNING email_status
+                    """, (msg.id,))
+                except ReadOnlySqlTransaction:
+                    # The database is in read-only mode, give up for now
+                    return
+                if not r:
+                    # Message already (being) sent by another thread
+                    continue
                 d = deserialize(msg.context)
                 d['notification_ts'] = msg.ts
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
                 if not email:
-                    dequeue(msg, False)
+                    dequeue(msg, 'skipped')
                     continue
                 email_row = p.get_email(email)
                 try:
                     p.send_email(msg.event, email_row, **d)
                 except EmailAddressIsBlacklisted:
-                    dequeue(msg, False)
+                    dequeue(msg, 'skipped')
                 except Exception as e:
                     website.tell_sentry(e, {})
+                    dequeue(msg, 'failed')
                 else:
-                    dequeue(msg, True)
+                    dequeue(msg, 'sent')
                 sleep(1)
             last_id = messages[-1].id
         # Delete old email-only notifications
@@ -1376,10 +1397,11 @@ class Participant(Model, MixinTeam):
             )
             email = False
         # Okay, add the notification to the queue
+        email_status = 'queued' if email else None
         n_id = self.db.one("""
             INSERT INTO notifications
-                        (participant, event, context, web, email, idem_key)
-                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(idem_key)s)
+                        (participant, event, context, web, email, email_status, idem_key)
+                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(email_status)s, %(idem_key)s)
               RETURNING id;
         """, locals())
         if not web:
@@ -1744,8 +1766,8 @@ class Participant(Model, MixinTeam):
                         context = dict(msg.context, unsubscribe_url=s.unsubscribe_url)
                         count += cursor.one("""
                             INSERT INTO notifications
-                                        (participant, event, context, web, email)
-                                 SELECT p.id, 'newsletter', %s, false, true
+                                        (participant, event, context, web, email, email_status)
+                                 SELECT p.id, 'newsletter', %s, false, true, 'queued'
                                    FROM participants p
                                   WHERE p.id = %s
                                     AND p.email IS NOT NULL

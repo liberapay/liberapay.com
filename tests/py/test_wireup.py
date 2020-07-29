@@ -1,7 +1,8 @@
+from datetime import timedelta
 from importlib import reload
+import sys
 import unittest
 from unittest.mock import patch
-import sys
 
 
 class Test(unittest.TestCase):
@@ -26,6 +27,28 @@ class Test(unittest.TestCase):
             assert bool(website.db) is False
             # Check that the website.platforms attribute exists
             assert website.platforms is website.db
+
+    @patch.dict('os.environ', {'RUN_CRON_JOBS': 'yes'})
+    def test_98_main_starts_cron_jobs(self):
+        import liberapay.cron
+        now = liberapay.cron.datetime.utcnow()
+        datetime_patch = patch.object(liberapay.cron, 'datetime', autospec=True)
+        sleep_patch = patch.object(liberapay.cron, 'sleep')
+        test_hook_patch = patch.object(liberapay.cron, 'test_hook')
+        with datetime_patch as datetime, sleep_patch as sleep, test_hook_patch as test_hook:
+            datetime.utcnow.return_value = now
+            def forward_time(seconds):
+                datetime.utcnow.return_value += timedelta(seconds=seconds)
+            sleep.side_effect = forward_time
+            test_hook.side_effect = StopIteration()
+            from liberapay.main import website
+            assert website.cron
+            assert website.cron.jobs
+            website.cron._wait_for_lock_thread.join()
+            for job in website.cron.jobs:
+                print(job)
+                if job.period:
+                    job.thread.join()
 
     def test_99_main_can_be_reloaded(self):
         import liberapay.main
