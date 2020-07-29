@@ -84,6 +84,18 @@ class TestCronJobs(Harness):
                     job.thread.join()
                     assert mock_func.call_count == 0
 
+    def test_disabled_job_is_not_run(self):
+        job = self.website.cron.jobs[0]
+        period = job.period
+        job.period = 0
+        with patch.object(job, 'func', autospec=True) as mock_func:
+            try:
+                r = job.start()
+                assert r is None
+                assert mock_func.call_count == 0
+            finally:
+                job.period = period
+
     def test_fetch_currency_exchange_rates(self):
         fake_rates = self.db.all("SELECT * FROM currency_exchange_rates")
         fetch_currency_exchange_rates()
