@@ -402,6 +402,7 @@ class TestEmail(EmailHarness):
         self.queue_email(larry, 'team_invite', team='team', team_url='fake_url', inviter='bob')
 
         Participant.dequeue_emails()
+        Participant.dequeue_emails()
         assert self.mailer.call_count == 1
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'larry <larry@example.com>'
