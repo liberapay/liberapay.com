@@ -5,6 +5,7 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 
 from liberapay.exceptions import CommunityAlreadyExists, InvalidCommunityName
+from liberapay.utils.unconfusable import unconfusable_string
 
 
 name_maxlength = 40
@@ -40,8 +41,18 @@ class Community(Model):
         name = unicodedata.normalize('NFKC', name)
         if name_re.match(name) is None:
             raise InvalidCommunityName(name)
+
         try:
             with cls.db.get_cursor() as cursor:
+                unconfusable_name = unconfusable_string(name)
+                all_names = cursor.all("""
+                    SELECT name
+                    FROM communities
+                    """)
+                for existing_name in all_names:
+                    if unconfusable_name == unconfusable_string(existing_name):
+                        raise CommunityAlreadyExists
+
                 p_id = cursor.one("""
                     INSERT INTO participants
                                 (kind, status, join_time)
