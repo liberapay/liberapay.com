@@ -10,6 +10,7 @@ from psycopg2 import IntegrityError, InterfaceError, ProgrammingError
 from psycopg2_pool import ThreadSafeConnectionPool
 
 from liberapay.constants import RATE_LIMITS
+from liberapay.website import website
 
 
 class CustomConnectionPool(ThreadSafeConnectionPool):
@@ -323,10 +324,10 @@ def hit_rate_limit(db, key_prefix, key_unique, exception=None):
         key = '%s:%s' % (key_prefix, key_unique)
         r = db.one("SELECT hit_rate_limit(%s, %s, %s)", (key, cap, period))
     except Exception as e:
-        from liberapay.website import website
         website.tell_sentry(e, {})
         return -1
     if r is None and exception is not None:
+        website.logger.warning(f"rate limit counter {key!r} is maxed out")
         raise exception(key_unique)
     return r
 
@@ -339,7 +340,6 @@ def decrement_rate_limit(db, key_prefix, key_unique):
         key = '%s:%s' % (key_prefix, key_unique)
         return db.one("SELECT decrement_rate_limit(%s, %s, %s)", (key, cap, period))
     except Exception as e:
-        from liberapay.website import website
         website.tell_sentry(e, {})
         return -1
 
@@ -381,7 +381,6 @@ DB.lock = acquire_db_lock
 
 
 if __name__ == '__main__':
-    from liberapay.website import website
     from liberapay import wireup
     db = wireup.minimal_chain.run(**website.__dict__)['db']
     print('Checking DB...')

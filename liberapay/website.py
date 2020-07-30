@@ -93,6 +93,7 @@ website = Website(
     www_root=env.aspen_www_root,
 )
 website.env = env
+website.logger = logging.Logger('liberapay')
 
 
 # Common Jinja configuration
