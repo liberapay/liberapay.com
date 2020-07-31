@@ -572,9 +572,9 @@ def mkdir_p(path):
 
 def get_ip_net(addr):
     if addr.max_prefixlen == 32:
-        return '.'.join(str(addr).split('.', 3)[:2])
+        return '.'.join(str(addr).split('.', 2)[:2])
     else:
-        return hexlify(addr.packed[:4])
+        return ':'.join(str(addr).split(':', 2)[:2])
 
 
 def render(context, allow_partial_i18n=True):
