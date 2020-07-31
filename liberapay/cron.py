@@ -69,7 +69,7 @@ class Job:
         return f"Job(func={self.func!r}, period={self.period!r}, exclusive={self.exclusive!r}, thread={self.thread!r})"
 
     def start(self):
-        if self.thread and self.thread.is_alive():
+        if self.thread and self.thread.is_alive() or not self.period:
             return
 
         def f():
@@ -98,6 +98,7 @@ class Job:
                         # tomorrow
                         sleep(3600 * 24 + seconds)
                 try:
+                    logger.info(f"Running {self!r}")
                     test_hook()
                     r = self.func()
                 except Exception as e:
