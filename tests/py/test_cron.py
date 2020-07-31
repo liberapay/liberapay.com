@@ -18,6 +18,7 @@ class TestCronJobs(Harness):
     def test_cron_jobs_with_empty_db(self, datetime):
         now = utcnow()
         for job in self.website.cron.jobs:
+            real_func = job.func
             with patch.object(job, 'func', autospec=True) as mock_func:
                 if isinstance(job.period, Weekly):
                     datetime.utcnow.return_value = (
@@ -28,8 +29,10 @@ class TestCronJobs(Harness):
                     datetime.utcnow.return_value = now.replace(
                         hour=job.period.hour, minute=5, second=0
                     )
-                if isinstance(job.period, Weekly) or job.func is fetch_currency_exchange_rates:
-                    mock_func.return_value = None
+                if isinstance(job.period, Weekly) or real_func is fetch_currency_exchange_rates:
+                    mock_func.side_effect = None
+                else:
+                    mock_func.side_effect = real_func
                 job.start()
                 job.thread.join()
                 assert mock_func.call_count == 1
