@@ -441,8 +441,8 @@ RATE_LIMITS = {
     'insert_identity': (7, 60*60*24*7),  # 7 per week
     'log-in.email': (10, 60*60*24),  # 10 per day
     'log-in.email.ip-addr': (5, 60*60),  # 5 per hour per IP address
-    'log-in.email.ip-net': (15, 60*60),  # 15 per hour per IP network
-    'log-in.email.country': (10, 10*60),  # 10 per 10 minutes per country
+    'log-in.email.ip-net': (10, 30*60),  # 10 per 30 minutes per IP network
+    'log-in.email.country': (15, 15*60),  # 15 per 15 minutes per country
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
     'log-in.password': (3, 60*60),  # 3 per hour
@@ -455,9 +455,9 @@ RATE_LIMITS = {
     'sign-up.email': (1, 5*60),  # this is used to detect near-simultaneous requests,
                                  # so 5 minutes should be plenty enough
     'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address
-    'sign-up.ip-net': (15, 60*60),  # 15 per hour per IP network
-    'sign-up.country': (5, 5*60),  # 5 per 5 minutes per country
-    'sign-up.ip-version': (15, 5*60),  # 15 per 5 minutes per IP version
+    'sign-up.ip-net': (10, 30*60),  # 10 per 30 minutes per IP network
+    'sign-up.country': (15, 15*60),  # 15 per 15 minutes per country
+    'sign-up.ip-version': (20, 10*60),  # 20 per 10 minutes per IP version
 }
 
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
