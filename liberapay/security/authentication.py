@@ -316,11 +316,11 @@ def authenticate_user_if_possible(request, response, state, user, _):
         response.redirect(redirect_url, trusted_url=False)
 
 
-def add_auth_to_response(response, request=None, user=ANON):
+def add_auth_to_response(response, request=None, user=ANON, etag=None):
     if request is None:
         return  # early parsing must've failed
-    if request.line.uri.startswith(b'/assets/'):
-        return  # assets never get auth headers
+    if etag:
+        return  # cachable responses should never contain cookies
 
     if SESSION in request.headers.cookie:
         if user.session:
