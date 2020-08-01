@@ -10,7 +10,7 @@ from liberapay.constants import (
 )
 from liberapay.exceptions import (
     BadPasswordSize, EmailAlreadyTaken, LoginRequired,
-    TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps,
+    TooManyLogInAttempts, TooManyLoginEmails, TooManyRequests, TooManySignUps,
     UsernameAlreadyTaken,
 )
 from liberapay.models.participant import Participant
@@ -55,17 +55,18 @@ def sign_in_with_form_data(body, state):
     if body.get('log-in.id'):
         request = state['request']
         src_addr, src_country = request.source, request.country
-        website.db.hit_rate_limit('log-in.ip-addr', str(src_addr), TooManyLogInAttempts)
-        website.db.hit_rate_limit('log-in.country', src_country, TooManyLogInAttempts)
         id = body['log-in.id'].strip()
         password = body.pop('log-in.password', None)
         k = 'email' if '@' in id else 'username'
         if password:
+            website.db.hit_rate_limit('log-in.password.ip-addr', str(src_addr), TooManyLogInAttempts)
+            website.db.hit_rate_limit('hash_password.ip-addr', str(src_addr), TooManyRequests)
             id = Participant.get_id_for(k, id)
             p = Participant.authenticate(id, 0, password)
             if not p:
                 state['log-in.error'] = _("Bad username or password.")
             else:
+                website.db.decrement_rate_limit('log-in.password.ip-addr', str(src_addr))
                 try:
                     p.check_password(password, context='login')
                 except Exception as e:
@@ -74,6 +75,9 @@ def sign_in_with_form_data(body, state):
             state['log-in.error'] = _("\"{0}\" is not a valid email address.", id)
             return
         else:
+            website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
+            website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)
+            website.db.hit_rate_limit('log-in.email.country', src_country, TooManyLogInAttempts)
             email = id
             p = Participant.from_email(email)
             if p and p.kind == 'group':

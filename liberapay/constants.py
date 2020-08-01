@@ -433,17 +433,20 @@ RATE_LIMITS = {
     'email.bypass_error': (2, 60*60*24*7),  # 2 per week
     'email.unblacklist.source': (5, 60*60*24*7),  # 5 per week
     'email.unblacklist.target': (3, 60*60*24*7),  # 3 per week
+    'hash_password.ip-addr': (3, 15),  # 3 per 15 seconds
     'http-query.ip-addr': (10, 10),  # 10 per 10 seconds
     'http-query.user': (10, 10),  # 10 per 10 seconds
     'http-unsafe.ip-addr': (10, 10),  # 10 per 10 seconds
     'http-unsafe.user': (10, 10),  # 10 per 10 seconds
     'insert_identity': (7, 60*60*24*7),  # 7 per week
-    'log-in.country': (10, 60),  # 10 per minute per country
     'log-in.email': (10, 60*60*24),  # 10 per day
+    'log-in.email.ip-addr': (5, 60*60),  # 5 per hour per IP address
+    'log-in.email.ip-net': (10, 30*60),  # 10 per 30 minutes per IP network
+    'log-in.email.country': (15, 15*60),  # 15 per 15 minutes per country
     'log-in.email.not-verified': (2, 60*60*24),  # 2 per day
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
-    'log-in.ip-addr': (5, 5*60),  # 5 per 5 minutes per IP address
     'log-in.password': (3, 60*60),  # 3 per hour
+    'log-in.password.ip-addr': (3, 60*60),  # 3 per hour per IP address
     'make_team': (5, 60*60*24*7),  # 5 per week
     'payin.from-user': (15, 60*60*24*7),  # 15 per week
     'payin.from-ip-addr': (15, 60*60*24*7),  # 15 per week
@@ -452,9 +455,9 @@ RATE_LIMITS = {
     'sign-up.email': (1, 5*60),  # this is used to detect near-simultaneous requests,
                                  # so 5 minutes should be plenty enough
     'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address
-    'sign-up.ip-net': (15, 60*60),  # 15 per hour per IP network
-    'sign-up.country': (5, 5*60),  # 5 per 5 minutes per country
-    'sign-up.ip-version': (15, 5*60),  # 15 per 5 minutes per IP version
+    'sign-up.ip-net': (10, 30*60),  # 10 per 30 minutes per IP network
+    'sign-up.country': (15, 15*60),  # 15 per 15 minutes per country
+    'sign-up.ip-version': (20, 10*60),  # 20 per 10 minutes per IP version
 }
 
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
