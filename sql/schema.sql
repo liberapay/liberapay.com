@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '129'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '130'::jsonb);
 
 
 -- app configuration
@@ -1027,6 +1027,14 @@ CREATE OR REPLACE FUNCTION check_rate_limit(k text, cap int, period float) RETUR
            WHERE r.key = k
         ), 0
     ) < cap;
+$$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION decrement_rate_limit(key text, cap int, period float) RETURNS int AS $$
+    UPDATE rate_limiting AS r
+       SET counter = greatest(r.counter - 1 - compute_leak(cap, period, r.ts), 0)
+              , ts = current_timestamp
+     WHERE r.key = key
+ RETURNING counter;
 $$ LANGUAGE sql;
 
 

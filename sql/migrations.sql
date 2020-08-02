@@ -2625,3 +2625,12 @@ CREATE UNIQUE INDEX queued_emails_idx ON notifications (id ASC)
     WHERE (email AND email_status = 'queued');
 ALTER TABLE notifications DROP COLUMN email_sent;
 ALTER TABLE notifications ADD CONSTRAINT email_chk CHECK (email = (email_status IS NOT null));
+
+-- migration #130
+CREATE OR REPLACE FUNCTION decrement_rate_limit(key text, cap int, period float) RETURNS int AS $$
+    UPDATE rate_limiting AS r
+       SET counter = greatest(r.counter - 1 - compute_leak(cap, period, r.ts), 0)
+              , ts = current_timestamp
+     WHERE r.key = key
+ RETURNING counter;
+$$ LANGUAGE sql;
