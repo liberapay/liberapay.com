@@ -87,10 +87,11 @@ def insert_constants():
     return {'constants': constants}
 
 
-def enforce_rate_limits(request, user, website):
+def enforce_rate_limits(request, user, website, etag=None):
     if request.method in constants.SAFE_METHODS:
         if request.qs:
-            if request.line.uri.startswith(b'/assets/'):
+            if etag:
+                # Don't count requests for static assets
                 return
             request_type = 'http-query'
         else:
