@@ -39,6 +39,13 @@ require () {
 require eb
 require git
 
+# Check that we have the required credentials
+sentry_token="$(cat .sentry-token 2>/dev/null || true)"
+if [ -z "$sentry_token" ]; then
+    echo "The Sentry API token is missing, please put it in the '.sentry-token' file (in the same directory as this script)."
+    exit 1
+fi
+
 # Make sure we have the latest master
 git checkout -q master
 git pull
@@ -161,3 +168,17 @@ fi
 # Push to GitHub
 git push
 git push --tags
+
+# Tell Sentry about this release
+curl https://sentry.io/api/0/organizations/liberapay/releases/ \
+   -X POST \
+   -H "Authorization: Bearer $sentry_token" \
+   -H "Content-Type: application/json" \
+   -d '{
+         "version": "'$version'",
+         "refs": [{
+             "repository": "liberapay/liberapay.com",
+             "commit": "'$(git rev-list -n 1 $version)'"
+         }],
+         "projects": ["liberapaycom"]
+     }'
