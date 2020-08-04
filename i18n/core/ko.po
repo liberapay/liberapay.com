@@ -1222,8 +1222,16 @@ msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n}년치 {money_amount}"
 
-msgid "Bad username or password."
-msgstr "잘못된 계정명 또는 비밀번호."
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr "이메일 계정이 {0} 인 계정을 찾을 수 없었습니다."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1232,10 +1240,6 @@ msgstr "\"{0}\"은(는) 유효한 이메일 주소가 아닙니다."
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} 은(는) 팀 계정으로 연결되어 있습니다. 팀 계정으로는 로그인할 수 없습니다."
-
-#, fuzzy, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
-msgstr "이메일 계정이 {0} 인 계정을 찾을 수 없었습니다."
 
 msgid "Your email address is now verified."
 msgstr "이메일 주소가 확인되었습니다."
@@ -2607,8 +2611,8 @@ msgid "The payment of {charge_amount} was successful."
 msgstr "{charge_amount} 을(를) 성공적으로 지불했습니다."
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
-msgstr "지불이 실패했습니다. 오류 메시지: “{0}”"
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "결제 프로세서 {name}에서 \"{error_message}\" 오류를 반환했습니다."
 
 msgid "The payment has been initiated."
 msgstr "결제가 시작되었습니다."
@@ -2648,10 +2652,6 @@ msgstr "PayPal 지불은 현재 익명이 아니며, 받는 사람은 당신의 
 
 msgid "Initiate the payment"
 msgstr "지불 시작"
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "결제 프로세서 {name}에서 \"{error_message}\" 오류를 반환했습니다."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr ""
@@ -4390,7 +4390,10 @@ msgstr ""
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr ""
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."

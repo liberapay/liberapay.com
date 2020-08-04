@@ -1221,8 +1221,16 @@ msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} 年× {money_amount}"
 
-msgid "Bad username or password."
-msgstr "ユーザー名またはパスワードが間違っています。"
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr "メインのメールアドレスが {0} であるアカウントは見つかりませんでした。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1231,10 +1239,6 @@ msgstr "\"{0}\" は有効なメールアドレスではありません。"
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} はチームアカウントにリンクされています。チームとしてログインすることはできません。"
-
-#, fuzzy, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
-msgstr "メインのメールアドレスが {0} であるアカウントは見つかりませんでした。"
 
 msgid "Your email address is now verified."
 msgstr "メールアドレスが認証されました。"
@@ -2609,8 +2613,8 @@ msgid "The payment of {charge_amount} was successful."
 msgstr "{charge_amount}の支払いは成功しました。"
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
-msgstr "支払いは失敗しました。エラーメッセージ：“{0}”"
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "決済サービス {name} はエラーを返しました：「{error_message}」。"
 
 msgid "The payment has been initiated."
 msgstr "支払いが開始されました。"
@@ -2650,10 +2654,6 @@ msgstr "現在、PayPal の支払いは匿名ではありません。受領者�
 
 msgid "Initiate the payment"
 msgstr "支払いを開始する"
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "決済サービス {name} はエラーを返しました：「{error_message}」。"
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "支払い手段が無効です。別の手段を選択または追加してください。"
@@ -4392,8 +4392,11 @@ msgstr "以下に PayPal と Stripe の違いを一覧にしました。"
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr "通常、取引手数料は Stripe の方が PayPal よりも安いです。"
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr "Stripe では一度に複数のクリエイターに寄付できますが、PayPal ではできません。"
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
+msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "PayPal は、PayPal の Web サイトでの支払いを必要としますが、Stripe は Liberapay と統合されています。"

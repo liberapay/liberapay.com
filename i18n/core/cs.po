@@ -1228,8 +1228,16 @@ msgstr[0] "{money_amount} po {n} rok"
 msgstr[1] "{money_amount} po {n} roky"
 msgstr[2] "{money_amount} po {n} let"
 
-msgid "Bad username or password."
-msgstr "Chybné jméno nebo heslo."
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr "Nenašli jsme žádný účet, jehož hlavní e-mailová adresa je {0}."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1238,10 +1246,6 @@ msgstr "\"{0}\" není platná emailová adresa."
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} je spojen s týmovým účet. Není možné se přihlásit jako tým."
-
-#, fuzzy, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
-msgstr "Nenašli jsme žádný účet, jehož hlavní e-mailová adresa je {0}."
 
 msgid "Your email address is now verified."
 msgstr "Vaše emailová adresa je nyní ověřena."
@@ -2633,7 +2637,7 @@ msgid "The payment of {charge_amount} was successful."
 msgstr ""
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
+msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr ""
 
 msgid "The payment has been initiated."
@@ -2676,10 +2680,6 @@ msgstr ""
 
 msgid "Initiate the payment"
 msgstr "Zahajte platbu"
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr ""
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Platební prostředek není platný, prosím zvolte nebo vytvořte jiný."
@@ -4456,7 +4456,10 @@ msgstr ""
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr ""
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."

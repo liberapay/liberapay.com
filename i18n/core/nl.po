@@ -1234,8 +1234,16 @@ msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} jaar van {money_amount}"
 msgstr[1] "{n} jaren van {money_amount}"
 
-msgid "Bad username or password."
-msgstr "Incorrecte gebruikersnaam of wachtwoord."
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr "We hebben geen account gevonden met het primaire e-mailadres {0}."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1244,10 +1252,6 @@ msgstr "\"{0}\" is geen geldig e-mailadres."
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} is gekoppeld aan een teamaccount. Het is niet mogelijk om in te loggen als een team."
-
-#, fuzzy, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
-msgstr "We hebben geen account gevonden met het primaire e-mailadres {0}."
 
 msgid "Your email address is now verified."
 msgstr "Je e-mailadres is nu geverifieerd."
@@ -2632,8 +2636,8 @@ msgid "The payment of {charge_amount} was successful."
 msgstr "De betaling van {charge_amount} was succesvol."
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
-msgstr "De betaling is mislukt. Foutmelding: “{0}”"
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "De betalingsverwerker {name} geeft een fout: \"{error_message}\"."
 
 msgid "The payment has been initiated."
 msgstr "De betaling is geïnitieerd."
@@ -2674,10 +2678,6 @@ msgstr "PayPal betalingen zijn op dit moment niet anoniem, de ontvanger zal je n
 
 msgid "Initiate the payment"
 msgstr "Start de betaling"
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "De betalingsverwerker {name} geeft een fout: \"{error_message}\"."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "De betaalmethode is ongeldig, selecteer of voeg een ander toe."
@@ -4435,8 +4435,11 @@ msgstr "Hier is een lijst van de verschillen tussen hen:"
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr "De kosten voor het verwerken van de betaling zijn meestal lager bij Stripe dan bij PayPal."
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr "Stripe maakt het mogelijk om aan meerdere makers tegelijk te doneren, PayPal niet."
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
+msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "Bij een PayPal-betalingen moet de donateur worden doorverwezen naar de website van PayPal, terwijl Stripe is geïntegreerd in Liberapay."

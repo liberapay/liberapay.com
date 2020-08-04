@@ -1267,8 +1267,16 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-msgid "Bad username or password."
-msgstr "إسم المستخدم أو كلمة السر خاطئة."
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr ""
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1276,10 +1284,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
-msgstr ""
-
-#, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
 msgstr ""
 
 msgid "Your email address is now verified."
@@ -2704,7 +2708,7 @@ msgid "The payment of {charge_amount} was successful."
 msgstr ""
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
+msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr ""
 
 msgid "The payment has been initiated."
@@ -2749,10 +2753,6 @@ msgid "PayPal payments are currently not anonymous, the recipient will see your 
 msgstr ""
 
 msgid "Initiate the payment"
-msgstr ""
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr ""
 
 msgid "The payment instrument is invalid, please select or add another one."
@@ -4586,7 +4586,10 @@ msgstr ""
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr ""
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."

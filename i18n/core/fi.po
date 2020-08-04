@@ -1234,8 +1234,16 @@ msgid_plural "{n} years of {money_amount}"
 msgstr[0] "Yksi vuosi × {money_amount}"
 msgstr[1] "{n} vuotta × {money_amount}"
 
-msgid "Bad username or password."
-msgstr "Virheellinen käyttäjätunnus tai salasana."
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr "Järjestelmästä ei löydy tunnusta, jonka pääsähköpostiosoite olisi {0}."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1244,10 +1252,6 @@ msgstr "”{0}” ei ole kelvollinen sähköpostiosoite."
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} on kytketty ryhmätunnukseen. Ryhmänä ei ole mahdollista kirjautua."
-
-#, fuzzy, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
-msgstr "Järjestelmästä ei löydy tunnusta, jonka pääsähköpostiosoite olisi {0}."
 
 msgid "Your email address is now verified."
 msgstr "Sähköpostiosoitteesi on nyt varmistettu."
@@ -2632,8 +2636,8 @@ msgid "The payment of {charge_amount} was successful."
 msgstr "{charge_amount} maksu onnistui."
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
-msgstr "Maksu epäonnistui: Virheilmoitus: ”{0}”"
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Maksunkäsittelijä {name} palautti virheen: ”{error_message}”."
 
 msgid "The payment has been initiated."
 msgstr "Maksutoimenpide on aloitettu."
@@ -2674,10 +2678,6 @@ msgstr "PayPal-maksut eivät ole anonyymejä. Vastaanottaja näkee nimesi ja sä
 
 msgid "Initiate the payment"
 msgstr "Toimeenpane maksu"
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Maksunkäsittelijä {name} palautti virheen: ”{error_message}”."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Tämä maksuväline ei toimi, valitse tai lisää toinen."
@@ -4435,8 +4435,11 @@ msgstr "Tässä on listaus niiden eroista:"
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr "Maksunkäsittelykulut Stripessä ovat yleensä Paypalin kuluja pienemmät."
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr "Stripe mahdollistaa usealle lahjoittamisen samanaikaisesti. PayPal ei."
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
+msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "PayPal-lahjoitukset edellyttävät lahjoittajaa käymään PayPalin sivuilla. Stripe on integroitu Liberapay-palveluun."

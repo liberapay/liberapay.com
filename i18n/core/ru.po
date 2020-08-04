@@ -1247,8 +1247,16 @@ msgstr[0] "{n} год по {money_amount}"
 msgstr[1] "{n} года по {money_amount}"
 msgstr[2] "{n} лет по {money_amount}"
 
-msgid "Bad username or password."
-msgstr "Неправильное имя пользователя или пароль."
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr "Мы не нашли аккаунт с основным адресом электронной почты {0}."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1257,10 +1265,6 @@ msgstr "\"{0}\" не является корректным адресом эле
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} связан с учётной записью команды. Войти в систему как команда невозможно."
-
-#, fuzzy, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
-msgstr "Мы не нашли аккаунт с основным адресом электронной почты {0}."
 
 msgid "Your email address is now verified."
 msgstr "Ваш адрес электронной почты подтверждён."
@@ -2655,8 +2659,8 @@ msgid "The payment of {charge_amount} was successful."
 msgstr "Платёж на {charge_amount} прошёл успешно."
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
-msgstr "Платёж не прошёл. Сообщение об ошибке: \"{0}\""
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Обработчик платежа {name} возвратил ошибку: “{error_message}”."
 
 msgid "The payment has been initiated."
 msgstr "Платёж инициирован."
@@ -2698,10 +2702,6 @@ msgstr "Платежи PayPal в настоящее время не являют
 
 msgid "Initiate the payment"
 msgstr "Начать оплату"
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Обработчик платежа {name} возвратил ошибку: “{error_message}”."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Платежный инструмент недействителен, выберите или добавьте другой."
@@ -4478,8 +4478,11 @@ msgstr "Вот список различий между ними:"
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr "Плата за обработку платежей обычно ниже в Stripe, чем в PayPal."
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr "Stripe позволяет делать пожертвования сразу нескольким создателям, а PayPal - нет."
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
+msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "Платежи PayPal требуют перенаправления спонсоров на веб-сайт PayPal, тогда как Stripe интегрирован в Liberapay."

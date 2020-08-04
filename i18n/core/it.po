@@ -1234,8 +1234,16 @@ msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} anno di {money_amount}"
 msgstr[1] "{n} anni di {money_amount}"
 
-msgid "Bad username or password."
-msgstr "Nome utente o password errati."
+msgid "The submitted password is incorrect."
+msgstr ""
+
+#, python-brace-format
+msgid "No account has the username “{username}”."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "No account has “{email_address}” as its primary email address."
+msgstr "Non abbiamo trovato alcun conto il cui indirizzo e-mail principale è {0}."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1244,10 +1252,6 @@ msgstr "“{0}” non è un indirizzo e-mail valido."
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} è collegato al conto di una squadra. Non è possibile effettuare l'accesso come squadra."
-
-#, fuzzy, python-brace-format
-msgid "No account has “{email_address}” as its primary email address."
-msgstr "Non abbiamo trovato alcun conto il cui indirizzo e-mail principale è {0}."
 
 msgid "Your email address is now verified."
 msgstr "Il tuo indirizzo e-mail è stato verificato."
@@ -2632,8 +2636,8 @@ msgid "The payment of {charge_amount} was successful."
 msgstr "Il pagamento di {charge_amount} è andato a buon fine."
 
 #, python-brace-format
-msgid "The payment failed. Error message: “{0}”"
-msgstr "Il pagamento non è riuscito. Messaggio di errore: “{0}”"
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "L'elaboratore di pagamenti {name} ha riportato un errore: “{error_message}”."
 
 msgid "The payment has been initiated."
 msgstr "Il pagamento è stato avviato."
@@ -2674,10 +2678,6 @@ msgstr "I pagamenti tramite PayPal al momento non sono anonimi, il ricevente ved
 
 msgid "Initiate the payment"
 msgstr "Avvia il pagamento"
-
-#, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "L'elaboratore di pagamenti {name} ha riportato un errore: “{error_message}”."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Lo strumento di pagamento non è valido, si prega di selezionare o aggiungere un altro strumento."
@@ -4435,8 +4435,11 @@ msgstr "Questa è una lista delle differenze tra i due:"
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
 msgstr "Le commissioni di elaborazione dei pagamenti sono solitamente più basse con Stripe che con PayPal."
 
-msgid "Stripe allows donating to multiple creators at once, PayPal doesn't."
-msgstr "Stripe ti permette di donare a diversi creativi tutti insieme, PayPal no."
+msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
+msgstr ""
+
+msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
+msgstr ""
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "I pagamenti con PayPal reindirizzano il donatore al sito web di PayPal, mentre Stripe è integrato con Liberapay."
