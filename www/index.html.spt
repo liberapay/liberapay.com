@@ -150,8 +150,8 @@ recent = query_cache.one("""
                     {{ _("2. Fund your donation") }}
                 </dt>
                 <dd>{{ _(
-                    "On Liberapay donations are funded in advance. You have control over "
-                    "how much money you put in and when. Sending more money at once "
+                    "On Liberapay, donations are funded in advance. You have control over "
+                    "when and how much you pay. Sending more money at once usually "
                     "results in a lower percentage of {0}transaction fees{1}.",
                     '<a href="/about/faq#fees">'|safe,
                     '</a>'|safe,
