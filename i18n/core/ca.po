@@ -396,58 +396,58 @@ msgstr "El càrrec domiciliat a la vostra cartera de Liberapay ha finalitzat cor
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "El vostre pagament de {money_amount} ha estat qüestionat"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr ""
+msgstr "La transferència de {money_amount} que vau iniciar en data {date} ha estat revertida pel vostre banc."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: no ha estat possible processar el pagament."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: heu sol·licitat un reemborsament."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: el pagament no es va autoritzar."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: el pagament és un duplicat."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: el pagament era fraudulent."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "El vostre banc no ha proporcionat cap motiu específic per a aquesta disputa."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: les dades del compte proporcionades no són correctes."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: el compte no té prou diners per a fer front al pagament."
 
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: el propietari del compte no reconeix el pagament."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "El motiu proporcionat pel banc és: {reason_code_in_english}."
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "Si aquesta disputa es va activar per error, aleshores podeu demanar al vostre banc que la retiri. Feu-nos saber si ho veu, perquè també hem d'enviar un missatge al vostre banc."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
-msgstr ""
+msgstr "Si la disputa no es resol favorablement, aleshores les persones que han rebut els fons disputats els recuperaran."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
-msgstr ""
+msgstr "Aquesta disputa és tancada, no es pot retirar ni revertir."
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "Els fons disputats s'han recuperat automàticament de les persones que els havien rebut."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "Si el vostre ban ha disputat el pagament sense consultar-vos, aleshores hauríeu de demanar-li el perquè. Una vegada hàgiu resolt el problema, podeu {link_start}tornar a fer el pagament{link_end}."
 
 msgid "Your payment has failed"
 msgstr "El vostre pagament ha fallat"
@@ -1235,15 +1235,15 @@ msgstr[0] "{n} any de {money_amount}"
 msgstr[1] "{n} anys de {money_amount}"
 
 msgid "The submitted password is incorrect."
-msgstr ""
+msgstr "La contrasenya proporcionada no és correcta."
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
-msgstr ""
+msgstr "No hi ha cap compte amb el nom d'usuari «{username}»."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
-msgstr "No hem trobat cap compte amb adreça electrònica principal {0}."
+msgstr "No hem trobat cap compte amb adreça electrònica principal «{email_address}»."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -4436,10 +4436,10 @@ msgid "The payment processing fees are usually lower with Stripe than with PayPa
 msgstr "Les comissions de processament de pagaments habitualment són inferiors amb Stripe que amb Paypal."
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
-msgstr ""
+msgstr "Stripe us permet renovar els donatius de forma automàtica, mentre que actualment PayPal requereix que els donants confirmin cada pagament."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
-msgstr ""
+msgstr "Stripe permet fer donatius a diferents creadors a la vegada en alguns casos, mentre que PayPal sempre requereix pagaments per separat."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "Els pagaments de PayPal requereixen redirigir del donant al lloc web de Paypal, mentre que Stripe s'integra amb Liberapay."
@@ -5003,9 +5003,9 @@ msgstr "Trobeu algú a qui vulgueu donar diners, aleshores trieu una quantitat d
 msgid "2. Fund your donation"
 msgstr "2. Financeu el vostre donatiu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "On Liberapay, donations are funded in advance. You have control over when and how much you pay. Sending more money at once usually results in a lower percentage of {0}transaction fees{1}."
-msgstr "En el Liberapay, els donatius es financen a l'avançada. Teniu el control sobre la quantitat de diners hi poseu i sobre quan ho feu. L'enviament de diners de cop permet un percentatge inferior de {0}comissions de transacció{1}."
+msgstr "En el Liberapay, els donatius es financen a l'avançada. Teniu el control sobre la quantitat de diners que pagueu i sobre quan ho feu. L'enviament de diners de cop permet un percentatge inferior de {0}comissions de transacció{1}."
 
 msgid "3. Keep your donation funded"
 msgstr "3. Manteniu el finançament del donatiu"
