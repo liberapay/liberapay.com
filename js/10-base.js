@@ -105,13 +105,18 @@ Liberapay.init = function() {
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('.radio input:not([type="radio"])').on('click change', function() {
+    $('.radio input:not([type="radio"]), .radio-group input:not([type="radio"])').on('click change', function(event) {
+        if (event.type == 'click' && event.clientX == 0 && event.clientY == 0) {
+            return  // This click event seems to be fake
+        } else if (event.type != 'click' && this.value == '') {
+            return  // Don't act on non-click events when the <input> is empty
+        }
         $(this).parents('label').children('input[type="radio"]').prop('checked', true).trigger('change');
     });
-    $('.radio-group input:not([type="radio"])').on('click change', function() {
-        $(this).parents('label').children('input[type="radio"]').prop('checked', true).trigger('change');
-    });
-    $('.radio-group .list-group-item > label').on('click', function() {
+    $('.radio-group .list-group-item > label').on('click', function(event) {
+        if (event.clientX == 0 && event.clientY == 0) {
+            return  // This click event seems to be fake
+        }
         $(this).children('input[type="radio"]').prop('checked', true).trigger('change');
     });
 
