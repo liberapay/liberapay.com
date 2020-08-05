@@ -271,7 +271,7 @@ title = "Users Admin"
             <br>
             % for account in elsewhere
                 <a class="account-link" href="{{ account.html_url }}">
-                    <span class="symbol">{{ fontawesome(account.platform) }}</span>
+                    <span class="symbol-3ex">{{ fontawesome(account.platform) }}</span>
                     <span>{{ account.friendly_name_long }}</span>
                 </a>
                 <br>
@@ -311,7 +311,7 @@ title = "Users Admin"
         % if row.payments
         <p><strong>Incoming payments:</strong><br>
             % for pt in row.payments
-                <span class="symbol">{{ payment_method_icon(pt.payin_method) }}</span>&nbsp;
+                <span class="symbol-3ex">{{ payment_method_icon(pt.payin_method) }}</span>
                 {{ locale.format_money(Money(**pt.amount)) }}
                 from <a href="/~{{ pt.payer }}/">{{ pt.payer_name }}</a>
                 % set ctime = parse_date(pt.ctime)

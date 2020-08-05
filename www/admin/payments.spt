@@ -27,7 +27,7 @@ payins = website.db.all("""
                         pt.team, team.username AS team_name,
                         pt.status, pt.error,
                         pt.amount, pt.unit_amount, pt.n_units, pt.period
-                    ) x))
+                    ORDER BY pt.id ) x))
                FROM payin_transfers pt
                JOIN participants recipient ON recipient.id = pt.recipient
           LEFT JOIN participants team ON team.id = pt.team
@@ -101,13 +101,16 @@ title = "Payments Admin"
             % endif
             </td>
             <td>
-                % for pt in pi.transfers or ()
+            % if pi.transfers
+                <ul class="right-pointing-arrows">
+                % for pt in pi.transfers
+                    <li>
                     % do pt.__setitem__('status', (
                         'refunded' if pt.reversed_amount == pt.amount else
                         'partially_refunded' if pt.reversed_amount else
                         pt.status
                     ))
-                    → {{ locale.format_money(Money(**pt.amount)) }}
+                    {{ locale.format_money(Money(**pt.amount)) }}
                     to <a href="/~{{ pt.recipient }}/">{{ pt.recipient_name }}</a>
                     % if pt.team
                         through team <a href="/~{{ pt.team }}/">{{ pt.team_name }}</a>
@@ -121,10 +124,12 @@ title = "Payments Admin"
                             ‒ error: <code>{{ pt.error }}</code>
                         % endif
                     % endif
-                    <br>
-                % else
-                    <code>{{ pi.transfers }}</code>
+                    </li>
                 % endfor
+                </ul>
+            % else
+                <code>{{ pi.transfers }}</code>
+            % endif
             </td>
             <td class="text-{{ STATUS_MAP.get(pi.status, 'info') }}">{{ pi.status }}</td>
         </tr>
