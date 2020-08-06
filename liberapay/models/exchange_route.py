@@ -222,7 +222,7 @@ class ExchangeRoute(Model):
                     else:
                         raise
                 else:
-                    assert source.status == 'consumed'
+                    assert source.status not in ('chargeable', 'pending')
                     self.update_status(source.status)
                     return
         elif self.network == 'mango-cc':

@@ -1,5 +1,6 @@
 from urllib.parse import urlsplit, urlunsplit
 
+import mangopay.exceptions
 from pando import Response
 from pando.http.request import Line
 import pando.state_chain
@@ -87,10 +88,11 @@ def insert_constants():
     return {'constants': constants}
 
 
-def enforce_rate_limits(request, user, website):
+def enforce_rate_limits(request, user, website, etag=None):
     if request.method in constants.SAFE_METHODS:
         if request.qs:
-            if request.line.uri.startswith(b'/assets/'):
+            if etag:
+                # Don't count requests for static assets
                 return
             request_type = 'http-query'
         else:
@@ -155,7 +157,8 @@ def merge_responses(state, exception, website, response=None):
 
 def turn_socket_error_into_50X(website, state, exception, _=lambda a: a, response=None):
     # The mangopay module reraises exceptions and stores the original in `__cause__`.
-    exception = getattr(exception, '__cause__', exception)
+    if isinstance(exception, mangopay.exceptions.APIError):
+        exception = exception.__cause__
     # log the exception
     website.tell_sentry(exception, state, level='warning')
     # replace the exception with a Response
