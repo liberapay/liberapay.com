@@ -186,8 +186,9 @@ class EmailAddressError(LazyResponse400):
 
 class EmailAlreadyTaken(EmailAddressError):
     code = 409
+    html_template = 'templates/exceptions/EmailAlreadyTaken.html'
     def msg(self, _):
-        return _("{0} is already connected to a different Liberapay account.", self.email_address)
+        return _("The email address {0} is already connected to a Liberapay account.", self.email_address)
 
 
 class CannotRemovePrimaryEmail(LazyResponseXXX):

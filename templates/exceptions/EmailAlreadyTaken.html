@@ -1,0 +1,22 @@
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+<p class="alert alert-danger">{{ response.body }}</p>
+% set input_name = request.find_input_name(response.email_address)
+% if input_name in ('log-in.id', 'sign-in.email')
+    <p>{{ _("Log in to the existing account:") }}</p>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <button class="btn btn-primary" name="log-in.new_user" value="no">{{ _("Log in") }}</button>
+    </form>
+    <hr>
+    <p>{{ _("Or use another email address:") }}</p>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <div class="form-group">
+            <input class="form-control" type="email" name="{{ input_name }}" placeholder="{{ _('Email address') }}" />
+        </div>
+        <button class="btn btn-primary">{{ _("Try again") }}</button>
+    </form>
+% endif
+</div>
+</div>
