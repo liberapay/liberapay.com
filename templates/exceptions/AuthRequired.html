@@ -4,11 +4,7 @@
 % include "templates/log-in-form.html"
 % else
 
-% if state.get('sign-in.error')
-    <p class="alert alert-danger">{{ state['sign-in.error'] }}</p>
-% else
     <p>{{ _("You need an account for this. Please fill one of the forms below.") }}</p>
-% endif
 
 <h2 class="banderole success">{{ _("Create an account") }}</h2>
 <form action="" method="POST">

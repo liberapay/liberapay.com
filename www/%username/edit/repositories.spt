@@ -65,13 +65,14 @@ if platform_name:
                         r = platform.get_repos(account, page_url=next_page, sess=sess)
                     except (InvalidGrantError, TokenExpiredError):
                         response.render('simplates/reconnect-elsewhere-account.spt', state, platform=platform)
-                    repos += upsert_repos(cursor, r[0], participant, utcnow())
+                    repos.extend(upsert_repos(cursor, r[0], participant, utcnow()))
                     next_page = r[2].get('next')
                     if not next_page:
                         break
                 payload = dict(partial_list=bool(next_page))
                 last_fetch = participant.add_event(cursor, event_type, payload)
-            repos = sorted(repos, key=lambda repo: (not repo.is_fork, repo.last_update), reverse=True)[:LIMIT]
+            repos.sort(key=lambda repo: (not repo.is_fork, repo.last_update), reverse=True)
+            repos = repos[:LIMIT]
         total_count = website.db.one("""
             SELECT count(*)
               FROM repositories r
@@ -118,12 +119,10 @@ subhead = _("Repositories")
         <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
         <form action="javascript:" class="js-submit" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-            % for repo in repos
-                {{ show_repo(repo, edit=True) }}
-            % else
-                <p>{{ _("No repositories found.") }}</p>
-            % endfor
             % if repos
+                % for repo in repos
+                    {{ show_repo(repo, edit=True) }}
+                % endfor
                 <br>
                 % set next_offset = offset + LIMIT
                 % if next_offset < total_count
@@ -133,6 +132,8 @@ subhead = _("Repositories")
                 }}</a>
                 % endif
                 <button class="btn btn-success btn-lg">{{ _("Save") }}</button>
+            % else
+                <p>{{ _("No repositories found.") }}</p>
             % endif
         </form>
     % endif

@@ -18,10 +18,6 @@ no_navbar_sign_in = True
     % include "templates/log-in-form.html"
     % else
 
-    % if state.get('sign-in.error')
-        <p class="alert alert-danger">{{ state['sign-in.error'] }}</p>
-    % endif
-
     <p class="banderole default">{{ _("If you already have an account, log in:") }}</p>
     % include "templates/log-in-form.html"
 
