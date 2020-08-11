@@ -113,7 +113,9 @@ if 'ctime' not in out:
 % extends "templates/layouts/base-thin.html"
 
 % block thin_content
-    <p class="alert alert-danger">These aren't the droids you're looking for.</p>
+    <p class="alert alert-danger">{{ _(
+        "Something went wrong, please go back to the previous page and resubmit the form."
+    ) }}</p>
 % endblock
 
 [---] application/json via json_dump
