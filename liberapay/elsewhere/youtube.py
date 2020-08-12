@@ -8,8 +8,8 @@ class Youtube(PlatformOAuth2):
     # Platform attributes
     based_on = 'google'
     name = 'youtube'
-    display_name = 'Youtube'
-    fontawesome_name = name
+    display_name = 'YouTube'
+    fontawesome_name = 'youtube-play'
     account_url = 'https://youtube.com/channel/{user_id}'
     optional_user_name = True
     user_type = 'channel'
