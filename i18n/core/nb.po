@@ -1536,9 +1536,9 @@ msgstr "Du er fremdeles ikke innlogget som {0}."
 msgid "Password (optional)"
 msgstr "Passord (valgfritt)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "La det forrige feltet stå tomt hvis kontoen din ikke har et passord, eller du har mistet det. En innloggingslenke vil bli sendt til deg per e-post."
+msgstr "La det forrige feltet stå tomt hvis kontoen din ikke har et passord, eller du har {bold}mistet passordet{bold_end}. En innloggingslenke vil bli sendt til deg per e-post."
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -1884,17 +1884,17 @@ msgstr "Du donerer for tiden {0} per uke til {1}. Du kan velge å skrive inn et 
 msgid "Please select or input an amount:"
 msgstr "Velg eller skriv inn et beløp:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] "Feil valuta? {n} annen støttes:"
-msgstr[1] "Feil valuta? {n} andre støttes:"
+msgstr[0] "Er {currency_name} feil valuta? {n} annen støttes:"
+msgstr[1] "Er {currency_name} feil valuta? {n} andre støttes:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] "Feil valuta? {username} godtar også {n} annen:"
-msgstr[1] "Feil valuta? {username} godtar også {n} andre:"
+msgstr[0] "Er {currency_name} feil valuta? {username} godtar også {n} annen:"
+msgstr[1] "Er {currency_name} feil valuta? {username} godtar også {n} andre:"
 
 msgid "not supported by PayPal"
 msgstr "ikke støttet av PayPal"
@@ -4305,10 +4305,10 @@ msgstr "Du kan få Liberapay-oppdateringer på følgende sosiale medier:"
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr "Du kan også følge med på {1}utviklingen av Liberapays programvare{0}, {2}eventyrene til Liberapays juridiske avdeling{0}, og {3}generelle diskusjoner i Liberapays lag{0}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
 msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] ""
+msgstr[0] "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
 msgstr[1] "Liberapay er tilgjengelig for skapere i {stripe_link_open}{n} land gjennom Stripe{link_close} og {paypal_link_open}mer enn 200 land gjennom PayPal{link_close}."
 
 #, fuzzy, python-brace-format
