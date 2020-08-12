@@ -98,7 +98,10 @@ class Job:
                         # tomorrow
                         sleep(3600 * 24 + seconds)
                 try:
-                    logger.info(f"Running {self!r}")
+                    if isinstance(period, (float, int)) and period < 300:
+                        logger.debug(f"Running {self!r}")
+                    else:
+                        logger.info(f"Running {self!r}")
                     test_hook()
                     r = self.func()
                 except Exception as e:
