@@ -643,8 +643,16 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     friends_platforms = PlatformRegistry(friends_platforms)
 
     for platform in platforms:
-        platform.icon = asset('platforms/%s.16.png' % platform.name)
-        platform.logo = asset('platforms/%s.png' % platform.name)
+        if platform.fontawesome_name:
+            continue
+        platform.icon = asset(
+            'platforms/%s.svg' % platform.name,
+            'platforms/%s.16.png' % platform.name,
+        )
+        platform.logo = asset(
+            'platforms/%s.svg' % platform.name,
+            'platforms/%s.png' % platform.name,
+        )
 
     return {'platforms': platforms, 'friends_platforms': friends_platforms}
 
@@ -779,17 +787,24 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
 
 
 def asset_url_generator(env, asset_url, tell_sentry, www_root):
-    if env.cache_static:
-        def asset(path):
+    def asset(*paths):
+        for path in paths:
             fspath = www_root+'/assets/'+path
             etag = ''
             try:
-                etag = asset_etag(fspath)
+                if env.cache_static:
+                    etag = asset_etag(fspath)
+                else:
+                    os.stat(fspath)
+            except FileNotFoundError as e:
+                if path == paths[-1]:
+                    if not os.path.exists(fspath + '.spt'):
+                        tell_sentry(e, {})
+                else:
+                    continue
             except Exception as e:
                 tell_sentry(e, {})
             return asset_url+path+(etag and '?etag='+etag)
-    else:
-        asset = lambda path: asset_url+path
     return {'asset': asset}
 
 
