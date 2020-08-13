@@ -69,11 +69,11 @@ if account:
     <br>
 % endif
 
+<div class="paragraph">
 % if user.ANON
     % from "templates/macros/sign-in-link.html" import sign_in_link with context
     {{ sign_in_link() }}<br>
 % elif need_reconnect
-<div class="paragraph">
     <p>{{ _(
         "{platform} rejected our request to access your data. Reconnecting your "
         "{platform} account should fix the problem.",
@@ -82,14 +82,10 @@ if account:
     % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope])
         {{ _("Reconnect") }}
     % endcall
-</div>
 % elif not account or not sess
-<div class="paragraph">
-    <p></p>
     % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope])
         {{ _("Connect your {platform} account", platform=platform.display_name) }}
     % endcall
-</div>
 % elif not follows
 <p>{{ _("It looks like you don't follow anyone on {platform}.", platform=platform.display_name) }}</p>
 % else
@@ -112,5 +108,6 @@ if account:
 % endif
 
 % endif
+</div>
 
 % endblock
