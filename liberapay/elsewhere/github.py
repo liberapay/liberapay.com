@@ -29,7 +29,7 @@ class GitHub(PlatformOAuth2):
     api_user_name_info_path = '/users/{user_name}'
     api_user_self_info_path = '/user'
     api_team_members_path = '/orgs/{user_name}/public_members'
-    api_friends_path = '/users/{user_name}/following'
+    api_follows_path = '/users/{user_name}/following'
     api_repos_path = '/users/{user_name}/repos?type=owner&sort=updated&per_page=100'
     api_starred_path = '/users/{user_name}/starred'
     ratelimit_headers_prefix = 'x-ratelimit-'

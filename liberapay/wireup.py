@@ -591,7 +591,7 @@ class PlatformRegistry(object):
 
 def accounts_elsewhere(app_conf, asset, canonical_url, db):
     if not app_conf:
-        return {'platforms': db, 'friends_platforms': db}
+        return {'platforms': db, 'follow_platforms': db}
     platforms = []
     for cls in elsewhere.CLASSES:
         conf = {
@@ -639,8 +639,8 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     platforms = sorted(platforms, key=lambda p: (order.get(p.name, n), p.name))
     platforms = PlatformRegistry(platforms)
 
-    friends_platforms = [p for p in platforms if getattr(p, 'api_friends_path', None)]
-    friends_platforms = PlatformRegistry(friends_platforms)
+    follow_platforms = [p for p in platforms if getattr(p, 'api_follows_path', None)]
+    follow_platforms = PlatformRegistry(follow_platforms)
 
     for platform in platforms:
         if platform.fontawesome_name:
@@ -654,7 +654,7 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
             'platforms/%s.png' % platform.name,
         )
 
-    return {'platforms': platforms, 'friends_platforms': friends_platforms}
+    return {'platforms': platforms, 'follow_platforms': follow_platforms}
 
 
 def replace_unused_singulars(c):

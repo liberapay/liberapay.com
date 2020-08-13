@@ -79,7 +79,7 @@ subhead = _("Social Networks")
     <p>{{ _("Which platform would you like to explore?") }}</p>
     % for p, d in platforms.values()
         % set n_connected_accounts = d['n_connected_accounts']
-        % if n_connected_accounts or p in website.friends_platforms
+        % if n_connected_accounts or p in website.follow_platforms
         <div class="card card-default card-md card-narrow text-center overlaid">
             <h2 class="text-info">{{ platform_logo(p) }}<br>{{ p.display_name }}</h2>
             <p>{{ ngettext("{n} connected account", "{n} connected accounts", n_connected_accounts) }}</p>
@@ -91,7 +91,7 @@ subhead = _("Social Networks")
 
 % else
 
-    % if platform in website.friends_platforms
+    % if platform in website.follow_platforms
     <p class="text-center">
         <a class="btn btn-primary btn-lg btn-wrap" href="/on/{{ platform_name }}">{{
             _("Explore Your {0} Contacts", platform.display_name)

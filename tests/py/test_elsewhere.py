@@ -314,21 +314,21 @@ class TestConfirmTakeOver(Harness):
 
 class TestFriendFinder(Harness):
 
-    def test_twitter_get_friends_for(self):
+    def test_twitter_get_follows_for(self):
         platform = self.platforms.twitter
         user_info = platform.extract_user_info(user_info_examples.twitter(), '')
         account = AccountElsewhere.upsert(user_info)
-        friends, nfriends, pages_urls = platform.get_friends_for(account)
-        assert friends
-        assert nfriends > 0
+        follows, nfollows, pages_urls = platform.get_follows_for(account)
+        assert follows
+        assert nfollows > 0
 
-    def test_github_get_friends_for(self):
+    def test_github_get_follows_for(self):
         platform = self.platforms.github
         user_info = platform.extract_user_info(user_info_examples.github(), '')
         account = AccountElsewhere.upsert(user_info)
-        friends, nfriends, pages_urls = platform.get_friends_for(account)
-        assert friends
-        assert nfriends == len(friends) or nfriends == -1
+        follows, nfollows, pages_urls = platform.get_follows_for(account)
+        assert follows
+        assert nfollows == len(follows) or nfollows == -1
 
 
 class TestElsewhereDelete(Harness):
