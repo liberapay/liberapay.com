@@ -3273,7 +3273,7 @@ class Participant(Model, MixinTeam):
     # Accounts Elsewhere
     # ==================
 
-    def get_accounts_elsewhere(self, platform=None, is_team=None):
+    def get_accounts_elsewhere(self, platform=None, is_team=None, url_required=False):
         """Return a sorted list of AccountElsewhere instances.
         """
         accounts = self.db.all("""
@@ -3287,6 +3287,8 @@ class Participant(Model, MixinTeam):
 
         """, (self.id, platform, is_team))
         accounts.sort(key=lambda a: (website.platforms.index(a.platform), a.is_team, a.user_id))
+        if url_required:
+            accounts = [a for a in accounts if a.platform_data.account_url]
         return accounts
 
     def take_over(self, account, have_confirmation=False):
