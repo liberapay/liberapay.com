@@ -107,7 +107,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         {{ members_listing(participant) }}
     % endif
 
-    % set e_accounts = participant.get_accounts_elsewhere()
+    % set e_accounts = participant.get_accounts_elsewhere(url_required=True)
     % if e_accounts
         <h3>{{ _("Linked Accounts") }}</h3>
         <p>{{ _("{0} owns the following accounts on other platforms:", participant.username) }}</p>

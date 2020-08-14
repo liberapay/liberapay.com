@@ -67,7 +67,7 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
     {{ tip_form(tippee=participant) }}
     <br>
 
-    % set e_accounts = participant.get_accounts_elsewhere()
+    % set e_accounts = participant.get_accounts_elsewhere(url_required=True)
     % if e_accounts
         <h3>{{ _("Recipient Identity") }}</h3>
         <p>{{ _(

@@ -35,7 +35,7 @@ subhead = _("Linked Accounts")
 
     <h4>{{ _("Connect an account") }}</h4>
     <div class="buttons">
-    % for platform in website.platforms
+    % for platform in website.platforms.hasattr('account_url')
         % set disabled = participant.kind == 'group' and platform.has_teams and not hasattr(platform, 'is_team_member')
         % call auth_button(platform.name, 'connect', btn_cls='no-default-styles', form_cls='btn btn-default', participant=participant, disabled=disabled)
             {{ platform_logo(platform) }}<br>{{ platform.display_name }}

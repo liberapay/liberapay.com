@@ -21,11 +21,18 @@ platforms = query_cache.all("""
 platforms = OrderedDict(
     (p_name, (getattr(website.platforms, p_name), d)) for p_name, d in platforms
 )
+for p, d in list(platforms.values()):
+    if not p.account_url:
+        del platforms[p.name]
 
 platform_name = request.path['platform']
-platform = website.platforms.get(platform_name)
-if platform_name and not platform:
-    raise response.error(404)
+if platform_name:
+    try:
+        platform = platforms[platform_name][0]
+    except KeyError:
+        raise response.error(404)
+else:
+    platform = None
 
 account = None
 
