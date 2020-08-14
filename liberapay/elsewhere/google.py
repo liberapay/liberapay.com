@@ -19,7 +19,6 @@ class Google(PlatformOAuth2):
     access_token_url = 'https://accounts.google.com/o/oauth2/token'
     # https://developers.google.com/identity/protocols/googlescopes
     oauth_default_scope = ['https://www.googleapis.com/auth/userinfo.profile']
-    oauth_friends_scope = 'https://www.googleapis.com/auth/contacts.readonly'
 
     # https://developers.google.com/people/api/rest/v1/people/get
     person_fields = 'personFields=names,nicknames,photos,taglines'
@@ -33,7 +32,6 @@ class Google(PlatformOAuth2):
     api_url = 'https://people.googleapis.com/v1'
     api_user_info_path = '/people/{user_id}?%s' % person_fields
     api_user_self_info_path = '/people/me?%s' % person_fields
-    api_friends_path = '/people/me/connections?%s' % person_fields
 
     # User info extractors
     x_user_id = key('resourceName', clean=partial(_strip_prefix, 'people/'))

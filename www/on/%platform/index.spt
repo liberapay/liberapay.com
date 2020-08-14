@@ -3,11 +3,11 @@ from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.utils import b64decode_s
 
-platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.friends_platforms]
+platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.follow_platforms]
 
 [---]
 platform = website.platforms.get(request.path['platform'])
-if platform is None or platform not in website.friends_platforms:
+if platform is None or platform not in website.follow_platforms:
     raise response.error(404)
 
 title = _("Social Explorer")
@@ -33,20 +33,18 @@ if account:
         if page_url and page_url[:1] != '/':
             raise response.invalid_input(page_url, 'page', 'querystring')
         try:
-            friends, nfriends, pages_urls = platform.get_friends_for(account, page_url, sess)
+            follows, nfollows, pages_urls = platform.get_follows_for(account, page_url, sess)
         except (InvalidGrantError, TokenExpiredError):
             need_reconnect = True
         else:
-            friends = AccountElsewhere.get_many(platform.name, friends)
+            follows = AccountElsewhere.get_many(platform.name, follows)
             user_tippees = set(website.db.all("""
                 SELECT t.tippee
                   FROM current_tips t
                  WHERE t.tipper = %s
                    AND t.tippee IN %s
                    AND t.amount > 0
-            """, (user.id, set(e.participant.id for e in friends)))) if friends else set()
-
-limited = getattr(platform, 'api_friends_limited', False)
+            """, (user.id, set(e.participant.id for e in follows)))) if follows else set()
 
 [---] text/html
 % extends "templates/layouts/base.html"
@@ -63,14 +61,6 @@ limited = getattr(platform, 'api_friends_limited', False)
     </nav>
 % endblock
 
-% macro limitation_note()
-    % if limited
-        <br>
-        <p>{{ _("Note: privacy settings may prevent Liberapay from seeing some of your {0} friends.",
-                platform.display_name) }}</p>
-    % endif
-% endmacro
-
 % block content
 
 % if len(accounts) > 1
@@ -79,39 +69,35 @@ limited = getattr(platform, 'api_friends_limited', False)
     <br>
 % endif
 
+<div class="paragraph">
 % if user.ANON
     % from "templates/macros/sign-in-link.html" import sign_in_link with context
     {{ sign_in_link() }}<br>
 % elif need_reconnect
-<div class="paragraph">
     <p>{{ _(
-        "Please refresh your {0} connection to find your friends from there.",
-        platform.display_name
+        "{platform} rejected our request to access your data. Reconnecting your "
+        "{platform} account should fix the problem.",
+        platform=platform.display_name
     ) }}</p>
-    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_friends_scope])
-        {{ _("Refresh") }}
+    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope])
+        {{ _("Reconnect") }}
     % endcall
-</div>
 % elif not account or not sess
-<div class="paragraph">
-    <p>{{ _(
-        "Connect your {0} account to find your friends from there.",
-        platform.display_name
-    ) }}</p>
-    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_friends_scope])
-        {{ _("Connect") }}
+    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope])
+        {{ _("Connect your {platform} account", platform=platform.display_name) }}
     % endcall
-</div>
-% elif not friends
-<p>{{ _("No friends found.") }}</p>
-{{ limitation_note() }}
+% elif not follows
+<p>{{ _("It looks like you don't follow anyone on {platform}.", platform=platform.display_name) }}</p>
 % else
-<p>{{ ngettext("You have {n} friend on {0}.", "You have {n} friends on {0}.",
-               nfriends, platform.display_name) if nfriends >= 0 }}</p>
+<p>{{ ngettext(
+    "You follow {n} account on {platform}.",
+    "You follow {n} accounts on {platform}.",
+    n=nfollows, platform=platform.display_name
+) if nfollows >= 0 else '' }}</p>
 <div class="inline-boxes">
-% for friend in friends
+% for e_account in follows
     {{ profile_box_embedded_elsewhere(
-        friend, has_tip=(friend.participant.id in user_tippees),
+        e_account, has_tip=(e_account.participant.id in user_tippees),
         show_button=True, show_numbers=False, show_platform_icon=False,
     ) }}
 % endfor
@@ -121,7 +107,7 @@ limited = getattr(platform, 'api_friends_limited', False)
     {{ pages_links(pages_urls) }}
 % endif
 
-{{ limitation_note() }}
 % endif
+</div>
 
 % endblock

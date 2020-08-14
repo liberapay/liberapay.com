@@ -18,15 +18,12 @@ class Facebook(PlatformOAuth2):
     refresh_token_url = None
     oauth_default_scope = ['public_profile']
     oauth_email_scope = 'email'
-    oauth_friends_scope = 'user_friends'
 
     # API attributes
     api_format = 'json'
     api_paginator = keys_paginator('data', paging='paging', prev='previous')
     api_url = 'https://graph.facebook.com/v2.10'
     api_user_self_info_path = '/me?fields=id,name,email'
-    api_friends_path = '/me/friends'
-    api_friends_limited = True
 
     # User info extractors
     x_user_id = key('id')

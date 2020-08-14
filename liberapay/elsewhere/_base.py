@@ -330,18 +330,18 @@ class Platform(object):
             info.token = json.dumps(token)
         return info
 
-    def get_friends_for(self, account, page_url=None, sess=None):
+    def get_follows_for(self, account, page_url=None, sess=None):
         if not page_url:
-            page_url = self.api_friends_path.format(
+            page_url = self.api_follows_path.format(
                 user_id=urlquote(account.user_id),
                 user_name=urlquote(account.user_name or ''),
             )
         r = self.api_get(account.domain, page_url, sess=sess)
-        friends, count, pages_urls = self.api_paginator(r, self.api_parser(r))
-        friends = [self.extract_user_info(f, account.domain) for f in friends]
-        if count == -1 and hasattr(self, 'x_friends_count'):
-            count = self.x_friends_count(None, account.extra_info, -1)
-        return friends, count, pages_urls
+        follows, count, pages_urls = self.api_paginator(r, self.api_parser(r))
+        follows = [self.extract_user_info(f, account.domain) for f in follows]
+        if count == -1 and hasattr(self, 'x_follows_count'):
+            count = self.x_follows_count(None, account.extra_info, -1)
+        return follows, count, pages_urls
 
     def extract_repo_info(self, info):
         r = RepoInfo()
@@ -492,7 +492,7 @@ class PlatformOAuth2(Platform):
 
     oauth_default_scope = []
     oauth_email_scope = None
-    oauth_friends_scope = ''
+    oauth_follows_scope = ''
 
     can_auth_with_client_credentials = None
     use_basic_auth_for_app_session = False

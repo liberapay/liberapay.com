@@ -28,7 +28,7 @@ class Twitch(PlatformOAuth2):
     api_user_name_info_path = '/users?login={user_name}'
     api_user_self_info_path = '/users'
 
-    # api_friends_path = '/users/follows?from_id={user_id}'
+    # api_follows_path = '/users/follows?from_id={user_id}'
     # This endpoint only returns user IDs, not a list of user info objects
 
     # User info extractors

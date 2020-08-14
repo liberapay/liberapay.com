@@ -36,7 +36,7 @@ class Mastodon(PlatformOAuth2):
     # https://github.com/tootsuite/mastodon/issues/4588
     # api_user_name_info_path = '/accounts/search?q={user_name}@{domain}'
     api_user_self_info_path = '/accounts/verify_credentials'
-    api_friends_path = '/accounts/{user_id}/following'
+    api_follows_path = '/accounts/{user_id}/following'
     ratelimit_headers_prefix = 'x-ratelimit-'
 
     # User info extractors
