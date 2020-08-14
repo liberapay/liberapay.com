@@ -2592,7 +2592,7 @@ class Participant(Model, MixinTeam):
 
             # Get renewable tips
             renewable_tips = cursor.all("""
-                SELECT t.*, tippee_p
+                SELECT t.*::tips, tippee_p
                   FROM current_tips t
                   JOIN participants tippee_p ON tippee_p.id = t.tippee
                  WHERE t.tipper = %s
@@ -2615,6 +2615,9 @@ class Participant(Model, MixinTeam):
                        )
               ORDER BY t.tippee
             """, (self.id,))
+            for tip, tippee_p in renewable_tips:
+                tip.tippee_p = tippee_p
+            renewable_tips = [tip for tip, tippee_p in renewable_tips]
 
             # Get the existing schedule
             current_schedule = cursor.all("""
@@ -2677,28 +2680,7 @@ class Participant(Model, MixinTeam):
             next_payday = compute_next_payday_date()
             tip_groups = defaultdict(list)
             for tip in renewable_tips:
-                tip.weeks_left = int(tip.paid_in_advance // tip.amount)
-                if tip.weeks_left == 0:
-                    last_transfer_date = cursor.one("""
-                        SELECT tr.timestamp::date
-                          FROM transfers tr
-                         WHERE tr.tipper = %s
-                           AND coalesce(tr.team, tr.tippee) = %s
-                           AND tr.context IN ('tip', 'take')
-                      ORDER BY tr.timestamp DESC
-                         LIMIT 1
-                    """, (tip.tipper, tip.tippee)) or cursor.one("""
-                        SELECT pt.ctime::date
-                          FROM payin_transfers pt
-                         WHERE pt.payer = %s
-                           AND coalesce(pt.team, pt.recipient) = %s
-                           AND pt.context IN ('personal-donation', 'team-donation')
-                      ORDER BY pt.ctime DESC
-                         LIMIT 1
-                    """, (tip.tipper, tip.tippee))
-                    tip.due_date = (last_transfer_date or next_payday) + timedelta(weeks=1)
-                else:
-                    tip.due_date = next_payday + timedelta(weeks=tip.weeks_left - 1)
+                tip.due_date = tip.compute_renewal_due_date(next_payday, cursor)
                 renewal_quarter = tip.weeks_left // 13
                 tip_groups[(tip.renewal_mode, tip.amount.currency, renewal_quarter)].append(tip)
             del renewable_tips
