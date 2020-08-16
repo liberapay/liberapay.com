@@ -156,7 +156,8 @@ class Harness(unittest.TestCase):
     def setUpClass(cls):
         cls_name = cls.__name__
         if cls_name[4:5].isupper():
-            cls_id = sum(ord(c) - 97 << (i*5) for i, c in enumerate(cls_name[4:10].lower()))
+            f = lambda x: x - 97 if x >= 97 else x
+            cls_id = sum(f(ord(c)) << (i*5) for i, c in enumerate(cls_name[4:10].lower()))
         else:
             cls_id = 1
         cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH %s", (cls_id,))
