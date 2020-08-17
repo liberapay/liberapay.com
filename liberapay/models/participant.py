@@ -1292,7 +1292,13 @@ class Participant(Model, MixinTeam):
                 website.mailer.send(**message)
             except Exception as e:
                 website.tell_sentry(e, {})
-                raise UnableToSendEmail(email)
+                try:
+                    # Retry without the user's name in the `To:` header
+                    message['to'] = [email]
+                    website.mailer.send(**message)
+                except Exception as e:
+                    website.tell_sentry(e, {})
+                    raise UnableToSendEmail(email)
             website.log_email(message)
 
     @classmethod
