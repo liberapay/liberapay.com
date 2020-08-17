@@ -424,7 +424,7 @@ class Harness(unittest.TestCase):
         data.setdefault('display_name', None)
         data.setdefault('token', None)
         data.update(p_id=participant.id, provider=provider, country=country)
-        return self.db.one("""
+        r = self.db.one("""
             INSERT INTO payment_accounts
                         (participant, provider, country, id,
                          default_currency, charges_enabled, verified,
@@ -434,6 +434,12 @@ class Harness(unittest.TestCase):
                          %(display_name)s, %(token)s)
               RETURNING *
         """, data)
+        participant.set_attributes(payment_providers=self.db.one("""
+            SELECT payment_providers
+              FROM participants
+             WHERE id = %s
+        """, (participant.id,)))
+        return r
 
     def insert_email(self, address, participant_id, verified=True):
         verified_time = utcnow() if verified else None
