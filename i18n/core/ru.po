@@ -1248,15 +1248,15 @@ msgstr[1] "{n} года по {money_amount}"
 msgstr[2] "{n} лет по {money_amount}"
 
 msgid "The submitted password is incorrect."
-msgstr ""
+msgstr "Представленный пароль неверен."
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
-msgstr ""
+msgstr "Ни одна учётная запись не имеет имени пользователя \"{username}\"."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
-msgstr "Мы не нашли аккаунт с основным адресом электронной почты {email_address}."
+msgstr "Ни один аккаунт не имеет \"{email_address}\" в качестве основного адреса электронной почты."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -4479,10 +4479,10 @@ msgid "The payment processing fees are usually lower with Stripe than with PayPa
 msgstr "Плата за обработку платежей обычно ниже в Stripe, чем в PayPal."
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
-msgstr ""
+msgstr "Stripe позволяет автоматически обновлять пожертвования, тогда как PayPal в настоящее время требует, чтобы спонсоры подтверждали каждый платеж."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
-msgstr ""
+msgstr "Stripe в некоторых случаях позволяет делать пожертвования сразу нескольким создателям, тогда как PayPal всегда требует отдельных платежей."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "Платежи PayPal требуют перенаправления спонсоров на веб-сайт PayPal, тогда как Stripe интегрирован в Liberapay."
@@ -5063,7 +5063,7 @@ msgstr "Найдите того, кому вы хотите дать деньг�
 msgid "2. Fund your donation"
 msgstr "2. Добавьте средства для вашего пожертвования"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "On Liberapay, donations are funded in advance. You have control over when and how much you pay. Sending more money at once usually results in a lower percentage of {0}transaction fees{1}."
 msgstr "На Liberapay пожертвования финансируются заранее. Вы контролируете, сколько денег вы положили и когда. Отправка большего количества денег за один раз приводит к снижению процента {0}комиссии за транзакцию{1}."
 
@@ -5529,18 +5529,18 @@ msgstr "Социальный обозреватель"
 
 #, python-brace-format
 msgid "Connect your {platform} account"
-msgstr ""
+msgstr "Подключите свой {platform} аккаунт"
 
 #, python-brace-format
 msgid "It looks like you don't follow anyone on {platform}."
-msgstr ""
+msgstr "Похоже, вы ни на кого не подписаны на {platform}."
 
 #, python-brace-format
 msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Вы подписаны на {n} аккаунт на {platform}."
+msgstr[1] "Вы подписаны на {n} аккаунта на {platform}."
+msgstr[2] "Вы подписаны на {n} аккаунтов на {platform}."
 
 msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
 msgstr "Введённый вами адрес некорректен: в нём нет символа \"@\"."
