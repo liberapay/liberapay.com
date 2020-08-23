@@ -1,0 +1,49 @@
+% if len(donations) == 1
+{{ _("It's time to renew your donation to {username} on Liberapay", username=donations[0].tippee_username) }}
+% else
+{{ _("It's time to renew your donations on Liberapay") }}
+% endif
+
+[---] text/html
+% if len(donations) == 1
+    % set tip = donations[0]
+    <p>{{ _(
+        "Your donation of {amount} per week to {username} needs to be renewed before {date}.",
+        amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
+    ) if tip.period == 'weekly' else _(
+        "Your donation of {amount} per month to {username} needs to be renewed before {date}.",
+        amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
+    ) if tip.period == 'monthly' else _(
+        "Your donation of {amount} per year to {username} needs to be renewed before {date}.",
+        amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
+    ) }}</p>
+% else
+    <p>{{ ngettext(
+        "You have {n} donation up for renewal:",
+        "You have {n} donations up for renewal:",
+        n=len(donations)
+    ) }}</p>
+    <ul>
+    % for tip in donations
+        <li>{{ _(
+            "Your donation of {amount} per week to {username} needs to be renewed before {date}.",
+            amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
+        ) if tip.period == 'weekly' else _(
+            "Your donation of {amount} per month to {username} needs to be renewed before {date}.",
+            amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
+        ) if tip.period == 'monthly' else _(
+            "Your donation of {amount} per year to {username} needs to be renewed before {date}.",
+            amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
+        ) }}</li>
+    % endfor
+    </ul>
+% endif
+
+<p><a href="{{ participant.url('giving/pay') }}" style="{{ button_style('primary') }}">{{
+    ngettext("Renew this donation", "Renew these donations", len(donations)) }}</a></p>
+
+<p>{{ _(
+    "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}.",
+    link_start='<a href="%s">'|safe % participant.url('giving/'),
+    link_end='</a>'|safe
+) }}</p>

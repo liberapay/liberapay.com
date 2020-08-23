@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from cached_property import cached_property
 from postgres.orm import Model
 
@@ -19,6 +21,8 @@ class Tip(Model):
         except AttributeError:
             raise KeyError(key)
 
+    __setattr__ = object.__setattr__
+
     def __setitem__(self, key, value):
         try:
             object.__setattr__(self, key, value)
@@ -34,6 +38,37 @@ class Tip(Model):
     def _asdict(self):
         # For compatibility with namedtuple classes
         return self.__dict__.copy()
+
+    def compute_renewal_due_date(self, next_payday, cursor=None):
+        if not cursor:
+            cursor = self.db
+        weeks_left = self.weeks_left
+        if weeks_left is None:
+            return
+        if weeks_left == 0:
+            last_transfer_date = cursor.one("""
+                SELECT tr.timestamp::date
+                  FROM transfers tr
+                 WHERE tr.tipper = %s
+                   AND coalesce(tr.team, tr.tippee) = %s
+                   AND tr.context IN ('tip', 'take')
+              ORDER BY tr.timestamp DESC
+                 LIMIT 1
+            """, (self.tipper, self.tippee)) or cursor.one("""
+                SELECT pt.ctime::date
+                  FROM payin_transfers pt
+                 WHERE pt.payer = %s
+                   AND coalesce(pt.team, pt.recipient) = %s
+                   AND pt.context IN ('personal-donation', 'team-donation')
+              ORDER BY pt.ctime DESC
+                 LIMIT 1
+            """, (self.tipper, self.tippee))
+            if last_transfer_date:
+                return last_transfer_date + timedelta(weeks=1)
+            else:
+                return next_payday
+        else:
+            return next_payday + timedelta(weeks=weeks_left)
 
     def for_json(self):
         return {k: v for k, v in self.__dict__.items() if not isinstance(v, self.db.Participant)}
@@ -60,3 +95,9 @@ class Tip(Model):
     @cached_property
     def tipper_p(self):
         return self.db.one("SELECT p FROM participants p WHERE p.id = %s", (self.tipper,))
+
+    @cached_property
+    def weeks_left(self):
+        if self.paid_in_advance is None:
+            return
+        return int(self.paid_in_advance // self.amount)

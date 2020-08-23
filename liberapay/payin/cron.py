@@ -4,6 +4,7 @@ from time import sleep
 
 from pando import json
 
+from ..billing.payday import compute_next_payday_date
 from ..cron import logger
 from ..exceptions import AccountSuspended, NextAction
 from ..i18n.currencies import Money
@@ -94,7 +95,19 @@ def send_donation_reminder_notifications():
                    SELECT sp.id, sp.execution_date, sp.amount, sp.transfers
                ) a ORDER BY a.execution_date)) AS payins
           FROM scheduled_payins sp
-         WHERE sp.execution_date <= (current_date + interval '14 days')
+     LEFT JOIN LATERAL (
+                   SELECT pi.*
+                     FROM payins pi
+                    WHERE pi.payer = sp.payer
+                      AND NOT pi.off_session
+                 ORDER BY pi.ctime DESC
+                    LIMIT 1
+               ) last_payin ON true
+         WHERE sp.execution_date <= (current_date + (CASE
+                   WHEN last_payin.ctime >= (current_date - interval '14 days')
+                   THEN interval '7 days'
+                   ELSE interval '14 days'
+               END))
            AND sp.automatic IS NOT true
            AND sp.payin IS NULL
            AND sp.ctime < (current_timestamp - interval '6 hours')
@@ -105,6 +118,7 @@ def send_donation_reminder_notifications():
                       OR sp.notifs_count = 2 AND sp.last_notif_ts <= (current_date - interval '26 weeks')
                ) > 0
     """)
+    next_payday = compute_next_payday_date()
     for payer, payins in rows:
         if payer.is_suspended or payer.status != 'active':
             continue
@@ -114,11 +128,14 @@ def send_donation_reminder_notifications():
         donations = []
         for sp in payins:
             for tr in sp['transfers']:
+                tip = tr['tip']
                 donations.append({
-                    'periodic_amount': tr['tip'].periodic_amount,
+                    'due_date': tip.compute_renewal_due_date(next_payday),
+                    'period': tip.period,
+                    'periodic_amount': tip.periodic_amount,
                     'tippee_username': tr['tippee_username'],
                 })
-        payer.notify('donate_reminder', donations=donations, email_unverified_address=True)
+        payer.notify('donate_reminder~v2', donations=donations, email_unverified_address=True)
         counts['donate_reminder'] += 1
         db.run("""
             UPDATE scheduled_payins
