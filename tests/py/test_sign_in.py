@@ -7,6 +7,7 @@ from babel.messages.catalog import Message
 from liberapay.constants import SESSION
 from liberapay.i18n.base import LOCALES
 from liberapay.models.participant import Participant
+from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import postgres_readonly
 from liberapay.testing.emails import EmailHarness
 
@@ -164,8 +165,20 @@ class TestLogIn(EmailHarness):
         )
         assert qs in last_email['text']
 
+        # Attempt to use the URL in a new browser session (no anti-CSRF cookie yet)
+        r = self.client.GxT('/alice/?foo=bar&' + qs, csrf_token=None)
+        assert r.code == 200
+        refresh_qs = '?foo=bar&' + qs + '&cookie_sent=true'
+        assert r.headers[b'Refresh'] == b"0;url=" + refresh_qs.encode()
+        assert CSRF_TOKEN in r.headers.cookie
+
+        # Follow the redirect, still without cookies
+        r = self.client.GxT('/alice/' + refresh_qs, csrf_token=None)
+        assert r.code == 403, r.text
+        assert "Please make sure your browser is configured to allow cookies" in r.text
+
         # Log in
-        r = self.client.GxT('/alice/?foo=bar&' + qs)
+        r = self.client.GxT('/alice/' + refresh_qs)
         assert r.code == 302
         assert r.headers[b'Location'].startswith(
             b'http://localhost/alice/?foo=bar&success='

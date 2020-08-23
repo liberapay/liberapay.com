@@ -11,6 +11,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.participant import Participant
 from liberapay.security.authentication import ANON
+from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import postgres_readonly
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils.emails import EmailVerificationResult, check_email_blacklist
@@ -244,6 +245,23 @@ class TestEmail(EmailHarness):
         actual = Participant.from_username('alice').email
         assert punycode_email == actual
 
+    def test_verify_email_without_cookies(self):
+        self.hit_email_spt('add-email', 'alice@example.com')
+        email = self.alice.get_email('alice@example.com')
+        url = '/~1/emails/verify.html?email=%s&nonce=%s' % (email.id, email.nonce)
+        r = self.client.GET(url, csrf_token=None, raise_immediately=False)
+        assert r.code == 200, r.text
+        refresh_url = "?email=%s&nonce=%s&cookie_sent=true" % (email.id, email.nonce)
+        assert r.headers[b"Refresh"] == b"0;url=" + refresh_url.encode('ascii')
+        assert CSRF_TOKEN in r.headers.cookie
+        csrf_token = r.headers.cookie[CSRF_TOKEN].value
+        r = self.client.GET(url, csrf_token=csrf_token, raise_immediately=False)
+        assert r.code == 200, r.text
+        assert b"Refresh" not in r.headers
+        assert CSRF_TOKEN not in r.headers.cookie
+        self.alice = self.alice.refetch()
+        assert self.alice.email == email.address
+
     def test_verified_email_is_not_changed_after_update(self):
         self.add_and_verify_email('alice@example.com')
         self.alice.add_email('alice@example.net')
@@ -259,9 +277,24 @@ class TestEmail(EmailHarness):
         })
         bob = Participant.from_username('bob')
         email = bob.get_email('bob@liberapay.com')
-        url = '/bob/emails/disavow?email.id=%s&email.nonce=%s' % (email.id, email.nonce)
+        qs = '?email.id=%s&email.nonce=%s' % (email.id, email.nonce)
+        url = '/bob/emails/disavow' + qs
         verification_email = self.get_last_email()
         assert url in verification_email['text']
+
+        # Test the disavowal URL without cookies
+        r = self.client.GET(url, csrf_token=None, raise_immediately=False)
+        assert r.code == 200
+        refresh_qs = qs + '&cookie_sent=true'
+        assert r.headers[b"Refresh"] == b'0;url=' + refresh_qs.encode()
+        assert CSRF_TOKEN in r.headers.cookie
+        email = bob.get_email(email.address)
+        assert email.disavowed is None
+        assert email.disavowed_time is None
+        assert email.verified is None
+        assert email.verified_time is None
+
+        # Test the disavowal URL with cookies
         r = self.client.GET(url)
         assert r.code == 200
         email = bob.get_email(email.address)
