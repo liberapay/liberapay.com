@@ -114,3 +114,30 @@ def add_token_to_response(response, csrf_token=None):
         # Don't set httponly so that we can POST using XHR.
         # https://github.com/gratipay/gratipay.com/issues/3030
         response.set_cookie(CSRF_TOKEN, str(csrf_token), expires=CSRF_TIMEOUT, httponly=False)
+
+
+def require_cookie(state):
+    """Check that the CSRF cookie has been sent by the client.
+
+    Some GET requests trigger side effects, so they have to be protected against bots.
+
+    This isn't exactly a protection against CSRFs, but it uses the CSRF cookie to
+    check that the client supports cookies.
+    """
+    request = state['request']
+    if request.headers.cookie.get(CSRF_TOKEN):
+        return
+    _, response, website = state['locale']._, state['response'], state['website']
+    if request.method == 'GET' and request.qs.get('cookie_sent') != 'true':
+        csrf_token = str(state['csrf_token'])
+        add_token_to_response(response=response, csrf_token=csrf_token)
+        raise response.refresh(
+            state,
+            url=('?' + request.qs.derive(cookie_sent='true')),
+            msg=_("Checking cookies…"),
+        )
+    raise response.error(403, _(
+        "A security check has failed. Please make sure your browser is "
+        "configured to allow cookies for {domain}, then try again.",
+        domain=website.canonical_host
+    ))

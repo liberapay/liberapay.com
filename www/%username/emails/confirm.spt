@@ -3,6 +3,7 @@
 This simplate must not reveal the email address in its response.
 """
 
+from liberapay.security.csrf import require_cookie
 from liberapay.utils import get_participant
 from liberapay.utils.emails import EmailVerificationResult
 
@@ -14,6 +15,8 @@ if request.method == 'HEAD':
 
 # Redirecting this request can lead to confusing situations, so we ask `get_participant` to avoid redirecting it.
 participant = get_participant(state, restrict=False, redirect_canon=False, redirect_stub=False)
+
+require_cookie(state)
 
 if 'email.verification-result' in state:
     result = state['email.verification-result']
