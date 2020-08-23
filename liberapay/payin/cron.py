@@ -252,7 +252,7 @@ def execute_scheduled_payins():
                       , r.ctime DESC
                   LIMIT 1
                ) r ON true
-         WHERE ( r.network = 'stripe-sdd' AND sp.execution_date <= (current_date + interval '5 days') OR
+         WHERE ( r.network = 'stripe-sdd' AND sp.execution_date <= (current_date + interval '6 days') OR
                  r.network = 'stripe-card' AND sp.execution_date <= current_date )
            AND sp.last_notif_ts < (current_date - interval '2 days')
            AND sp.automatic
