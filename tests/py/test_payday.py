@@ -337,8 +337,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.janet.set_tip_to(team, EUR('0.40'))
         self.janet.distribute_balances_to_donees()
 
-        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
-
         # Preliminary checks
         janet = self.janet.refetch()
         assert janet.balance == 0
@@ -359,6 +357,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert transfers[1].context == 'take-in-advance'
 
         # Now run a payday and check the results
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET ctime = ctime - interval '12 hours'
+                 , execution_date = current_date
+        """)
         Payday.start().run()
         tips = self.db.all("""
             SELECT *
@@ -1067,7 +1070,11 @@ class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
         self.make_payin_and_transfer(janet_card, team, EUR('25.00'))
         self.client.PxST('/homer/emails/', auth_as=self.homer,
                          data={'events': 'income', 'income': ''}, xhr=True)
-        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET ctime = ctime - interval '12 hours'
+                 , execution_date = execution_date - interval '2 weeks'
+        """)
         Payday.start().run()
         emails = self.get_emails()
         assert len(emails) == 2

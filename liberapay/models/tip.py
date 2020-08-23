@@ -63,9 +63,12 @@ class Tip(Model):
               ORDER BY pt.ctime DESC
                  LIMIT 1
             """, (self.tipper, self.tippee))
-            return (last_transfer_date or next_payday) + timedelta(weeks=1)
+            if last_transfer_date:
+                return last_transfer_date + timedelta(weeks=1)
+            else:
+                return next_payday
         else:
-            return next_payday + timedelta(weeks=weeks_left - 1)
+            return next_payday + timedelta(weeks=weeks_left)
 
     def for_json(self):
         return {k: v for k, v in self.__dict__.items() if not isinstance(v, self.db.Participant)}

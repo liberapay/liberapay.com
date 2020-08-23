@@ -40,7 +40,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount is None
         assert new_schedule[0].transfers == expected_transfers
-        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=49))
+        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=50))
         assert new_schedule[0].automatic is False
         # check idempotency
         new_schedule2 = alice.schedule_renewals()
@@ -52,7 +52,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount is None
         assert new_schedule[0].transfers == expected_transfers
-        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=24))
+        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=25))
         assert new_schedule[0].automatic is False
         # enable automatic renewal for this donation
         alice.set_tip_to(bob, EUR('0.99'), renewal_mode=2)
@@ -61,7 +61,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('49.50')
         assert new_schedule[0].transfers == expected_transfers
-        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=49))
+        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=50))
         assert new_schedule[0].automatic is True
 
     def test_schedule_renewals_notifies_payer_of_changes(self):
@@ -82,11 +82,15 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('2.00')
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=1)
+        expected_renewal_date = next_payday + timedelta(weeks=2)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
-        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET ctime = ctime - interval '12 hours'
+                 , execution_date = current_date
+        """)
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -94,6 +98,8 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €2.00'
         sp = self.db.one("SELECT * FROM scheduled_payins")
         assert sp.notifs_count == 1
+        self.db.run("UPDATE scheduled_payins SET execution_date = %s",
+                    (expected_renewal_date,))
         # Tweak the donation amount. The renewal shouldn't be pushed back and
         # the payer shouldn't be notified.
         alice.set_tip_to(bob, EUR('0.50'))
@@ -112,7 +118,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('2.00')
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=19)
+        expected_renewal_date = next_payday + timedelta(weeks=20)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         emails = self.get_emails()
@@ -151,11 +157,15 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('5.00')
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=1)
+        expected_renewal_date = next_payday + timedelta(weeks=2)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
-        self.db.run("UPDATE scheduled_payins SET ctime = ctime - interval '12 hours'")
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET ctime = ctime - interval '12 hours'
+                 , execution_date = current_date - interval '6 days'
+        """)
         send_upcoming_debit_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -163,6 +173,8 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €5.00'
         sp = self.db.one("SELECT * FROM scheduled_payins WHERE payin IS NULL")
         assert sp.notifs_count == 1
+        self.db.run("UPDATE scheduled_payins SET execution_date = %s",
+                    (expected_renewal_date,))
         # Tweak the amount of the first donation. The renewal shouldn't be
         # pushed back and the payer shouldn't be notified.
         alice.set_tip_to(bob, EUR('0.50'))
@@ -182,7 +194,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].amount == EUR('2.00')
         assert new_schedule[0].transfers == [expected_transfers[0]]
         previous_renewal_date = expected_renewal_date
-        expected_renewal_date = next_payday + timedelta(weeks=3)
+        expected_renewal_date = next_payday + timedelta(weeks=4)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         emails = self.get_emails()
