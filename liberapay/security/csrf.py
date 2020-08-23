@@ -127,7 +127,7 @@ def require_cookie(state):
     request = state['request']
     if request.headers.cookie.get(CSRF_TOKEN):
         return
-    _, response, website = state['locale']._, state['response'], state['website']
+    _, response, website = state['_'], state['response'], state['website']
     if request.method == 'GET' and request.qs.get('cookie_sent') != 'true':
         csrf_token = str(state['csrf_token'])
         add_token_to_response(response=response, csrf_token=csrf_token)
