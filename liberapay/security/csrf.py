@@ -133,7 +133,7 @@ def require_cookie(state):
         add_token_to_response(response=response, csrf_token=csrf_token)
         raise response.refresh(
             state,
-            url=('?' + request.qs.derive(cookie_sent='true')),
+            url=(request.qs.derive(cookie_sent='true')),
             msg=_("Checking cookies…"),
         )
     raise response.error(403, _(
