@@ -126,14 +126,15 @@ def require_cookie(state):
     """
     request = state['request']
     if request.headers.cookie.get(CSRF_TOKEN):
+        request.qs.pop('cookie_sent', None)
         return
-    _, response, website = state['locale']._, state['response'], state['website']
+    _, response, website = state['_'], state['response'], state['website']
     if request.method == 'GET' and request.qs.get('cookie_sent') != 'true':
         csrf_token = str(state['csrf_token'])
         add_token_to_response(response=response, csrf_token=csrf_token)
         raise response.refresh(
             state,
-            url=('?' + request.qs.derive(cookie_sent='true')),
+            url=(request.qs.derive(cookie_sent='true')),
             msg=_("Checking cookies…"),
         )
     raise response.error(403, _(
