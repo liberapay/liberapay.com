@@ -384,7 +384,10 @@ def mail(app_conf, env, project_root='.'):
         print(text)
         print('  ', '='*27, 'END EMAIL', '='*27)
 
-    log_email = log_email if app_conf.log_emails else lambda *a, **kw: None
+    if app_conf.log_emails and not isinstance(mailer, ToConsoleMailer):
+        log_email = log_email
+    else:
+        log_email = lambda *a, **kw: None
 
     return {'emails': emails, 'log_email': log_email, 'mailer': mailer}
 
