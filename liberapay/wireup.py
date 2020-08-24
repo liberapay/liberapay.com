@@ -14,7 +14,7 @@ import babel.localedata
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
-from mailshake import AmazonSESMailer, DummyMailer, SMTPMailer
+from mailshake import AmazonSESMailer, ToConsoleMailer, SMTPMailer
 import pando
 from postgres.cursors import SimpleRowCursor
 import psycopg2
@@ -365,7 +365,7 @@ def mail(app_conf, env, project_root='.'):
     elif smtp_conf:
         mailer = SMTPMailer(**smtp_conf)
     else:
-        mailer = DummyMailer()
+        mailer = ToConsoleMailer()
     emails = {}
     emails_dir = project_root+'/emails/'
     i = len(emails_dir)
@@ -384,7 +384,10 @@ def mail(app_conf, env, project_root='.'):
         print(text)
         print('  ', '='*27, 'END EMAIL', '='*27)
 
-    log_email = log_email if app_conf.log_emails else lambda *a, **kw: None
+    if app_conf.log_emails and not isinstance(mailer, ToConsoleMailer):
+        log_email = log_email
+    else:
+        log_email = lambda *a, **kw: None
 
     return {'emails': emails, 'log_email': log_email, 'mailer': mailer}
 

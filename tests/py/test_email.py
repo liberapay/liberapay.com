@@ -12,7 +12,7 @@ from liberapay.exceptions import (
 from liberapay.models.participant import Participant
 from liberapay.security.authentication import ANON
 from liberapay.security.csrf import CSRF_TOKEN
-from liberapay.testing import postgres_readonly
+from liberapay.testing import Harness, postgres_readonly
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils.emails import EmailVerificationResult, check_email_blacklist
 
@@ -472,3 +472,21 @@ class TestEmail(EmailHarness):
         assert r.code == 200, r.text
         with self.assertRaises(EmailDomainIsBlacklisted):
             check_email_blacklist('example@example.com')
+
+
+class TestEmail2(Harness):
+
+    def test_participant_with_long_email_address_can_receive_messages(self):
+        email = 'a' * 200 + '@example.org'
+        fred = self.make_participant(None, email=email)
+        fred.insert_identity({'name': "You don't need to know my legal name"})
+        fred.notify('team_invite', team='team', team_url='fake_url', inviter='bob')
+        Participant.dequeue_emails()
+        assert self.db.one("SELECT email_status FROM notifications") == 'sent'
+
+    def test_participant_with_long_nonascii_name_can_receive_emails(self):
+        fred = self.make_participant(None, email='frederic@example.org')
+        fred.insert_identity({'name': "Frédéric d'Arundel d'Esquincourt de Condé"})
+        fred.notify('team_invite', team='team', team_url='fake_url', inviter='bob')
+        Participant.dequeue_emails()
+        assert self.db.one("SELECT email_status FROM notifications") == 'sent'
