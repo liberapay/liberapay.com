@@ -13,3 +13,21 @@
 .table tr.subrow > td {
     border-width: 0;
 }
+
+.text-right th {
+    text-align: right;
+    &.text-left {
+        text-align: left;
+    }
+    &.text-center {
+        text-align: center;
+    }
+}
+
+.first-col-left th:first-child, .first-col-left td:first-child {
+    text-align: left;
+}
+
+.last-col-right th:last-child, .last-col-right td:last-child {
+    text-align: right;
+}

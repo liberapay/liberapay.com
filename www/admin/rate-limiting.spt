@@ -8,6 +8,13 @@ if user.ANON:
 if not user.is_admin:
     raise response.error(403)
 
+rate_counters = website.db.all("SELECT * FROM rate_limiting")
+for row in rate_counters:
+    row.key_prefix, row.key_unique = row.key.split(':', 1)
+    row.cap, row.period = constants.RATE_LIMITS[row.key_prefix]
+    row.percentage = row.counter / row.cap
+rate_counters.sort(key=lambda row: (row.percentage, row.ts, row.key), reverse=True)
+
 title = "Rate Limiting"
 
 [---] text/html
@@ -15,6 +22,15 @@ title = "Rate Limiting"
 
 % block content
 
-<pre>{{ website.db.render("SELECT * FROM rate_limiting ORDER BY key") }}</pre>
+<table class="table text-right first-col-left">
+<thead><tr><th>key<th>counter<th>ts</tr></thead>
+<tbody>
+% for row in rate_counters
+    <tr><td>{{ row.key }}</td>
+        <td class="{{ 'danger' if row.percentage > 0.99 else 'text-warning' if row.percentage >= 0.5 else '' }}">{{ row.counter }}</td>
+        <td>{{ row.ts }}</td>
+% endfor
+<tbody>
+</table>
 
 % endblock
