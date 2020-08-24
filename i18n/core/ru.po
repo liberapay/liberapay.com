@@ -55,26 +55,26 @@ msgstr "Управление вашими пожертвованиями"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Ваше пожертвование {amount} в неделю для {username} необходимо продлить до {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Ваше пожертвование {amount} в месяц для {username} необходимо продлить до {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Ваше пожертвование {amount} в год для {username} необходимо продлить до {date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "У вас есть {n} пожертвование на продление:"
+msgstr[1] "У вас есть {n} пожертвования на продление:"
+msgstr[2] "У вас есть {n} пожертвований на продление:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Если вы хотите изменить или отменить пожертвование, нажмите на следующую ссылку: {link_start}управлять моими пожертвованиями{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "Ваш адрес электронной почты был временно добавлен в черный список"
@@ -1297,7 +1297,7 @@ msgid "A security check has failed. Please make sure your browser is configured 
 msgstr "Проверка безопасности завершилась неудачей. Убедитесь, что ваш браузер настроен на использование cookies для {domain} и попробуйте ещё раз."
 
 msgid "Checking cookies…"
-msgstr ""
+msgstr "Проверка файлов cookie…"
 
 msgid "You are not authorized to access this page."
 msgstr "Доступ к этой странице запрещён."
@@ -2623,8 +2623,8 @@ msgstr "Финансирование ваших пожертвований"
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] ""
-msgstr[1] "Из-за технических ограничений мы не можем обработать все ваши пожертвования одним платежом. Вы должны сделать {n} раздельных платежа. Извините за неудобства."
-msgstr[2] "Из-за технических ограничений мы не можем обработать все ваши пожертвования одним платежом. Вы должны сделать {n} раздельных платежей. Извините за неудобства."
+msgstr[1] "Из-за юридических и технических ограничений в настоящее время мы не можем обрабатывать все ваши пожертвования как единый платеж. Вместо этого вам придется произвести {n} отдельных платежа. Приносим свои извинения за доставленные неудобства."
+msgstr[2] "Из-за юридических и технических ограничений в настоящее время мы не можем обрабатывать все ваши пожертвования как единый платеж. Вместо этого вам придется произвести {n} отдельных платежей. Приносим свои извинения за доставленные неудобства."
 
 msgid "We are able to group these donations into a single payment."
 msgstr "Мы можем объединить эти пожертвования в один платёж."
@@ -2810,8 +2810,8 @@ msgstr "(рекомендуется, комиссия с низким проце
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
 msgstr[0] ""
-msgstr[1] "Следующее пожертвование через {n} недели ({timedelta})."
-msgstr[2] "Следующее пожертвование через {n} недель ({timedelta})."
+msgstr[1] "Следующий платёж через {n} недели ({timedelta})."
+msgstr[2] "Следующий платёж через {n} недель ({timedelta})."
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
@@ -4357,8 +4357,8 @@ msgstr "Вы также можете следить за {1}разработко
 msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
 msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
 msgstr[0] ""
-msgstr[1] "Liberapay доступен для создателей в {stripe_link_open}{n} странах через Stripe{link_close} и {paypal_link_open}более чем в 200 странах через PayPal{link_close}."
-msgstr[2] "Liberapay доступен для создателей в {stripe_link_open}{n} странах через Stripe{link_close} и {paypal_link_open}более чем в 200 странах через PayPal{link_close}."
+msgstr[1] "Liberapay доступен создателям в {stripe_link_open}{n} странах через Stripe{link_close} и {paypal_link_open}более чем в 200 странах через PayPal{link_close}."
+msgstr[2] "Liberapay доступен создателям в {stripe_link_open}{n} странах через Stripe{link_close} и {paypal_link_open}более чем в 200 странах через PayPal{link_close}."
 
 #, python-brace-format
 msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
@@ -4523,8 +4523,8 @@ msgstr "Stripe позволяет создателям настраивать а
 msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
 msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
 msgstr[0] ""
-msgstr[1] "PayPal доступен для создателей в {paypal_link_open}более чем в 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} страны{link_close}."
-msgstr[2] "PayPal доступен для создателей в {paypal_link_open}более чем в 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} стран{link_close}."
+msgstr[1] "PayPal доступен создателям в {paypal_link_open}более чем 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} страны{link_close}."
+msgstr[2] "PayPal доступен создателям в {paypal_link_open}более чем 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} стран{link_close}."
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "Мы делаем всё возможное, чтобы сохранить вашу конфиденцальность: мы не пытаемся отслеживать людей, посещающих наш веб-сайт, мы стремимся собирать только ту персональную инфорацию, которая нам действительно нужна, и мы никому её не продаём."
@@ -5160,8 +5160,8 @@ msgstr[2] "Он также частично переведён на {n} друг
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
 msgid_plural "Your profile descriptions and other texts can be published in up to {n} languages."
 msgstr[0] ""
-msgstr[1] "Описание вашего профиля и другие тексты можно опубликовать на {n} языках."
-msgstr[2] "Описание вашего профиля и другие тексты можно опубликовать на {n} языках."
+msgstr[1] "Описания вашего профиля и другие тексты могут быть опубликованы на {n} языках."
+msgstr[2] "Описания вашего профиля и другие тексты могут быть опубликованы на {n} языках."
 
 msgid "Multiple currencies"
 msgstr "Различные валюты"
@@ -5170,8 +5170,8 @@ msgstr "Различные валюты"
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
 msgstr[0] ""
-msgstr[1] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем в общей сложности {n} валюты. Однако мы не работаем с какой-либо криптовалютой."
-msgstr[2] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем в общей сложности {n} валют. Однако мы не работаем с какой-либо криптовалютой."
+msgstr[1] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем в общей сложности {n} валюты. Однако мы не обрабатываем криптовалюту."
+msgstr[2] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем в общей сложности {n} валют. Однако мы не обрабатываем криптовалюту."
 
 msgid "Integrations"
 msgstr "Интеграции"
@@ -5180,8 +5180,8 @@ msgstr "Интеграции"
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
 msgstr[0] ""
-msgstr[1] "Вы можете связать ваш профиль с вашими учётными записями на {platform1}, {platform2}, {platform3}, и {n} других платформах."
-msgstr[2] "Вы можете связать ваш профиль с вашими учётными записями на {platform1}, {platform2}, {platform3}, и {n} других платформах."
+msgstr[1] "Вы можете привязать к своему профилю учетные записи, которыми вы владеете на {platform1}, {platform2}, {platform3} и {n} другие платформы."
+msgstr[2] "Вы можете привязать к своему профилю учетные записи, которыми вы владеете на {platform1}, {platform2}, {platform3} и {n} других платформах."
 
 #, python-brace-format
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
