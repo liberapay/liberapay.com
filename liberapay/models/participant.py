@@ -56,6 +56,7 @@ from liberapay.exceptions import (
     TransferError,
     UnableToDistributeBalance,
     UnableToSendEmail,
+    UnexpectedCurrency,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -2731,9 +2732,11 @@ class Participant(Model, MixinTeam):
                                 new_sp.customized = True
                             new_amount = new_amounts.get(cur_sp.id) if new_sp.automatic else None
                             if new_amount and new_sp.amount != new_amount:
+                                if new_amount.currency != payin_currency:
+                                    raise UnexpectedCurrency(new_amount, payin_currency)
                                 new_sp.amount = new_amount
                                 tr_amounts = resolve_amounts(new_amount, {
-                                    tr['tippee_id']: tr['amount']
+                                    tr['tippee_id']: tr['amount'].convert(payin_currency)
                                     for tr in new_sp.transfers
                                 })
                                 for tr in new_sp.transfers:

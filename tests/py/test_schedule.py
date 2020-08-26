@@ -852,6 +852,15 @@ class TestScheduledPayins(EmailHarness):
         )
         assert r.code == 302
 
+        # Check that a different currency is rejected
+        r = self.client.POST(
+            "/alice/giving/schedule?id=%i&action=modify" % sp_id,
+            {'amount': '20.00', 'currency': 'USD'}, auth_as=alice,
+            raise_immediately=False,
+        )
+        assert r.code == 400, r.text
+        assert " expected currency (EUR)." in r.text
+
         expected_transfers = [
             {
                 'tippee_id': bob.id,

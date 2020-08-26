@@ -436,6 +436,20 @@ class BadDonationCurrency(LazyResponseXXX):
         )
 
 
+class UnexpectedCurrency(LazyResponse400):
+
+    def __init__(self, unexpected_amount, expected_currency):
+        super().__init__()
+        self.unexpected_amount = unexpected_amount
+        self.expected_currency = expected_currency
+
+    def msg(self, _):
+        return _(
+            "The amount {money_amount} isn't in the expected currency ({expected_currency}).",
+            money_amount=self.unexpected_amount, expected_currency=self.expected_currency,
+        )
+
+
 class NonexistingElsewhere(LazyResponse400):
     def msg(self, _):
         return _("It seems you're trying to delete something that doesn't exist.")
