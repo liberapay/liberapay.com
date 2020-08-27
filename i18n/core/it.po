@@ -53,25 +53,25 @@ msgstr "Gestisci le tue donazioni"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "La tua donazione di {amount} per settimana a {username} deve essere rinnovata prima del {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "La tua donazione di {amount} per mese a {username} deve essere rinnovata prima del {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "La tua donazione di {amount} per anno a {username} deve essere rinnovata prima del {date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hai {n} donazione da rinnovare:"
+msgstr[1] "Hai {n} donazioni da rinnovare:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Se desideri modificare o fermare una donazione, fai clic sul seguente collegamento: {link_start}gestisci le mie donazioni{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "Il tuo indirizzo e-mail è temporaneamente sulla lista nera"
@@ -1257,15 +1257,15 @@ msgstr[0] "{n} anno di {money_amount}"
 msgstr[1] "{n} anni di {money_amount}"
 
 msgid "The submitted password is incorrect."
-msgstr ""
+msgstr "La password inserita non è corretta."
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
-msgstr ""
+msgstr "Non esiste un conto con il nome utente “{username}”."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
-msgstr "Non abbiamo trovato alcun conto il cui indirizzo e-mail principale è {email_address}."
+msgstr "Nessun conto ha come indirizzo e-mail principale “{email_address}”."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -1283,7 +1283,7 @@ msgid "A security check has failed. Please make sure your browser is configured 
 msgstr "Un controllo di sicurezza è fallito. Per favore accertati che il browser sia configurato per accettare i cookie per il dominio {domain}, quindi riprova."
 
 msgid "Checking cookies…"
-msgstr ""
+msgstr "Controllo dei cookie…"
 
 msgid "You are not authorized to access this page."
 msgstr "Non sei autorizzato/a ad accedere a questa pagina."
@@ -4461,10 +4461,10 @@ msgid "The payment processing fees are usually lower with Stripe than with PayPa
 msgstr "Le commissioni di elaborazione dei pagamenti sono solitamente più basse con Stripe che con PayPal."
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
-msgstr ""
+msgstr "Stripe permette il rinnovo automatico delle donazione, mentre attualmente PayPal richiede una aconferma per ciascun pagamento."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
-msgstr ""
+msgstr "Stripe permette di donare a più creatori in un'unica soluzione in alcuni casi, mentre PayPal richiede sempre pagamenti separati."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "I pagamenti con PayPal reindirizzano il donatore al sito web di PayPal, mentre Stripe è integrato con Liberapay."
@@ -5028,7 +5028,7 @@ msgstr "Cerca qualcuno a cui vuoi donare denaro, poi seleziona una somma, un per
 msgid "2. Fund your donation"
 msgstr "2. Finanzia la tua donazione"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "On Liberapay, donations are funded in advance. You have control over when and how much you pay. Sending more money at once usually results in a lower percentage of {0}transaction fees{1}."
 msgstr "Su Liberapay le donazioni sono finanziate in anticipo. Tu controlli quanto denaro aggiungi e quando. Inviare ulteriore denaro in un'unica soluzione comporta una riduzione in percentuale sulle {0}commissioni delle transazioni{1}."
 
@@ -5480,17 +5480,17 @@ msgstr "Esploratore social"
 
 #, python-brace-format
 msgid "Connect your {platform} account"
-msgstr ""
+msgstr "Collega il tuo profilo {platform}"
 
 #, python-brace-format
 msgid "It looks like you don't follow anyone on {platform}."
-msgstr ""
+msgstr "Ci risulta che tu non segua nessuno su {platform}."
 
 #, python-brace-format
 msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Stai seguendo {n} profilo su {platform}."
+msgstr[1] "Stai seguendo {n} profili su {platform}."
 
 msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
 msgstr "L'indirizzo che hai fornito non è valido: non contiene il simbolo “@”."
