@@ -41,7 +41,7 @@ elif direction == 'from':
     else:
         tippee = Participant.from_id(request.qs.get_int('tippee'))
 else:
-    raise response.invalid_input(direction, 'direction', 'querystring')
+    raise response.invalid_input(direction, 'dir', 'querystring')
 
 tippee_name = tippee.username
 if tippee.status == 'stub':

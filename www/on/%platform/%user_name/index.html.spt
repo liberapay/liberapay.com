@@ -103,6 +103,7 @@ if is_team:
             ) }}</p>
             {{ tip_form(tippee=account) }}
         % elif locked
+            <div class="text-center">
             <p>{{ _("{0} has opted out of Liberapay", friendly_name) }}</p>
             % if is_team
                 <p>{{ _("If you are an administrator of this {0} team account, you can "
@@ -121,6 +122,7 @@ if is_team:
             % call auth_button(platform.name, 'unlock', user_id, user_id_type)
                 {{ _("Unlock") }}
             % endcall
+            </div>
         % endif
     </div>
 
@@ -193,18 +195,19 @@ if is_team:
         </div>
     % endif
 
+    % if not locked
     <br><br>
     <div class="text-center">
         <h4>{{ _("Are you {0}?", friendly_name) }}</h4>
 
-        % if is_team and allow_team_connect and not locked
+        % if is_team and allow_team_connect
             <p>{{ _("Are you an administrator of this {0} team account? Connect it "
                     "to your Liberapay account.",
                     platform.display_name) }}</p>
             % call auth_button(platform.name, 'connect', user_id, user_id_type)
                 {{ _("Connect team account") }}
             % endcall
-        % elif not locked
+        % else
             % if user.ANON
                 <p>{{ _("We never collect money for you unless you join.") }}</p>
                 % from "templates/macros/sign-in-link.html" import sign_in_link with context
@@ -232,6 +235,7 @@ if is_team:
             % endcall
         % endif
     </div>
+    % endif
 
     % if user.ANON
         <br><br>

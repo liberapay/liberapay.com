@@ -2,6 +2,7 @@ from datetime import timedelta
 from decimal import ROUND_HALF_UP
 from math import floor
 
+from liberapay.exceptions import UnexpectedCurrency
 from liberapay.payin.prospect import PayinProspect
 from liberapay.utils import form_post_success, get_participant, utcnow
 
@@ -30,7 +31,7 @@ if request.method == 'POST':
         new_amount = request.body.get('amount')
         if new_amount:
             payin_currency = request.body['currency']
-            if payin_currency != sp.amount.currency:
+            if payin_currency not in constants.CURRENCIES:
                 raise response.invalid_input(payin_currency, 'currency', 'body')
             if new_amount == 'custom':
                 new_amount = locale.parse_money_amount(request.body['amount_custom'], payin_currency)
@@ -38,6 +39,8 @@ if request.method == 'POST':
                 new_amount = Money(new_amount, payin_currency, rounding=ROUND_HALF_UP)
             tips = payer.get_tips_to([tr['tippee_id'] for tr in sp.transfers])
             prospect = PayinProspect(tips, 'stripe')
+            if payin_currency != prospect.currency:
+                raise UnexpectedCurrency(new_amount, prospect.currency)
             amount_min = prospect.min_acceptable_amount
             amount_max = prospect.max_acceptable_amount
             if new_amount < amount_min or new_amount > amount_max:

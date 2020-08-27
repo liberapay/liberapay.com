@@ -63,7 +63,7 @@ application = website  # for stupid WSGI implementations
 # Configure renderers
 # ===================
 
-json.register_encoder(Money, lambda m: {'amount': str(m.amount), 'currency': m.currency})
+json.register_encoder(Money, Money.for_json)
 json.register_encoder(MoneyBasket, lambda b: list(b))
 json.register_encoder(Object, lambda o: o.__dict__)
 

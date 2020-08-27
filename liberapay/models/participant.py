@@ -56,6 +56,7 @@ from liberapay.exceptions import (
     TransferError,
     UnableToDistributeBalance,
     UnableToSendEmail,
+    UnexpectedCurrency,
     UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -2722,6 +2723,13 @@ class Participant(Model, MixinTeam):
                             new_sp.execution_date = cur_sp.execution_date
                             new_sp.amount = cur_sp.amount if new_sp.automatic else None
                             new_sp.transfers = cur_sp.transfers
+                            if new_sp.amount and new_sp.amount.currency != payin_currency:
+                                # … unless the currency has changed.
+                                new_sp.amount = new_sp.amount.convert(payin_currency)
+                                new_sp.transfers = [
+                                    dict(tr, amount=tr['amount'].convert(payin_currency))
+                                    for tr in new_sp.transfers
+                                ]
                             new_sp.customized = True
                         if cur_sp.id in new_dates or cur_sp.id in new_amounts:
                             new_sp.customized = cur_sp.customized
@@ -2731,9 +2739,11 @@ class Participant(Model, MixinTeam):
                                 new_sp.customized = True
                             new_amount = new_amounts.get(cur_sp.id) if new_sp.automatic else None
                             if new_amount and new_sp.amount != new_amount:
+                                if new_amount.currency != payin_currency:
+                                    raise UnexpectedCurrency(new_amount, payin_currency)
                                 new_sp.amount = new_amount
                                 tr_amounts = resolve_amounts(new_amount, {
-                                    tr['tippee_id']: tr['amount']
+                                    tr['tippee_id']: tr['amount'].convert(payin_currency)
                                     for tr in new_sp.transfers
                                 })
                                 for tr in new_sp.transfers:
