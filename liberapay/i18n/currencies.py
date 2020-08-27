@@ -105,6 +105,7 @@ Money.__repr__ = lambda m: '<Money "%s">' % m
 Money.__str__ = lambda m: '%(amount)s %(currency)s' % m.__dict__
 Money.__unicode__ = Money.__str__
 Money.convert = _convert
+Money.for_json = lambda m: {'amount': str(m.amount), 'currency': m.currency}
 Money.minimum = lambda m: Money.MINIMUMS[m.currency]
 Money.MINIMUMS = _Minimums()
 Money.parse = classmethod(_Money_parse)

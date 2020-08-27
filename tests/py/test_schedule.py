@@ -9,7 +9,7 @@ from liberapay.payin.cron import (
     execute_scheduled_payins,
     send_donation_reminder_notifications, send_upcoming_debit_notifications,
 )
-from liberapay.testing import EUR
+from liberapay.testing import EUR, USD
 from liberapay.testing.emails import EmailHarness
 
 
@@ -235,6 +235,78 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].amount is None
         assert scheduled_payins[0].automatic is False
+
+    def test_schedule_renewals_handles_currency_switch(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com', accepted_currencies=None)
+        alice.set_tip_to(bob, EUR('1.00'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('37.00'))
+        schedule = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        next_payday = compute_next_payday_date()
+        expected_transfers = [
+            {
+                'tippee_id': bob.id,
+                'tippee_username': 'bob',
+                'amount': EUR('37.00').for_json(),
+            }
+        ]
+        assert len(schedule) == 1
+        assert schedule[0].amount == EUR('37.00')
+        assert schedule[0].transfers == expected_transfers
+        expected_renewal_date = next_payday + timedelta(weeks=37)
+        assert schedule[0].execution_date == expected_renewal_date
+        assert schedule[0].automatic is True
+
+        # Change the currency
+        alice.set_tip_to(bob, USD('1.20'), renewal_mode=2)
+        schedule = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        assert len(schedule) == 1
+        expected_transfers = [dict(expected_transfers[0], amount=USD('44.40').for_json())]
+        assert schedule[0].amount == USD('44.40')
+        assert schedule[0].transfers == expected_transfers
+        assert schedule[0].execution_date == expected_renewal_date
+        assert schedule[0].automatic is True
+
+        # Customize the renewal
+        sp_id = schedule[0].id
+        r = self.client.GET("/alice/giving/schedule", auth_as=alice)
+        assert r.code == 200
+        r = self.client.GET(
+            "/alice/giving/schedule?id=%i&action=modify" % sp_id,
+            auth_as=alice
+        )
+        assert r.code == 200
+        new_date = expected_renewal_date - timedelta(days=14)
+        r = self.client.PxST(
+            "/alice/giving/schedule?id=%i&action=modify" % sp_id,
+            {
+                'amount': '42.00', 'currency': 'USD',
+                'new_date': new_date.isoformat(),
+            },
+            auth_as=alice
+        )
+        assert r.code == 302
+        sp = self.db.one("SELECT * FROM scheduled_payins WHERE id = %s", (sp_id,))
+        assert sp.amount == USD('42.00')
+        assert sp.execution_date == new_date
+        assert sp.customized is True
+        schedule = alice.schedule_renewals()
+        assert len(schedule) == 1
+        assert schedule[0].amount == USD('42.00')
+        assert schedule[0].execution_date == new_date
+        assert schedule[0].customized is True
+
+        # Change the currency again
+        alice.set_tip_to(bob, EUR('1.00'), renewal_mode=2)
+        schedule = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        assert len(schedule) == 1
+        expected_transfers = [dict(expected_transfers[0], amount=EUR('35.00').for_json())]
+        assert schedule[0].amount == EUR('35.00')
+        assert schedule[0].transfers == expected_transfers
+        assert schedule[0].execution_date == new_date
+        assert schedule[0].automatic is True
+        assert schedule[0].customized is True
 
     def test_no_new_renewal_is_scheduled_when_there_is_a_pending_transfer(self):
         # Set up a funded manual donation
