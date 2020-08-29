@@ -45,7 +45,7 @@ if request.method == 'POST':
                     raise NotImplementedError(si.next_action.type)
                 raise response.redirect(si.next_action.redirect_to_url.url)
     except stripe.error.StripeError as e:
-        raise response.error(e.http_status, _(
+        raise response.error(e.http_status or 500, _(
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
         ))

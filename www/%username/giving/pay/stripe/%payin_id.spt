@@ -96,7 +96,7 @@ if request.method == 'POST':
             route.sync_status()
 
     except stripe.error.StripeError as e:
-        raise response.error(e.http_status, _(
+        raise response.error(e.http_status or 500, _(
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
         ))
