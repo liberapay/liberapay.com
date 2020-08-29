@@ -1,6 +1,7 @@
 from dateutil.parser import parse as parse_date
 
 from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.models.participant import Participant
 
 PT_STATUS_MAP = {
