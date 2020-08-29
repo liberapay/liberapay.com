@@ -82,12 +82,12 @@ if request.method == 'POST':
                 'name': body.get('owner.name'),
             }
             source = create_source_from_token(
-                body['token'], one_off, payin_amount, owner_info, return_url
+                body.word('token'), one_off, payin_amount, owner_info, return_url
             )
             route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
         elif 'stripe_pm_id' in body:
             one_off = body.get('keep') != 'true'
-            pm = stripe.PaymentMethod.retrieve(body['stripe_pm_id'])
+            pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)

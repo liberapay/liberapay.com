@@ -267,6 +267,10 @@ if hasattr(aspen.http.mapping.Mapping, 'get_choice'):
     raise Warning('aspen.http.mapping.Mapping.get_choice() already exists')
 aspen.http.mapping.Mapping.get_choice = utils.get_choice
 
+if hasattr(aspen.http.mapping.Mapping, 'word'):
+    raise Warning('aspen.http.mapping.Mapping.word() already exists')
+aspen.http.mapping.Mapping.word = utils.word
+
 if hasattr(aspen.http.mapping.Mapping, 'parse_boolean'):
     raise Warning('aspen.http.mapping.Mapping.parse_boolean() already exists')
 aspen.http.mapping.Mapping.parse_boolean = utils.parse_boolean
