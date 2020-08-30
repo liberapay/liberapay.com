@@ -59,19 +59,19 @@ events = website.db.all("""
 
 <h3>Events</h3>
 
-<table class="table monospace">
+<table class="table monospace last-col-right">
     <tr>
         <th>ts</th>
         <th>type</th>
         <th>payload</th>
-        <th class="text-right">recorder</th>
+        <th>recorder</th>
     </tr>
     % for e in events
     <tr>
         <td>{{ e.ts }}</td>
         <td>{{ e.type }}</td>
         <td class="pre-wrap">{{ json.dumps(e.payload) }}</td>
-        <td class="text-right">{{ e.recorder_name or '' }}</td>
+        <td>{{ e.recorder_name or '' }}</td>
     </tr>
     % endfor
 </table>

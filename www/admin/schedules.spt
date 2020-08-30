@@ -1,0 +1,122 @@
+from liberapay.exceptions import LoginRequired
+from liberapay.i18n.base import LOCALE_EN as locale
+
+[---]
+
+if user.ANON:
+    raise LoginRequired
+
+if not user.is_admin:
+    raise response.error(403, "You don't have the admin privileges.")
+
+automatic = request.qs.parse_boolean('automatic', default=None)
+execution_date = request.qs.parse_date('execution_date', default=None)
+
+if execution_date:
+    future = None
+    scheduled_payins = website.db.all("""
+        SELECT sp.*, p.username AS payer_name
+          FROM scheduled_payins sp
+          JOIN participants p ON p.id = sp.payer
+         WHERE execution_date = %s
+           AND coalesce(automatic = %s, true)
+      ORDER BY sp.id
+    """, (execution_date, automatic))
+else:
+    future = request.qs.parse_boolean('future', default=None)
+    aggregates = website.db.all("""
+        SELECT sp.execution_date, count(*) AS n_all
+             , count(*) FILTER (WHERE sp.automatic) AS n_automatic
+             , count(*) FILTER (WHERE NOT sp.automatic) AS n_manual
+             , basket_sum(sp.amount) FILTER (WHERE sp.automatic) AS sum_automatic
+          FROM scheduled_payins sp
+         WHERE coalesce(automatic = %s, true)
+           AND coalesce((execution_date > current_date) = %s, true)
+           AND sp.payin IS NULL
+      GROUP BY sp.execution_date
+      ORDER BY sp.execution_date
+    """, (automatic, future))
+    sp_count = sum(row.n_all for row in aggregates)
+    sp_dates_count = len(aggregates)
+
+kind = ' '.join(filter(None, (
+    'future' if future else 'overdue' if future is False else '',
+    'automatic' if automatic else 'manual' if automatic is False else ''
+)))
+
+title = "Scheduled Payments Admin"
+
+[---] text/html
+% from 'templates/macros/nav.html' import querystring_nav with context
+
+% extends "templates/layouts/admin.html"
+
+% block content
+
+<ul class="nav nav-pills inline-block middle">{{ querystring_nav('automatic', [
+    (None, "All"),
+    (True, "Automatic"),
+    (False, "Manual"),
+], automatic) }}</ul>
+% if not execution_date
+<span class="middle text-muted">&nbsp;&nbsp;⋅&nbsp;&nbsp;</span>
+<ul class="nav nav-pills inline-block middle">{{ querystring_nav('future', [
+    (None, "All"),
+    (True, "Future"),
+    (False, "Overdue"),
+], future) }}</ul>
+% endif
+<br><br>
+
+% if execution_date
+    <p>
+    % if len(scheduled_payins) == 1
+    There is one {{ kind }} payment scheduled for {{ locale.format_date(execution_date) }}.
+    % else
+    There are {{ len(scheduled_payins) }} {{ kind }} payments scheduled for {{ locale.format_date(execution_date) }}.
+    % endif
+    </p>
+    <table class="table text-right first-col-left">
+    <thead><tr><th>ID<th>Timestamps<th>Customized<th>Payer<th>Amount<th class="text-left">Distribution<th>Notifications</tr></thead>
+    <tbody>
+    % for sp in scheduled_payins
+        <tr><td>{{ sp.id }}</td>
+            <td>ctime = {{ sp.ctime }}<br>mtime = {{ sp.mtime }}</td>
+            <td>{{ 'Yes' if sp.customized else 'No' }}</td>
+            <td><a href="/~{{ sp.payer }}/giving/schedule">{{ sp.payer_name }}</a></td>
+            <td>{{ 'manual' if sp.amount == None else locale.format_money(sp.amount) }}</td>
+            <td class="text-left">
+            % for tr in sp.transfers
+                → {% if tr['amount'] != None %}{{ locale.format_money(Money(**tr['amount'])) }} to {% endif %}
+                <a href="/~{{ tr['tippee_id'] }}/">{{ tr['tippee_username'] }}<br>
+            % endfor
+            </td>
+            <td>{{ sp.notifs_count }} sent{% if sp.last_notif_ts %}, last one at {{ sp.last_notif_ts }}{% endif %}</td>
+        </tr>
+    % endfor
+    </tbody>
+    </table>
+    <a href="{{ request.qs.derive(execution_date=None) }}">← Go back</a>
+% else
+    % if sp_count > 1 and sp_dates_count > 1
+    <p>There are {{ sp_count }} {{ kind }} payments scheduled on {{ sp_dates_count }} different days.</p>
+    % endif
+    <table class="table text-right first-col-left">
+    <thead><tr><th>execution_date<th>n_all<th>n_automatic<th>n_manual<th>sum_automatic</tr></thead>
+    <tbody>
+    % for row in aggregates
+        <tr><td><a href="?execution_date={{ row.execution_date }}">{{ row.execution_date }}</a></td>
+            <td>{{ row.n_all }}<td>{{ row.n_automatic }}<td>{{ row.n_manual }}</td>
+            % if row.n_automatic
+            <td title="{{ locale.format_money_basket(row.sum_automatic) }}">{{
+                locale.format_money(row.sum_automatic.fuzzy_sum(currency))
+            }}</td>
+            % else
+            <td class="text-muted">n/a</td>
+            % endif
+    % endfor
+    </tbody>
+    </table>
+% endif
+
+% endblock

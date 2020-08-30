@@ -97,15 +97,15 @@ output.body = render(globals(), allow_partial_i18n=False)
         "shows the donations as they were when the payment was initiated ({datetime}, UTC)."
         , name=owner_name, datetime=exchange.timestamp
     ) }}</p>
-    <table class="table table-bordered">
+    <table class="table table-bordered last-col-right">
         <tr>
             <th>{{ _("Recipient") }}
-            <th class="text-right">{{ _("Amount per week") }}
+            <th>{{ _("Amount per week") }}
         </tr>
     % for tip in tips
         <tr>
             <td><a href="{{ website.canonical_url }}/{{ tip.username }}">{{ tip.username }}</a>
-            <td class="text-right">{{ locale.format_money(tip.amount) }}
+            <td>{{ locale.format_money(tip.amount) }}
         </tr>
     % endfor
     </table>

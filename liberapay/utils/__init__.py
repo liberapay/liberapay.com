@@ -497,6 +497,24 @@ def get_choice(d, k, choices, default=NO_DEFAULT):
     return r
 
 
+FALSEISH = {'0', 'f', 'false', 'n', 'no'}
+TRUEISH = {'1', 't', 'true', 'y', 'yes'}
+
+
+def parse_boolean(mapping, k, default=NO_DEFAULT):
+    try:
+        r = mapping[k].lower()
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    if r in TRUEISH:
+        return True
+    if r in FALSEISH:
+        return False
+    raise Response().error(400, "`%s` value %r is invalid" % (k, r))
+
+
 def parse_date(mapping, k, default=NO_DEFAULT, sep='-'):
     try:
         r = mapping[k]

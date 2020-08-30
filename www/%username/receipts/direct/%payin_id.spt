@@ -157,10 +157,10 @@ output.body = render(globals(), allow_partial_i18n=False)
         "The money has been donated to the following recipients:",
         n=len(payin_transfers)
     ) }}</p>
-    <table class="table table-bordered">
+    <table class="table table-bordered last-col-right">
         <tr>
             <th>{{ _("Recipient") }}
-            <th class="text-right">{{ _("Amount") }}
+            <th>{{ _("Amount") }}
         </tr>
     % for pt in payin_transfers
         <tr>
@@ -174,7 +174,7 @@ output.body = render(globals(), allow_partial_i18n=False)
             % else
                 <a href="{{ website.canonical_url }}/~{{ pt.recipient }}">{{ pt.recipient_username }}</a>
             % endif
-            <td class="text-right">{{ locale.format_money(pt.amount - (pt.reversed_amount or 0)) }}
+            <td>{{ locale.format_money(pt.amount - (pt.reversed_amount or 0)) }}
         </tr>
     % endfor
     </table>
