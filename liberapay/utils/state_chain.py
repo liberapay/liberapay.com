@@ -159,8 +159,6 @@ def turn_socket_error_into_50X(website, state, exception, _=lambda a: a, respons
     # The mangopay module reraises exceptions and stores the original in `__cause__`.
     if isinstance(exception, mangopay.exceptions.APIError):
         exception = exception.__cause__
-    # log the exception
-    website.tell_sentry(exception, state, level='warning')
     # replace the exception with a Response
     if isinstance(exception, Timeout) or 'timeout' in str(exception).lower():
         response = response or Response()
@@ -170,6 +168,9 @@ def turn_socket_error_into_50X(website, state, exception, _=lambda a: a, respons
         response.code = 502
     else:
         return
+    # log the exception
+    website.tell_sentry(exception, state, level='warning')
+    # show a proper error message
     response.body = _(
         "Processing your request failed because our server was unable to communicate "
         "with a service located on another machine. This is a temporary issue, please "
