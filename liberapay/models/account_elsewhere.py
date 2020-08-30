@@ -11,7 +11,7 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-from ..constants import AVATAR_QUERY, RATE_LIMITS, SUMMARY_MAX_SIZE
+from ..constants import AVATAR_QUERY, DOMAIN_RE, RATE_LIMITS, SUMMARY_MAX_SIZE
 from ..cron import logger
 from ..elsewhere._exceptions import BadUserId, UserNotFound
 from ..exceptions import InvalidId, TooManyRequests
@@ -360,8 +360,14 @@ def get_account_elsewhere(website, state, api_lookup=True):
             uid = uid[1:]
     split = uid.rsplit('@', 1)
     uid, domain = split if len(split) == 2 else (uid, '')
-    if domain and platform.single_domain:
+    if bool(domain) == platform.single_domain:
         raise response.error(404)
+    try:
+        domain = domain.encode('idna').decode('ascii')
+    except UnicodeEncodeError as e:
+        raise response.error(404, str(e))
+    if domain and not DOMAIN_RE.match(domain):
+        raise response.error(404, "invalid domain name")
     try:
         account = AccountElsewhere._from_thing(key, platform.name, uid, domain)
     except UnknownAccountElsewhere:

@@ -107,10 +107,16 @@ class TestElsewhere(EmailHarness):
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_pages(self, get_user_info):
         for platform in self.platforms:
-            alice = UserInfo(platform=platform.name, user_id='0',
-                             user_name='alice', is_team=False, domain='')
+            if platform.single_domain:
+                domain, slug = '', 'alice'
+            else:
+                domain, slug = 'example.com', 'alice@example.com'
+            alice = UserInfo(
+                platform=platform.name, user_id='0', user_name='alice',
+                is_team=False, domain=domain
+            )
             get_user_info.side_effect = lambda *a: alice
-            response = self.client.GET('/on/%s/alice/' % platform.name)
+            response = self.client.GET('/on/%s/%s/' % (platform.name, slug))
             assert response.code == 200
             self.db.run("DELETE FROM rate_limiting")
 
@@ -178,8 +184,12 @@ class TestElsewhere(EmailHarness):
 
     def test_public_json_not_opted_in(self):
         for platform in self.platforms:
-            self.make_elsewhere(platform.name, 1, 'alice')
-            response = self.client.GET('/on/%s/alice/public.json' % platform.name)
+            if platform.single_domain:
+                domain, slug = '', 'alice'
+            else:
+                domain, slug = 'example.com', 'alice@example.com'
+            self.make_elsewhere(platform.name, 1, 'alice', domain=domain)
+            response = self.client.GET('/on/%s/%s/public.json' % (platform.name, slug))
 
             assert response.code == 200
 
