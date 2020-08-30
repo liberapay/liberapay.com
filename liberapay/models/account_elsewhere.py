@@ -139,6 +139,30 @@ class AccountElsewhere(Model):
              RETURNING elsewhere.*::elsewhere_with_participant
             """.format(cols, placeholders), vals+(i.platform, i.domain, i.user_id))
 
+        # Check for and handle a possible user_name reallocation
+        if i.user_name:
+            conflicts_with = cls.db.one("""
+                SELECT e.*::elsewhere_with_participant
+                  FROM elsewhere e
+                 WHERE e.platform = %s
+                   AND e.domain = %s
+                   AND lower(e.user_name) = %s
+                   AND e.user_id <> %s
+            """, (i.platform, i.domain, i.user_name.lower(), i.user_id))
+            if conflicts_with is not None:
+                try:
+                    conflicts_with.refresh_user_info()
+                except (UnableToRefreshAccount, UserNotFound):
+                    cls.db.run("""
+                        UPDATE elsewhere
+                           SET user_name = null
+                         WHERE id = %s
+                           AND platform = %s
+                           AND domain = %s
+                           AND user_name = %s
+                    """, (conflicts_with.id, i.platform, i.domain, conflicts_with.user_name))
+            del conflicts_with
+
         account = update() if i.user_id else None
         if not account:
             try:
