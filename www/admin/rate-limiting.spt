@@ -27,7 +27,7 @@ title = "Rate Limiting"
 <tbody>
 % for row in rate_counters
     <tr><td>{{ row.key }}</td>
-        <td class="{{ 'danger' if row.percentage > 0.99 else 'text-warning' if row.percentage >= 0.5 else '' }}">{{ row.counter }}</td>
+        <td class="{{ 'danger' if row.percentage > 0.99 else 'warning' if row.percentage >= 0.5 else '' }}">{{ row.counter }}</td>
         <td>{{ row.ts }}</td>
 % endfor
 <tbody>
