@@ -74,10 +74,10 @@ msgid "If you wish to modify or stop a donation, click on the following link: {l
 msgstr "Als u een donatie wilt wijzigen of stoppen, klik dan op de volgende link: {link_start}beheer mijn donaties{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
-msgstr "Uw e-mailadres staat tijdelijk op de zwarte lijst"
+msgstr "Uw e-mailadres staat tijdelijk op de blokkeerlijst"
 
 msgid "Your email address has been blacklisted"
-msgstr "Uw e-mailadres staat op de zwarte lijst"
+msgstr "Uw e-mailadres staat op de blokkeerlijst"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
@@ -89,7 +89,7 @@ msgstr "We sturen geen e-mails meer naar uw adres {email_address}, omdat een rec
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Wij sturen geen e-mails meer naar uw adres {email_address}, omdat wij een klacht hebben ontvangen van de e-mailprovider. Stuur een e-mail vanaf dat adres naar support@liberapay.com als u wilt dat wij het van de zwarte lijst verwijderen."
+msgstr "Wij sturen geen e-mails meer naar uw adres {email_address}, omdat wij een klacht hebben ontvangen van de e-mailprovider. Stuur een e-mail vanaf dat adres naar support@liberapay.com als u wilt dat wij het van de blokkeerlijst verwijderen."
 
 msgid "The error message from the email system was:"
 msgstr "De foutmelding van het e-mailsysteem was:"
@@ -962,10 +962,10 @@ msgid "You need to log in"
 msgstr "U moet u aanmelden"
 
 msgid "We're unable to process your request right now, sorry."
-msgstr "We kunnen je verzoek momenteel niet uitvoeren, sorry."
+msgstr "We kunnen uw verzoek nu niet verwerken, sorry."
 
 msgid "You need to provide a username!"
-msgstr "Je moet een gebruikersnaam opgeven!"
+msgstr "U moet een gebruikersnaam opgeven!"
 
 #, python-brace-format
 msgid "The username '{0}' is too long."
@@ -992,7 +992,7 @@ msgid "The username '{0}' ends with the forbidden suffix '{1}'."
 msgstr "De gebruikersnaam '{0}' eindigt met een verboden achtervoegsel '{1}'."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
-msgstr "Je hebt je gebruikersnaam de afgelopen tijd te vaak veranderd. Probeer het later opnieuw (na bijvoorbeeld een week) of neem contact op met support@liberapay.com."
+msgstr "U heeft uw gebruikersnaam onlangs al vele malen gewijzigd, probeer het later nog eens (bijv. over een week) of neem contact op met support@liberapay.com."
 
 #, python-brace-format
 msgid "The value '{0}' is too long."
@@ -1007,14 +1007,14 @@ msgid "{0} is already connected to a different Liberapay account."
 msgstr "{0} is al verbonden aan een andere Liberapay-account."
 
 msgid "You cannot remove your primary email address."
-msgstr "Je kunt je primaire e-mailadres niet verwijderen."
+msgstr "U kunt uw primaire e-mailadres niet verwijderen."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
 msgstr "Het e-mailadres '{0}' is niet geverifieerd."
 
 msgid "You've reached the maximum number of email addresses we allow."
-msgstr "Je hebt het maximum toegestane aantal e-mailadressen bereikt."
+msgstr "U heeft het maximum aantal e-mailadressen bereikt dat wij toestaan."
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
@@ -1038,38 +1038,38 @@ msgstr "{domain_name}\" is geen geldig e-maildomein."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr "Het e-mailadres {email_address} staat op de zwarte lijst, omdat een poging om er een bericht naar te sturen mislukte {timespan_ago}."
+msgstr "Het e-mailadres {email_address} staat op de blokkeerlijst, omdat een poging om er een bericht naar te sturen mislukte {timespan_ago}."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Het e-mailadres {email_address} staat op een zwarte lijst vanwege een klacht die {timespan_ago} is ontvangen. Stuur een e-mail vanaf dat adres naar support@liberapay.com als je wilt dat wij het van de zwarte lijst verwijderen."
+msgstr "Het e-mailadres {email_address} staat op de blokkeerlijst vanwege een ontvangen klacht {timespan_ago}. Stuur een e-mail van dat adres naar support@liberapay.com als u wilt dat wij het van de blokkeerlijst verwijderen."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr "Het e-maildomein {domain} stond op een zwarte lijst op {date} omdat het alle berichten terugstuurde. Neem contact met ons op als dat niet meer het geval is en u wilt dat wij dit domein van de zwarte lijst verwijderen."
+msgstr "Het e-maildomein {domain} stond op een blokeerlijst op {date} omdat het alle berichten terugstuurde. Neem contact met ons op als dat niet meer het geval is en u wilt dat wij dit domein van de blokkeerlijst verwijderen."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr "Het e-maildomein {domain} staat op de zwarte lijst vanwege een ontvangen klacht {timespan_ago}. Neem contact met ons op als dit domein van u is en u wilt dat wij het van de zwarte lijst verwijderen."
+msgstr "Het e-maildomein {domain} staat op de blokkeerlijst vanwege een ontvangen klacht {timespan_ago}. Neem contact met ons op als dit domein van u is en u wilt dat wij het van de blokkeerlijst verwijderen."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr "Het e-maildomein {domain} stond op een zwarte lijst op {date} omdat het wegwerpadressen opleverde. Neem contact met ons op als dat niet meer het geval is en u wilt dat wij dit domein van de zwarte lijst verwijderen."
+msgstr "Het e-maildomein {domain} stond op een blokkeerlijst op {date} omdat het wegwerpadressen opleverde. Neem contact met ons op als dat niet meer het geval is en u wilt dat wij dit domein van de blokkeerlijst verwijderen."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr "Het e-maildomein {domain} staat op de zwarte lijst. Neem contact met ons op als u wilt dat wij het van de zwarte lijst verwijderen."
+msgstr "Het e-maildomein {domain} staat op de blokkeerlijst. Neem contact met ons op als u wilt dat wij het van de blokkeerlijst verwijderen."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
-msgstr "Het e-mailadres {0} is al gekoppeld aan je account."
+msgstr "Het e-mailadres {0} is al verbonden met uw account."
 
 #, python-brace-format
 msgid "A verification email has already been sent to {email_address} recently."
 msgstr "Een verificatie-e-mail werd kort geleden al verzonden naar {email_address}."
 
 msgid "You are not allowed to add another email address right now, please try again in a few days."
-msgstr "Het is je nu niet toegestaan om nog een e-mailadres toe te voegen. Probeer het opnieuw na een paar dagen."
+msgstr "Het is niet toegestaan om nu een ander e-mailadres toe te voegen, probeer het over een paar dagen opnieuw."
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
 msgstr "Er werden onlangs te veel pogingen uitgevoerd om via uw IP-adres of land aan te melden. Probeer het over een uur opnieuw, of stuur een e-mail naar support@liberapay.com als het probleem zich blijft voordoen."
@@ -1119,7 +1119,7 @@ msgstr "{username} accepteert geen donaties in {rejected_currency}."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
-msgstr ""
+msgstr "Het bedrag {money_amount} is niet in de verwachte valuta ({expected_currency})."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Het lijkt erop dat je iets probeert te verwijderen wat niet bestaat."
@@ -1377,17 +1377,17 @@ msgid "Did you mistype your email address? Fix it and try again, or try a differ
 msgstr "Heeft u uw e-mailadres verkeerd opgegeven? Herstel het en probeer het opnieuw, of probeer een ander adres."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr "Als u zeker weet dat het door u ingevoerde e-mailadres geldig is, kunt u deze fout omzeilen. Als we echter niet in staat zijn om berichten op dit adres af te leveren, dan wordt het adres op de zwarte lijst gezet."
+msgstr "Als u zeker weet dat het door u ingevoerde e-mailadres geldig is kunt u deze fout omzeilen. Als we echter niet in staat zijn om berichten op dit adres af te leveren, dan wordt het adres op de blokkeerlijst gezet."
 
 msgid "Ignore the error and proceed"
 msgstr "Negeer de fout en ga verder"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
-msgstr "Als u denkt dat door ons verzonden e-mails naar {email_address} niet meer terugkomen, dan kunt u dit adres van de zwarte lijst verwijderen en het opnieuw proberen:"
+msgstr "Als u denkt dat door ons verzonden e-mails naar {email_address} niet meer terugkomen, dan kunt u dit adres van de blokkeerlijst verwijderen en het opnieuw proberen:"
 
 msgid "Bypass the blacklist and retry"
-msgstr "Omzeil de zwarte lijst en probeer opnieuw"
+msgstr "Omzeil de blokkeerlijst en probeer opnieuw"
 
 msgid "Alternatively, you can try a different email address:"
 msgstr "U kunt ook een ander e-mailadres proberen:"
@@ -2409,22 +2409,22 @@ msgid "Password"
 msgstr "Wachtwoord"
 
 msgid "Your email address is now blacklisted."
-msgstr "Je e-mailadres staat nu op de zwarte lijst."
+msgstr "Je e-mailadres staat nu op de blokkeerlijst."
 
 msgid "Your email address is no longer blacklisted."
-msgstr "Je e-mailadres staat niet langer op de zwarte lijst."
+msgstr "Je e-mailadres staat niet langer op de blokkeerlijst."
 
 msgid "Remove my email address from the blacklist"
-msgstr "Mijn e-mailadres van de zwarte lijst verwijderen"
+msgstr "Mijn e-mailadres van de blokkeerlijst verwijderen"
 
 msgid "Add my email address to the blacklist"
-msgstr "Mijn e-mailadres toevoegen aan de zwarte lijst"
+msgstr "Mijn e-mailadres toevoegen aan de blokkeerlijst"
 
 msgid "You have successfully disavowed having connected your email address to this Liberapay account."
 msgstr "Je hebt met succes geweigerd je e-mailadres te koppelen aan dit Liberapay-account."
 
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
-msgstr "Wil je een toekomstige poging om je e-mailadres te koppelen aan een Liberapay-account blokkeren, door het toe te voegen aan onze zwarte lijst?"
+msgstr "Wil je een toekomstige poging om je e-mailadres te koppelen aan een Liberapay-account blokkeren, door het toe te voegen aan onze blokkeerlijst?"
 
 msgid "You have already added and verified this address."
 msgstr "Je hebt dit e-mailadres al toegevoegd en geverifieerd."
@@ -2445,7 +2445,7 @@ msgstr[0] "E-mailadres (privé)"
 msgstr[1] "E-mailadressen (privé)"
 
 msgid "Blacklisted"
-msgstr "Zwarte lijst"
+msgstr "Blokkeerlijst"
 
 msgid "Primary"
 msgstr "Primair"
@@ -2533,7 +2533,7 @@ msgid "Automatic renewals are enabled for this donation, but are currently impos
 msgstr "Automatische verlengingen zijn ingeschakeld voor deze donatie, maar zijn op dit moment onmogelijk vanwege de beperkingen van de betalingsverwerker."
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr "Inactief omdat de rekening van de ontvanger op de zwarte lijst staat."
+msgstr "Inactief omdat de rekening van de ontvanger op de blokkeerlijst staat."
 
 msgid "Inactive because the account of the recipient is closed."
 msgstr "Inactief omdat de rekening van de ontvanger gesloten is."
