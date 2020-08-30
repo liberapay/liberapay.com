@@ -36,6 +36,18 @@ class Website(_Website):
         except Warning as e:
             self.tell_sentry(e, state)
 
+    def wireup(self, minimal=False):
+        from liberapay import wireup
+        attributes_before = set(website.__dict__.keys())
+        chain = wireup.minimal_chain if minimal else wireup.full_chain
+        d = chain.run(**dict(self.__dict__, **self.request_processor.__dict__))
+        d.pop('chain', None)
+        d.pop('exception', None)
+        d.pop('state', None)
+        for k, v in d.items():
+            if k not in attributes_before:
+                self.__dict__[k] = v
+
 
 env = Environment(
     ASPEN_CHANGES_RELOAD=is_yesish,

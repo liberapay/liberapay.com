@@ -168,3 +168,6 @@ bootstrap-upgrade:
 	git commit -p style/variables.scss -m "merge upstream changes into variables.scss"
 	git checkout -q HEAD style/variables.scss
 	rm -rf bootstrap-sass-$(version){,.tar.gz}
+
+stripe-bridge:
+	PYTHONPATH=. $(with_local_env) $(env_py) cli/stripe-bridge.py
