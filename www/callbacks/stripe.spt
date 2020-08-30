@@ -143,6 +143,20 @@ elif event.type == 'account.updated':
         account_id=account_id,
     ))
 
+elif event.type == 'account.application.deauthorized':
+    # Doc: https://stripe.com/docs/connect/webhooks
+    if event.data.object.id != website.app_conf.stripe_connect_id:
+        raise response.error(400, (
+            "application IDs don't match: {event.data.object.id!r} != "
+            "{website.app_conf.stripe_connect_id!r}"
+        ))
+    website.db.run("""
+        UPDATE payment_accounts
+           SET is_current = null
+             , authorized = false
+         WHERE id = %s
+    """, (event.account,))
+
 else:
     raise response.error(500, "unknown event object type %r" % event_object_type)
 
