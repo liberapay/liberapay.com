@@ -6,10 +6,9 @@ bin_dir := $(shell $(python) -c 'import sys; print("Scripts" if sys.platform == 
 env := env
 env_bin := $(env)/$(bin_dir)
 env_py := $(env_bin)/python
-test_env_files := defaults.env,tests/test.env,tests/local.env
 pip := pip --disable-pip-version-check
-with_local_env := $(env_bin)/honcho run -e defaults.env,local.env
-with_tests_env := $(env_bin)/honcho run -e $(test_env_files)
+with_local_env := $(env_py) cli/run.py -e defaults.env,local.env
+with_tests_env := $(env_py) cli/run.py -e defaults.env,tests/test.env,tests/local.env
 py_test := $(with_tests_env) $(env_bin)/python -m pytest -Wd $$PYTEST_ARGS
 
 echo:
