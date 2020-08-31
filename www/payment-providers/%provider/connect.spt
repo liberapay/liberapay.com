@@ -173,6 +173,7 @@ elif 'state' in request.qs:
                       , default_currency = excluded.default_currency
                       , charges_enabled = excluded.charges_enabled
                       , verified = true
+                      , authorized = true
                       , display_name = excluded.display_name
                       , token = excluded.token;
         """, account_data)

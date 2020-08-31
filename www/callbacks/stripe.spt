@@ -126,6 +126,37 @@ elif event.type == 'transfer.reversed':
             reversed_amount=int_to_Money(reversed_amount, transfer.currency),
         )
 
+elif event.type == 'account.updated':
+    account = event.data.object
+    website.db.run("""
+        UPDATE payment_accounts
+           SET country = %(country)s
+             , default_currency = %(default_currency)s
+             , charges_enabled = %(charges_enabled)s
+             , display_name = %(display_name)s
+         WHERE id = %(account_id)s
+    """, dict(
+        country=account.country,
+        default_currency=account.default_currency.upper(),
+        charges_enabled=account.charges_enabled,
+        display_name=account.settings.dashboard.display_name,
+        account_id=account_id,
+    ))
+
+elif event.type == 'account.application.deauthorized':
+    # Doc: https://stripe.com/docs/connect/webhooks
+    if event.data.object.id != website.app_conf.stripe_connect_id:
+        raise response.error(400, (
+            "application IDs don't match: {event.data.object.id!r} != "
+            "{website.app_conf.stripe_connect_id!r}"
+        ))
+    website.db.run("""
+        UPDATE payment_accounts
+           SET is_current = null
+             , authorized = false
+         WHERE id = %s
+    """, (event.account,))
+
 else:
     raise response.error(500, "unknown event object type %r" % event_object_type)
 

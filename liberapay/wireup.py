@@ -431,6 +431,7 @@ def stripe(app_conf):
     import stripe
     stripe.api_key = app_conf.stripe_secret_key
     stripe.api_version = '2019-08-14'
+    stripe.client_id = app_conf.stripe_connect_id
     stripe.max_network_retries = 2
 
 
