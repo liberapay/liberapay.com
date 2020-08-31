@@ -2653,3 +2653,6 @@ CREATE FUNCTION decrement_rate_limit(a_key text, cap int, period float) RETURNS 
     SELECT counter FROM updated;
 $$ LANGUAGE sql;
 DELETE FROM rate_limiting WHERE counter = 0;
+
+-- migration #132
+ALTER TABLE payment_accounts ADD COLUMN authorized boolean;

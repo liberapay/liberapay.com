@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '131'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '132'::jsonb);
 
 
 -- app configuration
@@ -432,6 +432,7 @@ CREATE TABLE payment_accounts
 , connection_ts         timestamptz     NOT NULL DEFAULT current_timestamp
 , pk                    bigserial       PRIMARY KEY
 , verified              boolean         NOT NULL
+, authorized            boolean
 , UNIQUE (participant, provider, country, is_current)
 , UNIQUE (provider, id, participant)
 );
