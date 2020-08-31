@@ -11,7 +11,7 @@ from postgres.orm import Model
 from psycopg2 import IntegrityError
 import xmltodict
 
-from ..constants import AVATAR_QUERY, RATE_LIMITS, SUMMARY_MAX_SIZE
+from ..constants import AVATAR_QUERY, DOMAIN_RE, RATE_LIMITS, SUMMARY_MAX_SIZE
 from ..cron import logger
 from ..elsewhere._exceptions import BadUserId, UserNotFound
 from ..exceptions import InvalidId, TooManyRequests
@@ -138,6 +138,30 @@ class AccountElsewhere(Model):
                  WHERE platform=%s AND domain=%s AND user_id=%s
              RETURNING elsewhere.*::elsewhere_with_participant
             """.format(cols, placeholders), vals+(i.platform, i.domain, i.user_id))
+
+        # Check for and handle a possible user_name reallocation
+        if i.user_name:
+            conflicts_with = cls.db.one("""
+                SELECT e.*::elsewhere_with_participant
+                  FROM elsewhere e
+                 WHERE e.platform = %s
+                   AND e.domain = %s
+                   AND lower(e.user_name) = %s
+                   AND e.user_id <> %s
+            """, (i.platform, i.domain, i.user_name.lower(), i.user_id))
+            if conflicts_with is not None:
+                try:
+                    conflicts_with.refresh_user_info()
+                except (UnableToRefreshAccount, UserNotFound):
+                    cls.db.run("""
+                        UPDATE elsewhere
+                           SET user_name = null
+                         WHERE id = %s
+                           AND platform = %s
+                           AND domain = %s
+                           AND user_name = %s
+                    """, (conflicts_with.id, i.platform, i.domain, conflicts_with.user_name))
+            del conflicts_with
 
         account = update() if i.user_id else None
         if not account:
@@ -336,8 +360,14 @@ def get_account_elsewhere(website, state, api_lookup=True):
             uid = uid[1:]
     split = uid.rsplit('@', 1)
     uid, domain = split if len(split) == 2 else (uid, '')
-    if domain and platform.single_domain:
+    if bool(domain) == platform.single_domain:
         raise response.error(404)
+    try:
+        domain = domain.encode('idna').decode('ascii')
+    except UnicodeEncodeError as e:
+        raise response.error(404, str(e))
+    if domain and not DOMAIN_RE.match(domain):
+        raise response.error(404, "invalid domain name")
     try:
         account = AccountElsewhere._from_thing(key, platform.name, uid, domain)
     except UnknownAccountElsewhere:

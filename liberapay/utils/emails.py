@@ -524,7 +524,8 @@ def clean_up_emails():
            AND added_time < (current_timestamp - interval '1 year');
         UPDATE emails
            SET nonce = NULL
-         WHERE added_time < (current_timestamp - interval '1 year');
+         WHERE added_time < (current_timestamp - interval '1 year')
+           AND nonce IS NOT NULL;
     """)
 
 

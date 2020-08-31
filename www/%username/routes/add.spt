@@ -25,11 +25,11 @@ if request.method == 'POST':
                 'name': body.get('owner.name'),
             }
             source = create_source_from_token(
-                body['token'], one_off, None, owner_info, return_url
+                body.word('token'), one_off, None, owner_info, return_url
             )
             route = ExchangeRoute.attach_stripe_source(participant, source, one_off)
         else:
-            pm = stripe.PaymentMethod.retrieve(body['stripe_pm_id'])
+            pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
             si = stripe.SetupIntent.create(
                 confirm=True,
@@ -45,7 +45,7 @@ if request.method == 'POST':
                     raise NotImplementedError(si.next_action.type)
                 raise response.redirect(si.next_action.redirect_to_url.url)
     except stripe.error.StripeError as e:
-        raise response.error(e.http_status, _(
+        raise response.error(e.http_status or 500, _(
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
         ))

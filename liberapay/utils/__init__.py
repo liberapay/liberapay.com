@@ -497,6 +497,15 @@ def get_choice(d, k, choices, default=NO_DEFAULT):
     return r
 
 
+def word(mapping, k, pattern=r'^\w+$', unicode=False):
+    r = mapping[k]
+    if not r:
+        raise Response().error(400, "`%s` value %r is empty" % (k, r))
+    if not re.match(pattern, r, re.UNICODE if unicode else re.ASCII):
+        raise Response().error(400, "`%s` value %r contains forbidden characters" % (k, r))
+    return r
+
+
 FALSEISH = {'0', 'f', 'false', 'n', 'no'}
 TRUEISH = {'1', 't', 'true', 'y', 'yes'}
 
