@@ -76,7 +76,7 @@ else:
             platform=platform.display_name
         ) }}</p>
         % call auth_button(platform.name, 'connect')
-            {{ _("Connect {0} account", platform.display_name) }}
+            {{ _("Connect {platform_name} account", platform_name=platform.display_name) }}
         % endcall
     % elif not sess
         <p>{{ _(
@@ -84,7 +84,7 @@ else:
             platform=platform.display_name
         ) }}</p>
         % call auth_button(platform.name, 'connect')
-            {{ _("Connect {0} account", platform.display_name) }}
+            {{ _("Connect {platform_name} account", platform_name=platform.display_name) }}
         % endcall
     % else
         % if total_count > 0

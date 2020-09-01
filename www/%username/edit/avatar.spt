@@ -40,7 +40,7 @@ subhead = _("Avatar")
             ) }}</p>
             <p> </p>{# for spacing #}
             % call auth_button(src, 'connect', participant=participant)
-                {{ _("Connect {0} account", platform.display_name) }}
+                {{ _("Connect {platform_name} account", platform_name=platform.display_name) }}
             % endcall
         </div>
     % elif new_avatar_url == None
