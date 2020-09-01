@@ -86,6 +86,7 @@ if request.method == 'POST':
             out['renewal_mode'] > 0 and
             not out['is_funded'] and
             not out['is_pledge'] and
+            tippee.accepts_tips and
             out['pending_payins_count'] == 0
         )
         if awaiting_payment:

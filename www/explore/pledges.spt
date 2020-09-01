@@ -39,11 +39,11 @@ subhead = _("Unclaimed Donations")
 
 % block content
 
-<p>{{ _(
-    "Liberapay allows you to pledge to donate to people who haven't joined "
-    "the site yet. The donation will automatically start if they sign up "
-    "to receive it. We'll send you a notification when that happens."
-) }}</p>
+    <p>{{ _(
+        "Liberapay allows pledging to people who haven't joined the site yet. "
+        "No money is collected for pledges, they only become real donations when "
+        "the recipients join. Of course we notify the donors when that happens."
+    ) }}</p>
 
     <h3 class="banderole default">{{ _("Top pledges") }}</h3>
     % if pledgees

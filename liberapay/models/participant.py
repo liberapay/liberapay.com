@@ -57,7 +57,6 @@ from liberapay.exceptions import (
     UnableToDistributeBalance,
     UnableToSendEmail,
     UnexpectedCurrency,
-    UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
     UsernameContainsInvalidCharacters,
@@ -2328,7 +2327,7 @@ class Participant(Model, MixinTeam):
     def update_giving(self, cursor=None):
         # Update is_funded on tips
         tips = (cursor or self.db).all("""
-            SELECT t.*, p2.status AS tippee_status
+            SELECT t.*, p2.status AS tippee_status, p2.goal AS tippee_goal
               FROM current_tips t
               JOIN participants p2 ON p2.id = t.tippee
              WHERE t.tipper = %s
@@ -2354,10 +2353,9 @@ class Participant(Model, MixinTeam):
         """, dict(p_id=self.id)) is not None
         updated = []
         for tip in tips:
-            if tip.tippee_status == 'stub':
-                is_funded = has_donated_recently
-            else:
-                is_funded = tip.amount <= (tip.paid_in_advance or 0)
+            is_funded = tip.amount <= (tip.paid_in_advance or 0)
+            if tip.tippee_status == 'stub' or tip.tippee_goal == -1:
+                is_funded |= has_donated_recently
             if tip.is_funded == is_funded:
                 continue
             updated.append((cursor or self.db).one("""
@@ -2447,8 +2445,6 @@ class Participant(Model, MixinTeam):
             limits = DONATION_LIMITS[periodic_amount.currency][period]
             if periodic_amount < limits[0] or periodic_amount > limits[1]:
                 raise BadAmount(periodic_amount, period, limits)
-            if not tippee.accepts_tips:
-                raise UserDoesntAcceptTips(tippee.username)
             if amount.currency not in tippee.accepted_currencies_set:
                 raise BadDonationCurrency(tippee, amount.currency)
 

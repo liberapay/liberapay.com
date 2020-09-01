@@ -108,7 +108,6 @@ elif step == '2':
             # Donations/pledges
             donations = result['donations'] = []
             pledges = result['pledges'] = []
-            rejected_tips = result['rejected_tips'] = []
             for pi in data.pop('payment_instructions'):
                 email = pi['email_address']
                 tippee = Participant.from_email(email) if email else None
@@ -158,22 +157,19 @@ elif step == '2':
                     tippee = elsewhere.participant
                 if tippee == p:
                     continue
-                if tippee.accepts_tips:
-                    amount = Money(pi['amount'], 'USD')
-                    if amount == 0:
-                        continue
-                    if 'USD' not in tippee.accepted_currencies_set:
-                        amount = amount.convert(tippee.main_currency)
-                    d = p.set_tip_to(tippee, amount)
-                    if tippee.status == 'stub':
-                        d['platform'] = elsewhere.platform_data.display_name
-                        d['tippee_name'] = elsewhere.friendly_name
-                        pledges.append((pi, d))
-                    else:
-                        d['tippee_name'] = tippee.username
-                        donations.append((pi, d))
+                amount = Money(pi['amount'], 'USD')
+                if amount == 0:
+                    continue
+                if 'USD' not in tippee.accepted_currencies_set:
+                    amount = amount.convert(tippee.main_currency)
+                d = p.set_tip_to(tippee, amount)
+                if tippee.status == 'stub':
+                    d['platform'] = elsewhere.platform_data.display_name
+                    d['tippee_name'] = elsewhere.friendly_name
+                    pledges.append((pi, d))
                 else:
-                    rejected_tips.append((pi, tippee.id, tippee.username))
+                    d['tippee_name'] = tippee.username
+                    donations.append((pi, d))
         except Exception as e:
             result['donations'] = website.tell_sentry(e, state)['sentry_ident']
 
@@ -500,17 +496,6 @@ title = _("Migrating from Gratipay")
                 "user {name2}.",
                 money_amount=Money(**pledge['amount']), name=pi['name'], platform=platform,
                 elsewhere_platform=pledge['platform'],
-                name2=('<a href="/~%s">%s</a>'|safe % (pledge['tippee'], pledge['tippee_name'])),
-            ) }}</li>
-            % endif
-        % endfor
-        % for pi, tippee_id, tippee_username in result.rejected_tips
-            % if float(pi['amount']) > 0
-            <li class="not-ok-danger">{{ _(
-                "Your donation of {money_amount} per week to {name} on {platform} "
-                "was not recreated because {name2} has opted out of receiving "
-                "donations on Liberapay.",
-                money_amount=Money(pi['amount'], 'USD'), name=pi['name'], platform=platform,
                 name2=('<a href="/~%s">%s</a>'|safe % (pledge['tippee'], pledge['tippee_name'])),
             ) }}</li>
             % endif

@@ -155,7 +155,6 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         % endif
     % endif
 
-    % if participant.accepts_tips
     <h3>{{ _("History") }}</h3>
 
     <p>{{ _(
@@ -163,7 +162,15 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         username=participant.username,
         timespan_ago=to_age(participant.join_time)
     ) }}</p>
+    % if participant.status == 'closed'
+    <p>{{ _(
+        "{username} closed this account {timespan_ago}.",
+        username=participant.username,
+        timespan_ago=to_age(participant.closed_time)
+    ) }}</p>
+    % endif
 
+    % if participant.accepts_tips
     % if show_income
         <button class="btn btn-default" type="button"
                 data-charts="{{ participant.path('charts.json') }}"
