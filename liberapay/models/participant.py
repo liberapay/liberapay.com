@@ -3479,6 +3479,7 @@ class Participant(Model, MixinTeam):
         output = {
             'id': self.id,
             'username': self.username,
+            'display_name': self.public_name,
             'avatar': self.avatar_url,
             'kind': self.kind,
         }
@@ -3521,8 +3522,22 @@ class Participant(Model, MixinTeam):
             giving = None
         output['giving'] = giving
 
-        # Key: statements
-        output['statements'] = self.get_statement(self.get_statement_langs())
+        # Keys: summaries and statements
+        # Values: lists of dicts containing the user's texts in various languages
+        output['summaries'] = self.db.all("""
+            SELECT lang, content
+              FROM statements
+             WHERE participant = %s
+               AND type = 'summary'
+          GROUP BY lang, type
+        """, (self.id,), back_as=dict)
+        output['statements'] = self.db.all("""
+            SELECT lang, content
+              FROM statements
+             WHERE participant = %s
+               AND type = 'profile'
+          GROUP BY lang, type
+        """, (self.id,), back_as=dict)
 
         return output
 
