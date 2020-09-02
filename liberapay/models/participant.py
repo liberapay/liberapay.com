@@ -3529,14 +3529,12 @@ class Participant(Model, MixinTeam):
               FROM statements
              WHERE participant = %s
                AND type = 'summary'
-          GROUP BY lang, type
         """, (self.id,), back_as=dict)
         output['statements'] = self.db.all("""
             SELECT lang, content
               FROM statements
              WHERE participant = %s
                AND type = 'profile'
-          GROUP BY lang, type
         """, (self.id,), back_as=dict)
 
         return output
