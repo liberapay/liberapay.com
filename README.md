@@ -172,6 +172,10 @@ PostgreSQL is designed to prevent data loss, so it does a lot of synchronous dis
 
 Liberapay was built on top of [MangoPay](https://www.mangopay.com/) for payments, however they [kicked us out](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82) so we've shifted to integrating with multiple payment processors. We currently support [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/). However, support for Mangopay hasn't been completely removed yet.
 
+#### Testing Stripe webhooks
+
+You can forward Stripe's callbacks to your local Liberapay instance by running `make stripe-bridge`. The [stripe-cli](https://github.com/stripe/stripe-cli) program has to be installed for this to work.
+
 ### Modifying python dependencies
 
 All new dependencies need to be audited to check that they don't contain malicious code or security vulnerabilities.

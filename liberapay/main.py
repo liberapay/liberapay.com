@@ -24,7 +24,7 @@ from pando import json
 from pando.state_chain import render_response
 from pando.utils import maybe_encode
 
-from liberapay import utils, wireup
+from liberapay import utils
 from liberapay.billing.payday import Payday, create_payday_issue
 from liberapay.cron import Cron, Daily, Weekly
 from liberapay.exceptions import PayinMethodIsUnavailable, TooManyAttempts
@@ -108,14 +108,7 @@ del website.body_parsers[rp.media_type_json]
 # Wireup Algorithm
 # ================
 
-attributes_before = set(website.__dict__.keys())
-d = wireup.full_chain.run(**dict(website.__dict__, **rp.__dict__))
-d.pop('chain', None)
-d.pop('exception', None)
-d.pop('state', None)
-for k, v in d.items():
-    if k not in attributes_before:
-        website.__dict__[k] = v
+website.wireup()
 env = website.env
 tell_sentry = website.tell_sentry
 
