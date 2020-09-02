@@ -3521,6 +3521,9 @@ class Participant(Model, MixinTeam):
             giving = None
         output['giving'] = giving
 
+        # Key: statements
+        output['statements'] = self.get_statement(self.get_statement_langs())
+
         return output
 
     def path(self, path, query=''):
