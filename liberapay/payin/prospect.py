@@ -10,7 +10,7 @@ class PayinProspect:
     __slots__ = (
         'tips', 'provider', 'currency', 'period',
         'one_periods_worth', 'one_weeks_worth', 'one_months_worth', 'one_years_worth',
-        'twelve_years_worth',
+        'twenty_years_worth',
         'min_acceptable_amount', 'moderate_fee_amount', 'low_fee_amount', 'max_acceptable_amount',
         'min_proposed_amount', 'moderate_proposed_amount', 'low_fee_proposed_amount',
         'suggested_amounts',
@@ -42,7 +42,7 @@ class PayinProspect:
             tip.periodic_amount * PERIOD_CONVERSION_MAP[(tip.period, 'yearly')]
             for tip in tips
         ).round()
-        self.twelve_years_worth = self.one_years_worth * 12
+        self.twenty_years_worth = self.one_years_worth * 20
         if self.period == 'weekly':
             # For weekly donations we round up the monthly amount to 5 weeks.
             self.one_months_worth = (self.one_weeks_worth * 5).round()
@@ -62,7 +62,7 @@ class PayinProspect:
         self.low_fee_amount = standard_amounts['low_fee'][self.currency]
         self.max_acceptable_amount = min(
             standard_amounts['max_acceptable'][self.currency],
-            self.twelve_years_worth
+            self.twenty_years_worth
         )
         self.min_proposed_amount = max(
             self.round_to_period(self.min_acceptable_amount, threshold=0),
@@ -75,7 +75,7 @@ class PayinProspect:
                 self.one_months_worth,
                 self.one_periods_worth
             ),
-            self.twelve_years_worth
+            self.twenty_years_worth
         )
         self.low_fee_proposed_amount = min(
             max(

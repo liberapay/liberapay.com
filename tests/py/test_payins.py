@@ -191,9 +191,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_weeks_worth == tip_amount
         assert pp.one_months_worth == tip_amount * 5
         assert pp.one_years_worth == tip_amount * 52
-        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.twenty_years_worth == pp.one_years_worth * 20
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
-        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+        assert pp.suggested_amounts == [EUR('2.00'), EUR('10.00')]
 
     def test_minimum_monthly_EUR_tip(self):
         tip_amount = DONATION_LIMITS['EUR']['monthly'][0]
@@ -205,9 +205,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_weeks_worth == DONATION_LIMITS['EUR']['weekly'][0]
         assert pp.one_months_worth == tip_amount
         assert pp.one_years_worth == tip_amount * 12
-        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.twenty_years_worth == pp.one_years_worth * 20
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
-        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+        assert pp.suggested_amounts == [EUR('2.00'), EUR('10.00')]
 
     def test_minimum_yearly_EUR_tip(self):
         tip_amount = DONATION_LIMITS['EUR']['yearly'][0]
@@ -219,9 +219,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_weeks_worth == DONATION_LIMITS['EUR']['weekly'][0]
         assert pp.one_months_worth == (tip_amount / 12).round()
         assert pp.one_years_worth == tip_amount
-        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.twenty_years_worth == pp.one_years_worth * 20
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
-        assert pp.suggested_amounts == [pp.min_proposed_amount, pp.twelve_years_worth]
+        assert pp.suggested_amounts == [pp.min_proposed_amount, pp.twenty_years_worth]
 
     def test_small_weekly_USD_tip(self):
         tip_amount = STANDARD_TIPS['USD'][1].weekly
