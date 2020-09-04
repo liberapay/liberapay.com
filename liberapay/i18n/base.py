@@ -86,7 +86,7 @@ class Locale(babel.core.Locale):
     List = List
 
     def __init__(self, *a, **kw):
-        super(Locale, self).__init__(*a, **kw)
+        super().__init__(*a, **kw)
         self.currency_formats['amount_only'] = MONEY_AMOUNT_FORMAT
         delta_p = self.currency_formats['standard'].pattern
         minus_sign = self.number_symbols.get('minusSign', '-')

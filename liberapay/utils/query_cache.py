@@ -6,7 +6,7 @@ import time
 # ==========================
 
 
-class Entry(object):
+class Entry:
     """An entry in a QueryCache.
     """
 
@@ -22,7 +22,7 @@ class Entry(object):
         self.result = result
 
 
-class QueryCache(object):
+class QueryCache:
     """Implement a caching SQL post-processor.
 
     Instances of this object are callables that take two or more arguments. The

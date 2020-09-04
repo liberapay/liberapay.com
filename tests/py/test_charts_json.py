@@ -13,7 +13,7 @@ def today():
 class TestChartsJson(FakeTransfersHarness):
 
     def setUp(self):
-        super(TestChartsJson, self).setUp()
+        super().setUp()
 
         self.alice = self.make_participant('alice')
         self.bob = self.make_participant('bob')

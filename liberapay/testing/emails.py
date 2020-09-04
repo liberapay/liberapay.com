@@ -7,7 +7,7 @@ from liberapay.testing import Harness
 class EmailHarness(Harness):
 
     def setUp(self):
-        super(EmailHarness, self).setUp()
+        super().setUp()
         self.mailer_patcher = mock.patch.object(self.client.website.mailer, 'send')
         self.mailer = self.mailer_patcher.start()
         self.mailer.return_value = 1

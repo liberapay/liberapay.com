@@ -55,7 +55,7 @@ def stream_lines_from_file(f, request, response, maxlen=MAXLEN):
 
 payday_logs = {}
 
-class payday_pid(object):
+class payday_pid:
     file, lock = None, Lock()
 
 def serve_payday_log(payday_id, request, response):

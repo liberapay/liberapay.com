@@ -7,7 +7,7 @@ class Tests(Harness):
 
     @classmethod
     def setUpClass(cls):
-        super(Tests, cls).setUpClass()
+        super().setUpClass()
         cls.website._trusted_proxies = getattr(cls.website, 'trusted_proxies', None)
         cls.website.trusted_proxies = [
             [IPv4Network('10.0.0.0/8')],
@@ -17,7 +17,7 @@ class Tests(Harness):
     @classmethod
     def tearDownClass(cls):
         cls.website.trusted_proxies = cls.website._trusted_proxies
-        super(Tests, cls).tearDownClass()
+        super().tearDownClass()
 
     def request(self, forwarded_for, source, **kw):
         kw['HTTP_X_FORWARDED_FOR'] = forwarded_for

@@ -16,7 +16,7 @@ Daily = namedtuple('Daily', 'hour')
 Weekly = namedtuple('Weekly', 'weekday hour')
 
 
-class Cron(object):
+class Cron:
 
     def __init__(self, website):
         self.website = website
