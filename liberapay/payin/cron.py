@@ -306,7 +306,12 @@ def execute_scheduled_payins():
                 counts['renewal_unauthorized'] += 1
                 return
             if payin.status in ('failed', 'succeeded'):
-                payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
+                payer.notify(
+                    'payin_' + payin.status,
+                    payin=payin._asdict(),
+                    provider='Stripe',
+                    email_unverified_address=True,
+                )
                 counts['payin_' + payin.status] += 1
         else:
             db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))

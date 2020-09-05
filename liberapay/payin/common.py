@@ -823,6 +823,7 @@ def record_payin_refund(
             payin_ctime=payin.ctime,
             refund_amount=refund.amount,
             refund_reason=refund.reason,
+            email_unverified_address=True,
         )
     return refund
 
