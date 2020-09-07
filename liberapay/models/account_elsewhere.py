@@ -196,12 +196,15 @@ class AccountElsewhere(Model):
                     raise
 
         # Return account after propagating avatar_url to participant
+        avatar_url = account.avatar_url
+        if avatar_url and avatar_url.startswith('https://pbs.twimg.com/'):
+            avatar_url = 'https://nitter.net/pic/' + avatar_url[22:].replace('/', '%2F')
         account.participant.set_attributes(avatar_url=cls.db.one("""
             UPDATE participants
                SET avatar_url = coalesce(%s, avatar_url)
              WHERE id = %s
          RETURNING avatar_url
-        """, (account.avatar_url, account.participant.id)))
+        """, (avatar_url, account.participant.id)))
         return account
 
 

@@ -63,7 +63,7 @@ if is_team:
         <div class="panel-body">
             <div class="avatar-col">
                 <a class="account-link" href="{{ account.html_url}}">{{
-                    avatar_img(account, size=120)
+                    avatar_img(account.participant, size=120)
                 }}</a>
             </div>
             <div class="col-right">
@@ -169,7 +169,7 @@ if is_team:
                         % endset
                         <td>
                             <a href="{{ url }}" class="avatar-inline">
-                                {{ avatar_img(member, size=size) }}
+                                {{ avatar_img(member.participant, size=size) }}
                             </a>
                             <span class="block-xs">{{
                                 _("{0} opted out of Liberapay", friendly_name_link|safe) if declines_gifts else
