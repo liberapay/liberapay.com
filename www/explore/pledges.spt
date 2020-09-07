@@ -47,6 +47,10 @@ subhead = _("Unclaimed Donations")
 
     <h3 class="banderole default">{{ _("Top pledges") }}</h3>
     % if pledgees
+        <p class="alert alert-warning">{{ _(
+            "Please don't spam the people and projects listed below with messages "
+            "inviting them to join Liberapay or asking them why they haven't."
+        ) }}</p>
         <div class="inline-boxes">
         % for p in pledgees
             {{ profile_box_embedded_elsewhere(p) }}
