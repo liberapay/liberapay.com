@@ -189,11 +189,11 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
         assert pp.one_weeks_worth == tip_amount
-        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_months_worth == tip_amount * 5
         assert pp.one_years_worth == tip_amount * 52
-        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.twenty_years_worth == pp.one_years_worth * 20
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
-        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+        assert pp.suggested_amounts == [EUR('2.00'), EUR('10.00')]
 
     def test_minimum_monthly_EUR_tip(self):
         tip_amount = DONATION_LIMITS['EUR']['monthly'][0]
@@ -205,9 +205,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_weeks_worth == DONATION_LIMITS['EUR']['weekly'][0]
         assert pp.one_months_worth == tip_amount
         assert pp.one_years_worth == tip_amount * 12
-        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.twenty_years_worth == pp.one_years_worth * 20
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
-        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+        assert pp.suggested_amounts == [EUR('2.00'), EUR('10.00')]
 
     def test_minimum_yearly_EUR_tip(self):
         tip_amount = DONATION_LIMITS['EUR']['yearly'][0]
@@ -219,9 +219,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_weeks_worth == DONATION_LIMITS['EUR']['weekly'][0]
         assert pp.one_months_worth == (tip_amount / 12).round()
         assert pp.one_years_worth == tip_amount
-        assert pp.twelve_years_worth == pp.one_years_worth * 12
+        assert pp.twenty_years_worth == pp.one_years_worth * 20
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
-        assert pp.suggested_amounts == [pp.min_acceptable_amount, pp.twelve_years_worth]
+        assert pp.suggested_amounts == [pp.min_proposed_amount, pp.twenty_years_worth]
 
     def test_small_weekly_USD_tip(self):
         tip_amount = STANDARD_TIPS['USD'][1].weekly
@@ -231,10 +231,10 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
         assert pp.one_weeks_worth == tip_amount
-        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_months_worth == tip_amount * 5
         assert pp.one_years_worth == tip_amount * 52
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
-        assert pp.suggested_amounts == [USD('2.00'), USD('12.00')]
+        assert pp.suggested_amounts == [USD('2.00'), USD('13.00'), USD('48.00')]
 
     def test_small_monthly_USD_tip(self):
         tip_amount = USD('1.00')
@@ -247,7 +247,7 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_months_worth == tip_amount
         assert pp.one_years_worth == tip_amount * 12
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
-        assert pp.suggested_amounts == [USD('2.00'), USD('12.00')]
+        assert pp.suggested_amounts == [USD('2.00'), USD('12.00'), USD('48.00')]
 
     def test_small_yearly_USD_tip(self):
         tip_amount = USD('10.00')
@@ -260,7 +260,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_months_worth == USD('0.83')
         assert pp.one_years_worth == tip_amount
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
-        assert pp.suggested_amounts == [USD('10.00'), USD('12.00')]
+        assert pp.suggested_amounts == [
+            USD('10.00'), USD('20.00'), USD('50.00')
+        ]
 
     def test_medium_weekly_JPY_tip(self):
         tip_amount = STANDARD_TIPS['JPY'][2].weekly
@@ -270,10 +272,12 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
         assert pp.one_weeks_worth == tip_amount
-        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_months_worth == tip_amount * 5
         assert pp.one_years_worth == tip_amount * 52
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['JPY']
-        assert pp.suggested_amounts == [JPY('520'), JPY('1000'), JPY('6760')]
+        assert pp.suggested_amounts == [
+            JPY('650'), JPY('1690'), JPY('3380'), JPY('6760')
+        ]
 
     def test_medium_monthly_JPY_tip(self):
         tip_amount = JPY('500')
@@ -286,7 +290,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_months_worth == tip_amount
         assert pp.one_years_worth == tip_amount * 12
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['JPY']
-        assert pp.suggested_amounts == [JPY('500'), JPY('1000'), JPY('6000')]
+        assert pp.suggested_amounts == [
+            JPY('500'), JPY('1500'), JPY('3000'), JPY('6000')
+        ]
 
     def test_medium_yearly_JPY_tip(self):
         tip_amount = JPY('5000')
@@ -299,7 +305,7 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_months_worth == JPY('417')
         assert pp.one_years_worth == tip_amount
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['JPY']
-        assert pp.suggested_amounts == [JPY('5000')]
+        assert pp.suggested_amounts == [JPY('5000'), JPY('10000')]
 
     def test_large_weekly_EUR_tip(self):
         tip_amount = STANDARD_TIPS['EUR'][3].weekly
@@ -309,10 +315,10 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
         assert pp.one_weeks_worth == tip_amount
-        assert pp.one_months_worth == tip_amount * 4
+        assert pp.one_months_worth == tip_amount * 5
         assert pp.one_years_worth == tip_amount * 52
         assert pp.suggested_amounts == [
-            EUR('20.00'), EUR('65.00'), EUR('130.00'), EUR('260.00')
+            EUR('25.00'), EUR('65.00'), EUR('130.00'), EUR('260.00')
         ]
 
     def test_large_monthly_EUR_tip(self):
@@ -339,7 +345,7 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_weeks_worth == EUR('9.61')
         assert pp.one_months_worth == EUR('41.67')
         assert pp.one_years_worth == tip_amount
-        assert pp.suggested_amounts == [EUR('500.00')]
+        assert pp.suggested_amounts == [EUR('500.00'), EUR('1000.00')]
 
     def test_two_small_monthly_USD_tips(self):
         tip_amount = USD('1.00')
@@ -353,7 +359,9 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_months_worth == pp.one_periods_worth
         assert pp.one_years_worth == tip_amount * 24
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['USD']
-        assert pp.suggested_amounts == [USD('2.00'), USD('12.00')]
+        assert pp.suggested_amounts == [
+            USD('2.00'), USD('12.00'), USD('24.00'), USD('48.00')
+        ]
 
     def test_two_medium_yearly_KRW_tips(self):
         tip_amount = KRW('50000')
@@ -367,7 +375,7 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_months_worth == KRW('8333')
         assert pp.one_years_worth == pp.one_periods_worth
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['KRW']
-        assert pp.suggested_amounts == [KRW('100000')]
+        assert pp.suggested_amounts == [KRW('100000'), KRW('200000')]
 
     def test_two_very_different_EUR_tips(self):
         tip1 = self.alice.set_tip_to(self.bob, EUR('0.24'), period='weekly')
@@ -377,11 +385,11 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == EUR('4.86')
         assert pp.one_weeks_worth == pp.one_weeks_worth
-        assert pp.one_months_worth == pp.one_weeks_worth * 4
+        assert pp.one_months_worth == pp.one_weeks_worth * 5
         assert pp.one_years_worth == EUR('252.48')
         assert pp.low_fee_amount == PAYIN_AMOUNTS['stripe']['low_fee']['EUR']
         assert pp.suggested_amounts == [
-            EUR('19.40'), EUR('63.12'), EUR('126.24'), EUR('252.48')
+            EUR('24.25'), EUR('63.12'), EUR('126.24'), EUR('252.48')
         ]
 
     def test_three_very_different_EUR_tips(self):

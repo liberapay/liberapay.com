@@ -64,11 +64,15 @@ def convert_symbolic_amount(amount, target_currency, precision=2, rounding=ROUND
 
 class MoneyAutoConvertDict(defaultdict):
 
-    def __init__(self, *args, **kw):
-        super(MoneyAutoConvertDict, self).__init__(None, *args, **kw)
+    def __init__(self, *args, precision=2):
+        super().__init__(None, *args)
+        self.precision = precision
 
     def __missing__(self, currency):
-        r = Money(convert_symbolic_amount(self['EUR'].amount, currency, 1), currency)
+        r = Money(
+            convert_symbolic_amount(self['EUR'].amount, currency, self.precision),
+            currency
+        )
         self[currency] = r
         return r
 

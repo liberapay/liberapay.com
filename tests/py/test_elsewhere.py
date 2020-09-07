@@ -273,7 +273,7 @@ class TestElsewhere(EmailHarness):
             "SELECT * FROM scheduled_payins WHERE payer = %s", (bob.id,)
         )
         assert len(scheduled_payins) == 1
-        assert scheduled_payins[0].amount == EUR('400.00')
+        assert scheduled_payins[0].amount == EUR('500.00')
         assert scheduled_payins[0].automatic is True
 
         # check that the notification isn't sent again
