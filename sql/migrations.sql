@@ -2659,5 +2659,5 @@ ALTER TABLE payment_accounts ADD COLUMN authorized boolean;
 
 -- migration #133
 UPDATE participants
-   SET avatar_url = 'https://nitter.net/pic/' || regexp_replace(substr(avatar_url, 23), '/', '%2F')
+   SET avatar_url = 'https://nitter.net/pic/' || regexp_replace(substr(avatar_url, 23), '/', '%2F', 'g')
  WHERE avatar_url LIKE 'https://pbs.twimg.com/%';
