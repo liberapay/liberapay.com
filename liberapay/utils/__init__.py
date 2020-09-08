@@ -14,7 +14,6 @@ from urllib.parse import quote as urlquote
 from pando import Response, json
 from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
-from postgres.cursors import SimpleCursorBase
 
 from liberapay.constants import SAFE_METHODS
 from liberapay.elsewhere._paginators import _modify_query
@@ -222,22 +221,6 @@ def b64encode_s(s):
             prefix = b'.'
     r = prefix + b64encode(s, b'-_').replace(b'=', b'~')
     return r.decode('ascii')
-
-
-def _execute(this, sql, params=[]):
-    print(sql.strip(), params)
-    super(SimpleCursorBase, this).execute(sql, params)
-
-def log_cursor(f):
-    "Prints sql and params to stdout. Works globaly so watch for threaded use."
-    def wrapper(*a, **kw):
-        try:
-            SimpleCursorBase.execute = _execute
-            ret = f(*a, **kw)
-        finally:
-            del SimpleCursorBase.execute
-        return ret
-    return wrapper
 
 
 def excerpt_intro(text, length=175):
