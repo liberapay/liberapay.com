@@ -345,6 +345,8 @@ class AccountElsewhere(Model):
                        AND missing_since IS NULL
                 """, (self.id,))
             raise
+        if info.user_id is None:
+            raise UnableToRefreshAccount("user_id is None")
         return self.upsert(info)
 
 
@@ -425,9 +427,13 @@ def refetch_elsewhere_data():
     website.db.hit_rate_limit(rl_prefix, rl_key)
     logger.debug("Refetching data of %r" % account)
     try:
-        account.refresh_user_info()
+        account2 = account.refresh_user_info()
     except (UnableToRefreshAccount, UserNotFound) as e:
         logger.debug("The refetch failed: %s" % e)
         return
+    if account2.id != account.id:
+        raise UnableToRefreshAccount(f"IDs don't match: {account2.id} != {account.id}")
+    if account2.info_fetched_at < (utcnow() - timedelta(days=90)):
+        raise UnableToRefreshAccount("info_fetched_at is still far in the past")
     # The update was successful, clean up the rate_limiting table
     website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))
