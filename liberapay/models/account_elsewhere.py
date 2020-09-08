@@ -416,7 +416,7 @@ def refetch_elsewhere_data():
          WHERE e.info_fetched_at < now() - interval '90 days'
            AND (e.missing_since IS NULL OR e.missing_since > (current_timestamp - interval '30 days'))
            AND (p.status = 'active' OR p.receiving > 0)
-           AND (e.token IS NOT NULL OR e.platform <> 'google')
+           AND e.platform NOT IN ('facebook', 'google', 'youtube')
            AND check_rate_limit(%s || e.id::text, %s, %s)
       ORDER BY e.info_fetched_at ASC
          LIMIT 1
