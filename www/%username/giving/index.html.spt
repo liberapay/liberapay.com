@@ -365,7 +365,7 @@ next_payday = compute_next_payday_date()
             <div class="card card-default card-xs-vanish donation">
                 <div class="recipient">
                     <div class="col-1"><a href="{{ e.liberapay_path }}">{{
-                        avatar_img(e, size=72)
+                        avatar_img(e.participant, size=72)
                     }}</a></div>
                     <div class="col-2">
                         <a class="username" href="{{ e.liberapay_path }}">
@@ -491,7 +491,7 @@ next_payday = compute_next_payday_date()
         <div class="card card-default card-xs-vanish donation">
             <div class="recipient">
                 <div class="col-1"><a href="{{ e.liberapay_path }}">{{
-                    avatar_img(e, size=72)
+                    avatar_img(e.participant, size=72)
                 }}</a></div>
                 <div class="col-2">
                     <a class="username" href="{{ e.liberapay_path }}">
