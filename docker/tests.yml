@@ -5,7 +5,7 @@ services:
         extends:
             file: common.yml
             service: web
-        entrypoint: honcho run -e defaults.env,tests/test.env,docker/tests.env,tests/local.env ./docker/runtests
+        entrypoint: python3 cli/run.py -e defaults.env,tests/test.env,docker/tests.env,tests/local.env ./docker/runtests
         links:
             - test_db
     test_db:

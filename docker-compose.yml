@@ -6,7 +6,7 @@ services:
             file: docker/common.yml
             service: web
         command: python3 app.py
-        entrypoint: honcho run -e defaults.env,docker/defaults.env,local.env
+        entrypoint: python3 cli/run.py -e defaults.env,docker/defaults.env,local.env
         links:
             - db
         ports:
