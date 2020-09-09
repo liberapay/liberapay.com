@@ -16,7 +16,7 @@ class BrowseTestHarness(Harness):
 
     @classmethod
     def setUpClass(cls):
-        super(BrowseTestHarness, cls).setUpClass()
+        super().setUpClass()
         i = len(cls.client.www_root)
         def f(spt):
             if spt[spt.rfind('/')+1:].startswith('index.'):

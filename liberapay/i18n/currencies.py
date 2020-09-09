@@ -117,7 +117,7 @@ Money.zero = lambda m: Money.ZEROS[m.currency]
 Money.ZEROS = _Zeros()
 
 
-class MoneyBasket(object):
+class MoneyBasket:
 
     __slots__ = ('amounts', '__dict__')
 

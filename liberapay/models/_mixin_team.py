@@ -18,7 +18,7 @@ class MemberLimitReached(Exception): pass
 class InactiveParticipantAdded(Exception): pass
 
 
-class MixinTeam(object):
+class MixinTeam:
 
     def invite(self, invitee, inviter):
         assert self.kind == 'group'

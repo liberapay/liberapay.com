@@ -35,7 +35,7 @@ class NoPayday(Exception):
     __str__ = lambda self: "No payday found where one was expected."
 
 
-class Payday(object):
+class Payday:
 
     @classmethod
     def start(cls, public_log=''):

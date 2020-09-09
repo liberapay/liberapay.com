@@ -23,7 +23,7 @@ from liberapay.utils.emails import (
 )
 
 
-class _ANON(object):
+class _ANON:
     ANON = True
     is_admin = False
     session = None

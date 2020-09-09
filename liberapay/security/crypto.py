@@ -55,7 +55,7 @@ class CryptoWarning(Warning):
     "For when a cryptographic function is being used in a potentially unsafe way."
 
 
-class Cryptograph(object):
+class Cryptograph:
     """Symmetric encryption and decryption for the storage of sensitive data.
 
     We currently rely on Fernet, which was the algorithm adopted by Gratipay:

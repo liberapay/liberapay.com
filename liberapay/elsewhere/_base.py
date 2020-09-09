@@ -36,7 +36,7 @@ class APIEndpoint(str):
         pass
 
 
-class UserInfo(object):
+class UserInfo:
     """A simple container for a user's info.
 
     Accessing a non-existing attribute returns `None`.
@@ -55,11 +55,11 @@ class UserInfo(object):
             self.__dict__[key] = value
 
 
-class RepoInfo(object):
+class RepoInfo:
     pass
 
 
-class Platform(object):
+class Platform:
 
     fontawesome_name = None
     has_teams = False

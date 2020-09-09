@@ -53,7 +53,7 @@ class FakeTransfersHarness(Harness):
     wallet_id_serial = itertools.count(1000000)
 
     def setUp(self):
-        super(FakeTransfersHarness, self).setUp()
+        super().setUp()
         self.transfer_patch = mock.patch('mangopay.resources.Transfer.save', autospec=True)
         _mock = self.transfer_patch.__enter__()
         _mock.side_effect = fake_transfer
@@ -66,7 +66,7 @@ class FakeTransfersHarness(Harness):
     def tearDown(self):
         self.transfer_patch.__exit__()
         self.wallet_patch.__exit__()
-        super(FakeTransfersHarness, self).tearDown()
+        super().tearDown()
 
 
 def make_mangopay_account(FirstName):

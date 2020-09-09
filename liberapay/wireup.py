@@ -112,7 +112,7 @@ def crypto():
     return {'cryptograph': Cryptograph()}
 
 
-class NoDB(object):
+class NoDB:
 
     def __getattr__(self, attr):
         raise NeedDatabase()
@@ -206,7 +206,7 @@ def database(env, tell_sentry):
     return {'db': db, 'db_qc1': qc1, 'db_qc5': qc5}
 
 
-class AppConf(object):
+class AppConf:
 
     fields = dict(
         app_name=str,
@@ -558,7 +558,7 @@ def make_sentry_teller(env, version):
     return {'tell_sentry': tell_sentry}
 
 
-class PlatformRegistry(object):
+class PlatformRegistry:
     """Registry of platforms we support.
     """
 
