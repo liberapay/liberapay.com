@@ -1619,6 +1619,7 @@ class Participant(Model, MixinTeam):
                 liberapay_username=elsewhere.participant.username,
                 tippee_id=elsewhere.participant.id,
                 scheduled_payin=sp,
+                email_unverified_address=bool(sp),
             )
             if sp:
                 cls.db.run("""

@@ -45,8 +45,10 @@ class AccountElsewhere(Model):
         self.platform_data = getattr(website.platforms, self.platform)
 
     def __repr__(self):
-        return '<AccountElsewhere id=%i platform=%r user_name=%r>' % (
-            self.id, self.platform, self.user_name
+        return '<AccountElsewhere #%i %s:%s (participant ~%i)>' % (
+            self.id, self.platform,
+            self.address if self.domain else self.user_name or self.user_id,
+            self.participant.id,
         )
 
 
@@ -325,13 +327,13 @@ class AccountElsewhere(Model):
                 sess = None
         # We don't have a valid user token, try a non-authenticated request
         if getattr(self.platform_data, 'api_requires_user_token', False):
-            raise UnableToRefreshAccount(self.id, self.platform)
+            raise UnableToRefreshAccount("user token required but missing")
         if self.user_id and hasattr(self.platform_data, 'api_user_info_path'):
             type_of_id, id_value = 'user_id', self.user_id
         elif self.user_name and hasattr(self.platform_data, 'api_user_name_info_path'):
             type_of_id, id_value = 'user_name', self.user_name
         else:
-            raise UnableToRefreshAccount(self.id, self.platform)
+            raise UnableToRefreshAccount("user_id and user_name lookups are both impossible")
         try:
             info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
         except UserNotFound:
@@ -343,6 +345,8 @@ class AccountElsewhere(Model):
                        AND missing_since IS NULL
                 """, (self.id,))
             raise
+        if info.user_id is None:
+            raise UnableToRefreshAccount("user_id is None")
         return self.upsert(info)
 
 
@@ -412,7 +416,7 @@ def refetch_elsewhere_data():
          WHERE e.info_fetched_at < now() - interval '90 days'
            AND (e.missing_since IS NULL OR e.missing_since > (current_timestamp - interval '30 days'))
            AND (p.status = 'active' OR p.receiving > 0)
-           AND (e.token IS NOT NULL OR e.platform <> 'google')
+           AND e.platform NOT IN ('facebook', 'google', 'youtube')
            AND check_rate_limit(%s || e.id::text, %s, %s)
       ORDER BY e.info_fetched_at ASC
          LIMIT 1
@@ -421,14 +425,15 @@ def refetch_elsewhere_data():
         return
     rl_key = str(account.id)
     website.db.hit_rate_limit(rl_prefix, rl_key)
-    logger.debug(
-        "Refetching data of %s account %s (participant %i)" %
-        (account.platform, account.user_id, account.participant.id)
-    )
+    logger.debug("Refetching data of %r" % account)
     try:
-        account.refresh_user_info()
+        account2 = account.refresh_user_info()
     except (UnableToRefreshAccount, UserNotFound) as e:
         logger.debug("The refetch failed: %s" % e)
         return
+    if account2.id != account.id:
+        raise UnableToRefreshAccount(f"IDs don't match: {account2.id} != {account.id}")
+    if account2.info_fetched_at < (utcnow() - timedelta(days=90)):
+        raise UnableToRefreshAccount("info_fetched_at is still far in the past")
     # The update was successful, clean up the rate_limiting table
     website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))

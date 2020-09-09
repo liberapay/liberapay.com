@@ -46,7 +46,12 @@ if event_object_type == 'charge':
     payin = settle_charge(website.db, payin, charge)
     if status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
         payer = Participant.from_id(payin.payer)
-        payer.notify('payin_' + payin.status, payin=payin._asdict(), provider='Stripe')
+        payer.notify(
+            'payin_' + payin.status,
+            payin=payin._asdict(),
+            provider='Stripe',
+            email_unverified_address=True,
+        )
 
 elif event_object_type == 'charge.dispute':
     dispute = event.data.object
