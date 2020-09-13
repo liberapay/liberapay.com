@@ -2126,19 +2126,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "Tento účet je dočasne pozastavený, príspevky pre neho nebudú spracované."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
 msgstr ""
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "{0} dostáva {1} za týždeň. Pomôžte mu dosiahnuť jeho cieľ ({2} za týždeň)."
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "{username} dostáva {income_amount} za týždeň. Pomôžte mu dosiahnuť jeho cieľ ({goal_amount} za týždeň)."
 
 msgid "Be the first to contribute!"
 msgstr "Buďte prvý, kto prispeje!"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "{0} dostáva {1} za týždeň."
+msgid "{username} currently receives {money_amount} per week."
+msgstr "{username} dostáva {money_amount} za týždeň."
 
 msgid "Recipient Identity"
 msgstr "Totožnosť príjemcu"
@@ -5196,7 +5196,8 @@ msgstr[2] "Môžete pripojiť svoj účet k účtom, ktoré vlastníte na {platf
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Môžete ľahko vyhľadať repozitáre do ktorých prispievate na {platforms_list}."
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay Vám umožní prisľúbiť príspevok ľuďom, ktorí sa ešte na stránku neprihlásili. Príspevok sa uskutoční automaticky keď sa obdarovaný prihlási a my Vás jeho prihlásenie upozorníme."
 
 msgid "Sponsors"
@@ -5465,8 +5466,8 @@ msgstr[2] "{0} je tím s {n} verejnými členmi"
 msgid "Explore unclaimed donations"
 msgstr "Prehliadať nepriradené dary"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "Táto stránka je priradený {platform} používateľovi {user_name}:"
 
 msgid "No description available."
@@ -5498,7 +5499,8 @@ msgstr "Pokiaľ ste {username} na {platform}, môžete odomknúť Váš účet a
 msgid "Unlock"
 msgstr "Odblokovať"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "Môžete darovať priamo ľuďom v tíme:"
 
 #, python-brace-format
@@ -5518,8 +5520,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0} ešte nezačal používať Liberapay"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "Ste {0}?"
+msgid "Are you {user_name}?"
+msgstr "Ste {user_name}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."

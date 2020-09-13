@@ -2105,19 +2105,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "Questo conto è temporaneamente sospeso, le donazioni verso di esso non verranno elaborate."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr "Attualmente {0} riceve {1} a settimana. Ha già raggiunto il suo obiettivo di finanziamento ({2} a settimana), ma la tua donazione sarebbe comunque di aiuto."
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
+msgstr "Attualmente {username} riceve {income_amount} a settimana. Ha già raggiunto il suo obiettivo di finanziamento ({goal_amount} a settimana), ma la tua donazione sarebbe comunque di aiuto."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "Attualmente {0} riceve {1} a settimana, ha bisogno del tuo aiuto per raggiungere il suo obiettivo di finanziamento ({2} a settimana)."
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "Attualmente {username} riceve {income_amount} a settimana, ha bisogno del tuo aiuto per raggiungere il suo obiettivo di finanziamento ({goal_amount} a settimana)."
 
 msgid "Be the first to contribute!"
 msgstr "Contribuisci per primo!"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "{0} attualmente riceve {1} a settimana."
+msgid "{username} currently receives {money_amount} per week."
+msgstr "{username} attualmente riceve {money_amount} a settimana."
 
 msgid "Recipient Identity"
 msgstr "Identità del ricevente"
@@ -5125,7 +5125,8 @@ msgstr[1] "Nel tuo profilo Liberapay puoi collegare i tuoi profili {platform1}, 
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Nel tuo profilo puoi anche elencare facilmente i repository {platforms_list} a cui contribuisci."
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay permette di impegnarti a donare a persone che non si sono ancora unite al sito. Quando si iscrivono, la donazione verrà avviata automaticamente. Ti invieremo una notifica quando ciò accade."
 
 msgid "Sponsors"
@@ -5389,8 +5390,8 @@ msgstr[1] "{0} è una squadra con {n} membri pubblici"
 msgid "Explore unclaimed donations"
 msgstr "Esplora le donazioni non riscosse"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "Questa pagina è dedicata all'utente {user_name} della piattaforma {platform}:"
 
 msgid "No description available."
@@ -5421,7 +5422,8 @@ msgstr "Se sei {username} su {platform}, puoi sbloccare il tuo conto per permett
 msgid "Unlock"
 msgstr "Sblocca"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "Puoi donare direttamente ai membri della squadra:"
 
 #, python-brace-format
@@ -5441,8 +5443,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0} non si è ancora unito/a a Liberapay"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "Sei {0} ?"
+msgid "Are you {user_name}?"
+msgstr "Sei {user_name} ?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."

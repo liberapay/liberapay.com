@@ -2105,19 +2105,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "Denne konto er midlertidigt suspenderet, donationer til den bliver ikke behandlet."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr "{0} får på nuværende tidspunkt {1} per uge. De har allerede nået deres finansieringsmål ({2} per uge), men din donation vil stadig hjælpe dem."
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
+msgstr "{username} får på nuværende tidspunkt {income_amount} per uge. De har allerede nået deres finansieringsmål ({goal_amount} per uge), men din donation vil stadig hjælpe dem."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "{0} Modtager {1} hver uge, de har brug for din hjælp til at nå deres finansieringsmål ({2} hver uge)."
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "{username} Modtager {income_amount} hver uge, de har brug for din hjælp til at nå deres finansieringsmål ({goal_amount} hver uge)."
 
 msgid "Be the first to contribute!"
 msgstr "Vær den første til at bidrage!"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "{0} Modtager {1} hver uge."
+msgid "{username} currently receives {money_amount} per week."
+msgstr "{username} Modtager {money_amount} hver uge."
 
 msgid "Recipient Identity"
 msgstr "Modtagers Identitet"
@@ -5124,7 +5124,8 @@ msgstr[1] "Du kan linke til din profil fra konti du ejer på {platform1}, {platf
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Du kan også nemt skrive på din profil de repositories, du bidrager til på {platforms_list}."
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay tillader dig at give et donationstilbud til folk der endnu ikke har tilmeldt sig sitet. Donationen vil automatisk starte hvis de melder sig ind. Vi sender dig en meddelelse når det sker."
 
 msgid "Sponsors"
@@ -5388,8 +5389,8 @@ msgstr[1] "{0} er et team med {n} offentlige medlemmer"
 msgid "Explore unclaimed donations"
 msgstr "Undersøg ikke hævede donationer"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "Denne side er dedikeret til {platform}-brugeren {user_name}:"
 
 msgid "No description available."
@@ -5420,7 +5421,8 @@ msgstr "Hvis du er {username} på {platform}, kan du åbne din konto og derved t
 msgid "Unlock"
 msgstr "Lås op"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "Du kan donere direkte til teamets medlemmer:"
 
 #, python-brace-format
@@ -5440,8 +5442,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0} har ikke tilsluttet sig Liberapay endnu"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "Er du {0}?"
+msgid "Are you {user_name}?"
+msgstr "Er du {user_name}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."

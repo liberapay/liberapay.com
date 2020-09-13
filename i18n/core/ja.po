@@ -2086,19 +2086,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "このアカウントは一時的に停止されています。このアカウントに対する寄付は処理されません。"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr "{0} は現在、1 週間あたり {1} を受け取っています。資金調達目標（1 週間あたり {2}）は達成済みですが、あなたの支援が力になります。"
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
+msgstr "{username} は現在、1 週間あたり {income_amount} を受け取っています。資金調達目標（1 週間あたり {goal_amount}）は達成済みですが、あなたの支援が力になります。"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "{0} は現在、1 週間あたり {1} を受け取っていますが、資金調達目標（1 週間あたり {2}）を達成するには、あなたの支援が必要です。"
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "{username} は現在、1 週間あたり {income_amount} を受け取っていますが、資金調達目標（1 週間あたり {goal_amount}）を達成するには、あなたの支援が必要です。"
 
 msgid "Be the first to contribute!"
 msgstr "最初の貢献者になりましょう！"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "{0} さんは現在 1 週間あたり {1} を受け取っています。"
+msgid "{username} currently receives {money_amount} per week."
+msgstr "{username} さんは現在 1 週間あたり {money_amount} を受け取っています。"
 
 msgid "Recipient Identity"
 msgstr "受領者の身分証明"
@@ -5059,7 +5059,8 @@ msgstr[0] "ご自身のプロフィールを {platform1} や、{platform2}、{pl
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "また、{platforms_list} で貢献しているリポジトリをプロフィールに簡単に掲載することもできます。"
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay では、Liberapay に参加していない人に寄付の約束をすることも可能です。その人がサインアップしてお金を受け取ると寄付が自動的に始まります。その際あなたに通知が送信されます。"
 
 msgid "Sponsors"
@@ -5315,8 +5316,8 @@ msgstr[0] "{0} は {n} 人の公開メンバーがいるチームです"
 msgid "Explore unclaimed donations"
 msgstr "未請求の寄付を探す"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "これは {platform} のユーザー {user_name} 専用のページです。"
 
 msgid "No description available."
@@ -5346,7 +5347,8 @@ msgstr "{platform} の {username} である場合、ロックを解除して Lib
 msgid "Unlock"
 msgstr "ロックを解除"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "チームのメンバーに直接寄付できます："
 
 #, python-brace-format
@@ -5366,8 +5368,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0} はまだ Liberapay に参加していません"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "{0} ですか？"
+msgid "Are you {user_name}?"
+msgstr "{user_name} ですか？"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."

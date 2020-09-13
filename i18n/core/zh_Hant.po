@@ -2086,19 +2086,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "這個帳戶暫時被停權，因此目前無法受理捐款事宜。"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr "{0}目前每週接獲{1}之金額，他們已達成其每週籌資{2}之目標，但您的捐款仍對他們大有幫助。"
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
+msgstr "{username}目前每週接獲{income_amount}之金額，他們已達成其每週籌資{goal_amount}之目標，但您的捐款仍對他們大有幫助。"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "{0}目前每週收到{1}，他們需要你的幫助來達到他們的籌款目標（每週{2}）。"
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "{username}目前每週收到{income_amount}，他們需要你的幫助來達到他們的籌款目標（每週{goal_amount}）。"
 
 msgid "Be the first to contribute!"
 msgstr "成為第一個贊助者！"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "{0}目前每週收到{1}。"
+msgid "{username} currently receives {money_amount} per week."
+msgstr "{username}目前每週收到{money_amount}。"
 
 msgid "Recipient Identity"
 msgstr "收款者身分"
@@ -5058,7 +5058,8 @@ msgstr[0] "您可以在 {platform1} ，{platform2} ，{platform3} 和 {n} 個其
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "您还可以轻松地在您的个人资料上列出您在{platforms_list}上贡献的存储库."
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay 可讓用戶承諾捐助那些尚未加入本站的人員。如果他們一旦完成註冊，這些捐款會自動地轉交給他們。我們也會傳送通知給原捐款人知道。"
 
 msgid "Sponsors"
@@ -5314,8 +5315,8 @@ msgstr[0] "{0} 團隊有 {n} 公開成員"
 msgid "Explore unclaimed donations"
 msgstr "查看未主脹的捐款"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "本頁是給{platform}用戶{user_name}的："
 
 msgid "No description available."
@@ -5345,7 +5346,8 @@ msgstr "如果你是在 {platform}的 {username}，你可以解解鎖帳戶好�
 msgid "Unlock"
 msgstr "解鎖"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "你可以直接捐款給各團隊成員："
 
 #, python-brace-format
@@ -5365,8 +5367,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0}未加入Liberapay"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "你是 {0}？"
+msgid "Are you {user_name}?"
+msgstr "你是 {user_name}？"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."

@@ -2107,19 +2107,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "Acest cont este suspendat temporar, donațiile către el nu vor fi procesate."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
 msgstr ""
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "{0} primește momentan {1} pe săptămână, au nevoie de ajutorul dumneavoastră pentru a atinge țelul de finanțare (de {2} pe săptămână)."
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "{username} primește momentan {income_amount} pe săptămână, au nevoie de ajutorul dumneavoastră pentru a atinge țelul de finanțare (de {goal_amount} pe săptămână)."
 
 msgid "Be the first to contribute!"
 msgstr "Fiți primul care contribuie!"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "{0} primește momentan {1} pe săptămână."
+msgid "{username} currently receives {money_amount} per week."
+msgstr "{username} primește momentan {money_amount} pe săptămână."
 
 msgid "Recipient Identity"
 msgstr "Identitatea beneficiarului"
@@ -5173,7 +5173,8 @@ msgstr[2] "Puteți conecta la profilul dumneavoastră conturile pe care le deți
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Puteți de asemenea lista pe profilul dumneavoastră depozitele la care contribuiți pe {platforms_list}."
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay vă permite să faceți un angajament că donați oamenilor care încă nu s-au alăturat sitului încă. Donațiile vor începe automat dacă ei se vor autentifica pentru a le primi. Vă vom trimite o notificare când se va întâmpla."
 
 msgid "Sponsors"
@@ -5442,8 +5443,8 @@ msgstr[2] "{0} este o echipă cu {n} de membri publici"
 msgid "Explore unclaimed donations"
 msgstr "Explorează donări nerevendicate"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "Această pagină este dedicată utilizatorului de {platform} cu numele {user_name}:"
 
 msgid "No description available."
@@ -5475,7 +5476,8 @@ msgstr "Dacă sunteți {username} pe {platform}, vă puteți debloca contul pent
 msgid "Unlock"
 msgstr "Deblochează"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "Puteți dona direct membrilor echipei:"
 
 #, python-brace-format
@@ -5495,8 +5497,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0} nu s-a alăturat la Liberapay încă"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "Sunteți {0}?"
+msgid "Are you {user_name}?"
+msgstr "Sunteți {user_name}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."

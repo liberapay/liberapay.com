@@ -2105,19 +2105,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "Akaun ini digantung buat sementara waktu, derma kepadanya tidak akan diproses."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr "{0} kini menerima {1} setiap minggu. Dia telah capai matlamat dananya ({2} setiap minggu), tetapi derma anda masih boleh membantunya."
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
+msgstr "{username} kini menerima {income_amount} setiap minggu. Dia telah capai matlamat dananya ({goal_amount} setiap minggu), tetapi derma anda masih boleh membantunya."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "{0} kini menerima {1} setiap minggu, mereka perlukan bantuan anda untuk mencapai matlamat dana mereka ({2} setiap minggu)."
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "{username} kini menerima {income_amount} setiap minggu, mereka perlukan bantuan anda untuk mencapai matlamat dana mereka ({goal_amount} setiap minggu)."
 
 msgid "Be the first to contribute!"
 msgstr "Jadilah yang pertama untuk menyumbang!"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "{0} kini menerima {1} setiap minggu."
+msgid "{username} currently receives {money_amount} per week."
+msgstr "{username} kini menerima {money_amount} setiap minggu."
 
 msgid "Recipient Identity"
 msgstr "Identiti Penerima"
@@ -5125,7 +5125,8 @@ msgstr[1] "Anda boleh memautkan profil anda dengan akaun yang anda miliki di {pl
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Anda juga boleh paparkan di profil anda senarai repositori yang anda menyumbang di {platforms_list}."
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay membolehkan anda berjanji untuk menderma kepada mereka yang belum sertai laman web ini. Derma akan mula diproses secara automatik apabila mereka mendaftar untuk menerimanya. Kami akan menghantar pemberitahuan apabila ia bermula."
 
 msgid "Sponsors"
@@ -5389,8 +5390,8 @@ msgstr[1] "{0} ialah kumpulan dengan {n} orang ahli awam"
 msgid "Explore unclaimed donations"
 msgstr "Teroka derma tidak dituntut"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "Halaman ini dikhususkan kepada pengguna {platform} {user_name}:"
 
 msgid "No description available."
@@ -5421,7 +5422,8 @@ msgstr "Jika anda ialah {username} di {platform}, anda boleh membuka akaun anda 
 msgid "Unlock"
 msgstr "Buka"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "Anda boleh menderma secara terus kepada ahli kumpulan:"
 
 #, python-brace-format
@@ -5441,8 +5443,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0} masih belum sertai Liberapay"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "Adakah anda {0}?"
+msgid "Are you {user_name}?"
+msgstr "Adakah anda {user_name}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."

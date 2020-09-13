@@ -2124,19 +2124,19 @@ msgid "This account is temporarily suspended, donations to it will not be proces
 msgstr "Цей обліковий запис тимчасово вимкнено, внески для нього не оброблятимуться."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week. They have already reached their funding goal ({2} per week), but your donation would still help them."
-msgstr "{0} наразі отримує {1} на тиждень. Вони вже досягли своєї мети фінансування ({2} на тиждень), але ваш внесок все одно допоможе їм."
+msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
+msgstr "{username} наразі отримує {income_amount} на тиждень. Вони вже досягли своєї мети фінансування ({goal_amount} на тиждень), але ваш внесок все одно допоможе їм."
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week, they need your help to reach their funding goal ({2} per week)."
-msgstr "{0} зараз отримує {1} на тиждень, вони потребують вашої допомоги для досягнення своєї мети фінансування ({2} на тиждень)."
+msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
+msgstr "{username} зараз отримує {income_amount} на тиждень, вони потребують вашої допомоги для досягнення своєї мети фінансування ({goal_amount} на тиждень)."
 
 msgid "Be the first to contribute!"
 msgstr "Будьте першими, хто зробить внесок!"
 
 #, python-brace-format
-msgid "{0} currently receives {1} per week."
-msgstr "Наразі {0} отримує {1} на тиждень."
+msgid "{username} currently receives {money_amount} per week."
+msgstr "Наразі {username} отримує {money_amount} на тиждень."
 
 msgid "Recipient Identity"
 msgstr "Ідентифікація отримувача"
@@ -5192,7 +5192,8 @@ msgstr[2] "Ви можете пов'язати ваш профіль зі сво
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "У своєму профілі ви також можете легко перерахувати сховища проєктів, в яких ви берете участь, на {platforms_list}."
 
-msgid "Liberapay allows you to pledge to donate to people who haven't joined the site yet. The donation will automatically start if they sign up to receive it. We'll send you a notification when that happens."
+#, fuzzy
+msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay дозволяє створювати зобов'язання допомогти людям, які ще не долучилися до сайту. Внесок буде зроблено автоматично, якщо вони зареєструються, щоб отримати його. Ми надішлемо вам повідомлення коли це станеться."
 
 msgid "Sponsors"
@@ -5461,8 +5462,8 @@ msgstr[2] "{0} - команда з {n} відкритими учасниками
 msgid "Explore unclaimed donations"
 msgstr "Переглянути невзяті внески"
 
-#, python-brace-format
-msgid "This page is dedicated to the {platform} user {user_name}:"
+#, fuzzy, python-brace-format
+msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "Ця сторінка присвячена користувачу {platform} з {user_name}:"
 
 msgid "No description available."
@@ -5494,7 +5495,8 @@ msgstr "Якщо ви {username} на {platform}, ви можете розбло
 msgid "Unlock"
 msgstr "Розблокувати"
 
-msgid "You can donate directly to the team's members:"
+#, fuzzy
+msgid "You can support individual team members:"
 msgstr "Ви можете робити пожертвування учасникам команди напряму:"
 
 #, python-brace-format
@@ -5514,8 +5516,8 @@ msgid "{0} hasn't joined Liberapay yet"
 msgstr "{0} ще не приєднався до Liberapay"
 
 #, python-brace-format
-msgid "Are you {0}?"
-msgstr "Ви {0}?"
+msgid "Are you {user_name}?"
+msgstr "Ви {user_name}?"
 
 #, python-brace-format
 msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
