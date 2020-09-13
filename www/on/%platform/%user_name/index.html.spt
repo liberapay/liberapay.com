@@ -14,10 +14,8 @@ if not account.domain:
     user_id, user_id_type = account.user_id, None
 else:
     user_id, user_id_type = account.address, 'user_name'
-locked = participant.goal == -1
+opted_out = not participant.accepts_tips
 is_team = account.is_team
-allow_team_connect = hasattr(platform, 'is_team_member')
-allow_pledges = not locked and (not is_team or allow_team_connect)
 
 if is_team:
     page_url = b64decode_s(request.qs.get('page', ''))
@@ -34,8 +32,6 @@ if is_team:
         team_description = ngettext("{0} is a team with {n} public member",
                                     "{0} is a team with {n} public members",
                                     nmembers, friendly_name)
-    if user.ANON:
-        allow_team_connect = False
 
 [-----------------------------------------------------------------------------]
 % from 'templates/macros/avatar-url.html' import avatar_img with context
@@ -53,9 +49,16 @@ if is_team:
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
     <p><a class="btn btn-default" href="/explore/pledges/">← {{ _("Explore unclaimed donations") }}</a></p>
+    <br>
 
     <p>{{ _(
-        "This page is dedicated to the {platform} user {user_name}:"
+        "Liberapay allows pledging to people who haven't joined the site yet. "
+        "No money is collected for pledges, they only become real donations when "
+        "the recipients join. Of course we notify the donors when that happens."
+    ) }}</p>
+
+    <p>{{ _(
+        "This page is for pledges to the {platform} user {user_name}:"
         , platform=platform.display_name
         , user_name=friendly_name
     ) }}</p>
@@ -91,95 +94,64 @@ if is_team:
     ) }}</div>
     % endif
 
+    % if opted_out
+        <p class="alert alert-warning">{{ _(
+            "{user_name} has indicated that they can't or don't want to join Liberapay. "
+            "You can still make a pledge to them below, but you should also consider "
+            "supporting them in other ways.",
+            user_name=friendly_name,
+        ) }}<br><br><strong>{{ _(
+            "Please don't send messages to {user_name} inviting them to join Liberapay "
+            "or asking them why they haven't.",
+            user_name=friendly_name,
+        ) }}</strong></p>
+    % endif
+
     <br>
     <div>
-        <h4 class="text-center">{{ _("Donate to {0}", friendly_name) }}</h4>
-
-        % if allow_pledges
-            <p>{{ _(
-                "Liberapay allows you to pledge to donate to people who haven't joined "
-                "the site yet. The donation will automatically start if they sign up "
-                "to receive it. We'll send you a notification when that happens."
-            ) }}</p>
-            {{ tip_form(tippee=account) }}
-        % elif locked
-            <div class="text-center">
-            <p>{{ _("{0} has opted out of Liberapay", friendly_name) }}</p>
-            % if is_team
-                <p>{{ _("If you are an administrator of this {0} team account, you can "
-                        "unlock it to allow people to pledge tips to your team on "
-                        "Liberapay.",
-                        platform.display_name) }}</p>
-            % else
-                <p>{{ _(
-                    "If you are {username} on {platform}, you can unlock your account "
-                    "to allow people to pledge to donate to you on Liberapay.",
-                    username='<a href="%s">%s</a>'|safe % (account.html_url, friendly_name),
-                    platform=platform.display_name
-                ) }}</p>
-            % endif
-
-            % call auth_button(platform.name, 'unlock', user_id, user_id_type)
-                {{ _("Unlock") }}
-            % endcall
-            </div>
-        % endif
+        <h4 class="text-center">{{ _("Pledge to {user_name}", user_name=friendly_name) }}</h4>
+        {{ tip_form(tippee=account) }}
     </div>
 
-    % if is_team and members and not locked
+    % if is_team and members
         <br><br>
         <div>
             <h4 class="text-center">{{ team_description }}</h4>
 
-            <p>{{ _("You can donate directly to the team's members:") }}</p>
+            <p>{{ _("You can support individual team members:") }}</p>
 
             <table id="members" class="table table-condensed text-center-xs">
             <tbody>
 
             % for member in members
                 % set on_liberapay = member.participant.status != 'stub'
-                % set declines_gifts = not member.participant.accepts_tips
-                % set size = 28 if declines_gifts else 72
+                % set accepts_tips = member.participant.accepts_tips
+                % set can_receive = member.participant.payment_providers > 0
+                % set size = 72 if accepts_tips else 28
                 <tr>
                     % if on_liberapay
-                        % set url = member.participant.path('')
-                        % set username_link
-                            <a href="{{ url }}">{{ member.participant.username }}</a>
-                        % endset
                         <td>
-                            <a href="{{ url }}" class="avatar-inline">
-                                {{ avatar_img(member.participant, size=size) }}
+                            <a href="{{ member.participant.path('') }}">
+                                <span class="avatar-inline">{{ avatar_img(member, size=size) }}</span>
+                                {{ member.participant.username }}
                             </a>
-                            <span class="block-xs">{{
-                                _("{0} declines donations", username_link|safe) if declines_gifts else
-                                _("{0} accepts donations", username_link|safe)
-                            }}</span>
-                            % if not declines_gifts
-                                <div class="inline-block pull-right no-float-xs line-height-{{ size }}">
-                                <a class="btn btn-donate btn-lg"
-                                   href="{{ member.participant.path('donate') }}"
-                                   >{{ _("Donate") }}</a>
-                                </div>
-                            % endif
+                            <div class="inline-block pull-right no-float-xs line-height-{{ size }}">
+                                <a class="btn btn-donate {{ 'btn-lg' if accepts_tips else '' }}"
+                                   href="{{ member.participant.path('donate') }}">{{
+                                    _("Donate") if accepts_tips and can_receive else _("Pledge")
+                                }}</a>
+                            </div>
                         </td>
                     % else
                         % set url = '/on/%s/%s/' % (platform.name, member.liberapay_slug)
-                        % set friendly_name_link
-                            <a href="{{ url }}">{{ member.friendly_name }}</a>
-                        % endset
                         <td>
-                            <a href="{{ url }}" class="avatar-inline">
-                                {{ avatar_img(member.participant, size=size) }}
+                            <a href="{{ url }}">
+                                <span class="avatar-inline">{{ avatar_img(member.participant, size=size) }}</span>
+                                {{ member.friendly_name }}
                             </a>
-                            <span class="block-xs">{{
-                                _("{0} opted out of Liberapay", friendly_name_link|safe) if declines_gifts else
-                                _("{0} hasn't joined Liberapay yet", friendly_name_link|safe)
-                            }}</span>
-                            % if not declines_gifts
-                                <div class="inline-block pull-right no-float-xs line-height-{{ size }}">
+                            <div class="inline-block pull-right no-float-xs line-height-{{ size }}">
                                 <a class="btn btn-donate" href="{{ url }}">{{ _("Pledge") }}</a>
-                                </div>
-                            % endif
+                            </div>
                         </td>
                     % endif
                 </tr>
@@ -195,57 +167,38 @@ if is_team:
         </div>
     % endif
 
-    % if not locked
     <br><br>
     <div class="text-center">
-        <h4>{{ _("Are you {0}?", friendly_name) }}</h4>
+        <h4>{{
+            _("Are you a member of the {team_name} team?", team_name=friendly_name) if is_team else
+            _("Are you {user_name}?", user_name=friendly_name)
+        }}</h4>
+        % call auth_button(platform.name, 'connect', user_id, user_id_type, btn_cls='btn btn-primary btn-lg')
+            {{ _("Connect your {platform} account", platform=platform.display_name) }}
+        % endcall
 
-        % if is_team and allow_team_connect
-            <p>{{ _("Are you an administrator of this {0} team account? Connect it "
-                    "to your Liberapay account.",
-                    platform.display_name) }}</p>
-            % call auth_button(platform.name, 'connect', user_id, user_id_type)
-                {{ _("Connect team account") }}
-            % endcall
-        % else
-            % if user.ANON
-                <p>{{ _("We never collect money for you unless you join.") }}</p>
-                % from "templates/macros/sign-in-link.html" import sign_in_link with context
-                {{ sign_in_link() }}
-                <br>
-            % else
-                <p>{{ _("Connect this {0} account to your Liberapay profile.",
-                        platform.display_name) }}</p>
-                % call auth_button(platform.name, 'connect', user_id, user_id_type)
-                    {{ _("Connect") }}
-                % endcall
-            % endif
-        % endif
-        % if user.ANON and allow_pledges
+        % if user.ANON and not opted_out
             <br>
-            <h5>{{ _("Don't like what you see?") }}</h5>
-
-            <p>{{ _("If you are an owner of this {0} account, you can explicitly opt "
-                    "out of Liberapay by locking it. We don't allow new pledges to "
-                    "locked accounts.",
-                    platform.display_name) }}</p>
-
+            <h5>{{ _("You can't or don't want to join Liberapay?") }}</h5>
+            <p>{{ _(
+                "You can “opt out” of Liberapay. People will still be able to pledge to you, "
+                "but a message will be displayed on this page informing everyone that you're "
+                "not planning to join and asking them not to send you messages about Liberapay.",
+                platform_name=platform.display_name
+            ) }}</p>
             % call auth_button(platform.name, 'lock', user_id, user_id_type, btn_cls='btn btn-danger')
-                {{ _("Lock") }}
+                {{ _("Opt out") }}
             % endcall
         % endif
     </div>
-    % endif
 
     % if user.ANON
         <br><br>
         <div class="text-center">
             <h4>{{ _("What is Liberapay?") }}</h4>
-
-            <p>{{ _("Liberapay is a way to thank and support your favorite artists, "
-                    "musicians, writers, programmers, etc. by setting up a small weekly "
-                    "cash gift to them.") }}
-            <a href="/about/">{{ _("Learn more") }}</a></p>
+            <p>{{ _("Liberapay is a recurrent donations platform.") }}</p>
+            <p>{{ _("We help you fund the creators and projects you appreciate.") }}</p>
+            <a href="/about/">{{ _("Learn more") }}</a>
         </div>
     % endif
 </div>

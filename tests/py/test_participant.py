@@ -9,7 +9,6 @@ from liberapay.exceptions import (
     NoSelfTipping,
     NoTippee,
     NonexistingElsewhere,
-    UserDoesntAcceptTips,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
     UsernameContainsInvalidCharacters,
@@ -461,12 +460,6 @@ class Tests(Harness):
         assert alice.giving == 0
 
     # pledging
-
-    def test_cant_pledge_to_locked_accounts(self):
-        alice = self.make_participant('alice')
-        bob = self.make_stub(goal=EUR(-1))
-        with self.assertRaises(UserDoesntAcceptTips):
-            alice.set_tip_to(bob, EUR('3.00'))
 
     def test_pledging_isnt_giving(self):
         alice = self.make_participant('alice', balance=EUR(100))

@@ -104,7 +104,7 @@ subhead = _("Repositories")
             platform=platform.display_name
         ) }}</p>
         % call auth_button(platform.name, 'connect', participant=participant)
-            {{ _("Connect {0} account", platform.display_name) }}
+            {{ _("Connect {platform_name} account", platform_name=platform.display_name) }}
         % endcall
     % else
         % if len(accounts) > 1

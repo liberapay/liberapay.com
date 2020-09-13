@@ -1,10 +1,7 @@
-from liberapay.exceptions import UserDoesntAcceptTips
 from liberapay.utils import get_participant
 
 [---]
 participant = get_participant(state, restrict=False)
-if participant.goal == -1:
-    raise UserDoesntAcceptTips(participant.username)
 
 full_title = _("Donate to {0} via Liberapay", participant.username)
 
@@ -29,37 +26,55 @@ full_title = _("Donate to {0} via Liberapay", participant.username)
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
     <h2>{{ _("Donate to {0}", ('<a href="/{0}">{0}</a>'|safe).format(participant.username)) }}</h2>
 
-    % if participant.is_suspended
+    % if not participant.accepts_tips
+    <p class="alert alert-warning">{{ _(
+        "{username} currently doesn't accept donations. You can pledge "
+        "to them, but you can't actually send them money.",
+        username=participant.username
+    ) }}</p>
+    % elif participant.is_suspended
     <p class="alert alert-danger">{{ _(
         "This account is temporarily suspended, donations to it will not be processed."
     ) }}</p>
     % endif
 
-    % if not participant.hide_receiving
+    % if not participant.accepts_tips
+        % if participant.npatrons
+        <p>{{ ngettext(
+            "{username} currently has {n} patron ready to support them.",
+            "{username} currently has {n} patrons ready to support them.",
+            n=participant.npatrons, username=participant.username,
+        ) }}</p>
+        % endif
+    % elif not participant.hide_receiving
         % set goal, receiving = participant.goal, participant.receiving
         % if goal
             % if receiving >= goal
             <p>{{ _(
-                "{0} currently receives {1} per week. They have already reached their funding "
-                "goal ({2} per week), but your donation would still help them."
-                , participant.username, receiving, goal
+                "{username} currently receives {income_amount} per week. They have "
+                "reached their funding goal ({goal_amount} per week), but your "
+                "donation would still help them."
+                , username=participant.username, income_amount=receiving
+                , goal_amount=goal
             ) }}</p>
             % elif receiving
             <p>{{ _(
-                "{0} currently receives {1} per week, they need your help to reach "
-                "their funding goal ({2} per week)."
-                , participant.username, receiving, goal
+                "{username} currently receives {income_amount} per week, they need "
+                "your help to reach their funding goal ({goal_amount} per week)."
+                , username=participant.username, income_amount=receiving
+                , goal_amount=goal
             ) }}</p>
             % else
             <p>{{ _(
-                "{0}'s goal is to receive {1} per week."
-                , participant.username, goal
-            ) }} {{ _("Be the first to contribute!") }}</p>
+                "{username}'s goal is to receive {money_amount} per week. "
+                "Be the first to contribute!"
+                , username=participant.username, money_amount=goal
+            ) }}</p>
             % endif
-        % else
+        % elif receiving
             <p>{{ _(
-                "{0} currently receives {1} per week."
-                , participant.username, receiving
+                "{username} currently receives {money_amount} per week."
+                , username=participant.username, money_amount=receiving
             ) }}</p>
         % endif
     % endif

@@ -9,7 +9,7 @@ from psycopg2.extras import execute_batch
 from ..constants import SEPA
 from ..exceptions import (
     AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended,
-    NoSelfTipping,
+    NoSelfTipping, UserDoesntAcceptTips,
 )
 from ..i18n.currencies import Money, MoneyBasket
 from ..utils import group_by
@@ -315,6 +315,8 @@ def prepare_donation(
 
     if payer.is_suspended:
         raise AccountSuspended(payer)
+    if not tippee.accepts_tips:
+        raise UserDoesntAcceptTips(tippee.username)
     if tippee.is_suspended:
         raise RecipientAccountSuspended(tippee)
 
