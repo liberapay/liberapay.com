@@ -254,7 +254,7 @@ title = "Users Admin"
         % if p.kind != 'community'
             <p>
             % if row.email
-                <strong>Email address:</strong> {{ row.email.address }}
+                <strong>Email address:</strong> <span class="break-word-anywhere">{{ row.email.address }}</span>
                 % if row.email.verified
                 <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
                 % elif row.email.blacklisted
