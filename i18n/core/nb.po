@@ -1502,25 +1502,6 @@ msgid "Print"
 msgstr "Skriv ut"
 
 #, python-brace-format
-msgid "Joined {timespan_ago}."
-msgstr "Ble med {timespan_ago}."
-
-#, python-brace-format
-msgid "Closed {timespan_ago}."
-msgstr "Lukket {timespan_ago}."
-
-#, python-brace-format
-msgid "{0} doesn't publish how much they give."
-msgstr "{0} har ikke offentliggjort hvor mye de gir."
-
-#, python-brace-format
-msgid "{0} gives {1} per week."
-msgstr "{0} gir {1} per uke."
-
-msgid "This user doesn't accept donations."
-msgstr "Denne brukeren godtar ikke donasjoner."
-
-#, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
 msgstr[0] "{0} har én kroneruller."
@@ -1737,14 +1718,14 @@ msgstr ""
 msgid "Members"
 msgstr "Medlemmer"
 
+msgid "First"
+msgstr "Første"
+
 msgid "Previous"
 msgstr "Forrige"
 
 msgid "Next"
 msgstr "Neste"
-
-msgid "First"
-msgstr "Første"
 
 msgid "Last"
 msgstr "Siste"
@@ -1962,11 +1943,11 @@ msgstr "Manuell fornyelse"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr ""
 
-msgid "Modify the donation"
-msgstr "Endre bidraget"
-
 msgid "Stop the donation"
 msgstr "Stopp donasjonen →"
+
+msgid "Cancel the pledge"
+msgstr "Avbryt donasjonstilbudet"
 
 #, python-brace-format
 msgid "You have uploaded {n} document of this type:"
@@ -2106,8 +2087,18 @@ msgstr "Doner til {0} via Liberapay"
 msgid "Support {username}'s work with a recurrent donation."
 msgstr "Støtt {username}s arbeide med en vedvarende donasjon."
 
+#, python-brace-format
+msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
+msgstr ""
+
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Denne kontoen er midlertidig avstengt, donasjoner til den vil ikke gå gjennom."
+
+#, python-brace-format
+msgid "{username} currently has {n} patron ready to support them."
+msgid_plural "{username} currently has {n} patrons ready to support them."
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2117,8 +2108,9 @@ msgstr "{username} mottar {income_amount} per uke. Vedkommende har allerede nåd
 msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
 msgstr "{username} mottar {income_amount} i uken, og trenger din hjelp for å nå finansieringsmålet sitt på {goal_amount} i uken."
 
-msgid "Be the first to contribute!"
-msgstr "Bli den første til å bidra!"
+#, python-brace-format
+msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
+msgstr ""
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2167,10 +2159,6 @@ msgstr "Din nye avatarnettadresse er: {0}"
 #, python-brace-format
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
 msgstr "Du har valgt {platform} som avatarkilde, men du har ikke koblet til noen {platform}-konto."
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Koble til {0}-konto"
 
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
@@ -2573,9 +2561,6 @@ msgstr "{bold}Total:{bold_end} {0} per uke ~ {1} per måned ~ {2} per år."
 msgid "You are currently not donating to anyone."
 msgstr "Du donerer for tiden ikke til noen."
 
-msgid "Cancel the pledge"
-msgstr "Avbryt donasjonstilbudet"
-
 msgid "Stopped donations"
 msgstr ""
 
@@ -2921,6 +2906,10 @@ msgstr "Historikk"
 #, fuzzy, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} registrerte seg {timespan_ago}."
+
+#, python-brace-format
+msgid "{username} closed this account {timespan_ago}."
+msgstr ""
 
 msgid "View income history"
 msgstr "Vis inntektshistorikk"
@@ -4910,6 +4899,9 @@ msgstr "Opprett en organisasjonskonto"
 msgid "Top pledges"
 msgstr "Toppbidrag"
 
+msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
+msgstr ""
+
 #, fuzzy
 msgid "There are no unclaimed donations right now."
 msgstr "Ingen donasjonstilbud akkurat nå."
@@ -5365,10 +5357,6 @@ msgstr "Din donasjon på {money_amount} per uke til {name} på {platform} har bl
 msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
 msgstr "Din donasjon på {money_amount} per uke til {name} på {platform} har blitt gjenopprettet på Liberapay som et donasjonstilbud til {elsewhere_platform}-bruker {name2}."
 
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
-msgstr "Donasjonen din på {money_amount} til {name} på {platform} hver uke ble ikke gjenopprettet fordi {name2} har valgt å ikke motta donasjoner på Liberapay."
-
 msgid "Email addresses"
 msgstr "E-postadresser"
 
@@ -5445,71 +5433,38 @@ msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week
 msgstr[0] "En Liberapay-bruker tilbyr seg å donere {0} i uken til {1}."
 msgstr[1] "{n} Liberpay-brukere tilbyr seg å donere til sammen {0} ukentlig til {1}."
 
-#, fuzzy, python-brace-format
-msgid "{0} has opted out of Liberapay"
-msgstr "{0} har valgt seg bort fra Liberapay"
+#, python-brace-format
+msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
+msgstr ""
 
 #, python-brace-format
-msgid "If you are an administrator of this {0} team account, you can unlock it to allow people to pledge tips to your team on Liberapay."
-msgstr "Hvis du er administrator av denne {0} lagkontoen, kan du låse den opp for å la folk gi tips til ditt lag på Liberapay."
+msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
+msgstr ""
 
 #, python-brace-format
-msgid "If you are {username} on {platform}, you can unlock your account to allow people to pledge to donate to you on Liberapay."
-msgstr "Hvis du er {username} på {platform} kan du åpne kontoen din slik at folk kan tilby deg donasjoner på Liberapay."
-
-msgid "Unlock"
-msgstr "Lås opp"
+msgid "Pledge to {user_name}"
+msgstr ""
 
 #, fuzzy
 msgid "You can support individual team members:"
 msgstr "Du kan donere direkte til lagets medlemmer:"
 
 #, python-brace-format
-msgid "{0} declines donations"
-msgstr "{0} avslår donasjoner"
-
-#, python-brace-format
-msgid "{0} accepts donations"
-msgstr "{0} godtar donasjoner"
-
-#, python-brace-format
-msgid "{0} opted out of Liberapay"
-msgstr "{0} valgt seg bort fra Liberapay"
-
-#, python-brace-format
-msgid "{0} hasn't joined Liberapay yet"
-msgstr "{0} har ikke registrert seg på Liberapay enda"
+msgid "Are you a member of the {team_name} team?"
+msgstr ""
 
 #, python-brace-format
 msgid "Are you {user_name}?"
 msgstr "Er du {user_name}?"
 
-#, fuzzy, python-brace-format
-msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
-msgstr "Er du administrator av denne {0} lagkontoen? Koble den til din Liberapay-konto."
+msgid "You can't or don't want to join Liberapay?"
+msgstr ""
 
-msgid "Connect team account"
-msgstr "Koble til lagkonto"
+msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
+msgstr ""
 
-msgid "We never collect money for you unless you join."
-msgstr "Liberapay tar aldri imot penger for deg hvis ikke du melder deg inn."
-
-#, python-brace-format
-msgid "Connect this {0} account to your Liberapay profile."
-msgstr "Koble denne {0}-kontoen til din Liberapay-profil."
-
-msgid "Don't like what you see?"
-msgstr "Faller ikke det du ser i smak?"
-
-#, python-brace-format
-msgid "If you are an owner of this {0} account, you can explicitly opt out of Liberapay by locking it. We don't allow new pledges to locked accounts."
-msgstr "Hvis du eier denne {0}-kontoen, kan du eksplisitt velge deg bort fra Liberapay ved å låse den. Nye donasjonstilbud tillates ikke til låste kontoer."
-
-msgid "Lock"
-msgstr "Lås"
-
-msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
-msgstr "Liberapay er en måte å takke og støtte dine favorittartister, musikere, skribenter, programmerere, osv. ved å sette opp en liten ukentlig påskjønnelse til dem."
+msgid "Opt out"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"

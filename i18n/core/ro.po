@@ -1495,25 +1495,6 @@ msgid "Print"
 msgstr "Tipărește"
 
 #, python-brace-format
-msgid "Joined {timespan_ago}."
-msgstr "S-a alăturat {timespan_ago}."
-
-#, python-brace-format
-msgid "Closed {timespan_ago}."
-msgstr "Închis {timespan_ago}."
-
-#, python-brace-format
-msgid "{0} doesn't publish how much they give."
-msgstr "{0} nu publică suma donată."
-
-#, python-brace-format
-msgid "{0} gives {1} per week."
-msgstr "{0} donează {1} pe săptămână."
-
-msgid "This user doesn't accept donations."
-msgstr "Acest utilizator nu acceptă donații."
-
-#, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
 msgstr[0] "{0} are {n} susținător."
@@ -1731,14 +1712,14 @@ msgstr ""
 msgid "Members"
 msgstr "Membri"
 
+msgid "First"
+msgstr "Primul"
+
 msgid "Previous"
 msgstr "Precedentul"
 
 msgid "Next"
 msgstr "Următorul"
-
-msgid "First"
-msgstr "Primul"
 
 msgid "Last"
 msgstr "Ultimul"
@@ -1958,11 +1939,11 @@ msgstr ""
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr ""
 
-msgid "Modify the donation"
-msgstr "Modifică donația"
-
 msgid "Stop the donation"
 msgstr "Oprește donația"
+
+msgid "Cancel the pledge"
+msgstr "Anulează angajamentul"
 
 #, python-brace-format
 msgid "You have uploaded {n} document of this type:"
@@ -2103,8 +2084,19 @@ msgstr "Donează la {0} prin Liberapay"
 msgid "Support {username}'s work with a recurrent donation."
 msgstr "Susțineți munca lui {username} cu o donație recurentă."
 
+#, python-brace-format
+msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
+msgstr ""
+
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Acest cont este suspendat temporar, donațiile către el nu vor fi procesate."
+
+#, python-brace-format
+msgid "{username} currently has {n} patron ready to support them."
+msgid_plural "{username} currently has {n} patrons ready to support them."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2114,8 +2106,9 @@ msgstr ""
 msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
 msgstr "{username} primește momentan {income_amount} pe săptămână, au nevoie de ajutorul dumneavoastră pentru a atinge țelul de finanțare (de {goal_amount} pe săptămână)."
 
-msgid "Be the first to contribute!"
-msgstr "Fiți primul care contribuie!"
+#, python-brace-format
+msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
+msgstr ""
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2164,10 +2157,6 @@ msgstr "Noul URL al avatarului dumneavoastră este: {0}"
 #, python-brace-format
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
 msgstr ""
-
-#, python-brace-format
-msgid "Connect {0} account"
-msgstr "Conectează contul {0}"
 
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
@@ -2573,9 +2562,6 @@ msgstr "{bold}Total:{bold_end} {0} pe săptămână ~ {1} pe lună ~ {2} pe an."
 msgid "You are currently not donating to anyone."
 msgstr ""
 
-msgid "Cancel the pledge"
-msgstr "Anulează angajamentul"
-
 msgid "Stopped donations"
 msgstr ""
 
@@ -2928,6 +2914,10 @@ msgstr "Istoric"
 #, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} s-a alăturat {timespan_ago}."
+
+#, python-brace-format
+msgid "{username} closed this account {timespan_ago}."
+msgstr ""
 
 msgid "View income history"
 msgstr "Vizualizează istoricul venitului"
@@ -4916,6 +4906,9 @@ msgstr "Creează un cont de organizație"
 msgid "Top pledges"
 msgstr "Top angajamente"
 
+msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
+msgstr ""
+
 msgid "There are no unclaimed donations right now."
 msgstr "Nu există donări nerevendicate în acest moment."
 
@@ -5379,10 +5372,6 @@ msgstr "Donația dumneavoastră de {money_amount} pe săptămână lui {name} pe
 msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
 msgstr "Donația dumneavoastră de {money_amount} pe săptămână lui {name} pe {platform} a fost recreată pe Liberapay ca angajament către utilizatorul de {elsewhere_platform} cu numele {name2}."
 
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} was not recreated because {name2} has opted out of receiving donations on Liberapay."
-msgstr "Donația dumneavoastră de {money_amount} pe săptămână lui {name} pe {platform} nu a fost recreată pentru că {name2} a ales să nu primească donații pe Liberapay."
-
 msgid "Email addresses"
 msgstr "Adrese de e-mail"
 
@@ -5462,70 +5451,37 @@ msgstr[1] "{n} utilizatori Liberapay s-au angajat să doneze un total de {0} pe 
 msgstr[2] "{n} de utilizatori Liberapay s-au angajat să doneze un total de {0} pe săptămână lui {1}."
 
 #, python-brace-format
-msgid "{0} has opted out of Liberapay"
-msgstr "{0} a optat să iasă din Liberapay"
+msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
+msgstr ""
 
 #, python-brace-format
-msgid "If you are an administrator of this {0} team account, you can unlock it to allow people to pledge tips to your team on Liberapay."
-msgstr "Dacă sunteți un administrator al acestui cont de echipă {0}, o puteți debloca pentru a permite oamenilor să se angajeze în a vă oferi daruri echipei pe Liberapay."
+msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
+msgstr ""
 
 #, python-brace-format
-msgid "If you are {username} on {platform}, you can unlock your account to allow people to pledge to donate to you on Liberapay."
-msgstr "Dacă sunteți {username} pe {platform}, vă puteți debloca contul pentru a permite oamenilor să se angajeze să vă doneze pe Liberapay."
-
-msgid "Unlock"
-msgstr "Deblochează"
+msgid "Pledge to {user_name}"
+msgstr ""
 
 #, fuzzy
 msgid "You can support individual team members:"
 msgstr "Puteți dona direct membrilor echipei:"
 
 #, python-brace-format
-msgid "{0} declines donations"
-msgstr "{0} nu acceptă donații"
-
-#, python-brace-format
-msgid "{0} accepts donations"
-msgstr "{0} acceptă donații"
-
-#, python-brace-format
-msgid "{0} opted out of Liberapay"
-msgstr "{0} a optat să iasă din Liberapay"
-
-#, python-brace-format
-msgid "{0} hasn't joined Liberapay yet"
-msgstr "{0} nu s-a alăturat la Liberapay încă"
+msgid "Are you a member of the {team_name} team?"
+msgstr ""
 
 #, python-brace-format
 msgid "Are you {user_name}?"
 msgstr "Sunteți {user_name}?"
 
-#, python-brace-format
-msgid "Are you an administrator of this {0} team account? Connect it to your Liberapay account."
-msgstr "Sunteți un administrator al acestui cont de echipă {0}? Conectați-l la contul dumneavoastră Liberapay."
+msgid "You can't or don't want to join Liberapay?"
+msgstr ""
 
-msgid "Connect team account"
-msgstr "Conectează contul echipei"
+msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
+msgstr ""
 
-msgid "We never collect money for you unless you join."
-msgstr "Nu vom colecta niciodată bani pentru dumneavoastră dacă nu vă alăturați."
-
-#, python-brace-format
-msgid "Connect this {0} account to your Liberapay profile."
-msgstr "Conectează acest cont {0} la profilul dumneavoastră Liberapay."
-
-msgid "Don't like what you see?"
-msgstr "Nu vă place ce vedeți?"
-
-#, python-brace-format
-msgid "If you are an owner of this {0} account, you can explicitly opt out of Liberapay by locking it. We don't allow new pledges to locked accounts."
-msgstr "Dacă sunteți proprietarul acestui cont {0}, puteți opta să ieșiți din Liberapay explicit blocându-l. Nu vom permite noi angajamente la conturile blocate."
-
-msgid "Lock"
-msgstr "Blochează"
-
-msgid "Liberapay is a way to thank and support your favorite artists, musicians, writers, programmers, etc. by setting up a small weekly cash gift to them."
-msgstr "Liberapay este un mod de a mulțumi și susține artiștii, muzicienii, scriitorii, programatorii, etc dumneavoastră favoriți prin stabilirea unui dar mic săptămânal de bani pentru ei."
+msgid "Opt out"
+msgstr ""
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
