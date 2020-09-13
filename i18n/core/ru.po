@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"PO-Revision-Date: 2020-09-15 08:36+0000\n"
+"Last-Translator: Nikita Epifanov <nikgreens@protonmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.3-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -1797,7 +1799,7 @@ msgid "per week"
 msgstr "в неделю"
 
 msgid "Modify your pledge"
-msgstr "Изменить свой залог"
+msgstr "Изменить свой взнос"
 
 msgid "Pledges"
 msgstr "Подарки"
@@ -2103,7 +2105,7 @@ msgstr "Поддержите работу {username} при помощи пер�
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username} в настоящее время не принимает пожертвования. Вы можете сделать им взнос, но сейчас вы не можете отправить им деньги."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Этот аккаунт временно отключён, пожертвования для него не обрабатываются."
@@ -2111,9 +2113,9 @@ msgstr "Этот аккаунт временно отключён, пожерт�
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "У {username} сейчас есть {n} спонсор, готовый оказать поддержку."
+msgstr[1] "У {username} сейчас есть {n} спонсора, готовых оказать поддержку."
+msgstr[2] "У {username} сейчас есть {n} спонсоров, готовых оказать поддержку."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2125,7 +2127,7 @@ msgstr "В данный момент {username} получает {income_amount}
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "Цель {username} - получать {money_amount} в неделю. Будьте первым, кто внесёт свой вклад!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2600,7 +2602,7 @@ msgid "This stopped donation still has {money_amount} paid in advance. That adva
 msgstr "За это остановленное пожертвование по-прежнему выплачивается {money_amount}. Этот аванс будет потребляться каждую неделю, пока не достигнет нуля."
 
 msgid "Cancelled pledges"
-msgstr "Отменённые залоги"
+msgstr "Отменённые взносы"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
@@ -2937,7 +2939,7 @@ msgstr "{username} присоединился {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} закрыл этот аккаунт {timespan_ago}."
 
 msgid "View income history"
 msgstr "Просмотреть историю доходов"
@@ -4927,7 +4929,7 @@ msgid "Top pledges"
 msgstr "Самые дорогие подарки"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Пожалуйста, не рассылайте спам людям и проектам, перечисленным ниже, с сообщениями, приглашающими их присоединиться к Liberapay или спрашивающими, почему они этого не сделали."
 
 msgid "There are no unclaimed donations right now."
 msgstr "В данный момент нет неподтверждённых пожертвований."
@@ -5184,9 +5186,8 @@ msgstr[2] "Вы можете привязать к своему профилю �
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Вы также можете легко перечислить в вашем профиле репозитории, в которые вы вносите вклад на {platforms_list}."
 
-#, fuzzy
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay позволяет делать подарки людям, которые ещё не присоединились к сайту. Пожертвование автоматически начнётся, если они зарегистрируются, чтобы получать его. Мы отправим вам уведомление, когда это случится."
+msgstr "Liberapay позволяет делать взносы людям, которые еще не присоединились к сайту. Деньги на взносы не собираются, они становятся реальными пожертвованиями только тогда, когда получатели присоединяются. Конечно, мы уведомляем спонсоров, когда это происходит."
 
 msgid "Sponsors"
 msgstr "Спонсоры"
@@ -5453,9 +5454,9 @@ msgstr[2] "{0} - команда с {n} открытыми участниками
 msgid "Explore unclaimed donations"
 msgstr "Список неподтверждённых пожертвований"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr "Эта страница посвящена пользователю {user_name} с {platform}:"
+msgstr "Эта страница предназначена для взносов пользователю {user_name} с {platform}:"
 
 msgid "No description available."
 msgstr "Нет доступного описания."
@@ -5473,36 +5474,35 @@ msgstr[2] "{n} пользователей Liberapay пообещали дела�
 
 #, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
-msgstr ""
+msgstr "{user_name} указал, что они не могут или не хотят присоединяться к Liberapay. Вы все равно можете сделать взнос ниже, но вам также следует подумать о поддержке их другими способами."
 
 #, python-brace-format
 msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Пожалуйста, не отправляйте сообщения {user_name}, приглашая их присоединиться к Liberapay или спрашивая их, почему они этого не сделали."
 
 #, python-brace-format
 msgid "Pledge to {user_name}"
-msgstr ""
+msgstr "Взнос для {user_name}"
 
-#, fuzzy
 msgid "You can support individual team members:"
 msgstr "Вы можете делать пожертвования участникам команды напрямую:"
 
 #, python-brace-format
 msgid "Are you a member of the {team_name} team?"
-msgstr ""
+msgstr "Вы член команды {team_name}?"
 
 #, python-brace-format
 msgid "Are you {user_name}?"
 msgstr "Вы {user_name}?"
 
 msgid "You can't or don't want to join Liberapay?"
-msgstr ""
+msgstr "Не можете или не хотите присоединиться к Liberapay?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
-msgstr ""
+msgstr "Вы можете \"отказаться\" от Liberapay. Люди по-прежнему смогут дать вам взносы, но на этой странице будет отображаться сообщение, информирующее всех о том, что вы не планируете присоединяться, и просьба не отправлять вам сообщения о Liberapay."
 
 msgid "Opt out"
-msgstr ""
+msgstr "Отказаться"
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
