@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Catalan "
-"<https://hosted.weblate.org/projects/liberapay/core/ca/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2020-09-16 00:36+0000\n"
+"Last-Translator: Joan Montané <joan@montane.cat>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/liberapay/core/ca/>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -2084,7 +2086,7 @@ msgstr "Doneu suport a la tasca de {username} amb un donatiu recurrent."
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "Ara per ara, {username} no accepta donatius. Us podeu comprometre per a fer-ne, però encara no podeu enviar-li diners."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Aquest compte està suspès temporalment. No s'hi processarà cap donatiu."
@@ -2092,8 +2094,8 @@ msgstr "Aquest compte està suspès temporalment. No s'hi processarà cap donati
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} ja té {n} mecenes diposat a ajudar-lo."
+msgstr[1] "{username} ja té {n} mecenes diposats a ajudar-lo."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2105,7 +2107,7 @@ msgstr "Actualment, {username} rep {income_amount} setmanalment. Necessita la vo
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "L'objectiu de {username} és rebre {money_amount} per setmana. Sigueu el primer de contribuir-hi!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2906,7 +2908,7 @@ msgstr "{username} es va unir {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} va tancar aquest compte {timespan_ago}."
 
 msgid "View income history"
 msgstr "Mostra l'historial d'ingressos"
@@ -4870,7 +4872,7 @@ msgid "Top pledges"
 msgstr "Compromisos més importants"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "No envieu missatges a les persones i projectes llistats tot seguit invitant-los a unir-se a Liberapay o demanant-los per què no s'hi han unit."
 
 msgid "There are no unclaimed donations right now."
 msgstr "Ara mateix no hi ha cap donatiu sense reclamar."
@@ -5117,9 +5119,8 @@ msgstr[1] "Podeu associar el vostre perfil amb els comptes de {platform1}, {plat
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "També podeu llistar al perfil els repositoris on col·laboreu en {platforms_list}."
 
-#, fuzzy
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay permet que us comprometeu en fer donatius a persones que encara no s'han unit al lloc web. El donatiu començarà automàticament si s'hi inscriuen per a rebre'l. Us enviarem una notificació si això succeeix."
+msgstr "Liberapay permet que us comprometeu en fer donatius a persones que encara no s'han unit al lloc web. No es recapten diners per als compromisos, només seran donatius si els destinataris s'hi uneixin. Òbviament, enviarem una notificació als donants si això succeeix."
 
 msgid "Sponsors"
 msgstr "Patrocinadors"
@@ -5378,9 +5379,9 @@ msgstr[1] "{0} és un equip amb {n} membres públics"
 msgid "Explore unclaimed donations"
 msgstr "Explora els donatius sense reclamar"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr "Aquesta pàgina està dedicada a l'usuari {user_name} de {platform}:"
+msgstr "Aquesta pàgina és per als compromisos per a l'usuari {user_name} de {platform}:"
 
 msgid "No description available."
 msgstr "No hi ha cap descripció disponible."
