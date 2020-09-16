@@ -2084,7 +2084,7 @@ msgstr "Steun {username}s werk met een periodieke donatie."
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username} accepteert op dit moment geen donaties. U kunt ze toezeggen, maar u kunt ze niet echt geld sturen."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Dit account is tijdelijk opgeschort, donaties aan zal het niet worden verwerkt."
@@ -2092,8 +2092,8 @@ msgstr "Dit account is tijdelijk opgeschort, donaties aan zal het niet worden ve
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} heeft op dit moment {n} donateur klaar staan om hen te steunen."
+msgstr[1] "{username} heeft op dit moment {n} donateurs klaar staan om hen te steunen."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2105,7 +2105,7 @@ msgstr "{username} ontvangt momenteel {income_amount} per week, ze hebben jou hu
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "{username}'s doel is om {money_amount} per week te ontvangen. Draag als eerste bij!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2906,7 +2906,7 @@ msgstr "{username} werd {timespan_ago} lid."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} heeft deze rekening gesloten {timespan_ago}."
 
 msgid "View income history"
 msgstr "Bekijk de inkomensontwikkeling"
@@ -4870,7 +4870,7 @@ msgid "Top pledges"
 msgstr "Top toezeggingen"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Spam de hieronder vermelde mensen en projecten niet met berichten die hen uitnodigen om zich bij Liberapay aan te sluiten of die hen vragen waarom ze dat niet hebben gedaan."
 
 msgid "There are no unclaimed donations right now."
 msgstr "Er zijn op dit moment geen donatie toezeggingen."
@@ -5117,9 +5117,8 @@ msgstr[1] "U kan uw profiel linken aan uw accounts op {platform1}, {platform2}, 
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "U kan ook gemakkelijk een repositories-lijst waaraan u bijdraagt van {platforms_list} weergeven op uw profiel."
 
-#, fuzzy
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay staat toe om donaties toe te zeggen aan mensen die zich nog niet hebben aangemeld. De donatie wordt automatisch gestart als ze zich aanmelden. We zullen u een melding sturen wanneer dat gebeurt."
+msgstr "Liberapay maakt het mogelijk om mensen geld toe te zeggen die nog geen lid zijn van de site. Er wordt geen geld ingezameld voor toezeggingen, ze worden pas echte donaties als de ontvangers zich aansluiten. Natuurlijk informeren we de donoren wanneer dat gebeurt."
 
 msgid "Sponsors"
 msgstr "Liberapay's donateurs"
@@ -5378,9 +5377,9 @@ msgstr[1] "{0} is een team met {n} publieke leden"
 msgid "Explore unclaimed donations"
 msgstr "Verken de toezeggingen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr "Dit is een pagina voor het {platform} account {user_name} van:"
+msgstr "Deze pagina is voor toezeggingen aan de {platform}-persoon {user_name}:"
 
 msgid "No description available."
 msgstr "Geen beschrijving beschikbaar."
@@ -5397,36 +5396,35 @@ msgstr[1] "{n} personen hebben toegezegd om {0} per week aan {1} te doneren via 
 
 #, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
-msgstr ""
+msgstr "{user_name} heeft aangegeven dat ze zich niet bij Liberapay kunnen of willen aansluiten. U kunt hieronder nog steeds een toezegging aan hen doen, maar u moet ook overwegen om hen op andere manieren te steunen."
 
 #, python-brace-format
 msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Stuur alstublieft geen berichten naar {user_name} waarin u hen uitnodigt om zich bij Liberapay aan te sluiten of waarin u hen vraagt waarom ze zich niet bij Liberapay hebben aangesloten."
 
 #, python-brace-format
 msgid "Pledge to {user_name}"
-msgstr ""
+msgstr "Toezegging aan {user_name}"
 
-#, fuzzy
 msgid "You can support individual team members:"
-msgstr "U kunt rechtstreeks aan de leden van het team doneren:"
+msgstr "U kunt individuele teamleden ondersteunen:"
 
 #, python-brace-format
 msgid "Are you a member of the {team_name} team?"
-msgstr ""
+msgstr "Bent u lid van het {team_name}-team?"
 
 #, python-brace-format
 msgid "Are you {user_name}?"
 msgstr "Bent u {user_name}?"
 
 msgid "You can't or don't want to join Liberapay?"
-msgstr ""
+msgstr "U kunt of wilt u niet bij Liberapay aansluiten?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
-msgstr ""
+msgstr "U kunt zich afmelden voor Liberapay. Mensen kunnen u nog steeds geld toezeggen, maar er wordt een bericht op deze pagina weergegeven waarin iedereen wordt geïnformeerd dat u niet van plan bent om lid te worden en hen te vragen om u geen berichten over Liberapay te sturen."
 
 msgid "Opt out"
-msgstr ""
+msgstr "Afmelden"
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"

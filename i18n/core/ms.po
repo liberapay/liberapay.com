@@ -2084,7 +2084,7 @@ msgstr "Sokong kerja {username} dengan derma berulang."
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username} tidak menerima derma ketika ini. Anda boleh menjanjikan derma, tetapi anda belum boleh menghantar wang kepadanya."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Akaun ini digantung buat sementara waktu, derma kepadanya tidak akan diproses."
@@ -2092,8 +2092,8 @@ msgstr "Akaun ini digantung buat sementara waktu, derma kepadanya tidak akan dip
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} mempunyai {n} orang pelanggan yang bersedia untuk menyokongnya ketika ini."
+msgstr[1] "{username} mempunyai {n} orang pelanggan yang bersedia untuk menyokongnya ketika ini."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2105,7 +2105,7 @@ msgstr "{username} kini menerima {income_amount} setiap minggu, mereka perlukan 
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "Matlamat {username} adalah untuk menerima {money_amount} seminggu. Jadilah penyumbang pertama!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2906,7 +2906,7 @@ msgstr "{username} sertai {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} telah menutup akaun ini {timespan_ago}."
 
 msgid "View income history"
 msgstr "Lihat sejarah pendapatan"
@@ -4870,7 +4870,7 @@ msgid "Top pledges"
 msgstr "Perjanjian teratas"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Tolong jangan spam orang dan projek yang disenaraikan di bawah dengan mesej mengajak mereka sertai Liberapay atau bertanyakan sebab mereka belum sertai."
 
 msgid "There are no unclaimed donations right now."
 msgstr "Tiada derma tidak dituntut pada waktu ini."
@@ -5117,9 +5117,8 @@ msgstr[1] "Anda boleh memautkan profil anda dengan akaun yang anda miliki di {pl
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Anda juga boleh paparkan di profil anda senarai repositori yang anda menyumbang di {platforms_list}."
 
-#, fuzzy
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay membolehkan anda berjanji untuk menderma kepada mereka yang belum sertai laman web ini. Derma akan mula diproses secara automatik apabila mereka mendaftar untuk menerimanya. Kami akan menghantar pemberitahuan apabila ia bermula."
+msgstr "Liberapay membolehkan anda berjanji untuk menderma kepada mereka yang belum sertai laman web ini. Tiada wang dikutip untuk perjanjian ini, derma hanya akan bermula apabila penerimanya sertai kami. Sudah tentu, kami akan memberitahu penderma apabila ia berlaku."
 
 msgid "Sponsors"
 msgstr "Penaja"
@@ -5378,9 +5377,9 @@ msgstr[1] "{0} ialah kumpulan dengan {n} orang ahli awam"
 msgid "Explore unclaimed donations"
 msgstr "Teroka derma tidak dituntut"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr "Halaman ini dikhususkan kepada pengguna {platform} {user_name}:"
+msgstr "Halaman ini untuk perjanjian derma kepada pengguna {platform} bernama {user_name}:"
 
 msgid "No description available."
 msgstr "Tiada perihal."
@@ -5397,36 +5396,35 @@ msgstr[1] "{n} orang pengguna Liberapay telah berjanji untuk menderma {0} setiap
 
 #, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
-msgstr ""
+msgstr "{user_name} telah menyatakan bahawa dia tidak boleh atau tidak ingin menyertai Liberapay. Anda masih boleh membuat perjanjian derma kepadanya di bawah, tetapi anda juga patut pertimbangkan untuk menyokong mereka dalam cara yang lain."
 
 #, python-brace-format
 msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Tolong jangan hantar mesej kepada {user_name} mengajaknya sertai Liberapay atau bertanyakan sebab dia belum sertai."
 
 #, python-brace-format
 msgid "Pledge to {user_name}"
-msgstr ""
+msgstr "Janjikan derma kepada {user_name}"
 
-#, fuzzy
 msgid "You can support individual team members:"
-msgstr "Anda boleh menderma secara terus kepada ahli kumpulan:"
+msgstr "Anda boleh menyokong ahli kumpulan secara individu:"
 
 #, python-brace-format
 msgid "Are you a member of the {team_name} team?"
-msgstr ""
+msgstr "Adakah anda ahli kumpulan {team_name}?"
 
 #, python-brace-format
 msgid "Are you {user_name}?"
 msgstr "Adakah anda {user_name}?"
 
 msgid "You can't or don't want to join Liberapay?"
-msgstr ""
+msgstr "Anda tidak boleh atau tidak ingin sertai Liberapay?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
-msgstr ""
+msgstr "Anda boleh “pilih keluar” Liberapay. Orang ramai masih boleh menjanjikan derma kepada anda, tetapi sebuah mesej akan dipaparkan di halaman ini memaklumkan semua orang bahawa anda tidak bercadang untuk sertai dan menyuruh mereka untuk tidak menghantar mesej kepada anda mengenai Liberapay."
 
 msgid "Opt out"
-msgstr ""
+msgstr "Pilih keluar"
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"

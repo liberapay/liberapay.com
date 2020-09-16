@@ -53,25 +53,25 @@ msgstr "Hallinnoi lahjoituksiasi"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Viikoittainen {amount} lahjoituksesi käyttäjälle {username} tulee uusia ennen {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Kuukausittainen {amount} lahjoituksesi käyttäjälle {username} tulee uusia ennen {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Vuosittainen {amount} lahjoituksesi käyttäjälle {username} tulee uusia ennen {date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sinulla on {n} uusittava lahjoitus:"
+msgstr[1] "Sinulla on {n} uusittavaa lahjoitusta:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Jos haluat muuttaa tai keskeyttää lahjoituksen, klikkaa tätä linkkiä: {link_start}hallinnoi lahjoituksiani{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "Sähköpostiosoitteesi on väliaikaisesti torjuntalistalla"
@@ -950,7 +950,7 @@ msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr "Onko {0} todellakin {1}-palvelin? Se ei toimi niin kuin olisi."
 
 msgid "example@pleroma.site"
-msgstr "example@example.com"
+msgstr "example@pleroma.site"
 
 msgid "You need to sign in first"
 msgstr "Sinun pitää ensin kirjautua sisään"
@@ -1119,7 +1119,7 @@ msgstr "{username} ei ota vastaan {rejected_currency}-määräisiä lahjoituksia
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
-msgstr ""
+msgstr "{money_amount} summa ei ole odotetussa valuutassa ({expected_currency})."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Vaikuttaa siltä, että yrität poistaa jotain mitä ei ole olemassa."
@@ -1287,7 +1287,7 @@ msgid "A security check has failed. Please make sure your browser is configured 
 msgstr "Tietoturvatarkistus on epäonnistunut. Varmista, että selaimesi sallii evästeet domainille {domain} ja yritä uudelleen."
 
 msgid "Checking cookies…"
-msgstr ""
+msgstr "Tarkistetaan evästeet…"
 
 msgid "You are not authorized to access this page."
 msgstr "Sinulla ei ole käyttöoikeuksia tähän sivuun."
@@ -2084,7 +2084,7 @@ msgstr "Tue käyttäjän {username} työtä toistuvalla lahjoituksella."
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username} ei tällä hetkellä ota vastaan lahjoituksia. Voit lupautua niihin, mutta et voi oikeasti lähettää rahaa."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Tämä tili on väliaikaisesti jäädytetty. Lahjoituksia kyseiselle tilille ei käsitellä."
@@ -2092,8 +2092,8 @@ msgstr "Tämä tili on väliaikaisesti jäädytetty. Lahjoituksia kyseiselle til
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Käyttäjällä {username} on {n} tukija valmiina."
+msgstr[1] "Käyttäjällä {username} on {n} tukijaa valmiina."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2105,7 +2105,7 @@ msgstr "{username} saa tällä hetkellä {income_amount} viikossa, mutta tavoite
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "Käyttäjän {username} päämäärä on saada {money_amount} viikoittain. Ole ensimmäinen osallistuja!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2906,7 +2906,7 @@ msgstr "{username} liittyi {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} sulki tilinsä {timespan_ago}."
 
 msgid "View income history"
 msgstr "Näytä tulohistoria"
@@ -4870,7 +4870,7 @@ msgid "Top pledges"
 msgstr "Suurimmat lupaukset"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Ethän lähetä näille henkilöille ja projekteille turhaa postia pyytäen heitä liittymään Liberapay-palveluun tai kysyen miksi he eivät ole siellä."
 
 msgid "There are no unclaimed donations right now."
 msgstr "Nyt ei ole lunastamattomia lahjoituksia."
@@ -5117,9 +5117,8 @@ msgstr[1] "Voit yhdistää profiilisi omistamiisi tileihin useissa eri palveluis
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "Voit listata profiilissa helposti myös repositoriot, joiden kanssa työskentelet seuraavissa palveluissa: {platforms_list}."
 
-#, fuzzy
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay mahdollistaa lahjoittamisen sellaisillekin, jotka eivät ole vielä liittyneet palveluun. Lahjoitus käynnistyy automaattisesti, jos tämä liittyy palveluun vastaanottaakseen sen. Tällöin lähetämme sinulle siitä tiedotuksen."
+msgstr "Liberapay mahdollistaa sitoutumisen lahjoittamaan sellaisillekin, jotka eivät ole vielä liittyneet palveluun. Rahaa ei kerätä sitoumusta varten. Lahjoitus realisoituu vasta, kun vastaanottaja liittyy palveluun. Toki ilmoitamme lahjoittajille silloin."
 
 msgid "Sponsors"
 msgstr "Sponsorit"
@@ -5378,9 +5377,9 @@ msgstr[1] "{0} on ryhmä, jossa on {n} julkista jäsentä"
 msgid "Explore unclaimed donations"
 msgstr "Tutki lunastamattomia lahjoituksia"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr "Tämä sivu on omistettu {platform}-käyttäjälle {user_name}:"
+msgstr "Tämä sivu on lahjoitussitoumuksille {platform}-käyttäjälle {user_name}:"
 
 msgid "No description available."
 msgstr "Ei kuvausta."
@@ -5397,36 +5396,35 @@ msgstr[1] "{n} Liberapay-käyttäjää ovat luvanneet lahjoittaa yhteensä {0} v
 
 #, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
-msgstr ""
+msgstr "{user_name} on ilmoittanut, ettei pysty tai halua liittyä Liberapay-palveluun. Voit yhä tehdä lahjoitussitoumuksia alla, mutta harkitse tukemista muulla tavalla."
 
 #, python-brace-format
 msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Ethän lähetä käyttäjälle {user_name} turhaa postia pyytäen liittymään Liberapay-palveluun tai kysyen miksi hän ei ole siellä."
 
 #, python-brace-format
 msgid "Pledge to {user_name}"
-msgstr ""
+msgstr "Sitoudu lahjoittamaan käyttäjälle {user_name}"
 
-#, fuzzy
 msgid "You can support individual team members:"
-msgstr "Voit lahjoittaa ryhmän jäsenille suoraan:"
+msgstr "Voit tukea yksittäisiä ryhmän jäseniä:"
 
 #, python-brace-format
 msgid "Are you a member of the {team_name} team?"
-msgstr ""
+msgstr "Oletko ryhmän {team_name} jäsen?"
 
 #, python-brace-format
 msgid "Are you {user_name}?"
 msgstr "Oletko {user_name}?"
 
 msgid "You can't or don't want to join Liberapay?"
-msgstr ""
+msgstr "Etkö voi tai halua liittyä Liberapay-palveluun?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
-msgstr ""
+msgstr "Voit “irtisanoutua” Liberapay-palvelusta. Sinulle voidaan yhä sitoutua lahjoittamaan, mutta lahjoittajille näytetään sivu, josta ilmenee, ettet aio liittyä ja kehotetaan olemaan lähettämättä viestejä Liberapay-palvelua koskien."
 
 msgid "Opt out"
-msgstr ""
+msgstr "Irtisanoudu"
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
@@ -5441,17 +5439,17 @@ msgstr "Sosiaalisten verkkojen tutkimustyökalu"
 
 #, python-brace-format
 msgid "Connect your {platform} account"
-msgstr ""
+msgstr "Yhdistä {platform}-tilisi"
 
 #, python-brace-format
 msgid "It looks like you don't follow anyone on {platform}."
-msgstr ""
+msgstr "Näyttää siltä, ettet seuraa ketään {platform}-palvelussa."
 
 #, python-brace-format
 msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Seuraat {n} tiliä palvelussa {platform}."
+msgstr[1] "Seuraat {n} tiliä {platform}-palvelussa."
 
 msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
 msgstr "Syöttämäsi osoite oli virheellinen: se ei sisältänyt ”@”-merkkiä."
