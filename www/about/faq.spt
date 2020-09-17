@@ -26,6 +26,21 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
+    {{ dt(
+        _('Can creators of {abbr_}NSFW{_abbr} content use Liberapay?',
+          abbr_='<abbr title="%s">'|safe % _("Not safe for work"),
+          _abbr='</abbr>'|safe),
+        'nsfw-creators'
+    ) }}
+
+    <dd>{{ _(
+        "Yes. However, Liberapay isn't a shield: we can't protect anyone from being "
+        "banned by {link_open}the underlying payment processors{link_close}.",
+        link_open='<a href="/about/payment-processors">'|safe,
+        link_close='</a>'|safe,
+    ) }}</dd>
+
+
     {{ dt(_("Can I modify or stop my donations?"), 'modify-or-stop-donations') }}
 
     <dd>{{ _(

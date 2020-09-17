@@ -1117,3 +1117,8 @@ code.gray {
 fieldset#amount {
     max-width: 750px;
 }
+
+abbr[title] {
+    /* Bootstrap 3.3.6 adds a bottom border but doesn't disable text-decoration */
+    text-decoration: none;
+}
