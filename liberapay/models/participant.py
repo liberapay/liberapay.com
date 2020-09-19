@@ -1831,6 +1831,13 @@ class Participant(Model, MixinTeam):
                 extra_query.append(('log-in.key', session.id))
                 extra_query.append(('log-in.token', session.secret))
             if not email_row.verified:
+                if not email_row.nonce:
+                    email_row = self._rendering_email_to = self.db.one("""
+                        UPDATE emails
+                           SET nonce = coalesce(nonce, %s)
+                         WHERE id = %s
+                     RETURNING *
+                    """, (str(uuid.uuid4()), email_row.id))
                 extra_query.append(('email.id', email_row.id))
                 extra_query.append(('email.nonce', email_row.nonce))
             if extra_query:

@@ -99,7 +99,7 @@ def charge(db, payin, payer):
             pt = db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin.id,))
             tip = db.one("""
                 SELECT t.*, p AS tippee_p
-                  FROM tips t
+                  FROM current_tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE t.tipper = %s
                    AND t.tippee = %s

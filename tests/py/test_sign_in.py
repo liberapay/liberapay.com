@@ -219,6 +219,43 @@ class TestLogIn(EmailHarness):
         alice2 = Participant.authenticate(alice.id, 0, password)
         assert alice2 and alice2 == alice
 
+    def test_email_login_with_old_unverified_address(self):
+        email = 'alice@example.net'
+        alice = self.make_participant('alice', email=None)
+        alice.add_email(email)
+        Participant.dequeue_emails()
+        self.db.run("UPDATE emails SET nonce = null")
+
+        # Initiate email log-in
+        data = {'log-in.id': email.upper()}
+        r = self.client.POST('/', data, raise_immediately=False)
+        session = self.db.one("SELECT * FROM user_secrets WHERE participant = %s", (alice.id,))
+        assert session.secret not in r.headers.raw.decode('ascii')
+        assert session.secret not in r.body.decode('utf8')
+
+        # Check the email message
+        Participant.dequeue_emails()
+        last_email = self.get_last_email()
+        assert last_email and last_email['subject'] == 'Log in to Liberapay'
+        email_row = alice.get_email(email)
+        assert email_row.verified is None
+        assert email_row.nonce
+        qs = 'log-in.id=%i&log-in.key=%i&log-in.token=%s&email.id=%s&email.nonce=%s' % (
+            alice.id, session.id, session.secret, email_row.id, email_row.nonce
+        )
+        assert qs in last_email['text']
+
+        # Log in
+        r = self.client.GxT('/alice/?' + qs)
+        assert r.code == 302
+        assert r.headers[b'Location'].startswith(b'http://localhost/alice/')
+
+        # Check that the email address is now verified
+        email_row = alice.get_email(email)
+        assert email_row.verified
+        alice = alice.refetch()
+        assert alice.email == email
+
     def test_email_login_bad_email(self):
         data = {'log-in.id': 'unknown@example.org'}
         r = self.client.POST('/sign-in', data, raise_immediately=False)
