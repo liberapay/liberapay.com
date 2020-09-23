@@ -355,6 +355,7 @@ PAYIN_AMOUNTS = {
 }
 
 PAYIN_SETTLEMENT_DELAYS = {
+    'mango-ba': timedelta(days=6),
     'stripe-sdd': timedelta(days=6),
 }
 

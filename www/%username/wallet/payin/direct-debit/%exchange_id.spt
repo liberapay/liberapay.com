@@ -200,7 +200,8 @@ title = _("Adding Money")
         <a href="{{ participant.path('receipts/%s' % exchange.id) }}">{{ _("View receipt") }}</a>
         % elif exchange.status == 'created'
         <div class="alert alert-info">{{ _(
-            "Direct debits take approximately 4 business days to complete."
+            "Processing this kind of payment takes {timedelta} on average.",
+            timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['mango-ba'], format_args=dict(threshold=0.9))
         ) }}</div>
         % endif
     % endif

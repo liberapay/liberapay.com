@@ -226,10 +226,10 @@ title = _("Adding Money")
         constants.FEE_PAYIN_BANK_WIRE.with_vat,
     ) }}</p>
 
-    <p>{{ _(
-        "Money sent by bank wire does not arrive instantly, but most transfers "
-        "are completed within 4 business days."
-    ) }}</p>
+    {#<p>{{ _(
+        "Processing this kind of payment takes {timedelta} on average.",
+        timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['mango-bw'], format_args=dict(threshold=0.9))
+    ) }}</p>#}
 
     <h3>{{ _("Amount") }}</h3>
 
