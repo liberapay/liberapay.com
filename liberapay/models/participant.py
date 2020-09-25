@@ -2700,6 +2700,9 @@ class Participant(Model, MixinTeam):
                 for payin_tips in groups:
                     execution_date = min(t.due_date for t in payin_tips)
                     if renewal_mode == 2:
+                        # We schedule automatic renewals one day early so that the
+                        # donor has a little bit of time to react if it fails.
+                        execution_date -= timedelta(days=1)
                         execution_date = max(execution_date, min_automatic_debit_date)
                     new_sp = Object(
                         amount=Money.sum(

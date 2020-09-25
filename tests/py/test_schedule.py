@@ -61,7 +61,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('49.50')
         assert new_schedule[0].transfers == expected_transfers
-        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=50))
+        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=50, days=-1))
         assert new_schedule[0].automatic is True
 
     def test_schedule_renewals_notifies_payer_of_changes(self):
@@ -82,7 +82,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('2.00')
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=2)
+        expected_renewal_date = next_payday + timedelta(weeks=2, days=-1)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
@@ -118,7 +118,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('2.00')
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=20)
+        expected_renewal_date = next_payday + timedelta(weeks=20, days=-1)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         emails = self.get_emails()
@@ -157,7 +157,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount == EUR('5.00')
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=2)
+        expected_renewal_date = next_payday + timedelta(weeks=2, days=-1)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         # Trigger the initial "upcoming charge" notification
@@ -194,7 +194,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].amount == EUR('2.00')
         assert new_schedule[0].transfers == [expected_transfers[0]]
         previous_renewal_date = expected_renewal_date
-        expected_renewal_date = next_payday + timedelta(weeks=4)
+        expected_renewal_date = next_payday + timedelta(weeks=4, days=-1)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is True
         emails = self.get_emails()
@@ -254,7 +254,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(schedule) == 1
         assert schedule[0].amount == EUR('37.00')
         assert schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=37)
+        expected_renewal_date = next_payday + timedelta(weeks=37, days=-1)
         assert schedule[0].execution_date == expected_renewal_date
         assert schedule[0].automatic is True
 
