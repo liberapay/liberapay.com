@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Turkish "
-"<https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"PO-Revision-Date: 2020-09-28 05:40+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -53,25 +55,25 @@ msgstr "Bağışlarınızı yönetin"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "{username} için haftalık {amount} tutarında bağışınızın {date} tarihinden önce yenilenmesi gerekiyor."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "{username} için aylık {amount} tutarında bağışınızın {date} tarihinden önce yenilenmesi gerekiyor."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "{username} için yıllık {amount} tutarında bağışınızın {date} tarihinden önce yenilenmesi gerekiyor."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Yenilenecek {n} bağışınız var:"
+msgstr[1] "Yenilenecek {n} bağışınız var:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Bir bağışı değiştirmek veya durdurmak isterseniz, şu bağlantıya tıklayın: {link_start}bağışlarımı yönet{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "E-mail adresiniz geçici olarak kara listeye alındı"
@@ -219,7 +221,7 @@ msgstr "{addressee_name}'den {amount}'e ödeme isteğiniz reddedildi."
 
 #, python-brace-format
 msgid "Reason: “{0}”"
-msgstr "Gerekçe:\"{0}\""
+msgstr "Sebep: “{0}”"
 
 msgid "Log in to Liberapay"
 msgstr "Liberapay'e giriş yap"
@@ -363,7 +365,7 @@ msgstr "Liberapay cüzdanınızın banka havalesi süresi doldu"
 
 #, python-brace-format
 msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "{date} tarihinde {money_amount} tutarindaki parayı banka hesabınızdan Liberapay cüzdanınıza transfer edeceğinizi belirtmiştiniz, fakat para hiç ulaşmadı."
+msgstr "{date} tarihinde {money_amount} tutarindaki parayı banka hesabınızdan Liberapay cüzdanınıza aktaracağınızı belirtmiştiniz, fakat para hiç ulaşmadı."
 
 msgid "If you forgot to do it you can initiate a new payment:"
 msgstr "Eğer yapmayı unuttuysanız, yeni bir ödeme başlatabilirsiniz:"
@@ -376,7 +378,7 @@ msgstr "Liberapay cüzdanınıza banka havalesi başarısız oldu"
 
 #, python-brace-format
 msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Banka hesabınızdan {0} transferi aşağıdaki hata mesajını vererek başarısız oldu:"
+msgstr "Banka hesabınızdan {0} havale girişimi aşağıdaki hata mesajını vererek başarısız oldu:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Aşağıdaki bağlantıya tıklayarak, belki de başka bir ödeme yöntemiyle, yeniden deneyebilirsiniz:"
@@ -399,58 +401,58 @@ msgstr "Liberapay cüzdanınıza otomatik ödeme talimatı başarılı"
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "{money_amount} tutarındaki ödemenize itiraz edildi"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr ""
+msgstr "{date} tarihinde başlattığınız {money_amount} tutarındaki havale bankanız tarafından geri alındı."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: ödemeyi işleme koyamadı."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: bir geri ödeme talep ettiniz."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: ödeme onaylanmadı."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: ödeme zaten vardı."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: ödemenin hileli olması."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "Bankanız bu itiraz için belirli bir sebep sunmadı."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: verilen hesap bilgileri yanlış."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: hesapta ödemeyi karşılamaya yetecek kadar para yok."
 
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: hesap sahibi ödemeyi tanımadı."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "Bankanız tarafından sağlanan sebep: {reason_code_in_english}."
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "Bu anlaşmazlık yanlışlıkla tetiklendiyse, bankanızdan geri çekmesini isteyebilirsiniz. Bunu yaparsanız, bankanıza da bir mesaj göndermemiz gerekeceğinden lütfen bize bildirin."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
-msgstr ""
+msgstr "Anlaşmazlık olumlu bir şekilde çözülmezse, tartışmalı fonlar onları alan kişilerden geri alınacaktır."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
-msgstr ""
+msgstr "Bu anlaşmazlık kesindir, geri alınamaz veya geri çevrilemez."
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "Üzerinde anlaşmazlık olan fonlar, onları alan kişilerden otomatik olarak geri alındı."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "Bankanız size danışmadan ödemeye itiraz ettiyse, sebebini onlara sormalısınız. Sorun çözüldükten sonra {link_start}ödemeyi yeniden yapabilirsiniz{link_end}."
 
 msgid "Your payment has failed"
 msgstr "Ödemeniz başarısız oldu"
@@ -483,7 +485,7 @@ msgid "Reason: the payment was a duplicate."
 msgstr "Sebep: ödeme zaten vardı."
 
 msgid "Reason: the payment has been deemed fraudulent."
-msgstr "Sebep: ödeme geçersiz sayıldı."
+msgstr "Sebep: ödeme hileli olarak değerlendirildi."
 
 msgid "Reason: the refund was requested by you."
 msgstr "Sebep: geri ödeme tarafınızca istendi."
@@ -514,11 +516,11 @@ msgstr "Bu ödemeyi onaylamadıysanız lütfen bize bildirin, geri ödeme yapaca
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
-msgstr "Bu ödeme işleme koyulduktan sonra, banka ekstrenizde \"{descriptor}\" olarak görünmelidir."
+msgstr "Bu ödeme işleme koyulduktan sonra, banka ekstrenizde “{descriptor}” olarak görünmelidir."
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Bu tür ödemelerin işlenmesi ortalama {timedelta} sürmektedir."
 
 msgid "Your payment has succeeded"
 msgstr "Ödemeniz başarılı oldu"
@@ -538,7 +540,7 @@ msgid "You're missing out on donations through Liberapay"
 msgstr "Liberapay aracılığıyla yapılan bağışları kaçırıyorsunuz"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr "Ödeme işlemleri hesabınız için ayarlanmadığı için müşterileriniz şu anda Liberapay üzerinden size para gönderemiyor."
+msgstr "Ödeme işlemleri hesabınız için ayarlanmadığı için sponsorlarınız şu anda Liberapay üzerinden size para gönderemiyor."
 
 msgid "Configure payment processing"
 msgstr "Ödeme işlemini yapılandır"
@@ -557,7 +559,7 @@ msgstr "Tarafınızdan veya bağış yaptığınız biri tarafından yapılan de
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "{date} için planlanan {money_amount} tutarında ödeme iptal edildi."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
@@ -565,7 +567,7 @@ msgstr "{date} tarihinde yapılması planlanan manuel ödeme iptal edildi."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
-msgstr ""
+msgstr "{date} için {money_amount} tutarında yeni bir ödeme planlandı."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
@@ -573,7 +575,7 @@ msgstr "{date} için yeni bir elle ödeme planlandı."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "{old_date} için planlanan {money_amount} tutarındaki ödeme {new_date} olarak yeniden planlandı."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
@@ -581,29 +583,29 @@ msgstr "{old_date} tarihinde yapılması planlanan ödeme {new_date} olarak yeni
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
-msgstr ""
+msgstr "{date} için planlanan ödeme tutarı {old_money_amount} iken {new_money_amount} olarak değiştirildi."
 
 #, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "{old_date} için planlanan {old_money_amount} ödemesi, {new_date} tarihinde {new_money_amount} ödemesi ile değiştirildi."
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "{old_date} için planlanan {old_money_amount} tutarındaki otomatik ödeme, {new_date} tarihinde elle ödeme ile değiştirildi."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "{old_date} için planlanan elle ödeme, {new_date} tarihinde {new_money_amount} tutarındaki otomatik ödeme ile değiştirildi."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Artık {n} planlanmış ödemeniz var:"
+msgstr[1] "Artık {n} planlanmış ödemeniz var:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: {recipient} için {money_amount} tutarının otomatik ödemesi"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
@@ -611,18 +613,18 @@ msgstr ""
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: {recipients} için elle ödeme"
 
 msgid "Manage your payment schedule"
 msgstr "Ödeme planınızı yönetin"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
-msgstr "{1}'den {0} Liberapay'a katıldı!"
+msgstr "{0} ({1}'den) Liberapay'a katıldı!"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
-msgstr "{1} kullanıcısına her hafta {0} verme sözünüz, kendileri Liberapay'e katıldıkları için artık uygulanabilecek. Yaşasın!"
+msgstr "Her hafta {0} miktarı {1} kullanıcısına verme vaadiniz, kendileri Liberapay'e katıldıkları için artık uygulanabilecek. Yaşasın!"
 
 #, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
@@ -638,7 +640,7 @@ msgstr "{date} tarihinde {user_name} kullanıcısının Liberapay'e katılması 
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
-msgstr ""
+msgstr "{user_name} kullanıcısının {time_ago} {liberapay_username} olarak Liberapay'e katıldığını bildirmekten mutluluk duyuyoruz."
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
@@ -652,7 +654,7 @@ msgstr[1] ""
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
-msgstr "{user_name} kullanıcısının {time_ago} {liberapay_username} olarak Liberapay'e katıldığını, dolayısıyla vaadinizi gerçek bağışa döndürebileceğinizi bildirmekten memnuniyet duyarız:"
+msgstr "{user_name} kullanıcısının {time_ago} {liberapay_username} olarak Liberapay'e katıldığını, dolayısıyla vaadinizi gerçek bağışa döndürebileceğinizi bildirmekten mutluluk duyuyoruz:"
 
 #, python-brace-format
 msgid "Donate to {0}"
@@ -679,7 +681,7 @@ msgid "Confirm the payment"
 msgstr ""
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr "Liberapay aracılığıyla müşterilerinizin size destek olmasını kolaylaştırabilirsiniz"
+msgstr "Liberapay aracılığıyla sponsorlarınızın size destek olmasını kolaylaştırabilirsiniz"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
@@ -694,7 +696,7 @@ msgstr "Üyesi olduğunuz takımda değişiklikler yapıldı"
 
 #, python-brace-format
 msgid "The reference currency used by the team “{0}” has been changed from {1} to {2} by {3}."
-msgstr "\"{0}\" takımının kullandığı {1} referans para birimi {3} tarafından {2} birimine değiştirilmiştir."
+msgstr "“{0}” takımının kullandığı {1} referans para birimi {2} birimine {3} tarafından değiştirildi."
 
 msgid "You have been invited to join a team on Liberapay"
 msgstr "Liberapay'de bir takıma girmek için davet edildiniz"
@@ -717,7 +719,7 @@ msgstr "Üyesi olduğunuz takım yeniden adlandırıldı"
 
 #, python-brace-format
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
-msgstr "{0} takımı {2} tarafından \"{1}\" olarak yeniden adlandırıldı."
+msgstr "“{0}” takımı “{1}” olarak {2} tarafından yeniden adlandırıldı."
 
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
@@ -817,7 +819,7 @@ msgid "When it's time to renew my donations"
 msgstr "Bağışlarımı yenileme zamanı geldiğinde"
 
 msgid "When someone I pledge to joins Liberapay"
-msgstr "Liberapay'e katılacağına söz verdiğim biri"
+msgstr "Vaatte bulunduğum biri Liberapay'a katıldığında"
 
 msgid "When someone invites me to join a team"
 msgstr "Biri beni bir takıma katılmaya davet ettiğinde"
@@ -1019,27 +1021,27 @@ msgstr "‘{domain_name}’ geçerli bir e-posta alanı değil."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr ""
+msgstr "{timespan_ago} ona mesaj gönderme denemesi başarısız olduğu için {email_address} e-posta adresi kara listeye alındı."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "{timespan_ago} bir şikayet alındığı için {email_address} e-posta adresi kara listeye alındı. Kara listeden kaldırmamızı istiyorsanız lütfen o adresten support@liberapay.com adresine bir e-posta gönderin."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Tüm mesajları geri döndürdüğü için {domain} e-posta etki alanı {date} tarihinde kara listeye alındı. Bu artık geçerli değilse ve bu etki alanını kara listeden kaldırmamızı istiyorsanız lütfen bizimle iletişime geçin."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr ""
+msgstr "{timespan_ago} bir şikayet alındığı için {domain} e-posta etki alanı kara listeye alındı. Bu alan size aitse ve onu kara listeden kaldırmamızı istiyorsanız lütfen bizimle iletişime geçin."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr ""
+msgstr "Tek kullanımlık adresler sağladığı için {domain} e-posta etki alanı {date} tarihinde kara listeye alındı. Bu artık geçerli değilse ve bu etki alanını kara listeden kaldırmamızı istiyorsanız lütfen bizimle iletişime geçin."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr ""
+msgstr "{domain} e-posta etki alanı kara listeye alındı. Kara listeden kaldırmamızı istiyorsanız lütfen bizimle iletişime geçin."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
@@ -1140,7 +1142,7 @@ msgstr "\"{0}\" geçerli bir topluluk adı değil."
 
 #, python-brace-format
 msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr "Para transferi başarısız oldu, üzgünüz. Sorun devam ederse lütfen support@liberapay.com adresi ile iletişime geçin. Hata mesajı: {0}"
+msgstr "Para aktarımı başarısız oldu, üzgünüz. Sorun devam ederse lütfen support@liberapay.com ile iletişime geçin. Hata mesajı: {0}"
 
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Hesabınız şu anda askıya alındığından bunu yapmanıza izin verilmiyor."
@@ -1358,17 +1360,17 @@ msgid "Did you mistype your email address? Fix it and try again, or try a differ
 msgstr ""
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "Girdiğiniz e-posta adresinin geçerli olduğundan eminseniz, bu hatayı atlayabilirsiniz. Ancak, mesajları bu adrese teslim edemezsek, o zaman kara listeye alınacaktır."
 
 msgid "Ignore the error and proceed"
 msgstr ""
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
-msgstr ""
+msgstr "Tarafımızdan {email_address} adresine gönderilen e-postaların artık geri döndürülmeyeceğine inanıyorsanız, bu adresi kara listeden kaldırıp tekrar deneyebilirsiniz:"
 
 msgid "Bypass the blacklist and retry"
-msgstr ""
+msgstr "Kara listeyi atla ve yeniden dene"
 
 msgid "Alternatively, you can try a different email address:"
 msgstr ""
@@ -1420,16 +1422,16 @@ msgid "({x_percent} translated)"
 msgstr "({x_percent} çevrildi)"
 
 msgid "Help us translate Liberapay"
-msgstr "Liberapay çevirisine yardım et"
+msgstr "Liberapay'i çevirmemize yardım edin"
 
 msgid "Your account"
-msgstr ""
+msgstr "Hesabınız"
 
 msgid "Profile"
 msgstr "Profil"
 
 msgid "Giving"
-msgstr ""
+msgstr "Verme"
 
 msgid "Payment Instruments"
 msgstr "Ödeme Araçları"
@@ -1438,7 +1440,7 @@ msgid "Payment Schedule"
 msgstr "Ödeme Planı"
 
 msgid "Receiving"
-msgstr "Alınıyor"
+msgstr "Alma"
 
 msgid "Payment Processors"
 msgstr "Ödeme İşlemcileri"
@@ -1482,18 +1484,18 @@ msgstr "Yazdır"
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0}, {n} sponsora sahip."
+msgstr[1] "{0}, {n} sponsora sahip."
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
-msgstr ""
+msgstr "{0}'ın hedefi her hafta {1} almak."
 
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0}, her hafta {1} tutarında bağışı {n} sponsordan alıyor."
+msgstr[1] "{0}, her hafta {1} tutarında bağışı {n} sponsordan alıyor."
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1503,7 +1505,7 @@ msgid "Modify your donation"
 msgstr "Bağışınızı değiştirin"
 
 msgid "Pledge"
-msgstr "Üstlenme"
+msgstr "Vaatte bulun"
 
 msgid "Donate"
 msgstr "Bağış"
@@ -1532,13 +1534,13 @@ msgid "Avatar"
 msgstr "Avatar"
 
 msgid "Default avatar"
-msgstr ""
+msgstr "Öntanımlı avatar"
 
 msgid "Find great people to donate to"
-msgstr "Bağış için hevesli insanlar bulun"
+msgstr "Bağış yapacak harika insanlar bulun"
 
 msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "Kimin işini beğeniyorsun? Liberapay'da mı bir bak"
+msgstr "Kimin çalışmalarını takdir ediyorsunuz? Liberapay'de olup olmadıklarına bakın"
 
 msgid "Disconnect"
 msgstr "Bağlantıyı kes"
@@ -1620,10 +1622,10 @@ msgstr "Genel Merkez Adresi"
 
 #, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr ""
+msgstr "{submenu_label} alt menüsünü göster"
 
 msgid "Introduction"
-msgstr "Sunuş"
+msgstr "Giriş"
 
 msgid "Global"
 msgstr "Küresel"
@@ -1674,13 +1676,13 @@ msgid "Name"
 msgstr "Ad"
 
 msgid "Currencies"
-msgstr "Para birimi"
+msgstr "Para birimleri"
 
 msgid "Goal"
 msgstr "Hedef"
 
 msgid "Statement"
-msgstr "Sözce"
+msgstr "Açıklama"
 
 msgid "Linked Accounts"
 msgstr "Bağlantılı Hesaplar"
@@ -1720,19 +1722,19 @@ msgstr "Yeni parola"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
-msgstr ""
+msgstr "{username} henüz herhangi bir ödeme yöntemi yapılandırmadı, bu nedenle bağışınız şu anda gerçekten işlenemiyor. Ödeme mümkün olduğunda sizi bilgilendireceğiz."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr ""
+msgstr "{username} için bağışlar bir kredi kartı veya banka kartı (Visa, MasterCard, American Express) ya da bir Euro banka hesabının otomatik ödemesi (sadece Euro cinsinden bağışlar için) kullanılarak yapılabilir."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "{username}'ye yapılan bağışlar PayPal üzerinden gerçekleştirilir."
+msgstr "{username} için yapılan bağışlar PayPal üzerinden gerçekleştirilir."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "{username} için bağışlar bir kredi veya banka kartı (Visa, MasterCard, American Express), bir Euro banka hesabı (SEPA Otomatik Ödeme) veya bir PayPal hesabı kullanılarak yapılabilir."
 
 msgid "Country"
 msgstr "Ülke"
@@ -1753,7 +1755,7 @@ msgid "Address within the city"
 msgstr "Şehir içindeki adres"
 
 msgid "Patrons"
-msgstr ""
+msgstr "Sponsorlar"
 
 msgid "Income"
 msgstr "Gelir"
@@ -1762,10 +1764,10 @@ msgid "per week"
 msgstr "haftada"
 
 msgid "Modify your pledge"
-msgstr ""
+msgstr "Vaadinizi düzenleyin"
 
 msgid "Pledges"
-msgstr "Taahhüt"
+msgstr "Vaatler"
 
 msgid "Sum"
 msgstr "Toplam"
@@ -1791,13 +1793,13 @@ msgid "Updated {timespan_ago}"
 msgstr "{timespan_ago} güncellendi"
 
 msgid "Unlist"
-msgstr ""
+msgstr "Listeden çıkar"
 
 msgid "Show on your profile"
-msgstr "Profilinde göster"
+msgstr "Profilinizde gösterin"
 
 msgid "Search Liberapay"
-msgstr "Liberapay Ara"
+msgstr "Liberapay'de Ara"
 
 msgid "Log In or Create Account"
 msgstr "Oturum Aç veya Hesap Oluştur"
@@ -1854,7 +1856,7 @@ msgid "You are currently donating {money_amount} per week to {name}, but they no
 msgstr ""
 
 msgid "Modify"
-msgstr ""
+msgstr "Değiştir"
 
 msgid "Stop"
 msgstr "Dur"
@@ -1899,7 +1901,7 @@ msgstr "her yıl"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
-msgstr "{0} her hafta ~ {1} her ay ~ {2} her yıl"
+msgstr "her hafta {0} ~ her ay {1} ~ her yıl {2}"
 
 msgid "Custom"
 msgstr "Özel"
@@ -1911,7 +1913,7 @@ msgid "Automatic renewal"
 msgstr "Otomatik yenile"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr "Karttan veya banka hesabınızdan çekim yapmaya çalışacağız. İki gün önce bilgilendirileceksiniz."
+msgstr "Karttan veya banka hesabınızdan çekim yapmaya çalışacağız. En az iki gün önce bilgilendirileceksiniz."
 
 msgid "Manual renewal"
 msgstr "Elle yenile"
@@ -1923,35 +1925,35 @@ msgid "Stop the donation"
 msgstr "Bağışı durdur"
 
 msgid "Cancel the pledge"
-msgstr ""
+msgstr "Vaadi iptal et"
 
 #, python-brace-format
 msgid "You have uploaded {n} document of this type:"
 msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu türden {n} belge yüklediniz:"
+msgstr[1] "Bu türden {n} belge yüklediniz:"
 
 #, python-brace-format
 msgid "Document #{id} is awaiting validation."
-msgstr ""
+msgstr "Belge #{id} doğrulanmayı bekliyor."
 
 #, python-brace-format
 msgid "Document #{id} has been validated."
-msgstr ""
+msgstr "Belge #{id} doğrulandı."
 
 #, python-brace-format
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr ""
+msgstr "Belge #{id} reddedildi: {refused_reason_type} - {refused_reason_message}."
 
 msgid "If you need assistance you can send an email to support@liberapay.com."
-msgstr "Yardıma gereksiniminiz olursa support@liberapay.com adresine e-posta gönderebilirsiniz."
+msgstr "Yardıma ihtiyacınız olursa support@liberapay.com adresine e-posta gönderebilirsiniz."
 
 msgid "Income Range"
 msgstr "Gelir Aralığı"
 
 #, python-brace-format
 msgid "Less than {0}"
-msgstr "{0}dan daha az"
+msgstr "{0}'dan daha az"
 
 #, python-brace-format
 msgid "More than {0}"
@@ -1962,7 +1964,7 @@ msgid "Between {0} and {1}"
 msgstr "{0} ve {1} arasında"
 
 msgid "How much money you earn per year, approximately."
-msgstr "Yıllık geliriniz yaklaşık olarak."
+msgstr "Yaklaşık olarak yılda ne kadar kazandığınız."
 
 msgid "Identity Proof"
 msgstr "Kimlik Kartı"
@@ -2073,8 +2075,8 @@ msgstr "Bu hesap geçici olarak askıya alındı, ona bağışlar işleme alınm
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} şu anda onları desteklemeye hazır {n} sponsora sahip."
+msgstr[1] "{username} şu anda onları desteklemeye hazır {n} sponsora sahip."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2162,7 +2164,7 @@ msgid "Explore communities"
 msgstr "Toplulukları keşfet"
 
 msgid "The submitted settings are incoherent."
-msgstr "Sunulan ayarlar tutarsız."
+msgstr "Gönderilen ayarlar tutarsız."
 
 #, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
@@ -2253,8 +2255,8 @@ msgstr "Profilinize bağlı herhangi bir {platform} hesabı yok."
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{platform} hesabınızda {timespan_ago} {n} kod deposu bulduk."
+msgstr[1] "{platform} hesabınızdan {timespan_ago} {n} kod deposunun bir listesi içe aktarıldı."
 
 msgid "No repositories found."
 msgstr "Depo bulunamadı."
@@ -2276,41 +2278,41 @@ msgstr ""
 
 #, python-brace-format
 msgid "The submitted summary is too long ({0} > {1})."
-msgstr ""
+msgstr "Gönderilen özet çok uzun ({0} > {1})."
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr ""
+msgstr "Değişikliklerinizi kaydetmediniz, onları atmak istediğinizden emin misiniz?"
 
 msgid "This is a preview."
-msgstr ""
+msgstr "Bu bir ön izlemedir."
 
 msgid "Excerpt that will be used in social media:"
-msgstr ""
+msgstr "Sosyal medyada kullanılacak alıntılar:"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
-msgstr ""
+msgstr "Çalışmanızı, neden bağış istediğinizi vs. açıklayın. Hem kısa bir özete hem de tam bir açıklamaya ihtiyacımız var."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
-msgstr ""
+msgstr "Liberapay, metinlerinizi uluslararasılaştırmanıza olanak tanır. Diller arasında geçiş yapmak için aşağıdaki seçiciyi kullanın."
 
 #, python-brace-format
 msgid "Current language: {0}"
-msgstr "Mevcut dil: {0}"
+msgstr "Geçerli dil: {0}"
 
 msgid "Short description"
-msgstr ""
+msgstr "Kısa açıklama"
 
 msgid "Full statement"
-msgstr ""
+msgstr "Tam açıklama"
 
 msgid "Markdown supported."
 msgstr "Markdown desteklenir."
 
 msgid "What is Markdown?"
-msgstr "Nedir bu Markdown?"
+msgstr "Markdown nedir?"
 
 msgid "Preview"
-msgstr ""
+msgstr "Ön izleme"
 
 msgid "Switch to another language:"
 msgstr "Başka bir dile geçin:"
@@ -2327,70 +2329,73 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
+"Kullanıcı adınızı değiştirdiğinizde, profilinizin web adresi buna göre değişir. Eski URL'den yenisine bir yönlendirme yapılır, ancak herhangi bir kullanıcı eski kullanıcı adınızı talep ederek bunu kaldırabilir, bu nedenle diğer web sitelerine koyduğunuz profilinizin tüm bağlantılarını güncellemelisiniz, bu bağlantılar kullanıcı adınız yerine değişmez hesap kimliğinizi ({account_id}) içeriyorsa bunu yapmanıza gerek yoktur.\n"
+"\n"
+"Kullanıcı adınızı değiştirmek istediğinizden emin misiniz?"
 
 msgid "Username"
-msgstr ""
+msgstr "Kullanıcı adı"
 
 msgid "A unique name, required for users who wish to receive donations."
-msgstr ""
+msgstr "Bağış almak isteyen kullanıcılar için gerekli olan benzersiz bir ad."
 
 #, python-brace-format
 msgid "Maximum length is {0}."
-msgstr ""
+msgstr "Azami uzunluk: {0}."
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
-msgstr ""
+msgstr "İzin verilen karakterler: latin harfleri ve rakamlar, noktalar (.), kısa çizgiler (-), ve alt çizgiler (_)."
 
 msgid "Name (optional)"
-msgstr ""
+msgstr "Ad (isteğe bağlı)"
 
 msgid "A name to show alongside your username on your public profile page. It doesn't have to be your legal name."
-msgstr ""
+msgstr "Genel profil sayfanızda kullanıcı adınızın yanında gösterilecek bir ad. Yasal adınız olmak zorunda değil."
 
 msgid "The full name of your project or organization. It will be shown alongside the username on the public profile page."
-msgstr ""
+msgstr "Projenizin veya kuruluşunuzun tam adı. Genel profil sayfasında kullanıcı adının yanında gösterilecektir."
 
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
-msgstr ""
+msgstr "İzin verilen karakterler: harfler ve rakamlar, boşluk karakterleri ve noktalama işaretleri."
 
 msgid "Already Verified"
-msgstr ""
+msgstr "Zaten Doğrulandı"
 
 msgid "This email address has already been verified."
-msgstr ""
+msgstr "Bu e-posta adresi zaten doğrulandı."
 
 msgid "Address Taken"
-msgstr ""
+msgstr "Adres Alındı"
 
 msgid "This email address is already connected to a different Liberapay account."
-msgstr ""
+msgstr "Bu e-posta adresi zaten farklı bir Liberapay hesabına bağlı."
 
 msgid "Failure"
-msgstr ""
+msgstr "Başarısız"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr ""
+msgstr "Lütfen tıkladığınız veya kopyalayıp yapıştırdığınız bağlantının herhangi bir şekilde kırpılmadığını veya değiştirilmediğini denetleyin."
 
 msgid "Password"
-msgstr ""
+msgstr "Parola"
 
 msgid "Your email address is now blacklisted."
-msgstr ""
+msgstr "E-posta adresiniz artık kara listeye alındı."
 
 msgid "Your email address is no longer blacklisted."
-msgstr ""
+msgstr "E-posta adresiniz artık kara listede değil."
 
 msgid "Remove my email address from the blacklist"
-msgstr ""
+msgstr "E-posta adresimi kara listeden kaldır"
 
 msgid "Add my email address to the blacklist"
-msgstr ""
+msgstr "E-posta adresimi kara listeye ekle"
 
 msgid "You have successfully disavowed having connected your email address to this Liberapay account."
-msgstr ""
+msgstr "E-posta adresinizi bu Liberapay hesabına bağlamayı başarıyla reddettiniz."
 
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
-msgstr ""
+msgstr "E-posta adresinizi kara listemize ekleyerek onu bir Liberapay hesabına bağlamak için gelecekte yapılacak tüm girişimleri engellemek ister misiniz?"
 
 msgid "You have already added and verified this address."
 msgstr ""
@@ -2400,10 +2405,10 @@ msgid "A verification email has been sent to {0}."
 msgstr "Doğrulama e-postası {0} gönderildi."
 
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "Bildirim ayarlarınız değiştirildi."
 
 msgid "Email settings"
-msgstr ""
+msgstr "E-posta ayarları"
 
 msgid "Email Address (Private)"
 msgid_plural "Email Addresses (Private)"
@@ -2411,25 +2416,25 @@ msgstr[0] "E-posta Adresi (Gizli)"
 msgstr[1] "E-posta Adresleri (Gizli)"
 
 msgid "Blacklisted"
-msgstr ""
+msgstr "Kara listeye alındı"
 
 msgid "Primary"
-msgstr "Öncelik"
+msgstr "Birincil"
 
 msgid "Disavowed"
-msgstr ""
+msgstr "Reddedildi"
 
 msgid "Unverified"
-msgstr ""
+msgstr "Doğrulanmadı"
 
 msgid "Resend email"
-msgstr ""
+msgstr "E-postayı yeniden gönder"
 
 msgid "Verified"
-msgstr ""
+msgstr "Doğrulandı"
 
 msgid "Set as primary"
-msgstr ""
+msgstr "Birincil olarak ayarla"
 
 msgid "Add"
 msgstr "Ekle"
@@ -2489,17 +2494,17 @@ msgstr ""
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
-msgstr ""
+msgstr "{timespan_ago} başladı."
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
-msgstr ""
+msgstr "{timespan_ago_1} başladı. {timespan_ago_2} değiştirildi."
 
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
 msgstr ""
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr ""
+msgstr "Alıcının hesabı kara listeye alındığı için etkin değil."
 
 msgid "Inactive because the account of the recipient is closed."
 msgstr ""
@@ -2547,7 +2552,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
-msgstr ""
+msgstr "{timespan_ago_1} başladı. {timespan_ago_2} durdu."
 
 #, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
@@ -2825,11 +2830,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} receives {1} per week"
-msgstr ""
+msgstr "{0} haftalık {1} alıyor"
 
 #, python-brace-format
 msgid "You are not a member of the {0} team."
-msgstr ""
+msgstr "{0} takımının üyesi değilsiniz."
 
 #, python-brace-format
 msgid "Your take is now {0} (you can't go higher this week)."
@@ -2841,20 +2846,20 @@ msgstr ""
 
 #, python-brace-format
 msgid "{username}'s profile"
-msgstr ""
+msgstr "{username} adlı kullanıcının profili"
 
 #, python-brace-format
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu profil {n} dilde kullanılabilir"
+msgstr[1] "Bu profil {n} dilde kullanılabilir"
 
 msgid "Show the list of languages"
-msgstr ""
+msgstr "Dil listesini göster"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr ""
+msgstr "Bu profil sadece {language} dilinde kullanılabilir"
 
 msgid "Edit"
 msgstr "Düzenle"
@@ -2866,78 +2871,78 @@ msgstr "{0} diğer platformlarda aşağıdaki hesaplara sahiptir:"
 #, python-brace-format
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username}, {n} takımın üyesi:"
+msgstr[1] "{username}, {n} takımın üyesi:"
 
 #, python-brace-format
 msgid "with {n} other"
 msgid_plural "with {n} others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "diğer {n} kişi ile birlikte"
+msgstr[1] "diğer {n} kişi ile birlikte"
 
 msgid "History"
-msgstr ""
+msgstr "Geçmiş"
 
 #, python-brace-format
 msgid "{username} joined {timespan_ago}."
-msgstr ""
+msgstr "{username} {timespan_ago} katıldı."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} bu hesabı {timespan_ago} kapattı."
 
 msgid "View income history"
-msgstr ""
+msgstr "Gelir geçmişini görüntüle"
 
 msgid "No data to show."
-msgstr ""
+msgstr "Gösterilecek veri yok."
 
 #, python-brace-format
 msgid "Income Per Week (in {currency})"
-msgstr ""
+msgstr "Haftalık Gelir ({currency})"
 
 msgid "Number of Patrons Per Week"
-msgstr ""
+msgstr "Haftalık Sponsor Sayısı"
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} Liberapay aracılığıyla ne kadar aldıklarını açıklamıyor."
 
 msgid "Invoice documents are private."
 msgstr "Fatura belgeleri özeldir."
 
 msgid "The message is too long."
-msgstr ""
+msgstr "Mesaj çok uzun."
 
 #, python-brace-format
 msgid "Invoice #{0}"
-msgstr ""
+msgstr "Fatura #{0}"
 
 msgid "Please input a short message explaining why you are rejecting this invoice:"
 msgstr "Lütfen bu faturayı neden reddettiğinizi açıklayan kısa bir mesaj girin:"
 
 msgid "Short explanation"
-msgstr ""
+msgstr "Kısa açıklama"
 
 msgid "Reject"
-msgstr ""
+msgstr "Reddet"
 
 msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
-msgstr ""
+msgstr "Fatura hazır, lütfen her şeyin doğru olup olmadığını gözden geçirin ve ardından göndermek için aşağıdaki düğmeye tıklayın."
 
 msgid "This invoice has been paid."
 msgstr "Bu fatura ödendi."
 
 msgid "This invoice has been rejected."
-msgstr ""
+msgstr "Bu fatura reddedildi."
 
 #, python-brace-format
 msgid "From: {0}"
-msgstr ""
+msgstr "Gönderen: {0}"
 
 #, python-brace-format
 msgid "To: {0}"
-msgstr ""
+msgstr "Alıcı: {0}"
 
 #, python-brace-format
 msgid "Date: {0}"
@@ -2945,50 +2950,50 @@ msgstr "Tarih: {0}"
 
 #, python-brace-format
 msgid "Amount: {0}"
-msgstr ""
+msgstr "Tutar: {0}"
 
 msgid "Details:"
-msgstr ""
+msgstr "Ayrıntılar:"
 
 msgid "Documents:"
 msgstr "Belgeler:"
 
 msgid "Download"
-msgstr ""
+msgstr "İndir"
 
 msgid "Send"
-msgstr ""
+msgstr "Gönder"
 
 msgid "Accept and Pay"
-msgstr ""
+msgstr "Kabul Et ve Öde"
 
 #, python-brace-format
 msgid "Message: {0}"
-msgstr ""
+msgstr "Mesaj: {0}"
 
 msgid "Created"
-msgstr ""
+msgstr "Oluşturuldu"
 
 #, python-brace-format
 msgid "Status: {0}"
-msgstr ""
+msgstr "Durum: {0}"
 
 #, python-brace-format
 msgid "Invoices - {username}"
-msgstr ""
+msgstr "Faturalar - {username}"
 
 msgid "Nothing to show."
-msgstr ""
+msgstr "Gösterecek bir şey yok."
 
 #, python-brace-format
 msgid "You are not allowed to invoice {0}."
-msgstr ""
+msgstr "{0} için fatura düzenlemenize izin verilmiyor."
 
 msgid "The description is too short."
-msgstr ""
+msgstr "Açıklama çok kısa."
 
 msgid "The description is too long."
-msgstr ""
+msgstr "Açıklama çok uzun."
 
 msgid "The details are too long."
 msgstr "Ayrıntılar çok uzun."
@@ -3007,16 +3012,16 @@ msgid "Description"
 msgstr "Açıklama"
 
 msgid "A short description of the invoice"
-msgstr ""
+msgstr "Faturanın kısa bir açıklaması"
 
 msgid "Details (optional)"
 msgstr "Ayrıntılar (isteğe bağlı)"
 
 msgid "Details of the invoice (e.g. the breakdown of the amount into its components)"
-msgstr ""
+msgstr "Faturanın ayrıntıları (örneğin tutarın bileşenlerine göre dağılımı)"
 
 msgid "Documents (private)"
-msgstr ""
+msgstr "Belgeler (özel)"
 
 msgid "A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened."
 msgstr "Giderin gerçekten gerçekleştiğine dair kanıt sağlarsanız, geri ödeme talebinin kabul edilme olasılığı daha yüksektir."
@@ -3134,11 +3139,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
-msgstr ""
+msgstr "{username}, {timespan_ago} bu takıma katılmaya zaten davet edildi."
 
 #, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
-msgstr ""
+msgstr "{username}, {timespan_ago} bu takıma katılmayı zaten reddetti."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
@@ -3613,7 +3618,7 @@ msgid "This page only shows transactions processed by Mangopay, to view other pa
 msgstr ""
 
 msgid "Account Statement"
-msgstr ""
+msgstr "Hesap Ekstresi"
 
 #, python-brace-format
 msgid "{money_amount} in donations to {n} person"
@@ -3646,7 +3651,7 @@ msgid "End of day balance"
 msgstr ""
 
 msgid "The amount you should see on your bank account statement."
-msgstr ""
+msgstr "Banka hesap ekstrenizde görmeniz gereken miktar."
 
 msgid "Amount in bank"
 msgstr ""
@@ -4220,7 +4225,7 @@ msgid "You can usually check the authenticity of a Liberapay profile by looking 
 msgstr ""
 
 msgid "How do I know that my pledges won't be claimed by an impostor?"
-msgstr "Sözlerimin bir sahtekâr tarafından talep edilmeyeceğini nasıl bilebilirim?"
+msgstr "Vaatlerimin bir sahtekâr tarafından talep edilmeyeceğini nasıl bilebilirim?"
 
 #, python-brace-format
 msgid "A pledge is linked to an account on another platform (e.g. {platform}) and it can only be claimed by someone who controls this account."
@@ -4546,8 +4551,8 @@ msgstr ""
 #, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Liberapay {timespan_ago} başlatıldı ve {n} kullanıcısı var."
+msgstr[1] "Liberapay {timespan_ago} başlatıldı ve {n} kullanıcısı var."
 
 #, python-brace-format
 msgid "{0} is escrowed within Liberapay."
@@ -4556,8 +4561,8 @@ msgstr ""
 #, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Son ödeme günü {timespan_ago} idi ve {n} kullanıcı arasında {money_amount} aktarıldı."
+msgstr[1] "Son ödeme günü {timespan_ago} idi ve {n} kullanıcı arasında {money_amount} aktarıldı."
 
 #, python-brace-format
 msgid "{n} participant gave money."
@@ -4726,7 +4731,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
-msgstr ""
+msgstr "Son olarak {timespan_ago}, {username} tarafından değiştirildi."
 
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
 msgstr ""
@@ -4918,8 +4923,8 @@ msgstr ""
 #, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bu topluluk {timespan_ago} oluşturuldu ve {n} üyesi var."
+msgstr[1] "Bu topluluk {timespan_ago} oluşturuldu ve {n} üyesi var."
 
 #, python-brace-format
 msgid ""
@@ -4958,7 +4963,7 @@ msgid "Receive"
 msgstr "Bağış Al"
 
 msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software? Or something else that can be funded by recurrent donations?"
-msgstr "Proje geliştiricisi misin? Özgür sanat yapıyor, özgür bilgiyi yayıyor, özgür yazılım yazıyor musunuz? Veya tekrarlayan bağışlarla finanse edilebilecek başka bir işiniz var mı?"
+msgstr "Proje geliştiricisi misiniz? Özgür sanat yapıyor, özgür bilgiyi yayıyor, özgür yazılım mı yazıyorsunuz? Veya tekrarlayan bağışlarla finanse edilebilecek başka bir işiniz mi var?"
 
 msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
 msgstr "Evet? O zaman Liberapay tam size göre! Hesabınızı oluşturun, profilinizi doldurun ve kitlenizden çalışmanızı finansal olarak desteklemesini isteyin."
@@ -5027,7 +5032,7 @@ msgid "1. Create your profile"
 msgstr "1. Profil oluştur"
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
-msgstr "Ne yaptığınızı, neden bağış istemeyi seçtiğinizi, paranın ne için kullanılacağını vb. Açıklayın."
+msgstr "Ne yaptığınızı, neden bağış istemeyi seçtiğinizi, paranın ne için kullanılacağını vs. açıklayın."
 
 msgid "2. Configure payment processing"
 msgstr "2. Ödeme işlemini yapılandırın"
@@ -5051,7 +5056,7 @@ msgid "We rely on your support to keep Liberapay running and {link_start}improvi
 msgstr "Liberapay'i çalışır durumda tutmak ve {link_start} geliştirmek {link_end} için desteğinize güveniyoruz."
 
 msgid "Fund Liberapay"
-msgstr "Liberapay'i Destekle"
+msgstr "Liberapay'i Destekleyin"
 
 msgid "Features"
 msgstr "Özellikler"
@@ -5067,13 +5072,13 @@ msgstr "Çoklu dil"
 msgid "Our service is currently available in {n} language."
 msgid_plural "Our service is currently available in {n} languages."
 msgstr[0] "Hizmetimiz şu anda {n} dilde kullanılabilir."
-msgstr[1] "Hizmetimiz şu anda {n} dillerde kullanılabilir."
+msgstr[1] "Hizmetimiz şu anda {n} dilde kullanılabilir."
 
 #, python-brace-format
 msgid "It's also partially translated into {n} other language ({link_open}you can contribute{link_close})."
 msgid_plural "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close})."
 msgstr[0] "Ayrıca kısmen {n} diğer dile ({link_open} katkıda bulunabilirsiniz {link_close}) çevrilmiştir."
-msgstr[1] "Ayrıca kısmen {n} diğer dillere ({link_open} katkıda bulunabilirsiniz {link_close}) çevrilmiştir."
+msgstr[1] "Ayrıca kısmen {n} diğer dile ({link_open} katkıda bulunabilirsiniz {link_close}) çevrilmiştir."
 
 #, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
@@ -5104,10 +5109,10 @@ msgid "You can also easily list on your profile the repositories you contribute 
 msgstr "Ayrıca profilinizde {platforms_list} üzerinde katkıda bulunabileceğiniz depoları kolayca listeleyebilirsiniz."
 
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay, siteye henüz katılmamış kişilere taahhütte bulunmaya izin verir. Taahhütler için para toplanmaz, sadece alıcılar katıldığında gerçek bağış haline gelirler. Tabii ki bu olduğunda bağışçılara haber veriyoruz."
+msgstr "Liberapay, siteye henüz katılmamış kişilere vaatte bulunmaya izin verir. Vaatler için para toplanmaz, sadece alıcılar katıldığında gerçek bağış haline gelirler. Tabii ki bu olduğunda bağışçılara haber veriyoruz."
 
 msgid "Sponsors"
-msgstr "Destekleyenler"
+msgstr "Sponsorlar"
 
 #, python-brace-format
 msgid "Donations from businesses and nonprofits are welcome on Liberapay. If you have any questions, don't hesitate to {0}contact us{1}."
@@ -5126,7 +5131,7 @@ msgid "Thanks"
 msgstr "Teşekkürler"
 
 msgid "Liberapay benefits from sponsored accounts on the following open source services:"
-msgstr "Liberapay, aşağıdaki açık kaynak hizmetlerinde sponsorlu hesaplardan yararlanır:"
+msgstr "Liberapay, aşağıdaki açık kaynak hizmetlerinde sponsorlu hesaplardan yararlanmaktadır:"
 
 msgid "Recent Activity"
 msgstr "Son Etkinlik"
@@ -5134,8 +5139,8 @@ msgstr "Son Etkinlik"
 #, python-brace-format
 msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Geçen ay {n} kullanıcı hesabı oluşturuldu. En sonuncusu {timespan_ago} idi."
+msgstr[1] "Geçen ay {n} kullanıcı hesabı oluşturuldu. En sonuncusu {timespan_ago} idi."
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
@@ -5162,7 +5167,7 @@ msgid "Learn more"
 msgstr "Daha fazla bilgi"
 
 msgid "Follow us"
-msgstr "Bizi takip et"
+msgstr "Bizi takip edin"
 
 msgid "Log In"
 msgstr ""
@@ -5222,7 +5227,7 @@ msgid "any money currently in the account"
 msgstr ""
 
 msgid "the account's history (ledger, etc.)"
-msgstr ""
+msgstr "hesabın geçmişi (hesap defteri vs.)"
 
 #, python-brace-format
 msgid "Please input an email address (your {platform} account doesn't have a primary one):"
@@ -5248,8 +5253,8 @@ msgstr ""
 #, python-brace-format
 msgid "{n} profile statement was imported."
 msgid_plural "{n} profile statements were imported."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} profil açıklaması içe aktarıldı."
+msgstr[1] "{n} profil açıklaması içe aktarıldı."
 
 #, python-brace-format
 msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
@@ -5442,7 +5447,7 @@ msgid "'{0}' is not a valid domain name."
 msgstr ""
 
 msgid "Which account?"
-msgstr ""
+msgstr "Hangi hesap?"
 
 #, python-brace-format
 msgid "Please enter the name of the {0} account you would like to connect:"
@@ -5450,11 +5455,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "Name of the team's account on {platform}"
-msgstr ""
+msgstr "Ekibin {platform} üzerindeki hesabının adı"
 
 #, python-brace-format
 msgid "Name of the organization's account on {platform}"
-msgstr ""
+msgstr "Kuruluşun {platform} üzerindeki hesabının adı"
 
 #, python-brace-format
 msgid "{0} username"
@@ -5462,7 +5467,7 @@ msgstr "{0} kullanıcı adı"
 
 #, python-brace-format
 msgid "Please enter the address of the {0} account you would like to connect:"
-msgstr ""
+msgstr "Lütfen bağlanmak istediğiniz {0} hesabının adresini girin:"
 
 msgid "Connect"
 msgstr "Bağlan"
@@ -5484,31 +5489,31 @@ msgid "How the accounts will be after the transfer"
 msgstr "Aktardıktan sonra hesaplar nasıl olacak"
 
 msgid "Transfer the account"
-msgstr "Hesabı transfer et"
+msgstr "Hesabı aktar"
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
-msgstr ""
+msgstr "Bir {platform} hesabı bağla"
 
 msgid "Please input the email address and country of the PayPal account you want to connect:"
 msgstr "Lütfen bağlanmak istediğiniz PayPal hesabının e-posta adresini ve ülkesini girin:"
 
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr ""
+msgstr "Liberapay hesabınıza zaten bağlı değilse, bu e-posta adresine bir onay kodu gönderilecek."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr ""
+msgstr "PayPal ödemeleri şu anda anonim değil, bağışçılar e-posta adresinizi görecek ve siz de onlarınkini göreceksiniz."
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "Üzgünüz, sorgunuzla eşleşen bir şey bulamadık."
 
 msgid "Whose work do you appreciate?"
-msgstr "Kimin çalışmalarına minnettarsınız?"
+msgstr "Kimin çalışmalarını takdir ediyorsunuz?"
 
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eşleşen bir kullanıcı adı bulundu"
+msgstr[1] "Eşleşen kullanıcı adları bulundu"
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
@@ -5518,8 +5523,8 @@ msgstr[1] "Eşleşen topluluk isimleri bulduk"
 #, python-brace-format
 msgid "{n} member"
 msgid_plural "{n} members"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} üye"
+msgstr[1] "{n} üye"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
@@ -5528,18 +5533,18 @@ msgstr[1] ""
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
-msgstr ""
+msgstr "{username}, {platform} hesaplarında {repo_name} adlı bir depoya sahip"
 
 msgid "Found a matching user statement"
 msgid_plural "Found matching user statements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eşleşen kullanıcı açıklaması bulundu"
+msgstr[1] "Eşleşen kullanıcı açıklamaları bulundu"
 
 msgid "Didn't find who you were looking for?"
 msgstr "Aradığınız kişiyi bulamadınız mı?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
-msgstr "Henüz Liberapay'e katılmamış kişilere de bağış yapabilirsiniz:"
+msgstr "Henüz Liberapay'e katılmamış kişilere de vaatte bulunabilirsiniz:"
 
 msgid "Sign In"
 msgstr "Oturum Aç"
