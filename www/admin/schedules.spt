@@ -88,7 +88,7 @@ title = "Scheduled Payments Admin"
             <td class="text-left">
             % for tr in sp.transfers
                 → {% if tr['amount'] != None %}{{ locale.format_money(Money(**tr['amount'])) }} to {% endif %}
-                <a href="/~{{ tr['tippee_id'] }}/">{{ tr['tippee_username'] }}<br>
+                <a href="/~{{ tr['tippee_id'] }}/">{{ tr['tippee_username'] }}</a><br>
             % endfor
             </td>
             <td>{{ sp.notifs_count }} sent{% if sp.last_notif_ts %}, last one at {{ sp.last_notif_ts }}{% endif %}</td>
