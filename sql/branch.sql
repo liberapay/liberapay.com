@@ -1,4 +1,4 @@
-CREATE FUNCTION compute_arrears(tip tips) RETURNS currency_amount AS $$
+CREATE OR REPLACE FUNCTION compute_arrears(tip tips) RETURNS currency_amount AS $$
     SELECT coalesce_currency_amount((
                SELECT sum(tip_at_the_time.amount, tip.amount::currency)
                  FROM paydays payday
@@ -33,8 +33,4 @@ CREATE FUNCTION compute_arrears(tip tips) RETURNS currency_amount AS $$
                   AND tr.context IN ('tip-in-arrears', 'take-in-arrears')
                   AND tr.status = 'succeeded'
            ), tip.amount::currency);
-$$ LANGUAGE sql;
-
-CREATE FUNCTION compute_arrears(tip current_tips) RETURNS currency_amount AS $$
-    SELECT compute_arrears(tip::tips);
 $$ LANGUAGE sql;
