@@ -249,7 +249,11 @@ class MixinTeam:
         if income_amount == 0:
             income_amount = Money.MINIMUMS[currency]
         manual_takes_sum = MoneyBasket(t.amount for t in takes if t.amount > 0)
-        auto_take = income_amount - manual_takes_sum.fuzzy_sum(currency)
+        n_auto_takes = sum(1 for t in takes if t.amount < 0) or 1
+        auto_take = (
+            (income_amount - manual_takes_sum.fuzzy_sum(currency)) /
+            n_auto_takes
+        ).round_up()
         if auto_take < 0:
             auto_take = zero
         for t in takes:
