@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Polish "
-"<https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"PO-Revision-Date: 2020-10-01 07:40+0000\n"
+"Last-Translator: Atrate <Atrate@protonmail.com>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.3-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -55,22 +57,22 @@ msgstr "Zarządzaj swoimi darowiznami"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Twoja darowizna w wysokości {amount} tygodniowo na rzecz {username} musi zostać odnowiona przed {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Twoja darowizna w wysokości {amount} miesięcznie na rzecz {username} musi zostać odnowiona przed {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Twoja darowizna w wysokości {amount} rocznie na rzecz {username} musi zostać odnowiona przed {date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Masz {n} darowiznę do przedłużenia:"
+msgstr[1] "Masz {n} darowizny do przedłużenia:"
+msgstr[2] "Masz {n} darowizn do przedłużenia:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
@@ -423,16 +425,16 @@ msgstr "Polecenie zapłaty do Twojego portfela Liberapay nie powiodło się"
 msgid "The direct debit payment to your Liberapay wallet has succeeded"
 msgstr "Polecenie zapłaty do Twojego portfela Liberapay powiodło się"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "Twoja płatność w wysokości {money_amount} została zakwestionowana"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
 msgstr ""
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "Powód podany przez twój bank to: nie był w stanie przetworzyć płatności."
 
 msgid "The reason provided by your bank is: you requested a refund."
 msgstr ""
@@ -447,7 +449,7 @@ msgid "The reason provided by your bank is: the payment was fraudulent."
 msgstr ""
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "Twój bank nie podał konkretnego powodu."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
 msgstr ""
@@ -463,7 +465,7 @@ msgid "The reason provided by your bank is: {reason_code_in_english}."
 msgstr ""
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "Jeśli spór został wywołany omyłkowo, możesz poprosić swój bank o jego wycofanie. Daj nam znać, jeśli to zrobisz, ponieważ będziemy musieli również wysłać wiadomość do Twojego banku."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
 msgstr ""
@@ -472,7 +474,7 @@ msgid "This dispute is final, it cannot be withdrawn or reversed."
 msgstr ""
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "Kwestionowane fundusze zostały automatycznie odzyskane od osób, które je otrzymały."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
@@ -696,8 +698,9 @@ msgstr "Płatność za odnowienie darowizny w wysokości {money_amount} na rzecz
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Następujące płatności za przedłużenie darowizny zostały przerwane, ponieważ odbiorcy nie mogą ich otrzymać:"
 
+#, fuzzy
 msgid "Liberapay donation renewal: authentication required"
-msgstr ""
+msgstr "Odnowienie darowizny Liberapay: wymagane uwierzytelnienie"
 
 #, python-brace-format
 msgid "We haven't been able to complete your scheduled payment of {money_amount}, because your bank requested that you confirm it."
