@@ -202,6 +202,7 @@ class MixinTeam:
                           AND pt.team = t.team
                           AND pt.context = 'team-donation'
                           AND pt.status = 'succeeded'
+                          AND pt.ctime > (current_timestamp - interval '13 weeks')
                    ), %(currency)s) + coalesce_currency_amount((
                        SELECT sum(tr.amount, %(currency)s)
                          FROM transfers tr
@@ -210,6 +211,7 @@ class MixinTeam:
                           AND tr.context IN ('take', 'take-in-advance')
                           AND tr.status = 'succeeded'
                           AND tr.virtual IS NOT true
+                          AND tr.timestamp > (current_timestamp - interval '13 weeks')
                    ), %(currency)s)) AS received_sum
                  , (coalesce_currency_amount((
                        SELECT sum(t2.amount, %(currency)s)
@@ -224,6 +226,7 @@ class MixinTeam:
                                           LIMIT 1
                                        ) AS amount
                                   FROM paydays payday
+                                 WHERE payday.ts_start > (current_timestamp - interval '13 weeks')
                               ) t2
                         WHERE t2.amount > 0
                    ), %(currency)s)) AS takes_sum
