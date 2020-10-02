@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: 2020-10-02 21:41+0000\n"
+"Last-Translator: Paper <kodycze@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 4.3-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -14,7 +16,7 @@ msgid "The {language} translation of this page is not yet complete."
 msgstr "Překlad této stránky do jazyka {language} ještě není hotový."
 
 msgid "Greetings,"
-msgstr "Vítej,"
+msgstr "Vítejte,"
 
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
 msgstr "Něco není v pořádku? Tento e-mail byl odeslán automaticky, ale můžete nás kontaktovat tak, že na něj odpovíte."
@@ -24,7 +26,7 @@ msgstr "Změnit nastavení e-mailu"
 
 #, python-brace-format
 msgid "It's time to renew your donation to {username} on Liberapay"
-msgstr "Je čas obnovit váš příspěvek k uživateli {username} na Liberapay"
+msgstr "Je čas obnovit váš příspěvek uživateli {username} na Liberapay"
 
 msgid "It's time to renew your donations on Liberapay"
 msgstr "Je čas obnovit vaše příspěvky na Liberapay"
@@ -74,15 +76,17 @@ msgstr[2] "Máte {n} příspěvků k obnovení:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Pokud si přejete upravit nebo ukončit přispívání, klikněte na následující odkaz: {link_start}spravovat moje příspěvky{link_end}."
 
+#, fuzzy
 msgid "Your email address is temporarily blacklisted"
 msgstr "Vaše emailová adresa je dočasně na blacklistu"
 
+#, fuzzy
 msgid "Your email address has been blacklisted"
 msgstr "Vaše e-mailová adresa byla přidána na černou listinu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
 msgstr "Pozastavujeme zasílání oznámení na vaši adresu {email_address} do {date}, protože nedávný pokus o zaslání vám e-mailu selhal."
 
@@ -102,15 +106,15 @@ msgstr "Spravovat vaše e-mailové adresy"
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
-msgstr "Tento týden Vám bylo darování asi {0}"
+msgstr "Tento týden Vám bylo darováno asi {0}"
 
 #, python-brace-format
 msgid "You have received {0} this week"
-msgstr "Tento týden jste dostal(a) {0}"
+msgstr "Tento týden jste dostali {0}"
 
 #, python-brace-format
 msgid "{0} was given to you personally."
-msgstr "{0} bylo dáno vám osobně."
+msgstr "{0} vám bylo dáno osobně."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
 msgstr "Nejste členem žádného týmu, proto jste nedostal(a) žádné příspěvky za účast v týmech."
@@ -139,7 +143,7 @@ msgid "You now have {0} in your wallet."
 msgstr "Ve svojí peněžence máte {0}."
 
 msgid "See your account's transaction logs"
-msgstr "Zobrazit záznam převodů ve vašem účtu"
+msgstr "Zobrazit záznam převodů ve Vašem účtu"
 
 #, python-brace-format
 msgid "- {0}: {1}"
@@ -154,7 +158,7 @@ msgid "Your Liberapay income is {money_amount} this week"
 msgstr "Váš příjem na Liberapay je tento týden {money_amount}"
 
 msgid "Here is the breakdown of your income this week:"
-msgstr "Tady jsou detaily vašeho týdenního příjmu:"
+msgstr "Zde jsou detaily vašeho týdenního příjmu:"
 
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
@@ -169,9 +173,9 @@ msgstr "Osobní příspěvky: žádné."
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] "Příspěvky za vaší roli v {team_name} týmu: {money_amount} od {n} dárce."
-msgstr[1] "Příspěvky za vaší roli v {team_name} týmu: {money_amount} od {n} dárců."
-msgstr[2] "Příspěvky za vaší roli v {team_name} týmu: {money_amount} od {n} dárců."
+msgstr[0] "Příspěvky za vaší roli v týmu {team_name}: {money_amount} od {n} dárce."
+msgstr[1] "Příspěvky za vaší roli v týmu {team_name}: {money_amount} od {n} dárců."
+msgstr[2] "Příspěvky za vaší roli v týmu {team_name}: {money_amount} od {n} dárců."
 
 msgid "Donations through teams: none (you are not a member of any team)."
 msgstr "Příspěvky skrze týmy: žádné (nejste členem žádného týmu)."
@@ -196,7 +200,7 @@ msgstr "Vaše žádost o platbu {amount} od {addressee_name} byla přijata."
 
 #, python-brace-format
 msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "Bohužel peněženka {0} v současné době neobsahuje dost peněz na zaplacení, ale peníze vám pošleme hned jak to bude možné."
+msgstr "Bohužel peněženka {0} v současné době neobsahuje dostatek peněz k zaplacení, ale peníze Vám pošleme ihned jak to bude možné."
 
 msgid "View the invoice"
 msgstr "Zobrazit fakturu"
@@ -207,7 +211,7 @@ msgstr "Vaše faktura pro {0} byla přijata a zaplacena - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr "Vaše žádost o platbu {amount} od {addressee_name} byla přijata a peníze byly převedeny do vaší peněženky."
+msgstr "Vaše žádost o platbu {amount} od {addressee_name} byla přijata a peníze byly převedeny do Vaší peněženky."
 
 msgid "Withdraw the money"
 msgstr "Vybrat peníze"
@@ -232,7 +236,7 @@ msgstr "Přihlaste se na Liberapay"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
-msgstr "Někdo (snad vy) požádal o přístup k účtu {0} na Liberapay."
+msgstr "Někdo (doufáme, že vy) požádal o přístup k účtu {0} na Liberapay."
 
 msgid "Follow this link to proceed:"
 msgstr "Pro pokračování klikněte na následující odkaz:"
@@ -240,12 +244,12 @@ msgstr "Pro pokračování klikněte na následující odkaz:"
 msgid "Log in"
 msgstr "Přihlásit se"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Please note that the link is only valid for {0}."
-msgstr "Tento odkaz platí jenom {0}."
+msgstr "Tento odkaz platí jen {0}."
 
 msgid "It's time to top up your Liberapay wallet"
-msgstr "Je čas nabít si vaši peněženku na Liberapay"
+msgstr "Je čas nabít Vaši peněženku na Liberapay"
 
 #, python-brace-format
 msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
@@ -406,58 +410,58 @@ msgstr "Přímá platba kartou do Vaší Liberapay peněženky byla úspěšná"
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "Vaše platba ve výši {money_amount} byla zpochybněna"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr ""
+msgstr "Převod {money_amount}, který jste zahájili dne {date}, byl vaší bankou stornován."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "Důvodem, který vaše banka uvedla, je: platbu nemohla zpracovat."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr ""
+msgstr "Důvod, který vaše banka uvedla, je: požádali jste o vrácení peněz."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr ""
+msgstr "Důvod, který vaše banka uvedla, je: platba nebyla autorizována."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr ""
+msgstr "Důvod, který vaše banka uvedla, je: platba byla duplikát."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr ""
+msgstr "Důvodem, který vaše banka uvedla, je: platba byla podvodná."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "Vaše banka neposkytla konkrétní důvod tohoto sporu."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "Důvodem, který banka uvedla, je: poskytnuté údaje o účtu jsou nesprávné."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "Důvod, který vaše banka uvedla, je: účet neobsahoval dostatek peněz na provedení platby."
 
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "Důvod, který banka uvedla, je: vlastník účtu platbu nerozpoznal."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "Důvod, který vaše banka uvedla, je: {reason_code_in_english}."
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "Pokud byl tento spor omylem spuštěn, můžete požádat svou banku, aby jej stáhla. Prosím, dejte nám vědět, pokud tak učiníte, protože budeme muset také poslat zprávu do vaší banky."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
-msgstr ""
+msgstr "Pokud spor nebude vyřešen příznivě, budou sporné prostředky získány od lidí, kteří je obdrželi."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
-msgstr ""
+msgstr "Tento spor je konečný, nelze jej odvolat ani zvrátit."
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "Sporné prostředky byly automaticky získány zpět od lidí, kteří je obdrželi."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "Pokud vaše banka platbu zpochybnila bez konzultace s vámi, měli byste se jich zeptat proč. Jakmile je problém vyřešen, můžete {link_start}znovu provést platbu{link_end}."
 
 msgid "Your payment has failed"
 msgstr "Vaše platba se nezdařila"
@@ -545,7 +549,7 @@ msgid "You're missing out on donations through Liberapay"
 msgstr "Chybějí vám příspěvky prostřednictvím Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr ""
+msgstr "Vaši patroni vám v současné době nemohou posílat peníze prostřednictvím Liberapay, protože váš účet nemá nastaveno zpracování plateb."
 
 msgid "Configure payment processing"
 msgstr "Konfigurovat zpracování plateb"
@@ -560,7 +564,7 @@ msgid "Liberapay donation renewal: your upcoming payment has changed"
 msgstr "Obnovení daru Liberapay: vaše nadcházející platba se změnila"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr ""
+msgstr "Kvůli změnám provedeným vámi nebo někým, komu přispíváte, byl váš platební plán upraven následovně:"
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
@@ -568,7 +572,7 @@ msgstr "Platba ve výši {money_amount} plánovaná na {date} byla zrušena."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr ""
+msgstr "Manuální platba naplánovaná na {date} byla zrušena."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
@@ -576,7 +580,7 @@ msgstr "Nová platba ve výši {money_amount} byla naplánována na {date}."
 
 #, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
-msgstr ""
+msgstr "Nová manuální platba byla naplánována na {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
@@ -584,7 +588,7 @@ msgstr "Platba ve výši {money_amount} původně plánovaná na {old_date} byla
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr ""
+msgstr "Manuální platba plánovaná na {old_date} byla přesunuta na {new_date}."
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
@@ -596,33 +600,33 @@ msgstr "Platba ve výši {old_money_amount} plánovaná na {old_date} byla nahra
 
 #, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
-msgstr ""
+msgstr "Automatická platba {old_money_amount} plánovaná na {old_date} byla nahrazena manuální platbou dne {new_date}."
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Manuální platba plánovaná na {old_date} byla nahrazena automatickou platbou ve výši {new_money_amount} dne {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Nyní máte {n} plánovanou platbu:"
+msgstr[1] "Nyní máte {n} plánované platby:"
+msgstr[2] "Nyní máte {n} plánovaných plateb:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
-msgstr ""
+msgstr "{date}: automatická platba ve výši {money_amount} pro {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: automatická platba {money_amount} byla rozdělena mezi {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
-msgstr ""
+msgstr "{date}: manuální platba pro {recipients}"
 
 msgid "Manage your payment schedule"
-msgstr ""
+msgstr "Spravujte svůj platební plán"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
@@ -642,11 +646,11 @@ msgstr "{user_name} z {platform} se připojil k Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr ""
+msgstr "Dne {date} jste se zavázali darovat {money_amount} {user_name}, pokud se připojí k Liberapay."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
-msgstr ""
+msgstr "S potěšením vám oznamujeme, že {user_name} se připojil k Liberapay {time_ago}, jako {liberapay_username}."
 
 #, python-brace-format
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
