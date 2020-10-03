@@ -348,7 +348,7 @@ if user.is_admin:
                         weeks, money_amount=event['unit_amount']
                     ) }})
                 % endif
-                % if context == 'tip-in-arrears'
+                % if context == 'take-in-arrears'
                     ({{ _("in arrears") }})
                 % endif
             % elif context == 'refund'
