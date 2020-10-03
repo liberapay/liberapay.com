@@ -194,7 +194,7 @@ class MixinTeam:
         takes = self.db.all("""
             SELECT t.member
                  , t.ctime
-                 , t.amount
+                 , convert(t.amount, %(currency)s) AS amount
                  , (coalesce_currency_amount((
                        SELECT sum(pt.amount - coalesce(pt.reversed_amount, zero(pt.amount)), %(currency)s)
                          FROM payin_transfers pt
