@@ -50,7 +50,7 @@ participant.render_notifications(state, before=before, limit=limit)
     % endif
     <button class="btn btn-primary" name="mark_all_as_read" value="true"
         {{ 'disabled' if not unread_notifications }}>{{
-        _("Mark all notifications as read")
+        _("Mark all notifications in this page as read")
     }}</button><br>
     <br>
     % for notif in notifs
