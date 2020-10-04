@@ -194,7 +194,7 @@ class MixinTeam:
         takes = self.db.all("""
             SELECT t.member
                  , t.ctime
-                 , t.amount
+                 , convert(t.amount, %(currency)s) AS amount
                  , (coalesce_currency_amount((
                        SELECT sum(pt.amount - coalesce(pt.reversed_amount, zero(pt.amount)), %(currency)s)
                          FROM payin_transfers pt
@@ -202,6 +202,7 @@ class MixinTeam:
                           AND pt.team = t.team
                           AND pt.context = 'team-donation'
                           AND pt.status = 'succeeded'
+                          AND pt.ctime > (current_timestamp - interval '13 weeks')
                    ), %(currency)s) + coalesce_currency_amount((
                        SELECT sum(tr.amount, %(currency)s)
                          FROM transfers tr
@@ -210,6 +211,7 @@ class MixinTeam:
                           AND tr.context IN ('take', 'take-in-advance')
                           AND tr.status = 'succeeded'
                           AND tr.virtual IS NOT true
+                          AND tr.timestamp > (current_timestamp - interval '13 weeks')
                    ), %(currency)s)) AS received_sum
                  , (coalesce_currency_amount((
                        SELECT sum(t2.amount, %(currency)s)
@@ -224,6 +226,7 @@ class MixinTeam:
                                           LIMIT 1
                                        ) AS amount
                                   FROM paydays payday
+                                 WHERE payday.ts_start > (current_timestamp - interval '13 weeks')
                               ) t2
                         WHERE t2.amount > 0
                    ), %(currency)s)) AS takes_sum
@@ -249,7 +252,11 @@ class MixinTeam:
         if income_amount == 0:
             income_amount = Money.MINIMUMS[currency]
         manual_takes_sum = MoneyBasket(t.amount for t in takes if t.amount > 0)
-        auto_take = income_amount - manual_takes_sum.fuzzy_sum(currency)
+        n_auto_takes = sum(1 for t in takes if t.amount < 0) or 1
+        auto_take = (
+            (income_amount - manual_takes_sum.fuzzy_sum(currency)) /
+            n_auto_takes
+        ).round_up()
         if auto_take < 0:
             auto_take = zero
         for t in takes:

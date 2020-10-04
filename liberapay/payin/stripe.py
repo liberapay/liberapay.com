@@ -115,7 +115,7 @@ def charge(db, payin, payer):
                    AND a.country IN %(SEPA)s
             """, dict(team=pt.team, SEPA=SEPA)) > 0
             if can_retry:
-                payin = prepare_payin(db, payer, payin.amount, route)
+                payin = prepare_payin(db, payer, payin.amount, route, off_session=payin.off_session)
                 prepare_donation(
                     db, payin, tip, tip.tippee_p, 'stripe', payer, route.country, payin.amount,
                     sepa_only=True,

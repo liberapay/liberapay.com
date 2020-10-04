@@ -74,7 +74,7 @@ from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.models.tip import Tip
-from liberapay.payin.common import resolve_amounts
+from liberapay.payin.common import resolve_amounts, resolve_take_amounts
 from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
@@ -641,19 +641,20 @@ class Participant(Model, MixinTeam):
 
         tips = self.db.all("""
             SELECT tip.amount, tip.tippee, tip.ctime, tip.periodic_amount
-                 , tippee_p.kind
+                 , tip.paid_in_advance, tip.renewal_mode
+                 , tippee_p
                  , compute_arrears(tip) AS arrears_due
               FROM current_tips tip
               JOIN participants tippee_p ON tippee_p.id = tip.tippee
              WHERE tip.tipper = %s
-               AND tip.renewal_mode > 0
                AND tippee_p.status = 'active'
                AND (tippee_p.mangopay_user_id IS NOT NULL OR tippee_p.kind = 'group')
                AND tippee_p.is_suspended IS NOT TRUE
         """, (self.id,))
-
+        if arrears_only:
+            tips = [tip for tip in tips if tip.arrears_due > 0]
         for tip in tips:
-            if tip.kind == 'group':
+            if tip.tippee_p.kind == 'group':
                 currency = tip.amount.currency
                 tip.team = Participant.from_id(tip.tippee)
                 unfiltered_takes = tip.team.get_current_takes_for_payment(
@@ -668,8 +669,10 @@ class Participant(Model, MixinTeam):
                     tip.takes[0].amount.amount = Decimal('1')
                 tip.total_takes = MoneyBasket(t.amount for t in tip.takes)
         tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
-        transfers = []
+        if not tips:
+            raise UnableToDistributeBalance(self.balance)
 
+        transfers = []
         for wallet in self.get_current_wallets():
             if wallet.balance == 0:
                 continue
@@ -678,64 +681,73 @@ class Participant(Model, MixinTeam):
                 [t for t in tips if t.amount.currency == currency],
                 key=lambda t: (t.amount, t.ctime), reverse=True
             )
-            total = Money.sum((t.amount for t in tips_in_this_currency), currency)
-            distributed = Money.ZEROS[currency]
-            initial_balance = wallet.balance
-            transfers_in_this_currency = []
-
-            if not total:
+            if not tips_in_this_currency:
                 continue
-
+            zero = Money.ZEROS[currency]
+            for_arrears = {
+                tip.tippee: max(tip.arrears_due, zero) for tip in tips_in_this_currency
+            }
+            for_arrears_sum = Money.sum(for_arrears.values(), currency)
+            if wallet.balance < for_arrears_sum:
+                for_arrears = resolve_amounts(wallet.balance, for_arrears)
+                for_arrears_sum = wallet.balance
+            renewable_tips = [
+                tip for tip in tips_in_this_currency
+                if tip.renewal_mode > 0 and tip.tippee_p.accepts_tips
+            ]
+            if renewable_tips and not arrears_only and wallet.balance > for_arrears_sum:
+                for tip in renewable_tips:
+                    if tip.paid_in_advance is None:
+                        tip.paid_in_advance = zero
+                max_advance_weeks = max(
+                    t.paid_in_advance / t.amount for t in renewable_tips
+                )
+                if max_advance_weeks < 1:
+                    max_advance_weeks = 1
+                for tip in renewable_tips:
+                    tip.convergence_amount = max((
+                        tip.amount * max_advance_weeks - tip.paid_in_advance
+                    ), zero)
+                for_advances = resolve_amounts(
+                    wallet.balance - for_arrears_sum,
+                    {tip.tippee: tip.amount for tip in renewable_tips},
+                    {tip.tippee: tip.convergence_amount for tip in renewable_tips},
+                )
+            else:
+                for_advances = {}
             for tip in tips_in_this_currency:
-                rate = tip.amount / total
-                pro_rated = (initial_balance * rate).round_down()
-                if pro_rated == 0:
-                    continue
-                arrears = min(max(tip.arrears_due, 0), pro_rated)
-                advance = pro_rated - arrears
-                assert arrears > 0 or advance > 0
-                assert (arrears + advance) == pro_rated
-                arrears_percentage = arrears / (arrears + advance)
-                advance_percentage = 1 - arrears_percentage
-                if tip.kind == 'group':
-                    n_periods = pro_rated / tip.periodic_amount
+                arrears = for_arrears.get(tip.tippee, zero)
+                advance = for_advances.get(tip.tippee, zero)
+                if tip.tippee_p.kind == 'group':
                     team_id = tip.tippee
-                    from liberapay.payin.common import resolve_take_amounts
-                    resolve_take_amounts(pro_rated, tip.takes)
-                    for take in tip.takes:
-                        actual = take.resolved_amount
-                        if actual == 0:
-                            continue
-                        unit_amount = (actual / n_periods).round_up()
-                        arr = min(
-                            (actual * arrears_percentage).round_up(),
-                            actual
+                    if arrears:
+                        resolved_takes = resolve_amounts(
+                            arrears,
+                            {take.member: take.amount for take in tip.takes},
                         )
-                        adv = min(
-                            (actual * advance_percentage).round_up(),
-                            actual - arr
-                        )
-                        assert arr > 0 or adv > 0
-                        assert (arr + adv) == actual
-                        transfers_in_this_currency.append(
-                            [take.member, adv, arr, team_id, wallet, unit_amount]
-                        )
+                        n_weeks = arrears / tip.amount
+                        for take in tip.takes:
+                            resolved_amount = resolved_takes.get(take.member, zero)
+                            if resolved_amount > 0:
+                                unit_amount = (resolved_amount / n_weeks).round_up()
+                                transfers.append(
+                                    [take.member, None, resolved_amount, team_id, wallet, unit_amount]
+                                )
+                    if advance:
+                        resolve_take_amounts(advance, tip.takes)
+                        n_weeks = advance / tip.periodic_amount
+                        for take in tip.takes:
+                            resolved_amount = take.resolved_amount
+                            if resolved_amount > 0:
+                                unit_amount = (resolved_amount / n_weeks).round_up()
+                                transfers.append(
+                                    [take.member, resolved_amount, None, team_id, wallet, unit_amount]
+                                )
+                            del take.resolved_amount
                 else:
-                    transfers_in_this_currency.append(
+                    transfers.append(
                         [tip.tippee, advance, arrears, None, wallet, tip.amount]
                     )
-                distributed += pro_rated
-
-            diff = initial_balance - distributed
-            if diff != 0 and transfers_in_this_currency:
-                # Give it to the first recipient.
-                tr = transfers_in_this_currency[0]
-                if tr[1]:
-                    tr[1] += diff
-                else:
-                    tr[2] += diff
-
-            transfers.extend(transfers_in_this_currency)
 
         if not transfers:
             raise UnableToDistributeBalance(self.balance)
@@ -752,7 +764,8 @@ class Participant(Model, MixinTeam):
                     tipper_mango_id=self.mangopay_user_id,
                     tipper_wallet_id=wallet.remote_id
                 )[0]
-            if advance and not arrears_only:
+            if advance:
+                assert not arrears_only
                 context = 'take-in-advance' if team else 'tip-in-advance'
                 balance = transfer(
                     db, tipper, tippee, advance, context,
@@ -762,11 +775,10 @@ class Participant(Model, MixinTeam):
                 )[0]
 
         self.set_attributes(balance=balance)
-
         self.schedule_renewals()
 
-        if balance != 0:
-            raise UnableToDistributeBalance(balance)
+        if self.balance != 0:
+            raise UnableToDistributeBalance(self.balance)
 
     def donate_remaining_balances_to_liberapay(self):
         """Donate what's left in the user's wallets to Liberapay.
