@@ -94,7 +94,7 @@ class TestNotifications(Harness):
         )
         assert alice.pending_notifs == 2
 
-        data = {'mark_all_as_read': 'true', 'until': str(n1)}
+        data = {'mark_all_as_read': 'true', 'last_seen': str(n1)}
         r = self.client.PxST('/alice/notifications.json', data, auth_as=alice)
         assert r.code == 302
 
