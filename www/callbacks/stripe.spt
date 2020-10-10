@@ -145,7 +145,7 @@ elif event.type == 'account.updated':
         default_currency=account.default_currency.upper(),
         charges_enabled=account.charges_enabled,
         display_name=account.settings.dashboard.display_name,
-        account_id=account_id,
+        account_id=account.id,
     ))
 
 elif event.type == 'account.application.deauthorized':
