@@ -195,41 +195,10 @@ class MixinTeam:
             SELECT t.member
                  , t.ctime
                  , convert(t.amount, %(currency)s) AS amount
-                 , (coalesce_currency_amount((
-                       SELECT sum(pt.amount - coalesce(pt.reversed_amount, zero(pt.amount)), %(currency)s)
-                         FROM payin_transfers pt
-                        WHERE pt.recipient = t.member
-                          AND pt.team = t.team
-                          AND pt.context = 'team-donation'
-                          AND pt.status = 'succeeded'
-                          AND pt.ctime > (current_timestamp - interval '13 weeks')
-                   ), %(currency)s) + coalesce_currency_amount((
-                       SELECT sum(tr.amount, %(currency)s)
-                         FROM transfers tr
-                        WHERE tr.tippee = t.member
-                          AND tr.team = t.team
-                          AND tr.context IN ('take', 'take-in-advance')
-                          AND tr.status = 'succeeded'
-                          AND tr.virtual IS NOT true
-                          AND tr.timestamp > (current_timestamp - interval '13 weeks')
-                   ), %(currency)s)) AS received_sum
-                 , (coalesce_currency_amount((
-                       SELECT sum(t2.amount, %(currency)s)
-                         FROM ( SELECT ( SELECT t2.amount
-                                           FROM takes t2
-                                          WHERE t2.member = t.member
-                                            AND t2.team = t.team
-                                            AND t2.mtime < coalesce(
-                                                    payday.ts_start, current_timestamp
-                                                )
-                                       ORDER BY t2.mtime DESC
-                                          LIMIT 1
-                                       ) AS amount
-                                  FROM paydays payday
-                                 WHERE payday.ts_start > (current_timestamp - interval '13 weeks')
-                              ) t2
-                        WHERE t2.amount > 0
-                   ), %(currency)s)) AS takes_sum
+                 , convert(
+                       coalesce_currency_amount(t.paid_in_advance, t.amount::currency),
+                       %(currency)s
+                   ) AS paid_in_advance
                  , p.is_suspended
                  , ( CASE WHEN %(provider)s = 'mangopay' THEN p.mangopay_user_id IS NOT NULL
                      ELSE EXISTS (
