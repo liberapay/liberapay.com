@@ -1,7 +1,5 @@
 from liberapay.utils import get_participant
 
-get_unread = lambda notifs: [n for n in notifs if n['is_new']]
-
 [---]
 
 request.allow('GET', 'POST')
@@ -11,8 +9,8 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     body = request.body
     if body.get('mark_all_as_read') == 'true':
-        until = body.get_int('until', default=0)
-        participant.mark_notifications_as_read(until=until)
+        last_seen = body.get_int('last_seen', default=0)
+        participant.mark_notifications_as_read(until=last_seen)
     elif 'mark_as_read' in body:
         participant.mark_notification_as_read(body.get_int('mark_as_read'))
     elif 'restore' in body:
@@ -44,12 +42,16 @@ participant.render_notifications(state, before=before, limit=limit)
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % set notifs = participant.render_notifications(state, before=before, limit=limit)
-    % set unread_notifications = get_unread(notifs)
-    % if len(unread_notifications) > 0
-        <input type="hidden" name="until" value="{{ unread_notifications[0].id }}" />
+    % if notifs and not before
+        % set last_seen = notifs[0].id
+    % else
+        % set last_seen = request.qs.get_int('last_seen', default=None)
+    % endif
+    % if last_seen
+        <input type="hidden" name="last_seen" value="{{ last_seen }}" />
     % endif
     <button class="btn btn-primary" name="mark_all_as_read" value="true"
-        {{ 'disabled' if not unread_notifications }}>{{
+        {{ 'disabled' if participant.pending_notifs == 0 }}>{{
         _("Mark all notifications as read")
     }}</button><br>
     <br>
@@ -80,7 +82,7 @@ participant.render_notifications(state, before=before, limit=limit)
         <p>{{ _("No notifications to show.") }}</p>
     % endfor
     % if len(notifs) == limit
-        <a class="btn btn-default" href="{{ request.qs.derive(before=notifs[-1].id) }}">{{
+        <a class="btn btn-default" href="{{ request.qs.derive(before=notifs[-1].id, last_seen=last_seen) }}">{{
             _("Next Page →")
         }}</a>
     % endif

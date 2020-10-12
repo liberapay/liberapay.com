@@ -21,10 +21,10 @@
     % for sp in payins
         <li>{{ _(
             "{date}: {money_amount} to {recipient}",
-            date=sp.execution_date, money_amount=sp.amount, recipient=sp.tippee_link
-        ) if sp.tippee_link else _(
+            date=sp.execution_date, money_amount=sp.amount, recipient=website.tippee_links(sp.transfers)[0]
+        ) if len(sp.transfers) == 1 else _(
             "{date}: {money_amount} split between {recipients}",
-            date=sp.execution_date, money_amount=sp.amount, recipients=sp.tippee_links
+            date=sp.execution_date, money_amount=sp.amount, recipients=website.tippee_links(sp.transfers)
         ) }}</li>
     % endfor
     </ul>

@@ -1,6 +1,5 @@
 from collections import namedtuple
 from datetime import timedelta
-from decimal import Decimal
 
 from pando import json
 from pando.utils import utcnow
@@ -417,11 +416,8 @@ def resolve_team_donation(
         raise MissingPaymentAccount(team)
     members = sorted(members, key=lambda t: (
         int(t.member == payer.id),
-        -(
-            (t.amount + t.takes_sum) /
-            (t.received_sum + payment_amount)
-        ),
-        t.received_sum,
+        -(t.amount / (t.paid_in_advance + payment_amount)),
+        t.paid_in_advance,
         t.ctime
     ))
     if members[0].member == payer.id:
@@ -474,17 +470,13 @@ def resolve_take_amounts(payment_amount, takes):
     adding a `resolved_amount` attribute to each one.
 
     """
-    exp = Decimal('0.7')
     max_weeks_of_advance = 0
     for t in takes:
         if t.amount == 0:
             t.weeks_of_advance = 0
             continue
-        t.weeks_of_advance = (t.received_sum - t.takes_sum) / t.amount
-        if t.weeks_of_advance < -1:
-            # Dampen the effect of past takes, because they can't be changed.
-            t.weeks_of_advance = -((-t.weeks_of_advance) ** exp)
-        elif t.weeks_of_advance > max_weeks_of_advance:
+        t.weeks_of_advance = t.paid_in_advance / t.amount
+        if t.weeks_of_advance > max_weeks_of_advance:
             max_weeks_of_advance = t.weeks_of_advance
     base_amounts = {t.member: t.amount for t in takes}
     convergence_amounts = {
