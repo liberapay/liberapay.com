@@ -118,7 +118,6 @@ class NoDB:
         raise NeedDatabase()
 
     __bool__ = lambda self: False
-    __nonzero__ = __bool__
 
     back_as_registry = {}
 

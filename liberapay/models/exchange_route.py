@@ -17,8 +17,6 @@ class ExchangeRoute(Model):
     def __bool__(self):
         return self.status in ('pending', 'chargeable')
 
-    __nonzero__ = __bool__
-
     def __repr__(self):
         return '<ExchangeRoute id=%r participant=%r network=%r status=%r>' % (
             self.id, self.participant, self.network, self.status
