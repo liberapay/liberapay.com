@@ -587,9 +587,9 @@ msgstr "新しい手動支払いが{date}に予定されています。"
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
 msgstr "{old_date}に予定されていた{money_amount}の支払いは、{new_date}に変更になりました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
-msgstr "{old_date}に予定されていたの手動の支払いは、{new_date}に変更になりました。"
+msgstr "{old_date}に予定されていた手動の支払いは、{new_date}に変更になりました。"
 
 #, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
@@ -1253,9 +1253,9 @@ msgstr ""
 msgid "No account has the username “{username}”."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
-msgstr "メインのメールアドレスが {email_address} であるアカウントは見つかりませんでした。"
+msgstr "“{email_address}”をメインのメールアドレスに使用しているアカウントはありません。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
@@ -3211,9 +3211,8 @@ msgstr "通貨：{0}"
 msgid "Added on {date}"
 msgstr "{date} に追加"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, log in to the account and complete the verification process. After that, reconnect the account if you still see this message."
-msgstr "このアカウントは支払いを受け取ることができません。"
+msgstr "このアカウントは支払いを受け取ることができません。この問題を修正するには、アカウントにログインして認証プロセスを完了してください。その後もこのメッセージが表示される場合は、アカウントを再接続してください。"
 
 #, python-brace-format
 msgid "Manage this {platform} account"
@@ -4976,9 +4975,9 @@ msgstr "まず寄付をしたい相手を見つけましょう。次に金額と
 msgid "2. Fund your donation"
 msgstr "2. 寄付金を提供"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "On Liberapay, donations are funded in advance. You have control over when and how much you pay. Sending more money at once usually results in a lower percentage of {0}transaction fees{1}."
-msgstr "Liberapay において、寄付は前もって行われます。皆さんは、寄付の金額と寄付がいつ行われるのかを管理することができます。一度により多くの金額を送信することで、{0}取引手数料{1}の割合を下げられます。"
+msgstr "Liberapay において、寄付は前もって行われます。寄贈者は、金額と支払日を選択できます。一度により多くの金額を送信することで、{0}取引手数料{1}の割合を下げられます。"
 
 msgid "3. Keep your donation funded"
 msgstr "3. 寄付をし続ける"
@@ -5064,9 +5063,8 @@ msgstr[0] "ご自身のプロフィールを {platform1} や、{platform2}、{pl
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "また、{platforms_list} で貢献しているリポジトリをプロフィールに簡単に掲載することもできます。"
 
-#, fuzzy
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay では、Liberapay に参加していない人に寄付の約束をすることも可能です。その人がサインアップしてお金を受け取ると寄付が自動的に始まります。その際あなたに通知が送信されます。"
+msgstr "Liberapay では、Liberapay に参加していない人に寄付の約束をすることも可能です。その人がサインアップしてお金を受け取ると寄付が自動的に始まります。その際、寄贈者に通知が送信されます。"
 
 msgid "Sponsors"
 msgstr "スポンサー"
@@ -5317,7 +5315,7 @@ msgstr[0] "{0} は {n} 人の公開メンバーがいるチームです"
 msgid "Explore unclaimed donations"
 msgstr "未請求の寄付を探す"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "これは {platform} のユーザー {user_name} 専用のページです。"
 
@@ -5345,7 +5343,6 @@ msgstr ""
 msgid "Pledge to {user_name}"
 msgstr ""
 
-#, fuzzy
 msgid "You can support individual team members:"
 msgstr "チームのメンバーに直接寄付できます："
 
