@@ -56,10 +56,17 @@ participant.render_notifications(state, before=before, limit=limit)
     }}</button><br>
     <br>
     % for notif in notifs
-        <div class="alert alert-{{ notif.type }} {{ 'alert-read' if not notif.is_new else '' }}">
-        % if notif.subject
+        <div class="alert alert-{{ notif.type|default('info') }} alert-notification {{ 'alert-read' if not notif.is_new else '' }}">
+        % if notif.hidden_since
+            <i>{{ _("This notification is marked for deletion.") }}</i>
+            <button class="btn btn-default btn-xs pull-right" name="restore" value="{{ notif.id }}">{{
+                _("Restore")
+            }}</button>
+        % else
+            % set subject = notif.subject|default('')
+            % set html = notif.html|default('')
             <h3 class="alert-header">
-                <span class="title">{{ notif.subject|safe }}</span>
+                <span class="title">{{ subject|safe }}</span>
                 <small>{{ locale.format_datetime(notif.ts) if notif.ts }}</small>
                 <span class="actions">
                     % if notif.is_new
@@ -70,12 +77,20 @@ participant.render_notifications(state, before=before, limit=limit)
                             _('Remove') }}"></button>
                 </span>
             </h3>
-            {{ notif.html|safe }}
-        % else
-            <i>{{ _("This notification is marked for deletion.") }}</i>
-            <button class="btn btn-default btn-xs pull-right" name="restore" value="{{ notif.id }}">{{
-                _("Restore")
-            }}</button>
+            <div class="alert-body">
+            % if subject and html
+                {{ html|safe }}
+            % else
+                <p><i>{{ _("An error occurred while rendering this notification.") }}</i></p>
+                % if notif.sentry_ident
+                    <p><i>{{ _(
+                        "The details of this error have been recorded. If you decide to contact us "
+                        "please include the following error identification code in your message: {0}.",
+                        '<code>%s</code>'|safe % notif.sentry_ident
+                    ) }}</i></p>
+                % endif
+            % endif
+            </div>
         % endif
         </div>
     % else

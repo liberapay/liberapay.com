@@ -1525,22 +1525,20 @@ class Participant(Model, MixinTeam):
 
         r = []
         for id, event, notif_context, is_new, ts, hidden_since in notifs:
+            d = dict(id=id, is_new=is_new, ts=ts, hidden_since=hidden_since)
+            r.append(d)
             try:
                 notif_context = deserialize(notif_context)
+                d['type'] = notif_context.get('type', 'info')
                 spt = website.emails[event]
-                if hidden_since:
-                    subject, html = None, None
-                else:
-                    context = dict(state)
-                    self.fill_notification_context(context)
-                    context.update(notif_context)
-                    context['notification_ts'] = ts
-                    subject = spt['subject'].render(context).strip()
-                    html = spt['text/html'].render(context).strip()
-                typ = notif_context.get('type', 'info')
-                r.append(dict(id=id, subject=subject, html=html, type=typ, is_new=is_new, ts=ts))
+                context = dict(state)
+                self.fill_notification_context(context)
+                context.update(notif_context)
+                context['notification_ts'] = ts
+                d['subject'] = spt['subject'].render(context).strip()
+                d['html'] = spt['text/html'].render(context).strip()
             except Exception as e:
-                website.tell_sentry(e, state)
+                d['sentry_ident'] = website.tell_sentry(e, state).get('sentry_ident')
         return r
 
     @classmethod

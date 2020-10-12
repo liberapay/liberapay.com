@@ -817,14 +817,16 @@ span.help-title {
     background: transparent;
 }
 
+.alert-notification {
+    padding: 0;
+}
 .alert-header {
-    border-bottom: 1px solid;
     display: flex;
     flex-wrap: wrap;
     font-size: $font-size-base;
     justify-content: space-between;
     line-height: $line-height-computed;
-    margin: -15px -15px 11px;
+    margin: 0;
     padding: 10px 15px 10px;
     position: relative;
     & > .title {
@@ -851,17 +853,21 @@ span.help-title {
         margin-right: 11ex;
     }
 }
-.alert-danger > .alert-header {
-    border-bottom-color: $state-danger-border;
+.alert-body {
+    border-top: 1px solid;
+    padding: 11px 15px 0;
 }
-.alert-info > .alert-header {
-    border-bottom-color: $state-info-border;
+.alert-danger > .alert-body {
+    border-top-color: $state-danger-border;
 }
-.alert-success > .alert-header {
-    border-bottom-color: $state-success-border;
+.alert-info > .alert-body {
+    border-top-color: $state-info-border;
 }
-.alert-warning > .alert-header {
-    border-bottom-color: $state-warning-border;
+.alert-success > .alert-body {
+    border-top-color: $state-success-border;
+}
+.alert-warning > .alert-body {
+    border-top-color: $state-warning-border;
 }
 
 .hover-danger:hover {
