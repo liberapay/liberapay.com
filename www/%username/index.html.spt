@@ -27,9 +27,8 @@ if lang:
     if lang in website.subdomains and request.hostname.split('.', 1)[0] != lang:
         raise response.redirect(website.subdomains[lang] + request.path.raw)
 else:
-    statement, lang = participant.get_statement(request.accept_langs)
-    if not statement:
-        lang = locale.language
+    statement = participant.get_statement(request.accept_langs)
+    lang = statement.lang if statement else locale.language
 statement = markdown.render(statement) if statement else None
 summary = participant.get_statement(lang, 'summary')
 

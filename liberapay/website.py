@@ -146,5 +146,5 @@ JINJA_ENV_COMMON = dict(
     line_statement_prefix='%',
     auto_reload=env.aspen_changes_reload,
     extensions=['jinja2.ext.do'],
-    # undefined=CustomUndefined,
+    undefined=CustomUndefined,
 )

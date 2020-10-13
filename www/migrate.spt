@@ -383,13 +383,13 @@ title = _("Migrating from Gratipay")
         ) }}</p>
 
         <h3>{{ _("Profile") }}</h3>
-        % if result.self_username_conflict
+        % if result.self_username_conflict is defined
             <div class="alert alert-warning">{{ _(
                 "Your username \"{0}\" was the same as your team's name, so it was "
                 "attributed to the team instead of your personal account.",
                 result.self_username_conflict
             ) }}</div>
-        % elif result.unavailable_username
+        % elif result.unavailable_username is defined
             <div class="alert alert-danger">{{ _(
                 "The username '{0}' is already taken.",
                 result.unavailable_username

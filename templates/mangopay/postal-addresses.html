@@ -3,38 +3,38 @@
     <label>
         <span>{{ _("Address") }}</span>
         <input name="{{ prefix }}Address.AddressLine1" class="form-control" required
-               value="{{ saved.AddressLine1 or '' }}" />
+               value="{{ saved.AddressLine1|default('', true) }}" />
     </label><br>
 
     <label>
         <span>{{ _("Address (second line)") }}</span>
         <input name="{{ prefix }}Address.AddressLine2" class="form-control"
-               value="{{ saved.AddressLine2 or '' }}" />
+               value="{{ saved.AddressLine2|default('', true) }}" />
     </label><br>
 
     <label>
         <span>{{ _("City") }}</span>
         <input name="{{ prefix }}Address.City" class="form-control" required
-               value="{{ saved.City or '' }}" />
+               value="{{ saved.City|default('', true) }}" />
     </label><br>
 
     <label>
         <span>{{ _("Region") }}</span>
         <input name="{{ prefix }}Address.Region" class="form-control"
-               value="{{ saved.Region or '' }}" />
+               value="{{ saved.Region|default('', true) }}" />
     </label><br>
 
     <label>
         <span>{{ _("Postal Code") }}</span>
         <input name="{{ prefix }}Address.PostalCode" class="form-control" required
-               size=6 value="{{ saved.PostalCode or '' }}" />
+               size=6 value="{{ saved.PostalCode|default('', true) }}" />
     </label><br>
 
     <label>
         <span>{{ _("Country") }}</span>
         <select name="{{ prefix }}Address.Country" class="form-control country" required>
             <option></option>
-            % set country = country or saved.Country
+            % set country = country or saved.Country|default(None)
             % for code, name in locale.countries.items()
                 <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
             % endfor

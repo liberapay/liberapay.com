@@ -4,7 +4,7 @@
             <div class="input-group">
                 <input type="text" name="q" class="form-control search"
                        placeholder="{{ _('Search Liberapay') }}"
-                       value="{{ query or '' }}"
+                       value="{{ query|default('', true) }}"
                        {{ 'autofocus' if autofocus else '' }}
                        {% if not autocomplete %} autocomplete="off" {% endif %} />
                 <div class="input-group-btn">

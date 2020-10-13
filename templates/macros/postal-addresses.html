@@ -8,7 +8,7 @@
         <span>{{ _("Country") }}</span>
         <select name="{{ prefix }}.country" class="form-control country" {{ required }}>
             <option></option>
-            % set country = saved.country or request.country
+            % set country = saved.country|default('') or request.country
             % for code, name in locale.countries.items()
                 <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
             % endfor
@@ -24,25 +24,25 @@
             }}</span>
         </span>
         <input name="{{ prefix }}.region" class="form-control" maxlength=100
-               value="{{ saved.region or '' }}" />
+               value="{{ saved.region|default('') }}" />
     </label>
 
     <label>
         <span>{{ _("City") }}</span>
         <input name="{{ prefix }}.city" class="form-control" {{ required }} maxlength=100
-               value="{{ saved.city or '' }}" />
+               value="{{ saved.city|default('') }}" />
     </label>
 
     <label>
         <span>{{ _("Postal code") }}</span>
         <input name="{{ prefix }}.postal_code" class="form-control" {{ required }} maxlength=50
-               size=6 value="{{ saved.postal_code or '' }}" />
+               size=6 value="{{ saved.postal_code|default('') }}" />
     </label>
 
     <label>
         <span>{{ _("Address within the city") }}</span>
         <textarea name="{{ prefix }}.local_address" class="form-control" {{ required }} rows=2 maxlength=200>{{
-            saved.local_address
+            saved.local_address|default('')
         }}</textarea>
     </label>
 

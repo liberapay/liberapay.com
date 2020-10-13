@@ -34,13 +34,19 @@ if request.method == 'POST':
         if not needs_confirmation:
             raise response.redirect(f'/for/{c.name}/edit?lang={switch_lang}')
 else:
+    action = None
     lang = request.qs.get('lang')
     if lang:
         subtitle = c.participant.get_statement(lang, 'subtitle')
         sidebar = c.participant.get_statement(lang, 'sidebar')
     else:
-        subtitle, lang = c.participant.get_statement(request.accept_langs, 'subtitle')
-        sidebar, lang = c.participant.get_statement(request.accept_langs, 'sidebar')
+        subtitle = c.participant.get_statement(request.accept_langs, 'subtitle')
+        if subtitle:
+            lang = subtitle.lang
+            sidebar = c.participant.get_statement(lang, 'sidebar')
+        else:
+            sidebar = c.participant.get_statement(request.accept_langs, 'sidebar')
+            lang = sidebar.lang if sidebar else None
 
 select_langs = get_lang_options(request, locale, c.participant.get_statement_langs('subtitle'))
 lang = lang or c.lang

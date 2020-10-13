@@ -1,6 +1,18 @@
 from types import SimpleNamespace
 
 
+class LocalizedString(str):
+    """A string with a `lang` attribute containing an ISO language code.
+    """
+
+    __slots__ = ('lang',)
+
+    def __new__(cls, obj, lang):
+        r = str.__new__(cls, obj)
+        r.lang = lang
+        return r
+
+
 class Object(SimpleNamespace):
     """
     A namespace that supports both attribute-style and dict-style lookups and

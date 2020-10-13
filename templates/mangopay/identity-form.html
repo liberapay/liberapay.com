@@ -7,7 +7,7 @@
         "show it to other users or anyone else unless required by law."
     ) }}</p>
 
-    % set p = 'LegalRepresentative' if participant.kind == 'organization' else ''
+    % set p = 'LegalRepresentative' if account.PersonType == 'LEGAL' else ''
 
     <label>
         <span>{{ _('Given Name') }}</span>
@@ -76,8 +76,9 @@
                 ('BUSINESS', _('Business')),
                 ('ORGANIZATION', _('Organization')),
             ] %}
+            % set current_value = account.LegalPersonType|default('')
             % for v, t in legal_person_types
-            <option value="{{ v }}" {{ 'selected' if account.LegalPersonType == v else '' }}
+            <option value="{{ v }}" {{ 'selected' if v == current_value else '' }}
                     >{{ t }}</option>
             % endfor
         </select>
@@ -87,7 +88,7 @@
     <label>
         <span>{{ _('Organization Name') }}</span>
         <input name="Name" required size=30 maxlength=255
-               class="form-control" value="{{ account.Name }}" />
+               class="form-control" value="{{ account.Name|default('') }}" />
     </label>
 
     </fieldset>

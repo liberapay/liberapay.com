@@ -43,7 +43,7 @@ subhead = _("Avatar")
                 {{ _("Connect {platform_name} account", platform_name=platform.display_name) }}
             % endcall
         </div>
-    % elif new_avatar_url == None
+    % elif new_avatar_url is none
         <div class="alert alert-danger">
             {{ _("We were unable to get an avatar for you from {0}.", src) }}
             <form action="" method="POST" class="form-inline inline-block">

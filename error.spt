@@ -31,10 +31,10 @@ user_agent = request.headers.get(b'User-Agent')
 [----------------------------------------] text/html
 % extends "templates/layouts/base.html"
 
-% set title = '' if response.html_template else msg
+% set title = '' if response.html_template is defined else msg
 
 % block content
-    % if response.html_template
+    % if response.html_template is defined
         % include response.html_template
     % else
         % if code >= 400 and code <= 499

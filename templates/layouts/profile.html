@@ -23,7 +23,7 @@
         % else
             <h1>{{ participant.username }}</h1>
         % endif
-        <p class="summary" lang="{{ lang or '' }}">{{ summary or '' }}</p>
+        <p class="summary" lang="{{ lang|default('') }}">{{ summary|default('') }}</p>
     </div>
 </div>
 <div class="col-md-offset-1 col-md-10 col-lg-offset-0 col-lg-2">{% block profile_btn %}{% endblock %}</div>
