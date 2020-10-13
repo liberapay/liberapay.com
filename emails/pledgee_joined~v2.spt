@@ -19,7 +19,7 @@
     <p>{{ _(
         "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}.",
         "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}.",
-        n=len(payins),
+        n=1,
         link_start='<a href="%s">'|safe % participant.url('giving/schedule'),
         link_end='</a>'|safe
     ) }}</p>
