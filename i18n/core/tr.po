@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-10-13 11:27+0000\n"
+"PO-Revision-Date: 2020-10-15 02:26+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
 "Language: tr\n"
@@ -33,7 +33,7 @@ msgstr "Liberapay'deki bağışlarınızı yenilemenin vakti geldi"
 
 #, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr "{recipient}'e {amount} tutarındaki bağışınız ödenmeyi bekliyor."
+msgstr "{recipient} için {amount} tutarındaki bağışınız ödenmeyi bekliyor."
 
 #, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
@@ -43,7 +43,7 @@ msgstr[1] "{n} tane yenilenmeyi bekleyen bağışınız var:"
 
 #, python-brace-format
 msgid "{amount} to {username}"
-msgstr "{username}'e {amount}"
+msgstr "{username} için {amount}"
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
@@ -255,7 +255,7 @@ msgstr "Liberapay bağış yenileme: geçerli bir ödeme aracı yok"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "{recipient}'e {amount} olan bağışınızı yenilemek için {payment_date} tarihine planlanmış ödemenizi doğru bir ödeme aracı olmadığı için gerçekleştiremiyoruz."
+msgstr "{recipient} için {amount} tutarındaki bağışınızı yenilemek için {payment_date} tarihine planlanmış ödemenizi geçerli bir ödeme aracı olmadığı için gerçekleştiremiyoruz."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
@@ -677,7 +677,7 @@ msgstr "{user_name} kullanıcısının {time_ago} {liberapay_username} olarak Li
 
 #, python-brace-format
 msgid "Donate to {0}"
-msgstr "{0}'e bağış yapın"
+msgstr "{0} için bağış yapın"
 
 msgid "Liberapay donation renewal: payment aborted"
 msgstr "Liberapay bağış yenilemesi: ödeme iptal edildi"
@@ -777,7 +777,7 @@ msgstr "{0} e-posta adresini şu anki adresi {1} olan Liberapay hesabıyla iliş
 
 #, python-brace-format
 msgid "A Liberapay account was created on {0} with the email address {1}. Was it you?"
-msgstr "{0}'de {1} e-posta adresiyle bir Liberapay hesabı oluşturuldu. O sen miydin?"
+msgstr "{0}'de {1} e-posta adresiyle bir Liberapay hesabı oluşturuldu. O siz miydiniz?"
 
 msgid "Yes, I confirm"
 msgstr "Evet, onaylıyorum"
@@ -991,7 +991,7 @@ msgstr "'{0}' kullanıcı adı kısıtlı bir karakter ile başlıyor."
 
 #, python-brace-format
 msgid "The username '{0}' ends with the forbidden suffix '{1}'."
-msgstr "'{0}' kullanıcı adı yasaklı '{1}' sonekiyle bitiyor."
+msgstr "'{0}' kullanıcı adı yasaklı '{1}' son ekiyle bitiyor."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Kullanıcı adınızı yakın zamanda birçok kez değiştirdiniz, lütfen daha sonra tekrar deneyin (ör. Bir hafta içinde) veya support@liberapay.com ile iletişim kurun."
@@ -1238,11 +1238,11 @@ msgstr "{1} üzerinde {0} adında bir kullanıcı yok gibi görünüyor."
 
 #, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
-msgstr "{username}'a Liberapay bağışı ({team_name} takımı)"
+msgstr "{username} için Liberapay bağışı ({team_name} takımı)"
 
 #, python-brace-format
 msgid "Liberapay donation to {username}"
-msgstr "{username}'e Liberapay bağışı"
+msgstr "{username} için Liberapay bağışı"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
@@ -1527,7 +1527,7 @@ msgid "Pledge"
 msgstr "Vaatte bulun"
 
 msgid "Donate"
-msgstr "Bağış"
+msgstr "Bağış yap"
 
 msgid "Switch to a different account"
 msgstr "Farklı bir hesaba geç"
@@ -1780,7 +1780,7 @@ msgid "Income"
 msgstr "Gelir"
 
 msgid "per week"
-msgstr "haftada"
+msgstr "her hafta"
 
 msgid "Modify your pledge"
 msgstr "Vaadinizi düzenleyin"
@@ -2078,7 +2078,7 @@ msgstr "Denetim Paneli"
 
 #, python-brace-format
 msgid "Donate to {0} via Liberapay"
-msgstr "Liberapay üzerinden {0}'e bağış yap"
+msgstr "Liberapay üzerinden {0} için bağış yap"
 
 #, python-brace-format
 msgid "Support {username}'s work with a recurrent donation."
@@ -4125,7 +4125,7 @@ msgstr "Haftalık {0} alıyoruz,{newline} hedefimiz {1}"
 
 #, python-brace-format
 msgid "We receive {0} per week"
-msgstr "Haftada {0} bağışla"
+msgstr "Haftalık {0} alıyoruz"
 
 msgid "Donation Button"
 msgstr "Bağış Düğmesi"
@@ -5365,7 +5365,7 @@ msgstr "Gerçekten {0} takımının bir yöneticisi misiniz?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
-msgstr "{0}'da {1} takımının yöneticisi olmayan birisi olarak oturum açtığınız için bu hesabı talep etme girişiminiz başarısız oldu. Lütfen oturumu kapatın ve {2}tekrar deneyin{3}."
+msgstr "{0} üzerinde {1} takımının yöneticisi olmayan birisi olarak oturum açtığınız için bu hesabı talep etme girişiminiz başarısız oldu. Lütfen oturumu kapatın ve {2}tekrar deneyin{3}."
 
 #, python-brace-format
 msgid "Are you really {0}?"
@@ -5373,7 +5373,7 @@ msgstr "Gerçekten {0} misiniz?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
-msgstr "{0}'da başka birisi olarak oturum açtığınız için bu hesabı talep etme girişiminiz başarısız oldu. Lütfen oturumu kapatın ve {1}tekrar deneyin{2}."
+msgstr "{0} üzerinde başka birisi olarak oturum açtığınız için bu hesabı talep etme girişiminiz başarısız oldu. Lütfen oturumu kapatın ve {1}tekrar deneyin{2}."
 
 #, python-brace-format
 msgid "{0} is a private team"
@@ -5504,7 +5504,7 @@ msgstr "Lütfen Doğrulayın"
 
 #, python-brace-format
 msgid "{0} is connected to {1} on Liberapay. Transfer it?"
-msgstr "{0}, Liberapay'de {1}'e bağlandı . Aktar?"
+msgstr "{0}, Liberapay'de {1}'e bağlandı . Aktarılsın mı?"
 
 msgid "How the accounts are now"
 msgstr "Hesaplar şimdi nasıl"
