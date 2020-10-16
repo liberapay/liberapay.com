@@ -461,18 +461,19 @@ def make_sentry_teller(env, version):
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
     def tell_sentry(exception, state, allow_reraise=True, level=None):
+        r = {'sentry_ident': None}
 
         if isinstance(exception, pando.Response):
             if exception.code < 500:
                 # Only log server errors
-                return
+                return r
             if not level and exception.code in (502, 504):
                 # This kind of error is usually transient and not our fault.
                 level = 'warning'
 
         if isinstance(exception, NeedDatabase):
             # Don't flood Sentry when DB is down
-            return
+            return r
 
         if isinstance(exception, PoolError):
             # If this happens, then the `DATABASE_MAXCONN` value is too low.
@@ -507,7 +508,9 @@ def make_sentry_teller(env, version):
                 response = state.get('response') or pando.Response()
                 response.code = 400
                 response.body = str(exception)
-                return {'exception': None, 'response': response}
+                r['exception'] = None
+                r['response'] = response
+                return r
 
         if not sentry:
             # No Sentry, log to stderr instead
@@ -515,7 +518,7 @@ def make_sentry_teller(env, version):
             # Reraise if allowed
             if env.sentry_reraise and allow_reraise:
                 raise
-            return {'sentry_ident': None}
+            return r
 
         # Prepare context data
         if not level:
@@ -549,9 +552,8 @@ def make_sentry_teller(env, version):
 
         # Tell Sentry
         result = sentry.captureException(data=sentry_data)
-
-        # Put the Sentry id in the state for logging, etc
-        return {'sentry_ident': sentry.get_ident(result)}
+        r['sentry_ident'] = sentry.get_ident(result)
+        return r
 
     CustomUndefined._tell_sentry = staticmethod(tell_sentry)
 
