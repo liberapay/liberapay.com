@@ -76,6 +76,21 @@ class TestNotifications(Harness):
                             sentry_reraise=False).text
         assert 'fake_event_name' not in r
 
+    def test_render_broken_notifications(self):
+        self.client.website.emails['_broken_subject'] = {
+            'subject': SimplateLoader(None, "{{ broken }}").load(jinja_env_html, None),
+            'text/html': SimplateLoader(None, "").load(jinja_env_html, None)
+        }
+        self.client.website.emails['_broken_body'] = {
+            'subject': SimplateLoader(None, "Lorem ipsum").load(jinja_env_html, None),
+            'text/html': SimplateLoader(None, "{{ broken }}").load(jinja_env_html, None)
+        }
+        alice = self.make_participant('alice')
+        alice.notify('_broken_subject', email=False)
+        alice.notify('_broken_body', email=False)
+        r = self.client.GET('/alice/notifications.html', auth_as=alice, sentry_reraise=False)
+        assert r.text.count("An error occurred while rendering this notification.") == 2
+
     def test_marking_notifications_as_read_avoids_race_condition(self):
         alice = self.make_participant('alice')
         n1 = alice.notify(
