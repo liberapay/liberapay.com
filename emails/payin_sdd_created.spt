@@ -22,14 +22,14 @@
     "If you did not authorize this payment please let us know, we will refund it."
 ) }}</p>
 
-% if statement_descriptor
+% if statement_descriptor is defined
 <p>{{ _(
     "Once this payment has been processed it should appear on your bank statement as “{descriptor}”.",
     descriptor=statement_descriptor
 ) }}</p>
 % endif
 
-% if average_settlement_seconds
+% if average_settlement_seconds is defined
 <p>{{ _(
     "Processing this kind of payment takes {timedelta} on average.",
     timedelta=locale.Age(seconds=average_settlement_seconds, format_args=dict(threshold=0.9))
