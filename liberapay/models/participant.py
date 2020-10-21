@@ -815,7 +815,7 @@ class Participant(Model, MixinTeam):
                     SELECT compute_arrears(tip)
                       FROM tips tip
                      WHERE tip.id = %s
-                """, (tip.id,))
+                """, (tip.id,)).convert(wallet.balance.currency)
                 arrears = min(max(arrears_due, 0), wallet.balance)
                 advance = wallet.balance - arrears
                 assert arrears > 0 or advance > 0
