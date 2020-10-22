@@ -12,6 +12,9 @@ import jinja2
 __version__ = '0.1'
 
 
+plugin = None
+
+
 def import_object(path):
     names = path.split('.')
     module = None
@@ -43,6 +46,9 @@ class JinjaPlugin(coverage.plugin.CoveragePlugin):
         for pattern in self.filename_patterns:
             if fnmatch(filename, pattern):
                 return JinjaFileTracer(filename, self.environment)
+
+    def _file_tracer(self, filename):
+        return JinjaFileTracer(filename, self.environment)
 
     def file_reporter(self, filename):
         return JinjaFileReporter(filename, self.environment)
@@ -99,4 +105,7 @@ class JinjaFileReporter(coverage.plugin.FileReporter):
 
 
 def coverage_init(reg, options):
-    reg.add_file_tracer(JinjaPlugin(options))
+    global plugin
+    if not plugin:
+        plugin = JinjaPlugin(options)
+    reg.add_file_tracer(plugin)
