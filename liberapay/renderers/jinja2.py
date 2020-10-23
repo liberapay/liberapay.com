@@ -51,6 +51,11 @@ class Environment(base.Environment):
         self.tests = DictWithLowercaseFallback(self.tests)
 
 
+loader = base.FileSystemLoader(website.project_root)
+default_env = Environment(loader=loader)
+htmlescaped_env = Environment(loader=loader, autoescape=True)
+
+
 class Renderer(base.Renderer):
 
     autoescape = True
@@ -70,8 +75,7 @@ class Factory(base.Factory):
 
     def compile_meta(self, configuration):
         # Override to add our own custom Environment subclass
-        loader = base.FileSystemLoader(configuration.project_root)
         return {
-            'default_env': Environment(loader=loader),
-            'htmlescaped_env': Environment(loader=loader, autoescape=True),
+            'default_env': default_env,
+            'htmlescaped_env': htmlescaped_env,
         }
