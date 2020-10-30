@@ -495,3 +495,13 @@ coverage.Coverage._instances = List()
 
 def coverage_init(reg, options):
     reg.add_file_tracer(SimplatePlugin(options))
+
+
+add_file_tracers = coverage.sqldata.CoverageData.add_file_tracers
+
+def _add_file_tracers(self, file_tracers):
+    for filename in file_tracers:
+        self._file_id(filename, add=True)
+    return add_file_tracers(self, file_tracers)
+
+coverage.sqldata.CoverageData.add_file_tracers = _add_file_tracers
