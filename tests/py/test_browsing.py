@@ -40,6 +40,7 @@ class BrowseTestHarness(Harness):
                      .replace('/%type', '/receiving.js')
             urls[url.replace('/%username/', '/david/')] = None
             urls[url.replace('/%username/', '/team/')] = None
+            # TODO load the simplate to get the list of media types and test each one
         cls.urls = list(urls)
 
     def browse_setup(self):
