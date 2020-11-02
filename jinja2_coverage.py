@@ -90,6 +90,18 @@ class JinjaFileTracer(coverage.plugin.FileTracer):
 
 class JinjaFileReporter(coverage.plugin.FileReporter):
 
+    #token_types_map = {
+        ## TODO jinja2 tokens → coverage tokens
+        #'com' # a comment
+        #'key' # a keyword
+        #'nam' # a name, or identifier
+        #'num' # a number
+        #'op' # an operator
+        #'str' # a string literal
+        #'ws' # some white space
+        #'txt' # some other kind of text
+    #}
+
     def __init__(self, filename, environment):
         super().__init__(filename)
         self.environment = environment
@@ -102,6 +114,25 @@ class JinjaFileReporter(coverage.plugin.FileReporter):
             i += 1
         template = self.environment.get_template(self.filename[i:])
         return set(template_line for template_line, code_line in template.debug_info)
+
+    #def source_token_lines(self):
+        #return super().source_token_lines()
+        #source_code = self.source()
+        #lines = [[] for i in range(len(source_code.count('\n')))]
+        #tokens = self.environment._tokenize(source_code, self.filename)
+        #for token in tokens:
+            #if token.type is token.value:
+                #token.type = 'keyword'
+            #token_type = self.token_types_map.get(token.type)
+            #if not token_type:
+                #warnings.warn(f"encountered unknown token type {token.type!r}")
+            #source_lines[token.lineno].append((token_type or 'txt', token.value))
+        #source_code = self.environment.preprocess(source_code, self.filename)
+        #tokens = self.environment.lexer.tokeniter(source_code, self.filename)
+        #for lineno, token_type, value in tokens:
+            #token_type = self.token_types_map.get(token_type)
+            #source_lines[lineno].append((token_type or 'txt', value))
+        #return lines
 
 
 def coverage_init(reg, options):
