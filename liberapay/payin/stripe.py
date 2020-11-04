@@ -142,6 +142,7 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
     amount = payin.amount
     route = ExchangeRoute.from_id(payer, payin.route)
     intent = None
+    description = generate_charge_description(payin)
     try:
         if route.address.startswith('pm_'):
             intent = stripe.PaymentIntent.create(
@@ -149,6 +150,7 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
                 confirm=True,
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
+                description=description,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=on_behalf_of,
@@ -163,6 +165,7 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
                 amount=Money_to_int(amount),
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
+                description=description,
                 metadata={'payin_id': payin.id},
                 on_behalf_of=on_behalf_of,
                 source=route.address,
@@ -203,6 +206,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
     destination = db.one("SELECT id FROM payment_accounts WHERE pk = %s", (pt.destination,))
     amount = payin.amount
     route = ExchangeRoute.from_id(payer, payin.route)
+    description = generate_charge_description(payin)
     intent = None
     if destination == 'acct_1ChyayFk4eGpfLOC':
         # Stripe rejects the charge if the destination is our own account
@@ -214,6 +218,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
                 confirm=True,
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
+                description=description,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=destination,
@@ -229,6 +234,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
                 amount=Money_to_int(amount),
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
+                description=description,
                 destination={'account': destination} if destination else None,
                 metadata={'payin_id': payin.id},
                 source=route.address,
@@ -384,6 +390,7 @@ def execute_transfer(db, pt, destination, source_transaction):
         tr = stripe.Transfer.create(
             amount=Money_to_int(pt.amount),
             currency=pt.amount.currency,
+            description=generate_transfer_description(pt),
             destination=destination,
             metadata={'payin_transfer_id': pt.id},
             source_transaction=source_transaction,
@@ -412,6 +419,7 @@ def sync_transfer(db, pt):
     """
     assert pt.remote_id, "can't sync a transfer lacking a `remote_id`"
     tr = stripe.Transfer.retrieve(pt.remote_id)
+    update_transfer_metadata(tr, pt)
     if tr.amount_reversed:
         reversed_amount = min(int_to_Money(tr.amount_reversed, tr.currency), pt.amount)
     else:
@@ -453,6 +461,7 @@ def settle_destination_charge(db, payin, charge, pt, intent_id=None):
     reversed_amount = None
     if getattr(charge, 'transfer', None):
         tr = stripe.Transfer.retrieve(charge.transfer)
+        update_transfer_metadata(tr, pt)
         if tr.amount_reversed == 0:
             tr.reversals.create(
                 amount=bt.fee,
@@ -471,6 +480,45 @@ def settle_destination_charge(db, payin, charge, pt, intent_id=None):
     )
 
     return payin
+
+
+def update_transfer_metadata(tr, pt):
+    """Set the Transfer's `description` and `metadata` if they're missing.
+
+    Args:
+        tr (Transfer): the `stripe.Transfer` object to update
+        pt (Record): the row from the `payin_transfers` table
+
+    """
+    attrs = {}
+    if not getattr(tr, 'description', None):
+        attrs['description'] = generate_transfer_description(pt)
+    if not getattr(tr, 'metadata', None):
+        attrs['metadata'] = {'payin_transfer_id': pt.id}
+    if attrs:
+        tr.modify(tr.id, **attrs)
+
+
+def generate_charge_description(payin):
+    """Generate the `stripe.Charge.description` value for the given payin.
+
+    For now this function always returns the same string regardless of the payin.
+    """
+    return "Liberapay"
+
+
+def generate_transfer_description(pt):
+    """Generate the `stripe.Transfer.description` value for the given payin transfer.
+    """
+    name = website.db.one("""
+        SELECT username
+          FROM participants
+         WHERE id = %s
+    """, (pt.team or pt.recipient,))
+    if pt.team:
+        return f"anonymous donation for team {name} via Liberapay"
+    else:
+        return f"anonymous donation for {name} via Liberapay"
 
 
 def record_refunds(db, payin, charge):

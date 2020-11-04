@@ -1087,10 +1087,11 @@ class TestRefundsStripe(EmailHarness):
 
     @patch('stripe.BalanceTransaction.retrieve')
     @patch('stripe.Source.retrieve')
+    @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_destination_charge(
-        self, construct_event, tr_retrieve, source_retrieve, bt_retrieve
+        self, construct_event, tr_retrieve, tr_modify, source_retrieve, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -1451,10 +1452,11 @@ class TestRefundsStripe(EmailHarness):
 
     @patch('stripe.BalanceTransaction.retrieve')
     @patch('stripe.Source.retrieve')
+    @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_split_charge(
-        self, construct_event, tr_retrieve, source_retrieve, bt_retrieve
+        self, construct_event, tr_retrieve, tr_modify, source_retrieve, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -1801,10 +1803,11 @@ class TestRefundsStripe(EmailHarness):
     @patch('stripe.Source.detach')
     @patch('stripe.Source.retrieve')
     @patch('stripe.Transfer.create_reversal')
+    @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_charge_dispute(
-        self, construct_event, tr_retrieve, create_reversal, source_retrieve,
+        self, construct_event, tr_retrieve, tr_modify, create_reversal, source_retrieve,
         source_detach, ch_retrieve, bt_retrieve,
     ):
         alice = self.make_participant('alice')
