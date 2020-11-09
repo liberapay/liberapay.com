@@ -236,6 +236,65 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[0].amount is None
         assert scheduled_payins[0].automatic is False
 
+    def test_schedule_renewals_handles_change_of_customized_renewal_to_automatic(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('0.99'))
+        alice_card = self.upsert_route(alice, 'stripe-card')
+        self.make_payin_and_transfer(alice_card, bob, EUR('49.50'))
+        new_schedule = alice.schedule_renewals()
+        next_payday = compute_next_payday_date()
+        expected_transfers = [
+            {
+                'tippee_id': bob.id,
+                'tippee_username': 'bob',
+                'amount': None,
+            }
+        ]
+        assert len(new_schedule) == 1
+        assert new_schedule[0].amount is None
+        assert new_schedule[0].transfers == expected_transfers
+        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=50))
+        assert new_schedule[0].automatic is False
+        # customize the renewal
+        schedule = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        assert len(schedule) == 1
+        sp = schedule[0]
+        r = self.client.GET("/alice/giving/schedule", auth_as=alice)
+        assert r.code == 200
+        r = self.client.GET(
+            "/alice/giving/schedule?id=%i&action=modify" % sp.id,
+            auth_as=alice
+        )
+        assert r.code == 200
+        new_date = sp.execution_date - timedelta(days=14)
+        r = self.client.PxST(
+            "/alice/giving/schedule?id=%i&action=modify" % sp.id,
+            {'new_date': new_date.isoformat()},
+            auth_as=alice
+        )
+        assert r.code == 302
+        sp = self.db.one("SELECT * FROM scheduled_payins WHERE id = %s", (sp.id,))
+        assert sp.amount is None
+        assert sp.transfers == expected_transfers
+        assert sp.execution_date == new_date
+        assert sp.customized is True
+        new_schedule = alice.schedule_renewals()
+        assert len(new_schedule) == 1
+        assert new_schedule[0].amount is None
+        assert new_schedule[0].transfers == expected_transfers
+        assert new_schedule[0].execution_date == new_date
+        assert new_schedule[0].customized is True
+        # enable automatic renewal for this donation
+        alice.set_tip_to(bob, EUR('0.99'), renewal_mode=2)
+        expected_transfers[0]['amount'] = EUR('49.50')
+        new_schedule = alice.schedule_renewals()
+        assert len(new_schedule) == 1
+        assert new_schedule[0].amount == EUR('49.50')
+        assert new_schedule[0].transfers == expected_transfers
+        assert new_schedule[0].execution_date == new_date
+        assert new_schedule[0].automatic is True
+
     def test_schedule_renewals_handles_currency_switch(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob', email='bob@liberapay.com', accepted_currencies=None)
