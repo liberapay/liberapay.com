@@ -2738,8 +2738,9 @@ class Participant(Model, MixinTeam):
                             # Don't modify a payment that has been explicitly
                             # customized by the donor.
                             new_sp.execution_date = cur_sp.execution_date
-                            new_sp.amount = cur_sp.amount if new_sp.automatic else None
-                            new_sp.transfers = cur_sp.transfers
+                            if new_sp.automatic and cur_sp.automatic:
+                                new_sp.amount = cur_sp.amount
+                                new_sp.transfers = cur_sp.transfers
                             if new_sp.amount and new_sp.amount.currency != payin_currency:
                                 # … unless the currency has changed.
                                 new_sp.amount = new_sp.amount.convert(payin_currency)
