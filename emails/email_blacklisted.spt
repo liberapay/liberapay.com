@@ -1,4 +1,4 @@
-{{ _("Your email address is temporarily blacklisted") if ignore_after else
+{{ _("Your email address is temporarily blacklisted") if ignore_after|default(None) else
    _("Your email address has been blacklisted") }}
 
 [---] text/html
@@ -6,7 +6,7 @@
     "We are suspending sending notifications to your address {email_address} "
     "until {date}, because a recent attempt to email you has failed.",
     email_address=blacklisted_address, date=ignore_after
-) if ignore_after else _(
+) if ignore_after|default(None) else _(
     "We will no longer send emails to your address {email_address}, because a "
     "recent attempt to do so has failed.",
     email_address=blacklisted_address
@@ -18,7 +18,7 @@
     email_address=blacklisted_address
 ) }}</p>
 
-% if bounce_message
+% if bounce_message|default('')
 <p>{{ _("The error message from the email system was:") }}</p>
 <pre>{{ bounce_message }}</pre>
 <br>
