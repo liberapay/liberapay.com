@@ -483,7 +483,7 @@ def settle_destination_charge(db, payin, charge, pt, intent_id=None):
 
 
 def update_transfer_metadata(tr, pt):
-    """Set the Transfer's `description` and `metadata` if they're missing.
+    """Set `description` and `metadata` if they're missing.
 
     Args:
         tr (Transfer): the `stripe.Transfer` object to update
@@ -496,7 +496,33 @@ def update_transfer_metadata(tr, pt):
     if not getattr(tr, 'metadata', None):
         attrs['metadata'] = {'payin_transfer_id': pt.id}
     if attrs:
-        tr.modify(tr.id, **attrs)
+        try:
+            tr = tr.modify(tr.id, **attrs)
+        except Exception as e:
+            website.tell_sentry(e, {})
+            return tr
+    if getattr(tr, 'destination_payment', None):
+        py = tr.destination_payment
+        if isinstance(py, str):
+            try:
+                py = stripe.Charge.retrieve(py, stripe_account=tr.destination)
+            except Exception as e:
+                website.tell_sentry(e, {})
+                return tr
+        attrs = {}
+        if not getattr(py, 'description', None):
+            attrs['description'] = tr.description
+        metadata = getattr(py, 'metadata', None) or {}
+        if 'liberapay_transfer_id' not in metadata:
+            metadata['liberapay_transfer_id'] = pt.id
+            attrs['metadata'] = metadata
+        if attrs:
+            attrs['stripe_account'] = tr.destination
+            try:
+                py.modify(py.id, **attrs)
+            except Exception as e:
+                website.tell_sentry(e, {})
+    return tr
 
 
 def generate_charge_description(payin):
