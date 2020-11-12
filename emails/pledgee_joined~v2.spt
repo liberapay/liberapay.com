@@ -6,7 +6,7 @@
     date=pledge_date, money_amount=periodic_amount,
     user_name=('<a href="{0}">{1}</a>'|safe).format(elsewhere_profile_url, user_name) if elsewhere_profile_url else user_name
 ) }}</p>
-% if scheduled_payin and scheduled_payin.automatic
+% if scheduled_payin|default(None) and scheduled_payin.automatic
     <p>{{ _(
         "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}.",
         platform=platform, user_name=user_name, time_ago=locale.Age(join_time - notification_ts, format_args=dict(add_direction=True)),
