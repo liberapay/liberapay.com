@@ -6,6 +6,7 @@ from babel.messages.catalog import Message
 
 from liberapay.constants import SESSION
 from liberapay.i18n.base import LOCALES
+from liberapay.i18n.currencies import Money
 from liberapay.models.participant import Participant
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import postgres_readonly
@@ -411,6 +412,17 @@ class TestSignIn(EmailHarness):
         r = self.sign_in(url='/for/new', extra=extra)
         assert r.code == 302
         assert r.headers[b'Location'] == b'/for/python/edit'
+
+    def test_sign_in_through_donation_form(self):
+        alice = self.make_participant('alice', accepted_currencies=None)
+        extra = {'amount': '10000', 'currency': 'KRW', 'period': 'weekly', 'form.repost': 'true'}
+        r = self.sign_in(url='/~1/tip', extra=extra)
+        assert r.code == 302, r.text
+        assert r.headers[b'Location'].startswith(b'http://localhost/bob/giving/')
+        bob = Participant.from_username('bob')
+        tip = bob.get_tip_to(alice)
+        assert tip.amount == Money('10000', 'KRW')
+        assert bob.main_currency == 'KRW'
 
     def test_sign_in_without_username(self):
         r = self.sign_in(dict(username=''))
