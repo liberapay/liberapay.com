@@ -64,10 +64,13 @@ class PayinProspect:
             standard_amounts['max_acceptable'][self.currency],
             self.twenty_years_worth
         )
-        self.min_proposed_amount = max(
-            self.round_to_period(self.min_acceptable_amount, threshold=0),
-            self.one_months_worth,
-            self.one_periods_worth
+        self.min_proposed_amount = min(
+            max(
+                self.round_to_period(self.min_acceptable_amount, threshold=0),
+                self.one_months_worth,
+                self.one_periods_worth
+            ),
+            self.max_acceptable_amount
         )
         self.moderate_proposed_amount = min(
             max(
@@ -75,7 +78,8 @@ class PayinProspect:
                 self.one_months_worth,
                 self.one_periods_worth
             ),
-            self.twenty_years_worth
+            self.twenty_years_worth,
+            self.max_acceptable_amount
         )
         self.low_fee_proposed_amount = min(
             max(
