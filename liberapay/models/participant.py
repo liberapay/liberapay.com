@@ -2685,7 +2685,7 @@ class Participant(Model, MixinTeam):
                         else:
                             tip.renewal_amount = None
                         if not tip.renewal_amount or tip.renewal_amount < (tip.amount * 2):
-                            pp = PayinProspect([tip], 'stripe')
+                            pp = PayinProspect(self, [tip], 'stripe')
                             tip.renewal_amount = pp.moderate_proposed_amount
                     else:
                         tip.renewal_amount = None

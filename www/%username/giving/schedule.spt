@@ -38,7 +38,7 @@ if request.method == 'POST':
             else:
                 new_amount = Money(new_amount, payin_currency, rounding=ROUND_HALF_UP)
             tips = payer.get_tips_to([tr['tippee_id'] for tr in sp.transfers])
-            prospect = PayinProspect(tips, 'stripe')
+            prospect = PayinProspect(payer, tips, 'stripe')
             if payin_currency != prospect.currency:
                 raise UnexpectedCurrency(new_amount, prospect.currency)
             amount_min = prospect.min_acceptable_amount
@@ -77,7 +77,7 @@ if action:
         raise response.invalid_input(sp_id, 'id', 'querystring')
     if action == 'modify':
         sp.tips = payer.get_tips_to([tr['tippee_id'] for tr in sp.transfers])
-        sp.prospect = PayinProspect(sp.tips, 'stripe')
+        sp.prospect = PayinProspect(payer, sp.tips, 'stripe')
 
 [---] text/html
 % extends "templates/layouts/settings.html"

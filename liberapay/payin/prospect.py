@@ -16,7 +16,7 @@ class PayinProspect:
         'suggested_amounts',
     )
 
-    def __init__(self, tips, provider):
+    def __init__(self, donor, tips, provider):
         """This method computes the suggested payment amounts.
 
         Args:
@@ -60,8 +60,23 @@ class PayinProspect:
             self.one_weeks_worth
         )
         self.low_fee_amount = standard_amounts['low_fee'][self.currency]
+        standard_maximums = standard_amounts['max_acceptable']
+        donor_has_at_least_one_good_payment = donor.db.one("""
+            SELECT count(*)
+              FROM payins
+             WHERE payer = %s
+               AND status = 'succeeded'
+               AND refunded_amount IS NULL
+               AND ctime < (current_timestamp - interval '30 days')
+        """, (donor.id,)) > 0
         self.max_acceptable_amount = min(
-            standard_amounts['max_acceptable'][self.currency],
+            (
+                standard_maximums['trusted_donor'][self.currency]
+                if donor.is_suspended is False else
+                standard_maximums['active_donor'][self.currency]
+                if donor_has_at_least_one_good_payment else
+                standard_maximums['new_donor'][self.currency]
+            ),
             self.twenty_years_worth
         )
         self.min_proposed_amount = min(

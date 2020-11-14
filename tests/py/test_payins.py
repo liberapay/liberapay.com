@@ -184,7 +184,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_minimum_weekly_EUR_tip(self):
         tip_amount = DONATION_LIMITS['EUR']['weekly'][0]
         tip = self.alice.set_tip_to(self.bob, tip_amount)
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
@@ -198,7 +198,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_minimum_monthly_EUR_tip(self):
         tip_amount = DONATION_LIMITS['EUR']['monthly'][0]
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'monthly'
         assert pp.one_periods_worth == tip_amount
@@ -212,7 +212,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_minimum_yearly_EUR_tip(self):
         tip_amount = DONATION_LIMITS['EUR']['yearly'][0]
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'yearly'
         assert pp.one_periods_worth == tip_amount
@@ -226,7 +226,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_small_weekly_USD_tip(self):
         tip_amount = STANDARD_TIPS['USD'][1].weekly
         tip = self.alice.set_tip_to(self.bob, tip_amount)
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'USD'
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
@@ -239,7 +239,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_small_monthly_USD_tip(self):
         tip_amount = USD('1.00')
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'USD'
         assert pp.period == 'monthly'
         assert pp.one_periods_worth == tip_amount
@@ -252,7 +252,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_small_yearly_USD_tip(self):
         tip_amount = USD('10.00')
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'USD'
         assert pp.period == 'yearly'
         assert pp.one_periods_worth == tip_amount
@@ -267,7 +267,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_medium_weekly_JPY_tip(self):
         tip_amount = STANDARD_TIPS['JPY'][2].weekly
         tip = self.alice.set_tip_to(self.bob, tip_amount)
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'JPY'
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
@@ -282,7 +282,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_medium_monthly_JPY_tip(self):
         tip_amount = JPY('500')
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'JPY'
         assert pp.period == 'monthly'
         assert pp.one_periods_worth == tip_amount
@@ -297,7 +297,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_medium_yearly_JPY_tip(self):
         tip_amount = JPY('5000')
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'JPY'
         assert pp.period == 'yearly'
         assert pp.one_periods_worth == tip_amount
@@ -310,7 +310,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_large_weekly_EUR_tip(self):
         tip_amount = STANDARD_TIPS['EUR'][3].weekly
         tip = self.alice.set_tip_to(self.bob, tip_amount)
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == tip_amount
@@ -324,7 +324,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_large_monthly_EUR_tip(self):
         tip_amount = EUR('25.00')
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'monthly'
         assert pp.one_periods_worth == tip_amount
@@ -338,7 +338,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_large_yearly_EUR_tip(self):
         tip_amount = EUR('500.00')
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'yearly'
         assert pp.one_periods_worth == tip_amount
@@ -350,20 +350,21 @@ class TestPayinAmountSuggestions(Harness):
     def test_maximum_yearly_EUR_tip(self):
         tip_amount = EUR('5200.00')
         tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
-        pp = PayinProspect([tip], 'stripe')
+        pp = PayinProspect(self.alice, [tip], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'yearly'
         assert pp.one_periods_worth == tip_amount
         assert pp.one_weeks_worth == EUR('100.00')
         assert pp.one_months_worth == EUR('433.33')
         assert pp.one_years_worth == tip_amount
-        assert pp.suggested_amounts == [EUR('5000.00')]
+        assert pp.suggested_amounts == [EUR('5200.00')]
+        assert pp.max_acceptable_amount == EUR('5200.00')
 
     def test_two_small_monthly_USD_tips(self):
         tip_amount = USD('1.00')
         tip1 = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
         tip2 = self.alice.set_tip_to(self.carl, tip_amount, period='monthly')
-        pp = PayinProspect([tip1, tip2], 'stripe')
+        pp = PayinProspect(self.alice, [tip1, tip2], 'stripe')
         assert pp.currency == 'USD'
         assert pp.period == 'monthly'
         assert pp.one_periods_worth == tip_amount * 2
@@ -379,7 +380,7 @@ class TestPayinAmountSuggestions(Harness):
         tip_amount = KRW('50000')
         tip1 = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
         tip2 = self.alice.set_tip_to(self.carl, tip_amount, period='yearly')
-        pp = PayinProspect([tip1, tip2], 'stripe')
+        pp = PayinProspect(self.alice, [tip1, tip2], 'stripe')
         assert pp.currency == 'KRW'
         assert pp.period == 'yearly'
         assert pp.one_periods_worth == tip_amount * 2
@@ -392,7 +393,7 @@ class TestPayinAmountSuggestions(Harness):
     def test_two_very_different_EUR_tips(self):
         tip1 = self.alice.set_tip_to(self.bob, EUR('0.24'), period='weekly')
         tip2 = self.alice.set_tip_to(self.carl, EUR('240.00'), period='yearly')
-        pp = PayinProspect([tip1, tip2], 'stripe')
+        pp = PayinProspect(self.alice, [tip1, tip2], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'weekly'
         assert pp.one_periods_worth == EUR('4.86')
@@ -408,7 +409,7 @@ class TestPayinAmountSuggestions(Harness):
         tip1 = self.alice.set_tip_to(self.bob, EUR('0.01'), period='weekly')
         tip2 = self.alice.set_tip_to(self.carl, EUR('1.00'), period='monthly')
         tip3 = self.alice.set_tip_to(self.dana, EUR('5200.00'), period='yearly')
-        pp = PayinProspect([tip1, tip2, tip3], 'stripe')
+        pp = PayinProspect(self.alice, [tip1, tip2, tip3], 'stripe')
         assert pp.currency == 'EUR'
         assert pp.period == 'monthly'
         assert pp.one_periods_worth == EUR('434.38')
@@ -616,7 +617,7 @@ class TestPayinsStripe(Harness):
         self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
         self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
         self.add_payment_account(self.creator_1, 'stripe')
-        tip = self.donor.set_tip_to(self.creator_1, EUR('0.02'))
+        tip = self.donor.set_tip_to(self.creator_1, EUR('0.05'))
 
         # 1st request: test getting the payment page
         r = self.client.GET(
