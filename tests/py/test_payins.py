@@ -347,6 +347,18 @@ class TestPayinAmountSuggestions(Harness):
         assert pp.one_years_worth == tip_amount
         assert pp.suggested_amounts == [EUR('500.00'), EUR('1000.00')]
 
+    def test_maximum_yearly_EUR_tip(self):
+        tip_amount = EUR('5200.00')
+        tip = self.alice.set_tip_to(self.bob, tip_amount, period='yearly')
+        pp = PayinProspect([tip], 'stripe')
+        assert pp.currency == 'EUR'
+        assert pp.period == 'yearly'
+        assert pp.one_periods_worth == tip_amount
+        assert pp.one_weeks_worth == EUR('100.00')
+        assert pp.one_months_worth == EUR('433.33')
+        assert pp.one_years_worth == tip_amount
+        assert pp.suggested_amounts == [EUR('5000.00')]
+
     def test_two_small_monthly_USD_tips(self):
         tip_amount = USD('1.00')
         tip1 = self.alice.set_tip_to(self.bob, tip_amount, period='monthly')
