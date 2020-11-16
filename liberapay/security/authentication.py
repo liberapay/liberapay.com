@@ -6,7 +6,8 @@ from time import sleep
 from pando import Response
 
 from liberapay.constants import (
-    CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE, SESSION, SESSION_TIMEOUT
+    ASCII_ALLOWED_IN_USERNAME, CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE,
+    SESSION, SESSION_TIMEOUT,
 )
 from liberapay.exceptions import (
     BadPasswordSize, EmailAlreadyTaken, LoginRequired,
@@ -56,19 +57,29 @@ def sign_in_with_form_data(body, state):
     if body.get('log-in.id'):
         request = state['request']
         src_addr, src_country = request.source, request.country
-        id = body['log-in.id'].strip()
+        input_id = body['log-in.id'].strip()
         password = body.pop('log-in.password', None)
-        k = 'email' if '@' in id else 'username'
-        if password:
+        id_type = None
+        if input_id.find('@') > 0:
+            id_type = 'email'
+        elif input_id.startswith('~'):
+            id_type = 'immutable'
+        elif set(input_id).issubset(ASCII_ALLOWED_IN_USERNAME):
+            id_type = 'username'
+        if password and id_type:
             website.db.hit_rate_limit('log-in.password.ip-addr', str(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('hash_password.ip-addr', str(src_addr), TooManyRequests)
-            p_id = Participant.get_id_for(k, id)
+            if id_type == 'immutable':
+                p_id = Participant.check_id(input_id[1:])
+            else:
+                p_id = Participant.get_id_for(id_type, input_id)
             p = Participant.authenticate(p_id, 0, password)
             if not p:
                 state['log-in.error'] = (
                     _("The submitted password is incorrect.") if p_id is not None else
-                    _("No account has the username “{username}”.", username=id) if k == 'username' else
-                    _("No account has “{email_address}” as its primary email address.", email_address=id)
+                    _("“{0}” is not a valid account ID.", input_id) if id_type == 'immutable' else
+                    _("No account has the username “{username}”.", username=input_id) if id_type == 'username' else
+                    _("No account has “{email_address}” as its primary email address.", email_address=input_id)
                 )
             else:
                 website.db.decrement_rate_limit('log-in.password.ip-addr', str(src_addr))
@@ -76,14 +87,11 @@ def sign_in_with_form_data(body, state):
                     p.check_password(password, context='login')
                 except Exception as e:
                     website.tell_sentry(e, state)
-        elif k == 'username':
-            state['log-in.error'] = _("\"{0}\" is not a valid email address.", id)
-            return
-        else:
+        elif id_type == 'email':
             website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('log-in.email.country', src_country, TooManyLogInAttempts)
-            email = id
+            email = input_id
             p = Participant.from_email(email)
             if p and p.kind == 'group':
                 state['log-in.error'] = _(
@@ -101,9 +109,12 @@ def sign_in_with_form_data(body, state):
             else:
                 state['log-in.error'] = _(
                     "No account has “{email_address}” as its primary email address.",
-                    email_address=id
+                    email_address=email
                 )
             p = None
+        else:
+            state['log-in.error'] = _("\"{0}\" is not a valid email address.", input_id)
+            return
 
     elif 'sign-in.email' in body:
         response = state['response']

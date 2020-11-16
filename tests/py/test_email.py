@@ -10,7 +10,7 @@ from liberapay.exceptions import (
     TooManyEmailAddresses, TooManyEmailVerifications,
 )
 from liberapay.models.participant import Participant
-from liberapay.security.authentication import ANON
+from liberapay.security.authentication import ANON, SESSION
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import Harness, postgres_readonly
 from liberapay.testing.emails import EmailHarness
@@ -127,6 +127,37 @@ class TestEmail(EmailHarness):
         assert last_email['to'][0] == 'alice <alice@example.com>'
         expected = "We've received a request to associate the email address alice@example.com to "
         assert expected in last_email['text']
+
+    def test_adding_second_email_requires_recent_password_authentication(self):
+        initial_session = self.alice.session = self.alice.start_session(suffix='.in')
+        self.add_and_verify_email('alice1@example.com')
+        assert len(self.alice.get_emails()) == 1
+        self.alice.update_password('password')
+        self.db.run("""
+            UPDATE user_secrets
+               SET mtime = mtime - interval '30 minutes'
+             WHERE participant = %s
+        """, (self.alice.id,))
+        data = {'add-email': 'alice2@example.com'}
+        r = self.client.POST(
+            '/alice/emails/', data,
+            auth_as=self.alice, raise_immediately=False,
+        )
+        assert r.code == 200, r.text
+        assert "Please input your password to confirm this action:" in r.text
+        assert len(self.alice.get_emails()) == 1
+        data['form.repost'] = 'true'
+        data['log-in.id'] = '~' + str(self.alice.id)
+        data['log-in.password'] = 'password'
+        r = self.client.POST(
+            '/alice/emails/', data,
+            auth_as=self.alice, raise_immediately=False,
+        )
+        assert r.code == 302, r.text
+        assert len(self.alice.get_emails()) == 2
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        assert int(new_session_id) == initial_session.id
+        assert new_session_secret != initial_session.secret
 
     def test_adding_second_email_sends_verification_notice(self):
         self.add_and_verify_email('alice1@example.com')

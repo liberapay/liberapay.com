@@ -1,7 +1,8 @@
 from collections import OrderedDict
+from datetime import timedelta
 
 from liberapay.constants import EVENTS, EVENTS_S
-from liberapay.utils import form_post_success, get_participant
+from liberapay.utils import form_post_success, get_participant, utcnow
 from liberapay.utils.emails import normalize_and_check_email_address
 
 EMAIL_LANGS = OrderedDict(sorted([
@@ -23,6 +24,14 @@ if request.method == 'POST':
     elif 'add-email' in body or 'resend' in body:
         address = body.get('add-email') or body['resend']
         address = normalize_and_check_email_address(address, state)
+        # Ask for the user's password, if necessary
+        password_required = user.has_password and not (
+            user.session_type == 'em' or
+            user.session_type == 'pw' and
+            user.session.mtime > (utcnow() - timedelta(minutes=5))
+        )
+        if password_required:
+            raise response.render('simplates/password-required.spt', state)
         r = participant.add_email(address)
         if not r:
             raise response.error(400, _("You have already added and verified this address."))

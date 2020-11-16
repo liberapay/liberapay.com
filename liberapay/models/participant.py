@@ -219,6 +219,14 @@ class Participant(Model, MixinTeam):
         """, (mangopay_user_id,))
 
     @classmethod
+    def check_id(cls, p_id):
+        try:
+            p_id = int(p_id)
+        except (ValueError, TypeError):
+            return
+        return cls.db.one("SELECT id FROM participants WHERE id = %s", (p_id,))
+
+    @classmethod
     def get_id_for(cls, type_of_id, id_value):
         return getattr(cls, 'from_' + type_of_id)(id_value, id_only=True)
 
@@ -518,6 +526,15 @@ class Participant(Model, MixinTeam):
                     (self.id, self.session.id))
         del self.session
         erase_cookie(cookies, SESSION)
+
+    @property
+    def session_type(self):
+        session = self.session
+        if session:
+            if not hasattr(session, 'type'):
+                i = session.secret.rfind('.')
+                session.type = session.secret[i+1:] if i > 0 else ''
+            return session.type
 
 
     # Permissions
