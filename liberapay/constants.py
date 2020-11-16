@@ -309,10 +309,20 @@ PAYIN_AMOUNTS = {
             'EUR': Money('40.00', 'EUR'),
             'USD': Money('48.00', 'USD'),
         }),
-        'max_acceptable': MoneyAutoConvertDict({
-            'EUR': Money('5000.00', 'EUR'),
-            'USD': Money('5000.00', 'USD'),
-        }),
+        'max_acceptable': {
+            'new_donor': MoneyAutoConvertDict({
+                'EUR': Money('5200.00', 'EUR'),
+                'USD': Money('5200.00', 'USD'),
+            }),
+            'active_donor': MoneyAutoConvertDict({
+                'EUR': Money('12000.00', 'EUR'),
+                'USD': Money('12000.00', 'USD'),
+            }),
+            'trusted_donor': MoneyAutoConvertDict({
+                'EUR': Money('52000.00', 'EUR'),
+                'USD': Money('52000.00', 'USD'),
+            }),
+        },
     },
     'stripe': {
         'min_acceptable': MoneyAutoConvertDict({  # fee > 10%
@@ -327,10 +337,20 @@ PAYIN_AMOUNTS = {
             'EUR': Money('40.00', 'EUR'),
             'USD': Money('48.00', 'USD'),
         }),
-        'max_acceptable': MoneyAutoConvertDict({
-            'EUR': Money('5000.00', 'EUR'),
-            'USD': Money('5000.00', 'USD'),
-        }),
+        'max_acceptable': {
+            'new_donor': MoneyAutoConvertDict({
+                'EUR': Money('5200.00', 'EUR'),
+                'USD': Money('5200.00', 'USD'),
+            }),
+            'active_donor': MoneyAutoConvertDict({
+                'EUR': Money('12000.00', 'EUR'),
+                'USD': Money('12000.00', 'USD'),
+            }),
+            'trusted_donor': MoneyAutoConvertDict({
+                'EUR': Money('52000.00', 'EUR'),
+                'USD': Money('52000.00', 'USD'),
+            }),
+        },
     },
 }
 

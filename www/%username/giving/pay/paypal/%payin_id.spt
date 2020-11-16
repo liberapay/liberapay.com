@@ -51,12 +51,9 @@ if request.method == 'POST':
     if len(tips) > 1:
         raise response.error(400, "We don't support one-to-many payments through PayPal yet.")
 
-    tips_weekly_sum = Money.sum((tip.amount for tip in tips), payin_currency)
-    amount_min = max(
-        constants.PAYIN_AMOUNTS['paypal']['min_acceptable'][payin_currency],
-        tips_weekly_sum
-    )
-    amount_max = constants.PAYIN_AMOUNTS['paypal']['max_acceptable'][payin_currency]
+    prospect = PayinProspect(payer, tips, 'paypal')
+    amount_min = prospect.min_acceptable_amount
+    amount_max = prospect.max_acceptable_amount
     if payin_amount < amount_min or payin_amount > amount_max:
         raise response.error(400, _(
             "'{0}' is not an acceptable amount (min={1}, max={2})",
@@ -118,7 +115,7 @@ if tippees:
     ]
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
-    payment = PayinProspect(tips, 'paypal')
+    payment = PayinProspect(payer, tips, 'paypal')
     del tips
 
 elif not payin_id:
