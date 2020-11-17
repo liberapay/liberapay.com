@@ -241,16 +241,16 @@ def authenticate_user_if_possible(request, response, state, user, _):
     # Try to authenticate the user
     # We want to try cookie auth first, but we want password and email auth to
     # supersede it.
-    p = None
+    session_p = None
     if SESSION in request.headers.cookie:
         creds = request.headers.cookie[SESSION].value.split(':', 2)
         if len(creds) == 2:
             creds = [creds[0], 1, creds[1]]
         if len(creds) == 3:
-            p = Participant.authenticate(*creds)
-            if p:
-                state['user'] = p
-    session_p, p = p, None
+            session_p = Participant.authenticate(*creds)
+            if session_p:
+                state['user'] = session_p
+    p = None
     session_suffix = ''
     redirect = False
     redirect_url = None
