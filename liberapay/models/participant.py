@@ -2915,6 +2915,7 @@ class Participant(Model, MixinTeam):
                 modified_payments=[t for t in (
                     (sp_to_dict(old_sp), sp_to_dict(new_sp))
                     for old_sp, new_sp in updates
+                    if old_sp.notifs_count > 0
                 ) if t[0] != t[1]],
                 new_schedule=new_schedule,
             )
