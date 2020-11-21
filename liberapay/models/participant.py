@@ -406,14 +406,24 @@ class Participant(Model, MixinTeam):
         if not set(token).issubset(BASE64URL_CHARS):
             raise Response(400, "bad token, not base64url")
 
-    def extend_session_lifetime(self):
+    def regenerate_session(self, session, cookies, suffix='.rg'):
         self.session = self.db.one("""
             UPDATE user_secrets
                SET mtime = current_timestamp
-             WHERE participant = %s
-               AND id = %s
+                 , secret = %(new_secret)s
+             WHERE participant = %(p_id)s
+               AND id = %(session_id)s
+               AND mtime = %(current_mtime)s
          RETURNING id, secret, mtime
-        """, (self.id, self.session.id))
+        """, dict(
+            new_secret=self.generate_session_token() + suffix,
+            p_id=self.id,
+            session_id=session.id,
+            current_mtime=session.mtime,
+        ))
+        if self.session:
+            creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
+            set_cookie(cookies, SESSION, creds, expires=utcnow() + SESSION_TIMEOUT)
 
     def start_session(self, suffix='', token=None, id_min=1, id_max=20,
                       lifetime=SESSION_TIMEOUT):
@@ -439,8 +449,9 @@ class Participant(Model, MixinTeam):
         """
         assert id_min < id_max, (id_min, id_max)
         if token:
-            self.check_session_token(token)
-            token += suffix
+            if not token.endswith(suffix):
+                self.check_session_token(token)
+                token += suffix
         else:
             token = self.generate_session_token() + suffix
         p_id = self.id
@@ -498,11 +509,7 @@ class Participant(Model, MixinTeam):
         """
         now = utcnow()
         if now - self.session.mtime > SESSION_REFRESH:
-            self.extend_session_lifetime()
-            if not self.session:
-                return
-            creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
-            set_cookie(cookies, SESSION, creds, expires=now + SESSION_TIMEOUT)
+            self.regenerate_session(self.session, cookies)
 
     def sign_out(self, cookies):
         """End the user's current session.

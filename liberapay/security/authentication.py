@@ -161,7 +161,7 @@ def sign_in_with_form_data(body, state):
                    AND mtime < (%s + interval '6 hours')
                    AND mtime > (current_timestamp - interval '6 hours')
             """, (existing_account.id, existing_account.join_time))
-            if session and constant_time_compare(session_token, session.secret):
+            if session and constant_time_compare(session_token, session.secret.split('.')[0]):
                 p = existing_account
                 p.authenticated = True
                 p.sign_in(response.headers.cookie, session=session)
@@ -200,7 +200,7 @@ def sign_in_with_form_data(body, state):
             p.update_password(password)
             p.check_password(password, context='login')
         p.authenticated = True
-        p.sign_in(response.headers.cookie, token=session_token)
+        p.sign_in(response.headers.cookie, token=session_token, suffix='.in')
         # We're done, we can clean up the body now
         body.pop('sign-in.email')
         body.pop('sign-in.currency', None)
@@ -263,6 +263,8 @@ def authenticate_user_if_possible(request, response, state, user, _):
                 if p:
                     redirect = body.get('form.repost', None) != 'true'
                     redirect_url = body.get('sign-in.back-to') or request.line.uri.decoded
+                    if not p.session:
+                        session_suffix = '.pw'  # stands for "password"
     elif request.method == 'GET':
         if request.qs.get('log-in.id') or request.qs.get('email.id'):
             # Prevent email software from messing up an email log-in or confirmation
@@ -280,7 +282,13 @@ def authenticate_user_if_possible(request, response, state, user, _):
             p = Participant.authenticate(id, session_id, token)
             if p:
                 redirect = True
-                session_p = p
+                db.run("""
+                    DELETE FROM user_secrets
+                     WHERE participant = %s
+                       AND id = %s
+                       AND mtime = %s
+                """, (p.id, p.session.id, p.session.mtime))
+                p.session = None
                 session_suffix = '.em'
             else:
                 raise response.render('simplates/bad-login-link.spt', state)
@@ -309,10 +317,12 @@ def authenticate_user_if_possible(request, response, state, user, _):
 
     # Set up the new session
     if p:
-        if session_p:
-            session_p.sign_out(response.headers.cookie)
         if p.status == 'closed':
             p.update_status('active')
+        if session_p:
+            p.regenerate_session(
+                session_p.session, response.headers.cookie, suffix=session_suffix
+            )
         if not p.session:
             p.sign_in(response.headers.cookie, suffix=session_suffix)
         state['user'] = p
