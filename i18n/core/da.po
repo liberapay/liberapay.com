@@ -1260,6 +1260,10 @@ msgid "The submitted password is incorrect."
 msgstr "Det indsendte kodeord er forkert."
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr "Der er ingen konto med brugernavnet, “{username}”."
 
@@ -1268,12 +1272,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "Vi fandt ikke nogen konto hvis primære e-mailadresse er “{email_address}”."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "\"{0}\" er ikke en gyldig e-mailadresse."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} ser ud til at være tilknyttet et hold-konto. Det ikke muligt at logge ind som et hold."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "\"{0}\" er ikke en gyldig e-mailadresse."
 
 msgid "Your email address is now verified."
 msgstr "Din e-mailadresse er nu verificeret."
@@ -1321,6 +1325,12 @@ msgstr "Annuller"
 
 msgid "Confirm"
 msgstr "Bekræft"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "Adgangskode"
 
 msgid "This new password is not safe"
 msgstr "Denne nye adgangskode er ikke sikker"
@@ -2391,9 +2401,6 @@ msgstr "Fejl"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Check venligst at det link du klikkede på eller kopierede ind ikke er blevet forkortet eller ændret på anden måde."
-
-msgid "Password"
-msgstr "Adgangskode"
 
 msgid "Your email address is now blacklisted."
 msgstr "Din e-mail-adresse er nu blacklisted."

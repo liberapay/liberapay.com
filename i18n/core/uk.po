@@ -1274,6 +1274,10 @@ msgid "The submitted password is incorrect."
 msgstr "Надісланий пароль неправильний."
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr "Жоден обліковий запис не має імені користувача “{username}”."
 
@@ -1282,12 +1286,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "Обліковий запис з основною адресою електронної пошти “{email_address}” не знайдено."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "\"{0}\" не є дійсною адресою електронної пошти."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} пов'язано з обліковим записом команди. Неможливо увійти як команда."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "\"{0}\" не є дійсною адресою електронної пошти."
 
 msgid "Your email address is now verified."
 msgstr "Вашу адресу електронної пошти підтверджено."
@@ -1335,6 +1339,12 @@ msgstr "Скасувати"
 
 msgid "Confirm"
 msgstr "Підтвердити"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "Пароль"
 
 msgid "This new password is not safe"
 msgstr "Новий пароль не є безпечним"
@@ -2413,9 +2423,6 @@ msgstr "Помилка"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Перевірте, чи посилання, на яке ви натиснули або копіювали, не обрізано або якимось чином змінено."
-
-msgid "Password"
-msgstr "Пароль"
 
 msgid "Your email address is now blacklisted."
 msgstr "Адресу вашої електронної пошти наразі заблоковано."

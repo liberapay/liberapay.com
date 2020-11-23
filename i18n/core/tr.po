@@ -1260,6 +1260,10 @@ msgid "The submitted password is incorrect."
 msgstr "Gönderilen parola yanlış."
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr "“{username}” kullanıcı adına sahip hesap yok."
 
@@ -1268,12 +1272,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "“{email_address}” birincil e-posta adresine sahip hesap yok."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "“{0}” geçerli olmayan bir e-posta adresi."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} bir takım hesabına bağlı. Takım olarak oturum açmak mümkün değil."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "“{0}” geçerli olmayan bir e-posta adresi."
 
 msgid "Your email address is now verified."
 msgstr "E-posta adresiniz artık doğrulandı."
@@ -1321,6 +1325,12 @@ msgstr "İptal"
 
 msgid "Confirm"
 msgstr "Onay"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "Parola"
 
 msgid "This new password is not safe"
 msgstr "Bu yeni parola güvenli değil"
@@ -2391,9 +2401,6 @@ msgstr "Başarısız"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Lütfen tıkladığınız veya kopyalayıp yapıştırdığınız bağlantının herhangi bir şekilde kırpılmadığını veya değiştirilmediğini denetleyin."
-
-msgid "Password"
-msgstr "Parola"
 
 msgid "Your email address is now blacklisted."
 msgstr "E-posta adresiniz artık kara listeye alındı."

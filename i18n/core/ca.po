@@ -1260,6 +1260,10 @@ msgid "The submitted password is incorrect."
 msgstr "La contrasenya proporcionada no és correcta."
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr "No hi ha cap compte amb el nom d'usuari «{username}»."
 
@@ -1268,12 +1272,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "No hem trobat cap compte amb adreça electrònica principal «{email_address}»."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "«{0}» no és una adreça de correu electrònic vàlida."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} està enllaçat a un compte d'equip. No és possible d'iniciar sessió com a equip."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "«{0}» no és una adreça de correu electrònic vàlida."
 
 msgid "Your email address is now verified."
 msgstr "Ara l'adreça de correu electrònic està verificada."
@@ -1321,6 +1325,12 @@ msgstr "Cancel·la"
 
 msgid "Confirm"
 msgstr "Confirma"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "Contrasenya"
 
 msgid "This new password is not safe"
 msgstr "La contrasenya nova no és segura"
@@ -2391,9 +2401,6 @@ msgstr "Fracàs"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Comproveu que l'enllaç on heu fet clic, o que heu enganxat, no estigui trencat o estigui modificat d'alguna manera."
-
-msgid "Password"
-msgstr "Contrasenya"
 
 msgid "Your email address is now blacklisted."
 msgstr "La vostra adreça electrònica ara és a la llista negra."

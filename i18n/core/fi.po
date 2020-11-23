@@ -1260,6 +1260,10 @@ msgid "The submitted password is incorrect."
 msgstr "Syötetty salasana on väärä."
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr "Millään tilillä ei ole käyttäjätunnusta ”{username}”."
 
@@ -1268,12 +1272,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "Järjestelmästä ei löydy tunnusta, jonka pääsähköpostiosoite olisi {email_address}."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "”{0}” ei ole kelvollinen sähköpostiosoite."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} on kytketty ryhmätunnukseen. Ryhmänä ei ole mahdollista kirjautua."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "”{0}” ei ole kelvollinen sähköpostiosoite."
 
 msgid "Your email address is now verified."
 msgstr "Sähköpostiosoitteesi on nyt varmistettu."
@@ -1321,6 +1325,12 @@ msgstr "Peruuta"
 
 msgid "Confirm"
 msgstr "Hyväksy"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "Salasana"
 
 msgid "This new password is not safe"
 msgstr "Tämä uusi salasana ei ole turvallinen"
@@ -2391,9 +2401,6 @@ msgstr "Epäonnistui"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Tarkista, että klikkaamasi tai copypastettamasi linkki ei ollut rikkinäinen tai jollain tavalla muuttunut."
-
-msgid "Password"
-msgstr "Salasana"
 
 msgid "Your email address is now blacklisted."
 msgstr "Sähköpostiosoitteesi on nyt sulkulistalla."

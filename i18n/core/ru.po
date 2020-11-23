@@ -1274,6 +1274,10 @@ msgid "The submitted password is incorrect."
 msgstr "Представленный пароль неверен."
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr "Ни одна учётная запись не имеет имени пользователя \"{username}\"."
 
@@ -1282,12 +1286,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "Ни один аккаунт не имеет \"{email_address}\" в качестве основного адреса электронной почты."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "\"{0}\" не является корректным адресом электронной почты."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} связан с учётной записью команды. Войти в систему как команда невозможно."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "\"{0}\" не является корректным адресом электронной почты."
 
 msgid "Your email address is now verified."
 msgstr "Ваш адрес электронной почты подтверждён."
@@ -1335,6 +1339,12 @@ msgstr "Отменить"
 
 msgid "Confirm"
 msgstr "Подтвердить"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "Пароль"
 
 msgid "This new password is not safe"
 msgstr "Новый пароль небезопасен"
@@ -2413,9 +2423,6 @@ msgstr "Ошибка"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Проверьте, что ссылка, на которую вы нажали или скопировали, не обрезана или каким-то образом изменена."
-
-msgid "Password"
-msgstr "Пароль"
 
 msgid "Your email address is now blacklisted."
 msgstr "Ваш адрес электронной почты теперь в чёрном списке."

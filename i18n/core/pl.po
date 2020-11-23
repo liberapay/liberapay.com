@@ -1275,6 +1275,10 @@ msgid "The submitted password is incorrect."
 msgstr ""
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr ""
 
@@ -1283,12 +1287,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "Nie znaleziono żadnego konta, którego podstawowym adresem e-mail jest {email_address}."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "\"{0}\" jest nie prawidłowym adresem e-mail."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} jest kontem zespołu. Nie ma możliwości logowania jako zespół."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "\"{0}\" jest nie prawidłowym adresem e-mail."
 
 msgid "Your email address is now verified."
 msgstr "Twój adres e-mail został zweryfikowany."
@@ -1336,6 +1340,12 @@ msgstr "Anuluj"
 
 msgid "Confirm"
 msgstr "Potwierdź"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "Hasło"
 
 msgid "This new password is not safe"
 msgstr "To nowe hasło nie jest bezpieczne"
@@ -2414,9 +2424,6 @@ msgstr "Niepowodzenie"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Prosimy o sprawdzenie czy odnośnik który kliknąłeś lub wkleiłeś nie został ucięty lub zmieniony w inny sposób."
-
-msgid "Password"
-msgstr "Hasło"
 
 msgid "Your email address is now blacklisted."
 msgstr "Twój adres e-mail jest teraz na czarnej liście."

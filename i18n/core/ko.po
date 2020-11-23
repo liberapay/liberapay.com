@@ -1247,6 +1247,10 @@ msgid "The submitted password is incorrect."
 msgstr ""
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr ""
 
@@ -1255,12 +1259,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "이메일 계정이 {email_address} 인 계정을 찾을 수 없었습니다."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "\"{0}\"은(는) 유효한 이메일 주소가 아닙니다."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "{0} 은(는) 팀 계정으로 연결되어 있습니다. 팀 계정으로는 로그인할 수 없습니다."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "\"{0}\"은(는) 유효한 이메일 주소가 아닙니다."
 
 msgid "Your email address is now verified."
 msgstr "이메일 주소가 확인되었습니다."
@@ -1308,6 +1312,12 @@ msgstr "취소"
 
 msgid "Confirm"
 msgstr "확인"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr "비밀번호"
 
 msgid "This new password is not safe"
 msgstr "새 비밀번호가 안전하지 않습니다"
@@ -2367,9 +2377,6 @@ msgstr "실패"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "클릭하거나 복사-붙여넣기 한 링크가 변조되거나 링크의 일부가 잘려나가지 않았는지 확인해 주세요."
-
-msgid "Password"
-msgstr "비밀번호"
 
 msgid "Your email address is now blacklisted."
 msgstr "이메일 주소가 블랙리스트에 추가되었습니다."

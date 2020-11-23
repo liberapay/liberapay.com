@@ -1260,6 +1260,10 @@ msgid "The submitted password is incorrect."
 msgstr ""
 
 #, python-brace-format
+msgid "“{0}” is not a valid account ID."
+msgstr ""
+
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr ""
 
@@ -1268,12 +1272,12 @@ msgid "No account has “{email_address}” as its primary email address."
 msgstr "Κανένας λογαριασμός δεν έχει το \"{email_address}\" ως κύρια διεύθυνση ηλεκτρονικού ταχυδρομείου."
 
 #, python-brace-format
-msgid "\"{0}\" is not a valid email address."
-msgstr "Η \"{0}\" δεν είναι μια έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου."
-
-#, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
 msgstr "Το {0} είναι συνδεδεμένο με λογαριασμό μιας ομάδας. Δεν είναι δυνατό να συνδεθείς σαν ομάδα."
+
+#, python-brace-format
+msgid "\"{0}\" is not a valid email address."
+msgstr "Η \"{0}\" δεν είναι μια έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου."
 
 msgid "Your email address is now verified."
 msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου σας έχει επιβεβαιωθεί."
@@ -1321,6 +1325,12 @@ msgstr "Ακύρωση"
 
 msgid "Confirm"
 msgstr "Επιβεβαίωση"
+
+msgid "Please input your password to confirm this action:"
+msgstr ""
+
+msgid "Password"
+msgstr ""
 
 msgid "This new password is not safe"
 msgstr "Αυτός ο νέος κωδικός δεν είναι ασφαλείς"
@@ -2387,9 +2397,6 @@ msgid "Failure"
 msgstr ""
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr ""
-
-msgid "Password"
 msgstr ""
 
 msgid "Your email address is now blacklisted."
