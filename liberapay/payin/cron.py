@@ -371,6 +371,7 @@ def _filter_transfers(payer, transfers, automatic):
         if tip.renewal_mode < 1 or automatic and (tip.renewal_mode != 2):
             canceled_transfers.append(tr)
         elif beneficiary.status != 'active' or beneficiary.is_suspended or \
+             not beneficiary.accepts_tips or \
              beneficiary.payment_providers == 0 or \
              automatic and beneficiary.payment_providers & 1 == 0:
             impossible_transfers.append(tr)

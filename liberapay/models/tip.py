@@ -66,7 +66,7 @@ class Tip(Model):
             if last_transfer_date:
                 return last_transfer_date + timedelta(weeks=1)
             else:
-                return next_payday
+                return self.mtime.date()
         else:
             return next_payday + timedelta(weeks=weeks_left)
 

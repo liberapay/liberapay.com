@@ -65,10 +65,10 @@ class TestEmail(EmailHarness):
         response = self.hit_email_spt('add-email', 'alice@example.com')
         msg = json.loads(response.body)['msg']
         assert msg == "A verification email has been sent to alice@example.com."
-        with patch.object(self.website, 'app_conf') as app_conf:
-            # Travis drops outgoing SMTP traffic, so we don't turn on the SMTP
-            # check when testing on Travis.
-            app_conf.check_email_domains = os.environ.get('TRAVIS') != 'true'
+        # Travis drops outgoing SMTP traffic, so we don't turn on the SMTP
+        # check when testing on Travis.
+        check_email_domains = os.environ.get('TRAVIS') != 'true'
+        with patch.object(self.website.app_conf, 'check_email_domains', check_email_domains):
             response = self.hit_email_spt('add-email', 'support@liberapay.com')
             msg = json.loads(response.body)['msg']
             assert msg == "A verification email has been sent to support@liberapay.com."
@@ -102,8 +102,7 @@ class TestEmail(EmailHarness):
             ('alice@nonexistent.oy.lc', EmailDomainUnresolvable),  # NXDOMAIN
             ('alice@nullmx.liberapay.com', NonEmailDomain),  # null MX record, per RFC 7505
         )
-        with patch.object(self.website, 'app_conf') as app_conf:
-            app_conf.check_email_domains = True
+        with patch.object(self.website.app_conf, 'check_email_domains', True):
             for email, expected_exception in bad:
                 with self.assertRaises(expected_exception):
                     self.client.POST(
