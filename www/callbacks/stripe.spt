@@ -41,7 +41,7 @@ if event_object_type == 'charge':
          WHERE id = %s
     """, (payin_id,))
     assert payin
-    if payin.ctime > (utcnow() - timedelta(seconds=60)):
+    if payin.ctime > (utcnow() - timedelta(minutes=50)):
         raise response.error(409, "This callback is too early.")
     payin = settle_charge(website.db, payin, charge)
     if status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
@@ -122,6 +122,8 @@ elif event.type == 'transfer.reversed':
                AND remote_id = %s
         """, (payin_id, transfer.id))
     assert pt
+    if pt.ctime > (utcnow() - timedelta(minutes=50)):
+        raise response.error(409, "This callback is too early.")
     record_reversals(website.db, pt, transfer)
     fee = transfer.amount - Money_to_int(pt.amount)
     reversed_amount = transfer.amount_reversed - fee
