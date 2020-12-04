@@ -124,6 +124,8 @@ elif event.type == 'transfer.reversed':
     assert pt
     if pt.ctime > (utcnow() - timedelta(minutes=50)):
         raise response.error(409, "This callback is too early.")
+    assert pt.status == 'succeeded', \
+        f"received a `transfer.reversed` callback for a transfer whose status is {pt.status!r}"
     record_reversals(website.db, pt, transfer)
     fee = transfer.amount - Money_to_int(pt.amount)
     reversed_amount = transfer.amount_reversed - fee
