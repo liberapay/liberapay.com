@@ -2193,6 +2193,10 @@ class TestRefundsStripe(EmailHarness):
             }''' % params),
             stripe.api_key
         )
+        r = self.client.PxST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
+        assert r.code == 409
+        assert r.text == 'This callback is too early.'
+        self.db.run("UPDATE payin_transfers SET ctime = ctime - interval '1 hour'")
         r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
         assert r.code == 200
         assert r.text == 'OK'
