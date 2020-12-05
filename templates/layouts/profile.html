@@ -64,7 +64,7 @@
                         <a class="btn btn-donating btn-lg" href="{{ donate_path }}">{{
                             _("Modify your donation")
                         }}</a>
-                    % elif participant.payment_providers == 0
+                    % elif participant.payment_providers == 0 or not participant.accepts_tips
                         <a class="btn btn-donate btn-lg" href="{{ donate_path }}">{{
                             _("Pledge")
                         }}</a>
