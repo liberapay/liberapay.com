@@ -19,7 +19,7 @@ Liberapay.stripe_form_init = function($form) {
     var element_type = $container.data('type');
     var options = {style: {
         base: {
-            color: $container.css('color'),
+            color: rgb_to_hex($container.css('color')),
             fontFamily: $container.css('font-family'),
             fontSize: $container.css('font-size'),
             lineHeight: $container.css('line-height'),
