@@ -17,7 +17,7 @@ from liberapay.exceptions import (
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
 from liberapay.security.csrf import require_cookie
-from liberapay.utils import b64encode_s, get_ip_net
+from liberapay.utils import b64encode_s, get_ip_net, get_recordable_headers
 from liberapay.utils.emails import (
     EmailVerificationResult, normalize_and_check_email_address,
     remove_email_address_from_blacklist,
@@ -195,14 +195,9 @@ def sign_in_with_form_data(body, state):
         website.db.hit_rate_limit('sign-up.ip-version', src_addr.version, TooManySignUps)
         # Okay, create the account
         with website.db.get_cursor() as c:
-            decode = lambda b: b.decode('ascii', 'backslashreplace')
             request_data = {
                 'url': request.line.uri.decoded,
-                'headers': {
-                    decode(k): decode(b', '.join(v))
-                    for k, v in request.headers.items()
-                    if k != b'Cookie'
-                },
+                'headers': get_recordable_headers(request),
             }
             p = Participant.make_active(kind, currency, username, cursor=c, request_data=request_data)
             p.set_email_lang(state['locale'].language, cursor=c)
@@ -316,7 +311,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
                  WHERE e.id = %s
             """, (email_id,), default=(None, None))
             if email_participant:
-                result = email_participant.verify_email(email_id, email_nonce, p)
+                result = email_participant.verify_email(email_id, email_nonce, p, request)
                 state['email.verification-result'] = result
                 request.qs.pop('email.id', None)
                 request.qs.pop('email.nonce', None)

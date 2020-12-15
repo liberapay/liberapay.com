@@ -1,6 +1,6 @@
 import json
 import os
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from liberapay.exceptions import (
     BadEmailAddress, CannotRemovePrimaryEmail,
@@ -184,7 +184,7 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', 'alice@example.com')
         nonce = 'fake-nonce'
         email_row = self.alice.get_email('alice@example.com')
-        r = self.alice.verify_email(email_row.id, nonce, self.alice)
+        r = self.alice.verify_email(email_row.id, nonce, self.alice, MagicMock())
         assert r == EmailVerificationResult.FAILED
         self.hit_verify('alice@example.com', nonce)
         expected = None
@@ -196,15 +196,15 @@ class TestEmail(EmailHarness):
         self.hit_email_spt('add-email', address)
         email_row = self.alice.get_email(address)
         bob = self.make_participant('bob')
-        r = bob.verify_email(email_row.id, email_row.nonce, self.alice)
+        r = bob.verify_email(email_row.id, email_row.nonce, self.alice, MagicMock())
         assert r == EmailVerificationResult.FAILED
 
     def test_verify_email_a_second_time_returns_redundant(self):
         address = 'alice@example.com'
         self.hit_email_spt('add-email', address)
         email_row = self.alice.get_email(address)
-        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
-        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON, MagicMock())
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON, MagicMock())
         assert r == EmailVerificationResult.REDUNDANT
 
     def test_verify_only_email_with_expired_nonce(self):
@@ -216,7 +216,7 @@ class TestEmail(EmailHarness):
              WHERE participant = %s
         """, (self.alice.id,))
         email_row = self.alice.get_email(address)
-        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice, MagicMock())
         assert r == EmailVerificationResult.SUCCEEDED
 
     def test_verify_secondary_email_expired_nonce(self):
@@ -228,11 +228,11 @@ class TestEmail(EmailHarness):
         """, (self.alice.id,))
         email_row = self.alice.get_email('alice@example.com')
         self.hit_email_spt('add-email', 'alice@liberapay.com')
-        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON, MagicMock())
         assert r == EmailVerificationResult.LOGIN_REQUIRED
         actual = self.alice.refetch().email
         assert actual == None
-        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, self.alice, MagicMock())
         assert r == EmailVerificationResult.SUCCEEDED
 
     def test_verify_email_doesnt_leak_whether_an_email_is_linked_to_an_account_or_not(self):
@@ -240,16 +240,16 @@ class TestEmail(EmailHarness):
         email_row_alice = self.alice.get_email('alice@example.com')
         bob = self.make_participant('bob', email='bob@example.com')
         email_row_bob = bob.get_email(bob.email)
-        r1 = self.alice.verify_email(email_row_alice.id, 'bad nonce', ANON)
+        r1 = self.alice.verify_email(email_row_alice.id, 'bad nonce', ANON, MagicMock())
         assert r1 == EmailVerificationResult.FAILED
         self.db.run("""
             UPDATE emails
                SET added_time = (now() - INTERVAL '2 years')
              WHERE participant = %s
         """, (self.alice.id,))
-        r2 = self.alice.verify_email(email_row_alice.id, 'bad nonce', ANON)
+        r2 = self.alice.verify_email(email_row_alice.id, 'bad nonce', ANON, MagicMock())
         assert r2 == EmailVerificationResult.FAILED
-        r3 = bob.verify_email(email_row_bob.id, 'bad nonce', ANON)
+        r3 = bob.verify_email(email_row_bob.id, 'bad nonce', ANON, MagicMock())
         assert r3 == EmailVerificationResult.FAILED
 
     def test_verify_email(self):
@@ -373,7 +373,7 @@ class TestEmail(EmailHarness):
         bob = self.make_participant('bob')
         self.alice.add_email('alice@example.com')
         email_row = self.alice.get_email('alice@example.com')
-        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON)
+        r = self.alice.verify_email(email_row.id, email_row.nonce, ANON, MagicMock())
         assert r == EmailVerificationResult.SUCCEEDED
 
         with self.assertRaises(EmailAlreadyTaken):

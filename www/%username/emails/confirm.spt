@@ -28,7 +28,7 @@ elif 'email' in request.qs:
         result = EmailVerificationResult.FAILED
     else:
         nonce = request.qs.get('nonce', '')
-        result = participant.verify_email(email_id, nonce, user)
+        result = participant.verify_email(email_id, nonce, user, request)
     del email_id
 else:
     result = EmailVerificationResult.FAILED

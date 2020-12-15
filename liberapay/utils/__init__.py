@@ -629,3 +629,12 @@ def partition(l, predicate):
         else:
             b.append(e)
     return a, b
+
+
+def get_recordable_headers(request):
+    decode = lambda b: b.decode('ascii', 'backslashreplace')
+    return {
+        decode(k): decode(b', '.join(v))
+        for k, v in request.headers.items()
+        if k != b'Cookie'
+    }
