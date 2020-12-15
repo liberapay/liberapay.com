@@ -36,11 +36,13 @@ if request.method == 'POST':
     if change_currency:
         participant.change_main_currency(new_currency, user)
     if change_policy:
-        website.db.run("""
-            UPDATE participants
-               SET accepted_currencies = %s
-             WHERE id = %s
-        """, (new_accepted, participant.id))
+        with website.db.get_cursor() as cursor:
+            cursor.run("""
+                UPDATE participants
+                   SET accepted_currencies = %s
+                 WHERE id = %s
+            """, (new_accepted, participant.id))
+            participant.add_event(cursor, 'accepted_currencies', new_accepted, user.id)
         participant.set_attributes(accepted_currencies=new_accepted)
         participant.__dict__.pop('accepted_currencies_set', None)
     form_post_success(state)
