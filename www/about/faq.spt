@@ -13,7 +13,11 @@ title = _("Frequently Asked Questions")
 
     {{ dt(_("How is Liberapay funded?"), 'how-funded') }}
 
-    <dd>{{ _("Liberapay is funded {0}on Liberapay{1}.",
+    <dd>{{ _("Liberapay is funded through a normal {0}Liberapay account{1}, "
+             "just like any other project/person with an account on "
+             "Liberapay. In other words, and unlike many online funding "
+             "platforms, Liberapay does not charge any commission on "
+             "donations made to other projects/persons hosted on Liberapay.",
              '<a href="/Liberapay/">'|safe,
              '</a>'|safe) }}</dd>
 
