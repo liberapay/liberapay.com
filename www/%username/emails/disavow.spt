@@ -7,6 +7,7 @@ been deleted or renamed.
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
 from liberapay.security.csrf import require_cookie
+from liberapay.utils import get_recordable_headers
 from liberapay.utils.emails import EmailVerificationResult
 
 [---]
@@ -57,7 +58,10 @@ else:
      RETURNING true AS changed
     """, (email_row.id,))
     if changed and participant:
-        participant.add_event(website.db, 'disavow_email', email_row.address)
+        participant.add_event(website.db, 'email_disavowed', dict(
+            address=email_row.address,
+            headers=get_recordable_headers(request),
+        ), user.id)
         if participant.email == email_row.address:
             website.db.run("""
                 UPDATE participants AS p

@@ -78,7 +78,8 @@ from liberapay.payin.common import resolve_amounts, resolve_take_amounts
 from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
-    deserialize, erase_cookie, serialize, set_cookie, urlquote,
+    deserialize, erase_cookie, get_recordable_headers, serialize, set_cookie,
+    urlquote,
     markdown,
 )
 from liberapay.utils.emails import (
@@ -1135,7 +1136,7 @@ class Participant(Model, MixinTeam):
         self.set_attributes(email=email)
         self.update_avatar()
 
-    def verify_email(self, email_id, nonce, user):
+    def verify_email(self, email_id, nonce, user, request):
         """Set an email address as verified, if the given nonce is valid.
 
         If the verification succeeds and the participant doesn't already have a
@@ -1191,6 +1192,10 @@ class Participant(Model, MixinTeam):
                 """, (r.address, self.id, email_id))
             except IntegrityError:
                 return EmailVerificationResult.STYMIED
+            self.add_event(cursor, 'email_verified', dict(
+                address=r.address,
+                headers=get_recordable_headers(request),
+            ), user.id)
         # At this point we assume that the user is in fact the owner of the email
         # address and has received the verification email, so we can remove the
         # address from our blacklist if it was mistakenly blocked.
