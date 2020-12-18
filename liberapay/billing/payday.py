@@ -1,4 +1,3 @@
-from collections import namedtuple
 from datetime import date, timedelta
 from decimal import Decimal, ROUND_UP
 from itertools import chain
@@ -28,7 +27,16 @@ def round_up(d):
     return d.quantize(constants.D_CENT, rounding=ROUND_UP)
 
 
-TakeTransfer = namedtuple('TakeTransfer', 'tipper member amount')
+class TakeTransfer:
+    __slots__ = ('tipper', 'member', 'amount')
+
+    def __init__(self, tipper, member, amount):
+        self.tipper = tipper
+        self.member = member
+        self.amount = amount
+
+    def __repr__(self):
+        return f"TakeTransfer({self.tipper!r}, {self.member!r}, {self.amount!r})"
 
 
 class NoPayday(Exception):
@@ -508,7 +516,7 @@ class Payday:
                         leeway_ratio = min(delta / leeway, 1)
                         tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
         # Loop: compute the adjusted donation amounts, and do the transfers
-        transfers = []
+        transfers = {}
         for tip in tips:
             if tip.paid_in_advance is None:
                 tip.paid_in_advance = tip.full_amount.zero()
@@ -545,7 +553,13 @@ class Payday:
                 transfer_amount = in_advance_amount + on_time_amount
                 if transfer_amount == 0:
                     continue
-                transfers.append(TakeTransfer(tip.tipper, take.member, transfer_amount))
+                transfer_key = (tip.tipper, take.member)
+                if transfer_key in transfers:
+                    transfers[transfer_key].amount += transfer_amount
+                else:
+                    transfers[transfer_key] = TakeTransfer(
+                        tip.tipper, take.member, transfer_amount
+                    )
                 if transfer_amount == fuzzy_take_amount:
                     take.amount = take.amount.zero()
                 else:
@@ -558,6 +572,7 @@ class Payday:
                 tip.amount -= transfer_amount
                 if tip.amount == 0:
                     break
+        transfers = transfers.values()
         leftover = total_income - MoneyBasket(t.amount for t in transfers)
         return transfers, leftover
 
