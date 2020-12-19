@@ -244,7 +244,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
         if len(creds) == 3:
             session_p = Participant.authenticate(*creds)
             if session_p:
-                state['user'] = session_p
+                user = state['user'] = session_p
     p = None
     session_suffix = ''
     redirect = False
@@ -311,7 +311,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
                  WHERE e.id = %s
             """, (email_id,), default=(None, None))
             if email_participant:
-                result = email_participant.verify_email(email_id, email_nonce, p, request)
+                result = email_participant.verify_email(email_id, email_nonce, p or user, request)
                 state['email.verification-result'] = result
                 request.qs.pop('email.id', None)
                 request.qs.pop('email.nonce', None)

@@ -137,6 +137,9 @@ def normalize_email_address(email: str) -> NormalizedEmailAddress:
     return str.__new__(NormalizedEmailAddress, email)
 
 
+port_25_is_open = None
+
+
 def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
     """Check that an email address isn't blacklisted and has a valid domain.
 
@@ -180,6 +183,20 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
             try:
                 test_email_domain(email)
             except EmailAddressError as e:
+                if isinstance(e, BrokenEmailDomain):
+                    global port_25_is_open
+                    if port_25_is_open is None:
+                        try:
+                            test_email_domain(normalize_email_address('test@liberapay.com'))
+                        except BrokenEmailDomain:
+                            port_25_is_open = False
+                        except Exception as e:
+                            website.tell_sentry(e, {})
+                        else:
+                            port_25_is_open = True
+                    if port_25_is_open is False:
+                        website.tell_sentry(e, {}, allow_reraise=False)
+                        return
                 request = state.get('request')
                 if request:
                     bypass_error = request.body.get('email.bypass_error') == 'yes'
