@@ -142,11 +142,13 @@ $(function(){ Liberapay.init(); });
 
 Liberapay.error = function(jqXHR, textStatus, errorThrown) {
     var msg = null;
-    try {
-        msg = JSON.parse(jqXHR.responseText).error_message_long;
-    } catch(exc) {}
-    if(!msg) {
-        msg = "An error occurred (" + (errorThrown || textStatus) + ").\n" +
+    if (jqXHR.responseText > "") {
+        try {
+            msg = JSON.parse(jqXHR.responseText).error_message_long;
+        } catch(exc) {}
+    }
+    if (typeof msg != "string" || msg.length == 0) {
+        msg = "An error occurred (" + (errorThrown || textStatus || jqXHR.status) + ").\n" +
               "Please contact support@liberapay.com if the problem persists.";
     }
     Liberapay.notification(msg, 'error', -1);
