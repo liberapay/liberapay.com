@@ -24,10 +24,14 @@ Liberapay.forms.setValidity = function($input, validity) {
 Liberapay.forms.jsSubmit = function() {
     // Initialize forms with the `js-submit` class
     function submit(e) {
-        e.preventDefault();
         var form = this.form || this;
-        if (form.reportValidity && form.reportValidity() == false) return;
         var $form = $(form);
+        if ($form.data('bypass-js-submit') === 'on') {
+            setTimeout(function () { $form.data('bypass-js-submit', 'off') }, 100);
+            return
+        }
+        e.preventDefault();
+        if (form.reportValidity && form.reportValidity() == false) return;
         var target = $form.attr('action');
         var js_only = target.substr(0, 11) == 'javascript:';
         var data = $form.serializeArray();
@@ -52,10 +56,31 @@ Liberapay.forms.jsSubmit = function() {
             data: data,
             dataType: 'json',
             success: Liberapay.forms.success($form, $inputs, button),
-            error: [
-                function () { $inputs.prop('disabled', false); },
-                Liberapay.error,
-            ],
+            error: function (jqXHR, textStatus, errorThrown) {
+                $inputs.prop('disabled', false);
+                var msg = null;
+                if (jqXHR.responseText > "") {
+                    try {
+                        msg = JSON.parse(jqXHR.responseText).error_message_long;
+                    } catch(exc) {
+                        if (!js_only) {
+                            $form.data('bypass-js-submit', 'on');
+                            if (button) {
+                                $(button).click();
+                            } else {
+                                $form.submit();
+                            }
+                            $inputs.prop('disabled', true);
+                            return
+                        }
+                    }
+                }
+                if (typeof msg != "string" || msg.length == 0) {
+                    msg = "An error occurred (" + (errorThrown || textStatus || jqXHR.status) + ").\n" +
+                          "Please contact support@liberapay.com if the problem persists.";
+                }
+                Liberapay.notification(msg, 'error', -1);
+            },
         });
     }
     $('.js-submit').submit(submit);
