@@ -17,7 +17,7 @@ if query:
         results['usernames'] = website.db.all("""
             SELECT username, avatar_url, similarity(username, %(q)s) AS rank, id
               FROM participants
-             WHERE username %% %(q)s
+             WHERE lower(username) %% lower(%(q)s)
                AND status = 'active'
                AND hide_from_search = 0
           ORDER BY rank DESC, username
@@ -65,7 +65,7 @@ if query:
                  , similarity(c.name, %(q)s) AS rank
               FROM communities c
               JOIN participants p ON p.id = c.participant
-             WHERE name %% %(q)s
+             WHERE lower(name) %% lower(%(q)s)
                AND p.hide_from_search = 0
           ORDER BY rank DESC, name
              LIMIT 10
@@ -84,7 +84,7 @@ if query:
                    ) as owner
               FROM repositories r
               JOIN participants p ON p.id = r.participant
-             WHERE r.name %% %(q)s
+             WHERE lower(r.name) %% lower(%(q)s)
                AND p.hide_from_search = 0
           ORDER BY similarity(r.name, %(q)s) DESC, r.is_fork ASC, r.last_update DESC, r.name
              LIMIT 10
