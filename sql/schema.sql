@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '136'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '137'::jsonb);
 
 
 -- app configuration
@@ -92,8 +92,9 @@ CREATE UNIQUE INDEX ON participants (lower(username));
 CREATE UNIQUE INDEX participants_email_key ON participants (lower(email));
 
 CREATE INDEX username_trgm_idx ON participants
-    USING gist(lower(username) gist_trgm_ops)
-    WHERE status = 'active';
+    USING GIN (lower(username) gin_trgm_ops)
+    WHERE status = 'active'
+      AND NOT username like '~%';
 
 CREATE INDEX participants_join_time_idx ON participants (join_time)
     WHERE join_time IS NOT NULL;
@@ -196,7 +197,8 @@ CREATE INDEX repositories_info_fetched_at_idx ON repositories (info_fetched_at A
     WHERE participant IS NOT NULL AND show_on_profile;
 
 CREATE INDEX repositories_trgm_idx ON repositories
-    USING gist(name gist_trgm_ops);
+    USING GIN (lower(name) gin_trgm_ops)
+    WHERE participant IS NOT NULL;
 
 
 -- tips -- all times a participant elects to tip another
@@ -585,7 +587,7 @@ CREATE TABLE communities
 CREATE UNIQUE INDEX ON communities (lower(name));
 
 CREATE INDEX community_trgm_idx ON communities
-    USING gist(name gist_trgm_ops);
+    USING GIN (lower(name) gin_trgm_ops);
 
 CREATE TABLE community_memberships
 ( participant   bigint         NOT NULL REFERENCES participants

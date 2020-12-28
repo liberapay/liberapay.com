@@ -2710,3 +2710,17 @@ CREATE OR REPLACE FUNCTION compute_arrears(tip tips) RETURNS currency_amount AS 
                   AND tr.status = 'succeeded'
            ), tip.amount::currency);
 $$ LANGUAGE sql;
+
+-- migration #137
+DROP INDEX username_trgm_idx;
+CREATE INDEX username_trgm_idx ON participants
+    USING GIN (lower(username) gin_trgm_ops)
+    WHERE status = 'active'
+      AND NOT username like '~%';
+DROP INDEX community_trgm_idx;
+CREATE INDEX community_trgm_idx ON communities
+    USING GIN (lower(name) gin_trgm_ops);
+DROP INDEX repositories_trgm_idx;
+CREATE INDEX repositories_trgm_idx ON repositories
+    USING GIN (lower(name) gin_trgm_ops)
+    WHERE participant IS NOT NULL;
