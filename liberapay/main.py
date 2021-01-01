@@ -47,8 +47,8 @@ from liberapay.utils import (
 from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
     attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
-    canonize, insert_constants, enforce_rate_limits, set_output_to_None,
-    add_content_disposition_header, merge_responses,
+    canonize, detect_obsolete_browsers, insert_constants, enforce_rate_limits,
+    set_output_to_None, add_content_disposition_header, merge_responses,
     bypass_csp_for_form_redirects, delegate_error_to_simplate, return_500_for_exception,
     turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
 )
@@ -187,6 +187,8 @@ algorithm.functions = [
     csrf.reject_forgeries,
     authentication.authenticate_user_if_possible,
     add_currency_to_state,
+
+    detect_obsolete_browsers,
 
     algorithm['dispatch_path_to_filesystem'],
     algorithm['raise_404_if_missing'],

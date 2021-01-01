@@ -1,0 +1,21 @@
+[---]
+[---] text/html
+<!DOCTYPE html>
+<html lang="{{ locale.language }}">
+<head>
+    <title>Liberapay</title>
+</head>
+<body>
+    <center>
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <p>{{ _(
+            "You seem to be using an obsolete browser, as a result this website "
+            "may not work properly. We recommend using a recent version of a "
+            "mainstream browser."
+        ) }}</p>
+        <button name="obsolete-browser-warning" value="ignore">{{ _("Ignore this warning") }}</button>
+    </form>
+    </center>
+</body>
+</html>
