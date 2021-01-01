@@ -158,6 +158,32 @@ elif payin_id:
             client_secret = act.client_secret
         else:
             raise NotImplementedError()
+    route = ExchangeRoute.from_id(payer, payin.route)
+
+else:
+    routes = website.db.all("""
+        SELECT r
+          FROM exchange_routes r
+         WHERE r.participant = %s
+           AND r.status = 'chargeable'
+           AND r.network::text LIKE %s
+           AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
+      ORDER BY r.is_default NULLS LAST
+             , r.network = 'stripe-sdd' DESC
+             , r.id DESC
+    """, (payer.id, 'stripe-' + (payment_type or '%')))
+    if routes:
+        route = None
+        while routes:
+            route = routes[0]
+            route.sync_status()
+            if route:
+                break
+            routes = routes[1:]
+        payment_type = route.network.split('-', 1)[-1]
+        del route
+    if not payment_type:
+        response.redirect(payer.path('giving/pay'))
 
 tippees = request.qs.parse_list('beneficiary', int, default=None)
 if tippees:
@@ -171,30 +197,6 @@ if tippees:
     del tips
 
 elif not payin_id:
-    response.redirect(payer.path('giving/pay'))
-
-routes = website.db.all("""
-    SELECT r
-      FROM exchange_routes r
-     WHERE r.participant = %s
-       AND r.status = 'chargeable'
-       AND r.network::text LIKE %s
-       AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
-  ORDER BY r.is_default NULLS LAST
-         , r.network = 'stripe-sdd' DESC
-         , r.id DESC
-""", (payer.id, 'stripe-' + (payment_type or '%')))
-if routes:
-    route = None
-    while routes:
-        route = routes[0]
-        route.sync_status()
-        if route:
-            break
-        routes = routes[1:]
-    payment_type = route.network.split('-', 1)[-1]
-    del route
-if not payment_type:
     response.redirect(payer.path('giving/pay'))
 
 if user == payer:
@@ -247,7 +249,7 @@ title = _("Funding your donations")
         </div>
         <p><a class="btn btn-primary btn-lg" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
     % elif status == 'pending'
-        <div class="alert alert-info">{{ _("The payment has been initiated.") }}</div>
+        <p class="alert alert-info">{{ _("The payment has been initiated.") }}</p>
         <p>{{ _(
             "Processing this kind of payment takes {timedelta} on average.",
             timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
@@ -257,6 +259,16 @@ title = _("Funding your donations")
             link_start='<a href="%s">'|safe % payer.path('ledger/'),
             link_end='</a>'|safe
         ) }}</p>
+        % if not route.has_been_charged_successfully()
+        <p class="alert alert-warning">{{ _(
+            "Your bank can reject this payment. We recommend sending a copy of "
+            "{link_start}the mandate{link_end} to your bank if you're not sure "
+            "that it properly handles {currency} direct debit instructions.",
+            link_start='<a href="%s">'|safe % route.get_mandate_url(),
+            link_end='</a>'|safe,
+            currency=Currency(payin.amount.currency),
+        ) }}</p>
+        % endif
     % endif
 
     % if status != 'failed'
