@@ -101,6 +101,7 @@ elif event_object_type == 'charge.dispute':
                 payin_ctime=payin.ctime,
                 dispute_reason=dispute.reason,
                 dispute_can_be_withdrawn=dispute.status == 'needs_response',
+                mandate_url=route.get_mandate_url(),
             )
         except DuplicateNotification:
             pass

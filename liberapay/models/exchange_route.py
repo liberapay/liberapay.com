@@ -326,6 +326,16 @@ class ExchangeRoute(Model):
         else:
             raise NotImplementedError(self.network)
 
+    def has_been_charged_successfully(self):
+        return bool(self.db.one("""
+            SELECT 1
+              FROM payins pi
+             WHERE pi.payer = %s
+               AND pi.route = %s
+               AND pi.status = 'succeeded'
+             LIMIT 1
+        """, (self.participant.id, self.id)))
+
     @cached_property
     def stripe_payment_method(self):
         return stripe.PaymentMethod.retrieve(self.address)
