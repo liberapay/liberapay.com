@@ -464,6 +464,10 @@ msgstr "争点となっていた資金は、受け取っていた人から自動
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
 msgstr "もし、あなたの銀行があなたに相談せずに支払いを拒否したのであれば、その理由を聞いてみましょう。問題が解決したら、{link_start}支払いをやり直してください{link_end}。"
 
+#, python-brace-format
+msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
+msgstr ""
+
 msgid "Your payment has failed"
 msgstr "支払いに失敗しました"
 
@@ -1311,6 +1315,12 @@ msgstr "キャンセル"
 
 msgid "Confirm"
 msgstr "確認"
+
+msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
+msgstr ""
+
+msgid "Ignore this warning"
+msgstr ""
 
 msgid "Please input your password to confirm this action:"
 msgstr ""
@@ -2682,6 +2692,10 @@ msgstr "この支払いを処理するには、より詳細な情報が必要で
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "支払い処理業者（{name}）は、まだこの受取人の{currency}口座振替を処理できません。別のお支払い方法をお試しください。"
+
+#, python-brace-format
+msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
+msgstr ""
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."

@@ -471,6 +471,10 @@ msgstr "Les fonds litigieux ont été automatiquement récupérés auprès des p
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
 msgstr "Si votre banque a contesté le paiement sans vous consulter, alors vous devriez lui demander pourquoi. Une fois le problème réglé, vous pouvez {link_start}refaire le paiement{link_end}."
 
+#, python-brace-format
+msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
+msgstr ""
+
 msgid "Your payment has failed"
 msgstr "Votre paiement a échoué"
 
@@ -1325,6 +1329,12 @@ msgstr "Annuler"
 
 msgid "Confirm"
 msgstr "Confirmer"
+
+msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
+msgstr ""
+
+msgid "Ignore this warning"
+msgstr ""
 
 msgid "Please input your password to confirm this action:"
 msgstr "Veuillez entrer votre mot de passe pour confirmer cette action :"
@@ -2708,6 +2718,10 @@ msgstr "De plus amples informations sont nécessaires afin de traiter ce paiemen
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "L'opérateur de paiement ({name}) n'est pas encore capable de traiter des prélèvements bancaires en {currency} pour ce destinataire. Veuillez réessayer avec un autre mode de paiement."
+
+#, python-brace-format
+msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
+msgstr ""
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."

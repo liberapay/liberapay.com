@@ -472,6 +472,10 @@ msgstr "De påklagde midlene har blitt automatisk overtrukket fra de som har mot
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
 msgstr "Hvis banken din påklagde betalingen uten å ta det opp med deg, bør du spørre dem om hvorfor. Når problemet har blitt løst, kan du {link_start}fornye betalingen{link_end}."
 
+#, python-brace-format
+msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
+msgstr ""
+
 msgid "Your payment has failed"
 msgstr "Din betaling mislyktes"
 
@@ -1326,6 +1330,12 @@ msgstr "Avbryt"
 
 msgid "Confirm"
 msgstr "Bekreft"
+
+msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
+msgstr ""
+
+msgid "Ignore this warning"
+msgstr ""
 
 msgid "Please input your password to confirm this action:"
 msgstr "Skriv inn passordet ditt for å bekrefte denne handlingen:"
@@ -2712,6 +2722,10 @@ msgstr "Mer info kreves for å formidle betalingen."
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "Betalingsformidleren ({name}) kan ikke behandle {currency}-direktedebiteringer for denne mottageren enda. Prøv igjen med en annen betalingsmetode."
+
+#, python-brace-format
+msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
+msgstr ""
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
