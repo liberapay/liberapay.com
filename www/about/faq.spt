@@ -11,11 +11,16 @@ title = _("Frequently Asked Questions")
 <div class="row faq">
 <dl class="col-md-6">
 
-    {{ dt(_("How is Liberapay funded?"), 'how-funded') }}
+    {{ dt(_("How is Liberapay funded? Are there fees?"), 'how-funded') }}
 
-    <dd>{{ _("Liberapay is funded {0}on Liberapay{1}.",
-             '<a href="/Liberapay/">'|safe,
-             '</a>'|safe) }}</dd>
+    <dd>{{ _(
+        "Liberapay does not take a cut of payments, the service is funded by "
+        "the donations to {1}its own account{0}. However there are {2}payment "
+        "processing fees{0}.",
+        '</a>'|safe,
+        '<a href="/Liberapay/">'|safe,
+        '<a href="/about/faq#fees">'|safe,
+    ) }}</dd>
 
 
     {{ dt(_("Who can use Liberapay?"), 'who-can-use') }}
