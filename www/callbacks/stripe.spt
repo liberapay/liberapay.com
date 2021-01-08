@@ -76,12 +76,21 @@ elif event_object_type == 'charge.dispute':
             if pt.remote_id:
                 reversal_amount = pt.amount - (pt.reversed_amount or 0)
                 if reversal_amount:
-                    stripe.Transfer.create_reversal(
-                        pt.remote_id,
-                        amount=Money_to_int(reversal_amount),
-                        idempotency_key='%s_pt_%i' % (dispute.id, pt.id),
-                    )
-                    # ↑ This triggers a `transfer.reversed` event, handled below.
+                    try:
+                        stripe.Transfer.create_reversal(
+                            pt.remote_id,
+                            amount=Money_to_int(reversal_amount),
+                            idempotency_key='%s_pt_%i' % (dispute.id, pt.id),
+                        )
+                        # ↑ This triggers a `transfer.reversed` event, handled below.
+                    except stripe.error.InvalidRequestError as e:
+                        if str(e).endswith(" is already fully reversed."):
+                            update_payin_transfer(
+                                website.db, pt.id, None, pt.status, pt.error,
+                                reversed_amount=pt.amount,
+                            )
+                        else:
+                            raise
             else:
                 update_payin_transfer(
                     website.db, pt.id, None, pt.status, pt.error,
