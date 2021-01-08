@@ -2438,10 +2438,12 @@ class Participant(Model, MixinTeam):
             zero = Money.ZEROS[self.main_currency]
             r = c.one("""
                 WITH our_tips AS (
-                         SELECT amount
-                           FROM current_tips
-                          WHERE tippee = %(id)s
-                            AND is_funded
+                         SELECT tip.amount
+                           FROM current_tips tip
+                           JOIN participants tipper_p ON tipper_p.id = tip.tipper
+                          WHERE tip.tippee = %(id)s
+                            AND tip.is_funded
+                            AND tipper_p.is_suspended IS NOT true
                      )
                 UPDATE participants p
                    SET receiving = taking + coalesce_currency_amount(
