@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Korean "
-"<https://hosted.weblate.org/projects/liberapay/core/ko/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2021-01-10 21:56+0000\n"
+"Last-Translator: Yongmin Hong <revi@pobox.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/liberapay/core/ko/>\n"
+"Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -16,9 +18,8 @@ msgstr "{language} 언어로의 번역이 완료되지 않았습니다."
 msgid "Greetings,"
 msgstr "안녕하세요,"
 
-#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
-msgstr "뭔가 잘못됐나요? 이 이메일에 답변하여 도움을 얻으세요."
+msgstr "뭔가 잘못됐나요? 이 이메일은 자동으로 발송되었지만, 이 이메일에 답변하여 도움을 얻으세요."
 
 msgid "Change your email settings"
 msgstr "이메일 설정 변경하기"
@@ -52,24 +53,24 @@ msgstr "기부 관리하기"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "{username}님에 대한 매주 {amount} 기부를 {date} 이전에 갱신해야 합니다."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "{username}님에 대한 매주 {amount} 기부를 {date} 이전에 갱신해야 합니다."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "{username}님에 대한 매년 {amount} 기부를 {date} 이전에 갱신해야 합니다."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
+msgstr[0] "갱신이 필요한 기부가 {n}개 있습니다."
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "기부를 수정하거나 중단하려면 다음 링크를 방문하세요. {link_start}기부 관리하기{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "이메일 주소가 임시적으로 차단되었습니다"
@@ -412,62 +413,62 @@ msgstr "Liberapay로의 실시간 계좌 이체가 성공적으로 이루어졌�
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "{money_amount} 기부금에 분쟁이 제기되었습니다"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr ""
+msgstr "귀하가 {date}에 실행한 {money_amount} 이체가 은행에 의해 취소되었습니다."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 지불을 처리할 수 없었습니다."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 귀하가 환불을 요청했습니다."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 이 결제는 승인되지 않았습니다."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 중복 결제입니다."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 이 결제는 사기일 가능성이 높습니다."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "은행에서 분쟁 사유를 제공하지 않았습니다."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 제공된 계정 정보가 잘못되었습니다."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 계좌에 잔고가 부족하여 결제를 처리할 수 없습니다."
 
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: 예금주가 이 결제를 승인하지 않았습니다."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "은행에서 다음 정보를 제공했습니다: {reason_code_in_english}."
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "이 분쟁이 잘못 제기되었다고 생각하시면 은행에 철회를 요청할 수 있습니다. 철회를 요청하는 경우 저희에게 알려 주세요. 저희도 귀하의 은행에 연락을 해야 합니다."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
-msgstr ""
+msgstr "분쟁이 귀하에게 유리하게 종결되지 않으면, 분쟁이 제기된 금액이 돈을 보낸 사람에게 돌아갑니다."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
-msgstr ""
+msgstr "이 분쟁은 종결되었으며, 되돌려지거나 철회될 수 없습니다."
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "분쟁이 제기된 금액이 자동적으로 돈을 받은 사람에게 환불되었습니다."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "은행에서 귀하에게 연락하지 않고 분쟁을 제기한 경우, 은행에 사유를 문의하세요. 문제가 해결된 후 {link_start}결제를 다시 시도할 수 있습니다{link_end}."
 
 #, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
-msgstr ""
+msgstr "은행에서 무슨 일이 일어났는지 빠르게 파악할 수 있도록, {link_start}이 문서의 사본{link_end}을 보낼 수 있습니다."
 
 msgid "Your payment has failed"
 msgstr "지불이 실패하였습니다"
@@ -535,7 +536,7 @@ msgstr "결제가 처리되면 은행 계좌에 \"{descriptor}\" 라는 내용�
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "이런 종류의 거래를 처리하는데는 평균적으로 {timedelta} 이(가) 걸립니다."
 
 msgid "Your payment has succeeded"
 msgstr "지불이 성공적으로 이루어졌습니다"
@@ -684,14 +685,14 @@ msgid "The following donation renewal payments have been aborted because the rec
 msgstr "수신자가 자금을 수령할 수 없기 때문에 기부 갱신 결제가 취소되었습니다:"
 
 msgid "Liberapay donation renewal: authentication required"
-msgstr ""
+msgstr "Liberapay 기부 갱신: 인증 필요"
 
 #, python-brace-format
 msgid "We haven't been able to complete your scheduled payment of {money_amount}, because your bank requested that you confirm it."
-msgstr ""
+msgstr "{money_amount} 예약 결제를 처리하지 못했습니다. 은행에서 귀하가 결제를 승인할 것을 요청했습니다."
 
 msgid "Confirm the payment"
-msgstr ""
+msgstr "결제 승인하기"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Liberapay를 통해 기부자들이 당신을 돕는 일을 쉽게 할 수 있습니다"
@@ -741,16 +742,16 @@ msgstr[0] "Liberapay 기부 갱신: 다가오는 {money_amount} 출금"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr ""
+msgstr "이 메시지는 {recipient} 님에 대한 기부를 처리하기 위해 귀하의 기본 결제 계좌에서 {amount} 을(를) {debit_date} 에 결제할 것이라는 것을 알려주기 위해 발송되었습니다."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr ""
+msgstr "이 메시지는 {recipients} 님에 대한 기부를 처리하기 위해 귀하의 기본 결제 계좌에서 {amount} 을(를) {debit_date} 에 결제할 것이라는 것을 알려주기 위해 발송되었습니다."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
+msgstr[0] "이 메시지는 기부를 갱신하기 위해 귀하의 기본 결제 계좌에서 {amount} 을(를) {n} 일 내에 갱신할 예정이라는 것을 알려주기 위해 발송되었습니다."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -758,7 +759,7 @@ msgstr "기부를 수정하려면 다음 링크를 클릭하세요: {link_start}
 
 #, python-brace-format
 msgid "A receipt will be available once the payment has been successfully processed. You can see all your payments and receipts in {link_start}your account's ledger{link_end}."
-msgstr ""
+msgstr "결제가 처리된 후에 영수증이 발행될 예정입니다. 모든 결제와 영수증을 {link_start}계정 장부{link_end}에서 확인할 수 있습니다."
 
 msgid "Email address verification - Liberapay"
 msgstr "이메일 주소 확인 - Liberapay"
@@ -1258,9 +1259,9 @@ msgstr ""
 msgid "No account has the username “{username}”."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
-msgstr "이메일 계정이 {email_address} 인 계정을 찾을 수 없었습니다."
+msgstr "주 이메일 계정이 {email_address} 인 계정을 찾을 수 없습니다."
 
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
@@ -2716,7 +2717,7 @@ msgid "Please input your name and card number:"
 msgstr "이름과 카드 번호를 입력해 주십시오:"
 
 msgid "Jane Doe"
-msgstr "Jane Doe"
+msgstr "홍길동"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
@@ -3191,7 +3192,7 @@ msgstr "제거"
 msgid "An error occurred while rendering this notification."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
 msgstr "이 오류의 세부 사항이 기록되었습니다. 저희에게 연락하기로 결정하셨다면 에러 식별자 {0} 을/를 알려주세요."
 
@@ -3233,9 +3234,8 @@ msgstr "통화: {0}"
 msgid "Added on {date}"
 msgstr "{date} 에 추가됨"
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, log in to the account and complete the verification process. After that, reconnect the account if you still see this message."
-msgstr "이 계정은 지급을 받을 수 없습니다."
+msgstr "이 계정은 지급을 받을 수 없습니다. 이 문제를 해결하려면 계정에 로그인하여 인증 절차를 완료해 주세요. 그런 후 계정을 다시 연결하여 여전히 이 오류가 표시되는지 확인하세요."
 
 #, python-brace-format
 msgid "Manage this {platform} account"
@@ -4161,9 +4161,8 @@ msgstr "GitHub에 이슈를 열어 주세요"
 msgid "Other communication channels:"
 msgstr "다른 커뮤니케이션 채널:"
 
-#, fuzzy
 msgid "How is Liberapay funded? Are there fees?"
-msgstr "Liberapay는 어떻게 자금을 모으나요?"
+msgstr "Liberapay는 어떻게 자금을 모으나요? 수수료는요?"
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
