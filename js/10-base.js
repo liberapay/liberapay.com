@@ -179,11 +179,7 @@ Liberapay.jsonml = function(jsonml) {
 
             case Array: node.appendChild(Liberapay.jsonml(v)); break;
 
-            case String: case Number:
-                node.appendChild(document.createTextNode(v));
-                break;
-
-            default: node.appendChild(v); break;
+            default: node.appendChild(document.createTextNode(v.toString())); break;
         }
     });
 

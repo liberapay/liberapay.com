@@ -125,6 +125,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         bob.set_tip_to(emma, EUR('7.00'))  # not funded, insufficient receiving
         carl.set_tip_to(dana, EUR('2.08'))  # not funded, insufficient balance
         self.make_payin_and_transfer(carl_card, dana, EUR('1.56'))
+        fred = self.make_participant('fred')
+        fred_card = self.upsert_route(fred, 'stripe-card')
+        fred.set_tip_to(dana, EUR('2.22'))
+        self.make_payin_and_transfer(fred_card, dana, EUR('8.88'))
+        self.db.run("UPDATE participants SET is_suspended = true WHERE username = 'fred'")
+        dana.update_receiving()
 
         def check():
             alice = Participant.from_username('alice')
@@ -152,7 +158,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             assert emma.npatrons == 1
             assert emma.nteampatrons == 0
             funded_tips = self.db.all("SELECT amount FROM tips WHERE is_funded ORDER BY id")
-            assert funded_tips == [3, 6, 0.5, EUR('1.20'), EUR('0.49')]
+            assert funded_tips == [3, 6, 0.5, EUR('1.20'), EUR('0.49'), EUR('2.22')]
 
             team = Participant.from_username('team')
             assert team.receiving == EUR('1.20')
