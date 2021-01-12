@@ -2219,7 +2219,7 @@ class Participant(Model, MixinTeam):
 
         return new_public_name
 
-    def update_avatar(self, src=None, cursor=None, avatar_email=None):
+    def update_avatar(self, src=None, cursor=None, avatar_email=None, check=True):
         if self.status == 'stub':
             assert src is None
 
@@ -2259,7 +2259,7 @@ class Participant(Model, MixinTeam):
                  LIMIT 1
             """, (self.id, platform, user_id or None))
 
-        if avatar_url and avatar_url != self.avatar_url and website.app_conf.check_avatar_urls:
+        if avatar_url and avatar_url != self.avatar_url and check and website.app_conf.check_avatar_urls:
             # Check that the new avatar URL returns a 200.
             try:
                 r = requests.head(avatar_url, allow_redirects=True, timeout=5)
