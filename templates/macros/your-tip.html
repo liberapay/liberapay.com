@@ -185,7 +185,7 @@
             None
         )
         % set periodic_amount = (
-            None if tip_is_standard or tip.amount.currency != new_currency else
+            None if tip_is_standard or tip.amount > 0 and tip.amount.currency != new_currency else
             tip.periodic_amount or querystring_amount
         )
         <li class="list-group-item">
