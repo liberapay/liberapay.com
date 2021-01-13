@@ -104,6 +104,25 @@ class TestElsewhere(EmailHarness):
             account = AccountElsewhere.upsert(platform.extract_user_info(user_info, domain))
             assert isinstance(account, AccountElsewhere)
 
+    def test_upsert_correctly_updates_the_participant_avatar_url(self):
+        alice = self.make_participant('alice')
+        alice.update_avatar(src='libravatar:', avatar_email='alice@liberapay.com')
+        libravatar_url = alice.avatar_url
+        assert libravatar_url
+        alice_github_info = UserInfo(
+            platform='github', user_id='1', user_name='alice', domain='',
+            avatar_url='fake-github-avatar-url',
+        )
+        alice_github = AccountElsewhere.upsert(alice_github_info)
+        alice.take_over(alice_github)
+        alice = alice.refetch()
+        assert alice.avatar_url == libravatar_url
+        alice.update_avatar(src='github:')
+        assert alice.avatar_url == 'fake-github-avatar-url'
+        alice_github_info.avatar_url = 'new-fake-github-avatar-url'
+        alice_github = AccountElsewhere.upsert(alice_github_info)
+        assert alice_github.participant.avatar_url == 'new-fake-github-avatar-url'
+
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_pages(self, get_user_info):
         for platform in self.platforms:
