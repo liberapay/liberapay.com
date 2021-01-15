@@ -44,9 +44,9 @@ Alternatively you can post a message in [our GitHub salon](https://github.com/li
 
 You can help translate Liberapay [via Weblate](https://hosted.weblate.org/engage/liberapay/). Current status:
 
-[![global translation status](https://hosted.weblate.org/widgets/liberapay/-/287x66-white.png)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
+[![global translation status](https://hosted.weblate.org/widgets/liberapay/-/core/287x66-white.png)](https://hosted.weblate.org/engage/liberapay/?utm_source=widget)
 
-[![translation status by language](https://hosted.weblate.org/widgets/liberapay/-/multi-auto.svg)](https://hosted.weblate.org/projects/liberapay/core/?utm_source=widget)
+[![translation status by language](https://hosted.weblate.org/widgets/liberapay/-/core/multi-auto.svg)](https://hosted.weblate.org/projects/liberapay/core/?utm_source=widget)
 
 If you have questions about translating Liberapay, you can ask them [in the salon](https://github.com/liberapay/salon/labels/i18n).
 
