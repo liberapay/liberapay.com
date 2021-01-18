@@ -227,6 +227,7 @@ title = _("Funding your donations")
             </div>
         </div>
         % elif provider == 'paypal'
+        % set possible = allow_paypal and payment.currency in constants.PAYPAL_CURRENCIES
         <div class="panel panel-default {{ '' if allow_paypal else 'muted' }}">
             <div class="panel-body overlaid">
                 <p class="payment-icon">{{ fontawesome('paypal') }}</p>
@@ -243,7 +244,7 @@ title = _("Funding your donations")
                     <small class="text-warning">{{ _("Not anonymous") }}</small>
                     % endif
                 </h4>
-                % if allow_paypal
+                % if possible
                 <a class="overlay" href="{{ payer.path('giving/pay/paypal/') }}?{{ payment.beneficiary }}"
                     ><span class="sr-only">{{ _("Pay with PayPal") }}</span></a>
                 % endif

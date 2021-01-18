@@ -11,7 +11,7 @@ nusers = db_qc5.one("""
     SELECT count(*)
       FROM participants
      WHERE status = 'active'
-       AND kind IN ('individual', 'organization', 'group');
+       AND kind IN ('individual', 'organization');
 """)
 transfer_volume = db_qc5.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1") or 0
 tips_stats = db_qc5.one("""
