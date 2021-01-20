@@ -3,11 +3,7 @@
   @include gradient-bg($background);
   border-color: $border;
 
-  hr {
-    border-top-color: darken($border, 5%);
-  }
-
   .alert-link {
-    color: darken($color, 10%);
+    color: shade-color($color, 20%);
   }
 }
