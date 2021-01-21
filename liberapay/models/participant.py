@@ -2771,6 +2771,17 @@ class Participant(Model, MixinTeam):
                         execution_date=execution_date,
                         automatic=(renewal_mode == 2),
                     )
+                    # Check the charge amount
+                    if renewal_mode == 2:
+                        pp = PayinProspect(self, payin_tips, 'stripe')
+                        if new_sp.amount < pp.min_acceptable_amount:
+                            new_sp.amount = pp.min_acceptable_amount
+                            tr_amounts = resolve_amounts(
+                                new_sp.amount, {tip.tippee: tip.amount}
+                            )
+                            for tr in new_sp.transfers:
+                                tr['amount'] = tr_amounts[tr['tippee_id']]
+                            del tr_amounts
                     # Try to find this new payment in the current schedule
                     tippees = get_tippees_tuple(new_sp)
                     cur_sp = current_schedule_map.pop(tippees, None)
