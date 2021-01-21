@@ -64,6 +64,41 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=50, days=-1))
         assert new_schedule[0].automatic is True
 
+    def test_schedule_renewals_handles_donations_to_teams(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
+        team = self.make_participant('team', kind='group')
+        team.add_member(bob)
+        team.add_member(carl)
+        # set up a donation
+        alice.set_tip_to(team, EUR('0.13'), renewal_mode=2)
+        new_schedule = alice.schedule_renewals()
+        assert new_schedule == []
+        # fund the donation
+        self.add_payment_account(bob, 'stripe')
+        self.add_payment_account(carl, 'stripe')
+        alice_card = self.upsert_route(alice, 'stripe-card')
+        self.make_payin_and_transfer(alice_card, team, EUR('2.00'))
+        new_schedule = alice.schedule_renewals()
+        next_payday = compute_next_payday_date()
+        expected_transfers = [
+            {
+                'tippee_id': team.id,
+                'tippee_username': 'team',
+                'amount': EUR('2.00'),
+            }
+        ]
+        assert len(new_schedule) == 1
+        assert new_schedule[0].amount == EUR('2.00')
+        assert new_schedule[0].transfers == expected_transfers
+        assert new_schedule[0].execution_date == (next_payday + timedelta(weeks=15, days=-1))
+        assert new_schedule[0].automatic is True
+        # check idempotency
+        new_schedule2 = alice.schedule_renewals()
+        assert len(new_schedule2) == 1
+        assert new_schedule2[0].__dict__ == new_schedule[0].__dict__
+
     def test_schedule_renewals_notifies_payer_of_changes(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob', email='bob@liberapay.com')
