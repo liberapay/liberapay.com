@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '137'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '138'::jsonb);
 
 
 -- app configuration
@@ -570,6 +570,7 @@ CREATE TABLE scheduled_payins
 );
 
 CREATE INDEX scheduled_payins_payer_idx ON scheduled_payins (payer);
+CREATE INDEX scheduled_payins_payin_idx ON scheduled_payins (payin);
 
 
 -- communities -- groups of participants
