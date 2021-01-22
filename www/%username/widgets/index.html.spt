@@ -25,7 +25,7 @@ response.headers[b'Content-Security-Policy'] = csp
 
     <p>{{ _("Here's what it looks like:") }}</p>
 
-    <p><script src="button.js"></script></p>
+    <p><script src="{{ profile_url }}widgets/button.js"></script></p>
 
     <p>{{ _("And here's what it looks like with JavaScript turned off:") }}</p>
 
@@ -47,7 +47,7 @@ response.headers[b'Content-Security-Policy'] = csp
         link_close='</a>'|safe
     ) }}</p>
     % else
-    <p><script src="receiving.js"></script></p>
+    <p><script src="{{ profile_url }}widgets/receiving.js"></script></p>
     % endif
 
     <p>{{ _("Or, if you'd like a widget that shows how much you're giving:") }}</p>
@@ -64,7 +64,7 @@ response.headers[b'Content-Security-Policy'] = csp
         link_close='</a>'|safe
     ) }}</p>
     % else
-    <p><script src="giving.js"></script></p>
+    <p><script src="{{ profile_url }}widgets/giving.js"></script></p>
     % endif
 
     <h3>{{ _(

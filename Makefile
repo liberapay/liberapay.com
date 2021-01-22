@@ -1,4 +1,4 @@
-python := "$(shell { command -v python3.6 || command -v python3.7; } 2>/dev/null)"
+python := "$(shell { command -v python3.6 || command -v python3.7 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
@@ -15,6 +15,11 @@ echo:
 	@echo $($(var))
 
 $(env): requirements*.txt
+	@if [ "$(python)" = "false" ]; then \
+		echo "Unable to find a 'python' executable. Please make sure that Python is installed."; \
+		exit 1; \
+	fi;
+	@$(python) cli/check-python-version.py
 	$(python) -m venv $(env)
 	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
 	@touch $(env)

@@ -2688,22 +2688,38 @@ class Participant(Model, MixinTeam):
             if renewable_tips:
                 tippees = set(t.tippee for t in renewable_tips)
                 last_payments = dict(cursor.all("""
-                    SELECT DISTINCT ON (coalesce(pt.team, pt.recipient))
-                           coalesce(pt.team, pt.recipient) AS tippee,
-                           round(
-                               convert(pt.amount, pi.amount::currency) / (
-                                   SELECT sum(pt2.amount, pi.amount::currency)
-                                     FROM payin_transfers pt2
-                                    WHERE pt2.payin = pt.payin
-                               ) * pi.amount
+                    SELECT tippee, round(
+                               ( SELECT sum(pt.amount, payin_amount::currency) FILTER (
+                                            WHERE coalesce(pt.team, pt.recipient) = tippee
+                                        ) /
+                                        sum(pt.amount, payin_amount::currency)
+                                   FROM payin_transfers pt
+                                  WHERE pt.payin = payin_id
+                                    AND pt.status = 'succeeded'
+                               ) * (
+                                   payin_amount - coalesce_currency_amount(
+                                       payin_refunded_amount, payin_amount::currency
+                                   )
+                               )
                            ) AS amount
-                      FROM payin_transfers pt
-                      JOIN payins pi ON pi.id = pt.payin
-                     WHERE pt.payer = %(payer)s
-                       AND coalesce(pt.team, pt.recipient) IN %(tippees)s
-                       AND pt.status = 'succeeded'
-                  ORDER BY coalesce(pt.team, pt.recipient)
-                         , pt.ctime DESC
+                      FROM ( SELECT DISTINCT ON (coalesce(pt.team, pt.recipient))
+                                    coalesce(pt.team, pt.recipient) AS tippee,
+                                    pi.id AS payin_id,
+                                    pi.amount AS payin_amount,
+                                    pi.refunded_amount AS payin_refunded_amount
+                               FROM payin_transfers pt
+                               JOIN payins pi ON pi.id = pt.payin
+                              WHERE pt.payer = %(payer)s
+                                AND coalesce(pt.team, pt.recipient) IN %(tippees)s
+                                AND pt.status = 'succeeded'
+                                AND ( NOT pi.off_session OR (
+                                        SELECT sp.customized
+                                          FROM scheduled_payins sp
+                                         WHERE sp.payin = pi.id
+                                    ) )
+                           ORDER BY coalesce(pt.team, pt.recipient)
+                                  , pt.ctime DESC
+                           ) x
                 """, dict(payer=self.id, tippees=tippees)))
                 for tip in renewable_tips:
                     if tip.renewal_mode == 2 and tip.tippee_p.payment_providers & 1 == 0:
@@ -2760,6 +2776,17 @@ class Participant(Model, MixinTeam):
                         execution_date=execution_date,
                         automatic=(renewal_mode == 2),
                     )
+                    # Check the charge amount
+                    if renewal_mode == 2:
+                        pp = PayinProspect(self, payin_tips, 'stripe')
+                        if new_sp.amount < pp.min_acceptable_amount:
+                            new_sp.amount = pp.min_acceptable_amount
+                            tr_amounts = resolve_amounts(
+                                new_sp.amount, {tip.tippee: tip.amount}
+                            )
+                            for tr in new_sp.transfers:
+                                tr['amount'] = tr_amounts[tr['tippee_id']]
+                            del tr_amounts
                     # Try to find this new payment in the current schedule
                     tippees = get_tippees_tuple(new_sp)
                     cur_sp = current_schedule_map.pop(tippees, None)
