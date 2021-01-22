@@ -2712,6 +2712,11 @@ class Participant(Model, MixinTeam):
                               WHERE pt.payer = %(payer)s
                                 AND coalesce(pt.team, pt.recipient) IN %(tippees)s
                                 AND pt.status = 'succeeded'
+                                AND ( NOT pi.off_session OR (
+                                        SELECT sp.customized
+                                          FROM scheduled_payins sp
+                                         WHERE sp.payin = pi.id
+                                    ) )
                            ORDER BY coalesce(pt.team, pt.recipient)
                                   , pt.ctime DESC
                            ) x
