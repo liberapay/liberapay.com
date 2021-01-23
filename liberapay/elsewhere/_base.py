@@ -14,6 +14,7 @@ from requests import Session
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
 from liberapay.exceptions import LazyResponse
+from liberapay.i18n.base import to_age
 from liberapay.website import website
 
 from ._exceptions import BadUserId, UserNotFound
@@ -163,7 +164,7 @@ class Platform:
             raise InvalidGrantError
         if status == 429 and is_user_session:
             limit, remaining, reset = self.get_ratelimit_headers(response)
-            def msg(_, to_age):
+            def msg(_):
                 if remaining == 0 and reset:
                     return _(
                         "You've consumed your quota of requests, you can try again {in_N_minutes}.",
