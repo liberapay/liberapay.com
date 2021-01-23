@@ -1,20 +1,25 @@
 [---]
 [---] text/css via scss
 /*!
- * Bootstrap v4.3.1 (https://getbootstrap.com/)
- * Copyright 2011-2019 The Bootstrap Authors
- * Copyright 2011-2019 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Bootstrap v5.0.0-beta1 (https://getbootstrap.com/)
+ * Copyright 2011-2020 The Bootstrap Authors
+ * Copyright 2011-2020 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
+// scss-docs-start import-stack
+// Configuration
 @import "style/functions";
 @import "style/variables";
 @import "style/bootstrap/mixins";
+@import "style/bootstrap/utilities";
+
+// Layout & components
 @import "style/bootstrap/root";
 @import "style/bootstrap/reboot";
 @import "style/bootstrap/type";
 @import "style/bootstrap/images";
-@import "style/bootstrap/code";
+@import "style/bootstrap/containers";
 @import "style/bootstrap/grid";
 @import "style/bootstrap/tables";
 @import "style/bootstrap/forms";
@@ -22,18 +27,15 @@
 @import "style/bootstrap/transitions";
 @import "style/bootstrap/dropdown";
 @import "style/bootstrap/button-group";
-@import "style/bootstrap/input-group";
-@import "style/bootstrap/custom-forms";
 @import "style/bootstrap/nav";
 @import "style/bootstrap/navbar";
 @import "style/bootstrap/card";
+@import "style/bootstrap/accordion";
 @import "style/bootstrap/breadcrumb";
 @import "style/bootstrap/pagination";
 @import "style/bootstrap/badge";
-@import "style/bootstrap/jumbotron";
 @import "style/bootstrap/alert";
 @import "style/bootstrap/progress";
-@import "style/bootstrap/media";
 @import "style/bootstrap/list-group";
 @import "style/bootstrap/close";
 @import "style/bootstrap/toasts";
@@ -42,5 +44,10 @@
 @import "style/bootstrap/popover";
 @import "style/bootstrap/carousel";
 @import "style/bootstrap/spinners";
-@import "style/bootstrap/utilities";
-@import "style/bootstrap/print";
+
+// Helpers
+@import "style/bootstrap/helpers";
+
+// Utilities
+@import "style/bootstrap/utilities/api";
+// scss-docs-end import-stack
