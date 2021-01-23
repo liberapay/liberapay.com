@@ -58,7 +58,7 @@ body {
         }
     }
     #main {
-        font-size: $font-size-md;
+        font-size: $font-size-base;
     }
     .section {
         $border-color: #f6c915;
@@ -241,12 +241,12 @@ a.account-link[href="#not-available"] {
     }
     & > .summary {
         color: $gray-700;
-        font-size: $font-size-md;
+        font-size: $font-size-base;
     }
 }
 .profile-header-bar {
     background: $gray-100;
-    font-size: $font-size-md;
+    font-size: $font-size-base;
     margin-bottom: 30px;
 }
 
@@ -296,7 +296,7 @@ p.summary {
         text-overflow: ellipsis;
     }
     .summary {
-        height: 3 * $line-height-base-rem;
+        height: 3 * $line-height-base;
         margin: 1em 0 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -304,7 +304,7 @@ p.summary {
     .numbers {
         display: flex;
         justify-content: space-around;
-        margin: $line-height-base-rem 0 0;
+        margin: $line-height-base 0 0;
         & > dl {
             margin: 0 10px 0 0;
             & > dt {
@@ -324,7 +324,7 @@ p.summary {
         }
     }
     & > .panel-body > .btn {
-        margin: $line-height-base-rem 0 0;
+        margin: $line-height-base 0 0;
     }
     .btn-donate {
         color: #7f6e06;
@@ -431,7 +431,7 @@ input.search {
     .name {
         display: block;
         margin-top: 5px;
-        max-height: 2 * $line-height-base-rem;
+        max-height: 2 * $line-height-base;
         overflow: hidden;
         text-align: center;
         text-overflow: ellipsis;
@@ -530,8 +530,8 @@ section.profile-statement, section.community-sidebar, section.invoice-details {
         margin: $h4-font-size 0 10px;
     }
     h3 {
-        font-size: $font-size-md;
-        margin: $font-size-md 0 10px;
+        font-size: $font-size-base;
+        margin: $font-size-base 0 10px;
     }
     h4, h5, h6 {
         font-size: $font-size-base;
@@ -826,7 +826,7 @@ span.help-title {
     flex-wrap: wrap;
     font-size: $font-size-base;
     justify-content: space-between;
-    line-height: $line-height-base-rem;
+    line-height: $line-height-base;
     margin: 0;
     padding: 10px 15px 10px;
     position: relative;
@@ -911,9 +911,9 @@ span.help-title {
         }
     }
     small.text-warning, small.text-danger {
-        font-size: $font-size-md;
+        font-size: $font-size-base;
         font-weight: bold;
-        line-height: $font-size-md * $line-height-base;
+        line-height: $font-size-base * $line-height-base;
     }
 }
 
