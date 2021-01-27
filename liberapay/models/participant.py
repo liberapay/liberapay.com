@@ -2782,7 +2782,8 @@ class Participant(Model, MixinTeam):
                         if new_sp.amount < pp.min_acceptable_amount:
                             new_sp.amount = pp.min_acceptable_amount
                             tr_amounts = resolve_amounts(
-                                new_sp.amount, {tip.tippee: tip.amount}
+                                new_sp.amount,
+                                {tip.tippee: tip.amount for tip in payin_tips}
                             )
                             for tr in new_sp.transfers:
                                 tr['amount'] = tr_amounts[tr['tippee_id']]
