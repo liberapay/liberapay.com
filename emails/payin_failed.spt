@@ -11,7 +11,7 @@
 ) }}</p>
 % else
 <p>{{ _(
-    "The payment of {money_amount} initiated today has failed.",
+    "The payment of {money_amount} initiated earlier today has failed.",
     money_amount=payin.amount,
 ) if payin.ctime.date() == notification_ts.date() else _(
     "The payment of {money_amount} initiated on {date} has failed.",
