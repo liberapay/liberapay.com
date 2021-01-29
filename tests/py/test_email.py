@@ -1,3 +1,4 @@
+from datetime import timedelta
 import json
 from unittest.mock import MagicMock, patch
 
@@ -498,6 +499,27 @@ class TestEmail(EmailHarness):
         assert r.code == 200, r.text
         with self.assertRaises(EmailDomainIsBlacklisted):
             check_email_blacklist('example@example.com')
+
+    def test_emails_are_translated_in_whole_or_not_at_all(self):
+        alice = self.alice
+        alice.set_email_lang('FR')
+        alice.add_email('alice@liberapay.com')
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['subject'] == "Vérification de votre adresse électronique - Liberapay"
+
+        email_row = alice.get_email('alice@liberapay.com')
+        translation = self.website.locales['fr'].catalog._messages.pop("Greetings,")
+        try:
+            alice.send_email(
+                'login_link', email_row,
+                username='alice', link_validity=timedelta(hours=6)
+            )
+        finally:
+            self.website.locales['fr'].catalog._messages["Greetings,"] = translation
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['subject'] == "Log in to Liberapay"
 
 
 class TestEmail2(Harness):
