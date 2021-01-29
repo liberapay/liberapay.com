@@ -22,6 +22,7 @@ recent_donation_changes = website.db.all("""
                FROM tips t
               WHERE t.tippee = %(p_id)s
                 AND t.mtime > current_timestamp - interval '30 days'
+                AND t.hidden IS NOT true
            ORDER BY t.mtime DESC, t.tipper
               LIMIT 30
            ) t
@@ -110,7 +111,7 @@ recent_donation_changes = website.db.all("""
 
 % endif
 
-% if participant.receiving > participant.taking
+% if recent_donation_changes or participant.receiving > participant.taking
 <h3>{{ _("Details of Donations") }}</h3>
 % if participant.taking
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
@@ -162,6 +163,7 @@ recent_donation_changes = website.db.all("""
 % endfor
 
 % set tip_distribution = participant.get_tip_distribution()[0]
+% if tip_distribution
 <h4>{{ _("Stats") }}</h4>
 <div class="row">
 <div class="col-md-10 col-lg-8">
@@ -197,6 +199,7 @@ recent_donation_changes = website.db.all("""
     </table>
 </div>
 </div>
+% endif
 % endif
 
 <h3>{{ _("History") }}</h3>
