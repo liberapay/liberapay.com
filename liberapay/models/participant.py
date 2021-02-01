@@ -1280,18 +1280,14 @@ class Participant(Model, MixinTeam):
             if n_left == 0:
                 raise CannotRemovePrimaryEmail()
 
-    def send_email(self, spt_name, email_row, **context):
+    def render_email(self, spt_name, email_row, context, locale):
         email = email_row.address
-        check_email_blacklist(email, check_domain=False)
-        if email_row.disavowed:
-            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time, 'disavowed')
+        context = context.copy()
         self.fill_notification_context(context)
         context['email'] = email
-        langs = i18n.parse_accept_lang(self.email_lang or 'en')
-        locale = i18n.match_lang(langs)
         i18n.add_helpers_to_context(context, locale)
         context['escape'] = lambda s: s
-        context_html = dict(context)
+        context_html = context.copy()
         i18n.add_helpers_to_context(context_html, locale)
         context_html['escape'] = htmlescape
         spt = website.emails[spt_name]
@@ -1327,6 +1323,31 @@ class Participant(Model, MixinTeam):
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
         del self._rendering_email_to, self._email_session
+        partial_translation = locale.language.split('_', 1)[0] != 'en' and bool(
+            context.get('partial_translation') or
+            context_html.get('partial_translation')
+        )
+        return message, partial_translation
+
+    def send_email(self, spt_name, email_row, **context):
+        email = email_row.address
+        check_email_blacklist(email, check_domain=False)
+        if email_row.disavowed:
+            raise EmailAddressIsBlacklisted(email, 'complaint', email_row.disavowed_time, 'disavowed')
+        langs = i18n.parse_accept_lang(self.email_lang or 'en')
+        locale = i18n.match_lang(langs)
+        message, partial_translation = self.render_email(
+            spt_name, email_row, context, locale
+        )
+        if partial_translation:
+            message, partial_translation = self.render_email(
+                spt_name, email_row, context, website.locales['en']
+            )
+            try:
+                assert not partial_translation, \
+                    f"unexpected `partial_translation` value: {partial_translation}"
+            except AssertionError as e:
+                website.tell_sentry(e, {})
 
         with email_lock:
             try:
