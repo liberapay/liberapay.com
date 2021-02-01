@@ -1340,9 +1340,14 @@ class Participant(Model, MixinTeam):
             spt_name, email_row, context, locale
         )
         if partial_translation:
-            message = self.render_email(
+            message, partial_translation = self.render_email(
                 spt_name, email_row, context, website.locales['en']
-            )[0]
+            )
+            try:
+                assert not partial_translation, \
+                    f"unexpected `partial_translation` value: {partial_translation}"
+            except AssertionError as e:
+                website.tell_sentry(e, {})
 
         with email_lock:
             try:
