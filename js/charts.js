@@ -34,7 +34,7 @@ Liberapay.charts.make = function(series, $container) {
     }
 
     function parsePoint(o) {
-        return parseFloat(o.amount || o);
+        return parseFloat(o ? o.amount || o : 0);
     }
 
     // Reverse the series.

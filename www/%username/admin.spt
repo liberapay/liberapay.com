@@ -16,7 +16,7 @@ events = website.db.all("""
       FROM events e
  LEFT JOIN participants p2 ON p2.id = e.recorder
      WHERE e.participant = %s
-  ORDER BY e.ts DESC
+  ORDER BY e.ts DESC, e.id DESC
 """, (participant.id,))
 
 [---] text/html
