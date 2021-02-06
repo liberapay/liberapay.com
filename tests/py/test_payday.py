@@ -1013,6 +1013,71 @@ class TestPaydayForTeams(FakeTransfersHarness):
         assert transfers[0].tippee == alice.id
         assert transfers[0].amount == JPY('125')
 
+    def test_takes_paid_in_advance_to_now_inactive_members(self):
+        team = self.make_participant('team', kind='group', accepted_currencies=None)
+        alice = self.make_participant('alice', main_currency='EUR', accepted_currencies=None)
+        team.set_take_for(alice, EUR('1.00'), team)
+        bob = self.make_participant('bob', main_currency='USD', accepted_currencies=None)
+        team.set_take_for(bob, USD('1.00'), team)
+
+        stripe_account_alice = self.add_payment_account(
+            alice, 'stripe', default_currency='EUR'
+        )
+        stripe_account_bob = self.add_payment_account(
+            bob, 'stripe', country='US', default_currency='USD'
+        )
+
+        carl = self.make_participant('carl')
+        carl.set_tip_to(team, JPY('250'))
+
+        carl_card = ExchangeRoute.insert(
+            carl, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
+        )
+        payin, pt = self.make_payin_and_transfer(carl_card, team, JPY('1250'))
+        assert pt.destination == stripe_account_alice.pk
+        payin, pt = self.make_payin_and_transfer(carl_card, team, JPY('1250'))
+        assert pt.destination == stripe_account_bob.pk
+
+        team.set_take_for(alice, EUR('0.00'), team)
+        team.set_take_for(bob, None, team)
+        takes = dict(self.db.all("""
+            SELECT DISTINCT ON (member)
+                   member, paid_in_advance
+              FROM takes
+          ORDER BY member, mtime DESC
+        """))
+        assert takes == {
+            alice.id: EUR('10.00'),
+            bob.id: USD('12.00'),
+        }
+
+        Payday.start().run()
+
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 2
+        assert transfers[0].virtual is True
+        assert transfers[0].tipper == carl.id
+        assert transfers[0].tippee == alice.id
+        assert transfers[0].amount == JPY('125')
+        assert transfers[1].virtual is True
+        assert transfers[1].tipper == carl.id
+        assert transfers[1].tippee == bob.id
+        assert transfers[1].amount == JPY('125')
+
+        takes = dict(self.db.all("""
+            SELECT DISTINCT ON (member)
+                   member, paid_in_advance
+              FROM takes
+          ORDER BY member, mtime DESC
+        """))
+        assert takes == {
+            alice.id: EUR('9.00'),
+            bob.id: USD('10.80'),
+        }
+
+        notifications = self.db.all("SELECT * FROM notifications")
+        assert len(notifications) == 0
+
 
 class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
 
