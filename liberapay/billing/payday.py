@@ -423,7 +423,7 @@ class Payday:
         manual_takes = [t for t in takes if t.amount > 0]
         if manual_takes:
             manual_takes_sum = MoneyBasket(t.amount for t in manual_takes)
-            n_auto_takes = sum(1 for t in takes if t.amount > 0) or 1
+            n_auto_takes = sum(1 for t in takes if t.amount < 0) or 1
             auto_take = (
                 (fuzzy_income_sum - manual_takes_sum.fuzzy_sum(ref_currency)) /
                 n_auto_takes
