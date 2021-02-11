@@ -208,7 +208,7 @@ class Payday:
                    ) t
               JOIN payday_participants p ON p.id = t.tipper
               JOIN payday_participants p2 ON p2.id = t.tippee
-             WHERE (p2.goal IS NULL OR p2.goal >= 0 OR t.paid_in_advance > t.amount)
+             WHERE (p2.goal IS NULL OR p2.goal >= 0 OR t.paid_in_advance > 0)
           ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
@@ -261,7 +261,7 @@ class Payday:
                 in_advance := zero(a_amount);
                 transfer_amount := a_amount;
 
-                IF (a_context IN ('tip', 'take', 'leftover-take')) THEN
+                IF (a_context IN ('tip', 'take', 'leftover-take', 'partial-tip')) THEN
                     tip := (
                         SELECT t
                           FROM payday_tips t
@@ -301,25 +301,25 @@ class Payday:
 
         -- Create a function to check whether a tip is "funded" or not
 
-        CREATE OR REPLACE FUNCTION check_tip_funding(payday_tips) RETURNS boolean AS $$
+        CREATE OR REPLACE FUNCTION compute_tip_funding(tip payday_tips)
+        RETURNS currency_amount AS $$
             DECLARE
                 tipper_balances currency_basket;
-                okay boolean = false;
+                tip_currency currency := (tip.amount).currency;
+                available_amount currency_amount;
             BEGIN
-                IF ($1.is_funded IS true) THEN RETURN NULL; END IF;
-                okay := $1.paid_in_advance >= $1.amount;
-                IF (okay IS NOT true) THEN
-                    IF (NOT $1.process_real_transfers) THEN
-                        RETURN false;
-                    END IF;
+                available_amount := tip.paid_in_advance;
+                IF (tip.process_real_transfers) THEN
                     tipper_balances := (
                         SELECT balances
                           FROM payday_participants p
-                         WHERE id = $1.tipper
+                         WHERE id = tip.tipper
                     );
-                    okay := tipper_balances >= ($1.amount - $1.paid_in_advance);
+                    available_amount := available_amount + (
+                        coalesce(tipper_balances->tip_currency, 0), tip_currency
+                    )::currency_amount;
                 END IF;
-                RETURN okay;
+                RETURN available_amount;
             END;
         $$ LANGUAGE plpgsql;
 
@@ -338,7 +338,7 @@ class Payday:
                             SET is_funded = true
                           WHERE is_funded IS NOT true
                             AND to_team IS NOT true
-                            AND check_tip_funding(t) IS true
+                            AND compute_tip_funding(t) >= t.amount
                       RETURNING id, transfer(tipper, tippee, amount, 'tip', NULL, NULL)
                     )
                     SELECT COUNT(*) FROM updated_rows INTO count;
@@ -349,6 +349,14 @@ class Payday:
                         RAISE 'Reached the maximum number of iterations';
                     END IF;
                 END LOOP;
+                WITH updated_rows AS (
+                     UPDATE payday_tips AS t
+                        SET is_funded = false
+                      WHERE is_funded IS NULL
+                        AND to_team IS NOT true
+                  RETURNING id, transfer(tipper, tippee, compute_tip_funding(t), 'partial-tip', NULL, NULL)
+                )
+                SELECT count(*) FROM updated_rows INTO count;
             END;
         $$ LANGUAGE plpgsql;
 
@@ -376,9 +384,9 @@ class Payday:
         args = dict(team_id=team_id)
         tips = cursor.all("""
             UPDATE payday_tips AS t
-               SET is_funded = true
+               SET is_funded = compute_tip_funding(t) >= t.amount
              WHERE tippee = %(team_id)s
-               AND check_tip_funding(t) IS true
+               AND compute_tip_funding(t) > 0
          RETURNING t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
                  , ( SELECT p.balances
                        FROM payday_participants p

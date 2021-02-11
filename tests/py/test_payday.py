@@ -275,8 +275,10 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
     @staticmethod
     def get_new_balances(cursor):
         return {
-            id: [m for m in balances if m.amount]
-            for id, balances in cursor.all("SELECT id, balances FROM payday_participants")
+            username: [m for m in balances if m.amount]
+            for username, balances in cursor.all(
+                "SELECT username, balances FROM payday_participants"
+            )
         }
 
     def test_payday_doesnt_process_tips_when_goal_is_negative(self):
@@ -288,8 +290,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[self.janet.id] == [EUR(20)]
-            assert new_balances[self.homer.id] == []
+            assert new_balances == {
+                'david': [],
+                'homer': [],
+                'janet': [EUR(20)],
+            }
 
     def test_payday_doesnt_make_null_transfers(self):
         alice = self.make_participant('alice')
@@ -310,28 +315,40 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[self.david.id] == [EUR('0.49')]
-            assert new_balances[self.janet.id] == [EUR('0.51')]
-            assert new_balances[self.homer.id] == []
-            nulls = cursor.all("SELECT * FROM payday_tips WHERE is_funded IS NULL")
-            assert not nulls
+            assert new_balances == {
+                'david': [],
+                'homer': [EUR('0.49')],
+                'janet': [EUR('0.51')],
+            }
+            tips = dict(cursor.all("SELECT tippee, is_funded FROM payday_tips"))
+            assert tips == {
+                self.janet.id: True,
+                self.homer.id: False,
+            }
+            transfers = dict(cursor.all("SELECT tippee, context FROM payday_transfers"))
+            assert transfers == {
+                self.janet.id: 'tip',
+                self.homer.id: 'partial-tip',
+            }
 
     def test_transfer_tips_whole_graph(self):
         alice = self.make_participant('alice', balance=EUR(50))
         alice.set_tip_to(self.homer, EUR('50'))
         self.homer.set_tip_to(self.janet, EUR('20'))
         self.janet.set_tip_to(self.david, EUR('5'))
-        self.david.set_tip_to(self.homer, EUR('20'))  # Should be unfunded
+        self.david.set_tip_to(self.homer, EUR('20'))  # Partially funded
 
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start)
             new_balances = self.get_new_balances(cursor)
-            assert new_balances[alice.id] == []
-            assert new_balances[self.homer.id] == [EUR('30')]
-            assert new_balances[self.janet.id] == [EUR('15')]
-            assert new_balances[self.david.id] == [EUR('5')]
+            assert new_balances == {
+                'alice': [],
+                'david': [],
+                'homer': [EUR('35')],
+                'janet': [EUR('15')],
+            }
 
     def test_payday_handles_paid_in_advance(self):
         self.add_payment_account(self.david, 'stripe')

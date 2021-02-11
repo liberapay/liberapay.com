@@ -213,7 +213,7 @@ output.body = render(globals(), allow_partial_i18n=False)
                          link_close='',
                          payer=event['username'],
                     ) }}
-                % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears')
+                % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')
                     {{ _("anonymous donation") }}
                     % if event['unit_amount']
                         % set weeks = int(event['amount'] / event['unit_amount'])
@@ -265,7 +265,7 @@ output.body = render(globals(), allow_partial_i18n=False)
                          link_close='',
                          payee=to,
                     ) }}
-                % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears')
+                % elif context in ('tip', 'tip-in-advance', 'tip-in-arrears', 'partial-tip')
                     {{ _("donation to {0}", to) }}
                     % if event['unit_amount']
                         % set weeks = int(abs(event['amount'] / event['unit_amount']))
