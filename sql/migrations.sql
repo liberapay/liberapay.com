@@ -2749,3 +2749,7 @@ UPDATE scheduled_payins AS sp
  WHERE pi.id = sp.payin
    AND pi.status = 'failed'
    AND pi.error LIKE 'For ''sepa_debit'' payments, we currently require %';
+
+-- migration #139
+ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'leftover-take';
+ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'partial-tip';
