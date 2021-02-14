@@ -28,12 +28,13 @@ def round_up(d):
 
 
 class TakeTransfer:
-    __slots__ = ('tipper', 'member', 'amount')
+    __slots__ = ('tipper', 'member', 'amount', 'is_leftover')
 
-    def __init__(self, tipper, member, amount):
+    def __init__(self, tipper, member, amount, is_leftover=False):
         self.tipper = tipper
         self.member = member
         self.amount = amount
+        self.is_leftover = is_leftover
 
     def __repr__(self):
         return f"TakeTransfer({self.tipper!r}, {self.member!r}, {self.amount!r})"
@@ -207,7 +208,7 @@ class Payday:
                    ) t
               JOIN payday_participants p ON p.id = t.tipper
               JOIN payday_participants p2 ON p2.id = t.tippee
-             WHERE (p2.goal IS NULL OR p2.goal >= 0 OR t.paid_in_advance > t.amount)
+             WHERE (p2.goal IS NULL OR p2.goal >= 0 OR t.paid_in_advance > 0)
           ORDER BY p.join_time ASC, t.ctime ASC;
 
         CREATE INDEX ON payday_tips (tipper);
@@ -221,9 +222,7 @@ class Payday:
                       WHERE mtime < %(ts_start)s
                    ORDER BY team, member, mtime DESC
                    ) t
-             WHERE t.amount IS NOT NULL
-               AND t.amount <> 0
-               AND t.team IN (SELECT id FROM payday_participants)
+             WHERE t.team IN (SELECT id FROM payday_participants)
                AND t.member IN (SELECT id FROM payday_participants);
 
         CREATE UNIQUE INDEX ON payday_takes (team, member);
@@ -262,7 +261,7 @@ class Payday:
                 in_advance := zero(a_amount);
                 transfer_amount := a_amount;
 
-                IF (a_context IN ('tip', 'take')) THEN
+                IF (a_context IN ('tip', 'take', 'leftover-take', 'partial-tip')) THEN
                     tip := (
                         SELECT t
                           FROM payday_tips t
@@ -302,25 +301,25 @@ class Payday:
 
         -- Create a function to check whether a tip is "funded" or not
 
-        CREATE OR REPLACE FUNCTION check_tip_funding(payday_tips) RETURNS boolean AS $$
+        CREATE OR REPLACE FUNCTION compute_tip_funding(tip payday_tips)
+        RETURNS currency_amount AS $$
             DECLARE
                 tipper_balances currency_basket;
-                okay boolean = false;
+                tip_currency currency := (tip.amount).currency;
+                available_amount currency_amount;
             BEGIN
-                IF ($1.is_funded IS true) THEN RETURN NULL; END IF;
-                okay := $1.paid_in_advance >= $1.amount;
-                IF (okay IS NOT true) THEN
-                    IF (NOT $1.process_real_transfers) THEN
-                        RETURN false;
-                    END IF;
+                available_amount := tip.paid_in_advance;
+                IF (tip.process_real_transfers) THEN
                     tipper_balances := (
                         SELECT balances
                           FROM payday_participants p
-                         WHERE id = $1.tipper
+                         WHERE id = tip.tipper
                     );
-                    okay := tipper_balances >= ($1.amount - $1.paid_in_advance);
+                    available_amount := available_amount + (
+                        coalesce(tipper_balances->tip_currency, 0), tip_currency
+                    )::currency_amount;
                 END IF;
-                RETURN okay;
+                RETURN available_amount;
             END;
         $$ LANGUAGE plpgsql;
 
@@ -339,7 +338,7 @@ class Payday:
                             SET is_funded = true
                           WHERE is_funded IS NOT true
                             AND to_team IS NOT true
-                            AND check_tip_funding(t) IS true
+                            AND compute_tip_funding(t) >= t.amount
                       RETURNING id, transfer(tipper, tippee, amount, 'tip', NULL, NULL)
                     )
                     SELECT COUNT(*) FROM updated_rows INTO count;
@@ -350,6 +349,14 @@ class Payday:
                         RAISE 'Reached the maximum number of iterations';
                     END IF;
                 END LOOP;
+                WITH updated_rows AS (
+                     UPDATE payday_tips AS t
+                        SET is_funded = false
+                      WHERE is_funded IS NULL
+                        AND to_team IS NOT true
+                  RETURNING id, transfer(tipper, tippee, compute_tip_funding(t), 'partial-tip', NULL, NULL)
+                )
+                SELECT count(*) FROM updated_rows INTO count;
             END;
         $$ LANGUAGE plpgsql;
 
@@ -377,9 +384,9 @@ class Payday:
         args = dict(team_id=team_id)
         tips = cursor.all("""
             UPDATE payday_tips AS t
-               SET is_funded = true
+               SET is_funded = compute_tip_funding(t) >= t.amount
              WHERE tippee = %(team_id)s
-               AND check_tip_funding(t) IS true
+               AND compute_tip_funding(t) > 0
          RETURNING t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
                  , ( SELECT p.balances
                        FROM payday_participants p
@@ -403,8 +410,9 @@ class Payday:
         """, args)
         transfers, leftover = Payday.resolve_takes(tips, takes, currency)
         for t in transfers:
-            cursor.run("SELECT transfer(%s, %s, %s, 'take', %s, NULL)",
-                       (t.tipper, t.member, t.amount, team_id))
+            context = 'leftover-take' if t.is_leftover else 'take'
+            cursor.run("SELECT transfer(%s, %s, %s, %s, %s, NULL)",
+                       (t.tipper, t.member, t.amount, context, team_id))
 
     @staticmethod
     def resolve_takes(tips, takes, ref_currency):
@@ -413,17 +421,18 @@ class Payday:
         total_income = MoneyBasket(t.full_amount for t in tips)
         if total_income == 0:
             return (), total_income
+        leftover_takes = [t for t in takes if t.paid_in_advance and not t.amount]
         if mangopay.sandbox:
-            takes = [t for t in takes if t.amount != 0]
+            takes = [t for t in takes if t.amount]
         else:
-            takes = [t for t in takes if t.amount != 0 and t.paid_in_advance]
-        if not takes:
+            takes = [t for t in takes if t.amount and t.paid_in_advance]
+        if not (takes or leftover_takes):
             return (), total_income
         fuzzy_income_sum = total_income.fuzzy_sum(ref_currency)
         manual_takes = [t for t in takes if t.amount > 0]
         if manual_takes:
             manual_takes_sum = MoneyBasket(t.amount for t in manual_takes)
-            n_auto_takes = sum(1 for t in takes if t.amount > 0) or 1
+            n_auto_takes = sum(1 for t in takes if t.amount < 0) or 1
             auto_take = (
                 (fuzzy_income_sum - manual_takes_sum.fuzzy_sum(ref_currency)) /
                 n_auto_takes
@@ -441,7 +450,10 @@ class Payday:
         tips_by_currency = group_by(tips, lambda t: t.full_amount.currency)
         takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
         takes_by_secondary_currency = {c: [] for c in tips_by_currency}
-        takes_ratio = min(fuzzy_income_sum / fuzzy_takes_sum, 1)
+        if fuzzy_takes_sum:
+            takes_ratio = min(fuzzy_income_sum / fuzzy_takes_sum, 1)
+        else:
+            takes_ratio = 0
         for take in takes:
             take.amount = (take.amount * takes_ratio).round_up()
             if take.paid_in_advance is None:
@@ -518,6 +530,7 @@ class Payday:
         # Loop: compute the adjusted donation amounts, and do the transfers
         transfers = {}
         for tip in tips:
+            tip.available_amount = tip.full_amount
             if tip.paid_in_advance is None:
                 tip.paid_in_advance = tip.full_amount.zero()
             if adjust_tips:
@@ -570,10 +583,52 @@ class Payday:
                 if on_time_amount:
                     tip.balances -= on_time_amount
                 tip.amount -= transfer_amount
+                tip.available_amount -= transfer_amount
                 if tip.amount == 0:
                     break
-        transfers = transfers.values()
+        # Try to use the leftover to reduce the advances received in the past by
+        # members who have now left the team or have zeroed takes.
+        transfers = list(transfers.values())
         leftover = total_income - MoneyBasket(t.amount for t in transfers)
+        if leftover and leftover_takes:
+            leftover_takes.sort(key=lambda t: t.member)
+            leftover_takes_fuzzy_sum = MoneyBasket(
+                take.paid_in_advance for take in leftover_takes
+            ).fuzzy_sum(ref_currency)
+            advance_ratio = leftover.fuzzy_sum(ref_currency) / leftover_takes_fuzzy_sum
+            leftover_transfers = {}
+            for take in leftover_takes:
+                take.amount = (take.paid_in_advance * advance_ratio).round()
+                for tip in tips:
+                    if tip.available_amount == 0 or tip.tipper == take.member:
+                        continue
+                    tip_currency = tip.full_amount.currency
+                    fuzzy_take_amount = take.amount.convert(tip_currency)
+                    transfer_amount = min(
+                        tip.available_amount,
+                        fuzzy_take_amount,
+                        max(tip.paid_in_advance, 0),
+                        max(take.paid_in_advance.convert(tip_currency), 0),
+                    )
+                    if transfer_amount == 0:
+                        continue
+                    transfer_key = (tip.tipper, take.member)
+                    if transfer_key in transfers:
+                        leftover_transfers[transfer_key].amount += transfer_amount
+                    else:
+                        leftover_transfers[transfer_key] = TakeTransfer(
+                            tip.tipper, take.member, transfer_amount, is_leftover=True,
+                        )
+                    if transfer_amount == fuzzy_take_amount:
+                        take.amount = take.amount.zero()
+                    else:
+                        take.amount -= transfer_amount.convert(take.amount.currency)
+                    tip.paid_in_advance -= transfer_amount
+                    take.paid_in_advance -= transfer_amount.convert(take.paid_in_advance.currency)
+                    tip.available_amount -= transfer_amount
+                    if take.amount == 0:
+                        break
+            transfers.extend(leftover_transfers.values())
         return transfers, leftover
 
     @staticmethod
