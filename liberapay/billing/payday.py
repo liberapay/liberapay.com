@@ -1059,8 +1059,8 @@ class Payday:
                             ) - (
                                 SELECT basket_sum(t.amount + t.in_advance)
                                   FROM payday_transfers t
-                                 WHERE t.tippee = p2.id
-                                    OR t.team = p2.id
+                                 WHERE (t.tippee = p2.id OR t.team = p2.id)
+                                   AND t.context <> 'leftover-take'
                             ) AS leftover
                        FROM participants p2
                    ) p2
