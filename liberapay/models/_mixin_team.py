@@ -270,7 +270,7 @@ class MixinTeam:
         # Recompute the takes
         transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
         transfers_by_member = group_by(transfers, lambda t: t.member)
-        takes_sum = {k: MoneyBasket(t.amount for t in tr_list)
+        takes_sum = {k: MoneyBasket(t.amount for t in tr_list if not t.is_leftover)
                      for k, tr_list in transfers_by_member.items()}
         tippers = {k: set(t.tipper for t in tr_list)
                    for k, tr_list in transfers_by_member.items()}
