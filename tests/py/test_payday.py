@@ -1095,6 +1095,14 @@ class TestPaydayForTeams(FakeTransfersHarness):
         notifications = self.db.all("SELECT * FROM notifications")
         assert len(notifications) == 0
 
+        leftovers = dict(self.db.all("SELECT username, leftover FROM participants"))
+        assert leftovers == {
+            'team': MoneyBasket(JPY('250.00')),
+            'alice': None,
+            'bob': None,
+            'carl': None,
+        }
+
 
 class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
 

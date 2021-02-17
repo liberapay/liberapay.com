@@ -28,16 +28,20 @@ def round_up(d):
 
 
 class TakeTransfer:
-    __slots__ = ('tipper', 'member', 'amount', 'is_leftover')
+    __slots__ = ('tipper', 'member', 'amount', 'is_leftover', 'is_partial')
 
-    def __init__(self, tipper, member, amount, is_leftover=False):
+    def __init__(self, tipper, member, amount, is_leftover=False, is_partial=False):
         self.tipper = tipper
         self.member = member
         self.amount = amount
         self.is_leftover = is_leftover
+        self.is_partial = is_partial
 
     def __repr__(self):
-        return f"TakeTransfer({self.tipper!r}, {self.member!r}, {self.amount!r})"
+        return (
+            f"TakeTransfer({self.tipper!r}, {self.member!r}, {self.amount!r}, "
+            f"is_leftover={self.is_leftover!r}, is_partial={self.is_partial!r})"
+        )
 
 
 class NoPayday(Exception):
@@ -410,7 +414,7 @@ class Payday:
         """, args)
         transfers, leftover = Payday.resolve_takes(tips, takes, currency)
         for t in transfers:
-            context = 'leftover-take' if t.is_leftover else 'take'
+            context = 'leftover-take' if t.is_leftover else 'partial-take' if t.is_partial else 'take'
             cursor.run("SELECT transfer(%s, %s, %s, %s, %s, NULL)",
                        (t.tipper, t.member, t.amount, context, team_id))
 
@@ -530,9 +534,12 @@ class Payday:
         # Loop: compute the adjusted donation amounts, and do the transfers
         transfers = {}
         for tip in tips:
+            tip_currency = tip.full_amount.currency
             tip.available_amount = tip.full_amount
             if tip.paid_in_advance is None:
                 tip.paid_in_advance = tip.full_amount.zero()
+            funded_amount = tip.paid_in_advance + tip.balances[tip_currency]
+            tip.is_partial = funded_amount < tip.full_amount
             if adjust_tips:
                 tip_amount = (tip.amount + tip.leeway * leeway_ratio).round_up()
                 if tip_amount == 0:
@@ -542,7 +549,6 @@ class Payday:
                 tip.amount = tip_amount
             else:
                 tip.amount = (tip.full_amount * tips_ratio).round_up()
-            tip_currency = tip.amount.currency
             sorted_takes = chain(
                 takes_by_preferred_currency.get(tip_currency, ()),
                 takes_by_secondary_currency.get(tip_currency, ()),
@@ -571,7 +577,8 @@ class Payday:
                     transfers[transfer_key].amount += transfer_amount
                 else:
                     transfers[transfer_key] = TakeTransfer(
-                        tip.tipper, take.member, transfer_amount
+                        tip.tipper, take.member, transfer_amount,
+                        is_partial=tip.is_partial,
                     )
                 if transfer_amount == fuzzy_take_amount:
                     take.amount = take.amount.zero()
@@ -613,11 +620,12 @@ class Payday:
                     if transfer_amount == 0:
                         continue
                     transfer_key = (tip.tipper, take.member)
-                    if transfer_key in transfers:
+                    if transfer_key in leftover_transfers:
                         leftover_transfers[transfer_key].amount += transfer_amount
                     else:
                         leftover_transfers[transfer_key] = TakeTransfer(
-                            tip.tipper, take.member, transfer_amount, is_leftover=True,
+                            tip.tipper, take.member, transfer_amount,
+                            is_leftover=True, is_partial=tip.is_partial,
                         )
                     if transfer_amount == fuzzy_take_amount:
                         take.amount = take.amount.zero()
@@ -999,7 +1007,7 @@ class Payday:
                        FROM current_takes t2
                    ) t2
              WHERE t.id = t2.id
-               AND t.actual_amount <> t2.actual_amount;
+               AND coalesce_currency_basket(t.actual_amount) <> t2.actual_amount;
             """)
             cursor.run("""
             UPDATE participants p
@@ -1059,13 +1067,14 @@ class Payday:
                             ) - (
                                 SELECT basket_sum(t.amount + t.in_advance)
                                   FROM payday_transfers t
-                                 WHERE t.tippee = p2.id
-                                    OR t.team = p2.id
+                                 WHERE t.team = p2.id
+                                   AND t.context = 'take'
                             ) AS leftover
                        FROM participants p2
+                      WHERE p2.kind = 'group'
                    ) p2
              WHERE p.id = p2.id
-               AND p.leftover <> p2.leftover;
+               AND coalesce_currency_basket(p.leftover) <> p2.leftover;
             """)
             cursor.run("""
             UPDATE participants p
