@@ -283,7 +283,7 @@ if user.is_admin:
                 % if event['team']
                     for team <a href="/{{ event['team_name'] }}/">{{ event['team_name'] }}</a>
                 % endif
-            % elif context in ('take', 'take-in-advance', 'take-in-arrears')
+            % elif context in ('take', 'take-in-advance', 'take-in-arrears', 'partial-take')
                 {{ _("anonymous donation for your role in the {0} team",
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
                 % if event['unit_amount']
@@ -337,7 +337,7 @@ if user.is_admin:
             % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['username'])
             % if context == 'final-gift'
                 {{ _("final gift to {0}", to) }}
-            % elif context in ('take', 'take-in-advance', 'take-in-arrears')
+            % elif context in ('take', 'take-in-advance', 'take-in-arrears', 'partial-take')
                 {{ _("donation to {0} for their role in the {1} team", to,
                      ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
                 % if event['unit_amount']

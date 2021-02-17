@@ -191,7 +191,7 @@ output.body = render(globals(), allow_partial_i18n=False)
             <td>
             % set context = event['context']
             % if event['tippee'] == participant.id
-                % if context in ('take', 'take-in-advance', 'take-in-arrears')
+                % if context in ('take', 'take-in-advance', 'take-in-arrears', 'partial-take')
                     {{ _("anonymous donation for your role in the {0} team", event['team_name']) }}
                     % if event['unit_amount']
                         % set weeks = int(event['amount'] / event['unit_amount'])
@@ -243,7 +243,7 @@ output.body = render(globals(), allow_partial_i18n=False)
                 % set to = event['username']
                 % if context == 'final-gift'
                     {{ _("final gift to {0}", to) }}
-                % elif context in ('take', 'take-in-advance', 'take-in-arrears')
+                % elif context in ('take', 'take-in-advance', 'take-in-arrears', 'partial-take')
                     {{ _("donation to {0} for their role in the {1} team", to, event['team_name']) }}
                     % if event['unit_amount']
                         % set weeks = int(abs(event['amount'] / event['unit_amount']))

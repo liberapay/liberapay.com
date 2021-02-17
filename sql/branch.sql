@@ -1,3 +1,5 @@
+ALTER TYPE transfer_context ADD VALUE IF NOT EXISTS 'partial-take';
+
 CREATE OR REPLACE FUNCTION empty_currency_basket() RETURNS currency_basket AS $$
     BEGIN RETURN (0::numeric,0::numeric,jsonb_build_object()); END;
 $$ LANGUAGE plpgsql;
