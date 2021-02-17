@@ -613,7 +613,7 @@ class Payday:
                     if transfer_amount == 0:
                         continue
                     transfer_key = (tip.tipper, take.member)
-                    if transfer_key in transfers:
+                    if transfer_key in leftover_transfers:
                         leftover_transfers[transfer_key].amount += transfer_amount
                     else:
                         leftover_transfers[transfer_key] = TakeTransfer(
