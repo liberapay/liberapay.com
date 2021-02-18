@@ -236,8 +236,8 @@ class Payday:
         ( id serial
         , tipper bigint
         , tippee bigint
-        , amount currency_amount
-        , in_advance currency_amount
+        , amount currency_amount CHECK (amount >= 0)
+        , in_advance currency_amount CHECK (in_advance >= 0)
         , context transfer_context
         , team bigint
         , invoice int
@@ -620,13 +620,11 @@ class Payday:
                     if transfer_amount == 0:
                         continue
                     transfer_key = (tip.tipper, take.member)
-                    if transfer_key in leftover_transfers:
-                        leftover_transfers[transfer_key].amount += transfer_amount
-                    else:
-                        leftover_transfers[transfer_key] = TakeTransfer(
-                            tip.tipper, take.member, transfer_amount,
-                            is_leftover=True, is_partial=tip.is_partial,
-                        )
+                    assert transfer_key not in leftover_transfers
+                    leftover_transfers[transfer_key] = TakeTransfer(
+                        tip.tipper, take.member, transfer_amount,
+                        is_leftover=True, is_partial=tip.is_partial,
+                    )
                     if transfer_amount == fuzzy_take_amount:
                         take.amount = take.amount.zero()
                     else:
