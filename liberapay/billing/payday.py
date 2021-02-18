@@ -313,6 +313,9 @@ class Payday:
                 available_amount currency_amount;
             BEGIN
                 available_amount := tip.paid_in_advance;
+                IF (available_amount < 0) THEN
+                    available_amount := zero(available_amount);
+                END IF;
                 IF (tip.process_real_transfers) THEN
                     tipper_balances := (
                         SELECT balances
