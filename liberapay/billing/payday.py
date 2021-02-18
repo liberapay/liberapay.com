@@ -191,6 +191,7 @@ class Payday:
                  , kind
                  , main_currency
                  , accepted_currencies
+                 , empty_currency_basket() AS leftover
               FROM participants p
              WHERE join_time < %(ts_start)s
                AND is_suspended IS NOT true
@@ -420,6 +421,8 @@ class Payday:
             context = 'leftover-take' if t.is_leftover else 'partial-take' if t.is_partial else 'take'
             cursor.run("SELECT transfer(%s, %s, %s, %s, %s, NULL)",
                        (t.tipper, t.member, t.amount, context, team_id))
+        cursor.run("UPDATE payday_participants SET leftover = %s WHERE id = %s",
+                   (leftover, team_id))
 
     @staticmethod
     def resolve_takes(tips, takes, ref_currency):
@@ -1069,19 +1072,8 @@ class Payday:
             cursor.run("""
             UPDATE participants p
                SET leftover = p2.leftover
-              FROM ( SELECT p2.id
-                          , (
-                                SELECT basket_sum(t.amount)
-                                  FROM payday_tips t
-                                 WHERE t.tippee = p2.id
-                                   AND t.is_funded
-                            ) - (
-                                SELECT basket_sum(t.amount + t.in_advance)
-                                  FROM payday_transfers t
-                                 WHERE t.team = p2.id
-                                   AND t.context IN ('take', 'partial-take')
-                            ) AS leftover
-                       FROM participants p2
+              FROM ( SELECT p2.id, p2.leftover
+                       FROM payday_participants p2
                       WHERE p2.kind = 'group'
                    ) p2
              WHERE p.id = p2.id
