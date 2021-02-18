@@ -46,7 +46,7 @@ transfers = website.db.all("""
     WHERE t.{0} = %s
       AND status = 'succeeded'
       AND t.timestamp < %s
-      AND t.context IN ('tip', 'take')
+      AND t.context IN ('tip', 'take', 'partial-take')
  ORDER BY id ASC
 """.format(col), (participant.id, paydays[-1]['ts_end']), back_as=dict)
 

@@ -265,7 +265,7 @@ class Payday:
                 in_advance := zero(a_amount);
                 transfer_amount := a_amount;
 
-                IF (a_context IN ('tip', 'take', 'leftover-take', 'partial-tip')) THEN
+                IF (a_context IN ('tip', 'take', 'leftover-take', 'partial-tip', 'partial-take')) THEN
                     tip := (
                         SELECT t
                           FROM payday_tips t
@@ -401,7 +401,7 @@ class Payday:
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
-                          AND tr.context = 'take'
+                          AND tr.context IN ('take', 'partial-take', 'leftover-take')
                           AND tr.status = 'succeeded'
                    ), t.amount::currency) AS past_transfers_sum
         """, args)
@@ -823,17 +823,20 @@ class Payday:
                       WHERE "timestamp" >= %(ts_start)s
                         AND "timestamp" <= %(ts_end)s
                         AND status = 'succeeded'
-                        AND context IN ('tip', 'take')
+                        AND context IN (
+                                'tip', 'partial-tip',
+                                'take', 'partial-take', 'leftover-take'
+                            )
                  )
                , our_tips AS (
                      SELECT *
                        FROM our_transfers
-                      WHERE context = 'tip'
+                      WHERE team IS NULL
                  )
                , our_takes AS (
                      SELECT *
                        FROM our_transfers
-                      WHERE context = 'take'
+                      WHERE team IS NOT NULL
                  )
                , week_exchanges AS (
                      SELECT e.*
@@ -1032,7 +1035,7 @@ class Payday:
                                 SELECT sum(t.amount + t.in_advance, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
-                                   AND context = 'take'
+                                   AND context IN ('take', 'partial-take')
                             ), p2.main_currency) AS taking
                        FROM participants p2
                    ) p2
@@ -1083,7 +1086,7 @@ class Payday:
                           , ( SELECT count(DISTINCT t.tipper)
                                 FROM payday_transfers t
                                WHERE t.tippee = p2.id
-                                 AND t.context = 'take'
+                                 AND t.context IN ('take', 'partial-take')
                             ) AS nteampatrons
                        FROM participants p2
                       WHERE p2.status <> 'stub'

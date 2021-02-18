@@ -251,7 +251,7 @@ class MixinTeam:
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
-                          AND tr.context = 'take'
+                          AND tr.context IN ('take', 'partial-take', 'leftover-take')
                           AND tr.status = 'succeeded'
                    ), t.amount::currency) AS past_transfers_sum
               FROM current_tips t
