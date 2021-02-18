@@ -436,6 +436,7 @@ class Payday:
         total_income = MoneyBasket(t.funded_amount for t in tips)
         if total_income == 0:
             return (), total_income
+        takes = [t for t in takes if not (t.paid_in_advance and t.paid_in_advance < 0)]
         leftover_takes = [t for t in takes if t.paid_in_advance and not t.amount]
         if mangopay.sandbox:
             takes = [t for t in takes if t.amount]
