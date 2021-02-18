@@ -251,13 +251,13 @@ class MixinTeam:
                          FROM transfers tr
                         WHERE tr.tipper = t.tipper
                           AND tr.team = %(team_id)s
-                          AND tr.context = 'take'
+                          AND tr.context IN ('take', 'partial-take', 'leftover-take')
                           AND tr.status = 'succeeded'
                    ), t.amount::currency) AS past_transfers_sum
               FROM current_tips t
               JOIN participants p ON p.id = t.tipper
              WHERE t.tippee = %(team_id)s
-               AND t.is_funded
+               AND ( t.is_funded OR t.paid_in_advance > 0 )
                AND p.is_suspended IS NOT true
         """, dict(team_id=self.id, use_mangopay=mangopay.sandbox))
         takes = (cursor or self.db).all("""
@@ -270,7 +270,7 @@ class MixinTeam:
         # Recompute the takes
         transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
         transfers_by_member = group_by(transfers, lambda t: t.member)
-        takes_sum = {k: MoneyBasket(t.amount for t in tr_list if not (t.is_leftover or t.is_partial))
+        takes_sum = {k: MoneyBasket(t.amount for t in tr_list if not t.is_leftover)
                      for k, tr_list in transfers_by_member.items()}
         tippers = {k: set(t.tipper for t in tr_list)
                    for k, tr_list in transfers_by_member.items()}
