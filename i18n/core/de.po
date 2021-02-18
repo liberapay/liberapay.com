@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: German "
-"<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2021-02-19 10:50+0000\n"
+"Last-Translator: hacked.works <weblate@hacked.works>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.5\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -456,7 +458,7 @@ msgid "The reason provided by your bank is: {reason_code_in_english}."
 msgstr "Ihre Bank gab folgenden Grund an: {reason_code_in_english}."
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr "Wenn dieser Widerspruch irrtümlich eingelegt wurde, dann können Sie Ihre Bank bitten, ihn aufzuheben. Bitte teilen Sie uns dies mit, da wir dann ebenfalls eine Nachricht an Ihre Bank senden müssen."
+msgstr "Falls dieser Widerspruch fälschlicherweise ausgelöst wurde, können Sie Ihre Bank bitten, den Widerspruch zurückzuziehen. Bitte informieren Sie uns über diesen Schritt, da wir uns ebenfalls bei Ihrer Bank melden müssen."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
 msgstr "Wenn dem Widerspruch nicht stattgegeben wird, werden die strittigen Gelder von den Personen zurückgefordert, die sie erhalten haben."
@@ -465,11 +467,11 @@ msgid "This dispute is final, it cannot be withdrawn or reversed."
 msgstr "Dieser Widerspruch ist endgültig. Er kann weder zurückgezogen, noch rückgängig gemacht werden."
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "Die strittigen Gelder wurden von den ursprünglichen Empfängern automatisch zurückgefordert."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "Wennn Ihre Bank die Zahlung abgelehnt hat, ohne sie mit Ihnen abzuklären, dann sollten Sie Ihre Bank kontaktieren. Sobald das Problem geklärt ist, können Sie {link_start}die Zahlung erneut tätigen{link_end}."
 
 #, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
@@ -480,15 +482,15 @@ msgstr "Ihre Zahlung ist fehlgeschlagen"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr ""
+msgstr "Die heute automatisch vorgenommene Zahlung über {money_amount} ist fehlgeschlagen."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Die am {date} automatisch vorgenommene Zahlung über {money_amount} ist fehlgeschlagen."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Die heute vorgenommene Zahlung über {money_amount} ist gescheitert."
+msgstr "Die füher am heutigen Tag vorgenommene Zahlung über {money_amount} ist fehlgeschlagen."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
@@ -556,11 +558,11 @@ msgstr "Ihre Zahlung ist erfolgt"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
-msgstr ""
+msgstr "Die heute eingeleitete automatische Auszahlung über {money_amount} ist ausgeführt worden."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Die automatische Auszahlung über {money_amount} ist am {date} ausgeführt worden."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
@@ -1135,7 +1137,7 @@ msgstr "{username} akzeptiert keine Spenden in {rejected_currency}."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
-msgstr ""
+msgstr "Der Betrag {money_amount} ist nicht in der erwarteten Währung ({expected_currency})."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Es scheint so, als ob Sie etwas zu löschen versuchen, das nicht existiert."
@@ -1307,7 +1309,7 @@ msgid "A security check has failed. Please make sure your browser is configured 
 msgstr "Eine Sicherheitsüberprüfung schlug fehl. Bitte stellen Sie sicher, dass Ihr Browser Cookies von {domain} erlaubt und versuchen Sie es erneut.."
 
 msgid "Checking cookies…"
-msgstr ""
+msgstr "Cookies werden überprüft…"
 
 msgid "You are not authorized to access this page."
 msgstr "Sie sind nicht berechtigt, diese Seite aufzurufen."
@@ -1347,13 +1349,13 @@ msgid "Confirm"
 msgstr "Bestätigen"
 
 msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
-msgstr ""
+msgstr "Es scheint als würden Sie einen veralteten Browser verwenden, weshalb diese Webseite möglicher Weise nicht richtig funktioniert. Wir empfehlen die Verwendung einer aktuellen Version einer der gängigen Browser."
 
 msgid "Ignore this warning"
-msgstr ""
+msgstr "Ignorieren Sie diese Warnung"
 
 msgid "Please input your password to confirm this action:"
-msgstr ""
+msgstr "Bitte geben Sie Ihr Passwort ein, um diesen Vorgang zu bestätigen:"
 
 msgid "Password"
 msgstr "Passwort"
@@ -2116,7 +2118,7 @@ msgstr "Unterstütze die Arbeit von {username} mit einer wiederkehrenden Spende.
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username} nimmt derzeit keine Spenden an. Sie können lediglich eine Spende zusagen, aber Sie können noch kein Geld schicken."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Dieses Konto wird vorübergehend ausgesetzt, Spenden an sie werden nicht bearbeitet."
@@ -2137,7 +2139,7 @@ msgstr "{username} erhält aktuell {income_amount} pro Woche. Ihre Hilfe wird be
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "Das Ziel von {Benutzername} ist es, {Geldbetrag_Betrag} pro Woche zu erhalten. Sei der/die Erste, der/die sich beteiligt!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2251,7 +2253,7 @@ msgid "Connect an account"
 msgstr "Ein Konto verknüpfen"
 
 msgid "Our YouTube integration has been disabled by Google. We're working on re-implementing this feature in a different way."
-msgstr ""
+msgstr "Google hat unsere Integration mit YouTube gesperrt. Wir arbeiten daran dieses Feature auf eine andere Art umzusetzen."
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Ich bin dankbar für Spenden, habe aber kein spezifisches Spendenziel."
@@ -2737,7 +2739,7 @@ msgstr "Der Zahlungsdienstleister ({name}) kann keine Abbuchungen in {currency} 
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
-msgstr ""
+msgstr "Ihre Bank kann diese Zahlung abwiesen. Wir empfehlen daher, Ihrer Bank eine Kopie {link_start}des Mandats{link_end} zuzusenden, wenn Sie sich nicht sicher sind, dass sie Abbuchungsaufträge in {currency} ordentlich ausführt."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -3238,7 +3240,7 @@ msgid "Remove"
 msgstr "Löschen"
 
 msgid "An error occurred while rendering this notification."
-msgstr ""
+msgstr "Während der Erstellung dieses Hinweises ist ein Fehler aufgetreten."
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
@@ -4221,9 +4223,8 @@ msgstr "Öffnen Sie ein Issue auf GitHub"
 msgid "Other communication channels:"
 msgstr "Andere Kommunikationswege:"
 
-#, fuzzy
 msgid "How is Liberapay funded? Are there fees?"
-msgstr "Wie finanziert sich Liberapay?"
+msgstr "Wie finanziert sich Liberapay? Gibt es Gebühren?"
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
@@ -4237,14 +4238,14 @@ msgstr "Liberapay kann von jedem verwendet werden, der seine Arbeit durch Sammel
 
 #, python-brace-format
 msgid "Can creators of {abbr_}NSFW{_abbr} content use Liberapay?"
-msgstr ""
+msgstr "Können Autor*innen von {abbr_}NSFW{_abbr}-Inhalten Liberapay verwenden?"
 
 msgid "Not safe for work"
 msgstr ""
 
 #, python-brace-format
 msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr ""
+msgstr "Ja, Liberapay ist jedoch kein Schutzschild; wir können niemanden davor schützen, von den zugrundeliegenden Zahlungsdienstleistern {link_open} gebannt zu werden {link_close}."
 
 msgid "Can I modify or stop my donations?"
 msgstr "Kann ich meine Spenden ändern oder stoppen?"
@@ -4505,10 +4506,10 @@ msgid "The payment processing fees are usually lower with Stripe than with PayPa
 msgstr "Die Gebühren für die Zahlungsabwicklung sind bei Stripe in der Regel niedriger als bei PayPal."
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
-msgstr ""
+msgstr "Stripe ermöglicht die automatische Erneuerung von Spenden, wohingegen PayPal derzeit von den Spender*innen verlangt, jede Zahlung einzeln zu bestätigen."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
-msgstr ""
+msgstr "Stripe ermöglicht es in einigen Fällen, an mehrere Empfänger gleichzeitig zu spenden, wohingegen PayPal immer separate Zahlungen erfordert."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "PayPal-Zahlungen erfordern eine Umleitung des Spenders auf die PayPal-Website, während Stripe in Liberapay integriert ist."
@@ -4539,7 +4540,7 @@ msgstr "Die liberapay.com-Webpräsenz setzt nur technische Cookies, die benötig
 
 #, python-brace-format
 msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} if you want to learn more about them."
-msgstr ""
+msgstr "Besucher der Website liberapay.com können auch von Cloudflare gesendete Cookies empfangen. Bitte lies {link_open}\"Cloudflare-Cookies verstehen\"{link_close}, wenn du mehr darüber erfahren möchtest."
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
@@ -4921,7 +4922,7 @@ msgid "Top pledges"
 msgstr "Top-Versprechen"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Bitte belästige die unten aufgeführten Personen und Projekte nicht mit Spam-Nachrichten, die sie zur Anmeldung bei Liberapay aufrufen oder sie fragen, warum sie dies noch nicht getan haben."
 
 msgid "There are no unclaimed donations right now."
 msgstr "Es gibt zurzeit keine unbeanspruchte Spenden."
