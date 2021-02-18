@@ -459,9 +459,9 @@ class Payday:
             assert take.amount >= 0
         total_takes = MoneyBasket(t.amount for t in takes)
         fuzzy_takes_sum = total_takes.fuzzy_sum(ref_currency)
-        tips_by_currency = group_by(tips, lambda t: t.full_amount.currency)
+        tip_currencies = set(t.full_amount.currency for t in tips)
         takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
-        takes_by_secondary_currency = {c: [] for c in tips_by_currency}
+        takes_by_secondary_currency = {c: [] for c in tip_currencies}
         if fuzzy_takes_sum:
             takes_ratio = min(fuzzy_income_sum / fuzzy_takes_sum, 1)
         else:
