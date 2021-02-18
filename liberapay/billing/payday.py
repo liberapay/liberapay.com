@@ -538,7 +538,10 @@ class Payday:
                         adjust_tips = False
                     else:
                         leeway_ratio = min(delta / leeway, 1)
-                        tips = sorted(tips, key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
+        if adjust_tips:
+            tips.sort(key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
+        else:
+            tips.sort(key=lambda tip: tip.id)
         # Loop: compute the adjusted donation amounts, and do the transfers
         transfers = {}
         for tip in tips:
