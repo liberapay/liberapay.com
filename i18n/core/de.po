@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-02-19 10:50+0000\n"
+"PO-Revision-Date: 2021-02-19 21:57+0000\n"
 "Last-Translator: hacked.works <weblate@hacked.works>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
 "Language: de\n"
@@ -173,7 +173,7 @@ msgid "Donations through teams: none (you are not a member of any team)."
 msgstr "Spenden durch Teams: keine (Sie sind in keinem Team Mitglied)."
 
 msgid "NB: Donations through Liberapay are now paid in advance instead of being transferred weekly. The numbers above match what you would have received this week under the old system."
-msgstr "NB: Spenden durch Liberapay werden nun im Voraus bezahlt und nicht mehr wöchentlich. Die Zahlen oben entsprechen den wöchentlichen Einnahmen aus dem alten System."
+msgstr "Hinweis: Spenden durch Liberapay werden nun im Voraus bezahlt und nicht mehr wöchentlich weitergeleitet. Die Zahlen oben entsprechen den wöchentlichen Einnahmen aus dem alten System."
 
 #, python-brace-format
 msgid "You have {money_amount} in your Mangopay wallet."
@@ -475,7 +475,7 @@ msgstr "Wennn Ihre Bank die Zahlung abgelehnt hat, ohne sie mit Ihnen abzukläre
 
 #, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
-msgstr ""
+msgstr "Um Ihrer Bank zu helfen herauszufinden, was geschehen ist, können Sie ihr eine Kopie {link_start}diese Dokuments{link_end} schicken."
 
 msgid "Your payment has failed"
 msgstr "Ihre Zahlung ist fehlgeschlagen"
@@ -1283,7 +1283,7 @@ msgstr "Das eingegebene Passwort ist falsch."
 
 #, python-brace-format
 msgid "“{0}” is not a valid account ID."
-msgstr ""
+msgstr "“{0}” ist keine gültige Konto-ID."
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
@@ -2126,8 +2126,8 @@ msgstr "Dieses Konto wird vorübergehend ausgesetzt, Spenden an sie werden nicht
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} hat derzeit {n} Förderer, der/die bereit ist, ihn/sie zu unterstützen."
+msgstr[1] "{username} hat derzeit {n} Förderer, die bereit sind, ihn/sie zu unterstützen."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2139,7 +2139,7 @@ msgstr "{username} erhält aktuell {income_amount} pro Woche. Ihre Hilfe wird be
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr "Das Ziel von {Benutzername} ist es, {Geldbetrag_Betrag} pro Woche zu erhalten. Sei der/die Erste, der/die sich beteiligt!"
+msgstr "Das Ziel von {username} ist es, pro Woche {money_amount} zu erhalten. Seien Sie der/die Erste, der/die dazu beiträgt!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2944,7 +2944,7 @@ msgstr "{username} ist {timespan_ago} beigetreten."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} hat dieses Konto vor {timespan_ago} geschlossen."
 
 msgid "View income history"
 msgstr "Einkommensverlauf anzeigen"
@@ -4241,7 +4241,7 @@ msgid "Can creators of {abbr_}NSFW{_abbr} content use Liberapay?"
 msgstr "Können Autor*innen von {abbr_}NSFW{_abbr}-Inhalten Liberapay verwenden?"
 
 msgid "Not safe for work"
-msgstr ""
+msgstr "unpassende Inhalte, die nicht zur Ansicht bzw. Verwendung am Arbeitsplatz geeignet sind"
 
 #, python-brace-format
 msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
@@ -4252,7 +4252,7 @@ msgstr "Kann ich meine Spenden ändern oder stoppen?"
 
 #, python-brace-format
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
-msgstr ""
+msgstr "Ja, Sie können Ihre Spenden jederzeit über {link_open}Ihre \"Ausgaben\"-Seite{link_close} stoppen oder die zugehörigen Beträge, Zeiträume und Verlängerungsmodi ändern. Das Einstellen einer Spende löst keine Rückerstattung aus, es verhindert lediglich zukünftige Erneuerungen."
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
 msgstr "Liberapay wurde entwickelt um eine langfristige, planbare Finanzierung zu ermöglichen und unterstützt deshalb nur wiederkehrende Spenden."
@@ -5448,11 +5448,11 @@ msgstr[1] "{n} Liberapay-Nutzer haben versprochen, insgesamt {0} pro Woche an {1
 
 #, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
-msgstr ""
+msgstr "{user_name} hat angegeben, dass er/sie Liberapay nicht beitreten kann oder will. Sie können ihm/ihr dennoch weiter unten eine Spende zusagen, aber Sie sollten auch in Betracht ziehen, ihn/sie auf andere Art und Weise zu unterstützen."
 
 #, python-brace-format
 msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
-msgstr ""
+msgstr "Senden Sie bitte keine Nachrichten an {user_name}, in denen Sie ihn/sie dazu einladen, Liberapay beizutreten, oder ihn/sie fragen, warum er/sie es noch nicht getan hat."
 
 #, python-brace-format
 msgid "Pledge to {user_name}"
@@ -5463,20 +5463,20 @@ msgstr "Du kannst Teammitglieder individuell unterstützen:"
 
 #, python-brace-format
 msgid "Are you a member of the {team_name} team?"
-msgstr ""
+msgstr "Sind Sie ein Mitglied des {team_name} Teams?"
 
 #, python-brace-format
 msgid "Are you {user_name}?"
 msgstr "Sind Sie {user_name}?"
 
 msgid "You can't or don't want to join Liberapay?"
-msgstr ""
+msgstr "Können oder wollen Sie Liberapay nicht beitreten?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
 msgstr ""
 
 msgid "Opt out"
-msgstr ""
+msgstr "Abmelden"
 
 #, python-brace-format
 msgid "{0} returned this error message: {1}"
@@ -5491,17 +5491,17 @@ msgstr "Social Explorer"
 
 #, python-brace-format
 msgid "Connect your {platform} account"
-msgstr ""
+msgstr "Verbinden Sie Ihr {platform}-Konto"
 
 #, python-brace-format
 msgid "It looks like you don't follow anyone on {platform}."
-msgstr ""
+msgstr "Es sieht so aus, als würden Sie niemandem auf {platform} folgen."
 
 #, python-brace-format
 msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sie folgen {n} Benutzerkonto auf {platform}."
+msgstr[1] "Sie folgen {n} Benutzerkonten auf {platform}."
 
 msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
 msgstr "Die von Ihnen angegebene Adresse ist ungültig: Sie enthält kein „@“-Zeichen."
