@@ -5,13 +5,6 @@ basado en la legislación francesa, en lo sucesivo denominado "la organización"
 persona que se inscribe en su servicio homónimo en lo sucesivo conocido como "el
 usuario".
 
-# Términos del servicio Liberapay
-
-Este contrato es entre Liberapay, una organización sin fines de lucro fundada en 2015
-basado en la legislación francesa, en lo sucesivo denominado "la organización", y el
-persona que se inscribe en su servicio homónimo en lo sucesivo conocido como "el
-usuario".
-
 ## 1. Naturaleza del servicio
 
 El servicio está diseñado para facilitar donaciones anónimas, recurrentes y monetarias
