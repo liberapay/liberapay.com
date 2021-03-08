@@ -362,7 +362,7 @@ class Participant(Model, MixinTeam):
                  WHERE participant = %(p_id)s
                    AND id >= 1 AND id <= 20
                    AND id <> %(current_session_id)s
-                   AND secret NOT LIKE '%%.%%';
+                   AND secret NOT LIKE '%%.em';
             """, locals())
             if checked:
                 self.add_event(c, 'password-check', None)
