@@ -360,16 +360,19 @@ class TestLogIn(EmailHarness):
         alice.session = alice.start_session()
         assert alice.session.id == 1
 
-        # Initiate a normal session, to be invalidated
-        session2 = alice.start_session()
+        # Get a password session, to be invalidated
+        session2 = alice.start_session(suffix='.pw')
         assert session2.id == 2
+
+        # Get a "regenerated" session, to be invalidated
+        session3 = alice.start_session(suffix='.rg')
+        assert session3.id == 3
 
         # Change the password
         alice.update_password('correct horse battery staple')
 
-        # The second session should no longer be valid, but the initial session
-        # should still be valid, and the account's password should not have
-        # been deleted
+        # Only the initial session should still be valid, and of course the
+        # account's password should not have been deleted
         secret_ids = set(self.db.all(
             "SELECT id FROM user_secrets WHERE participant = %s", (alice.id,)
         ))
