@@ -11,11 +11,11 @@ El servicio está diseñado para facilitar donaciones anónimas, recurrentes y m
 entre sus usuarios.
 
 El servicio normalmente permite al usuario aumentar la visibilidad de su perfil
-de varias maneras, pero la organización se reserva el derecho de deshabilitar la
+de varias maneras, pero la organización se reserva el derecho de deshabilitar el
 acceso a esas características.
 
 El usuario se compromete a no utilizar el servicio para transacciones financieras que no son
-donaciones, en particular las vinculadas a la ejecución de un contrato o la promesa de
+donaciones, en particular las vinculadas a la ejecución de un contrato o la promesa de una
 recompensa.
 
 ## 2. Precios
@@ -33,14 +33,14 @@ delegó la custodia de los fondos.
 La organización se compromete a corregir cualquier error por su parte en la ejecución de
 las donaciones.
 
-La organización no garantiza que el usuario podrá retirar la
-dinero de su cuenta sin demora. En particular, la organización puede imponer una
+La organización no garantiza que el usuario podrá retirar el
+dinero de su cuenta sin demora. En particular, la organización puede imponer un
 retraso para disuadir y protegerse del fraude.
 
 ## 4. Honestidad
 
 El usuario se compromete a utilizar el servicio de buena fe, en particular el usuario
-se compromete a no mentir sobre su identidad y a no llenar su perfil en un
+se compromete a no mentir sobre su identidad y a no llenar su perfil en una
 manera engañosa con el propósito de atraer más donaciones.
 
 ## 5. Reembolsos
@@ -48,18 +48,18 @@ manera engañosa con el propósito de atraer más donaciones.
 El usuario se compromete a reembolsar una donación recibida si se revela que su
 origen es fraudulento.
 
-Ni el usuario ni la organización se comprometen a reembolsar una donación
+Ni el usuario, ni la organización se comprometen a reembolsar una donación
 después de una solicitud sin una base legal o contractual sólida.
 
 ## 6. Propiedad intelectual
 
-Cuando el usuario transmite al servicio un contenido protegido por derechos de autor, autoriza la
+Cuando el usuario transmite al servicio un contenido protegido por derechos de autor, autoriza a la
 organización para almacenarlo, copiarlo, traducirlo y publicarlo. Al hacerlo, el usuario
 declara que poseen los derechos necesarios para conceder esta licencia.
 
 ## 7. Terminación del servicio
 
-El usuario puede salir del servicio cerrando su cuenta. Hacerlo no niega
+El usuario puede salir del servicio cerrando su cuenta. Hacerlo no niega la
 responsabilidad del usuario durante el período durante el cual utilizó el
 servicio.
 
@@ -77,8 +77,8 @@ operativo en todo momento sin interrupciones.
 La organización no se hace responsable de las consecuencias de la negligencia
 por el usuario, en particular de la falla por parte del usuario para proteger su contraseña.
 
-La organización no asume ninguna de las responsabilidades del usuario. Notablemente
-el usuario es responsable de la declaración de los ingresos recibidos a través de la
+La organización no asume ninguna de las responsabilidades del usuario. Notablemente,
+el usuario es responsable de la declaración de los ingresos recibidos a través de el
 servicio a las autoridades competentes y al pago de los impuestos aplicables.
 
 La organización no es responsable en caso de disputa entre un donante y un
