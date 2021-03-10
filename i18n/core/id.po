@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Indonesian "
-"<https://hosted.weblate.org/projects/liberapay/core/id/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2021-03-10 23:02+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/liberapay/core/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.5.2-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -340,7 +342,7 @@ msgid "BIC (Bank Identifier Code)"
 msgstr "BIC (Kode Pengenal Bank)"
 
 msgid "Wire Reference Code"
-msgstr ""
+msgstr "Kode Referensi Wire"
 
 msgid "Destination Country"
 msgstr "Negara tujuan"
@@ -414,16 +416,16 @@ msgid "The reason provided by your bank is: the payment was fraudulent."
 msgstr "Alasan yang diberikan oleh bank Anda adalah: pembayarannya ada kecurangan."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "Bank Anda tidak memberikan alasan khusus untuk sengketa ini."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "Alasan yang diberikan oleh bank anda adalaha: informasi rekening yang diberikan salah."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "Alasan yang diberikan oleh bank Anda adalah: rekening tidak memiliki cukup dana untuk membayar pembayaran."
 
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "Alasan yang diberikan oleh bank Anda adalah: pemilik rekening tidak mengenali pembayaran."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
@@ -454,19 +456,19 @@ msgstr "Anda gagal melakukan pembayaran"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr ""
+msgstr "Pembayaran otomatis {money_amount} yang dimulai hari ini telah gagal."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Pembayaran otomatis {money_amount} yang dimulai pada {date} telah gagal."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr ""
+msgstr "Pembayaran {money_amount} yang dilakukan sebelumnya hari ini telah gagal."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Pembayaran {money_amount} yang dimulai pada {date} telah gagal."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -478,26 +480,26 @@ msgstr "Pengembalian dana atas {money_amount} telah diinisiasi"
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr ""
+msgstr "Pembayaran {money_amount} yang Anda lakukan pada {date} sedang dikembalikan."
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr ""
+msgstr "Pembayaran {money_amount} yang Anda lakukan pada {date} sebagian dikembalikan."
 
 msgid "Reason: the payment was a duplicate."
-msgstr ""
+msgstr "Alasan: pembayaran duplikat."
 
 msgid "Reason: the payment has been deemed fraudulent."
-msgstr ""
+msgstr "Alasan: pembayaran telah dianggap penipuan."
 
 msgid "Reason: the refund was requested by you."
-msgstr ""
+msgstr "Alasan: pengembalian dana diajukan oleh Anda."
 
 msgid "Please contact us to obtain more information."
-msgstr ""
+msgstr "Silakan hubungi kami untuk mendapatkan informasi lebih lanjut."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
-msgstr ""
+msgstr "Perlu waktu beberapa hari kerja sampai dana muncul di rekening bank Anda."
 
 msgid "Your bank account is going to be debited"
 msgstr "Rekening bank Anda akan didebit"
@@ -508,14 +510,14 @@ msgstr "Kami telah memulai debit langsung {money_amount} dari rekening {bank_nam
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr ""
+msgstr "Kami telah memulai debit langsung {money_amount} dari rekening bank Anda ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Operasi ini dilakukan berdasarkan {link_start} mandat {mandate_id} {link_end} 3 yang Anda tanda tangani di {acceptance_date}, otorisasi Liberapay (kreditor SEPA {creditor_identifier}) untuk mengirim instruksi ke bank Anda untuk mendebit rekening Anda dan bank Anda untuk mendebit rekening Anda sesuai dengan instruksi tersebut."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr ""
+msgstr "Jika Anda tidak melakukan pembayaran ini, beri tahu kami, kami akan mengembalikannya."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -523,35 +525,35 @@ msgstr "Setelah pembayaran ini diproses, akan muncul pada laporan bank anda seba
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Memproses pembayaran semacam ini rata-rata membutuhkan {timedelta}."
 
 msgid "Your payment has succeeded"
 msgstr "Anda berhasil melakukan pembayaran"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
-msgstr ""
+msgstr "Pembayaran otomatis {money_amount} yang dimulai hari ini telah berhasil."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Pembayaran otomatis {money_amount} yang dimulai pada {date} telah berhasil."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr ""
+msgstr "Pembayaran {money_amount} yang dimulai sebelumnya hari ini telah berhasil."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Pembayaran {money_amount} yang dimulai pada {date} telah berhasil."
 
 msgid "Thank you for this donation!"
 msgstr "Terima kasih atas donasi anda!"
 
 msgid "You're missing out on donations through Liberapay"
-msgstr ""
+msgstr "Anda melewatkan donasi melalui Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr ""
+msgstr "Patron Anda saat ini tidak dapat mengirim uang kepada Anda melalui Liberapay karena pemrosesan pembayaran akun anda belum disiapkan."
 
 msgid "Configure payment processing"
 msgstr "Konfigurasi proses pembayaran"
@@ -563,7 +565,7 @@ msgid "Reject donations"
 msgstr "Tolak donasi"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
-msgstr ""
+msgstr "Perpanjangan donasi Liberapay: pembayaran Anda yang akan datang telah berubah"
 
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
 msgstr ""
@@ -5392,7 +5394,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Connect your {platform} account"
-msgstr ""
+msgstr "Hubungkan akun {platform} anda"
 
 #, python-brace-format
 msgid "It looks like you don't follow anyone on {platform}."
