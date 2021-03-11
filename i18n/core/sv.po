@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "PO-Revision-Date: 2021-03-12 08:02+0000\n"
-"Last-Translator: Snorre Sturlasson <retpojke@gmail.com>\n"
+"Last-Translator: Joel Pennegård <joelpennegard@hotmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/liberapay/core/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,8 @@ msgstr "Den {language} översättningen av denna sida är inte färdig ännu."
 msgid "Greetings,"
 msgstr "Välkommen,"
 
-#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
-msgstr "Är det något som inte stämmer? Svara på detta mejl för att få hjälp."
+msgstr "Är det något som inte stämmer? Detta mejl skickades automatiskt till dig, men du kan kontakta oss genom att svara på det."
 
 msgid "Change your email settings"
 msgstr "Ändra dina e-postinställningar"
@@ -56,31 +55,31 @@ msgstr "Hantera dina donationer."
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Din donation av {amount} per vecka till {username} behöver förnyas innan {date}"
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Din donation av {amount} per månad till {username} behöver förnyas innan {date}"
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Din donation av {amount} per år till {username} behöver förnyas innan {date}"
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har {n} donation som är dags att förnya:"
+msgstr[1] "Du har {n} donationer som är dags att förnya:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Om du önskar ändra eller stoppa en donation, klicka på följande länk: {link_start}Hantera mina donationer{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "Din e-postadress är temporärt svartlistad"
 
 msgid "Your email address has been blacklisted"
-msgstr "Din e-postadress har blivit svartlistad"
+msgstr "Din e-mail adress har blivit svartlistad"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
@@ -421,48 +420,50 @@ msgstr "Autogirobetalningen till din Liberapay-plånbok har lyckats"
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "Din betalning av {money_amount} har blivit bestriden"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr ""
+msgstr "Överföringen av {money_amount} som du initierade {date} har blivit återkallad av din bank."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: de kunde inte behandla betalningen."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: du begärde en återbetalning."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: betalningen var inte auktoriserad."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: betalningen var en dubblett."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: betalningen var bedräglig."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "Din bank angav inte någon särskild anledning för varför det bestridits."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: de angivna kontouppgifterna är inkorrekta."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: kontot hade inte tillräckligt mycket pengar för att infria betalningen."
 
+#, fuzzy
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: kontots ägare kände inte igen/erkände inte betalningen"
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: {reason_code_in_english}."
 
+#, fuzzy
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "Om denna tvist triggades av misstag så kan du be din bank att återkalla den. Vänligen låt oss veta om du gör det, för då behöver vi också skicka ett meddelande till din bank."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
-msgstr ""
+msgstr "Om problemet inte kan lösas framgångsrikt så kommer pengarna bli återförda från personerna som har mottagit dem."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
 msgstr ""
