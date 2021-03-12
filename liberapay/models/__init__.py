@@ -238,6 +238,7 @@ def _check_sum_of_payin_transfers(cursor):
     l = cursor.all("""
         SELECT pi.id AS payin_id, pi.amount_settled, pi.fee
              , (pi.amount_settled - pi.fee) AS net_amount
+             , pi.refunded_amount
              , sum(pt.amount) AS transfers_sum
           FROM payin_transfers pt
           JOIN payins pi ON pi.id = pt.payin
