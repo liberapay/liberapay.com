@@ -333,10 +333,9 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
         amount_settled, fee, net_amount = None, None, None
 
     error = repr_charge_error(charge)
-    refunded_amount, refund_ratio = None, None
+    refunded_amount = None
     if charge.amount_refunded:
         refunded_amount = int_to_Money(charge.amount_refunded, charge.currency)
-        refund_ratio = refunded_amount / payin.amount
     payin = update_payin(
         db, payin.id, charge.id, charge.status, error,
         amount_settled=amount_settled, fee=fee, intent_id=intent_id,
@@ -357,20 +356,30 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
       ORDER BY pt.id
     """, (payin.id,))
     if amount_settled is not None:
-        for pt in payin_transfers:
+        for i, pt in enumerate(payin_transfers):
             if pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
-                if refund_ratio:
-                    pt_reversed_amount = (pt.amount * refund_ratio).round_up()
-                else:
-                    pt_reversed_amount = None
-                update_payin_transfer(
-                    db, pt.id, None, charge.status, error,
-                    reversed_amount=pt_reversed_amount,
-                )
+                pt = update_payin_transfer(db, pt.id, None, charge.status, error)
             elif pt.remote_id is None and pt.status in ('pre', 'pending'):
-                execute_transfer(db, pt, pt.destination_id, charge.id)
+                pt = execute_transfer(db, pt, pt.destination_id, charge.id)
             elif refunded_amount and pt.remote_id:
-                sync_transfer(db, pt)
+                pt = sync_transfer(db, pt)
+            payin_transfers[i] = pt
+        if refunded_amount == payin.amount and payin.ctime.year >= 2021:
+            payin_refund_id = db.one("""
+                SELECT pr.id
+                  FROM payin_refunds pr
+                 WHERE pr.payin = %s
+                   AND pr.amount = %s
+                   AND pr.status <> 'failed'
+              ORDER BY pr.ctime
+                 LIMIT 1
+            """, (payin.id, payin.amount))
+            for i, pt in enumerate(payin_transfers):
+                if pt.status == 'succeeded':
+                    payin_transfers[i] = reverse_transfer(
+                        db, pt, payin_refund_id=payin_refund_id
+                    )
+
     elif charge.status in ('failed', 'pending'):
         for pt in payin_transfers:
             update_payin_transfer(db, pt.id, None, charge.status, error)
@@ -410,6 +419,49 @@ def execute_transfer(db, pt, destination, source_transaction):
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
     return update_payin_transfer(db, pt.id, tr.id, 'succeeded', None)
+
+
+def reverse_transfer(db, pt, reversal_amount=None, payin_refund_id=None):
+    """Create a Transfer Reversal.
+
+    Args:
+        pt (Record): a row from the `payin_transfers` table
+        reversal_amount (Money): the amount of the reversal
+
+    Returns:
+        Record: the row updated in the `payin_transfers` table
+
+    """
+    assert pt.status == 'succeeded', "can't reverse an unsuccessful transfer"
+    if reversal_amount is None:
+        reversal_amount = pt.amount - (pt.reversed_amount or 0)
+    assert reversal_amount >= 0, f"expected a positive amount, got {reversal_amount!r}"
+    new_reversed_amount = reversal_amount + (pt.reversed_amount or 0)
+    if pt.remote_id and reversal_amount > 0:
+        try:
+            reversal = stripe.Transfer.create_reversal(
+                pt.remote_id,
+                amount=Money_to_int(reversal_amount),
+                idempotency_key=(
+                    f'reverse_{Money_to_int(reversal_amount)}_from_pt_{pt.id}'
+                )
+            )
+        except stripe.error.InvalidRequestError as e:
+            if str(e).endswith(" is already fully reversed."):
+                return update_payin_transfer(
+                    db, pt.id, pt.remote_id, pt.status, pt.error,
+                    reversed_amount=pt.amount,
+                )
+            else:
+                raise
+        else:
+            record_payin_transfer_reversal(
+                db, pt.id, reversal.id, reversal_amount, payin_refund_id=payin_refund_id,
+                ctime=(EPOCH + timedelta(seconds=reversal.created)),
+            )
+    return update_payin_transfer(
+        db, pt.id, pt.remote_id, pt.status, pt.error, reversed_amount=new_reversed_amount
+    )
 
 
 def sync_transfer(db, pt):

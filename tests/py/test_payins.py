@@ -1465,11 +1465,13 @@ class TestRefundsStripe(EmailHarness):
 
     @patch('stripe.BalanceTransaction.retrieve')
     @patch('stripe.Source.retrieve')
+    @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_split_charge(
-        self, construct_event, tr_retrieve, tr_modify, source_retrieve, bt_retrieve
+        self, construct_event, tr_retrieve, tr_modify, tr_create_reversal,
+        source_retrieve, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -1689,10 +1691,25 @@ class TestRefundsStripe(EmailHarness):
             }'''),
             stripe.api_key
         )
+        tr_create_reversal.return_value = stripe.Reversal.construct_from(
+            json.loads('''{
+              "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "transfer_reversal",
+              "amount": 100,
+              "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXY",
+              "created": 1564297245,
+              "currency": "eur",
+              "destination_payment_refund": null,
+              "metadata": {},
+              "source_refund": null,
+              "transfer": "po_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }'''),
+            stripe.api_key
+        )
         tr_retrieve.return_value = stripe.Transfer.construct_from(
             json.loads('''{
               "amount": 20000,
-              "amount_reversed": 20000,
+              "amount_reversed": 0,
               "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
               "created": 1564038240,
               "currency": "eur",
@@ -1704,26 +1721,12 @@ class TestRefundsStripe(EmailHarness):
               "metadata": {},
               "object": "transfer",
               "reversals": {
-                "data": [
-                  {
-                    "amount": 20000,
-                    "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "created": %(recent_timestamp)i,
-                    "currency": "eur",
-                    "destination_payment_refund": "pyr_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "metadata": {},
-                    "object": "transfer_reversal",
-                    "source_refund": "pyr_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "transfer": "tr_XXXXXXXXXXXXXXXXXXXXXXXX"
-                  }
-                ],
+                "data": [],
                 "has_more": false,
                 "object": "list",
-                "total_count": 1,
                 "url": "/v1/transfers/tr_XXXXXXXXXXXXXXXXXXXXXXXX/reversals"
               },
-              "reversed": true,
+              "reversed": false,
               "source_transaction": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "source_type": "card",
               "transfer_group": "group_py_XXXXXXXXXXXXXXXXXXXXXXXX"
