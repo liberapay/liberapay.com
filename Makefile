@@ -106,8 +106,9 @@ _i18n_clean:
 	           -e 's/^("[^:]+: ) +/\1/' \
 	           -e 's/^("Language-Team: .+? )<(.+)>\\n/\1"\n"<\2>\\n/' \
 	           -e 's/^#(, .+)?, python-format(, .+)?$$/#\1\2/' \
-	           -e '/^#: /d' "$$f" >"$$f.new"; \
-	    a=$$(<$$f.new); echo "$$a" >$$f.new; \
+	           -e '/^#: /d' \
+	           "$$f" | \
+	        $(env_py) -c "import sys; print(sys.stdin.read().rstrip())" > "$$f.new"; \
 	    mv "$$f.new" "$$f"; \
 	done
 
