@@ -477,12 +477,14 @@ def refund_payin(db, payin, refund_amount=None):
     )
 
 
-def reverse_transfer(db, pt, reversal_amount=None, payin_refund_id=None):
+def reverse_transfer(db, pt, reversal_amount=None, payin_refund_id=None, idempotency_key=None):
     """Create a Transfer Reversal.
 
     Args:
         pt (Record): a row from the `payin_transfers` table
         reversal_amount (Money): the amount of the reversal
+        payin_refund_id (int): the ID of the parent refund in our database
+        idempotency_key (str): the unique identifier of this reversal request
 
     Returns:
         Record: the row updated in the `payin_transfers` table
@@ -499,6 +501,7 @@ def reverse_transfer(db, pt, reversal_amount=None, payin_refund_id=None):
                 pt.remote_id,
                 amount=Money_to_int(reversal_amount),
                 idempotency_key=(
+                    idempotency_key or
                     f'reverse_{Money_to_int(reversal_amount)}_from_pt_{pt.id}'
                 )
             )
