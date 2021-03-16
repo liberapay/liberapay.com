@@ -834,9 +834,9 @@ class Payday:
                       WHERE "timestamp" >= %(ts_start)s
                         AND "timestamp" <= %(ts_end)s
                         AND status = 'succeeded'
-                        AND context IN (
-                                'tip', 'partial-tip',
-                                'take', 'partial-take', 'leftover-take'
+                        AND ( context IN ('tip', 'take') OR
+                              context IN ('partial-tip', 'partial-take', 'leftover-take') AND
+                              %(ts_start)s >= '2021-02-19'
                             )
                  )
                , our_tips AS (
