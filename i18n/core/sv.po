@@ -16,19 +16,18 @@ msgstr "Den {language} översättningen av denna sida är inte färdig ännu."
 msgid "Greetings,"
 msgstr "Välkommen,"
 
-#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
-msgstr "Är det något som inte stämmer? Svara på detta mejl för att få hjälp."
+msgstr "Är det något som inte stämmer? Detta mejl skickades automatiskt till dig, men du kan kontakta oss genom att svara på det."
 
 msgid "Change your email settings"
 msgstr "Ändra dina e-postinställningar"
 
 #, python-brace-format
 msgid "It's time to renew your donation to {username} on Liberapay"
-msgstr "Det är dags att förnya din donation till {username} på Liberapay"
+msgstr "Det är dags att förnya din donation till {username} på Liberapay."
 
 msgid "It's time to renew your donations on Liberapay"
-msgstr "Det är dags att förnya dina donationer på Liberapay"
+msgstr "Det är dags att förnya dina donationer på Liberapay."
 
 #, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
@@ -54,31 +53,31 @@ msgstr "Hantera dina donationer"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Din donation av {amount} per vecka till {username} behöver förnyas innan {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Din donation av {amount} per månad till {username} behöver förnyas innan {date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
-msgstr ""
+msgstr "Din donation av {amount} per år till {username} behöver förnyas innan {date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har {n} donation som är dags att förnya:"
+msgstr[1] "Du har {n} donationer som är dags att förnya:"
 
 #, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr ""
+msgstr "Om du önskar ändra eller stoppa en donation, klicka på följande länk: {link_start}Hantera mina donationer{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "Din e-postadress är temporärt svartlistad"
 
 msgid "Your email address has been blacklisted"
-msgstr "Din e-postadress har blivit svartlistad"
+msgstr "Din e-mail adress har blivit svartlistad"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
@@ -116,8 +115,8 @@ msgstr "Du är inte medlem i någon grupp, så du har inte mottagit några penga
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Inga pengar gavs till dig för din roll i {0} grupp."
-msgstr[1] "Inga pengar gavs till dig för din roll i de {n} grupper du är medlem i."
+msgstr[0] "Inga pengar gavs till dig för din roll i gruppen {0}."
+msgstr[1] "Inga pengar gavs till dig för din roll i de {n} grupperna du är medlem av."
 
 #, python-brace-format
 msgid "{0} was given to you for your role in the {1} team."
@@ -165,8 +164,8 @@ msgstr "Personliga donationer: inga."
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] "Donationer för din roll i {team_name} gruppen: {money_amount} från {n} donator."
-msgstr[1] "Donationer för din roll i {team_name} gruppen: {money_amount} från {n} donatorer."
+msgstr[0] "Donationer för din roll i gruppen {team_name}: {money_amount} från {n} donator."
+msgstr[1] "Donationer för din roll i gruppen {team_name}: {money_amount} från {n} donatorer."
 
 msgid "Donations through teams: none (you are not a member of any team)."
 msgstr "Donationer genom lag: inga (du är inte medlem i något lag)."
@@ -419,77 +418,79 @@ msgstr "Autogirobetalningen till din Liberapay-plånbok har lyckats"
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr ""
+msgstr "Din betalning av {money_amount} har blivit bestriden"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr ""
+msgstr "Överföringen av {money_amount} som du initierade {date} har blivit återkallad av din bank."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: de kunde inte behandla betalningen."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: du begärde en återbetalning."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: betalningen var inte auktoriserad."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: betalningen var en dubblett."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: betalningen var bedräglig."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr ""
+msgstr "Din bank angav inte någon särskild anledning för varför det bestridits."
 
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: de angivna kontouppgifterna är inkorrekta."
 
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: kontot hade inte tillräckligt mycket pengar för att infria betalningen."
 
+#, fuzzy
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: kontots ägare kände inte igen/erkände inte betalningen."
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "Anledningen som angavs av din bank är: {reason_code_in_english}."
 
+#, fuzzy
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr ""
+msgstr "Om denna tvist triggades av misstag så kan du be din bank att återkalla den. Vänligen låt oss veta om du gör det, för då behöver vi också skicka ett meddelande till din bank."
 
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
-msgstr ""
+msgstr "Om problemet inte kan lösas framgångsrikt så kommer pengarna bli återförda från personerna som har mottagit dem."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
 msgstr ""
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
-msgstr ""
+msgstr "De bestridda medlen har blivit automatiskt återförda från de personer som har mottagit dem."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "Om din bank bestred betalningen utan att konsultera dig kan du fråga dem varför. När problemet har lösts kan du {link_start}genomföra betalningen på nytt{link_end}."
 
 #, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
-msgstr ""
+msgstr "För att hjälpa din bank att komma fram till vad som har hänt kan du skicka dem en kopia av {link_start}detta dokument{link_end}."
 
 msgid "Your payment has failed"
 msgstr "Din betalning misslyckades"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr ""
+msgstr "Den automatiska betalningen av {money_amount} som initierades idag har misslyckats."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Den automatiska betalningen av {money_amount} som initierades {date} har misslyckats."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr ""
+msgstr "Betalningen av {money_amount} som initierades tidigare idag har misslyckats."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
@@ -535,7 +536,7 @@ msgstr "Vi har anslutit ett autogiro på {money_amount} från ditt {bank_name}-k
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr "Vi har initierat en direktbetalning på {money_amount} från ditt bankkonto ({partial_account_number})."
+msgstr "Vi har initierat en direktdebitering på {money_amount} från ditt bankkonto {partial_account_number}."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
@@ -550,18 +551,18 @@ msgstr "Så fort betalningen har behandlats bör den visas på ditt kontoutdrag 
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Att bearbeta den här typen av betalning tar {timedelta} i genomsnitt."
 
 msgid "Your payment has succeeded"
 msgstr "Din betalning har lyckats"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
-msgstr ""
+msgstr "Den automatiska betalningen av {money_amount} som initierades idag har lyckats."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Den automatiska betalningen av {money_amount} som initierades {date} har lyckats."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
@@ -709,14 +710,14 @@ msgid "The following donation renewal payments have been aborted because the rec
 msgstr "Följande betalningar för donationsförnyelser har avbrutits för att mottagarna inte kan ta emot dem:"
 
 msgid "Liberapay donation renewal: authentication required"
-msgstr ""
+msgstr "Liberapay donationsförnyelse: autentisering krävs"
 
 #, python-brace-format
 msgid "We haven't been able to complete your scheduled payment of {money_amount}, because your bank requested that you confirm it."
-msgstr ""
+msgstr "Vi har inte lyckats genomföra din schemalagda betalning av {money_amount}. Din bank har begärt att du bekräftar den."
 
 msgid "Confirm the payment"
-msgstr ""
+msgstr "Bekräfta betalningen"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Du kan göra det lättare för dina kunder att stödja dig genom Liberapay"
@@ -785,7 +786,7 @@ msgstr "Om du vill ändra dina donationer, klicka på länken: {link_start}hante
 
 #, python-brace-format
 msgid "A receipt will be available once the payment has been successfully processed. You can see all your payments and receipts in {link_start}your account's ledger{link_end}."
-msgstr ""
+msgstr "Ett kvitto kommer vara tillgängligt när betalningen har bearbetats framgångsrikt. Du kan se alla dina betalningar och kvitton på {link_start}ditt kontos liggare{link_end}."
 
 msgid "Email address verification - Liberapay"
 msgstr "Verifiering av e-postadress - Liberapay"
@@ -1039,15 +1040,15 @@ msgstr "'{0}' är inte en giltig e-postadress."
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
-msgstr ""
+msgstr "{0} är inte ett giltigt domännamn."
 
 #, python-brace-format
 msgid "Our attempt to resolve the domain {domain_name} failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Vårt försök att slå upp domänen {domain_name} misslyckades (felmeddelande: \"{error_message}\")."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "Vårt försök att upprätta en anslutning till e-mail servern för {domain_name} misslyckades (felmeddelande: \"{error_message}\")."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -1132,11 +1133,11 @@ msgstr "Användaren {0} accepterar inte donationer."
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
-msgstr ""
+msgstr "{username} tar inte emot donationer i {rejected_currency}."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
-msgstr ""
+msgstr "Beloppet {money_amount} är inte i den valuta som förväntades ({expected_currency})."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Det verkar som att du försöker ta bort något som inte finns."
@@ -1278,15 +1279,15 @@ msgstr[0] "{n} år av {money_amount}"
 msgstr[1] "{n} år av {money_amount}"
 
 msgid "The submitted password is incorrect."
-msgstr ""
+msgstr "Det angivna lösenordet är inkorrekt."
 
 #, python-brace-format
 msgid "“{0}” is not a valid account ID."
-msgstr ""
+msgstr "\"{0}\" är inte ett giltigt konto ID."
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
-msgstr ""
+msgstr "Det finns inget konto med användarnamn \"{username}\"."
 
 #, fuzzy, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
@@ -1308,7 +1309,7 @@ msgid "A security check has failed. Please make sure your browser is configured 
 msgstr "En säkerhetskontroll misslyckades. Vänligen kontrollera att din webbläsare tillåter kakor för {domain}, försök sedan igen."
 
 msgid "Checking cookies…"
-msgstr ""
+msgstr "Kontrollerar kakor…"
 
 msgid "You are not authorized to access this page."
 msgstr "Du har inte tillgång till att se denna sida."
@@ -1348,13 +1349,13 @@ msgid "Confirm"
 msgstr "Bekräfta"
 
 msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
-msgstr ""
+msgstr "Du verkar använda en föråldrad webbläsare, på grund av detta så är det inte säkert att hemsidan fungerar korrekt. Vi rekommenderar användning av någon nyare version från de vanligaste webbläsarna."
 
 msgid "Ignore this warning"
-msgstr ""
+msgstr "Ignorera denna varning"
 
 msgid "Please input your password to confirm this action:"
-msgstr ""
+msgstr "Vänligen mata in ditt lösenord för att bekräfta handlingen:"
 
 msgid "Password"
 msgstr "Lösenord"
@@ -1407,13 +1408,13 @@ msgid "Log in to reopen your account."
 msgstr "Logga in för att återöppna ditt konto."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr ""
+msgstr "Matade du in din e-mejladress fel? Rätta till det och testa igen, eller testa en annan adress."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
-msgstr ""
+msgstr "Om du är säker på att e-mejladressen du angav är korrekt så kan du kringgå det här felet. Dock så kommer den angivna adressen bli svartlistad om vi inte kan leverera meddelanden till den."
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "Ignorera det här felet och fortsätt"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
@@ -1423,7 +1424,7 @@ msgid "Bypass the blacklist and retry"
 msgstr "Gå förbi svartlistan och försök igen"
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "Alternativt, testa en annan e-mejladress:"
 
 msgid "Proceed"
 msgstr "Fortsätt"
@@ -1475,7 +1476,7 @@ msgid "Help us translate Liberapay"
 msgstr "Hjälp oss att översätta Liberapay"
 
 msgid "Your account"
-msgstr ""
+msgstr "Ditt konto"
 
 msgid "Profile"
 msgstr "Profil"
@@ -1584,7 +1585,7 @@ msgid "Avatar"
 msgstr "Avatar"
 
 msgid "Default avatar"
-msgstr ""
+msgstr "Förvald avatar"
 
 msgid "Find great people to donate to"
 msgstr "Hitta bra folk att donera till"
@@ -1672,7 +1673,7 @@ msgstr "Högkvartersadress"
 
 #, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr ""
+msgstr "Visa undermenyn {submenu_label}"
 
 msgid "Introduction"
 msgstr "Introduktion"
@@ -2118,16 +2119,16 @@ msgstr "Stöt {username}'s arbete med en återkommande donation."
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username} accepterar för närvarande inte donationer. Du kan skapa ett donationslöfte till dem, men du kan inte faktiskt överföra pengar."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Detta konto är tillfälligt avstängt, donationer till det kommer inte bli behandlade."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} har för närvarande {n} patron/givare redo att stödja dem."
+msgstr[1] "{username} har för närvarande {n} patrons/givare redo att stödja dem."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2139,7 +2140,7 @@ msgstr "{username} mottar just nu {income_amount} per vecka, de behöver din hj�
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "{username}s mål är att erhålla {money_amount} per vecka. Bli den första som bidrar!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -2246,14 +2247,14 @@ msgstr "Anslutning av dina konton på andra platformer gör din Liberapay profil
 #, python-brace-format
 msgid "You currently have {n} connected account:"
 msgid_plural "You currently have {n} connected accounts:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har för närvarande {n} kopplat konto:"
+msgstr[1] "Du har för närvarande {n} kopplade konton:"
 
 msgid "Connect an account"
-msgstr ""
+msgstr "Koppla ett konto"
 
 msgid "Our YouTube integration has been disabled by Google. We're working on re-implementing this feature in a different way."
-msgstr ""
+msgstr "Vår YouTube integration har blivit inaktiverad av Google. Vi jobbar på att återimplementera funktionen på ett annat sätt."
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Jag är tacksam för gåvor, men har inget specifikt finansieringsmål."
@@ -2383,6 +2384,9 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
+"När du ändrar ditt användarnamn så ändras adressen till din profil på motsvarande sätt. En omdirigering från den gamla URLen till den nya läggs på, men vilken användare som helst kan ta bort denne genom att göra anspråk på ditt gamla användarnamn. Därför bör du uppdatera alla länkar till din profil som du lagt på andra hemsidor, om det inte är så att länkarna innehåller ditt oföränderliga konto ID ({account_id}) istället för ditt användarnamn.\n"
+"\n"
+"Är du säker på att du vill ändra ditt användarnamn?"
 
 msgid "Username"
 msgstr "Användarnamn"
@@ -2548,8 +2552,9 @@ msgstr "Startades {timespan_ago}."
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
 msgstr "Startades {timespan_ago_1}. Ändrad {timespan_ago_2}."
 
+#, fuzzy
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
-msgstr ""
+msgstr "Automatiska förnyelser är aktiverade för denna donation, men är för närvarande inte möjliga på grund av begränsningar hos betalningsbehandlarna."
 
 msgid "Inactive because the account of the recipient is blacklisted."
 msgstr "Inaktiv eftersom mottagarkontot är svartlistat."
@@ -2590,13 +2595,13 @@ msgid "You are currently not donating to anyone."
 msgstr "Du donerar inte längre till någon."
 
 msgid "Stopped donations"
-msgstr ""
+msgstr "Avslutade donationer"
 
 msgid "Restart"
 msgstr "Starta om"
 
 msgid "Hide"
-msgstr ""
+msgstr "Dölj"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2604,10 +2609,10 @@ msgstr "Startade {timespan_ago_1}. Stoppades {timespan_ago_2}."
 
 #, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
-msgstr ""
+msgstr "Denna avslutade donation har fortfarande {money_amount} betalade i förskott. Detta förskott kommer användas varje vecka tills det att det når noll."
 
 msgid "Cancelled pledges"
-msgstr ""
+msgstr "Avslutade donationslöften"
 
 #, python-brace-format
 msgid "You are not donating to {username}."
@@ -2642,7 +2647,7 @@ msgid "Currently unavailable"
 msgstr "För närvarande inte tillgänglig"
 
 msgid "Pay by card"
-msgstr ""
+msgstr "Betala med kort"
 
 msgid "Euro donations only"
 msgstr "Endast Euro donationer"
@@ -2650,8 +2655,9 @@ msgstr "Endast Euro donationer"
 msgid "Euro bank accounts only"
 msgstr "Endast Euro bankkonton"
 
+#, fuzzy
 msgid "Pay by direct debit"
-msgstr ""
+msgstr "Betala med direktbetalning"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
@@ -2664,7 +2670,7 @@ msgid "Not anonymous"
 msgstr "Inte anonym"
 
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "Betala med PayPal"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
@@ -2736,7 +2742,7 @@ msgstr "Betalningsprocessorn ({name}) kan inte hantera {currency} direktbetalnin
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
-msgstr ""
+msgstr "Din bank kan avvisa denna betalning. Vi rekommenderar att skicka en kopia av {link_start}mandatet{link_end} till din bank om du är osäker på huruvida de behandlar instruktioner för direktbetalning i {currency} korrekt."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2904,14 +2910,14 @@ msgstr "{username}s profil"
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "Denna profil är tillgänglig i {n} språk"
 
 msgid "Show the list of languages"
-msgstr ""
+msgstr "Visa listan med språk"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr ""
+msgstr "Denna profil är endast tillgänglig på {language}"
 
 msgid "Edit"
 msgstr "Redigera"
@@ -2941,7 +2947,7 @@ msgstr "{username} gick med {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} stängde detta konto {timespan_ago}."
 
 msgid "View income history"
 msgstr "Visa inkomst historik"
@@ -3237,7 +3243,7 @@ msgid "Remove"
 msgstr "Ta bort"
 
 msgid "An error occurred while rendering this notification."
-msgstr ""
+msgstr "Ett fel inträffade vid utvisningen av denna notifiering."
 
 #, fuzzy, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
@@ -3538,10 +3544,10 @@ msgid "Add a payment instrument:"
 msgstr "Lägg till ett betalningsmedel:"
 
 msgid "Add a card"
-msgstr ""
+msgstr "Lägg till ett kort"
 
 msgid "Add a bank account"
-msgstr ""
+msgstr "Lägg till ett bankkonto"
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Du har fortfarande pengar i detta Liberapay konto, var god välj en utbetalningsmetod nedan eller kontakta support."
@@ -4198,19 +4204,20 @@ msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Använd dessa kod-snippets för att lägga till ett emblem på din webbplats eller README:"
 
 msgid "To contact the Liberapay team privately:"
-msgstr ""
+msgstr "För att kontakta Liberapay privat:"
 
 msgid "Send us an email"
 msgstr "Skicka oss ett e-mail"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr ""
+msgstr "Om ditt meddelande inte är skrivet på engelska eller franska så kommer det bli automatiskt maskinöversatt. Vårt svar kommer att översättas på samma sätt."
 
 msgid "We currently don't have a phone number."
 msgstr "Vi har förnuvarande inte något telefonnummer."
 
+#, fuzzy
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr ""
+msgstr "Kontakta inte oss om du försöker nå någon av våra användare. Vi vidarebefordrar inte meddelanden och vi kan inte delge identitet eller kontaktinformation för våra användare såvida du inte har en giltig begäran från en domstol eller ett domstolsbeslut."
 
 msgid "To report a problem or make a suggestion in English:"
 msgstr "För att rapportera ett problem eller skicka in ett förslag på Engelska:"
@@ -4235,23 +4242,23 @@ msgstr "Vem kan använda Liberapay?"
 msgid "Liberapay can be used by anyone who wishes to fund their work by collecting recurrent donations."
 msgstr "Liberapay kan användas av alla som vill finansiera sitt arbete genom att samla in återkommande donationer."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Can creators of {abbr_}NSFW{_abbr} content use Liberapay?"
-msgstr ""
+msgstr "Kan användare av {abbr_}NSFW{_abbr}-innehåll använda Liberapay?"
 
 msgid "Not safe for work"
 msgstr ""
 
 #, python-brace-format
 msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr ""
+msgstr "Ja. Men Liberapay är inte en sköld: vi kan inte skydda någon från att bli bannlyst från {link_open}de underliggande betalningsbehandlarna{link_close}."
 
 msgid "Can I modify or stop my donations?"
-msgstr ""
+msgstr "Kan jag ändra eller stoppa mina donationer?"
 
 #, python-brace-format
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
-msgstr ""
+msgstr "Ja, du kan stoppa dina donationer eller ändra deras belopp, perioder och förnyelse inställningar när som helst genom {link_open}din \"Givar\"-sida{link_close}. Att stoppa en donation innebär inte att det triggas en återbetalning, det stoppar bara framtida förnyelser."
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
 msgstr "Liberapay är utformad för långsiktig stabil finansiering och stöder endast återkommande gåvor."
@@ -4504,10 +4511,10 @@ msgid "The payment processing fees are usually lower with Stripe than with PayPa
 msgstr "Betalningsavgifterna är vanligtvis lägre med Stripe än med PayPal."
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
-msgstr ""
+msgstr "Stripe tillåter att automatisk förnya donationer, medans PayPal för närvarande kräver att donatorer bekräftar varje betalning."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
-msgstr ""
+msgstr "Stripe tillåter i vissa fall donationer till flera skapare på en gång, medans PayPal alltid kräver separata betalningar."
 
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
 msgstr "Betalningar med PayPal kräver vidaresändning av donatorn till PayPals hemsida, medan Stripe är integrerat i Liberapay."
@@ -4528,32 +4535,32 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr "Vi gör vårt bästa för att skydda allas integritet: vi försöker inte spåra personer som besöker vår webbplats, vi strävar efter att samla in bara den personliga information som vi faktiskt behöver, och vi säljer den inte till någon."
 
 msgid "Cookies"
-msgstr ""
+msgstr "Kakor"
 
 msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
-msgstr ""
+msgstr "En kaka är en bit information som skickas av en webbsida till din webbläsare där den lagras på din enhet. Därefter skickas den med av webbläsaren till webbsidan vid varje efterföljande begäran."
 
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
-msgstr ""
+msgstr "Webbsidan liberapay.com sätter endast tekniska kakor som krävs för att autentisera användaren eller för att genomföra specifika funktioner. Dessa kakor är begränsade till \"same-site\" anrop, så vi vet inte vem som besöker webbsidor som innehåller Liberapay widgets."
 
 #, python-brace-format
 msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} if you want to learn more about them."
-msgstr ""
+msgstr "Besökare på liberapay.com kan också ta emot kakor som skickas från Cloudflare. Vänligen läs {link_open}\"Understanding the Cloudfare Cookies\"{link_close} om du vill lära dig mer om dem."
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
-msgstr ""
+msgstr "På vissa betalningssidor så kan extra kakor sättas av betalningsbehandlarna. Vänligen läs dessa dokument för mer information: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s cookie policy"
-msgstr ""
+msgstr "{platform_name}'s policy för kakor"
 
 msgid "Social networks"
-msgstr ""
+msgstr "Sociala nätverk"
 
 #, python-brace-format
 msgid "Liberapay currently has integrations with {list_of_platforms}. When an account from one of those platforms is connected to a Liberapay profile, we retrieve and store some data from that platform, for example the unique identifier of the linked account. We only keep public information about the linked account, no private data."
-msgstr ""
+msgstr "Liberapay har för närvarande integrationer med {list_of_platforms}. När ett konto från någon av dessa plattformar kopplas till en profil på Liberapay så hämtar och lagrar vi viss data från plattformen i fråga, till exempel den unika identifieraren som tillhör det länkade kontot. Vi sparar endast allmän information om det kopplade kontot, ingen privat data."
 
 msgid "The primary purpose of these integrations is to confirm that a Liberapay account hasn't been created by an impostor attempting to profit from someone's else work."
 msgstr ""
