@@ -36,7 +36,7 @@
         }}</button>
         % if tip.renewal_mode > 0
         &nbsp;&nbsp;
-        <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Stop") }}</button>
+        <button class="btn btn-danger btn-sm" name="selected_amount" value="0">{{ _("Discontinue") }}</button>
         % endif
     </form>
     % else
@@ -238,7 +238,7 @@
     % if tip.renewal_mode > 0
     <br>
     <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{
-        _("Cancel the pledge") if pledging else _("Stop the donation")
+        _("Cancel the pledge") if pledging else _("Discontinue the donation")
     }}</button>
     % elif tippee_p.payment_providers
     <p class="text-center">{{ payment_methods_icons(tippee_p) }}</p>

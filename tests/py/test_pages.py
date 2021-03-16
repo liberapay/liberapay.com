@@ -126,7 +126,7 @@ class TestPages(Harness):
         alice.set_tip_to(bob, EUR('0.00'))
         actual = self.client.GET("/alice/giving/", auth_as=alice).text
         assert "bob" in actual
-        assert "Stopped donations (1)" in actual
+        assert "Discontinued donations (1)" in actual
 
     def test_giving_page_allows_hiding_stopped_tip(self):
         alice = self.make_participant('alice')
@@ -144,7 +144,7 @@ class TestPages(Harness):
         r = self.client.GET('/alice/giving/', auth_as=alice)
         assert r.code == 200, r.text
         assert 'href="/bob' not in r.text
-        assert 'Stopped donations' not in r.text
+        assert 'Discontinued donations' not in r.text
 
     def test_new_participant_can_edit_profile(self):
         alice = self.make_participant('alice')

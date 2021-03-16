@@ -251,7 +251,7 @@ next_payday = compute_next_payday_date()
                                     _("Modify")
                                 }}</a>
                                 <button class="btn btn-default btn-xs" name="tippee" value="{{ tip.tippee }}"
-                                        title="{{ _('Stop the donation') }}">
+                                        title="{{ _('Discontinue the donation') }}">
                                     <span class="text-danger">{{ glyphicon('minus-sign') }}</span>
                                 </button>
                             </span>
@@ -425,7 +425,7 @@ next_payday = compute_next_payday_date()
 % endif
 
 % if cancelled_tips
-    <h3>{{ _("Stopped donations") }} ({{ len(cancelled_tips) }})</h3>
+    <h3>{{ _("Discontinued donations") }} ({{ len(cancelled_tips) }})</h3>
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % for tip in cancelled_tips
