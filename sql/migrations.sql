@@ -2837,3 +2837,7 @@ CREATE OR REPLACE FUNCTION compute_arrears(tip tips) RETURNS currency_amount AS 
                   AND tr.status = 'succeeded'
            ), tip.amount::currency);
 $$ LANGUAGE sql;
+
+-- migration #142
+ALTER TABLE payin_transfers DROP CONSTRAINT IF EXISTS payin_transfers_reversed_amount_check;
+ALTER TABLE payin_transfers ADD CONSTRAINT payin_transfers_reversed_amount_check CHECK (NOT (reversed_amount < 0));
