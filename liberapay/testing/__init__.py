@@ -400,14 +400,16 @@ class Harness(unittest.TestCase):
           ORDER BY ctime
         """, (payin.id,))
         fallback_remote_id = 'fake' if payin.status == 'succeeded' else None
+        options_by_tippee = {tippee.id: opt for tippee, pt_amount, opt in transfers}
+        for i, pt in enumerate(payin_transfers):
+            opt = options_by_tippee[pt.team or pt.recipient]
+            payin_transfers[i] = update_payin_transfer(
+                self.db, pt.id, opt.get('remote_id', fallback_remote_id),
+                opt.get('status', status), opt.get('error', error)
+            )
+            if pt.team:
+                Participant.from_id(pt.recipient).update_receiving()
         for tippee, pt_amount, opt in transfers:
-            for i, pt in enumerate(payin_transfers):
-                payin_transfers[i] = update_payin_transfer(
-                    self.db, pt.id, opt.get('remote_id', fallback_remote_id),
-                    opt.get('status', status), opt.get('error', error)
-                )
-                if pt.team:
-                    Participant.from_id(pt.recipient).update_receiving()
             tippee.update_receiving()
         payer.update_giving()
         # Call `update_payin` again to uncover bugs

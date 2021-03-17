@@ -1084,6 +1084,76 @@ class TestPayinsStripe(Harness):
         assert r.code == 200, r.text
         assert "2606" in r.text
 
+    def test_07_partially_undeliverable_payment(self):
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
+        self.add_payment_account(self.creator_1, 'stripe', id=self.acct_switzerland.id)
+        self.add_payment_account(self.creator_2, 'stripe', id='acct_invalid')
+        tip1 = self.donor.set_tip_to(self.creator_1, EUR('12.50'))
+        tip3 = self.donor.set_tip_to(self.creator_2, EUR('12.50'))
+
+        # 1st request: test getting the payment pages
+        expected_uri = '/donor/giving/pay/stripe/?beneficiary=%i,%i&method=card' % (
+            self.creator_1.id, self.creator_2.id
+        )
+        r = self.client.GET('/donor/giving/pay/', auth_as=self.donor)
+        assert r.code == 200, r.text
+        assert str(Markup.escape(expected_uri)) in r.text
+        r = self.client.GET(expected_uri, auth_as=self.donor)
+        assert r.code == 200, r.text
+
+        # 2nd request: prepare the payment
+        form_data = {
+            'amount': '100.00',
+            'currency': 'EUR',
+            'tips': '%i,%i' % (tip1['id'], tip3['id']),
+            'stripe_pm_id': 'pm_card_jp',
+        }
+        r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
+        assert r.code == 200, r.text
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/stripe/%i' % self.offset
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'pre'
+        assert payin.amount == EUR('100.00')
+        payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
+        assert len(payin_transfers) == 2
+        pt1, pt2 = payin_transfers
+        assert pt1.status == 'pre'
+        assert pt1.amount == EUR('50.00')
+        assert pt2.status == 'pre'
+        assert pt2.amount == EUR('50.00')
+
+        # 3rd request: execute the payment
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
+        assert r.code == 200, r.text
+        payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
+        assert len(payin_transfers) == 2
+        pt1, pt2 = payin_transfers
+        assert pt1.status == 'succeeded'
+        assert pt1.amount == EUR('48.43')
+        assert pt1.remote_id
+        assert pt2.status == 'failed'
+        assert pt2.amount == EUR('48.42')
+        assert pt2.error.startswith("No such destination: 'acct_invalid'")
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'succeeded'
+        assert payin.amount_settled == EUR('100.00')
+        assert payin.fee == EUR('3.15')
+        assert payin.refunded_amount == EUR('50.00')
+        creator_2_stripe_account = self.db.one("""
+            SELECT *
+              FROM payment_accounts
+             WHERE participant = %s
+               AND provider = 'stripe'
+        """, (self.creator_2.id,))
+        assert creator_2_stripe_account.is_current is None
+        self.creator_2 = self.creator_2.refetch()
+        assert self.creator_2.payment_providers == 0
+
+        # 4th request: test getting the payment page again
+        r = self.client.GET(expected_uri, auth_as=self.donor)
+        assert r.code == 200, r.text
+
 
 class TestRefundsStripe(EmailHarness):
 
@@ -1465,11 +1535,13 @@ class TestRefundsStripe(EmailHarness):
 
     @patch('stripe.BalanceTransaction.retrieve')
     @patch('stripe.Source.retrieve')
+    @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_split_charge(
-        self, construct_event, tr_retrieve, tr_modify, source_retrieve, bt_retrieve
+        self, construct_event, tr_retrieve, tr_modify, tr_create_reversal,
+        source_retrieve, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -1689,10 +1761,25 @@ class TestRefundsStripe(EmailHarness):
             }'''),
             stripe.api_key
         )
+        tr_create_reversal.return_value = stripe.Reversal.construct_from(
+            json.loads('''{
+              "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "transfer_reversal",
+              "amount": 100,
+              "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXY",
+              "created": 1564297245,
+              "currency": "eur",
+              "destination_payment_refund": null,
+              "metadata": {},
+              "source_refund": null,
+              "transfer": "po_XXXXXXXXXXXXXXXXXXXXXXXX"
+            }'''),
+            stripe.api_key
+        )
         tr_retrieve.return_value = stripe.Transfer.construct_from(
             json.loads('''{
               "amount": 20000,
-              "amount_reversed": 20000,
+              "amount_reversed": 0,
               "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
               "created": 1564038240,
               "currency": "eur",
@@ -1704,26 +1791,12 @@ class TestRefundsStripe(EmailHarness):
               "metadata": {},
               "object": "transfer",
               "reversals": {
-                "data": [
-                  {
-                    "amount": 20000,
-                    "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "created": %(recent_timestamp)i,
-                    "currency": "eur",
-                    "destination_payment_refund": "pyr_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "id": "trr_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "metadata": {},
-                    "object": "transfer_reversal",
-                    "source_refund": "pyr_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "transfer": "tr_XXXXXXXXXXXXXXXXXXXXXXXX"
-                  }
-                ],
+                "data": [],
                 "has_more": false,
                 "object": "list",
-                "total_count": 1,
                 "url": "/v1/transfers/tr_XXXXXXXXXXXXXXXXXXXXXXXX/reversals"
               },
-              "reversed": true,
+              "reversed": false,
               "source_transaction": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
               "source_type": "card",
               "transfer_group": "group_py_XXXXXXXXXXXXXXXXXXXXXXXX"

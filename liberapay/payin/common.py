@@ -650,6 +650,8 @@ def update_payin_transfer(
             params['delta'] -= pt.old_amount
         if pt.reversed_amount:
             params['delta'] += -(pt.reversed_amount - (pt.old_reversed_amount or 0))
+        elif pt.old_reversed_amount:
+            params['delta'] += pt.old_reversed_amount
         if params['delta'] == 0:
             return pt
         updated_tips = cursor.all("""
