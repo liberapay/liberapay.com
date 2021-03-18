@@ -1,0 +1,52 @@
+from hashlib import blake2b
+
+from liberapay.utils import b64encode_s
+
+[---]
+cancel = request.qs.parse_boolean('log-in.cancel', default=False)
+p_id = request.qs.get_int('log-in.id')
+if cancel:
+    website.db.run("""
+        DELETE FROM user_secrets
+         WHERE participant = %s
+           AND id = %s
+           AND secret = %s
+    """, (p_id, request.qs.get_int('log-in.key'), request.qs['log-in.token']))
+else:
+    confirmation_token = b64encode_s(blake2b(
+        request.qs['log-in.token'].encode('ascii'),
+        key=csrf_token.token.encode('ascii'),
+        digest_size=48,
+    ).digest())
+    logging_in_as = website.db.Participant.from_id(p_id).get_email_address()
+response.code = 200
+
+[---] text/html
+% extends "templates/layouts/base-thin.html"
+
+% block thin_content
+    % if cancel
+        <p class="alert alert-info">{{ _(
+            "The log-in has been cancelled. You can close this page."
+        ) }}</p>
+    % else
+        <p class="alert alert-info">{{ _(
+            "You are about to log in as {identifier}. Please click a button below "
+            "to confirm or cancel.",
+            identifier='<code>%s</code>'|safe % logging_in_as
+        ) }}</p>
+        <p class="flex-row space-between wrap">
+            <span class="flex-col">
+                <a class="btn btn-success" href="{{ request.qs.derive(**{'log-in.confirmation': confirmation_token}) }}">{{ _(
+                    "Log in as {identifier}",
+                    identifier=logging_in_as
+                ) }}</a>
+            </span>
+            <span class="flex-col text-right">
+                <a class="btn btn-warning" href="{{ request.qs.derive(**{'log-in.cancel': 'yes'}) }}">{{
+                    _("Cancel")
+                }}</a>
+            </span>
+        </p>
+    % endif
+% endblock

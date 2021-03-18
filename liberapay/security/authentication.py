@@ -1,6 +1,7 @@
 """Defines website authentication helpers.
 """
 
+from hashlib import blake2b
 from time import sleep
 
 from pando import Response
@@ -223,7 +224,7 @@ def start_user_as_anon():
     return {'user': ANON}
 
 
-def authenticate_user_if_possible(request, response, state, user, _):
+def authenticate_user_if_possible(csrf_token, request, response, state, user, _):
     """This signs the user in.
     """
     if request.line.uri.startswith(b'/assets/'):
@@ -284,9 +285,30 @@ def authenticate_user_if_possible(request, response, state, user, _):
             session_id = request.qs.get('log-in.key')
             token = request.qs.get('log-in.token')
             if not (token and token.endswith('.em')):
-                raise response.render('simplates/bad-login-link.spt', state)
+                raise response.render('simplates/log-in-link-is-invalid.spt', state)
             p = Participant.authenticate(id, session_id, token)
             if p:
+                if p.id != user.id:
+                    submitted_confirmation_token = request.qs.get('log-in.confirmation')
+                    if submitted_confirmation_token:
+                        expected_confirmation_token = b64encode_s(blake2b(
+                            token.encode('ascii'),
+                            key=csrf_token.token.encode('ascii'),
+                            digest_size=48,
+                        ).digest())
+                        confirmation_tokens_match = constant_time_compare(
+                            expected_confirmation_token,
+                            submitted_confirmation_token
+                        )
+                        if not confirmation_tokens_match:
+                            raise response.invalid_input(
+                                submitted_confirmation_token,
+                                'log-in.confirmation',
+                                'querystring'
+                            )
+                        del request.qs['log-in.confirmation']
+                    else:
+                        raise response.render('simplates/log-in-link-is-valid.spt', state)
                 redirect = True
                 db.run("""
                     DELETE FROM user_secrets
@@ -297,7 +319,7 @@ def authenticate_user_if_possible(request, response, state, user, _):
                 p.session = None
                 session_suffix = '.em'
             else:
-                raise response.render('simplates/bad-login-link.spt', state)
+                raise response.render('simplates/log-in-link-is-invalid.spt', state)
             del request.qs['log-in.id'], request.qs['log-in.key'], request.qs['log-in.token']
 
         # Handle email verification
