@@ -1,7 +1,7 @@
 # Términos del servicio Liberapay.
 
 Este contrato es entre Liberapay, una organización sin fines de lucro fundada en 2015
-basado en la legislación francesa, en lo sucesivo denominado "la organización", y la
+sujeta a la ley francesa, en lo sucesivo denominado "la organización", y la
 persona que se inscribe en su servicio homónimo en lo sucesivo conocido como "el
 usuario".
 
@@ -21,13 +21,12 @@ recompensa.
 ## 2. Precios
 
 El servicio es gratuito. Se invita al usuario a participar en su financiación, a través de
-el servicio en sí, donando a las personas físicas y jurídicas que mantienen
-eso.
+el servicio en sí, donando a las personas físicas y jurídicas que lo mantienen.
 
 ## 3. Gestión de los fondos
 
-La organización garantiza que los fondos que el usuario ha puesto bajo su custodia,
-no se perdera en caso de quiebra de sí mismo o de un tercero a quien tiene
+La organización garantiza que los fondos que el usuario ha puesto bajo su custodia
+no se perderan en caso de quiebra de sí mismo o de un tercero a quien
 delegó la custodia de los fondos.
 
 La organización se compromete a corregir cualquier error por su parte en la ejecución de
