@@ -1,0 +1,11 @@
+[---]
+[---] text/html
+% extends "templates/layouts/base.html"
+
+% block content
+<p class="text-center font-lg">
+<br>
+{{ _("This profile is marked as spam.") }}
+<br>
+</p>
+% endblock

@@ -21,35 +21,28 @@ if request.method == 'POST':
     event_data = {}
     p = Participant.from_id(request.body.get_int('p_id'))
     updated = 0
-    for attr in constants.PROFILE_VISIBILITY_ATTRS:
-        value = request.body.get(attr)
-        if value is None:
-            continue
-        r = p.update_bit(attr, 2, value == 'on')
-        if r:
-            updated += 1
-            event_data[attr] = value == 'on'
-    if event_data:
-        p.add_event(website.db, 'visibility_override', event_data, user.id)
+    with website.db.get_cursor() as cursor:
+        for attr in ('is_controversial', 'is_spam', 'is_suspended'):
+            if attr not in request.body:
+                continue
+            new_value = request.body.parse_ternary(attr)
+            r = cursor.one("""
+                UPDATE participants
+                   SET {0} = %(new_value)s
+                 WHERE id = %(p_id)s
+                   AND {0} IS NOT %(new_value)s
+             RETURNING id
+            """.format(attr), dict(p_id=p.id, new_value=new_value))
+            if r:
+                updated += 1
+                event_data[attr] = new_value
 
-    if 'is_suspended' in request.body:
-        new_value = request.body['is_suspended']
-        if new_value == 'null':
-            new_value = None
-        else:
-            new_value = new_value == 'on'
-        r = website.db.one("""
-            UPDATE participants
-               SET is_suspended = %(new_value)s
-             WHERE id = %(p_id)s
-               AND is_suspended IS NOT %(new_value)s
-         RETURNING id
-        """, dict(p_id=p.id, new_value=new_value))
-        if r:
-            updated += 1
-            p.add_event(website.db, 'is_suspended', new_value, user.id)
+        if event_data:
+            if request.body.get('reason'):
+                event_data['reason'] = request.body['reason']
+            p.add_event(cursor, 'flags_changed', event_data, user.id)
 
-    raise response.json({'msg': "Done, %i bits have been updated." % updated})
+    raise response.json({'msg': "Done, %i attributes have been updated." % updated})
 
 last_showed = request.qs.get('last_showed')
 mode = request.qs.get('mode', 'all')
@@ -357,14 +350,48 @@ title = "Users Admin"
         <form action="javascript:" method="POST" class="js-submit">
             <input type="hidden" name="p_id" value="{{ p.id }}">
             <div class="form-group">
-                Does this account look fraudulent?<br>
+                Is this profile controversial?<br>
                 <label>
-                    <input type="radio" name="is_suspended" value="on" {{
-                           'checked' if p.is_suspended == True else '' }} />
-                    Yes, block payments!
+                    <input type="radio" name="is_controversial" value="yes" {{
+                           'checked' if p.is_controversial == True else '' }} />
+                    Yes, isolate it
                 </label> &nbsp;&nbsp;
                 <label>
-                    <input type="radio" name="is_suspended" value="off" {{
+                    <input type="radio" name="is_controversial" value="no" {{
+                           'checked' if p.is_controversial == False else '' }} />
+                    No
+                </label> &nbsp;&nbsp;
+                <label>
+                    <input type="radio" name="is_controversial" value="null" />
+                    Unsure
+                </label>
+            </div>
+            <div class="form-group">
+                Is this profile spam?<br>
+                <label>
+                    <input type="radio" name="is_spam" value="yes" {{
+                           'checked' if p.is_spam == True else '' }} />
+                    Yes, hide it completely
+                </label> &nbsp;&nbsp;
+                <label>
+                    <input type="radio" name="is_spam" value="no" {{
+                           'checked' if p.is_spam == False else '' }} />
+                    No
+                </label> &nbsp;&nbsp;
+                <label>
+                    <input type="radio" name="is_spam" value="null" />
+                    Unsure
+                </label>
+            </div>
+            <div class="form-group">
+                Is this account fraudulent?<br>
+                <label>
+                    <input type="radio" name="is_suspended" value="yes" {{
+                           'checked' if p.is_suspended == True else '' }} />
+                    Yes, disable payments
+                </label> &nbsp;&nbsp;
+                <label>
+                    <input type="radio" name="is_suspended" value="no" {{
                            'checked' if p.is_suspended == False else '' }} />
                     No
                 </label> &nbsp;&nbsp;
@@ -372,16 +399,6 @@ title = "Users Admin"
                     <input type="radio" name="is_suspended" value="null" />
                     Unsure
                 </label>
-            </div>
-            <div class="form-group">
-            % for attr in constants.PROFILE_VISIBILITY_ATTRS
-                % set value = getattr(p, attr)
-                <label>
-                    <input type="checkbox" name="{{ attr }}" {{ 'checked' if value.__and__(2) }} />
-                    {{ attr }} (user value: {{ bool(value.__and__(1)) }})
-                </label>
-                <br>
-            % endfor
             </div>
             <button class="btn btn-warning">{{ _("Save") }}</button>
         </form>

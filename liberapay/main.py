@@ -270,6 +270,10 @@ if hasattr(aspen.http.mapping.Mapping, 'parse_boolean'):
     raise Warning('aspen.http.mapping.Mapping.parse_boolean() already exists')
 aspen.http.mapping.Mapping.parse_boolean = utils.parse_boolean
 
+if hasattr(aspen.http.mapping.Mapping, 'parse_ternary'):
+    raise Warning('aspen.http.mapping.Mapping.parse_ternary() already exists')
+aspen.http.mapping.Mapping.parse_ternary = utils.parse_ternary
+
 if hasattr(aspen.http.mapping.Mapping, 'parse_date'):
     raise Warning('aspen.http.mapping.Mapping.parse_date() already exists')
 aspen.http.mapping.Mapping.parse_date = utils.parse_date

@@ -79,6 +79,16 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
             canon = '/' + participant.username + request.line.uri.decoded[len(slug)+1:]
             raise response.redirect(canon)
 
+    if (restrict or participant.is_spam) and participant != user:
+        if allow_member and participant.kind == 'group' and user.member_of(participant):
+            pass
+        elif user.is_admin:
+            log_admin_request(user, participant, request)
+        elif restrict:
+            raise response.error(403, _("You are not authorized to access this page."))
+        elif participant.is_spam:
+            raise response.render('simplates/spam-profile.spt', state)
+
     status = participant.status
     if status == 'closed':
         if not user.is_admin:
@@ -90,15 +100,6 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
                 # Account has been taken over
                 raise response.error(404)
             raise response.redirect(to)
-
-    if restrict:
-        if participant != user:
-            if allow_member and participant.kind == 'group' and user.member_of(participant):
-                pass
-            elif user.is_admin:
-                log_admin_request(user, participant, request)
-            else:
-                raise response.error(403, _("You are not authorized to access this page."))
 
     if block_suspended_user and participant.is_suspended and participant == user:
         raise AccountSuspended()
@@ -491,6 +492,7 @@ def word(mapping, k, pattern=r'^\w+$', unicode=False):
 
 FALSEISH = {'0', 'f', 'false', 'n', 'no'}
 TRUEISH = {'1', 't', 'true', 'y', 'yes'}
+NULLISH = {'', 'null', 'none'}
 
 
 def parse_boolean(mapping, k, default=NO_DEFAULT):
@@ -504,6 +506,22 @@ def parse_boolean(mapping, k, default=NO_DEFAULT):
         return True
     if r in FALSEISH:
         return False
+    raise Response().error(400, "`%s` value %r is invalid" % (k, r))
+
+
+def parse_ternary(mapping, k, default=NO_DEFAULT):
+    try:
+        r = mapping[k].lower()
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    if r in TRUEISH:
+        return True
+    if r in FALSEISH:
+        return False
+    if r in NULLISH:
+        return None
     raise Response().error(400, "`%s` value %r is invalid" % (k, r))
 
 
