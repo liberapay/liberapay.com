@@ -34,7 +34,9 @@ from liberapay.i18n.base import (
 from liberapay.i18n.currencies import Money, MoneyBasket, fetch_currency_exchange_rates
 from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
-from liberapay.models.participant import Participant, clean_up_closed_accounts
+from liberapay.models.participant import (
+    Participant, clean_up_closed_accounts, send_account_disabled_notifications,
+)
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
 from liberapay.payin.cron import (
@@ -143,6 +145,7 @@ if conf:
     cron(intervals.get('check_db', 600), website.db.self_check, True)
     cron(intervals.get('dequeue_emails', 60), Participant.dequeue_emails, True)
     cron(intervals.get('send_newsletters', 60), Participant.send_newsletters, True)
+    cron(intervals.get('send_account_disabled_notifications', 600), send_account_disabled_notifications, True)
     cron(intervals.get('refetch_elsewhere_data', 120), refetch_elsewhere_data, True)
     cron(intervals.get('refetch_repos', 60), refetch_repos, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)

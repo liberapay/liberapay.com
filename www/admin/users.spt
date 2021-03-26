@@ -42,7 +42,10 @@ if request.method == 'POST':
                 event_data['reason'] = request.body['reason']
             p.add_event(cursor, 'flags_changed', event_data, user.id)
 
-    raise response.json({'msg': "Done, %i attributes have been updated." % updated})
+    raise response.json({'msg': (
+        f"Done, {updated} attribute has been updated." if updated == 1 else
+        f"Done, {updated} attributes have been updated."
+    )})
 
 last_showed = request.qs.get('last_showed')
 mode = request.qs.get('mode', 'all')
