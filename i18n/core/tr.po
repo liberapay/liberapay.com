@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Turkish "
-"<https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"PO-Revision-Date: 2021-03-30 11:26+0000\n"
+"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/liberapay/core/tr/>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.6-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -222,7 +224,7 @@ msgid "Reason: “{0}”"
 msgstr "Sebep: “{0}”"
 
 msgid "Log in to Liberapay"
-msgstr "Liberapay'e giriş yap"
+msgstr "Liberapay'de oturum aç"
 
 #, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
@@ -975,7 +977,7 @@ msgid "This account is closed"
 msgstr "Bu hesap kapalı"
 
 msgid "You need to log in"
-msgstr "Giriş yapmalısınız"
+msgstr "Oturum açmanız gerekiyor"
 
 msgid "We're unable to process your request right now, sorry."
 msgstr "Üzgünüz, isteğinizi şu anda işleme koyamıyoruz."
@@ -1091,10 +1093,10 @@ msgid "There have been too many attempts to log in from your IP address or count
 msgstr "Son zamanlarda IP adresinizden veya ülkenizden çok fazla oturum açma girişimi oldu. Lütfen bir saat sonra tekrar deneyin ve sorun devam ederse support@liberapay.com adresine e-posta gönderin."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
-msgstr "E-posta giriş kotanızı tükettiniz, lütfen yarın tekrar deneyin veya support@liberapay.com ile iletişim kurun."
+msgstr "E-posta yoluyla oturum açma kotanızı tükettiniz, lütfen yarın tekrar deneyin veya support@liberapay.com ile iletişime geçin."
 
 msgid "There have been too many attempts to log in to this account recently, please try again in a few hours or log in via email."
-msgstr "Son zamanlarda bu hesaba giriş yapmak için çok fazla girişim olmuştur, lütfen birkaç saat içinde yeniden deneyin veya e-posta yoluyla giriş yapın."
+msgstr "Son zamanlarda bu hesap ile oturum açmak için çok fazla girişim oldu, lütfen birkaç saat içinde yeniden deneyin veya e-posta yoluyla oturum açın."
 
 msgid "Too many accounts have been created recently. This either means that a lot of people are trying to join Liberapay today, or that an attacker is trying to overload our system. As a result we have to ask you to come back later (e.g. in a few hours), or send an email to support@liberapay.com. We apologize for the inconvenience."
 msgstr "Son zamanlarda çok fazla hesap oluşturuldu. Bu ya bugün birçok insanın Liberapay'e katılmaya çalıştığı ya da bir saldırganın sistemimizi aşırı yüklemeye çalıştığı anlamına geliyor. Sonuç olarak, daha sonra (örn. birkaç saat içinde) geri gelmenizi veya support@liberapay.com adresine bir e-posta göndermenizi istemek zorundayız. Verdiğimiz rahatsızlıktan dolayı özür dileriz."
@@ -1325,20 +1327,20 @@ msgid "Bad Request"
 msgstr "Geçersiz İstek"
 
 msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
-msgstr "Bu giriş bağlantısının süresi doldu veya geçersiz. Ancak zaten giriş yaptınız, bu yüzden önemli değil."
+msgstr "Bu oturum açma bağlantısının süresi doldu veya geçersiz. Ancak zaten oturum açtınız, bu yüzden önemli değil."
 
 msgid "Carry on"
 msgstr "Sürdürme"
 
 msgid "This login link is expired or invalid."
-msgstr "Bu giriş bağlantısının süresi dolmuş veya geçersiz."
+msgstr "Bu oturum açma bağlantısının süresi doldu veya geçersiz."
 
 #, python-brace-format
 msgid "A login link is only valid for {x_hours} and can only be used once."
-msgstr "Giriş bağlantısı yalnızca {x_hours} için geçerlidir ve yalnızca bir kez kullanılabilir."
+msgstr "Oturum açma bağlantısı yalnızca {x_hours} için geçerlidir ve yalnızca bir kez kullanılabilir."
 
 msgid "To request a new login link, input your email address:"
-msgstr "Yeni bir giriş bağlantısı istemek için e-posta adresinizi girin:"
+msgstr "Yeni bir oturum açma bağlantısı istemek için e-posta adresinizi girin:"
 
 msgid "Email address"
 msgstr "E-posta adresi"
@@ -1347,15 +1349,15 @@ msgid "Go"
 msgstr "Git"
 
 msgid "The log-in has been cancelled. You can close this page."
-msgstr ""
+msgstr "Oturum açma iptal edildi. Bu sayfayı kapatabilirsiniz."
 
 #, python-brace-format
 msgid "You are about to log in as {identifier}. Please click a button below to confirm or cancel."
-msgstr ""
+msgstr "{identifier} olarak oturum açmak üzeresiniz. Onaylamak veya iptal etmek için lütfen aşağıdaki düğmeye tıklayın."
 
 #, python-brace-format
 msgid "Log in as {identifier}"
-msgstr ""
+msgstr "{identifier} olarak oturum aç"
 
 msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
 msgstr "Görünüşe göre eski bir tarayıcı kullanıyorsunuz, bu nedenle bu web sitesi düzgün çalışmayabilir. Yaygın bir tarayıcının yeni bir sürümünü kullanmanızı tavsiye ederiz."
@@ -1414,7 +1416,7 @@ msgid "Are you the account owner?"
 msgstr "Hesap sahibi siz misiniz?"
 
 msgid "Log in to reopen your account."
-msgstr "Hesabınızı yeniden açmak için giriş yapın."
+msgstr "Hesabınızı yeniden açmak için oturum açın."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
 msgstr "E-posta adresinizi yanlış mı yazdınız? Düzeltin ve tekrar deneyin veya farklı bir adres deneyin."
@@ -1442,7 +1444,7 @@ msgid "Please try again in a few minutes."
 msgstr "Lütfen birkaç dakika içinde yeniden deneyin."
 
 msgid "Log in via email"
-msgstr "E-posta yoluyla giriş"
+msgstr "E-posta yoluyla oturum aç"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Şu anda teknik sorunlar yaşıyoruz. Sonuç olarak çoğu şey çalışmıyor. Verdiğimiz rahatsızlıktan dolayı özür dileriz, her şeyi en kısa sürede normale döndüreceğiz."
@@ -1577,18 +1579,18 @@ msgid "The changes have been saved."
 msgstr "Değişiklikler kaydedildi."
 
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
-msgstr "Size tek kullanımlık giriş bağlantısı gönderdik. Gelen kutunuzu kontrol edin, yeni bir sekmede sağlanan bağlantıyı açın, ardından bu sayfaya geri gelin ve yapmak istediğiniz şeyi devam ettirmek için aşağıdaki düğmeye tıklayın."
+msgstr "Size tek kullanımlık oturum açma bağlantısı gönderdik. Gelen kutunuza bakın, yeni bir sekmede sağlanan bağlantıyı açın, ardından bu sayfaya geri gelin ve yapmak istediğiniz şeyi devam ettirmek için aşağıdaki düğmeye tıklayın."
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
-msgstr "Hala {0} olarak giriş yapmadınız."
+msgstr "Hala {0} olarak oturum açmadınız."
 
 msgid "Password (optional)"
 msgstr "Parola (isteğe bağlı)"
 
 #, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "{bold}Parolanızı kaybettiyseniz{bold_end} veya hesabınızda hiç parola yoksa, parola alanını boş bırakın. Size e-posta yoluyla bir giriş bağlantısı göndereceğiz."
+msgstr "{bold}Parolanızı kaybettiyseniz{bold_end} veya hesabınızın hiç parolası yoksa, parola alanını boş bırakın. Size e-posta yoluyla bir oturum açma bağlantısı göndereceğiz."
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -3306,7 +3308,7 @@ msgid "Added on {date}"
 msgstr "{date} tarihinde eklendi"
 
 msgid "This account cannot receive payments. To fix this, log in to the account and complete the verification process. After that, reconnect the account if you still see this message."
-msgstr "Bu hesap ödeme alamıyor. Bunu düzeltmek için hesaba giriş yapın ve doğrulama sürecini tamamlayın. Bundan sonra hala bu mesajı görüyorsanız hesabı yeniden bağlayın."
+msgstr "Bu hesap ödeme alamıyor. Bunu düzeltmek için hesap ile oturum açın ve doğrulama sürecini tamamlayın. Bundan sonra hala bu mesajı görüyorsanız hesabı yeniden bağlayın."
 
 #, python-brace-format
 msgid "Manage this {platform} account"
@@ -5634,7 +5636,7 @@ msgid "Sign In"
 msgstr "Oturum Aç"
 
 msgid "If you already have an account, log in:"
-msgstr "Zaten bir hesabınız varsa giriş yapın:"
+msgstr "Zaten bir hesabınız varsa oturum açın:"
 
 msgid "Otherwise, sign up:"
 msgstr "Hesabınız yoksa kayıt olun:"
@@ -5647,4 +5649,4 @@ msgstr "Kayıt Ol"
 
 #, python-brace-format
 msgid "You are already logged in as {0}."
-msgstr "Halihazırda {0} olarak giriş yaptınız."
+msgstr "Zaten {0} olarak oturum açtınız."
