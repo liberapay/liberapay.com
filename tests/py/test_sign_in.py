@@ -1,4 +1,5 @@
 from email.utils import parsedate
+from hashlib import blake2b
 from http.cookies import SimpleCookie
 from time import gmtime
 
@@ -11,6 +12,7 @@ from liberapay.models.participant import Participant
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import postgres_readonly
 from liberapay.testing.emails import EmailHarness
+from liberapay.utils import b64encode_s
 
 
 password = 'password'
@@ -179,8 +181,20 @@ class TestLogIn(EmailHarness):
         assert "Please make sure your browser is configured to allow cookies" in r.text
 
         # Log in
-        r = self.client.GxT('/alice/' + refresh_qs)
+        csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
+        confirmation_token = b64encode_s(blake2b(
+            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+        ).digest())
+        r = self.client.GxT('/alice/' + refresh_qs, csrf_token=csrf_token)
+        assert r.code == 200
+        assert SESSION not in r.headers.cookie
+        assert confirmation_token in r.text
+        r = self.client.GxT(
+            '/alice/' + refresh_qs + '&log-in.confirmation=' + confirmation_token,
+            csrf_token=csrf_token,
+        )
         assert r.code == 302
+        assert SESSION in r.headers.cookie
         assert r.headers[b'Location'].startswith(
             b'http://localhost/alice/?foo=bar&success='
         )
@@ -246,9 +260,32 @@ class TestLogIn(EmailHarness):
         )
         assert qs in last_email['text']
 
-        # Log in
-        r = self.client.GxT('/alice/?' + qs)
+        # Try to log in without a confirmation code
+        csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
+        confirmation_token = b64encode_s(blake2b(
+            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+        ).digest())
+        r = self.client.GxT('/alice/?' + qs, csrf_token=csrf_token)
+        assert r.code == 200
+        assert SESSION not in r.headers.cookie
+        assert confirmation_token in r.text
+
+        # Try to log in with an incorrect confirmation code
+        r = self.client.GxT(
+            '/alice/?' + qs + '&log-in.confirmation=' + ('~' * 64),
+            csrf_token=csrf_token,
+        )
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        assert confirmation_token not in r.text
+
+        # Log in with the correct confirmation code
+        r = self.client.GxT(
+            '/alice/?' + qs + '&log-in.confirmation=' + confirmation_token,
+            csrf_token=csrf_token,
+        )
         assert r.code == 302
+        assert SESSION in r.headers.cookie
         assert r.headers[b'Location'].startswith(b'http://localhost/alice/')
 
         # Check that the email address is now verified
@@ -256,6 +293,39 @@ class TestLogIn(EmailHarness):
         assert email_row.verified
         alice = alice.refetch()
         assert alice.email == email
+
+    def test_email_login_cancellation(self):
+        email = 'alice@example.net'
+        alice = self.make_participant('alice', email=email)
+
+        # Initiate the log-in
+        data = {'log-in.id': email.title()}
+        r = self.client.POST('/', data, raise_immediately=False)
+        session = self.db.one("SELECT * FROM user_secrets WHERE participant = %s", (alice.id,))
+        assert session.secret not in r.headers.raw.decode('ascii')
+        assert session.secret not in r.body.decode('utf8')
+
+        # Open the log-in URL
+        qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
+            alice.id, session.id, session.secret
+        )
+        r = self.client.GxT('/alice/' + qs)
+        assert r.code == 200
+        assert SESSION not in r.headers.cookie
+        assert 'log-in.cancel=yes' in r.text
+
+        # Cancel the log-in
+        r = self.client.GxT('/alice/' + qs + '&log-in.cancel=yes')
+        assert r.code == 200
+        assert SESSION not in r.headers.cookie
+        old_secret = self.db.one("""
+            SELECT secret
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = %s
+               AND secret = %s
+        """, (alice.id, session.id, session.secret))
+        assert old_secret is None
 
     def test_email_login_bad_email(self):
         data = {'log-in.id': 'unknown@example.org'}
