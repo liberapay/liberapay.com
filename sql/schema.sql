@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '142'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '143'::jsonb);
 
 
 -- app configuration
@@ -79,6 +79,9 @@ CREATE TABLE participants
 
 , payment_providers     integer                 NOT NULL DEFAULT 0
 
+, is_controversial      boolean
+, is_spam               boolean
+
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
 , CONSTRAINT goal_chk CHECK (NOT (kind IN ('group', 'community') AND status='active' AND goal IS NOT NULL AND goal <= 0))
@@ -126,6 +129,29 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER initialize_amounts
     BEFORE INSERT OR UPDATE ON participants
     FOR EACH ROW EXECUTE PROCEDURE initialize_amounts();
+
+CREATE FUNCTION update_profile_visibility() RETURNS trigger AS $$
+    BEGIN
+        IF (NEW.is_controversial OR NEW.is_spam OR NEW.is_suspended) THEN
+            NEW.profile_noindex = NEW.profile_noindex | 2;
+            NEW.hide_from_lists = NEW.hide_from_lists | 2;
+            NEW.hide_from_search = NEW.hide_from_search | 2;
+        ELSIF (NEW.is_controversial IS false) THEN
+            NEW.profile_noindex = NEW.profile_noindex & 2147483645;
+            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
+            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+        ELSE
+            NEW.profile_noindex = NEW.profile_noindex | 2;
+            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
+            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_profile_visibility
+    BEFORE INSERT OR UPDATE ON participants
+    FOR EACH ROW EXECUTE PROCEDURE update_profile_visibility();
 
 
 -- elsewhere -- social network accounts attached to participants
