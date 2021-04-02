@@ -53,7 +53,7 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
 
-donation_groups, n_fundable = payer.get_tips_awaiting_renewal()
+donation_groups, n_fundable = payer.get_tips_awaiting_payment()
 n_payments = len(donation_groups['fundable'])
 
 payment = None

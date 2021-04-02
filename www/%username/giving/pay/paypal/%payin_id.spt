@@ -157,7 +157,7 @@ title = _("Funding your donations")
 
     % if status != 'failed'
     <hr>
-    % set n_fundable = payer.get_tips_awaiting_renewal()[1]
+    % set n_fundable = payer.get_tips_awaiting_payment()[1]
     % if n_fundable
         <p>{{ ngettext(
             "You have {n} other donation awaiting payment.",

@@ -337,9 +337,9 @@ class Tests(Harness):
         with pytest.raises(NoTippee):
             alice.set_tip_to('bob', EUR('1.00'))
 
-    # get_tips_awaiting_renewal
+    # get_tips_awaiting_payment
 
-    def test_get_tips_awaiting_renewal(self):
+    def test_get_tips_awaiting_payment(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
@@ -347,7 +347,7 @@ class Tests(Harness):
         team.add_member(carl)
 
         # 1st check: alice hasn't set up any donations yet
-        groups, n_fundable = alice.get_tips_awaiting_renewal()
+        groups, n_fundable = alice.get_tips_awaiting_payment()
         assert isinstance(groups, dict)
         assert n_fundable == 0
         for v in groups.values():
@@ -358,7 +358,7 @@ class Tests(Harness):
         alice.set_tip_to(team, EUR('1.02'))
 
         # 2nd check: no payment accounts to send the donations to
-        groups, n_fundable = alice.get_tips_awaiting_renewal()
+        groups, n_fundable = alice.get_tips_awaiting_payment()
         assert n_fundable == 0
         assert not groups['fundable']
         assert len(groups['no_provider']) == 3
@@ -367,7 +367,7 @@ class Tests(Harness):
         self.add_payment_account(carl, 'paypal', country='FR')
 
         # 3rd check: two fundable donations are grouped, the other one isn't fundable
-        groups, n_fundable = alice.get_tips_awaiting_renewal()
+        groups, n_fundable = alice.get_tips_awaiting_payment()
         assert n_fundable == 2
         assert len(groups['fundable']) == 1
         assert len(groups['fundable'][0]) == 2
@@ -376,7 +376,7 @@ class Tests(Harness):
         self.add_payment_account(bob, 'stripe', country='DE')
 
         # 4th check: all three donations are fundable and grouped into a single payment
-        groups, n_fundable = alice.get_tips_awaiting_renewal()
+        groups, n_fundable = alice.get_tips_awaiting_payment()
         assert n_fundable == 3
         assert len(groups['fundable']) == 1
         assert len(groups['fundable'][0]) == 3
@@ -387,7 +387,7 @@ class Tests(Harness):
         alice.set_tip_to(dana, EUR('1.03'))
 
         # 5th check: a fourth donation has been added, it can't be grouped with the others
-        groups, n_fundable = alice.get_tips_awaiting_renewal()
+        groups, n_fundable = alice.get_tips_awaiting_payment()
         assert n_fundable == 4
         assert len(groups['fundable']) == 2
         assert len(groups['fundable'][0]) == 3
