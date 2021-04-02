@@ -1,17 +1,20 @@
 from datetime import datetime, timedelta
+import json
 from unittest.mock import patch
 
 from psycopg2.extras import execute_values
 
 from liberapay.cron import Daily, Weekly
 from liberapay.i18n.currencies import fetch_currency_exchange_rates
-from liberapay.testing import fake_sleep, Harness
+from liberapay.models.participant import send_account_disabled_notifications
+from liberapay.testing import fake_sleep
+from liberapay.testing.emails import EmailHarness
 
 
 utcnow = datetime.utcnow
 
 
-class TestCronJobs(Harness):
+class TestCronJobs(EmailHarness):
 
     @fake_sleep(target='liberapay.cron.sleep', raise_after=0)
     @patch('liberapay.cron.datetime', autospec=True)
@@ -108,3 +111,51 @@ class TestCronJobs(Harness):
                             (source_currency, target_currency, rate)
                      VALUES %s
             """, fake_rates)
+
+    def test_send_account_disabled_notifications(self):
+        admin = self.make_participant('admin', privileges=1)
+        fraudster = self.make_participant('fraudster', email='fraudster@example.com')
+        spammer = self.make_participant('spammer', email='spammer@example.com')
+        spammer.upsert_statement('en', "spammy summary", 'summary')
+        spammer.upsert_statement('en', "spammy profile", 'profile')
+        # First check, there aren't any notifications to send
+        send_account_disabled_notifications()
+        emails = self.get_emails()
+        assert not emails
+        # Flag the accounts
+        r = self.client.PxST(
+            '/admin/users', data={'p_id': str(fraudster.id), 'is_suspended': 'yes'},
+            auth_as=admin,
+        )
+        assert r.code == 200
+        assert json.loads(r.text) == {"msg": "Done, 1 attribute has been updated."}
+        r = self.client.PxST(
+            '/admin/users', data={'p_id': str(spammer.id), 'is_spam': 'yes'},
+            auth_as=admin,
+        )
+        assert r.code == 200
+        assert json.loads(r.text) == {"msg": "Done, 1 attribute has been updated."}
+        # Check that the notifications aren't sent yet
+        send_account_disabled_notifications()
+        emails = self.get_emails()
+        assert not emails
+        # Check that the spam profile is hidden
+        r = self.client.GET('/spammer/', raise_immediately=False)
+        assert r.code == 200
+        assert 'spammy' not in r.text, r.text
+        # Make it look like the accounts were flagged 24 hours ago
+        self.db.run("UPDATE events SET ts = ts - interval '24 hours'")
+        # Check that the notifications are sent
+        send_account_disabled_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 2
+        assert emails[0]['to'] == ['fraudster <fraudster@example.com>']
+        assert emails[0]['subject'] == "Your Liberapay account has been disabled"
+        assert 'fraud' in emails[0]['text']
+        assert emails[1]['to'] == ['spammer <spammer@example.com>']
+        assert emails[1]['subject'] == "Your Liberapay account has been disabled"
+        assert 'spam' in emails[1]['text']
+        # Check that the notifications aren't sent again
+        send_account_disabled_notifications()
+        emails = self.get_emails()
+        assert not emails

@@ -34,7 +34,9 @@ from liberapay.i18n.base import (
 from liberapay.i18n.currencies import Money, MoneyBasket, fetch_currency_exchange_rates
 from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
-from liberapay.models.participant import Participant, clean_up_closed_accounts
+from liberapay.models.participant import (
+    Participant, clean_up_closed_accounts, send_account_disabled_notifications,
+)
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
 from liberapay.payin.cron import (
@@ -143,6 +145,7 @@ if conf:
     cron(intervals.get('check_db', 600), website.db.self_check, True)
     cron(intervals.get('dequeue_emails', 60), Participant.dequeue_emails, True)
     cron(intervals.get('send_newsletters', 60), Participant.send_newsletters, True)
+    cron(intervals.get('send_account_disabled_notifications', 600), send_account_disabled_notifications, True)
     cron(intervals.get('refetch_elsewhere_data', 120), refetch_elsewhere_data, True)
     cron(intervals.get('refetch_repos', 60), refetch_repos, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
@@ -269,6 +272,10 @@ aspen.http.mapping.Mapping.word = utils.word
 if hasattr(aspen.http.mapping.Mapping, 'parse_boolean'):
     raise Warning('aspen.http.mapping.Mapping.parse_boolean() already exists')
 aspen.http.mapping.Mapping.parse_boolean = utils.parse_boolean
+
+if hasattr(aspen.http.mapping.Mapping, 'parse_ternary'):
+    raise Warning('aspen.http.mapping.Mapping.parse_ternary() already exists')
+aspen.http.mapping.Mapping.parse_ternary = utils.parse_ternary
 
 if hasattr(aspen.http.mapping.Mapping, 'parse_date'):
     raise Warning('aspen.http.mapping.Mapping.parse_date() already exists')

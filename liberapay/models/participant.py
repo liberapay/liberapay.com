@@ -3735,3 +3735,46 @@ def clean_up_closed_accounts():
         p.erase_personal_information()
         p.invalidate_exchange_routes()
     return len(participants)
+
+
+def send_account_disabled_notifications():
+    """Notify the owners of accounts that have been flagged as fraudulent or spam.
+
+    This is done to:
+    - discourage fraudsters and spammers
+    - encourage appeals when accounts have been mistakenly flagged
+
+    The one hour delay before sending the notification gives time to reverse the decision.
+    """
+    participants = website.db.all("""
+        SELECT DISTINCT ON (p.id) p
+          FROM events e
+          JOIN participants p ON p.id = e.participant
+         WHERE e.type = 'flags_changed'
+           AND ( e.payload->>'is_spam' = 'true' OR
+                 e.payload->>'is_suspended' = 'true' )
+           AND e.ts < (current_timestamp - interval '1 hour')
+           AND e.ts > (current_timestamp - interval '48 hours')
+           AND ( p.is_spam OR p.is_suspended )
+           AND NOT EXISTS (
+                   SELECT 1
+                     FROM notifications n
+                    WHERE n.participant = p.id
+                      AND n.event = 'account_disabled'
+                      AND n.ts > (current_timestamp - interval '48 hours')
+                    LIMIT 1
+               )
+      ORDER BY p.id
+    """)
+    sent = 0
+    for p in participants:
+        sleep(1)
+        p.notify(
+            'account_disabled',
+            reason=('spam' if p.is_spam else 'fraud'),
+            force_email=True,
+        )
+        sent += 1
+    if sent:
+        print(f"Sent {sent} account_disabled notification{'' if sent == 1 else 's'}.")
+    return len(participants)

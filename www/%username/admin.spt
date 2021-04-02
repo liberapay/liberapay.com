@@ -28,14 +28,48 @@ events = website.db.all("""
 <form action="javascript:/admin/users" method="POST" class="js-submit" data-on-success="reload">
     <input type="hidden" name="p_id" value="{{ participant.id }}">
     <div class="form-group">
-        Does this account look fraudulent?<br>
+        Is this profile controversial?<br>
         <label>
-            <input type="radio" name="is_suspended" value="on" {{
-                   'checked' if participant.is_suspended == True else '' }} />
-            Yes, block payments!
+            <input type="radio" name="is_controversial" value="yes" {{
+                   'checked' if participant.is_controversial == True else '' }} />
+            Yes, isolate it
         </label> &nbsp;&nbsp;
         <label>
-            <input type="radio" name="is_suspended" value="off" {{
+            <input type="radio" name="is_controversial" value="no" {{
+                   'checked' if participant.is_controversial == False else '' }} />
+            No
+        </label> &nbsp;&nbsp;
+        <label>
+            <input type="radio" name="is_controversial" value="null" />
+            Unsure
+        </label>
+    </div>
+    <div class="form-group">
+        Is this profile spam?<br>
+        <label>
+            <input type="radio" name="is_spam" value="yes" {{
+                   'checked' if participant.is_spam == True else '' }} />
+            Yes, hide it completely
+        </label> &nbsp;&nbsp;
+        <label>
+            <input type="radio" name="is_spam" value="no" {{
+                   'checked' if participant.is_spam == False else '' }} />
+            No
+        </label> &nbsp;&nbsp;
+        <label>
+            <input type="radio" name="is_spam" value="null" />
+            Unsure
+        </label>
+    </div>
+    <div class="form-group">
+        Is this account fraudulent?<br>
+        <label>
+            <input type="radio" name="is_suspended" value="yes" {{
+                   'checked' if participant.is_suspended == True else '' }} />
+            Yes, disable payments
+        </label> &nbsp;&nbsp;
+        <label>
+            <input type="radio" name="is_suspended" value="no" {{
                    'checked' if participant.is_suspended == False else '' }} />
             No
         </label> &nbsp;&nbsp;
@@ -43,16 +77,6 @@ events = website.db.all("""
             <input type="radio" name="is_suspended" value="null" />
             Unsure
         </label>
-    </div>
-    <div class="form-group">
-    % for attr in constants.PROFILE_VISIBILITY_ATTRS
-        % set value = getattr(participant, attr)
-        <label>
-            <input type="checkbox" name="{{ attr }}" {{ 'checked' if value.__and__(2) }} />
-            {{ attr }} (user value: {{ bool(value.__and__(1)) }})
-        </label>
-        <br>
-    % endfor
     </div>
     <button class="btn btn-warning">{{ _("Save") }}</button>
 </form>
