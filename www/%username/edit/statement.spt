@@ -68,7 +68,7 @@ subhead = _("Statement")
         <p>{{ excerpt_intro(rendered_stmt) }}</p>
         <hr>
         <button class="btn btn-default">{{ _("Edit") }}</button>
-        <button class="btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+        <button class="btn btn-success" name="save" value="true">{{ _("Publish") }}</button>
     </form>
 
 % else
@@ -110,7 +110,7 @@ subhead = _("Statement")
         </div>
 
         <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
-        <button class="save btn btn-success" name="save" value="true">{{ _("Save") }}</button>
+        <button class="save btn btn-success" name="save" value="true">{{ _("Publish") }}</button>
     </form>
 
     <br>
