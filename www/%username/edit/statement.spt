@@ -142,14 +142,14 @@ subhead = _("Statement")
         <div class="form-group">
         <input name="summary" class="form-control" size=60
                maxlength="{{ constants.SUMMARY_MAX_SIZE }}"
-               placeholder="{{ _('Short description') }}"
+               placeholder="{{ _('Short description in {language}', language=locale.Language(lang)) }}"
                value="{{ summary }}" />
         </div>
 
         <div class="form-group">
         <textarea name="statement" rows="15"
                   class="form-control profile-statement vertical-resize"
-                  placeholder="{{ _('Full statement') }}"
+                  placeholder="{{ _('Full description in {language}', language=locale.Language(lang)) }}"
             >{{ statement or '' }}</textarea>
         <p class="help-block pull-right">{{ _("Markdown supported.") }}
             <a href="https://daringfireball.net/projects/markdown/basics"

@@ -46,6 +46,10 @@ class Currency(str):
     __slots__ = ()
 
 
+class Language(str):
+    __slots__ = ()
+
+
 class List(list):
     __slots__ = ('pattern',)
 
@@ -83,6 +87,7 @@ class Age(timedelta):
 class Locale(babel.core.Locale):
 
     Age = Age
+    Language = Language
     List = List
 
     def __init__(self, *a, **kw):
@@ -159,6 +164,8 @@ class Locale(babel.core.Locale):
                         o = self.countries.get(o, o)
                     elif isinstance(o, Currency):
                         o = self.currencies.get(o, o)
+                    elif isinstance(o, Language):
+                        o = self.languages.get(o) or o.upper()
                 elif isinstance(o, (Decimal, int)):
                     if isinstance(o, Percent):
                         o = self.format_percent(o)
