@@ -64,7 +64,7 @@ else:
 select_langs = get_lang_options(request, locale, participant.get_statement_langs())
 
 title = participant.username
-subhead = _("Statement")
+subhead = _("Descriptions")
 
 [---] text/html
 % from "templates/macros/select-lang.html" import lang_options with context
