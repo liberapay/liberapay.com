@@ -6,11 +6,24 @@ participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
     lang = request.body['lang']
+    switch_lang = request.body.get('switch_lang')
     summary = request.body.get('summary') or ''
     statement = request.body['statement']
 
+    action = request.body.get('action')
+    if action is None:
+        # Temporary fallback
+        if request.body.get('save') == 'true':
+            action = 'publish'
+        elif request.body.get('preview') == 'true':
+            action = 'preview'
+        else:
+            action = 'edit'
+
     if lang not in LANGUAGES_2:
         raise response.invalid_input(lang, 'lang', 'body')
+    if switch_lang and switch_lang not in LANGUAGES_2:
+        raise response.invalid_input(lang, 'switch_lang', 'body')
 
     if len(summary) > constants.SUMMARY_MAX_SIZE:
         raise response.error(400, _(
@@ -18,13 +31,26 @@ if request.method == 'POST':
             len(summary), constants.SUMMARY_MAX_SIZE)
         )
 
-    if request.body.get('save') == 'true':
+    if action == 'publish':
         participant.upsert_statement(lang, summary, 'summary')
         participant.upsert_statement(lang, statement, 'profile')
         form_post_success(state)
 
+    elif action == 'switch':
+        if request.body.parse_boolean('discard', default=None):
+            needs_confirmation = False
+        else:
+            saved_statement = participant.get_statement(lang) or ''
+            saved_summary = participant.get_statement(lang, 'summary') or ''
+            needs_confirmation = (
+                statement != saved_statement or summary != saved_summary
+            )
+        if not needs_confirmation:
+            raise response.redirect(participant.path('edit/statement', {'lang': switch_lang}))
+
 else:
     lang = request.qs.get('lang')
+    switch_lang = None
     if lang:
         if lang not in LANGUAGES_2:
             raise response.invalid_input(lang, 'lang', 'querystring')
@@ -36,7 +62,6 @@ else:
     summary = participant.get_statement(lang, 'summary') or ''
 
 select_langs = get_lang_options(request, locale, participant.get_statement_langs())
-confirm_discard = _("You haven't saved your changes, are you sure you want to discard them?")
 
 title = participant.username
 subhead = _("Statement")
@@ -48,7 +73,7 @@ subhead = _("Statement")
 
 % block form
 
-% if request.body.get('preview') == 'true'
+% if action == 'preview'
 
     <div class="alert alert-info">{{ _("This is a preview.") }}</div>
 
@@ -67,8 +92,32 @@ subhead = _("Statement")
         <h5>{{ _("Excerpt that will be used in social media:") }}</h5>
         <p>{{ excerpt_intro(rendered_stmt) }}</p>
         <hr>
-        <button class="btn btn-default">{{ _("Edit") }}</button>
-        <button class="btn btn-success" name="save" value="true">{{ _("Publish") }}</button>
+        <div class="buttons">
+            <button class="btn btn-default" name="action" value="edit">{{ _("Edit") }}</button>
+            <button class="btn btn-success" name="action" value="publish">{{ _("Publish") }}</button>
+        </div>
+    </form>
+
+% elif action == 'switch'
+
+    <div class="alert alert-warning">{{ _(
+        "You haven't saved your changes, are you sure you want to discard them?"
+    ) }}</div>
+
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="lang" value="{{ lang }}" />
+        <input type="hidden" name="switch_lang" value="{{ switch_lang }}" />
+        <input type="hidden" name="discard" value="yes" />
+        % if summary
+        <input type="hidden" name="summary" value="{{ summary }}" />
+        % endif
+        <textarea class="hidden" name="statement">{{ statement }}</textarea>
+        <div class="buttons">
+            <button class="btn btn-danger btn-lg" name="action" value="switch">{{ _("Discard") }}</button>
+            <button class="btn btn-default btn-lg" name="action" value="edit">{{ _("Edit") }}</button>
+            <button class="btn btn-success btn-lg" name="action" value="publish">{{ _("Publish") }}</button>
+        </div>
     </form>
 
 % else
@@ -101,7 +150,6 @@ subhead = _("Statement")
         <textarea name="statement" rows="15"
                   class="form-control profile-statement vertical-resize"
                   placeholder="{{ _('Full statement') }}"
-                  data-confirm-discard="{{ confirm_discard }}"
             >{{ statement or '' }}</textarea>
         <p class="help-block pull-right">{{ _("Markdown supported.") }}
             <a href="https://daringfireball.net/projects/markdown/basics"
@@ -109,17 +157,19 @@ subhead = _("Statement")
         </p>
         </div>
 
-        <button class="preview btn btn-default" name="preview" value="true">{{ _("Preview") }}</button>
-        <button class="save btn btn-success" name="save" value="true">{{ _("Publish") }}</button>
-    </form>
+        <div class="buttons">
+            <button class="btn btn-default" name="action" value="preview">{{ _("Preview") }}</button>
+            <button class="btn btn-success" name="action" value="publish">{{ _("Publish") }}</button>
+        </div>
 
-    <br>
-    {{ _("Switch to another language:") }}
-    <form action="" method="GET" class="form-inline langs">
-        <select class="form-control" name="lang">{{
-            lang_options(select_langs, lang)
-        }}</select>
-        <button class="btn btn-default">{{ _("Switch") }}</button>
+        <br>
+        <label for="switch_lang">{{ _("Switch to another language:") }}</label>
+        <div class="form-inline langs">
+            <select class="form-control" name="switch_lang" id="switch_lang">{{
+                lang_options(select_langs, switch_lang or lang)
+            }}</select>
+            <button class="btn btn-default" name="action" value="switch">{{ _("Switch") }}</button>
+        </div>
     </form>
 
 % endif
