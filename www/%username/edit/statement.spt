@@ -67,6 +67,7 @@ title = participant.username
 subhead = _("Descriptions")
 
 [---] text/html
+% from "templates/macros/profile-box.html" import profile_box_embedded with context
 % from "templates/macros/select-lang.html" import lang_options with context
 
 % extends "templates/layouts/profile-edit.html"
@@ -76,25 +77,28 @@ subhead = _("Descriptions")
 % if action == 'preview'
 
     <div class="alert alert-info">{{ _("This is a preview.") }}</div>
+    <hr>
 
     % set rendered_stmt = markdown.render(statement)
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="lang" value="{{ lang }}" />
+        <h3>{{ _("Statement") }}</h3>
+        <textarea class="hidden" name="statement">{{ statement }}</textarea>
+        <section class="profile-statement" lang="{{ lang }}">{{ rendered_stmt }}</section>
+        <hr>
+        <h4>{{ _("Excerpt that will be used in social media:") }}</h4>
+        <blockquote>{{ excerpt_intro(rendered_stmt) }}</blockquote>
+        <hr>
         % if summary
+        <h3>{{ _("Preview of the short description") }}</h3>
         <input type="hidden" name="summary" value="{{ summary }}" />
-        <p class="summary">{{ summary }}</p>
+        {{ profile_box_embedded(participant, summary) }}
         <hr>
         % endif
-        <textarea class="hidden" name="statement">{{ statement }}</textarea>
-        <section class="profile-statement">{{ rendered_stmt }}</section>
-        <hr>
-        <h5>{{ _("Excerpt that will be used in social media:") }}</h5>
-        <p>{{ excerpt_intro(rendered_stmt) }}</p>
-        <hr>
         <div class="buttons">
-            <button class="btn btn-default" name="action" value="edit">{{ _("Edit") }}</button>
-            <button class="btn btn-success" name="action" value="publish">{{ _("Publish") }}</button>
+            <button class="btn btn-default btn-lg" name="action" value="edit">{{ _("Edit") }}</button>
+            <button class="btn btn-success btn-lg" name="action" value="publish">{{ _("Publish") }}</button>
         </div>
     </form>
 
