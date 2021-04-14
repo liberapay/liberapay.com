@@ -41,6 +41,10 @@ title = pretty_name = community.pretty_name
 {% block before_content %}{% endblock %}
 
 % block content
+% if participant.is_spam
+    <p class="alert alert-warning text-center">{{ _("This profile is marked as spam.") }}</p>
+% endif
+
 <div class="row">
 <div class="col-md-8">
 

@@ -126,15 +126,19 @@ def get_community(state, restrict=False):
     elif user.ANON:
         raise AuthRequired
 
-    if restrict:
-        if user.ANON:
-            raise LoginRequired
-        if user.id != c.creator:
-            if user.is_admin:
-                log_admin_request(user, c.participant, request)
+    if (restrict or c.participant.is_spam):
+        if user.id == c.creator:
+            pass
+        elif user.is_admin:
+            log_admin_request(user, c.participant, request)
+        elif restrict:
+            if user.ANON:
+                raise LoginRequired
             else:
                 _ = state['_']
                 raise response.error(403, _("You are not authorized to access this page."))
+        elif c.participant.is_spam:
+            raise response.render('simplates/spam-profile.spt', state)
 
     return c
 

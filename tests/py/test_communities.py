@@ -12,12 +12,32 @@ class Tests(Harness):
 
         # Alice joins a community.
         self.alice = self.make_participant('alice')
-        c = self.alice.create_community('C++')
-        self.alice.upsert_community_membership(True, c.id)
+        self.com = self.alice.create_community('C++')
+        self.alice.upsert_community_membership(True, self.com.id)
 
     def test_community_member_shows_up_on_community_listing(self):
         html = self.client.GET('/for/C++/').text
         assert html.count('alice') == 4  # entry in New Members
+
+    def test_spam_community_is_hidden(self):
+        admin = self.make_participant('admin', privileges=1)
+        self.com.participant.upsert_statement('en', "spammy subtitle", 'subtitle')
+        self.com.participant.upsert_statement('en', "spammy sidebar", 'sidebar')
+        r = self.client.PxST(
+            '/admin/users', data={'p_id': str(self.com.participant.id), 'is_spam': 'yes'},
+            auth_as=admin,
+        )
+        assert r.code == 200
+        assert json.loads(r.text) == {"msg": "Done, 1 attribute has been updated."}
+        r = self.client.GET('/for/C++/', raise_immediately=False)
+        assert r.text.count('alice') == 0
+        assert r.code == 200
+        assert 'spammy' not in r.text
+        assert "This profile is marked as spam." in r.text
+        r = self.client.GET('/explore/communities')
+        assert r.code == 200
+        assert r.text.count('C++') == 0
+        assert 'spammy' not in r.text
 
 
 class TestCommunitiesJson(Harness):
