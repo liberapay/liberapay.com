@@ -3074,9 +3074,8 @@ class Participant(Model, MixinTeam):
                      , t.renewal_mode
                      , p.payment_providers
                      , ( t.paid_in_advance IS NULL OR
-                         t.paid_in_advance < (t.periodic_amount * 0.75) OR
-                         t.paid_in_advance < (t.amount * 4)
-                       ) AS awaits_renewal
+                         t.paid_in_advance < (t.amount * 3)
+                       ) AS awaits_payment
                   FROM current_tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE t.tipper = %s
@@ -3108,7 +3107,7 @@ class Participant(Model, MixinTeam):
 
         return tips, pledges
 
-    def get_tips_awaiting_renewal(self):
+    def get_tips_awaiting_payment(self):
         """Fetch a list of the user's donations that need to be renewed, and
         determine if some of them can be grouped into a single charge.
 
@@ -3131,8 +3130,7 @@ class Participant(Model, MixinTeam):
              WHERE t.tipper = %s
                AND t.renewal_mode > 0
                AND ( t.paid_in_advance IS NULL OR
-                     t.paid_in_advance < (t.periodic_amount * 0.75) OR
-                     t.paid_in_advance < (t.amount * 4)
+                     t.paid_in_advance < (t.amount * 3)
                    )
                AND p.status = 'active'
                AND ( p.goal IS NULL OR p.goal >= 0 )
@@ -3143,9 +3141,7 @@ class Participant(Model, MixinTeam):
                          JOIN exchange_routes r ON r.id = pi.route
                         WHERE pt.payer = t.tipper
                           AND COALESCE(pt.team, pt.recipient) = t.tippee
-                          AND ( r.network = 'stripe-sdd' AND pi.status = 'pending' OR
-                                r.network <> 'stripe-sdd' AND pi.status = 'succeeded' )
-                          AND pt.ctime > (current_timestamp - interval '6 hours')
+                          AND ( pi.status = 'pending' OR pt.status = 'pending' )
                         LIMIT 1
                    )
           ORDER BY ( SELECT 1

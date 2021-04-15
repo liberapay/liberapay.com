@@ -57,8 +57,7 @@ has_pending_transfer = set(website.db.all("""
       JOIN payins pi ON pi.id = pt.payin
       JOIN exchange_routes r ON r.id = pi.route
      WHERE pt.payer = %s
-       AND ( pt.status = 'pending' OR
-             r.network = 'stripe-sdd' AND pi.status = 'pending' )
+       AND ( pi.status = 'pending' OR pt.status = 'pending' )
 """, (participant.id,)))
 
 tips, pledges = participant.get_giving_details()
@@ -70,9 +69,9 @@ cancelled_pledges = [x for x in pledges if x.renewal_mode <= 0]
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.renewal_mode > 0]
 ntips = len(tips)
-ntips_awaiting_renewal = sum(
+ntips_awaiting_payment = sum(
     1 for t in tips if (
-        t.awaits_renewal and
+        t.awaits_payment and
         t.tippee_p.payment_providers > 0 and
         t.tippee not in has_pending_transfer
     )
@@ -198,16 +197,16 @@ next_payday = compute_next_payday_date()
 
     <h3>{{ _("Donations") }} ({{ ntips }})</h3>
 % if ntips
-    % if ntips_awaiting_renewal
+    % if ntips_awaiting_payment
         <div class="alert alert-warning">
         {{ ngettext(
             "You have {n} donation awaiting payment.",
             "You have {n} donations awaiting payment.",
-            n=ntips_awaiting_renewal
+            n=ntips_awaiting_payment
         ) }}
         &nbsp;
         <a class="btn btn-success" href="{{ participant.path('giving/pay') }}">{{
-            ngettext("Renew this donation", "Renew these donations", ntips_awaiting_renewal)
+            ngettext("Renew this donation", "Renew these donations", ntips_awaiting_payment)
         }}</a>
         </div>
     % endif
