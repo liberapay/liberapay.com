@@ -31,14 +31,24 @@ if team.kind != 'group':
 action = request.path['action']
 msg = None
 confirm = None
+invite = None
+
+def leave_team():
+    global confirm
+    if not request.body.get('confirmed'):
+        confirm = _("Are you sure you want to leave this team?")
+    else:
+        team.set_take_for(user, None, user)
+        if not team.nmembers:
+            team.close(None)
 
 if action in ('accept', 'refuse'):
     invite = get_invite(team, user)
     if not invite:
         raise response.error(403, _("You are not invited to join this team."))
-    if invite.type == 'invite_accept':
+    if invite.type == 'invite_accept' and action == 'accept':
         raise response.error(409, _("You have already accepted this invitation."))
-    if invite.type == 'invite_refuse':
+    if invite.type == 'invite_refuse' and action == 'refuse':
         raise response.error(409, _("You have already refused this invitation."))
     notif_id = invite.payload.get('notification_id')
 elif not user.member_of(team):
@@ -73,12 +83,7 @@ if action == 'invite':
         msg = _("{0} is already a member of this team.", invitee.username)
 
 elif action == 'leave':
-    if not request.body.get('confirmed'):
-        confirm = _("Are you sure you want to leave this team?")
-    else:
-        team.set_take_for(user, None, user)
-        if not team.nmembers:
-            team.close(None)
+    leave_team()
 
 elif action == 'accept':
     with website.db.get_cursor() as c:
@@ -89,11 +94,16 @@ elif action == 'accept':
         user.mark_notification_as_read(notif_id)
 
 elif action == 'refuse':
-    with website.db.get_cursor() as c:
-        team.add_event(c, 'invite_refuse', dict(invitee=user.id), user.id)
-    if notif_id:
-        user.mark_notification_as_read(notif_id)
-    response.redirect('/')
+    prev_accepted = invite.type == 'invite_accept'
+    if prev_accepted:
+        request.qs['back_to'] = '/{}/notifications'.format(user.username)
+        leave_team()
+    if not prev_accepted or request.body.get('confirmed'):
+        with website.db.get_cursor() as c:
+            team.add_event(c, 'invite_refuse', dict(invitee=user.id), user.id)
+        if notif_id:
+            user.mark_notification_as_read(notif_id)
+        response.redirect('/')
 
 else:
     raise response.invalid_input(action, 'action', 'path')

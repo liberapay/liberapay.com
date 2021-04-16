@@ -62,6 +62,35 @@ class Tests(Harness):
         is_member = self.bob.member_of(self.a_team)
         assert is_member is False
 
+    def test_accept_then_refuse_invite(self):
+        self.a_team.invite(self.bob, self.alice)
+        r = self.client.PxST('/A-Team/membership/accept', auth_as=self.bob)
+        assert r.code == 302
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is True
+
+        r = self.client.PxST('/A-Team/membership/refuse', auth_as=self.bob)
+        assert r.code == 200
+        assert 'confirm' in r.text
+
+        r = self.client.PxST(
+            '/A-Team/membership/refuse', {'confirmed': 'true'}, auth_as=self.bob,
+        )
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is False
+
+    def test_refuse_then_accept_invite(self):
+        self.a_team.invite(self.bob, self.alice)
+        r = self.client.PxST('/A-Team/membership/refuse', auth_as=self.bob)
+        assert r.code == 302
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is False
+
+        r = self.client.PxST('/A-Team/membership/accept', auth_as=self.bob)
+        assert r.code == 302
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is True
+
     def test_invite_is_scoped_to_specific_team(self):
         b_team = self.make_participant('B-Team', kind='group')
         self.a_team.invite(self.bob, self.alice)
