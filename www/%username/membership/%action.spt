@@ -32,15 +32,6 @@ action = request.path['action']
 msg = None
 confirm = None
 
-def leave_team():
-    global confirm
-    if not request.body.get('confirmed'):
-        confirm = _("Are you sure you want to leave this team?")
-    else:
-        team.set_take_for(user, None, user)
-        if not team.nmembers:
-            team.close(None)
-
 if action in ('accept', 'refuse'):
     invite = get_invite(team, user)
     if not invite:
@@ -82,7 +73,10 @@ if action == 'invite':
         msg = _("{0} is already a member of this team.", invitee.username)
 
 elif action == 'leave':
-    leave_team()
+    if not request.body.get('confirmed'):
+        confirm = _("Are you sure you want to leave this team?")
+    else:
+        user.leave_team(team)
 
 elif action == 'accept':
     with website.db.get_cursor() as c:
@@ -95,8 +89,11 @@ elif action == 'accept':
 elif action == 'refuse':
     is_member = user.member_of(team)
     if is_member:
-        request.qs['back_to'] = '/{}/notifications'.format(user.username)
-        leave_team()
+        if not request.body.get('confirmed'):
+            request.qs['back_to'] = '/{}/notifications'.format(user.username)
+            confirm = _("Are you sure you want to leave this team?")
+        else:
+            user.leave_team(team)
     if not is_member or request.body.get('confirmed'):
         with website.db.get_cursor() as c:
             team.add_event(c, 'invite_refuse', dict(invitee=user.id), user.id)
