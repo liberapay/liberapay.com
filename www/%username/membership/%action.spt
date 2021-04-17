@@ -31,7 +31,6 @@ if team.kind != 'group':
 action = request.path['action']
 msg = None
 confirm = None
-invite = None
 
 def leave_team():
     global confirm
@@ -46,7 +45,7 @@ if action in ('accept', 'refuse'):
     invite = get_invite(team, user)
     if not invite:
         raise response.error(403, _("You are not invited to join this team."))
-    if invite.type == 'invite_accept' and action == 'accept':
+    if action == 'accept' and user.member_of(team):
         raise response.error(409, _("You have already accepted this invitation."))
     if invite.type == 'invite_refuse' and action == 'refuse':
         raise response.error(409, _("You have already refused this invitation."))
@@ -94,11 +93,11 @@ elif action == 'accept':
         user.mark_notification_as_read(notif_id)
 
 elif action == 'refuse':
-    prev_accepted = invite.type == 'invite_accept'
-    if prev_accepted:
+    is_member = user.member_of(team)
+    if is_member:
         request.qs['back_to'] = '/{}/notifications'.format(user.username)
         leave_team()
-    if not prev_accepted or request.body.get('confirmed'):
+    if not is_member or request.body.get('confirmed'):
         with website.db.get_cursor() as c:
             team.add_event(c, 'invite_refuse', dict(invitee=user.id), user.id)
         if notif_id:
