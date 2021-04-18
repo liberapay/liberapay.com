@@ -29,8 +29,8 @@ if team.kind != 'group':
     raise response.error(404)
 
 action = request.path['action']
+back_to = request.qs.get('back_to') or user.path('notifications')
 msg = None
-confirm = None
 
 if action in ('accept', 'refuse'):
     invite = get_invite(team, user)
@@ -38,7 +38,7 @@ if action in ('accept', 'refuse'):
         raise response.error(403, _("You are not invited to join this team."))
     if action == 'accept' and user.member_of(team):
         raise response.error(409, _("You have already accepted this invitation."))
-    if invite.type == 'invite_refuse' and action == 'refuse':
+    if action == 'refuse' and invite.type == 'invite_refuse':
         raise response.error(409, _("You have already refused this invitation."))
     notif_id = invite.payload.get('notification_id')
 elif not user.member_of(team):
@@ -73,43 +73,36 @@ if action == 'invite':
         msg = _("{0} is already a member of this team.", invitee.username)
 
 elif action == 'leave':
-    if not request.body.get('confirmed'):
+    if not request.body.parse_boolean('confirmed', default=False):
         confirm = _("Are you sure you want to leave this team?")
-    else:
-        user.leave_team(team)
+        raise response.render('simplates/confirm.spt', state, msg=confirm, back_to=back_to)
+    user.leave_team(team)
 
 elif action == 'accept':
     with website.db.get_cursor() as c:
         team.add_event(c, 'invite_accept', dict(invitee=user.id), user.id)
         team.add_member(user)
     msg = _("You are now a member of the team.")
+    back_to = team.path('income/')
     if notif_id:
         user.mark_notification_as_read(notif_id)
 
 elif action == 'refuse':
-    is_member = user.member_of(team)
-    if is_member:
-        if not request.body.get('confirmed'):
-            request.qs['back_to'] = '/{}/notifications'.format(user.username)
+    if user.member_of(team):
+        if not request.body.parse_boolean('confirmed', default=False):
             confirm = _("Are you sure you want to leave this team?")
-        else:
-            user.leave_team(team)
-    if not is_member or request.body.get('confirmed'):
-        with website.db.get_cursor() as c:
-            team.add_event(c, 'invite_refuse', dict(invitee=user.id), user.id)
-        if notif_id:
-            user.mark_notification_as_read(notif_id)
-        response.redirect('/')
+            raise response.render('simplates/confirm.spt', state, msg=confirm, back_to=back_to)
+        user.leave_team(team)
+    with website.db.get_cursor() as c:
+        team.add_event(c, 'invite_refuse', dict(invitee=user.id), user.id)
+    if notif_id:
+        user.mark_notification_as_read(notif_id)
 
 else:
     raise response.invalid_input(action, 'action', 'path')
 
-back_to = request.qs.get('back_to') or (team.path('income/') if action == 'accept' else '/')
-if not confirm:
-    if msg:
-        back_to = _modify_query(back_to, 'success', b64encode_s(msg))
-    response.redirect(back_to, trusted_url=False)
-
-response.render('simplates/confirm.spt', state, msg=confirm, back_to=back_to)
+if msg:
+    back_to = _modify_query(back_to, 'success', b64encode_s(msg))
+response.redirect(back_to, trusted_url=False)
 
 [---] text/html
