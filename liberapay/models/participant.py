@@ -179,6 +179,11 @@ class Participant(Model, MixinTeam):
                 t.add_email(email, cursor=c)
         return t
 
+    def leave_team(self, team):
+        team.set_take_for(self, None, self)
+        if not team.nmembers:
+            team.close(None)
+
     @classmethod
     def from_id(cls, id, _raise=True):
         """Return an existing participant based on id.
