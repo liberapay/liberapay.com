@@ -527,7 +527,7 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
 
     # Compute the prorated amounts
     base_sum = Money.sum(base_amounts.values(), amount_left.currency)
-     base_ratio = 0
+    base_ratio = 0
 
     if base_sum != 0:
         base_ratio = amount_left / base_sum 
@@ -547,7 +547,7 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
             base_amount = base_amounts[key] * base_ratio
             return (current_amount - base_amount) / base_amount
 
-         count = 0
+        count = 0
 
         for check_priority in r.items():
             if count == 0:

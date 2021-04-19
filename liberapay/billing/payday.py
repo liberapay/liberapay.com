@@ -11,7 +11,7 @@ from babel.dates import format_timedelta
 import mangopay
 import pando.utils
 import requests
-
+from liberapay.payin.common import resolve_amounts
 from liberapay import constants
 from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
@@ -599,7 +599,7 @@ class Payday:
                     take.amount -= transfer_amount.convert(take.amount.currency)
                 if in_advance_amount:
                     tip.paid_in_advance -= in_advance_amount
-                    take.paid_in_advance -= in_advance_amount.convert(take.amount.currency)
+                    take.paid_in_advance -= in_advance_amount.convert(take.paid_in_advance.currency)
                 if on_time_amount:
                     tip.balances -= on_time_amount
                 tip.amount -= transfer_amount
