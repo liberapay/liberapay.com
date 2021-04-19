@@ -111,8 +111,8 @@ class TestCommunityEdit(Harness):
 
     def test_creator_can_edit_community(self):
         data = {'lang': 'en', 'subtitle': '', 'sidebar': ''}
-        response = self.client.POST('/for/test/edit', data, auth_as=self.alice)
-        assert response.code == 200
+        response = self.client.PxST('/for/test/edit', data, auth_as=self.alice)
+        assert response.code == 302
 
     def test_others_cant_edit_community(self):
         response = self.client.PxST('/for/test/edit')

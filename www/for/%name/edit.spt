@@ -1,5 +1,5 @@
 from liberapay.i18n.base import LANGUAGES_2, get_lang_options
-from liberapay.utils import get_community
+from liberapay.utils import form_post_success, get_community
 
 [---]
 
@@ -14,8 +14,25 @@ if request.method == 'POST':
         raise response.error(400, "subtitle too long")
     if len(sidebar) > c.sidebar_maxlength:
         raise response.error(400, "sidebar too long")
-    c.participant.upsert_statement(lang, subtitle, 'subtitle')
-    c.participant.upsert_statement(lang, sidebar, 'sidebar')
+    switch_lang = body.get('switch_lang')
+    if switch_lang and switch_lang not in LANGUAGES_2:
+        raise response.invalid_input(lang, 'switch_lang', 'body')
+    action = body.get_choice('action', ('edit', 'publish', 'switch'), default='publish')
+    if action == 'publish':
+        c.participant.upsert_statement(lang, subtitle, 'subtitle')
+        c.participant.upsert_statement(lang, sidebar, 'sidebar')
+        form_post_success(state)
+    elif action == 'switch':
+        if body.parse_boolean('discard', default=None):
+            needs_confirmation = False
+        else:
+            saved_subtitle = c.participant.get_statement(lang, 'subtitle') or ''
+            saved_sidebar = c.participant.get_statement(lang, 'sidebar') or ''
+            needs_confirmation = (
+                subtitle != saved_subtitle or sidebar != saved_sidebar
+            )
+        if not needs_confirmation:
+            raise response.redirect(f'/for/{c.name}/edit?lang={switch_lang}')
 else:
     lang = request.qs.get('lang')
     if lang:
@@ -39,31 +56,54 @@ title = _("{0} community settings", c.name)
 
 % block panel_body
 
+% if action == 'switch'
+
+    <div class="alert alert-warning">{{ _(
+        "You haven't saved your changes, are you sure you want to discard them?"
+    ) }}</div>
+
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="lang" value="{{ lang }}" />
+        <input type="hidden" name="switch_lang" value="{{ switch_lang }}" />
+        <input type="hidden" name="discard" value="yes" />
+        <input type="hidden" name="subtitle" value="{{ subtitle }}" />
+        <textarea class="hidden" name="sidebar">{{ sidebar }}</textarea>
+        <div class="buttons">
+            <button class="btn btn-danger" name="action" value="switch">{{ _("Discard") }}</button>
+            <button class="btn btn-default" name="action" value="edit">{{ _("Edit") }}</button>
+            <button class="btn btn-success" name="action" value="publish">{{ _("Publish") }}</button>
+        </div>
+    </form>
+
+% else
+
 <p>{{ _(
     "Liberapay allows you to internationalize your texts. "
     "Use the selector below to switch between languages.")
 }}</p>
 
-<p>{{ _("Current language: {0}",
-        '<b>%s</b>'|safe % locale.languages.get(lang, lang.upper())) }}</p>
-
-<form action="" class="block-labels" method="POST">
+<form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     <input type="hidden" name="lang" value="{{ lang }}" />
 
-    <label>
-        <span>{{ _("Short description") }}</span>
+    <div class="form-group">
+        <label for="subtitle">{{ _(
+            "Short description in {language}", language=locale.Language(lang)
+        ) }}</label>
         <input class="form-control" name="subtitle" value="{{ subtitle or '' }}"
-               maxlength="{{ c.subtitle_maxlength }}" />
+               id="subtitle" maxlength="{{ c.subtitle_maxlength }}" />
         <p class="help-block">{{ _(
             "Maximum length is {0}.", c.subtitle_maxlength
         ) }}</p>
-    </label>
+    </div>
 
-    <label>
-        <span>{{ _("Sidebar text") }}</span>
+    <div class="form-group">
+        <label for="sidebar">{{ _(
+            "Sidebar text in {language}", language=locale.Language(lang)
+        ) }}</label>
         <textarea class="form-control vertical-resize" name="sidebar" rows=10
-                  maxlength="{{ c.sidebar_maxlength }}"
+                  id="sidebar" maxlength="{{ c.sidebar_maxlength }}"
             >{{ sidebar or '' }}</textarea>
         <p class="help-block">
             {{ _("Maximum length is {0}.", c.sidebar_maxlength) }}
@@ -71,19 +111,22 @@ title = _("{0} community settings", c.name)
             <a href="https://daringfireball.net/projects/markdown/basics"
                target="_blank" rel="noopener noreferrer">{{ _("What is Markdown?") }}</a>
         </p>
-    </label>
+    </div>
 
-    <button class="btn btn-success">{{ _("Save") }}</button>
+    <div class="buttons">
+        <button class="btn btn-success" name="action" value="publish">{{ _("Publish") }}</button>
+        <a href="/for/{{ c.name }}" class="btn btn-warning pull-right">{{ _("Go back") }}</a>
+    </div>
 
-    <a href="/for/{{ c.name }}" class="btn btn-warning pull-right">{{ _("Go back") }}</a>
+    <br>
+    <label for="switch_lang">{{ _("Switch to another language:") }}</label>
+    <div class="form-group form-inline langs">
+        <select class="form-control" name="switch_lang" id="switch_lang">{{
+            lang_options(select_langs, lang)
+        }}</select>
+        <button class="btn btn-default" name="action" value="switch">{{ _("Switch") }}</button>
+    </div>
 </form>
 
-<br>
-{{ _("Switch to another language:") }}
-<form action="" method="GET" class="form-group form-inline langs">
-    <select class="form-control" name="lang">{{
-        lang_options(select_langs, lang)
-    }}</select>
-    <button class="btn btn-default">{{ _("Switch") }}</button>
-</form>
+% endif
 % endblock
