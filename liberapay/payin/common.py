@@ -13,7 +13,7 @@ from ..exceptions import (
 from ..i18n.currencies import Money, MoneyBasket
 from ..utils import group_by
 
-
+import random
 Donation = namedtuple('Donation', 'amount recipient destination')
 
 
@@ -527,7 +527,10 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
 
     # Compute the prorated amounts
     base_sum = Money.sum(base_amounts.values(), amount_left.currency)
-    base_ratio = amount_left / base_sum
+     base_ratio = 0
+
+    if base_sum != 0:
+        base_ratio = amount_left / base_sum 
     for key, base_amount in sorted(base_amounts.items()):
         if base_amount == 0:
             continue
@@ -544,11 +547,32 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
             base_amount = base_amounts[key] * base_ratio
             return (current_amount - base_amount) / base_amount
 
-        for key, amount in sorted(r.items(), key=compute_priority):
-            r[key] += min_transfer_amount
-            amount_left -= min_transfer_amount
-            if amount_left == 0:
-                break
+         count = 0
+
+        for check_priority in r.items():
+            if count == 0:
+               comparator = compute_priority(check_priority)
+               count += 1
+            elif comparator == compute_priority(check_priority):
+                count += 1
+
+        # If everyone has the same priority & there is only 0.01 to distribute, then randomly select 
+        if count == len(r) and amount_left == 0.01: 
+            shuffle_keys = list(r.keys())
+            random.shuffle(shuffle_keys)
+
+            for key in shuffle_keys:
+                r[key] += min_transfer_amount
+                amount_left -= min_transfer_amount
+                if amount_left == 0:
+                    break
+        else:
+            for key, amount in sorted(r.items(), key=compute_priority):
+                r[key] += min_transfer_amount
+                amount_left -= min_transfer_amount
+                if amount_left == 0:
+                    break
+        
 
     # Final check and return
     assert amount_left == 0, '%r != 0' % amount_left

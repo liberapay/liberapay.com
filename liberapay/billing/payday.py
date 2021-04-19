@@ -469,12 +469,12 @@ class Payday:
         tip_currencies = set(t.full_amount.currency for t in tips)
         takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
         takes_by_secondary_currency = {c: [] for c in tip_currencies}
-        if fuzzy_takes_sum:
-            takes_ratio = min(fuzzy_income_sum / fuzzy_takes_sum, 1)
-        else:
-            takes_ratio = 0
+        resolved_takes = resolve_amounts(min(fuzzy_income_sum, fuzzy_takes_sum), {take.member: take.amount.convert(fuzzy_income_sum.currency) for take in takes})
         for take in takes:
-            take.amount = (take.amount * takes_ratio).round_up()
+            if take.member in resolved_takes:
+              take.amount = resolved_takes[take.member]
+            else:
+              take.amount = Money(0, take.amount.currency)
             if take.paid_in_advance is None:
                 take.paid_in_advance = take.amount.zero()
             if take.accepted_currencies is None:

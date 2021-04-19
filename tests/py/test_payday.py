@@ -488,6 +488,54 @@ class TestPaydayForTeams(FakeTransfersHarness):
         }
         assert d == expected
 
+    def test_non_divisible_team_income(self):
+        """
+        This tests the payment to teams with a nondivisible income (with respect to the number of team members):
+            - creates a team of 7 people
+            - has a total income of 0.85 euros/week
+            - each member of the team would like to have an income of 1 euro 
+            - each participant will 0.12 euros except 1 participant will have 0.13 euros 
+            - team should have a leftover of 0.00 euros after each week 
+        """
+        team = self.make_participant('team', kind = 'group')
+        charlie = self.make_participant('charlie', balance=EUR(1000))
+        charlie.set_tip_to(team, EUR('0.85'))
+
+        jillian = self.make_participant('jillian')
+        marisa = self.make_participant('marisa')
+        kevin = self.make_participant('kevin')
+        brandon = self.make_participant('brandon')
+        rachel = self.make_participant('rachel')
+        linda = self.make_participant('linda')
+        raymond = self.make_participant('raymond')
+
+        team.set_take_for(jillian, EUR('1.00'), team)
+        team.set_take_for(marisa, EUR('1.00'), team)
+        team.set_take_for(kevin, EUR('1.00'), team)
+        team.set_take_for(brandon, EUR('1.00'), team)
+        team.set_take_for(rachel, EUR('1.00'), team)
+        team.set_take_for(linda, EUR('1.00'), team)
+        team.set_take_for(raymond, EUR('1.00'), team)
+
+        Payday.start().run()
+
+        count_twelve = 0
+        count_thirteen = 0
+        count_team = 0
+
+        for check in self.db.all("SELECT username, balance FROM participants"):
+            if check.balance == EUR('0.12'):
+                count_twelve += 1
+            elif check.balance == EUR('0.13'):
+                count_thirteen += 1
+            elif check.username == 'team' and check.balance == EUR('0.00'):
+                count_team += 1
+
+        assert count_twelve == 6
+        assert count_thirteen == 1
+        assert count_team == 1
+
+
     def test_wellfunded_team(self):
         """
         This tests two properties:
