@@ -1753,8 +1753,8 @@ msgstr "Valuta's"
 msgid "Goal"
 msgstr "Doel"
 
-msgid "Statement"
-msgstr "Omschrijving"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Gekoppelde accounts"
@@ -1764,6 +1764,9 @@ msgstr "Methodes"
 
 msgid "Schedule"
 msgstr "Schema"
+
+msgid "Statement"
+msgstr "Omschrijving"
 
 msgid "Members"
 msgstr "Leden"
@@ -2367,14 +2370,23 @@ msgstr "We kunnen ook lijsten van repositories voor je teams importeren:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "De opgegeven korte beschrijving is te lang ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Je hebt je wijzigingen niet opgeslagen, weet je zeker dat je ze niet wilt opslaan?"
-
 msgid "This is a preview."
 msgstr "Dit is een voorbeeld."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Fragment dat zal worden gebruikt op sociale media:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Je hebt je wijzigingen niet opgeslagen, weet je zeker dat je ze niet wilt opslaan?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Beschrijf je werk, wat je met je donatie wil doen, enzovoort. We hebben een korte omschrijving nodig voor de overzichtspagina en een uitgebreide versie."
@@ -2386,11 +2398,11 @@ msgstr "Met Liberapay kan u uw teksten vertalen in meerdere talen. Gebruik de on
 msgid "Current language: {0}"
 msgstr "Huidige taal: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Korte beschrijving"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Het volledige verhaal"
 
@@ -5011,7 +5023,7 @@ msgstr "Maak een team"
 msgid "{0} community settings"
 msgstr "{0} gemeenschap instellingen"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Sidebar tekst"
 

@@ -1739,8 +1739,8 @@ msgstr "Mata uang"
 msgid "Goal"
 msgstr "Tujuan"
 
-msgid "Statement"
-msgstr "Pernyataan"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Akun yang Dihubungkan"
@@ -1750,6 +1750,9 @@ msgstr ""
 
 msgid "Schedule"
 msgstr "Jadwal"
+
+msgid "Statement"
+msgstr "Pernyataan"
 
 msgid "Members"
 msgstr "Anggota"
@@ -2352,14 +2355,23 @@ msgstr "Kami juga dapat mengimpor daftar repositori untuk kelompok Anda:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Ringkasan yang dikirimkan terlalu panjang ({0}>{1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Anda belum menyimpan perubahan, anda yakin ingin membuang perubahan?"
-
 msgid "This is a preview."
 msgstr "Ini adalah pratinjau."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Kutipan yang akan digunakan di media sosial:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Anda belum menyimpan perubahan, anda yakin ingin membuang perubahan?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Jelaskan apa yang anda kerjakan, mengapa anda meminta donasi, dan sebagainya. Kami membutuhkan ringkasan singkat dan penyataan lengkap."
@@ -2371,11 +2383,11 @@ msgstr "Liberapay memungkinkan anda untuk menginternasionalkan teks anda. Gunaka
 msgid "Current language: {0}"
 msgstr "Bahasa saat ini: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Deskripsi singkat"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Penyataan lengkap"
 
@@ -4959,6 +4971,7 @@ msgstr "Buat sebuah tim"
 msgid "{0} community settings"
 msgstr ""
 
+#, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr ""
 

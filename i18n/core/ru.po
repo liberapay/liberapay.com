@@ -1769,8 +1769,8 @@ msgstr "Валюты"
 msgid "Goal"
 msgstr "Цель"
 
-msgid "Statement"
-msgstr "Описание"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Связанные аккаунты"
@@ -1780,6 +1780,9 @@ msgstr "Инструменты"
 
 msgid "Schedule"
 msgstr "График"
+
+msgid "Statement"
+msgstr "Описание"
 
 msgid "Members"
 msgstr "Участники"
@@ -2390,14 +2393,23 @@ msgstr "Также можно импортировать список репоз
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Отправленное описание слишком длинное ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Несохранённые изменения будут потеряны, вы уверены, что хотите продолжить?"
-
 msgid "This is a preview."
 msgstr "Это предварительный просмотр."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Выдержка, которая будет использоваться в социальных медиа:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Несохранённые изменения будут потеряны, вы уверены, что хотите продолжить?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Опишите свою работу, почему вы просите делать пожертвования, и т.д. Нам нужно как краткое, так и полное описание."
@@ -2409,11 +2421,11 @@ msgstr "Liberapay позволяет делать ваши тексты инте
 msgid "Current language: {0}"
 msgstr "Текущий язык: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Краткое описание"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Полное описание"
 
@@ -5072,7 +5084,7 @@ msgstr "Создать команду"
 msgid "{0} community settings"
 msgstr "Настройки сообщества {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Текст на боковой панели"
 

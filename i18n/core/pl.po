@@ -1770,8 +1770,8 @@ msgstr "Waluty"
 msgid "Goal"
 msgstr "Cel"
 
-msgid "Statement"
-msgstr "Oświadczenie"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Konta w innych serwisach"
@@ -1781,6 +1781,9 @@ msgstr "Instrumenty"
 
 msgid "Schedule"
 msgstr "Harmonogram"
+
+msgid "Statement"
+msgstr "Oświadczenie"
 
 msgid "Members"
 msgstr "Członkowie"
@@ -2392,14 +2395,23 @@ msgstr "Możemy także zaimportować listy repozytoriów dla Twoich zespołów:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Przesłane podsumowanie jest zbyt długie ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Nie zapisano zmian, czy na pewno chcesz je odrzucić?"
-
 msgid "This is a preview."
 msgstr "To jest podgląd."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Fragment, który będzie używany w mediach społecznościowych:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Nie zapisano zmian, czy na pewno chcesz je odrzucić?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Opisz czym się zajmujesz, dlaczego prosisz o darowizny, itp. Potrzebujemy zarówno krótkiego podsumowania, jak i pełnego oświadczenia."
@@ -2411,11 +2423,11 @@ msgstr "Liberapay daje możliwość umiędzynarodowienia tekstów. Użyj znajduj
 msgid "Current language: {0}"
 msgstr "Aktualny język: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Krótki opis"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Pełne oświadczenie"
 
@@ -5076,7 +5088,7 @@ msgstr "Utwórz zespół"
 msgid "{0} community settings"
 msgstr "Ustawienia społeczności {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Tekst w pasku bocznym"
 

@@ -1737,8 +1737,8 @@ msgstr "Pénznemek"
 msgid "Goal"
 msgstr "Cél"
 
-msgid "Statement"
-msgstr "Kimutatás"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Összekapcsolt fiókok"
@@ -1748,6 +1748,9 @@ msgstr "Eszközök"
 
 msgid "Schedule"
 msgstr "Ütemezés"
+
+msgid "Statement"
+msgstr "Kimutatás"
 
 msgid "Members"
 msgstr "Tagok"
@@ -2347,14 +2350,23 @@ msgstr "Importálhatjuk Önnek a csapatai tárolóinak a listáját is:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "A beküldött összefoglaló túl hosszú ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Ön nem mentette el a változtatásait, valóban el akarja vetni őket?"
-
 msgid "This is a preview."
 msgstr "Ez egy előnézet."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Részlet, ami a szociális médiában lesz használva:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Ön nem mentette el a változtatásait, valóban el akarja vetni őket?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Írja le a munkáját, miért szeretne támogatást kapni, stb. Szükségünk van egy rövid áttekintésre és egy teljes összefoglalóra."
@@ -2366,11 +2378,11 @@ msgstr "A Liberapay megengedi Önnek a szövegeinek a többnyelvűvé tételét.
 msgid "Current language: {0}"
 msgstr "Jelenlegi nyelv: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Rövid leírás"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Teljes leírás"
 
@@ -4951,6 +4963,7 @@ msgstr ""
 msgid "{0} community settings"
 msgstr ""
 
+#, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr ""
 

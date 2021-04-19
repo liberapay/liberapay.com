@@ -1756,8 +1756,8 @@ msgstr "Valutaer"
 msgid "Goal"
 msgstr "Mål"
 
-msgid "Statement"
-msgstr "Budskap"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Koblede kontoer"
@@ -1767,6 +1767,9 @@ msgstr "Instrumenter"
 
 msgid "Schedule"
 msgstr "Betalingsplan"
+
+msgid "Statement"
+msgstr "Budskap"
 
 msgid "Members"
 msgstr "Medlemmer"
@@ -2372,14 +2375,23 @@ msgstr "Lister over pakkebrønner fra lagene dine kan også importeres:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Innsendt sammendrag er for langt ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Du har ikke lagret endringene dine, er du sikker på at du ønsker å forkaste dem?"
-
 msgid "This is a preview."
 msgstr "Dette er en forhåndsvisning."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Utdrag som vil brukes i sosiale media:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Du har ikke lagret endringene dine, er du sikker på at du ønsker å forkaste dem?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Beskriv ditt arbeid, hvorfor du spør om bidrag, osv. Et kort sammendrag og en helhetlig erklæring trengs."
@@ -2391,11 +2403,11 @@ msgstr "Liberapay tillater deg å internasjonalisere tekstene dine. Bruk språkv
 msgid "Current language: {0}"
 msgstr "Nåværende språk: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Kort beskrivelse"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Full erklæring"
 
@@ -5050,7 +5062,7 @@ msgstr "Opprett et lag"
 msgid "{0} community settings"
 msgstr "{0} gemenskapsinnstillinger"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Sidepanelstekst"
 

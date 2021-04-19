@@ -1756,8 +1756,8 @@ msgstr "Valutor"
 msgid "Goal"
 msgstr "Mål"
 
-msgid "Statement"
-msgstr "Uttalande"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Länkade konton"
@@ -1767,6 +1767,9 @@ msgstr "Medel"
 
 msgid "Schedule"
 msgstr "Schema"
+
+msgid "Statement"
+msgstr "Uttalande"
 
 msgid "Members"
 msgstr "Medlemmar"
@@ -2372,14 +2375,23 @@ msgstr "Vi kan också importera listor över källkodsarkiv för dina grupper:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Den inlämnade sammanfattningen är för lång ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Du har inte sparat dina ändringar, är du säker på att du vill kasta bort dem?"
-
 msgid "This is a preview."
 msgstr "Detta är en förhandsvisning."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Utdrag som kommer användas i sociala medier:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Du har inte sparat dina ändringar, är du säker på att du vill kasta bort dem?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Beskriv ditt arbete, varför du söker bidrag, osv. Vi behöver både en kort beskrivning och ett fullständigt uttalande."
@@ -2391,11 +2403,11 @@ msgstr "Liberapay tillåter dig att internationalisera dina texter. Använd väl
 msgid "Current language: {0}"
 msgstr "Nuvarande språk: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Kort beskrivning"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Fullständigt uttalande"
 
@@ -5021,7 +5033,7 @@ msgstr "Skapa en grupp"
 msgid "{0} community settings"
 msgstr "{0} gemenskapsinställningar"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Sidopanel text"
 

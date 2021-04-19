@@ -1737,8 +1737,8 @@ msgstr "화폐"
 msgid "Goal"
 msgstr "목표"
 
-msgid "Statement"
-msgstr "성명 (statement)"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "다른 곳의 계정"
@@ -1748,6 +1748,9 @@ msgstr ""
 
 msgid "Schedule"
 msgstr "계획"
+
+msgid "Statement"
+msgstr "성명 (statement)"
 
 msgid "Members"
 msgstr "회원"
@@ -2347,14 +2350,23 @@ msgstr "팀의 저장소를 불러올 수 있습니다:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "제출된 설명이 너무 깁니다 ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "바뀐 내용을 저장하지 않았습니다. 바뀐 내용을 버릴까요?"
-
 msgid "This is a preview."
 msgstr "미리보기 중입니다."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "소셜 미디어에서 사용될 요약:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "바뀐 내용을 저장하지 않았습니다. 바뀐 내용을 버릴까요?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "당신이 하는 일을 요약하고, 왜 기부를 요청하는 지 설명해 주세요. 짧은 요약과 긴 성명이 모두 필요합니다."
@@ -2366,11 +2378,11 @@ msgstr "Liberapay는 문구를 다른 언어로 표현할 수 있도록 허용�
 msgid "Current language: {0}"
 msgstr "현재 언어: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "짧은 설명"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "긴 성명"
 
@@ -4951,6 +4963,7 @@ msgstr ""
 msgid "{0} community settings"
 msgstr ""
 
+#, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr ""
 

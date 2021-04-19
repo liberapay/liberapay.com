@@ -1753,8 +1753,8 @@ msgstr "Monnaies"
 msgid "Goal"
 msgstr "Objectif"
 
-msgid "Statement"
-msgstr "Présentation"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Comptes liés"
@@ -1764,6 +1764,9 @@ msgstr "Instruments"
 
 msgid "Schedule"
 msgstr "Échéances"
+
+msgid "Statement"
+msgstr "Présentation"
 
 msgid "Members"
 msgstr "Membres"
@@ -2367,14 +2370,23 @@ msgstr "Nous pouvons aussi importer les dépôts de vos équipes :"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Le résumé est trop long ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Vous n'avez pas sauvegardé vos modifications, êtes-vous sûr de vouloir les abandonner ?"
-
 msgid "This is a preview."
 msgstr "Ceci est un aperçu."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Extrait qui sera utilisé sur les réseaux sociaux :"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Vous n'avez pas sauvegardé vos modifications, êtes-vous sûr de vouloir les abandonner ?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Décrivez votre travail, pourquoi vous demandez des dons, etc. Nous avons besoin à la fois d'un résumé concis et d'une présentation complète."
@@ -2386,11 +2398,11 @@ msgstr "Liberapay vous permet de traduire vos textes. Utilisez le sélecteur ci-
 msgid "Current language: {0}"
 msgstr "Langue actuelle : {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Description courte"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Présentation complète"
 
@@ -5011,7 +5023,7 @@ msgstr "Créer une équipe"
 msgid "{0} community settings"
 msgstr "Paramètres de la communauté {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Texte de la barre latérale"
 

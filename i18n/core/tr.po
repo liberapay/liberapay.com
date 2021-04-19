@@ -1753,8 +1753,8 @@ msgstr "Para Birimleri"
 msgid "Goal"
 msgstr "Hedef"
 
-msgid "Statement"
-msgstr "Açıklama"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Bağlantılı Hesaplar"
@@ -1764,6 +1764,9 @@ msgstr "Araçlar"
 
 msgid "Schedule"
 msgstr "Plan"
+
+msgid "Statement"
+msgstr "Açıklama"
 
 msgid "Members"
 msgstr "Üyeler"
@@ -2367,14 +2370,23 @@ msgstr "Takımlarınız için kod depolarının listelerini de içe aktarabiliri
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Gönderilen özet çok uzun ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Değişikliklerinizi kaydetmediniz, onları atmak istediğinizden emin misiniz?"
-
 msgid "This is a preview."
 msgstr "Bu bir ön izlemedir."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Sosyal medyada kullanılacak alıntılar:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Değişikliklerinizi kaydetmediniz, onları atmak istediğinizden emin misiniz?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Çalışmanızı, neden bağış istediğinizi vs. açıklayın. Hem kısa bir özete hem de tam bir açıklamaya ihtiyacımız var."
@@ -2386,11 +2398,11 @@ msgstr "Liberapay, metinlerinizi uluslararasılaştırmanıza olanak tanır. Dil
 msgid "Current language: {0}"
 msgstr "Geçerli dil: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Kısa açıklama"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Tam açıklama"
 
@@ -5010,7 +5022,7 @@ msgstr "Takım oluştur"
 msgid "{0} community settings"
 msgstr "{0} topluluk ayarları"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Kenar çubuğu metni"
 

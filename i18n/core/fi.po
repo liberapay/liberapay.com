@@ -1753,8 +1753,8 @@ msgstr "Valuutat"
 msgid "Goal"
 msgstr "Tavoite"
 
-msgid "Statement"
-msgstr "Esittely"
+msgid "Descriptions"
+msgstr ""
 
 msgid "Linked Accounts"
 msgstr "Yhdistetyt tilit"
@@ -1764,6 +1764,9 @@ msgstr "Välineet"
 
 msgid "Schedule"
 msgstr "Aikataulu"
+
+msgid "Statement"
+msgstr "Esittely"
 
 msgid "Members"
 msgstr "Jäseniä"
@@ -2367,14 +2370,23 @@ msgstr "Voimme myös noutaa repositoriolistat ryhmistäsi:"
 msgid "The submitted summary is too long ({0} > {1})."
 msgstr "Syötetty tiivistelmä on liian pitkä ({0} > {1})."
 
-msgid "You haven't saved your changes, are you sure you want to discard them?"
-msgstr "Et ole tallentanut muutoksiasi. Haluatko varmasti hylätä ne?"
-
 msgid "This is a preview."
 msgstr "Tämä on esikatselu."
 
 msgid "Excerpt that will be used in social media:"
 msgstr "Lainaus, jota käytetään sosiaalisessa mediassa:"
+
+msgid "Preview of the short description"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "You haven't saved your changes, are you sure you want to discard them?"
+msgstr "Et ole tallentanut muutoksiasi. Haluatko varmasti hylätä ne?"
+
+msgid "Discard"
+msgstr ""
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Kuvaile työtäsi, miksi pyydät lahjoituksia jne. Tarvitsemme lyhyen tiivistelmän sekä koko kuvauksen."
@@ -2386,11 +2398,11 @@ msgstr "Liberapay mahdollistaa tekstien tarjoamisen eri kielellä. Valitse kieli
 msgid "Current language: {0}"
 msgstr "Tämänhetkinen kieli: {0}"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Short description in {language}"
 msgstr "Lyhyt kuvaus"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Full description in {language}"
 msgstr "Koko kuvaus"
 
@@ -5011,7 +5023,7 @@ msgstr "Luo ryhmä"
 msgid "{0} community settings"
 msgstr "{0}-yhteisön asetukset"
 
-#, fuzzy
+#, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Sivupalkkiteksti"
 
