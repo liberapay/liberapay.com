@@ -1,0 +1,16 @@
+% if donations_paused
+{{ _("Liberapay donation paused") }}
+% else
+{{ _("Liberapay donation resumed") }}
+% endif
+
+[---] text/html
+% if donations_paused
+<p>{{ _("Due to changes recently made by {0}, your donations for {0} have been temporarily paused.", recipient) }}</p>
+% else
+<p>{{ _("Due to changes recently made by {0}, your donations for {0} are set to resume.", recipient) }}</p>
+% endif
+
+<p>{{ _("View your updated donations page at the following link:") }}</p>
+
+<p><a href="{{ donations_url }}" style="{{ button_style('primary') }}">{{ _("View Donations Page") }}</a></p>

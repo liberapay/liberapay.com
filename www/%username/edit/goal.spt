@@ -11,22 +11,25 @@ if request.method == "POST":
         goal = request.body["goal_custom"]
         goal_currency = request.body.get_currency('currency', participant.main_currency)
         goal = locale.parse_money_amount(goal, goal_currency)
-        if not (goal > 0 or participant.is_person and goal.amount in (0, -1)):
+        if not (goal > 0 or participant.is_person and goal.amount in (0, -1, -2)):
             raise response.invalid_input(goal, 'goal_custom', 'body')
     else:
-        goal = Money(request.body.get_int("goal", minimum=-1), participant.main_currency).round_down()
-        if not (goal > 0 or participant.is_person and goal.amount in (0, -1)):
+        goal = Money(request.body.get_int("goal", minimum=-2), participant.main_currency).round_down()
+        if not (goal > 0 or participant.is_person and goal.amount in (0, -1, -2)):
             raise response.invalid_input(goal, 'goal', 'body')
-    participant.update_goal(goal)
+    if goal != participant.goal:
+        participant.update_goal(goal)
     form_post_success(state)
 
 if participant.kind == 'individual':
     GRATEFUL = _("I'm grateful for gifts, but don't have a specific funding goal.")
+    GRATEFUL_PAUSED_GIFTS = _("I'm grateful for gifts, but they are currently paused.")
     PATRON = _("I'm here as a patron.")
     PATRON_NO_GIFTS = _("I'm here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("My goal is to receive {0}")
 else:
     GRATEFUL = _("We're grateful for gifts, but don't have a specific funding goal.")
+    GRATEFUL_PAUSED_GIFTS = _("We're grateful for gifts, but they are currently paused.")
     PATRON = _("We're here as a patron.")
     PATRON_NO_GIFTS = _("We're here as a patron, and politely decline to receive gifts.")
     GOAL_RAW = _("Our goal is to receive {0}")
@@ -70,6 +73,12 @@ subhead = _("Goal")
 
         % if participant.kind != 'group'
         <label>
+            <input type="radio" name="goal" id="goal-negative" value="-2"
+                   {{ 'checked' if participant.goal == -2 else '' }} />
+            {{ GRATEFUL_PAUSED_GIFTS }}
+        </label><br>
+
+        <label>
             <input type="radio" name="goal" id="goal-0" value="0"
                    {{ 'checked' if participant.goal == 0 else '' }} />
             {{ PATRON }}
@@ -77,7 +86,7 @@ subhead = _("Goal")
 
         <label>
             <input type="radio" name="goal" id="goal-negative" value="-1"
-                   {{ 'checked' if participant.goal and participant.goal < 0 else '' }} />
+                   {{ 'checked' if participant.goal == -1 else '' }} />
             {{ PATRON_NO_GIFTS }}
         </label>
         % endif
