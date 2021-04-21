@@ -11,11 +11,12 @@ from babel.dates import format_timedelta
 import mangopay
 import pando.utils
 import requests
-from liberapay.payin.common import resolve_amounts
+
 from liberapay import constants
 from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.i18n.currencies import MoneyBasket
+from liberapay.payin.common import resolve_amounts
 from liberapay.utils import group_by
 from liberapay.website import website
 
@@ -469,12 +470,15 @@ class Payday:
         tip_currencies = set(t.full_amount.currency for t in tips)
         takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
         takes_by_secondary_currency = {c: [] for c in tip_currencies}
-        resolved_takes = resolve_amounts(min(fuzzy_income_sum, fuzzy_takes_sum), {take.member: take.amount.convert(fuzzy_income_sum.currency) for take in takes})
+        resolved_takes = resolve_amounts(
+            min(fuzzy_income_sum, fuzzy_takes_sum),
+            {take.member: take.amount.convert(fuzzy_income_sum.currency) for take in takes}
+        )
         for take in takes:
             if take.member in resolved_takes:
-              take.amount = resolved_takes[take.member]
+                take.amount = resolved_takes[take.member]
             else:
-              take.amount = Money(0, take.amount.currency)
+                take.amount = Money(0, take.amount.currency)
             if take.paid_in_advance is None:
                 take.paid_in_advance = take.amount.zero()
             if take.accepted_currencies is None:

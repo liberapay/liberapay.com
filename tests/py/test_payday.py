@@ -493,11 +493,11 @@ class TestPaydayForTeams(FakeTransfersHarness):
         This tests the payment to teams with a nondivisible income (with respect to the number of team members):
             - creates a team of 7 people
             - has a total income of 0.85 euros/week
-            - each member of the team would like to have an income of 1 euro 
-            - each participant will 0.12 euros except 1 participant will have 0.13 euros 
-            - team should have a leftover of 0.00 euros after each week 
+            - each member of the team would like to have an income of 1 euro
+            - each participant will 0.12 euros except 1 participant will have 0.13 euross
+            - team should have a leftover of 0.00 euros after each week
         """
-        team = self.make_participant('team', kind = 'group')
+        team = self.make_participant('team', kind='group')
         charlie = self.make_participant('charlie', balance=EUR(1000))
         charlie.set_tip_to(team, EUR('0.85'))
 
