@@ -1,5 +1,6 @@
 from collections import namedtuple
 from datetime import timedelta
+import itertools
 
 from pando.utils import utcnow
 from psycopg2.extras import execute_batch
@@ -451,7 +452,7 @@ def resolve_take_amounts(payment_amount, takes):
         t.resolved_amount = tr_amounts.get(t.member, payment_amount.zero())
 
 
-def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
+def resolve_amounts(available_amount, base_amounts, convergence_amounts=None, payday_id=1):
     """Compute transfer amounts.
 
     Args:
@@ -461,6 +462,9 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
             a map of IDs to raw transfer amounts
         convergence_amounts (Dict[Any, Money]):
             an optional map of IDs to ideal additional amounts
+        payday_id (int):
+            the ID of the current or next payday, used to rotate who receives
+            the remainder when there is a tie
 
     Returns a copy of `base_amounts` with updated values.
     """
@@ -488,7 +492,7 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
 
     # Compute the prorated amounts
     base_sum = Money.sum(base_amounts.values(), amount_left.currency)
-    base_ratio = amount_left / base_sum
+    base_ratio = 0 if base_sum == 0 else amount_left / base_sum
     for key, base_amount in sorted(base_amounts.items()):
         if base_amount == 0:
             continue
@@ -500,10 +504,17 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None):
     # Deal with rounding errors
     if amount_left > 0:
         # Try to distribute in a way that doesn't skew the percentages much.
+        # If there's a tie, use the payday ID to rotate the winner every week.
+        i = itertools.count(1)
+        n = len(r)
+
         def compute_priority(item):
             key, current_amount = item
             base_amount = base_amounts[key] * base_ratio
-            return (current_amount - base_amount) / base_amount
+            return (
+                (current_amount - base_amount) / base_amount if base_amount else 2,
+                (next(i) - payday_id) % n
+            )
 
         for key, amount in sorted(r.items(), key=compute_priority):
             r[key] += min_transfer_amount

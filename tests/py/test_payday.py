@@ -288,7 +288,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor, payday.ts_start, payday.id)
             new_balances = self.get_new_balances(cursor)
             assert new_balances == {
                 'david': [],
@@ -313,7 +313,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor, payday.ts_start, payday.id)
             new_balances = self.get_new_balances(cursor)
             assert new_balances == {
                 'david': [],
@@ -341,7 +341,7 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start)
+            payday.transfer_virtually(cursor, payday.ts_start, payday.id)
             new_balances = self.get_new_balances(cursor)
             assert new_balances == {
                 'alice': [],
@@ -783,6 +783,101 @@ class TestPaydayForTeams(FakeTransfersHarness):
             'team': EUR('0.00'),
         }
         assert d == expected
+
+    def get_payday_transfers(self):
+        return self.db.all("""
+            SELECT tippee, amount
+              FROM transfers tr
+             WHERE tr.timestamp > (
+                       SELECT ts_start
+                         FROM paydays
+                     ORDER BY ts_start DESC
+                        LIMIT 1
+                   )
+        """)
+
+    def test_indivisible_team_income(self):
+        # Create a team with 7 members
+        member_1 = self.make_participant('member_1')
+        member_2 = self.make_participant('member_2')
+        member_3 = self.make_participant('member_3')
+        member_4 = self.make_participant('member_4')
+        member_5 = self.make_participant('member_5')
+        member_6 = self.make_participant('member_6')
+        member_7 = self.make_participant('member_7')
+        self.add_payment_account(member_1, 'stripe')
+        self.add_payment_account(member_2, 'stripe')
+        self.add_payment_account(member_3, 'stripe')
+        self.add_payment_account(member_4, 'stripe')
+        self.add_payment_account(member_5, 'stripe')
+        self.add_payment_account(member_6, 'stripe')
+        self.add_payment_account(member_7, 'stripe')
+        team = self.make_participant('team', kind='group')
+        team.set_take_for(member_1, EUR('1.00'), team)
+        team.set_take_for(member_2, EUR('1.00'), team)
+        team.set_take_for(member_3, EUR('1.00'), team)
+        team.set_take_for(member_4, EUR('1.00'), team)
+        team.set_take_for(member_5, EUR('1.00'), team)
+        team.set_take_for(member_6, EUR('1.00'), team)
+        team.set_take_for(member_7, EUR('1.00'), team)
+
+        # Fund the team
+        charlie = self.make_participant('charlie')
+        charlie.set_tip_to(team, EUR('0.85'))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        payin_transfers = self.make_payin_and_transfer(charlie_card, team, EUR('85.00'))[1]
+        transfer_amounts = {pt.recipient: pt.amount for pt in payin_transfers}
+        assert transfer_amounts == {
+            member_1.id: EUR('12.15'),
+            member_2.id: EUR('12.15'),
+            member_3.id: EUR('12.14'),
+            member_4.id: EUR('12.14'),
+            member_5.id: EUR('12.14'),
+            member_6.id: EUR('12.14'),
+            member_7.id: EUR('12.14'),
+        }
+
+        # First payday
+        Payday.start().run()
+        transfer_amounts = dict(self.get_payday_transfers())
+        assert transfer_amounts == {
+            member_1.id: EUR('0.13'),
+            member_2.id: EUR('0.12'),
+            member_3.id: EUR('0.12'),
+            member_4.id: EUR('0.12'),
+            member_5.id: EUR('0.12'),
+            member_6.id: EUR('0.12'),
+            member_7.id: EUR('0.12'),
+        }
+        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
+
+        # Second payday
+        Payday.start().run()
+        transfer_amounts = dict(self.get_payday_transfers())
+        assert transfer_amounts == {
+            member_1.id: EUR('0.12'),
+            member_2.id: EUR('0.13'),
+            member_3.id: EUR('0.12'),
+            member_4.id: EUR('0.12'),
+            member_5.id: EUR('0.12'),
+            member_6.id: EUR('0.12'),
+            member_7.id: EUR('0.12'),
+        }
+        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
+
+        # Third payday, with an income increased by four cents
+        charlie.set_tip_to(team, EUR('0.89'))
+        Payday.start().run()
+        transfer_amounts = dict(self.get_payday_transfers())
+        assert transfer_amounts == {
+            member_1.id: EUR('0.12'),
+            member_2.id: EUR('0.12'),
+            member_3.id: EUR('0.13'),
+            member_4.id: EUR('0.13'),
+            member_5.id: EUR('0.13'),
+            member_6.id: EUR('0.13'),
+            member_7.id: EUR('0.13'),
+        }
 
     # Two currencies
     # ==============

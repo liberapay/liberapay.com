@@ -167,9 +167,9 @@ class TestResolveTeamDonation(Harness):
             alice_card, team, EUR('3.30'), fee=EUR('0.30')
         )
         assert len(payin_transfers) == 2
-        assert payin_transfers[0].amount == EUR('1.02')
+        assert payin_transfers[0].amount == EUR('1.00')
         assert payin_transfers[0].destination == stripe_account_bob.pk
-        assert payin_transfers[1].amount == EUR('1.98')
+        assert payin_transfers[1].amount == EUR('2.00')
         assert payin_transfers[1].destination == stripe_account_carl.pk
 
 
