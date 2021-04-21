@@ -26,7 +26,7 @@ el servicio en sí, donando a las personas físicas y jurídicas que lo mantiene
 ## 3. Gestión de los fondos
 
 La organización garantiza que los fondos que el usuario ha puesto bajo su custodia
-no se perderan en caso de quiebra de sí mismo o de un tercero a quien
+no se perderán en caso de quiebra de sí mismo o de un tercero a quien
 delegó la custodia de los fondos.
 
 La organización se compromete a corregir cualquier error por su parte en la ejecución de
