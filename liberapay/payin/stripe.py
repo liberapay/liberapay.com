@@ -192,7 +192,7 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
             charge = intent.charges.data[0]
     intent_id = getattr(intent, 'id', None)
     payin = settle_charge_and_transfers(db, payin, charge, intent_id=intent_id)
-    send_payin_notification(payin, payer, charge, route)
+    send_payin_notification(db, payin, payer, charge, route)
     return payin
 
 
@@ -261,11 +261,11 @@ def destination_charge(db, payin, payer, statement_descriptor):
             charge = intent.charges.data[0]
     intent_id = getattr(intent, 'id', None)
     payin = settle_destination_charge(db, payin, charge, pt, intent_id=intent_id)
-    send_payin_notification(payin, payer, charge, route)
+    send_payin_notification(db, payin, payer, charge, route)
     return payin
 
 
-def send_payin_notification(payin, payer, charge, route):
+def send_payin_notification(db, payin, payer, charge, route):
     """Send the legally required notification for SEPA Direct Debits.
     """
     if route.network == 'stripe-sdd' and charge.status != 'failed':
@@ -273,6 +273,12 @@ def send_payin_notification(payin, payer, charge, route):
             raise NotImplementedError()
         else:
             sepa_debit = stripe.Source.retrieve(route.address).sepa_debit
+        tippees = db.all("""
+            SELECT DISTINCT tippee_p.id AS tippee_id, tippee_p.username AS tippee_username
+              FROM payin_transfers pt
+              JOIN participants tippee_p ON tippee_p.id = coalesce(pt.team, pt.recipient)
+             WHERE pt.payin = %s
+        """, (payin.id,), back_as=dict)
         payer.notify(
             'payin_sdd_created',
             force_email=True,
@@ -286,6 +292,7 @@ def send_payin_notification(payin, payer, charge, route):
             mandate_creation_date=route.ctime.date(),
             creditor_identifier=website.app_conf.sepa_creditor_identifier,
             average_settlement_seconds=PAYIN_SETTLEMENT_DELAYS['stripe-sdd'].total_seconds(),
+            tippees=tippees,
         )
 
 

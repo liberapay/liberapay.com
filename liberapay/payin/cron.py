@@ -211,14 +211,6 @@ def send_upcoming_debit_notifications():
             event = 'upcoming_debit'
             context['instrument_brand'] = route.get_brand()
             context['instrument_partial_number'] = route.get_partial_number()
-            if route.network == 'stripe-sdd':
-                source = route.stripe_source
-                context.update({
-                    'creditor_identifier': website.app_conf.sepa_creditor_identifier,
-                    'mandate_creation_date': route.ctime.date(),
-                    'mandate_id': source.sepa_debit.mandate_reference,
-                    'mandate_url': source.sepa_debit.mandate_url,
-                })
         else:
             event = 'missing_route'
         payer.notify(event, email_unverified_address=True, **context)
