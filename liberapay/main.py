@@ -106,6 +106,14 @@ website.renderer_factories['jinja2'].Renderer.global_context.update({
 
 del website.body_parsers[rp.media_type_json]
 
+def default_body_parser(body_bytes, headers):
+    if body_bytes:
+        raise pando.exceptions.UnknownBodyType(headers.get(b'Content-Type'))
+    else:
+        return pando.http.mapping.Mapping()
+
+website.body_parsers[''] = default_body_parser
+
 
 # Wireup Algorithm
 # ================
