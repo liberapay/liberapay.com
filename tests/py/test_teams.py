@@ -40,12 +40,12 @@ class Tests(Harness):
         )
         assert r.code == 302
 
-        r = self.client.PxST('/A-Team/membership/accept', auth_as=self.bob)
+        r = self.client.GxT('/A-Team/membership/accept', auth_as=self.bob)
         assert r.code == 302
         is_member = self.bob.member_of(self.a_team)
         assert is_member is True
 
-        r = self.client.PxST('/A-Team/membership/leave', auth_as=self.alice)
+        r = self.client.GxT('/A-Team/membership/leave', auth_as=self.alice)
         assert r.code == 200
         assert 'confirm' in r.text
 
@@ -57,19 +57,19 @@ class Tests(Harness):
 
     def test_refuse_invite(self):
         self.a_team.invite(self.bob, self.alice)
-        r = self.client.PxST('/A-Team/membership/refuse', auth_as=self.bob)
+        r = self.client.GxT('/A-Team/membership/refuse', auth_as=self.bob)
         assert r.code == 302
         is_member = self.bob.member_of(self.a_team)
         assert is_member is False
 
     def test_accept_then_refuse_invite(self):
         self.a_team.invite(self.bob, self.alice)
-        r = self.client.PxST('/A-Team/membership/accept', auth_as=self.bob)
+        r = self.client.GxT('/A-Team/membership/accept', auth_as=self.bob)
         assert r.code == 302
         is_member = self.bob.member_of(self.a_team)
         assert is_member is True
 
-        r = self.client.PxST('/A-Team/membership/refuse', auth_as=self.bob)
+        r = self.client.GxT('/A-Team/membership/refuse', auth_as=self.bob)
         assert r.code == 200
         assert 'confirm' in r.text
 
@@ -81,12 +81,12 @@ class Tests(Harness):
 
     def test_refuse_then_accept_invite(self):
         self.a_team.invite(self.bob, self.alice)
-        r = self.client.PxST('/A-Team/membership/refuse', auth_as=self.bob)
+        r = self.client.GxT('/A-Team/membership/refuse', auth_as=self.bob)
         assert r.code == 302
         is_member = self.bob.member_of(self.a_team)
         assert is_member is False
 
-        r = self.client.PxST('/A-Team/membership/accept', auth_as=self.bob)
+        r = self.client.GxT('/A-Team/membership/accept', auth_as=self.bob)
         assert r.code == 302
         is_member = self.bob.member_of(self.a_team)
         assert is_member is True
@@ -96,7 +96,7 @@ class Tests(Harness):
         self.a_team.invite(self.bob, self.alice)
 
         # Check that bob can't use the invite from A-Team to join B-Team
-        r = self.client.PxST('/B-Team/membership/accept', auth_as=self.bob)
+        r = self.client.GxT('/B-Team/membership/accept', auth_as=self.bob)
         assert r.code == 403
         assert 'not invited' in r.text
         is_member = self.bob.member_of(b_team)
