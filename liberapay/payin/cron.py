@@ -160,7 +160,7 @@ def send_upcoming_debit_notifications():
         SELECT (SELECT p FROM participants p WHERE p.id = sp.payer) AS payer
              , json_agg((SELECT a FROM (
                    SELECT sp.id, sp.execution_date, sp.amount, sp.transfers
-               ) a ORDER BY a.execution_date)) AS payins
+               ) a)) AS payins
           FROM scheduled_payins sp
          WHERE sp.execution_date <= (current_date + interval '45 days')
            AND sp.automatic
@@ -169,6 +169,7 @@ def send_upcoming_debit_notifications():
            AND sp.ctime < (current_timestamp - interval '6 hours')
       GROUP BY sp.payer, (sp.amount).currency
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
+      ORDER BY sp.payer, (sp.amount).currency
     """)
     for payer, payins in rows:
         if payer.is_suspended or payer.status != 'active' or not payer.get_email_address():
@@ -176,6 +177,7 @@ def send_upcoming_debit_notifications():
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
             continue
+        payins.sort(key=lambda sp: sp['execution_date'])
         context = {
             'payins': payins,
             'total_amount': sum(sp['amount'] for sp in payins),
@@ -184,7 +186,10 @@ def send_upcoming_debit_notifications():
             for tr in sp['transfers']:
                 del tr['tip'], tr['beneficiary']
         if len(payins) > 1:
-            context['ndays'] = (payins[-1]['execution_date'] - utcnow().date()).days
+            last_execution_date = payins[-1]['execution_date']
+            max_execution_date = max(sp['execution_date'] for sp in payins)
+            assert last_execution_date == max_execution_date
+            context['ndays'] = (max_execution_date - utcnow().date()).days
         while True:
             route = db.one("""
                 SELECT r
