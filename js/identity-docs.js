@@ -111,8 +111,6 @@ Liberapay.identity_docs_init = function () {
                 }
                 var count = 0;
                 $.each(uploaders, function (i, uploader) {
-                    console.log(uploader);
-                    console.log(uploader._storedIds.length);
                     if (uploader._storedIds.length !== 0) {
                         count += uploader._storedIds.length;
                         if (uploader._options.request.params.doc_id) {
@@ -123,7 +121,6 @@ Liberapay.identity_docs_init = function () {
                     }
                 });
                 if (count == 0) {
-                    console.log(count);
                     window.location.href = window.location.href;
                 }
             },

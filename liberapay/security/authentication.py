@@ -31,7 +31,7 @@ class _ANON:
     session = None
     id = None
 
-    __bool__ = __nonzero__ = lambda *a: False
+    __bool__ = lambda *a: False
     __repr__ = lambda self: '<ANON>'
 
     get_currencies_for = staticmethod(Participant.get_currencies_for)

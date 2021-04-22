@@ -97,7 +97,6 @@ class _Zeros(defaultdict):
 
 
 Money.__init__ = _Money_init
-Money.__nonzero__ = Money.__bool__
 Money.__eq__ = _Money_eq
 Money.__hash__ = _Money_hash
 Money.__iter__ = lambda m: iter((m.amount, m.currency))
@@ -220,8 +219,6 @@ class MoneyBasket:
 
     def __bool__(self):
         return any(v for v in self.amounts.values())
-
-    __nonzero__ = __bool__
 
     @property
     def currencies_present(self):
