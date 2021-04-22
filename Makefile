@@ -121,7 +121,7 @@ i18n_update: _i18n_rebase _i18n_pull _i18n_extract
 	@echo "All done, check that everything is okay then push to master."
 
 _i18n_rebase:
-	@echo -n "Please go to https://hosted.weblate.org/projects/liberapay/#repository and click the Rebase button if you haven't done it yet, then press Enter to continue..."
+	@echo -n "Please go to https://hosted.weblate.org/projects/liberapay/#repository and click the Commit button if there are uncommitted changes, then press Enter to continue..."
 	@read a
 
 _i18n_fetch:
