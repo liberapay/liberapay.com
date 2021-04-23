@@ -21,6 +21,7 @@ $(env): requirements*.txt
 	fi;
 	@$(python) cli/check-python-version.py
 	$(python) -m venv $(env)
+	$(env_bin)/$(pip) install wheel
 	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
 	@touch $(env)
 
