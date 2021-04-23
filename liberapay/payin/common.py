@@ -1,7 +1,6 @@
 from collections import namedtuple
 from datetime import timedelta
 
-from pando import json
 from pando.utils import utcnow
 from psycopg2.extras import execute_batch
 
@@ -121,6 +120,8 @@ def update_payin(
                    AND payin = %s
             """, (payin.payer, payin.id))
             if not sp:
+                # Try to find a scheduled renewal that matches this payin.
+                # It doesn't have to be an exact match.
                 schedule = cursor.all("""
                     SELECT *
                       FROM scheduled_payins
@@ -137,47 +138,13 @@ def update_payin(
                        AND payin = %s
                 """, (payin.payer, payin.id)))
                 for sp in schedule:
-                    matching_tippees_count = 0
-                    other_transfers = []
-                    for tr in sp.transfers:
-                        if tr['tippee_id'] in payin_tippees:
-                            matching_tippees_count += 1
-                        else:
-                            other_transfers.append(tr)
-                    if matching_tippees_count > 0:
-                        if other_transfers:
-                            cursor.run("""
-                                UPDATE scheduled_payins
-                                   SET payin = %s
-                                     , mtime = current_timestamp
-                                 WHERE id = %s
-                            """, (payin.id, sp.id))
-                            other_transfers_sum = Money.sum(
-                                (Money(**tr['amount']) for tr in other_transfers),
-                                sp['amount'].currency
-                            ) if sp['amount'] else None
-                            cursor.run("""
-                                INSERT INTO scheduled_payins
-                                            (ctime, mtime, execution_date, payer,
-                                             amount, transfers, automatic,
-                                             notifs_count, last_notif_ts,
-                                             customized, payin)
-                                     VALUES (%(ctime)s, now(), %(execution_date)s, %(payer)s,
-                                             %(amount)s, %(transfers)s, %(automatic)s,
-                                             %(notifs_count)s, %(last_notif_ts)s,
-                                             %(customized)s, NULL)
-                            """, dict(
-                                sp._asdict(),
-                                amount=other_transfers_sum,
-                                transfers=json.dumps(other_transfers),
-                            ))
-                        else:
-                            cursor.run("""
-                                UPDATE scheduled_payins
-                                   SET payin = %s
-                                     , mtime = current_timestamp
-                                 WHERE id = %s
-                            """, (payin.id, sp.id))
+                    if any((tr['tippee_id'] in payin_tippees) for tr in sp.transfers):
+                        cursor.run("""
+                            UPDATE scheduled_payins
+                               SET payin = %s
+                                 , mtime = current_timestamp
+                             WHERE id = %s
+                        """, (payin.id, sp.id))
                         break
 
     return payin
