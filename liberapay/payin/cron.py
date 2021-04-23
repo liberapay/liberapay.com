@@ -93,7 +93,7 @@ def send_donation_reminder_notifications():
         SELECT (SELECT p FROM participants p WHERE p.id = sp.payer) AS payer
              , json_agg((SELECT a FROM (
                    SELECT sp.id, sp.execution_date, sp.amount, sp.transfers
-               ) a ORDER BY a.execution_date)) AS payins
+               ) a)) AS payins
           FROM scheduled_payins sp
      LEFT JOIN LATERAL (
                    SELECT pi.*
@@ -117,11 +117,13 @@ def send_donation_reminder_notifications():
                       OR sp.notifs_count = 1 AND sp.last_notif_ts <= (current_date - interval '4 weeks')
                       OR sp.notifs_count = 2 AND sp.last_notif_ts <= (current_date - interval '26 weeks')
                ) > 0
+      ORDER BY sp.payer
     """)
     next_payday = compute_next_payday_date()
     for payer, payins in rows:
         if payer.is_suspended or payer.status != 'active':
             continue
+        payins.sort(key=lambda sp: sp['execution_date'])
         _check_scheduled_payins(db, payer, payins, automatic=False)
         if not payins:
             continue
