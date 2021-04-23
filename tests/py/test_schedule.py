@@ -169,7 +169,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         alice.set_tip_to(carl, EUR('2.00'), renewal_mode=1)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('2.00'))
-        self.make_payin_and_transfer(alice_card, carl, EUR('2.00'))
+        self.make_payin_and_transfer(alice_card, carl, EUR('12.00'))
         new_schedule = alice.schedule_renewals()
         next_payday = compute_next_payday_date()
         expected_transfers = [
@@ -207,7 +207,7 @@ class TestDonationRenewalScheduling(EmailHarness):
                     (expected_renewal_date,))
         # Renew one of the donations
         renewal_payin = self.make_payin_and_transfer(alice_card, bob, EUR('200.00'))[0]
-        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY execution_date, ctime")
         assert len(scheduled_payins) == 3
         assert scheduled_payins[0].amount is None
         assert scheduled_payins[0].automatic is False
@@ -216,12 +216,14 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[0].transfers == expected_transfers
         assert scheduled_payins[1].amount is None
         assert scheduled_payins[1].automatic is False
+        expected_renewal_date = next_payday + timedelta(weeks=6)
         assert scheduled_payins[1].execution_date == expected_renewal_date
         assert scheduled_payins[1].payin is None
         assert scheduled_payins[1].transfers == [expected_transfers[1]]
         assert scheduled_payins[2].amount is None
         assert scheduled_payins[2].automatic is False
-        assert scheduled_payins[2].execution_date == next_payday + timedelta(weeks=101)
+        expected_renewal_date = next_payday + timedelta(weeks=101)
+        assert scheduled_payins[2].execution_date == expected_renewal_date
         assert scheduled_payins[2].payin is None
         assert scheduled_payins[2].transfers == [expected_transfers[0]]
         emails = self.get_emails()
@@ -277,7 +279,8 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[0].transfers == expected_transfers
         assert scheduled_payins[1].amount is None
         assert scheduled_payins[1].automatic is False
-        assert scheduled_payins[1].execution_date == next_payday + timedelta(weeks=4)
+        expected_renewal_date = next_payday + timedelta(weeks=4)
+        assert scheduled_payins[1].execution_date == expected_renewal_date
         assert scheduled_payins[1].payin is None
         assert scheduled_payins[1].transfers == expected_transfers
         emails = self.get_emails()
