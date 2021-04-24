@@ -1,13 +1,13 @@
 % if request.method == 'POST'
     % if 'form.repost' not in request.body
-        <input name="form.repost" type="hidden" value="true" />
+        <input type="hidden" name="form.repost" value="true" />
     % endif
     % for k, values in request.body.items()
         % for v in values:
-            <input name="{{ k }}" type="hidden" value="{{ v }}" />
+            <input type="hidden" name="{{ k }}" value="{{ v }}" />
         % endfor
     % endfor
 % else
-    <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-    <input name="form.repost" type="hidden" value="false" />
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="form.repost" value="false" />
 % endif

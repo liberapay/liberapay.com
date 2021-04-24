@@ -254,6 +254,8 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
         # Form auth
         body = _get_body(request)
         if body:
+            redirect = body.get('form.repost', None) != 'true'
+            redirect_url = body.get('sign-in.back-to')
             # Remove email address from blacklist if requested
             email_address = body.pop('email.unblacklist', None)
             if email_address:
@@ -268,10 +270,10 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             else:
                 p = sign_in_with_form_data(body, state)
                 if p:
-                    redirect = body.get('form.repost', None) != 'true'
-                    redirect_url = body.get('sign-in.back-to') or request.line.uri.decoded
                     if not p.session:
                         session_suffix = '.pw'  # stands for "password"
+                else:
+                    redirect = False
     elif request.method == 'GET':
         if request.qs.get('log-in.id') or request.qs.get('email.id'):
             # Prevent email software from messing up an email log-in or confirmation

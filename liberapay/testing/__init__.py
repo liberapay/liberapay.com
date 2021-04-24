@@ -2,6 +2,7 @@
 """
 
 from contextlib import contextmanager
+from io import BytesIO
 import itertools
 import json
 from os.path import dirname, join, realpath
@@ -65,7 +66,7 @@ class ClientWithAuth(Client):
         Client.__init__(self, *a, **kw)
         Client.website = website
 
-    def build_wsgi_environ(self, *a, **kw):
+    def build_wsgi_environ(self, method, *a, **kw):
         """Extend base class to support authenticating as a certain user.
         """
 
@@ -85,7 +86,11 @@ class ClientWithAuth(Client):
                 sess = auth_as.session = auth_as.start_session()
             cookies[SESSION] = '%i:%i:%s' % (auth_as.id, sess.id, sess.secret)
 
-        return Client.build_wsgi_environ(self, *a, **kw)
+        environ = super().build_wsgi_environ(method, *a, **kw)
+        if method not in ('POST', 'PUT'):
+            environ.pop(b'CONTENT_TYPE', None)
+            environ[b'wsgi.input'] = BytesIO()
+        return environ
 
     def hit(self, method, url, *a, **kw):
         if kw.pop('xhr', False):

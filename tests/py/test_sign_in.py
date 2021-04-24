@@ -379,6 +379,87 @@ class TestLogIn(EmailHarness):
         Participant.dequeue_emails()
         assert not self.get_emails()
 
+    def test_carrying_on_after_email_login(self):
+        email = 'alice@example.net'
+        alice = self.make_participant('alice', email=email)
+
+        # Initiate the log-in
+        data = {'log-in.id': email.upper()}
+        r = self.client.POST('/?foo=bar', data, raise_immediately=False, HTTP_ACCEPT=b'text/html')
+        session = self.db.one("SELECT * FROM user_secrets WHERE participant = %s", (alice.id,))
+        assert session.secret not in r.headers.raw.decode('ascii')
+        assert session.secret not in r.body.decode('utf8')
+        assert r.headers[b'Content-Type'] == b'text/html; charset=UTF-8'
+        assert "Carry on" in r.text
+
+        # Log in, in another tab
+        qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
+            alice.id, session.id, session.secret
+        )
+        csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
+        confirmation_token = b64encode_s(blake2b(
+            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+        ).digest())
+        r = self.client.GxT(
+            '/alice/' + qs + '&log-in.confirmation=' + confirmation_token,
+            csrf_token=csrf_token,
+        )
+        assert r.code == 302
+        assert SESSION in r.headers.cookie
+
+        # Carry on in the first tab
+        data['log-in.carry-on'] = email
+        r = self.client.POST(
+            '/?foo=bar',
+            data,
+            auth_as=alice,
+            raise_immediately=False,
+            HTTP_ACCEPT=b'text/html',
+        )
+        assert r.code == 302
+        assert r.headers[b'Location'] == b'http://localhost/?foo=bar'
+
+    def test_carrying_on_with_form_submission_after_email_login(self):
+        email = 'alice@example.net'
+        alice = self.make_participant('alice', email=email)
+
+        # Initiate the log-in
+        data = {'log-in.id': email.upper()}
+        r = self.client.POST('/?foo=bar', data, raise_immediately=False, HTTP_ACCEPT=b'text/html')
+        session = self.db.one("SELECT * FROM user_secrets WHERE participant = %s", (alice.id,))
+        assert session.secret not in r.headers.raw.decode('ascii')
+        assert session.secret not in r.body.decode('utf8')
+        assert r.headers[b'Content-Type'] == b'text/html; charset=UTF-8'
+        assert "Carry on" in r.text
+        assert 'name="form.repost" value="true"' in r.text
+
+        # Log in, in another tab
+        qs = '?log-in.id=%i&log-in.key=%i&log-in.token=%s' % (
+            alice.id, session.id, session.secret
+        )
+        csrf_token = '_ThisIsAThirtyTwoBytesLongToken_'
+        confirmation_token = b64encode_s(blake2b(
+            session.secret.encode(), key=csrf_token.encode(), digest_size=48,
+        ).digest())
+        r = self.client.GxT(
+            '/alice/' + qs + '&log-in.confirmation=' + confirmation_token,
+            csrf_token=csrf_token,
+        )
+        assert r.code == 302
+        assert SESSION in r.headers.cookie
+
+        # Carry on in the first tab
+        data['form.repost'] = 'true'
+        data['log-in.carry-on'] = email
+        r = self.client.POST(
+            '/?foo=bar',
+            data,
+            auth_as=alice,
+            raise_immediately=False,
+            HTTP_ACCEPT=b'text/html',
+        )
+        assert r.code == 200
+
     def test_normal_session_cannot_be_escalated_to_email_session(self):
         alice = self.make_participant('alice')
         session = alice.start_session()

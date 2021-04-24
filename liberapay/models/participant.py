@@ -2650,9 +2650,7 @@ class Participant(Model, MixinTeam):
                     continue
                 cur_tippees_set = set(cur_tippees)
                 n_common_tippees = len(cur_tippees_set & new_tippees_set)
-                if best_match and best_match_score >= n_common_tippees:
-                    continue
-                else:
+                if n_common_tippees > best_match_score:
                     best_match, best_match_score = cur_sp, n_common_tippees
             return best_match
 
