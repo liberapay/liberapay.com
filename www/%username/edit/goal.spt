@@ -73,7 +73,7 @@ subhead = _("Goal")
 
         % if participant.kind != 'group'
         <label>
-            <input type="radio" name="goal" id="goal-negative" value="-2"
+            <input type="radio" name="goal" id="goal--2" value="-2"
                    {{ 'checked' if participant.goal == -2 else '' }} />
             {{ GRATEFUL_PAUSED_GIFTS }}
         </label><br>
@@ -85,7 +85,7 @@ subhead = _("Goal")
         </label><br>
 
         <label>
-            <input type="radio" name="goal" id="goal-negative" value="-1"
+            <input type="radio" name="goal" id="goal--1" value="-1"
                    {{ 'checked' if participant.goal == -1 else '' }} />
             {{ PATRON_NO_GIFTS }}
         </label>

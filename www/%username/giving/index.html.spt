@@ -358,8 +358,8 @@ next_payday = compute_next_payday_date()
                         "Inactive because the account of the recipient is closed."
                     ) }}</p>
                 % elif tippee.goal == -2
-                    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
-                        "Inactive because the recipient's donations are temporarily paused."
+                    <p class="text-info">{{ glyphicon('pause') }} {{ _(
+                        "This donation has been paused by the recipient."
                     ) }}</p>
                 % elif not tippee.accepts_tips
                     <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
