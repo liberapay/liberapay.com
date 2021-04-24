@@ -240,7 +240,8 @@ title = _("Adding Money")
         constants.FEE_PAYIN_DIRECT_DEBIT[currency].with_vat,
     ) }}</p>
     <p>{{ _(
-        "Direct debits take approximately 4 business days to complete."
+        "Processing this kind of payment takes {timedelta} on average.",
+        timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['mango-ba'], format_args=dict(threshold=0.9))
     ) }}</p>
 
     <h3>{{ _("Amount") }}</h3>
