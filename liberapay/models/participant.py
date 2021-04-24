@@ -2260,8 +2260,9 @@ class Participant(Model, MixinTeam):
                 self.set_attributes(**r._asdict())
             if donations_paused or donations_resumed:
                 for tipper in tippers:
+                    event = 'donations_paused' if donations_paused else 'donations_resumed'
                     tipper.send_email(
-                        'donations_paused',
+                        event,
                         tipper.get_email(tipper.get_email_address()),
                         recipient=self.username,
                         donations_paused=donations_paused,
