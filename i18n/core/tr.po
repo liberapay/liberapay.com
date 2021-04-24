@@ -538,6 +538,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Banka hesabınızdan çekilecek"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "{bank_name} {partial_account_number} hesabınızdan {money_amount} otomatik ödemesi başlattık."
 
@@ -3929,9 +3937,6 @@ msgstr "Fikrinizi mi değiştirdiniz? Önümüzdeki ay hata bildirimi almamak i�
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Liberapay'e banka havalesi yoluyla para eklemek, ödeme işleyicimizden kaynaklanan %{0} tutarında bir ücrete tabidir."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Banka havalesiyle gönderilen para anında ulaşmaz, ancak çoğu havale 4 iş günü içinde tamamlanır."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Lütfen önceden hesaplanmış bir tutar seçin veya özel bir tane girin."
 
@@ -4037,9 +4042,6 @@ msgstr "{0} banka hesabınızdan çekildi, {1} Liberapay cüzdanınıza gitti, {
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "{0} tutarında bir otomatik ödeme başlatıldı. Aktarım başarılı olursa {1} Liberapay cüzdanınıza ulaşacak ve {2} ücretler için ödenecek."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Otomatik ödemelerin tamamlanması yaklaşık 4 iş günü sürer."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

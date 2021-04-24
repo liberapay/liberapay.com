@@ -545,6 +545,14 @@ msgid "Your bank account is going to be debited"
 msgstr "З вашого банківського рахунку буде стягнуто плату"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Ми зробили запит прямого платежу на суму {money_amount} з рахунку ({partial_account_number}) банку {bank_name}."
 
@@ -3969,9 +3977,6 @@ msgstr "Передумали? Скасуйте платіж, щоб не отр�
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Додавання грошей до Liberapay банківським переказом тягне за собою стягнення комісії в {0}% нашою платіжною системою."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Гроші, надіслані через банківський переказ, не надходять одночасно, але більшість платежів завершуються впродовж 4 робочих днів."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Виберіть суму з пропонованих або введіть власну."
 
@@ -4080,9 +4085,6 @@ msgstr "З вашого банківського рахунку було зня�
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Було створено прямий переказ {0}. Якщо переказ пройде успішно, на ваш гаманець Liberapay прийде {1}, та {2} піде на оплату комісій."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Прямий переказ триватиме близько 4 робочих днів."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

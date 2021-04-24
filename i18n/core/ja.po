@@ -531,6 +531,14 @@ msgid "Your bank account is going to be debited"
 msgstr "お使いの銀行口座において引き落としが開始されます"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "{bank_name} のお使いの口座（{partial_account_number}）からの {money_amount} の引き落としを開始しました。"
 
@@ -3892,9 +3900,6 @@ msgstr "考えが変わりましたか？　来月の失敗通知を受け取ら
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "銀行送金でLiberapayに入金すると、決済業者に対して{0}% の手数料が発生します。"
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "銀行振り込みによる送金はすぐには届きません。多くの決済業者は4営業日以内に完了します。"
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "あらかじめ計算された金額を選択します。または自由に金額を入力することもできます。"
 
@@ -3997,9 +4002,6 @@ msgstr "{0}が銀行口座から引き落とされ、{1}がLiberapayウォレッ
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "{0}の口座自動振替が開始されています。転送が成功した場合、{1} は Liberapay ウォレットに追加され、{2} は手数料で支払われます。"
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "口座自動振替は約4営業日以内に完了します。"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

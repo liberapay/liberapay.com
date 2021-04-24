@@ -538,6 +538,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Tu cuenta bancaria será debitada"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Hemos iniciado un pago domiciliado de {money_amount} de tu cuenta ({partial_account_number}) de {bank_name}."
 
@@ -3929,9 +3937,6 @@ msgstr "¿Has cambiado de idea? Cancela el pago para evitar recibir una notifica
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Agregar dinero a Liberapay mediante transferencia bancaria tiene una comisión del {0}% facturada por nuestro procesador de pagos."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "El dinero enviado por transferencia bancaria no llega instantáneamente, pero la mayoría de las transferencias se completan en un plazo de 4 días laborales."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Por favor, selecciona una cantidad precalculada o introduce una personalizada."
 
@@ -4037,9 +4042,6 @@ msgstr "{0} han sido cargados desde tu cuenta bancaria, {1} han ido a tu cartera
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Se ha iniciado un pago domiciliado de {0}. Si la transferencia se realiza con éxito, {1} llegarán a tu cuenta de Liberapay, y {2} serán pagados en tasas."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Los pagos domiciliados tardan aproximadamente 4 días laborables en completarse."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

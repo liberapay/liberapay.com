@@ -533,6 +533,14 @@ msgid "Your bank account is going to be debited"
 msgstr "您的銀行帳戶將會被扣款"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "我們已直接自您的{bank_name}戶頭扣款{money_amount}({partial_account_number})。"
 
@@ -3894,9 +3902,6 @@ msgstr "改變心意了嗎？取消此次付款以避免下個月收到付款失
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "透過銀行滙款到 Liberapay 帳戶將產生{0}% 手續費，這是要給支付處理器的費用。"
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "透過銀行電滙的錢不會立即到位，大部份此類交易需四個工作天完成。"
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "請選擇預先計算的金額或自定數目。"
 
@@ -3999,9 +4004,6 @@ msgstr "{0}已從你的銀行帳號扣除，其中 {1} 已轉入到你的Liberap
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "已請求{0}的自動撥款。若轉帳成功，其中 {1} 會轉入到你的Liberapay 錢包， {2} 則會以支付的手續費扣除。"
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "直接扣款大約要４個工作天。"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

@@ -531,6 +531,14 @@ msgid "Your bank account is going to be debited"
 msgstr "은행 계좌에 청구가 이루어질 예정입니다"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "{bank_name} 은행 계좌에서 {money_amount} 의 자동 이체를 지시하였습니다({partial_account_number})."
 
@@ -3889,9 +3897,6 @@ msgstr "마음을 바꾸었나요? 이체를 취소하면 다음 달에 이체 �
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "계좌 이체로 자금을 입금하게 되면 지불 처리업체에서 {0}% 만큼의 수수료를 부과합니다."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "은행으로 이체되는 자금은 즉각적으로 도착하지 않지만, 대부분의 거래는 4 영업일 내에 처리됩니다."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "사전에 계산된 금액을 선택하거나 수동으로 금액을 입력해 주십시오."
 
@@ -3994,9 +3999,6 @@ msgstr "{0} 만큼이 은행 계좌에서 이체되었으며, {1} 만큼이 Libe
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "{0} 만큼의 자동 이체가 시작되었습니다. 이체가 성공적이라면 {1} 만큼이 Liberapay 계좌로 입금되고 {2} 만큼이 수수료로 지불될 것입니다."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "계좌 이체 처리에는 4영업일이 걸립니다."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

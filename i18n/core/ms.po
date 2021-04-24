@@ -538,6 +538,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Akaun bank anda akan didebitkan"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Kami telah memulakan debit terus sebanyak {money_amount} daripada akaun {bank_name} anda ({partial_account_number})."
 
@@ -3929,9 +3937,6 @@ msgstr "Anda tukar fikiran? Batalkan pembayaran untuk mengelak penerimaan pember
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Menambah wang ke Liberapay melalui pindah kawat bank dikenakan caj perkhidmatan {0} oleh pihak pemproses pembayaran kami."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Wang yang dihantar melalui pindah kawat bank tidak sampai dengan segera, tetapi kebanyakan pindahan siap dalam masa empat hari bekerja."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Sila pilih jumlah yang disediakan atau masukkan jumlah sendiri."
 
@@ -4037,9 +4042,6 @@ msgstr "{0} telah didebit daripada akaun bank anda, {1} masuk ke dompet Liberapa
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Debit terus sebanyak {0} telah dimulakan. Jika pindahan berjaya, {1} akan masuk ke dompet Liberapay anda dan {2} akan dibayar untuk caj perkhidmatan."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Debit terus mengambil masa lebih kurang empat hari bekerja untuk disiapkan."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

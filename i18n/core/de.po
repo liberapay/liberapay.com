@@ -538,6 +538,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Ihr Bankkonto wird belastet werden"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Wir haben eine Lastschrift über {money_amount} von ihrem {bank_name} Konto {partial_account_number} initiiert."
 
@@ -3932,9 +3940,6 @@ msgstr "Haben Sie es sich anders überlegt? Brechen Sie die Zahlung ab, um zu ve
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Wenn Sie Ihr Guthaben bei Liberapay per Banküberweisung aufladen, dann fällt eine zusätzliche Gebühr von {0}% bei unserem Zahlungsdienstleister an."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Eine Überweisung wird nicht direkt gutgeschrieben. Üblicherweise sollte die Gutschrift aber innerhalb von vier Arbeitstagen erfolgt sein."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Bitte wählen Sie einen vorberechneten Betrag aus oder geben einen eigenen ein."
 
@@ -4040,9 +4045,6 @@ msgstr "{0} wurden von Ihrem Bankkonto eingezogen. {1} gingen davon auf Ihre Lib
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Eine Lastschrift über {0} wurde angefordert. Im Erfolgsfall werden Ihrer Liberapay-Brieftasche davon {1} gutgeschrieben, die restlichen {2} werden als Gebühren fällig."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Die Durchführung einer Lastschriftbuchung dauert etwa vier Arbeitstage."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

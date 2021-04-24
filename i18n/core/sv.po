@@ -540,6 +540,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Ditt bankkonto kommer att debiteras"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Vi har anslutit ett autogiro på {money_amount} från ditt {bank_name}-konto ({partial_account_number})."
 
@@ -3938,9 +3946,6 @@ msgstr "Ändrat dig? Avbryt betalningen för att undvika att motta en misslyckel
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Insättning av pengar till Liberapay genom banköverföring medför en avgift på {0}% från vår betalningsprocessor."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Pengar som skickas via banköverföring kommer inte fram omedelbart, men de flesta överföringar är färdiga inom 4 bankdagar."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Var god välj ett förberäknat belopp eller ange ett anpassat belopp."
 
@@ -4046,9 +4051,6 @@ msgstr "{0} har dragits från ditt bankkonto, {1} gick till din Liberapayplånbo
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "En direktdebitering av {0} har påbörjats. Om överföringen lyckas kommer {1} att nå din Liberapayplånbok och {2} att betalas i avgifter."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Direktöverföringar tar ca 4 arbetsdagar att genomföra."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

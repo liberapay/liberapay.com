@@ -538,6 +538,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Via bankokonto estos debetita"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Ni ekigis rektan debeton de {money_amount} el via konto ({partial_account_number}) ĉe {bank_name}."
 
@@ -3929,9 +3937,6 @@ msgstr "Ĉu vi rezignas? Nuligu la pagon por eviti ricevi sciigon pri malsukceso
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Aldoni monon al Liberapay per banka transdono okazigas koston de {0}% pro nia provizanto de pagservo."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Mono sendita per banka transdono ne tuj alvenas, sed la plejmulto finiĝas ene de 4 labortagoj."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Bonvolu elekti antaŭkalkulitan kvanton aŭ enigi propran."
 
@@ -4037,9 +4042,6 @@ msgstr "{0} estis prenita(j) el via bankokonto, {1} iris al via Liberapay-monujo
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Rekta debeto de {0} estis komencita. Se la transdono sukcesas {1} iros al via Liberapay-monujo kaj {2} estos peradkostoj."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Rektaj debetoj bezonas ĉirkaŭ 4 labortagojn por kompletiĝi."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

@@ -538,6 +538,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Es girarà un càrrec a dèbit del vostre compte bancari"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Hem iniciat un càrrec a dèbit directe de {money_amount} del vostre compte {bank_name} ({partial_account_number})."
 
@@ -3929,9 +3937,6 @@ msgstr "Heu canviat d'idea? Cancel·leu el pagament per a evitar de rebre una no
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Afegir diners en Liberapay mitjançant transferència bancària té una comissió de {0}% del nostre processador de pagaments."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Els diners enviats per transferència bancària no arriben immediatament, però la majoria de transferències es completen en menys de 4 dies feiners."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Seleccioneu una quantitat predefinida o introduïu-ne una de personalitzada."
 
@@ -4037,9 +4042,6 @@ msgstr "S'han carregat {0} des del vostre compte bancari, {1} han anat a la cart
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "S'ha iniciat un càrrec domiciliat de {0}. Si la transferència es realitza correctament, arribaran {1} a la vostra cartera de Liberapay i es pagaran {2} en comissions."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Els pagaments domiciliats triguen a completar-se aproximadament 4 dies feiners."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

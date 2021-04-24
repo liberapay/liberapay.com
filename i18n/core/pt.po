@@ -538,6 +538,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Sua conta bancária será debitada"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Iniciamos débito direto de {money_amount} na sua conta ({partial_account_number}) em {bank_name}."
 
@@ -3932,9 +3940,6 @@ msgstr "Mudou de ideia? Cancele o pagamento para evitar uma notificação de fal
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Adicionar fundos ao Liberapay por transferência bancária gera uma taxa de {0}% do processador de pagamentos."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "O financiamento por transferência bancária não chega instantaneamente, mas a maioria das transferências são concluídas no prazo de 4 dias úteis."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Selecione um valor pré-definido ou defina um personalizado."
 
@@ -4040,9 +4045,6 @@ msgstr "{0} foram debitados da sua conta bancária, {1} foram para a sua carteir
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Débito direto de {0} foi iniciado. Se a transferência for realizada com sucesso, serão adicionados {1} à sua carteira Liberapay e serão pagos {2} em taxas."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Débitos diretos demoram aproximadamente 4 dias úteis para finalizar."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

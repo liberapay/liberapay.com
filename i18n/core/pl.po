@@ -1,14 +1,12 @@
+
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-04-23 05:32+0000\n"
-"Last-Translator: gnu-ewm <gnu.ewm@protonmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
-"Language: pl\n"
+"Language-Team: Polish "
+"<https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7-dev\n"
 "Generated-By: Babel 2.6.0\n"
 
 #, python-brace-format
@@ -545,6 +543,14 @@ msgstr "Ponowne pojawienie się środków na Twoim koncie bankowym może zająć
 
 msgid "Your bank account is going to be debited"
 msgstr "Twoje konto bankowe zostanie obciążone"
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
@@ -3976,9 +3982,6 @@ msgstr "Zmieniłeś zdanie? Anuluj płatność, aby nie otrzymać niepotrzebnie,
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Dodanie pieniędzy do Liberapay za pomocą przelewu bankowego wymaga opłaty w wysokości {0}%, pobieranej przez podmiot obsługujący dla nas płatności."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Pieniądze wysłane przelewem bankowym nie docierają natychmiastowo, ale zwykle transakcje trwają do 4 dni roboczych."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Wybierz sugerowaną kwotę lub wprowadź swoją własną."
 
@@ -4087,9 +4090,6 @@ msgstr "Twoje konto bankowe zostało obciążone na kwotę {0}, {1} zostało prz
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Polecenie zapłaty w wysokości {0} zostało zainicjowane. Jeśli transfer się powiedzie wtedy {1} pojawi się w Twoim portfelu Liberapay, a {2} pokryje opłaty obsługi transakcji."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Przekazy bezpośrednie trafiają w ciągu około 4 dni roboczych."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."

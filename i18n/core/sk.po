@@ -545,6 +545,14 @@ msgid "Your bank account is going to be debited"
 msgstr "Váš bankový účet bude účtovaný"
 
 #, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
+msgstr ""
+
+#, python-brace-format
+msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
+msgstr ""
+
+#, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
 msgstr "Vykonali sme inkaso {money_amount} z vášho bankového účtu {bank_name} ({partial_account_number})."
 
@@ -3969,9 +3977,6 @@ msgstr "Zmenili ste názor? Zrušte platbu aby ste sa vyhli chybnej notifikáci�
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
 msgstr "Pridanie peňazí na Liberapay bankovým prevodom zahrňuje poplatok {0} % od nášho sprostredkovatela platieb."
 
-msgid "Money sent by bank wire does not arrive instantly, but most transfers are completed within 4 business days."
-msgstr "Peniaze poslané bankovým prevodom neprídu ihneď, väčšina transakcí prebehne v priebehu 4 pracovných dní."
-
 msgid "Please select a precomputed amount or input a custom one."
 msgstr "Vyberte čiastku alebo zadajte vlastnú."
 
@@ -4080,9 +4085,6 @@ msgstr "{0} bolo inkasované z vášho bakového účtu, {1} prišlo na vašu Li
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
 msgstr "Inkaso za {0} bolo začaté. Ak transakcia je úspešná {1} príde na vašu Liberapay peňaženku a za {2} budú zaplatené poplatky."
-
-msgid "Direct debits take approximately 4 business days to complete."
-msgstr "Inkaso trvá zhruba 4 pracovné dni na dokončenie."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
