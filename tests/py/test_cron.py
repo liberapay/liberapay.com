@@ -7,7 +7,6 @@ from psycopg2.extras import execute_values
 from liberapay.cron import Daily, Weekly
 from liberapay.i18n.currencies import fetch_currency_exchange_rates
 from liberapay.models.participant import send_account_disabled_notifications
-from liberapay.testing import fake_sleep
 from liberapay.testing.emails import EmailHarness
 
 
@@ -16,9 +15,10 @@ utcnow = datetime.utcnow
 
 class TestCronJobs(EmailHarness):
 
-    @fake_sleep(target='liberapay.cron.sleep', raise_after=0)
+    @patch('liberapay.cron.sleep')
     @patch('liberapay.cron.datetime', autospec=True)
-    def test_cron_jobs_with_empty_db(self, datetime):
+    @patch('liberapay.cron.break_after_call', return_value=True)
+    def test_cron_jobs_with_empty_db(self, bac, datetime, sleep):
         now = utcnow()
         for job in self.website.cron.jobs:
             real_func = job.func
@@ -37,14 +37,20 @@ class TestCronJobs(EmailHarness):
                 else:
                     mock_func.side_effect = real_func
                 job.start()
-                job.thread.join()
+                job.thread.join(10)
                 assert mock_func.call_count == 1
 
-    @fake_sleep(target='liberapay.cron.sleep', raise_after=0)
+    @patch('liberapay.cron.sleep')
     @patch('liberapay.cron.datetime', autospec=True)
-    def test_weekly_and_daily_cron_jobs_at_the_wrong_time(self, datetime):
+    @patch('liberapay.cron.break_before_call', return_value=True)
+    def test_weekly_and_daily_cron_jobs_at_the_wrong_time(self, bbc, datetime, sleep):
+        def forward_time(seconds):
+            datetime.utcnow.return_value += timedelta(seconds=seconds)
+
         now = utcnow()
+        sleep.side_effect = forward_time
         for job in self.website.cron.jobs:
+            print(job)
             with patch.object(job, 'func', autospec=True) as mock_func:
                 mock_func.return_value = None
                 if isinstance(job.period, Weekly):
@@ -55,39 +61,40 @@ class TestCronJobs(EmailHarness):
                         days_delta + timedelta(days=1)
                     )
                     job.start()
-                    job.thread.join()
-                    assert mock_func.call_count == 0
+                    job.thread.join(10)
+                    assert sleep.call_count == 1
                     # Not yet time
                     datetime.utcnow.return_value = (
                         now.replace(hour=job.period.hour, minute=0, second=0) +
                         days_delta
                     )
                     job.start()
-                    job.thread.join()
-                    assert mock_func.call_count == 0
+                    job.thread.join(10)
+                    assert sleep.call_count == 2
                     # Too late
                     datetime.utcnow.return_value = (
                         now.replace(hour=job.period.hour, minute=20, second=0) +
                         days_delta
                     )
                     job.start()
-                    job.thread.join()
-                    assert mock_func.call_count == 0
+                    job.thread.join(10)
+                    assert sleep.call_count == 4
                 elif isinstance(job.period, Daily):
                     # Not yet time
                     datetime.utcnow.return_value = utcnow().replace(
                         hour=job.period.hour, minute=0, second=0
                     )
                     job.start()
-                    job.thread.join()
-                    assert mock_func.call_count == 0
+                    job.thread.join(10)
+                    assert sleep.call_count == 1
                     # Too late
                     datetime.utcnow.return_value = utcnow().replace(
                         hour=job.period.hour, minute=10, second=0
                     )
                     job.start()
-                    job.thread.join()
-                    assert mock_func.call_count == 0
+                    job.thread.join(10)
+                    assert sleep.call_count == 2
+            sleep.reset_mock()
 
     def test_disabled_job_is_not_run(self):
         job = self.website.cron.jobs[0]

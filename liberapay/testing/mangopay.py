@@ -64,8 +64,8 @@ class FakeTransfersHarness(Harness):
         self.wallet_mock = _mock
 
     def tearDown(self):
-        self.transfer_patch.__exit__()
-        self.wallet_patch.__exit__()
+        self.transfer_patch.__exit__(None, None, None)
+        self.wallet_patch.__exit__(None, None, None)
         super().tearDown()
 
 

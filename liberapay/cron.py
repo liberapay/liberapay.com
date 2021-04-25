@@ -102,8 +102,11 @@ class Job:
                         logger.debug(f"Running {self!r}")
                     else:
                         logger.info(f"Running {self!r}")
-                    test_hook()
+                    if break_before_call():
+                        break
                     r = self.func()
+                    if break_after_call():
+                        break
                 except Exception as e:
                     self.cron.website.tell_sentry(e, {})
                     # retry in 5 minutes
@@ -128,5 +131,9 @@ class Job:
         return t
 
 
-def test_hook():
-    pass
+def break_before_call():
+    return False
+
+
+def break_after_call():
+    return False

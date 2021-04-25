@@ -23,7 +23,7 @@ class TestMangopayCallbacks(EmailHarness, FakeTransfersHarness, MangopayHarness)
 
     @classmethod
     def tearDownClass(cls):
-        cls.cwp_patch.__exit__()
+        cls.cwp_patch.__exit__(None, None, None)
         super().tearDownClass()
 
     def callback(self, qs, **kw):

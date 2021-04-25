@@ -34,13 +34,13 @@ class Test(unittest.TestCase):
         now = liberapay.cron.datetime.utcnow()
         datetime_patch = patch.object(liberapay.cron, 'datetime', autospec=True)
         sleep_patch = patch.object(liberapay.cron, 'sleep')
-        test_hook_patch = patch.object(liberapay.cron, 'test_hook')
+        test_hook_patch = patch.object(liberapay.cron, 'break_before_call')
         with datetime_patch as datetime, sleep_patch as sleep, test_hook_patch as test_hook:
             datetime.utcnow.return_value = now
             def forward_time(seconds):
                 datetime.utcnow.return_value += timedelta(seconds=seconds)
             sleep.side_effect = forward_time
-            test_hook.side_effect = StopIteration()
+            test_hook.return_value = True
             from liberapay.main import website
             assert website.cron
             assert website.cron.jobs
