@@ -21,11 +21,12 @@ if 'new-password' in body:
         pass  # user doesn't have a password yet, allow adding one
     else:
         website.db.hit_rate_limit('hash_password.ip-addr', str(request.source), TooManyRequests)
-        p = Participant.authenticate(
+        p2 = Participant.authenticate(
             p.id, 0, body['cur-password'], context='change_password'
         )
-        if not p:
+        if not p2:
             raise response.error(403, _("Incorrect password"))
+        del p2
 
     # Check the new password
     password_status = None
