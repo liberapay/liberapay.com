@@ -41,7 +41,7 @@ participant.render_notifications(state, before=before, limit=limit)
 % block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    % set notifs = participant.render_notifications(state, before=before, limit=limit)
+    % set notifs = participant.render_notifications(state, before=before, limit=limit, viewer=user)
     % if notifs and not before
         % set last_seen = notifs[0].id
     % else
@@ -57,7 +57,7 @@ participant.render_notifications(state, before=before, limit=limit)
     <br>
     % for notif in notifs
         <div class="alert alert-{{ notif.type|default('info') }} alert-notification {{ 'alert-read' if not notif.is_new else '' }}">
-        % if notif.hidden_since
+        % if notif.hidden_since and not user.is_admin
             <i>{{ _("This notification is marked for deletion.") }}</i>
             <button class="btn btn-default btn-xs pull-right" name="restore" value="{{ notif.id }}">{{
                 _("Restore")
@@ -68,13 +68,18 @@ participant.render_notifications(state, before=before, limit=limit)
             <h3 class="alert-header">
                 <span class="title">{{ subject|safe }}</span>
                 <small>{{ locale.format_datetime(notif.ts) if notif.ts }}</small>
+                % if notif.hidden_since
+                    <em class="text-muted">{{ _("This notification is marked for deletion.") }}</em>
+                % endif
                 <span class="actions">
                     % if notif.is_new
                     <button class="glyphicon glyphicon-eye-open hover-info" name="mark_as_read" value="{{ notif.id }}" title="{{
                             _('Mark as read') }}"></button>&nbsp;
                     % endif
+                    % if not notif.hidden_since
                     <button class="glyphicon glyphicon-remove hover-danger" name="remove" value="{{ notif.id }}" title="{{
                             _('Remove') }}"></button>
+                    % endif
                 </span>
             </h3>
             <div class="alert-body">
