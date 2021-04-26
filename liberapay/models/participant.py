@@ -30,7 +30,7 @@ from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, BASE64URL_CHARS, CURRENCIES,
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS, PAYPAL_CURRENCIES,
-    PERIOD_CONVERSION_RATES, PRIVILEGES, PROFILE_VISIBILITY_ATTRS,
+    PERIOD_CONVERSION_RATES, PRIVILEGES,
     PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
@@ -3684,9 +3684,6 @@ class Participant(Model, MixinTeam):
         self.set_attributes(**{column: r})
         return 1
 
-    def get_active_overrides(self):
-        return [attr for attr in PROFILE_VISIBILITY_ATTRS if getattr(self, attr).__and__(2)]
-
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
@@ -3737,7 +3734,7 @@ def clean_up_closed_accounts():
 
 
 def send_account_disabled_notifications():
-    """Notify the owners of accounts that have been flagged as fraudulent or spam.
+    """Notify the owners of accounts that have been flagged as fraud or spam.
 
     This is done to:
     - discourage fraudsters and spammers
@@ -3751,10 +3748,11 @@ def send_account_disabled_notifications():
           JOIN participants p ON p.id = e.participant
          WHERE e.type = 'flags_changed'
            AND ( e.payload->>'is_spam' = 'true' OR
-                 e.payload->>'is_suspended' = 'true' )
+                 e.payload->>'is_suspended' = 'true' OR
+                 e.payload->>'marked_as' IN ('spam', 'fraud') )
            AND e.ts < (current_timestamp - interval '1 hour')
            AND e.ts > (current_timestamp - interval '48 hours')
-           AND ( p.is_spam OR p.is_suspended )
+           AND p.marked_as IN ('spam', 'fraud')
            AND NOT EXISTS (
                    SELECT 1
                      FROM notifications n
@@ -3770,7 +3768,7 @@ def send_account_disabled_notifications():
         sleep(1)
         p.notify(
             'account_disabled',
-            reason=('spam' if p.is_spam else 'fraud'),
+            reason=p.marked_as,
             force_email=True,
         )
         sent += 1

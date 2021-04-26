@@ -131,13 +131,13 @@ class TestCronJobs(EmailHarness):
         assert not emails
         # Flag the accounts
         r = self.client.PxST(
-            '/admin/users', data={'p_id': str(fraudster.id), 'is_suspended': 'yes'},
+            '/admin/users', data={'p_id': str(fraudster.id), 'mark_as': 'fraud'},
             auth_as=admin,
         )
         assert r.code == 200
         assert json.loads(r.text) == {"msg": "Done, 1 attribute has been updated."}
         r = self.client.PxST(
-            '/admin/users', data={'p_id': str(spammer.id), 'is_spam': 'yes'},
+            '/admin/users', data={'p_id': str(spammer.id), 'mark_as': 'spam'},
             auth_as=admin,
         )
         assert r.code == 200

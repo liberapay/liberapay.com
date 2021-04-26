@@ -24,7 +24,7 @@ class Tests(Harness):
         self.com.participant.upsert_statement('en', "spammy subtitle", 'subtitle')
         self.com.participant.upsert_statement('en', "spammy sidebar", 'sidebar')
         r = self.client.PxST(
-            '/admin/users', data={'p_id': str(self.com.participant.id), 'is_spam': 'yes'},
+            '/admin/users', data={'p_id': str(self.com.participant.id), 'mark_as': 'spam'},
             auth_as=admin,
         )
         assert r.code == 200
