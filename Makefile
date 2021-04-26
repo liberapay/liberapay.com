@@ -26,6 +26,7 @@ $(env): requirements*.txt
 	@touch $(env)
 
 rehash-requirements:
+	$(env_bin)/$(pip) install hashin
 	for f in requirements*.txt; do \
 	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.6 -p 3.7 -p 3.8 -p 3.9; \
 	done

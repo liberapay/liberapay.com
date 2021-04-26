@@ -508,7 +508,7 @@ class TestLogIn(EmailHarness):
         alice.update_password('password')
 
         # Get an initial session
-        alice.session = alice.start_session()
+        alice.session = alice.start_session(suffix='.in')
         assert alice.session.id == 1
 
         # Get a password session, to be invalidated
@@ -519,15 +519,25 @@ class TestLogIn(EmailHarness):
         session3 = alice.start_session(suffix='.rg')
         assert session3.id == 3
 
-        # Change the password
-        alice.update_password('correct horse battery staple')
+        # Get an email session
+        session3 = alice.start_session(suffix='.em', id_min=1001, id_max=1010)
+        assert session3.id == 1001
 
-        # Only the initial session should still be valid, and of course the
-        # account's password should not have been deleted
+        # Change the password
+        form_data = {
+            'cur-password': 'password',
+            'new-password': 'correct horse battery staple',
+            'ignore_warning': 'true',
+        }
+        r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 302, r.text
+
+        # Only the initial and email sessions should still be valid, and of
+        # course the account's password should not have been deleted
         secret_ids = set(self.db.all(
             "SELECT id FROM user_secrets WHERE participant = %s", (alice.id,)
         ))
-        assert secret_ids == {0, 1}
+        assert secret_ids == {0, 1, 1001}
 
 
 class TestSignIn(EmailHarness):
