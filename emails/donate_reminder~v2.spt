@@ -1,12 +1,21 @@
 % if len(donations) == 1
-{{ _("It's time to renew your donation to {username} on Liberapay", username=donations[0].tippee_username) }}
+    % if overdue
+        {{ _("It's past time to renew your donation to {username} on Liberapay", username=donations[0].tippee_username) }}
+    % else
+        {{ _("It's time to renew your donation to {username} on Liberapay", username=donations[0].tippee_username) }}
+    % endif
 % else
-{{ _("It's time to renew your donations on Liberapay") }}
+    % if overdue
+        {{ _("It's past time to renew your donations on Liberapay") }}
+    % else
+        {{ _("It's time to renew your donations on Liberapay") }}
+    % endif
 % endif
 
 [---] text/html
 % if len(donations) == 1
     % set tip = donations[0]
+    % if tip.due_date >= notification_ts.date()
     <p>{{ _(
         "Your donation of {amount} per week to {username} needs to be renewed before {date}.",
         amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
@@ -17,6 +26,18 @@
         "Your donation of {amount} per year to {username} needs to be renewed before {date}.",
         amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
     ) }}</p>
+    % else
+    <p>{{ _(
+        "Your donation of {amount} per week to {username} needed to be renewed before {past_date}.",
+        amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
+    ) if tip.period == 'weekly' else _(
+        "Your donation of {amount} per month to {username} needed to be renewed before {past_date}.",
+        amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
+    ) if tip.period == 'monthly' else _(
+        "Your donation of {amount} per year to {username} needed to be renewed before {past_date}.",
+        amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
+    ) }}</p>
+    % endif
 % else
     <p>{{ ngettext(
         "You have {n} donation up for renewal:",
@@ -25,6 +46,7 @@
     ) }}</p>
     <ul>
     % for tip in donations
+        % if tip.due_date >= notification_ts.date()
         <li>{{ _(
             "Your donation of {amount} per week to {username} needs to be renewed before {date}.",
             amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
@@ -35,6 +57,18 @@
             "Your donation of {amount} per year to {username} needs to be renewed before {date}.",
             amount=tip.periodic_amount, username=tip.tippee_username, date=tip.due_date
         ) }}</li>
+        % else
+        <li>{{ _(
+            "Your donation of {amount} per week to {username} needed to be renewed before {past_date}.",
+            amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
+        ) if tip.period == 'weekly' else _(
+            "Your donation of {amount} per month to {username} needed to be renewed before {past_date}.",
+            amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
+        ) if tip.period == 'monthly' else _(
+            "Your donation of {amount} per year to {username} needed to be renewed before {past_date}.",
+            amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
+        ) }}</li>
+        % endif
     % endfor
     </ul>
 % endif

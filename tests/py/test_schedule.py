@@ -1,4 +1,5 @@
 from datetime import timedelta
+from unittest.mock import patch
 
 from pando.utils import utcnow
 
@@ -1184,3 +1185,57 @@ class TestScheduledPayins(EmailHarness):
 
         emails = self.get_emails()
         assert len(emails) == 0
+
+    def test_reminders_to_renew_a_manual_donation(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('52.00'), period='yearly')
+        alice_card = self.upsert_route(alice, 'stripe-card')
+        self.make_payin_and_transfer(alice_card, bob, EUR('2.00'))
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount is None
+        assert scheduled_payins[0].payin is None
+
+        # A week later, a first reminder should be sent
+        self.db.run("""
+            UPDATE payins
+               SET ctime = ctime - interval '8 days';
+            UPDATE payin_transfers
+               SET ctime = ctime - interval '8 days';
+            UPDATE tips
+               SET paid_in_advance = ('1.00', 'EUR')::currency_amount;
+            UPDATE scheduled_payins
+               SET execution_date = current_date + interval '5 days'
+                 , ctime = ctime - interval '8 days';
+        """)
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == "It's time to renew your donation to bob on Liberapay"
+
+        # Several weeks later, a second reminder should be sent
+        self.db.run("""
+            UPDATE payins
+               SET ctime = ctime - interval '5 weeks';
+            UPDATE payin_transfers
+               SET ctime = ctime - interval '5 weeks';
+            UPDATE notifications
+               SET ts = ts - interval '5 weeks';
+            UPDATE scheduled_payins
+               SET last_notif_ts = last_notif_ts - interval '5 weeks';
+        """)
+        with patch.object(self.db.Tip, 'compute_renewal_due_date') as compute_renewal_due_date:
+            compute_renewal_due_date.return_value = utcnow().date() - timedelta(weeks=5)
+            send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == "It's past time to renew your donation to bob on Liberapay"
+
+        # Of course, there shouldn't be any new payin or scheduled payin
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins")
+        assert len(scheduled_payins) == 1
+        payins = self.db.all("SELECT * FROM payins")
+        assert len(payins) == 1
