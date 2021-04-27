@@ -174,8 +174,9 @@ def adjust_payin_transfers(db, payin, net_amount):
                FOR UPDATE OF pt
         """, (payin.id,))
         assert payin_transfers
-        if all(pt.status == 'succeeded' for pt in payin_transfers):
-            # It's too late to adjust anything.
+        if any(pt.status == 'succeeded' for pt in payin_transfers):
+            # At least one of the transfers has already been executed, so it's
+            # too complicated to adjust the amounts now.
             return
         transfers_by_tippee = group_by(
             payin_transfers, lambda pt: (pt.team or pt.recipient)
