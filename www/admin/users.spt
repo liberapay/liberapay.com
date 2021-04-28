@@ -47,7 +47,7 @@ if request.method == 'POST':
         f"Done, {updated} attributes have been updated."
     )})
 
-last_showed = request.qs.get('last_showed')
+last_showed = request.qs.get_int('last_showed', default=None)
 mode = request.qs.get('mode', 'all')
 if mode == 'all':
     participants = website.db.all("""
@@ -167,10 +167,11 @@ elif mode == 'new_recipients':
                    'amount', pt.amount, 'context', pt.context, 'ctime', date_trunc('second', pt.ctime),
                    'payer', pt.payer, 'payer_name', payer.username,
                    'team', pt.team, 'team_name', team.username,
-                   'status', pt.status, 'error', pt.error, 'payin_method', r.network
+                   'status', pt.status, 'error', pt.error, 'payin_method', r.network,
+                   'id', pt.id
                ) ORDER BY pt.row_number) AS payments
           FROM ( SELECT pt.*
-                      , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC)
+                      , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC, pt.id DESC)
                    FROM payin_transfers pt
                   WHERE pt.status <> 'pre'
                     AND coalesce(pt.error <> 'aborted by payer', true)
@@ -180,14 +181,14 @@ elif mode == 'new_recipients':
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
-         WHERE coalesce(pt.ctime < %s, true)
-           AND p.is_suspended IS NULL
+         WHERE p.is_suspended IS NULL
            AND pt.row_number <= 20
       GROUP BY p.id
-      ORDER BY min(pt.ctime) DESC
+        HAVING coalesce(min(pt.id) < %s, true)
+      ORDER BY min(pt.id) DESC
          LIMIT 25
     """, (last_showed,))
-    page_end = participants[-1][-1][-1]['ctime'] if participants else None
+    page_end = participants[-1][-1][-1]['id'] if participants else None
 else:
     raise response.invalid_input(mode, 'mode', 'querystring')
 
