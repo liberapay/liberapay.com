@@ -208,7 +208,7 @@ title = "Users Admin"
 <ul class="nav nav-pills">{{ querystring_nav('mode', [
     ('all', "All"),
     ('new_recipients', "New Recipients"),
-], mode) }}</ul>
+], mode, derive=False) }}</ul>
 <br><br>
 
 % for row in participants

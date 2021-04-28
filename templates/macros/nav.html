@@ -151,10 +151,14 @@
     % endif
 % endmacro
 
-% macro querystring_nav(key, values, current)
+% macro querystring_nav(key, values, current, derive=True)
     % for value, title in values
         <li{% if value == current %} class="active"{% endif %}>
+        % if derive
             <a href="{{ request.qs.derive(**{key: value}) }}">{{ title }}</a>
+        % else
+            <a href="?{% if value %}{{ key }}={{ value }}{% endif %}">{{ title }}</a>
+        % endif
         </li>
     % endfor
 % endmacro
