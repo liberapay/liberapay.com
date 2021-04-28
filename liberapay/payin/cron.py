@@ -119,6 +119,7 @@ def send_donation_reminder_notifications():
                ) > 0
       ORDER BY sp.payer
     """)
+    today = utcnow().date()
     next_payday = compute_next_payday_date()
     for payer, payins in rows:
         if payer.is_suspended or payer.status != 'active':
@@ -128,16 +129,25 @@ def send_donation_reminder_notifications():
         if not payins:
             continue
         donations = []
+        overdue = False
         for sp in payins:
             for tr in sp['transfers']:
                 tip = tr['tip']
+                due_date = tip.compute_renewal_due_date(next_payday)
                 donations.append({
-                    'due_date': tip.compute_renewal_due_date(next_payday),
+                    'due_date': due_date,
                     'period': tip.period,
                     'periodic_amount': tip.periodic_amount,
                     'tippee_username': tr['tippee_username'],
                 })
-        payer.notify('donate_reminder~v2', donations=donations, email_unverified_address=True)
+                if due_date <= today:
+                    overdue = True
+        payer.notify(
+            'donate_reminder~v2',
+            donations=donations,
+            overdue=overdue,
+            email_unverified_address=True,
+        )
         counts['donate_reminder'] += 1
         db.run("""
             UPDATE scheduled_payins
