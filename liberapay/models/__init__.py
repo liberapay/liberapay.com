@@ -109,35 +109,35 @@ def _check_balances_against_transactions(cursor):
     Recalculates balances for all wallets from transfers and exchanges.
     """
     b = cursor.all("""
-        select wallet_id, expected, balance as actual
-          from (
-            select wallet_id, sum(a) as expected
-              from (
-                      select e.wallet_id, sum(ee.wallet_delta) as a
-                        from exchanges e
-                        join exchange_events ee on ee.exchange = e.id
-                    group by e.wallet_id
+        SELECT wallet_id, expected, balance AS actual
+          FROM (
+            SELECT wallet_id, sum(a) AS expected
+              FROM (
+                      SELECT e.wallet_id, sum(ee.wallet_delta) AS a
+                        FROM exchanges e
+                        JOIN exchange_events ee ON ee.exchange = e.id
+                    GROUP BY e.wallet_id
 
-                       union all
+                       UNION ALL
 
-                      select wallet_from as wallet_id, sum(-amount) as a
-                        from transfers
-                       where status = 'succeeded'
-                         and virtual is not true
-                    group by wallet_from
+                      SELECT wallet_from as wallet_id, sum(-amount) AS a
+                        FROM transfers
+                       WHERE status = 'succeeded'
+                         AND virtual IS NOT TRUE
+                    GROUP BY wallet_from
 
-                       union all
+                       UNION ALL
 
-                      select wallet_to as wallet_id, sum(amount) as a
-                        from transfers
-                       where status = 'succeeded'
-                         and virtual is not true
-                    group by wallet_to
-                    ) as foo
-            group by wallet_id
-          ) as foo2
-        join wallets w on w.remote_id = foo2.wallet_id
-        where expected <> w.balance
+                      SELECT wallet_to AS wallet_id, sum(amount) AS a
+                        FROM transfers
+                       WHERE status = 'succeeded'
+                         AND virtual IS NOT TRUE
+                    GROUP BY wallet_to
+                    ) AS foo
+            GROUP BY wallet_id
+          ) AS foo2
+        JOIN wallets w ON w.remote_id = foo2.wallet_id
+        WHERE expected <> w.balance
     """)
     assert len(b) == 0, "conflicting balances:\n" + '\n'.join(str(r) for r in b)
 
