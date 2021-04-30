@@ -372,12 +372,20 @@ def _filter_transfers(payer, transfers, automatic):
     canceled_transfers = []
     impossible_transfers = []
     okay_transfers = []
+    has_pending_transfer = set(website.db.all("""
+        SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
+          FROM payin_transfers pt
+          JOIN payins pi ON pi.id = pt.payin
+         WHERE pt.payer = %s
+           AND ( pi.status = 'pending' OR pt.status = 'pending' )
+    """, (payer.id,)))
     for tr in transfers:
         if isinstance(tr['amount'], dict):
             tr['amount'] = Money(**tr['amount'])
         beneficiary = tr['beneficiary'] = website.db.Participant.from_id(tr['tippee_id'])
         tip = tr['tip'] = payer.get_tip_to(beneficiary)
-        if tip.renewal_mode < 1 or automatic and (tip.renewal_mode != 2):
+        if tip.renewal_mode < 1 or automatic and (tip.renewal_mode != 2) or \
+           beneficiary.id in has_pending_transfer:
             canceled_transfers.append(tr)
         elif beneficiary.status != 'active' or beneficiary.is_suspended or \
              not beneficiary.accepts_tips or \

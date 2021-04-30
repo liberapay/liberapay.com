@@ -1,7 +1,7 @@
 {{ _("Your bank account is going to be debited") }}
 
 [---] text/html
-% if tippees
+% if tippees is defined
 <p>{{ _(
     "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}.",
     money_amount=payin_amount, partial_account_number=partial_bank_account_number, recipient=website.tippee_links(tippees)[0],

@@ -55,7 +55,6 @@ has_pending_transfer = set(website.db.all("""
     SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
       FROM payin_transfers pt
       JOIN payins pi ON pi.id = pt.payin
-      JOIN exchange_routes r ON r.id = pi.route
      WHERE pt.payer = %s
        AND ( pi.status = 'pending' OR pt.status = 'pending' )
 """, (participant.id,)))
