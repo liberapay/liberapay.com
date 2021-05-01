@@ -15,7 +15,7 @@ nusers = db_qc5.one("""
 """)
 transfer_volume = db_qc5.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1") or 0
 tips_stats = db_qc5.one("""
-    SELECT count(*), avg(amount, %s), sum(amount, %s)
+    SELECT count(*), basket_sum(amount)
       FROM current_tips
       JOIN participants p ON p.id = tipper
       JOIN participants p2 ON p2.id = tippee
@@ -23,10 +23,13 @@ tips_stats = db_qc5.one("""
        AND is_funded
        AND p.status = 'active'
        AND p2.status = 'active'
-""", (currency, currency))
-tip_n = getattr(tips_stats, 'count', None) or 0
-average_tip = (getattr(tips_stats, 'avg', None) or zero).round_up()
-total_backed_tips = (getattr(tips_stats, 'sum', None) or zero).round_up()
+""")
+active_tips_count = getattr(tips_stats, 'count', None) or 0
+active_tips_sum = getattr(tips_stats, 'basket_sum', None) or MoneyBasket()
+if active_tips_count:
+    average_tip = active_tips_sum.fuzzy_sum(currency) / active_tips_count
+else:
+    average_tip = zero
 
 average_tippees = int(db_qc5.one("""\
     SELECT round(avg(ntippees))
@@ -76,7 +79,7 @@ else:
 
 def out():
     names = ['transfer_volume', 'average_tip', 'average_tippees',
-             'total_backed_tips', 'tip_n', 'nusers',
+             'active_tips_sum', 'active_tips_count', 'nusers',
              'ngivers', 'nreceivers', 'noverlap', 'nactive']
     d = globals()
     r = {name: d[name] for name in names}
