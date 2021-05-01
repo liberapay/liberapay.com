@@ -20,9 +20,9 @@ from postgres.cursors import SimpleRowCursor
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 from psycopg2_pool import PoolError
-import raven
 import requests
 import sass
+import sentry_sdk
 from state_chain import StateChain
 
 from liberapay import elsewhere
@@ -450,13 +450,15 @@ def version(env):
 
 def make_sentry_teller(env, version):
     if env.sentry_dsn:
-        sentry = raven.Client(
+        sentry_sdk.init(
             env.sentry_dsn,
             environment=env.instance_type,
             release=version,
+            debug=False,  # Pass `True` when investigating an integration issue
         )
+        sentry = True
     else:
-        sentry = None
+        sentry = False
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
     def tell_sentry(exception, state, allow_reraise=True, level=None):
@@ -522,18 +524,22 @@ def make_sentry_teller(env, version):
         # Prepare context data
         if not level:
             level = 'warning' if isinstance(exception, Warning) else 'error'
-        sentry_data = {'level': level}
+        scope_dict = {'level': level}
         if state:
             try:
-                sentry_data['tags'] = {
-                    'lang': getattr(state.get('locale'), 'language', None),
-                }
+                # https://docs.sentry.io/platforms/python/enriching-events/identify-user/
+                user_data = scope_dict['user'] = {}
+                user = state.get('user')
+                if isinstance(user, Participant):
+                    user_data['id'] = getattr(user, 'id', None)
+                    user_data['username'] = getattr(user, 'username', None)
+                # https://develop.sentry.dev/sdk/event-payloads/request/
                 request = state.get('request')
-                user_data = sentry_data['user'] = {}
                 if request is not None:
                     user_data['ip_address'] = str(request.source)
                     decode = lambda b: b.decode('ascii', 'backslashreplace')
-                    sentry_data['request'] = {
+                    scope_dict['contexts'] = {}
+                    scope_dict['contexts']['request'] = {
                         'method': request.method,
                         'url': request.line.uri.decoded,
                         'headers': {
@@ -542,16 +548,15 @@ def make_sentry_teller(env, version):
                             if k != b'Cookie'
                         },
                     }
-                user = state.get('user')
-                if isinstance(user, Participant):
-                    user_data['id'] = getattr(user, 'id', None)
-                    user_data['username'] = getattr(user, 'username', None)
+                # https://docs.sentry.io/platforms/python/enriching-events/tags/
+                scope_dict['tags'] = {
+                    'lang': getattr(state.get('locale'), 'language', None),
+                }
             except Exception as e:
                 tell_sentry(e, {})
 
         # Tell Sentry
-        result = sentry.captureException(data=sentry_data)
-        r['sentry_ident'] = sentry.get_ident(result)
+        r['sentry_ident'] = sentry_sdk.capture_exception(exception, **scope_dict)
         return r
 
     CustomUndefined._tell_sentry = staticmethod(tell_sentry)
