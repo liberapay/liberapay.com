@@ -70,17 +70,17 @@ last_payday = db.one("SELECT * FROM paydays ORDER BY ts_end DESC LIMIT 1")
         {{ ngettext(
             "{n} participant gave money.",
             "{n} participants gave money.",
-            last_payday.ngivers
+            last_payday.ntippers
         ) }}<br />
         {{ ngettext(
             "{n} participant received money.",
             "{n} participants received money.",
-            last_payday.nreceivers
+            last_payday.ntippees
         ) }}<br />
         {{ ngettext(
             "{n} participant was both a donor and a recipient.",
             "{n} participants were both donors and recipients.",
-            last_payday.ngivers + last_payday.nreceivers - last_payday.nactive
+            last_payday.ntippers + last_payday.ntippees - last_payday.nactive
         ) }}
     </p>
     % endif
