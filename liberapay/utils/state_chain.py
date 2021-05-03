@@ -23,6 +23,20 @@ def create_response_object(request, website):
     return {'response': response}
 
 
+def raise_response_to_OPTIONS_request(request, response):
+    """Return a 204 (No Content) for all OPTIONS requests.
+
+    Ideally a response to an OPTIONS request for a specific URL includes an
+    `Allow` header listing all the valid request methods for that URL, but we
+    currently don't have a simple way of getting that list.
+
+    https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS
+    """
+    if request and request.line.method == b"OPTIONS":
+        response.code = 204
+        raise response
+
+
 def reject_requests_bypassing_proxy(request, response):
     """Reject requests that bypass Cloudflare, except health checks.
     """
