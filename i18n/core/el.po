@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-05-03 06:21+0000\n"
+"PO-Revision-Date: 2021-05-03 09:51+0000\n"
 "Last-Translator: Eugenia Russell <eugenia.russell2019@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/liberapay/core/el/>\n"
 "Language: el\n"
@@ -2179,8 +2179,8 @@ msgstr "Αυτός ο λογαριασμός έχει ανασταλεί προ�
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Το {username} έχει επί του παρόντος {n} προστάτη έτοιμο να τους υποστηρίξει."
+msgstr[1] "Το {username} έχει επί του παρόντος {n} προστάτες έτοιμους να τους υποστηρίξουν."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2663,13 +2663,13 @@ msgstr "Δεν μπορεί να ανανεωθεί επειδή ο λογαρι
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
-msgstr ""
+msgstr "{bold}Σύνολο: {bold_end} {0} ανά εβδομάδα ~ {1} ανά μήνα ~ {2} ανά έτος."
 
 msgid "You are currently not donating to anyone."
-msgstr ""
+msgstr "Προς το παρόν δεν κάνετε δωρεά σε κανέναν."
 
 msgid "Discontinued donations"
-msgstr ""
+msgstr "Διακοπείσες δωρεές"
 
 msgid "Restart"
 msgstr "Επανεκίνηση"
@@ -2679,11 +2679,11 @@ msgstr "Απόκρυψη"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
-msgstr ""
+msgstr "Ξεκίνησε {timespan_ago_1}. Σταμάτησε {timespan_ago_2}."
 
 #, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
-msgstr ""
+msgstr "Αυτή η σταματημένη δωρεά εξακολουθεί να έχει {money_amount} πληρωμένη προκαταβολικά. Αυτή η προκαταβολή θα καταναλώνεται κάθε εβδομάδα μέχρι να μηδενιστεί."
 
 msgid "Cancelled pledges"
 msgstr "Ακυρωμένες υποσχέσεις"
@@ -2698,8 +2698,8 @@ msgstr "Χρηματοδότηση των δωρεών σου"
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
+msgstr[1] "Λόγω νομικών και τεχνικών περιορισμών, δεν μπορούμε επί του παρόντος να επεξεργαστούμε όλες τις δωρεές σας ως ενιαία πληρωμή. Αντ' αυτού θα πρέπει να κάνετε {n} ξεχωριστές πληρωμές. Ζητούμε συγγνώμη για την ταλαιπωρία."
 
 msgid "We are able to group these donations into a single payment."
 msgstr "Μπορούμε να ομαδοποιήσουμε αυτές τις δωρεές σε μια ενιαία πληρωμή."
@@ -2772,8 +2772,8 @@ msgstr "Η πληρωμή αναμένει την έγκριση σας."
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Έχετε {n} άλλη δωρεά εν αναμονή πληρωμής."
+msgstr[1] "Έχετε {n} άλλες δωρεές εν αναμονή πληρωμής."
 
 msgid "You don't have any other donation awaiting payment at this time."
 msgstr "Δεν έχετε καμία άλλη δωρεά προς πληρωμή αυτή τη στιγμή."
@@ -2811,22 +2811,22 @@ msgstr "Απαιτούνται περισσότερες πληροφορίες �
 
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
-msgstr ""
+msgstr "Ο επεξεργαστής πληρωμών ({name}) δεν είναι σε θέση να επεξεργαστεί {currency} άμεσες χρεώσεις για αυτόν τον παραλήπτη. Παρακαλώ επαναλάβετε την προσπάθεια με διαφορετική μέθοδο πληρωμής."
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
-msgstr ""
+msgstr "Η τράπεζά σας μπορεί να απορρίψει αυτή την πληρωμή. Συνιστούμε να στείλετε ένα αντίγραφο της {link_start}εντολής{link_end} στην τράπεζά σας εάν δεν είστε σίγουροι ότι χειρίζεται σωστά τις {currency} εντολές άμεσης χρέωσης."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
-msgstr ""
+msgstr "Θα χρεώσουμε την κάρτα σας {brand} (τέσσερα τελευταία ψηφία: {last4})."
 
 msgid "Use another card"
 msgstr "Χρησιμοποιήστε άλλη κάρτα"
 
 #, python-brace-format
 msgid "We will charge your {bank_name} account ({partial_account_number})."
-msgstr ""
+msgstr "Θα χρεώσουμε το λογαριασμό σας {bank_name} ({partial_account_number})."
 
 msgid "Use another bank account"
 msgstr "Χρησιμοποιήστε άλλο τραπεζικό λογαριασμό"
@@ -2838,14 +2838,14 @@ msgid "Please input your name and card number:"
 msgstr "Παρακαλούμε εισάγετε το όνομα σας και τον αριθμό κάρτας:"
 
 msgid "Jane Doe"
-msgstr ""
+msgstr "Κωνσταντίνος Κανάρης"
 
 #, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
-msgstr ""
+msgstr "Τα δεδομένα αυτά θα αποστέλλονται απευθείας στον επεξεργαστή πληρωμών {name} μέσω κρυπτογραφημένης σύνδεσης."
 
 msgid "Remember the card number for next time"
-msgstr ""
+msgstr "Θυμηθείτε τον αριθμό της κάρτας για την επόμενη φορά"
 
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Παρακαλώ εισάγετε το όνομα σας και το IBAN σας (Διεθνής Αριθμός Τραπεζικού Λογαριασμού):"
@@ -2855,7 +2855,7 @@ msgid "By providing your IBAN and confirming this payment, you are authorizing {
 msgstr "Παρέχοντας τον IBAN του λογαριασμού σας και επιβεβαιώνοντας αυτήν την πληρωμή, εξουσιοδοτείτε τους {platform} και {provider}, τον πάροχό μας υπηρεσίας πληρωμών, να στείλετε εντολές στην τράπεζά σας για να χρεώσετε το λογαριασμό σας και την τράπεζά σας για να χρεώσετε το λογαριασμό σας σύμφωνα με αυτές τις οδηγίες. Έχετε δικαίωμα επιστροφής χρημάτων από την τράπεζά σας σύμφωνα με τους όρους και τις προϋποθέσεις της συμφωνίας σας με την τράπεζά σας. Η επιστροφή χρημάτων πρέπει να ζητηθεί εντός 8 εβδομάδων από την ημερομηνία χρέωσης του λογαριασμού σας."
 
 msgid "Remember the bank account number for future payments"
-msgstr ""
+msgstr "Θυμηθείτε τον αριθμό τραπεζικού λογαριασμού για μελλοντικές πληρωμές"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2873,16 +2873,16 @@ msgid "Are you sure you want to cancel this scheduled payment? It will stop your
 msgstr "Είστε σίγουροι ότι θέλετε να ακυρώσετε αυτή τη προγραμματισμένη πληρωμή; Θα σταματήσει τις δωρεές σας στους {recipients}."
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Εάν θέλετε να τροποποιήσετε το ποσό αυτής της προγραμματισμένης πληρωμής, επιλέξτε ή εισαγάγετε ένα νέο ποσό:"
 
 msgid "(not recommended, high fee percentage)"
-msgstr ""
+msgstr "(δεν συνιστάται, υψηλό ποσοστό τελών)"
 
 msgid "(okay, moderate fee percentage)"
-msgstr ""
+msgstr "(εντάξει, μέτριο ποσοστό τελών)"
 
 msgid "(recommended, low fee percentage)"
-msgstr ""
+msgstr "(συνιστάται, χαμηλό ποσοστό τελών)"
 
 #, python-brace-format
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
@@ -2892,17 +2892,17 @@ msgstr[1] "Επόμενη πληρωμή σε {n} εβδομάδες ({timedelta
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
-msgstr ""
+msgstr "Επόμενη πληρωμή {in_N_weeks_months_or_years}."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
-msgstr ""
+msgstr "Προσαρμοσμένο ποσό (ελάχιστο = {0}, μέγιστο = {1})"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
-msgstr ""
+msgstr "Εάν θέλετε να τροποποιήσετε την ημερομηνία αυτής της προγραμματισμένης πληρωμής, επιλέξτε ή εισαγάγετε μια νέα ημερομηνία:"
 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
-msgstr ""
+msgstr "Η καθυστέρηση της πληρωμής σας πέραν της κανονικής ημερομηνίας θα έχει ως αποτέλεσμα η δωρεά σας να είναι ανενεργή κατά τη διάρκεια αυτής της περιόδου."
 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
@@ -2911,22 +2911,22 @@ msgstr[0] "Έχετε {n} προγραμματισμένη πληρωμή:"
 msgstr[1] "Έχετε {n} προγραμματισμένες πληρωμές:"
 
 msgid "You currently don't have any scheduled payment."
-msgstr ""
+msgstr "Προς το παρόν δεν έχετε καμία προγραμματισμένη πληρωμή."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr ""
+msgstr "Είστε σίγουροι ότι θέλετε να αλλάξετε τον τύπο του λογαριασμού σας; Για νομικούς λόγους θα πρέπει να δημιουργήσουμε έναν νέο λογαριασμό για εσάς στο σύστημα του συνεργάτη πληρωμών μας και να μεταφέρουμε τα χρήματα από τον παλιό σας λογαριασμό."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr ""
+msgstr "Δεν μπορούμε να αλλάξουμε τον τύπο του λογαριασμού σας κατά τη διάρκεια της ημέρας πληρωμής, παρακαλούμε προσπαθήστε ξανά σε λίγα λεπτά."
 
 msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
-msgstr ""
+msgstr "Είστε σίγουροι ότι θέλετε να αλλάξετε τα στοιχεία της ταυτότητάς σας; Εάν ναι, ενδέχεται να χρειαστεί να περάσετε ξανά από τη διαδικασία επαλήθευσης της ταυτότητας."
 
 msgid "You haven't filled all the required fields."
-msgstr ""
+msgstr "Δεν έχετε συμπληρώσει όλα τα απαιτούμενα πεδία."
 
 msgid "Invalid date of birth."
-msgstr ""
+msgstr "Μη έγκυρη ημερομηνία γέννησης."
 
 msgid "Your identity information has been updated."
 msgstr ""
@@ -5460,6 +5460,9 @@ msgid ""
 "\n"
 "Please {link_start}make sure your membership of the team is public{link_end}."
 msgstr ""
+"Δεν μπορέσαμε να διαπιστώσουμε αν είστε μέλος της ομάδας {team_name} στο {platform_name}.\n"
+"\n"
+"Παρακαλούμε {link_start}βεβαιωθείτε ότι η συμμετοχή σας στην ομάδα είναι δημόσια{link_end}."
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
@@ -5509,7 +5512,7 @@ msgstr "Προφίλ στην {0}"
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
 msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
 msgstr[0] "Ένας χρήστης του Liberapay δεσμεύτηκε να δωρίζει {0} την εβδομάδα στο {1}."
-msgstr[1] "Χρήστες του Liberapay δεσμεύτηκε να δωρίζει {0} την εβδομάδα στο {1}."
+msgstr[1] "{n} Χρήστες του Liberapay δεσμεύτηκε να δωρίζει {0} την εβδομάδα στο {1}."
 
 #, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
