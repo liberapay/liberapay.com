@@ -3,152 +3,22 @@ from liberapay.i18n.currencies import Money, MoneyBasket
 db = website.db
 db_qc5 = website.db_qc5
 
-[--------------------------------------------------------]
+[---]
 
 title = _("Stats")
-zero = Money.ZEROS[currency]
 escrow = db_qc5.one("SELECT basket_sum(balance) FROM wallets") or MoneyBasket()
-nusers = db_qc5.one("""
-    SELECT count(*)
-      FROM participants
-     WHERE status = 'active'
-       AND kind IN ('individual', 'organization', 'group');
-""")
-transfer_volume = db_qc5.one("SELECT transfer_volume FROM paydays ORDER BY ts_end DESC LIMIT 1") or 0
-tips_stats = db_qc5.one("""
-    SELECT count(*), avg(amount, %s), sum(amount, %s)
-      FROM current_tips
-      JOIN participants p ON p.id = tipper
-      JOIN participants p2 ON p2.id = tippee
-     WHERE renewal_mode > 0
-       AND is_funded
-       AND p.status = 'active'
-       AND p2.status = 'active'
-""", (currency, currency))
-tip_n = getattr(tips_stats, 'count', None) or 0
-average_tip = (getattr(tips_stats, 'avg', None) or zero).round_up()
-total_backed_tips = (getattr(tips_stats, 'sum', None) or zero).round_up()
 
-average_tippees = int(db_qc5.one("""\
-    SELECT round(avg(ntippees))
-      FROM ( SELECT count(tippee) as ntippees
-               FROM current_tips
-               JOIN participants p ON p.id = tipper
-               JOIN participants p2 on p2.id = tippee
-              WHERE renewal_mode > 0
-                AND is_funded
-                AND p.status = 'active'
-                AND p2.status = 'active'
-           GROUP BY tipper
-           ) AS bar
-""") or 0)
-
-TIP_DISTRIBUTION = """
-    SELECT amount, count(amount)
-      FROM current_tips
-      JOIN participants p ON p.id = tipper
-      JOIN participants p2 on p2.id = tippee
-     WHERE renewal_mode > 0
-       AND is_funded
-       AND p.status = 'active'
-       AND p2.status = 'active'
-  GROUP BY amount
-  ORDER BY amount
-"""
-
-def get_tip_distribution():
-    tip_distribution = db_qc5.all(TIP_DISTRIBUTION)
-    r = {}
-    for row in tip_distribution:
-        percentage = row.count * 1.0 / tip_n
-        r[str(row.amount)] = (row.count, percentage)
-    return r
-
-
-last_payday = db.one("select * from paydays order by ts_end desc limit 1", back_as="dict")
-if last_payday:
-    nactive = last_payday['nactive']
-    ngivers = last_payday['ntippers']
-    nreceivers = last_payday['ntippees']
-    noverlap = ngivers + nreceivers - nactive
-else:
-    nactive = ngivers = nreceivers = noverlap = 0
-
-
-def out():
-    names = ['transfer_volume', 'average_tip', 'average_tippees',
-             'total_backed_tips', 'tip_n', 'escrow', 'nusers',
-             'ngivers', 'nreceivers', 'noverlap', 'nactive']
-    d = globals()
-    r = {name: d[name] for name in names}
-    r['tip_distribution'] = get_tip_distribution()
-    return r
-
-[----------------------------------------------------------] text/html
+[---] text/html
 
 % extends "templates/layouts/about.html"
 
 % block content
 
-    <p>{{ ngettext(
-        "Liberapay was launched {timespan_ago} and has {n} user.",
-        "Liberapay was launched {timespan_ago} and has {n} users.",
-        n=nusers, timespan_ago=to_age(constants.LAUNCH_TIME)
-    ) }}</p>
-
     <p>{{ _("{0} is escrowed within Liberapay.", escrow) }}</p>
 
-    % if last_payday
-    <p>
-        {{ ngettext(
-            "",
-            "The last payday was {timespan_ago} and transferred {money_amount} between {n} users.",
-            n=nactive,
-            timespan_ago=to_age(last_payday.ts_start),
-            money_amount=transfer_volume.fuzzy_sum(currency),
-        ) }}<br />
-        {{ ngettext("{n} participant gave money.", "{n} participants gave money.", ngivers) }}<br />
-        {{ ngettext("{n} participant received money.", "{n} participants received money.", nreceivers) }}<br />
-        {{ ngettext(
-            "{n} participant was both a donor and a recipient.",
-            "{n} participants were both donors and recipients.",
-            noverlap
-        ) }}
-    </p>
-    % endif
-
-    <p>{{ ngettext("On average, people who donate give {0} each to one other user.",
-                   "On average, people who donate give {0} each to {n} other users.",
-                   average_tippees, average_tip) }}</p>
-
-    % if last_payday
     <noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
 
     <div class="row" data-charts="/about/charts-v1.json">
-        <div class="chart-wrapper col-md-6">
-            <a name="users"></a>
-            <h3>{{ _("Open Accounts") }}</h3>
-            <p class="note">{{ _("Number of open individual and organization accounts on Liberapay") }}</p>
-            <div class="chart" data-chart="nusers"></div>
-            <div class="x-axis">{{ _("weeks") }}</div>
-        </div>
-
-        <div class="chart-wrapper col-md-6">
-            <a name="active"></a>
-            <h3>{{ _("Active Users") }}</h3>
-            <p class="note">{{ _("Users that gave and/or received money within Liberapay (per week)") }}</p>
-            <div class="chart" data-chart="nactive"></div>
-            <div class="x-axis">{{ _("weeks") }}</div>
-        </div>
-
-        <div class="chart-wrapper col-md-6">
-            <a name="gifts"></a>
-            <h3>{{ _("Weekly Gifts (€)") }}</h3>
-            <p class="note">{{ _("Money transferred within Liberapay (per week)") }}</p>
-            <div class="chart" data-chart="transfer_volume"></div>
-            <div class="x-axis">{{ _("weeks") }}</div>
-        </div>
-
         <div class="chart-wrapper col-md-6">
             <a name="deposits"></a>
             <h3>{{ _("Deposits (€)") }}</h3>
@@ -165,9 +35,5 @@ def out():
             <div class="x-axis">{{ _("weeks") }}</div>
         </div>
     </div>
-    % endif
 
 % endblock
-
-[----------------------------------------------------------] application/json via json_dump
-out()

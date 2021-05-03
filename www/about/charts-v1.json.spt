@@ -5,10 +5,6 @@ query_cache = website.db_qc5
 charts = [r._asdict() for r in query_cache.all("""\
 
     SELECT ts_start::date           AS date
-         , nparticipants::text
-         , nusers::text
-         , nactive::text
-         , transfer_volume
          , week_deposits
          , week_withdrawals
       FROM paydays p
@@ -17,10 +13,8 @@ charts = [r._asdict() for r in query_cache.all("""\
 
 """)]
 for c in charts:
-    for k in ('transfer_volume', 'week_deposits', 'week_withdrawals'):
+    for k in ('week_deposits', 'week_withdrawals'):
         c[k] = c[k].fuzzy_sum('EUR')
-
-response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
 response.headers[b'Cache-Control'] = b'public, max-age=600'
 
