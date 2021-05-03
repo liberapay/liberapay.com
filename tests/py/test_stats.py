@@ -1,5 +1,4 @@
 from decimal import Decimal
-import json
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import EUR, Harness
@@ -68,11 +67,3 @@ class TestChartOfReceiving(Harness):
         expected = ([], 0, EUR('0.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
-
-class TestJson(Harness):
-
-    def test_200(self):
-        response = self.client.GET('/about/stats.json')
-        assert response.code == 200
-        body = json.loads(response.text)
-        assert len(body) > 0
