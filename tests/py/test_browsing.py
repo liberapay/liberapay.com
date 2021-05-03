@@ -5,6 +5,7 @@ import re
 from pando import Response
 import pytest
 
+from liberapay.billing.payday import Payday
 from liberapay.testing import EUR, Harness
 from liberapay.utils import find_files
 
@@ -55,6 +56,7 @@ class BrowseTestHarness(Harness):
                  VALUES (%s, %s, 'expense', ('28.04','EUR'), 'badges and stickers', null, '{}'::jsonb, 'new')
               RETURNING id
         """, (self.david.id, self.org.id))
+        Payday.start().run()
 
     def browse(self, **kw):
         for url in self.urls:
