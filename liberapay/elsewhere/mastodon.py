@@ -70,7 +70,7 @@ class Mastodon(PlatformOAuth2):
         except (KeyError, ValueError):
             c_id, c_secret = None, None
         if status != 200 or not c_id or not c_secret:
-            logger.error('{} responded with {}:\n{}'.format(domain, status, r.text))
+            logger.info('{} responded with {}:\n{}'.format(domain, status, r.text))
             msg = lambda _: _(
                 "Is {0} really a {1} server? It is currently not acting like one.",
                 domain, self.display_name,
