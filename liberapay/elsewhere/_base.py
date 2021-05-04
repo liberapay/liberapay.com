@@ -174,7 +174,7 @@ class Platform:
                     return _("You're making requests too fast, please try again later.")
             raise LazyResponse(status, msg)
         if status != 200:
-            logger.error('{} responded with {}:\n{}'.format(domain, status, response_text))
+            logger.warning('{} responded with {}:\n{}'.format(domain, status, response_text))
             msg = lambda _: _("{0} returned an error, please try again later.", domain)
             raise LazyResponse(502, msg)
 

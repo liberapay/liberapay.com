@@ -48,11 +48,22 @@ from liberapay.utils import (
 )
 from liberapay.utils.emails import clean_up_emails, handle_email_bounces
 from liberapay.utils.state_chain import (
-    attach_environ_to_request, create_response_object, reject_requests_bypassing_proxy,
-    canonize, detect_obsolete_browsers, insert_constants, enforce_rate_limits,
-    set_output_to_None, add_content_disposition_header, merge_responses,
-    bypass_csp_for_form_redirects, delegate_error_to_simplate, return_500_for_exception,
-    turn_socket_error_into_50X, overwrite_status_code_of_gateway_errors,
+    add_content_disposition_header,
+    attach_environ_to_request,
+    bypass_csp_for_form_redirects,
+    canonize,
+    create_response_object,
+    delegate_error_to_simplate,
+    detect_obsolete_browsers,
+    enforce_rate_limits,
+    insert_constants,
+    merge_responses,
+    overwrite_status_code_of_gateway_errors,
+    raise_response_to_OPTIONS_request,
+    reject_requests_bypassing_proxy,
+    return_500_for_exception,
+    set_output_to_None,
+    turn_socket_error_into_50X,
 )
 from liberapay.utils.types import Object
 from liberapay.renderers import csv_dump, jinja2, jinja2_jswrapped, jinja2_xml_min, scss
@@ -183,8 +194,8 @@ algorithm.functions = [
     insert_constants,
     algorithm['parse_environ_into_request'],
     attach_environ_to_request,
-    algorithm['raise_200_for_OPTIONS'],
     create_response_object,
+    raise_response_to_OPTIONS_request,
     set_output_to_None,
 
     reject_requests_bypassing_proxy,
