@@ -260,7 +260,7 @@ class MixinTeam:
                AND ( t.is_funded OR t.paid_in_advance > 0 )
                AND p.is_suspended IS NOT true
         """, dict(team_id=self.id, use_mangopay=mangopay.sandbox))
-        takes = (cursor or self.db).all("""
+        takes = cursor.all("""
             SELECT t.*, p.main_currency, p.accepted_currencies
               FROM current_takes t
               JOIN participants p ON p.id = t.member
@@ -268,7 +268,16 @@ class MixinTeam:
                AND p.is_suspended IS NOT true
         """, (self.id,))
         # Recompute the takes
-        transfers, new_leftover = Payday.resolve_takes(tips, takes, self.main_currency)
+        next_payday_id = cursor.one("""
+            SELECT id
+              FROM paydays
+             WHERE ts_start IS NOT NULL
+          ORDER BY id DESC
+             LIMIT 1
+        """, default=0) + 1
+        transfers, new_leftover = Payday.resolve_takes(
+            tips, takes, self.main_currency, next_payday_id,
+        )
         transfers_by_member = group_by(transfers, lambda t: t.member)
         takes_sum = {k: MoneyBasket(t.amount for t in tr_list if not t.is_leftover)
                      for k, tr_list in transfers_by_member.items()}

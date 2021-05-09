@@ -16,6 +16,7 @@ from liberapay import constants
 from liberapay.billing.transactions import Money, transfer
 from liberapay.exceptions import NegativeBalance
 from liberapay.i18n.currencies import MoneyBasket
+from liberapay.payin.common import resolve_amounts
 from liberapay.utils import group_by
 from liberapay.website import website
 
@@ -149,7 +150,7 @@ class Payday:
             assert self.stage == 1
             with self.db.get_cursor() as cursor:
                 self.prepare(cursor, self.ts_start)
-                self.transfer_virtually(cursor, self.ts_start)
+                self.transfer_virtually(cursor, self.ts_start, self.id)
                 self.check_balances(cursor)
                 cursor.run("""
                     UPDATE paydays
@@ -372,13 +373,13 @@ class Payday:
         log("Prepared the DB.")
 
     @staticmethod
-    def transfer_virtually(cursor, ts_start):
+    def transfer_virtually(cursor, ts_start, payday_id):
         cursor.run("SELECT settle_tip_graph();")
         teams = cursor.all("""
             SELECT id, main_currency FROM payday_participants WHERE kind = 'group';
         """)
         for team_id, currency in teams:
-            Payday.transfer_takes(cursor, team_id, currency)
+            Payday.transfer_takes(cursor, team_id, currency, payday_id)
         cursor.run("""
             SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
@@ -386,7 +387,7 @@ class Payday:
         Payday.pay_invoices(cursor, ts_start)
 
     @staticmethod
-    def transfer_takes(cursor, team_id, currency):
+    def transfer_takes(cursor, team_id, currency, payday_id):
         """Resolve and transfer takes for the specified team
         """
         args = dict(team_id=team_id)
@@ -416,7 +417,7 @@ class Payday:
               JOIN payday_participants p ON p.id = t.member
              WHERE t.team = %(team_id)s;
         """, args)
-        transfers, leftover = Payday.resolve_takes(tips, takes, currency)
+        transfers, leftover = Payday.resolve_takes(tips, takes, currency, payday_id)
         for t in transfers:
             context = 'leftover-take' if t.is_leftover else 'partial-take' if t.is_partial else 'take'
             cursor.run("SELECT transfer(%s, %s, %s, %s, %s, NULL)",
@@ -425,7 +426,7 @@ class Payday:
                    (leftover, team_id))
 
     @staticmethod
-    def resolve_takes(tips, takes, ref_currency):
+    def resolve_takes(tips, takes, ref_currency, payday_id):
         """Resolve many-to-many donations (team takes)
         """
         for tip in tips:
@@ -469,12 +470,13 @@ class Payday:
         tip_currencies = set(t.full_amount.currency for t in tips)
         takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
         takes_by_secondary_currency = {c: [] for c in tip_currencies}
-        if fuzzy_takes_sum:
-            takes_ratio = min(fuzzy_income_sum / fuzzy_takes_sum, 1)
-        else:
-            takes_ratio = 0
+        resolved_takes = resolve_amounts(
+            min(fuzzy_income_sum, fuzzy_takes_sum),
+            {take.member: take.amount.convert(ref_currency) for take in takes},
+            payday_id=payday_id,
+        )
         for take in takes:
-            take.amount = (take.amount * takes_ratio).round_up()
+            take.amount = resolved_takes.get(take.member) or take.amount.zero()
             if take.paid_in_advance is None:
                 take.paid_in_advance = take.amount.zero()
             if take.accepted_currencies is None:
@@ -599,7 +601,7 @@ class Payday:
                     take.amount -= transfer_amount.convert(take.amount.currency)
                 if in_advance_amount:
                     tip.paid_in_advance -= in_advance_amount
-                    take.paid_in_advance -= in_advance_amount.convert(take.amount.currency)
+                    take.paid_in_advance -= in_advance_amount.convert(take.paid_in_advance.currency)
                 if on_time_amount:
                     tip.balances -= on_time_amount
                 tip.amount -= transfer_amount
@@ -950,8 +952,15 @@ class Payday:
         now = pando.utils.utcnow()
         with cls.db.get_cursor() as cursor:
             cursor.run("LOCK TABLE takes IN EXCLUSIVE MODE")
+            payday_id = cursor.one("""
+                SELECT id
+                  FROM paydays
+                 WHERE ts_start IS NOT NULL
+              ORDER BY id DESC
+                 LIMIT 1
+            """, default=0) + 1
             cls.prepare(cursor, now)
-            cls.transfer_virtually(cursor, now)
+            cls.transfer_virtually(cursor, now, payday_id)
             cursor.run("""
             CREATE INDEX ON payday_transfers (tippee);
             CREATE INDEX ON payday_transfers (team) WHERE team IS NOT NULL;
