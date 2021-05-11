@@ -19,3 +19,7 @@ def set_default_security_headers(website, response, request=None):
     # https://www.w3.org/TR/referrer-policy/#referrer-policy-strict-origin-when-cross-origin
     # https://caniuse.com/referrer-policy
     response.headers[b'Referrer-Policy'] = b'strict-origin-when-cross-origin'
+
+    # https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
+    if request.headers.get(b'X-Forwarded-Proto') == b'https' and website.env.instance_type == 'production':
+        response.headers[b'Strict-Transport-Security'] = b'max-age=31536000; includeSubDomains; preload'
