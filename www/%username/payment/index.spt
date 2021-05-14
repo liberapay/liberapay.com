@@ -8,19 +8,49 @@ participant = get_participant(state, restrict=True)
 
 if request.method == 'POST':
     account_pk = request.body.get_int('account_pk')
-    account = website.db.one("""
-        UPDATE payment_accounts
-           SET is_current = NULL
-         WHERE participant = %s
-           AND pk = %s
-     RETURNING *
-    """, (participant.id, account_pk))
-    if account and account.provider == 'stripe':
-        try:
-            stripe.oauth.OAuth.deauthorize(stripe_user_id=account.id)
-        except stripe.oauth_error.InvalidClientError as e:
-            if "This application is not connected to stripe account" not in str(e):
-                website.warning("unexpected error message: " + str(e))
+    action = request.body.get_choice('action', ('disconnect', 'refresh'), default='disconnect')
+    if action == 'disconnect':
+        account = website.db.one("""
+            UPDATE payment_accounts
+               SET is_current = NULL
+             WHERE participant = %s
+               AND pk = %s
+         RETURNING *
+        """, (participant.id, account_pk))
+        if account and account.provider == 'stripe':
+            try:
+                stripe.oauth.OAuth.deauthorize(stripe_user_id=account.id)
+            except stripe.oauth_error.InvalidClientError as e:
+                if "This application is not connected to stripe account" not in str(e):
+                    website.warning("unexpected error message: " + str(e))
+    elif action == 'refresh':
+        account = website.db.one("""
+            SELECT *
+              FROM payment_accounts
+             WHERE participant = %s
+               AND pk = %s
+        """, (participant.id, account_pk))
+        if not account:
+            raise response.invalid_input(account_pk, 'account_pk', 'body')
+        if account.provider == 'stripe':
+            stripe_account = stripe.Account.retrieve(account.id)
+            website.db.run("""
+                UPDATE payment_accounts
+                   SET country = %(country)s
+                     , default_currency = %(default_currency)s
+                     , charges_enabled = %(charges_enabled)s
+                     , display_name = %(display_name)s
+                 WHERE provider = 'stripe'
+                   AND id = %(account_id)s
+            """, dict(
+                country=stripe_account.country,
+                default_currency=stripe_account.default_currency.upper(),
+                charges_enabled=stripe_account.charges_enabled,
+                display_name=stripe_account.settings.dashboard.display_name,
+                account_id=stripe_account.id,
+            ))
+        else:
+            raise response.error(400, f"refresh isn't implemented for provider {account.provider}")
     response.redirect(request.path.raw)
 
 accounts = website.db.all("""
@@ -99,12 +129,14 @@ subhead = _("Payment Processors")
         "bank accounts.)"
     ) }}</p>
     % if stripe_accounts
-    <form action="" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % for account in stripe_accounts
-        <div class="card card-default">
-            <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
-                    title="{{ _('Disconnect') }}">&times;</button>
+        <form class="card card-default" action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <input type="hidden" name="account_pk" value="{{ account.pk }}" />
+            <button class="corner-icon fa fa-close" name="action" value="disconnect"
+                    title="{{ _('Disconnect') }}"></button>
+            <button class="corner-icon fa fa-refresh" name="action" value="refresh"
+                    title="{{ _('Refresh') }}"></button>
             % if account.display_name
             <h4>{{ account.display_name }}</h4>
             {{ _("Account ID: {0}", account.id) }}<br>
@@ -129,9 +161,8 @@ subhead = _("Payment Processors")
                 fontawesome("external-link") }} {{ _(
                 "Manage this {platform} account", platform="Stripe"
             ) }}</a>
-        </div>
+        </form>
         % endfor
-    </form>
     <br>
     % elif country in locale.countries
         % if country in constants.PAYOUT_COUNTRIES['stripe']
