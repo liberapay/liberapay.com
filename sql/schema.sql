@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '143'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '144'::jsonb);
 
 
 -- app configuration
@@ -25,6 +25,11 @@ CREATE TABLE app_conf (key text PRIMARY KEY, value jsonb);
 
 CREATE TYPE participant_kind AS ENUM ('individual', 'organization', 'group', 'community');
 CREATE TYPE participant_status AS ENUM ('stub', 'active', 'closed');
+CREATE TYPE account_mark AS ENUM (
+    'trusted', 'okay', 'unsettling',
+    'controversial', 'irrelevant', 'misleading',
+    'spam', 'fraud'
+);
 
 CREATE TABLE participants
 ( id                    bigserial               PRIMARY KEY
@@ -79,8 +84,8 @@ CREATE TABLE participants
 
 , payment_providers     integer                 NOT NULL DEFAULT 0
 
-, is_controversial      boolean
-, is_spam               boolean
+, marked_as             account_mark
+, is_unsettling         int                     NOT NULL DEFAULT 0
 
 , CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
@@ -132,18 +137,33 @@ CREATE TRIGGER initialize_amounts
 
 CREATE FUNCTION update_profile_visibility() RETURNS trigger AS $$
     BEGIN
-        IF (NEW.is_controversial OR NEW.is_spam OR NEW.is_suspended) THEN
-            NEW.profile_noindex = NEW.profile_noindex | 2;
-            NEW.hide_from_lists = NEW.hide_from_lists | 2;
-            NEW.hide_from_search = NEW.hide_from_search | 2;
-        ELSIF (NEW.is_controversial IS false) THEN
+        IF (NEW.marked_as IS NULL) THEN
+            RETURN NEW;
+        END IF;
+        IF (NEW.marked_as = 'trusted') THEN
+            NEW.is_suspended = false;
+        ELSIF (NEW.marked_as IN ('fraud', 'spam')) THEN
+            NEW.is_suspended = true;
+        ELSE
+            NEW.is_suspended = null;
+        END IF;
+        IF (NEW.marked_as = 'unsettling') THEN
+            NEW.is_unsettling = NEW.is_unsettling | 2;
+        ELSE
+            NEW.is_unsettling = NEW.is_unsettling & 2147483645;
+        END IF;
+        IF (NEW.marked_as IN ('okay', 'trusted')) THEN
             NEW.profile_noindex = NEW.profile_noindex & 2147483645;
+            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
+            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+        ELSIF (NEW.marked_as = 'unsettling') THEN
+            NEW.profile_noindex = NEW.profile_noindex | 2;
             NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
             NEW.hide_from_search = NEW.hide_from_search & 2147483645;
         ELSE
             NEW.profile_noindex = NEW.profile_noindex | 2;
-            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
-            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+            NEW.hide_from_lists = NEW.hide_from_lists | 2;
+            NEW.hide_from_search = NEW.hide_from_search | 2;
         END IF;
         RETURN NEW;
     END;
