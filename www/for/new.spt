@@ -30,7 +30,7 @@ title = _("Start a new community")
 % extends "templates/layouts/panel.html"
 
 % block panel_body
-<form action="" class="block-labels" method="POST">
+<form action="" class="block-labels-mb-4" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
     <label>

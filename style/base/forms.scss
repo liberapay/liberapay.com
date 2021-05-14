@@ -74,10 +74,15 @@ label:not([for]) {
 
 .block-labels label {
     display: block;
-    margin-bottom: 15px;
 }
-.block-labels.max-width-500 {
-    max-width: 500px;
+.block-labels-mb-4 label {
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+.inline-labels > label {
+    display: inline-block;
+    margin: 0 3ex 5px 0;
 }
 
 .btn-block + p {

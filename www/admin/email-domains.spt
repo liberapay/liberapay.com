@@ -157,7 +157,7 @@ title = "Email Domains"
         <p>The domain <span class="monospace">{{ domain }}</span> is not blacklisted.</p>
     % endif
 
-    <form action="" method="POST" class="block-labels">
+    <form action="" method="POST" class="block-labels-mb-4">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % if blacklisted
         <input type="hidden" name="action" value="remove_from_blacklist" />

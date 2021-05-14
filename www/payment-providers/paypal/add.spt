@@ -55,7 +55,7 @@ title = _("Connecting a {platform} account", platform='PayPal')
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     <p>{{ _("Please input the email address and country of the PayPal account you want to connect:") }}</p>
-    <div class="form-group block-labels">
+    <div class="form-group block-labels-mb-4">
     <label>
         <span>{{ _("Email") }}</span>
         <input class="form-control" name="email" value="{{ participant.email or '' }}" required />

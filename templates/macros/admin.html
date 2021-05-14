@@ -1,0 +1,59 @@
+% macro admin_form(p, reload=False, style='columns-sm-2 block-labels')
+    <form action="javascript:/admin/users" method="POST" class="js-submit"{% if reload %}
+          data-on-success="reload"{% endif %}>
+        <input type="hidden" name="p_id" value="{{ p.id }}">
+        <p>This account is…</p>
+        <div class="form-group {{ style }}">
+            <label class="text-success">
+                <input type="radio" name="mark_as" value="trusted" {{
+                       'checked' if p.marked_as == 'trusted' else '' }} />
+                trusted
+            </label>
+            <label class="text-info">
+                <input type="radio" name="mark_as" value="okay" {{
+                       'checked' if p.marked_as == 'okay' else '' }} />
+                okay
+            </label>
+            <label class="text-info">
+                <input type="radio" name="mark_as" value="unsettling" {{
+                       'checked' if p.marked_as == 'unsettling' else '' }} />
+                unsettling
+                % if p.is_unsettling.__and__(1)
+                &nbsp;
+                <span class="fa fa-check-circle" title="This account has been marked as unsettling by its owner."></span>
+                % endif
+            </label>
+            <label class="text-warning">
+                <input type="radio" name="mark_as" value="controversial" {{
+                       'checked' if p.marked_as == 'controversial' else '' }} />
+                controversial
+            </label>
+            <label class="text-warning">
+                <input type="radio" name="mark_as" value="irrelevant" {{
+                       'checked' if p.marked_as == 'irrelevant' else '' }} />
+                irrelevant
+            </label>
+            <label class="text-warning">
+                <input type="radio" name="mark_as" value="misleading" {{
+                       'checked' if p.marked_as == 'misleading' else '' }} />
+                misleading
+            </label>
+            <label class="text-danger">
+                <input type="radio" name="mark_as" value="spam" {{
+                       'checked' if p.marked_as == 'spam' else '' }} />
+                spam
+            </label>
+            <label class="text-danger">
+                <input type="radio" name="mark_as" value="fraud" {{
+                       'checked' if p.marked_as == 'fraud' else '' }} />
+                fraud
+            </label>
+        </div>
+        <label class="btn btn-default">
+            <input type="radio" class="out-of-sight" name="mark_as" value="" />
+            Unselect
+        </label>
+        &nbsp;&nbsp;
+        <button class="btn btn-warning">{{ _("Save") }}</button>
+    </form>
+% endmacro

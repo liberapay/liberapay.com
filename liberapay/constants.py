@@ -440,8 +440,6 @@ PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 PRIVILEGES = dict(admin=1, run_payday=2)
 check_bits(list(PRIVILEGES.values()))
 
-PROFILE_VISIBILITY_ATTRS = ('profile_noindex', 'hide_from_lists', 'hide_from_search')
-
 PUBLIC_NAME_MAX_SIZE = 64
 
 QUARANTINE = timedelta(weeks=0)

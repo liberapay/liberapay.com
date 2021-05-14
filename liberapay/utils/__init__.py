@@ -79,14 +79,15 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
             canon = '/' + participant.username + request.line.uri.decoded[len(slug)+1:]
             raise response.redirect(canon)
 
-    if (restrict or participant.is_spam) and participant != user:
+    is_spam = participant.marked_as == 'spam'
+    if (restrict or is_spam) and participant != user:
         if allow_member and participant.kind == 'group' and user.member_of(participant):
             pass
         elif user.is_admin:
             log_admin_request(user, participant, request)
         elif restrict:
             raise response.error(403, _("You are not authorized to access this page."))
-        elif participant.is_spam:
+        elif is_spam:
             raise response.render('simplates/spam-profile.spt', state)
 
     status = participant.status
@@ -126,7 +127,8 @@ def get_community(state, restrict=False):
     elif user.ANON:
         raise AuthRequired
 
-    if (restrict or c.participant.is_spam):
+    is_spam = c.participant.marked_as == 'spam'
+    if (restrict or is_spam):
         if user.id == c.creator:
             pass
         elif user.is_admin:
@@ -137,7 +139,7 @@ def get_community(state, restrict=False):
             else:
                 _ = state['_']
                 raise response.error(403, _("You are not authorized to access this page."))
-        elif c.participant.is_spam:
+        elif is_spam:
             raise response.render('simplates/spam-profile.spt', state)
 
     return c

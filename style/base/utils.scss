@@ -63,6 +63,10 @@
     flex-wrap: wrap;
 }
 
+.max-width-500 {
+    max-width: 500px;
+}
+
 @for $i from 0 through 100 {
     .width-#{$i} {
         width: $i * 1%;

@@ -8,6 +8,8 @@ PT_STATUS_MAP = {
     'failed': 'danger',
     'pre': 'muted',
 }
+ACCOUNT_MARKS = set(website.db.one("SELECT array_to_json(enum_range(NULL::account_mark))"))
+ACCOUNT_MARKS.add('')
 
 [---]
 
@@ -22,20 +24,20 @@ if request.method == 'POST':
     p = Participant.from_id(request.body.get_int('p_id'))
     updated = 0
     with website.db.get_cursor() as cursor:
-        for attr in ('is_controversial', 'is_spam', 'is_suspended'):
-            if attr not in request.body:
-                continue
-            new_value = request.body.parse_ternary(attr)
+        if 'mark_as' in request.body:
+            new_value = request.body.get_choice('mark_as', ACCOUNT_MARKS)
+            if new_value == '':
+                new_value = None
             r = cursor.one("""
                 UPDATE participants
-                   SET {0} = %(new_value)s
+                   SET marked_as = %(new_value)s
                  WHERE id = %(p_id)s
-                   AND {0} IS NOT %(new_value)s
+                   AND coalesce(marked_as::text, '') <> %(new_value)s
              RETURNING id
-            """.format(attr), dict(p_id=p.id, new_value=new_value))
+            """, dict(p_id=p.id, new_value=new_value))
             if r:
                 updated += 1
-                event_data[attr] = new_value
+                event_data['marked_as'] = new_value
 
         if event_data:
             if request.body.get('reason'):
@@ -98,7 +100,7 @@ if mode == 'all':
                             FROM events e
                        LEFT JOIN participants p2 ON p2.id = e.recorder
                            WHERE e.participant = p.id
-                             AND e.type IN ('is_suspended', 'visibility_override')
+                             AND e.type IN ('is_suspended', 'visibility_override', 'flags_changed')
                         ORDER BY ts DESC
                            LIMIT 1
                         ) e
@@ -158,7 +160,7 @@ elif mode == 'new_recipients':
                             FROM events e
                        LEFT JOIN participants p2 ON p2.id = e.recorder
                            WHERE e.participant = p.id
-                             AND e.type IN ('is_suspended', 'visibility_override')
+                             AND e.type IN ('is_suspended', 'visibility_override', 'flags_changed')
                         ORDER BY ts DESC
                            LIMIT 1
                         ) e
@@ -181,7 +183,7 @@ elif mode == 'new_recipients':
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
-         WHERE p.is_suspended IS NULL
+         WHERE p.marked_as IS NULL
            AND pt.row_number <= 20
       GROUP BY p.id
         HAVING coalesce(min(pt.id) < %s, true)
@@ -195,6 +197,7 @@ else:
 title = "Users Admin"
 
 [---] text/html
+% from 'templates/macros/admin.html' import admin_form with context
 % from 'templates/macros/avatar-url.html' import avatar_img with context
 % from 'templates/macros/icons.html' import fontawesome, glyphicon
 % from 'templates/macros/nav.html' import querystring_nav with context
@@ -351,61 +354,7 @@ title = "Users Admin"
     % endif
     </div>
     <div class="col-md-4">
-        <form action="javascript:" method="POST" class="js-submit">
-            <input type="hidden" name="p_id" value="{{ p.id }}">
-            <div class="form-group">
-                Is this profile controversial?<br>
-                <label>
-                    <input type="radio" name="is_controversial" value="yes" {{
-                           'checked' if p.is_controversial == True else '' }} />
-                    Yes, isolate it
-                </label> &nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="is_controversial" value="no" {{
-                           'checked' if p.is_controversial == False else '' }} />
-                    No
-                </label> &nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="is_controversial" value="null" />
-                    Unsure
-                </label>
-            </div>
-            <div class="form-group">
-                Is this profile spam?<br>
-                <label>
-                    <input type="radio" name="is_spam" value="yes" {{
-                           'checked' if p.is_spam == True else '' }} />
-                    Yes, hide it completely
-                </label> &nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="is_spam" value="no" {{
-                           'checked' if p.is_spam == False else '' }} />
-                    No
-                </label> &nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="is_spam" value="null" />
-                    Unsure
-                </label>
-            </div>
-            <div class="form-group">
-                Is this account fraudulent?<br>
-                <label>
-                    <input type="radio" name="is_suspended" value="yes" {{
-                           'checked' if p.is_suspended == True else '' }} />
-                    Yes, disable payments
-                </label> &nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="is_suspended" value="no" {{
-                           'checked' if p.is_suspended == False else '' }} />
-                    No
-                </label> &nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="is_suspended" value="null" />
-                    Unsure
-                </label>
-            </div>
-            <button class="btn btn-warning">{{ _("Save") }}</button>
-        </form>
+        {{ admin_form(p) }}
         <br>
         % if row.last_change
         <span class="text-muted">{{ _(

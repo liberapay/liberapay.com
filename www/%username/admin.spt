@@ -20,66 +20,15 @@ events = website.db.all("""
 """, (participant.id,))
 
 [---] text/html
+% from 'templates/macros/admin.html' import admin_form with context
+
 % extends "templates/layouts/settings.html"
+
 % block content
 
 <h3>Admin flags</h3>
 
-<form action="javascript:/admin/users" method="POST" class="js-submit" data-on-success="reload">
-    <input type="hidden" name="p_id" value="{{ participant.id }}">
-    <div class="form-group">
-        Is this profile controversial?<br>
-        <label>
-            <input type="radio" name="is_controversial" value="yes" {{
-                   'checked' if participant.is_controversial == True else '' }} />
-            Yes, isolate it
-        </label> &nbsp;&nbsp;
-        <label>
-            <input type="radio" name="is_controversial" value="no" {{
-                   'checked' if participant.is_controversial == False else '' }} />
-            No
-        </label> &nbsp;&nbsp;
-        <label>
-            <input type="radio" name="is_controversial" value="null" />
-            Unsure
-        </label>
-    </div>
-    <div class="form-group">
-        Is this profile spam?<br>
-        <label>
-            <input type="radio" name="is_spam" value="yes" {{
-                   'checked' if participant.is_spam == True else '' }} />
-            Yes, hide it completely
-        </label> &nbsp;&nbsp;
-        <label>
-            <input type="radio" name="is_spam" value="no" {{
-                   'checked' if participant.is_spam == False else '' }} />
-            No
-        </label> &nbsp;&nbsp;
-        <label>
-            <input type="radio" name="is_spam" value="null" />
-            Unsure
-        </label>
-    </div>
-    <div class="form-group">
-        Is this account fraudulent?<br>
-        <label>
-            <input type="radio" name="is_suspended" value="yes" {{
-                   'checked' if participant.is_suspended == True else '' }} />
-            Yes, disable payments
-        </label> &nbsp;&nbsp;
-        <label>
-            <input type="radio" name="is_suspended" value="no" {{
-                   'checked' if participant.is_suspended == False else '' }} />
-            No
-        </label> &nbsp;&nbsp;
-        <label>
-            <input type="radio" name="is_suspended" value="null" />
-            Unsure
-        </label>
-    </div>
-    <button class="btn btn-warning">{{ _("Save") }}</button>
-</form>
+{{ admin_form(participant, reload=True, style='inline-labels') }}
 
 <h3>Events</h3>
 
