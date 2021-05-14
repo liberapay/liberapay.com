@@ -99,6 +99,13 @@
 
         <br>
         <button class="btn btn-primary btn-lg">{{ _("Proceed") }}</button>
+
+        <br><br><br>
+        <h4>{{ _("Why do you ask for my email address?") }}</h4>
+        <p>{{ _(
+            "We need to be able to notify you in the future if there is a "
+            "problem with your donation or if the time has come to renew it."
+        ) }}</p>
     </form>
 
 % endif
