@@ -19,10 +19,12 @@ PRODUCTION = website.env.instance_type == 'production'
 request.allow('POST')
 payload = request.body_bytes
 sig = request.headers[b'Stripe-Signature'].decode('ascii', 'replace')
+if 'connect' in request.qs:
+    secret = website.app_conf.stripe_connect_callback_secret
+else:
+    secret = website.app_conf.stripe_callback_secret
 try:
-    event = stripe.Webhook.construct_event(
-        payload, sig, website.app_conf.stripe_callback_secret
-    )
+    event = stripe.Webhook.construct_event(payload, sig, secret)
 except ValueError as e:
     raise response.error(400, str(e))
 except stripe.error.SignatureVerificationError:
