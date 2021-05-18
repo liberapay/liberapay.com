@@ -265,6 +265,7 @@ class AppConf:
         smtp_password=str,
         smtp_use_tls=bool,
         stripe_callback_secret=str,
+        stripe_connect_callback_secret=str,
         stripe_connect_id=str,
         stripe_publishable_key=str,
         stripe_secret_key=str,
