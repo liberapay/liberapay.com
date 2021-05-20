@@ -145,13 +145,13 @@ git tag $version
 # Deploy
 if [ -s $branch_before ]; then
     echo "Running $branch_before..."
-    eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_before
+    eb ssh liberapay -c 'psql -v ON_ERROR_STOP=on' <$branch_before
 fi
 [ -e $branch_before ] && rm $branch_before
-eb deploy liberapay-prod --label $version
+eb deploy liberapay --label $version
 if [ -s $branch_after ]; then
     echo "Running $branch_after..."
-    eb ssh liberapay-prod -c 'psql -v ON_ERROR_STOP=on' <$branch_after
+    eb ssh liberapay -c 'psql -v ON_ERROR_STOP=on' <$branch_after
 fi
 [ -e $branch_after ] && rm $branch_after
 
