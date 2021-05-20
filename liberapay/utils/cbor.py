@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 from decimal import Decimal
+from io import BytesIO
 
 import cbor2
 from markupsafe import Markup
@@ -8,24 +9,28 @@ from ..i18n.currencies import Money, MoneyBasket
 from .types import Object
 
 
+CBORDecoder = cbor2.decoder.CBORDecoder
 CBORTag = cbor2.encoder.CBORTag
-encode_semantic = cbor2.encoder.encode_semantic
+
+default_encoders = cbor2.encoder.default_encoders.copy()
+semantic_decoders = {}
 
 
 # Dates
 # =====
-# Upstream issue: https://github.com/agronholm/cbor2/issues/37
-# Spec: https://j-richter.github.io/CBOR/date.html
+# Upstream issue: https://github.com/agronholm/cbor2/issues/85
+# Spec: https://datatracker.ietf.org/doc/html/rfc8943
 
 EPOCH = date(1970, 1, 1)
 
 
 def encode_date(encoder, value):
-    encode_semantic(encoder, CBORTag(100, value.isoformat()))
+    encoder.encode_semantic(CBORTag(100, (value - EPOCH).days))
 
 
 def decode_date(decoder, value, shareable_index=None):
     if type(value) == str:
+        # We used to encode dates as strings. The original spec allowed it.
         return date(*map(int, value.split('-')))
     elif type(value) == int:
         return EPOCH + timedelta(days=value)
@@ -33,8 +38,8 @@ def decode_date(decoder, value, shareable_index=None):
         raise TypeError("expected str or int, got %r" % type(value))
 
 
-cbor2.encoder.default_encoders[date] = encode_date
-cbor2.decoder.semantic_decoders[100] = decode_date
+default_encoders[date] = encode_date
+semantic_decoders[100] = decode_date
 
 
 # Markup
@@ -43,7 +48,7 @@ cbor2.decoder.semantic_decoders[100] = decode_date
 def encode_Markup(encoder, value):
     raise NotImplementedError()
 
-cbor2.encoder.default_encoders[Markup] = encode_Markup
+default_encoders[Markup] = encode_Markup
 
 
 # Money and MoneyBasket
@@ -52,13 +57,13 @@ cbor2.encoder.default_encoders[Markup] = encode_Markup
 
 def encode_Money(encoder, value):
     if set(value.__dict__.keys()) == {'amount', 'currency'}:
-        encode_semantic(encoder, CBORTag(77111, '%s%s' % (value.currency, value.amount)))
+        encoder.encode_semantic(CBORTag(77111, '%s%s' % (value.currency, value.amount)))
     else:
         attrs = {
             k: v for k, v in value.__dict__.items()
             if k not in {'amount', 'currency'}
         }
-        encode_semantic(encoder, CBORTag(77111, [value.currency, value.amount, attrs]))
+        encoder.encode_semantic(CBORTag(77111, [value.currency, value.amount, attrs]))
 
 
 def decode_Money(decoder, value, shareable_index=None):
@@ -79,9 +84,9 @@ def encode_MoneyBasket(encoder, value):
     amounts = {k: v for k, v in value.amounts.items() if v}
     if value.__dict__:
         attrs = value.__dict__
-        encode_semantic(encoder, CBORTag(77112, dict(amounts, attrs=attrs)))
+        encoder.encode_semantic(CBORTag(77112, dict(amounts, attrs=attrs)))
     else:
-        encode_semantic(encoder, CBORTag(77112, amounts))
+        encoder.encode_semantic(CBORTag(77112, amounts))
 
 
 def decode_MoneyBasket(decoder, value, shareable_index=None):
@@ -95,21 +100,46 @@ def decode_MoneyBasket(decoder, value, shareable_index=None):
     return r
 
 
-cbor2.encoder.default_encoders[Money] = encode_Money
-cbor2.encoder.default_encoders[MoneyBasket] = encode_MoneyBasket
+default_encoders[Money] = encode_Money
+default_encoders[MoneyBasket] = encode_MoneyBasket
 
-cbor2.decoder.semantic_decoders[77111] = decode_Money
-cbor2.decoder.semantic_decoders[77112] = decode_MoneyBasket
+semantic_decoders[77111] = decode_Money
+semantic_decoders[77112] = decode_MoneyBasket
 
 
 # Object
 # ======
 
 def encode_Object(encoder, value):
-    cbor2.encoder.encode_map(encoder, value.__dict__)
+    encoder.encode_map(value.__dict__)
 
-cbor2.encoder.default_encoders[Object] = encode_Object
+default_encoders[Object] = encode_Object
 
 
-dumps = cbor2.dumps
-loads = cbor2.loads
+# Wrapper functions
+# =================
+
+default_encoder = cbor2.encoder.CBOREncoder(BytesIO())
+default_encoder._encoders = default_encoders
+canonical_encoder = cbor2.encoder.CBOREncoder(BytesIO())
+canonical_encoder._encoders = default_encoders.copy()
+canonical_encoder._encoders.update(cbor2.encoder.canonical_encoders)
+
+
+def dumps(obj, canonical=False):
+    encoder = canonical_encoder if canonical else default_encoder
+    with BytesIO() as fp:
+        encoder.fp = fp
+        encoder.encode(obj)
+        return fp.getvalue()
+
+
+def tag_hook(decoder, tag):
+    # https://cbor2.readthedocs.io/en/latest/customizing.html
+    f = semantic_decoders.get(tag.tag)
+    return tag if f is None else f(decoder, tag.value)
+
+
+def loads(s):
+    with BytesIO(s) as fp:
+        return CBORDecoder(fp, tag_hook=tag_hook).decode()
