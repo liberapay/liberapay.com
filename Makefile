@@ -1,4 +1,4 @@
-python := "$(shell { command -v python3.6 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
+python := "$(shell { command -v python3.8 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
@@ -28,7 +28,7 @@ $(env): requirements*.txt
 rehash-requirements:
 	$(env_bin)/$(pip) install hashin
 	for f in requirements*.txt; do \
-	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.6 -p 3.7 -p 3.8 -p 3.9; \
+	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.8 -p 3.9; \
 	done
 
 clean:
