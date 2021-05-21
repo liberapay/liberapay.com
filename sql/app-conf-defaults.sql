@@ -52,7 +52,6 @@ INSERT INTO app_conf (key, value) VALUES
     ('stripe_connect_id', '"ca_DEYxiYHBHZtGj32l9uczcsunbQOcRq8H"'::jsonb),
     ('stripe_publishable_key', '"pk_test_rGZY3Q7ba61df50X0h70iHeZ"'::jsonb),
     ('stripe_secret_key', '"sk_test_QTUa8AqWXyU2feC32glNgDQd"'::jsonb),
-    ('trusted_proxies', '[]'::jsonb),
     ('twitch_id', '"9ro3g4slh0de5yijy6rqb2p0jgd7hi"'::jsonb),
     ('twitch_secret', '"o090sc7828d7gljtrqc5n4vcpx3bfx"'::jsonb),
     ('twitter_callback', '"http://127.0.0.1:8339/on/twitter/associate"'::jsonb),
