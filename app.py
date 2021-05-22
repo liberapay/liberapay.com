@@ -16,9 +16,11 @@ if __name__ == '__main__':
     program = 'gunicorn'
     execlp(program, program, 'liberapay.main:website', '--config', 'app.py', *sys.argv[1:])
 
-accesslog = '-'  # stderr
+accesslog = '-'  # stdout
 access_log_format = (
     '%(t)s %(s)s %(L)ss %({Host}i)s "%(r)s" %(b)s "%(f)s"'
+) if sys.stdin.isatty() else (
+    '%(s)s %(L)s %({Host}i)s "%(r)s" %(b)s "%(f)s"'
 )
 
 if ':' in _canonical_host:
