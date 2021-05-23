@@ -37,13 +37,6 @@ def raise_response_to_OPTIONS_request(request, response):
         raise response
 
 
-def reject_requests_bypassing_proxy(request, response):
-    """Reject requests that bypass Cloudflare, except health checks.
-    """
-    if request.bypasses_proxy and request.path.raw != '/callbacks/health':
-        raise response.error(403, "The request bypassed a proxy.")
-
-
 def canonize(request, website):
     """Enforce a certain scheme and hostname.
 

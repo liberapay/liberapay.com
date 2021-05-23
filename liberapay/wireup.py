@@ -1,13 +1,10 @@
 from decimal import Decimal
-from ipaddress import ip_network
 import json
 import logging
 from operator import itemgetter
 import os
 import re
 import socket
-from tempfile import mkstemp
-from time import time
 import traceback
 
 import babel.localedata
@@ -20,7 +17,6 @@ from postgres.cursors import SimpleRowCursor
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 from psycopg2_pool import PoolError
-import requests
 import sass
 import sentry_sdk
 from state_chain import StateChain
@@ -43,7 +39,7 @@ from liberapay.models.payin import Payin
 from liberapay.models.repository import Repository
 from liberapay.models.tip import Tip
 from liberapay.security.crypto import Cryptograph
-from liberapay.utils import find_files, markdown, mkdir_p, resolve, urlquote
+from liberapay.utils import find_files, markdown, resolve
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.query_cache import QueryCache
@@ -269,7 +265,6 @@ class AppConf:
         stripe_connect_id=str,
         stripe_publishable_key=str,
         stripe_secret_key=str,
-        trusted_proxies=list,
         twitch_id=str,
         twitch_secret=str,
         twitter_callback=str,
@@ -313,40 +308,6 @@ def app_conf(db):
     if app_conf:
         socket.setdefaulttimeout(app_conf.socket_timeout)
     return {'app_conf': app_conf}
-
-
-def trusted_proxies(app_conf, env, tell_sentry):
-    if not app_conf:
-        return {'trusted_proxies': []}
-    def parse_network(net):
-        if net == 'private':
-            return [net]
-        elif net.startswith('https://'):
-            d = env.log_dir + '/trusted_proxies/'
-            mkdir_p(d)
-            filename = d + urlquote(net, '')
-            skip_download = (
-                os.path.exists(filename) and
-                os.stat(filename).st_size > 0 and
-                os.stat(filename).st_mtime > time() - 60*60*24*7
-            )
-            if not skip_download:
-                tmpfd, tmp_path = mkstemp(dir=d)
-                with open(tmpfd, 'w') as f:
-                    f.write(requests.get(net).text)
-                os.rename(tmp_path, filename)
-            with open(filename, 'rb') as f:
-                return [ip_network(x) for x in f.read().decode('ascii').strip().split()]
-        else:
-            return [ip_network(net)]
-    try:
-        return {'trusted_proxies': [
-            sum((parse_network(net) for net in networks), [])
-            for networks in (app_conf.trusted_proxies or ())
-        ]}
-    except Exception as e:
-        tell_sentry(e, {})
-        return {'trusted_proxies': []}
 
 
 def mail(app_conf, env, project_root='.'):
@@ -873,7 +834,6 @@ full_chain = StateChain(
     accounts_elsewhere,
     load_scss_variables,
     s3,
-    trusted_proxies,
     currency_exchange_rates,
 )
 

@@ -1,4 +1,4 @@
-python := "$(shell { command -v python3.6 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
+python := "$(shell { command -v python3.8 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
@@ -28,7 +28,7 @@ $(env): requirements*.txt
 rehash-requirements:
 	$(env_bin)/$(pip) install hashin
 	for f in requirements*.txt; do \
-	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.6 -p 3.7 -p 3.8 -p 3.9; \
+	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.8 -p 3.9; \
 	done
 
 clean:
@@ -39,7 +39,7 @@ schema: $(env)
 	$(with_local_env) ./recreate-schema.sh
 
 schema-diff: test-schema
-	eb ssh liberapay-prod -c 'pg_dump -sO' | sed -e '/^INFO: /d' >prod.sql
+	eb ssh liberapay -c 'pg_dump -sO' | sed -e '/^INFO: /d' >prod.sql
 	$(with_tests_env) sh -c 'pg_dump -sO "$$DATABASE_URL"' >local.sql
 	sed -E -e '/^--/d' -e '/^\s*$$/d' -e '/^SET /d' -e 's/\bpg_catalog\.//g' -i prod.sql local.sql
 	diff -uw prod.sql local.sql

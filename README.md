@@ -74,7 +74,7 @@ The python code inside simplates is only for request-specific logic, common back
 
 Make sure you have the following dependencies installed first:
 
-- python ≥ 3.6
+- python ≥ 3.8
   - including the C headers of python and libffi, which are packaged separately in many Linux distributions
 - postgresql 13 (see [the official download & install docs](https://www.postgresql.org/download/))
 - make
@@ -182,12 +182,12 @@ All new dependencies need to be audited to check that they don't contain malicio
 We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_install/#hash-checking-mode) to protect ourselves from dependency tampering. Thus, when adding or upgrading a dependency the new hashes need to be computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
 
     pip install hashin
-    hashin package==x.y -r requirements_base.txt -p 3.6 -p 3.7 -p 3.8 -p 3.9
+    hashin package==x.y -r requirements_base.txt -p 3.8 -p 3.9
     # note: we have several requirements files, use the right one
 
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
 
-To upgrade all the dependencies in a requirements file, run `hashin -u -r requirements_XXX.txt -p 3.6 -p 3.7 -p 3.8 -p 3.9`. You may have to run extra `hashin` commands if new subdependencies are missing.
+To upgrade all the dependencies in a requirements file, run `hashin -u -r requirements_XXX.txt -p 3.8 -p 3.9`. You may have to run extra `hashin` commands if new subdependencies are missing.
 
 ### Processing personal data
 

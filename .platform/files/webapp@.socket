@@ -1,0 +1,9 @@
+[Unit]
+Description=Socket of web application daemon #%i
+
+[Socket]
+ListenStream=/var/app/%i/socket
+Service=webapp@%i.service
+SocketUser=webapp
+SocketGroup=cloudflared
+SocketMode=0660

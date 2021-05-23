@@ -60,7 +60,6 @@ from liberapay.utils.state_chain import (
     merge_responses,
     overwrite_status_code_of_gateway_errors,
     raise_response_to_OPTIONS_request,
-    reject_requests_bypassing_proxy,
     return_500_for_exception,
     set_output_to_None,
     turn_socket_error_into_50X,
@@ -198,8 +197,6 @@ algorithm.functions = [
     raise_response_to_OPTIONS_request,
     set_output_to_None,
 
-    reject_requests_bypassing_proxy,
-
     canonize,
     algorithm['extract_accept_header'],
     set_default_security_headers,
@@ -325,45 +322,18 @@ aspen.http.request.Querystring.serialize = _Querystring_serialize
 if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
 def _source(self):
-    def f():
-        addr = self.environ.get('REMOTE_ADDR') or self.environ[b'REMOTE_ADDR']
-        addr = ip_address(addr.decode('ascii') if type(addr) is bytes else addr)
-        trusted_proxies = getattr(self.website, 'trusted_proxies', None)
-        forwarded_for = self.headers.get(b'X-Forwarded-For')
-        self.__dict__['bypasses_proxy'] = bool(trusted_proxies)
-        if not trusted_proxies or not forwarded_for:
-            return addr
-        for networks in trusted_proxies:
-            is_trusted = False
-            for network in networks:
-                is_trusted = addr.is_private if network == 'private' else addr in network
-                if is_trusted:
-                    break
-            if not is_trusted:
-                return addr
-            i = forwarded_for.rfind(b',')
-            try:
-                addr = ip_address(forwarded_for[i+1:].decode('ascii').strip())
-            except (UnicodeDecodeError, ValueError):
-                return addr
-            if i == -1:
-                if networks is trusted_proxies[-1]:
-                    break
-                return addr
-            forwarded_for = forwarded_for[:i]
-        self.__dict__['bypasses_proxy'] = False
-        return addr
-    r = f()
-    self.__dict__['source'] = r
-    return r
+    if 'source' not in self.__dict__:
+        addr = (
+            self.headers.get(b'Cf-Connecting-Ip') or
+            self.environ.get(b'REMOTE_ADDR') or
+            self.environ.get('REMOTE_ADDR') or
+            '0.0.0.0'
+        )
+        if isinstance(addr, bytes):
+            addr = addr.decode()
+        self.__dict__['source'] = ip_address(addr)
+    return self.__dict__['source']
 pando.http.request.Request.source = property(_source)
-
-if hasattr(pando.http.request.Request, 'bypasses_proxy'):
-    raise Warning('pando.http.request.Request.bypasses_proxy already exists')
-def _bypasses_proxy(self):
-    self.source
-    return self.__dict__['bypasses_proxy']
-pando.http.request.Request.bypasses_proxy = property(_bypasses_proxy)
 
 if hasattr(pando.http.request.Request, 'find_input_name'):
     raise Warning('pando.http.request.Request.find_input_name already exists')
