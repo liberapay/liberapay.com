@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '144'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '145'::jsonb);
 
 
 -- app configuration
@@ -1040,7 +1040,7 @@ CREATE TRIGGER upsert_mangopay_user_id
 
 -- rate limiting
 
-CREATE UNLOGGED TABLE rate_limiting
+CREATE TABLE rate_limiting
 ( key       text          PRIMARY KEY
 , counter   int           NOT NULL
 , ts        timestamptz   NOT NULL

@@ -2963,3 +2963,7 @@ UPDATE participants
    SET marked_as = 'okay'
  WHERE profile_noindex < 2
    AND marked_as IS NULL;
+
+-- migration #145
+DELETE FROM app_conf WHERE key = 'trusted_proxies';
+ALTER TABLE rate_limiting SET LOGGED;
