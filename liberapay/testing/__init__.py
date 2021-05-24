@@ -111,7 +111,9 @@ class ClientWithAuth(Client):
                 r = wanted.get('response')
             if not r or not r.body:
                 return wanted
-            # Attempt to validate the response body
+            # Attempt to validate the response body, unless asked not to
+            if not kw.pop('parse_output', True):
+                return wanted
             r_type = r.headers[b'Content-Type']
             try:
                 if r_type.startswith(b'text/html'):

@@ -2928,9 +2928,9 @@ ALTER TABLE participants
 WITH _events AS (
     SELECT DISTINCT ON (e.participant)
            e.participant
-         , ( CASE WHEN e.payload->>'profile_noindex' = 'true'
-                  THEN p.profile_noindex | 2
-                  ELSE p.profile_noindex & 2147483645
+         , ( CASE WHEN e.payload->>'profile_noindex' = 'false'
+                  THEN p.profile_noindex & 2147483645
+                  ELSE p.profile_noindex | 2
              END
            ) AS profile_noindex
          , ( CASE WHEN e.payload->>'hide_from_lists' = 'true'
@@ -2958,11 +2958,20 @@ UPDATE participants p
    AND ( p.profile_noindex <> e.profile_noindex OR
          p.hide_from_lists <> e.hide_from_lists OR
          p.hide_from_search <> e.hide_from_search
+       )
+   AND NOT EXISTS (
+           SELECT 1
+             FROM events e2
+            WHERE e2.participant = p.id
+              AND e2.type = 'flags_changed'
        );
 UPDATE participants
    SET marked_as = 'okay'
  WHERE profile_noindex < 2
-   AND marked_as IS NULL;
+   AND hide_from_lists < 2
+   AND hide_from_search < 2
+   AND marked_as IS NULL
+   AND is_suspended IS NULL;
 
 -- migration #145
 DELETE FROM app_conf WHERE key = 'trusted_proxies';

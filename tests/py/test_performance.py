@@ -13,8 +13,8 @@ class TestPerformance(Harness):
 
     def test_performance_of_homepage(self):
         for i in range(1000):
-            self.client.GET('/')
+            self.client.GET('/', parse_output=False)
 
     def test_performance_when_serving_static_file(self):
         for i in range(10000):
-            self.client.GET('/assets/avatar-default.png')
+            self.client.GET('/assets/avatar-default.png', parse_output=False)

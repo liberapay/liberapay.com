@@ -201,8 +201,8 @@ subhead = _("Payment Processors")
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % for account in paypal_accounts
         <div class="card card-default">
-            <button class="close pull-right" name="account_pk" value="{{ account.pk }}"
-                    title="{{ _('Disconnect') }}">&times;</button>
+            <button class="corner-icon fa fa-close" name="account_pk" value="{{ account.pk }}"
+                    title="{{ _('Disconnect') }}"></button>
             % if account.display_name
             <h4>{{ account.display_name }}</h4>
             {{ _("Account ID: {0}", account.id) }}<br>
