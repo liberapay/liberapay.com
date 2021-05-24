@@ -445,5 +445,5 @@ def sync_all_pending_payments(db=None):
             else:
                 sync_order(db, payin)
         except Exception as e:
-            website.tell_sentry(e, {})
+            website.tell_sentry(e)
         sleep(0.2)

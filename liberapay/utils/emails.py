@@ -191,11 +191,11 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
                         except BrokenEmailDomain:
                             port_25_is_open = False
                         except Exception as e:
-                            website.tell_sentry(e, {})
+                            website.tell_sentry(e)
                         else:
                             port_25_is_open = True
                     if port_25_is_open is False:
-                        website.tell_sentry(e, {}, allow_reraise=False)
+                        website.tell_sentry(e, allow_reraise=False)
                         return
                 request = state.get('request')
                 if request:
@@ -208,7 +208,7 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
                 else:
                     raise
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
 
 
 def test_email_domain(email: NormalizedEmailAddress):
@@ -237,7 +237,7 @@ def test_email_domain(email: NormalizedEmailAddress):
             except (SMTPException, OSError) as e:
                 exceptions.append(e)
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
                 exceptions.append(e)
             n_attempts += 1
             if n_attempts >= 3:
@@ -295,7 +295,7 @@ def get_email_server_addresses(email):
             exceptions.append(e)
             continue
         except Exception as e:
-            website.tell_sentry(e, {})
+            website.tell_sentry(e)
             exceptions.append(e)
             continue
         for addr in mx_ip_addresses:
@@ -428,7 +428,7 @@ def handle_email_bounces():
             try:
                 _handle_ses_notification(msg)
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
         time.sleep(1)
 
 

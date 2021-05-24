@@ -1352,19 +1352,19 @@ class Participant(Model, MixinTeam):
                 assert not partial_translation, \
                     f"unexpected `partial_translation` value: {partial_translation}"
             except AssertionError as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
 
         with email_lock:
             try:
                 website.mailer.send(**message)
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
                 try:
                     # Retry without the user's name in the `To:` header
                     message['to'] = [email]
                     website.mailer.send(**message)
                 except Exception as e:
-                    website.tell_sentry(e, {})
+                    website.tell_sentry(e)
                     raise UnableToSendEmail(email)
             website.log_email(message)
 
@@ -1385,7 +1385,7 @@ class Participant(Model, MixinTeam):
                     dict(id=msg.id, status=status)
                 )
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
                 sleep(5)
                 return dequeue(msg, status)
         last_id = 0
@@ -1421,7 +1421,7 @@ class Participant(Model, MixinTeam):
                 except EmailAddressIsBlacklisted:
                     dequeue(msg, 'skipped')
                 except Exception as e:
-                    website.tell_sentry(e, {})
+                    website.tell_sentry(e)
                     dequeue(msg, 'failed')
                 else:
                     dequeue(msg, 'sent')
@@ -1593,7 +1593,7 @@ class Participant(Model, MixinTeam):
                 d['subject'] = spt['subject'].render(context).strip()
                 d['html'] = spt['text/html'].render(context).strip()
             except Exception as e:
-                d['sentry_ident'] = website.tell_sentry(e, state).get('sentry_ident')
+                d['sentry_ident'] = website.tell_sentry(e).get('sentry_ident')
         return r
 
     @classmethod
@@ -2341,7 +2341,7 @@ class Participant(Model, MixinTeam):
                     try:
                         goal = Money.parse(last_goal.payload)
                     except Exception as e:
-                        website.tell_sentry(e, {})
+                        website.tell_sentry(e)
             r = c.one("""
                 UPDATE participants
                    SET status = %(status)s

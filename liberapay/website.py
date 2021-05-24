@@ -38,11 +38,11 @@ class Website(_Website):
             for tr in transfers
         ]
 
-    def warning(self, msg, state={}):
+    def warning(self, msg):
         try:
             raise Warning(msg)
         except Warning as e:
-            self.tell_sentry(e, state)
+            self.tell_sentry(e)
 
     def wireup(self, minimal=False):
         from liberapay import wireup
@@ -125,7 +125,7 @@ def wrap_method(method):
         try:
             self._fail_with_undefined_error()
         except Exception as e:
-            website.tell_sentry(e, {})
+            website.tell_sentry(e)
         return method(self, *a, **kw)
     return f
 

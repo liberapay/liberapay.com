@@ -36,7 +36,7 @@ if 'new-password' in body:
         try:
             password_status = p.check_password(body['new-password'], context='update_password')
         except Exception as e:
-            website.tell_sentry(e, state)
+            website.tell_sentry(e)
         if password_status and password_status != 'okay':
             raise response.render(
                 'simplates/password-warning.spt', state,

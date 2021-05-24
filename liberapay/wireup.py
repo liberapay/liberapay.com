@@ -45,7 +45,7 @@ from liberapay.utils.http_caching import asset_etag
 from liberapay.utils.query_cache import QueryCache
 from liberapay.utils.types import Object
 from liberapay.version import get_version
-from liberapay.website import CustomUndefined
+from liberapay.website import Website
 
 
 def canonical(env):
@@ -127,7 +127,7 @@ def database(env, tell_sentry):
     try:
         db = DB(dburl, maxconn=maxconn, cursor_factory=SimpleRowCursor)
     except psycopg2.OperationalError as e:
-        tell_sentry(e, {}, allow_reraise=False)
+        tell_sentry(e, allow_reraise=False)
         db = NoDB()
 
     itemgetter0 = itemgetter(0)
@@ -423,7 +423,7 @@ def make_sentry_teller(env, version):
         sentry = False
         print("Won't log to Sentry (SENTRY_DSN is empty).")
 
-    def tell_sentry(exception, state, allow_reraise=True, level=None):
+    def tell_sentry(exception, send_state=True, allow_reraise=True, level=None):
         r = {'sentry_ident': None}
 
         if isinstance(exception, pando.Response):
@@ -438,6 +438,7 @@ def make_sentry_teller(env, version):
             # Don't flood Sentry when DB is down
             return r
 
+        state = Website.state.get(None) or {}
         if isinstance(exception, PoolError):
             # If this happens, then the `DATABASE_MAXCONN` value is too low.
             state['exception'] = NeedDatabase()
@@ -515,13 +516,11 @@ def make_sentry_teller(env, version):
                     'lang': getattr(state.get('locale'), 'language', None),
                 }
             except Exception as e:
-                tell_sentry(e, {})
+                tell_sentry(e, send_state=False)
 
         # Tell Sentry
         r['sentry_ident'] = sentry_sdk.capture_exception(exception, **scope_dict)
         return r
-
-    CustomUndefined._tell_sentry = staticmethod(tell_sentry)
 
     return {'tell_sentry': tell_sentry}
 
@@ -683,7 +682,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 except KeyError:
                     l.languages_2 = LANGUAGES_2
         except Exception as e:
-            tell_sentry(e, {})
+            tell_sentry(e)
     del source_strings
 
     # Unload the Babel data that we no longer need
@@ -772,11 +771,11 @@ def asset_url_generator(env, asset_url, tell_sentry, www_root):
             except FileNotFoundError as e:
                 if path == paths[-1]:
                     if not os.path.exists(fspath + '.spt'):
-                        tell_sentry(e, {})
+                        tell_sentry(e)
                 else:
                     continue
             except Exception as e:
-                tell_sentry(e, {})
+                tell_sentry(e)
             return asset_url+path+(etag and '?etag='+etag)
     return {'asset': asset}
 

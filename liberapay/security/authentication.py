@@ -87,7 +87,7 @@ def sign_in_with_form_data(body, state):
                 try:
                     p.check_password(password, context='login')
                 except Exception as e:
-                    website.tell_sentry(e, state)
+                    website.tell_sentry(e)
         elif id_type == 'email':
             website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)

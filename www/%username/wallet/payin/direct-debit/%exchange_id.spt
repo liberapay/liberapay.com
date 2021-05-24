@@ -131,7 +131,7 @@ if request.method == 'POST':
         except Exception as e:
             error = repr_exception(e)
             record_exchange_result(website.db, exchange.id, '', 'failed', error, participant)
-            website.tell_sentry(e, state)
+            website.tell_sentry(e)
             response.redirect(return_url)
     if mandate.Status == 'CREATED':
         route.set_mandate(mandate.Id)

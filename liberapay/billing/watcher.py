@@ -50,4 +50,4 @@ def on_response(sender, **kw):
                     logger.warning(log_msg)
         Payday.transfer_delay = next_delay
     except Exception as e:
-        website.tell_sentry(e, {})
+        website.tell_sentry(e)

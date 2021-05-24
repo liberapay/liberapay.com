@@ -163,7 +163,7 @@ elif cls:
                 try:
                     raise Exception('fee mismatch in bankwire payin')
                 except Exception as e:
-                    website.tell_sentry(e, state, allow_reraise=False)
+                    website.tell_sentry(e, allow_reraise=False)
         if credited_amount != expected:
             # The user didn't send the expected amount of money
             note = (
