@@ -126,7 +126,7 @@ def sign_in_with_form_data(body, state):
         email = body['sign-in.email']
         if not email:
             raise response.error(400, 'email is required')
-        email = normalize_and_check_email_address(email, state)
+        email = normalize_and_check_email_address(email)
         currency = (
             body.get('sign-in.currency') or body.get('currency') or
             state.get('currency') or 'EUR'

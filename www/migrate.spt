@@ -68,7 +68,7 @@ elif step == '2':
             if user.ANON:
                 email = body['email_address']
                 email_is_verified = email == data['email_address']
-                email = normalize_and_check_email_address(email, state)
+                email = normalize_and_check_email_address(email)
                 p = Participant.make_stub(
                     cursor=cursor,
                     status='active',

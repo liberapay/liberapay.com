@@ -16,7 +16,7 @@ if request.method == 'POST':
     email_address = normalize_email_address(body['email'])
     email = participant.get_email(email_address)
     if not email:
-        check_email_address(email_address, state)
+        check_email_address(email_address)
         participant.add_email(email_address)
     account_data = dict(
         p_id=participant.id, country=country, account_id=email_address,

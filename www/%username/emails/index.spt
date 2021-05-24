@@ -23,7 +23,7 @@ if request.method == 'POST':
         participant.set_email_lang(email_lang)
     elif 'add-email' in body or 'resend' in body:
         address = body.get('add-email') or body['resend']
-        address = normalize_and_check_email_address(address, state)
+        address = normalize_and_check_email_address(address)
         # Ask for the user's password, if necessary
         password_required = user.has_password and not (
             user.session_type == 'em' or

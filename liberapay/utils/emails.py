@@ -83,7 +83,7 @@ class NormalizedEmailAddress(str):
         return self[:self.rfind('@')]
 
 
-def normalize_and_check_email_address(email: str, state: dict) -> NormalizedEmailAddress:
+def normalize_and_check_email_address(email: str) -> NormalizedEmailAddress:
     """Normalize and check an email address.
 
     Returns a `NormalizedEmailAddress` object.
@@ -99,7 +99,7 @@ def normalize_and_check_email_address(email: str, state: dict) -> NormalizedEmai
 
     """
     email = normalize_email_address(email)
-    check_email_address(email, state)
+    check_email_address(email)
     return email
 
 
@@ -140,7 +140,7 @@ def normalize_email_address(email: str) -> NormalizedEmailAddress:
 port_25_is_open = None
 
 
-def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
+def check_email_address(email: NormalizedEmailAddress) -> None:
     """Check that an email address isn't blacklisted and has a valid domain.
 
     Raises:
@@ -197,7 +197,7 @@ def check_email_address(email: NormalizedEmailAddress, state: dict) -> None:
                     if port_25_is_open is False:
                         website.tell_sentry(e, allow_reraise=False)
                         return
-                request = state.get('request')
+                request = website.state.get({}).get('request')
                 if request:
                     bypass_error = request.body.get('email.bypass_error') == 'yes'
                 else:
