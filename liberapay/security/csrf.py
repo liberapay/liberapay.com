@@ -13,6 +13,7 @@ from datetime import timedelta
 from pando.exceptions import UnknownBodyType
 
 from ..constants import SAFE_METHODS
+from ..website import website
 from .crypto import constant_time_compare, get_random_string
 
 
@@ -25,10 +26,9 @@ class CSRF_Token:
     """A lazy anti-CSRF token generator.
     """
 
-    __slots__ = ('state', '_token')
+    __slots__ = ('_token',)
 
-    def __init__(self, state):
-        self.state = state
+    def __init__(self):
         self._token = None
 
     def __bool__(self):
@@ -49,8 +49,9 @@ class CSRF_Token:
     @property
     def token(self):
         if not self._token:
+            state = website.state.get()
             try:
-                cookie_token = self.state['request'].headers.cookie[CSRF_TOKEN].value
+                cookie_token = state['request'].headers.cookie[CSRF_TOKEN].value
             except KeyError:
                 cookie_token = ''
             if len(cookie_token) == TOKEN_LENGTH:
@@ -61,7 +62,7 @@ class CSRF_Token:
 
 
 def add_csrf_token_to_state(state):
-    state['csrf_token'] = CSRF_Token(state)
+    state['csrf_token'] = CSRF_Token()
 
 
 def reject_forgeries(state, request, response, website, _):
