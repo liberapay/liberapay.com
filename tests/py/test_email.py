@@ -527,14 +527,24 @@ class TestEmail2(Harness):
     def test_participant_with_long_email_address_can_receive_messages(self):
         email = 'a' * 200 + '@example.org'
         fred = self.make_participant(None, email=email)
-        fred.insert_identity({'name': "You don't need to know my legal name"})
+        r = self.client.PxST(
+            f'/~{fred.id}/identity',
+            {'name': "You don't need to know my legal name"},
+            auth_as=fred,
+        )
+        assert r.code == 302
         fred.notify('team_invite', team='team', team_url='fake_url', inviter='bob')
         Participant.dequeue_emails()
         assert self.db.one("SELECT email_status FROM notifications") == 'sent'
 
     def test_participant_with_long_nonascii_name_can_receive_emails(self):
         fred = self.make_participant(None, email='frederic@example.org')
-        fred.insert_identity({'name': "Frédéric d'Arundel d'Esquincourt de Condé"})
+        r = self.client.PxST(
+            f'/~{fred.id}/identity',
+            {'name': "Frédéric d'Arundel d'Esquincourt de Condé"},
+            auth_as=fred,
+        )
+        assert r.code == 302
         fred.notify('team_invite', team='team', team_url='fake_url', inviter='bob')
         Participant.dequeue_emails()
         assert self.db.one("SELECT email_status FROM notifications") == 'sent'
