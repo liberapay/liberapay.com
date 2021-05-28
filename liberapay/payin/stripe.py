@@ -443,7 +443,9 @@ def execute_transfer(db, pt, destination, source_transaction):
         return update_payin_transfer(db, pt.id, '', 'failed', str(e))
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
-    return update_payin_transfer(db, pt.id, tr.id, 'succeeded', None)
+    pt = update_payin_transfer(db, pt.id, tr.id, 'succeeded', None)
+    update_transfer_metadata(tr, pt)
+    return pt
 
 
 def refund_payin(db, payin, refund_amount=None):
