@@ -1,5 +1,6 @@
 from decimal import Decimal
 import json
+from time import sleep
 from unittest.mock import patch
 
 from markupsafe import Markup
@@ -579,21 +580,63 @@ class TestPayinsStripe(Harness):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.offset = 2100
+        # https://stripe.com/docs/connect/testing
         cls.sepa_direct_debit_token = stripe.Token.create(bank_account=dict(
             country='DE',
             currency='EUR',
             account_number='DE89370400440532013000',
             account_holder_name='Jane Doe',
-        ))
+        ), idempotency_key=f'create_german_bank_account_token_{cls.offset}')
+        ba_ch_token = stripe.Token.create(bank_account=dict(
+            country='CH',
+            currency='CHF',
+            account_number='CH9300762011623852957',
+            account_holder_name='Foo Bar',
+        ), idempotency_key=f'create_swiss_bank_account_token_{cls.offset}')
         acct_ch_token = stripe.Token.create(account=dict(
+            business_type='individual',
+            individual={
+                'address': {
+                    'country': 'CH',
+                    'city': 'Bern',
+                    'postal_code': '3000',
+                    'line1': 'address_full_match',
+                },
+                'dob': {'day': 1, 'month': 1, 'year': 1901},
+                'email': 'test-swiss-1@liberapay.com',
+                'first_name': 'Foo',
+                'last_name': 'Bar',
+                'id_number': '000000000',
+                'phone': '+41665554433',
+            },
             tos_shown_and_accepted=True,
-        ))
+        ), idempotency_key=f'create_swiss_account_token_{cls.offset}')
         cls.acct_switzerland = stripe.Account.create(
             account_token=acct_ch_token.id,
             country='CH',
             type='custom',
+            business_profile={
+                'mcc': 5734,
+                'url': 'https://liberapay.com/',
+            },
+            capabilities={
+                'card_payments': {'requested': True},
+                'sepa_debit_payments': {'requested': True},
+                'transfers': {'requested': True},
+            },
+            external_account=ba_ch_token,
+            idempotency_key=f'create_swiss_account_{cls.offset}',
         )
-        cls.offset = 1600
+        try:
+            assert cls.acct_switzerland.capabilities == {
+                'card_payments': 'active',
+                'sepa_debit_payments': 'active',
+                'transfers': 'active',
+            }
+        except AssertionError:
+            print(cls.acct_switzerland.requirements)
+            raise
 
     def setUp(self):
         super().setUp()
@@ -648,7 +691,7 @@ class TestPayinsStripe(Harness):
         r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
-        assert payin.status == 'succeeded'
+        assert payin.status == 'succeeded', payin.error
         assert payin.amount_settled == EUR('24.99')
         assert payin.fee == EUR('0.97')
         pt = self.db.one("SELECT * FROM payin_transfers")
@@ -699,7 +742,7 @@ class TestPayinsStripe(Harness):
         r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
-        assert payin.status == 'succeeded'
+        assert payin.status == 'succeeded', payin.error
         assert payin.amount_settled.currency == 'EUR'
         assert payin.fee.currency == 'EUR'
         payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
@@ -746,7 +789,7 @@ class TestPayinsStripe(Harness):
         r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
-        assert payin.status == 'pending'
+        assert payin.status == 'pending', payin.error
         assert payin.amount_settled is None
         assert payin.fee is None
         pt = self.db.one("SELECT * FROM payin_transfers")
@@ -844,6 +887,10 @@ class TestPayinsStripe(Harness):
 
         # Settle
         charge = stripe.Charge.retrieve(payin.remote_id)
+        if charge.status == 'pending':
+            # Wait ten seconds for the payment to succeed.
+            sleep(10)
+            charge = stripe.Charge.retrieve(payin.remote_id)
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin, charge)
@@ -1064,6 +1111,10 @@ class TestPayinsStripe(Harness):
 
         # Settle
         charge = stripe.Charge.retrieve(payin2.remote_id)
+        if charge.status == 'pending':
+            # Wait ten seconds for the payment to succeed.
+            sleep(10)
+            charge = stripe.Charge.retrieve(payin2.remote_id)
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
         payin = settle_charge_and_transfers(self.db, payin2, charge)

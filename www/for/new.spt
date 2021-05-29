@@ -9,6 +9,12 @@ lang = None
 if request.method == 'POST':
     if user.ANON:
         raise AuthRequired
+    if user.marked_as in ('spam', 'fraud'):
+        raise response.error(403, _(
+            "You're not allowed to do this because your account has been flagged. "
+            "Please contact support@liberapay.com if you want to know why and "
+            "request that your account be unflagged."
+        ))
     body = request.body
     lang = body['lang']
     if lang not in LANGUAGES_2 and lang != 'mul':

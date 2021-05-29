@@ -1,4 +1,5 @@
 import logging
+import os
 from os.path import join, dirname, realpath
 
 from vcr import VCR
@@ -41,7 +42,7 @@ class CustomSerializer:
 
 vcr = VCR(
     cassette_library_dir=FIXTURES_ROOT,
-    record_mode='once',
+    record_mode=os.environ.get('VCR', 'once'),
     match_on=['method', 'scheme', 'host', 'path', 'query'],
 )
 vcr.register_serializer('custom', CustomSerializer)
