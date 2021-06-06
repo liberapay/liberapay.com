@@ -1,6 +1,5 @@
 from urllib.parse import urlsplit, urlunsplit
 
-import mangopay.exceptions
 from pando import Response
 from pando.http.request import Line
 import pando.state_chain
@@ -185,19 +184,31 @@ def merge_responses(state, exception, website, response=None):
     state['response'] = exception
 
 
-def turn_socket_error_into_50X(website, state, exception, _=lambda a: a, response=None):
-    # The mangopay module reraises exceptions and stores the original in `__cause__`.
-    if isinstance(exception, mangopay.exceptions.APIError):
-        exception = exception.__cause__
-    # replace the exception with a Response
-    if isinstance(exception, Timeout) or 'timeout' in str(exception).lower():
-        response = response or Response()
-        response.code = 504
-    elif isinstance(exception, (OSError, ConnectionError)):
-        response = response or Response()
-        response.code = 502
-    else:
-        return
+def turn_socket_error_into_50X(website, state, exception, _=str.format, response=None):
+    """Catch network errors and replace them with a 502 or 504 response.
+
+    Because network exceptions are often caught and wrapped by libraries, this
+    function recursively looks at the standard `__cause__` and `__context__`
+    attributes of exceptions in order to find the initial error.
+
+    https://docs.python.org/3/reference/simple_stmts.html#the-raise-statement
+    https://stackoverflow.com/a/11235957/2729778
+    """
+    for i in range(100):
+        if isinstance(exception, Timeout) or 'timeout' in str(exception).lower():
+            response = response or Response()
+            response.code = 504
+            break
+        elif isinstance(exception, (OSError, ConnectionError)):
+            response = response or Response()
+            response.code = 502
+            break
+        elif getattr(exception, '__cause__', None):
+            exception = exception.__cause__
+        elif getattr(exception, '__context__', None):
+            exception = exception.__context__
+        else:
+            return
     # log the exception
     website.tell_sentry(exception, state, level='warning')
     # show a proper error message
