@@ -3,6 +3,7 @@
 To avoid circular imports this module should not import any other liberapay submodule.
 """
 
+from contextvars import ContextVar, copy_context
 from functools import wraps
 import logging
 import os
@@ -16,6 +17,8 @@ from pando.website import Website as _Website
 
 class Website(_Website):
 
+    state = ContextVar('state')
+
     @cached_property
     def _html_link(self):
         return Markup('<a href="{}://{}/%s">%s</a>').format(
@@ -25,17 +28,21 @@ class Website(_Website):
     def link(self, path, text):
         return self._html_link % (path, text)
 
+    def respond(self, *args, **kw):
+        # Run in a new (sub)context
+        return copy_context().run(super().respond, *args, **kw)
+
     def tippee_links(self, transfers):
         return [
             self._html_link % ('~%i/' % tr['tippee_id'], tr['tippee_username'])
             for tr in transfers
         ]
 
-    def warning(self, msg, state={}):
+    def warning(self, msg):
         try:
             raise Warning(msg)
         except Warning as e:
-            self.tell_sentry(e, state)
+            self.tell_sentry(e)
 
     def wireup(self, minimal=False):
         from liberapay import wireup
@@ -118,7 +125,7 @@ def wrap_method(method):
         try:
             self._fail_with_undefined_error()
         except Exception as e:
-            website.tell_sentry(e, {})
+            website.tell_sentry(e)
         return method(self, *a, **kw)
     return f
 

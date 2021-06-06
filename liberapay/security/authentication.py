@@ -87,7 +87,7 @@ def sign_in_with_form_data(body, state):
                 try:
                     p.check_password(password, context='login')
                 except Exception as e:
-                    website.tell_sentry(e, state)
+                    website.tell_sentry(e)
         elif id_type == 'email':
             website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)
@@ -126,7 +126,7 @@ def sign_in_with_form_data(body, state):
         email = body['sign-in.email']
         if not email:
             raise response.error(400, 'email is required')
-        email = normalize_and_check_email_address(email, state)
+        email = normalize_and_check_email_address(email)
         currency = (
             body.get('sign-in.currency') or body.get('currency') or
             state.get('currency') or 'EUR'

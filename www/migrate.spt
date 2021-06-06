@@ -68,7 +68,7 @@ elif step == '2':
             if user.ANON:
                 email = body['email_address']
                 email_is_verified = email == data['email_address']
-                email = normalize_and_check_email_address(email, state)
+                email = normalize_and_check_email_address(email)
                 p = Participant.make_stub(
                     cursor=cursor,
                     status='active',
@@ -171,7 +171,7 @@ elif step == '2':
                     d['tippee_name'] = tippee.username
                     donations.append((pi, d))
         except Exception as e:
-            result['donations'] = website.tell_sentry(e, state)['sentry_ident']
+            result['donations'] = website.tell_sentry(e)['sentry_ident']
 
         try:
             # Elsewhere
@@ -206,7 +206,7 @@ elif step == '2':
                         pass
                 elsewhere.append(('added', e) if added else ('conflict', e))
         except Exception as e:
-            result['elsewhere'] = website.tell_sentry(e, state)['sentry_ident']
+            result['elsewhere'] = website.tell_sentry(e)['sentry_ident']
 
         try:
             # Statements
@@ -222,7 +222,7 @@ elif step == '2':
                 """, (p.id, s['lang'], s['content'], search_conf))
                 statements[inserted is not None] += 1
         except Exception as e:
-            result['statements'] = website.tell_sentry(e, state)['sentry_ident']
+            result['statements'] = website.tell_sentry(e)['sentry_ident']
 
         teams = result['teams'] = []
         for team_data in data.pop('teams'):
@@ -257,7 +257,7 @@ elif step == '2':
                 else:
                     teams.append((None, team_data))
             except Exception as e:
-                team_data['_error_id'] = website.tell_sentry(e, state)['sentry_ident']
+                team_data['_error_id'] = website.tell_sentry(e)['sentry_ident']
                 teams.append(('error', team_data))
 
         if not result.get('self_username_conflict'):

@@ -12,7 +12,7 @@ msg = _(HTTP_ERRORS[code]) if code in HTTP_ERRORS else status_strings.get(code, 
 try:
     assert msg
 except Exception as e:
-    website.tell_sentry(e, state)
+    website.tell_sentry(e)
 
 if isinstance(response, LazyResponse):
     response.render_body(state)

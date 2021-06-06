@@ -108,7 +108,7 @@ class Job:
                     if break_after_call():
                         break
                 except Exception as e:
-                    self.cron.website.tell_sentry(e, {})
+                    self.cron.website.tell_sentry(e)
                     # retry in 5 minutes
                     sleep(300)
                     continue

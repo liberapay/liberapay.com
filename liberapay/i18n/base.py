@@ -124,7 +124,7 @@ class Locale(babel.core.Locale):
             try:
                 return self.format(escape(s2), *a, **kw)
             except Exception as e:
-                website.tell_sentry(e, state)
+                website.tell_sentry(e)
                 return LOCALE_EN.format(escape(s), *a, **kw)
         return escape(s2)
 
@@ -138,7 +138,7 @@ class Locale(babel.core.Locale):
             try:
                 s2 = msg.string[self.catalog.plural_func(n)]
             except Exception as e:
-                website.tell_sentry(e, state)
+                website.tell_sentry(e)
         if not s2:
             s2 = s if n == 1 else p
             if self is not LOCALE_EN:
@@ -150,7 +150,7 @@ class Locale(babel.core.Locale):
         try:
             return self.format(escape(s2), *a, **kw)
         except Exception as e:
-            website.tell_sentry(e, state)
+            website.tell_sentry(e)
             return LOCALE_EN.format(escape(s if n == 1 else p), *a, **kw)
 
     def format(self, s, *a, **kw):

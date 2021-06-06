@@ -45,7 +45,7 @@ if route.network.startswith('stripe-'):
             try:
                 raise ValueError(pm.type)
             except ValueError as e:
-                website.tell_sentry(e, state)
+                website.tell_sentry(e)
     else:
         source = stripe.Source.retrieve(route.address)
         if not payer_name:
@@ -58,7 +58,7 @@ if route.network.startswith('stripe-'):
             try:
                 raise ValueError(source.type)
             except ValueError as e:
-                website.tell_sentry(e, state)
+                website.tell_sentry(e)
     if not payer_name:
         customer = stripe.Customer.retrieve(route.remote_user_id)
         payer_name = customer.name

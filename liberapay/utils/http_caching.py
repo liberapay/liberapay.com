@@ -62,13 +62,13 @@ def asset_etag(path):
 
 # algorithm functions
 
-def get_etag_for_file(dispatch_result, website, state):
+def get_etag_for_file(dispatch_result, website):
     if dispatch_result.status != DispatchStatus.okay:
         return {'etag': None}
     try:
         return {'etag': asset_etag(dispatch_result.match)}
     except Exception as e:
-        website.tell_sentry(e, state)
+        website.tell_sentry(e)
         return {'etag': None}
 
 
@@ -92,7 +92,7 @@ def try_to_serve_304(dispatch_result, request, response, etag):
         raise response.success(304)
 
 
-def add_caching_to_response(state, website, response, request=None, etag=None):
+def add_caching_to_response(website, response, request=None, etag=None):
     """Set caching headers.
     """
     if response.code not in (200, 304):
@@ -104,7 +104,7 @@ def add_caching_to_response(state, website, response, request=None, etag=None):
         try:
             assert not response.headers.cookie
         except Exception as e:
-            website.tell_sentry(e, state)
+            website.tell_sentry(e)
             response.headers.cookie.clear()
         # https://developers.google.com/speed/docs/best-practices/caching
         response.headers[b'Etag'] = etag.encode('ascii')

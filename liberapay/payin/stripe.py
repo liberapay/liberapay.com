@@ -181,7 +181,7 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
     except stripe.error.StripeError as e:
         return abort_payin(db, payin, repr_stripe_error(e))
     except Exception as e:
-        website.tell_sentry(e, {})
+        website.tell_sentry(e)
         return abort_payin(db, payin, str(e))
     if intent:
         if intent.status == 'requires_action':
@@ -250,7 +250,7 @@ def destination_charge(db, payin, payer, statement_descriptor):
     except stripe.error.StripeError as e:
         return abort_payin(db, payin, repr_stripe_error(e))
     except Exception as e:
-        website.tell_sentry(e, {})
+        website.tell_sentry(e)
         return abort_payin(db, payin, str(e))
     if intent:
         if intent.status == 'requires_action':
@@ -388,7 +388,7 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
             try:
                 payin = refund_payin(db, payin, refund_amount=refund_amount)
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
         if refunded_amount == payin.amount and payin.ctime.year >= 2021:
             payin_refund_id = db.one("""
                 SELECT pr.id
@@ -436,10 +436,10 @@ def execute_transfer(db, pt, destination, source_transaction):
             idempotency_key='payin_transfer_%i' % pt.id,
         )
     except stripe.error.StripeError as e:
-        website.tell_sentry(e, {}, allow_reraise=False)
+        website.tell_sentry(e, allow_reraise=False)
         return update_payin_transfer(db, pt.id, '', 'failed', repr_stripe_error(e))
     except Exception as e:
-        website.tell_sentry(e, {})
+        website.tell_sentry(e)
         return update_payin_transfer(db, pt.id, '', 'failed', str(e))
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
@@ -624,7 +624,7 @@ def update_transfer_metadata(tr, pt):
         try:
             tr = tr.modify(tr.id, **attrs)
         except Exception as e:
-            website.tell_sentry(e, {})
+            website.tell_sentry(e)
             return tr
     if getattr(tr, 'destination_payment', None):
         py = tr.destination_payment
@@ -632,7 +632,7 @@ def update_transfer_metadata(tr, pt):
             try:
                 py = stripe.Charge.retrieve(py, stripe_account=tr.destination)
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
                 return tr
         attrs = {}
         if not getattr(py, 'description', None):
@@ -646,7 +646,7 @@ def update_transfer_metadata(tr, pt):
             try:
                 py.modify(py.id, **attrs)
             except Exception as e:
-                website.tell_sentry(e, {})
+                website.tell_sentry(e)
     return tr
 
 

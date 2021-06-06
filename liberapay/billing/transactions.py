@@ -637,7 +637,7 @@ def execute_transfer(db, t_id, tr):
         error = repr_exception(e)
         _record_transfer_result(db, t_id, 'failed', error)
         from liberapay.website import website
-        website.tell_sentry(e, {}, allow_reraise=False)
+        website.tell_sentry(e, allow_reraise=False)
         raise TransferError(error)
     return record_transfer_result(db, t_id, tr, _raise=True)
 
@@ -1242,7 +1242,7 @@ def sync_with_mangopay(db):
     check_db(db)
 
 
-def check_wallet_balance(w, state={}):
+def check_wallet_balance(w):
     remote_wallet = Wallet.get(w.remote_id)
     remote_balance = remote_wallet.balance / 100
     try:
@@ -1252,7 +1252,7 @@ def check_wallet_balance(w, state={}):
         )
     except AssertionError as e:
         from liberapay.website import website
-        website.tell_sentry(e, state, allow_reraise=False)
+        website.tell_sentry(e, allow_reraise=False)
 
 
 def check_all_balances():

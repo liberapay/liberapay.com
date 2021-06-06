@@ -40,7 +40,7 @@ if request.method == 'POST':
             """, (user.id, team_email))
             if email_is_attached_to_self:
                 raise EmailAlreadyAttachedToSelf(team_email)
-            check_email_address(team_email, state)
+            check_email_address(team_email)
         throttle_takes = request.body.get('throttle_takes') == 'on'
         t = user.make_team(name, team_currency, team_email, email_lang, throttle_takes)
     response.redirect('/'+t.username+'/edit')

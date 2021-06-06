@@ -325,7 +325,7 @@ def hit_rate_limit(db, key_prefix, key_unique, exception=None):
         key = '%s:%s' % (key_prefix, key_unique)
         r = db.one("SELECT hit_rate_limit(%s, %s, %s)", (key, cap, period))
     except Exception as e:
-        website.tell_sentry(e, {})
+        website.tell_sentry(e)
         return -1
     if r is None and exception is not None:
         website.logger.warning(f"rate limit counter {key!r} is maxed out")
@@ -341,7 +341,7 @@ def decrement_rate_limit(db, key_prefix, key_unique):
         key = '%s:%s' % (key_prefix, key_unique)
         return db.one("SELECT decrement_rate_limit(%s, %s, %s)", (key, cap, period))
     except Exception as e:
-        website.tell_sentry(e, {})
+        website.tell_sentry(e)
         return -1
 
 DB.decrement_rate_limit = SimpleCursorBase.decrement_rate_limit = decrement_rate_limit
