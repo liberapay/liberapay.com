@@ -1498,15 +1498,15 @@ class Participant(Model, MixinTeam):
         """, locals())
         self.set_attributes(pending_notifs=r)
 
-    def mark_notifications_as_read(self, event=None, until=None):
+    def mark_notifications_as_read(self, event=None, until=None, idem_key=None):
         if not self.pending_notifs:
             return
         p_id = self.id
         sql_filter = 'AND event = %(event)s' if event else ''
-
         if until:
             sql_filter += ' AND id <= %(until)s'
-
+        if idem_key:
+            sql_filter += ' AND idem_key = %(idem_key)s'
         r = self.db.one("""
             UPDATE notifications
                SET is_new = false
