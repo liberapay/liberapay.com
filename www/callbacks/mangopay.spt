@@ -246,7 +246,7 @@ elif cls:
     # Check balances
     check_wallet_balance(website.db.one(
         "SELECT * FROM wallets WHERE remote_id = %s", (current_wallet_id,)
-    ), state)
+    ))
 
 else:
     raise response.error(400, "unknown event type")
