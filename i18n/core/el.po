@@ -3382,7 +3382,7 @@ msgstr "Το PayPal επιτρέπει τη λήψη χρημάτων σε πο�
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
-msgstr ""
+msgstr "liberapay_απόδειξη_παραλαβής_{number}"
 
 msgid "Receipt"
 msgstr "Απόδειξη"
@@ -3440,7 +3440,7 @@ msgstr "Επιβεβαιώνουμε ότι η πληρωμή των {money_amou
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
-msgstr ""
+msgstr "Τα χρήματα μετατράπηκαν αυτόματα από {presentment_currency} σε {settlement_currency} με επιτόκιο {exchange_rate}."
 
 #, python-brace-format
 msgid "However, the payment was fully refunded on {refund_date}."
@@ -3452,7 +3452,7 @@ msgstr "{0} καταβλήθηκε σε τέλη διεκπεραίωσης κα
 
 #, python-brace-format
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
-msgstr ""
+msgstr "Ωστόσο, το {x_percent} της πληρωμής ({refund_amount}) επιστράφηκε στις {refund_date}."
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
@@ -3629,7 +3629,7 @@ msgid "Try Again Later"
 msgstr "Δοκιμάστε ξανά αργότερα"
 
 msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr ""
+msgstr "Λυπούμαστε, αλλά αυτή τη στιγμή έχουμε πληρωμή και δεν είμαστε σε θέση να κλείνουμε λογαριασμούς ενώ η πληρωμή είναι σε εξέλιξη. Παρακαλείστε να επιστρέψετε σε λίγες ώρες."
 
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
@@ -3661,16 +3661,16 @@ msgid "Data retention"
 msgstr "Διατήρηση δεδομένων"
 
 msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr ""
+msgstr "Δεν διαγράφουμε αμέσως τη διεύθυνση ηλεκτρονικού ταχυδρομείου και τον κωδικό πρόσβασής σας, οπότε για λίγο καιρό θα μπορείτε να ανοίξετε ξανά τον λογαριασμό σας με απλή σύνδεση, μέχρι να αρχειοθετηθεί οριστικά ο λογαριασμός σας."
 
 msgid "We will start to erase the personal data attached to your account 7 days after it is closed. This delay is meant to protect your account from an accidental or malicious closure."
-msgstr ""
+msgstr "Θα αρχίσουμε να διαγράφουμε τα προσωπικά δεδομένα που συνδέονται με τον λογαριασμό σας 7 ημέρες μετά το κλείσιμό του. Αυτή η καθυστέρηση έχει σκοπό να προστατεύσει τον λογαριασμό σας από τυχαίο ή κακόβουλο κλείσιμο."
 
 msgid "Identity information and transaction records are kept for as long as is necessary to comply with all legal obligations."
-msgstr ""
+msgstr "Οι πληροφορίες ταυτότητας και τα αρχεία συναλλαγών διατηρούνται για όσο χρονικό διάστημα είναι απαραίτητο για τη συμμόρφωση με όλες τις νομικές υποχρεώσεις."
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr ""
+msgstr "Μπορούμε να δώσουμε το όνομα χρήστη σας σε κάποιον άλλον αν το ζητήσει, αλλά όχι για τουλάχιστον ένα χρόνο μετά το κλείσιμο του λογαριασμού σας (εκτός αν διαπιστώσουμε ότι παραβιάζετε κάποιο εμπορικό σήμα)."
 
 msgid "Ready?"
 msgstr "Έτοιμοι;"
@@ -3739,7 +3739,7 @@ msgstr "Εξαγωγή Ιστορικού"
 
 #, python-brace-format
 msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
-msgstr ""
+msgstr "Έχετε περίπου {converted_amount} στο λογαριασμό σας (ακριβώς: {exact_amounts})."
 
 #, python-brace-format
 msgid "You have {money_amount} in your account."
@@ -3751,7 +3751,7 @@ msgstr "Το ισοζύγιό τους είναι {0}."
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
-msgstr ""
+msgstr "Αυτή η σελίδα εμφανίζει μόνο τις συναλλαγές που επεξεργάζεται η Mangopay, για να δείτε άλλες πληρωμές {link_start}μεταβείτε στη σελίδα Λογιστικό βιβλίο{link_end}."
 
 msgid "Account Statement"
 msgstr "Κατάσταση λογαριασμού"
@@ -3883,13 +3883,13 @@ msgstr "Πρέπει να μεταφέρεις χρήματα στο πορτο�
 
 #, python-brace-format
 msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr ""
+msgstr "Έχετε μια εκκρεμή πληρωμή {payment_method} για {money_amount}. {link_open}Λεπτομέρειες{link_close}"
 
 msgid "Please choose a payment method to add money:"
-msgstr ""
+msgstr "Παρακαλούμε επιλέξτε μια μέθοδο πληρωμής για να προσθέσετε χρήματα:"
 
 msgid "Easy and instantaneous"
-msgstr ""
+msgstr "Εύκολο και στιγμιαίο"
 
 #, python-brace-format
 msgid "Fees: {0}% + {1}"
