@@ -37,6 +37,7 @@ recent_donation_changes = website.db.all("""
            ) old_t ON true
      WHERE ( old_t.amount IS NULL OR old_t.amount <> t.amount OR
              old_t.renewal_mode <> t.renewal_mode )
+       AND t.is_funded
   ORDER BY t.mtime DESC
 """, dict(p_id=participant.id))
 

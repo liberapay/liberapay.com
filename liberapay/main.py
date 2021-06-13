@@ -341,11 +341,9 @@ if hasattr(pando.http.request.Request, 'find_input_name'):
     raise Warning('pando.http.request.Request.find_input_name already exists')
 def _find_input_name(self, value):
     assert isinstance(self.body, aspen.http.mapping.Mapping)
-    r = None
     for k, values in self.body.items():
         if any(map(value.__eq__, values)):
-            r = k
-    return r
+            return k
 pando.http.request.Request.find_input_name = _find_input_name
 
 if hasattr(pando.Response, 'encode_url'):

@@ -75,9 +75,11 @@ if request.method == 'POST':
             invoice=invoice,
             sender_name=sender.username,
             force_email=True,
+            idem_key=str(invoice.id),
         )
     elif action == 'accept':
         paid = addressee.pay_invoice(invoice)
+        addressee.mark_notifications_as_read('new_invoice', idem_key=str(invoice.id))
         sender.notify(
             'invoice_paid' if paid else 'invoice_accepted',
             invoice=invoice,
@@ -87,6 +89,7 @@ if request.method == 'POST':
             force_email=True,
         )
     elif action == 'reject':
+        addressee.mark_notifications_as_read('new_invoice', idem_key=str(invoice.id))
         sender.notify(
             'invoice_rejected',
             invoice=invoice,
