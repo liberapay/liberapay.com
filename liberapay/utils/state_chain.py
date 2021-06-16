@@ -277,3 +277,15 @@ def overwrite_status_code_of_gateway_errors(response):
     """
     if response.code in (502, 504):
         response.code = 500
+
+
+def no_response_body_for_HEAD_requests(response, request=None, exception=None):
+    """This function ensures that we only return headers in response to a HEAD request.
+
+    Gunicorn, Pando and Aspen currently all fail to prevent a body from being sent
+    in a response to a HEAD request, even though the HTTP spec clearly states that
+    a “server MUST NOT send a message body in the response [to a HEAD request]”:
+    https://datatracker.ietf.org/doc/html/rfc7231#section-4.3.2
+    """
+    if request and request.method == 'HEAD' and response.body:
+        response.body = b''
