@@ -34,7 +34,7 @@ Note: This webapp is not self-hostable.
 
 ## Contact
 
-Want to chat? [Join us on Gitter](https://gitter.im/liberapay/salon). (If you use IRC, [Gitter has a gateway](https://irc.gitter.im/), and we're also in the #liberapay channel on Freenode.)
+Want to chat? [Join us on Gitter](https://gitter.im/liberapay/salon). (If you use IRC, [Gitter has a gateway](https://irc.gitter.im/).)
 
 Alternatively you can post a message in [our GitHub salon](https://github.com/liberapay/salon).
 
