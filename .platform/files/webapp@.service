@@ -9,7 +9,7 @@ Type=notify
 WorkingDirectory=/var/app/current/
 EnvironmentFile=/opt/elasticbeanstalk/deployment/env
 Sockets=webapp@%i.socket
-ExecStart=/var/app/venv/staging-LQM1lest/bin/python app.py --bind fd:3
+ExecStart=/var/app/venv/staging-LQM1lest/bin/python app.py
 
 Restart=always
 
