@@ -59,6 +59,7 @@ from liberapay.utils.state_chain import (
     enforce_rate_limits,
     insert_constants,
     merge_responses,
+    no_response_body_for_HEAD_requests,
     overwrite_status_code_of_gateway_errors,
     raise_response_to_OPTIONS_request,
     return_500_for_exception,
@@ -236,6 +237,7 @@ algorithm.functions = [
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,
     overwrite_status_code_of_gateway_errors,
+    no_response_body_for_HEAD_requests,
 
     tell_sentry,
     return_500_for_exception,

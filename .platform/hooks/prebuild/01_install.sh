@@ -18,16 +18,22 @@ install -m 644 -o root -g root -t /etc/systemd/system .platform/files/webapp@.so
 systemctl daemon-reload
 
 # Install cloudflared, directly from GitHub
-if ! which cloudflared 2>/dev/null || [ $(cloudflared version) != "cloudflared version 2021.5.8 "* ]; then
-    wget https://github.com/cloudflare/cloudflared/releases/download/2021.5.8/cloudflared-linux-amd64
+cfd_version="2021.6.0"
+if [ $(/usr/local/bin/cloudflared version || true) != "cloudflared version $cfd_version "* ]; then
+    echo "Installing cloudflared version $cfd_version"
+    wget "https://github.com/cloudflare/cloudflared/releases/download/$cfd_version/cloudflared-linux-amd64"
     hash=$(sha256sum cloudflared-linux-amd64 | cut -d' ' -f1)
-    expected_hash=224cd850cb042a5da1d15432063ed04bf8764241de769338e65c44639ed6c28e
+    expected_hash=56f83406f8320727303c3c03dd0d3903decaea3731cf2a275d5c6e0cb0e627bd
     if [ $hash != $expected_hash ]; then
         echo "cloudflared binary downloaded from GitHub doesn't match expected hash: $hash != $expected_hash"
         exit 1
     fi
     install -m 755 -o root -g root cloudflared-linux-amd64 /usr/local/bin/cloudflared
     rm cloudflared-linux-amd64
+    if [ $(/usr/local/bin/cloudflared version || true) != "cloudflared version $cfd_version "* ]; then
+        echo "installing cloudflared failed"
+        exit 1
+    fi
 fi
 
 # Create the cloudflared system user and group

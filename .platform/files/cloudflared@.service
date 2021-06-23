@@ -11,33 +11,3 @@ User=cloudflared
 Group=cloudflared
 Restart=on-failure
 RestartSec=5s
-
-CapabilityBoundingSet=
-AmbientCapabilities=
-PrivateUsers=true
-
-NoNewPrivileges=true
-LimitNOFILE=1048576
-UMask=0077
-
-ProtectSystem=strict
-ProtectHome=true
-PrivateTmp=true
-PrivateDevices=true
-ProtectHostname=true
-ProtectClock=true
-ProtectKernelTunables=true
-ProtectKernelModules=true
-ProtectKernelLogs=true
-ProtectControlGroups=true
-RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
-RestrictNamespaces=true
-LockPersonality=true
-MemoryDenyWriteExecute=true
-RestrictRealtime=true
-RestrictSUIDSGID=true
-RemoveIPC=true
-
-SystemCallFilter=@system-service
-SystemCallFilter=~@privileged @resources
-SystemCallArchitectures=native
