@@ -132,6 +132,8 @@ def send_donation_reminder_notifications():
         overdue = False
         for sp in payins:
             for tr in sp['transfers']:
+                if tr.get('impossible'):
+                    continue
                 tip = tr['tip']
                 due_date = tip.compute_renewal_due_date(next_payday)
                 donations.append({
@@ -142,6 +144,8 @@ def send_donation_reminder_notifications():
                 })
                 if due_date <= today:
                     overdue = True
+        if not donations:
+            continue
         payer.notify(
             'donate_reminder~v2',
             donations=donations,
