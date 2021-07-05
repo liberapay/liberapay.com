@@ -369,7 +369,8 @@ def get_account_elsewhere(website, state, api_lookup=True):
     except UnicodeEncodeError as e:
         raise response.error(404, str(e))
     if domain and not DOMAIN_RE.match(domain):
-        raise response.error(404, "invalid domain name")
+        _ = state['_']
+        raise response.error(404, _("{0} is not a valid domain name.", repr(domain)))
     try:
         account = AccountElsewhere._from_thing(key, platform.name, uid, domain)
     except UnknownAccountElsewhere:

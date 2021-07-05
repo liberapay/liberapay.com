@@ -19,7 +19,7 @@ platform = website.platforms.get(platform_name)
 if platform is None:
     raise response.error(404)
 if domain and not constants.DOMAIN_RE.match(domain):
-    raise response.error(400, "`%s` is not a valid domain name" % domain)
+    raise response.error(400, _("{0} is not a valid domain name.", repr(domain)))
 domain = domain.lower()
 
 # Get the query id from the querystring
