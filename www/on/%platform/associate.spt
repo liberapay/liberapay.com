@@ -30,17 +30,17 @@ cookie_name = platform.name+'_'+domain+('_' if domain else '')+query_id
 try:
     cookie_value = request.headers.cookie[cookie_name].value
 except KeyError:
-    raise response.error(400, 'Missing cookie')
+    raise response.error(400, f"Cookie {cookie_name!r} not found")
 if not cookie_value:
-    raise response.error(400, 'Empty cookie')
+    raise response.error(400, f"Cookie {cookie_name!r} has an empty value")
 try:
     cookie_obj = json.loads(b64decode_s(cookie_value))
 except json.JSONDecodeError as e:
-    raise response.error(400, 'Invalid cookie value: ' + str(e))
+    raise response.error(400, f"Cookie {cookie_name!r} has an invalid value: {e}")
 try:
     query_data, action, then, action_user_id = cookie_obj[:4]
 except ValueError as e:
-    raise response.error(400, 'Invalid cookie value: ' + str(e))
+    raise response.error(400, f"Cookie {cookie_name!r} has an invalid value: {e}")
 p_id = cookie_obj[4] if len(cookie_obj) > 4 else None
 then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
