@@ -26,7 +26,7 @@ domain = domain.lower()
 query_id = platform.get_query_id(request.qs)
 
 # Check that we have a cookie that matches the query id (CSRF prevention)
-cookie_name = str(platform.name+'_'+domain+('_' if domain else '')+query_id)
+cookie_name = platform.name+'_'+domain+('_' if domain else '')+query_id
 try:
     cookie_value = request.headers.cookie[cookie_name].value
 except KeyError:
