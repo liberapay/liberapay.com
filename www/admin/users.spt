@@ -334,6 +334,10 @@ title = "Users Admin"
         % endif
 
         <div><strong>Profile descriptions:</strong>
+        % if p.public_name
+            <br>
+            [<em>public_name</em>] <span class="break-word-anywhere">{{ p.public_name }}</span>
+        % endif
         % if row.statements
             <br>
             % for s in row.statements or ()
