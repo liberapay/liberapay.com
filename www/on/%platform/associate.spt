@@ -47,8 +47,9 @@ then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ 
 # Check for an error message in the querystring
 error_message = request.qs.get('error_message') or request.qs.get('error_description')
 if error_message:
-    raise response.error(502, _("{0} returned this error message: {1}",
-                          platform.display_name, error_message))
+    raise response.error(502, _(
+        "{0} returned this error message: {1}", platform.display_name, error_message
+    ))
 
 # Require auth before trying a connection
 if action == 'connect' and user.ANON:
@@ -59,8 +60,9 @@ url = website.canonical_url + request.line.uri.decoded
 try:
     sess = platform.handle_auth_callback(domain, url, query_id, query_data)
 except TokenRequestDenied as e:
-    raise response.error(502, _("{0} returned an error, please try again later.",
-                          platform.display_name))
+    raise response.error(502, _(
+        "{0} returned an error, please try again later.", platform.display_name
+    ))
 except OAuth2Error as e:
     raise response.error(502, str(e))
 
