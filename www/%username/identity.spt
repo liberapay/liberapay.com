@@ -19,15 +19,7 @@ identity = participant.get_current_identity() or {}
 
 if request.method == 'POST':
     body = request.body
-    v1_form = (
-        'CountryOfResidence' in body or 'LegalPersonType' in body or
-        'IncomeRange' in body or 'LegalRepresentativeEmail' in body
-    )
-    if v1_form:
-        raise response.redirect(participant.path('identity-v1'), code=307)
-
     new_kind = 'organization' if body.get('organization_name') else 'individual'
-
     identity = {}
     for k in constants.IDENTITY_FIELDS:
         v = body.get(k, '')
@@ -68,9 +60,6 @@ if request.method == 'POST':
 
     if error and request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
         raise response.error(400, error)
-
-elif participant.mangopay_user_id and (participant.balance or not identity):
-    raise response.redirect(participant.path('identity-v1'))
 
 else:
     for k in constants.IDENTITY_FIELDS:

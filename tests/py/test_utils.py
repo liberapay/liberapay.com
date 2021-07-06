@@ -216,15 +216,10 @@ class Tests(Harness):
         assert expected == actual
 
     def test_cbor_serialization_of_Money_with_extra_attribute(self):
-        expected = Money('0.01', 'EUR')
-        expected.fuzzy = True
+        expected = Money('0.01', 'EUR', fuzzy=True)
         actual = cbor.loads(cbor.dumps(expected))
-        assert expected.__dict__ == {
-            'amount': Decimal('0.01'),
-            'currency': 'EUR',
-            'fuzzy': True,
-        }
-        assert expected.__dict__ == actual.__dict__
+        assert expected == actual
+        assert expected.fuzzy == actual.fuzzy
 
     def test_cbor_serialization_of_MoneyBasket(self):
         original = MoneyBasket(EUR=Decimal('10.01'), JPY=Decimal('1300'))

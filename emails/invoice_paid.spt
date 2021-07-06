@@ -2,19 +2,9 @@
 
 [---] text/html
 <p>{{ _(
-    "Your request for a payment of {amount} from {addressee_name} has been accepted, "
-    "and the money has been transferred to your wallet."
+    "Your invoice of {amount} to {addressee_name} has been paid."
     , addressee_name=addressee_name, amount=LegacyMoney(invoice.amount)
 ) }}</p>
-
-<p>
-    % if withdrawable
-    <a href="{{ participant.url('wallet/payout/') }}"
-       style="{{ button_style('primary') }}">{{ _("Withdraw the money") }}</a>
-    % else
-    {{ _("However you cannot withdraw the money yet as it is still in quarantine.") }}
-    % endif
-</p>
 
 <p><a href="{{ participant.url('invoices/%s' % invoice.id, log_in='no') }}"
       >{{ _("View the invoice") }}</a></p>

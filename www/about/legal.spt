@@ -1,14 +1,4 @@
-import os
-
-from markupsafe import Markup
-
 from liberapay.i18n.base import getdoc
-
-MANGOPAY_TERMS = Markup().join(
-    Markup('<li><a href="%s">%s</a></li>') % (website.asset('mangopay/'+f), f)
-    for f in sorted(os.listdir(website.www_root+'/assets/mangopay'))
-    if f.startswith('Mangopay_Terms-') and f.endswith('.pdf')
-)
 
 [---]
 title = _("Legal")
@@ -53,18 +43,5 @@ Amazon Data Services Ireland Ltd<br>Burlington Plaza, Burlington Road<br>Dublin 
 <p><a href="/about/privacy">{{ _(
     "See the “{page_name}” page.", page_name=_("Privacy")
 ) }}</a></p>
-
-% if user and user.mangopay_user_id
-<h3 id="mangopay-terms">MangoPay</h3>
-
-<p>{{ _(
-    "{0} was Liberapay's initial payment partner, but they quit on us in 2018. "
-    "Below are copies of the contract you had to accept in order to send or "
-    "receive money through Liberapay prior to August 2018: ",
-    '<a href="https://www.mangopay.com/legal-notices/">MangoPay</a>'|safe
-) }}</p>
-
-<ul>{{ MANGOPAY_TERMS }}</ul>
-% endif
 
 % endblock

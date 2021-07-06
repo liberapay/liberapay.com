@@ -48,22 +48,7 @@ years = []
 if participant.join_time:
     years = list(range(current_year, participant.join_time.year-1, -1))
 
-balances = participant.get_balances()
-balance = balances.fuzzy_sum(participant.main_currency)
-if participant == user:
-    if balance.fuzzy:
-        BALANCE = _(
-            "You have approximately {converted_amount} in your account (exactly: {exact_amounts}).",
-            converted_amount=balance, exact_amounts=balances
-        )
-    else:
-        BALANCE = _("You have {money_amount} in your account.", money_amount=balances)
-    participant.mark_notifications_as_read('income')
-else:
-    BALANCE = _("Their balance is {0}.", balance)
-
 if user_is_admin:
-    mp_dashboard_url = website.app_conf.mangopay_base_url.replace('api.', 'dashboard.')
     wallets = website.db.all("""
         SELECT *
           FROM wallets
@@ -74,13 +59,6 @@ if user_is_admin:
 [-----------------------------------------------------------------------------]
 % extends "templates/layouts/settings.html"
 % block content
-
-<p>{{ BALANCE }}</p>
-
-% if balance > 0
-    <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
-          >{{ _("Withdraw money") }}</a></p>
-% endif
 
 % if year >= 2018
     <p class="alert alert-warning">{{ _(
@@ -258,7 +236,6 @@ if user_is_admin:
         % if event['error'] == 'canceled'
             &mdash; <span class="text-warning">{{ _("canceled") }}</span>
         % elif event['status'] == 'succeeded' and event['kind'] == 'charge'
-            (<a href="{{ participant.path('receipts/') }}{{ event['exchange_id'] }}">{{ _("Receipt").lower() }}</a>)
         % else
             &mdash;
             <span class="text-{{ STATUS_MAP.get(event['status'], 'info') }}">{{

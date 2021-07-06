@@ -1,8 +1,6 @@
 from dependency_injection import resolve_dependencies
 from pando import Response
 
-from .constants import PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
-
 
 class NextAction(Exception):
     def __init__(self, intent):
@@ -397,6 +395,7 @@ class TooManyTeamsCreated(LazyResponseXXX):
 
 class BadPasswordSize(LazyResponse400):
     def msg(self, _):
+        from .constants import PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE
         return _("The password must be at least {0} and at most {1} characters long.",
                  PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE)
 
@@ -460,11 +459,6 @@ class NonexistingElsewhere(LazyResponse400):
         return _("It seems you're trying to delete something that doesn't exist.")
 
 
-class NegativeBalance(LazyResponse400):
-    def msg(self, _):
-        return _("There isn't enough money in your wallet.")
-
-
 class NotEnoughWithdrawableMoney(LazyResponse400):
     def msg(self, _):
         return _("You can't withdraw more than {0} at this time.", *self.args)
@@ -509,15 +503,6 @@ class CommunityAlreadyExists(LazyResponse400):
 class InvalidCommunityName(LazyResponse400):
     def msg(self, _):
         return _('"{0}" is not a valid community name.', *self.args)
-
-
-class TransferError(LazyResponseXXX):
-    code = 500
-    def msg(self, _):
-        return _(
-            "Transferring the money failed, sorry. Please contact support@liberapay.com "
-            "if the problem persists. Error message: {0}", *self.args
-        )
 
 
 class AccountSuspended(LazyResponseXXX):
@@ -582,14 +567,6 @@ class TooManyAdminActions(Response):
             "You have consumed your quota of admin actions. This isn't supposed "
             "to happen."
         ))
-
-
-class UnableToDistributeBalance(LazyResponse400):
-    def msg(self, _):
-        return _(
-            "The attempt to distribute all the money in your wallet failed: "
-            "{money_amount} remains.", money_amount=self.args[0]
-        )
 
 
 class UnableToSendEmail(LazyResponseXXX):

@@ -12,7 +12,7 @@ import pando.utils
 import requests
 
 from liberapay import constants
-from liberapay.i18n.currencies import Money, MoneyBasket
+from liberapay.i18n.currencies import D_CENT, Money, MoneyBasket
 from liberapay.payin.common import resolve_amounts
 from liberapay.utils import group_by
 from liberapay.website import website
@@ -22,7 +22,7 @@ log = print
 
 
 def round_up(d):
-    return d.quantize(constants.D_CENT, rounding=ROUND_UP)
+    return d.quantize(D_CENT, rounding=ROUND_UP)
 
 
 class TakeTransfer:

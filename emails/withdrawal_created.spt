@@ -1,8 +1,0 @@
-{{ _("Withdrawal initiated") }}
-
-[---] text/html
-<p>{{ _(
-    "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. "
-    "Please note that it can take several business days for the transaction to complete.",
-    LegacyMoney(-exchange.amount + exchange.fee)
-) }}</p>
