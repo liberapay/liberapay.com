@@ -19,36 +19,37 @@ platform = website.platforms.get(platform_name)
 if platform is None:
     raise response.error(404)
 if domain and not constants.DOMAIN_RE.match(domain):
-    raise response.error(400, "`%s` is not a valid domain name" % domain)
+    raise response.error(400, _("{0} is not a valid domain name.", repr(domain)))
 domain = domain.lower()
 
 # Get the query id from the querystring
 query_id = platform.get_query_id(request.qs)
 
 # Check that we have a cookie that matches the query id (CSRF prevention)
-cookie_name = str(platform.name+'_'+domain+('_' if domain else '')+query_id)
+cookie_name = platform.name+'_'+domain+('_' if domain else '')+query_id
 try:
     cookie_value = request.headers.cookie[cookie_name].value
 except KeyError:
-    raise response.error(400, 'Missing cookie')
+    raise response.error(400, f"Cookie {cookie_name!r} not found")
 if not cookie_value:
-    raise response.error(400, 'Empty cookie')
+    raise response.error(400, f"Cookie {cookie_name!r} has an empty value")
 try:
     cookie_obj = json.loads(b64decode_s(cookie_value))
 except json.JSONDecodeError as e:
-    raise response.error(400, 'Invalid cookie value: ' + str(e))
+    raise response.error(400, f"Cookie {cookie_name!r} has an invalid value: {e}")
 try:
     query_data, action, then, action_user_id = cookie_obj[:4]
 except ValueError as e:
-    raise response.error(400, 'Invalid cookie value: ' + str(e))
+    raise response.error(400, f"Cookie {cookie_name!r} has an invalid value: {e}")
 p_id = cookie_obj[4] if len(cookie_obj) > 4 else None
 then = b64decode_s(then)  # double-b64encoded to avoid other encoding issues w/ qs
 
 # Check for an error message in the querystring
 error_message = request.qs.get('error_message') or request.qs.get('error_description')
 if error_message:
-    raise response.error(502, _("{0} returned this error message: {1}",
-                          platform.display_name, error_message))
+    raise response.error(502, _(
+        "{0} returned this error message: {1}", platform.display_name, error_message
+    ))
 
 # Require auth before trying a connection
 if action == 'connect' and user.ANON:
@@ -59,8 +60,9 @@ url = website.canonical_url + request.line.uri.decoded
 try:
     sess = platform.handle_auth_callback(domain, url, query_id, query_data)
 except TokenRequestDenied as e:
-    raise response.error(502, _("{0} returned an error, please try again later.",
-                          platform.display_name))
+    raise response.error(502, _(
+        "{0} returned an error, please try again later.", platform.display_name
+    ))
 except OAuth2Error as e:
     raise response.error(502, str(e))
 

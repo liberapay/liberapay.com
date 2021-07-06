@@ -42,7 +42,7 @@ if user_id:
             raise response.error(400, _("The address you provided is not valid: it doesn't contain any “@” symbol."))
         user_id, domain = '>' + split[0], split[1].lower()
         if not constants.DOMAIN_RE.match(domain):
-            raise response.error(400, _("'{0}' is not a valid domain name.", domain))
+            raise response.error(400, _("{0} is not a valid domain name.", repr(domain)))
 
 team = not p.ANON and p.kind != 'individual' and hasattr(platform, 'is_team_member')
 if user_id or (not team and platform.single_domain) or action != 'connect':
