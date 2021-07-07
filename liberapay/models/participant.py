@@ -1557,26 +1557,29 @@ class Participant(Model, MixinTeam):
         )
         context['LegacyMoney'] = i18n.LegacyMoney
 
-    def get_notifs(self, before=None, limit=None):
+    def get_notifs(self, before=None, limit=None, viewer=None):
+        for_admin = bool(viewer and viewer.is_admin)
+        p_id = self.id
         return self.db.all("""
             SELECT id, event, context, is_new, ts, hidden_since
               FROM notifications
-             WHERE participant = %s
+             WHERE participant = %(p_id)s
                AND web
-               AND ( hidden_since IS NULL OR
+               AND coalesce(id < %(before)s, true)
+               AND ( %(for_admin)s OR
+                     hidden_since IS NULL OR
                      hidden_since > (current_timestamp - interval '6 hours') )
-               AND coalesce(id < %s, true)
           ORDER BY id DESC
-             LIMIT %s
-        """, (self.id, before, limit))
+             LIMIT %(limit)s
+        """, locals())
 
-    def render_notifications(self, state, notifs=None, before=None, limit=None):
+    def render_notifications(self, state, notifs=None, before=None, limit=None, viewer=None):
         """Render notifications as HTML.
 
         The `notifs` argument allows rendering arbitrary notifications.
 
         """
-        notifs = notifs or self.get_notifs(before=before, limit=limit)
+        notifs = notifs or self.get_notifs(before=before, limit=limit, viewer=viewer)
 
         r = []
         for id, event, notif_context, is_new, ts, hidden_since in notifs:

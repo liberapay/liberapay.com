@@ -254,7 +254,7 @@ title = "Users Admin"
         % if p.kind != 'community'
             <p>
             % if row.email
-                <strong>Email address:</strong> {{ row.email.address }}
+                <strong>Email address:</strong> <span class="break-word-anywhere">{{ row.email.address }}</span>
                 % if row.email.verified
                 <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
                 % elif row.email.blacklisted
@@ -334,6 +334,10 @@ title = "Users Admin"
         % endif
 
         <div><strong>Profile descriptions:</strong>
+        % if p.public_name
+            <br>
+            [<em>public_name</em>] <span class="break-word-anywhere">{{ p.public_name }}</span>
+        % endif
         % if row.statements
             <br>
             % for s in row.statements or ()
