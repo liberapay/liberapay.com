@@ -811,8 +811,8 @@ msgstr "Αυτό το μήνυμα είναι μια υπενθύμιση ότι
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
+msgstr[1] "Αυτό το μήνυμα είναι μια υπενθύμιση ότι ένα συνολικό ποσό {amount} θα χρεωθεί από το προεπιλεγμένο μέσο πληρωμής σας εντός των επόμενων {n} ημερών, προκειμένου να ανανεώσετε τις δωρεές σας."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -2372,8 +2372,8 @@ msgstr "Δεν έχουμε κανένα λογαριασμό {platform} συν�
 #, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Βρήκαμε {n} αποθετήριο στο λογαριασμό σας {platform}, {timespan_ago}."
+msgstr[1] "Βρήκαμε {n} αποθετήρια στο λογαριασμό σας {platform}, {timespan_ago}."
 
 msgid "No repositories found."
 msgstr "Δεν βρέθηκαν αποθετήρια."
@@ -3189,7 +3189,7 @@ msgstr "επιστράφηκε"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
-msgstr ""
+msgstr "Τα παρακάτω σύνολα δεν περιλαμβάνουν τις δωρεές μέσω του παλιού συστήματος πορτοφολιού. Μπορείτε να τα βρείτε στη σελίδα {link_start}του πορτοφολιού σας{link_end}."
 
 #, python-brace-format
 msgid "Total money received: {0}"
@@ -3818,9 +3818,9 @@ msgstr "στις καθυστερήσεις"
 msgid "donation refund"
 msgstr "επιστροφή δωρεάς"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
-msgstr "επιστροφή εξόδων {link_open} #{invoice_id}{link_close} από {payer}"
+msgstr "επιστροφή {link_open}εξόδων #{invoice_id}{link_close} από {payer}"
 
 msgid "one-off donation from someone closing their account"
 msgstr "εφάπαξ δωρεά από κάποιον που κλείνει το λογαριασμό του"
@@ -3844,9 +3844,9 @@ msgstr "τελικό δώρο στο {0}"
 msgid "refund of anonymous donation"
 msgstr "επιστροφή ανώνυμης δωρεάς"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
-msgstr "πληρωμή των δαπανών {link_open} #{invoice_id}{link_close} έως {payee}"
+msgstr "πληρωμή {link_open}των δαπανών #{invoice_id}{link_close} έως {payee}"
 
 msgid "Adding Money"
 msgstr "Προσθήκη χρημάτων"
@@ -3944,13 +3944,13 @@ msgid "Wire reference codes are not reusable. It's not yet possible to set up a 
 msgstr ""
 
 msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr ""
+msgstr "Θα σας στείλουμε ένα μήνυμα ηλεκτρονικού ταχυδρομείου μόλις μάθουμε αν η πληρωμή σας ήταν επιτυχής ή αποτυχημένη."
 
 msgid "You have disabled some or all email notifications about bank wires."
-msgstr ""
+msgstr "Έχετε απενεργοποιήσει ορισμένες ή όλες τις ειδοποιήσεις ηλεκτρονικού ταχυδρομείου σχετικά με τραπεζικά εμβάσματα."
 
 msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr ""
+msgstr "Αλλάξατε γνώμη; Ακυρώστε την πληρωμή ώστε να μην λάβετε ειδοποίηση αποτυχίας τον επόμενο μήνα:"
 
 #, python-brace-format
 msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
@@ -4000,7 +4000,7 @@ msgid "Card payments are instantenous, and we will attempt to pull the full amou
 msgstr ""
 
 msgid "Billing Address (optional)"
-msgstr ""
+msgstr "Διεύθυνση χρέωσης (προαιρετική)"
 
 msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
 msgstr ""
@@ -4009,13 +4009,13 @@ msgid "Saved address:"
 msgstr "Αποθηκευμένη διεύθυνση:"
 
 msgid "Input the billing address"
-msgstr ""
+msgstr "Εισάγετε τη διεύθυνση χρέωσης"
 
 msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr ""
+msgstr "Προειδοποίηση: ορισμένα από τα δεδομένα της κάρτας που έχετε εισάγει φαίνεται να είναι άκυρα. Προχωρήστε ούτως ή άλλως;"
 
 msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr ""
+msgstr "Το αίτημα απέτυχε. Παρακαλούμε βεβαιωθείτε ότι το πρόγραμμα περιήγησής σας είναι ενημερωμένο και απενεργοποιήστε οποιαδήποτε επέκταση που μπλοκάρει τα αιτήματα (π.χ. NoScript) και δοκιμάστε ξανά."
 
 msgid "Card number"
 msgstr "Αριθμός κάρτας"
@@ -4024,69 +4024,69 @@ msgid "The main number on the card, between 8 and 19 digits"
 msgstr "Ο κύριος αριθμός στην κάρτα, μεταξύ 8 και 19 ψηφία"
 
 msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
+msgstr "Αυτός ο αριθμός κάρτας φαίνεται να είναι άκυρος. Είστε βέβαιοι ότι δεν κάνατε λάθος;"
 
 msgid "This card number is invalid."
-msgstr ""
+msgstr "Αυτός ο αριθμός κάρτας είναι άκυρος."
 
 msgid "MM/YY"
-msgstr ""
+msgstr "MM/YY"
 
 msgid "Expiration date (4 digits)"
-msgstr ""
+msgstr "Ημερομηνία λήξης (4 ψηφία)"
 
 msgid "This expiration date is invalid."
-msgstr ""
+msgstr "Αυτή η ημερομηνία λήξης είναι άκυρη."
 
 msgid "CVV"
-msgstr ""
+msgstr "CVV"
 
 msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr ""
+msgstr "Κωδικός επαλήθευσης, συνήθως 3 ψηφία που βρίσκονται στο πίσω μέρος της κάρτας"
 
 msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
+msgstr "Αυτός ο κωδικός επαλήθευσης φαίνεται να είναι άκυρος. Είστε βέβαιοι ότι δεν κάνατε λάθος;"
 
 msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr ""
+msgstr "Τα δεδομένα της κάρτας σας αποστέλλονται απευθείας στο σύστημα του συνεργάτη πληρωμών μας μέσω κρυπτογραφημένης σύνδεσης."
 
 #, python-brace-format
 msgid "Direct debits in {currency} are not possible from {country}."
-msgstr ""
+msgstr "Οι άμεσες χρεώσεις στο {currency} δεν είναι δυνατές από το {country}."
 
 #, python-brace-format
 msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
+msgstr "{0} έχουν χρεωθεί από τον τραπεζικό σας λογαριασμό, {1} πήγαν στο πορτοφόλι σας Liberapay, {2} πληρώθηκαν σε τέλη συναλλαγής."
 
 #, python-brace-format
 msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr ""
+msgstr "Ξεκίνησε η άμεση χρέωση του {0}. Εάν η μεταφορά είναι επιτυχής, {1} θα φτάσουν στο πορτοφόλι σας στο Liberapay και {2} θα καταβληθούν σε τέλη."
 
 #, python-brace-format
 msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr ""
+msgstr "Η προσθήκη χρημάτων στη Liberapay μέσω άμεσης χρέωσης συνεπάγεται χρέωση {0}."
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "Use another account"
-msgstr ""
+msgstr "Χρησιμοποιήστε έναν άλλο λογαριασμό"
 
 msgid "This IBAN is invalid."
-msgstr ""
+msgstr "Αυτό το IBAN είναι άκυρο."
 
 msgid "The following fields are about the legal owner of the bank account."
-msgstr ""
+msgstr "Τα ακόλουθα πεδία αφορούν τον νόμιμο κάτοχο του τραπεζικού λογαριασμού."
 
 msgid "The amount cannot be zero."
 msgstr "Το ποσό δεν μπορεί να είναι 0."
 
 #, python-brace-format
 msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr ""
+msgstr "Η αμοιβή συναλλαγής θα είναι υψηλή: {0}% ({1}/{2}). Προχωρήστε ούτως ή άλλως;"
 
 msgid "Withdrawing Money"
-msgstr ""
+msgstr "Απόσυρση χρημάτων"
 
 #, python-brace-format
 msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
@@ -4940,7 +4940,7 @@ msgid "Liberapay allows pledging to fund people who haven't joined the site yet.
 msgstr ""
 
 msgid "Explore Pledges"
-msgstr ""
+msgstr "Εξερευνήστε τις δεσμεύσεις"
 
 msgid "A repository contains a project's data, for example the source code of an application."
 msgstr ""
@@ -4980,7 +4980,7 @@ msgid "Create an organization account"
 msgstr ""
 
 msgid "Top pledges"
-msgstr ""
+msgstr "Κορυφαίες δεσμεύσεις"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
 msgstr ""
@@ -5023,8 +5023,8 @@ msgstr ""
 #, python-brace-format
 msgid "The top team on Liberapay is:"
 msgid_plural "The top {n} teams on Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Η κορυφαία ομάδα στη Liberapay είναι:"
+msgstr[1] "Η κορυφαίες {n} ομάδες στη Liberapay είναι:"
 
 #, python-brace-format
 msgid "List of teams on Liberapay, page {number} of {total}:"
@@ -5039,7 +5039,7 @@ msgstr "{0} ρυθμίσεις κοινότητας"
 
 #, python-brace-format
 msgid "Sidebar text in {language}"
-msgstr ""
+msgstr "Κείμενο πλευρικής στήλης σε {language}"
 
 #, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
@@ -5107,7 +5107,7 @@ msgid "Congratulations, you have reached your goal of receiving {0} per week!"
 msgstr ""
 
 msgid "To receive money, do something awesome and then tell people about it:"
-msgstr ""
+msgstr "Για να λάβετε χρήματα, κάντε κάτι φοβερό και στη συνέχεια πείτε στους ανθρώπους για αυτό:"
 
 #, python-brace-format
 msgid "{0}Fill out your profile{1}."
@@ -5115,11 +5115,11 @@ msgstr "{0}Γεμίστε το προφίλ σας{1}."
 
 #, python-brace-format
 msgid "{0}Configure a payment account{1}."
-msgstr ""
+msgstr "{0}Διαμόρφωση λογαριασμού πληρωμών{1}."
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr ""
+msgstr "{0}Ενσωματώστε τα widgets μας{1} στο ιστολόγιο/την ιστοσελίδα σας."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Επικοινωνήστε με τους ανθρώπους που επωφελούνται από την εργασία σας και ζητήστε τους να σας υποστηρίξουν."
@@ -5153,17 +5153,17 @@ msgid "1. Create your profile"
 msgstr "Δημιούργησε το προφίλ σου"
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
-msgstr ""
+msgstr "Εξηγήστε τι κάνετε, γιατί επιλέξατε να ζητήσετε δωρεές, για ποιο σκοπό θα χρησιμοποιηθούν τα χρήματα, κ.λπ."
 
 msgid "2. Configure payment processing"
-msgstr ""
+msgstr "2. Διαμόρφωση της επεξεργασίας πληρωμών"
 
 #, python-brace-format
 msgid "We currently support processing payments through {payment_processors_list}."
-msgstr ""
+msgstr "Επί του παρόντος υποστηρίζουμε την επεξεργασία πληρωμών μέσω {payment_processors_list}."
 
 msgid "3. Reach out to your audience"
-msgstr ""
+msgstr "3. Προσεγγίστε το κοινό σας"
 
 msgid "How it works internally"
 msgstr "Πως λειτουργεί εσωτερικά"
@@ -5174,7 +5174,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "We rely on your support to keep Liberapay running and {link_start}improving{link_end}."
-msgstr ""
+msgstr "Βασιζόμαστε στην υποστήριξή σας για να διατηρήσουμε τη λειτουργία του Liberapay και να {link_start}βελτιώνουμε{link_end}."
 
 msgid "Fund Liberapay"
 msgstr "Χρηματοδότησε το Liberapay"
@@ -5227,7 +5227,7 @@ msgstr[1] "Μπορείτε να συνδέσετε στο προφίλ σας �
 
 #, python-brace-format
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
-msgstr ""
+msgstr "Μπορείτε επίσης εύκολα να αναφέρετε στο προφίλ σας τα αποθετήρια στα οποία συνεισφέρετε {platforms_list}."
 
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr ""
@@ -5295,7 +5295,7 @@ msgstr "Σύνδεση"
 
 #, python-brace-format
 msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
-msgstr ""
+msgstr "Η ανάκτηση των δεδομένων του λογαριασμού σας από το {platform} απέτυχε (κωδικός σφάλματος {x}). Εάν το πρόβλημα εξακολουθεί να υφίσταται, επικοινωνήστε με το support@liberapay.com."
 
 msgid "Migrating from Gratipay"
 msgstr "Μετεγκατάσταση από το Gratipay"
