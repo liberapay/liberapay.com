@@ -536,9 +536,7 @@ h2, h3, h4, h5, h6 {
 }
 
 section.profile-statement, section.community-sidebar, section.invoice-details {
-    word-break: break-all;
-    word-wrap: anywhere;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
     h1 {
         font-size: $font-size-h3;
         margin: $font-size-h3 0 10px;
