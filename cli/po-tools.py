@@ -52,7 +52,11 @@ elif sys.argv[1] == 'fuzz':
     lang = po_path.rsplit('/', 1)[-1].split('.', 1)[0]
     with open(po_path, 'rb') as po:
         catalog = read_po(po, locale=lang)
-    # replace old msg
+    # check that the new msg doesn't already exist
+    m = catalog.get(new_msg)
+    if m and any(m.string):
+        raise SystemExit(0)
+    # modify the old msg
     m = catalog.get(old_msg)
     if any(m.string):
         m.flags.add('fuzzy')
