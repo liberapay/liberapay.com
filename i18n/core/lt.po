@@ -1,20 +1,22 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Lithuanian "
-"<https://hosted.weblate.org/projects/liberapay/core/lt/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: 2021-07-09 13:33+0000\n"
+"Last-Translator: Moo <hazap@hotmail.com>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/liberapay/core/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 4.8-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
-msgstr "Šio puslapio {language} vertimas dar nėra baigtas."
+msgstr "Šio puslapio vertimas į {language} kalbą dar nebaigtas."
 
 msgid "Your Liberapay account has been disabled"
-msgstr ""
+msgstr "Jūsų Liberapay paskyra išjungta"
 
 msgid "Your Liberapay account has been marked as fraudulent by a staff member. You are no longer able to send and receive payments."
 msgstr ""
@@ -25,9 +27,8 @@ msgstr ""
 msgid "Greetings,"
 msgstr "Sveiki,"
 
-#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
-msgstr "Kažkas ne taip? Atsakykite į šį el. Laišką, kad gautumėte pagalbos."
+msgstr "Kažkas nutiko? Šis el. laiškas buvo išsiųstas automatiškai, bet atsakę į jį, galite su mumis susisiekti."
 
 msgid "Change your email settings"
 msgstr ""
@@ -52,7 +53,7 @@ msgstr[2] ""
 
 #, python-brace-format
 msgid "{amount} to {username}"
-msgstr ""
+msgstr "{amount}, skirta {username}"
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
@@ -106,10 +107,10 @@ msgid "If you wish to modify or stop a donation, click on the following link: {l
 msgstr ""
 
 msgid "Your email address is temporarily blacklisted"
-msgstr ""
+msgstr "Jūsų el. pašto adresas laikinai yra pridėtas į juodąjį sąrašą"
 
 msgid "Your email address has been blacklisted"
-msgstr ""
+msgstr "Jūsų el. pašto adresas pridėtas į juodąjį sąrašą"
 
 #, python-brace-format
 msgid "We are suspending sending notifications to your address {email_address} until {date}, because a recent attempt to email you has failed."
@@ -131,7 +132,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "You have received approximately {0} this week"
-msgstr "Šį savaitę gavote maždaug {0}"
+msgstr "Šią savaitę gavote maždaug {0}"
 
 #, python-brace-format
 msgid "You have received {0} this week"
@@ -139,25 +140,25 @@ msgstr "Šią savaitę gavote {0}"
 
 #, python-brace-format
 msgid "{0} was given to you personally."
-msgstr "{0} buvo jums suteikta asmeniškai."
+msgstr "Jums asmeniškai buvo suteikta {0}."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "Jūs nesate bet kurios komandos narys, taigi jūs negavote pinigų už dalyvavimą komandose."
+msgstr "Jūs nesate jokios komandos narys, todėl negavote jokių pinigų už dalyvavimą komandose."
 
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Jums nebuvo suteikta pinigų už jūsų vaidmenį {0} komandoje."
-msgstr[1] "Jums nebuvo suteikta pinigų už jūsų vaidmenis {n} komandose, kuriose jus esate narys."
-msgstr[2] ""
+msgstr[0] "Jums nebuvo suteikta jokių pinigų už jūsų vaidmenį {0} komandoje, kurios narys esate."
+msgstr[1] "Jums nebuvo suteikta jokių pinigų už jūsų vaidmenį {0} komandose, kurių narys esate."
+msgstr[2] "Jums nebuvo suteikta jokių pinigų už jūsų vaidmenį {0} komandų, kurių narys esate."
 
 #, python-brace-format
 msgid "{0} was given to you for your role in the {1} team."
-msgstr "{0} buvo jums suteikta už jūsų vaidmenį {1} komandoje."
+msgstr "Jums už jūsų vaidmenį {1} komandoje buvo skirta {0}."
 
 #, python-brace-format
 msgid "{0} was given to you for your roles in the following teams:"
-msgstr "{0} jums buvo suteikta už jūsų vaidmenis šiose komandose:"
+msgstr "Jums buvo suteikta {0} už jūsų vaidmenis šiose komandose:"
 
 #, python-brace-format
 msgid "{0}: {1}"
@@ -165,14 +166,14 @@ msgstr "{0}:{1}"
 
 #, python-brace-format
 msgid "You now have {0} in your wallet."
-msgstr "Dabar turite {0} savo piniginėje."
+msgstr "Dabar, savo piniginėje turite {0}."
 
 msgid "See your account's transaction logs"
 msgstr ""
 
 #, python-brace-format
 msgid "- {0}: {1}"
-msgstr ""
+msgstr "- {0}: {1}"
 
 #, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
@@ -193,7 +194,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Personal donations: none."
-msgstr ""
+msgstr "Asmeniniai paaukojimai: nėra."
 
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
@@ -254,7 +255,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Reason: “{0}”"
-msgstr ""
+msgstr "Priežastis: „{0}“"
 
 msgid "Log in to Liberapay"
 msgstr ""
@@ -267,11 +268,11 @@ msgid "Follow this link to proceed:"
 msgstr ""
 
 msgid "Log in"
-msgstr ""
+msgstr "Prisijungti"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
-msgstr ""
+msgstr "Turėkite omenyje, kad ši nuoroda galioja tik {0}."
 
 msgid "It's time to top up your Liberapay wallet"
 msgstr ""
@@ -281,7 +282,7 @@ msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to 
 msgstr ""
 
 msgid "Add money"
-msgstr ""
+msgstr "Pridėti pinigų"
 
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr ""
@@ -325,10 +326,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "Description: {0}"
-msgstr ""
+msgstr "Aprašas: {0}"
 
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Atsisakyti prenumeratos"
 
 msgid "Liberapay is in trouble"
 msgstr ""
@@ -357,7 +358,7 @@ msgid ""
 msgstr ""
 
 msgid "The password of your Liberapay account is weak"
-msgstr ""
+msgstr "Jūsų Liberapay paskyros slaptažodis yra silpnas"
 
 msgid "We have detected that your password is a commonly used one. It appears many times in various leaked databases, which makes it very insecure."
 msgstr ""
@@ -386,13 +387,13 @@ msgid "Wire Reference Code"
 msgstr ""
 
 msgid "Destination Country"
-msgstr ""
+msgstr "Paskirties šalis"
 
 msgid "Bank Account Owner Name"
-msgstr ""
+msgstr "Banko sąskaitos savininko vardas"
 
 msgid "Bank Account Owner Address"
-msgstr ""
+msgstr "Banko sąskaitos savininko adresas"
 
 msgid "The bank wire to your Liberapay wallet has expired"
 msgstr ""
@@ -442,7 +443,7 @@ msgid "The transfer of {money_amount} that you initiated on {date} has been reve
 msgstr ""
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr ""
+msgstr "Jūsų banko nurodyta priežastis yra: jam nepavyko apdoroti mokėjimo."
 
 msgid "The reason provided by your bank is: you requested a refund."
 msgstr ""
@@ -470,7 +471,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr ""
+msgstr "Jūsų banko nurodyta priežastis yra: {reason_code_in_english}."
 
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
 msgstr ""
@@ -493,7 +494,7 @@ msgid "To help your bank figure out what happened, you can send them a copy of {
 msgstr ""
 
 msgid "Your payment has failed"
-msgstr ""
+msgstr "Jūsų mokėjimas patyrė nesėkmę"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
@@ -537,7 +538,7 @@ msgid "Reason: the refund was requested by you."
 msgstr ""
 
 msgid "Please contact us to obtain more information."
-msgstr ""
+msgstr "Norėdami gauti daugiau informacijos, susisiekite su mumis."
 
 msgid "It can take several business days for the funds to reappear in your bank account."
 msgstr ""
@@ -574,7 +575,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Processing this kind of payment takes {timedelta} on average."
-msgstr ""
+msgstr "Tokio tipo mokėjimų apdorojimas užima vidutiniškai {timedelta}."
 
 msgid "Your payment has succeeded"
 msgstr ""
@@ -596,7 +597,7 @@ msgid "The payment of {money_amount} initiated on {date} has succeeded."
 msgstr ""
 
 msgid "Thank you for this donation!"
-msgstr ""
+msgstr "Dėkojame už paaukojimą!"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr ""
@@ -608,10 +609,10 @@ msgid "Configure payment processing"
 msgstr ""
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Jei nenorite gauti paramos per Liberapay, galite atmesti juos, atitinkamai redaguodami savo profilį."
+msgstr "Jei nenorite gauti paaukojimų per Liberapay, galite juos atmesti, atitinkamai pataisę savo profilį."
 
 msgid "Reject donations"
-msgstr ""
+msgstr "Atmesti paaukojimus"
 
 msgid "Liberapay donation renewal: your upcoming payment has changed"
 msgstr ""
@@ -767,16 +768,16 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} has invited you to join the {1} team."
-msgstr ""
+msgstr "{0} pakvietė jus prisijungti prie {1} komandos."
 
 msgid "See the team's profile"
-msgstr ""
+msgstr "Žiūrėti komandos profilį"
 
 msgid "Accept"
-msgstr ""
+msgstr "Priimti"
 
 msgid "Refuse"
-msgstr ""
+msgstr "Atmesti"
 
 msgid "A team you're a member of has been renamed"
 msgstr ""
@@ -816,7 +817,7 @@ msgid "A receipt will be available once the payment has been successfully proces
 msgstr ""
 
 msgid "Email address verification - Liberapay"
-msgstr ""
+msgstr "El. pašto adreso patvirtinimas - Liberapay"
 
 #, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
@@ -827,10 +828,10 @@ msgid "A Liberapay account was created on {0} with the email address {1}. Was it
 msgstr ""
 
 msgid "Yes, I confirm"
-msgstr ""
+msgstr "Taip, aš patvirtinu"
 
 msgid "No, it wasn't me"
-msgstr ""
+msgstr "Ne, tai buvau ne aš"
 
 msgid "Your Liberapay account is being modified"
 msgstr ""
@@ -855,10 +856,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "You can try again: {0}"
-msgstr ""
+msgstr "Galite bandyti dar kartą: {0}"
 
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
-msgstr ""
+msgstr "Atrodo, kad radote klaidą! Atsiprašome už nepatogumus, mes kaip įmanoma greičiau ją ištaisysime!"
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
@@ -869,7 +870,7 @@ msgid "Your request has been rejected by our software. Please {link_open}contact
 msgstr ""
 
 msgid "Error message:"
-msgstr ""
+msgstr "Klaidos pranešimas:"
 
 msgid "If you decide to contact us please include the following debugging information in your message:"
 msgstr ""
@@ -884,10 +885,10 @@ msgid "When someone I pledge to joins Liberapay"
 msgstr ""
 
 msgid "When someone invites me to join a team"
-msgstr ""
+msgstr "Kai kas nors kviečia mane prisijungti prie komandos"
 
 msgid "When a payment I initiated fails"
-msgstr ""
+msgstr "Kai mano inicijuotas mokėjimas patiria nesėkmę"
 
 msgid "When a payment I initiated succeeds"
 msgstr ""
@@ -908,7 +909,7 @@ msgid "Expense Report"
 msgstr ""
 
 msgid "Draft"
-msgstr ""
+msgstr "Juodraštis"
 
 msgid "Sent (awaiting approval)"
 msgstr ""
@@ -926,13 +927,13 @@ msgid "Rejected"
 msgstr ""
 
 msgid "Individual"
-msgstr ""
+msgstr "Asmuo"
 
 msgid "Organization"
-msgstr ""
+msgstr "Organizacija"
 
 msgid "Team"
-msgstr ""
+msgstr "Komanda"
 
 msgid "Direct Debit"
 msgstr ""
@@ -941,10 +942,10 @@ msgid "Bank Wire"
 msgstr ""
 
 msgid "Credit Card"
-msgstr ""
+msgstr "Kredito kortelė"
 
 msgid "Credit/Debit Card"
-msgstr ""
+msgstr "Kredito/Debeto kortelė"
 
 msgid "Hide total giving from others."
 msgstr ""
@@ -981,21 +982,21 @@ msgid "You've consumed your quota of requests, you can try again {in_N_minutes}.
 msgstr ""
 
 msgid "You're making requests too fast, please try again later."
-msgstr ""
+msgstr "Jūs per greitai atliekate užklausas, vėliau bandykite dar kartą."
 
 #, python-brace-format
 msgid "{0} returned an error, please try again later."
-msgstr ""
+msgstr "{0} grąžino klaidą, vėliau bandykite dar kartą."
 
 msgid "example@mastodon.social"
-msgstr ""
+msgstr "pavyzdys@mastodon.social"
 
 #, python-brace-format
 msgid "Is {0} really a {1} server? It is currently not acting like one."
 msgstr ""
 
 msgid "example@pleroma.site"
-msgstr ""
+msgstr "pavyzdys@pleroma.site"
 
 msgid "You need to sign in first"
 msgstr ""
@@ -1004,29 +1005,29 @@ msgid "This account is closed"
 msgstr ""
 
 msgid "You need to log in"
-msgstr ""
+msgstr "Turite prisijungti"
 
 msgid "We're unable to process your request right now, sorry."
-msgstr ""
+msgstr "Šiuo metu negalime apdoroti jūsų užklausos, apgailestaujame."
 
 msgid "You need to provide a username!"
-msgstr ""
+msgstr "Turite pateikti naudotojo vardą!"
 
 #, python-brace-format
 msgid "The username '{0}' is too long."
-msgstr ""
+msgstr "Naudotojo vardas „{0}“ yra per ilgas."
 
 #, python-brace-format
 msgid "The username '{0}' contains invalid characters."
-msgstr ""
+msgstr "Naudotojo varde „{0}“ yra netinkamų simbolių."
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
-msgstr ""
+msgstr "Naudotojo vardas „{0}“ yra uždraustas."
 
 #, python-brace-format
 msgid "The username '{0}' is already taken."
-msgstr ""
+msgstr "Naudotojo vardas „{0}“ jau užimtas."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
@@ -1052,7 +1053,7 @@ msgid "{0} is already connected to a different Liberapay account."
 msgstr ""
 
 msgid "You cannot remove your primary email address."
-msgstr ""
+msgstr "Negalite pašalinti savo pirminio el. pašto adreso."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
@@ -1136,7 +1137,7 @@ msgid "The password must be at least {0} and at most {1} characters long."
 msgstr ""
 
 msgid "You can't donate to yourself."
-msgstr ""
+msgstr "Negalite paaukoti patys sau."
 
 #, python-brace-format
 msgid "There is no user named {0}."
@@ -1156,7 +1157,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The user {0} doesn't accept donations."
-msgstr ""
+msgstr "Naudotojas {0} nepriima paaukojimų."
 
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
@@ -1167,10 +1168,10 @@ msgid "The amount {money_amount} isn't in the expected currency ({expected_curre
 msgstr ""
 
 msgid "It seems you're trying to delete something that doesn't exist."
-msgstr ""
+msgstr "Atrodo, kad bandote ištrinti tai, ko nėra."
 
 msgid "There isn't enough money in your wallet."
-msgstr ""
+msgstr "Jūsų piniginėje trūksta pinigų."
 
 #, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
@@ -1241,10 +1242,10 @@ msgid "The payment processor {name} returned an error. Please try again and cont
 msgstr ""
 
 msgid "Forbidden"
-msgstr ""
+msgstr "Uždrausta"
 
 msgid "Not Found"
-msgstr ""
+msgstr "Nerasta"
 
 msgid "Conflict"
 msgstr ""
@@ -1253,16 +1254,16 @@ msgid "Gone"
 msgstr ""
 
 msgid "Too Many Requests"
-msgstr ""
+msgstr "Per daug užklausų"
 
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Vidinė serverio klaida"
 
 msgid "Upstream Error"
 msgstr ""
 
 msgid "Service Unavailable"
-msgstr ""
+msgstr "Paslauga neprieinama"
 
 msgid "Gateway Timeout"
 msgstr ""
@@ -1285,7 +1286,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Liberapay donation to {username}"
-msgstr ""
+msgstr "Liberapay paaukojimas, skirtas {username}"
 
 #, python-brace-format
 msgid "{n} week of {money_amount}"
@@ -1309,7 +1310,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "The submitted password is incorrect."
-msgstr ""
+msgstr "Pateiktas slaptažodis yra neteisingas."
 
 #, python-brace-format
 msgid "“{0}” is not a valid account ID."
@@ -1317,7 +1318,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
-msgstr ""
+msgstr "Jokia paskyra neturi naudotojo vardo „{username}“."
 
 #, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
@@ -1325,61 +1326,61 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} is linked to a team account. It's not possible to log in as a team."
-msgstr ""
+msgstr "{0} yra susietas su komandos paskyra. Neįmanoma prisijungti kaip komanda."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
 msgstr ""
 
 msgid "Your email address is now verified."
-msgstr ""
+msgstr "Dabar, jūsų el. pašto adresas yra patvirtintas."
 
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr ""
 
 msgid "Checking cookies…"
-msgstr ""
+msgstr "Tikrinami slapukai…"
 
 msgid "You are not authorized to access this page."
-msgstr ""
+msgstr "Jūs neturite įgaliojimų gauti prieigą prie šio puslapio."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Atsisakyti"
 
 msgid "Confirm"
-msgstr ""
+msgstr "Patvirtinti"
 
 msgid "Bad Request"
-msgstr ""
+msgstr "Bloga užklausa"
 
 msgid "This login link is expired or invalid. However you're already logged in, so it doesn't matter."
-msgstr ""
+msgstr "Ši prisijungimo nuoroda nebegalioja arba yra neteisinga. Vis dėlto, tai nebesvarbu, nes jau esate prisijungę."
 
 msgid "Carry on"
 msgstr ""
 
 msgid "This login link is expired or invalid."
-msgstr ""
+msgstr "Ši nuoroda nebegalioja arba yra neteisinga."
 
 #, python-brace-format
 msgid "A login link is only valid for {x_hours} and can only be used once."
 msgstr ""
 
 msgid "To request a new login link, input your email address:"
-msgstr ""
+msgstr "Norėdami paprašyti naujos prisijungimo nuorodos, įveskite savo el. pašto adresą:"
 
 msgid "Email address"
-msgstr ""
+msgstr "El. pašto adresas"
 
 msgid "Go"
-msgstr ""
+msgstr "Pirmyn"
 
 msgid "The log-in has been cancelled. You can close this page."
-msgstr ""
+msgstr "Prisijungimo atsisakyta. Galite užverti šį puslapį."
 
 #, python-brace-format
 msgid "You are about to log in as {identifier}. Please click a button below to confirm or cancel."
@@ -1393,28 +1394,28 @@ msgid "You seem to be using an obsolete browser, as a result this website may no
 msgstr ""
 
 msgid "Ignore this warning"
-msgstr ""
+msgstr "Nepaisyti šio įspėjimo"
 
 msgid "Please input your password to confirm this action:"
 msgstr ""
 
 msgid "Password"
-msgstr ""
+msgstr "Slaptažodis"
 
 msgid "This new password is not safe"
-msgstr ""
+msgstr "Šis slaptažodis yra nesaugus"
 
 msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr ""
+msgstr "Aptikome, kad jūsų dabartinį slaptažodį yra lengva atspėti ir todėl, jis yra nesaugus."
 
 msgid "Do you still want to use this password?"
-msgstr ""
+msgstr "Ar vis tiek norite naudoti šį slaptažodį?"
 
 msgid "No, cancel"
-msgstr ""
+msgstr "Ne, atsisakyti"
 
 msgid "Yes, proceed"
-msgstr ""
+msgstr "Taip, tęsti"
 
 #, python-brace-format
 msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
@@ -1424,7 +1425,7 @@ msgid "Reconnect"
 msgstr ""
 
 msgid "Redirecting…"
-msgstr ""
+msgstr "Peradresuojama…"
 
 #, python-brace-format
 msgid "If you're using an exotic browser and nothing is happening, then {link_start}click on this link to proceed{link_end}."
@@ -1434,19 +1435,19 @@ msgid "Retry"
 msgstr ""
 
 msgid "This profile is marked as spam."
-msgstr ""
+msgstr "Šis profilis yra pažymėtas kaip brukalas."
 
 msgid "You need an account for this. Please fill one of the forms below."
-msgstr ""
+msgstr "Tam jums prireiks paskyros. Užpildykite žemiau kurią nors formą."
 
 msgid "Create an account"
-msgstr ""
+msgstr "Sukurti paskyrą"
 
 msgid "Use an existing account"
-msgstr ""
+msgstr "Naudoti esamą paskyrą"
 
 msgid "Are you the account owner?"
-msgstr ""
+msgstr "Ar esate paskyros savininkas?"
 
 msgid "Log in to reopen your account."
 msgstr ""
@@ -1458,7 +1459,7 @@ msgid "If you're sure that the email address you input is valid, then you can by
 msgstr ""
 
 msgid "Ignore the error and proceed"
-msgstr ""
+msgstr "Nepaisyti klaidos ir tęsti"
 
 #, python-brace-format
 msgid "If you believe that emails sent by us to {email_address} will no longer bounce back, then you can remove this address from the blacklist and try again:"
@@ -1468,16 +1469,16 @@ msgid "Bypass the blacklist and retry"
 msgstr ""
 
 msgid "Alternatively, you can try a different email address:"
-msgstr ""
+msgstr "Arba kitaip, galite pabandyti kitokį el. pašto adresą:"
 
 msgid "Proceed"
-msgstr ""
+msgstr "Tęsti"
 
 msgid "Please try again in a few minutes."
-msgstr ""
+msgstr "Po kelių minučių bandykite dar kartą."
 
 msgid "Log in via email"
-msgstr ""
+msgstr "Prisijungti per el. paštą"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr ""
@@ -1486,19 +1487,19 @@ msgid "Liberapay is currently in read-only mode as we are migrating the database
 msgstr ""
 
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Perjungti naršymą"
 
 msgid "Homepage"
-msgstr ""
+msgstr "Pagrindinis puslapis"
 
 msgid "Explore"
-msgstr ""
+msgstr "Naršyti"
 
 msgid "Search"
-msgstr ""
+msgstr "Ieškoti"
 
 msgid "About"
-msgstr ""
+msgstr "Apie"
 
 msgid "Contact Us"
 msgstr ""
@@ -1510,20 +1511,20 @@ msgid "Legal"
 msgstr ""
 
 msgid "Switch to another language"
-msgstr ""
+msgstr "Perjungti į kitą kalbą"
 
 #, python-brace-format
 msgid "({x_percent} translated)"
-msgstr ""
+msgstr "({x_percent} išversta)"
 
 msgid "Help us translate Liberapay"
-msgstr ""
+msgstr "Padėkite mums išversti Liberapay"
 
 msgid "Your account"
-msgstr ""
+msgstr "Jūsų paskyra"
 
 msgid "Profile"
-msgstr ""
+msgstr "Profilis"
 
 msgid "Giving"
 msgstr ""
@@ -1544,37 +1545,37 @@ msgid "Ledger"
 msgstr ""
 
 msgid "Wallet"
-msgstr ""
+msgstr "Piniginė"
 
 msgid "Emptying your wallet"
 msgstr ""
 
 msgid "Identity"
-msgstr ""
+msgstr "Tapatybė"
 
 msgid "Account"
-msgstr ""
+msgstr "Paskyra"
 
 msgid "Emails"
-msgstr ""
+msgstr "El. pašto adresai"
 
 msgid "Notifications"
-msgstr ""
+msgstr "Pranešimai"
 
 msgid "Widgets"
-msgstr ""
+msgstr "Valdikliai"
 
 msgid "Create a new community"
-msgstr ""
+msgstr "Sukurti naują bendruomenę"
 
 msgid "Create a new team"
-msgstr ""
+msgstr "Sukurti naują komandą"
 
 msgid "Sign out"
-msgstr ""
+msgstr "Atsijungti"
 
 msgid "Print"
-msgstr ""
+msgstr "Spausdinti"
 
 #, python-brace-format
 msgid "{0} has {n} patron."
@@ -1608,27 +1609,27 @@ msgid "Donate"
 msgstr ""
 
 msgid "Switch to a different account"
-msgstr ""
+msgstr "Perjungti į kitą paskyrą"
 
 msgid "The changes have been saved."
-msgstr ""
+msgstr "Pakeitimai įrašyti."
 
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr ""
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
-msgstr ""
+msgstr "Jūs vis dar nesate prisijungę kaip {0}."
 
 msgid "Password (optional)"
-msgstr ""
+msgstr "Slaptažodis (nebūtinas)"
 
 #, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
 msgstr ""
 
 msgid "Save"
-msgstr ""
+msgstr "Įrašyti"
 
 msgid "Avatar"
 msgstr ""
@@ -1646,10 +1647,10 @@ msgid "Disconnect"
 msgstr ""
 
 msgid "This is not supported yet"
-msgstr ""
+msgstr "Tai kol kas nepalaikoma"
 
 msgid "username"
-msgstr ""
+msgstr "naudotojo vardas"
 
 msgid "Drop files here"
 msgstr ""
@@ -1658,40 +1659,40 @@ msgid "Processing dropped files…"
 msgstr ""
 
 msgid "Add a file"
-msgstr ""
+msgstr "Pridėti failą"
 
 msgid "Edit filename"
-msgstr ""
+msgstr "Taisyti failo pavadinimą"
 
 msgid "Delete"
-msgstr ""
+msgstr "Ištrinti"
 
 msgid "Close"
-msgstr ""
+msgstr "Užverti"
 
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 msgid "Yes"
-msgstr ""
+msgstr "Taip"
 
 msgid "Ok"
-msgstr ""
+msgstr "Gerai"
 
 msgid "Personal Information"
-msgstr ""
+msgstr "Asmeninė informacija"
 
 msgid "Full Name"
-msgstr ""
+msgstr "Visas vardas"
 
 msgid "Country (residence)"
 msgstr ""
 
 msgid "Nationality"
-msgstr ""
+msgstr "Tautybė"
 
 msgid "Date of Birth"
-msgstr ""
+msgstr "Gimimo data"
 
 msgid "YYYY-MM-DD"
 msgstr ""
@@ -1709,20 +1710,20 @@ msgid "Organization Information"
 msgstr ""
 
 msgid "Are you acting as the representative of an organization?"
-msgstr ""
+msgstr "Ar esate organizacijos atstovas?"
 
 msgid "Yes, I represent a business or nonprofit."
 msgstr ""
 
 msgid "Organization Name"
-msgstr ""
+msgstr "Organizacijos pavadinimas"
 
 msgid "Headquarters Address"
-msgstr ""
+msgstr "Būstinės adresas"
 
 #, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr ""
+msgstr "Rodyti {submenu_label} submeniu"
 
 msgid "Introduction"
 msgstr ""
@@ -1731,13 +1732,13 @@ msgid "Global"
 msgstr ""
 
 msgid "Teams"
-msgstr ""
+msgstr "Komandos"
 
 msgid "Stats"
-msgstr ""
+msgstr "Statistika"
 
 msgid "Privacy"
-msgstr ""
+msgstr "Privatumas"
 
 msgid "Follow Us"
 msgstr ""
@@ -1746,19 +1747,19 @@ msgid "Contact"
 msgstr ""
 
 msgid "Security"
-msgstr ""
+msgstr "Saugumas"
 
 msgid "Logos"
-msgstr ""
+msgstr "Logotipai"
 
 msgid "Overview"
-msgstr ""
+msgstr "Apžvalga"
 
 msgid "Organizations"
-msgstr ""
+msgstr "Organizacijos"
 
 msgid "Individuals"
-msgstr ""
+msgstr "Asmenys"
 
 msgid "Unclaimed Donations"
 msgstr ""
@@ -1767,25 +1768,25 @@ msgid "Repositories"
 msgstr ""
 
 msgid "Social Networks"
-msgstr ""
+msgstr "Socialiniai tinklai"
 
 msgid "Communities"
-msgstr ""
+msgstr "Bendruomenės"
 
 msgid "Name"
 msgstr ""
 
 msgid "Currencies"
-msgstr ""
+msgstr "Valiutos"
 
 msgid "Goal"
 msgstr ""
 
 msgid "Descriptions"
-msgstr ""
+msgstr "Aprašai"
 
 msgid "Linked Accounts"
-msgstr ""
+msgstr "Susietos paskyros"
 
 msgid "Instruments"
 msgstr ""
@@ -1797,31 +1798,31 @@ msgid "Statement"
 msgstr ""
 
 msgid "Members"
-msgstr ""
+msgstr "Nariai"
 
 msgid "First"
-msgstr ""
+msgstr "Pirmas"
 
 msgid "Previous"
-msgstr ""
+msgstr "Ankstesnis"
 
 msgid "Next"
-msgstr ""
+msgstr "Kitas"
 
 msgid "Last"
-msgstr ""
+msgstr "Paskutinis"
 
 msgid "View More"
-msgstr ""
+msgstr "Rodyti daugiau"
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
 msgstr ""
 
 msgid "Current password"
-msgstr ""
+msgstr "Dabartinis slaptažodis"
 
 msgid "New password"
-msgstr ""
+msgstr "Naujas slaptažodis"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1840,7 +1841,7 @@ msgid "Donations to {username} can be paid using: a credit or debit card (Visa, 
 msgstr ""
 
 msgid "Country"
-msgstr ""
+msgstr "Šalis"
 
 msgid "Region (state, province, island…)"
 msgstr ""
@@ -1849,7 +1850,7 @@ msgid "You can leave this field empty if your country does not use regions in po
 msgstr ""
 
 msgid "City"
-msgstr ""
+msgstr "Miestas"
 
 msgid "Postal code"
 msgstr ""
@@ -1880,7 +1881,7 @@ msgid "Income: {0}/week"
 msgstr ""
 
 msgid "Mission accomplished!"
-msgstr ""
+msgstr "Misija įvykdyta!"
 
 msgid "View income shares"
 msgstr ""
@@ -1905,16 +1906,16 @@ msgid "Search Liberapay"
 msgstr ""
 
 msgid "Log In or Create Account"
-msgstr ""
+msgstr "Prisijungti ar susikurti paskyrą"
 
 msgid "Please input your email address:"
-msgstr ""
+msgstr "Įveskite el. pašto adresą:"
 
 msgid "Email"
-msgstr ""
+msgstr "El. paštas"
 
 msgid "and select your preferred currency:"
-msgstr ""
+msgstr "ir pasirinkite pageidaujamą valiutą:"
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -1996,7 +1997,7 @@ msgid "Switch"
 msgstr ""
 
 msgid "Amount"
-msgstr ""
+msgstr "Suma"
 
 msgid "per month"
 msgstr ""
@@ -2059,15 +2060,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "Less than {0}"
-msgstr ""
+msgstr "Mažiau nei {0}"
 
 #, python-brace-format
 msgid "More than {0}"
-msgstr ""
+msgstr "Daugiau nei {0}"
 
 #, python-brace-format
 msgid "Between {0} and {1}"
-msgstr ""
+msgstr "Tarp {0} ir {1}"
 
 msgid "How much money you earn per year, approximately."
 msgstr ""
@@ -2158,7 +2159,7 @@ msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr ""
 
 msgid "Dashboard"
-msgstr ""
+msgstr "Skydelis"
 
 #, python-brace-format
 msgid "Donate to {0} via Liberapay"
@@ -2199,7 +2200,7 @@ msgid "{username} currently receives {money_amount} per week."
 msgstr ""
 
 msgid "Recipient Identity"
-msgstr ""
+msgstr "Gavėjo tapatybė"
 
 #, python-brace-format
 msgid "We have confirmed through an automated verification process that {0} has control of the following accounts on other platforms:"
@@ -2209,7 +2210,7 @@ msgid "Frequently Asked Questions"
 msgstr ""
 
 msgid "Can I donate in another currency?"
-msgstr ""
+msgstr "Ar galiu paaukoti kita valiuta?"
 
 #, python-brace-format
 msgid "No, {username} only accepts payments in {currency}."
@@ -2262,10 +2263,10 @@ msgid "Modify your Libravatar"
 msgstr ""
 
 msgid "What is Libravatar?"
-msgstr ""
+msgstr "Kas yra Libravatar?"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Įkelti iš naujo"
 
 msgid "Avatar source"
 msgstr ""
@@ -2332,7 +2333,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "My goal is to receive {0}"
-msgstr ""
+msgstr "Mano tikslas – gauti {0}"
 
 msgid "We're grateful for gifts, but don't have a specific funding goal."
 msgstr ""
@@ -2348,19 +2349,19 @@ msgid "Our goal is to receive {0}"
 msgstr ""
 
 msgid "Enter a username"
-msgstr ""
+msgstr "Įveskite naudotojo vardą"
 
 msgid "Invite"
 msgstr ""
 
 msgid "Your privacy settings have been changed."
-msgstr ""
+msgstr "Jūsų privatumo nustatymai pakeisti."
 
 msgid "Admin override is on.*"
 msgstr ""
 
 msgid "Save changes"
-msgstr ""
+msgstr "Įrašyti pakeitimus"
 
 msgid "*The referencing of Liberapay profiles is subject to admin approval."
 msgstr ""
@@ -2383,7 +2384,7 @@ msgid "No repositories found."
 msgstr ""
 
 msgid "← Go back"
-msgstr ""
+msgstr "← Grįžti"
 
 msgid "The following repositories are currently displayed on your profile:"
 msgstr ""
@@ -2402,7 +2403,7 @@ msgid "The submitted summary is too long ({0} > {1})."
 msgstr ""
 
 msgid "This is a preview."
-msgstr ""
+msgstr "Tai yra peržiūra."
 
 msgid "Excerpt that will be used in social media:"
 msgstr ""
@@ -2411,7 +2412,7 @@ msgid "Preview of the short description"
 msgstr ""
 
 msgid "Publish"
-msgstr ""
+msgstr "Paskelbti"
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr ""
@@ -2427,15 +2428,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "Current language: {0}"
-msgstr ""
+msgstr "Dabartinė kalba: {0}"
 
 #, python-brace-format
 msgid "Short description in {language}"
-msgstr ""
+msgstr "Trumpas aprašas {language} kalba"
 
 #, python-brace-format
 msgid "Full description in {language}"
-msgstr ""
+msgstr "Pilnas aprašas {language} kalba"
 
 msgid "Markdown supported."
 msgstr ""
@@ -2444,10 +2445,10 @@ msgid "What is Markdown?"
 msgstr ""
 
 msgid "Preview"
-msgstr ""
+msgstr "Peržiūra"
 
 msgid "Switch to another language:"
-msgstr ""
+msgstr "Perjungti į kitą kalbą:"
 
 msgid "Explore teams"
 msgstr ""
@@ -2463,7 +2464,7 @@ msgid ""
 msgstr ""
 
 msgid "Username"
-msgstr ""
+msgstr "Naudotojo vardas"
 
 msgid "A unique name, required for users who wish to receive donations."
 msgstr ""
@@ -2491,16 +2492,16 @@ msgid "Already Verified"
 msgstr ""
 
 msgid "This email address has already been verified."
-msgstr ""
+msgstr "Šis el. pašto adresas jau patvirtintas."
 
 msgid "Address Taken"
-msgstr ""
+msgstr "Adresas užimtas"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr ""
 
 msgid "Failure"
-msgstr ""
+msgstr "Nesėkmė"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr ""
@@ -2561,19 +2562,19 @@ msgid "Verified"
 msgstr ""
 
 msgid "Set as primary"
-msgstr ""
+msgstr "Nustatyti kaip pirminį"
 
 msgid "Add"
-msgstr ""
+msgstr "Pridėti"
 
 msgid "Send me notifications via email:"
-msgstr ""
+msgstr "Siųsti man pranešimus el. paštu:"
 
 msgid "Some types of notifications cannot be turned off, so they are not listed above. For example you will always be notified when we are preparing to debit your bank account."
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Kalba"
 
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
@@ -2676,7 +2677,7 @@ msgid "Restart"
 msgstr ""
 
 msgid "Hide"
-msgstr ""
+msgstr "Slėpti"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -2745,7 +2746,7 @@ msgid "Not anonymous"
 msgstr ""
 
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "Mokėti naudojant PayPal"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
@@ -2865,7 +2866,7 @@ msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr ""
 
 msgid "The date must be in the future."
-msgstr ""
+msgstr "Data privalo būti ateityje."
 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}."
@@ -2900,7 +2901,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
-msgstr ""
+msgstr "Tinkinta suma (mažiausia={0}, didžiausia={1})"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
 msgstr ""
@@ -2934,7 +2935,7 @@ msgid "Invalid date of birth."
 msgstr ""
 
 msgid "Your identity information has been updated."
-msgstr ""
+msgstr "Jūsų tapatybės informacija atnaujinta."
 
 msgid "Your identity information has been registered."
 msgstr ""
@@ -2970,7 +2971,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "You are not a member of the {0} team."
-msgstr ""
+msgstr "Jūs nesate {0} komandos narys."
 
 #, python-brace-format
 msgid "Your take is now {0} (you can't go higher this week)."
@@ -2992,14 +2993,14 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Show the list of languages"
-msgstr ""
+msgstr "Rodyti kalbų sąrašą"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr ""
+msgstr "Šis profilis yra prieinamas tik {language} kalba"
 
 msgid "Edit"
-msgstr ""
+msgstr "Taisyti"
 
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
@@ -3020,11 +3021,11 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "History"
-msgstr ""
+msgstr "Istorija"
 
 #, python-brace-format
 msgid "{username} joined {timespan_ago}."
-msgstr ""
+msgstr "{username} prisijungė {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
@@ -3061,7 +3062,7 @@ msgid "Please input a short message explaining why you are rejecting this invoic
 msgstr ""
 
 msgid "Short explanation"
-msgstr ""
+msgstr "Trumpas paaiškinimas"
 
 msgid "Reject"
 msgstr ""
@@ -3077,31 +3078,31 @@ msgstr ""
 
 #, python-brace-format
 msgid "From: {0}"
-msgstr ""
+msgstr "Nuo: {0}"
 
 #, python-brace-format
 msgid "To: {0}"
-msgstr ""
+msgstr "Kam: {0}"
 
 #, python-brace-format
 msgid "Date: {0}"
-msgstr ""
+msgstr "Data: {0}"
 
 #, python-brace-format
 msgid "Amount: {0}"
-msgstr ""
+msgstr "Suma: {0}"
 
 msgid "Details:"
-msgstr ""
+msgstr "Išsamesnė informacija:"
 
 msgid "Documents:"
-msgstr ""
+msgstr "Dokumentai:"
 
 msgid "Download"
-msgstr ""
+msgstr "Atsisiųsti"
 
 msgid "Send"
-msgstr ""
+msgstr "Siųsti"
 
 msgid "Accept and Pay"
 msgstr ""
@@ -3115,7 +3116,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Status: {0}"
-msgstr ""
+msgstr "Būsena: {0}"
 
 #, python-brace-format
 msgid "Invoices - {username}"
@@ -3129,13 +3130,13 @@ msgid "You are not allowed to invoice {0}."
 msgstr ""
 
 msgid "The description is too short."
-msgstr ""
+msgstr "Aprašas per trumpas."
 
 msgid "The description is too long."
-msgstr ""
+msgstr "Aprašas per ilgas."
 
 msgid "The details are too long."
-msgstr ""
+msgstr "Išsamesnė informacija per ilga."
 
 #, python-brace-format
 msgid "Invoice {someone}"
@@ -3148,7 +3149,7 @@ msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr ""
 
 msgid "Description"
-msgstr ""
+msgstr "Aprašas"
 
 msgid "A short description of the invoice"
 msgstr ""
@@ -3203,11 +3204,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "Total money received: {0}"
-msgstr ""
+msgstr "Iš viso gauta pinigų: {0}"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
-msgstr ""
+msgstr "Iš viso išsiųsta pinigų: {0}"
 
 msgid "Fees"
 msgstr ""
@@ -3226,7 +3227,7 @@ msgid "error message: {0}"
 msgstr ""
 
 msgid "anonymous donation"
-msgstr ""
+msgstr "anoniminis paaukojimas"
 
 #, python-brace-format
 msgid "anonymous donation for your role in the {0} team"
@@ -3246,7 +3247,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "PayPal status code: {0}"
-msgstr ""
+msgstr "PayPal būsenos kodas: {0}"
 
 msgid "There were no transactions during this period."
 msgstr ""
@@ -3265,13 +3266,13 @@ msgid "You have already refused this invitation."
 msgstr ""
 
 msgid "You are not a member of this team."
-msgstr ""
+msgstr "Jūs nesate šios komandos narys."
 
 msgid "User not found."
-msgstr ""
+msgstr "Naudotojas nerastas."
 
 msgid "A team can't join a team"
-msgstr ""
+msgstr "Komanda negali prisijungti prie komandos"
 
 msgid "You can't invite an inactive user to join a team."
 msgstr ""
@@ -3309,19 +3310,19 @@ msgid "Please confirm"
 msgstr ""
 
 msgid "Mark all notifications as read"
-msgstr ""
+msgstr "Žymėti visus pranešimus kaip skaitytus"
 
 msgid "This notification is marked for deletion."
-msgstr ""
+msgstr "Šis pranešimas yra pažymėtas ištrynimui."
 
 msgid "Restore"
-msgstr ""
+msgstr "Atkurti"
 
 msgid "Mark as read"
-msgstr ""
+msgstr "Žymėti kaip skaitytą"
 
 msgid "Remove"
-msgstr ""
+msgstr "Šalinti"
 
 msgid "An error occurred while rendering this notification."
 msgstr ""
@@ -3334,7 +3335,7 @@ msgid "No notifications to show."
 msgstr ""
 
 msgid "Next Page →"
-msgstr ""
+msgstr "Kitas puslapis →"
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3354,15 +3355,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
-msgstr ""
+msgstr "Paskyros ID: {0}"
 
 #, python-brace-format
 msgid "Country: {0}"
-msgstr ""
+msgstr "Šalis: {0}"
 
 #, python-brace-format
 msgid "Currency: {0}"
-msgstr ""
+msgstr "Valiuta: {0}"
 
 #, python-brace-format
 msgid "Added on {date}"
@@ -3413,7 +3414,7 @@ msgid "The money will fund the donations of {name} on Liberapay. The table below
 msgstr ""
 
 msgid "Recipient"
-msgstr ""
+msgstr "Gavėjas"
 
 msgid "Amount per week"
 msgstr ""
@@ -3503,7 +3504,7 @@ msgid "This section doesn't include data on donations through teams, it only sho
 msgstr ""
 
 msgid "Recent Changes"
-msgstr ""
+msgstr "Paskiausi pakeitimai"
 
 #, python-brace-format
 msgid "A new donation of {amount} per week has been created."
@@ -3627,10 +3628,10 @@ msgid "Add a payment instrument:"
 msgstr ""
 
 msgid "Add a card"
-msgstr ""
+msgstr "Pridėti kortelę"
 
 msgid "Add a bank account"
-msgstr ""
+msgstr "Pridėti banko paskyrą"
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr ""
@@ -3686,7 +3687,7 @@ msgid "We may give your username to someone else if they ask for it, but not for
 msgstr ""
 
 msgid "Ready?"
-msgstr ""
+msgstr "Pasiruošę?"
 
 msgid "Yes, close my Liberapay account"
 msgstr ""
@@ -3702,7 +3703,7 @@ msgid "The ID number of your Liberapay account is {user_id}."
 msgstr ""
 
 msgid "Account type"
-msgstr ""
+msgstr "Paskyros tipas"
 
 msgid "modify"
 msgstr ""
@@ -3735,7 +3736,7 @@ msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
 msgstr ""
 
 msgid "The donation amount is missing."
-msgstr ""
+msgstr "Trūksta paaukojimo sumos."
 
 msgid "This donation doesn't exist or has already been stopped."
 msgstr ""
@@ -3745,7 +3746,7 @@ msgid "Your donation to {0} has been stopped."
 msgstr ""
 
 msgid "Your wallet is empty."
-msgstr ""
+msgstr "Jūsų piniginė tuščia."
 
 msgid "Export History"
 msgstr ""
@@ -3777,7 +3778,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Export as CSV"
-msgstr ""
+msgstr "Eksportuoti kaip CSV"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
@@ -4040,7 +4041,7 @@ msgid "The request failed. Please make sure your browser is up-to-date, and disa
 msgstr ""
 
 msgid "Card number"
-msgstr ""
+msgstr "Kortelės numeris"
 
 msgid "The main number on the card, between 8 and 19 digits"
 msgstr ""
@@ -4172,13 +4173,13 @@ msgid "Sort Code"
 msgstr ""
 
 msgid "SEPA / IBAN"
-msgstr ""
+msgstr "SEPA / IBAN"
 
 msgid "USA"
-msgstr ""
+msgstr "JAV"
 
 msgid "Canada"
-msgstr ""
+msgstr "Kanada"
 
 msgid "UK"
 msgstr ""
@@ -4299,7 +4300,7 @@ msgid "If your message isn't written in English or French, then it will be trans
 msgstr ""
 
 msgid "We currently don't have a phone number."
-msgstr ""
+msgstr "Šiuo metu neturime telefono numerio."
 
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr ""
