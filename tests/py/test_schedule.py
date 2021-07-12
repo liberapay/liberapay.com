@@ -817,7 +817,7 @@ class TestScheduledPayins(EmailHarness):
         assert scheduled_payins[0].amount == EUR('36.00')
         assert scheduled_payins[1].amount == EUR('12.00')
 
-        bob.close(None)
+        bob.close()
         self.db.run("UPDATE participants SET is_suspended = true WHERE username = 'carl'")
         self.db.run("UPDATE tips SET renewal_mode = 1 WHERE tippee = %s", (dana.id,))
 

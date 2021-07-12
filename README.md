@@ -162,8 +162,6 @@ If you add or modify interactions with external services, then the tests will fa
 
 If you're testing an API which uses idempotency keys (for example Stripe's API), then some requests will fail if they're no longer exactly identical. In that case, increase the value of the test class' `offset` attribute so that different idempotency keys will be used.
 
-If the new interactions are with MangoPay you have to delete the file `tests/py/fixtures/MangopayOAuth.yml`, otherwise you'll be using an expired authentication token and the requests will be rejected.
-
 #### Speeding up the tests
 
 PostgreSQL is designed to prevent data loss, so it does a lot of synchronous disk writes by default. To reduce the number of those blocking writes, our `recreate-schema.sh` script automatically switches the `synchronous_commit` option to `off` for the test database, however this doesn't completely disable syncing. If your PostgreSQL instance only contains data that you can afford to lose, then you can speed things up further by setting `fsync` to `off` in the server's configuration file (`postgresql.conf`).

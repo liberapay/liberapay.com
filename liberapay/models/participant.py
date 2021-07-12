@@ -53,7 +53,6 @@ from liberapay.exceptions import (
     TooManyEmailVerifications,
     TooManyPasswordLogins,
     TooManyUsernameChanges,
-    TransferError,
     UnableToDistributeBalance,
     UnableToSendEmail,
     UnexpectedCurrency,
@@ -182,7 +181,7 @@ class Participant(Model, MixinTeam):
     def leave_team(self, team):
         team.set_take_for(self, None, self)
         if not team.nmembers:
-            team.close(None)
+            team.close()
 
     @classmethod
     def from_id(cls, id, _raise=True):
@@ -640,7 +639,7 @@ class Participant(Model, MixinTeam):
 
     class UnknownDisbursementStrategy(Exception): pass
 
-    def close(self, disbursement_strategy):
+    def close(self, disbursement_strategy=None):
         """Close the participant's account.
         """
 
@@ -649,8 +648,6 @@ class Participant(Model, MixinTeam):
         elif disbursement_strategy == 'downstream':
             # This in particular needs to come before clear_tips_giving.
             self.distribute_balances_to_donees()
-        elif disbursement_strategy == 'payin-refund':
-            self.refund_balances()
         else:
             raise self.UnknownDisbursementStrategy
 
@@ -966,70 +963,12 @@ class Participant(Model, MixinTeam):
         """, (str(self.id),))
 
 
-    # Refunds
-    # =======
-
-    def refund_balances(self):
-        from liberapay.billing.transactions import refund_payin
-        payins = self.get_refundable_payins()
-        for exchange in payins:
-            balance = self.get_balance_in(exchange.amount.currency)
-            if balance == 0:
-                continue
-            amount = min(balance, exchange.refundable_amount)
-            status, e_refund = refund_payin(self.db, exchange, amount, self)
-            if status != 'succeeded':
-                raise TransferError(e_refund.note)
-
-    def get_refundable_balances(self):
-        return MoneyBasket(*[e.refundable_amount for e in self.get_refundable_payins()])
-
-    def get_refundable_payins(self):
-        """Get a list of the user's exchanges that can be refunded.
-
-        Notes on the time limits:
-        - Card payments older than 11 months can't be refunded.
-        - Refunding a SEPA direct debit is dangerous because the bank can pull
-          back the funds at the same time if the debit is disputed. In that case
-          the payer ends up with twice the amount of money he/she paid, and we
-          end up with a deficit. To protect ourselves from that we only refund
-          debits older than 9 weeks, because SEPA chargebacks happen within 8
-          weeks of the payment date.
-
-        """
-        return self.db.all("""
-            WITH x AS (
-                SELECT e.*
-                     , e.amount - coalesce_currency_amount((
-                           SELECT sum(-e2.amount)
-                             FROM exchanges e2
-                            WHERE e2.participant = e.participant  -- indexed column
-                              AND e2.amount < 0
-                              AND e2.refund_ref = e.id
-                              AND e2.status = 'succeeded'
-                       ), e.amount::currency) AS refundable_amount
-                  FROM exchanges e
-                  JOIN exchange_routes r ON r.id = e.route
-                 WHERE e.participant = %s
-                   AND e.amount > 0
-                   AND e.status = 'succeeded'
-                   AND ( r.network = 'mango-cc' AND e.timestamp > (now() - interval '11 months') OR
-                         r.network = 'mango-ba' AND e.timestamp <= (now() - interval '9 weeks')
-                       )
-                 )
-            SELECT *
-              FROM x
-             WHERE refundable_amount > 0
-          ORDER BY refundable_amount DESC;
-        """, (self.id,))
-
-
     # Deleting
     # ========
 
     def delete(self):
         if self.status != 'closed':
-            self.close(None)
+            self.close()
         with self.db.get_cursor() as cursor:
             cursor.run("""
                 UPDATE emails SET participant = NULL, verified = NULL WHERE participant = %(p_id)s;

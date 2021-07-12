@@ -1,16 +1,14 @@
-import datetime
 import json
 
 from liberapay.billing.payday import Payday
-from liberapay.testing import EUR
-from liberapay.testing.mangopay import FakeTransfersHarness
+from liberapay.testing import EUR, Harness
 
 
-def today():
-    return datetime.datetime.utcnow().date().strftime('%Y-%m-%d')
+def date(payday):
+    return payday.ts_start.strftime('%Y-%m-%d')
 
 
-class TestChartsJson(FakeTransfersHarness):
+class TestChartsJson(Harness):
 
     def setUp(self):
         super().setUp()
@@ -18,103 +16,72 @@ class TestChartsJson(FakeTransfersHarness):
         self.alice = self.make_participant('alice')
         self.bob = self.make_participant('bob')
         self.carl = self.make_participant('carl')
-        self.make_exchange('mango-cc', 10, 0, self.alice)
-        self.make_exchange('mango-cc', 10, 0, self.bob)
         self.make_participant('notactive')
 
         self.alice.set_tip_to(self.carl, EUR('1.00'))
+        self.alice_card = self.upsert_route(self.alice, 'stripe-card')
+        self.make_payin_and_transfer(self.alice_card, self.carl, EUR('10.00'))
         self.bob.set_tip_to(self.carl, EUR('2.00'))
+        self.bob_card = self.upsert_route(self.bob, 'stripe-card')
+        self.make_payin_and_transfer(self.bob_card, self.carl, EUR('10.00'))
 
     def run_payday(self):
-        Payday.start().run(recompute_stats=1)
-
+        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
+        payday = Payday.start()
+        payday.run(recompute_stats=1)
+        return payday
 
     def test_no_payday_returns_empty_list(self):
         assert json.loads(self.client.GxT('/carl/charts.json').text) == []
 
     def test_first_payday_comes_through(self):
-        self.run_payday()   # first
-
-        expected = [{"date": today(), "npatrons": 2, "receipts": {"amount": "3.00", "currency": "EUR"}}]
+        payday = self.run_payday()
+        expected = [
+            {"date": date(payday), "npatrons": 2, "receipts": {"amount": "3.00", "currency": "EUR"}},
+        ]
         actual = json.loads(self.client.GET('/carl/charts.json').text)
-
         assert actual == expected
 
     def test_second_payday_comes_through(self):
-        self.run_payday()   # first
+        self.alice.set_tip_to(self.carl, EUR('10.00'))
+        payday_1 = self.run_payday()
 
-        self.alice.set_tip_to(self.carl, EUR('5.00'))
-        self.bob.set_tip_to(self.carl, EUR('0.00'))
 
-        self.run_payday()   # second
+        payday_2 = self.run_payday()
 
         expected = [
-            {"date": today(), "npatrons": 1, "receipts": {"amount": "5.00", "currency": "EUR"}},  # most recent first
-            {"date": today(), "npatrons": 2, "receipts": {"amount": "3.00", "currency": "EUR"}},
+            {"date": date(payday_2), "npatrons": 1, "receipts": {"amount": "2.00", "currency": "EUR"}},
+            {"date": date(payday_1), "npatrons": 2, "receipts": {"amount": "12.00", "currency": "EUR"}},
         ]
         actual = json.loads(self.client.GET('/carl/charts.json').text)
-
         assert actual == expected
 
     def test_sandwiched_tipless_payday_comes_through(self):
-        self.run_payday()   # first
-
-        # Oops! Sorry, Carl. :-(
-        self.alice.set_tip_to(self.carl, EUR('0.00'))
-        self.bob.set_tip_to(self.carl, EUR('0.00'))
-        self.run_payday()   # second
+        self.alice.set_tip_to(self.carl, EUR('10.00'))
+        self.bob.set_tip_to(self.carl, EUR('10.00'))
+        payday_1 = self.run_payday()
+        payday_2 = self.run_payday()
 
         # Bouncing back ...
         self.alice.set_tip_to(self.carl, EUR('5.00'))
-        self.run_payday()   # third
+        self.make_payin_and_transfer(self.alice_card, self.carl, EUR('10.00'))
+        payday_3 = self.run_payday()
 
         expected = [
-            {"date": today(), "npatrons": 1, "receipts": {"amount": "5.00", "currency": "EUR"}},  # most recent first
-            {"date": today(), "npatrons": 0, "receipts": {"amount": "0.00", "currency": "EUR"}},
-            {"date": today(), "npatrons": 2, "receipts": {"amount": "3.00", "currency": "EUR"}},
+            {"date": date(payday_3), "npatrons": 1, "receipts": {"amount": "5.00", "currency": "EUR"}},
+            {"date": date(payday_2), "npatrons": 0, "receipts": {"amount": "0.00", "currency": "EUR"}},
+            {"date": date(payday_1), "npatrons": 2, "receipts": {"amount": "20.00", "currency": "EUR"}},
         ]
         actual = json.loads(self.client.GET('/carl/charts.json').text)
-
-        assert actual == expected
-
-    def test_out_of_band_transfer_gets_included_with_next_payday(self):
-        self.run_payday()   # first
-
-        # Do an out-of-band transfer.
-        self.make_transfer(self.alice.id, self.carl.id, EUR('4.00'))
-
-        self.run_payday()   # second
-        self.run_payday()   # third
-
-        expected = [
-            {
-                "date": today(),
-                "npatrons": 2,  # most recent first
-                "receipts": {"amount": "3.00", "currency": "EUR"},
-            },
-            {
-                "date": today(),
-                "npatrons": 2,
-                "receipts": {"amount": "7.00", "currency": "EUR"},
-            },
-            {
-                "date": today(),
-                "npatrons": 2,
-                "receipts": {"amount": "3.00", "currency": "EUR"},
-            },
-        ]
-        actual = json.loads(self.client.GET('/carl/charts.json').text)
-
         assert actual == expected
 
     def test_never_received_gives_empty_array(self):
-        self.run_payday()   # first
-        self.run_payday()   # second
-        self.run_payday()   # third
+        self.run_payday()
+        self.run_payday()
+        self.run_payday()
 
         expected = []
         actual = json.loads(self.client.GxT('/alice/charts.json').text)
-
         assert actual == expected
 
     def test_charts_work_for_teams(self):
@@ -123,24 +90,27 @@ class TestChartsJson(FakeTransfersHarness):
         team.set_take_for(self.carl, EUR('1.00'), team)
         self.alice.set_tip_to(team, EUR('0.30'))
         self.bob.set_tip_to(team, EUR('0.59'))
+        self.make_payin_and_transfer(self.alice_card, team, EUR('4.00'))
+        self.make_payin_and_transfer(self.bob_card, team, EUR('6.00'))
 
-        self.run_payday()
+        payday = self.run_payday()
 
-        expected = [{"date": today(), "npatrons": 2, "receipts": {"amount": "0.89", "currency": "EUR"}}]
+        expected = [
+            {"date": date(payday), "npatrons": 2, "receipts": {"amount": "0.89", "currency": "EUR"}},
+        ]
         actual = json.loads(self.client.GET('/team/charts.json').text)
-
         assert actual == expected
 
     def test_transfer_volume(self):
         dana = self.make_participant('dana')
-        dana.close(None)
+        dana.close()
 
         self.run_payday()
-        self.run_payday()
+        payday_2 = self.run_payday()
 
         zero = {'amount': '0.00', 'currency': 'EUR'}
         expected = {
-            "date": today(),
+            "date": date(payday_2),
             "transfer_volume": {'amount': '3.00', 'currency': 'EUR'},
             "nactive": '3',
             "nparticipants": '5',
@@ -157,9 +127,12 @@ class TestChartsJson(FakeTransfersHarness):
     def test_anonymous_receiver(self):
         self.run_payday()
         self.run_payday()
-        self.client.PxST('/carl/edit/privacy',
-                         {'privacy': 'hide_receiving', 'hide_receiving': 'on'},
-                         auth_as=self.carl)
+        r = self.client.PxST(
+            '/carl/edit/privacy',
+            {'privacy': 'hide_receiving', 'hide_receiving': 'on'},
+            auth_as=self.carl,
+        )
+        assert r.code == 302
 
         r = self.client.GxT('/carl/charts.json')
         assert r.code == 403

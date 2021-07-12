@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.testing import EUR, Harness
 
 
@@ -37,27 +36,6 @@ class TestChartOfReceiving(Harness):
             [EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 0.5, Decimal('0.25')],
             [EUR('3.00'), 1, EUR('3.00'), EUR('3.00'), 0.5, Decimal('0.75')]
         ], 2, EUR('4.00'))
-        actual = self.bob.get_tip_distribution()
-        assert actual == expected
-
-    def test_get_tip_distribution_ignores_bad_cc(self):
-        bad_cc = self.make_participant('bad_cc')
-        ExchangeRoute.insert(bad_cc, 'mango-cc', '-1', 'failed', currency='EUR')
-        self.alice.set_tip_to(self.bob, EUR('1.00'))
-        self.make_payin_and_transfer(self.alice_card, self.bob, EUR('25.00'))
-        bad_cc.set_tip_to(self.bob, EUR('3.00'))
-        expected = ([[EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 1, Decimal('1')]],
-                    1, EUR('1.00'))
-        actual = self.bob.get_tip_distribution()
-        assert actual == expected
-
-    def test_get_tip_distribution_ignores_missing_cc(self):
-        missing_cc = self.make_participant('missing_cc')
-        self.alice.set_tip_to(self.bob, EUR('1.00'))
-        self.make_payin_and_transfer(self.alice_card, self.bob, EUR('4.00'))
-        missing_cc.set_tip_to(self.bob, EUR('3.00'))
-        expected = ([[EUR('1.00'), 1, EUR('1.00'), EUR('1.00'), 1, Decimal('1')]],
-                    1.0, EUR('1.00'))
         actual = self.bob.get_tip_distribution()
         assert actual == expected
 
