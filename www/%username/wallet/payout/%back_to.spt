@@ -118,21 +118,7 @@ title = _("Withdrawing Money")
     % endif
 
     % if currency
-    <p>
-        {{ _("You have {0} in your Liberapay wallet.", balance) }}
-        % if not success
-            % if balance > withdrawable
-                % if withdrawable == 0
-                    {{ _("Unfortunately you cannot withdraw that money yet, it is still in quarantine.") }}
-                % else
-                    {{ _("Out of that, {0} is available for withdrawal, the rest is still in quarantine.",
-                         withdrawable) }}
-                % endif
-                </p><p>
-                {{ _("We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience.", constants.QUARANTINE) }}
-            % endif
-        % endif
-    </p>
+    <p>{{ _("You have {0} in your Liberapay wallet.", balance) }}</p>
     % if success and back_to
         <p><a href="{{ response.sanitize_untrusted_url(back_to) }}"
               class="btn btn-success">{{ _("Go back") }}</a></p>

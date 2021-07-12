@@ -29,7 +29,7 @@ from liberapay.billing.payday import compute_next_payday_date
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, BASE64URL_CHARS, CURRENCIES,
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
-    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYMENT_SLUGS, PAYPAL_CURRENCIES,
+    PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
     PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
@@ -1640,16 +1640,14 @@ class Participant(Model, MixinTeam):
     # ====================
 
     def get_withdrawable_amount(self, currency):
-        from liberapay.billing.transactions import QUARANTINE
         return self.db.one("""
             SELECT sum(amount)
               FROM cash_bundles
              WHERE owner = %s
-               AND ts < now() - INTERVAL %s
                AND disputed IS NOT TRUE
                AND locked_for IS NULL
                AND (amount).currency = %s
-        """, (self.id, QUARANTINE, currency)) or Money.ZEROS[currency]
+        """, (self.id, currency)) or Money.ZEROS[currency]
 
     def can_withdraw(self, amount):
         return self.get_withdrawable_amount(amount.currency) >= amount
@@ -1856,13 +1854,6 @@ class Participant(Model, MixinTeam):
             (path, query), extra_query = path.split('?', 1), query
             query += '&' + extra_query[1:]
         return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
-
-    def get_payin_url(self, network, e_id):
-        path = 'wallet/payin/%s' % PAYMENT_SLUGS[network]
-        if network == 'mango-ba':
-            return self.url(path + '/%s' % e_id)
-        else:
-            return self.url(path, dict(exchange_id=e_id))
 
     def get_teams(self):
         """Return a list of teams this user is a member of.
