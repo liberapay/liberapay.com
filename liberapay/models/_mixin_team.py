@@ -4,8 +4,6 @@
 from collections import OrderedDict
 from statistics import median
 
-import mangopay
-
 from liberapay.billing.payday import Payday
 from liberapay.constants import TAKE_THROTTLING_THRESHOLD
 from liberapay.i18n.currencies import Money, MoneyBasket
@@ -200,8 +198,7 @@ class MixinTeam:
                        %(currency)s
                    ) AS paid_in_advance
                  , p.is_suspended
-                 , ( CASE WHEN %(provider)s = 'mangopay' THEN p.mangopay_user_id IS NOT NULL
-                     ELSE EXISTS (
+                 , EXISTS (
                        SELECT true
                          FROM payment_accounts a
                         WHERE a.participant = t.member
@@ -209,8 +206,6 @@ class MixinTeam:
                           AND a.is_current
                           AND a.verified
                           AND coalesce(a.charges_enabled, true)
-                     )
-                     END
                    ) AS has_payment_account
               FROM current_takes t
               JOIN participants p ON p.id = t.member
@@ -240,12 +235,6 @@ class MixinTeam:
         """
         tips = cursor.all("""
             SELECT t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
-                 , ( SELECT basket_sum(w.balance)
-                       FROM wallets w
-                      WHERE w.owner = t.tipper
-                        AND w.is_current
-                        AND %(use_mangopay)s
-                   ) AS balances
                  , coalesce_currency_amount((
                        SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr
@@ -259,7 +248,7 @@ class MixinTeam:
              WHERE t.tippee = %(team_id)s
                AND ( t.is_funded OR t.paid_in_advance > 0 )
                AND p.is_suspended IS NOT true
-        """, dict(team_id=self.id, use_mangopay=mangopay.sandbox))
+        """, dict(team_id=self.id))
         takes = cursor.all("""
             SELECT t.*, p.main_currency, p.accepted_currencies
               FROM current_takes t
