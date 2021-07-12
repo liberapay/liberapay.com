@@ -1,0 +1,40 @@
+name: CI
+on:
+  # Trigger the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  # Allow running this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Cache the .tox directory to speed things up
+        uses: actions/cache@v2.1.6
+        with:
+          path: .tox
+          key: test-${{ runner.os }}-${{ hashFiles('requirements_*.txt') }}
+      - name: Start PostgreSQL
+        run: sudo systemctl start postgresql.service
+      - name: Create the database user
+        run: sudo -u postgres createuser --superuser $(whoami)
+      - name: Create the test database
+        run: createdb liberapay_tests
+      - name: Create the test database schema
+        run: DATABASE_URL=liberapay_tests ./recreate-schema.sh test
+      - name: Enable expensive tests, on the master branch only
+        if: ${{ env.GITHUB_HEAD_REF == 'master' }}
+        run: |
+          rm -rfv tests/py/fixtures
+          echo LIBERAPAY_I18N_TEST=yes >> $GITHUB_ENV
+      - name: Install tox
+        run: pip install tox
+      - name: Run the tests
+        run: tox
