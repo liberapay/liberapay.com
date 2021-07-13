@@ -260,16 +260,6 @@ msgstr "로그인"
 msgid "Please note that the link is only valid for {0}."
 msgstr "이 링크는 {0}까지만 유효합니다."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "Liberapay 지갑을 충전할 시간입니다"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "Liberapay 지갑에 {0} 만큼이 남아 있지만 다음 주의 기부를 진행하기 위해서 적어도 {1} 만큼이 필요합니다."
-
-msgid "Add money"
-msgstr "입금하기"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Liberapay 기부 갱신: 유효한 결제 수단 없음"
 
@@ -373,70 +363,6 @@ msgstr "현재 사용하시는 비밀번호가 유출되었음을 감지했습�
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "지금 {link_start}비밀번호를 바꾸는 것{link_end}이 좋습니다."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Liberapay 지갑으로 계좌 이체"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "자금을 이체받을 준비가 되었습니다. 정확히 {0} 만큼을 아래의 계좌로 이체해 주세요. 아래의 확인 코드를 입력하셔야 입금한 사람이 당신인지 알 수 있습니다:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (국제 은행 계좌 번호)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (은행 식별 코드)"
-
-msgid "Wire Reference Code"
-msgstr "계좌 확인 코드"
-
-msgid "Destination Country"
-msgstr "수신지 국가"
-
-msgid "Bank Account Owner Name"
-msgstr "은행 계좌 소유주"
-
-msgid "Bank Account Owner Address"
-msgstr "은행 계좌 소유자 주소"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Liberapay로의 자동 이체가 만료되었습니다"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "{date} 일에 은행 계좌에서 Liberapay 계좌로 {money_amount} 만큼을 이체하셨다고 했지만, 돈은 입금되지 않았습니다."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "이체를 까먹으셨다면 새 결제를 시작할 수 있습니다:"
-
-msgid "Try again"
-msgstr "다시 시도하기"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Liberapay 지갑으로의 은행 이체가 실패하였습니다"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "당신의 은행 계좌에서 {0} 만큼을 이체하려는 시도가 실패하였습니다:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "다시 시도하거나, 다른 지불 방법을 사용하거나, 아래 링크를 사용해 볼 수 있습니다:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Liberapay로의 계좌 이체가 성공하였습니다"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "은행 계좌에서의 이체가 성공하였음을 알리게 되어 기쁘게 생각합니다. 보내신 금액 {0} 중에서 {1} 만큼이 Liberapay 계좌로 입금되었고 {2} 만큼은 수수료로 지불되었습니다."
-
-msgid "View receipt"
-msgstr "영수증 보기"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Liberapay로의 실시간 계좌 이체가 실패하였습니다"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Liberapay로의 실시간 계좌 이체가 성공적으로 이루어졌습니다"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "{money_amount} 기부금에 분쟁이 제기되었습니다"
@@ -518,6 +444,12 @@ msgstr "{date} 에 시도된 {money_amount} 결제가 실패했습니다."
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "결제 대행사 {provider} 에서 제공한 메시지는 다음과 같습니다:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "다시 시도하거나, 다른 지불 방법을 사용하거나, 아래 링크를 사용해 볼 수 있습니다:"
+
+msgid "Try again"
+msgstr "다시 시도하기"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -601,6 +533,9 @@ msgstr "{date}에 시작된 {money_amount} 결제가 성공했습니다."
 
 msgid "Thank you for this donation!"
 msgstr "기부에 감사드립니다!"
+
+msgid "View receipt"
+msgstr "영수증 보기"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Liberapay 기부를 놓치고 있습니다"
@@ -930,17 +865,11 @@ msgstr "조직"
 msgid "Team"
 msgstr "팀"
 
-msgid "Direct Debit"
-msgstr "자동 이체"
-
-msgid "Bank Wire"
-msgstr "은행 이체"
-
-msgid "Credit Card"
-msgstr "신용카드"
-
 msgid "Credit/Debit Card"
 msgstr "신용/직불카드"
+
+msgid "Direct Debit"
+msgstr "자동 이체"
 
 msgid "Hide total giving from others."
 msgstr "다른 사람들에게 받고 있는 금액을 숨깁니다."
@@ -2761,10 +2690,6 @@ msgstr "결제금액을 선택 또는 입력해 주세요:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "전체 지불 금액은 즉시 {recipient_names}의 {payment_provider} 계정으로 이동됩니다."
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay는 더 이상 돈을 지갑에 저장하지 않습니다. 전체 지불 금액은 즉시 {payment_provider} 계정의 {recipient_name}(으)로 이동합니다."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "전체 지불 금액은 즉시 {recipient_name}의 {payment_provider} 계정으로 이동합니다."
@@ -3591,12 +3516,6 @@ msgstr "Liberapay 계정에 잔액이 존재합니다. 지출 방식을 선택�
 msgid "Close Account"
 msgstr "계정 삭제"
 
-msgid "Try Again Later"
-msgstr "다시 시도하기"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "죄송합니다, 현재 지출일 일정을 처리하고 있으며, 아직은 지출일 일정 중에 계정을 닫을 수 없습니다. 몇시간 후에 다시 시도해 주십시오."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "지갑에 {0} 이 있습니다. 어떻게 할까요?"
@@ -3610,9 +3529,6 @@ msgstr ""
 
 msgid "This option is recommended for small amounts."
 msgstr ""
-
-msgid "Refund it to my card or bank account"
-msgstr "내 카드나 통장으로 환불합니다"
 
 msgid "Withdraw it to my bank account"
 msgstr "내 은행 통장으로 출금합니다"
@@ -3810,231 +3726,6 @@ msgstr "익명 기여의 환불"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{payee}에 대한 {link_open}지출 #{invoice_id}{link_close}에 대한 지불"
 
-msgid "Adding Money"
-msgstr "자금 추가"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "당신의 기부는 수입에 의해 충당됩니다: 매주 {income} 만큼 받고, {donations_amount} 만큼 돌려주고 있습니다."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "{currency} 로 이루어지는 기부는 수입에 의해 충당됩니다: 매주 {income} 만큼 받고 {donations_amount} 만큼 돌려주고 있습니다."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "당신의 기부금으로 기부할 금액을 전액 충당할 수 있을 때는 추가 입금을 할 수 없습니다. 문제가 있다면 support@liberapay.com에 이유를 설명해 주세요."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "다음 {n} 주 동안 기부금을 낼 만큼의 돈이 있습니다."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "{currency} 로 이루어지는 기부가 다음 {n} 주간 유효합니다."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "기부금을 내기 위해서 Liberapay 지갑으로 돈을 이체해야 합니다."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "{currency} 로 이루어지는 기부를 유지하기 위해 지갑에 돈을 입금해야 합니다."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "대기 중인 {money_amount} 만큼의 {payment_method}거래가 있습니다. {link_open}자세한 정보{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "계좌에 돈을 추가할 결제 방식을 선택해 주세요:"
-
-msgid "Easy and instantaneous"
-msgstr "쉽고 즉각적입니다"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "수수료: {0}% + {1}"
-
-msgid "To an account in Europe"
-msgstr "유럽의 은행 계좌로 입금"
-
-msgid "Cheapest for small amounts¹"
-msgstr "소액에서 가장 쌈¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "싸지만¹ 복잡한 절차"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "수수료: {0}%"
-
-msgid "Best for regular payments"
-msgstr "정기 지불에 가장 좋음"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "기여를 설정하지 않았습니다. 기여를 설정하게 되면 계좌에 자금을 추가하기 위한 옵션이 추가됩니다."
-
-msgid "About Fees"
-msgstr "수수료에 대하여"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "수수료는 결제 대행업체에 의해 부과되며, Liberapay는 {0}Liberapay의 계좌에{1} 기부된 기부액에 의해서만 운영됩니다."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ 은행에서 이체에 대해 과금하지 않을 경우. 이러한 수수료에 대한 통제권이나 지식이 없습니다."
-
-msgid "The email has been sent."
-msgstr "이메일이 발송되었습니다."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "무슨 이유로 지갑에 더 많은 돈을 넣고 계십니까? 합리적인 이유가 있다면 support@liberapay.com에 연락해 주십시오."
-
-msgid "This bank wire has been canceled."
-msgstr "이 계좌 이체는 취소되었습니다."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "{0} 을(를) 은행으로 계좌 이체하려는 시도가 실패했습니다. 에러 메시지: {1}"
-
-msgid "Email me this information"
-msgstr "이 정보를 내 이메일로 전송"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "자동이체 확인 번호는 재사용할 수 없습니다. 현재로써는 Liberapay에 자동 이체를 설정할 수 없습니다."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "지불이 성공하거나 실패했다는 사실을 알게 되면 이메일을 보내 드리겠습니다."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "은행 계좌 이체에 대한 이메일 알림을 비활성화한 상태입니다."
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "마음을 바꾸었나요? 이체를 취소하면 다음 달에 이체 실패 알림을 받지 않습니다:"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "계좌 이체로 자금을 입금하게 되면 지불 처리업체에서 {0}% 만큼의 수수료를 부과합니다."
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "사전에 계산된 금액을 선택하거나 수동으로 금액을 입력해 주십시오."
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0} (수수료 {2}% 포함)"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "{n} 주 동안 기부금이 지급됩니다"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "당신의 기부금은 {n} 주 동안의 기부금을 충당합니다 ({0})"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n}개월"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "저장된 카드 정보로 거래를 처리할 수 없었습니다. 카드 정보를 채우면 다시 시도하겠습니다."
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "신용카드에서 {0} 만큼을 인출하여 {1} 만큼을 Liberapay 계좌에 입금하였고 {2} 은(는) 수수료로 지불되었습니다."
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "신용카드에서 {0} 을 출금하지 못했습니다. 에러 메시지: {1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "신용카드/체크카드에서 입금하게 되면 {0}%+{1} 의 수수료가 부과됩니다."
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "카드 거래는 즉각적이며, \"진행\" 버튼을 누르는 즉시 금액을 청구할 것입니다."
-
-msgid "Billing Address (optional)"
-msgstr "청구지 주소 (선택)"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "청구지 주소가 제공되지 않았거나 제공된 청구지 주소가 카드사의 정보와 일치하지 않을 때 거래가 거절되는 경우가 있습니다. 저희가 아는 바로는 미국, 영국, 오스트레일리아에서 발행된 카드가 이러한 검사를 거칩니다."
-
-msgid "Saved address:"
-msgstr "저장된 주소:"
-
-msgid "Input the billing address"
-msgstr "청구지 주소를 입력하세요"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "경고: 입력한 카드 값 중 일부가 유효하지 않은 것으로 보입니다. 계속할까요?"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "요청이 실패하였습니다. 브라우저가 최신 상태이고, 요청을 차단하는 확장 기능 (예: NoScript)를 비활성화한 다음에 다시 시도해 주세요."
-
-msgid "Card number"
-msgstr "카드 번호"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "카드 번호, 8~19자리"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "카드 번호가 유효하지 않은 것으로 보입니다. 오타가 없나요?"
-
-msgid "This card number is invalid."
-msgstr "이 카드 번호는 유효한 번호가 아닙니다."
-
-msgid "MM/YY"
-msgstr "MM/YY"
-
-msgid "Expiration date (4 digits)"
-msgstr "유효 기간 (4자리)"
-
-msgid "This expiration date is invalid."
-msgstr "이 만료일은 유효한 값이 아닙니다."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "확인 코드 (카드 뒤 3자리 숫자)"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "확인 코드가 유효하지 않은 것으로 보입니다, 오타가 없나요?"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "카드 데이터는 암호화된 수단을 통해 결제 대행사의 시스템으로 직접 전송됩니다."
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "{currency} 에 대한 계좌 이체는 {country} 에서는 불가능합니다."
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} 만큼이 은행 계좌에서 이체되었으며, {1} 만큼이 Liberapay 계좌로 입금되었고, {2} 만큼이 수수료로 지출되었습니다."
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "{0} 만큼의 자동 이체가 시작되었습니다. 이체가 성공적이라면 {1} 만큼이 Liberapay 계좌로 입금되고 {2} 만큼이 수수료로 지불될 것입니다."
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "Liberapay로 자동 이체로 입금하게 되면 {0} 만큼의 수수료가 부과됩니다."
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "다른 계좌 사용"
-
-msgid "This IBAN is invalid."
-msgstr "이 IBAN은 유효하지 않습니다."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "아래 정보는 예금주에 관한 내용입니다."
-
 msgid "The amount cannot be zero."
 msgstr "금액이 0일 수 없습니다."
 
@@ -4057,17 +3748,6 @@ msgstr "{0} 을(를) 은행 계좌로 이체하는 작업이 실패하였습니�
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Liberapay 지갑에 {0} 만큼이 있습니다."
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "이 돈은 아직 동결되어 있기 때문에 인출할 수 없습니다."
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "이 중에서 {0} 은(는) 인출할 수 있고, 나머지는 아직 동결되어 있습니다."
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "신용카드 사기로부터 플랫폼을 보호하기 위해 {0} 동안 자금을 동결합니다. 불편을 드려 죄송합니다."
-
 msgid "Which currency do you want to withdraw?"
 msgstr "어느 화폐로 출금하시겠습니까?"
 
@@ -4084,6 +3764,9 @@ msgstr "미국 달러 인출은 도착지 국가와 관계없이 {0} 만큼의 �
 
 msgid "Bank account"
 msgstr "은행 계좌"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "은행 고유 식별 번호"
@@ -4106,6 +3789,9 @@ msgstr "지점 코드"
 msgid "Sort Code"
 msgstr "분류 코드"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (은행 식별 코드)"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
 
@@ -4121,6 +3807,12 @@ msgstr "영국"
 msgid "Other"
 msgstr "그 외"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (국제 은행 계좌 번호)"
+
+msgid "This IBAN is invalid."
+msgstr "이 IBAN은 유효하지 않습니다."
+
 msgid "checking"
 msgstr "당좌 계좌"
 
@@ -4135,6 +3827,9 @@ msgstr "영문자 (a-z)와 숫자 (0-9)만 사용할 수 있습니다"
 
 msgid "This account number is invalid."
 msgstr "이 계좌번호는 유효한 번호가 아닙니다."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "아래 정보는 예금주에 관한 내용입니다."
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "은행 계좌는 당신의 것이어야 하며, 제3자에게 보내는 것은 허용되지 않습니다."
@@ -4502,21 +4197,6 @@ msgstr ""
 
 msgid "You need to log in to access this page."
 msgstr "이 페이지에 접근하려면 로그인 해야 합니다."
-
-msgid "Money"
-msgstr "돈"
-
-msgid "Quarantine"
-msgstr "동결"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "구체적으로, 동결된 자금은 Liberapay 계좌에서 은행 계좌로 인출될 수 없습니다."
-
-msgid "Safety"
-msgstr "안전"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "저희의 보호 하에 있는 자금은 저희 또는 저희의 자금을 위탁받은 제3자가 파산하더라도 안전함을 보증합니다."
 
 msgid "Here is a list of differences between them:"
 msgstr ""

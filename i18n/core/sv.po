@@ -266,16 +266,6 @@ msgstr "Logga in"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Lägg märke till att länken bara är giltig i {0}."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "Det är dags att fylla på din Liberapay-plånbok"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "Du har {0} kvar i din Liberapay-plånbok, men du behöver åtminstone {1} för att täcka dina donationer nästa vecka."
-
-msgid "Add money"
-msgstr "Lägg till pengar"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Liberapay donationsförnyelse: inget giltigt betalningsmedel"
 
@@ -380,70 +370,6 @@ msgstr "Vi har upptäckt att ditt lösenord är osäkert: det förekommer i en e
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Du bör {link_start}ändra ditt lösenord{link_end} nu."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Banköverföring till din Liberapay-plånbok"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Vi är reda att ta emot medlen. Var god skicka exakt {0} till följande konto med referensen nedan så vi vet att pengarna kommer från dig:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (International Bank Account Number)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Bank Identifier Code)"
-
-msgid "Wire Reference Code"
-msgstr "Banköverföringsreferens"
-
-msgid "Destination Country"
-msgstr "Mottagarland"
-
-msgid "Bank Account Owner Name"
-msgstr "Bankkontoinnehavarens namn"
-
-msgid "Bank Account Owner Address"
-msgstr "Bankkontoinnehavarens adress"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Banköverföringen till din Liberapay-plånbok har gått ut"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "Den {date} angav du att du skulle överföra {money_amount} från ditt bankkonto till din Liberapay-plånbok, men pengarna kom aldrig."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "Om du glömde bort att göra det kan du starta en ny betalning:"
-
-msgid "Try again"
-msgstr "Försök igen"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Banköverföringen till din Liberapay-plånbok har misslyckats"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Försöket att överföra {0} från ditt bankkonto har misslyckats med följande felmeddelande:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Du kan försöka igen, möjligtvis med en annan betalningsmetod, genom att klicka på länken nedan:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Banköverföringen till din Liberapay-plånbok har lyckats"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Vi är glada att meddela att överföringen från ditt bankkonto har lyckats. Av de {0} du skickade har {1} lagts till i din Liberapay-plånbok, medan {2} drogs i avgifter."
-
-msgid "View receipt"
-msgstr "Se kvittot"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Autogirobetalningen till din Liberapay-plånbok har misslyckats"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Autogirobetalningen till din Liberapay-plånbok har lyckats"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "Din betalning av {money_amount} har blivit bestriden"
@@ -525,6 +451,12 @@ msgstr "Betalningen på {money_amount} som påbörjades den {date} misslyckades.
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Felmeddelandet från betalningsförmedlaren {provider} är:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "Du kan försöka igen, möjligtvis med en annan betalningsmetod, genom att klicka på länken nedan:"
+
+msgid "Try again"
+msgstr "Försök igen"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -608,6 +540,9 @@ msgstr "Betalningen på {money_amount} som påbörjades den {date} har genomför
 
 msgid "Thank you for this donation!"
 msgstr "Tack för din donation!"
+
+msgid "View receipt"
+msgstr "Se kvittot"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Du missar donationer via Liberapay"
@@ -941,17 +876,11 @@ msgstr "Organisation"
 msgid "Team"
 msgstr "Grupp"
 
-msgid "Direct Debit"
-msgstr "Direktbetalning"
-
-msgid "Bank Wire"
-msgstr "Banköverföring"
-
-msgid "Credit Card"
-msgstr "Kreditkort"
-
 msgid "Credit/Debit Card"
 msgstr "Kredit- eller debitkort"
+
+msgid "Direct Debit"
+msgstr "Direktbetalning"
 
 msgid "Hide total giving from others."
 msgstr "Dölj mina totala donationer för andra."
@@ -2791,10 +2720,6 @@ msgstr "Var god välj eller ange belopp:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "Hela beloppet av din betalning går direkt till {recipient_names} konton på {payment_provider}."
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay lagrar inte längre pengar i plånböcker, hela beloppet går direkt till {recipient_name}'s konto på {payment_provider}."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Hela beloppet av din betalning går direkt till {recipient_name} konton på {payment_provider}."
@@ -3629,12 +3554,6 @@ msgstr "Du har fortfarande pengar i detta Liberapay konto, var god välj en utbe
 msgid "Close Account"
 msgstr "Stäng Konto"
 
-msgid "Try Again Later"
-msgstr "Försök Igen Senare"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Vi håller för närvarande på med överföringar av donationer mellan konton och dessvärre kan vi inte avsluta konton under tiden detta sker. Vänligen försök igen om några timmar."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Du har {0} i din plånbok. Vad ska vi göra med dem?"
@@ -3648,9 +3567,6 @@ msgstr "Donera till Liberapay"
 
 msgid "This option is recommended for small amounts."
 msgstr "Denna möjlighet rekommenderas endast för små belopp."
-
-msgid "Refund it to my card or bank account"
-msgstr "Återbetala det till mitt kort eller bankkonto"
 
 msgid "Withdraw it to my bank account"
 msgstr "Debitera det från mitt bankkonto"
@@ -3852,236 +3768,6 @@ msgstr "återbetalning av anonym donation"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "betalning av {link_open}utgift #{invoice_id}{link_close} till {payee}"
 
-msgid "Adding Money"
-msgstr "Sätta in pengar"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Dina donationer är finansierade genom din inkomst: du mottar {income} och ger tillbaks {donations_amount} (per vecka)."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Dina donationer i {currency} finansieras genom din inkomst: du mottar {income} och ger tillbaka {donations_amount} (per vecka)."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "Vi tillåter dig inte att sätta in pengar när dina donationer redan finansieras av dina inkomster. Om det är ett problem för dig, var god skicka ett mejl till support@liberapay.com och förklara varför."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Dina donationer är bara finansierade för en vecka till."
-msgstr[1] "Dina donationer är finansierade för {n} veckor till."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Dina donationer i {currency} är bara finansierade i en vecka till."
-msgstr[1] "Dina donationer i {currency} är bara finansierade i {n} veckor till."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Du måste överföra pengar till din plånbok för att finansiera dina donationer."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Du måste överföra pengar till din plånbok för att finansiera dina donationer i {currency}."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "Du har en pågående {payment_method}-betalning på {money_amount}. {link_open}Detaljer{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "Var god välj en betalningsmetod för att sätta in pengar:"
-
-msgid "Easy and instantaneous"
-msgstr "Lätt och momentan"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "Avgifter: {0}% + {1}"
-
-msgid "To an account in Europe"
-msgstr "Till ett konto i europa"
-
-msgid "Cheapest for small amounts¹"
-msgstr "Billigast för små belopp¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "Billigare¹ men besvärligt"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "Avgift: {0}%"
-
-msgid "Best for regular payments"
-msgstr "Bäst för reguljära betalningar"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Du har inte satt upp några donationer än, när du gör det kommer du bli uppmanad att lägga sätta in pengar på ditt konto."
-
-msgid "About Fees"
-msgstr "Om avgifter"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "Avgifterna är de från vår betalningsprocessor, Liberapay finansieras endast genom donationer till {0}vårt egna konto{1}."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Om inte din bank också debiterar dig för överföringen. Vi har ingen kontroll eller synlighet i det."
-
-msgid "The email has been sent."
-msgstr "E-mail meddelandet har skickats."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Varför försöker du sätta in mer pengar i din plånbok? Var god kontakta support@liberapay.com om du har en legitim anledning."
-
-msgid "This bank wire has been canceled."
-msgstr "Denna banköverföring har avbrutits."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "Försöket att förbereda en banköverföring av {0} har misslyckats. Felmeddelande: {1}"
-
-msgid "Email me this information"
-msgstr "E-maila mig denna information"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Referensen går inte att använda flera gånger. Det är ännu inte möjligt att sätta upp en återkommande överföring från ditt bankkonto till Liberapay."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Vi kommer skicka dig ett e-mail meddelande när vi vet om din betalning har lyckats eller inte."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "Du har stängt av några eller all e-mail notifieringar om banköverföringar."
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "Ändrat dig? Avbryt betalningen för att undvika att motta en misslyckelse notifiering nästa månad:"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Insättning av pengar till Liberapay genom banköverföring medför en avgift på {0}% från vår betalningsprocessor."
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "Var god välj ett förberäknat belopp eller ange ett anpassat belopp."
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0} ({2}% avgift inkluderad)"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "Dina donationer kommer finansieras i {n} vecka"
-msgstr[1] "Dina donationer kommer finansieras i {n} veckor"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgstr[1] "Dina donationer kommer finansieras i {n} veckor ({0})"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n} månad"
-msgstr[1] "{n} månader"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "De sparade kortuppgifterna var inte tillräckliga för att fullfölja betalningen, var god mata in dina kortuppgifter nedan för att försöka igen."
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} har tagits från ditt kreditkort, {1} gick till din Liberapay-plånbok, och {2} betalades i transaktionsavgifter."
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Försöket att ta {0} från ditt kreditkort har misslyckats. Felmeddelande: {1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "Att sätta in pengar till Liberapay via kredit- eller debitkort tillför en kostnad på {0}% + {1}."
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "Kortbetalningar är omedelbara och vi försöker överföra det fulla beloppet så snart du klickat 'Fortsätt' nedan."
-
-msgid "Billing Address (optional)"
-msgstr "Faktureringsadress (fakultativ)"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "Kortbetalningar kan ibland nekas när en faktureringsaddress inte är angiven, eller om den inte matchar kortinnehavarens address. Till vår kännedom så kontrolleras endast kort som är utfärdade i Förenta Staterna, Storbritannien och Australien."
-
-msgid "Saved address:"
-msgstr "Sparade addresser:"
-
-msgid "Input the billing address"
-msgstr "Ange faktureringsaddress"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "Varning: några av uppgifterna du matat in verkar inte stämma. Fortsätt ändå?"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "Överföringen misslyckades. Se till att din webbläsare är uppdaterad och att du slagit av alla extensions som kan blockera anslutningar (t.ex. NoScript) och försök igen."
-
-msgid "Card number"
-msgstr "Kortnummer"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "Det huvudsakliga numret på kortet, mellan 8 och 19 siffror"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Det här kortnumret verkar inte vara giltigt, är du säker på att du inte gjort ett misstag?"
-
-msgid "This card number is invalid."
-msgstr "Detta kortnummer är ogiltigt."
-
-msgid "MM/YY"
-msgstr "MM/ÅÅ"
-
-msgid "Expiration date (4 digits)"
-msgstr "Utgångsdatum (4 siffror)"
-
-msgid "This expiration date is invalid."
-msgstr "Detta utgångsdatum är ogiltigt."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "Verifikationskod, brukar vara 3 siffror skriva på baksidan av kortet"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Denna verifieringskod verkar vara ogiltig, är du säker på att du inte gjort ett misstag?"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "Dina kortuppgifter sänds direkt till vår betalningspartners system via en krypterad anslutning."
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "Direktöverföringar i {currency} är inte möjliga från {country}."
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} har dragits från ditt bankkonto, {1} gick till din Liberapayplånbok, {2} betalades i transaktionsavgifter."
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "En direktdebitering av {0} har påbörjats. Om överföringen lyckas kommer {1} att nå din Liberapayplånbok och {2} att betalas i avgifter."
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "Att överföra pengar till Liberapay via direktöverföring medför en avgift på {0}."
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "Använd ett annat konto"
-
-msgid "This IBAN is invalid."
-msgstr "Detta IBAN är ogiltigt."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Följande fält handlar om ägaren till bankkontot."
-
 msgid "The amount cannot be zero."
 msgstr "Beloppet kan inte vara noll."
 
@@ -4104,17 +3790,6 @@ msgstr "Försöket att skicka {0} till ditt bankkonto har misslyckats. Felmeddel
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Du har {0} i din Liberapay-plånbok."
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "Tyvärr kan du inte ta ut dessa pengar ännu, de är fortfarande i karantän."
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "Av det är {0} tillgängligt för uttag, resten är fortfarande i karantän."
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "Pengar sätts i karantän i {0} för att skydda oss mot kretitkortsbedrägerier, vi ber om ursäkt för besväret."
-
 msgid "Which currency do you want to withdraw?"
 msgstr "Villken valuta vill du ta ut?"
 
@@ -4131,6 +3806,9 @@ msgstr "Uttag av US dollar kostar {0} per överföring, oavsett destinationsland
 
 msgid "Bank account"
 msgstr "Bankkonto"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Clearingnummer"
@@ -4153,6 +3831,9 @@ msgstr "Grenkod"
 msgid "Sort Code"
 msgstr "Clearing nummer"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Bank Identifier Code)"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA/IBAN"
 
@@ -4168,6 +3849,12 @@ msgstr "Storbritannien"
 msgid "Other"
 msgstr "Annat"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (International Bank Account Number)"
+
+msgid "This IBAN is invalid."
+msgstr "Detta IBAN är ogiltigt."
+
 msgid "checking"
 msgstr "check"
 
@@ -4182,6 +3869,9 @@ msgstr "bara bokstäver (a-z) och siffror (0-9) är tillåtna"
 
 msgid "This account number is invalid."
 msgstr "Detta kontonummer är ogiltigt."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Följande fält handlar om ägaren till bankkontot."
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "Bankkontot måste tillhöra dig, att skicka pengar till tredjepart är inte tillåtet."
@@ -4552,21 +4242,6 @@ msgstr "Liberapay loggan är inkluderad i {fa_link_start}Fork Awesome{link_end} 
 
 msgid "You need to log in to access this page."
 msgstr "Du måste logga in för att se denna sida."
-
-msgid "Money"
-msgstr "Pengar"
-
-msgid "Quarantine"
-msgstr "Karantän"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "Konkret sett så hindras du från att ta ut de pengar som är i karantän från ditt Liberapay konto och överföra dem till ditt bankkonto."
-
-msgid "Safety"
-msgstr "Säkerhet"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "Vi garanterar att de pengar du placerar i vårt förvar inte kommer gå förlorade vid konkurs, oavsett om det påverkar oss eller en tredje part till vilka vi delegerat vårdnad om pengarna."
 
 msgid "Here is a list of differences between them:"
 msgstr "Här är en lista över skillnaderna mellan dem:"

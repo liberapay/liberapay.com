@@ -272,16 +272,6 @@ msgstr "Zaloguj się"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Należy pamiętać, że dostęp do tego linku jest ważny tylko przez {0}."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "Nadszedł czas, aby zasilić portfel Liberapay"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "Masz {0} w portfelu Liberapay, ale potrzeba przynajmniej {1} na pokrycie darowizn w przyszłym tygodniu."
-
-msgid "Add money"
-msgstr "Dodaj pieniądze"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Odnowienie darowizny Liberapay: brak ważnego instrumentu płatniczego"
 
@@ -387,70 +377,6 @@ msgstr "Wykryto, że Twoje hasło może być zagrożone – występuje w przynaj
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Powinieneś {link_start}zmienić swoje hasło{link_end}."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Przelew bankowy do Twojego portfela Liberapay"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Jesteśmy gotowi na otrzymanie pieniędzy. Prosimy o przesłanie dokładnie {0} na następujące konto używając poniższego kodu referencyjnego, byśmy mieli pewność, że pieniądze pochodzą od Ciebie:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (międzynarodowy numer rachunku bankowego)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Business Identifier Code)"
-
-msgid "Wire Reference Code"
-msgstr "Kod referencyjny przelewu bankowego"
-
-msgid "Destination Country"
-msgstr "Docelowy kraj"
-
-msgid "Bank Account Owner Name"
-msgstr "Imię i nazwisko właściciela konta bankowego"
-
-msgid "Bank Account Owner Address"
-msgstr "Adres właściciela konta bankowego"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Przelew bankowy do Twojego portfela Liberapay wygasł"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "{date} zadeklarowałeś przetransferowanie {money_amount} z Twojego konta bankowego do Twojego portfela Liberapay, lecz pieniądze nie dotarły."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "Jeśli zapomniałeś to zrobić, możesz zainicjować nową płatność:"
-
-msgid "Try again"
-msgstr "Spróbuj ponownie"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Przelew bankowy do Twojego portfela Liberapay nie powiódł się"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Próba przelania {0} z Twojego konta bankowego zakończyła się niepowodzeniem z następującym komunikatem o błędzie:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Możesz spróbować ponownie, ewentualnie używając innej metody płatności, klikając poniższy link:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Pomyślnie dokonano przelewu bankowego do Twojego portfela Liberapay"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Z radością informujemy, że udało się dokonać transferu z Twojego konta bankowego. Spośród {0} które przesłałeś, {1} wysłano do Twojego portfela Liberapay, a {2} pokryło opłaty obsługi transakcji."
-
-msgid "View receipt"
-msgstr "Wyświetl potwierdzenie"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Polecenie zapłaty do Twojego portfela Liberapay nie powiodło się"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Polecenie zapłaty do Twojego portfela Liberapay powiodło się"
-
 #, fuzzy, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "Twoja płatność w wysokości {money_amount} została zakwestionowana"
@@ -532,6 +458,12 @@ msgstr "Płatność {money_amount} zainicjowana w dniu {date} nie powiodła się
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Wiadomość błędu od pośrednika płatności {provider} to:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "Możesz spróbować ponownie, ewentualnie używając innej metody płatności, klikając poniższy link:"
+
+msgid "Try again"
+msgstr "Spróbuj ponownie"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -615,6 +547,9 @@ msgstr "Płatność {money_amount} zainicjowana w dniu {date} powiodła się."
 
 msgid "Thank you for this donation!"
 msgstr "Dziękuję za tę darowiznę!"
+
+msgid "View receipt"
+msgstr "Wyświetl potwierdzenie"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Tracisz darowizny za pośrednictwem Liberapay"
@@ -953,17 +888,11 @@ msgstr "Organizacja"
 msgid "Team"
 msgstr "Zespół"
 
-msgid "Direct Debit"
-msgstr "Polecenie zapłaty"
-
-msgid "Bank Wire"
-msgstr "Przelew bankowy"
-
-msgid "Credit Card"
-msgstr "Karta kredytowa"
-
 msgid "Credit/Debit Card"
 msgstr "Karta kredytowa/debetowa"
+
+msgid "Direct Debit"
+msgstr "Polecenie zapłaty"
 
 msgid "Hide total giving from others."
 msgstr "Nie pokazuj innym ile łącznie przekazuję."
@@ -2817,10 +2746,6 @@ msgstr "Wybierz lub wprowadź kwotę:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "Cała kwota płatności zostanie natychmiast przekazana na konta {payment_provider} {recipient_names}."
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay nie przechowuje już pieniędzy w portfelach, cała kwota płatności trafi natychmiast na konto {payment_provider} {recipient_name}."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Cała kwota płatności zostanie natychmiastowo przekazana na konto {payment_provider} {recipient_name}."
@@ -3664,12 +3589,6 @@ msgstr "Nadal masz pieniądze na swoim koncie Liberapay, prosimy o wybranie spos
 msgid "Close Account"
 msgstr "Zamknij konto"
 
-msgid "Try Again Later"
-msgstr "Spróbuj ponownie później"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Przykro nam, ale trwa właśnie dzień wypłaty (payday) i nie możemy zamykać kont podczas tego procesu. Spróbuj ponownie za kilka godzin."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Masz w portfelu {0}. Co chcesz z tym zrobić?"
@@ -3683,9 +3602,6 @@ msgstr "Przekaż darowiznę dla Liberapay"
 
 msgid "This option is recommended for small amounts."
 msgstr "Ta opcja jest zalecana do małych kwot."
-
-msgid "Refund it to my card or bank account"
-msgstr "Zwróć na moją kartę lub konto bankowe"
 
 msgid "Withdraw it to my bank account"
 msgstr "Przelej na moje konto bankowwe"
@@ -3891,241 +3807,6 @@ msgstr "zwrot anonimowej darowizny"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "zapłata za {link_open}wydatek #{invoice_id}{link_close} dla {payee}"
 
-msgid "Adding Money"
-msgstr "Dodawanie pieniędzy"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Twoje darowizny są pokrywane przez Twoje przychody: otrzymujesz {income} i oddajesz {donations_amount} (co tydzień)."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Twoje darowizny w {currency} są pokrywane przez Twoje przychody: otrzymujesz {income} i oddajesz {donations_amount} (co tydzień)."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "Nie zezwalamy na dodawanie pieniędzy, jeśli Twoje darowizny są pokryte Twoim przychodem. Jeśli stanowi to dla Ciebie kłopot, prosimy o kontakt z support@liberapay.com i wyjaśnienie dlaczego."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Twoje darowizny będą pokryte jeszcze przez tydzień."
-msgstr[1] "Twoje darowizny będą pokryte przez {n} tygodnie."
-msgstr[2] "Twoje darowizny będą pokryte przez {n} tygodni."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Twoje darowizny w {currency} mogą zostać opłacone tylko za następny tydzień."
-msgstr[1] "Twoje darowizny w {currency} mogą zostać opłacone tylko za {n} następne tygodnie."
-msgstr[2] "Twoje darowizny w {currency} mogą zostać opłacone tylko za {n} następnych tygodni."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Musisz przesłać pieniądze do Twojego portfela by ufundować Twoje darowizny."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Musisz dodać pieniądze do portfela, aby fundować darowizny w {currency}."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "Masz oczekującą płatność {payment_method} na kwotę {money_amount}. {link_open}Szczegóły{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "Wybierz metodę płatności aby dodać pieniądze:"
-
-msgid "Easy and instantaneous"
-msgstr "Łatwe i natychmiastowe"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "Opłaty: {0}% + {1}"
-
-msgid "To an account in Europe"
-msgstr "Na konto w Europie"
-
-msgid "Cheapest for small amounts¹"
-msgstr "Najtańsza opcja dla niewielkich kwot¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "Tańszy¹, ale mniej poręczny"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "Opłata: {0}%"
-
-msgid "Best for regular payments"
-msgstr "Najlepsza opcja dla regularnych płatności"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Nie ustawiłeś jeszcze żadnych darowizn. Gdy tylko to zrobisz, zostaniesz poproszony o dodanie pieniędzy do Twojego konta."
-
-msgid "About Fees"
-msgstr "O opłatach"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "Opłaty za transakcje są pobierane przez podmioty obsługujące dla nas płatności, Liberapay jest finansowane za pomocą darowizn przekazywanych {0}na jego własne konto{1}."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Chyba, że Twój bank także pobierze opłatę od transakcji. My nie mamy na to wpływu ani możliwości tego przewidzenia."
-
-msgid "The email has been sent."
-msgstr "E-mail został wysłany."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Dlaczego próbujesz dodać do Twojego portfela więcej pieniędzy? Jeśli masz ku temu dobry powód prosimy o kontakt z support@liberapay.com."
-
-msgid "This bank wire has been canceled."
-msgstr "Przelew bankowy został anulowany."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "Próba sporządzenia przelewu bankowego w wysokości {0} zakończyła się niepowodzeniem. Treść błędu: {1}"
-
-msgid "Email me this information"
-msgstr "Wyślij mi tę informację e-mailem"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Kody referencyjne przelewów bankowych nie są wielokrotnego użytku. Nie jest jeszcze możliwa konfiguracja regularnych przelewów bankowych do Liberapay."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Wyślemy Ci e-mail, gdy tylko dowiemy się, czy Twoja płatność się powiodła czy też nie."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "Zablokowałeś niektóre albo wszystkie powiadomienia e-mail na temat przelewów bankowych."
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "Zmieniłeś zdanie? Anuluj płatność, aby nie otrzymać niepotrzebnie, po miesiącu, informacji o nieudanej płatności:"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Dodanie pieniędzy do Liberapay za pomocą przelewu bankowego wymaga opłaty w wysokości {0}%, pobieranej przez podmiot obsługujący dla nas płatności."
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "Wybierz sugerowaną kwotę lub wprowadź swoją własną."
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0} (włącznie z opłatą w wysokości {2}%)"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "Twoje darowizny będą pokryte przez {n} tydzień"
-msgstr[1] "Twoje darowizny będą pokryte przez {n} tygodnie"
-msgstr[2] "Twoje darowizny będą pokryte przez {n} tygodni"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "Twoje darowizny będą pokryte przez {n} tydzień ({0})"
-msgstr[1] "Twoje darowizny będą pokryte przez {n} tygodnie ({0})"
-msgstr[2] "Twoje darowizny będą pokryte przez {n} tygodni ({0})"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n} miesiąc"
-msgstr[1] "{n} miesiące"
-msgstr[2] "{n} miesięcy"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "Zapisane informacje o karcie nie są wystarczające, aby ukończyć płatność. Wprowadź pełne informacje o karcie aby spróbować ponownie."
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} zostało pobrane z Twojej karty kredytowej, {1} trafiło do Twojego portfela Liberapay, a {2} pokryło opłaty obsługi transakcji."
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Próba pobrania {0} z Twojej karty kredytowej nie powiodła się. Treść błędu: {1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "Dodanie pieniędzy do Liberapay za pomocą karty kredytowej/debetowej wymaga opłaty w wysokości {0}% + {1}."
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "Płatności kartą są natychmiastowe, staramy się pobrać podaną kwotę pieniędzy natychmiast po użyciu poniższego przycisku „Przejdź”."
-
-msgid "Billing Address (optional)"
-msgstr "Adres rozliczeniowy (nieobowiązkowy)"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "Płatności kartą mogą być czasem odrzucone, jeżeli nie podano adresu rozliczeniowego, lub nie jest on zgodny z adresem posiadacza karty. Według naszej wiedzy, obecnie jedynie karty wydane w Stanach Zjednoczonych, Wielkiej Brytanii i Australii są sprawdzane pod tym kątem."
-
-msgid "Saved address:"
-msgstr "Zapisany adres:"
-
-msgid "Input the billing address"
-msgstr "Wprowadź adres rozliczeniowy"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "Uwaga: niektóre z informacji które podałeś na temat karty wydają się być niepoprawne. Kontynuować?"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "Żądanie nie powiodło się. Upewnij się czy posiadasz aktualną przeglądarkę internetową oraz czy żadne rozszerzenie nie blokuje żądań (np. NoScript) i spróbuj ponownie."
-
-msgid "Card number"
-msgstr "Numer karty"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "Główny numer na karcie, od 8 do 19 cyfr"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Podany numer karty wydaje się być niepoprawny, czy na pewno wpisałeś wszystko poprawnie?"
-
-msgid "This card number is invalid."
-msgstr "Podany numer karty jest niepoprawny."
-
-msgid "MM/YY"
-msgstr "MM/RR"
-
-msgid "Expiration date (4 digits)"
-msgstr "Data ważności (4 cyfry)"
-
-msgid "This expiration date is invalid."
-msgstr "Podana data ważności jest niepoprawna."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "Kod weryfikacyjny, zazwyczaj 3 cyfry umieszczone na odwrocie karty"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Podany kod weryfikacyjny wydaje się być niepoprawny, czy na pewno wpisałeś wszystko poprawnie?"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "Dane Twojej karty są przesyłane bezpośrednio do naszego partnera obsługującego płatności, za pomocą szyfrowanego połączenia."
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "Polecenia zapłaty w {currency} nie są dostępne w {country}."
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "Twoje konto bankowe zostało obciążone na kwotę {0}, {1} zostało przesłane do Twojego portfela Liberapay, a {2} pokryło opłaty obsługi transakcji."
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "Polecenie zapłaty w wysokości {0} zostało zainicjowane. Jeśli transfer się powiedzie wtedy {1} pojawi się w Twoim portfelu Liberapay, a {2} pokryje opłaty obsługi transakcji."
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "Dodanie pieniędzy do Liberapay za pomocą polecenia zapłaty wymaga opłaty w wysokości {0}."
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "Użyj innego konta"
-
-msgid "This IBAN is invalid."
-msgstr "Podany numer IBAN jest niepoprawny."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Poniższe pola dotyczą legalnego właściciela konta bankowego."
-
 msgid "The amount cannot be zero."
 msgstr "Kwota nie może wynosić zero."
 
@@ -4148,17 +3829,6 @@ msgstr "Próba przesłania {0} na Twoje konto bankowe nie powiodła się. Treś�
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Masz {0} w portfelu Liberapay."
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "Niestety nie możesz jeszcze wypłacić pieniędzy, ponieważ nadal znajdują się w kwarantannie."
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "Z czego, {0} jest możliwe do wypłaty, a reszta nadal znajduje się w kwarantannie."
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "Trzymamy pieniądze w kwarantannie przez {0} by chronić się przed oszustwami z wykorzystaniem kart kredytowych, przepraszamy za niedogodności."
-
 msgid "Which currency do you want to withdraw?"
 msgstr "W której walucie chcesz wypłacić pieniądze?"
 
@@ -4175,6 +3845,9 @@ msgstr "Wypłacanie dolarów amerykańskich kosztuje {0} za każdy transfer, nie
 
 msgid "Bank account"
 msgstr "Konto bankowe"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Numer instytucji (Routing Number)"
@@ -4197,6 +3870,9 @@ msgstr "Kod oddziału (Branch Code)"
 msgid "Sort Code"
 msgstr "Numer rozliczeniowy (Sort Code)"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Business Identifier Code)"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
 
@@ -4212,6 +3888,12 @@ msgstr "Wielka Brytania"
 msgid "Other"
 msgstr "Inne"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (międzynarodowy numer rachunku bankowego)"
+
+msgid "This IBAN is invalid."
+msgstr "Podany numer IBAN jest niepoprawny."
+
 msgid "checking"
 msgstr "bieżące"
 
@@ -4226,6 +3908,9 @@ msgstr "dozwolone są tylko litery (a-z) i cyfry (0-9)"
 
 msgid "This account number is invalid."
 msgstr "Podany numer konta jest niepoprawny."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Poniższe pola dotyczą legalnego właściciela konta bankowego."
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "Konto bankowe musi należeć do Ciebie, wysyłanie pieniędzy innym osobom jest niedozwolone."
@@ -4599,21 +4284,6 @@ msgstr "Logo Liberapay jest zawarte w czcionce {fa_link_start}Fork Awesome{link_
 
 msgid "You need to log in to access this page."
 msgstr "Musisz się zalogować by zobaczyć tę stronę."
-
-msgid "Money"
-msgstr "Pieniądze"
-
-msgid "Quarantine"
-msgstr "Kwarantanna"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "Oznacza to, że nie możesz przelać pieniędzy znajdujących się w kwarantannie z Twojego konta Liberapay na konto bankowe."
-
-msgid "Safety"
-msgstr "Bezpieczeństwo"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "Gwarantujemy, że pieniądze które nam powierzasz nie zostaną utracone w wynika bankructwa, zarówno naszego jak i podmiotu trzeciego do którego je delegujemy."
 
 msgid "Here is a list of differences between them:"
 msgstr "Oto lista różnic pomiędzy nimi:"

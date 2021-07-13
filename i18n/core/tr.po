@@ -266,16 +266,6 @@ msgstr "Oturum aç"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Lütfen bağlantının yalnızca {0} için geçerli olduğunu unutmayın."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "Liberapay cüzdanınıza yükleme yapma zamanı"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "Liberapay cüzdanınızda {0} kaldı, ama önümüzdeki hafta bağışlarınızı karşılayabilmek için {1} ihtiyacınız var."
-
-msgid "Add money"
-msgstr "Para ekle"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Liberapay bağış yenileme: geçerli bir ödeme aracı yok"
 
@@ -380,70 +370,6 @@ msgstr "Parolanızın gizliliğinin bozulduğunu saptadık: bir veya daha fazla 
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "{link_start}Parolanızı şimdi değiştirmelisiniz{link_end}."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Liberapay cüzdanınıza banka havalesi yapın"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Ödemeleri almaya hazırız. Lütfen tam olarak {0} miktarını takip eden hesaba aşağıdaki referans koduyla beraber gönderin böylece paranın sizden gelmiş olduğunu bileceğiz:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Uluslararası Banka Hesap Numarası)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Banka Tanımlama Kodu)"
-
-msgid "Wire Reference Code"
-msgstr "Havale Referans Kodu"
-
-msgid "Destination Country"
-msgstr "Hedef Ülke"
-
-msgid "Bank Account Owner Name"
-msgstr "Banka Hesabı Sahibinin Adı"
-
-msgid "Bank Account Owner Address"
-msgstr "Banka Hesabı Sahibinin Adresi"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Liberapay cüzdanınızın banka havalesi süresi doldu"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "{date} tarihinde {money_amount} tutarindaki parayı banka hesabınızdan Liberapay cüzdanınıza aktaracağınızı belirtmiştiniz, fakat para hiç ulaşmadı."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "Eğer yapmayı unuttuysanız, yeni bir ödeme başlatabilirsiniz:"
-
-msgid "Try again"
-msgstr "Yeniden deneyin"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Liberapay cüzdanınıza banka havalesi başarısız oldu"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Banka hesabınızdan {0} havale girişimi aşağıdaki hata mesajını vererek başarısız oldu:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Aşağıdaki bağlantıya tıklayarak, belki de başka bir ödeme yöntemiyle, yeniden deneyebilirsiniz:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Liberapay cüzdanınıza banka havalesi başarılı"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Banka hesabınızdan yaptığınız havalenin başarılı olduğunu bildirmekten mutluluk duyuyoruz. Gönderdiğiniz {0} tutarından {1} Liberapay cüzdanınıza gitti ve {2} işlem ücretleri için ödendi."
-
-msgid "View receipt"
-msgstr "Makbuzu görüntüle"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Liberapay cüzdanına otomatik ödeme talimatınız başarısız oldu"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Liberapay cüzdanınıza otomatik ödeme talimatı başarılı"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "{money_amount} tutarındaki ödemenize itiraz edildi"
@@ -525,6 +451,12 @@ msgstr "{date} tarihinde başlatılan {money_amount} ödemesi başarısız oldu.
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "{provider} ödeme işleyicisi tarafından sağlanan hata mesajı:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "Aşağıdaki bağlantıya tıklayarak, belki de başka bir ödeme yöntemiyle, yeniden deneyebilirsiniz:"
+
+msgid "Try again"
+msgstr "Yeniden deneyin"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -608,6 +540,9 @@ msgstr "{date} tarihinde yapılan {money_amount} miktarındaki ödeme başarıl�
 
 msgid "Thank you for this donation!"
 msgstr "Bağış için teşekkürler!"
+
+msgid "View receipt"
+msgstr "Makbuzu görüntüle"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Liberapay aracılığıyla yapılan bağışları kaçırıyorsunuz"
@@ -941,17 +876,11 @@ msgstr "Kuruluş"
 msgid "Team"
 msgstr "Takım"
 
-msgid "Direct Debit"
-msgstr "Otomatik Ödeme"
-
-msgid "Bank Wire"
-msgstr "Banka Havalesi"
-
-msgid "Credit Card"
-msgstr "Kredi Kartı"
-
 msgid "Credit/Debit Card"
 msgstr "Kredi/Banka Kartı"
+
+msgid "Direct Debit"
+msgstr "Otomatik Ödeme"
 
 msgid "Hide total giving from others."
 msgstr "Toplam verileni diğerlerinden gizle."
@@ -2787,10 +2716,6 @@ msgstr "Lütfen bir ödeme tutarı seçin veya girin:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "Ödemenizin tamamı hemen {recipient_names} kişisinin {payment_provider} hesabına gidecek."
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay artık parayı cüzdanlarda saklamıyor, ödemenizin tamamı hemen {recipient_name} kişisinin {payment_provider} hesabına gidecek."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Ödemenizin tamamı hemen {recipient_name} kişisinin {payment_provider} hesabına gidecek."
@@ -3625,12 +3550,6 @@ msgstr "Bu Liberapay hesabında hala paranız var, lütfen aşağıdan bir ödem
 msgid "Close Account"
 msgstr "Hesabı Kapat"
 
-msgid "Try Again Later"
-msgstr "Daha Sonra Deneyin"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Üzgünüz, şu anda ödeme günü çalıştırıyoruz ve ödeme günü çalışırken hesapları kapatmak için hazır değiliz. Lütfen birkaç saat içinde tekrar gelin."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Cüzdanınızda {0} var. Onunla ne yapmalıyız?"
@@ -3644,9 +3563,6 @@ msgstr "Liberapay'e bağışla"
 
 msgid "This option is recommended for small amounts."
 msgstr "Bu seçenek küçük tutarlar için tavsiye edilir."
-
-msgid "Refund it to my card or bank account"
-msgstr "Kartıma veya banka hesabıma iade et"
 
 msgid "Withdraw it to my bank account"
 msgstr "Banka hesabıma aktar"
@@ -3848,236 +3764,6 @@ msgstr "anonim bağışın iadesi"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{payee} için {link_open}gider #{invoice_id}{link_close} ödemesi"
 
-msgid "Adding Money"
-msgstr "Para Ekleme"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Bağışlarınız geliriniz tarafından finanse ediliyor: {income} alıyorsuz ve {donations_amount} geri veriyorsunuz (haftalık)."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "{currency} cinsinden bağışlarınız geliriniz tarafından finanse ediliyor: {income} alıyorsuz ve {donations_amount} geri veriyorsunuz (haftalık)."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "Bağışlarınız zaten geliriniz tarafından finanse ediliyorsa para eklemeye izin vermiyoruz. Bu sizin için bir sorunsa, lütfen support@liberapay.com adresine nedenini açıklayan bir e-posta gönderin."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Bağışlarınız yalnızca bir hafta daha finanse edilir."
-msgstr[1] "Bağışlarınız yalnızca {n} hafta daha finanse edilir."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "{currency} cinsinden bağışlarınız yalnızca bir hafta daha finanse ediliyor."
-msgstr[1] "{currency} cinsinden bağışlarınız {n} hafta daha finanse ediliyor."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Bağışlarınızı finanse etmek için cüzdanınıza para aktarmanız gerekiyor."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Bağışlarınızı {currency} olarak finanse etmek için cüzdanınıza para aktarmanız gerekir."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "{money_amount} tutarında bekleyen bir {payment_method} ödemeniz var. {link_open}Ayrıntılar{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "Para eklemek için lütfen bir ödeme yöntemi seçin:"
-
-msgid "Easy and instantaneous"
-msgstr "Kolay ve anında"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "Ücretler: %{0} + {1}"
-
-msgid "To an account in Europe"
-msgstr "Avrupa'daki bir hesaba"
-
-msgid "Cheapest for small amounts¹"
-msgstr "Küçük tutarlar için en ucuzu¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "Daha ucuz¹ ama daha az kullanışlı"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "Ücret: %{0}"
-
-msgid "Best for regular payments"
-msgstr "Düzenli ödemeler için en iyisi"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Henüz herhangi bir bağış oluşturmadınız, bunu yaptığınızda hesabınıza para eklemeniz istenecek."
-
-msgid "About Fees"
-msgstr "Ücretler Hakkında"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "Ücretler ödeme işleyicilerimize aittir, Liberapay yalnızca {0}kendi hesabına{1} yapılan bağışlarla finanse edilmektedir."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Bankanız da havale için sizden ücret almadığı sürece. Bunun üzerinde hiçbir denetimimiz veya görme imkanımız yok."
-
-msgid "The email has been sent."
-msgstr "E-posta gönderildi."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Neden cüzdanınıza daha fazla para koymaya çalışıyorsunuz? Meşru bir nedeniniz varsa lütfen support@liberapay.com ile iletişime geçin."
-
-msgid "This bank wire has been canceled."
-msgstr "Bu banka havalesi iptal edildi."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "{0} tutarında bir banka havalesi hazırlama girişimi başarısız oldu. Hata mesajı: {1}"
-
-msgid "Email me this information"
-msgstr "Bu bilgileri bana e-posta ile gönder"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Havale referans kodları yeniden kullanılabilir değildir. Banka hesabınızdan Liberapay'e tekrarlayan bir havale ayarlamak henüz mümkün değil."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Ödemenizin başarılı veya başarısız olduğunu öğrendikten sonra size bir e-posta göndereceğiz."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "Banka havaleleriyle ilgili e-posta bildirimlerinin bir kısmını veya tamamını devre dışı bıraktınız."
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "Fikrinizi mi değiştirdiniz? Önümüzdeki ay hata bildirimi almamak için ödemeyi iptal edin:"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Liberapay'e banka havalesi yoluyla para eklemek, ödeme işleyicimizden kaynaklanan %{0} tutarında bir ücrete tabidir."
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "Lütfen önceden hesaplanmış bir tutar seçin veya özel bir tane girin."
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0} (%{2} ücret dahil)"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "Bağışlarınız {n} hafta boyunca finanse edilecek"
-msgstr[1] "Bağışlarınız {n} hafta boyunca finanse edilecek"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "Bağışlarınız {n} hafta ({0}) boyunca finanse edilecek"
-msgstr[1] "Bağışlarınız {n} hafta ({0}) boyunca finanse edilecek"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n} ay"
-msgstr[1] "{n} ay"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "Kaydedilen kart verileri ödemeyi tamamlamak için yeterli değildi, lütfen yeniden denemek için tam kart bilgilerinizi girin."
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} kredi kartınızdan alındı, {1} Liberapay cüzdanınıza gitti, {2} işlem ücretleri için ödendi."
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Kredi kartınızdan {0} alma girişimi başarısız oldu. Hata mesajı: {1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "Liberapay'e kredi/banka kartıyla para eklemek %{0} + {1} tutarında bir ücrete tabidir."
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "Kart ödemeleri anlıktır ve aşağıdaki \"Devam et\" düğmesini tıkladığınız anda seçtiğiniz tutarın tamamını çekmeye çalışacağız."
-
-msgid "Billing Address (optional)"
-msgstr "Fatura Adresi (isteğe bağlı)"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "Bir fatura adresi sağlanmadığında veya kart sahibinin kayıtlı adresiyle eşleşmediğinde kart ödemeleri bazen reddedilebilir. Bildiğimiz kadarıyla bu durum yalnızca Amerika Birleşik Devletleri, Birleşik Krallık ve Avustralya'da verilen kartlar için geçerlidir."
-
-msgid "Saved address:"
-msgstr "Kayıtlı adres:"
-
-msgid "Input the billing address"
-msgstr "Fatura adresini girin"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "Uyarı: Girdiğiniz kart verilerinin bazıları geçersiz görünüyor. Yine de devam edilsin mi?"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "İstek başarısız oldu. Lütfen tarayıcınızın güncel olduğundan emin olun ve istekleri engelleyen tüm uzantıları (örn. NoScript) devre dışı bırakın, ardından tekrar deneyin."
-
-msgid "Card number"
-msgstr "Kart numarası"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "Kart üzerindeki ana numara, 8 ile 19 basamak arasında"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Bu kart numarası geçersiz görünüyor, hata yapmadığınızdan emin misiniz?"
-
-msgid "This card number is invalid."
-msgstr "Bu kart numarası geçersiz."
-
-msgid "MM/YY"
-msgstr "AA/YY"
-
-msgid "Expiration date (4 digits)"
-msgstr "Son kullanma tarihi (4 basamak)"
-
-msgid "This expiration date is invalid."
-msgstr "Bu son kullanma tarihi geçersiz."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "Doğrulama kodu, genellikle kartın arkasında bulunan 3 tane rakam"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Bu doğrulama kodu geçersiz görünüyor, hata yapmadığınızdan emin misiniz?"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "Kart verileriniz şifreli bir bağlantı aracılığıyla doğrudan ödeme ortağımızın sistemine gönderilir."
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "{country}'den {currency} cinsinden otomatik ödeme mümkün değil."
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} banka hesabınızdan çekildi, {1} Liberapay cüzdanınıza gitti, {2} işlem ücretleri için ödendi."
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "{0} tutarında bir otomatik ödeme başlatıldı. Aktarım başarılı olursa {1} Liberapay cüzdanınıza ulaşacak ve {2} ücretler için ödenecek."
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "Liberapay'e otomatik ödeme yoluyla para eklemek {0} tutarında bir ücrete tabidir."
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "Başka bir hesap kullan"
-
-msgid "This IBAN is invalid."
-msgstr "Bu IBAN geçersiz."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Aşağıdaki alanlar banka hesabının yasal sahibi ile ilgilidir."
-
 msgid "The amount cannot be zero."
 msgstr "Tutar sıfır olamaz."
 
@@ -4100,17 +3786,6 @@ msgstr "Banka hesabınıza {0} gönderme girişimi başarısız oldu. Hata mesaj
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Liberapay cüzdanınızda {0} var."
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "Maalesef bu parayı henüz çekemezsiniz, hala karantinada."
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "Bunun dışında {0} çekilebilir, geri kalanı hala karantinada."
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "Kendimizi kredi kartı sahtekarlığından korumak için parayı {0} süresince karantinaya alıyoruz, verdiğimiz rahatsızlıktan dolayı özür dileriz."
-
 msgid "Which currency do you want to withdraw?"
 msgstr "Hangi para birimini çekmek istiyorsunuz?"
 
@@ -4127,6 +3802,9 @@ msgstr "Hedef ülke ne olursa olsun ABD doları çekmek aktarım başına {0} tu
 
 msgid "Bank account"
 msgstr "Banka hesabı"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Yönlendirme Numarası"
@@ -4149,6 +3827,9 @@ msgstr "Şube Kodu"
 msgid "Sort Code"
 msgstr "Banka Kodu (Sort Code)"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Banka Tanımlama Kodu)"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
 
@@ -4164,6 +3845,12 @@ msgstr "Birleşik Krallık"
 msgid "Other"
 msgstr "Diğer"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (Uluslararası Banka Hesap Numarası)"
+
+msgid "This IBAN is invalid."
+msgstr "Bu IBAN geçersiz."
+
 msgid "checking"
 msgstr "cari"
 
@@ -4178,6 +3865,9 @@ msgstr "yalnızca harflere (a-z) ve rakamlara (0-9) izin verilir"
 
 msgid "This account number is invalid."
 msgstr "Bu hesap numarası geçersiz."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Aşağıdaki alanlar banka hesabının yasal sahibi ile ilgilidir."
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "Banka hesabı size ait olmalıdır, üçüncü taraflara para gönderilmesine izin verilmez."
@@ -4547,21 +4237,6 @@ msgstr "Liberapay logosu {fa_link_start}Fork Awesome{link_end} yazı tipine iki 
 
 msgid "You need to log in to access this page."
 msgstr "Bu sayfaya erişmek için oturum açmanız gerekir."
-
-msgid "Money"
-msgstr "Para"
-
-msgid "Quarantine"
-msgstr "Karantina"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "Somut olarak, karantinaya alınan parayı Liberapay hesabınızdan banka hesabınıza çekmeniz engellenir."
-
-msgid "Safety"
-msgstr "Emniyet"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "Nezaretimize koyduğunuz paranın, bizi veya paranın velayetini devretmiş olduğumuz üçüncü bir kişiyi etkilemesine bakılmaksızın, iflas durumunda kaybolmayacağını garanti ederiz."
 
 msgid "Here is a list of differences between them:"
 msgstr "İşte aralarındaki farkların bir listesi:"

@@ -266,16 +266,6 @@ msgstr "Kirjautuminen"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Huomioi, että tämä linkki toimii vain {0} ajan."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "On aika panna rahaa Liberapay-lompakkoosi"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "Liberapay-lompakossasi on jäljellä {0}, mutta seuraavan viikon lahjoituksiisi tarvitaan vähintään {1}."
-
-msgid "Add money"
-msgstr "Katteen lisäys"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Liberapay-lahjoituksen uusiminen: ei voimassaolevaa maksuvälinettä"
 
@@ -380,70 +370,6 @@ msgstr "Salasanasi on turvaton. Se esiintyy monissa julki vuotaneissa salasanati
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Sinun tulisi pikimmiten {link_start}vaihtaa salasanasi{link_end}."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Siirrä rahaa Liberapay-lompakkoosi pankkisiirrolla"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Olemme valmiita vastaanottamaan rahat. Lähetä tarkalleen {0} seuraavalle tilille käyttäen alla mainittua viitekoodia, jotta tiedämme, että raha tuli sinulta:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Kansainvälinen pankkitilinumero)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Pankkitunnistekoodi)"
-
-msgid "Wire Reference Code"
-msgstr "Pankkisiirron viite (Wire Reference Code)"
-
-msgid "Destination Country"
-msgstr "Kohdemaa"
-
-msgid "Bank Account Owner Name"
-msgstr "Pankkitilin haltijan nimi"
-
-msgid "Bank Account Owner Address"
-msgstr "Pankkitilin haltijan osoite"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Pankkisiirto Liberapay-lompakkoosi on vanhentunut"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "{date} ilmoitit, että aiot siirtää {money_amount} pankkitililtäsi Liberapay-lompakkoosi, mutta rahaa ei koskaan saapunut."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "Jos unohdit tehdä siirron, voit käynnistää uuden maksun:"
-
-msgid "Try again"
-msgstr "Yritä uudelleen"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Pankkisiirto Liberapay-lompakkoosi on epäonnistunut"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Yritys siirtää {0} pankkitililtäsi epäonnistui. Virheilmoitus:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Voit yrittää uudelleen – käyttäen mahdollisesti eri maksumenetelmää – klikkaamalla alla olevaa linkkiä:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Pankkisiirto Liberapay-lompakkoosi on onnistunut"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Iloksemme voimme ilmoittaa, että siirto pankkitilitäsi on onnistunut. Lähetetty summa oli {0}. Tästä {1} meni Liberapay-lompakkoosi, ja {2} meni rahansiirtokuluihin."
-
-msgid "View receipt"
-msgstr "Näytä kuitti"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Suoraveloitus Liberapay-lompakkoosi on epäonnistunut"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Suoraveloitus Liberapay-lompakkoosi on onnistunut"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "{money_amount} maksusi on riitautettu"
@@ -525,6 +451,12 @@ msgstr "{date} toimeenpanemasi {money_amount} maksu on epäonnistunut."
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Maksunkäsittelijän ({provider}) virheilmoitus on:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "Voit yrittää uudelleen – käyttäen mahdollisesti eri maksumenetelmää – klikkaamalla alla olevaa linkkiä:"
+
+msgid "Try again"
+msgstr "Yritä uudelleen"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -608,6 +540,9 @@ msgstr "{date} aloittamasi {money_amount} maksu onnistunut."
 
 msgid "Thank you for this donation!"
 msgstr "Kiitos tästä lahjoituksesta!"
+
+msgid "View receipt"
+msgstr "Näytä kuitti"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Lahjoitusmahdollisuuksissasi on puutteita"
@@ -941,17 +876,11 @@ msgstr "Järjestö"
 msgid "Team"
 msgstr "Ryhmä"
 
-msgid "Direct Debit"
-msgstr "Suoraveloitus"
-
-msgid "Bank Wire"
-msgstr "Pankkisiirto"
-
-msgid "Credit Card"
-msgstr "Luottokortti"
-
 msgid "Credit/Debit Card"
 msgstr "Credit/Debit -kortti"
+
+msgid "Direct Debit"
+msgstr "Suoraveloitus"
 
 msgid "Hide total giving from others."
 msgstr "Piilota annettujen lahjoitusten summa muilta."
@@ -2787,10 +2716,6 @@ msgstr "Valitse tai syötä maksun summa:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "Koko maksusumma lähetetään suoraan vastaanottajien {recipient_names} {payment_provider}-tileille."
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay ei enää talleta rahaa “lompakoissa”, vaan koko rahasumma menee samantien vastaanottajan {recipient_name} {payment_provider}-tilille."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Koko rahasumma menee välittömästi vastaanottajan {recipient_name} {payment_provider}-tilille."
@@ -3625,12 +3550,6 @@ msgstr "Tällä Liberapay-tililläsi on yhä rahaa. Valitse alta jokin palautusm
 msgid "Close Account"
 msgstr "Sulje tili"
 
-msgid "Try Again Later"
-msgstr "Yritä myöhemmin uudelleen"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Pahoittelemme, mutta meillä on juuri nyt käynnissä Maksupäivä. Maksupäivän aikana emme voi sulkea tilejä. Yritä uudelleen muutaman tunnin kuluttua."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Lompakossasi on {0}. Mitä meidän pitäisi tehdä sen kanssa?"
@@ -3644,9 +3563,6 @@ msgstr "Lahjoita se Liberapaylle"
 
 msgid "This option is recommended for small amounts."
 msgstr "Tätä suositellaan pienien summien tapauksessa."
-
-msgid "Refund it to my card or bank account"
-msgstr "Hyvitä kortilleni tai pankkitililleni"
 
 msgid "Withdraw it to my bank account"
 msgstr "Nosta pankkitililleni"
@@ -3848,236 +3764,6 @@ msgstr "nimettömän lahjoituksen palautus"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{link_open}laskun #{invoice_id}{link_close} maksu käyttäjälle {payee}"
 
-msgid "Adding Money"
-msgstr "Rahan lisääminen"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Lahjoituksesi rahoitetaan tuloillasi: Saat {income} ja annat eteenpäin {donations_amount} (viikossa)."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "{currency}-määräiset lahjoituksesi rahoitetaan tuloillasi: Saat {income} ja annat eteenpäin {donations_amount} (viikossa)."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "Kun lahjoituksesi saavat katteen jo tuloistasi, emme salli rahan lisäämistä. Jos tämä ei menettele, selitä meille miksi. Sähköposti: support@liberapay.com (englanniksi)."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Lahjoituksesi ovat voimassa enää vain viikon."
-msgstr[1] "Lahjoituksesi ovat voimassa vielä {n} viikkoa."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Lahjoituksesi valuutassa {currency} ovat voimassa enää vain viikon."
-msgstr[1] "Lahjoituksesi valuutassa {currency} ovat voimassa vielä {n} viikkoa."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Sinun tulee siirtää rahaa lompakkoosi, jotta lahjoituksillasi olisi katetta."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Sinun tulee siirtää rahaa lompakkoosi, jotta {currency}-määräisillä lahjoituksillasi olisi katetta."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "Sinulla on jonossa {money_amount} arvoinen {payment_method}-maksu. {link_open}Lisätietoja{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "Valitse maksumenetelmä rahan lisäämiseksi:"
-
-msgid "Easy and instantaneous"
-msgstr "Helppo ja välitön"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "Kulut: {0} % + {1}"
-
-msgid "To an account in Europe"
-msgstr "Eurooppalaiselle tilille"
-
-msgid "Cheapest for small amounts¹"
-msgstr "Halvin pienille määrille¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "Halvempi¹ mutta kömpelö"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "Kulut: {0} %"
-
-msgid "Best for regular payments"
-msgstr "Paras säännöllisiin maksuihin"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Et ole vielä päättänyt lahjoittaa kenellekään. Sitten kun lahjoitat, sinua pyydetään lisäämään rahaa tilillesi."
-
-msgid "About Fees"
-msgstr "Kuluista"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "Nämä kulut koskevat maksunkäsittelyjärjestelmiämme. Liberapay itse saa rahoituksensa pelkästään lahjoituksista {0}omalle tililleen{1}."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Paitsi jos oma pankkisi veloittaa sinua siirrosta. Meillä ei ole hallintavaltaa siihen eikä edes mahdollisuutta nähdä kyseisiä kustannuksia."
-
-msgid "The email has been sent."
-msgstr "Sähköposti on lähetetty."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Miksi yrität lisätä lompakkoosi rahaa? Kirjoita meille (support@liberapay.com, englanniksi), jos sinulla on pätevä syy."
-
-msgid "This bank wire has been canceled."
-msgstr "Pankkisiirto on peruuntunut."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "Pankkisiirron {0} valmistelu on epäonnistunut. Virheilmoitus: {1}"
-
-msgid "Email me this information"
-msgstr "Lähetä minulle nämä tiedot sähköpostitse"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Pankkiviitteet (wire reference code) ovat kertakäyttöisiä. Ei ole vielä mahdollista järjestää toistuvaa siirtoa pankkitililtäsi Liberapay-palveluun."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Lähetämme sähköpostin sitten, kun tiedämme onko maksu onnistunut vai epäonnistunut."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "Olet kieltänyt tietyt pankkisiirtoja koskevat sähköposti-ilmoitukset."
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "Muutitko mieltäsi? Peruuta maksu, jottet saisi ensi kuussa virheilmoitusta:"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Rahan lisääminen Liberapay-lompakkoon pankkisiirrolla aiheuttaa {0} % kulun veloituksen maksunkäsittelijältämme."
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "Valitse jokin näistä määristä, tai syötä vapaavalintainen määrä."
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0} (sisältää {2}% kulun veloituksen)"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "Lahjoituksillesi on katetta yhdeksi viikoksi"
-msgstr[1] "Lahjoituksillesi on katetta {n} viikoksi"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "kääk"
-msgstr[1] "Lahjoituksillesi on katetta {n} viikoksi ({0})"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n} kuukausi"
-msgstr[1] "{n} kuukautta"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "Tallennetut korttitiedot olivat riittämättömät maksun suorittamiseksi. Täytä kaikki tiedot kortista ja yritä uudelleen."
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} nostettiin luottokortillasi. {1} meni Liberapay-lompakkoosi, ja {2} meni rahansiirtokuluihin."
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Yritys nostaa {0} luottokortiltasi on epäonnistunut. Virheilmoitus: {1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "Rahan lisääminen Liberapay-lompakkoon luottokortilla aiheuttaa {0} % + {1} kulun veloituksen maksunkäsittelijältämme."
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "Korttimaksut ovat välittömiä, ja yritämme lunastaa täyden valitsemasi rahasumman heti, kun klikkaat toimeksiantonappia alla."
-
-msgid "Billing Address (optional)"
-msgstr "Laskutusosoite (ei pakollinen)"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "Joskus korttimaksu saattaa päätyä hylätyksi, mikäli laskutusosoitetta ei ole syötetty, tai jos se ei täsmää kortinhaltijan tietoihin. Tietääkseemme tämä koskee vain USA:ssa, Yhdistyneessä Kuningaskunnassa sekä Australiassa myönnettyjä kortteja."
-
-msgid "Saved address:"
-msgstr "Tallennettu osoite:"
-
-msgid "Input the billing address"
-msgstr "Syötä laskutusosoite"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "Varoitus: osa syöttämistäsi korttitiedoista näyttää virheellisiltä. Jatketaanko silti?"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "Pyyntö epäonnistui. Varmista, että selaimesi on ajan tasalla, poista käytöstä pyyntöjä torjuvat laajennukset kuten NoScript, ja yritä uudestaan."
-
-msgid "Card number"
-msgstr "Kortin numero"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "Kortin päällä lukeva numerosarja, 8—19 numeroa"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Kortin numero näyttää virheelliseltä. Oletko varma, ettet kirjoittanut väärin?"
-
-msgid "This card number is invalid."
-msgstr "Kortin numero on virheellinen."
-
-msgid "MM/YY"
-msgstr "KK/VV"
-
-msgid "Expiration date (4 digits)"
-msgstr "Päättymisaika (4 numeroa)"
-
-msgid "This expiration date is invalid."
-msgstr "Päättymisaika on virheellinen."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "Tarkistuskoodi, yleensä 3 numeron sarja kortin toisella puolella"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Tarkistuskoodi vaikuttaa virheelliseltä. Oletko varma, ettet kirjoittanut väärin?"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "Korttisi tiedot lähetetään suoraan maksukumppanimme järjestelmään salatun yhteyden läpi."
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "{currency}-määräiset suoraveloitukset eivät ole mahdollisia maasta {country}."
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} on veloitettu pankkitililtäsi. {1} meni Liberapay-lompakkoosi, {2} meni rahansiirtokuluihin."
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "{0} suoraveloitus on käynnistetty. Jos siirto onnistuu, {1} saapuu Liberapay-lompakkoosi ja {2} menee kuluihin."
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "Rahan lisääminen Liberapay-lompakkoon suoraveloituksella aiheuttaa {0} % kulun veloituksen maksunkäsittelijältämme."
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "Käytä toista tiliä"
-
-msgid "This IBAN is invalid."
-msgstr "Tämä IBAN on virheellinen."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Seuraavat kentät koskevat pankkitilin laillista haltijaa."
-
 msgid "The amount cannot be zero."
 msgstr "Määrä ei voi olla nolla."
 
@@ -4100,17 +3786,6 @@ msgstr "Yritys lähettää {0} pankkitilillesi epäonnistui. Virheilmoitus: {1}"
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Liberapay-lompakossasi on {0}."
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "Valitettavasti et voi nostaa tätä rahaa vielä; se on yhä karanteenissa."
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "Tästä summasta {0} on nostettavissa. Loput ovat yhä karanteenissa."
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "Asetamme rahan karanteeniin suojellaksemme itseämme luottokorttihuijauksilta. Pahoittelemme tästä aiheutuvaa vaivaa. Karanteenin pituus on {0}."
-
 msgid "Which currency do you want to withdraw?"
 msgstr "Mitä valuuttaa haluat nostaa?"
 
@@ -4127,6 +3802,9 @@ msgstr "Yhdysvaltain dollarien nostaminen maksaa {0} siirtoa kohti kohdemaasta r
 
 msgid "Bank account"
 msgstr "Pankkitili"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Pankin koodi (routing number / clearingnummer)"
@@ -4149,6 +3827,9 @@ msgstr "Haarakoodi (Branch Code / Grenkod)"
 msgid "Sort Code"
 msgstr "Pankkinumero (Sort Code / Clearing nummer)"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Pankkitunnistekoodi)"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
 
@@ -4164,6 +3845,12 @@ msgstr "Yhdistyneet Kuningaskunnat"
 msgid "Other"
 msgstr "Muu"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (Kansainvälinen pankkitilinumero)"
+
+msgid "This IBAN is invalid."
+msgstr "Tämä IBAN on virheellinen."
+
 msgid "checking"
 msgstr "käyttötili"
 
@@ -4178,6 +3865,9 @@ msgstr "vain kirjaimet (a–z) ja numerot (0–9) sallittu"
 
 msgid "This account number is invalid."
 msgstr "Tilinumerossa on virhe."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Seuraavat kentät koskevat pankkitilin laillista haltijaa."
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "Tilin täytyy olla omasi. Rahan lähettäminen kolmansille osapuolille ei ole sallittua."
@@ -4548,21 +4238,6 @@ msgstr "Liberapayn tunnus sisältyy {fa_link_start}Fork AweSome{link_end}-kirjas
 
 msgid "You need to log in to access this page."
 msgstr "Sinun pitää kirjautua käyttääksesi tätä sivua."
-
-msgid "Money"
-msgstr "Raha-asiat"
-
-msgid "Quarantine"
-msgstr "Karanteeni"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "Käytännössä karanteenissa oleva raha on suojattu niin, ettei sitä voi siirtää Liberapay-tililtä pankkitilille."
-
-msgid "Safety"
-msgstr "Turvallisuus"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "Takaamme, että rahat, jotka panet haltuumme, eivät häviä konkurssin tapauksessa, riippumatta siitä koskeeko se meitä tai kolmatta osapuolta, jolle olemme delegoineet rahojen sijoituksen."
 
 msgid "Here is a list of differences between them:"
 msgstr "Tässä on listaus niiden eroista:"

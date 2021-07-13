@@ -266,16 +266,6 @@ msgstr "Log in"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Noteer alstublieft dat deze link maar valide is voor {0}."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "Het is tijd om uw portemonnee op te waarderen"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "U heeft {0} in uw Liberapay-portemonnee, maar u heeft minstens {1} nodig om uw donaties voor volgende week te voldoen."
-
-msgid "Add money"
-msgstr "Geld toevoegen"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Verlenging van de Liberapay-donatie: geen geldig betaalmethode"
 
@@ -380,70 +370,6 @@ msgstr "We hebben gedetecteerd dat uw wachtwoord in gevaar is gebracht: het vers
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "U zou nu {link_start}uw wachtwoord moeten veranderen{link_end}."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Bankoverschrijving naar uw Liberapay-portemonnee"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "We zijn klaar om de overboeking te ontvangen. Stuur precies {0} naar de volgende rekening met de onderstaande referentie code zodat we weten dat het geld van u kwam:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (International Bank Account Number)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Bank Identifier Code)"
-
-msgid "Wire Reference Code"
-msgstr "Wire Referentie Code"
-
-msgid "Destination Country"
-msgstr "Land van bestemming"
-
-msgid "Bank Account Owner Name"
-msgstr "Bankrekening eigenaar naam"
-
-msgid "Bank Account Owner Address"
-msgstr "Bankrekening eigenaar adres"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "De bankoverschrijving naar uw Liberapay-portemonnee is verlopen"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "Op {date} verklaarde u dat u {money_amount} van uw bankrekening zou overschrijven naar uw Liberapay-portemonnee, maar het geld is nooit aangekomen."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "Als u het hebt vergeten te doen, kan u een nieuwe betaling starten:"
-
-msgid "Try again"
-msgstr "Probeer het opnieuw"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "De overschrijving naar uw Liberapay-portemonnee is mislukt"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "De poging om de {0} van uw bankrekening over te schrijven is mislukt met de volgende foutmelding:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "U kunt het opnieuw proberen, eventueel met een andere betaalmethode, door te klikken op de onderstaande link:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "De overschrijving naar uw Liberapay-portemonnee is geslaagd"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "We zijn blij u te kunnen melden dat de overschrijving vanaf uw bankrekening is geslaagd. Van de {0} die u heeft overgeschreven is {1} in uw Liberapay-portemonnee geplaatst en {2} werd betaald als provisie."
-
-msgid "View receipt"
-msgstr "Bekijk het ontvangstbewijs"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "De automatisch incasso voor uw Liberapay-portemonnee is mislukt"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "De automatisch incasso voor uw Liberapay-portemonnee is gelukt"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "Uw betaling van {money_amount} is betwist"
@@ -525,6 +451,12 @@ msgstr "De betaling van {money_amount} die op {date} is geïnitieerd, is mislukt
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "De foutmelding van de betalingsverwerker {provider} is:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "U kunt het opnieuw proberen, eventueel met een andere betaalmethode, door te klikken op de onderstaande link:"
+
+msgid "Try again"
+msgstr "Probeer het opnieuw"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -608,6 +540,9 @@ msgstr "De betaling van {money_amount} die op {date} is geïnitieerd, is geslaag
 
 msgid "Thank you for this donation!"
 msgstr "Bedankt voor deze donatie!"
+
+msgid "View receipt"
+msgstr "Bekijk het ontvangstbewijs"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "U loopt donaties mis via Liberapay"
@@ -941,17 +876,11 @@ msgstr "Organisatie"
 msgid "Team"
 msgstr "Team"
 
-msgid "Direct Debit"
-msgstr "Automatische incasso"
-
-msgid "Bank Wire"
-msgstr "Bankoverschrijving"
-
-msgid "Credit Card"
-msgstr "Creditcard"
-
 msgid "Credit/Debit Card"
 msgstr "Creditcard/betaalkaart"
+
+msgid "Direct Debit"
+msgstr "Automatische incasso"
 
 msgid "Hide total giving from others."
 msgstr "Verberg het totaal aan giften."
@@ -2787,10 +2716,6 @@ msgstr "Selecteer of voer een bedrag in:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "Het volledige bedrag van je betaling gaat direct naar de {payment_provider} rekeningen van {recipient_names}."
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay slaat geen geld meer op in een portemonnee, het volledige bedrag van je betaling gaat direct naar de {payment_provider} rekening van {recipient_name}."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Het volledige bedrag van je betaling gaat direct naar de {payment_provider} rekening van {recipient_name}."
@@ -3625,12 +3550,6 @@ msgstr "Er staat nog geld op dit Liberapay-account, kies alsjeblieft een methode
 msgid "Close Account"
 msgstr "Sluit account"
 
-msgid "Try Again Later"
-msgstr "Probeer het later nogmaals"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Sorry, de betaaldagverwerking wordt op dit moment uitgevoerd. We kunnen geen accounts sluiten terwijl de betaaldagverwerking draait. Probeer het opnieuw over een paar uur."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Je hebt {0} in je portemonnee. Wat wil je hiermee doen?"
@@ -3644,9 +3563,6 @@ msgstr "Doneer het aan Liberapay"
 
 msgid "This option is recommended for small amounts."
 msgstr "Deze optie wordt aanbevolen voor kleine bedragen."
-
-msgid "Refund it to my card or bank account"
-msgstr "Terugboeking naar mijn kaart of bankrekening"
 
 msgid "Withdraw it to my bank account"
 msgstr "Geld opnemen naar mijn bankrekening"
@@ -3848,236 +3764,6 @@ msgstr "Terugbetaling van een anoniemedonatie"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "betaling van {link_open}kosten #{invoice_id}{link_close} voor {payee}"
 
-msgid "Adding Money"
-msgstr "Geld Toevoegen"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Uw donaties zijn gefinancierd door uw inkomen: u ontvangt {income} en geeft {donations_amount} (per week)."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Uw donaties in {currency} zijn gefinancierd door uw inkomen: u ontvangt {income} en geeft {donations_amount} (per week)."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "We staan niet toe om geld toe te voegen aan uw account wanneer uw donaties al helemaal worden gedekt door uw inkomsten. Als dat een probleem voor u is, stuur dan een e-mail naar support@liberapay.com en leg ons uit waarom."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Je donaties zijn nog voor één week gefinancierd."
-msgstr[1] "Je donaties zijn nog voor {n} weken gefinancierd."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Je {currency} donaties zijn nog voor één week gefinancierd."
-msgstr[1] "Je {currency} donaties zijn nog voor {n} weken gefinancierd."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Je hebt geld nodig in je portemonnee om je donaties te financieren."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Je moet geld overmaken naar je portemonnee om je {currency} donaties te financieren."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "Je hebt een {payment_method} betaling van {money_amount} in behandeling. {link_open}Details{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "Kies een betaalmethode om geld toe te voegen:"
-
-msgid "Easy and instantaneous"
-msgstr "Gemakkelijk en direct"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "Provisie: {0}% + {1}"
-
-msgid "To an account in Europe"
-msgstr "Naar een account in Europa"
-
-msgid "Cheapest for small amounts¹"
-msgstr "Goedkoopst voor kleine bedragen¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "Goedkoper maar lastiger"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "Provisie: {0}%"
-
-msgid "Best for regular payments"
-msgstr "Beste voor regelmatige betalingen"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Je hebt nog geen donaties ingesteld. Zodra je dat doet wordt je gevraagd om geld toe te voegen aan je account."
-
-msgid "About Fees"
-msgstr "Over provisies"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "De provisie is voor de betalingsverwerker. Liberapay wordt gefinancierd door de donaties op het {0}eigen account{1}."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Tenzij je bank jou ook provisie berekend voor de overboeking. Wij hebben hier geen controle over of zicht op."
-
-msgid "The email has been sent."
-msgstr "De e-mail is verzonden."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Waarom probeer je nog meer geld naar je portemonnee over te maken? Neem contact op met support@liberapay.com als je een geldige reden hebt."
-
-msgid "This bank wire has been canceled."
-msgstr "Deze bankoverschrijving is geannuleerd."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "De poging om een overschrijving van {0} te bereiden is mislukt. Foutmelding: {1}"
-
-msgid "Email me this information"
-msgstr "E-mail mij deze informatie"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Bankoverschrijving referentie-codes zijn niet herbruikbaar. Het is nog niet mogelijk om een periodieke overschrijving in te stellen van je bankrekening naar Liberapay."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Wij sturen je een e-mail zodra we weten of je betaling is gelukt of mislukt."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "Je hebt sommige of alle emailberichten over bankoverschrijvingen uitgeschakeld."
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "Van gedachten veranderd? Annuleer de betaling om volgende maand geen foutmelding te ontvangen:"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Geld overmaken naar Liberapay met een bankoverschrijving kost {0}% bij onze betalingsverwerker."
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "Selecteer een bedrag of voer een aangepast bedrag in."
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0} ({2}% provisie inbegrepen)"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "Je donaties zullen gefinancierd zijn voor {n} week"
-msgstr[1] "Je donaties zullen gefinancierd zijn voor {n} weken"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "Je donaties zullen gefinancierd zijn voor {n} week ({0})"
-msgstr[1] "Je donaties zullen gefinancierd zijn voor {n} weken ({0})"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n} maand"
-msgstr[1] "{n} maanden"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "De opgeslagen kaartgegevens zijn niet voldoende om de betaling te voltooien, voer je volledige kaartgegevens in om het opnieuw uit te voeren."
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} is opgenomen van je creditcard, {1} ging naar je Liberapay-portemonnee, {2} is betaald als provisie."
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "De poging om {0} op te nemen van je creditcard is mislukt. Foutmelding: {1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "Geld overmaken naar Liberapay met een creditcard of betaalkaart kost {0}% + {1} bij onze betalingsverwerker."
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "Creditcard betalingen zijn direct en we proberen het volledige bedrag gelijk op te halen als je op de \"Doorgaan\"-knop klikt hieronder."
-
-msgid "Billing Address (optional)"
-msgstr "Factuuradres (optioneel)"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "Kaartbetalingen kunnen soms worden geweigerd als er geen factuuradres wordt opgegeven of als dit niet overeenkomt met het registratieadres van de kaarthouder. Voor zover ons bekend worden momenteel alleen in de Verenigde Staten, het Verenigd Koninkrijk en Australië uitgegeven kaarten op deze manier gecontroleerd."
-
-msgid "Saved address:"
-msgstr "Opgeslagen adres:"
-
-msgid "Input the billing address"
-msgstr "Voer het factuuradres in"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "Waarschuwing: sommige kaartgegevens die je hebt ingevoerd lijken ongeldig. Toch doorgaan?"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "Het verzoek is mislukt. Zorg ervoor dat je browser up-to-date is en dat eventuele add-ons die verzoeken kunnen blokkeren (bijv. NoScript) uit staan."
-
-msgid "Card number"
-msgstr "Kaartnummer"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "Het nummer op de kaart, tussen 8 en 19 cijfers"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Het kaartnummer lijkt ongeldig, weet je zeker dat je niet een fout maakt?"
-
-msgid "This card number is invalid."
-msgstr "Dit kaartnummer is ongeldig."
-
-msgid "MM/YY"
-msgstr "MM/JJ"
-
-msgid "Expiration date (4 digits)"
-msgstr "Verloopdatum (4 cijfers)"
-
-msgid "This expiration date is invalid."
-msgstr "Deze geldigheidsdatum is ongeldig."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "Verificatiecode, meestal 3 cijfers, op de achterkant van de kaart"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Deze verificatiecode lijkt ongeldig, weet u zeker dat u zich niet vergist?"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "Je kaartgegevens worden direct doorgestuurd naar onze betalingsverwerker via een versleutelde verbinding."
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "Automatische incasso’s in {currency} zijn niet mogelijk vanuit {country}."
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0} is van je bankrekening afgeschreven, {1} is naar je Liberapay-portemonnee gegaan, {2} is betaald als provisie."
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "Een automatische incasso van {0} is gestart. Als de incasso succesvol is zal {1} worden toegevoegd aan je Liberapay-portemonnee en {2} zal worden betaald als provisie."
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "Geld toevoegen aan Liberapay via een automatische incasso heeft een provisie van {0}."
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "Gebruik een ander account"
-
-msgid "This IBAN is invalid."
-msgstr "Deze IBAN is ongeldig."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "De volgende velden gaan over de juridische eigenaar van de bankrekening."
-
 msgid "The amount cannot be zero."
 msgstr "Het bedrag kan niet nul zijn."
 
@@ -4100,17 +3786,6 @@ msgstr "De poging om {0} naar op je bankrekening te overschrijven is mislukt. Fo
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Je hebt {0} in je Liberapay-portemonnee."
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "Helaas kun je dat geld nog niet opnemen, omdat het nog in quarantaine zit."
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "Hiervan is {0} beschikbaar voor opname, de rest is nog in quarantaine."
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "We plaatsen je overboekingen {0} in quarantaine om onszelf te beschermen tegen creditcardfraude, onze excuses voor het ongemak."
-
 msgid "Which currency do you want to withdraw?"
 msgstr "In welke munteenheid wil je geld opnemen?"
 
@@ -4127,6 +3802,9 @@ msgstr "Opnemen van dollars kost {0} per opname, ongeacht het land van bestemmin
 
 msgid "Bank account"
 msgstr "Bankrekening"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Routing nummer"
@@ -4149,6 +3827,9 @@ msgstr "Filiaalcode"
 msgid "Sort Code"
 msgstr "Sorteercode"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Bank Identifier Code)"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
 
@@ -4164,6 +3845,12 @@ msgstr "VK"
 msgid "Other"
 msgstr "Overige"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (International Bank Account Number)"
+
+msgid "This IBAN is invalid."
+msgstr "Deze IBAN is ongeldig."
+
 msgid "checking"
 msgstr "zichtrekening"
 
@@ -4178,6 +3865,9 @@ msgstr "alleen letters (a-z) en cijfers (0-9) zijn toegelaten"
 
 msgid "This account number is invalid."
 msgstr "Dit account is ongeldig."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "De volgende velden gaan over de juridische eigenaar van de bankrekening."
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "De bankrekening moet van jou zijn, geld sturen naar derden is niet toegestaan."
@@ -4548,21 +4238,6 @@ msgstr "Het Liberapay logo is deel van het {fa_link_start}Fork Awesome{link_end}
 
 msgid "You need to log in to access this page."
 msgstr "Je moet eerst inloggen om deze pagina te bekijken."
-
-msgid "Money"
-msgstr "Geld"
-
-msgid "Quarantine"
-msgstr "Quarantaine"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "In die periode kan je het gedeelte van je geld wat in quarentaine zit niet opnemen."
-
-msgid "Safety"
-msgstr "Veiligheid"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "Wij garanderen dat de middelen die je bij ons in bewaring brengt niet verloren gaan in geval van faillissement van ons of een derde partij aan wie we de bewaring van de fondsen hebben gedelegeerd."
 
 msgid "Here is a list of differences between them:"
 msgstr "Hier is een lijst van de verschillen tussen hen:"

@@ -272,16 +272,6 @@ msgstr "Увійти"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Зауважте, що це посилання чинне протягом {0}."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "Час поповнити ваш гаманець Liberapay"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "У вашому гаманці Liberapay залишилось {0}, а вам потрібно щонайменше {1} для внесків наступного тижня."
-
-msgid "Add money"
-msgstr "Поповнити гаманець"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Поновлення внеску Liberapay: немає дійсного платіжного засобу"
 
@@ -387,70 +377,6 @@ msgstr "Ми виявили, що ваш пароль було викрито: �
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Вам необхідно {link_start}змінити свій пароль{link_end} зараз."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Банківський переказ у ваш гаманець Liberapay"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Ми готові прийняти кошти. Надішліть рівно {0} на вказаний рахунок, за допомогою зазначеного далі коду посилання, щоб ми знали, що гроші прийшли від вас:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Номер міжнародного банківського рахунку)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Банківський Ідентифікаційний код)"
-
-msgid "Wire Reference Code"
-msgstr "Код посилання для переказу"
-
-msgid "Destination Country"
-msgstr "Країна призначення"
-
-msgid "Bank Account Owner Name"
-msgstr "Ім'я власника банківського рахунку"
-
-msgid "Bank Account Owner Address"
-msgstr "Адреса власника банківського рахунку"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Не вдалося виконати банківський переказ у ваш гаманець Liberapay — сплив час очікування"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "{date} ви вказали, що збираєтеся переказати {money_amount} з вашого банківського рахунку на ваш гаманець Liberapay, але гроші досі не надійшли."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "Якщо ви забули виконати його, ви можете створити новий платіж:"
-
-msgid "Try again"
-msgstr "Спробувати ще раз"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Не вдалося здійснити банківський переказ у ваш гаманець Liberapay"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Не вдалося переказати {0} з вашого банківського рахунку, отримано це повідомлення про помилку:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Можете спробувати ще раз, можливо, за допомогою іншого методу оплати, натиснувши на посилання нижче:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Банківський переказ у ваш гаманець Liberapay виконано успішно"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Раді повідомити, що переказ з вашого банківського рахунку виконано успішно. З {0}, що ви надіслали, {1} зараховано до вашого гаманця Liberapay, та {2} пішло на оплату комісій."
-
-msgid "View receipt"
-msgstr "Переглянути квитанцію"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Не вдалося виконати прямий дебетовий платіж до вашого гаманця Liberapay"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Прямий дебетовий платіж до вашого гаманця Liberapay виконано успішно"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "Ваш платіж розміром {money_amount} було оскаржено"
@@ -532,6 +458,12 @@ msgstr "Не вдалося виконати платіж, розміром {mon
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Повідомлення про помилку надано платіжною системою {provider}:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "Можете спробувати ще раз, можливо, за допомогою іншого методу оплати, натиснувши на посилання нижче:"
+
+msgid "Try again"
+msgstr "Спробувати ще раз"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -615,6 +547,9 @@ msgstr "Створений {date} платіж, розміром {money_amount},
 
 msgid "Thank you for this donation!"
 msgstr "Дякуємо за ваш внесок!"
+
+msgid "View receipt"
+msgstr "Переглянути квитанцію"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Ви пропускаєте внесок через Liberapay"
@@ -952,17 +887,11 @@ msgstr "Організація"
 msgid "Team"
 msgstr "Команда"
 
-msgid "Direct Debit"
-msgstr "Пряме списання"
-
-msgid "Bank Wire"
-msgstr "Банківський переказ"
-
-msgid "Credit Card"
-msgstr "Кредитна картка"
-
 msgid "Credit/Debit Card"
 msgstr "Кредитна/Дебетова картка"
+
+msgid "Direct Debit"
+msgstr "Пряме списання"
 
 msgid "Hide total giving from others."
 msgstr "Сховати загальну суму витрат від інших."
@@ -2813,10 +2742,6 @@ msgstr "Будь ласка, виберіть або введіть свою с�
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "Вся сума вашого платежу відразу ж перейде на рахунки {payment_provider} {recipient_names}."
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay більше не зберігає гроші в гаманцях, вся сума вашого платежу відразу ж перейде на рахунок {payment_provider} {recipient_name}."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Вся сума вашого платежу відразу ж перейде на рахунок {payment_provider} {recipient_name}."
@@ -3659,12 +3584,6 @@ msgstr "У вас залишились гроші у цьому обліково
 msgid "Close Account"
 msgstr "Закрити обліковий запис"
 
-msgid "Try Again Later"
-msgstr "Спробуйте ще раз пізніше"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Перепрошуємо, але сьогодні день виплат, тому ми не закриваємо облікові записи, поки він не закінчиться. Будь ласка, спробуйте ще раз за кілька годин."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "У вас {0} в гаманці. Що з ними робити?"
@@ -3678,9 +3597,6 @@ msgstr "Допомогти Liberapay"
 
 msgid "This option is recommended for small amounts."
 msgstr "Цей параметр рекомендовано для невеликих сум."
-
-msgid "Refund it to my card or bank account"
-msgstr "Повернути їх на вашу банківську картку або рахунок"
 
 msgid "Withdraw it to my bank account"
 msgstr "Вивести їх на мій банківський рахунок"
@@ -3886,241 +3802,6 @@ msgstr "відшкодування анонімного внеску"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "сплата {link_open}рахунку #{invoice_id}{link_close} для {payee}"
 
-msgid "Adding Money"
-msgstr "Додавання грошей"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Ваші внески забезпечено вашими надходженнями: ви отримуєте {income} та віддаєте {donations_amount} (на тиждень)."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Ваші внески в {currency} забезпечено вашими надходженнями: ви отримуєте {income} та віддаєте {donations_amount} (на тиждень)."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "Ви не можете додавати гроші, якщо ваші внески повністю забезпечено надходженнями від наданої вам допомоги. Якщо це проблема для вас, будь ласка, надішліть листа на адресу support@liberapay.com та поясніть чому."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "Ваші внески забезпечено грошами лише на наступний тиждень."
-msgstr[1] "Ваші внески забезпечено грошами лише на наступні {n} тижні."
-msgstr[2] "Ваші внески забезпечено грошами лише на наступні {n} тижнів."
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "Ваші внески в {currency} забезпечено грошами лише на наступний тиждень."
-msgstr[1] "Ваші внески в {currency} забезпечено грошами лише на наступні {n} тижні."
-msgstr[2] "Ваші внески в {currency} забезпечено грошами лише на наступні {n} тижнів."
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Вам необхідно поповнити свій гаманець для фінансування ваших внесків."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Вам необхідно поповнити свій гаманець для фінансування ваших внесків у {currency}."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "У вас незавершений платіж {payment_method} на {money_amount}, {link_open}Відомості{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "Виберіть спосіб оплати, щоб додати гроші:"
-
-msgid "Easy and instantaneous"
-msgstr "Легкий та миттєвий"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "Комісії: {0}% + {1}"
-
-msgid "To an account in Europe"
-msgstr "Для рахунків в Європі"
-
-msgid "Cheapest for small amounts¹"
-msgstr "Найдешевший для малих сум¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "Дешевше¹, але незручно"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "Комісія: {0}%"
-
-msgid "Best for regular payments"
-msgstr "Найкращий варіант для регулярних платежів"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Ви ще не налаштували внески, одразу, як ви це зробите, вам буде запропоновано додати гроші до облікового запису."
-
-msgid "About Fees"
-msgstr "Про комісії"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "Комісії стягуються нашими платіжними системами, Liberapay фінансується лише за рахунок внесків на {0}власний рахунок{1}."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Якщо ваш банк також не стягує з вас комісію за переказ. Ми не знаємо і не контролюємо це."
-
-msgid "The email has been sent."
-msgstr "Електронний лист надіслано."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Навіщо ви намагаєтеся додати гроші в гаманець? Зв'яжіться з support@liberapay.com, якщо маєте вагому причину."
-
-msgid "This bank wire has been canceled."
-msgstr "Цей банківський переказ було відхилено."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "Спроба підготувати банківський переказ {0} не вдалася. Повідомлення про помилку: {1}"
-
-msgid "Email me this information"
-msgstr "Надіслати мені ці дані поштою"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Коди вказаних банківських переказів не можна використовувати повторно. Наразі неможливо налаштувати регулярний банківський платіж з вашого банківського рахунку до Liberapay."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Ми надішлемо вам листа, як тільки дізнаємось, чи успішно пройшов платіж."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "Ви вимкнули частину або всі повідомлення поштою про банківські перекази."
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "Передумали? Скасуйте платіж, щоб не отримувати повідомлення про помилку наступного місяця:"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "Додавання грошей до Liberapay банківським переказом тягне за собою стягнення комісії в {0}% нашою платіжною системою."
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "Виберіть суму з пропонованих або введіть власну."
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0}% ({2}% комісії включено)"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "Ваші внески забезпечено на {n} тиждень"
-msgstr[1] "Ваші внески забезпечено на {n} тижні"
-msgstr[2] "Ваші внески забезпечено на {n} тижнів"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "Ваші внески буде забезпечено на {n} тиждень ({0})"
-msgstr[1] "Ваші внески буде забезпечено на {n} тижні ({0})"
-msgstr[2] "Ваші внески буде забезпечено на {n} тижнів ({0})"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n} місяць"
-msgstr[1] "{n} місяці"
-msgstr[2] "{n} місяців"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "Збережених даних картки було недостатньо для завершення платежу, введіть дані картки повністю та спробуйте ще раз."
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "З вашої кредитної картки знято {0}, {1} зараховано до гаманця Liberapay, комісія становить {2}."
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "Спроба зняти {0} з вашої кредитної картки не вдалася. Повідомлення про помилку: {1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "Додавання грошей в Liberapay з кредитної/дебетової картки спричинить стягнення комісії в {0}% + {1}."
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "Оплата картою відбувається миттєво та ми спробуємо зняти вказану суму цілком, коли ви натиснете на кнопку \"Далі\" нижче."
-
-msgid "Billing Address (optional)"
-msgstr "Платіжна адреса (не обов'язково)"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "Платіжні картки іноді може бути відхилено, якщо не вказано платіжну адресу, або якщо вона не відповідає адресі власника картки запису. На нашу думку, в даний час перевіряються лише картки, випущені в Сполучених Штатах, Великій Британії та Австралії."
-
-msgid "Saved address:"
-msgstr "Збережена адреса:"
-
-msgid "Input the billing address"
-msgstr "Введіть платіжну адресу"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "Попередження: схоже, що частина даних картки, яку ви ввели, неправильна. Все одно продовжити?"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "Запит завершився невдало. Переконайтеся, що ваш переглядач оновлено та вимкніть усі розширення, котрі блокують ваші запити (наприклад NoScript), потім спробуйте ще раз."
-
-msgid "Card number"
-msgstr "Номер картки"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "Основний номер картки, від 8 до 19 цифр"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Схоже, номер картки неправильний, ви впевнені, що не помилилися?"
-
-msgid "This card number is invalid."
-msgstr "Неправильний номер картки."
-
-msgid "MM/YY"
-msgstr "ММ/РР"
-
-msgid "Expiration date (4 digits)"
-msgstr "Дійсна до (4 цифри)"
-
-msgid "This expiration date is invalid."
-msgstr "Неправильна дата закінчення дії."
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "Код підтвердження, зазвичай 3 цифри на зворотній стороні картки"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "Схоже, код підтвердження неправильний, ви впевнені, що не помилилися?"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "Дані вашої карти надсилаються напряму до нашої партнерської платіжної системи з використанням захищеного з'єднання."
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "Прямий переказ в {currency} неможливий з країни {country}."
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "З вашого банківського рахунку було знято {0}, {1} пішло на ваш гаманець Liberapay, {2} пішло на оплату комісій за переказ."
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "Було створено прямий переказ {0}. Якщо переказ пройде успішно, на ваш гаманець Liberapay прийде {1}, та {2} піде на оплату комісій."
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "За додання грошей до Liberapay через прямий переказ стягується комісія {0}."
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "Використовуйте інший рахунок"
-
-msgid "This IBAN is invalid."
-msgstr "Неправильний IBAN."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Наступні поля про законного власника банківського рахунку."
-
 msgid "The amount cannot be zero."
 msgstr "Сума не може дорівнювати нулю."
 
@@ -4143,17 +3824,6 @@ msgstr "Спроба нарахувати {0} на ваш банківський
 msgid "You have {0} in your Liberapay wallet."
 msgstr "У вашому гаманці Liberapay {0}."
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "На жаль, поки ви не можете вивести ці гроші, оскільки вони ще в карантині."
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "{0} з цього доступно для виведення, інше все ще в карантині."
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "Ми тримаємо гроші в карантині {0}, щоб захиститися від шахрайства з кредитними картками, перепрошуємо за спричинені незручності."
-
 msgid "Which currency do you want to withdraw?"
 msgstr "В якій валюті ви бажаєте вивести?"
 
@@ -4170,6 +3840,9 @@ msgstr "Виведення доларів США коштує {0} за пере�
 
 msgid "Bank account"
 msgstr "Банківський рахунок"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "Код банку"
@@ -4192,6 +3865,9 @@ msgstr "Код підрозділу"
 msgid "Sort Code"
 msgstr "Код сортування"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Банківський Ідентифікаційний код)"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
 
@@ -4207,6 +3883,12 @@ msgstr "Великобританія"
 msgid "Other"
 msgstr "Інше"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (Номер міжнародного банківського рахунку)"
+
+msgid "This IBAN is invalid."
+msgstr "Неправильний IBAN."
+
 msgid "checking"
 msgstr "перевірка"
 
@@ -4221,6 +3903,9 @@ msgstr "допустимі лише латинські літери (a-z) та �
 
 msgid "This account number is invalid."
 msgstr "Цей номер рахунку недійсний."
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "Наступні поля про законного власника банківського рахунку."
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "Ваш банківський рахунок повинен належати вам, пересилання грошей третім особам заборонено."
@@ -4593,21 +4278,6 @@ msgstr "Логотип Liberapay включено до шрифту {fa_link_sta
 
 msgid "You need to log in to access this page."
 msgstr "Увійдіть, щоб отримати доступ до цієї сторінки."
-
-msgid "Money"
-msgstr "Гроші"
-
-msgid "Quarantine"
-msgstr "Карантин"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "Зокрема, ви не можете виводити гроші, котрі перебувають у карантині, з облікового запису Liberapay на ваш банківський рахунок."
-
-msgid "Safety"
-msgstr "Безпека"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "Ми гарантуємо, що гроші, які ви віддали нам на збереження, не буде втрачено у випадку нашого банкрутства або банкрутства третіх осіб, яким ми доручили збереження грошей."
 
 msgid "Here is a list of differences between them:"
 msgstr "Ось список відмінностей між ними:"

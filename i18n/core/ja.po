@@ -260,16 +260,6 @@ msgstr "ログイン"
 msgid "Please note that the link is only valid for {0}."
 msgstr "リンクは {0} のみ有効です。"
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "お使いの Liberapay ウォレットをいっぱいにしましょう"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "Liberapay ウォレットに残っているのは {0} ですが、来週の寄付には少なくとも {1} が必要です。"
-
-msgid "Add money"
-msgstr "お金を追加"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Liberapay での寄付の更新通知: 有効な支払手段がありません"
 
@@ -373,70 +363,6 @@ msgstr "お使いのパスワードが危険にさらされていることを検
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "今すぐ{link_start}パスワードを変更{link_end}するべきです。"
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Liberapay ウォレットに銀行振込"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "資金提供を受ける準備が整いました。あなたからのお金であることを識別できるよう、以下の参照コードを使用し、次の口座に正確な {0} をお送りください。"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN（国際銀行勘定番号）"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC（金融機関識別コード）"
-
-msgid "Wire Reference Code"
-msgstr "振込コード"
-
-msgid "Destination Country"
-msgstr "振込先の国"
-
-msgid "Bank Account Owner Name"
-msgstr "銀行口座の所有者名"
-
-msgid "Bank Account Owner Address"
-msgstr "銀行口座の所有者の住所"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Liberapay ウォレットへの銀行振込の期限が切れています"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "{date}に、ご自身の銀行口座から Liberapay ウォレットに {money_amount} を振り込むとあなたから申告がありましたが、お金が到着していません。"
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "もし忘れてしまった場合は新しい支払いを開始できます："
-
-msgid "Try again"
-msgstr "再試行"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Liberapay ウォレットへの銀行振込が失敗しました"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "{0} をお使いの銀行口座から振り込もうとしましたが、失敗しました。エラーメッセージは以下の通りです："
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "以下のリンクをクリックすると別の支払い方法で再試行できます。"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Liberapay ウォレットへの銀行振込が成功しました"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "お使いの銀行口座への振り込みが成功したことをお知らせします。送金された {0} のうち {1} はお使いの Liberapay ウォレットに入れられ、{2} は手数料として支払われました。"
-
-msgid "View receipt"
-msgstr "領収書を見る"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Liberapay ウォレットへの口座自動振替による支払いが失敗しました"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Liberapay ウォレットへの口座自動振替による支払いが成功しました"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "あなたの{money_amount}の支払いが異議を唱えられました"
@@ -518,6 +444,12 @@ msgstr "あなたが{date}に開始した{money_amount}の支払いが失敗し�
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "決済サービス {provider} によって出力されたエラーメッセージは以下の通りです："
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "以下のリンクをクリックすると別の支払い方法で再試行できます。"
+
+msgid "Try again"
+msgstr "再試行"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -601,6 +533,9 @@ msgstr "{date}に開始した{money_amount}の支払いは成功しました。"
 
 msgid "Thank you for this donation!"
 msgstr "寄付していただき、ありがとうございます！"
+
+msgid "View receipt"
+msgstr "領収書を見る"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Liberapay での寄付を受け取る機会を損失しています"
@@ -930,17 +865,11 @@ msgstr "組織"
 msgid "Team"
 msgstr "チーム"
 
-msgid "Direct Debit"
-msgstr "口座自動振替"
-
-msgid "Bank Wire"
-msgstr "銀行振込"
-
-msgid "Credit Card"
-msgstr "クレジットカード"
-
 msgid "Credit/Debit Card"
 msgstr "クレジット/デビッドカード"
+
+msgid "Direct Debit"
+msgstr "口座自動振替"
 
 msgid "Hide total giving from others."
 msgstr "寄付した総金額を非表示にします。"
@@ -2764,10 +2693,6 @@ msgstr "支払い金額を選択するか入力してください："
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "あなたの支払いの全額は、{recipient_names} さんの {payment_provider} アカウントに今すぐに移動します。"
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay はウォレットに金銭を保存しなくなりました。あなたの支払いの全額は、{recipient_name} さんの {payment_provider} アカウントに今すぐに移動します。"
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "あなたの支払いの全額は、{recipient_name} さんの {payment_provider} アカウントに今すぐに移動します。"
@@ -3594,12 +3519,6 @@ msgstr "まだこの Liberapay アカウントには残金があります。以�
 msgid "Close Account"
 msgstr "アカウントを削除"
 
-msgid "Try Again Later"
-msgstr "後で再試行"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "申し訳ございません。Payday を実行中のため、アカウントを閉じることができません。数時間後に再度ご確認ください。"
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Liberapay ウォレットに{0}があります。どうしますか？"
@@ -3613,9 +3532,6 @@ msgstr "Liberapay に寄付する"
 
 msgid "This option is recommended for small amounts."
 msgstr "このオプションは少額決済時に推奨されます。"
-
-msgid "Refund it to my card or bank account"
-msgstr "自分のカードまたは銀行口座に払い戻す"
 
 msgid "Withdraw it to my bank account"
 msgstr "自分の銀行口座に引き出す"
@@ -3813,231 +3729,6 @@ msgstr "匿名の寄付の払い戻し"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{payee} さんへの{link_open}経費 #{invoice_id}{link_close}の支払い"
 
-msgid "Adding Money"
-msgstr "資金の追加"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "あなたの寄付は、あなたの収入により資金が供給されました。あなたは {income} を受け取り、{donations_amount} を提供します（いずれも週あたり）。"
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "あなたの {currency} での寄付は、あなたの収入により資金が供給されました。あなたは {income} を受け取り、{donations_amount} を提供します（いずれも週あたり）。"
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "あなたの寄付がすでにあなたの収入によって資金が供給されている場合、金銭を追加することはできません。これが問題な場合は、support@liberapay.com 宛にメールを送信してください。"
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] "あなたの寄付は別の {n} 週に資金が供給されます。"
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] "あなたの {currency} による寄付は別の {n} 週に資金が供給されます。"
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "あなたの寄付に資金を供給するには、あなたのウォレットに金銭を移動する必要があります。"
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "あなたの寄付に {currency} で資金を供給するには、あなたのウォレットに金銭を移動する必要があります。"
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "{money_amount}の停止中の{payment_method}支払いがあります。{link_open}詳細{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "入金方法を選んでください。"
-
-msgid "Easy and instantaneous"
-msgstr "今すぐ簡単に"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "手数料：{0}% + {1}"
-
-msgid "To an account in Europe"
-msgstr "ヨーロッパの口座へ"
-
-msgid "Cheapest for small amounts¹"
-msgstr "少額決済時に最安¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "面倒だが格安¹"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "手数料：{0}%"
-
-msgid "Best for regular payments"
-msgstr "継続決済に最適"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "まだ寄付はありませんが、一度寄付するとあなたの口座に入金するよう求められます。"
-
-msgid "About Fees"
-msgstr "手数料について"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "手数料は決済サービスによるものです。Liberapay は{0}自身のアカウント{1}への寄付によって資金を得ています。"
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ 銀行が送金に課税しない限り。これに対してLiberapay側で管理したり確認したりすることはできません。"
-
-msgid "The email has been sent."
-msgstr "メールが送信されました。"
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "ウォレットにこれ以上入金しようとしているのはなぜですか？　合法的な理由であれば、support@liberapay.comに連絡してください。"
-
-msgid "This bank wire has been canceled."
-msgstr "この銀行振込はキャンセルされました。"
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "{0}個の振り込み送金の準備に失敗しました。エラーメッセージ：{1}"
-
-msgid "Email me this information"
-msgstr "この情報をメールしてください"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "振り込み参照コードは再利用できません。まだ銀行口座からLiberapayに継続的な送金をすることはできません。"
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "支払いの完了、失敗が判明次第、一度メールを送信します。"
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr "銀行振り込みに関しての一部ないし全てのメール通知が無効です。"
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr "考えが変わりましたか？　来月の失敗通知を受け取らないようにするために支払いを止めてください。"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr "銀行送金でLiberapayに入金すると、決済業者に対して{0}% の手数料が発生します。"
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr "あらかじめ計算された金額を選択します。または自由に金額を入力することもできます。"
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr "{0}（決済手数料は{2}%）"
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] "あなたの寄付は {n} 週間にわたり資金が供給されます"
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] "あなたの寄付は {n} 週間にわたり資金が供給されます（{0}）"
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] "{n} か月間"
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr "カード情報が不足しているため支払いが完了しません。カード情報を埋めて再処理してください。"
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0}がクレジットカードより支払われ、{1}がLiberapayウォレットに、{2}が決済手数料として使われました。"
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr "クレジットカードによる{0}の支払いに失敗しました。エラーメッセージ：{1}"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr "クレジットカード決済でLiberapayに残高を追加すると{0}% + {1}の手数料が発生します。"
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr "カード決済は即座に行われ、「続行」をクリックするとすぐに全額が引き出されます。"
-
-msgid "Billing Address (optional)"
-msgstr "支払いアドレス（省略可）"
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr "カード決済は請求先住所が無かったり、カード名義と一致しない場合に支払い拒否されることがあります。Liberapayが調べたところ、アメリカ合衆国やイギリス、オーストラリア発行のカードのみこの方法で確認することがあるようです。"
-
-msgid "Saved address:"
-msgstr "保存済みアドレス："
-
-msgid "Input the billing address"
-msgstr "支払いアドレスを入力"
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr "警告：カード情報の一部が無効である可能性があります。続行しますか？"
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr "リクエストは拒否されました。ブラウザが最新バージョンであるかを確認し、リクエストを拒否する拡張機能（NoScript など）を無効にしてからもう一度お試しください。"
-
-msgid "Card number"
-msgstr "カード番号"
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr "8字から19字のカード番号"
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "このカード番号は無効である可能性があります。間違えていませんか？"
-
-msgid "This card number is invalid."
-msgstr "このカード番号は無効です。"
-
-msgid "MM/YY"
-msgstr "MM/YY"
-
-msgid "Expiration date (4 digits)"
-msgstr "有効期限（4桁）"
-
-msgid "This expiration date is invalid."
-msgstr "有効期限が無効です。"
-
-msgid "CVV"
-msgstr "CVV"
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr "認証コード。たいてい3桁の数字で、カードの裏面に印字されています"
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr "この認証コードは正しくないと思われます。本当に間違いありませんか？"
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr "カード情報は暗号化され決済業者に直接送信されます。"
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr "{currency}での口座自動振替は{country}からはできません。"
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr "{0}が銀行口座から引き落とされ、{1}がLiberapayウォレットに、{2}が決済手数料として使われました。"
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr "{0}の口座自動振替が開始されています。転送が成功した場合、{1} は Liberapay ウォレットに追加され、{2} は手数料で支払われます。"
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr "自動口座振替でLiberapayに入金すると手数料として{0}がかかります。"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Use another account"
-msgstr "別の口座を使用する"
-
-msgid "This IBAN is invalid."
-msgstr "この IBAN は無効です。"
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "以下は銀行口座の法的所有者についての項目です。"
-
 msgid "The amount cannot be zero."
 msgstr "金額を0にすることはできません。"
 
@@ -4060,17 +3751,6 @@ msgstr "銀行口座への{0}の送金に失敗しました。エラーメッセ
 msgid "You have {0} in your Liberapay wallet."
 msgstr "Liberapayウォレットに{0}あります。"
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr "申し訳ありませんが確認期間中のため出金することはできません。"
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr "全てのうち{0}は出金できますが、残りは現在確認期間中です。"
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr "クレジットカード詐欺から保護するため{0}をしばらく確認します。ご不便をおかけして申し訳ありません。"
-
 msgid "Which currency do you want to withdraw?"
 msgstr "どの通貨を引き出しますか？"
 
@@ -4087,6 +3767,9 @@ msgstr "米ドルでの出金は送金先の国に関わらず取引ごとに{0}
 
 msgid "Bank account"
 msgstr "銀行口座"
+
+msgid "IBAN"
+msgstr "IBAN"
 
 msgid "Routing Number"
 msgstr "銀行支店コード"
@@ -4109,6 +3792,9 @@ msgstr "支店コード"
 msgid "Sort Code"
 msgstr "Sortコード"
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC（金融機関識別コード）"
+
 msgid "SEPA / IBAN"
 msgstr "SEPA / IBAN"
 
@@ -4124,6 +3810,12 @@ msgstr "イギリス"
 msgid "Other"
 msgstr "その他"
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN（国際銀行勘定番号）"
+
+msgid "This IBAN is invalid."
+msgstr "この IBAN は無効です。"
+
 msgid "checking"
 msgstr "確認"
 
@@ -4138,6 +3830,9 @@ msgstr "英数字（a-z/0-9）が使用できます"
 
 msgid "This account number is invalid."
 msgstr "この口座番号は無効です。"
+
+msgid "The following fields are about the legal owner of the bank account."
+msgstr "以下は銀行口座の法的所有者についての項目です。"
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
 msgstr "銀行口座を所持していなければなりません。第三者への送金はできません。"
@@ -4506,21 +4201,6 @@ msgstr "Liberapay のロゴとして{fa_link_start}Font Awesome{link_end}フォ�
 
 msgid "You need to log in to access this page."
 msgstr "このページにアクセスするにはログインする必要があります。"
-
-msgid "Money"
-msgstr "お金"
-
-msgid "Quarantine"
-msgstr "確認用の隔離"
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr "具体的には、Liberapay アカウントから銀行口座に確認のために隔離されたお金を引き出すことを防ぐことができます。"
-
-msgid "Safety"
-msgstr "安全"
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
-msgstr "私たちが保管するあなたの資金が倒産によって失われないことを、私たちは保証します。これは、私たち、あるいは私たちが資金の保管を委任している第三者のいずれが倒産した場合にも当てはまります。"
 
 msgid "Here is a list of differences between them:"
 msgstr "以下に PayPal と Stripe の違いを一覧にしました。"

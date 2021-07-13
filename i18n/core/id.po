@@ -260,16 +260,6 @@ msgstr "Masuk"
 msgid "Please note that the link is only valid for {0}."
 msgstr "Harap dicatat bahwa link ini hanya berlaku untuk {0}."
 
-msgid "It's time to top up your Liberapay wallet"
-msgstr "Waktu untuk mengisi ulang dompet Liberapay anda telah sampai"
-
-#, python-brace-format
-msgid "You have {0} left in your Liberapay wallet, but you need at least {1} to cover your donations next week."
-msgstr "{0} masih tersisa di dompet Liberapay anda, tetapi anda perlu setidaknya {1} untuk menutupi sumbangan anda minggu depan."
-
-msgid "Add money"
-msgstr "Tambahkan uang"
-
 msgid "Liberapay donation renewal: no valid payment instrument"
 msgstr "Pembaruan donasi Liberapay: tidak ada alat pembayaran yang valid"
 
@@ -373,70 +363,6 @@ msgstr "Kami mendeteksi bahwa kata sandi anda telah disusupi: kata sandi itu mun
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Anda sebaiknya {link_start} merubah kata sandi anda {link_end} sekarang."
 
-msgid "Bank wire to your Liberapay wallet"
-msgstr "Transfer bank ke dompet Liberapay anda"
-
-#, python-brace-format
-msgid "We are ready to receive the funds. Please send exactly {0} to the following account using the reference code below so we'll know the money came from you:"
-msgstr "Kami siap untuk menerima pendanaan. Silakan kirim tepat {0} ke akun berikut menggunakan kode referensi di bawah ini sehingga kami akan tahu uang itu berasal dari anda:"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Nomor Rekening Bank Internasional)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Kode Pengenal Bank)"
-
-msgid "Wire Reference Code"
-msgstr "Kode Referensi Wire"
-
-msgid "Destination Country"
-msgstr "Negara tujuan"
-
-msgid "Bank Account Owner Name"
-msgstr "Nama Pemilik Rekening Bank"
-
-msgid "Bank Account Owner Address"
-msgstr "Alamat Pemilik Rekening Bank"
-
-msgid "The bank wire to your Liberapay wallet has expired"
-msgstr "Bank wire ke Liberapay Anda telah kadaluwarsa"
-
-#, python-brace-format
-msgid "On {date} you declared that you were going to transfer {money_amount} from your bank account to your Liberapay wallet, but the money never arrived."
-msgstr "Pada {date} Anda menyatakan bahwa anda akan mentransfer {money_amount} dari rekening bank Anda ke dompet Liberapay Anda, tetapi uang itu tidak pernah sampai."
-
-msgid "If you forgot to do it you can initiate a new payment:"
-msgstr "Jika Anda lupa untuk melakukan pembayaran, Anda dapat memulai pembayaran baru:"
-
-msgid "Try again"
-msgstr "Coba lagi"
-
-msgid "The bank wire to your Liberapay wallet has failed"
-msgstr "Transfer bank ke dompet Liberapay anda gagal"
-
-#, python-brace-format
-msgid "The attempt to transfer {0} from your bank account has failed with the following error message:"
-msgstr "Upaya untuk mentransfer {0} dari rekening bank Anda telah gagal dengan pesan kesalahan berikut:"
-
-msgid "You can try again, possibly with another payment method, by clicking on the link below:"
-msgstr "Anda dapat mencoba kembali, mungkin dengan metode pembayaran lain, dengan mengklik tautan dibawah ini:"
-
-msgid "The bank wire to your Liberapay wallet has succeeded"
-msgstr "Transfer bank ke dompet Liberapay anda berhasil"
-
-#, python-brace-format
-msgid "We're happy to report that the transfer from your bank account has succeeded. Of the {0} that were sent, {1} went into your Liberapay wallet, and {2} were paid in fees."
-msgstr "Kami senang melaporkan bahwa transfer dari rekening bank Anda berhasil. Dari {0} yang telah terkirim, {1} masuk ke dompet Liberapay Anda, dan {2} dibayar sebagai biaya transaksi."
-
-msgid "View receipt"
-msgstr "Lihat tanda terima"
-
-msgid "The direct debit payment to your Liberapay wallet has failed"
-msgstr "Pembayaran debit langsung ke dompet Liberapay Anda gagal"
-
-msgid "The direct debit payment to your Liberapay wallet has succeeded"
-msgstr "Pembayaran debit langsung ke dompet Liberapay Anda berhasil"
-
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
 msgstr "Pembayaran Anda sejumlah {money_amount} ditolak"
@@ -518,6 +444,12 @@ msgstr "Pembayaran {money_amount} yang dimulai pada {date} telah gagal."
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
 msgstr "Pesan error yang disediakan oleh prosesor pembayaran {provider} adalah:"
+
+msgid "You can try again, possibly with another payment method, by clicking on the link below:"
+msgstr "Anda dapat mencoba kembali, mungkin dengan metode pembayaran lain, dengan mengklik tautan dibawah ini:"
+
+msgid "Try again"
+msgstr "Coba lagi"
 
 #, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
@@ -601,6 +533,9 @@ msgstr "Pembayaran {money_amount} yang dimulai pada {date} telah berhasil."
 
 msgid "Thank you for this donation!"
 msgstr "Terima kasih atas donasi anda!"
+
+msgid "View receipt"
+msgstr "Lihat tanda terima"
 
 msgid "You're missing out on donations through Liberapay"
 msgstr "Anda melewatkan donasi melalui Liberapay"
@@ -930,17 +865,11 @@ msgstr "Organisasi"
 msgid "Team"
 msgstr "Tim"
 
-msgid "Direct Debit"
-msgstr "Debit langsung"
-
-msgid "Bank Wire"
-msgstr ""
-
-msgid "Credit Card"
-msgstr "Kartu kredit"
-
 msgid "Credit/Debit Card"
 msgstr "Kartu kredit/Debit"
+
+msgid "Direct Debit"
+msgstr "Debit langsung"
 
 msgid "Hide total giving from others."
 msgstr "Sembunyikan total pemberian dari orang lain."
@@ -2764,10 +2693,6 @@ msgstr "Silakan pilih atau masukan jumlah pembayaran:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr ""
 
-#, python-brace-format
-msgid "Liberapay no longer stores money in wallets, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay tidak lagi menyimpan uang didalam dompet, seluruh jumlah pembayaran anda akan segera dipindahkan ke {payment_provider} dengan akun {recipient_name}."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Seluruh jumlah pembayaran anda akan segera dipindahke ke {payment_provider} dengan akun {recipient_name}."
@@ -3597,12 +3522,6 @@ msgstr "Anda masih memiliki uang di akun Liberapay ini, silakan pilih metode pen
 msgid "Close Account"
 msgstr "Tutup akun"
 
-msgid "Try Again Later"
-msgstr "Coba lagi nanti"
-
-msgid "Sorry, we're running payday right now, and we're not set up to close accounts while payday is running. Please check back in a few hours."
-msgstr "Maaf, kami menjalankan pembayaran hari ini, dan kami tidak menyiapkan untuk menutup akun saat pembayaran berjalan. Silakan periksa kembali dalam beberapa jam."
-
 #, python-brace-format
 msgid "You have {0} in your wallet. What should we do with it?"
 msgstr "Anda memiliki {0} dalam dompet anda. Apa yang harus kami lakukan dengannya?"
@@ -3616,9 +3535,6 @@ msgstr "Donasikan ke Liberapay"
 
 msgid "This option is recommended for small amounts."
 msgstr "Opsi ini direkomendasikan untuk jumlah kecil."
-
-msgid "Refund it to my card or bank account"
-msgstr "Pengembalian dana ke kartu atau rekening bank saya"
 
 msgid "Withdraw it to my bank account"
 msgstr "Tarik ke rekening bank saya"
@@ -3817,231 +3733,6 @@ msgstr "pengembalian donasi anonim"
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "pembayaran {link_open} biaya # {invoice_id} {link_close} ke {payee}"
 
-msgid "Adding Money"
-msgstr "Tambahkan uang"
-
-#, python-brace-format
-msgid "Your donations are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Donasi anda didanai oleh pemasukan anda: anda menerima {income} dan mengembalikan {donations_amount} (per minggu)."
-
-#, python-brace-format
-msgid "Your donations in {currency} are funded by your income: you receive {income} and give back {donations_amount} (per week)."
-msgstr "Donasi anda dalam {currency} didanai oleh pemasukan anda: anda menerima {income} dan mengembalikan {donations_amount} (per minggu)."
-
-msgid "We don't allow adding money when your donations are already funded by your income. If this is a problem for you please send an email to support@liberapay.com explaining why."
-msgstr "Kami tidak mengizinkan penambahan uang ketika donasi anda sudah didanai oleh pemasukan anda. Jika ini masalah bagi anda, silakan kirim email ke support@liberapay.com untuk menjelaskan alasannya."
-
-#, python-brace-format
-msgid "Your donations are only funded for another week."
-msgid_plural "Your donations are funded for another {n} weeks."
-msgstr[0] ""
-
-#, python-brace-format
-msgid "Your donations in {currency} are only funded for another week."
-msgid_plural "Your donations in {currency} are funded for another {n} weeks."
-msgstr[0] ""
-
-msgid "You need to transfer money to your wallet to fund your donations."
-msgstr "Anda perlu untuk mengirim uang ke dompet anda untuk mendanai donasi anda."
-
-#, python-brace-format
-msgid "You need to transfer money to your wallet to fund your donations in {currency}."
-msgstr "Anda perlu mengirim uang ke dompet anda untuk mendanai donasi anda dalam mata uang {currency}."
-
-#, python-brace-format
-msgid "You have a pending {payment_method} payment for {money_amount}. {link_open}Details{link_close}"
-msgstr "Anda memiliki {payment_method} yang tertunda untuk pembayaran sebesar {money_amount}. {link_open}Perincian{link_close}"
-
-msgid "Please choose a payment method to add money:"
-msgstr "Silakan pilih metode pembayaran untuk menambahkan uang:"
-
-msgid "Easy and instantaneous"
-msgstr "Mudah dan cepat"
-
-#, python-brace-format
-msgid "Fees: {0}% + {1}"
-msgstr "Biaya: {0}% +{1}"
-
-msgid "To an account in Europe"
-msgstr "Untuk akun di Eropa"
-
-msgid "Cheapest for small amounts¹"
-msgstr "Termurah untuk jumlah kecil¹"
-
-msgid "Cheaper¹ but cumbersome"
-msgstr "Lebih murah¹ tapi rumit"
-
-#, python-brace-format
-msgid "Fee: {0}%"
-msgstr "Biaya: {0}%"
-
-msgid "Best for regular payments"
-msgstr "Terbaik untuk pembayaran reguler"
-
-msgid "You haven't set up any donations yet, once you do you'll be prompted to add money to your account."
-msgstr "Anda belum menyiapkan sumbangan apa pun, begitu anda melakukannya, anda akan diminta untuk menambahkan uang ke akun anda."
-
-msgid "About Fees"
-msgstr "Tentang biaya"
-
-#, python-brace-format
-msgid "The fees are those of our payment processors, Liberapay is only funded by the donations to {0}its own account{1}."
-msgstr "Biaya adalah dari platform pemroses pembayaran kami, Liberapay hanya didanai oleh donasi ke {0} akun miliknya sendiri {1}."
-
-msgid "¹ Unless your bank also charges you for the transfer. We have no control or visibility over that."
-msgstr "¹ Kecuali jika bank anda juga membebankan biaya untuk transfer anda. Kami tidak memiliki kontrol atau pengamatan atas hal itu."
-
-msgid "The email has been sent."
-msgstr "Email telah dikirim."
-
-msgid "Why are you trying to put more money into your wallet? Please contact support@liberapay.com if you have a legitimate reason."
-msgstr "Mengapa anda mencoba memasukkan lebih banyak uang ke dompet anda? Silakan hubungi support@liberapay.com jika anda memiliki alasan yang sah."
-
-msgid "This bank wire has been canceled."
-msgstr "Transfer bank wire ini telah dibatalkan."
-
-#, python-brace-format
-msgid "The attempt to prepare a bank wire transfer of {0} has failed. Error message: {1}"
-msgstr "Upaya menyiapkan transfer bank wire {0} telah gagal. Pesan error: {1}"
-
-msgid "Email me this information"
-msgstr "Kirimkan saya email mengenai informasi ini"
-
-msgid "Wire reference codes are not reusable. It's not yet possible to set up a recurrent transfer from your bank account to Liberapay."
-msgstr "Kode referensi bank wire tidak dapat digunakan kembali. Belum dimungkinkan untuk mengatur transfer ulang dari rekening bank Anda ke Liberapay."
-
-msgid "We will send you an email once we know whether your payment has succeeded or failed."
-msgstr "Kami akan mengirimkan email kepada anda setelah kami tahu apakah pembayaran anda berhasil atau gagal."
-
-msgid "You have disabled some or all email notifications about bank wires."
-msgstr ""
-
-msgid "Changed your mind? Cancel the payment to avoid receiving a failure notification next month:"
-msgstr ""
-
-#, python-brace-format
-msgid "Adding money to Liberapay via bank wire incurs a fee of {0}% from our payment processor."
-msgstr ""
-
-msgid "Please select a precomputed amount or input a custom one."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} ({2}% fee included)"
-msgstr ""
-
-#, python-brace-format
-msgid "Your donations will be funded for {n} week"
-msgid_plural "Your donations will be funded for {n} weeks"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "<unused singular (hash=578803aaecf90d69fa606ab0f5a693e9)>"
-msgid_plural "Your donations will be funded for {n} weeks ({0})"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "{n} month"
-msgid_plural "{n} months"
-msgstr[0] ""
-
-msgid "The saved card data was not sufficient to complete the payment, please input your full card details to retry."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} have been taken from your credit card, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
-
-#, python-brace-format
-msgid "The attempt to take {0} from your credit card has failed. Error message: {1}"
-msgstr ""
-
-#, python-brace-format
-msgid "Adding money to Liberapay via credit/debit card incurs a fee of {0}% + {1}."
-msgstr ""
-
-msgid "Card payments are instantenous, and we will attempt to pull the full amount you choose as soon as you click the \"Proceed\" button below."
-msgstr ""
-
-msgid "Billing Address (optional)"
-msgstr ""
-
-msgid "Card payments can sometimes be rejected when a billing address isn't provided, or if it doesn't match the card holder's address of record. To our knowledge only cards issued in the United States, the United Kingdom and Australia are currently checked in this manner."
-msgstr ""
-
-msgid "Saved address:"
-msgstr ""
-
-msgid "Input the billing address"
-msgstr ""
-
-msgid "Warning: some of the card data you have input seems to be invalid. Proceed anyway?"
-msgstr ""
-
-msgid "The request failed. Please make sure your browser is up-to-date, and disable any extension that blocks requests (e.g. NoScript), then try again."
-msgstr ""
-
-msgid "Card number"
-msgstr ""
-
-msgid "The main number on the card, between 8 and 19 digits"
-msgstr ""
-
-msgid "This card number seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
-
-msgid "This card number is invalid."
-msgstr ""
-
-msgid "MM/YY"
-msgstr ""
-
-msgid "Expiration date (4 digits)"
-msgstr ""
-
-msgid "This expiration date is invalid."
-msgstr ""
-
-msgid "CVV"
-msgstr ""
-
-msgid "Verification code, usually 3 digits located on the back of the card"
-msgstr ""
-
-msgid "This verification code seems to be invalid, are you sure you didn't make a mistake?"
-msgstr ""
-
-msgid "Your card data is sent directly to our payment partner's system through an encrypted connection."
-msgstr ""
-
-#, python-brace-format
-msgid "Direct debits in {currency} are not possible from {country}."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} have been debited from your bank account, {1} went to your Liberapay wallet, {2} were paid in transaction fees."
-msgstr ""
-
-#, python-brace-format
-msgid "A direct debit of {0} has been initiated. If the transfer is successful {1} will arrive in your Liberapay wallet and {2} will be paid in fees."
-msgstr ""
-
-#, python-brace-format
-msgid "Adding money to Liberapay via direct debit incurs a fee of {0}."
-msgstr ""
-
-msgid "IBAN"
-msgstr ""
-
-msgid "Use another account"
-msgstr ""
-
-msgid "This IBAN is invalid."
-msgstr ""
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr ""
-
 msgid "The amount cannot be zero."
 msgstr ""
 
@@ -4064,17 +3755,6 @@ msgstr ""
 msgid "You have {0} in your Liberapay wallet."
 msgstr ""
 
-msgid "Unfortunately you cannot withdraw that money yet, it is still in quarantine."
-msgstr ""
-
-#, python-brace-format
-msgid "Out of that, {0} is available for withdrawal, the rest is still in quarantine."
-msgstr ""
-
-#, python-brace-format
-msgid "We quarantine money for {0} to protect ourselves from credit card fraud, sorry for the inconvenience."
-msgstr ""
-
 msgid "Which currency do you want to withdraw?"
 msgstr ""
 
@@ -4090,6 +3770,9 @@ msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination c
 msgstr ""
 
 msgid "Bank account"
+msgstr ""
+
+msgid "IBAN"
 msgstr ""
 
 msgid "Routing Number"
@@ -4113,6 +3796,9 @@ msgstr ""
 msgid "Sort Code"
 msgstr ""
 
+msgid "BIC (Bank Identifier Code)"
+msgstr "BIC (Kode Pengenal Bank)"
+
 msgid "SEPA / IBAN"
 msgstr ""
 
@@ -4128,6 +3814,12 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
+msgid "IBAN (International Bank Account Number)"
+msgstr "IBAN (Nomor Rekening Bank Internasional)"
+
+msgid "This IBAN is invalid."
+msgstr ""
+
 msgid "checking"
 msgstr ""
 
@@ -4141,6 +3833,9 @@ msgid "only letters (a-z) and digits (0-9) are allowed"
 msgstr ""
 
 msgid "This account number is invalid."
+msgstr ""
+
+msgid "The following fields are about the legal owner of the bank account."
 msgstr ""
 
 msgid "The bank account must belong to you, sending money to third parties is not allowed."
@@ -4508,21 +4203,6 @@ msgid "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_en
 msgstr ""
 
 msgid "You need to log in to access this page."
-msgstr ""
-
-msgid "Money"
-msgstr ""
-
-msgid "Quarantine"
-msgstr ""
-
-msgid "Concretely, you are prevented from withdrawing the quarantined money from your Liberapay account to your bank account."
-msgstr ""
-
-msgid "Safety"
-msgstr ""
-
-msgid "We guarantee that the funds you put in our custody will not be lost in case of bankruptcy, whether it affects us or a third party to whom we have delegated the custody of the funds."
 msgstr ""
 
 msgid "Here is a list of differences between them:"
