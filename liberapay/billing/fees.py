@@ -3,47 +3,7 @@
 
 from mangopay.utils import Money
 
-from liberapay.constants import (
-    PAYIN_CARD_MIN, FEE_PAYIN_CARD,
-    FEE_PAYIN_BANK_WIRE, PAYIN_BANK_WIRE_MIN,
-    FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN,
-    FEE_PAYOUT,
-    Fees,
-)
-
-
-def upcharge(amount, fees, min_amounts):
-    """Given an amount, return a higher amount and the difference.
-    """
-    assert isinstance(amount, Money), type(amount)
-
-    fees = fees if isinstance(fees, Fees) else fees[amount.currency]
-
-    min_amount = min_amounts[amount.currency]
-    if amount < min_amount:
-        amount = min_amount
-
-    # a = c - vf * c - ff  =>  c = (a + ff) / (1 - vf)
-    # a = amount ; c = charge amount ; ff = fixed fee ; vf = variable fee
-    charge_amount = (amount + fees.fix) / (1 - fees.var)
-    fee = charge_amount - amount
-
-    # + VAT
-    vat = fee * Fees.VAT
-    charge_amount += vat
-    fee += vat
-
-    # Round
-    charge_amount = charge_amount.round_up()
-    fee = fee.round_up()
-    vat = vat.round_up()
-
-    return charge_amount, fee, vat
-
-
-upcharge_bank_wire = lambda amount: upcharge(amount, FEE_PAYIN_BANK_WIRE, PAYIN_BANK_WIRE_MIN)
-upcharge_card = lambda amount: upcharge(amount, FEE_PAYIN_CARD, PAYIN_CARD_MIN)
-upcharge_direct_debit = lambda amount: upcharge(amount, FEE_PAYIN_DIRECT_DEBIT, PAYIN_DIRECT_DEBIT_MIN)
+from liberapay.constants import FEE_PAYOUT, Fees
 
 
 def skim_amount(amount, fees):
@@ -55,9 +15,6 @@ def skim_amount(amount, fees):
     fee = fee.round_up()
     vat = vat.round_up()
     return amount - fee, fee, vat
-
-
-skim_bank_wire = lambda amount: skim_amount(amount, FEE_PAYIN_BANK_WIRE)
 
 
 def get_bank_account_country(ba):

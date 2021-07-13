@@ -33,7 +33,7 @@
     "system."
 ) }}</p>
 
-% if mangopay_balance
+% if mangopay_balance|default(None)
 <p>{{ _("You have {money_amount} in your Mangopay wallet.", money_amount=mangopay_balance) }}</p>
 <p><a href="{{ participant.url('wallet/payout') }}" style="{{ button_style('primary') }}">{{ _("Withdraw money") }}</a></p>
 % endif

@@ -256,26 +256,15 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        % if len(payment.recipient_names) > 1
-        <div>{{ _(
-            "The entire amount of your payment will go immediately to the "
-            "{payment_provider} accounts of {recipient_names}.",
+        <div class="text-info">{{ glyphicon('info-sign') }} {{ _(
+            "Liberapay does not store money, the entire amount of your payment will "
+            "go immediately to the {payment_provider} accounts of {recipient_names}.",
             payment_provider='PayPal', recipient_names=payment.recipient_names
-        ) }}</div>
-        % elif payer.mangopay_user_id
-        <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
-            "Liberapay no longer stores money in wallets, the entire amount "
-            "of your payment will go immediately to the {payment_provider} "
-            "account of {recipient_name}.",
+        ) if len(payment.recipient_names) > 1 else _(
+            "Liberapay does not store money, the entire amount of your payment will "
+            "go immediately to the {payment_provider} account of {recipient_name}.",
             payment_provider='PayPal', recipient_name=payment.recipient_names[0]
         ) }}</div>
-        % else
-        <p>{{ _(
-            "The entire amount of your payment will go immediately to the "
-            "{payment_provider} account of {recipient_name}.",
-            payment_provider='PayPal', recipient_name=payment.recipient_names[0]
-        ) }}</p>
-        % endif
 
         <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
             "PayPal payments are currently not anonymous, the recipient will "

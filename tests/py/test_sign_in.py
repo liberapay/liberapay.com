@@ -145,7 +145,7 @@ class TestLogIn(EmailHarness):
         email = 'alice@example.net'
         alice = self.make_participant('alice', email=None)
         alice.add_email(email)
-        alice.close(None)
+        alice.close()
 
         # Sanity checks
         email_row = alice.get_email(email)

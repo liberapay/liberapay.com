@@ -5,8 +5,7 @@ import stripe
 
 from liberapay.billing.payday import Payday
 from liberapay.constants import SESSION
-from liberapay.testing import EUR
-from liberapay.testing.mangopay import Harness
+from liberapay.testing import EUR, Harness
 from liberapay.utils import b64encode_s
 from liberapay.wireup import NoDB
 

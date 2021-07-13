@@ -1,20 +1,16 @@
-import pytest
-
 from liberapay.billing.payday import Payday
-from liberapay.exceptions import UnableToDistributeBalance
 from liberapay.models.community import Community
 from liberapay.models.participant import Participant, clean_up_closed_accounts
-from liberapay.testing import EUR
-from liberapay.testing.mangopay import FakeTransfersHarness
+from liberapay.testing import EUR, Harness
 
 
-class TestClosing(FakeTransfersHarness):
+class TestClosing(Harness):
 
     # close
 
     def test_close_closes(self):
         team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=EUR('10.00'))
+        alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
 
@@ -25,28 +21,21 @@ class TestClosing(FakeTransfersHarness):
         team.add_member(bob)
         assert len(team.get_current_takes_for_display()) == 2  # sanity check
 
-        alice.close('downstream')
+        alice.close()
 
         assert carl.get_tip_to(alice).amount == EUR(2)
-        assert alice.balance == 0
         assert len(team.get_current_takes_for_display()) == 1
 
-    def test_close_raises_for_unknown_disbursement_strategy(self):
-        alice = self.make_participant('alice', balance=EUR('0.00'))
-        with pytest.raises(alice.UnknownDisbursementStrategy):
-            alice.close('cheese')
-
-    def test_close_page_is_usually_available(self):
+    def test_close_page(self):
         alice = self.make_participant('alice')
         body = self.client.GET('/alice/settings/close', auth_as=alice).text
-        assert '<h3>Username' in body
+        assert '<h3>Ready?' in body
 
-    def test_close_page_is_not_available_during_payday(self):
+    def test_close_page_is_available_during_payday(self):
         Payday.start()
         alice = self.make_participant('alice')
         body = self.client.GET('/alice/settings/close', auth_as=alice).text
-        assert 'Personal Information' not in body
-        assert 'Try Again Later' in body
+        assert '<h3>Ready?' in body
 
     def test_can_post_to_close_page(self):
         alice = self.make_participant('alice')
@@ -54,121 +43,12 @@ class TestClosing(FakeTransfersHarness):
         assert response.code == 302
         assert response.headers[b'Location'] == b'/alice/'
 
-    def test_cant_post_to_close_page_during_payday(self):
+    def test_can_post_to_close_page_during_payday(self):
         Payday.start()
         alice = self.make_participant('alice')
-        body = self.client.POST('/alice/settings/close', auth_as=alice).text
-        assert 'Try Again Later' in body
-
-
-    # dbtd - distribute_balances_to_donees
-
-    def test_dbtd_distributes_balance(self):
-        alice = self.make_participant('alice', balance=EUR('10.00'))
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        alice.set_tip_to(bob, EUR('3.00'))
-        alice.set_tip_to(carl, EUR('2.00'))
-        alice.distribute_balances_to_donees()
-        assert Participant.from_username('bob').balance == EUR('6.00')
-        assert Participant.from_username('carl').balance == EUR('4.00')
-        assert Participant.from_username('alice').balance == EUR('0.00')
-
-    def test_dbtd_with_arrears(self):
-        alice = self.make_participant('alice', balance=EUR('5.00'))
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        alice.set_tip_to(bob, EUR('3.00'))
-        alice.set_tip_to(carl, EUR('2.00'))
-        Payday.start().run()
-        Payday.start().run()
-        self.make_exchange('mango-cc', EUR('3.00'), 0, alice)
-        alice.distribute_balances_to_donees()
-        assert Participant.from_username('bob').balance == EUR('4.80')
-        assert Participant.from_username('carl').balance == EUR('3.20')
-        assert Participant.from_username('alice').balance == EUR('0.00')
-
-    def test_dbtd_needs_claimed_tips(self):
-        alice = self.make_participant('alice', balance=EUR('10.00'))
-        bob = self.make_stub()
-        carl = self.make_stub()
-        alice.set_tip_to(bob, EUR('3.00'))
-        alice.set_tip_to(carl, EUR('2.00'))
-        with pytest.raises(UnableToDistributeBalance):
-            alice.distribute_balances_to_donees()
-        assert Participant.from_id(bob.id).balance == EUR('0.00')
-        assert Participant.from_id(carl.id).balance == EUR('0.00')
-        assert Participant.from_id(alice.id).balance == EUR('10.00')
-
-    def test_dbtd_gives_all_to_claimed(self):
-        alice = self.make_participant('alice', balance=EUR('10.00'))
-        bob = self.make_participant('bob')
-        carl = self.make_stub()
-        alice.set_tip_to(bob, EUR('3.00'))
-        alice.set_tip_to(carl, EUR('2.00'))
-        alice.distribute_balances_to_donees()
-        assert Participant.from_id(bob.id).balance == EUR('10.00')
-        assert Participant.from_id(carl.id).balance == EUR('0.00')
-        assert Participant.from_id(alice.id).balance == EUR('0.00')
-
-    def test_dbtd_skips_stopped_tips(self):
-        alice = self.make_participant('alice', balance=EUR('10.00'))
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        alice.set_tip_to(bob, EUR('1.00'))
-        alice.stop_tip_to(bob)
-        alice.set_tip_to(carl, EUR('2.00'))
-        alice.distribute_balances_to_donees()
-        assert Participant.from_username('bob').balance == EUR('0.00')
-        assert Participant.from_username('carl').balance == EUR('10.00')
-        assert Participant.from_username('alice').balance == EUR('0.00')
-
-    def test_dbtd_favors_highest_tippee_in_rounding_errors(self):
-        alice = self.make_participant('alice', balance=EUR('10.00'))
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        alice.set_tip_to(bob, EUR('3.00'))
-        alice.set_tip_to(carl, EUR('6.00'))
-        alice.distribute_balances_to_donees()
-        assert Participant.from_username('bob').balance == EUR('3.33')
-        assert Participant.from_username('carl').balance == EUR('6.67')
-        assert Participant.from_username('alice').balance == EUR('0.00')
-
-    def test_dbtd_with_zero_balance_is_a_noop(self):
-        alice = self.make_participant('alice', balance=EUR('0.00'))
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        alice.set_tip_to(bob, EUR('3.00'))
-        alice.set_tip_to(carl, EUR('6.00'))
-        alice.distribute_balances_to_donees()
-        assert self.db.one("SELECT count(*) FROM tips") == 2
-        assert Participant.from_username('bob').balance == EUR('0.00')
-        assert Participant.from_username('carl').balance == EUR('0.00')
-        assert Participant.from_username('alice').balance == EUR('0.00')
-
-    def test_dbtd_distributes_to_team(self):
-        team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=EUR('0.01'))
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        alice.set_tip_to(team, EUR('3.00'))
-        team.set_take_for(alice, EUR('1.00'), team)
-        team.set_take_for(bob, EUR('1.00'), team)
-        team.set_take_for(carl, EUR('0.01'), team)
-        alice.distribute_balances_to_donees()
-        assert alice.balance == 0
-        assert bob.refetch().balance == EUR('0.01')
-        assert carl.refetch().balance == 0
-
-    def test_dbtd_distributes_to_team_of_one_with_zero_take(self):
-        team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=EUR('0.12'))
-        bob = self.make_participant('bob')
-        alice.set_tip_to(team, EUR('3.00'))
-        team.set_take_for(bob, EUR('0.00'), team)
-        alice.distribute_balances_to_donees()
-        assert alice.balance == 0
-        assert bob.refetch().balance == EUR('0.12')
+        response = self.client.PxST('/alice/settings/close', auth_as=alice)
+        assert response.code == 302
+        assert response.headers[b'Location'] == b'/alice/'
 
 
     # ctg - clear_tips_giving
@@ -268,7 +148,7 @@ class TestClosing(FakeTransfersHarness):
         )
         alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')
-        alice.close(None)
+        alice.close()
 
         cleaned = clean_up_closed_accounts()
         assert cleaned == 0
@@ -300,7 +180,7 @@ class TestClosing(FakeTransfersHarness):
         alice.upsert_statement('en', 'not forgetting to be awesome!')
         alice.add_email('alice@example.net')
 
-        alice.close(None)
+        alice.close()
         alice.update_status('active')
         new_alice = Participant.from_username('alice')
 

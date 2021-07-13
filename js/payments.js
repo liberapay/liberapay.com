@@ -1,12 +1,3 @@
-/* Bank Account and Credit Card forms
- *
- * These two forms share some common wiring under the Liberapay.payments
- * namespace, and each has unique code under the Liberapay.payments.{cc,ba}
- * namespaces. Each form gets its own page so we only instantiate one of these
- * at a time.
- *
- */
-
 Liberapay.payments = {};
 
 
@@ -14,7 +5,7 @@ Liberapay.payments = {};
 // ===========
 
 Liberapay.payments.init = function() {
-    var $form = $('form#payin, form#payout');
+    var $form = $('form#payout');
     if ($form.length === 0) return;
     $('fieldset.hidden').prop('disabled', true);
     $('button[data-modify]').click(function() {
@@ -189,123 +180,6 @@ Liberapay.payments.ba.submit = function () {
         type: 'POST',
         data: data,
         dataType: 'json',
-        success: Liberapay.payments.onSuccess,
-        error: Liberapay.payments.error,
-    });
-};
-
-
-// Credit Cards
-// ============
-
-Liberapay.payments.cc = {};
-
-Liberapay.payments.cc.check = function() {
-    Liberapay.forms.clearInvalid($('#credit-card'));
-
-    var card = Liberapay.payments.cc.form.check();
-    if (card.pan.status == null) card.pan.status = 'abnormal';
-    if (card.cvn.status == null) card.cvn.status = 'valid';
-
-    Liberapay.forms.setValidity($('#card_number'), card.pan.status);
-    Liberapay.forms.setValidity($('#expiration_date'), card.expiry.status);
-    Liberapay.forms.setValidity($('#cvv'), card.cvn.status);
-
-    return card;
-}
-
-Liberapay.payments.cc.init = function() {
-    var $fieldset = $('#credit-card');
-    if ($fieldset.length === 0) return;
-    mangoPay.cardRegistration.baseURL = $fieldset.data('mangopay-url');
-    mangoPay.cardRegistration.clientId = $fieldset.data('mangopay-id');
-
-    var form = new PaymentCards.Form(
-        document.querySelector('#card_number'),
-        document.querySelector('#expiration_date'),
-        document.querySelector('#cvv')
-    );
-    Liberapay.payments.cc.form = form;
-
-    function onBlur() {
-        var card = Liberapay.payments.cc.check();
-        $('.card-brand').text(card.brand);
-    }
-    form.inputs.pan.addEventListener('blur', onBlur);
-    form.inputs.expiry.addEventListener('blur', onBlur);
-    form.inputs.cvn.addEventListener('blur', onBlur);
-
-    form.inputs.pan.addEventListener('input', function () {
-        $('.card-brand').text('');
-    });
-};
-
-Liberapay.payments.cc.onError = function(response) {
-    Liberapay.payments.error();
-    var debugInfo = '';
-    if (response.ResultMessage == 'CORS_FAIL') {
-        var msg = $('#credit-card').data('msg-cors-fail');
-    } else {
-        var msg = response.ResultMessage;
-        var xhr = response.xmlhttp;
-        if (xhr && xhr.status === 0) {
-            var msg = $('#credit-card').data('msg-cors-fail');
-        } else if (xhr) {
-            var text = xhr.responseText;
-            text = text && text.length > 200 ? text.slice(0, 200) + '...' : text;
-            debugInfo = {status: xhr.status, responseText: text};
-            debugInfo = ' (Debug info: '+JSON.stringify(debugInfo)+')';
-        }
-    }
-    Liberapay.notification(msg + ' (Error code: '+response.ResultCode+')' + debugInfo, 'error', -1);
-};
-
-Liberapay.payments.cc.submit = function() {
-
-    var card = Liberapay.payments.cc.check();
-    if (card.pan.status != 'valid' || card.expiry.status != 'valid' || card.cvn.status != 'valid') {
-        if (!confirm($('#credit-card').data('msg-confirm-submit'))) {
-            Liberapay.payments.error();
-            Liberapay.forms.focusInvalid($('#credit-card'));
-            return false;
-        }
-    }
-
-    var cardData = {
-        cardNumber: card.pan.value,
-        cardCvx: card.cvn.value,
-        cardExpirationDate: card.expiry.value,
-    };
-
-    jQuery.ajax({
-        url: '/'+Liberapay.payments.user_slug+'/routes/credit-card.json',
-        type: "POST",
-        data: {CardType: 'CB_VISA_MASTERCARD', Currency: $('#credit-card').data('currency')},
-        dataType: "json",
-        success: Liberapay.payments.cc.register(cardData),
-        error: Liberapay.payments.error,
-    });
-    return false;
-};
-
-Liberapay.payments.cc.register = function (cardData) {
-    return Liberapay.payments.wrap(function (cardRegistrationData) {
-        cardRegistrationData.Id = cardRegistrationData.id;
-        delete cardRegistrationData.id;
-        mangoPay.cardRegistration.init(cardRegistrationData);
-        mangoPay.cardRegistration.registerCard(cardData, Liberapay.payments.cc.associate, Liberapay.payments.cc.onError);
-    })
-};
-
-Liberapay.payments.cc.associate = function (response) {
-    /* The request to tokenize the card succeeded. Now we need to associate it
-     * to the participant in our DB.
-     */
-    jQuery.ajax({
-        url: '/'+Liberapay.payments.user_slug+'/routes/credit-card.json',
-        type: "POST",
-        data: {CardId: response.CardId, keep: $('input#keep').prop('checked')},
-        dataType: "json",
         success: Liberapay.payments.onSuccess,
         error: Liberapay.payments.error,
     });

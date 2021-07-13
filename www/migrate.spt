@@ -503,10 +503,6 @@ title = _("Migrating from Gratipay")
         </ul>
         <p class="buttons">
             <a class="btn btn-default" href="{{ p.path('giving') }}" target="_blank">{{ _("Manage your donations") }}</a>
-        % if len(result.donations) and p.balance == 0
-            &nbsp;
-            <a class="btn btn-default" href="{{ p.path('giving/pay') }}" target="_blank">{{ _("Add money") }}</a>
-        % endif
         </p>
         % else
         <div class="alert alert-danger">{{ _(

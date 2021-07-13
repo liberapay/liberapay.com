@@ -8,8 +8,6 @@ if request.method == 'POST':
     disburse_to = request.body['disburse_to']
     if disburse_to == 'payout':
         response.redirect(participant.path('wallet/payout/'+b64encode_s(request.line.uri.decoded)))
-    elif disburse_to == 'payin-refund':
-        participant.refund_balances()
     elif disburse_to == 'downstream':
         participant.distribute_balances_to_donees()
     elif disburse_to == 'liberapay':
@@ -18,7 +16,6 @@ if request.method == 'POST':
         raise response.invalid_input(disburse_to, 'disburse_to', 'body')
 
 balances = participant.get_balances()
-refundable_balances = participant.get_refundable_balances()
 
 title = _("Emptying your wallet")
 
@@ -56,17 +53,10 @@ title = _("Emptying your wallet")
                         {{ _("This option is recommended for small amounts.") }}
                     </p>
                 </label><br>
-                % if refundable_balances >= balances
-                <label>
-                    <input type="radio" name="disburse_to" value="payin-refund" />
-                    {{ _("Refund it to my card or bank account") }}
-                </label><br>
-                % else
                 <label>
                     <input type="radio" name="disburse_to" value="payout" />
                     {{ _("Withdraw it to my bank account") }}
                 </label>
-                % endif
             </div>
             <p>{{ _(
                 "If neither option works for you, please contact support@liberapay.com."

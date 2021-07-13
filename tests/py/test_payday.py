@@ -1,16 +1,23 @@
 from unittest import mock
 
+import pytest
+
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
-from liberapay.billing.transactions import create_debt
 from liberapay.i18n.currencies import MoneyBasket
-from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, JPY, USD, Foobar
-from liberapay.testing.mangopay import FakeTransfersHarness, MangopayHarness
 from liberapay.testing.emails import EmailHarness
 
 
-class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
+class TestPayday(EmailHarness):
+
+    def setUp(self):
+        super().setUp()
+        self.david = self.make_participant('david', email='david@example.org')
+        self.janet = self.make_participant('janet', email='janet@example.net')
+        self.janet_route = self.upsert_route(self.janet, 'stripe-card')
+        self.homer = self.make_participant('homer', email='homer@example.com')
+        self.homer_route = self.upsert_route(self.homer, 'stripe-sdd')
 
     def test_payday_prevents_human_errors(self):
         with self.db.get_connection() as conn:
@@ -85,19 +92,6 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert payday.stage == 5
         payday.run()
         assert payday.stage is None
-
-    def test_payday_moves_money(self):
-        self.janet.set_tip_to(self.homer, EUR('6.00'))  # under $10!
-        self.make_exchange('mango-cc', 10, 0, self.janet)
-        Payday.start().run()
-
-        janet = Participant.from_username('janet')
-        homer = Participant.from_username('homer')
-
-        assert homer.balance == EUR('6.00')
-        assert janet.balance == EUR('4.00')
-
-        assert self.transfer_mock.call_count
 
     def test_update_cached_amounts(self):
         team = self.make_participant('team', kind='group')
@@ -189,12 +183,11 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             UPDATE tips t
                SET is_funded = true
               FROM participants p
-             WHERE p.id = t.tippee
-               AND p.mangopay_user_id IS NOT NULL;
+             WHERE p.id = t.tippee;
             UPDATE participants
                SET giving = (10000,'EUR')
                  , taking = (10000,'EUR')
-             WHERE mangopay_user_id IS NOT NULL;
+             WHERE kind NOT IN ('group', 'community');
             UPDATE participants
                SET npatrons = 10000
                  , receiving = (10000,'EUR');
@@ -208,35 +201,9 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
             p.update_giving()
         check()
 
-    def test_update_cached_amounts_depth(self):
-        # This test is currently broken, but we may be able to fix it someday
-        return
-
-        alice = self.make_participant('alice', balance=EUR(100))
-        usernames = ('bob', 'carl', 'dana', 'emma', 'fred', 'greg')
-        users = [self.make_participant(username) for username in usernames]
-
-        prev = alice
-        for user in reversed(users):
-            prev.set_tip_to(user, EUR('1.00'))
-            prev = user
-
-        def check():
-            for username in reversed(usernames[1:]):
-                user = Participant.from_username(username)
-                assert user.giving == EUR('1.00')
-                assert user.receiving == EUR('1.00')
-                assert user.npatrons == 1
-            funded_tips = self.db.all("SELECT id FROM tips WHERE is_funded ORDER BY id")
-            assert len(funded_tips) == 6
-
-        check()
-        Payday.start().update_cached_amounts()
-        check()
-
     def test_prepare(self):
         self.clear_tables()
-        self.make_participant('carl', balance=EUR(10))
+        self.make_participant('carl')
 
         payday = Payday.start()
         ts_start = payday.ts_start
@@ -272,29 +239,16 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         with self.assertRaises(NoPayday):
             Payday().end()
 
-    @staticmethod
-    def get_new_balances(cursor):
-        return {
-            username: [m for m in balances if m.amount]
-            for username, balances in cursor.all(
-                "SELECT username, balances FROM payday_participants"
-            )
-        }
-
-    def test_payday_doesnt_process_tips_when_goal_is_negative(self):
-        self.make_exchange('mango-cc', 20, 0, self.janet)
+    def test_payday_reduces_advance_even_when_tippee_goal_is_negative(self):
         self.janet.set_tip_to(self.homer, EUR('13.00'))
+        self.make_payin_and_transfer(self.janet_route, self.homer, EUR('20.00'))
         self.db.run("UPDATE participants SET goal = (-1,null) WHERE username='homer'")
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start, payday.id)
-            new_balances = self.get_new_balances(cursor)
-            assert new_balances == {
-                'david': [],
-                'homer': [],
-                'janet': [EUR(20)],
-            }
+            transfer = cursor.one("SELECT * FROM payday_transfers")
+            assert transfer.amount == EUR('13.00')
 
     def test_payday_doesnt_make_null_transfers(self):
         alice = self.make_participant('alice')
@@ -307,19 +261,15 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert not transfers0
 
     def test_transfer_tips(self):
-        self.make_exchange('mango-cc', 1, 0, self.david)
+        david_card = self.upsert_route(self.david, 'stripe-card')
         self.david.set_tip_to(self.janet, EUR('0.51'))
+        self.make_payin_and_transfer(david_card, self.janet, EUR('51.00'))
         self.david.set_tip_to(self.homer, EUR('0.50'))
+        self.make_payin_and_transfer(david_card, self.homer, EUR('0.49'))
         payday = Payday.start()
         with self.db.get_cursor() as cursor:
             payday.prepare(cursor, payday.ts_start)
             payday.transfer_virtually(cursor, payday.ts_start, payday.id)
-            new_balances = self.get_new_balances(cursor)
-            assert new_balances == {
-                'david': [],
-                'homer': [EUR('0.49')],
-                'janet': [EUR('0.51')],
-            }
             tips = dict(cursor.all("SELECT tippee, is_funded FROM payday_tips"))
             assert tips == {
                 self.janet.id: True,
@@ -331,55 +281,17 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
                 self.homer.id: 'partial-tip',
             }
 
-    def test_transfer_tips_whole_graph(self):
-        alice = self.make_participant('alice', balance=EUR(50))
-        alice.set_tip_to(self.homer, EUR('50'))
-        self.homer.set_tip_to(self.janet, EUR('20'))
-        self.janet.set_tip_to(self.david, EUR('5'))
-        self.david.set_tip_to(self.homer, EUR('20'))  # Partially funded
-
-        payday = Payday.start()
-        with self.db.get_cursor() as cursor:
-            payday.prepare(cursor, payday.ts_start)
-            payday.transfer_virtually(cursor, payday.ts_start, payday.id)
-            new_balances = self.get_new_balances(cursor)
-            assert new_balances == {
-                'alice': [],
-                'david': [],
-                'homer': [EUR('35')],
-                'janet': [EUR('15')],
-            }
-
     def test_payday_handles_paid_in_advance(self):
         self.add_payment_account(self.david, 'stripe')
-        self.add_payment_account(self.homer, 'paypal')
-        self.make_exchange('mango-cc', EUR('2.00'), 0, self.janet)
+        self.add_payment_account(self.homer, 'stripe')
         self.janet.set_tip_to(self.david, EUR('0.60'))
+        self.make_payin_and_transfer(self.janet_route, self.david, EUR('1.20'))
         team = self.make_participant('team', kind='group')
         team.set_take_for(self.homer, EUR('0.40'), team)
         self.janet.set_tip_to(team, EUR('0.40'))
-        self.janet.distribute_balances_to_donees()
+        self.make_payin_and_transfer(self.janet_route, team, EUR('0.80'))
 
-        # Preliminary checks
-        janet = self.janet.refetch()
-        assert janet.balance == 0
-        tips = self.db.all("""
-            SELECT *
-              FROM current_tips
-             WHERE tipper = %s
-          ORDER BY id
-        """, (janet.id,))
-        assert len(tips) == 2
-        assert tips[0].paid_in_advance == EUR('1.20')
-        assert tips[1].paid_in_advance == EUR('0.80')
-        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
-        assert len(transfers) == 2
-        assert transfers[0].amount == EUR('1.20')
-        assert transfers[0].context == 'tip-in-advance'
-        assert transfers[1].amount == EUR('0.80')
-        assert transfers[1].context == 'take-in-advance'
-
-        # Now run a payday and check the results
+        # Run a payday and check the results
         self.db.run("""
             UPDATE scheduled_payins
                SET ctime = ctime - interval '12 hours'
@@ -391,12 +303,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
               FROM current_tips
              WHERE tipper = %s
           ORDER BY id
-        """, (janet.id,))
+        """, (self.janet.id,))
         assert len(tips) == 2
         assert tips[0].paid_in_advance == EUR('0.60')
         assert tips[1].paid_in_advance == EUR('0.40')
         transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
-        assert len(transfers) == 4
+        assert len(transfers) == 2
 
         emails = self.get_emails()
         assert len(emails) == 3
@@ -416,12 +328,12 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
               FROM current_tips
              WHERE tipper = %s
           ORDER BY id
-        """, (janet.id,))
+        """, (self.janet.id,))
         assert len(tips) == 2
         assert not tips[0].paid_in_advance
         assert not tips[1].paid_in_advance
         transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
-        assert len(transfers) == 6
+        assert len(transfers) == 4
 
         emails = self.get_emails()
         assert len(emails) == 2
@@ -430,17 +342,103 @@ class TestPayday(EmailHarness, FakeTransfersHarness, MangopayHarness):
         assert emails[1]['to'][0] == 'homer <%s>' % self.homer.email
         assert '0.40' in emails[1]['text']
 
+    def test_payday_notifies_participants(self):
+        self.janet.set_tip_to(self.david, EUR('4.50'))
+        self.janet.set_tip_to(self.homer, EUR('3.50'))
+        team = self.make_participant('team', kind='group', email='team@example.com')
+        self.janet.set_tip_to(team, EUR('0.25'))
+        team.add_member(self.david)
+        team.set_take_for(self.david, EUR('0.23'), team)
+        janet_card = self.upsert_route(self.janet, 'stripe-card')
+        self.make_payin_and_transfer(janet_card, self.david, EUR('4.50'))
+        self.make_payin_and_transfer(janet_card, self.homer, EUR('3.50'))
+        self.make_payin_and_transfer(janet_card, team, EUR('25.00'))
+        self.client.PxST('/homer/emails/', auth_as=self.homer,
+                         data={'events': 'income', 'income': ''}, xhr=True)
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET ctime = ctime - interval '12 hours'
+                 , execution_date = execution_date - interval '2 weeks'
+        """)
+        Payday.start().run()
+        emails = self.get_emails()
+        assert len(emails) == 2
+        assert emails[0]['to'][0] == 'david <%s>' % self.david.email
+        assert '4.73' in emails[0]['subject']
+        assert emails[1]['to'][0] == 'janet <%s>' % self.janet.email
+        assert 'renew your donation' in emails[1]['subject']
+        assert '2 donations' in emails[1]['text']
 
-class TestPaydayForTeams(FakeTransfersHarness):
+    def test_log_upload(self):
+        payday = Payday.start()
+        with open('payday-%i.txt.part' % payday.id, 'w') as f:
+            f.write('fake log file\n')
+        with mock.patch.object(self.website, 's3') as s3:
+            payday.run('.', keep_log=True)
+            assert s3.upload_file.call_count == 1
+
+    @mock.patch('liberapay.billing.payday.date')
+    @mock.patch('liberapay.website.website.platforms.github.api_get')
+    @mock.patch('liberapay.website.website.platforms.github.api_request')
+    def test_create_payday_issue(self, api_request, api_get, date):
+        date.today.return_value.isoweekday.return_value = 3
+        # 1st payday issue
+        api_get.return_value.json = lambda: []
+        repo = self.website.app_conf.payday_repo
+        html_url = 'https://github.com/%s/issues/1' % repo
+        api_request.return_value.json = lambda: {'html_url': html_url}
+        create_payday_issue()
+        args = api_request.call_args
+        post_path = '/repos/%s/issues' % repo
+        assert args[0] == ('POST', '', post_path)
+        assert args[1]['json'] == {'body': '', 'title': 'Payday #1', 'labels': ['Payday']}
+        assert args[1]['sess'].auth
+        public_log = self.db.one("SELECT public_log FROM paydays")
+        assert public_log == html_url
+        api_request.reset_mock()
+        # Check that executing the function again doesn't create a duplicate
+        create_payday_issue()
+        assert api_request.call_count == 0
+        # Run 1st payday
+        Payday.start().run()
+        # 2nd payday issue
+        api_get.return_value.json = lambda: [{'body': 'Lorem ipsum', 'title': 'Payday #1'}]
+        html_url = 'https://github.com/%s/issues/2' % repo
+        api_request.return_value.json = lambda: {'html_url': html_url}
+        create_payday_issue()
+        args = api_request.call_args
+        assert args[0] == ('POST', '', post_path)
+        assert args[1]['json'] == {'body': 'Lorem ipsum', 'title': 'Payday #2', 'labels': ['Payday']}
+        assert args[1]['sess'].auth
+        public_log = self.db.one("SELECT public_log FROM paydays WHERE id = 2")
+        assert public_log == html_url
+
+
+class TestPaydayForTeams(EmailHarness):
+
+    def get_taken_sums(self):
+        return dict(self.db.all("""
+            SELECT tippee, basket_sum(amount)
+              FROM transfers
+             WHERE context = 'take'
+          GROUP BY tippee
+        """))
+
+    def get_tip_advances(self):
+        return dict(self.db.all("SELECT tipper, paid_in_advance FROM current_tips"))
 
     def test_transfer_takes(self):
         a_team = self.make_participant('a_team', kind='group')
         alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         a_team.set_take_for(alice, EUR('1.00'), a_team)
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         a_team.set_take_for(bob, EUR('0.01'), a_team)
-        charlie = self.make_participant('charlie', balance=EUR(1000))
+        charlie = self.make_participant('charlie')
         charlie.set_tip_to(a_team, EUR('1.01'))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        self.make_payin_and_transfer(charlie_card, a_team, EUR('10.00'))
 
         payday = Payday.start()
 
@@ -456,37 +454,32 @@ class TestPaydayForTeams(FakeTransfersHarness):
         for i in range(2):
             payday.shuffle()
 
-        participants = self.db.all("SELECT username, balance FROM participants")
-
-        for p in participants:
-            if p.username == 'alice':
-                assert p.balance == EUR('1.00')
-            elif p.username == 'bob':
-                assert p.balance == EUR('0.01')
-            elif p.username == 'charlie':
-                assert p.balance == EUR('998.99')
-            else:
-                assert p.balance == 0
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('1.00'),
+            bob.id: EUR('0.01'),
+        }
 
     def test_underfunded_team(self):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         team.set_take_for(alice, EUR('1.00'), team)
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         team.set_take_for(bob, EUR('1.00'), team)
-        charlie = self.make_participant('charlie', balance=EUR(1000))
+        charlie = self.make_participant('charlie')
         charlie.set_tip_to(team, EUR('0.26'))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        self.make_payin_and_transfer(charlie_card, team, EUR('26.00'))
 
         Payday.start().run()
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.13'),
-            'bob': EUR('0.13'),
-            'charlie': EUR('999.74'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.13'),
+            bob.id: EUR('0.13'),
         }
-        assert d == expected
 
     def test_wellfunded_team(self):
         """
@@ -496,146 +489,173 @@ class TestPaydayForTeams(FakeTransfersHarness):
         """
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         team.set_take_for(alice, EUR('0.79'), team)
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         team.set_take_for(bob, EUR('0.21'), team)
-        charlie = self.make_participant('charlie', balance=EUR(10))
+        charlie = self.make_participant('charlie')
         charlie.set_tip_to(team, EUR('5.00'))
-        dan = self.make_participant('dan', balance=EUR(10))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        self.make_payin_and_transfer(charlie_card, team, EUR('10.00'))
+        dan = self.make_participant('dan')
         dan.set_tip_to(team, EUR('5.00'))
+        dan_card = self.upsert_route(dan, 'stripe-card')
+        self.make_payin_and_transfer(dan_card, team, EUR('10.00'))
 
         Payday.start().run()
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79'),
-            'bob': EUR('0.21'),
-            'charlie': EUR('9.5'),
-            'dan': EUR('9.5'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79'),
+            bob.id: EUR('0.21'),
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('9.5')
+        assert dan_tip.paid_in_advance == EUR('9.5')
 
     def test_wellfunded_team_with_early_donor(self):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         team.set_take_for(alice, EUR('0.79'), team)
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         team.set_take_for(bob, EUR('0.21'), team)
-        charlie = self.make_participant('charlie', balance=EUR(10))
+        charlie = self.make_participant('charlie')
         charlie.set_tip_to(team, EUR('2.00'))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        self.make_payin_and_transfer(charlie_card, team, EUR('10.00'))
 
         print("> Step 1: three weeks of donations from charlie only")
         print()
         for i in range(3):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79') * 3,
-            'bob': EUR('0.21') * 3,
-            'charlie': EUR('7.00'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79') * 3,
+            bob.id: EUR('0.21') * 3,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('7.00')
 
         print("> Step 2: dan joins the party, charlie's donation is automatically "
               "reduced while dan catches up")
         print()
-        dan = self.make_participant('dan', balance=EUR(10))
+        dan = self.make_participant('dan')
         dan.set_tip_to(team, EUR('2.00'))
+        dan_card = self.upsert_route(dan, 'stripe-card')
+        self.make_payin_and_transfer(dan_card, team, EUR('10.00'))
 
         for i in range(6):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79') * 9,
-            'bob': EUR('0.21') * 9,
-            'charlie': EUR('5.50'),
-            'dan': EUR('5.50'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79') * 9,
+            bob.id: EUR('0.21') * 9,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('5.50')
+        assert dan_tip.paid_in_advance == EUR('5.50')
 
         print("> Step 3: dan has caught up with charlie, they will now both give 0.50")
         print()
         for i in range(3):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79') * 12,
-            'bob': EUR('0.21') * 12,
-            'charlie': EUR('4.00'),
-            'dan': EUR('4.00'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79') * 12,
+            bob.id: EUR('0.21') * 12,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('4.00')
+        assert dan_tip.paid_in_advance == EUR('4.00')
 
     def test_wellfunded_team_with_two_early_donors(self):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         team.set_take_for(alice, EUR('0.79'), team)
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         team.set_take_for(bob, EUR('0.21'), team)
-        charlie = self.make_participant('charlie', balance=EUR(10))
+        charlie = self.make_participant('charlie')
         charlie.set_tip_to(team, EUR('1.00'))
-        dan = self.make_participant('dan', balance=EUR(10))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        self.make_payin_and_transfer(charlie_card, team, EUR('10.00'))
+        dan = self.make_participant('dan')
         dan.set_tip_to(team, EUR('3.00'))
+        dan_card = self.upsert_route(dan, 'stripe-card')
+        self.make_payin_and_transfer(dan_card, team, EUR('10.00'))
 
         print("> Step 1: three weeks of donations from early donors")
         print()
         for i in range(3):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79') * 3,
-            'bob': EUR('0.21') * 3,
-            'charlie': EUR('9.25'),
-            'dan': EUR('7.75'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79') * 3,
+            bob.id: EUR('0.21') * 3,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('9.25')
+        assert dan_tip.paid_in_advance == EUR('7.75')
 
         print("> Step 2: a new donor appears, the contributions of the early "
               "donors automatically decrease while the new donor catches up")
         print()
-        emma = self.make_participant('emma', balance=EUR(10))
+        emma = self.make_participant('emma')
         emma.set_tip_to(team, EUR('1.00'))
+        emma_card = self.upsert_route(emma, 'stripe-card')
+        self.make_payin_and_transfer(emma_card, team, EUR('10.00'))
 
         Payday.start().run(recompute_stats=0, update_cached_amounts=False)
         print()
+        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79') * 4,
-            'bob': EUR('0.21') * 4,
-            'charlie': EUR('9.19'),
-            'dan': EUR('7.59'),
-            'emma': EUR('9.22'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79') * 4,
+            bob.id: EUR('0.21') * 4,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        emma_tip = emma.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('9.19')
+        assert dan_tip.paid_in_advance == EUR('7.59')
+        assert emma_tip.paid_in_advance == EUR('9.22')
 
         Payday.start().run(recompute_stats=0, update_cached_amounts=False)
         print()
+        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79') * 5,
-            'bob': EUR('0.21') * 5,
-            'charlie': EUR('8.99'),
-            'dan': EUR('7.01'),
-            'emma': EUR('9.00'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79') * 5,
+            bob.id: EUR('0.21') * 5,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        emma_tip = emma.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('8.99')
+        assert dan_tip.paid_in_advance == EUR('7.01')
+        assert emma_tip.paid_in_advance == EUR('9.00')
 
         print("> Step 3: emma has caught up with the early donors")
         print()
@@ -643,146 +663,159 @@ class TestPaydayForTeams(FakeTransfersHarness):
         for i in range(2):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.79') * 7,
-            'bob': EUR('0.21') * 7,
-            'charlie': EUR('8.60'),
-            'dan': EUR('5.80'),
-            'emma': EUR('8.60'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.79') * 7,
+            bob.id: EUR('0.21') * 7,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        emma_tip = emma.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('8.60')
+        assert dan_tip.paid_in_advance == EUR('5.80')
+        assert emma_tip.paid_in_advance == EUR('8.60')
 
     def test_wellfunded_team_with_two_early_donors_and_low_amounts(self):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         team.set_take_for(alice, EUR('0.01'), team)
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         team.set_take_for(bob, EUR('0.01'), team)
-        charlie = self.make_participant('charlie', balance=EUR(10))
+        charlie = self.make_participant('charlie')
         charlie.set_tip_to(team, EUR('0.02'))
-        dan = self.make_participant('dan', balance=EUR(10))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        self.make_payin_and_transfer(charlie_card, team, EUR('10.00'))
+        dan = self.make_participant('dan')
         dan.set_tip_to(team, EUR('0.02'))
+        dan_card = self.upsert_route(dan, 'stripe-card')
+        self.make_payin_and_transfer(dan_card, team, EUR('10.00'))
 
         print("> Step 1: three weeks of donations from early donors")
         print()
         for i in range(3):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.01') * 3,
-            'bob': EUR('0.01') * 3,
-            'charlie': EUR('9.97'),
-            'dan': EUR('9.97'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.01') * 3,
+            bob.id: EUR('0.01') * 3,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('9.97')
+        assert dan_tip.paid_in_advance == EUR('9.97')
 
         print("> Step 2: a new donor appears, the contributions of the early "
               "donors automatically decrease while the new donor catches up")
         print()
-        emma = self.make_participant('emma', balance=EUR(10))
+        emma = self.make_participant('emma')
         emma.set_tip_to(team, EUR('0.02'))
+        emma_card = self.upsert_route(emma, 'stripe-card')
+        self.make_payin_and_transfer(emma_card, team, EUR('10.00'))
 
         for i in range(6):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.01') * 9,
-            'bob': EUR('0.01') * 9,
-            'charlie': EUR('9.94'),
-            'dan': EUR('9.94'),
-            'emma': EUR('9.94'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.01') * 9,
+            bob.id: EUR('0.01') * 9,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        emma_tip = emma.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('9.94')
+        assert dan_tip.paid_in_advance == EUR('9.94')
+        assert emma_tip.paid_in_advance == EUR('9.94')
 
     def test_wellfunded_team_with_early_donor_and_small_leftover(self):
         team = self.make_participant('team', kind='group')
         alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         team.set_take_for(alice, EUR('0.50'), team)
         bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         team.set_take_for(bob, EUR('0.50'), team)
-        charlie = self.make_participant('charlie', balance=EUR(10))
+        charlie = self.make_participant('charlie')
         charlie.set_tip_to(team, EUR('0.52'))
+        charlie_card = self.upsert_route(charlie, 'stripe-card')
+        self.make_payin_and_transfer(charlie_card, team, EUR('10.00'))
 
         print("> Step 1: three weeks of donations from early donor")
         print()
         for i in range(3):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.26') * 3,
-            'bob': EUR('0.26') * 3,
-            'charlie': EUR('8.44'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.26') * 3,
+            bob.id: EUR('0.26') * 3,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('8.44')
 
         print("> Step 2: a new donor appears, the contribution of the early "
               "donor automatically decreases while the new donor catches up, "
               "but the leftover is small so the adjustments are limited")
         print()
-        dan = self.make_participant('dan', balance=EUR(10))
+        dan = self.make_participant('dan')
         dan.set_tip_to(team, EUR('0.52'))
+        dan_card = self.upsert_route(dan, 'stripe-card')
+        self.make_payin_and_transfer(dan_card, team, EUR('10.00'))
 
         for i in range(3):
             Payday.start().run(recompute_stats=0, update_cached_amounts=False)
             print()
+            self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.26') * 3 + EUR('0.50') * 3,
-            'bob': EUR('0.26') * 3 + EUR('0.50') * 3,
-            'charlie': EUR('7.00'),
-            'dan': EUR('8.44'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.26') * 3 + EUR('0.50') * 3,
+            bob.id: EUR('0.26') * 3 + EUR('0.50') * 3,
         }
-        assert d == expected
+        charlie_tip = charlie.get_tip_to(team)
+        dan_tip = dan.get_tip_to(team)
+        assert charlie_tip.paid_in_advance == EUR('7.00')
+        assert dan_tip.paid_in_advance == EUR('8.44')
 
+    @pytest.mark.xfail(reason="Payday.resolve_takes() currently isn't clever enough")
     def test_mutual_tipping_through_teams(self):
         team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice', balance=EUR(8))
+        alice = self.make_participant('alice')
+        self.add_payment_account(alice, 'stripe')
         alice.set_tip_to(team, EUR('2.00'))
         team.set_take_for(alice, EUR('0.25'), team)
-        bob = self.make_participant('bob', balance=EUR(10))
+        bob = self.make_participant('bob')
+        self.add_payment_account(bob, 'stripe')
         bob.set_tip_to(team, EUR('2.00'))
         team.set_take_for(bob, EUR('0.75'), team)
 
-        Payday.start().run()
-
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('7.75'),  # 8 - 0.50 + 0.25
-            'bob': EUR('10.25'),  # 10 - 0.25 + 0.50
-            'team': EUR('0.00'),
-        }
-        assert d == expected
-
-    def test_unfunded_tip_to_team_doesnt_cause_NegativeBalance(self):
-        team = self.make_participant('team', kind='group')
-        alice = self.make_participant('alice')
-        alice.set_tip_to(team, EUR('1.00'))  # unfunded tip
-        bob = self.make_participant('bob')
-        team.set_take_for(bob, EUR('1.00'), team)
+        alice_card = self.upsert_route(alice, 'stripe-card')
+        self.make_payin_and_transfer(alice_card, team, EUR('8.00'))
+        bob_card = self.upsert_route(bob, 'stripe-card')
+        self.make_payin_and_transfer(bob_card, team, EUR('10.00'))
 
         Payday.start().run()
 
-        d = dict(self.db.all("SELECT username, balance FROM participants"))
-        expected = {
-            'alice': EUR('0.00'),
-            'bob': EUR('0.00'),
-            'team': EUR('0.00'),
+        taken = self.get_taken_sums()
+        assert taken == {
+            alice.id: EUR('0.25'),
+            bob.id: EUR('0.75'),
         }
-        assert d == expected
+        alice_tip = alice.get_tip_to(team)
+        bob_tip = bob.get_tip_to(team)
+        assert alice_tip.paid_in_advance == EUR('7.25')
+        assert bob_tip.paid_in_advance == EUR('9.75')
 
     def get_payday_transfers(self):
         return self.db.all("""
@@ -888,14 +921,20 @@ class TestPaydayForTeams(FakeTransfersHarness):
         )
         self.alice = self.make_participant('alice', main_currency='EUR',
                                            accepted_currencies='EUR,USD')
+        self.add_payment_account(self.alice, 'stripe')
         team.set_take_for(self.alice, EUR('1.00'), team)
         self.bob = self.make_participant('bob', main_currency='USD',
                                          accepted_currencies='EUR,USD')
+        self.add_payment_account(self.bob, 'stripe')
         team.set_take_for(self.bob, EUR('1.00'), team)
-        self.donor1_eur = self.make_participant('donor1_eur', balance=EUR(100))
-        self.donor2_usd = self.make_participant('donor2_usd', balance=USD(100))
-        self.donor3_eur = self.make_participant('donor3_eur', balance=EUR(100))
-        self.donor4_usd = self.make_participant('donor4_usd', balance=USD(100))
+        self.donor1_eur = self.make_participant('donor1_eur')
+        self.donor2_usd = self.make_participant('donor2_usd')
+        self.donor3_eur = self.make_participant('donor3_eur')
+        self.donor4_usd = self.make_participant('donor4_usd')
+        self.donor1_eur_route = self.upsert_route(self.donor1_eur, 'stripe-card')
+        self.donor2_usd_route = self.upsert_route(self.donor2_usd, 'stripe-card')
+        self.donor3_eur_route = self.upsert_route(self.donor3_eur, 'stripe-card')
+        self.donor4_usd_route = self.upsert_route(self.donor4_usd, 'stripe-card')
 
     def test_transfer_takes_with_two_currencies(self):
         self.set_up_team_with_two_currencies()
@@ -903,39 +942,47 @@ class TestPaydayForTeams(FakeTransfersHarness):
         self.donor2_usd.set_tip_to(self.team, USD('0.60'))
         self.donor3_eur.set_tip_to(self.team, EUR('0.50'))
         self.donor4_usd.set_tip_to(self.team, USD('0.60'))
+        self.make_payin_and_transfer(self.donor1_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor2_usd_route, self.team, USD(100))
+        self.make_payin_and_transfer(self.donor3_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor4_usd_route, self.team, USD(100))
 
         Payday.start().shuffle()
 
-        expected = {
-            'alice': MoneyBasket(EUR('1.00')),
-            'bob': MoneyBasket(USD('1.20')),
-            'donor1_eur': MoneyBasket(EUR('99.50')),
-            'donor2_usd': MoneyBasket(USD('99.40')),
-            'donor3_eur': MoneyBasket(EUR('99.50')),
-            'donor4_usd': MoneyBasket(USD('99.40')),
+        taken = self.get_taken_sums()
+        assert taken == {
+            self.alice.id: EUR('1.00'),
+            self.bob.id: USD('1.20'),
         }
-        actual = self.get_balances()
-        assert expected == actual
+        tip_advances = self.get_tip_advances()
+        assert tip_advances == {
+            self.donor1_eur.id: EUR('99.50'),
+            self.donor2_usd.id: USD('99.40'),
+            self.donor3_eur.id: EUR('99.50'),
+            self.donor4_usd.id: USD('99.40'),
+        }
 
     def test_transfer_takes_with_two_currencies_on_both_sides(self):
         self.set_up_team_with_two_currencies()
-        self.team.set_take_for(self.alice, USD('0.01'), self.alice)
-        self.team.set_take_for(self.bob, EUR('0.01'), self.bob)
+        self.team.set_take_for(self.alice, EUR('0.01'), self.alice)
+        self.team.set_take_for(self.bob, USD('0.01'), self.bob)
         self.donor1_eur.set_tip_to(self.team, EUR('0.01'))
         self.donor2_usd.set_tip_to(self.team, USD('0.01'))
+        self.make_payin_and_transfer(self.donor1_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor2_usd_route, self.team, USD(100))
 
         Payday.start().shuffle()
 
-        expected = {
-            'alice': MoneyBasket(EUR('0.01')),
-            'bob': MoneyBasket(USD('0.01')),
-            'donor1_eur': MoneyBasket(EUR('99.99')),
-            'donor2_usd': MoneyBasket(USD('99.99')),
-            'donor3_eur': MoneyBasket(EUR('100')),
-            'donor4_usd': MoneyBasket(USD('100')),
+        taken = self.get_taken_sums()
+        assert taken == {
+            self.alice.id: EUR('0.01'),
+            self.bob.id: USD('0.01'),
         }
-        actual = self.get_balances()
-        assert expected == actual
+        tip_advances = self.get_tip_advances()
+        assert tip_advances == {
+            self.donor1_eur.id: EUR('99.99'),
+            self.donor2_usd.id: USD('99.99'),
+        }
 
     def test_wellfunded_team_with_two_balanced_currencies(self):
         self.set_up_team_with_two_currencies()
@@ -943,19 +990,25 @@ class TestPaydayForTeams(FakeTransfersHarness):
         self.donor2_usd.set_tip_to(self.team, USD('1.20'))
         self.donor3_eur.set_tip_to(self.team, EUR('1.00'))
         self.donor4_usd.set_tip_to(self.team, USD('1.20'))
+        self.make_payin_and_transfer(self.donor1_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor2_usd_route, self.team, USD(100))
+        self.make_payin_and_transfer(self.donor3_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor4_usd_route, self.team, USD(100))
 
         Payday.start().shuffle()
 
-        expected = {
-            'alice': MoneyBasket(EUR('1.00')),
-            'bob': MoneyBasket(USD('1.20')),
-            'donor1_eur': MoneyBasket(EUR('99.50')),
-            'donor2_usd': MoneyBasket(USD('99.40')),
-            'donor3_eur': MoneyBasket(EUR('99.50')),
-            'donor4_usd': MoneyBasket(USD('99.40')),
+        taken = self.get_taken_sums()
+        assert taken == {
+            self.alice.id: EUR('1.00'),
+            self.bob.id: USD('1.20'),
         }
-        actual = self.get_balances()
-        assert expected == actual
+        tip_advances = self.get_tip_advances()
+        assert tip_advances == {
+            self.donor1_eur.id: EUR('99.50'),
+            self.donor2_usd.id: USD('99.40'),
+            self.donor3_eur.id: EUR('99.50'),
+            self.donor4_usd.id: USD('99.40'),
+        }
 
     def test_exactly_funded_team_with_two_unbalanced_currencies(self):
         self.set_up_team_with_two_currencies()
@@ -963,19 +1016,25 @@ class TestPaydayForTeams(FakeTransfersHarness):
         self.donor2_usd.set_tip_to(self.team, USD('0.30'))
         self.donor3_eur.set_tip_to(self.team, EUR('0.75'))
         self.donor4_usd.set_tip_to(self.team, USD('0.30'))
+        self.make_payin_and_transfer(self.donor1_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor2_usd_route, self.team, USD(100))
+        self.make_payin_and_transfer(self.donor3_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor4_usd_route, self.team, USD(100))
 
         Payday.start().shuffle()
 
-        expected = {
-            'alice': MoneyBasket(EUR('1.00')),
-            'bob': MoneyBasket(EUR('0.50'), USD('0.60')),
-            'donor1_eur': MoneyBasket(EUR('99.25')),
-            'donor2_usd': MoneyBasket(USD('99.70')),
-            'donor3_eur': MoneyBasket(EUR('99.25')),
-            'donor4_usd': MoneyBasket(USD('99.70')),
+        taken = self.get_taken_sums()
+        assert taken == {
+            self.alice.id: EUR('1.00'),
+            self.bob.id: MoneyBasket(EUR('0.50'), USD('0.60')),
         }
-        actual = self.get_balances()
-        assert expected == actual
+        tip_advances = self.get_tip_advances()
+        assert tip_advances == {
+            self.donor1_eur.id: EUR('99.25'),
+            self.donor2_usd.id: USD('99.70'),
+            self.donor3_eur.id: EUR('99.25'),
+            self.donor4_usd.id: USD('99.70'),
+        }
 
     def test_wellfunded_team_with_two_unbalanced_currencies(self):
         self.set_up_team_with_two_currencies()
@@ -983,19 +1042,25 @@ class TestPaydayForTeams(FakeTransfersHarness):
         self.donor2_usd.set_tip_to(self.team, USD('0.60'))
         self.donor3_eur.set_tip_to(self.team, EUR('1.50'))
         self.donor4_usd.set_tip_to(self.team, USD('0.60'))
+        self.make_payin_and_transfer(self.donor1_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor2_usd_route, self.team, USD(100))
+        self.make_payin_and_transfer(self.donor3_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor4_usd_route, self.team, USD(100))
 
         Payday.start().shuffle()
 
-        expected = {
-            'alice': MoneyBasket(EUR('1.00')),
-            'bob': MoneyBasket(EUR('0.50'), USD('0.60')),
-            'donor1_eur': MoneyBasket(EUR('99.25')),
-            'donor2_usd': MoneyBasket(USD('99.70')),
-            'donor3_eur': MoneyBasket(EUR('99.25')),
-            'donor4_usd': MoneyBasket(USD('99.70')),
+        taken = self.get_taken_sums()
+        assert taken == {
+            self.alice.id: EUR('1.00'),
+            self.bob.id: MoneyBasket(EUR('0.50'), USD('0.60')),
         }
-        actual = self.get_balances()
-        assert expected == actual
+        tip_advances = self.get_tip_advances()
+        assert tip_advances == {
+            self.donor1_eur.id: EUR('99.25'),
+            self.donor2_usd.id: USD('99.70'),
+            self.donor3_eur.id: EUR('99.25'),
+            self.donor4_usd.id: USD('99.70'),
+        }
 
     def test_underfunded_team_with_two_balanced_currencies(self):
         self.set_up_team_with_two_currencies()
@@ -1003,19 +1068,25 @@ class TestPaydayForTeams(FakeTransfersHarness):
         self.donor2_usd.set_tip_to(self.team, USD('0.30'))
         self.donor3_eur.set_tip_to(self.team, EUR('0.25'))
         self.donor4_usd.set_tip_to(self.team, USD('0.30'))
+        self.make_payin_and_transfer(self.donor1_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor2_usd_route, self.team, USD(100))
+        self.make_payin_and_transfer(self.donor3_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor4_usd_route, self.team, USD(100))
 
         Payday.start().shuffle()
 
-        expected = {
-            'alice': MoneyBasket(EUR('0.50')),
-            'bob': MoneyBasket(USD('0.60')),
-            'donor1_eur': MoneyBasket(EUR('99.75')),
-            'donor2_usd': MoneyBasket(USD('99.70')),
-            'donor3_eur': MoneyBasket(EUR('99.75')),
-            'donor4_usd': MoneyBasket(USD('99.70')),
+        taken = self.get_taken_sums()
+        assert taken == {
+            self.alice.id: EUR('0.50'),
+            self.bob.id: USD('0.60'),
         }
-        actual = self.get_balances()
-        assert expected == actual
+        tip_advances = self.get_tip_advances()
+        assert tip_advances == {
+            self.donor1_eur.id: EUR('99.75'),
+            self.donor2_usd.id: USD('99.70'),
+            self.donor3_eur.id: EUR('99.75'),
+            self.donor4_usd.id: USD('99.70'),
+        }
 
     def test_underfunded_team_with_two_unbalanced_currencies(self):
         self.set_up_team_with_two_currencies()
@@ -1023,19 +1094,25 @@ class TestPaydayForTeams(FakeTransfersHarness):
         self.donor2_usd.set_tip_to(self.team, USD('0.25'))
         self.donor3_eur.set_tip_to(self.team, EUR('0.10'))
         self.donor4_usd.set_tip_to(self.team, USD('0.25'))
+        self.make_payin_and_transfer(self.donor1_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor2_usd_route, self.team, USD(100))
+        self.make_payin_and_transfer(self.donor3_eur_route, self.team, EUR(100))
+        self.make_payin_and_transfer(self.donor4_usd_route, self.team, USD(100))
 
         Payday.start().shuffle()
 
-        expected = {
-            'alice': MoneyBasket(EUR('0.20'), USD('0.13')),
-            'bob': MoneyBasket(USD('0.37')),
-            'donor1_eur': MoneyBasket(EUR('99.90')),
-            'donor2_usd': MoneyBasket(USD('99.75')),
-            'donor3_eur': MoneyBasket(EUR('99.90')),
-            'donor4_usd': MoneyBasket(USD('99.75')),
+        taken = self.get_taken_sums()
+        assert taken == {
+            self.alice.id: MoneyBasket(EUR('0.20'), USD('0.13')),
+            self.bob.id: MoneyBasket(USD('0.37')),
         }
-        actual = self.get_balances()
-        assert expected == actual
+        tip_advances = self.get_tip_advances()
+        assert tip_advances == {
+            self.donor1_eur.id: EUR('99.90'),
+            self.donor2_usd.id: USD('99.75'),
+            self.donor3_eur.id: EUR('99.90'),
+            self.donor4_usd.id: USD('99.75'),
+        }
 
     # Takes paid in advance
     # =====================
@@ -1057,9 +1134,7 @@ class TestPaydayForTeams(FakeTransfersHarness):
         carl = self.make_participant('carl')
         carl.set_tip_to(team, EUR('10'))
 
-        carl_card = ExchangeRoute.insert(
-            carl, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
-        )
+        carl_card = self.upsert_route(carl, 'stripe-card')
         payin, pt = self.make_payin_and_transfer(carl_card, team, EUR('10'))
         assert pt.destination == stripe_account_alice.pk
 
@@ -1082,9 +1157,7 @@ class TestPaydayForTeams(FakeTransfersHarness):
         donor = self.make_participant('donor')
         donor.set_tip_to(team, EUR('5'))
 
-        donor_card = ExchangeRoute.insert(
-            donor, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
-        )
+        donor_card = self.upsert_route(donor, 'stripe-card')
         payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('10'))
         assert pt.destination == stripe_account_alice.pk
 
@@ -1110,9 +1183,7 @@ class TestPaydayForTeams(FakeTransfersHarness):
         carl = self.make_participant('carl')
         carl.set_tip_to(team, JPY('1250'))
 
-        carl_card = ExchangeRoute.insert(
-            carl, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
-        )
+        carl_card = self.upsert_route(carl, 'stripe-card')
         payin, pt = self.make_payin_and_transfer(carl_card, team, JPY('1250'))
         assert pt.destination == stripe_account_alice.pk
 
@@ -1142,9 +1213,7 @@ class TestPaydayForTeams(FakeTransfersHarness):
         carl = self.make_participant('carl')
         carl.set_tip_to(team, JPY('250'))
 
-        carl_card = ExchangeRoute.insert(
-            carl, 'stripe-card', 'x', 'chargeable', remote_user_id='x'
-        )
+        carl_card = self.upsert_route(carl, 'stripe-card')
         payin, pt = self.make_payin_and_transfer(carl_card, team, JPY('1250'))
         assert pt.destination == stripe_account_alice.pk
         payin, pt = self.make_payin_and_transfer(carl_card, team, JPY('1250'))
@@ -1197,124 +1266,3 @@ class TestPaydayForTeams(FakeTransfersHarness):
             'bob': None,
             'carl': None,
         }
-
-
-class TestPayday2(EmailHarness, FakeTransfersHarness, MangopayHarness):
-
-    def test_it_handles_invoices_correctly(self):
-        org = self.make_participant('org', kind='organization', allow_invoices=True)
-        self.make_exchange('mango-cc', 60, 0, self.janet)
-        self.janet.set_tip_to(org, EUR('50.00'))
-        self.db.run("UPDATE participants SET allow_invoices = true WHERE id = %s",
-                    (self.janet.id,))
-        self.make_invoice(self.janet, org, EUR('40.02'), 'accepted')
-        self.make_invoice(self.janet, org, EUR('80.04'), 'accepted')
-        self.make_invoice(self.janet, org, EUR('5.16'), 'rejected')
-        self.make_invoice(self.janet, org, EUR('3.77'), 'new')
-        self.make_invoice(self.janet, org, EUR('1.23'), 'pre')
-        Payday.start().run()
-        expense_transfers = self.db.all("SELECT * FROM transfers WHERE context = 'expense'")
-        assert len(expense_transfers) == 1
-        d = dict(self.db.all("SELECT username, balance FROM participants WHERE balance <> 0"))
-        assert d == {
-            'org': EUR('9.98'),
-            'janet': EUR('50.02'),
-        }
-
-    def test_payday_tries_to_settle_debts(self):
-        # First, test a small debt which can be settled
-        e1_id = self.make_exchange('mango-cc', 10, 0, self.janet)
-        debt = create_debt(self.db, self.janet.id, self.homer.id, EUR(5), e1_id)
-        e2_id = self.make_exchange('mango-cc', 20, 0, self.janet)
-        Payday.start().run()
-        balances = dict(self.db.all("SELECT username, balance FROM participants"))
-        assert balances == {
-            'janet': 25,
-            'homer': 5,
-            'david': 0,
-        }
-        debt = self.db.one("SELECT * FROM debts WHERE id = %s", (debt.id,))
-        assert debt.status == 'paid'
-        # Second, test a big debt that can't be settled
-        self.make_exchange('mango-ba', -15, 0, self.janet)
-        debt2 = create_debt(self.db, self.janet.id, self.homer.id, EUR(20), e2_id)
-        Payday.start().run()
-        balances = dict(self.db.all("SELECT username, balance FROM participants"))
-        assert balances == {
-            'janet': 10,
-            'homer': 5,
-            'david': 0,
-        }
-        debt2 = self.db.one("SELECT * FROM debts WHERE id = %s", (debt2.id,))
-        assert debt2.status == 'due'
-
-    def test_it_notifies_participants(self):
-        self.janet.set_tip_to(self.david, EUR('4.50'))
-        self.janet.set_tip_to(self.homer, EUR('3.50'))
-        team = self.make_participant('team', kind='group', email='team@example.com')
-        self.janet.set_tip_to(team, EUR('0.25'))
-        team.add_member(self.david)
-        team.set_take_for(self.david, EUR('0.23'), team)
-        janet_card = self.upsert_route(self.janet, 'stripe-card')
-        self.make_payin_and_transfer(janet_card, self.david, EUR('4.50'))
-        self.make_payin_and_transfer(janet_card, self.homer, EUR('3.50'))
-        self.make_payin_and_transfer(janet_card, team, EUR('25.00'))
-        self.client.PxST('/homer/emails/', auth_as=self.homer,
-                         data={'events': 'income', 'income': ''}, xhr=True)
-        self.db.run("""
-            UPDATE scheduled_payins
-               SET ctime = ctime - interval '12 hours'
-                 , execution_date = execution_date - interval '2 weeks'
-        """)
-        Payday.start().run()
-        emails = self.get_emails()
-        assert len(emails) == 2
-        assert emails[0]['to'][0] == 'david <%s>' % self.david.email
-        assert '4.73' in emails[0]['subject']
-        assert emails[1]['to'][0] == 'janet <%s>' % self.janet.email
-        assert 'renew your donation' in emails[1]['subject']
-        assert '2 donations' in emails[1]['text']
-
-    def test_log_upload(self):
-        payday = Payday.start()
-        with open('payday-%i.txt.part' % payday.id, 'w') as f:
-            f.write('fake log file\n')
-        with mock.patch.object(self.website, 's3') as s3:
-            payday.run('.', keep_log=True)
-            assert s3.upload_file.call_count == 1
-
-    @mock.patch('liberapay.billing.payday.date')
-    @mock.patch('liberapay.website.website.platforms.github.api_get')
-    @mock.patch('liberapay.website.website.platforms.github.api_request')
-    def test_create_payday_issue(self, api_request, api_get, date):
-        date.today.return_value.isoweekday.return_value = 3
-        # 1st payday issue
-        api_get.return_value.json = lambda: []
-        repo = self.website.app_conf.payday_repo
-        html_url = 'https://github.com/%s/issues/1' % repo
-        api_request.return_value.json = lambda: {'html_url': html_url}
-        create_payday_issue()
-        args = api_request.call_args
-        post_path = '/repos/%s/issues' % repo
-        assert args[0] == ('POST', '', post_path)
-        assert args[1]['json'] == {'body': '', 'title': 'Payday #1', 'labels': ['Payday']}
-        assert args[1]['sess'].auth
-        public_log = self.db.one("SELECT public_log FROM paydays")
-        assert public_log == html_url
-        api_request.reset_mock()
-        # Check that executing the function again doesn't create a duplicate
-        create_payday_issue()
-        assert api_request.call_count == 0
-        # Run 1st payday
-        Payday.start().run()
-        # 2nd payday issue
-        api_get.return_value.json = lambda: [{'body': 'Lorem ipsum', 'title': 'Payday #1'}]
-        html_url = 'https://github.com/%s/issues/2' % repo
-        api_request.return_value.json = lambda: {'html_url': html_url}
-        create_payday_issue()
-        args = api_request.call_args
-        assert args[0] == ('POST', '', post_path)
-        assert args[1]['json'] == {'body': 'Lorem ipsum', 'title': 'Payday #2', 'labels': ['Payday']}
-        assert args[1]['sess'].auth
-        public_log = self.db.one("SELECT public_log FROM paydays WHERE id = 2")
-        assert public_log == html_url

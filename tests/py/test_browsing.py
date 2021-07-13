@@ -44,12 +44,12 @@ class BrowseTestHarness(Harness):
         cls.urls = list(urls)
 
     def browse_setup(self):
-        self.david = self.make_participant('david', mangopay_user_id=None)
+        self.david = self.make_participant('david')
         self.team = self.make_participant('team', kind='group')
         c = self.david.create_community('Wonderland')
         self.david.upsert_community_membership(True, c.id)
         self.team.add_member(self.david)
-        self.org = self.make_participant('org', kind='organization', mangopay_user_id=None)
+        self.org = self.make_participant('org', kind='organization')
         self.invoice_id = self.db.one("""
             INSERT INTO invoices
                         (sender, addressee, nature, amount, description, details, documents, status)
@@ -89,7 +89,7 @@ class TestBrowsing(BrowseTestHarness):
     def test_active_participant_can_browse(self):
         self.browse_setup()
         self.add_payment_account(self.david, 'stripe')
-        bob = self.make_participant('bob', mangopay_user_id=None)
+        bob = self.make_participant('bob')
         self.add_payment_account(bob, 'paypal')
         bob.set_tip_to(self.david, EUR('1.00'))
         bob_card = self.upsert_route(bob, 'stripe-card')
@@ -101,7 +101,7 @@ class TestBrowsing(BrowseTestHarness):
 
     def test_admin_can_browse(self):
         self.browse_setup()
-        admin = self.make_participant('admin', mangopay_user_id=None, privileges=1)
+        admin = self.make_participant('admin', privileges=1)
         self.browse(auth_as=admin)
 
 

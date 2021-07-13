@@ -6,11 +6,11 @@ Doc: https://docs.mangopay.com/api-references/notifications/
 from datetime import timedelta
 from decimal import Decimal as D
 
-from mangopay.resources import BankWirePayOut, Dispute, Document, PayIn, Refund
+from mangopay.resources import BankWirePayOut, Document, Refund
 
 from liberapay.billing.transactions import (
-    record_exchange_result, record_payout_refund, record_unexpected_payin,
-    repr_error, skim_bank_wire,
+    record_exchange_result, record_payout_refund,
+    repr_error,
     lock_disputed_funds, recover_lost_funds,
     check_wallet_balance,
 )
@@ -18,7 +18,6 @@ from liberapay.models.participant import Participant
 from liberapay.utils import utcnow
 
 EVENT_TYPES = {
-    'PAYIN_NORMAL': PayIn,
     'PAYOUT_NORMAL': BankWirePayOut,
     'PAYOUT_REFUND': Refund,
 }
@@ -54,81 +53,6 @@ if event == 'KYC':
     else:
         raise response.error(400, "unknown status")
 
-elif event == 'DISPUTE':
-    try:
-        dispute = Dispute.get(RessourceId)
-    except Dispute.DoesNotExist:
-        raise response.error(400, "bad RessourceId: DoesNotExist")
-    status = dispute.Status
-    with website.db.lock('dispute_callback'):
-        r = website.db.one("SELECT * FROM disputes WHERE id = %s", (RessourceId,))
-        if r and r.status == status:
-            raise response.success(200, "already done")
-        if r:
-            e_id, p_id = r.exchange_id, r.participant
-            exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
-        else:
-            assert dispute.InitialTransactionType == 'PAYIN'
-            payin = PayIn.get(dispute.InitialTransactionId)
-            e_id = int(payin.Tag)
-            exchange = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e_id,))
-            p_id = exchange.participant
-        dispute_type = dispute.DisputeType
-        dispute_amount = dispute.DisputedFunds / 100
-        result_code = dispute.ResultCode
-        new_dispute = not r
-        if new_dispute:
-            # Lock the disputed funds
-            with website.db.get_cursor() as cursor:
-                lock_disputed_funds(cursor, exchange, dispute_amount)
-        if status == 'CLOSED':
-            if result_code == 'LOST':
-                # Recover as much of the lost money as possible
-                recover_lost_funds(website.db, exchange, dispute_amount, dispute.RepudiationId)
-            else:
-                assert result_code == 'WON'
-                # Unlock the funds
-                website.db.run("""
-                    UPDATE cash_bundles
-                       SET disputed = false
-                     WHERE origin = %s
-                """, (e_id,))
-        r = website.db.one("""
-            INSERT INTO disputes AS current
-                        (id, creation_date, type, amount, status, result_code, exchange_id, participant)
-                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (id) DO UPDATE
-                    SET status = excluded.status
-                      , result_code = excluded.result_code
-                  WHERE current.status <> excluded.status
-              RETURNING *
-        """, (dispute.Id, dispute.CreationDate, dispute_type, dispute_amount, status, result_code, e_id, p_id))
-        if not r:
-            raise response.success(200, "already done")
-    # Notify admin
-    disputed_funds = website.db.render("""
-        SELECT owner, withdrawer, sum(amount) AS amount
-          FROM ( SELECT COALESCE(get_username(b.owner), '') AS owner
-                      , COALESCE(get_username((
-                            SELECT e.participant FROM exchanges e WHERE e.id = b.withdrawal
-                        )), '') AS withdrawer
-                      , b.amount
-                   FROM cash_bundles b
-                  WHERE b.origin = %s
-               ) b
-      GROUP BY owner, withdrawer
-    """, (r.exchange_id,))
-    original_owner = Participant.from_id(p_id)
-    Participant.from_username('LiberapayOrg').notify(
-        'dispute',
-        base_spt=None,
-        dispute=r._asdict(),
-        disputed_funds=disputed_funds,
-        new_dispute=new_dispute,
-        profile_url=original_owner.url(),
-        force_email=True,
-    )
-
 elif cls:
     # Check stuff
     try:
@@ -142,42 +66,9 @@ elif cls:
     if event == 'PAYOUT_REFUND':
         # Payout refunds are created by MangoPay and have no Tag
         e_id = record_payout_refund(website.db, payio)
-    elif event == 'PAYIN_NORMAL' and not e_id:
-        e_id = record_unexpected_payin(website.db, payio)
     e_status = website.db.one("SELECT status FROM exchanges WHERE id = %s", (e_id,))
     if e_status == status:
         raise response.success(200, "already done")
-    if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        expected = (payio.DeclaredDebitedFunds - payio.DeclaredFees) / D(100)
-        if status != 'succeeded':
-            expected = expected.zero()
-        credited_amount = payio.CreditedFunds / D(100)
-        if credited_amount == Money(0, 'XXX'):
-            credited_amount.currency = expected.currency
-        if credited_amount != expected or not payio.Tag:
-            # Check the fee
-            paid_fees = payio.Fees / D(100)
-            debited_amount = payio.DebitedFunds / D(100)
-            standard_fee, new_vat = skim_bank_wire(debited_amount)[1:]
-            if abs(paid_fees - standard_fee) > D('0.01'):
-                try:
-                    raise Exception('fee mismatch in bankwire payin')
-                except Exception as e:
-                    website.tell_sentry(e, allow_reraise=False)
-        if credited_amount != expected:
-            # The user didn't send the expected amount of money
-            note = (
-                'amount mismatch: expected %s (fee %s)' %
-                (payio.DeclaredDebitedFunds, payio.DeclaredFees)
-            )
-            website.db.run("""
-                UPDATE exchanges
-                   SET amount = %s
-                     , fee = %s
-                     , vat = %s
-                     , note = %s
-                 WHERE id = %s
-            """, (credited_amount, paid_fees, new_vat, note, e_id))
 
     if payio.AuthorId == website.app_conf.mangopay_client_id:
         if event == 'PAYOUT_NORMAL' and status == 'succeeded':
@@ -192,7 +83,7 @@ elif cls:
     was_closed = p.status == 'closed'
     affects_balance = (
         event == 'PAYOUT_NORMAL' and status == 'failed' or
-        event in ('PAYIN_NORMAL', 'PAYOUT_REFUND') and status == 'succeeded'
+        event == 'PAYOUT_REFUND' and status == 'succeeded'
     )
     reopen = was_closed and affects_balance
     if reopen:
@@ -214,29 +105,7 @@ elif cls:
             )
 
     # Notify the user
-    if event == 'PAYIN_NORMAL' and payio.PaymentType == 'BANK_WIRE':
-        if e.timestamp > (utcnow() - NOTIFICATION_TIMEOUT):
-            expired = payio.ResultCode == '101109'
-            if expired:
-                ignore = website.db.one("""
-                    SELECT count(*) > 0 AS ignore
-                      FROM exchanges e
-                     WHERE e.participant = %(participant)s
-                       AND e.amount > 0
-                       AND e.status = 'succeeded'
-                       AND e.timestamp > %(timestamp)s - INTERVAL '20 minutes'
-                       AND e.timestamp < %(timestamp)s + INTERVAL '12 hours'
-                """, e._asdict())
-                if ignore:
-                    raise response.json({'notification': 'no (duplicate payin)'})
-                p.notify('payin_bankwire_expired', exchange=e._asdict())
-            else:
-                p.notify('payin_bankwire_'+status, exchange=e._asdict(), force_email=reopen)
-        else:
-            raise response.json({'notification': 'no (payin too old)'})
-    elif event == 'PAYIN_NORMAL' and payio.PaymentType == 'DIRECT_DEBIT':
-        p.notify('payin_directdebit_'+status, exchange=e._asdict(), force_email=reopen)
-    elif event == 'PAYOUT_NORMAL' and status != 'succeeded':
+    if event == 'PAYOUT_NORMAL' and status != 'succeeded':
         p.notify('withdrawal_'+status, exchange=e._asdict(), force_email=True)
     elif event == 'PAYOUT_REFUND' and status == 'succeeded':
         d = website.db.one("SELECT * FROM exchanges WHERE id = %s", (e.refund_ref,))._asdict()

@@ -4,11 +4,7 @@ from liberapay.utils import b64encode_s, get_participant
 
 participant = get_participant(state, restrict=True)
 
-payday_is_running = website.db.one("""
-    SELECT ts_start FROM paydays WHERE ts_end='1970-01-01T00:00:00+00'::timestamptz
-""") is not None
-
-if request.method == 'POST' and not payday_is_running:
+if request.method == 'POST':
     disburse_to = request.body.get('disburse_to')
     if participant.balance and disburse_to is None:
         error = _("You still have money in this Liberapay account, please "
@@ -34,7 +30,6 @@ pending_payouts = website.db.one("""
 """, (participant.id,))
 
 balances = participant.get_balances()
-refundable_balances = participant.get_refundable_balances()
 
 title = _("Close Account")
 subhead = participant.username
@@ -50,21 +45,6 @@ subhead = participant.username
         <div class="alert alert-danger">{{ error }}</div>
     % endif
 
-    % if payday_is_running
-
-        <form><div>
-
-            <h3>{{ _("Try Again Later") }}</h3>
-
-            <p>{{ _(
-                "Sorry, we're running payday right now, and we're not set up "
-                "to close accounts while payday is running. Please check back "
-                "in a few hours."
-            ) }}</p>
-
-        </div></form>
-
-    % else
     <form method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
@@ -88,17 +68,10 @@ subhead = participant.username
                     {{ _("This option is recommended for small amounts.") }}
                 </p>
             </label><br>
-            % if refundable_balances >= balances
-            <label>
-                <input type="radio" name="disburse_to" value="payin-refund" />
-                {{ _("Refund it to my card or bank account") }}
-            </label><br>
-            % else
             <label>
                 <input type="radio" name="disburse_to" value="payout" />
                 {{ _("Withdraw it to my bank account") }}
             </label>
-            % endif
         </div>
         <p>{{ _(
             "If neither option works for you, please contact support@liberapay.com."
@@ -152,6 +125,5 @@ subhead = participant.username
 
         <button class="btn btn-danger btn-lg">{{ _("Yes, close my Liberapay account") }}</button>
     </form>
-    % endif
 
 % endblock

@@ -267,34 +267,6 @@ PARTICIPANT_KINDS = {
 PASSWORD_MIN_SIZE = 8
 PASSWORD_MAX_SIZE = 150
 
-PAYIN_BANK_WIRE_MIN = {k: Money('2.00', k) for k in ('EUR', 'USD')}  # fee ≈ 0.99%
-PAYIN_BANK_WIRE_TARGET = {k: Money('5.00', k) for k in ('EUR', 'USD')}  # fee ≈ 0.6%
-PAYIN_BANK_WIRE_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
-PAYIN_CARD_MIN = {
-    'EUR': Money('15.00', 'EUR'),  # fee ≈ 3.5%
-    'USD': Money('20.00', 'USD'),  # fee ≈ 4.58%
-}
-PAYIN_CARD_TARGET = {
-    'EUR': Money('92.00', 'EUR'),  # fee ≈ 2.33%
-    'USD': Money('95.00', 'USD'),  # fee ≈ 3.27%
-}
-PAYIN_CARD_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
-PAYIN_DIRECT_DEBIT_COUNTRIES = {
-    # https://support.gocardless.com/hc/en-gb/articles/115005758445
-    'EUR': EUROZONE | set("MC SM".split()),
-}
-PAYIN_DIRECT_DEBIT_MIN_EUR_GBP = Decimal('15.00')  # fee ≈ 3.78%
-PAYIN_DIRECT_DEBIT_MIN = {
-    'EUR': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'EUR'),
-    'GBP': Money(PAYIN_DIRECT_DEBIT_MIN_EUR_GBP, 'GBP'),
-}
-PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP = Decimal('99.00')  # fee ≈ 0.59%
-PAYIN_DIRECT_DEBIT_TARGET = {
-    'EUR': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'EUR'),
-    'GBP': Money(PAYIN_DIRECT_DEBIT_TARGET_EUR_GBP, 'GBP'),
-}
-PAYIN_DIRECT_DEBIT_MAX = {k: Money('2500.00', k) for k in ('EUR', 'USD')}
-
 PAYIN_AMOUNTS = {
     'paypal': {
         'min_acceptable': MoneyAutoConvertDict({  # fee > 10%
@@ -355,22 +327,13 @@ PAYIN_AMOUNTS = {
 }
 
 PAYIN_SETTLEMENT_DELAYS = {
-    'mango-ba': timedelta(days=6),
     'stripe-sdd': timedelta(days=6),
 }
 
 PAYMENT_METHODS = {
-    'mango-ba': _("Direct Debit"),
-    'mango-bw': _("Bank Wire"),
-    'mango-cc': _("Credit Card"),
     'paypal': "PayPal",
     'stripe-card': _("Credit/Debit Card"),
     'stripe-sdd': _("Direct Debit"),
-}
-PAYMENT_SLUGS = {
-    'mango-ba': 'direct-debit',
-    'mango-bw': 'bankwire',
-    'mango-cc': 'card',
 }
 
 PAYOUT_COUNTRIES = {
@@ -441,8 +404,6 @@ PRIVILEGES = dict(admin=1, run_payday=2)
 check_bits(list(PRIVILEGES.values()))
 
 PUBLIC_NAME_MAX_SIZE = 64
-
-QUARANTINE = timedelta(weeks=0)
 
 RATE_LIMITS = {
     'add_email.source': (5, 60*60*24),  # 5 per day

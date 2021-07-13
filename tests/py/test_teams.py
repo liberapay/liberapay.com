@@ -127,7 +127,7 @@ class Tests2(Harness):
         assert t.status == 'active'
         assert t.nmembers == 1
 
-        t.close(None)
+        t.close()
         t2 = t.refetch()
         assert t.status == t2.status == 'closed'
         assert t.goal == t2.goal == -1

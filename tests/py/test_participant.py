@@ -462,7 +462,7 @@ class Tests(Harness):
     # pledging
 
     def test_pledging_isnt_giving(self):
-        alice = self.make_participant('alice', balance=EUR(100))
+        alice = self.make_participant('alice')
         bob = self.make_elsewhere('github', 58946, 'bob').participant
         alice.set_tip_to(bob, EUR('3.00'))
         assert alice.giving == EUR('0.00')

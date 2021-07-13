@@ -5,17 +5,13 @@ import os
 import os.path
 from subprocess import Popen
 import sys
-from time import sleep
 
 from babel.dates import format_timedelta
-import mangopay
 import pando.utils
 import requests
 
 from liberapay import constants
-from liberapay.billing.transactions import Money, transfer
-from liberapay.exceptions import NegativeBalance
-from liberapay.i18n.currencies import MoneyBasket
+from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.payin.common import resolve_amounts
 from liberapay.utils import group_by
 from liberapay.website import website
@@ -123,17 +119,7 @@ class Payday:
             return
         get_transfers = lambda: self.db.all("""
             SELECT t.*
-                 , w.remote_owner_id AS tipper_mango_id
-                 , w2.remote_owner_id AS tippee_mango_id
-                 , w.remote_id AS tipper_wallet_id
-                 , w2.remote_id AS tippee_wallet_id
               FROM payday_transfers t
-         LEFT JOIN wallets w ON w.owner = t.tipper AND
-                   w.balance::currency = t.amount::currency AND
-                   w.is_current IS TRUE
-         LEFT JOIN wallets w2 ON w2.owner = t.tippee AND
-                   w2.balance::currency = t.amount::currency AND
-                   w2.is_current IS TRUE
           ORDER BY t.id
         """)
         if self.stage == 2:
@@ -151,7 +137,6 @@ class Payday:
             with self.db.get_cursor() as cursor:
                 self.prepare(cursor, self.ts_start)
                 self.transfer_virtually(cursor, self.ts_start, self.id)
-                self.check_balances(cursor)
                 cursor.run("""
                     UPDATE paydays
                        SET nparticipants = (SELECT count(*) FROM payday_participants)
@@ -162,7 +147,6 @@ class Payday:
             transfers = get_transfers()
 
         self.transfer_for_real(transfers)
-        self.settle_debts(self.db)
 
         self.db.self_check()
         self.end()
@@ -182,12 +166,6 @@ class Payday:
                  , username
                  , join_time
                  , status
-                 , ( SELECT basket_sum(w.balance)
-                       FROM wallets w
-                      WHERE w.owner = p.id
-                        AND w.is_current
-                        AND %(use_mangopay)s
-                   ) AS balances
                  , goal
                  , kind
                  , main_currency
@@ -204,9 +182,6 @@ class Payday:
         CREATE TEMPORARY TABLE payday_tips ON COMMIT DROP AS
             SELECT t.id, t.tipper, t.tippee, t.amount, (p2.kind = 'group') AS to_team
                  , coalesce_currency_amount(t.paid_in_advance, t.amount::currency) AS paid_in_advance
-                 , ( t.renewal_mode > 0 AND (p2.goal IS NULL OR p2.goal >= 0) AND
-                     p.status = 'active' AND p2.status = 'active'
-                   ) AS process_real_transfers
               FROM ( SELECT DISTINCT ON (tipper, tippee) *
                        FROM tips
                       WHERE mtime < %(ts_start)s
@@ -239,7 +214,6 @@ class Payday:
         , tipper bigint
         , tippee bigint
         , amount currency_amount CHECK (amount >= 0)
-        , in_advance currency_amount CHECK (in_advance >= 0)
         , context transfer_context
         , team bigint
         , invoice int
@@ -259,48 +233,27 @@ class Payday:
         )
         RETURNS void AS $$
             DECLARE
-                in_advance currency_amount;
                 tip payday_tips;
                 transfer_amount currency_amount;
             BEGIN
                 IF (a_amount = 0) THEN RETURN; END IF;
-                in_advance := zero(a_amount);
-                transfer_amount := a_amount;
-
-                IF (a_context IN ('tip', 'take', 'leftover-take', 'partial-tip', 'partial-take')) THEN
-                    tip := (
-                        SELECT t
-                          FROM payday_tips t
-                         WHERE t.tipper = a_tipper
-                           AND t.tippee = COALESCE(a_team, a_tippee)
-                    );
-                    IF (tip IS NULL) THEN
-                        RAISE 'tip not found: %%, %%, %%', a_tipper, a_tippee, a_team;
-                    END IF;
-                    IF (tip.paid_in_advance > 0) THEN
-                        IF (tip.paid_in_advance >= transfer_amount) THEN
-                            in_advance := transfer_amount;
-                        ELSE
-                            in_advance := tip.paid_in_advance;
-                        END IF;
-                        transfer_amount := transfer_amount - in_advance;
-                    END IF;
-                    IF (NOT tip.process_real_transfers) THEN
-                        transfer_amount := zero(transfer_amount);
-                    END IF;
+                tip := (
+                    SELECT t
+                      FROM payday_tips t
+                     WHERE t.tipper = a_tipper
+                       AND t.tippee = COALESCE(a_team, a_tippee)
+                );
+                IF (tip IS NULL) THEN
+                    RAISE 'tip not found: %%, %%, %%', a_tipper, a_tippee, a_team;
                 END IF;
-
-                UPDATE payday_participants
-                   SET balances = (balances - transfer_amount)
-                 WHERE id = a_tipper;
-                IF (NOT FOUND) THEN RAISE 'tipper %% not found', a_tipper; END IF;
-                UPDATE payday_participants
-                   SET balances = (balances + transfer_amount)
-                 WHERE id = a_tippee;
-                IF (NOT FOUND) THEN RAISE 'tippee %% not found', a_tippee; END IF;
+                IF (tip.paid_in_advance >= a_amount) THEN
+                    transfer_amount := a_amount;
+                ELSE
+                    transfer_amount := tip.paid_in_advance;
+                END IF;
                 INSERT INTO payday_transfers
-                            (tipper, tippee, amount, in_advance, context, team, invoice)
-                     VALUES (a_tipper, a_tippee, transfer_amount, in_advance, a_context, a_team, a_invoice);
+                            (tipper, tippee, amount, context, team, invoice)
+                     VALUES (a_tipper, a_tippee, transfer_amount, a_context, a_team, a_invoice);
             END;
         $$ LANGUAGE plpgsql;
 
@@ -310,23 +263,11 @@ class Payday:
         CREATE OR REPLACE FUNCTION compute_tip_funding(tip payday_tips)
         RETURNS currency_amount AS $$
             DECLARE
-                tipper_balances currency_basket;
-                tip_currency currency := (tip.amount).currency;
                 available_amount currency_amount;
             BEGIN
                 available_amount := tip.paid_in_advance;
                 IF (available_amount < 0) THEN
                     available_amount := zero(available_amount);
-                END IF;
-                IF (tip.process_real_transfers) THEN
-                    tipper_balances := (
-                        SELECT balances
-                          FROM payday_participants p
-                         WHERE id = tip.tipper
-                    );
-                    available_amount := available_amount + (
-                        coalesce(tipper_balances->tip_currency, 0), tip_currency
-                    )::currency_amount;
                 END IF;
                 RETURN available_amount;
             END;
@@ -369,7 +310,7 @@ class Payday:
             END;
         $$ LANGUAGE plpgsql;
 
-        """, dict(ts_start=ts_start, use_mangopay=mangopay.sandbox))
+        """, dict(ts_start=ts_start))
         log("Prepared the DB.")
 
     @staticmethod
@@ -384,7 +325,6 @@ class Payday:
             SELECT settle_tip_graph();
             UPDATE payday_tips SET is_funded = false WHERE is_funded IS NULL;
         """)
-        Payday.pay_invoices(cursor, ts_start)
 
     @staticmethod
     def transfer_takes(cursor, team_id, currency, payday_id):
@@ -397,10 +337,6 @@ class Payday:
              WHERE tippee = %(team_id)s
                AND compute_tip_funding(t) > 0
          RETURNING t.id, t.tipper, t.amount AS full_amount, t.paid_in_advance
-                 , ( SELECT p.balances
-                       FROM payday_participants p
-                      WHERE p.id = t.tipper
-                   ) AS balances
                  , coalesce_currency_amount((
                        SELECT sum(tr.amount, t.amount::currency)
                          FROM transfers tr
@@ -432,20 +368,14 @@ class Payday:
         for tip in tips:
             if tip.paid_in_advance is None:
                 tip.paid_in_advance = tip.full_amount.zero()
-            tip.funded_amount = min(
-                tip.full_amount,
-                tip.paid_in_advance + tip.balances[tip.full_amount.currency]
-            )
+            tip.funded_amount = min(tip.full_amount, tip.paid_in_advance)
             tip.is_partial = tip.funded_amount < tip.full_amount
         total_income = MoneyBasket(t.funded_amount for t in tips)
         if total_income == 0:
             return (), total_income
         takes = [t for t in takes if not (t.paid_in_advance and t.paid_in_advance < 0)]
         leftover_takes = [t for t in takes if t.paid_in_advance and not t.amount]
-        if mangopay.sandbox:
-            takes = [t for t in takes if t.amount]
-        else:
-            takes = [t for t in takes if t.amount and t.paid_in_advance]
+        takes = [t for t in takes if t.amount and t.paid_in_advance]
         if not (takes or leftover_takes):
             return (), total_income
         fuzzy_income_sum = total_income.fuzzy_sum(ref_currency)
@@ -573,18 +503,12 @@ class Payday:
                 if take.amount == 0 or tip.tipper == take.member:
                     continue
                 fuzzy_take_amount = take.amount.convert(tip_currency)
-                in_advance_amount = min(
+                transfer_amount = min(
                     tip.amount,
                     fuzzy_take_amount,
                     max(tip.paid_in_advance, 0),
                     max(take.paid_in_advance.convert(tip_currency), 0),
                 )
-                on_time_amount = min(
-                    max(tip.amount - in_advance_amount, 0),
-                    max(fuzzy_take_amount - in_advance_amount, 0),
-                    tip.balances[tip_currency],
-                )
-                transfer_amount = in_advance_amount + on_time_amount
                 if transfer_amount == 0:
                     continue
                 transfer_key = (tip.tipper, take.member)
@@ -599,11 +523,8 @@ class Payday:
                     take.amount = take.amount.zero()
                 else:
                     take.amount -= transfer_amount.convert(take.amount.currency)
-                if in_advance_amount:
-                    tip.paid_in_advance -= in_advance_amount
-                    take.paid_in_advance -= in_advance_amount.convert(take.paid_in_advance.currency)
-                if on_time_amount:
-                    tip.balances -= on_time_amount
+                tip.paid_in_advance -= transfer_amount
+                take.paid_in_advance -= transfer_amount.convert(take.paid_in_advance.currency)
                 tip.amount -= transfer_amount
                 tip.funded_amount -= transfer_amount
                 if tip.amount == 0:
@@ -652,122 +573,57 @@ class Payday:
             transfers.extend(leftover_transfers.values())
         return transfers, leftover
 
-    @staticmethod
-    def pay_invoices(cursor, ts_start):
-        """Settle pending invoices
-        """
-        invoices = cursor.all("""
-            SELECT i.*
-              FROM invoices i
-             WHERE i.status = 'accepted'
-               AND ( SELECT ie.ts
-                       FROM invoice_events ie
-                      WHERE ie.invoice = i.id
-                   ORDER BY ts DESC
-                      LIMIT 1
-                   ) < %(ts_start)s;
-        """, dict(ts_start=ts_start))
-        for i in invoices:
-            can_pay = cursor.one("""
-                SELECT p.balances >= %s AS can_pay
-                  FROM payday_participants p
-                 WHERE id = %s
-            """, (i.amount, i.addressee))
-            if not can_pay:
-                continue
-            cursor.run("""
-                SELECT transfer(%(addressee)s, %(sender)s, %(amount)s,
-                                %(nature)s::transfer_context, NULL, %(id)s);
-                UPDATE invoices
-                   SET status = 'paid'
-                 WHERE id = %(id)s;
-                INSERT INTO invoice_events
-                            (invoice, participant, status)
-                     VALUES (%(id)s, %(addressee)s, 'paid');
-            """, i._asdict())
-
-    @staticmethod
-    def check_balances(cursor):
-        """Check that balances aren't becoming (more) negative
-        """
-        oops = cursor.one("""
-            SELECT p.id
-                 , p.username
-                 , p2.balances
-              FROM payday_participants p2
-              JOIN participants p ON p.id = p2.id
-             WHERE p2.balances->'EUR' < 0 OR p2.balances->'USD' < 0
-             LIMIT 1
-        """)
-        if oops:
-            log(oops)
-            raise NegativeBalance()
-        log("Checked the balances.")
-
     def transfer_for_real(self, transfers):
         db = self.db
         print("Starting transfers (n=%i)" % len(transfers))
-        msg = "%s transfer #%i (amount=%s in_advance=%s context=%s team=%s)%s"
+        msg = "Recording transfer #%i (amount=%s context=%s team=%s)"
         for t in transfers:
-            if t.amount:
-                delay = getattr(self, 'transfer_delay', 0)
-                action = 'Executing'
-                when = ' in %.2f seconds' % delay if delay else ' now'
-            else:
-                delay = 0
-                action = 'Recording'
-                when = ''
-            log(msg % (action, t.id, t.amount, t.in_advance, t.context, t.team, when))
-            if delay:
-                sleep(delay)
-            if t.in_advance:
-                db.run("""
-                    INSERT INTO transfers
-                                (tipper, tippee, amount, context,
-                                 team, invoice, status,
-                                 wallet_from, wallet_to, virtual)
-                         VALUES (%(tipper)s, %(tippee)s, %(in_advance)s, %(context)s,
-                                 %(team)s, %(invoice)s, 'succeeded',
-                                 'x', 'y', true);
+            log(msg % (t.id, t.amount, t.context, t.team))
+            db.run("""
+                INSERT INTO transfers
+                            (tipper, tippee, amount, context,
+                             team, invoice, status,
+                             wallet_from, wallet_to, virtual)
+                     VALUES (%(tipper)s, %(tippee)s, %(amount)s, %(context)s,
+                             %(team)s, %(invoice)s, 'succeeded',
+                             'x', 'y', true);
 
-                    WITH latest_tip AS (
-                             SELECT *
-                               FROM tips
-                              WHERE tipper = %(tipper)s
-                                AND tippee = coalesce(%(team)s, %(tippee)s)
-                           ORDER BY mtime DESC
+                WITH latest_tip AS (
+                         SELECT *
+                           FROM tips
+                          WHERE tipper = %(tipper)s
+                            AND tippee = coalesce(%(team)s, %(tippee)s)
+                       ORDER BY mtime DESC
+                          LIMIT 1
+                     )
+                UPDATE tips t
+                   SET paid_in_advance = (t.paid_in_advance - %(amount)s)
+                  FROM latest_tip lt
+                 WHERE t.tipper = lt.tipper
+                   AND t.tippee = lt.tippee
+                   AND t.mtime >= lt.mtime;
+            """, t.__dict__)
+            if t.team:
+                db.run("""
+                    WITH latest_take AS (
+                             SELECT t.*
+                               FROM takes t
+                              WHERE t.team = %(team)s
+                                AND t.member = %(tippee)s
+                                AND t.amount IS NOT NULL
+                           ORDER BY t.mtime DESC
                               LIMIT 1
                          )
-                    UPDATE tips t
-                       SET paid_in_advance = (t.paid_in_advance - %(in_advance)s)
-                      FROM latest_tip lt
-                     WHERE t.tipper = lt.tipper
-                       AND t.tippee = lt.tippee
+                    UPDATE takes t
+                       SET paid_in_advance = (
+                               coalesce_currency_amount(lt.paid_in_advance, lt.amount::currency) -
+                               convert(%(amount)s, lt.amount::currency)
+                           )
+                      FROM latest_take lt
+                     WHERE t.team = lt.team
+                       AND t.member = lt.member
                        AND t.mtime >= lt.mtime;
                 """, t.__dict__)
-                if t.team:
-                    db.run("""
-                        WITH latest_take AS (
-                                 SELECT t.*
-                                   FROM takes t
-                                  WHERE t.team = %(team)s
-                                    AND t.member = %(tippee)s
-                                    AND t.amount IS NOT NULL
-                               ORDER BY t.mtime DESC
-                                  LIMIT 1
-                             )
-                        UPDATE takes t
-                           SET paid_in_advance = (
-                                   coalesce_currency_amount(lt.paid_in_advance, lt.amount::currency) -
-                                   convert(%(in_advance)s, lt.amount::currency)
-                               )
-                          FROM latest_take lt
-                         WHERE t.team = lt.team
-                           AND t.member = lt.member
-                           AND t.mtime >= lt.mtime;
-                    """, t.__dict__)
-            if t.amount:
-                transfer(db, **t.__dict__)
 
     @classmethod
     def clean_up(cls):
@@ -775,44 +631,6 @@ class Payday:
             DROP FUNCTION settle_tip_graph();
             DROP FUNCTION transfer(bigint, bigint, currency_amount, transfer_context, bigint, int);
         """)
-
-    @staticmethod
-    def settle_debts(db):
-        while True:
-            with db.get_cursor() as cursor:
-                debt = cursor.one("""
-                    SELECT d.id, d.debtor AS tipper, d.creditor AS tippee, d.amount
-                         , 'debt' AS context
-                         , w_debtor.remote_owner_id AS tipper_mango_id
-                         , w_debtor.remote_id AS tipper_wallet_id
-                         , w_creditor.remote_owner_id AS tippee_mango_id
-                         , w_creditor.remote_id AS tippee_wallet_id
-                      FROM debts d
-                      JOIN wallets w_debtor ON w_debtor.owner = d.debtor AND
-                           w_debtor.balance::currency = d.amount::currency AND
-                           w_debtor.is_current IS TRUE
-                 LEFT JOIN wallets w_creditor ON w_creditor.owner = d.creditor AND
-                           w_creditor.balance::currency = d.amount::currency AND
-                           w_creditor.is_current IS TRUE
-                      JOIN participants p_creditor ON p_creditor.id = d.creditor
-                     WHERE d.status = 'due'
-                       AND w_debtor.balance >= d.amount
-                       AND p_creditor.status = 'active'
-                     LIMIT 1
-                       FOR UPDATE OF d
-                """)
-                if not debt:
-                    break
-                try:
-                    t_id = transfer(db, **debt._asdict())[1]
-                except NegativeBalance:
-                    continue
-                cursor.run("""
-                    UPDATE debts
-                       SET status = 'paid'
-                         , settlement = %s
-                     WHERE id = %s
-                """, (t_id, debt.id))
 
     @classmethod
     def update_stats(cls, payday_id):
@@ -1021,7 +839,7 @@ class Payday:
                SET actual_amount = t2.actual_amount
               FROM ( SELECT t2.id
                           , (
-                                SELECT basket_sum(tr.amount + tr.in_advance)
+                                SELECT basket_sum(tr.amount)
                                   FROM payday_transfers tr
                                  WHERE tr.team = t2.team
                                    AND tr.tippee = t2.member
@@ -1052,7 +870,7 @@ class Payday:
                SET taking = p2.taking
               FROM ( SELECT p2.id
                           , coalesce_currency_amount((
-                                SELECT sum(t.amount + t.in_advance, p2.main_currency)
+                                SELECT sum(t.amount, p2.main_currency)
                                   FROM payday_transfers t
                                  WHERE t.tippee = p2.id
                                    AND context IN ('take', 'partial-take')
@@ -1204,7 +1022,6 @@ class Payday:
                 personal=personal,
                 personal_npatrons=personal_npatrons,
                 by_team=by_team,
-                mangopay_balance=p.get_balances(),
             )
             n += 1
         log("Sent %i income notifications." % n)
@@ -1339,7 +1156,6 @@ def exec_payday(log_file):  # pragma: no cover
 
 
 def main(override_payday_checks=False):
-    from liberapay.billing.transactions import sync_with_mangopay
     from liberapay.main import website
     from liberapay.payin import paypal
 
@@ -1360,7 +1176,6 @@ def main(override_payday_checks=False):
     # Prevent a race condition, by acquiring a DB lock
     with website.db.lock('payday', blocking=False):
         try:
-            sync_with_mangopay(website.db)
             paypal.sync_all_pending_payments(website.db)
             Payday.start().run(website.env.log_dir, website.env.keep_payday_logs)
         except KeyboardInterrupt:  # pragma: no cover
