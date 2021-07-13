@@ -2976,3 +2976,15 @@ UPDATE participants
 -- migration #145
 DELETE FROM app_conf WHERE key = 'trusted_proxies';
 ALTER TABLE rate_limiting SET LOGGED;
+
+-- migration #146
+DELETE FROM notifications WHERE event IN (
+    'dispute',
+    'low_balance',
+    'payin_bankwire_created',
+    'payin_bankwire_expired',
+    'payin_bankwire_failed',
+    'payin_bankwire_succeeded',
+    'payin_directdebit_failed',
+    'payin_directdebit_succeeded'
+);
