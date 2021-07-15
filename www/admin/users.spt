@@ -96,6 +96,11 @@ if mode == 'all':
                         ) s
                ) AS statements
              , ( SELECT row_to_json(e)
+                   FROM events e
+                  WHERE e.participant = p.id
+                    AND e.type = 'sign_up_request'
+               ) AS sign_up_request
+             , ( SELECT row_to_json(e)
                    FROM ( SELECT e.*, p2.username AS recorder_name
                             FROM events e
                        LEFT JOIN participants p2 ON p2.id = e.recorder
@@ -330,6 +335,19 @@ title = "Users Admin"
                 <br>
             % endfor
         </p>
+        % endif
+
+        % if row.sign_up_request|default(None)
+            % set headers = row.sign_up_request.get('headers', {})
+        % else
+            % set headers = {}
+        % endif
+        % set ip_address = headers.get('Cf-Connecting-Ip')
+        % set country_code = headers.get('Cf-Ipcountry')
+        % if ip_address
+        <p><strong>IP address:</strong> {{ ip_address }} ({{ country_code or 'country unknown' }})</p>
+        % else
+        <p><strong>IP address:</strong> unknown.</p>
         % endif
         % endif
 
