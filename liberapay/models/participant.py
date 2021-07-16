@@ -2823,110 +2823,109 @@ class Participant(Model, MixinTeam):
             new_schedule = []
             insertions, updates, deletions, unchanged = [], [], [], []
             for renewal_mode, payin_currency, payin_tips in tip_groups:
-                if True:
-                    execution_date = payin_tips[0].due_date
-                    if renewal_mode == 2:
-                        # We schedule automatic renewals one day early so that the
-                        # donor has a little bit of time to react if it fails.
-                        execution_date -= timedelta(days=1)
-                        execution_date = max(execution_date, min_automatic_debit_date)
-                    new_sp = Object(
-                        amount=Money.sum(
-                            (t.renewal_amount for t in payin_tips),
-                            payin_currency
-                        ) if renewal_mode == 2 else None,
-                        transfers=[
-                            {
-                                'tippee_id': tip.tippee,
-                                'tippee_username': tip.tippee_p.username,
-                                'amount': tip.renewal_amount,
-                            } for tip in payin_tips
-                        ],
-                        execution_date=execution_date,
-                        automatic=(renewal_mode == 2),
-                    )
-                    new_sp.transfers.sort(key=tippee_id_getter)
-                    # Check the charge amount
-                    if renewal_mode == 2:
-                        pp = PayinProspect(self, payin_tips, 'stripe')
-                        if new_sp.amount < pp.min_acceptable_amount:
-                            new_sp.amount = pp.min_acceptable_amount
-                            tr_amounts = resolve_amounts(
-                                new_sp.amount,
-                                {tip.tippee: tip.amount for tip in payin_tips}
-                            )
+                execution_date = payin_tips[0].due_date
+                if renewal_mode == 2:
+                    # We schedule automatic renewals one day early so that the
+                    # donor has a little bit of time to react if it fails.
+                    execution_date -= timedelta(days=1)
+                    execution_date = max(execution_date, min_automatic_debit_date)
+                new_sp = Object(
+                    amount=Money.sum(
+                        (t.renewal_amount for t in payin_tips),
+                        payin_currency
+                    ) if renewal_mode == 2 else None,
+                    transfers=[
+                        {
+                            'tippee_id': tip.tippee,
+                            'tippee_username': tip.tippee_p.username,
+                            'amount': tip.renewal_amount,
+                        } for tip in payin_tips
+                    ],
+                    execution_date=execution_date,
+                    automatic=(renewal_mode == 2),
+                )
+                new_sp.transfers.sort(key=tippee_id_getter)
+                # Check the charge amount
+                if renewal_mode == 2:
+                    pp = PayinProspect(self, payin_tips, 'stripe')
+                    if new_sp.amount < pp.min_acceptable_amount:
+                        new_sp.amount = pp.min_acceptable_amount
+                        tr_amounts = resolve_amounts(
+                            new_sp.amount,
+                            {tip.tippee: tip.amount for tip in payin_tips}
+                        )
+                        for tr in new_sp.transfers:
+                            tr['amount'] = tr_amounts[tr['tippee_id']]
+                        del tr_amounts
+                # Try to find this new payment in the current schedule
+                tippees = get_tippees_tuple(new_sp)
+                cur_sp = current_schedule_map.pop(tippees, None)
+                if cur_sp:
+                    # Found it, now we check if the two are different
+                    if cur_sp.customized:
+                        # Don't modify a payment that has been explicitly
+                        # customized by the donor.
+                        new_sp.execution_date = cur_sp.execution_date
+                        if new_sp.automatic and cur_sp.automatic:
+                            new_sp.amount = cur_sp.amount
+                            new_sp.transfers = cur_sp.transfers
+                        if new_sp.amount and new_sp.amount.currency != payin_currency:
+                            # … unless the currency has changed.
+                            new_sp.amount = new_sp.amount.convert(payin_currency)
+                            new_sp.transfers = [
+                                dict(tr, amount=tr['amount'].convert(payin_currency))
+                                for tr in new_sp.transfers
+                            ]
+                        new_sp.customized = True
+                    if cur_sp.id in new_dates or cur_sp.id in new_amounts:
+                        new_sp.customized = cur_sp.customized
+                        new_date = new_dates.get(cur_sp.id)
+                        if new_date and new_sp.execution_date != new_date:
+                            new_sp.execution_date = new_date
+                            new_sp.customized = True
+                        new_amount = new_amounts.get(cur_sp.id) if new_sp.automatic else None
+                        if new_amount and new_sp.amount != new_amount:
+                            if new_amount.currency != payin_currency:
+                                raise UnexpectedCurrency(new_amount, payin_currency)
+                            new_sp.amount = new_amount
+                            tr_amounts = resolve_amounts(new_amount, {
+                                tr['tippee_id']: tr['amount'].convert(payin_currency)
+                                for tr in new_sp.transfers
+                            })
                             for tr in new_sp.transfers:
                                 tr['amount'] = tr_amounts[tr['tippee_id']]
-                            del tr_amounts
-                    # Try to find this new payment in the current schedule
-                    tippees = get_tippees_tuple(new_sp)
-                    cur_sp = current_schedule_map.pop(tippees, None)
-                    if cur_sp:
-                        # Found it, now we check if the two are different
-                        if cur_sp.customized:
-                            # Don't modify a payment that has been explicitly
-                            # customized by the donor.
-                            new_sp.execution_date = cur_sp.execution_date
-                            if new_sp.automatic and cur_sp.automatic:
-                                new_sp.amount = cur_sp.amount
-                                new_sp.transfers = cur_sp.transfers
-                            if new_sp.amount and new_sp.amount.currency != payin_currency:
-                                # … unless the currency has changed.
-                                new_sp.amount = new_sp.amount.convert(payin_currency)
-                                new_sp.transfers = [
-                                    dict(tr, amount=tr['amount'].convert(payin_currency))
-                                    for tr in new_sp.transfers
-                                ]
                             new_sp.customized = True
-                        if cur_sp.id in new_dates or cur_sp.id in new_amounts:
-                            new_sp.customized = cur_sp.customized
-                            new_date = new_dates.get(cur_sp.id)
-                            if new_date and new_sp.execution_date != new_date:
-                                new_sp.execution_date = new_date
-                                new_sp.customized = True
-                            new_amount = new_amounts.get(cur_sp.id) if new_sp.automatic else None
-                            if new_amount and new_sp.amount != new_amount:
-                                if new_amount.currency != payin_currency:
-                                    raise UnexpectedCurrency(new_amount, payin_currency)
-                                new_sp.amount = new_amount
-                                tr_amounts = resolve_amounts(new_amount, {
-                                    tr['tippee_id']: tr['amount'].convert(payin_currency)
-                                    for tr in new_sp.transfers
-                                })
-                                for tr in new_sp.transfers:
-                                    tr['amount'] = tr_amounts[tr['tippee_id']]
-                                new_sp.customized = True
-                            if has_scheduled_payment_changed(cur_sp, new_sp):
-                                updates.append((cur_sp, new_sp))
-                            else:
-                                unchanged.append(cur_sp)
-                        elif has_scheduled_payment_changed(cur_sp, new_sp):
-                            is_short_delay = (
-                                new_sp.amount == cur_sp.amount and
-                                new_sp.execution_date <= (
-                                    cur_sp.execution_date + timedelta(weeks=4)
-                                )
-                            )
-                            if cur_sp.notifs_count and is_short_delay:
-                                # Don't push back a payment by only a few weeks
-                                # if we've already notified the payer.
-                                new_sp.execution_date = cur_sp.execution_date
-                                unchanged.append(cur_sp)
-                            else:
-                                updates.append((cur_sp, new_sp))
-                        else:
-                            unchanged.append(cur_sp)
-                    else:
-                        # No exact match, so we look for a partial match
-                        cur_sp = find_partial_match(new_sp, current_schedule_map)
-                        if cur_sp:
-                            # Found a partial match
-                            current_schedule_map.pop(get_tippees_tuple(cur_sp))
+                        if has_scheduled_payment_changed(cur_sp, new_sp):
                             updates.append((cur_sp, new_sp))
                         else:
-                            # No match, this is a completely new payment
-                            insertions.append(new_sp)
-                    new_schedule.append(new_sp)
+                            unchanged.append(cur_sp)
+                    elif has_scheduled_payment_changed(cur_sp, new_sp):
+                        is_short_delay = (
+                            new_sp.amount == cur_sp.amount and
+                            new_sp.execution_date <= (
+                                cur_sp.execution_date + timedelta(weeks=4)
+                            )
+                        )
+                        if cur_sp.notifs_count and is_short_delay:
+                            # Don't push back a payment by only a few weeks
+                            # if we've already notified the payer.
+                            new_sp.execution_date = cur_sp.execution_date
+                            unchanged.append(cur_sp)
+                        else:
+                            updates.append((cur_sp, new_sp))
+                    else:
+                        unchanged.append(cur_sp)
+                else:
+                    # No exact match, so we look for a partial match
+                    cur_sp = find_partial_match(new_sp, current_schedule_map)
+                    if cur_sp:
+                        # Found a partial match
+                        current_schedule_map.pop(get_tippees_tuple(cur_sp))
+                        updates.append((cur_sp, new_sp))
+                    else:
+                        # No match, this is a completely new payment
+                        insertions.append(new_sp)
+                new_schedule.append(new_sp)
             deletions = list(current_schedule_map.values())
             del current_schedule_map
 
