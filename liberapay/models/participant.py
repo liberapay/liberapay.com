@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5, sha1
+from operator import attrgetter, itemgetter
 from os import urandom
 from threading import Lock
 from time import sleep
@@ -2555,6 +2556,24 @@ class Participant(Model, MixinTeam):
         """, dict(tipper=self.id, tippee=tippee_id, hide=hide))
 
 
+    @cached_property
+    def donor_category(self):
+        if self.is_suspended is False:
+            return 'trusted_donor'
+        has_at_least_one_good_payment = self.db.one("""
+            SELECT count(*)
+              FROM payins
+             WHERE payer = %s
+               AND status = 'succeeded'
+               AND refunded_amount IS NULL
+               AND ctime < (current_timestamp - interval '30 days')
+        """, (self.id,)) > 0
+        if has_at_least_one_good_payment:
+            return 'active_donor'
+        else:
+            return 'new_donor'
+
+
     def schedule_renewals(self, save=True, new_dates={}, new_amounts={}):
         """(Re)schedule this donor's future payments.
         """
@@ -2641,10 +2660,10 @@ class Participant(Model, MixinTeam):
                         continue
                     current_schedule_by_tippee[tr['tippee_id']] = sp
 
-            # For each renewable tip, get the amount of the last payment
+            # Gather some data on past payments
             if renewable_tips:
                 tippees = set(t.tippee for t in renewable_tips)
-                last_payments = dict(cursor.all("""
+                last_manual_payment_amounts = dict(cursor.all("""
                     SELECT tippee, round(
                                ( SELECT sum(pt.amount, payin_amount::currency) FILTER (
                                             WHERE coalesce(pt.team, pt.recipient) = tippee
@@ -2683,7 +2702,7 @@ class Participant(Model, MixinTeam):
                         # Automatic payments are only possible through Stripe.
                         tip.renewal_mode = 1
                     if tip.renewal_mode == 2:
-                        last_payment_amount = last_payments.get(tip.tippee)
+                        last_payment_amount = last_manual_payment_amounts.get(tip.tippee)
                         if last_payment_amount:
                             tip.renewal_amount = last_payment_amount.convert(tip.amount.currency)
                         else:
@@ -2691,28 +2710,121 @@ class Participant(Model, MixinTeam):
                         if not tip.renewal_amount or tip.renewal_amount < (tip.amount * 2):
                             pp = PayinProspect(self, [tip], 'stripe')
                             tip.renewal_amount = pp.moderate_proposed_amount
+                        del last_payment_amount
                     else:
                         tip.renewal_amount = None
-                del last_payments, tippees
+                del last_manual_payment_amounts
+                last_payments = {row.tippee: row for row in cursor.all("""
+                    SELECT DISTINCT ON (coalesce(pt.team, pt.recipient))
+                           coalesce(pt.team, pt.recipient) AS tippee,
+                           pt.amount,
+                           pt.ctime,
+                           pt.unit_amount,
+                           pt.period
+                      FROM payin_transfers pt
+                     WHERE pt.payer = %(payer)s
+                       AND coalesce(pt.team, pt.recipient) IN %(tippees)s
+                       AND pt.status = 'succeeded'
+                  ORDER BY coalesce(pt.team, pt.recipient)
+                         , pt.ctime DESC
+                """, dict(payer=self.id, tippees=tippees))}
+                del tippees
+                past_payin_amount_maximum = cursor.one("""
+                    WITH relevant_payins AS (
+                        SELECT pi.*
+                          FROM payins pi
+                         WHERE pi.payer = %(payer)s
+                           AND pi.status IN ('pending', 'succeeded')
+                           AND ( NOT pi.off_session OR (
+                                   SELECT sp.customized
+                                     FROM scheduled_payins sp
+                                    WHERE sp.payin = pi.id
+                               ) )
+                      ORDER BY pi.ctime DESC
+                         LIMIT 50
+                    )
+                    SELECT max(sums.amount)
+                      FROM ( SELECT sum(pi.amount, %(main_currency)s) OVER (
+                                        ORDER BY pi.ctime DESC
+                                        RANGE '2 weeks' PRECEDING
+                                    ) AS amount
+                               FROM relevant_payins pi
+                           ) sums
+                """, dict(payer=self.id, main_currency=self.main_currency))
 
             # Group the tips into payments
+            # 1) Group the tips by renewal_mode and currency.
             next_payday = compute_next_payday_date()
-            tip_groups = defaultdict(list)
+            naive_tip_groups = defaultdict(list)
             for tip in renewable_tips:
                 tip.due_date = tip.compute_renewal_due_date(next_payday, cursor)
-                renewal_quarter = tip.weeks_left // 13
-                tip_groups[(tip.renewal_mode, tip.amount.currency, renewal_quarter)].append(tip)
+                naive_tip_groups[(tip.renewal_mode, tip.amount.currency)].append(tip)
             del renewable_tips
-            tip_groups = {
+            # 2) Subgroup by payment processor and geography.
+            naive_tip_groups = {
                 key: self.group_tips_into_payments(tips)[0]['fundable']
-                for key, tips in tip_groups.items()
+                for key, tips in naive_tip_groups.items()
             }
+            # 3) Subgroup based on when the renewal is due, when the last payment was,
+            #    and what the grouped payment amount would be.
+            tip_groups = []
+            due_date_getter = attrgetter('due_date')
+            for (renewal_mode, tips_currency), naive_groups in naive_tip_groups.items():
+                for naive_group in naive_groups:
+                    naive_group.sort(key=due_date_getter)
+                    if naive_group[0].tippee_p.payment_providers & 1 == 1:
+                        processor = 'stripe'
+                    else:
+                        processor = 'paypal'
+                    prospect = PayinProspect(self, naive_group, processor)
+                    hard_payin_amount_limit = prospect.max_acceptable_amount
+                    if past_payin_amount_maximum:
+                        soft_payin_amount_limit = past_payin_amount_maximum
+                    else:
+                        soft_payin_amount_limit = hard_payin_amount_limit
+                    group = None
+                    group_sum = 0
+                    execution_date = None  # for flake8
+                    for tip in naive_group:
+                        last_payment = last_payments.get(tip.tippee)
+                        new_group_sum = group_sum + (tip.renewal_amount or 0)
+                        start_new_group = (
+                            group is None or
+                            new_group_sum > hard_payin_amount_limit or
+                            tip.due_date >= (execution_date + timedelta(weeks=26)) or
+                            tip.due_date >= (execution_date + timedelta(weeks=1)) and (
+                                new_group_sum > soft_payin_amount_limit or
+                                last_payment is not None and execution_date < (
+                                    last_payment.ctime.date() +
+                                    timedelta(weeks=int(
+                                        last_payment.amount.convert(tips_currency) /
+                                        (last_payment.unit_amount.convert(tips_currency) *
+                                         PERIOD_CONVERSION_RATES[last_payment.period]) /
+                                        2
+                                    ))
+                                )
+                            )
+                        )
+                        if start_new_group:
+                            group = [tip]
+                            tip_groups.append((renewal_mode, tips_currency, group))
+                            execution_date = tip.due_date
+                            group_sum = tip.renewal_amount or 0
+                        else:
+                            group.append(tip)
+                            group_sum = new_group_sum
+                    del group, group_sum, last_payment, naive_group, new_group_sum
+                del naive_groups
+            del naive_tip_groups
+
+            # Compile the new schedule and compare it to the old one
+            tippee_id_getter = itemgetter('tippee_id')
             min_automatic_debit_date = date(2020, 2, 14)
             new_schedule = []
             insertions, updates, deletions, unchanged = [], [], [], []
-            for (renewal_mode, payin_currency, ignored), groups in tip_groups.items():
-                for payin_tips in groups:
-                    execution_date = min(t.due_date for t in payin_tips)
+            for renewal_mode, payin_currency, payin_tips in tip_groups:
+                if True:
+                    execution_date = payin_tips[0].due_date
                     if renewal_mode == 2:
                         # We schedule automatic renewals one day early so that the
                         # donor has a little bit of time to react if it fails.
@@ -2733,6 +2845,7 @@ class Participant(Model, MixinTeam):
                         execution_date=execution_date,
                         automatic=(renewal_mode == 2),
                     )
+                    new_sp.transfers.sort(key=tippee_id_getter)
                     # Check the charge amount
                     if renewal_mode == 2:
                         pp = PayinProspect(self, payin_tips, 'stripe')
@@ -3139,9 +3252,9 @@ class Participant(Model, MixinTeam):
                                 groups['fundable'].append(group)
                             group.append(tip)
                         else:
-                            groups['fundable'].append((tip,))
+                            groups['fundable'].append([tip])
                     else:
-                        groups['fundable'].append((tip,))
+                        groups['fundable'].append([tip])
             else:
                 n_fundable += 1
                 if tippee_p.payment_providers & 1 == 1:
@@ -3160,9 +3273,9 @@ class Participant(Model, MixinTeam):
                             groups['fundable'].append(group)
                         group.append(tip)
                     else:
-                        groups['fundable'].append((tip,))
+                        groups['fundable'].append([tip])
                 else:
-                    groups['fundable'].append((tip,))
+                    groups['fundable'].append([tip])
         return groups, n_fundable
 
     def get_tips_to(self, tippee_ids):

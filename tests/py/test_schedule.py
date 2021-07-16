@@ -169,7 +169,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         alice.set_tip_to(bob, EUR('2.00'), renewal_mode=1)
         alice.set_tip_to(carl, EUR('2.00'), renewal_mode=1)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
-        self.make_payin_and_transfer(alice_card, bob, EUR('2.00'))
+        self.make_payin_and_transfer(alice_card, bob, EUR('10.00'))
         self.make_payin_and_transfer(alice_card, carl, EUR('12.00'))
         new_schedule = alice.schedule_renewals()
         next_payday = compute_next_payday_date()
@@ -188,10 +188,10 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount is None
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=1)
+        expected_renewal_date = next_payday + timedelta(weeks=5)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is False
-        # Trigger the initial "upcoming charge" notification
+        # Trigger the initial "renewal reminder" notification
         self.db.run("""
             UPDATE scheduled_payins
                SET ctime = ctime - interval '12 hours'
@@ -223,7 +223,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[1].transfers == [expected_transfers[1]]
         assert scheduled_payins[2].amount is None
         assert scheduled_payins[2].automatic is False
-        expected_renewal_date = next_payday + timedelta(weeks=101)
+        expected_renewal_date = next_payday + timedelta(weeks=105)
         assert scheduled_payins[2].execution_date == expected_renewal_date
         assert scheduled_payins[2].payin is None
         assert scheduled_payins[2].transfers == [expected_transfers[0]]
