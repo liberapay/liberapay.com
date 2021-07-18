@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-07-18 03:34+0000\n"
+"PO-Revision-Date: 2021-07-18 22:48+0000\n"
 "Last-Translator: markmyle <burda@tuta.io>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
 "Language: pl\n"
@@ -425,29 +425,29 @@ msgid "If the dispute isn't resolved favorably, then the disputed funds will be 
 msgstr "Jeśli spór nie zostanie pomyślnie rozstrzygnięty, sporne środki zostaną odzyskane od ludzi, którzy je otrzymali."
 
 msgid "This dispute is final, it cannot be withdrawn or reversed."
-msgstr ""
+msgstr "Ten spór jest ostateczny, nie może zostać wycofany ani anulowany."
 
 msgid "The disputed funds have been automatically reclaimed from the people who had received them."
 msgstr "Kwestionowane fundusze zostały automatycznie odzyskane od osób, które je otrzymały."
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr ""
+msgstr "Jeśli twój bank zakwestionował płatność bez konsultacji z tobą, powinieneś/powinnaś zapytać ich o przyczynę. Gdy problem zostanie rozwiązany, możesz {link_start}ponowić płatność{link_end}."
 
 #, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
-msgstr ""
+msgstr "Aby pomóc bankowi ustalić, co się stało, możesz przesłać im kopię {link_start}tego dokumentu{link_end}."
 
 msgid "Your payment has failed"
 msgstr "Twoja płatność nie powiodła się"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr ""
+msgstr "Nie powiodła się zainicjowana dzisiaj automatyczna płatność w kwocie {money_amount}."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "Nie powiodła się automatyczna płatność w kwocie {money_amount} zainicjowana {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
@@ -499,11 +499,11 @@ msgstr "Twoje konto bankowe zostanie obciążone"
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
-msgstr ""
+msgstr "Aby sfinansować twoją darowiznę dla {recipient}, zainicjowano polecenie zapłaty z twojego konta bankowego ({partial_account_number}) kwoty {money_amount}."
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
-msgstr ""
+msgstr "Aby sfinansować twoje darowizny dla {recipients}, zainicjowano polecenie zapłaty z twojego konta bankowego ({partial_account_number}) kwoty {money_amount}."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
@@ -533,11 +533,11 @@ msgstr "Płatność powiodła się"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
-msgstr ""
+msgstr "Powiodła się zainicjowana dzisiaj, automatyczna płatność kwoty {money_amount}."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "Powiodła się zainicjowana {date}, automatyczna płatność kwoty {money_amount}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
@@ -695,10 +695,10 @@ msgstr "Odnowienie darowizny Liberapay: wymagane uwierzytelnienie"
 
 #, python-brace-format
 msgid "We haven't been able to complete your scheduled payment of {money_amount}, because your bank requested that you confirm it."
-msgstr ""
+msgstr "Nie udało się nam ukończyć zaplanowanej płatności kwoty {money_amount}, ponieważ twój bank poprosił cię o jej zatwierdzenie."
 
 msgid "Confirm the payment"
-msgstr ""
+msgstr "Zatwierdź płatność"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
 msgstr "Możesz ułatwić swoim patronom wsparcie poprzez Liberapay"
@@ -1114,7 +1114,7 @@ msgstr "{username} nie przyjmuje darowizn w {rejected_currency}."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
-msgstr ""
+msgstr "Kwota {money_amount} nie jest w oczekiwanej walucie ({expected_currency})."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Wygląda na to, że próbujesz usunąć coś co nie istnieje."
@@ -1259,15 +1259,15 @@ msgstr[1] "{n} lata z {money_amount}"
 msgstr[2] "{n} lat z {money_amount}"
 
 msgid "The submitted password is incorrect."
-msgstr ""
+msgstr "Wysłane hasło jest nieprawidłowe."
 
 #, python-brace-format
 msgid "“{0}” is not a valid account ID."
-msgstr ""
+msgstr "„{0}” nie jest prawidłowym identyfikatorem konta."
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
-msgstr ""
+msgstr "Nie ma konta z nazwą użytkownika „{username}”."
 
 #, fuzzy, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
@@ -1289,7 +1289,7 @@ msgid "A security check has failed. Please make sure your browser is configured 
 msgstr "Kontrola bezpieczeństwa nie powiodła się. Upewnij się, że Twoja przeglądarka jest skonfigurowana do obsługi plików cookie w domenie {domain}, a następnie spróbuj ponownie."
 
 msgid "Checking cookies…"
-msgstr ""
+msgstr "Sprawdzanie ciasteczek…"
 
 msgid "You are not authorized to access this page."
 msgstr "Nie masz uprawnień by odwiedzić ten obszar serwisu."
@@ -1329,24 +1329,24 @@ msgid "Go"
 msgstr "Wyślij"
 
 msgid "The log-in has been cancelled. You can close this page."
-msgstr ""
+msgstr "Anulowano logowanie. Możesz zamknąć tę stronę."
 
 #, python-brace-format
 msgid "You are about to log in as {identifier}. Please click a button below to confirm or cancel."
-msgstr ""
+msgstr "Logujesz się jako {identifier}. Proszę wcisnąć przycisk poniżej, aby potwierdzić albo anulować."
 
 #, python-brace-format
 msgid "Log in as {identifier}"
-msgstr ""
+msgstr "Zaloguj się jako {identifier}"
 
 msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
-msgstr ""
+msgstr "Wygląda na to, że używasz przestarzałej przeglądarki, przez co strona może nie działać prawidłowo. Zalecamy używanie najnowszej wersji wiodącej przeglądarki."
 
 msgid "Ignore this warning"
-msgstr ""
+msgstr "Zignoruj to ostrzeżenie"
 
 msgid "Please input your password to confirm this action:"
-msgstr ""
+msgstr "Proszę wprowadzić swoje hasło, aby potwierdzić tę czynność:"
 
 msgid "Password"
 msgstr "Hasło"
@@ -1384,7 +1384,7 @@ msgid "Retry"
 msgstr "Spróbuj ponownie"
 
 msgid "This profile is marked as spam."
-msgstr ""
+msgstr "Tej profil oznaczony jest jako spam."
 
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Potrzebujesz do tego konta. Prosimy o wypełnienie jednego z formularzy znajdujących się niżej."
@@ -1732,7 +1732,7 @@ msgid "Goal"
 msgstr "Cel"
 
 msgid "Descriptions"
-msgstr ""
+msgstr "Opisy"
 
 msgid "Linked Accounts"
 msgstr "Konta w innych serwisach"
@@ -2122,7 +2122,7 @@ msgstr "Wesprzyj pracę użytkownika {username} przekazując regularne darowizny
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username} obecnie nie akceptuje darowizn. Możesz zadeklarować wsparcie, ale nie możesz przesłać mu/jej samych pieniędzy."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "To konto jest tymczasowo zablokowane, darowizny do tego konta nie zostaną przetworzone."
@@ -2130,9 +2130,9 @@ msgstr "To konto jest tymczasowo zablokowane, darowizny do tego konta nie zostan
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{username} ma obecnie {n} patrona gotowego go/ją wspierać."
+msgstr[1] "{username} ma obecnie {n} patronów gotowych go/ją wspierać."
+msgstr[2] "{username} ma obecnie {n} patronów gotowych go/ją wspierać."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2144,7 +2144,7 @@ msgstr "{username} aktualnie otrzymuje {income_amount} tygodniowo, by osiągną�
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "Celem {username} jest otrzymywanie {money_amount} tygodniowo. Wnieś wkład jako pierwszy(-a)!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
