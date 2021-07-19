@@ -2663,6 +2663,10 @@ class Participant(Model, MixinTeam):
             # Gather some data on past payments
             if renewable_tips:
                 tippees = set(t.tippee for t in renewable_tips)
+                # For each renewable tip, compute the renewal amount, using the
+                # amount of the last *manual* payment. (If we based renewal
+                # amounts on previous renewal amounts, then past mistakes in the
+                # computation would be repeated forever.)
                 last_manual_payment_amounts = dict(cursor.all("""
                     SELECT tippee, round(
                                ( SELECT sum(pt.amount, payin_amount::currency) FILTER (
@@ -2714,6 +2718,9 @@ class Participant(Model, MixinTeam):
                     else:
                         tip.renewal_amount = None
                 del last_manual_payment_amounts
+                # For each renewable tip, fetch the amount and time of the last payment.
+                # This is used further down to ensure that a renewal isn't scheduled too
+                # early.
                 last_payments = {row.tippee: row for row in cursor.all("""
                     SELECT DISTINCT ON (coalesce(pt.team, pt.recipient))
                            coalesce(pt.team, pt.recipient) AS tippee,
@@ -2729,6 +2736,10 @@ class Participant(Model, MixinTeam):
                          , pt.ctime DESC
                 """, dict(payer=self.id, tippees=tippees))}
                 del tippees
+                # Try to guess how much the donor is willing to pay in advance
+                # (within a 2-week sliding window), by looking at past (manual)
+                # payments. The query is limited to 50 payins in order to
+                # curtail its running time.
                 past_payin_amount_maximum = cursor.one("""
                     WITH relevant_payins AS (
                         SELECT pi.*
