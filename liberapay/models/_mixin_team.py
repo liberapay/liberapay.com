@@ -183,7 +183,7 @@ class MixinTeam:
         """
         return (cursor or self.db).all(TAKES, dict(team=self.id))
 
-    def get_current_takes_for_payment(self, currency, provider, weekly_amount):
+    def get_current_takes_for_payment(self, currency, weekly_amount):
         """
         Return the list of current takes with the extra information that the
         `liberapay.payin.common.resolve_take_amounts` function needs to compute
@@ -198,19 +198,10 @@ class MixinTeam:
                        %(currency)s
                    ) AS paid_in_advance
                  , p.is_suspended
-                 , EXISTS (
-                       SELECT true
-                         FROM payment_accounts a
-                        WHERE a.participant = t.member
-                          AND a.provider = %(provider)s
-                          AND a.is_current
-                          AND a.verified
-                          AND coalesce(a.charges_enabled, true)
-                   ) AS has_payment_account
               FROM current_takes t
               JOIN participants p ON p.id = t.member
              WHERE t.team = %(team_id)s
-        """, dict(currency=currency, team_id=self.id, provider=provider))
+        """, dict(currency=currency, team_id=self.id))
         zero = Money.ZEROS[currency]
         income_amount = self.receiving.convert(currency) + weekly_amount.convert(currency)
         if income_amount == 0:

@@ -248,7 +248,7 @@ def adjust_payin_transfers(db, payin, net_amount):
 
 def prepare_donation(
     db, payin, tip, tippee, provider, payer, payer_country, payment_amount,
-    sepa_only=False,
+    sepa_only=False, excluded_destinations=set(),
 ):
     """Prepare to distribute a donation.
 
@@ -260,6 +260,8 @@ def prepare_donation(
         payer (Participant): the donor
         payer_country (str): the country the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
+        sepa_only (bool): passed to `resolve_team_donation()`
+        excluded_destinations (set): passed to `resolve_team_donation()`
 
     Returns:
         a list of the rows created in the `payin_transfers` table
@@ -285,7 +287,7 @@ def prepare_donation(
     if tippee.kind == 'group':
         team_donations = resolve_team_donation(
             db, tippee, provider, payer, payer_country, payment_amount, tip.amount,
-            sepa_only=sepa_only
+            sepa_only=sepa_only, excluded_destinations=excluded_destinations,
         )
         n_periods = payment_amount / tip.periodic_amount
         for d in team_donations:
@@ -346,7 +348,7 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
 
 def resolve_team_donation(
     db, team, provider, payer, payer_country, payment_amount, weekly_amount,
-    sepa_only=False,
+    sepa_only=False, excluded_destinations=(),
 ):
     """Figure out how to distribute a donation to a team's members.
 
@@ -357,6 +359,8 @@ def resolve_team_donation(
         payer_country (str): the country code the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
         weekly_amount (Money): the weekly donation amount
+        sepa_only (bool): only consider destination accounts within SEPA
+        excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
     Returns:
         a list of `Donation` objects
@@ -370,37 +374,59 @@ def resolve_team_donation(
     if team.is_suspended:
         raise RecipientAccountSuspended(team)
     currency = payment_amount.currency
-    members = team.get_current_takes_for_payment(currency, provider, weekly_amount)
-    if all(m.is_suspended for m in members):
-        raise RecipientAccountSuspended(members)
-    members = [m for m in members if m.has_payment_account and not m.is_suspended]
-    if not members:
+    takes = team.get_current_takes_for_payment(currency, weekly_amount)
+    if all(t.is_suspended for t in takes):
+        raise RecipientAccountSuspended(takes)
+    takes = [t for t in takes if not t.is_suspended]
+    if len(takes) == 1 and takes[0].member == payer.id:
+        raise NoSelfTipping()
+    member_ids = tuple([t.member for t in takes])
+    excluded_destinations = list(excluded_destinations)
+    payment_accounts = {row.participant: row for row in db.all("""
+        SELECT DISTINCT ON (participant) *
+          FROM payment_accounts
+         WHERE participant IN %(member_ids)s
+           AND provider = %(provider)s
+           AND is_current
+           AND verified
+           AND coalesce(charges_enabled, true)
+           AND array_position(%(excluded_destinations)s, pk) IS NULL
+      ORDER BY participant
+             , default_currency = %(currency)s DESC
+             , country = %(payer_country)s DESC
+             , connection_ts
+    """, locals())}
+    del member_ids
+    if not payment_accounts:
         raise MissingPaymentAccount(team)
-    members = sorted(members, key=lambda t: (
-        int(t.member == payer.id),
+    takes = [t for t in takes if t.member in payment_accounts]
+    if len(takes) == 1 and takes[0].member == payer.id:
+        raise NoSelfTipping()
+    takes.sort(key=lambda t: (
         -(t.amount / (t.paid_in_advance + payment_amount)),
         t.paid_in_advance,
         t.ctime
     ))
-    if members[0].member == payer.id:
-        raise NoSelfTipping()
     # Try to distribute the donation to multiple members.
-    other_members = set(t.member for t in members if t.member != payer.id)
+    other_members = {t.member for t in takes if t.member != payer.id}
     if sepa_only or other_members and provider == 'stripe':
         sepa_accounts = {a.participant: a for a in db.all("""
             SELECT DISTINCT ON (a.participant) a.*
               FROM payment_accounts a
-             WHERE a.participant IN %(members)s
-               AND a.provider = 'stripe'
+             WHERE a.participant IN %(other_members)s
+               AND a.provider = %(provider)s
                AND a.is_current
-               AND a.country IN %(SEPA)s
+               AND a.verified
+               AND coalesce(a.charges_enabled, true)
+               AND array_position(%(excluded_destinations)s, a.pk) IS NULL
+               AND a.country IN %(sepa)s
           ORDER BY a.participant
                  , a.default_currency = %(currency)s DESC
                  , a.connection_ts
-        """, dict(members=other_members, SEPA=SEPA, currency=currency))}
-        if sepa_only or len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
+        """, dict(locals(), sepa=SEPA))}
+        if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:
             selected_takes = [
-                t for t in members if t.member in sepa_accounts and t.amount != 0
+                t for t in takes if t.member in sepa_accounts and t.amount != 0
             ]
             if selected_takes:
                 resolve_take_amounts(payment_amount, selected_takes)
@@ -416,8 +442,8 @@ def resolve_team_donation(
             elif sepa_only:
                 raise MissingPaymentAccount(team)
     # Fall back to sending the entire donation to the member who "needs" it most.
-    member = db.Participant.from_id(members[0].member)
-    account = resolve_destination(db, member, provider, payer, payer_country, payment_amount)
+    member = db.Participant.from_id(takes[0].member)
+    account = payment_accounts[member.id]
     return [Donation(payment_amount, member, account)]
 
 
