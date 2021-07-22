@@ -2574,6 +2574,35 @@ class Participant(Model, MixinTeam):
             return 'new_donor'
 
 
+    def guess_payin_amount_maximum(self, cursor=None):
+        """Return the maximum sum ever paid (manually) within a week.
+
+        The query is limited to 50 payins in order to curtail its running time.
+        """
+        return (cursor or self.db).one("""
+            WITH relevant_payins AS (
+                SELECT pi.*
+                  FROM payins pi
+                 WHERE pi.payer = %(payer)s
+                   AND pi.status IN ('pending', 'succeeded')
+                   AND ( NOT pi.off_session OR (
+                           SELECT sp.customized
+                             FROM scheduled_payins sp
+                            WHERE sp.payin = pi.id
+                       ) )
+              ORDER BY pi.ctime DESC
+                 LIMIT 50
+            )
+            SELECT max(sums.amount)
+              FROM ( SELECT sum(pi.amount, %(main_currency)s) OVER (
+                                ORDER BY pi.ctime DESC
+                                RANGE '1 week' PRECEDING
+                            ) AS amount
+                       FROM relevant_payins pi
+                   ) sums
+        """, dict(payer=self.id, main_currency=self.main_currency))
+
+
     def schedule_renewals(self, save=True, new_dates={}, new_amounts={}):
         """(Re)schedule this donor's future payments.
         """
@@ -2736,32 +2765,9 @@ class Participant(Model, MixinTeam):
                          , pt.ctime DESC
                 """, dict(payer=self.id, tippees=tippees))}
                 del tippees
-                # Try to guess how much the donor is willing to pay in advance
-                # (within a 2-week sliding window), by looking at past (manual)
-                # payments. The query is limited to 50 payins in order to
-                # curtail its running time.
-                past_payin_amount_maximum = cursor.one("""
-                    WITH relevant_payins AS (
-                        SELECT pi.*
-                          FROM payins pi
-                         WHERE pi.payer = %(payer)s
-                           AND pi.status IN ('pending', 'succeeded')
-                           AND ( NOT pi.off_session OR (
-                                   SELECT sp.customized
-                                     FROM scheduled_payins sp
-                                    WHERE sp.payin = pi.id
-                               ) )
-                      ORDER BY pi.ctime DESC
-                         LIMIT 50
-                    )
-                    SELECT max(sums.amount)
-                      FROM ( SELECT sum(pi.amount, %(main_currency)s) OVER (
-                                        ORDER BY pi.ctime DESC
-                                        RANGE '2 weeks' PRECEDING
-                                    ) AS amount
-                               FROM relevant_payins pi
-                           ) sums
-                """, dict(payer=self.id, main_currency=self.main_currency))
+                # Try to guess how much the donor is willing to pay within a
+                # week by looking at past (manual) payments.
+                past_payin_amount_maximum = self.guess_payin_amount_maximum(cursor)
 
             # Group the tips into payments
             # 1) Group the tips by renewal_mode and currency.
