@@ -2747,23 +2747,20 @@ class Participant(Model, MixinTeam):
                     else:
                         tip.renewal_amount = None
                 del last_manual_payment_amounts
-                # For each renewable tip, fetch the amount and time of the last payment.
-                # This is used further down to ensure that a renewal isn't scheduled too
-                # early.
-                last_payments = {row.tippee: row for row in cursor.all("""
+                # For each renewable tip, fetch the amount of the last payment.
+                # This is used further down to ensure that a renewal isn't
+                # scheduled too early.
+                last_payment_amounts = dict(cursor.all("""
                     SELECT DISTINCT ON (coalesce(pt.team, pt.recipient))
                            coalesce(pt.team, pt.recipient) AS tippee,
-                           pt.amount,
-                           pt.ctime,
-                           pt.unit_amount,
-                           pt.period
+                           pt.amount
                       FROM payin_transfers pt
                      WHERE pt.payer = %(payer)s
                        AND coalesce(pt.team, pt.recipient) IN %(tippees)s
                        AND pt.status = 'succeeded'
                   ORDER BY coalesce(pt.team, pt.recipient)
                          , pt.ctime DESC
-                """, dict(payer=self.id, tippees=tippees))}
+                """, dict(payer=self.id, tippees=tippees)))
                 del tippees
                 # Try to guess how much the donor is willing to pay within a
                 # week by looking at past (manual) payments.
@@ -2782,55 +2779,38 @@ class Participant(Model, MixinTeam):
                 key: self.group_tips_into_payments(tips)[0]['fundable']
                 for key, tips in naive_tip_groups.items()
             }
-            # 3) Subgroup based on when the renewal is due, when the last payment was,
-            #    and what the grouped payment amount would be.
+            # 3) Subgroup based on when the renewal is due and how much was paid last time.
             tip_groups = []
             due_date_getter = attrgetter('due_date')
             for (renewal_mode, tips_currency), naive_groups in naive_tip_groups.items():
                 for naive_group in naive_groups:
                     naive_group.sort(key=due_date_getter)
-                    if naive_group[0].tippee_p.payment_providers & 1 == 1:
-                        processor = 'stripe'
-                    else:
-                        processor = 'paypal'
-                    prospect = PayinProspect(self, naive_group, processor)
-                    hard_payin_amount_limit = prospect.max_acceptable_amount
-                    if past_payin_amount_maximum:
-                        soft_payin_amount_limit = past_payin_amount_maximum
-                    else:
-                        soft_payin_amount_limit = hard_payin_amount_limit
                     group = None
-                    group_sum = 0
-                    execution_date = None  # for flake8
+                    execution_date = weeks_until_execution = None  # for flake8
                     for tip in naive_group:
-                        last_payment = last_payments.get(tip.tippee)
-                        new_group_sum = group_sum + (tip.renewal_amount or 0)
+                        last_payment_amount = last_payment_amounts.get(tip.tippee)
+                        # Start a new group if…
                         start_new_group = (
+                            # there isn't a group yet; or
                             group is None or
-                            new_group_sum > hard_payin_amount_limit or
+                            # the due date is at least 6 months further into the future; or
                             tip.due_date >= (execution_date + timedelta(weeks=26)) or
-                            tip.due_date >= (execution_date + timedelta(weeks=1)) and (
-                                new_group_sum > soft_payin_amount_limit or
-                                last_payment is not None and execution_date < (
-                                    last_payment.ctime.date() +
-                                    timedelta(weeks=int(
-                                        last_payment.amount.convert(tips_currency) /
-                                        (last_payment.unit_amount.convert(tips_currency) *
-                                         PERIOD_CONVERSION_RATES[last_payment.period]) /
-                                        2
-                                    ))
-                                )
-                            )
+                            # the due date is at least 1 week further into the future, and
+                            tip.due_date >= (execution_date + timedelta(weeks=1)) and
+                            # the advance will still be more than half of the last payment
+                            last_payment_amount is not None and
+                            (tip.paid_in_advance - tip.amount * weeks_until_execution) /
+                            last_payment_amount.convert(tips_currency) >
+                            Decimal('0.5')
                         )
                         if start_new_group:
                             group = [tip]
                             tip_groups.append((renewal_mode, tips_currency, group))
                             execution_date = tip.due_date
-                            group_sum = tip.renewal_amount or 0
+                            weeks_until_execution = (execution_date - next_payday).days // 7
                         else:
                             group.append(tip)
-                            group_sum = new_group_sum
-                    del group, group_sum, last_payment, naive_group, new_group_sum
+                    del group, last_payment_amount, naive_group, weeks_until_execution
                 del naive_groups
             del naive_tip_groups
 
@@ -2864,9 +2844,23 @@ class Participant(Model, MixinTeam):
                 new_sp.transfers.sort(key=tippee_id_getter)
                 # Check the charge amount
                 if renewal_mode == 2:
+                    adjust = False
                     pp = PayinProspect(self, payin_tips, 'stripe')
                     if new_sp.amount < pp.min_acceptable_amount:
+                        adjust = True
                         new_sp.amount = pp.min_acceptable_amount
+                    elif new_sp.amount > pp.max_acceptable_amount:
+                        adjust = True
+                        new_sp.amount = pp.max_acceptable_amount
+                    if past_payin_amount_maximum:
+                        maximum = past_payin_amount_maximum.convert(payin_currency)
+                        adjust = (
+                            new_sp.amount > maximum and
+                            maximum >= pp.moderate_proposed_amount
+                        )
+                        if adjust:
+                            new_sp.amount = maximum
+                    if adjust:
                         tr_amounts = resolve_amounts(
                             new_sp.amount,
                             {tip.tippee: tip.amount for tip in payin_tips}
