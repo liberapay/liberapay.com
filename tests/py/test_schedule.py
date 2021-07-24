@@ -169,7 +169,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         alice.set_tip_to(bob, EUR('2.00'), renewal_mode=1)
         alice.set_tip_to(carl, EUR('2.00'), renewal_mode=1)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
-        self.make_payin_and_transfer(alice_card, bob, EUR('2.00'))
+        self.make_payin_and_transfer(alice_card, bob, EUR('10.00'))
         self.make_payin_and_transfer(alice_card, carl, EUR('12.00'))
         new_schedule = alice.schedule_renewals()
         next_payday = compute_next_payday_date()
@@ -188,10 +188,10 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert len(new_schedule) == 1
         assert new_schedule[0].amount is None
         assert new_schedule[0].transfers == expected_transfers
-        expected_renewal_date = next_payday + timedelta(weeks=1)
+        expected_renewal_date = next_payday + timedelta(weeks=5)
         assert new_schedule[0].execution_date == expected_renewal_date
         assert new_schedule[0].automatic is False
-        # Trigger the initial "upcoming charge" notification
+        # Trigger the initial "renewal reminder" notification
         self.db.run("""
             UPDATE scheduled_payins
                SET ctime = ctime - interval '12 hours'
@@ -223,10 +223,132 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[1].transfers == [expected_transfers[1]]
         assert scheduled_payins[2].amount is None
         assert scheduled_payins[2].automatic is False
-        expected_renewal_date = next_payday + timedelta(weeks=101)
+        expected_renewal_date = next_payday + timedelta(weeks=105)
         assert scheduled_payins[2].execution_date == expected_renewal_date
         assert scheduled_payins[2].payin is None
         assert scheduled_payins[2].transfers == [expected_transfers[0]]
+        emails = self.get_emails()
+        assert not emails
+
+    def test_pending_manual_renewal_supersedes_scheduled_automatic_debit(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
+        alice.set_tip_to(carl, EUR('6.00'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('6.00'))
+        self.make_payin_and_transfer(alice_card, carl, EUR('12.00'))
+        new_schedule = alice.schedule_renewals()
+        next_payday = compute_next_payday_date()
+        expected_transfers = [
+            {
+                'tippee_id': bob.id,
+                'tippee_username': 'bob',
+                'amount': EUR('6.00'),
+            },
+            {
+                'tippee_id': carl.id,
+                'tippee_username': 'carl',
+                'amount': EUR('12.00'),
+            }
+        ]
+        assert len(new_schedule) == 1
+        assert new_schedule[0].amount == EUR('18.00')
+        assert new_schedule[0].transfers == expected_transfers
+        expected_renewal_date = next_payday + timedelta(weeks=2, days=-1)
+        assert new_schedule[0].execution_date == expected_renewal_date
+        assert new_schedule[0].automatic is True
+        # Trigger the initial "upcoming charge" notification
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET ctime = ctime - interval '12 hours'
+                 , execution_date = current_date
+        """)
+        send_upcoming_debit_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'][0] == 'alice <alice@liberapay.com>'
+        assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €18.00'
+        sp = self.db.one("SELECT * FROM scheduled_payins")
+        assert sp.notifs_count == 1
+        self.db.run("UPDATE scheduled_payins SET execution_date = %s",
+                    (expected_renewal_date,))
+        # Initiate a manual renewal of one of the donations
+        renewal_payin = self.make_payin_and_transfer(
+            alice_card, bob, EUR('600.00'), status='pending',
+        )[0]
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY execution_date, ctime")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('18.00')
+        assert scheduled_payins[0].automatic is True
+        assert scheduled_payins[0].execution_date == expected_renewal_date
+        assert scheduled_payins[0].payin == renewal_payin.id
+        # Call the renewal scheduler
+        new_schedule = alice.schedule_renewals()
+        assert len(new_schedule) == 1
+        assert new_schedule[0].amount == EUR('12.00')
+        assert new_schedule[0].automatic is True
+        assert new_schedule[0].execution_date == expected_renewal_date
+        assert new_schedule[0].transfers == [expected_transfers[1]]
+        emails = self.get_emails()
+        assert not emails
+
+    def test_new_donation_isnt_scheduled_for_renewal_too_early(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('7.00'))
+        new_schedule = alice.schedule_renewals()
+        next_payday = compute_next_payday_date()
+        expected_transfers = [
+            {
+                'tippee_id': bob.id,
+                'tippee_username': 'bob',
+                'amount': EUR('7.00'),
+            }
+        ]
+        assert len(new_schedule) == 1
+        assert new_schedule[0].amount == EUR('7.00')
+        assert new_schedule[0].transfers == expected_transfers
+        expected_renewal_date = next_payday + timedelta(weeks=2, days=-1)
+        assert new_schedule[0].execution_date == expected_renewal_date
+        assert new_schedule[0].automatic is True
+        # Trigger the "upcoming charge" notification
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET ctime = ctime - interval '12 hours'
+                 , execution_date = current_date
+        """)
+        send_upcoming_debit_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'][0] == 'alice <alice@liberapay.com>'
+        assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €7.00'
+        sp = self.db.one("SELECT * FROM scheduled_payins")
+        assert sp.notifs_count == 1
+        self.db.run("UPDATE scheduled_payins SET execution_date = %s",
+                    (expected_renewal_date,))
+        # Start another donation
+        alice.set_tip_to(carl, EUR('1.00'), renewal_mode=2)
+        self.make_payin_and_transfer(alice_card, carl, EUR('12.00'))
+        old_schedule = new_schedule
+        new_schedule = alice.schedule_renewals()
+        assert len(new_schedule) == 2
+        assert new_schedule[0] == old_schedule[0]
+        assert new_schedule[1].amount == EUR('12.00')
+        assert new_schedule[1].automatic is True
+        expected_renewal_date = next_payday + timedelta(weeks=12, days=-1)
+        assert new_schedule[1].execution_date == expected_renewal_date
+        assert new_schedule[1].transfers == [
+            {
+                'tippee_id': carl.id,
+                'tippee_username': 'carl',
+                'amount': EUR('12.00'),
+            }
+        ]
         emails = self.get_emails()
         assert not emails
 
