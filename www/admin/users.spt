@@ -95,7 +95,7 @@ if mode == 'all':
                         ORDER BY s.lang, s.type DESC
                         ) s
                ) AS statements
-             , ( SELECT row_to_json(e)
+             , ( SELECT e.payload
                    FROM events e
                   WHERE e.participant = p.id
                     AND e.type = 'sign_up_request'
