@@ -192,15 +192,6 @@ EVENTS = OrderedDict((e.name, e) for e in EVENTS)
 EVENTS_S = ' '.join(EVENTS.keys())
 
 # https://www.mangopay.com/pricing/
-FEE_PAYIN_BANK_WIRE = Fees(Decimal('0.005'), 0)  # 0.5%
-FEE_PAYIN_CARD = {
-    'EUR': Fees(Decimal('0.018'), Money('0.18', 'EUR')),  # 1.8% + €0.18
-    'USD': Fees(Decimal('0.025'), Money('0.30', 'USD')),  # 2.5% + $0.30
-}
-FEE_PAYIN_DIRECT_DEBIT = {
-    'EUR': Fees(0, Money('0.50', 'EUR')),  # €0.50
-    'GBP': Fees(0, Money('0.50', 'GBP')),  # £0.50
-}
 FEE_PAYOUT = {
     'EUR': {
         'domestic': (SEPA, Fees(0, 0)),

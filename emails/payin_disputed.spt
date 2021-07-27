@@ -40,7 +40,7 @@
     link_start='<a href="%s">'|safe % participant.url('giving/pay/?retry_id=%s' % payin_id),
     link_end='</a>'|safe,
 ) }}</p>
-% if mandate_url
+% if mandate_url is defined
 <p>{{ _(
     "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}.",
     link_start='<a href="%s">'|safe % mandate_url,
