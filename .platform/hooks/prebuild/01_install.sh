@@ -18,10 +18,21 @@ install -m 644 -o root -g root -t /etc/systemd/system .platform/files/webapp@.so
 systemctl daemon-reload
 
 # Install cloudflared, directly from GitHub
-cfd_version="2021.6.0"
-if [ $(/usr/local/bin/cloudflared version || true) != "cloudflared version $cfd_version "* ]; then
-    echo "Installing cloudflared version $cfd_version"
-    wget "https://github.com/cloudflare/cloudflared/releases/download/$cfd_version/cloudflared-linux-amd64"
+target_cfd_version="2021.6.0"
+function get_installed_cfd_version() {
+    if [ -x /usr/local/bin/cloudflared ]; then
+        /usr/local/bin/cloudflared version | \
+        sed -E -e 's/^cloudflared version ([^ ]+).*/\1/'
+    fi
+}
+installed_cfd_version="$(get_installed_cfd_version)"
+if [ "$installed_cfd_version" != "$target_cfd_version" ]; then
+    if [ "$installed_cfd_version" = "" ]; then
+        echo "Installing cloudflared (version $target_cfd_version)"
+    else
+        echo "Upgrading cloudflared ($installed_cfd_version -> $target_cfd_version)"
+    fi
+    wget "https://github.com/cloudflare/cloudflared/releases/download/$target_cfd_version/cloudflared-linux-amd64"
     hash=$(sha256sum cloudflared-linux-amd64 | cut -d' ' -f1)
     expected_hash=56f83406f8320727303c3c03dd0d3903decaea3731cf2a275d5c6e0cb0e627bd
     if [ $hash != $expected_hash ]; then
@@ -30,10 +41,12 @@ if [ $(/usr/local/bin/cloudflared version || true) != "cloudflared version $cfd_
     fi
     install -m 755 -o root -g root cloudflared-linux-amd64 /usr/local/bin/cloudflared
     rm cloudflared-linux-amd64
-    if [ $(/usr/local/bin/cloudflared version || true) != "cloudflared version $cfd_version "* ]; then
-        echo "installing cloudflared failed"
+    if [ "$(get_installed_cfd_version)" = "$installed_cfd_version" ]; then
+        echo "upgrading cloudflared failed"
         exit 1
     fi
+else
+    echo "cloudflared version $target_cfd_version is already installed"
 fi
 
 # Create the cloudflared system user and group
