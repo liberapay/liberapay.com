@@ -344,8 +344,13 @@ title = "Users Admin"
         % endif
         % set ip_address = headers.get('Cf-Connecting-Ip')
         % set country_code = headers.get('Cf-Ipcountry')
+        % if country_code
+            % set country_name = locale.countries.get(country_code, country_code)
+        % else
+            % set country_name = 'country unknown'
+        % endif
         % if ip_address
-        <p><strong>IP address:</strong> {{ ip_address }} ({{ country_code or 'country unknown' }})</p>
+        <p><strong>IP address:</strong> {{ ip_address }} ({{ country_name }})</p>
         % else
         <p><strong>IP address:</strong> unknown.</p>
         % endif
