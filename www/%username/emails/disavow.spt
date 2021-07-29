@@ -116,7 +116,7 @@ if result == EmailVerificationResult.SUCCEEDED:
 
 % block thin_content
     % if request.method == 'POST'
-        <p class="alert alert-success">{{ _(
+        <p class="alert alert-info">{{ _(
             "Your email address is now blacklisted."
         ) if blacklisted else _(
             "Your email address is no longer blacklisted."
@@ -134,7 +134,7 @@ if result == EmailVerificationResult.SUCCEEDED:
             % endif
         </form>
     % elif result == EmailVerificationResult.SUCCEEDED
-        <p class="alert alert-success">{{ _(
+        <p class="alert alert-info">{{ _(
             "You have successfully disavowed having connected your email address "
             "to this Liberapay account."
         ) }}</p>
