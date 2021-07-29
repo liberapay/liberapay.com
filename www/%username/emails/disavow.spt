@@ -46,6 +46,9 @@ elif email_row.nonce is None:
         result = EmailVerificationResult.FAILED
 elif not constant_time_compare(email_row.nonce, email_nonce):
     result = EmailVerificationResult.FAILED
+elif user == participant:
+    # Don't let the user disavow their own action
+    raise response.refresh(state, url=user.path('emails/confirm', request.qs))
 else:
     result = EmailVerificationResult.SUCCEEDED
     changed = website.db.one("""
