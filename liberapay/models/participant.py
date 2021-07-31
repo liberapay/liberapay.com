@@ -2844,23 +2844,21 @@ class Participant(Model, MixinTeam):
                 new_sp.transfers.sort(key=tippee_id_getter)
                 # Check the charge amount
                 if renewal_mode == 2:
-                    adjust = False
+                    unadjusted_amount = new_sp.amount
                     pp = PayinProspect(self, payin_tips, 'stripe')
                     if new_sp.amount < pp.min_acceptable_amount:
-                        adjust = True
                         new_sp.amount = pp.min_acceptable_amount
                     elif new_sp.amount > pp.max_acceptable_amount:
-                        adjust = True
                         new_sp.amount = pp.max_acceptable_amount
                     if past_payin_amount_maximum:
                         maximum = past_payin_amount_maximum.convert(payin_currency)
-                        adjust = (
-                            new_sp.amount > maximum and
-                            maximum >= pp.moderate_proposed_amount
-                        )
-                        if adjust:
-                            new_sp.amount = maximum
-                    if adjust:
+                        if new_sp.amount > maximum:
+                            new_sp.amount = max(
+                                maximum,
+                                pp.moderate_fee_amount,
+                                pp.one_weeks_worth,
+                            )
+                    if new_sp.amount != unadjusted_amount:
                         tr_amounts = resolve_amounts(
                             new_sp.amount,
                             {tip.tippee: tip.amount for tip in payin_tips}
@@ -2868,6 +2866,7 @@ class Participant(Model, MixinTeam):
                         for tr in new_sp.transfers:
                             tr['amount'] = tr_amounts[tr['tippee_id']]
                         del tr_amounts
+                    del unadjusted_amount
                 # Try to find this new payment in the current schedule
                 tippees = get_tippees_tuple(new_sp)
                 cur_sp = current_schedule_map.pop(tippees, None)
