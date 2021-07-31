@@ -1820,7 +1820,7 @@ class Participant(Model, MixinTeam):
         host = website.canonical_host
         username = self.username
         if query:
-            query = '?' + urlencode(query)
+            query = '?' + urlencode(query, doseq=True)
         email_row = getattr(self, '_rendering_email_to', None)
         if email_row:
             extra_query = []
@@ -3697,7 +3697,7 @@ class Participant(Model, MixinTeam):
         if query:
             assert '?' not in path
             if isinstance(query, dict):
-                query = '?' + urlencode(query)
+                query = '?' + urlencode(query, doseq=True)
             else:
                 assert query[0] == '?'
         return '/%s/%s%s' % (self.username, path, query)

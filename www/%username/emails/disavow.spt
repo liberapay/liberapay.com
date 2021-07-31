@@ -46,6 +46,9 @@ elif email_row.nonce is None:
         result = EmailVerificationResult.FAILED
 elif not constant_time_compare(email_row.nonce, email_nonce):
     result = EmailVerificationResult.FAILED
+elif user == participant:
+    # Don't let the user disavow their own action
+    raise response.refresh(state, url=user.path('emails/confirm', request.qs))
 else:
     result = EmailVerificationResult.SUCCEEDED
     changed = website.db.one("""
@@ -116,7 +119,7 @@ if result == EmailVerificationResult.SUCCEEDED:
 
 % block thin_content
     % if request.method == 'POST'
-        <p class="alert alert-success">{{ _(
+        <p class="alert alert-info">{{ _(
             "Your email address is now blacklisted."
         ) if blacklisted else _(
             "Your email address is no longer blacklisted."
@@ -134,7 +137,7 @@ if result == EmailVerificationResult.SUCCEEDED:
             % endif
         </form>
     % elif result == EmailVerificationResult.SUCCEEDED
-        <p class="alert alert-success">{{ _(
+        <p class="alert alert-info">{{ _(
             "You have successfully disavowed having connected your email address "
             "to this Liberapay account."
         ) }}</p>
