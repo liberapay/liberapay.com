@@ -353,6 +353,38 @@ class TestEmail(EmailHarness):
         assert r.code == 200, r.text
         assert check_email_blacklist(email.address) is None
 
+    def test_self_disavowal_is_not_allowed(self):
+        self.client.PxST('/sign-up', {
+            'sign-in.email': 'bob@liberapay.com',
+            'sign-in.username': 'bob',
+            'sign-in.currency': 'USD',
+        })
+        bob = Participant.from_username('bob')
+        email = bob.get_email('bob@liberapay.com')
+        qs = '?email.id=%s&email.nonce=%s' % (email.id, email.nonce)
+        url = '/bob/emails/disavow' + qs
+        verification_email = self.get_last_email()
+        assert url in verification_email['text']
+        # Check that the disavowal page redirects to the confirmation page when logged in
+        r = self.client.GET(url, auth_as=bob, raise_immediately=False)
+        assert r.code == 200
+        assert r.headers[b"Refresh"] == b"0;url=/bob/emails/confirm" + qs.encode()
+        email = bob.get_email(email.address)
+        assert email.disavowed is None
+        assert email.disavowed_time is None
+        assert email.verified is None
+        assert email.verified_time is None
+        assert email.nonce
+        # Check that following the redirect confirms the email address
+        r = self.client.GET(r.headers[b"Refresh"][6:].decode(), auth_as=bob)
+        assert r.code == 200
+        email = bob.get_email(email.address)
+        assert email.disavowed is not True
+        assert email.disavowed_time is None
+        assert email.verified is True
+        assert email.verified_time is not None
+        assert email.nonce
+
     def test_get_emails(self):
         self.add_and_verify_email('alice@example.com')
         self.alice.add_email('alice@example.net')
