@@ -337,17 +337,20 @@ title = "Users Admin"
         </p>
         % endif
 
-        % if row.sign_up_request|default(None)
-            % set headers = row.sign_up_request.get('headers', {})
-        % else
-            % set headers = {}
-        % endif
+        % if row.sign_up_request is defined
+        % set headers = (row.sign_up_request or {}).get('headers', {})
         % set ip_address = headers.get('Cf-Connecting-Ip')
         % set country_code = headers.get('Cf-Ipcountry')
+        % if country_code
+            % set country_name = locale.countries.get(country_code, country_code)
+        % else
+            % set country_name = 'country unknown'
+        % endif
         % if ip_address
-        <p><strong>IP address:</strong> {{ ip_address }} ({{ country_code or 'country unknown' }})</p>
+        <p><strong>IP address:</strong> {{ ip_address }} ({{ country_name }})</p>
         % else
         <p><strong>IP address:</strong> unknown.</p>
+        % endif
         % endif
         % endif
 
