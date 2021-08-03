@@ -38,7 +38,7 @@ class TestResolveTeamDonation(Harness):
                AND tippee = %s
         """, (payer.id, team.id))
         donations = resolve_team_donation(
-            self.db, team, provider, payer, payer_country, payment_amount, tip.amount
+            self.db, team, provider, payer, payer_country, payment_amount, tip
         )
         if len(donations) == 1:
             assert donations[0].amount == payment_amount

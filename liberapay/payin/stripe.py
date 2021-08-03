@@ -5,14 +5,13 @@ import stripe
 import stripe.error
 
 from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS
-from ..exceptions import MissingPaymentAccount, NextAction
+from ..exceptions import MissingPaymentAccount, NextAction, NoSelfTipping
 from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
 from .common import (
-    abort_payin, adjust_payin_transfers, prepare_payin, prepare_payin_transfer,
-    record_payin_refund, record_payin_transfer_reversal,
-    resolve_team_donation,
+    abort_payin, adjust_payin_transfers, prepare_payin,
+    record_payin_refund, record_payin_transfer_reversal, resolve_tip,
     update_payin, update_payin_transfer,
 )
 
@@ -111,45 +110,44 @@ def try_other_destinations(db, payin, payer):
     Returns a payin.
 
     """
-    team_id = db.one("SELECT team FROM payin_transfers WHERE payin = %s", (payin.id,))
-    if team_id is None:
-        return payin
+    tippee_id = db.one("""
+        SELECT coalesce(team, recipient) AS tippee
+          FROM payin_transfers
+         WHERE payin = %s
+    """, (payin.id,))
+    tippee = db.Participant.from_id(tippee_id)
     tip = db.one("""
         SELECT t.*, p AS tippee_p
           FROM current_tips t
           JOIN participants p ON p.id = t.tippee
          WHERE t.tipper = %s
            AND t.tippee = %s
-    """, (payer.id, team_id))
+    """, (payer.id, tippee_id))
     route = ExchangeRoute.from_id(payer, payin.route, _raise=False)
     if not (tip and route):
         return payin
     excluded_destinations = set()
-    sepa_only = False
     while payin.status == 'failed':
         error = payin.error
-        if error.startswith("For 'sepa_debit' payments, we currently require "):
-            sepa_only = True
+        reroute = (
+            error.startswith("As per Indian regulations, ") or
+            error.startswith("For 'sepa_debit' payments, we currently require ") or
+            error.startswith("Stripe doesn't currently support destination charges with accounts in ")
+        )
+        if reroute:
+            excluded_destinations.add(db.one("""
+                SELECT destination
+                  FROM payin_transfers
+                 WHERE payin = %s
+            """, (payin.id,)))
         else:
-            reroute = (
-                error.startswith("As per Indian regulations, ") or
-                error.startswith("Stripe doesn't currently support destination charges with accounts in ")
-            )
-            if reroute:
-                excluded_destinations.add(db.one("""
-                    SELECT destination
-                      FROM payin_transfers
-                     WHERE payin = %s
-                """, (payin.id,)))
-            else:
-                return payin
-        team = db.Participant.from_id(team_id)
+            return payin
         try:
-            team_donations = resolve_team_donation(
-                db, team, 'stripe', payer, route.country, payin.amount, tip.amount,
-                sepa_only=sepa_only, excluded_destinations=excluded_destinations,
+            proto_transfers = resolve_tip(
+                db, tip, tippee, 'stripe', payer, route.country, payin.amount,
+                excluded_destinations=excluded_destinations,
             )
-        except MissingPaymentAccount:
+        except (MissingPaymentAccount, NoSelfTipping):
             return payin
         db.run("""
             UPDATE scheduled_payins
@@ -157,15 +155,10 @@ def try_other_destinations(db, payin, payer):
              WHERE payin = %s
         """, (payin.id,))
         try:
-            payin = prepare_payin(db, payer, payin.amount, route, off_session=payin.off_session)
-            payin_transfers = []
-            n_periods = payin.amount / tip.periodic_amount
-            for d in team_donations:
-                unit_amount = (d.amount / n_periods).round_up()
-                payin_transfers.append(prepare_payin_transfer(
-                    db, payin, d.recipient, d.destination, 'team-donation',
-                    d.amount, unit_amount, tip.period, team=team_id
-                ))
+            payin, payin_transfers = prepare_payin(
+                db, payer, payin.amount, route, proto_transfers,
+                off_session=payin.off_session,
+            )
             if len(payin_transfers) == 1:
                 payin = destination_charge(
                     db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
@@ -176,8 +169,6 @@ def try_other_destinations(db, payin, payer):
                 )
         except Exception as e:
             website.tell_sentry(e)
-            return payin
-        else:
             return payin
     return payin
 

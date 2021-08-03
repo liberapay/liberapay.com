@@ -10,7 +10,7 @@ from ..exceptions import AccountSuspended, NextAction
 from ..i18n.currencies import Money
 from ..website import website
 from ..utils import utcnow
-from .common import prepare_donation, prepare_payin
+from .common import prepare_payin, resolve_tip
 from .stripe import charge
 
 
@@ -291,15 +291,19 @@ def execute_scheduled_payins():
             counts['renewal_aborted'] += 1
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
+            proto_transfers = []
+            for tr in transfers:
+                proto_transfers.extend(resolve_tip(
+                    db, tr['tip'], tr['beneficiary'], 'stripe',
+                    payer, route.country, tr['amount']
+                ))
             try:
-                payin = prepare_payin(db, payer, payin_amount, route, off_session=True)
+                payin = prepare_payin(
+                    db, payer, payin_amount, route, proto_transfers,
+                    off_session=True,
+                )[0]
             except AccountSuspended:
                 continue
-            for tr in transfers:
-                prepare_donation(
-                    db, payin, tr['tip'], tr['beneficiary'], 'stripe',
-                    payer, route.country, tr['amount']
-                )
             db.run("""
                 UPDATE scheduled_payins
                    SET payin = %s
