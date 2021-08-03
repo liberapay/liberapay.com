@@ -1,6 +1,7 @@
 from collections import namedtuple
 from datetime import timedelta
 import itertools
+from operator import attrgetter
 
 from pando.utils import utcnow
 from psycopg2.extras import execute_batch
@@ -439,7 +440,7 @@ def resolve_team_donation(
             ]
             if selected_takes:
                 resolve_take_amounts(payment_amount, selected_takes)
-                selected_takes.sort(key=lambda t: t.member)
+                selected_takes.sort(key=attrgetter('member'))
                 n_periods = payment_amount / tip.periodic_amount
                 return [
                     ProtoTransfer(

@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import date
+from operator import itemgetter
 from time import sleep
 
 from pando import json
@@ -124,7 +125,7 @@ def send_donation_reminder_notifications():
     for payer, payins in rows:
         if payer.is_suspended or payer.status != 'active':
             continue
-        payins.sort(key=lambda sp: sp['execution_date'])
+        payins.sort(key=itemgetter('execution_date'))
         _check_scheduled_payins(db, payer, payins, automatic=False)
         if not payins:
             continue
@@ -193,7 +194,7 @@ def send_upcoming_debit_notifications():
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
             continue
-        payins.sort(key=lambda sp: sp['execution_date'])
+        payins.sort(key=itemgetter('execution_date'))
         context = {
             'payins': payins,
             'total_amount': sum(sp['amount'] for sp in payins),
