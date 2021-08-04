@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from decimal import Decimal, ROUND_UP
 from itertools import chain
+from operator import attrgetter
 import os
 import os.path
 from subprocess import Popen
@@ -480,7 +481,7 @@ class Payday:
         if adjust_tips:
             tips.sort(key=lambda tip: (-tip.weeks_to_catch_up, tip.id))
         else:
-            tips.sort(key=lambda tip: tip.id)
+            tips.sort(key=attrgetter('id'))
         # Loop: compute the adjusted donation amounts, and do the transfers
         transfers = {}
         for tip in tips:

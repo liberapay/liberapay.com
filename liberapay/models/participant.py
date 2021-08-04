@@ -686,11 +686,11 @@ class Participant(Model, MixinTeam):
                 currency = tip.amount.currency
                 tip.team = Participant.from_id(tip.tippee)
                 unfiltered_takes = tip.team.get_current_takes_for_payment(
-                    currency, 'mangopay', tip.amount
+                    currency, tip.amount
                 )
                 tip.takes = [
                     t for t in unfiltered_takes
-                    if t.has_payment_account and not t.is_suspended and t.member != self.id
+                    if t.mangopay_user_id and not t.is_suspended and t.member != self.id
                 ]
                 if len(unfiltered_takes) == 1 and tip.takes and tip.takes[0].amount == 0:
                     # Team of one with a zero take

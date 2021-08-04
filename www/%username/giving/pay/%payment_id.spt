@@ -51,6 +51,12 @@ elif payin_id:
 
 donation_groups, n_fundable = payer.get_tips_awaiting_payment()
 n_payments = len(donation_groups['fundable'])
+donations_not_fundable = (
+    donation_groups['no_provider'] +
+    donation_groups['no_taker'] +
+    donation_groups['suspended']
+)
+self_donations = donation_groups['self_donation']
 
 payment = None
 tippee_id = request.qs.get_int('beneficiary', default=None)
@@ -75,7 +81,17 @@ if tippee_id:
         donations_not_fundable = [tip]
 
 elif retry_id:
-    allow_stripe_sdd = request.qs.get('sdd') != 'no'
+    error = website.db.one("""
+        SELECT error
+          FROM payins
+         WHERE payer = %s
+           AND id = %s
+           AND status = 'failed'
+    """, (payer.id, retry_id))
+    if not error:
+        raise response.invalid_input(retry_id, 'retry', 'querystring')
+    if error.startswith("For 'sepa_debit' payments, we currently require "):
+        allow_stripe_sdd = False
     tips = website.db.all("""
         SELECT tip.*, tippee_p
           FROM payin_transfers pt
@@ -88,6 +104,7 @@ elif retry_id:
         raise response.invalid_input(retry_id, 'retry', 'querystring')
     payment = SimpleNamespace()
     payment.tips = tips
+    del tips
     payment.currency = payment.tips[0].amount.currency
     _provider_bits = reduce(
         int.__and__, (tip.tippee_p.payment_providers for tip in payment.tips)
@@ -96,18 +113,32 @@ elif retry_id:
         name for i, name in enumerate(PAYMENT_PROVIDERS)
         if _provider_bits & 2**i > 0
     ]
+    # If the payin failed with a persistent error tied to the destination country,
+    # then retrying will fail, because the `try_other_destinations` function has
+    # already tried to bypass the error. The donor should avoid Stripe entirely
+    # if possible.
+    disable_stripe = 'stripe' in payment.providers and (
+        error.startswith("As per Indian regulations, only registered Indian businesses ") or
+        error.startswith("Stripe doesn't currently support destination charges with accounts in ")
+    )
+    if disable_stripe:
+        payment.providers.remove('stripe')
+    # We don't support one-to-many through PayPal, so if this payment is intended
+    # to fund multiple donations, then we have to either remove PayPal from the
+    # options, or give up on the grouping and fund only the first donation.
     if len(payment.tips) > 1 and 'paypal' in payment.providers:
-        # We don't support one-to-many through PayPal yet.
-        payment.providers.remove('paypal')
-    del _provider_bits
+        if 'stripe' in payment.providers:
+            payment.providers.remove('paypal')
+        else:
+            payment.tips = tips[:1]
+    # If there aren't any payment providers left, then the donations aren't fundable.
+    if not payment.providers:
+        donations_not_fundable = payment.tips
+        self_donations = ()
+        payment = None
+    del _provider_bits, disable_stripe, error
 
 else:
-    donations_not_fundable = (
-        donation_groups['no_provider'] +
-        donation_groups['no_taker'] +
-        donation_groups['suspended']
-    )
-    self_donations = donation_groups['self_donation']
     if n_payments:
         payment = SimpleNamespace()
         payment.tips = donation_groups['fundable'][0]

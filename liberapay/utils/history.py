@@ -1,6 +1,7 @@
 from calendar import monthrange
 from collections import namedtuple
 from datetime import datetime, timedelta
+from operator import itemgetter
 
 from pando import Response
 from pando.utils import utc, utcnow
@@ -502,9 +503,8 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
 
     prev_date = None
     totals = {'received': {}, 'sent': {}}
-    get_timestamp = lambda e: e['ctime']
     events = payins + incoming_transfers + outgoing_transfers
-    events.sort(key=get_timestamp)
+    events.sort(key=itemgetter('ctime'))
     for event in events:
         event_date = event['ctime'].date()
         if event_date != prev_date:

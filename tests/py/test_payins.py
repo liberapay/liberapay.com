@@ -14,7 +14,7 @@ from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.paypal import sync_all_pending_payments
 from liberapay.payin.prospect import PayinProspect
-from liberapay.payin.stripe import settle_charge_and_transfers
+from liberapay.payin.stripe import settle_charge_and_transfers, try_other_destinations
 from liberapay.testing import Harness, EUR, KRW, JPY, USD
 from liberapay.testing.emails import EmailHarness
 
@@ -38,7 +38,7 @@ class TestResolveTeamDonation(Harness):
                AND tippee = %s
         """, (payer.id, team.id))
         donations = resolve_team_donation(
-            self.db, team, provider, payer, payer_country, payment_amount, tip.amount
+            self.db, team, provider, payer, payer_country, payment_amount, tip
         )
         if len(donations) == 1:
             assert donations[0].amount == payment_amount
@@ -1204,6 +1204,196 @@ class TestPayinsStripe(Harness):
         # 4th request: test getting the payment page again
         r = self.client.GET(expected_uri, auth_as=self.donor)
         assert r.code == 200, r.text
+
+    @patch('stripe.BalanceTransaction.retrieve')
+    @patch('stripe.PaymentIntent.create')
+    def test_08_alternative_destinations_are_tried(self, pi_create, bt_retrieve):
+        self.add_payment_account(self.creator_1, 'stripe', country='IN')
+        self.add_payment_account(self.creator_2, 'stripe')
+        team = self.make_participant('Team', kind='group')
+        self.donor.set_tip_to(team, EUR('1.00'))
+        team.set_take_for(self.creator_1, EUR('1.00'), team)
+        team.set_take_for(self.creator_2, EUR('0.01'), team)
+        donor_card = self.upsert_route(self.donor, 'stripe-card', address='pm_card_visa')
+        payin, pt = self.make_payin_and_transfer(
+            donor_card, team, EUR('52.00'), status='failed',
+            error='As per Indian regulations, blah blah blah',
+        )
+        pi_create.return_value = stripe.PaymentIntent.construct_from(
+            json.loads('''{
+              "id": "pi_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "object": "payment_intent",
+              "amount": 52000,
+              "amount_capturable": 0,
+              "amount_received": 52000,
+              "application": null,
+              "application_fee_amount": null,
+              "canceled_at": null,
+              "cancellation_reason": null,
+              "capture_method": "automatic",
+              "charges": {
+                "object": "list",
+                "data": [
+                  {
+                    "id": "ch_XXXXXXXXXXXXXXXXXXXXXXXX",
+                    "object": "charge",
+                    "amount": 52000,
+                    "amount_captured": 52000,
+                    "amount_refunded": 0,
+                    "application": null,
+                    "application_fee": null,
+                    "application_fee_amount": null,
+                    "balance_transaction": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+                    "billing_details": {
+                      "address": {
+                        "city": null,
+                        "country": null,
+                        "line1": null,
+                        "line2": null,
+                        "postal_code": "41224",
+                        "state": null
+                      },
+                      "email": null,
+                      "name": null,
+                      "phone": null
+                    },
+                    "calculated_statement_descriptor": "Stripe Liberapay XXXX",
+                    "captured": true,
+                    "created": 1627549263,
+                    "currency": "eur",
+                    "customer": null,
+                    "description": null,
+                    "disputed": false,
+                    "failure_code": null,
+                    "failure_message": null,
+                    "fraud_details": {},
+                    "invoice": null,
+                    "livemode": false,
+                    "metadata": {},
+                    "on_behalf_of": null,
+                    "order": null,
+                    "outcome": {
+                      "network_status": "approved_by_network",
+                      "reason": null,
+                      "risk_level": "normal",
+                      "risk_score": 64,
+                      "seller_message": "Payment complete.",
+                      "type": "authorized"
+                    },
+                    "paid": true,
+                    "payment_intent": "pi_XXXXXXXXXXXXXXXXXXXXXXXX",
+                    "payment_method": "pm_card_visa",
+                    "payment_method_details": {
+                      "card": {
+                        "brand": "visa",
+                        "checks": {
+                          "address_line1_check": null,
+                          "address_postal_code_check": "pass",
+                          "cvc_check": "pass"
+                        },
+                        "country": "US",
+                        "exp_month": 12,
+                        "exp_year": 2025,
+                        "fingerprint": "812lueijl0oPjCom",
+                        "funding": "credit",
+                        "installments": null,
+                        "last4": "4242",
+                        "network": "visa",
+                        "three_d_secure": null,
+                        "wallet": null
+                      },
+                      "type": "card"
+                    },
+                    "receipt_email": null,
+                    "receipt_number": null,
+                    "receipt_url": "https://pay.stripe.com/receipts/[truncated]",
+                    "refunded": false,
+                    "refunds": {
+                      "object": "list",
+                      "data": [],
+                      "has_more": false,
+                      "url": "/v1/charges/ch_XXXXXXXXXXXXXXXXXXXXXXXX/refunds"
+                    },
+                    "review": null,
+                    "shipping": null,
+                    "source_transfer": null,
+                    "statement_descriptor": null,
+                    "statement_descriptor_suffix": null,
+                    "status": "succeeded",
+                    "transfer_data": null,
+                    "transfer_group": null
+                  }
+                ],
+                "has_more": false,
+                "url": "/v1/charges?payment_intent=pi_XXXXXXXXXXXXXXXXXXXXXXXX"
+              },
+              "client_secret": null,
+              "confirmation_method": "automatic",
+              "created": 1627549243,
+              "currency": "eur",
+              "customer": null,
+              "description": null,
+              "invoice": null,
+              "last_payment_error": null,
+              "livemode": false,
+              "metadata": {},
+              "next_action": null,
+              "on_behalf_of": null,
+              "payment_method": "pm_card_visa",
+              "payment_method_options": {
+                "card": {
+                  "installments": null,
+                  "network": null,
+                  "request_three_d_secure": "automatic"
+                }
+              },
+              "payment_method_types": [
+                "card"
+              ],
+              "receipt_email": null,
+              "review": null,
+              "setup_future_usage": null,
+              "shipping": null,
+              "statement_descriptor": null,
+              "statement_descriptor_suffix": null,
+              "status": "succeeded",
+              "transfer_data": null,
+              "transfer_group": null
+            }'''),
+            stripe.api_key
+        )
+        bt_retrieve.return_value = stripe.BalanceTransaction.construct_from(
+            json.loads('''{
+              "amount": 52000,
+              "available_on": 1564617600,
+              "created": 1564038239,
+              "currency": "eur",
+              "description": null,
+              "exchange_rate": null,
+              "fee": 111,
+              "fee_details": [
+                {
+                  "amount": 111,
+                  "application": null,
+                  "currency": "eur",
+                  "description": "Stripe processing fees",
+                  "type": "stripe_fee"
+                }
+              ],
+              "id": "txn_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "net": 51899,
+              "object": "balance_transaction",
+              "source": "py_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "status": "pending",
+              "type": "payment"
+            }'''),
+            stripe.api_key
+        )
+        payin2 = try_other_destinations(self.db, payin, self.donor)
+        assert payin2.status == 'succeeded'
+        pt2 = self.db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin2.id,))
+        assert pt2.recipient == self.creator_2.id
+        assert pt2.status == 'succeeded'
 
 
 class TestRefundsStripe(EmailHarness):

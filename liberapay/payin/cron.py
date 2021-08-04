@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import date
+from operator import itemgetter
 from time import sleep
 
 from pando import json
@@ -10,7 +11,7 @@ from ..exceptions import AccountSuspended, NextAction
 from ..i18n.currencies import Money
 from ..website import website
 from ..utils import utcnow
-from .common import prepare_donation, prepare_payin
+from .common import prepare_payin, resolve_tip
 from .stripe import charge
 
 
@@ -124,7 +125,7 @@ def send_donation_reminder_notifications():
     for payer, payins in rows:
         if payer.is_suspended or payer.status != 'active':
             continue
-        payins.sort(key=lambda sp: sp['execution_date'])
+        payins.sort(key=itemgetter('execution_date'))
         _check_scheduled_payins(db, payer, payins, automatic=False)
         if not payins:
             continue
@@ -193,7 +194,7 @@ def send_upcoming_debit_notifications():
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
             continue
-        payins.sort(key=lambda sp: sp['execution_date'])
+        payins.sort(key=itemgetter('execution_date'))
         context = {
             'payins': payins,
             'total_amount': sum(sp['amount'] for sp in payins),
@@ -291,15 +292,19 @@ def execute_scheduled_payins():
             counts['renewal_aborted'] += 1
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
+            proto_transfers = []
+            for tr in transfers:
+                proto_transfers.extend(resolve_tip(
+                    db, tr['tip'], tr['beneficiary'], 'stripe',
+                    payer, route.country, tr['amount']
+                ))
             try:
-                payin = prepare_payin(db, payer, payin_amount, route, off_session=True)
+                payin = prepare_payin(
+                    db, payer, payin_amount, route, proto_transfers,
+                    off_session=True,
+                )[0]
             except AccountSuspended:
                 continue
-            for tr in transfers:
-                prepare_donation(
-                    db, payin, tr['tip'], tr['beneficiary'], 'stripe',
-                    payer, route.country, tr['amount']
-                )
             db.run("""
                 UPDATE scheduled_payins
                    SET payin = %s

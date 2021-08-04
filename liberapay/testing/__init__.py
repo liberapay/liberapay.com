@@ -22,7 +22,7 @@ from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import (
-    adjust_payin_transfers, prepare_donation, prepare_payin,
+    adjust_payin_transfers, prepare_payin, resolve_tip,
     update_payin, update_payin_transfer,
 )
 from liberapay.security.csrf import CSRF_TOKEN
@@ -290,9 +290,8 @@ class Harness(unittest.TestCase):
         remote_id='fake',
     ):
         payer = route.participant
-        payin = prepare_payin(self.db, payer, amount, route)
         provider = route.network.split('-', 1)[0]
-        payin_transfers = []
+        proto_transfers = []
         for tippee, pt_amount, opt in transfers:
             tip = opt.get('tip')
             if tip:
@@ -308,8 +307,8 @@ class Harness(unittest.TestCase):
                 assert tip
             for i in range(100):
                 try:
-                    payin_transfers.extend(prepare_donation(
-                        self.db, payin, tip, tippee, provider, payer, payer_country, pt_amount
+                    proto_transfers.extend(resolve_tip(
+                        self.db, tip, tippee, provider, payer, payer_country, pt_amount
                     ))
                 except MissingPaymentAccount as e:
                     if i > 95:
@@ -321,6 +320,8 @@ class Harness(unittest.TestCase):
                     self.add_payment_account(recipient, provider)
                 else:
                     break
+        payin, payin_transfers = prepare_payin(self.db, payer, amount, route, proto_transfers)
+        del proto_transfers
         payin = update_payin(self.db, payin.id, remote_id, status, error, fee=fee)
         net_amount = payin.amount - (fee or 0)
         if len(payin_transfers) > 1:

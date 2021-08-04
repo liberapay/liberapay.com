@@ -1,6 +1,7 @@
 from collections import namedtuple
 from datetime import timedelta
 import itertools
+from operator import attrgetter
 
 from pando.utils import utcnow
 from psycopg2.extras import execute_batch
@@ -14,16 +15,20 @@ from ..i18n.currencies import Money, MoneyBasket
 from ..utils import group_by
 
 
-Donation = namedtuple('Donation', 'amount recipient destination')
+ProtoTransfer = namedtuple(
+    'ProtoTransfer',
+    'amount recipient destination context unit_amount period team',
+)
 
 
-def prepare_payin(db, payer, amount, route, off_session=False):
+def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
     """Prepare to charge a user.
 
     Args:
         payer (Participant): the user who will be charged
         amount (Money): the presentment amount of the charge
         route (ExchangeRoute): the payment instrument to charge
+        proto_transfers ([ProtoTransfer]): the transfers to prepare
         off_session (bool):
             `True` means that the payment is being initiated because it was scheduled,
             `False` means that the payer has initiated the operation just now
@@ -54,8 +59,14 @@ def prepare_payin(db, payer, amount, route, off_session=False):
                    (payin, status, error, timestamp)
             VALUES (%s, %s, NULL, current_timestamp)
         """, (payin.id, payin.status))
+        payin_transfers = []
+        for t in proto_transfers:
+            payin_transfers.append(prepare_payin_transfer(
+                cursor, payin, t.recipient, t.destination, t.context, t.amount,
+                t.unit_amount, t.period, t.team,
+            ))
 
-    return payin
+    return payin, payin_transfers
 
 
 def update_payin(
@@ -196,7 +207,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                 try:
                     team_donations = resolve_team_donation(
                         db, team, provider, payer, payer_country,
-                        prorated_amount, tip.amount, sepa_only=True,
+                        prorated_amount, tip, sepa_only=True,
                     )
                 except (MissingPaymentAccount, NoSelfTipping):
                     team_amounts = resolve_amounts(prorated_amount, {
@@ -246,66 +257,60 @@ def adjust_payin_transfers(db, payin, net_amount):
             """, updates)
 
 
-def prepare_donation(
-    db, payin, tip, tippee, provider, payer, payer_country, payment_amount,
-    sepa_only=False,
+def resolve_tip(
+    db, tip, tippee, provider, payer, payer_country, payment_amount,
+    sepa_only=False, excluded_destinations=set(),
 ):
-    """Prepare to distribute a donation.
+    """Prepare to fund a tip.
 
     Args:
-        payin (Record): a row from the `payins` table
-        tip (Record): a row from the `tips` table
+        tip (Row): a row from the `tips` table
         tippee (Participant): the intended beneficiary of the donation
         provider (str): the payment processor ('paypal' or 'stripe')
         payer (Participant): the donor
         payer_country (str): the country the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
+        sepa_only (bool): only consider destination accounts within SEPA
+        excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
     Returns:
-        a list of the rows created in the `payin_transfers` table
+        a list of `ProtoTransfer` objects
 
     Raises:
-        AccountSuspended: if the payer's account is suspended
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the donor would end up sending money to themself
         RecipientAccountSuspended: if the tippee's account is suspended
+        UserDoesntAcceptTips: if the tippee doesn't accept donations
 
     """
     assert tip.tipper == payer.id
     assert tip.tippee == tippee.id
 
-    if payer.is_suspended:
-        raise AccountSuspended(payer)
     if not tippee.accepts_tips:
         raise UserDoesntAcceptTips(tippee.username)
     if tippee.is_suspended:
         raise RecipientAccountSuspended(tippee)
 
-    r = []
     if tippee.kind == 'group':
-        team_donations = resolve_team_donation(
-            db, tippee, provider, payer, payer_country, payment_amount, tip.amount,
-            sepa_only=sepa_only
+        return resolve_team_donation(
+            db, tippee, provider, payer, payer_country, payment_amount, tip,
+            sepa_only=sepa_only, excluded_destinations=excluded_destinations,
         )
-        n_periods = payment_amount / tip.periodic_amount
-        for d in team_donations:
-            unit_amount = (d.amount / n_periods).round_up()
-            r.append(prepare_payin_transfer(
-                db, payin, d.recipient, d.destination, 'team-donation',
-                d.amount, unit_amount, tip.period, team=tippee.id
-            ))
     else:
         destination = resolve_destination(
-            db, tippee, provider, payer, payer_country, payment_amount
+            db, tippee, provider, payer, payer_country, payment_amount,
+            sepa_only=sepa_only, excluded_destinations=excluded_destinations,
         )
-        r.append(prepare_payin_transfer(
-            db, payin, tippee, destination, 'personal-donation',
-            payment_amount, tip.periodic_amount, tip.period
-        ))
-    return r
+        return [ProtoTransfer(
+            payment_amount, tippee, destination, 'personal-donation',
+            tip.periodic_amount, tip.period, None,
+        )]
 
 
-def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount):
+def resolve_destination(
+    db, tippee, provider, payer, payer_country, payin_amount,
+    sepa_only=False, excluded_destinations=(),
+):
     """Figure out where to send a payment.
 
     Args:
@@ -314,6 +319,8 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
         payer (Participant): the user who wants to pay
         payer_country (str): the country the money is supposedly coming from
         payin_amount (Money): the payment amount
+        sepa_only (bool): only consider destination accounts within SEPA
+        excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
     Returns:
         Record: a row from the `payment_accounts` table
@@ -323,21 +330,26 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
         NoSelfTipping: if the payer would end up sending money to themself
 
     """
-    if tippee.id == payer.id:
+    tippee_id = tippee.id
+    if tippee_id == payer.id:
         raise NoSelfTipping()
+    currency = payin_amount.currency
+    excluded_destinations = list(excluded_destinations)
     destination = db.one("""
         SELECT *
           FROM payment_accounts
-         WHERE participant = %s
-           AND provider = %s
+         WHERE participant = %(tippee_id)s
+           AND provider = %(provider)s
            AND is_current
            AND verified
            AND coalesce(charges_enabled, true)
-      ORDER BY country = %s DESC
-             , default_currency = %s DESC
+           AND array_position(%(excluded_destinations)s::bigint[], pk) IS NULL
+           AND ( country IN %(SEPA)s OR NOT %(sepa_only)s )
+      ORDER BY default_currency = %(currency)s DESC
+             , country = %(payer_country)s DESC
              , connection_ts
          LIMIT 1
-    """, (tippee.id, provider, payer_country, payin_amount.currency))
+    """, dict(locals(), SEPA=SEPA))
     if destination:
         return destination
     else:
@@ -345,8 +357,8 @@ def resolve_destination(db, tippee, provider, payer, payer_country, payin_amount
 
 
 def resolve_team_donation(
-    db, team, provider, payer, payer_country, payment_amount, weekly_amount,
-    sepa_only=False,
+    db, team, provider, payer, payer_country, payment_amount, tip,
+    sepa_only=False, excluded_destinations=(),
 ):
     """Figure out how to distribute a donation to a team's members.
 
@@ -356,10 +368,12 @@ def resolve_team_donation(
         payer (Participant): the donor
         payer_country (str): the country code the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
-        weekly_amount (Money): the weekly donation amount
+        tip (Row): the row from the `tips` table
+        sepa_only (bool): only consider destination accounts within SEPA
+        excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
     Returns:
-        a list of `Donation` objects
+        a list of `ProtoTransfer` objects
 
     Raises:
         MissingPaymentAccount: if no suitable destination has been found
@@ -370,55 +384,85 @@ def resolve_team_donation(
     if team.is_suspended:
         raise RecipientAccountSuspended(team)
     currency = payment_amount.currency
-    members = team.get_current_takes_for_payment(currency, provider, weekly_amount)
-    if all(m.is_suspended for m in members):
-        raise RecipientAccountSuspended(members)
-    members = [m for m in members if m.has_payment_account and not m.is_suspended]
-    if not members:
+    takes = team.get_current_takes_for_payment(currency, tip.amount)
+    if all(t.is_suspended for t in takes):
+        raise RecipientAccountSuspended(takes)
+    takes = [t for t in takes if not t.is_suspended]
+    if len(takes) == 1 and takes[0].member == payer.id:
+        raise NoSelfTipping()
+    member_ids = tuple([t.member for t in takes])
+    excluded_destinations = list(excluded_destinations)
+    payment_accounts = {row.participant: row for row in db.all("""
+        SELECT DISTINCT ON (participant) *
+          FROM payment_accounts
+         WHERE participant IN %(member_ids)s
+           AND provider = %(provider)s
+           AND is_current
+           AND verified
+           AND coalesce(charges_enabled, true)
+           AND array_position(%(excluded_destinations)s::bigint[], pk) IS NULL
+      ORDER BY participant
+             , default_currency = %(currency)s DESC
+             , country = %(payer_country)s DESC
+             , connection_ts
+    """, locals())}
+    del member_ids
+    if not payment_accounts:
         raise MissingPaymentAccount(team)
-    members = sorted(members, key=lambda t: (
-        int(t.member == payer.id),
+    takes = [t for t in takes if t.member in payment_accounts]
+    if len(takes) == 1 and takes[0].member == payer.id:
+        raise NoSelfTipping()
+    takes.sort(key=lambda t: (
         -(t.amount / (t.paid_in_advance + payment_amount)),
         t.paid_in_advance,
         t.ctime
     ))
-    if members[0].member == payer.id:
-        raise NoSelfTipping()
     # Try to distribute the donation to multiple members.
-    other_members = set(t.member for t in members if t.member != payer.id)
+    other_members = {t.member for t in takes if t.member != payer.id}
     if sepa_only or other_members and provider == 'stripe':
         sepa_accounts = {a.participant: a for a in db.all("""
             SELECT DISTINCT ON (a.participant) a.*
               FROM payment_accounts a
-             WHERE a.participant IN %(members)s
-               AND a.provider = 'stripe'
+             WHERE a.participant IN %(other_members)s
+               AND a.provider = %(provider)s
                AND a.is_current
+               AND a.verified
+               AND coalesce(a.charges_enabled, true)
+               AND array_position(%(excluded_destinations)s::bigint[], a.pk) IS NULL
                AND a.country IN %(SEPA)s
           ORDER BY a.participant
                  , a.default_currency = %(currency)s DESC
                  , a.connection_ts
-        """, dict(members=other_members, SEPA=SEPA, currency=currency))}
-        if sepa_only or len(sepa_accounts) > 1 and members[0].member in sepa_accounts:
+        """, dict(locals(), SEPA=SEPA))}
+        if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:
             selected_takes = [
-                t for t in members if t.member in sepa_accounts and t.amount != 0
+                t for t in takes if t.member in sepa_accounts and t.amount != 0
             ]
             if selected_takes:
                 resolve_take_amounts(payment_amount, selected_takes)
-                selected_takes.sort(key=lambda t: t.member)
+                selected_takes.sort(key=attrgetter('member'))
+                n_periods = payment_amount / tip.periodic_amount
                 return [
-                    Donation(
+                    ProtoTransfer(
                         t.resolved_amount,
                         db.Participant.from_id(t.member),
-                        sepa_accounts[t.member]
+                        sepa_accounts[t.member],
+                        'team-donation',
+                        (t.resolved_amount / n_periods).round_up(),
+                        tip.period,
+                        team.id,
                     )
                     for t in selected_takes if t.resolved_amount != 0
                 ]
             elif sepa_only:
                 raise MissingPaymentAccount(team)
     # Fall back to sending the entire donation to the member who "needs" it most.
-    member = db.Participant.from_id(members[0].member)
-    account = resolve_destination(db, member, provider, payer, payer_country, payment_amount)
-    return [Donation(payment_amount, member, account)]
+    member = db.Participant.from_id(takes[0].member)
+    account = payment_accounts[member.id]
+    return [ProtoTransfer(
+        payment_amount, member, account, 'team-donation',
+        tip.periodic_amount, tip.period, team.id,
+    )]
 
 
 def resolve_take_amounts(payment_amount, takes):
@@ -559,10 +603,10 @@ def prepare_payin_transfer(
         INSERT INTO payin_transfers
                (payin, payer, recipient, destination, context, amount,
                 unit_amount, n_units, period, team,
-                status)
+                status, ctime)
         VALUES (%s, %s, %s, %s, %s, %s,
                 %s, %s, %s, %s,
-                'pre')
+                'pre', clock_timestamp())
      RETURNING *
     """, (payin.id, payin.payer, recipient.id, destination.pk, context, amount,
           unit_amount, n_units, period, team))

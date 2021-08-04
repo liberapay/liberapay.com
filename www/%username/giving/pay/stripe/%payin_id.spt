@@ -9,7 +9,7 @@ from liberapay.exceptions import NextAction
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.payin.common import (
-    prepare_donation, prepare_payin, prepare_payin_transfer, resolve_amounts,
+    prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_tip,
 )
 from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import (
@@ -105,13 +105,14 @@ if request.method == 'POST':
     transfer_amounts = resolve_amounts(
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
-    payin = prepare_payin(website.db, payer, payin_amount, route)
     payer_country = route.country or request.country
+    proto_transfers = []
     for tip in tips:
-        prepare_donation(
-            website.db, payin, tip, tip.tippee_p, 'stripe', payer, payer_country,
+        proto_transfers.extend(resolve_tip(
+            website.db, tip, tip.tippee_p, 'stripe', payer, payer_country,
             transfer_amounts[tip.id]
-        )
+        ))
+    payin = prepare_payin(website.db, payer, payin_amount, route, proto_transfers)[0]
 
     msg = _("Request in progress, please wait…")
     response.refresh(state, url=payer.path('giving/pay/stripe/%i' % payin.id), msg=msg)
