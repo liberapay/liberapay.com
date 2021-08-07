@@ -1,4 +1,4 @@
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import quote as urlquote, urlsplit, urlunsplit
 
 from pando import Response
 from pando.http.request import Line
@@ -7,7 +7,6 @@ from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
 from ..exceptions import LazyResponse, TooManyRequests
-from . import urlquote
 
 
 def add_state_to_context(state, website):

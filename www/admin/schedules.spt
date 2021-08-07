@@ -1,13 +1,8 @@
-from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
 
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403, "You don't have the admin privileges.")
+user.require_active_privilege('admin')
 
 automatic = request.qs.parse_boolean('automatic', default=None)
 execution_date = request.qs.parse_date('execution_date', default=None)

@@ -438,7 +438,7 @@ RATE_LIMITS = {
 SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
 
 SESSION = 'session'
-SESSION_REFRESH = timedelta(hours=1)
+SESSION_REFRESH = timedelta(hours=12)
 SESSION_TIMEOUT = timedelta(hours=6)
 
 

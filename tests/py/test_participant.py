@@ -2,7 +2,7 @@ from http.cookies import SimpleCookie
 
 import pytest
 
-from liberapay.constants import SESSION, SESSION_REFRESH, USERNAME_SUFFIX_BLACKLIST
+from liberapay.constants import SESSION, USERNAME_SUFFIX_BLACKLIST
 from liberapay.exceptions import (
     BadAmount,
     InvalidId,
@@ -221,18 +221,16 @@ class Tests(Harness):
         alice = self.make_participant('alice')
         alice.authenticated = True
         alice.sign_in(SimpleCookie())
-        cookies = SimpleCookie()
-        alice.keep_signed_in(cookies)
-        assert SESSION not in cookies
-        cookies = SimpleCookie()
+        r = self.client.GET('/', auth_as=alice)
+        assert SESSION not in r.headers.cookie
         alice.session = self.db.one("""
             UPDATE user_secrets
-               SET mtime = mtime - %s
+               SET mtime = mtime - interval '12 hours'
              WHERE participant = %s
          RETURNING id, secret, mtime
-        """, (SESSION_REFRESH, alice.id))
-        alice.keep_signed_in(cookies)
-        assert SESSION in cookies
+        """, (alice.id,))
+        r = self.client.GET('/', auth_as=alice)
+        assert SESSION in r.headers.cookie
 
     # from_id
 

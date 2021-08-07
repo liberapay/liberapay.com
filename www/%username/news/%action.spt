@@ -35,6 +35,8 @@ if request.method == 'POST':
             raise AuthRequired
         else:
             raise LoginRequired
+    if subscriber is user:
+        subscriber.require_write_permission()
 
     subscriber.upsert_subscription(subscribe, publisher.id)
 

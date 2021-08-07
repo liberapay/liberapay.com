@@ -2,7 +2,6 @@
 
 from collections import OrderedDict
 
-from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.utils import partition
 
@@ -17,11 +16,7 @@ REASONS = OrderedDict([
 
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 domain = request.qs.get('domain', '').lower()
 

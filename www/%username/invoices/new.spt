@@ -1,7 +1,6 @@
 from pando import json
 
 from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
-from liberapay.exceptions import AuthRequired
 from liberapay.utils import get_participant
 
 ALLOWED_EXTENSIONS_STR = ', '.join(INVOICE_DOCS_EXTS)
@@ -11,8 +10,7 @@ MAX_SIZE_MB = int(INVOICE_DOC_MAX_SIZE / 1000000)
 
 addressee = get_participant(state, restrict=False)
 
-if user.ANON:
-    raise AuthRequired
+user.require_write_permission()
 
 if not user.can_invoice(addressee):
     raise response.error(403, _("You are not allowed to invoice {0}.", addressee.username))

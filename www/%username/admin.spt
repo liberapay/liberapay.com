@@ -5,8 +5,7 @@ from liberapay.utils import get_participant
 [---]
 
 participant = get_participant(state, restrict=True)
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 title = participant.username
 subhead = "Admin"

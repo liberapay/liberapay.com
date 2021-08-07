@@ -10,7 +10,7 @@ from threading import Lock
 from time import sleep
 from types import SimpleNamespace
 import unicodedata
-from urllib.parse import urlencode
+from urllib.parse import quote as urlquote, urlencode
 import uuid
 
 import aspen_jinja2_renderer
@@ -32,7 +32,7 @@ from liberapay.constants import (
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
-    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
+    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
@@ -45,6 +45,7 @@ from liberapay.exceptions import (
     EmailAlreadyTaken,
     EmailNotVerified,
     InvalidId,
+    LoginRequired,
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
@@ -79,7 +80,6 @@ from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     deserialize, erase_cookie, get_recordable_headers, serialize, set_cookie,
-    urlquote,
     markdown,
 )
 from liberapay.utils.emails import (
@@ -88,6 +88,10 @@ from liberapay.utils.emails import (
 )
 from liberapay.utils.types import Object
 from liberapay.website import website
+
+
+FOUR_WEEKS = timedelta(weeks=4)
+TEN_YEARS = timedelta(days=3652)
 
 
 email_lock = Lock()
@@ -237,14 +241,30 @@ class Participant(Model, MixinTeam):
         return getattr(cls, 'from_' + type_of_id)(id_value, id_only=True)
 
     @classmethod
-    def authenticate(cls, p_id, secret_id, secret, context='log-in'):
+    def authenticate(
+        cls, p_id, secret_id, secret,
+        context='log-in', allow_downgrade=False, cookies=None,
+    ):
+        """Fetch a participant using its ID, but only if the provided secret is valid.
+
+        Args:
+            p_id (int | str): the participant's ID
+            secret_id (int | str): the ID of the secret
+            secret (str): the actual secret
+            context (str): the operation that this authentication is part of
+            allow_downgrade (bool): allow downgrading to a read-only session
+            cookies (SimpleCookie):
+                the response cookies, only needed when `allow_downgrade` is `True`
+
+        Return type: `Tuple[Participant | None, Literal['expired', 'invalid', 'valid']]`
+        """
         if not secret:
-            return
+            return None, 'invalid'
         try:
             p_id = int(p_id)
             secret_id = int(secret_id)
         except (ValueError, TypeError):
-            return
+            return None, 'invalid'
         if secret_id >= 1:  # session token
             r = cls.db.one("""
                 SELECT p, s.secret, s.mtime
@@ -252,15 +272,27 @@ class Participant(Model, MixinTeam):
                   JOIN participants p ON p.id = s.participant
                  WHERE s.participant = %s
                    AND s.id = %s
-                   AND s.mtime > %s
-            """, (p_id, secret_id, utcnow() - SESSION_TIMEOUT))
+            """, (p_id, secret_id))
             if not r:
-                return
+                return None, 'invalid'
             p, stored_secret, mtime = r
-            if constant_time_compare(stored_secret, secret):
-                p.authenticated = True
+            if not constant_time_compare(stored_secret, secret):
+                return None, 'invalid'
+            if mtime > utcnow() - SESSION_TIMEOUT:
                 p.session = SimpleNamespace(id=secret_id, secret=secret, mtime=mtime)
-                return p
+            elif allow_downgrade:
+                if mtime > utcnow() - FOUR_WEEKS:
+                    p.regenerate_session(
+                        SimpleNamespace(id=secret_id, secret=secret, mtime=mtime),
+                        cookies,
+                        suffix='.ro',  # stands for "read only"
+                    )
+                else:
+                    return None, 'expired'
+            else:
+                return None, 'expired'
+            p.authenticated = True
+            return p, 'valid'
         elif secret_id == 0:  # user-input password
             r = cls.db.one("""
                 SELECT p, s.secret
@@ -270,7 +302,7 @@ class Participant(Model, MixinTeam):
                    AND s.id = %s
             """, (p_id, secret_id))
             if not r:
-                return
+                return None, 'invalid'
             p, stored_secret = r
             if context == 'log-in':
                 cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
@@ -288,7 +320,7 @@ class Participant(Model, MixinTeam):
                         "UPDATE user_secrets SET secret = %s WHERE participant = %s AND id = 0",
                         (hashed, p.id)
                     )
-                return p
+                return p, 'valid'
 
     @classmethod
     def get_chargebacks_account(cls, currency):
@@ -420,27 +452,33 @@ class Participant(Model, MixinTeam):
         if not set(token).issubset(BASE64URL_CHARS):
             raise Response(400, "bad token, not base64url")
 
-    def regenerate_session(self, session, cookies, suffix='.rg'):
-        self.session = self.db.one("""
+    def regenerate_session(self, session, cookies, suffix=None):
+        """Replace a session's secret and timestamp with new ones.
+        """
+        self.session = self.db.one(r"""
             UPDATE user_secrets
                SET mtime = current_timestamp
-                 , secret = %(new_secret)s
+                 , secret = %(new_secret)s || coalesce(
+                       %(suffix)s,
+                       regexp_replace(secret, '.+(\.[a-z]{2})$', '\1')
+                   )
              WHERE participant = %(p_id)s
                AND id = %(session_id)s
                AND mtime = %(current_mtime)s
          RETURNING id, secret, mtime
         """, dict(
-            new_secret=self.generate_session_token() + suffix,
+            new_secret=self.generate_session_token(),
+            suffix=suffix,
             p_id=self.id,
             session_id=session.id,
             current_mtime=session.mtime,
         ))
         if self.session:
             creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
-            set_cookie(cookies, SESSION, creds, expires=utcnow() + SESSION_TIMEOUT)
+            set_cookie(cookies, SESSION, creds, expires=self.session.mtime + TEN_YEARS)
 
     def start_session(self, suffix='', token=None, id_min=1, id_max=20,
-                      lifetime=SESSION_TIMEOUT):
+                      lifetime=FOUR_WEEKS):
         """Start a new session for the user.
 
         Args:
@@ -495,8 +533,9 @@ class Participant(Model, MixinTeam):
                         (participant, id, secret)
                  SELECT %(p_id)s
                       , coalesce(
-                            (SELECT s2.id FROM oldest_secret s2
-                              WHERE s2.mtime < (current_timestamp - %(lifetime)s)
+                            ( SELECT s2.id
+                                FROM oldest_secret s2
+                               WHERE s2.mtime < (current_timestamp - %(lifetime)s)
                             ),
                             (SELECT i FROM unused_id),
                             (SELECT s2.id FROM oldest_secret s2)
@@ -518,13 +557,6 @@ class Participant(Model, MixinTeam):
         creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
         set_cookie(cookies, SESSION, creds, self.session.mtime + SESSION_TIMEOUT)
 
-    def keep_signed_in(self, cookies):
-        """Extend the user's current session.
-        """
-        now = utcnow()
-        if now - self.session.mtime > SESSION_REFRESH:
-            self.regenerate_session(self.session, cookies)
-
     def sign_out(self, cookies):
         """End the user's current session.
         """
@@ -542,17 +574,67 @@ class Participant(Model, MixinTeam):
                 session.type = session.secret[i+1:] if i > 0 else ''
             return session.type
 
+    def require_write_permission(self):
+        session_type = self.session_type
+        if session_type is None:
+            # This isn't supposed to happen.
+            try:
+                raise AssertionError("session is None when it shouldn't be")
+            except Exception as e:
+                website.tell_sentry(e)
+            self.require_reauthentication()
+        elif session_type == 'ro':
+            self.require_reauthentication()
 
-    # Permissions
-    # ===========
+
+    # Privileges
+    # ==========
 
     def has_privilege(self, p):
-        return self.privileges & PRIVILEGES[p]
+        """Checks whether the participant has the specified privilege.
 
-    @cached_property
-    def is_admin(self):
-        return self.privileges & PRIVILEGES['admin']
+        A participant who has the 'admin' privilege is considered to have all
+        other privileges.
+        """
+        return self.privileges & (PRIVILEGES[p] | 1)
 
+    def is_acting_as(self, privilege):
+        """Checks whether the participant can currently use the specified privilege.
+
+        This method is more strict than `has_privilege`, it only returns `True`
+        if the user is currently logged in and has a fresh session.
+
+        If the user's session is read-only, then the user is asked to reauthenticate
+        themself.
+        """
+        if self.has_privilege(privilege):
+            session_type = self.session_type
+            if session_type == 'ro':
+                self.require_reauthentication()
+            if session_type is not None:
+                return True
+        return False
+
+    def require_active_privilege(self, privilege):
+        """Like `is_acting_as`, but raises an exception instead of returning `False`.
+        """
+        if self.has_privilege(privilege):
+            session_type = self.session_type
+            if session_type == 'ro':
+                self.require_reauthentication()
+            if session_type is not None:
+                return
+        raise Response(403, f"You don't have the {privilege} privilege.")
+
+    def require_reauthentication(self):
+        state = website.state.get()
+        state['log-in.reauthenticate'] = True
+        email = self.get_email_address()
+        if self.has_password:
+            state['log-in.password-or-email'] = email
+        else:
+            state['log-in.email'] = email
+        raise LoginRequired()
 
     # Statement
     # =========
@@ -1498,7 +1580,7 @@ class Participant(Model, MixinTeam):
         context['LegacyMoney'] = i18n.LegacyMoney
 
     def get_notifs(self, before=None, limit=None, viewer=None):
-        for_admin = bool(viewer and viewer.is_admin)
+        for_admin = bool(viewer and viewer.is_acting_as('admin'))
         p_id = self.id
         return self.db.all("""
             SELECT id, event, context, is_new, ts, hidden_since
@@ -2011,7 +2093,7 @@ class Participant(Model, MixinTeam):
         p_id = self.id
         recorder_id = recorder.id
         with self.db.get_cursor() as cursor:
-            if not recorder.is_admin:
+            if not recorder.is_acting_as('admin'):
                 cursor.hit_rate_limit('change_currency', self.id, TooManyCurrencyChanges)
             r = cursor.one("""
                 UPDATE participants

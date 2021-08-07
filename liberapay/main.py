@@ -233,7 +233,7 @@ algorithm.functions = [
     delegate_error_to_simplate,
 
     bypass_csp_for_form_redirects,
-    authentication.add_auth_to_response,
+    authentication.refresh_user_session,
     csrf.add_token_to_response,
     http_caching.add_caching_to_response,
     overwrite_status_code_of_gateway_errors,
@@ -250,7 +250,7 @@ algorithm.functions = [
 
 def check_payin_allowed(website, request, user, method=None):
     # Check permission
-    if user.is_admin:
+    if user.is_acting_as('admin'):
         pass
     elif website.app_conf.payin_methods.get(method) is False:
         raise PayinMethodIsUnavailable(method)

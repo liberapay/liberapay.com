@@ -30,6 +30,46 @@
     </form>
 </div>
 
+% elif state.get('log-in.password-or-email')
+
+    % set email = state['log-in.password-or-email']
+
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+
+        <p>{{ _("Please fill in your password to authenticate yourself:") }}</p>
+        <input name="log-in.id" value="{{ email }}"
+               aria-hidden="true" class="out-of-sight" tabindex="-1" />
+        <div class="form-group">
+            <input name="log-in.password" class="form-control"
+                   type="password" autocomplete="current-password"
+                   placeholder="{{ _('Password') }}" required />
+        </div>
+        <button class="btn btn-primary">{{ _("Log in") }}</button>
+    </form>
+
+    <hr>
+
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="log-in.id" value="{{ email }}" />
+        <p>{{ _("Or log in via email if you've lost your password:") }}</p>
+        <button class="btn btn-primary" name="log-in.via-email" value="yes">{{ _(
+            "Log in via email"
+        ) }}</button>
+    </form>
+
+% elif state.get('log-in.email')
+
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="log-in.id" value="{{ state['log-in.email'] }}" />
+        <p>{{ _("Your account doesn't have a password, so you'll have to authenticate yourself via email:") }}</p>
+        <button class="btn btn-primary" name="log-in.via-email" value="yes">{{ _(
+            "Log in via email"
+        ) }}</button>
+    </form>
+
 % else
 
 <form action="" method="POST">
@@ -38,6 +78,8 @@
 
 % if state.get('log-in.error')
     <p class="alert alert-danger">{{ state['log-in.error'] }}</p>
+% elif state.get('session_status') == 'expired'
+    <p class="alert alert-info">{{ _("Your session has expired.") }}</p>
 % endif
 
 <div class="form-group">
@@ -58,7 +100,7 @@
     bold='<strong>'|safe, bold_end='</strong>'|safe
 ) }}</p>
 
-<button class="btn btn-default">{{ _("Go") }}</button>
+<button class="btn btn-default">{{ _("Log in") }}</button>
 
 </form>
 

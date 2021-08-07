@@ -43,7 +43,7 @@ else:
         <h3>{{ _("Already Verified") }}</h3>
         <div class="alert alert-info">{{ _("This email address has already been verified.") }}</div>
     % elif result == EmailVerificationResult.LOGIN_REQUIRED
-        <p>{{ _("You need to log in") }}</p>
+        <h1 class="main-title thin-title">{{ _("Authentication required") }}</h1>
         % include "templates/log-in-form.html"
     % else
         % if result == EmailVerificationResult.STYMIED

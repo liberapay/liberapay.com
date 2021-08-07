@@ -553,7 +553,7 @@ def remove_email_address_from_blacklist(address, user, request):
     but with rate limits for non-admins in order to prevent abuse.
     """
     with website.db.get_cursor() as cursor:
-        if not user.is_admin:
+        if not user.is_acting_as('admin'):
             source = user.id or request.source
             website.db.hit_rate_limit('email.unblacklist.source', source, TooManyAttempts)
         r = cursor.all("""
@@ -566,7 +566,7 @@ def remove_email_address_from_blacklist(address, user, request):
         """, dict(address=address, user_id=user.id))
         if not r:
             return
-        if not user.is_admin:
+        if not user.is_acting_as('admin'):
             if any(bl.reason == 'complaint' for bl in r):
                 raise Response(403, (
                     "Only admins are allowed to unblock an address which is "

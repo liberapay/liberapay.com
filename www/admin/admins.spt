@@ -1,16 +1,10 @@
 from pando import json
 
-from liberapay.exceptions import LoginRequired
-
 PAGE_SIZE = 20
 
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 events = website.db.all("""
     SELECT e.*, p.username, admin.username AS recorder_name

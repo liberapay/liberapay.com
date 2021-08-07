@@ -57,7 +57,7 @@ participant.render_notifications(state, before=before, limit=limit)
     <br>
     % for notif in notifs
         <div class="alert alert-{{ notif.type|default('info') }} alert-notification {{ 'alert-read' if not notif.is_new else '' }}">
-        % if notif.hidden_since and not user.is_admin
+        % if notif.hidden_since and not user.is_acting_as('admin')
             <i>{{ _("This notification is marked for deletion.") }}</i>
             <button class="btn btn-default btn-xs pull-right" name="restore" value="{{ notif.id }}">{{
                 _("Restore")

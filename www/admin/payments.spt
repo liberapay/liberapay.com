@@ -1,4 +1,3 @@
-from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
 
 PAGE_SIZE = 50
@@ -12,11 +11,7 @@ STATUS_MAP = {
 
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 before = request.qs.get_int('before', default=None)
 status = request.qs.get('status')

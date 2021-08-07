@@ -54,6 +54,7 @@ if error_message:
 # Require auth before trying a connection
 if action == 'connect' and user.ANON:
     raise AuthRequired
+user.require_write_permission()
 
 # Finish the auth process, the returned session is ready to use
 url = website.canonical_url + request.line.uri.decoded

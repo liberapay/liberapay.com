@@ -13,8 +13,9 @@ STATUS_MAP = {
 participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Wallet")
-subpath = 'wallet/' if user.is_admin else ''
-admin_override = user.is_admin and (participant != user or 'override' in request.qs)
+user_is_admin = user.is_acting_as('admin')
+subpath = 'wallet/' if user_is_admin else ''
+admin_override = user_is_admin and (participant != user or 'override' in request.qs)
 translated_status = {
     None: '',
     'pre-mandate': _('awaiting confirmation'),
@@ -61,7 +62,7 @@ if participant == user:
 else:
     BALANCE = _("Their balance is {0}.", balance)
 
-if user.is_admin:
+if user_is_admin:
     mp_dashboard_url = website.app_conf.mangopay_base_url.replace('api.', 'dashboard.')
     wallets = website.db.all("""
         SELECT *
@@ -90,7 +91,7 @@ if user.is_admin:
     ) }}</p>
 % endif
 
-% if user.is_admin
+% if user_is_admin
     <h3>Admin</h3>
     <p>User ID: {{ participant.id }}</p>
     <p>Wallets:</p>

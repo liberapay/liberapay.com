@@ -25,8 +25,10 @@ except KeyError:
 if action not in constants.ELSEWHERE_ACTIONS:
     raise response.error(400)
 
-if action == 'connect' and user.ANON:
-    raise AuthRequired
+if action == 'connect':
+    if user.ANON:
+        raise AuthRequired
+    user.require_write_permission()
 
 p = (Participant.from_id(parse_int(p_id)) if p_id else None) or user
 

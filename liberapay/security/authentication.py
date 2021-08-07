@@ -5,10 +5,11 @@ from hashlib import blake2b
 from time import sleep
 
 from pando import Response
+from pando.utils import utcnow
 
 from liberapay.constants import (
     ASCII_ALLOWED_IN_USERNAME, CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE,
-    SESSION, SESSION_TIMEOUT,
+    SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
 )
 from liberapay.exceptions import (
     BadPasswordSize, EmailAlreadyTaken, LoginRequired,
@@ -27,7 +28,6 @@ from liberapay.utils.emails import (
 
 class _ANON:
     ANON = True
-    is_admin = False
     session = None
     id = None
 
@@ -36,6 +36,15 @@ class _ANON:
 
     get_currencies_for = staticmethod(Participant.get_currencies_for)
     get_tip_to = staticmethod(Participant._zero_tip)
+
+    def is_acting_as(self, privilege):
+        return False
+
+    def require_active_privilege(self, privilege):
+        raise LoginRequired()
+
+    def require_write_permission(self):
+        raise LoginRequired()
 
 
 ANON = _ANON()
@@ -74,7 +83,7 @@ def sign_in_with_form_data(body, state):
                 p_id = Participant.check_id(input_id[1:])
             else:
                 p_id = Participant.get_id_for(id_type, input_id)
-            p = Participant.authenticate(p_id, 0, password)
+            p = Participant.authenticate(p_id, 0, password)[0]
             if not p:
                 state['log-in.error'] = (
                     _("The submitted password is incorrect.") if p_id is not None else
@@ -243,7 +252,9 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
         if len(creds) == 2:
             creds = [creds[0], 1, creds[1]]
         if len(creds) == 3:
-            session_p = Participant.authenticate(*creds)
+            session_p, state['session_status'] = Participant.authenticate(
+                *creds, allow_downgrade=True, cookies=response.headers.cookie
+            )
             if session_p:
                 user = state['user'] = session_p
     p = None
@@ -263,8 +274,12 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             # Proceed with form auth
             carry_on = body.pop('log-in.carry-on', None)
             if carry_on:
-                p_email = session_p and session_p.get_email_address()
-                if p_email != carry_on:
+                can_carry_on = (
+                    session_p is not None and
+                    session_p.session_type != 'ro' and
+                    session_p.get_email_address() == carry_on
+                )
+                if not can_carry_on:
                     state['log-in.carry-on'] = carry_on
                     raise LoginRequired
             else:
@@ -288,7 +303,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             token = request.qs.get('log-in.token')
             if not (token and token.endswith('.em')):
                 raise response.render('simplates/log-in-link-is-invalid.spt', state)
-            p = Participant.authenticate(id, session_id, token)
+            p = Participant.authenticate(id, session_id, token)[0]
             if p:
                 if p.id != user.id:
                     submitted_confirmation_token = request.qs.get('log-in.confirmation')
@@ -366,12 +381,8 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
         response.redirect(redirect_url, trusted_url=False)
 
 
-def add_auth_to_response(response, request=None, user=ANON, etag=None):
-    if request is None:
-        return  # early parsing must've failed
+def refresh_user_session(response, user=ANON, etag=None):
     if etag:
         return  # cachable responses should never contain cookies
-
-    if SESSION in request.headers.cookie:
-        if user.session:
-            user.keep_signed_in(response.headers.cookie)
+    if user.session and user.session.mtime < (utcnow() - SESSION_REFRESH):
+        user.regenerate_session(user.session, response.headers.cookie)

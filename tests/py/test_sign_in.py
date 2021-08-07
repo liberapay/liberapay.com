@@ -231,7 +231,7 @@ class TestLogIn(EmailHarness):
             raise_immediately=False,
         )
         assert r.code == 302
-        alice2 = Participant.authenticate(alice.id, 0, password)
+        alice2 = Participant.authenticate(alice.id, 0, password)[0]
         assert alice2 and alice2 == alice
 
     def test_email_login_with_old_unverified_address(self):
@@ -515,8 +515,8 @@ class TestLogIn(EmailHarness):
         session2 = alice.start_session(suffix='.pw')
         assert session2.id == 2
 
-        # Get a "regenerated" session, to be invalidated
-        session3 = alice.start_session(suffix='.rg')
+        # Get a read-only session, to be invalidated
+        session3 = alice.start_session(suffix='.ro')
         assert session3.id == 3
 
         # Get an email session

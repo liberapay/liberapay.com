@@ -4,9 +4,8 @@ from liberapay.models.participant import Participant
 from liberapay.utils import get_int
 
 [---------]
-if user.ANON:
-    raise LoginRequired
 request.allow('POST')
+user.require_write_permission()
 
 body = request.body
 

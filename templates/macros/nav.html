@@ -146,7 +146,7 @@
         ('/emails/', _("Emails")),
         ('/widgets/', _("Widgets")),
     ]), base=base) }}
-    % if user.is_admin
+    % if user.is_acting_as('admin')
     {{ nav([('/admin', "Admin")], base=base) }}
     % endif
 % endmacro

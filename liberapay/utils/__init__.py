@@ -9,7 +9,6 @@ from operator import getitem
 import os
 import re
 import socket
-from urllib.parse import quote as urlquote
 
 from pando import Response, json
 from pando.utils import to_rfc822, utcnow
@@ -18,7 +17,7 @@ from markupsafe import Markup
 from liberapay.constants import SAFE_METHODS
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import (
-    AccountSuspended, AuthRequired, ClosedAccount, LoginRequired, TooManyAdminActions
+    AuthRequired, ClosedAccount, LoginRequired, TooManyAdminActions,
 )
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
@@ -29,11 +28,18 @@ from liberapay.utils import cbor
 BEGINNING_OF_EPOCH = to_rfc822(datetime(1970, 1, 1)).encode('ascii')
 
 
-def get_participant(state, restrict=True, redirect_stub=True, allow_member=False,
-                    block_suspended_user=False, redirect_canon=True):
-    """Given a Request, raise Response or return Participant.
+def get_participant(
+    state, restrict=True, allow_member=False, redirect_canon=True, redirect_stub=True,
+):
+    """Get a participant from the ID or username in the request path.
 
-    If restrict is True then we'll restrict access to owners and admins.
+    Args:
+        restrict (bool): the page is private, restrict access to it
+        allow_member (bool): allow members of a team to access this page
+        redirect_canon (bool): allow redirecting the request to the canonical URL
+        redirect_stub (bool): allow redirecting the request to the pledge page
+
+    Returns a `Participant` or raises a `Response`.
 
     """
     request = state['request']
@@ -74,16 +80,19 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
             """, (participant.id,))
             raise response.redirect('/for/%s' % c_name)
 
-    if redirect_canon and request.method in SAFE_METHODS:
-        if slug != participant.username:
+    if request.method in SAFE_METHODS:
+        if redirect_canon and slug != participant.username:
             canon = '/' + participant.username + request.line.uri.decoded[len(slug)+1:]
             raise response.redirect(canon)
+    else:
+        if restrict:
+            user.require_write_permission()
 
     is_spam = participant.marked_as == 'spam'
     if (restrict or is_spam) and participant != user:
         if allow_member and participant.kind == 'group' and user.member_of(participant):
             pass
-        elif user.is_admin:
+        elif user.is_acting_as('admin'):
             log_admin_request(user, participant, request)
         elif restrict:
             raise response.error(403, _("You are not authorized to access this page."))
@@ -92,7 +101,7 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
 
     status = participant.status
     if status == 'closed':
-        if not user.is_admin:
+        if not user.is_acting_as('admin'):
             raise ClosedAccount(participant)
     elif status == 'stub':
         if redirect_stub:
@@ -101,9 +110,6 @@ def get_participant(state, restrict=True, redirect_stub=True, allow_member=False
                 # Account has been taken over
                 raise response.error(404)
             raise response.redirect(to)
-
-    if block_suspended_user and participant.is_suspended and participant == user:
-        raise AccountSuspended()
 
     if allow_member and (user == participant or participant.kind == 'group' and user.member_of(participant)):
         state['can_switch_account'] = True
@@ -117,21 +123,21 @@ def get_community(state, restrict=False):
     name = request.path['name']
 
     c = Community.from_name(name)
+    if not c:
+        raise response.error(404)
     if request.method in SAFE_METHODS:
-        if not c:
-            response.redirect('/for/new?name=' + urlquote(name))
         if c.name != name:
             response.redirect('/for/' + c.name + request.line.uri.decoded[5+len(name):])
-    elif not c:
-        raise response.error(404)
     elif user.ANON:
         raise AuthRequired
+    else:
+        user.require_write_permission()
 
     is_spam = c.participant.marked_as == 'spam'
     if (restrict or is_spam):
         if user.id == c.creator:
             pass
-        elif user.is_admin:
+        elif user.is_acting_as('admin'):
             log_admin_request(user, c.participant, request)
         elif restrict:
             if user.ANON:

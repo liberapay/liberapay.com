@@ -1,6 +1,5 @@
 from dateutil.parser import parse as parse_date
 
-from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.models.participant import Participant
 
@@ -13,11 +12,7 @@ ACCOUNT_MARKS.add('')
 
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 if request.method == 'POST':
     event_data = {}
