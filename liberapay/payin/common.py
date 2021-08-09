@@ -441,7 +441,7 @@ def resolve_team_donation(
             if selected_takes:
                 resolve_take_amounts(payment_amount, selected_takes)
                 selected_takes.sort(key=attrgetter('member'))
-                n_periods = payment_amount / tip.periodic_amount
+                n_periods = payment_amount / tip.periodic_amount.convert(currency)
                 return [
                     ProtoTransfer(
                         t.resolved_amount,
