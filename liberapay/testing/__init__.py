@@ -275,7 +275,7 @@ class Harness(unittest.TestCase):
         remote_id='fake', pt_extra={},
     ):
         payin, payin_transfers = self.make_payin_and_transfers(
-            route, amount, [(tippee, amount, pt_extra)],
+            route, amount, [(tippee, amount - (fee or 0), pt_extra)],
             status=status, error=error, payer_country=payer_country, fee=fee,
             remote_id=remote_id,
         )
@@ -292,7 +292,9 @@ class Harness(unittest.TestCase):
         payer = route.participant
         provider = route.network.split('-', 1)[0]
         proto_transfers = []
+        net_amount = 0
         for tippee, pt_amount, opt in transfers:
+            net_amount += pt_amount
             tip = opt.get('tip')
             if tip:
                 assert tip.tipper == payer.id
@@ -323,7 +325,6 @@ class Harness(unittest.TestCase):
         payin, payin_transfers = prepare_payin(self.db, payer, amount, route, proto_transfers)
         del proto_transfers
         payin = update_payin(self.db, payin.id, remote_id, status, error, fee=fee)
-        net_amount = payin.amount - (fee or 0)
         if len(payin_transfers) > 1:
             adjust_payin_transfers(self.db, payin, net_amount)
         else:
