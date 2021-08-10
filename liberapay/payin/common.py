@@ -237,7 +237,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                             updates.append((d.amount, pt.id))
                     n_periods = prorated_amount / tip.periodic_amount.convert(prorated_amount.currency)
                     for d in team_donations.values():
-                        unit_amount = (d.amount / n_periods).round_up()
+                        unit_amount = (d.amount / n_periods).round(allow_zero=False)
                         prepare_payin_transfer(
                             db, payin, d.recipient, d.destination, 'team-donation',
                             d.amount, unit_amount, tip.period,
@@ -448,7 +448,7 @@ def resolve_team_donation(
                         db.Participant.from_id(t.member),
                         sepa_accounts[t.member],
                         'team-donation',
-                        (t.resolved_amount / n_periods).round_up(),
+                        (t.resolved_amount / n_periods).round(allow_zero=False),
                         tip.period,
                         team.id,
                     )

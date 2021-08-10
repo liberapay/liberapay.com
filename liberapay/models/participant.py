@@ -757,7 +757,7 @@ class Participant(Model, MixinTeam):
                         for take in tip.takes:
                             resolved_amount = resolved_takes.get(take.member, zero)
                             if resolved_amount > 0:
-                                unit_amount = (resolved_amount / n_weeks).round_up()
+                                unit_amount = (resolved_amount / n_weeks).round(allow_zero=False)
                                 transfers.append(
                                     [take.member, None, resolved_amount, team_id, wallet, unit_amount]
                                 )
@@ -767,7 +767,7 @@ class Participant(Model, MixinTeam):
                         for take in tip.takes:
                             resolved_amount = take.resolved_amount
                             if resolved_amount > 0:
-                                unit_amount = (resolved_amount / n_weeks).round_up()
+                                unit_amount = (resolved_amount / n_weeks).round(allow_zero=False)
                                 transfers.append(
                                     [take.member, resolved_amount, None, team_id, wallet, unit_amount]
                                 )
