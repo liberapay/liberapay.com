@@ -107,6 +107,11 @@ class TestResolveTeamDonation(Harness):
         account = self.resolve(team, 'paypal', alice, 'BR', EUR('5'))
         assert account == paypal_account_carl
 
+        # Test that self donation is avoided when there are two members
+        carl.set_tip_to(team, EUR('17.89'))
+        account = self.resolve(team, 'stripe', carl, 'FR', EUR('71.56'))
+        assert account == stripe_account_bob
+
         # Test with a suspended member
         self.db.run("UPDATE participants SET is_suspended = true WHERE id = %s", (carl.id,))
         account = self.resolve(team, 'stripe', alice, 'RU', EUR('7.70'))
