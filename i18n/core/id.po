@@ -58,13 +58,12 @@ msgstr[0] "Perpanjang donasi berikut"
 msgid "Manage your donations"
 msgstr "Atur donasi Anda"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It's past time to renew your donation to {username} on Liberapay"
-msgstr "Telah lewat waktu untuk memperbaharui donasi anda kepada {username} di Liberapay"
+msgstr "Sudah waktunya untuk memperbarui donasi Anda ke {username} di Liberapay"
 
-#, fuzzy
 msgid "It's past time to renew your donations on Liberapay"
-msgstr "Telah lewat waktu untuk memperbaharui donasi anda di Liberapay"
+msgstr "Sudah waktunya untuk memperbarui sumbangan Anda di Liberapay"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
@@ -597,12 +596,12 @@ msgstr "Pembayaran otomatis sebesar {old_money_amount} yang dijadwalkan untuk {o
 
 #, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
-msgstr ""
+msgstr "Pembayaran manual yang dijadwalkan pada {old_date} telah diganti dengan pembayaran otomatis sebesar {new_money_amount} pada {new_date}."
 
 #, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
+msgstr[0] "Anda sekarang punya {n} jadwal pembayaran:"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
@@ -610,7 +609,7 @@ msgstr "{date}: pembayaran otomatis sebesar {money_amount} kepada {recipient}"
 
 #, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
-msgstr ""
+msgstr "{date}: pembayaran otomatis sebesar {money_amount} dibagi antara {recipients}"
 
 #, python-brace-format
 msgid "{date}: manual payment to {recipients}"
@@ -661,17 +660,17 @@ msgid "Donate to {0}"
 msgstr "Berdonasi kepada {0}"
 
 msgid "Liberapay donation renewal: payment aborted"
-msgstr ""
+msgstr "Perpanjangan donasi Liberapay: pembayaran dibatalkan"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} has been aborted because the recipient is unable to receive it."
 msgstr ""
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr ""
+msgstr "Pembayaran perpanjangan donasi berikut telah dibatalkan karena penerima tidak dapat menerima donasi tersebut:"
 
 msgid "Liberapay donation renewal: authentication required"
-msgstr ""
+msgstr "Perpanjangan donasi Liberapay: diperlukan autentikasi"
 
 #, python-brace-format
 msgid "We haven't been able to complete your scheduled payment of {money_amount}, because your bank requested that you confirm it."
@@ -685,7 +684,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr ""
+msgstr "Anda telah menghubungkan akun PayPal namun tanpa akun Stripe. Kami sangat menyarankan Anda juga menghubungkan akun Stripe, karena ini {link_open} lebih baik daripada PayPal {link_close} di beberapa hal, baik untuk Anda maupun donatur Anda."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -1185,7 +1184,7 @@ msgid "Internal Server Error"
 msgstr "Kesalahan internal server"
 
 msgid "Upstream Error"
-msgstr ""
+msgstr "Galat Hulu"
 
 msgid "Service Unavailable"
 msgstr "Pelayanan tidak tersedia"
@@ -1699,13 +1698,13 @@ msgid "Goal"
 msgstr "Tujuan"
 
 msgid "Descriptions"
-msgstr ""
+msgstr "Deskripsi"
 
 msgid "Linked Accounts"
 msgstr "Akun yang Dihubungkan"
 
 msgid "Instruments"
-msgstr ""
+msgstr "Instrumen"
 
 msgid "Schedule"
 msgstr "Jadwal"
@@ -1852,10 +1851,10 @@ msgid "Member"
 msgstr "Anggota"
 
 msgid "Nominal Take"
-msgstr ""
+msgstr "Nominal pengambilan"
 
 msgid "Actual Take"
-msgstr ""
+msgstr "Pengambilan aktual"
 
 msgid "n/a"
 msgstr ""
@@ -2228,7 +2227,7 @@ msgid "Connect an account"
 msgstr ""
 
 msgid "Our YouTube integration has been disabled by Google. We're working on re-implementing this feature in a different way."
-msgstr ""
+msgstr "Integrasi kami dengan YouTube telah dimatikan oleh Google. Kami sedang mengerjakan penerapan ulang fitur ini dengan cara yang berbeda."
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "Saya berterima kasih atas pemberian, tetapi tidak memiliki tujuan pendanaan tertentu."
@@ -2318,13 +2317,13 @@ msgid "Preview of the short description"
 msgstr ""
 
 msgid "Publish"
-msgstr ""
+msgstr "Publikasikan"
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "Anda belum menyimpan perubahan, anda yakin ingin membuang perubahan?"
 
 msgid "Discard"
-msgstr ""
+msgstr "Buang"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "Jelaskan apa yang anda kerjakan, mengapa anda meminta donasi, dan sebagainya. Kami membutuhkan ringkasan singkat dan penyataan lengkap."
@@ -2454,7 +2453,7 @@ msgid "Primary"
 msgstr "Primer/utama"
 
 msgid "Disavowed"
-msgstr ""
+msgstr "Ditolak"
 
 msgid "Unverified"
 msgstr "Tidak diverifikasi"
@@ -2579,7 +2578,7 @@ msgid "Restart"
 msgstr "Mengulang kembali"
 
 msgid "Hide"
-msgstr ""
+msgstr "Sembunyikan"
 
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
@@ -3081,7 +3080,7 @@ msgid "partially refunded"
 msgstr ""
 
 msgid "refunded"
-msgstr ""
+msgstr "dikembalikan"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -3099,7 +3098,7 @@ msgid "Fees"
 msgstr "Biaya"
 
 msgid "Method"
-msgstr ""
+msgstr "Metode"
 
 msgid "automatic charge"
 msgstr ""
@@ -3201,7 +3200,7 @@ msgid "This notification is marked for deletion."
 msgstr ""
 
 msgid "Restore"
-msgstr ""
+msgstr "Pulihkan"
 
 msgid "Mark as read"
 msgstr ""
@@ -3474,7 +3473,7 @@ msgid "Bank Account"
 msgstr ""
 
 msgid "default"
-msgstr ""
+msgstr "baku"
 
 msgid "view mandate"
 msgstr ""
@@ -4192,7 +4191,7 @@ msgid "Download the black-on-yellow PNG ({x_y} pixels)"
 msgstr ""
 
 msgid "Fonts"
-msgstr ""
+msgstr "Fon"
 
 #, python-brace-format
 msgid "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}."
@@ -4231,7 +4230,7 @@ msgid "We do our best to protect everyone's privacy: we do not attempt to track 
 msgstr ""
 
 msgid "Cookies"
-msgstr ""
+msgstr "Kuki"
 
 msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
 msgstr ""
@@ -4285,7 +4284,7 @@ msgid "Similarly, PayPal allows a donor to see the name and email address of the
 msgstr ""
 
 msgid "Encryption"
-msgstr ""
+msgstr "Enkripsi"
 
 msgid "All network connections are encrypted, except for some communications between machines located in the same datacenter."
 msgstr ""
@@ -4298,7 +4297,7 @@ msgid "If you think you've found a security issue, and it's not already in our l
 msgstr ""
 
 msgid "Policy"
-msgstr ""
+msgstr "Kebijakan"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
@@ -5037,7 +5036,7 @@ msgid "Your donation of {money_amount} per week to {name} on {platform} has been
 msgstr ""
 
 msgid "Email addresses"
-msgstr ""
+msgstr "Alamat email"
 
 #, python-brace-format
 msgid "The email address {0} has been linked to your Liberapay account."
@@ -5080,26 +5079,26 @@ msgstr ""
 
 #, python-brace-format
 msgid "{0} is a private team"
-msgstr ""
+msgstr "{0} adalah tim privat"
 
 #, python-brace-format
 msgid "{0} is a big team"
-msgstr ""
+msgstr "{0} adalah tim besar"
 
 #, python-brace-format
 msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
-msgstr[0] ""
+msgstr[0] "{0} adalah tim dengan {n} anggota publik"
 
 msgid "Explore unclaimed donations"
-msgstr ""
+msgstr "Jelajahi donasi yang belum diklaim"
 
 #, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr ""
 
 msgid "No description available."
-msgstr ""
+msgstr "Tidak ada deskripsi."
 
 #, python-brace-format
 msgid "Profile on {0}"
