@@ -231,7 +231,7 @@ class TestLogIn(EmailHarness):
             raise_immediately=False,
         )
         assert r.code == 302
-        alice2 = Participant.authenticate(alice.id, 0, password)[0]
+        alice2 = Participant.authenticate_with_password(alice.id, password)
         assert alice2 and alice2 == alice
 
     def test_email_login_with_old_unverified_address(self):
@@ -336,7 +336,7 @@ class TestLogIn(EmailHarness):
         assert not self.get_emails()
 
     def test_email_login_bad_id(self):
-        r = self.client.GxT('/?log-in.id=1&log-in.token=x')
+        r = self.client.GxT('/?log-in.id=x&log-in.key=1001&log-in.token=x')
         assert r.code == 400
 
     def test_email_login_bad_key(self):
@@ -356,10 +356,43 @@ class TestLogIn(EmailHarness):
         assert r.code == 400
         assert SESSION not in r.headers.cookie
 
+    def test_email_login_missing_key(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        email_session = alice.start_session('.em')
+        url = f'/about/me/?log-in.id={alice.id}&log-in.token={email_session.secret}'
+        r = self.client.GxT(url)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=alice)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=bob)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+
     def test_email_login_bad_token(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
-        url = '/?log-in.id=%s&log-in.token=x' % alice.id
+        email_session = alice.start_session('.em')
+        url = '/about/me/?log-in.id=%s&log-in.key=%i&log-in.token=%s' % (
+            alice.id, email_session.id, email_session.secret + '!'
+        )
+        r = self.client.GxT(url)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=alice)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=bob)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+
+    def test_email_login_missing_token(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        email_session = alice.start_session('.em')
+        url = f'/about/me/?log-in.id={alice.id}&log-in.key={email_session.id}'
         r = self.client.GxT(url)
         assert r.code == 400
         assert SESSION not in r.headers.cookie

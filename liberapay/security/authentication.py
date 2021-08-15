@@ -13,7 +13,7 @@ from liberapay.constants import (
 )
 from liberapay.exceptions import (
     BadPasswordSize, EmailAlreadyTaken, LoginRequired,
-    TooManyLogInAttempts, TooManyLoginEmails, TooManyRequests, TooManySignUps,
+    TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps,
     UsernameAlreadyTaken,
 )
 from liberapay.models.participant import Participant
@@ -78,12 +78,11 @@ def sign_in_with_form_data(body, state):
             id_type = 'username'
         if password and id_type:
             website.db.hit_rate_limit('log-in.password.ip-addr', str(src_addr), TooManyLogInAttempts)
-            website.db.hit_rate_limit('hash_password.ip-addr', str(src_addr), TooManyRequests)
             if id_type == 'immutable':
                 p_id = Participant.check_id(input_id[1:])
             else:
                 p_id = Participant.get_id_for(id_type, input_id)
-            p = Participant.authenticate(p_id, 0, password)[0]
+            p = Participant.authenticate_with_password(p_id, password)
             if not p:
                 state['log-in.error'] = (
                     _("The submitted password is incorrect.") if p_id is not None else
@@ -252,7 +251,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
         if len(creds) == 2:
             creds = [creds[0], 1, creds[1]]
         if len(creds) == 3:
-            session_p, state['session_status'] = Participant.authenticate(
+            session_p, state['session_status'] = Participant.authenticate_with_session(
                 *creds, allow_downgrade=True, cookies=response.headers.cookie
             )
             if session_p:
@@ -298,12 +297,14 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
 
         if request.qs.get('log-in.id'):
             # Email auth
-            id = request.qs.get('log-in.id')
+            id = request.qs.get_int('log-in.id')
             session_id = request.qs.get('log-in.key')
+            if not session_id or session_id < '1001' or session_id > '1010':
+                raise response.render('simplates/log-in-link-is-invalid.spt', state)
             token = request.qs.get('log-in.token')
             if not (token and token.endswith('.em')):
                 raise response.render('simplates/log-in-link-is-invalid.spt', state)
-            p = Participant.authenticate(id, session_id, token)[0]
+            p = Participant.authenticate_with_session(id, session_id, token)[0]
             if p:
                 if p.id != user.id:
                     submitted_confirmation_token = request.qs.get('log-in.confirmation')

@@ -1,4 +1,4 @@
-from liberapay.exceptions import TooManyAttempts, TooManyRequests
+from liberapay.exceptions import TooManyAttempts
 from liberapay.models.participant import Participant
 from liberapay.utils import form_post_success, get_participant
 
@@ -20,10 +20,9 @@ if 'new-password' in body:
     elif not p.has_password:
         pass  # user doesn't have a password yet, allow adding one
     else:
-        website.db.hit_rate_limit('hash_password.ip-addr', str(request.source), TooManyRequests)
-        p2 = Participant.authenticate(
-            p.id, 0, body['cur-password'], context='change_password'
-        )[0]
+        p2 = Participant.authenticate_with_password(
+            p.id, body['cur-password'], context='change_password'
+        )
         if not p2:
             raise response.error(403, _("Incorrect password"))
         del p2

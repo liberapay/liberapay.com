@@ -54,6 +54,7 @@ from liberapay.exceptions import (
     TooManyEmailAddresses,
     TooManyEmailVerifications,
     TooManyPasswordLogins,
+    TooManyRequests,
     TooManyUsernameChanges,
     UnableToDistributeBalance,
     UnableToSendEmail,
@@ -241,88 +242,6 @@ class Participant(Model, MixinTeam):
         return getattr(cls, 'from_' + type_of_id)(id_value, id_only=True)
 
     @classmethod
-    def authenticate(
-        cls, p_id, secret_id, secret,
-        context='log-in', allow_downgrade=False, cookies=None,
-    ):
-        """Fetch a participant using its ID, but only if the provided secret is valid.
-
-        Args:
-            p_id (int | str): the participant's ID
-            secret_id (int | str): the ID of the secret
-            secret (str): the actual secret
-            context (str): the operation that this authentication is part of
-            allow_downgrade (bool): allow downgrading to a read-only session
-            cookies (SimpleCookie):
-                the response cookies, only needed when `allow_downgrade` is `True`
-
-        Return type: `Tuple[Participant | None, Literal['expired', 'invalid', 'valid']]`
-        """
-        if not secret:
-            return None, 'invalid'
-        try:
-            p_id = int(p_id)
-            secret_id = int(secret_id)
-        except (ValueError, TypeError):
-            return None, 'invalid'
-        if secret_id >= 1:  # session token
-            r = cls.db.one("""
-                SELECT p, s.secret, s.mtime
-                  FROM user_secrets s
-                  JOIN participants p ON p.id = s.participant
-                 WHERE s.participant = %s
-                   AND s.id = %s
-            """, (p_id, secret_id))
-            if not r:
-                return None, 'invalid'
-            p, stored_secret, mtime = r
-            if not constant_time_compare(stored_secret, secret):
-                return None, 'invalid'
-            if mtime > utcnow() - SESSION_TIMEOUT:
-                p.session = SimpleNamespace(id=secret_id, secret=secret, mtime=mtime)
-            elif allow_downgrade:
-                if mtime > utcnow() - FOUR_WEEKS:
-                    p.regenerate_session(
-                        SimpleNamespace(id=secret_id, secret=secret, mtime=mtime),
-                        cookies,
-                        suffix='.ro',  # stands for "read only"
-                    )
-                else:
-                    return None, 'expired'
-            else:
-                return None, 'expired'
-            p.authenticated = True
-            return p, 'valid'
-        elif secret_id == 0:  # user-input password
-            r = cls.db.one("""
-                SELECT p, s.secret
-                  FROM user_secrets s
-                  JOIN participants p ON p.id = s.participant
-                 WHERE s.participant = %s
-                   AND s.id = %s
-            """, (p_id, secret_id))
-            if not r:
-                return None, 'invalid'
-            p, stored_secret = r
-            if context == 'log-in':
-                cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
-            algo, rounds, salt, hashed = stored_secret.split('$', 3)
-            rounds = int(rounds)
-            salt, hashed = b64decode(salt), b64decode(hashed)
-            if constant_time_compare(cls._hash_password(secret, algo, salt, rounds), hashed):
-                p.authenticated = True
-                if context == 'log-in':
-                    cls.db.decrement_rate_limit('log-in.password', p.id)
-                if len(salt) < 32:
-                    # Update the password hash in the DB
-                    hashed = cls.hash_password(secret)
-                    cls.db.run(
-                        "UPDATE user_secrets SET secret = %s WHERE participant = %s AND id = 0",
-                        (hashed, p.id)
-                    )
-                return p, 'valid'
-
-    @classmethod
     def get_chargebacks_account(cls, currency):
         p = cls.db.one("""
             SELECT p
@@ -358,6 +277,50 @@ class Participant(Model, MixinTeam):
 
     # Password Management
     # ===================
+
+    @classmethod
+    def authenticate_with_password(cls, p_id, password, context='log-in'):
+        """Fetch a participant using its ID, but only if the provided password is valid.
+
+        Args:
+            p_id (int): the participant's ID
+            password (str): the participant's password
+            context (str): the operation that this authentication is part of
+
+        Return type: `Participant | None`
+        """
+        if not password:
+            return None
+        r = cls.db.one("""
+            SELECT p, s.secret
+              FROM user_secrets s
+              JOIN participants p ON p.id = s.participant
+             WHERE s.participant = %s
+               AND s.id = 0
+        """, (p_id,))
+        if not r:
+            return None
+        p, stored_secret = r
+        if context == 'log-in':
+            cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
+        request = website.state.get({}).get('request')
+        if request:
+            cls.db.hit_rate_limit('hash_password.ip-addr', str(request.source), TooManyRequests)
+        algo, rounds, salt, hashed = stored_secret.split('$', 3)
+        rounds = int(rounds)
+        salt, hashed = b64decode(salt), b64decode(hashed)
+        if constant_time_compare(cls._hash_password(password, algo, salt, rounds), hashed):
+            p.authenticated = True
+            if context == 'log-in':
+                cls.db.decrement_rate_limit('log-in.password', p.id)
+            if len(salt) < 32:
+                # Update the password hash in the DB
+                hashed = cls.hash_password(password)
+                cls.db.run(
+                    "UPDATE user_secrets SET secret = %s WHERE participant = %s AND id = 0",
+                    (hashed, p.id)
+                )
+            return p
 
     @staticmethod
     def _hash_password(password, algo, salt, rounds):
@@ -440,6 +403,61 @@ class Participant(Model, MixinTeam):
 
     # Session Management
     # ==================
+
+    @classmethod
+    def authenticate_with_session(
+        cls, p_id, session_id, secret, allow_downgrade=False, cookies=None,
+    ):
+        """Fetch a participant using its ID, but only if the provided session is valid.
+
+        Args:
+            p_id (int | str): the participant's ID
+            session_id (int | str): the ID of the session
+            secret (str): the actual secret
+            allow_downgrade (bool): allow downgrading to a read-only session
+            cookies (SimpleCookie):
+                the response cookies, only needed when `allow_downgrade` is `True`
+
+        Return type:
+            Tuple[Participant, Literal['valid']] |
+            Tuple[None, Literal['expired', 'invalid']]
+        """
+        if not secret:
+            return None, 'invalid'
+        try:
+            p_id = int(p_id)
+            session_id = int(session_id)
+        except (ValueError, TypeError):
+            return None, 'invalid'
+        if session_id < 1:
+            return None, 'invalid'
+        r = cls.db.one("""
+            SELECT p, s.secret, s.mtime
+              FROM user_secrets s
+              JOIN participants p ON p.id = s.participant
+             WHERE s.participant = %s
+               AND s.id = %s
+        """, (p_id, session_id))
+        if not r:
+            return None, 'invalid'
+        p, stored_secret, mtime = r
+        if not constant_time_compare(stored_secret, secret):
+            return None, 'invalid'
+        if mtime > utcnow() - SESSION_TIMEOUT:
+            p.session = SimpleNamespace(id=session_id, secret=secret, mtime=mtime)
+        elif allow_downgrade:
+            if mtime > utcnow() - FOUR_WEEKS:
+                p.regenerate_session(
+                    SimpleNamespace(id=session_id, secret=secret, mtime=mtime),
+                    cookies,
+                    suffix='.ro',  # stands for "read only"
+                )
+            else:
+                return None, 'expired'
+        else:
+            return None, 'expired'
+        p.authenticated = True
+        return p, 'valid'
 
     @staticmethod
     def generate_session_token():
