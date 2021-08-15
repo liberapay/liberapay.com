@@ -78,8 +78,14 @@ def _Money_parse(cls, amount_str, default_currency='EUR'):
     else:
         raise ValueError("%r is not a valid money amount" % amount_str)
 
-def _Money_round(self, rounding=ROUND_HALF_UP):
-    return Money(self.amount, self.currency, rounding=rounding)
+def _Money_round(self, rounding=ROUND_HALF_UP, allow_zero=True):
+    r = Money(self.amount, self.currency, rounding=rounding)
+    if not allow_zero:
+        if self.amount == 0:
+            raise ValueError("can't round zero away from zero")
+        if r.amount == 0:
+            return self.minimum() if self.amount > 0 else -self.minimum()
+    return r
 
 class _Minimums(defaultdict):
     def __missing__(self, currency):

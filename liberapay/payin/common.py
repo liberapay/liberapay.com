@@ -237,7 +237,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                             updates.append((d.amount, pt.id))
                     n_periods = prorated_amount / tip.periodic_amount.convert(prorated_amount.currency)
                     for d in team_donations.values():
-                        unit_amount = (d.amount / n_periods).round_up()
+                        unit_amount = (d.amount / n_periods).round(allow_zero=False)
                         prepare_payin_transfer(
                             db, payin, d.recipient, d.destination, 'team-donation',
                             d.amount, unit_amount, tip.period,
@@ -409,8 +409,8 @@ def resolve_team_donation(
     del member_ids
     if not payment_accounts:
         raise MissingPaymentAccount(team)
-    takes = [t for t in takes if t.member in payment_accounts]
-    if len(takes) == 1 and takes[0].member == payer.id:
+    takes = [t for t in takes if t.member in payment_accounts and t.member != payer.id]
+    if not takes:
         raise NoSelfTipping()
     takes.sort(key=lambda t: (
         -(t.amount / (t.paid_in_advance + payment_amount)),
@@ -418,12 +418,11 @@ def resolve_team_donation(
         t.ctime
     ))
     # Try to distribute the donation to multiple members.
-    other_members = {t.member for t in takes if t.member != payer.id}
-    if sepa_only or other_members and provider == 'stripe':
+    if sepa_only or provider == 'stripe':
         sepa_accounts = {a.participant: a for a in db.all("""
             SELECT DISTINCT ON (a.participant) a.*
               FROM payment_accounts a
-             WHERE a.participant IN %(other_members)s
+             WHERE a.participant IN %(member_ids)s
                AND a.provider = %(provider)s
                AND a.is_current
                AND a.verified
@@ -433,7 +432,7 @@ def resolve_team_donation(
           ORDER BY a.participant
                  , a.default_currency = %(currency)s DESC
                  , a.connection_ts
-        """, dict(locals(), SEPA=SEPA))}
+        """, dict(locals(), SEPA=SEPA, member_ids={t.member for t in takes}))}
         if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:
             selected_takes = [
                 t for t in takes if t.member in sepa_accounts and t.amount != 0
@@ -441,14 +440,14 @@ def resolve_team_donation(
             if selected_takes:
                 resolve_take_amounts(payment_amount, selected_takes)
                 selected_takes.sort(key=attrgetter('member'))
-                n_periods = payment_amount / tip.periodic_amount
+                n_periods = payment_amount / tip.periodic_amount.convert(currency)
                 return [
                     ProtoTransfer(
                         t.resolved_amount,
                         db.Participant.from_id(t.member),
                         sepa_accounts[t.member],
                         'team-donation',
-                        (t.resolved_amount / n_periods).round_up(),
+                        (t.resolved_amount / n_periods).round(allow_zero=False),
                         tip.period,
                         team.id,
                     )

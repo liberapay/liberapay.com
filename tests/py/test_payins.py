@@ -107,6 +107,11 @@ class TestResolveTeamDonation(Harness):
         account = self.resolve(team, 'paypal', alice, 'BR', EUR('5'))
         assert account == paypal_account_carl
 
+        # Test that self donation is avoided when there are two members
+        carl.set_tip_to(team, EUR('17.89'))
+        account = self.resolve(team, 'stripe', carl, 'FR', EUR('71.56'))
+        assert account == stripe_account_bob
+
         # Test with a suspended member
         self.db.run("UPDATE participants SET is_suspended = true WHERE id = %s", (carl.id,))
         account = self.resolve(team, 'stripe', alice, 'RU', EUR('7.70'))
@@ -144,11 +149,11 @@ class TestResolveTeamDonation(Harness):
         assert len(payin_transfers) == 2
         assert payin_transfers[0].amount == EUR('5.43')
         assert payin_transfers[0].destination == stripe_account_bob.pk
-        assert payin_transfers[0].unit_amount == EUR('0.82')
+        assert payin_transfers[0].unit_amount == EUR('0.86')
         assert payin_transfers[0].n_units == 6
         assert payin_transfers[1].amount == EUR('0.87')
         assert payin_transfers[1].destination == stripe_account_carl.pk
-        assert payin_transfers[1].unit_amount == EUR('0.19')
+        assert payin_transfers[1].unit_amount == EUR('0.14')
         assert payin_transfers[1].n_units == 6
         # Check that this donation has balanced the takes.
         takes = {t.member: t for t in self.db.all("""
@@ -171,6 +176,16 @@ class TestResolveTeamDonation(Harness):
         assert payin_transfers[0].amount == EUR('1.00')
         assert payin_transfers[0].destination == stripe_account_bob.pk
         assert payin_transfers[1].amount == EUR('2.00')
+        assert payin_transfers[1].destination == stripe_account_carl.pk
+
+        # Test with a transfer currency different than the tip currency
+        payin, payin_transfers = self.make_payin_and_transfers(
+            alice_card, EUR('10.00'), [(team, USD('12.00'), {})],
+        )
+        assert len(payin_transfers) == 2
+        assert payin_transfers[0].amount == USD('4.01')
+        assert payin_transfers[0].destination == stripe_account_bob.pk
+        assert payin_transfers[1].amount == USD('7.99')
         assert payin_transfers[1].destination == stripe_account_carl.pk
 
 
