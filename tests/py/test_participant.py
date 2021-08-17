@@ -1,8 +1,6 @@
-from http.cookies import SimpleCookie
-
 import pytest
 
-from liberapay.constants import SESSION, USERNAME_SUFFIX_BLACKLIST
+from liberapay.constants import USERNAME_SUFFIX_BLACKLIST
 from liberapay.exceptions import (
     BadAmount,
     InvalidId,
@@ -202,35 +200,6 @@ class Tests(Harness):
         self.make_participant('AlIcE')
         actual = Participant.from_username('aLiCe').username
         assert actual == 'AlIcE'
-
-    # sessions
-
-    def test_session_cookie_is_secure_if_it_should_be(self):
-        canonical_scheme = self.client.website.canonical_scheme
-        self.client.website.canonical_scheme = 'https'
-        try:
-            cookies = SimpleCookie()
-            alice = self.make_participant('alice')
-            alice.authenticated = True
-            alice.sign_in(cookies)
-            assert '; secure' in cookies[SESSION].output().lower()
-        finally:
-            self.client.website.canonical_scheme = canonical_scheme
-
-    def test_session_is_regularly_refreshed(self):
-        alice = self.make_participant('alice')
-        alice.authenticated = True
-        alice.sign_in(SimpleCookie())
-        r = self.client.GET('/', auth_as=alice)
-        assert SESSION not in r.headers.cookie
-        alice.session = self.db.one("""
-            UPDATE user_secrets
-               SET mtime = mtime - interval '12 hours'
-             WHERE participant = %s
-         RETURNING id, secret, mtime
-        """, (alice.id,))
-        r = self.client.GET('/', auth_as=alice)
-        assert SESSION in r.headers.cookie
 
     # from_id
 

@@ -10,7 +10,7 @@ from liberapay.i18n.base import LOCALES
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import Participant
 from liberapay.security.csrf import CSRF_TOKEN
-from liberapay.testing import postgres_readonly
+from liberapay.testing import Harness, postgres_readonly
 from liberapay.testing.emails import EmailHarness
 from liberapay.utils import b64encode_s
 
@@ -705,3 +705,44 @@ class TestSignIn(EmailHarness):
             r = self.sign_in(HTTP_ACCEPT=b'text/html')
             assert r.code == 503, r.text
             assert 'read-only' in r.text
+
+
+class TestSessions(Harness):
+
+    def test_session_cookie_is_secure_if_it_should_be(self):
+        canonical_scheme = self.client.website.canonical_scheme
+        self.client.website.canonical_scheme = 'https'
+        try:
+            cookies = SimpleCookie()
+            alice = self.make_participant('alice')
+            alice.authenticated = True
+            alice.sign_in(cookies)
+            assert '; secure' in cookies[SESSION].output().lower()
+        finally:
+            self.client.website.canonical_scheme = canonical_scheme
+
+    def test_session_is_downgraded_to_read_only_after_a_little_while(self):
+        alice = self.make_participant('alice')
+        initial_session = alice.session = alice.start_session(suffix='.em')
+        self.db.run("UPDATE user_secrets SET mtime = mtime - interval '7 hours'")
+        r = self.client.GET('/alice/edit/username', auth_as=alice)
+        assert r.code == 200, r.text
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        assert int(new_session_id) == initial_session.id
+        assert new_session_secret != initial_session.secret
+        assert new_session_secret.endswith('.ro')
+
+    def test_long_lived_session_tokens_are_regularly_regenerated(self):
+        alice = self.make_participant('alice')
+        alice.authenticated = True
+        alice.sign_in(SimpleCookie())
+        r = self.client.GET('/', auth_as=alice)
+        assert SESSION not in r.headers.cookie
+        alice.session = self.db.one("""
+            UPDATE user_secrets
+               SET mtime = mtime - interval '12 hours'
+             WHERE participant = %s
+         RETURNING id, secret, mtime
+        """, (alice.id,))
+        r = self.client.GET('/', auth_as=alice)
+        assert SESSION in r.headers.cookie
