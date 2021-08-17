@@ -472,6 +472,8 @@ class Participant(Model, MixinTeam):
 
     def regenerate_session(self, session, cookies, suffix=None):
         """Replace a session's secret and timestamp with new ones.
+
+        The new secret is guaranteed to be different from the old one.
         """
         self.session = self.db.one(r"""
             UPDATE user_secrets
@@ -492,6 +494,13 @@ class Participant(Model, MixinTeam):
             current_mtime=session.mtime,
         ))
         if self.session:
+            if self.session.secret == session.secret:
+                # Very unlikely, unless there's a bug in the generator. Try again.
+                website.logger.info(
+                    "The random generator returned the same token. This is only "
+                    "indicative of a problem if it happens often."
+                )
+                return self.regenerate_session(session, cookies, suffix)
             creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
             set_cookie(cookies, SESSION, creds, expires=self.session.mtime + TEN_YEARS)
 

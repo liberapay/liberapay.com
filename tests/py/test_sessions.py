@@ -735,8 +735,9 @@ class TestSessions(Harness):
     def test_long_lived_session_tokens_are_regularly_regenerated(self):
         alice = self.make_participant('alice')
         alice.authenticated = True
-        alice.sign_in(SimpleCookie())
+        initial_session = alice.session = alice.start_session(suffix='.ro')
         r = self.client.GET('/', auth_as=alice)
+        assert r.code == 200, r.text
         assert SESSION not in r.headers.cookie
         alice.session = self.db.one("""
             UPDATE user_secrets
@@ -745,4 +746,8 @@ class TestSessions(Harness):
          RETURNING id, secret, mtime
         """, (alice.id,))
         r = self.client.GET('/', auth_as=alice)
-        assert SESSION in r.headers.cookie
+        assert r.code == 200, r.text
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        assert int(new_session_id) == initial_session.id
+        assert new_session_secret != initial_session.secret
+        assert new_session_secret.endswith('.ro')
