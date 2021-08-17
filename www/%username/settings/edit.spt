@@ -15,7 +15,7 @@ if 'new-password' in body:
         raise response.error(403)
 
     # Check the old password, if necessary
-    if p.session and p.session.secret.endswith('.em'):
+    if p.session_type == 'em':
         pass  # user logged in via email, allow resetting password
     elif not p.has_password:
         pass  # user doesn't have a password yet, allow adding one

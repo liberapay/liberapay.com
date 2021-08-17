@@ -28,8 +28,9 @@ from liberapay.utils.emails import (
 
 class _ANON:
     ANON = True
-    session = None
     id = None
+    session = None
+    session_type = None
 
     __bool__ = lambda *a: False
     __repr__ = lambda self: '<ANON>'
