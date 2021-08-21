@@ -423,6 +423,8 @@ class Participant(Model, MixinTeam):
             Tuple[None, Literal['expired', 'invalid']]
         """
         if not secret:
+            if session_id == '!':
+                return None, 'expired'
             return None, 'invalid'
         try:
             p_id = int(p_id)
@@ -453,6 +455,7 @@ class Participant(Model, MixinTeam):
                     suffix='.ro',  # stands for "read only"
                 )
             else:
+                set_cookie(cookies, SESSION, f"{p.id}:!:", expires=utcnow() + TEN_YEARS)
                 return None, 'expired'
         else:
             return None, 'expired'
