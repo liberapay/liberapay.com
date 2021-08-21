@@ -12,7 +12,7 @@ from liberapay.models.participant import Participant
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import Harness, postgres_readonly
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils import b64encode_s
+from liberapay.utils import b64encode_s, find_files
 
 
 password = 'password'
@@ -751,3 +751,28 @@ class TestSessions(Harness):
         assert int(new_session_id) == initial_session.id
         assert new_session_secret != initial_session.secret
         assert new_session_secret.endswith('.ro')
+
+    def test_read_only_sessions_are_not_admin_sessions(self):
+        alice = self.make_participant('alice', privileges=1)
+        alice.session = alice.start_session(suffix='.ro')
+        i = len(self.client.www_root)
+        def f(spt):
+            if spt[spt.rfind('/')+1:].startswith('index.'):
+                return spt[i:spt.rfind('/')+1]
+            return spt[i:-4]
+        for url in sorted(map(f, find_files(self.client.www_root+'/admin', '*.spt'))):
+            r = self.client.GxT(url, auth_as=alice)
+            assert r.code == 403, r.text
+        self.make_participant('bob')
+        r = self.client.GxT('/bob/admin', auth_as=alice)
+        assert r.code == 403, r.text
+        r = self.client.GxT('/bob/giving/', auth_as=alice)
+        assert r.code == 403, r.text
+
+    def test_a_read_only_session_can_be_used_to_view_an_account_but_not_modify_it(self):
+        alice = self.make_participant('alice')
+        alice.session = alice.start_session(suffix='.ro')
+        r = self.client.GET('/alice/edit/username', auth_as=alice)
+        assert r.code == 200, r.text
+        r = self.client.PxST('/alice/edit/username', {}, auth_as=alice)
+        assert r.code == 403, r.text
