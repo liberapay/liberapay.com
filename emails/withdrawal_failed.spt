@@ -10,11 +10,3 @@
 
 <p><a href="{{ participant.url('wallet/payout/') }}"
       style="{{ button_style('default') }}">{{ _("Try again") }}</a></p>
-
-[---] text/plain
-{{ _("We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:",
-     LegacyMoney(-exchange.amount + exchange.fee)) }}
-
-{{ exchange.note }}
-
-{{ _("You can try again: {0}", participant.url('wallet/payout/')) }}
