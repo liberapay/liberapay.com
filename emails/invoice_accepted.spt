@@ -12,5 +12,5 @@
     , addressee_name
 ) }}</p>
 
-<p><a href="{{ participant.url('invoices/%s' % invoice.id) }}"
+<p><a href="{{ participant.url('invoices/%s' % invoice.id, log_in='no') }}"
       >{{ _("View the invoice") }}</a></p>

@@ -1914,7 +1914,7 @@ class Participant(Model, MixinTeam):
     # Random Stuff
     # ============
 
-    def url(self, path='', query='', autologin=False):
+    def url(self, path='', query='', log_in='auto'):
         """Return the full canonical URL of a user page.
 
         Args:
@@ -1923,31 +1923,44 @@ class Participant(Model, MixinTeam):
                 string) leads to the user's public profile page.
             query (dict):
                 querystring parameters to add to the URL.
-            autologin (bool):
-                if set to True, the returned URL contains an email session token
-                in the querystring. This only works when called from inside an
-                email simplate.
+            log_in (str):
+                Include an email session token in the URL. This only works when
+                called from inside an email simplate.
+                When set to 'required', the user will see an error page if the
+                log-in token is too old, whereas the default value 'auto' will
+                result in an expired token being ignored.
+                When set to 'no', log-in parameters aren't added to the URL.
         """
         scheme = website.canonical_scheme
         host = website.canonical_host
         username = self.username
         if query:
             query = '?' + urlencode(query, doseq=True)
+        if log_in not in ('auto', 'required', 'no'):
+            raise ValueError(f"{log_in!r} isn't a valid value for the `log_in` argument")
         email_row = getattr(self, '_rendering_email_to', None)
         if email_row:
             extra_query = []
-            if autologin:
+            if log_in == 'required' or log_in == 'auto' and not self.has_password:
                 primary_email = self.get_email_address()
-                if email_row.address.lower() != primary_email.lower():
+                if email_row.address.lower() == primary_email.lower():
                     # Only send login links to the primary email address
-                    raise AssertionError('%r != %r' % (email_row.address, primary_email))
-                session = self._email_session
-                if not session:
-                    session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
-                    self._email_session = session
-                extra_query.append(('log-in.id', self.id))
-                extra_query.append(('log-in.key', session.id))
-                extra_query.append(('log-in.token', session.secret))
+                    session = self._email_session
+                    if not session:
+                        session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
+                        self._email_session = session
+                    extra_query.append(('log-in.id', self.id))
+                    extra_query.append(('log-in.key', session.id))
+                    extra_query.append(('log-in.token', session.secret))
+                    if log_in != 'required':
+                        extra_query.append(('log-in.required', 'no'))
+                else:
+                    try:
+                        raise AssertionError('%r != %r' % (email_row.address, primary_email))
+                    except AssertionError as e:
+                        website.tell_sentry(e)
+                        if log_in == 'required':
+                            raise
             if not email_row.verified:
                 if not email_row.nonce:
                     email_row = self._rendering_email_to = self.db.one("""
@@ -1961,8 +1974,10 @@ class Participant(Model, MixinTeam):
             if extra_query:
                 query += ('&' if query else '?') + urlencode(extra_query)
             del extra_query
-        elif autologin:
-            raise ValueError("autologin is True but _rendering_email_to is missing")
+        elif log_in == 'required':
+            raise ValueError(
+                "`log_in` is 'required' but `self._rendering_email_to` is missing"
+            )
         if query and '?' in path:
             (path, query), extra_query = path.split('?', 1), query
             query += '&' + extra_query[1:]

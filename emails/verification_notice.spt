@@ -10,7 +10,7 @@
     ('<b>%s</b>'|safe) % email,
 ) }}</p>
 
-<p><a href="{{ participant.url('emails/', autologin=True) }}" style="{{ button_style('primary') }}">{{
+<p><a href="{{ participant.url('emails/') }}" style="{{ button_style('primary') }}">{{
     _("Manage your email addresses")
 }}</a></p>
 
@@ -23,4 +23,4 @@
     new_email, email
 ) }}
 
-{{ participant.url('emails/', autologin=True) }}
+{{ participant.url('emails/') }}
