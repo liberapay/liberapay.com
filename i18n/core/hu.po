@@ -924,8 +924,8 @@ msgstr "Előbb be kell jelentkeznie"
 msgid "This account is closed"
 msgstr "Ez a fiók zárolt"
 
-msgid "You need to log in"
-msgstr "Bejelentkezés szükséges"
+msgid "Authentication required"
+msgstr ""
 
 msgid "We're unable to process your request right now, sorry."
 msgstr "Jelenleg nem tudjuk feldolgozni a kérését, elnézést."
@@ -1388,11 +1388,11 @@ msgstr "Másik lehetőségként megpróbálhat egy másik e-mail címet:"
 msgid "Proceed"
 msgstr "Folytatás"
 
+msgid "Reauthentication required"
+msgstr ""
+
 msgid "Please try again in a few minutes."
 msgstr "Kérjük próbálja újból pár perc múlva."
-
-msgid "Log in via email"
-msgstr "Bejelentkezés e-mail címmel"
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "Jelenleg technikai problémáink vannak. Emiatt a legtöbb dolog jelenleg nem használható. Elnézését kérjük a kellemetlenségért, mielőbb visszaállítjuk a normális működést."
@@ -1530,6 +1530,21 @@ msgstr "Küldtünk Önnek egy egyszer használható hivatkozást a bejelentkezé
 #, python-brace-format
 msgid "You're still not logged in as {0}."
 msgstr "Ön még mindig nem jelentkezett be mint {0}."
+
+msgid "Please fill in your password to authenticate yourself:"
+msgstr ""
+
+msgid "Or log in via email if you've lost your password:"
+msgstr ""
+
+msgid "Log in via email"
+msgstr "Bejelentkezés e-mail címmel"
+
+msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
+msgstr ""
+
+msgid "Your session has expired."
+msgstr ""
 
 msgid "Password (optional)"
 msgstr "Jelszó (nem kötelező)"
@@ -4189,9 +4204,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}."
-msgstr ""
-
-msgid "You need to log in to access this page."
 msgstr ""
 
 msgid "Here is a list of differences between them:"
