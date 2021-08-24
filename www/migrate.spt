@@ -358,7 +358,7 @@ title = _("Migrating from Gratipay")
             <form action="" method="POST">
                 % include "templates/form-repost.html"
                 <div class="alert alert-danger">{{ _(
-                    "{0} is already connected to a different Liberapay account.",
+                    "The email address {0} is already connected to a Liberapay account.",
                     existing_account.email
                 ) }}</div>
                 <p>{{ _("If this address belongs to you please log in before continuing:") }}</p>
