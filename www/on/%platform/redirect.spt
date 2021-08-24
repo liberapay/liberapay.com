@@ -80,7 +80,7 @@ title = _("Which account?")
     % else
     <p>{{ _("Please enter the address of the {0} account you would like to connect:",
             platform.display_name) }}</p>
-    <input class="form-control" name="user_id" required pattern=".*@.*"
+    <input class="form-control" name="user_id" required
            placeholder="{{ platform.example_account_address(_) }}" />
     % endif
     <br>

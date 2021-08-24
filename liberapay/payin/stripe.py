@@ -401,6 +401,9 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
       ORDER BY pt.id
     """, (payin.id,))
     if amount_settled is not None:
+        payer = db.Participant.from_id(payin.payer)
+        if payer.is_suspended:
+            return payin
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
             destination_id = pt.destination_id
