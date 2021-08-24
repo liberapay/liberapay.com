@@ -17,7 +17,7 @@ msgid "Your Liberapay account has been disabled"
 msgstr "Twoje konto Liberapay zostało wyłączone"
 
 msgid "Your Liberapay account has been marked as fraudulent by a staff member. You are no longer able to send and receive payments."
-msgstr "Twoje konto Liberapay zostało oznaczone przez pracownika jako nieuczciwe. Nie możesz już wysyłać ani otrzymywać płatności."
+msgstr "Twoje konto Liberapay zostało oznaczone przez pracownika jako nieuczciwe. Nie możesz już wysyłać ani odbierać płatności."
 
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
 msgstr "Twój profil Liberapay został oznaczony przez pracownika jako spam. Jest on teraz ukryty."
@@ -134,21 +134,21 @@ msgstr "W tym tygodniu otrzymano około {0}"
 
 #, python-brace-format
 msgid "You have received {0} this week"
-msgstr "W tym tygodniu otrzymałeś {0}"
+msgstr "W tym tygodniu otrzymałeś(-aś) {0}"
 
 #, python-brace-format
 msgid "{0} was given to you personally."
 msgstr "{0} zostało przekazane bezpośrednio Tobie."
 
 msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "Nie jesteś członkiem żadnego zespołu, więc nie otrzymałeś żadnych pieniędzy za udział w zespołach."
+msgstr "Nie jesteś członkiem żadnego zespołu, więc nie otrzymałeś(-aś) żadnych pieniędzy za udział w zespołach."
 
 #, python-brace-format
 msgid "No money was given to you for your role in the {0} team."
 msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Nie otrzymałeś żadnych pieniędzy za twój wkład w zespół {0}."
-msgstr[1] "Nie otrzymałeś żadnych pieniędzy za twój wkład w {n} zespołach, do których należysz."
-msgstr[2] "Nie otrzymałeś żadnych pieniędzy za twój wkład w {n} zespołach, do których należysz."
+msgstr[0] "Nie otrzymałeś(-aś) żadnych pieniędzy za swój wkład w zespół {0}."
+msgstr[1] "Nie otrzymałeś(-aś) żadnych pieniędzy za swój wkład w {n} zespołach, do których należysz."
+msgstr[2] "Nie otrzymałeś(-aś) żadnych pieniędzy za swój wkład w {n} zespołach, do których należysz."
 
 #, python-brace-format
 msgid "{0} was given to you for your role in the {1} team."
@@ -156,7 +156,7 @@ msgstr "{0} zostało Ci przekazane za Twój wkład w zespół {1}."
 
 #, python-brace-format
 msgid "{0} was given to you for your roles in the following teams:"
-msgstr "Otrzymałeś {0} za role w następujących zespołach:"
+msgstr "Otrzymałeś(-aś) {0} za role w następujących zespołach:"
 
 #, python-brace-format
 msgid "{0}: {1}"
@@ -375,11 +375,11 @@ msgstr "Wykryto, że Twoje hasło może być zagrożone – występuje w przynaj
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
-msgstr "Powinieneś {link_start}zmienić swoje hasło{link_end}."
+msgstr "Powinieneś/Powinnaś {link_start}zmienić swoje hasło{link_end}."
 
 #, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr "Twoja płatność w kwocie {money_amount} została zakwestionowana"
+msgstr "Twoja płatność w wysokości {money_amount} została zakwestionowana"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
@@ -457,7 +457,7 @@ msgstr "Płatność {money_amount} zainicjowana w dniu {date} nie powiodła się
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr "Wiadomość błędu od pośrednika płatności {provider} to:"
+msgstr "Komunikat o błędzie otrzymany od pośrednika płatności {provider} to:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Możesz spróbować ponownie, ewentualnie używając innej metody płatności, klikając poniższy link:"
@@ -516,7 +516,7 @@ msgid "This operation is being carried out based on {link_start}the mandate {man
 msgstr "Ta operacja jest przeprowadzana na podstawie {link_start}mandatu {mandate_id}{link_end} podpisanego w dniu {acceptance_date}, upoważniając Liberapay (wierzyciel SEPA {creditor_identifier}) do wysyłania instrukcji do Twojego banku, aby obciążyć Twoje konto, a Twój bank do obciążenia konta zgodnie z tymi instrukcjami."
 
 msgid "If you did not authorize this payment please let us know, we will refund it."
-msgstr "Jeżeli nie zezwoliłeś(-aś) na tą płatność, poinformuj nas, zwrócimy pieniądze."
+msgstr "Jeśli nie autoryzowałeś(-aś) tej płatności, daj nam znać, zwrócimy ją."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -561,7 +561,7 @@ msgid "Configure payment processing"
 msgstr "Skonfiguruj pośrednika płatności"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "Jeśli nie chcesz otrzymywać darowizn przez Liberapay, możesz je odrzucić edytując swój profil."
+msgstr "Jeśli nie chcesz otrzymywać darowizn przez Liberapay, możesz je odrzucić, edytując swój profil."
 
 msgid "Reject donations"
 msgstr "Odrzucaj darowizny"
@@ -644,7 +644,7 @@ msgstr "Twoja obietnica darowania {0} tygodniowo {1} zostanie teraz włączona, 
 
 #, python-brace-format
 msgid "Follow this link to view {0}'s profile:"
-msgstr "Kliknij odnośnik, aby wyświetlić profil użytkownika {0}:"
+msgstr "Kliknij ten link, aby wyświetlić profil użytkownika {0}:"
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
@@ -652,7 +652,7 @@ msgstr "{user_name} z {platform} dołączył do Liberapay!"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
-msgstr "W dniu {date} zobowiązałeś się przekazać {money_amount} {user_name}, jeśli dołączy/ą do Liberapay."
+msgstr "W dniu {date} zobowiązałeś(-aś) się przekazać {money_amount} dla {user_name}, jeśli dołączy(-ą) do Liberapay."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}."
@@ -687,7 +687,6 @@ msgstr "Płatność za odnowienie darowizny w wysokości {money_amount} na rzecz
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Następujące płatności za przedłużenie darowizny zostały przerwane, ponieważ odbiorcy nie mogą ich otrzymać:"
 
-#, fuzzy
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Odnowienie darowizny Liberapay: wymagane uwierzytelnienie"
 
@@ -703,7 +702,7 @@ msgstr "Możesz ułatwić swoim patronom wsparcie poprzez Liberapay"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
-msgstr "Podłączyłeś konto PayPal, ale nie masz konta Stripe. Zdecydowanie zalecamy połączenie konta Stripe, ponieważ jest ono {link_open} lepsze niż PayPal {link_close} na kilka sposobów, zarówno dla Ciebie, jak i Twoich dawców."
+msgstr "Podłączyłeś(-aś) konto PayPal, ale nie masz konta Stripe. Zdecydowanie zalecamy połączenie konta Stripe, ponieważ jest ono {link_open}lepsze niż PayPal{link_close} pod wieloma względami, zarówno dla Ciebie, jak i Twoich darczyńców."
 
 #, python-brace-format
 msgid "Connect {platform_name} account"
@@ -717,7 +716,7 @@ msgid "The reference currency used by the team “{0}” has been changed from {
 msgstr "Waluta używana przez zespół „{0}” została zmieniona z {1} na {2} przez {3}."
 
 msgid "You have been invited to join a team on Liberapay"
-msgstr "Zostałeś zaproszony do zespołu na Liberapay"
+msgstr "Zostałeś(-aś) zaproszony(-a) do zespołu na Liberapay"
 
 #, python-brace-format
 msgid "{0} has invited you to join the {1} team."
@@ -791,7 +790,7 @@ msgstr "Twoje konto Liberapay jest modyfikowane"
 
 #, python-brace-format
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
-msgstr "Ktoś próbuje powiązać adres e-mail {0} z kontem Liberapay, którego bieżącym adresem jest {1}. Jeśli nie zainicjowałeś tej operacji, kliknij poniższy link i usuń nieprawidłowy adres ze swojego konta."
+msgstr "Ktoś próbuje powiązać adres e-mail {0} z kontem Liberapay, którego aktualny adres to {1}. Jeśli nie zainicjowałeś(-aś) tej operacji, kliknij poniższy link i usuń nieprawidłowy adres ze swojego konta."
 
 msgid "Withdrawal initiated"
 msgstr "Zainicjowano wypłacanie pieniędzy"
@@ -812,7 +811,7 @@ msgid "You can try again: {0}"
 msgstr "Możesz spróbować ponownie: {0}"
 
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
-msgstr "Wygląda na to, że znalazłeś błąd! Przepraszamy za niedogodności, postaramy się go naprawić najszybciej jak to możliwe!"
+msgstr "Wygląda na to, że znalazłeś(-aś) błąd! Przepraszamy za niedogodności, postaramy się go naprawić najszybciej jak to możliwe!"
 
 #, python-brace-format
 msgid "The requested page could not be found. Please {link_open}contact us{link_close} if you need assistance."
@@ -926,7 +925,7 @@ msgstr "Maksimum"
 
 #, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Wykorzystałeś swój limit żądań, możesz spróbować ponownie {in_N_minutes}."
+msgstr "Wykorzystałeś(-aś) swój limit żądań, możesz spróbować ponownie {in_N_minutes}."
 
 msgid "You're making requests too fast, please try again later."
 msgstr "Wysyłasz żądania w zbyt krótkich odstępach czasu, spróbuj ponownie później."
@@ -985,7 +984,7 @@ msgid "The username '{0}' ends with the forbidden suffix '{1}'."
 msgstr "Nazwa użytkownika '{0}' kończy się niedozwoloną cząstką '{1}'."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
-msgstr "W ostatnim czasie, zmieniłeś swoją nazwę użytkownika zbyt wiele razy. Spróbuj ponownie później (np. za tydzień) lub skontaktuj się z support@liberapay.com."
+msgstr "W ostatnim czasie zmieniłeś(-aś) swoją nazwę użytkownika zbyt wiele razy. Spróbuj ponownie później (np. za tydzień) lub skontaktuj się z support@liberapay.com."
 
 #, python-brace-format
 msgid "The value '{0}' is too long."
@@ -1007,7 +1006,7 @@ msgid "The email address '{0}' is not verified."
 msgstr "Adres e-mail '{0}' nie jest zweryfikowany."
 
 msgid "You've reached the maximum number of email addresses we allow."
-msgstr "Osiągnąłeś maksymalną liczbę adresów e-mail, które są dozwolone."
+msgstr "Osiągnąłeś/Osiągnęłaś maksymalną dozwoloną przez nas liczbę adresów e-mail."
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
@@ -1068,7 +1067,7 @@ msgid "There have been too many attempts to log in from your IP address or count
 msgstr "Ostatnio próbowano zalogować się z Twojego adresu IP lub kraju. Spróbuj ponownie za godzinę i wyślij wiadomość e-mail na adres support@liberapay.com, jeśli problem będzie się powtarzał."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
-msgstr "Wyczerpałeś limit logowań e-mail: spróbuj ponownie jutro, albo skontaktuj się z support@liberapay.com."
+msgstr "Wyczerpałeś(-aś) swój limit logowań na ten adres e-mail, spróbuj ponownie jutro albo skontaktuj się z support@liberapay.com."
 
 msgid "There have been too many attempts to log in to this account recently, please try again in a few hours or log in via email."
 msgstr "W ostatnim czasie miało miejsce zbyt wiele nieudanych prób zalogowania się na to konto, spróbuj ponownie za kilka godzin lub zaloguj się poprzez e-mail."
@@ -1077,7 +1076,7 @@ msgid "Too many accounts have been created recently. This either means that a lo
 msgstr "W ostatnim czasie zostało utworzonych zbyt wiele kont. Oznacza to, że albo duża liczba ludzi próbuje dołączyć do Liberapay, albo ma miejsce atak informatyczny, który przeciąża nasz system. W związku z tym, musimy poprosić Cię byś spróbował ponownie później (np. za kilka godzin). Przepraszamy za niedogodności."
 
 msgid "You've already created several teams recently, please come back in a week."
-msgstr "Wyczerpałeś limit zakładania zespołów w tym tygodniu, spróbuj ponownie za tydzień."
+msgstr "Ostatnio utworzyłeś(-aś) już kilka zespołów, spróbuj ponownie za tydzień."
 
 #, python-brace-format
 msgid "The password must be at least {0} and at most {1} characters long."
@@ -1165,7 +1164,7 @@ msgid "Your donation to {recipient} cannot be processed right now because the ac
 msgstr "Twoja darowizna na rzecz {recipient} nie może być w tej chwili przetworzona, ponieważ konto beneficjenta nie jest gotowe do otrzymania pieniędzy."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
-msgstr "Niedawno zmieniłeś główną walutę, spróbuj ponownie (np. za tydzień) lub skontaktuj się pod adresem support@liberapay.com."
+msgstr "Ostatnio zmieniłeś(-aś) już swoją główną walutę, spróbuj ponownie później (np. za tydzień) lub skontaktuj się z support@liberapay.com."
 
 msgid "There have been too many attempts to perform this action recently, please retry later (e.g. in a week) or contact support@liberapay.com if you require assistance."
 msgstr "Ostatnio dokonano wielu prób wykonania tego działania, spróbuj ponownie później (np. za tydzień) lub skontaktuj się pod adresem support@liberapay.com, jeżeli potrzebujesz pomocy."
@@ -1400,7 +1399,7 @@ msgid "Log in to reopen your account."
 msgstr "Zaloguj się, aby ponownie otworzyć swoje konto."
 
 msgid "Did you mistype your email address? Fix it and try again, or try a different address."
-msgstr "Czy źle wpisałeś swój adres e-mail? Napraw to i spróbuj ponownie lub spróbuj użyć innego adresu."
+msgstr "Czy błędnie wpisałeś(-aś) swój adres e-mail? Napraw to i spróbuj ponownie lub spróbuj użyć innego adresu."
 
 msgid "If you're sure that the email address you input is valid, then you can bypass this error. However, if we're unable to deliver messages to this address, then it will be blacklisted."
 msgstr "Jeśli masz pewność, że wprowadzony adres e-mail jest prawidłowy, możesz pominąć ten błąd. Jeśli jednak nie będziemy w stanie dostarczyć wiadomości na ten adres, zostanie on umieszczony na czarnej liście."
@@ -1573,7 +1572,7 @@ msgstr "Hasło (opcjonalnie)"
 
 #, python-brace-format
 msgid "If you've {bold}lost your password{bold_end}, or if your account doesn't have a password at all, then leave the password field empty. We'll send you a login link via email."
-msgstr "Jeśli {bold}zgubiłeś hasło{bold_end} lub jeśli Twoje konto w ogóle nie ma hasła, pozostaw pole hasła puste. Prześlemy Ci link do logowania przez e-mail."
+msgstr "Jeśli {bold}zgubiłeś(-aś) hasło{bold_end} lub jeśli Twoje konto w ogóle nie ma hasła, pozostaw pole hasła puste. Prześlemy Ci link do logowania przez e-mail."
 
 msgid "Save"
 msgstr "Zapisz"
@@ -1983,9 +1982,9 @@ msgstr "Anuluj zobowiązanie"
 #, python-brace-format
 msgid "You have uploaded {n} document of this type:"
 msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Wgrałeś {n} dokument tego typu:"
-msgstr[1] "Wgrałeś {n} dokumenty tego typu:"
-msgstr[2] "Wgrałeś {n} dokumentów tego typu:"
+msgstr[0] "Przesłałeś(-aś) {n} dokument tego typu:"
+msgstr[1] "Przesłałeś(-aś) {n} dokumenty tego typu:"
+msgstr[2] "Przesłałeś(-aś) {n} dokumentów tego typu:"
 
 #, python-brace-format
 msgid "Document #{id} is awaiting validation."
@@ -2186,7 +2185,7 @@ msgstr "Czy ta platforma jest bezpieczna?"
 
 #, python-brace-format
 msgid "Liberapay has been running for {timedelta} without any significant security incident. We do everything we can to keep your data safe and comply with the laws of the European Union ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end}, et cetera)."
-msgstr "Liberapay działa od {timedelta} bez żadnego znaczącego incydentu związanego z bezpieczeństwem. Robimy wszystko, co w naszej mocy, aby twoje dane pozostały bezpieczne i spełniały wymogi prawa Unii Europejskiej ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end} itd.)"
+msgstr "Liberapay działa od {timedelta} bez żadnego znaczącego incydentu związanego z bezpieczeństwem. Robimy wszystko, co w naszej mocy, aby Twoje dane pozostały bezpieczne i spełniały wymogi prawa Unii Europejskiej ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end} itd.)."
 
 msgid "General Data Protection Regulation"
 msgstr "Ogólne rozporządzenie o ochronie danych"
@@ -2200,7 +2199,7 @@ msgstr "Nowy adres URL Twojego awatara to: {0}"
 
 #, python-brace-format
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
-msgstr "Wybrałeś {platform} jako źródło awatara, ale nie podłączyłeś żadnego konta {platform}."
+msgstr "Wybrałeś(-aś) {platform} jako źródło awatara, ale nie podłączyłeś żadnego konta {platform}."
 
 #, python-brace-format
 msgid "We were unable to get an avatar for you from {0}."
@@ -2409,7 +2408,7 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
-"Po zmianie nazwy użytkownika adres internetowy Twojego profilu odpowiednio się zmienia. Wprowadzono przekierowanie ze starego adresu URL na nowy, ale każdy użytkownik może go usunąć, zgłaszając swoją starą nazwę użytkownika, dlatego należy zaktualizować wszystkie linki do swojego profilu, które umieściłeś na innych stronach internetowych, chyba że linki te zawierają niezmienny identyfikator konta ({account_id}) zamiast nazwy użytkownika.\n"
+"Po zmianie nazwy użytkownika adres internetowy Twojego profilu odpowiednio się zmienia. Wprowadzono przekierowanie ze starego adresu URL na nowy, ale każdy użytkownik może go usunąć, zgłaszając swoją starą nazwę użytkownika, dlatego powinieneś/powinnaś zaktualizować wszystkie linki do swojego profilu, które umieściłeś(-aś) na innych stronach internetowych, chyba że linki te zawierają niezmienny identyfikator konta ({account_id}) zamiast nazwy użytkownika.\n"
 "\n"
 "Czy na pewno chcesz zmienić swoją nazwę użytkownika?"
 
@@ -2424,7 +2423,7 @@ msgid "Maximum length is {0}."
 msgstr "Maksymalna liczba znaków to {0}."
 
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
-msgstr "Dozwolone znaki: znaki alfabetu łacińskiego, kropki, myślniki i podkreślniki."
+msgstr "Dozwolone znaki: litery alfabetu łacińskiego, cyfry, kropki (.), myślniki (-) i podkreślenia (_)."
 
 msgid "Name (optional)"
 msgstr "Nazwa (nieobowiązkowa)"
@@ -2436,7 +2435,7 @@ msgid "The full name of your project or organization. It will be shown alongside
 msgstr "Pełna nazwa Twojego projektu lub organizacji. Będzie ona widoczna przy nazwie użytkownika na publicznej stronie profilu."
 
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
-msgstr "Dozwolone znaki: znaki alfabetu łacińskiego, spacje i znaki interpunkcyjne."
+msgstr "Dozwolone znaki: alfanumeryczne, spacje i interpunkcja."
 
 msgid "Already Verified"
 msgstr "Już zweryfikowano"
@@ -2454,7 +2453,7 @@ msgid "Failure"
 msgstr "Niepowodzenie"
 
 msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Prosimy o sprawdzenie czy odnośnik który kliknąłeś lub wkleiłeś nie został ucięty lub zmieniony w inny sposób."
+msgstr "Sprawdź, czy kliknięty lub wklejony link nie został w żaden sposób obcięty ani zmieniony."
 
 msgid "Your email address is now blacklisted."
 msgstr "Twój adres e-mail jest teraz na czarnej liście."
@@ -2469,13 +2468,13 @@ msgid "Add my email address to the blacklist"
 msgstr "Dodaj mój adres e-mail do czarnej listy"
 
 msgid "You have successfully disavowed having connected your email address to this Liberapay account."
-msgstr "Pomyślnie zignorowałeś połączenie swojego adresu e-mail z tym kontem Liberapay."
+msgstr "Pomyślnie zrezygnowałeś(-aś) z połączenia swojego adresu e-mail z tym kontem Liberapay."
 
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "Czy chcesz zablokować jakąkolwiek przyszłą próbę połączenia twojego adresu e-mail z kontem Liberapay, dodając go do naszej czarnej listy?"
 
 msgid "You have already added and verified this address."
-msgstr "Już dodałeś i zweryfikowałeś ten adres."
+msgstr "Już dodałeś(-aś) i zweryfikowałeś(-aś) ten adres."
 
 #, python-brace-format
 msgid "A verification email has been sent to {0}."
@@ -2550,7 +2549,7 @@ msgid "Yes, activate automatic renewals"
 msgstr "Tak, aktywuj automatyczne odnawianie"
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
-msgstr "Włączyłeś automatyczne odnawianie dla niektórych lub wszystkich swoich darowizn, ale nie masz żadnego ważnego instrumentu płatniczego, który pozwoliłby nam inicjować automatyczne płatności w odpowiednim czasie."
+msgstr "Włączyłeś(-aś) automatyczne odnawianie dla niektórych lub wszystkich swoich darowizn, ale nie masz żadnego ważnego instrumentu płatniczego, który pozwoliłby nam inicjować automatyczne płatności w odpowiednim czasie."
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2875,7 +2874,7 @@ msgid "Are you sure you want to change your identity information? If you do, you
 msgstr "Czy na pewno chcesz zmienić informacje na temat Twojej tożsamości? Jeśli tak, być może będziesz musiał przejść ponownie proces weryfikacji tożsamości."
 
 msgid "You haven't filled all the required fields."
-msgstr "Nie wypełniłeś wszystkich wymaganych pól."
+msgstr "Nie wypełniłeś(-aś) wszystkich wymaganych pól."
 
 msgid "Invalid date of birth."
 msgstr "Nieprawidłowa data urodzenia."
@@ -2896,7 +2895,7 @@ msgid "Level 2"
 msgstr "Poziom 2"
 
 msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr "Przeszedłeś pomyślnie proces weryfikacji tożsamości, więc kwota pieniędzy jaką możesz przekazywać i otrzymywać rocznie nie jest już limitowana."
+msgstr "Zakończyłeś(-aś) proces weryfikacji tożsamości, więc ilość pieniędzy, jaką możesz przekazywać i otrzymywać rocznie, nie jest już limitowana."
 
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
@@ -3203,13 +3202,13 @@ msgid "To view the transactions processed in the past by Mangopay {link_start}go
 msgstr "Aby wyświetlić transakcje przetwarzane w przeszłości przez Mangopay, {link_start}przejdź do strony Portfela{link_end}."
 
 msgid "You are not invited to join this team."
-msgstr "Nie zostałeś zaproszony do tego zespołu."
+msgstr "Nie masz zaproszenia do tego zespołu."
 
 msgid "You have already accepted this invitation."
-msgstr "Już zaakceptowałeś to zaproszenie."
+msgstr "Już zaakceptowałeś(-aś) to zaproszenie."
 
 msgid "You have already refused this invitation."
-msgstr "Już odrzuciłeś to zaproszenie."
+msgstr "Już odrzuciłeś(-aś) to zaproszenie."
 
 msgid "You are not a member of this team."
 msgstr "Nie jesteś członkiem tego zespołu."
@@ -3291,7 +3290,7 @@ msgid "To receive donations you must connect at least one account from a support
 msgstr "Aby otrzymywać darowizny, musisz połączyć Liberapay z kontem przynajmniej jednego obsługiwanego pośrednika płatności. Ta strona pozwala na zrobienie tego."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
-msgstr "Dawcy nie muszą podłączać żadnego z poniższych rachunków płatniczych, są jedynie niezbędni do otrzymywania pieniędzy."
+msgstr "Darczyńcy nie muszą podłączać żadnego z poniższych rachunków płatniczych, są jedynie niezbędni do otrzymywania pieniędzy."
 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Zalecamy połączenie zarówno Stripe, jak i PayPala, jeżeli są dostępne w Twoim kraju."
@@ -3494,13 +3493,13 @@ msgstr "{x_percent} całkowitego przychodu"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
-msgstr "Repozytoria w serwisie {platform} które oznaczyłeś gwiazdką"
+msgstr "Repozytoria oznaczone gwiazdką na {platform}"
 
 msgid "Starred Repositories"
 msgstr "Repozytoria oznaczone gwiazdką"
 
 msgid "We can import a list of repositories you have starred from:"
-msgstr "Możemy zaimportować listę repozytoriów które oznaczyłeś gwiazdką w serwisie:"
+msgstr "Możemy zaimportować listę repozytoriów, które oznaczyłeś(-aś) gwiazdką w serwisie:"
 
 #, python-brace-format
 msgid "Your {platform} account needs to be reconnected."
@@ -3509,9 +3508,9 @@ msgstr "Twoje konto sieci {platform} musi zostać połączone ponownie."
 #, python-brace-format
 msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
-msgstr[0] "Oznaczyłeś gwiazdką {n} repozytorium w serwisie {platform}."
-msgstr[1] "Oznaczyłeś gwiazdką {n} repozytoria w serwisie {platform}."
-msgstr[2] "Oznaczyłeś gwiazdką {n} repozytoriów w serwisie {platform}."
+msgstr[0] "Oznaczyłeś(-aś) gwiazdką {n} repozytorium w serwisie {platform}."
+msgstr[1] "Oznaczyłeś(-aś) gwiazdką {n} repozytoria w serwisie {platform}."
+msgstr[2] "Oznaczyłeś(-aś) gwiazdką {n} repozytoriów w serwisie {platform}."
 
 msgid "The payment instrument has been successfully added."
 msgstr "Instrument płatniczy został pomyślnie dodany."
@@ -3527,7 +3526,7 @@ msgid "Forget this bank account number after one payment."
 msgstr "Zapomnij o tym numerze konta bankowego po jednej płatności."
 
 msgid "The BIC you provided appears to be invalid."
-msgstr "Kod BIC który podałeś zdaje się być niepoprawny."
+msgstr "Podany przez Ciebie kod BIC wydaje się być nieprawidłowy."
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
@@ -3621,7 +3620,7 @@ msgid "Identity information and transaction records are kept for as long as is n
 msgstr "Informacje o tożsamości i zapisy transakcji są przechowywane tak długo, jak jest to konieczne do spełnienia wszystkich obowiązków prawnych."
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr "Nazwa użytkownika której używałeś może zostać przejęta przez kogoś innego, jeżeli zostaniemy o to przez niego poproszeni, jednak nie wcześniej niż rok po zamknięciu Twojego konta (chyba że dowiemy się, że nielegalnie używałeś jakiegoś znaku towarowego)."
+msgstr "Możemy przekazać Twoją nazwę użytkownika komuś innemu, jeśli o to poprosi, ale nie przez co najmniej rok po zamknięciu konta (chyba że ustalimy, że naruszasz znak towarowy)."
 
 msgid "Ready?"
 msgstr "Gotowy?"
@@ -3662,15 +3661,15 @@ msgstr "Teraz przekazujesz {0} rocznie dla {1}. Wielkie dzięki!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per week to {1}. Thank you!"
-msgstr "Zadeklarowałeś cotygodniową darowiznę w wysokości {0} dla {1}. Dziękujemy!"
+msgstr "Zadeklarowałeś(-aś) cotygodniową darowiznę w wysokości {0} dla {1}. Dziękujemy!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per month to {1}. Thank you!"
-msgstr "Zadeklarowałeś comiesięczną darowiznę w wysokości {0} dla {1}. Dziękujemy!"
+msgstr "Zadeklarowałeś(-aś) comiesięczną darowiznę w wysokości {0} dla {1}. Dziękujemy!"
 
 #, python-brace-format
 msgid "You have now pledged to donate {0} per year to {1}. Thank you!"
-msgstr "Zadeklarowałeś coroczną darowiznę w wysokości {0} dla {1}. Dziękujemy!"
+msgstr "Zadeklarowałeś(-aś) coroczną darowiznę w wysokości {0} dla {1}. Dziękujemy!"
 
 msgid "The donation amount is missing."
 msgstr "Nie podano kwoty darowizny."
@@ -3727,9 +3726,9 @@ msgstr[2] "{money_amount} w zwrotach kosztów dla {n} osób"
 #, python-brace-format
 msgid "{money_amount} in donations from {n} donor"
 msgid_plural "{money_amount} in donations from {n} donors"
-msgstr[0] "{money_amount} w darowiznach od {n} dawcy"
-msgstr[1] "{money_amount} w darowiznach od {n} dawców"
-msgstr[2] "{money_amount} w darowiznach od {n} dawców"
+msgstr[0] "{money_amount} w darowiznach od {n} darczyńcy"
+msgstr[1] "{money_amount} w darowiznach od {n} darczyńców"
+msgstr[2] "{money_amount} w darowiznach od {n} darczyńców"
 
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
@@ -3742,7 +3741,7 @@ msgid "End of day balance"
 msgstr "Saldo na koniec dnia"
 
 msgid "The amount you should see on your bank account statement."
-msgstr "Kwota jaką powinieneś zobaczyć na wyciągu z Twojego konta bankowego."
+msgstr "Kwota, jaką powinieneś/powinnaś zobaczyć na wyciągu z Twojego konta bankowego."
 
 msgid "Amount in bank"
 msgstr "Kwota w banku"
@@ -4229,7 +4228,7 @@ msgstr "Polityka prywatności"
 
 #, python-brace-format
 msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
-msgstr "{0} był pierwszym partnerem płatniczym Liberapay, ale rzucił na nas w 2018 roku. Poniżej znajdują się kopie umowy, którą musiałeś zaakceptować, aby wysłać lub otrzymać pieniądze za pośrednictwem Liberapay przed sierpniem 2018: "
+msgstr "{0} był pierwszym partnerem płatniczym Liberapay, ale porzucił nas w 2018 roku. Poniżej znajdują się kopie umowy, którą musiałeś(-aś) zaakceptować, aby wysłać lub otrzymać pieniądze za pośrednictwem Liberapay przed sierpniem 2018: "
 
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Ta strona zawiera linki i informacje o logo Liberapay. Mamy nadzieję, że okaże się to szczególnie przydatne, jeśli piszesz artykuł o Liberapay lub jeśli chcesz dodać niestandardowe linki do swojego profilu Liberapay na swojej stronie internetowej."
@@ -4360,10 +4359,10 @@ msgid "Personal information leaks"
 msgstr "Wycieki danych osobowych"
 
 msgid "Liberapay does not tell creators who their patrons are. However, PayPal allows the recipient of a payment to see the name and email address of the payer, so donors who don't want to reveal themselves should not choose PayPal as the payment method."
-msgstr "Liberapay nie mówi twórcom, kto jest ich patronem. PayPal pozwala jednak odbiorcy płatności zobaczyć nazwę i adres e-mail płatnika, więc dawcy, którzy nie chcą się ujawnić, nie powinni wybierać PayPal jako metody płatności."
+msgstr "Liberapay nie mówi twórcom, kim są ich patroni. PayPal pozwala jednak odbiorcy płatności zobaczyć nazwę i adres e-mail płatnika, więc darczyńcy, którzy nie chcą się ujawnić, nie powinni wybierać PayPal jako metody płatności."
 
 msgid "Similarly, PayPal allows a donor to see the name and email address of the recipient, and Stripe may expose the recipient's phone number, so creators who do not want to reveal their identities should not use these payment processors, unless they have carefully configured their accounts to only leak nonsensitive information (a business name instead of the creator's name, a dedicated email address and phone number instead of the creator's personal contact details)."
-msgstr "Podobnie PayPal pozwala dawcy zobaczyć nazwę i adres e-mail odbiorcy, a Stripe może ujawnić numer telefonu odbiorcy, więc twórcy, którzy nie chcą ujawniać swojej tożsamości, nie powinni korzystać z tych operatorów płatności, chyba że dokładnie skonfigurują swoje konta w celu ujawnienia tylko nieczułych informacji (nazwa firmy zamiast nazwiska twórcy, dedykowany adres e-mail i numer telefonu zamiast osobistych danych kontaktowych twórcy)."
+msgstr "Podobnie PayPal pozwala darczyńcy zobaczyć nazwę i adres e-mail odbiorcy, a Stripe może ujawnić numer telefonu odbiorcy, więc twórcy, którzy nie chcą ujawniać swojej tożsamości, nie powinni korzystać z tych operatorów płatności, chyba że dokładnie skonfigurują swoje konta w celu ujawnienia tylko danych niewrażliwych (nazwa firmy zamiast nazwiska twórcy, dedykowany adres e-mail i numer telefonu zamiast osobistych danych kontaktowych twórcy)."
 
 msgid "Encryption"
 msgstr "Szyfrowanie"
@@ -4675,7 +4674,7 @@ msgid "A repository contains a project's data, for example the source code of an
 msgstr "Repozytorium zawiera dane projektu, na przykład kod źródłowy aplikacji."
 
 msgid "See the most popular repositories belonging to Liberapay users, and browse lists of repos that you've starred on other platforms."
-msgstr "Zobacz najpopularniejsze repozytoria należące do użytkowników Liberapay iprzegladaj listę repozytoriów, które polubiłeś na innych platformach."
+msgstr "Zobacz najpopularniejsze repozytoria należące do użytkowników Liberapay i przeglądaj listy repozytoriów, które oznaczyłeś(-aś) gwiazdką na innych platformach."
 
 msgid "Explore Repositories"
 msgstr "Przeglądaj repozytoria"
@@ -4889,7 +4888,7 @@ msgid "1. Create your profile"
 msgstr "1. Utwórz profil"
 
 msgid "Explain what you do, why you've chosen to ask for donations, what the money will be used for, etc."
-msgstr "Wyjaśnij czym się zajmujesz, dlaczego zdecydowałeś się prosić o darowizny, jak wykorzystasz zebrane pieniądze, itp."
+msgstr "Wyjaśnij, czym się zajmujesz, dlaczego zdecydowałeś(-aś) się poprosić o darowizny, jak wykorzystasz zebrane pieniądze itp."
 
 msgid "2. Configure payment processing"
 msgstr "2. Skonfiguruj przetwarzanie płatności"
@@ -5210,7 +5209,7 @@ msgstr "Czy na pewno jesteś administratorem zespołu {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
-msgstr "Twoja próba zgłoszenia się po to konto nie powiodła się, ponieważ jesteś zalogowany w serwisie {0} jako ktoś kto nie jest administratorem zespołu {1}. Prosimy o wylogowanie się i {2}spróbowanie ponownie{3}."
+msgstr "Twoja próba zgłoszenia się po to konto nie powiodła się, ponieważ jesteś zalogowany(-a) w serwisie {0} jako ktoś, kto nie jest administratorem zespołu {1}. Wyloguj się i {2}spróbuj ponownie{3}."
 
 #, python-brace-format
 msgid "Are you really {0}?"
@@ -5218,7 +5217,7 @@ msgstr "Czy {0} to na pewno Ty?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
-msgstr "Twoja próba zgłoszenia się po to konto nie powiodła się, ponieważ jesteś zalogowany w serwisie {0} jako ktoś inny. Prosimy o wylogowanie się i {1}spróbowanie ponownie{2}."
+msgstr "Twoja próba zgłoszenia się po to konto nie powiodła się, ponieważ jesteś zalogowany(-a) w serwisie {0} jako ktoś inny. Wyloguj się i {1}spróbuj ponownie{2}."
 
 #, python-brace-format
 msgid "{0} is a private team"
@@ -5315,7 +5314,7 @@ msgstr[1] "Śledzisz {n} konta na {platform}."
 msgstr[2] "Śledzisz {n} kont na {platform}."
 
 msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
-msgstr "Adres który podałeś jest niepoprawny: nie zawiera symbolu @."
+msgstr "Adres, który podałeś(-aś), jest nieprawidłowy: nie zawiera symbolu “@”."
 
 msgid "Which account?"
 msgstr "Jakie konto?"
@@ -5373,7 +5372,7 @@ msgid "A confirmation code will be sent to this email address, unless it's alrea
 msgstr "Kod potwierdzenia zostanie wysłany na adres e-mail, jeżeli nie jest już przypisany do Twojego konta Liberapay."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
-msgstr "Płatności PayPal nie są obecnie anonimowe, dawcy zobaczą Twój adres e-mail, a Ty zobaczysz ich."
+msgstr "Płatności PayPal nie są obecnie anonimowe, darczyńcy zobaczą Twój adres e-mail, a Ty zobaczysz ich."
 
 msgid "Sorry, we didn't find anything matching your query."
 msgstr "Przykro mi, nie znaleźliśmy niczego pasującego do Twojego zapytania."
@@ -5439,4 +5438,4 @@ msgstr "Zarejestruj się"
 
 #, python-brace-format
 msgid "You are already logged in as {0}."
-msgstr "Jesteś już zalogowany jako {0}."
+msgstr "Jesteś już zalogowany(-a) jako {0}."
