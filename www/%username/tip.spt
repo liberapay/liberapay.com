@@ -52,6 +52,7 @@ if tippee.status == 'stub':
 # =========================
 
 if request.method == 'POST':
+    user.require_write_permission()
     currency = request.body.get('currency', 'EUR')
     if currency not in constants.CURRENCIES:
         raise response.invalid_input(currency, 'currency', 'body')

@@ -1,13 +1,11 @@
 from liberapay.elsewhere._paginators import _modify_query
-from liberapay.exceptions import LoginRequired
 from liberapay.i18n.currencies import Money
 from liberapay.utils import b64encode_s, get_participant
 
 [---]
 
 request.allow('POST')
-if user.ANON:
-    raise LoginRequired
+user.require_write_permission()
 
 team = get_participant(state, restrict=False)
 if team.kind != 'group':

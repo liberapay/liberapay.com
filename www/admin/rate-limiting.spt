@@ -1,12 +1,6 @@
-from liberapay.exceptions import LoginRequired
-
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 rate_counters = website.db.all("SELECT * FROM rate_limiting")
 for row in rate_counters:

@@ -4,7 +4,6 @@ import os
 from threading import Lock
 
 import liberapay.billing.payday
-from liberapay.exceptions import LoginRequired
 from liberapay.utils import parse_int, pid_exists
 
 ONE_WEEK = timedelta(days=7)
@@ -103,10 +102,7 @@ def serve_payday_log(payday_id, request, response):
 
 [---]
 
-if user.ANON:
-    raise LoginRequired
-if not user.has_privilege('run_payday') and not user.is_admin:
-    raise response.error(403, "You're not authorized to run payday.")
+user.require_active_privilege('run_payday')
 
 payday_id = request.path['id'].split('.', 1)[0]
 title = "Payday"

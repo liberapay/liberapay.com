@@ -4,7 +4,6 @@ from pando.http.request import Request
 from pando.http.response import Response
 
 from liberapay.security import csrf
-from liberapay.security.authentication import SESSION
 from liberapay.testing import Harness
 
 
@@ -188,17 +187,6 @@ class Tests2(Harness):
         token = 'ddddeeeeaaaadddd bbbbeeeeeeeefff'
         state = self.client.GET('/log-in', csrf_token=token, want='state')
         assert state['csrf_token'] == token
-
-    def test_session_is_downgraded_after_a_little_while(self):
-        alice = self.make_participant('alice')
-        initial_session = alice.session = alice.start_session(suffix='.em')
-        self.db.run("UPDATE user_secrets SET mtime = mtime - interval '2 hours'")
-        r = self.client.GET('/alice/edit/username', auth_as=alice)
-        assert r.code == 200, r.text
-        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
-        assert int(new_session_id) == initial_session.id
-        assert new_session_secret != initial_session.secret
-        assert new_session_secret.endswith('.rg')
 
     def test_malformed_body(self):
         r = self.client.POST('/', body=b'\0', content_type=b'application/x-www-form-urlencoded')

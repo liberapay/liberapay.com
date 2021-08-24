@@ -1,12 +1,6 @@
-from liberapay.exceptions import LoginRequired
-
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 title = "Admin Tools"
 

@@ -15,8 +15,9 @@ STATUS_MAP = {
 participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Ledger")
-subpath = 'ledger/' if user.is_admin else ''
-admin_override = user.is_admin and (participant != user or 'override' in request.qs)
+user_is_admin = user.is_acting_as('admin')
+subpath = 'ledger/' if user_is_admin else ''
+admin_override = user_is_admin and (participant != user or 'override' in request.qs)
 translated_status = {
     None: '',
     'pre': _('preparing'),
@@ -101,7 +102,7 @@ if participant.join_time:
     % endif
 % endif
 
-% set show_id = user.is_admin
+% set show_id = user_is_admin
 <div class="row">
 <div class="col-lg-10">
 % if events

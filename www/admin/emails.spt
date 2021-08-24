@@ -1,7 +1,6 @@
 from pando import json
 from pando.utils import utcnow
 
-from liberapay.exceptions import LoginRequired
 from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.utils.emails import remove_email_address_from_blacklist
 
@@ -9,11 +8,7 @@ PAGE_SIZE = 20
 
 [---]
 
-if user.ANON:
-    raise LoginRequired
-
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 if request.method == 'POST':
     email = request.body['email']

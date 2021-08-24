@@ -7,7 +7,6 @@ from types import SimpleNamespace
 import requests
 import stripe
 
-from liberapay.exceptions import AuthRequired, LoginRequired
 from liberapay.utils import b64decode_s, b64encode_s
 
 OAUTH_QUERYSTRING = '?client_id={}&response_type=code&redirect_uri={}&scope={}&state={}'
@@ -43,8 +42,7 @@ provider = PROVIDERS.get(provider_name)
 if not provider:
     raise response.error(404)
 
-if user.ANON:
-    raise AuthRequired
+user.require_write_permission()
 
 if request.method == 'POST':
     back_to = request.body['back_to']
@@ -68,9 +66,6 @@ elif 'error' in request.qs:
     ))
 
 elif 'state' in request.qs:
-    if user.ANON:
-        raise LoginRequired
-
     # Get the query id from the querystring
     query_id = request.qs['state']
 

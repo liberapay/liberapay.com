@@ -71,7 +71,7 @@ class LoginRequired(LazyResponse):
         Response.__init__(self, 403, '')
 
     def lazy_body(self, _):
-        return _("You need to log in")
+        return _("Authentication required")
 
 
 class NeedDatabase(LazyResponse):

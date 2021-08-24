@@ -1,12 +1,10 @@
-from liberapay.exceptions import LoginRequired
 from liberapay.utils.emails import check_email_address, normalize_email_address
 
 [---]
 
 participant = user
 
-if user.ANON:
-    raise LoginRequired
+user.require_write_permission()
 
 if request.method == 'POST':
     body = request.body

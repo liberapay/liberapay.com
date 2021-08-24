@@ -2,13 +2,12 @@ from base64 import b64encode
 from hashlib import sha256
 import hmac
 import json
-from urllib.parse import urlsplit
+from urllib.parse import quote as urlquote, urlsplit
 
 from pando.exceptions import UnknownBodyType
 
 from liberapay.constants import INVOICE_DOC_MAX_SIZE, INVOICE_DOCS_EXTS
-from liberapay.exceptions import AuthRequired
-from liberapay.utils import get_participant, urlquote
+from liberapay.utils import get_participant
 
 S3_SECRET_KEY = website.app_conf.s3_secret_key
 AWS4_SECRET_KEY = b'AWS4' + S3_SECRET_KEY.encode('ascii')
@@ -21,9 +20,7 @@ SIZE_RANGE_STR = str(["0", str(INVOICE_DOC_MAX_SIZE)])
 [---]
 
 request.allow('POST')
-
-if user.ANON:
-    raise AuthRequired
+user.require_write_permission()
 
 invoice_id = request.headers.get_int(b'X-Invoice-Id')
 invoice = website.db.one("""

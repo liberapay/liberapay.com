@@ -10,7 +10,7 @@ from threading import Lock
 from time import sleep
 from types import SimpleNamespace
 import unicodedata
-from urllib.parse import urlencode
+from urllib.parse import quote as urlquote, urlencode
 import uuid
 
 import aspen_jinja2_renderer
@@ -32,7 +32,7 @@ from liberapay.constants import (
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
-    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
+    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_TIMEOUT,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
@@ -45,6 +45,7 @@ from liberapay.exceptions import (
     EmailAlreadyTaken,
     EmailNotVerified,
     InvalidId,
+    LoginRequired,
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
@@ -53,6 +54,7 @@ from liberapay.exceptions import (
     TooManyEmailAddresses,
     TooManyEmailVerifications,
     TooManyPasswordLogins,
+    TooManyRequests,
     TooManyUsernameChanges,
     UnableToDistributeBalance,
     UnableToSendEmail,
@@ -79,7 +81,6 @@ from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     deserialize, erase_cookie, get_recordable_headers, serialize, set_cookie,
-    urlquote,
     markdown,
 )
 from liberapay.utils.emails import (
@@ -88,6 +89,10 @@ from liberapay.utils.emails import (
 )
 from liberapay.utils.types import Object
 from liberapay.website import website
+
+
+FOUR_WEEKS = timedelta(weeks=4)
+TEN_YEARS = timedelta(days=3652)
 
 
 email_lock = Lock()
@@ -237,60 +242,6 @@ class Participant(Model, MixinTeam):
         return getattr(cls, 'from_' + type_of_id)(id_value, id_only=True)
 
     @classmethod
-    def authenticate(cls, p_id, secret_id, secret, context='log-in'):
-        if not secret:
-            return
-        try:
-            p_id = int(p_id)
-            secret_id = int(secret_id)
-        except (ValueError, TypeError):
-            return
-        if secret_id >= 1:  # session token
-            r = cls.db.one("""
-                SELECT p, s.secret, s.mtime
-                  FROM user_secrets s
-                  JOIN participants p ON p.id = s.participant
-                 WHERE s.participant = %s
-                   AND s.id = %s
-                   AND s.mtime > %s
-            """, (p_id, secret_id, utcnow() - SESSION_TIMEOUT))
-            if not r:
-                return
-            p, stored_secret, mtime = r
-            if constant_time_compare(stored_secret, secret):
-                p.authenticated = True
-                p.session = SimpleNamespace(id=secret_id, secret=secret, mtime=mtime)
-                return p
-        elif secret_id == 0:  # user-input password
-            r = cls.db.one("""
-                SELECT p, s.secret
-                  FROM user_secrets s
-                  JOIN participants p ON p.id = s.participant
-                 WHERE s.participant = %s
-                   AND s.id = %s
-            """, (p_id, secret_id))
-            if not r:
-                return
-            p, stored_secret = r
-            if context == 'log-in':
-                cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
-            algo, rounds, salt, hashed = stored_secret.split('$', 3)
-            rounds = int(rounds)
-            salt, hashed = b64decode(salt), b64decode(hashed)
-            if constant_time_compare(cls._hash_password(secret, algo, salt, rounds), hashed):
-                p.authenticated = True
-                if context == 'log-in':
-                    cls.db.decrement_rate_limit('log-in.password', p.id)
-                if len(salt) < 32:
-                    # Update the password hash in the DB
-                    hashed = cls.hash_password(secret)
-                    cls.db.run(
-                        "UPDATE user_secrets SET secret = %s WHERE participant = %s AND id = 0",
-                        (hashed, p.id)
-                    )
-                return p
-
-    @classmethod
     def get_chargebacks_account(cls, currency):
         p = cls.db.one("""
             SELECT p
@@ -326,6 +277,50 @@ class Participant(Model, MixinTeam):
 
     # Password Management
     # ===================
+
+    @classmethod
+    def authenticate_with_password(cls, p_id, password, context='log-in'):
+        """Fetch a participant using its ID, but only if the provided password is valid.
+
+        Args:
+            p_id (int): the participant's ID
+            password (str): the participant's password
+            context (str): the operation that this authentication is part of
+
+        Return type: `Participant | None`
+        """
+        if not password:
+            return None
+        r = cls.db.one("""
+            SELECT p, s.secret
+              FROM user_secrets s
+              JOIN participants p ON p.id = s.participant
+             WHERE s.participant = %s
+               AND s.id = 0
+        """, (p_id,))
+        if not r:
+            return None
+        p, stored_secret = r
+        if context == 'log-in':
+            cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
+        request = website.state.get({}).get('request')
+        if request:
+            cls.db.hit_rate_limit('hash_password.ip-addr', str(request.source), TooManyRequests)
+        algo, rounds, salt, hashed = stored_secret.split('$', 3)
+        rounds = int(rounds)
+        salt, hashed = b64decode(salt), b64decode(hashed)
+        if constant_time_compare(cls._hash_password(password, algo, salt, rounds), hashed):
+            p.authenticated = True
+            if context == 'log-in':
+                cls.db.decrement_rate_limit('log-in.password', p.id)
+            if len(salt) < 32:
+                # Update the password hash in the DB
+                hashed = cls.hash_password(password)
+                cls.db.run(
+                    "UPDATE user_secrets SET secret = %s WHERE participant = %s AND id = 0",
+                    (hashed, p.id)
+                )
+            return p
 
     @staticmethod
     def _hash_password(password, algo, salt, rounds):
@@ -409,6 +404,64 @@ class Participant(Model, MixinTeam):
     # Session Management
     # ==================
 
+    @classmethod
+    def authenticate_with_session(
+        cls, p_id, session_id, secret, allow_downgrade=False, cookies=None,
+    ):
+        """Fetch a participant using its ID, but only if the provided session is valid.
+
+        Args:
+            p_id (int | str): the participant's ID
+            session_id (int | str): the ID of the session
+            secret (str): the actual secret
+            allow_downgrade (bool): allow downgrading to a read-only session
+            cookies (SimpleCookie):
+                the response cookies, only needed when `allow_downgrade` is `True`
+
+        Return type:
+            Tuple[Participant, Literal['valid']] |
+            Tuple[None, Literal['expired', 'invalid']]
+        """
+        if not secret:
+            if session_id == '!':
+                return None, 'expired'
+            return None, 'invalid'
+        try:
+            p_id = int(p_id)
+            session_id = int(session_id)
+        except (ValueError, TypeError):
+            return None, 'invalid'
+        if session_id < 1:
+            return None, 'invalid'
+        r = cls.db.one("""
+            SELECT p, s.secret, s.mtime
+              FROM user_secrets s
+              JOIN participants p ON p.id = s.participant
+             WHERE s.participant = %s
+               AND s.id = %s
+        """, (p_id, session_id))
+        if not r:
+            return None, 'invalid'
+        p, stored_secret, mtime = r
+        if not constant_time_compare(stored_secret, secret):
+            return None, 'invalid'
+        if mtime > utcnow() - SESSION_TIMEOUT:
+            p.session = SimpleNamespace(id=session_id, secret=secret, mtime=mtime)
+        elif allow_downgrade:
+            if mtime > utcnow() - FOUR_WEEKS:
+                p.regenerate_session(
+                    SimpleNamespace(id=session_id, secret=secret, mtime=mtime),
+                    cookies,
+                    suffix='.ro',  # stands for "read only"
+                )
+            else:
+                set_cookie(cookies, SESSION, f"{p.id}:!:", expires=utcnow() + TEN_YEARS)
+                return None, 'expired'
+        else:
+            return None, 'expired'
+        p.authenticated = True
+        return p, 'valid'
+
     @staticmethod
     def generate_session_token():
         return b64encode(urandom(24), b'-_').decode('ascii')
@@ -420,27 +473,42 @@ class Participant(Model, MixinTeam):
         if not set(token).issubset(BASE64URL_CHARS):
             raise Response(400, "bad token, not base64url")
 
-    def regenerate_session(self, session, cookies, suffix='.rg'):
-        self.session = self.db.one("""
+    def regenerate_session(self, session, cookies, suffix=None):
+        """Replace a session's secret and timestamp with new ones.
+
+        The new secret is guaranteed to be different from the old one.
+        """
+        self.session = self.db.one(r"""
             UPDATE user_secrets
                SET mtime = current_timestamp
-                 , secret = %(new_secret)s
+                 , secret = %(new_secret)s || coalesce(
+                       %(suffix)s,
+                       regexp_replace(secret, '.+(\.[a-z]{2})$', '\1')
+                   )
              WHERE participant = %(p_id)s
                AND id = %(session_id)s
                AND mtime = %(current_mtime)s
          RETURNING id, secret, mtime
         """, dict(
-            new_secret=self.generate_session_token() + suffix,
+            new_secret=self.generate_session_token(),
+            suffix=suffix,
             p_id=self.id,
             session_id=session.id,
             current_mtime=session.mtime,
         ))
         if self.session:
+            if self.session.secret == session.secret:
+                # Very unlikely, unless there's a bug in the generator. Try again.
+                website.logger.info(
+                    "The random generator returned the same token. This is only "
+                    "indicative of a problem if it happens often."
+                )
+                return self.regenerate_session(session, cookies, suffix)
             creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
-            set_cookie(cookies, SESSION, creds, expires=utcnow() + SESSION_TIMEOUT)
+            set_cookie(cookies, SESSION, creds, expires=self.session.mtime + TEN_YEARS)
 
     def start_session(self, suffix='', token=None, id_min=1, id_max=20,
-                      lifetime=SESSION_TIMEOUT):
+                      lifetime=FOUR_WEEKS):
         """Start a new session for the user.
 
         Args:
@@ -495,8 +563,9 @@ class Participant(Model, MixinTeam):
                         (participant, id, secret)
                  SELECT %(p_id)s
                       , coalesce(
-                            (SELECT s2.id FROM oldest_secret s2
-                              WHERE s2.mtime < (current_timestamp - %(lifetime)s)
+                            ( SELECT s2.id
+                                FROM oldest_secret s2
+                               WHERE s2.mtime < (current_timestamp - %(lifetime)s)
                             ),
                             (SELECT i FROM unused_id),
                             (SELECT s2.id FROM oldest_secret s2)
@@ -518,13 +587,6 @@ class Participant(Model, MixinTeam):
         creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
         set_cookie(cookies, SESSION, creds, self.session.mtime + SESSION_TIMEOUT)
 
-    def keep_signed_in(self, cookies):
-        """Extend the user's current session.
-        """
-        now = utcnow()
-        if now - self.session.mtime > SESSION_REFRESH:
-            self.regenerate_session(self.session, cookies)
-
     def sign_out(self, cookies):
         """End the user's current session.
         """
@@ -542,17 +604,67 @@ class Participant(Model, MixinTeam):
                 session.type = session.secret[i+1:] if i > 0 else ''
             return session.type
 
+    def require_write_permission(self):
+        session_type = self.session_type
+        if session_type is None:
+            # This isn't supposed to happen.
+            try:
+                raise AssertionError("session is None when it shouldn't be")
+            except Exception as e:
+                website.tell_sentry(e)
+            self.require_reauthentication()
+        elif session_type == 'ro':
+            self.require_reauthentication()
 
-    # Permissions
-    # ===========
+
+    # Privileges
+    # ==========
 
     def has_privilege(self, p):
-        return self.privileges & PRIVILEGES[p]
+        """Checks whether the participant has the specified privilege.
 
-    @cached_property
-    def is_admin(self):
-        return self.privileges & PRIVILEGES['admin']
+        A participant who has the 'admin' privilege is considered to have all
+        other privileges.
+        """
+        return self.privileges & (PRIVILEGES[p] | 1)
 
+    def is_acting_as(self, privilege):
+        """Checks whether the participant can currently use the specified privilege.
+
+        This method is more strict than `has_privilege`, it only returns `True`
+        if the user is currently logged in and has a fresh session.
+
+        If the user's session is read-only, then the user is asked to reauthenticate
+        themself.
+        """
+        if self.has_privilege(privilege):
+            session_type = self.session_type
+            if session_type == 'ro':
+                self.require_reauthentication()
+            if session_type is not None:
+                return True
+        return False
+
+    def require_active_privilege(self, privilege):
+        """Like `is_acting_as`, but raises an exception instead of returning `False`.
+        """
+        if self.has_privilege(privilege):
+            session_type = self.session_type
+            if session_type == 'ro':
+                self.require_reauthentication()
+            if session_type is not None:
+                return
+        raise Response(403, f"You don't have the {privilege} privilege.")
+
+    def require_reauthentication(self):
+        state = website.state.get()
+        state['log-in.reauthenticate'] = True
+        email = self.get_email_address()
+        if self.has_password:
+            state['log-in.password-or-email'] = email
+        else:
+            state['log-in.email'] = email
+        raise LoginRequired()
 
     # Statement
     # =========
@@ -1498,7 +1610,7 @@ class Participant(Model, MixinTeam):
         context['LegacyMoney'] = i18n.LegacyMoney
 
     def get_notifs(self, before=None, limit=None, viewer=None):
-        for_admin = bool(viewer and viewer.is_admin)
+        for_admin = bool(viewer and viewer.is_acting_as('admin'))
         p_id = self.id
         return self.db.all("""
             SELECT id, event, context, is_new, ts, hidden_since
@@ -1802,7 +1914,7 @@ class Participant(Model, MixinTeam):
     # Random Stuff
     # ============
 
-    def url(self, path='', query='', autologin=False):
+    def url(self, path='', query='', log_in='auto'):
         """Return the full canonical URL of a user page.
 
         Args:
@@ -1811,31 +1923,44 @@ class Participant(Model, MixinTeam):
                 string) leads to the user's public profile page.
             query (dict):
                 querystring parameters to add to the URL.
-            autologin (bool):
-                if set to True, the returned URL contains an email session token
-                in the querystring. This only works when called from inside an
-                email simplate.
+            log_in (str):
+                Include an email session token in the URL. This only works when
+                called from inside an email simplate.
+                When set to 'required', the user will see an error page if the
+                log-in token is too old, whereas the default value 'auto' will
+                result in an expired token being ignored.
+                When set to 'no', log-in parameters aren't added to the URL.
         """
         scheme = website.canonical_scheme
         host = website.canonical_host
         username = self.username
         if query:
             query = '?' + urlencode(query, doseq=True)
+        if log_in not in ('auto', 'required', 'no'):
+            raise ValueError(f"{log_in!r} isn't a valid value for the `log_in` argument")
         email_row = getattr(self, '_rendering_email_to', None)
         if email_row:
             extra_query = []
-            if autologin:
+            if log_in == 'required' or log_in == 'auto' and not self.has_password:
                 primary_email = self.get_email_address()
-                if email_row.address.lower() != primary_email.lower():
+                if email_row.address.lower() == primary_email.lower():
                     # Only send login links to the primary email address
-                    raise AssertionError('%r != %r' % (email_row.address, primary_email))
-                session = self._email_session
-                if not session:
-                    session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
-                    self._email_session = session
-                extra_query.append(('log-in.id', self.id))
-                extra_query.append(('log-in.key', session.id))
-                extra_query.append(('log-in.token', session.secret))
+                    session = self._email_session
+                    if not session:
+                        session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
+                        self._email_session = session
+                    extra_query.append(('log-in.id', self.id))
+                    extra_query.append(('log-in.key', session.id))
+                    extra_query.append(('log-in.token', session.secret))
+                    if log_in != 'required':
+                        extra_query.append(('log-in.required', 'no'))
+                else:
+                    try:
+                        raise AssertionError('%r != %r' % (email_row.address, primary_email))
+                    except AssertionError as e:
+                        website.tell_sentry(e)
+                        if log_in == 'required':
+                            raise
             if not email_row.verified:
                 if not email_row.nonce:
                     email_row = self._rendering_email_to = self.db.one("""
@@ -1849,8 +1974,10 @@ class Participant(Model, MixinTeam):
             if extra_query:
                 query += ('&' if query else '?') + urlencode(extra_query)
             del extra_query
-        elif autologin:
-            raise ValueError("autologin is True but _rendering_email_to is missing")
+        elif log_in == 'required':
+            raise ValueError(
+                "`log_in` is 'required' but `self._rendering_email_to` is missing"
+            )
         if query and '?' in path:
             (path, query), extra_query = path.split('?', 1), query
             query += '&' + extra_query[1:]
@@ -2011,7 +2138,7 @@ class Participant(Model, MixinTeam):
         p_id = self.id
         recorder_id = recorder.id
         with self.db.get_cursor() as cursor:
-            if not recorder.is_admin:
+            if not recorder.is_acting_as('admin'):
                 cursor.hit_rate_limit('change_currency', self.id, TooManyCurrencyChanges)
             r = cursor.one("""
                 UPDATE participants

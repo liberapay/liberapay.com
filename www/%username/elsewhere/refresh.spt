@@ -2,8 +2,7 @@ from liberapay.utils import get_participant
 
 [---]
 
-if not user.is_admin:
-    raise response.error(403)
+user.require_active_privilege('admin')
 
 participant = get_participant(state, restrict=True)
 accounts = participant.get_accounts_elsewhere()

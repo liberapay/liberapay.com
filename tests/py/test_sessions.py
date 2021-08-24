@@ -10,9 +10,9 @@ from liberapay.i18n.base import LOCALES
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import Participant
 from liberapay.security.csrf import CSRF_TOKEN
-from liberapay.testing import postgres_readonly
+from liberapay.testing import Harness, postgres_readonly
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils import b64encode_s
+from liberapay.utils import b64encode_s, find_files
 
 
 password = 'password'
@@ -231,7 +231,7 @@ class TestLogIn(EmailHarness):
             raise_immediately=False,
         )
         assert r.code == 302
-        alice2 = Participant.authenticate(alice.id, 0, password)
+        alice2 = Participant.authenticate_with_password(alice.id, password)
         assert alice2 and alice2 == alice
 
     def test_email_login_with_old_unverified_address(self):
@@ -336,7 +336,7 @@ class TestLogIn(EmailHarness):
         assert not self.get_emails()
 
     def test_email_login_bad_id(self):
-        r = self.client.GxT('/?log-in.id=1&log-in.token=x')
+        r = self.client.GxT('/?log-in.id=x&log-in.key=1001&log-in.token=x')
         assert r.code == 400
 
     def test_email_login_bad_key(self):
@@ -356,10 +356,43 @@ class TestLogIn(EmailHarness):
         assert r.code == 400
         assert SESSION not in r.headers.cookie
 
+    def test_email_login_missing_key(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        email_session = alice.start_session('.em')
+        url = f'/about/me/?log-in.id={alice.id}&log-in.token={email_session.secret}'
+        r = self.client.GxT(url)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=alice)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=bob)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+
     def test_email_login_bad_token(self):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
-        url = '/?log-in.id=%s&log-in.token=x' % alice.id
+        email_session = alice.start_session('.em')
+        url = '/about/me/?log-in.id=%s&log-in.key=%i&log-in.token=%s' % (
+            alice.id, email_session.id, email_session.secret + '!'
+        )
+        r = self.client.GxT(url)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=alice)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+        r = self.client.GxT(url, auth_as=bob)
+        assert r.code == 400
+        assert SESSION not in r.headers.cookie
+
+    def test_email_login_missing_token(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        email_session = alice.start_session('.em')
+        url = f'/about/me/?log-in.id={alice.id}&log-in.key={email_session.id}'
         r = self.client.GxT(url)
         assert r.code == 400
         assert SESSION not in r.headers.cookie
@@ -515,8 +548,8 @@ class TestLogIn(EmailHarness):
         session2 = alice.start_session(suffix='.pw')
         assert session2.id == 2
 
-        # Get a "regenerated" session, to be invalidated
-        session3 = alice.start_session(suffix='.rg')
+        # Get a read-only session, to be invalidated
+        session3 = alice.start_session(suffix='.ro')
         assert session3.id == 3
 
         # Get an email session
@@ -672,3 +705,74 @@ class TestSignIn(EmailHarness):
             r = self.sign_in(HTTP_ACCEPT=b'text/html')
             assert r.code == 503, r.text
             assert 'read-only' in r.text
+
+
+class TestSessions(Harness):
+
+    def test_session_cookie_is_secure_if_it_should_be(self):
+        canonical_scheme = self.client.website.canonical_scheme
+        self.client.website.canonical_scheme = 'https'
+        try:
+            cookies = SimpleCookie()
+            alice = self.make_participant('alice')
+            alice.authenticated = True
+            alice.sign_in(cookies)
+            assert '; secure' in cookies[SESSION].output().lower()
+        finally:
+            self.client.website.canonical_scheme = canonical_scheme
+
+    def test_session_is_downgraded_to_read_only_after_a_little_while(self):
+        alice = self.make_participant('alice')
+        initial_session = alice.session = alice.start_session(suffix='.em')
+        self.db.run("UPDATE user_secrets SET mtime = mtime - interval '7 hours'")
+        r = self.client.GET('/alice/edit/username', auth_as=alice)
+        assert r.code == 200, r.text
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        assert int(new_session_id) == initial_session.id
+        assert new_session_secret != initial_session.secret
+        assert new_session_secret.endswith('.ro')
+
+    def test_long_lived_session_tokens_are_regularly_regenerated(self):
+        alice = self.make_participant('alice')
+        alice.authenticated = True
+        initial_session = alice.session = alice.start_session(suffix='.ro')
+        r = self.client.GET('/', auth_as=alice)
+        assert r.code == 200, r.text
+        assert SESSION not in r.headers.cookie
+        alice.session = self.db.one("""
+            UPDATE user_secrets
+               SET mtime = mtime - interval '12 hours'
+             WHERE participant = %s
+         RETURNING id, secret, mtime
+        """, (alice.id,))
+        r = self.client.GET('/', auth_as=alice)
+        assert r.code == 200, r.text
+        new_session_id, new_session_secret = r.headers.cookie[SESSION].value.split(':')[1:]
+        assert int(new_session_id) == initial_session.id
+        assert new_session_secret != initial_session.secret
+        assert new_session_secret.endswith('.ro')
+
+    def test_read_only_sessions_are_not_admin_sessions(self):
+        alice = self.make_participant('alice', privileges=1)
+        alice.session = alice.start_session(suffix='.ro')
+        i = len(self.client.www_root)
+        def f(spt):
+            if spt[spt.rfind('/')+1:].startswith('index.'):
+                return spt[i:spt.rfind('/')+1]
+            return spt[i:-4]
+        for url in sorted(map(f, find_files(self.client.www_root+'/admin', '*.spt'))):
+            r = self.client.GxT(url, auth_as=alice)
+            assert r.code == 403, r.text
+        self.make_participant('bob')
+        r = self.client.GxT('/bob/admin', auth_as=alice)
+        assert r.code == 403, r.text
+        r = self.client.GxT('/bob/giving/', auth_as=alice)
+        assert r.code == 403, r.text
+
+    def test_a_read_only_session_can_be_used_to_view_an_account_but_not_modify_it(self):
+        alice = self.make_participant('alice')
+        alice.session = alice.start_session(suffix='.ro')
+        r = self.client.GET('/alice/edit/username', auth_as=alice)
+        assert r.code == 200, r.text
+        r = self.client.PxST('/alice/edit/username', {}, auth_as=alice)
+        assert r.code == 403, r.text

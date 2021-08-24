@@ -1,8 +1,10 @@
 <div class="row">
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
     % if state.get('log-in.email-sent-to') or state.get('log-in.carry-on')
+    % elif state.get('log-in.reauthenticate')
+    <h1 class="main-title thin-title">{{ _("Reauthentication required") }}</h1>
     % else
-    <h2 class="banderole default">{{ _("You need to log in") }}</h2>
+    <h1 class="main-title thin-title">{{ _("Authentication required") }}</h1>
     % endif
     % include "templates/log-in-form.html"
 </div>

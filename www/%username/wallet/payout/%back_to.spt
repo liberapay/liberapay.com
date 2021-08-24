@@ -5,7 +5,7 @@ from mangopay.resources import BankAccount
 
 from liberapay.billing.fees import get_bank_account_country
 from liberapay.billing.transactions import payout
-from liberapay.exceptions import TransactionFeeTooHigh
+from liberapay.exceptions import AccountSuspended, TransactionFeeTooHigh
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.utils import (
     b64decode_s, get_participant, get_owner_address, get_owner_name, obfuscate
@@ -13,7 +13,9 @@ from liberapay.utils import (
 
 [---]
 
-participant = get_participant(state, restrict=True, block_suspended_user=True)
+participant = get_participant(state, restrict=True)
+if participant.is_suspended and not user.is_acting_as('admin'):
+    raise AccountSuspended()
 exchange = None
 bank_account = None
 

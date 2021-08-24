@@ -1,14 +1,11 @@
-from liberapay.exceptions import (
-    AuthRequired, EmailAlreadyAttachedToSelf, UsernameAlreadyTaken,
-)
+from liberapay.exceptions import EmailAlreadyAttachedToSelf, UsernameAlreadyTaken
 from liberapay.models.participant import Participant
 from liberapay.utils.emails import check_email_address, normalize_email_address
 
 [---]
 
 if request.method == 'POST':
-    if user.ANON:
-        raise AuthRequired
+    user.require_write_permission()
     if user.marked_as in ('spam', 'fraud'):
         raise response.error(403, _(
             "You're not allowed to do this because your account has been flagged. "

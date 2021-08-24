@@ -8,4 +8,4 @@
 
 <p>{{ _("Reason: “{0}”", rejection_message) }}</p>
 
-<p><a href="{{ participant.url('invoices/%s' % invoice.id) }}">{{ _("View the invoice") }}</a></p>
+<p><a href="{{ participant.url('invoices/%s' % invoice.id, log_in='no') }}">{{ _("View the invoice") }}</a></p>
