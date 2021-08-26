@@ -49,7 +49,8 @@ mode = request.qs.get('mode', 'all')
 if mode == 'all':
     participants = website.db.all("""
         SELECT p
-             , (SELECT c.name FROM communities c WHERE c.participant = p.id) AS c_name
+             , c.name AS c_name
+             , c.creator AS c_creator
              , ( SELECT json_build_object(
                             'address', e.address,
                             'verified', e.verified,
@@ -106,6 +107,7 @@ if mode == 'all':
                         ) e
                ) AS last_change
           FROM participants p
+     LEFT JOIN communities c ON c.participant = p.id
          WHERE coalesce(p.id < %s, true)
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
@@ -230,6 +232,9 @@ title = "Users Admin"
         % endif
     </div>
     <div class="col-md-6">
+    % if row.c_creator
+        <p><strong>Created by:</strong> <a href="/~{{ row.c_creator }}/">~{{ row.c_creator }}</a></p>
+    % endif
     % set elsewhere = p.get_accounts_elsewhere()
     % if p.status == 'stub'
         % for account in elsewhere
