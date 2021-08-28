@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-08-27 21:33+0000\n"
+"PO-Revision-Date: 2021-08-28 15:32+0000\n"
 "Last-Translator: Dayongdo <dayongdo@protonmail.ch>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/liberapay/core/ko/>\n"
 "Language: ko\n"
@@ -62,10 +62,10 @@ msgstr "기부 관리하기"
 
 #, python-brace-format
 msgid "It's past time to renew your donation to {username} on Liberapay"
-msgstr ""
+msgstr "Liberapay에서 {username}에 대한 기부금 갱신기간이 지났습니다"
 
 msgid "It's past time to renew your donations on Liberapay"
-msgstr ""
+msgstr "Liberapay에서 기부금을 갱신할 때가 지났습니다"
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needs to be renewed before {date}."
@@ -81,15 +81,15 @@ msgstr "{username}님에 대한 매년 {amount} 기부를 {date} 이전에 갱�
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr ""
+msgstr "매주  {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr ""
+msgstr "매달 {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr ""
+msgstr "매년 {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -429,11 +429,11 @@ msgstr "지불이 실패하였습니다"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr ""
+msgstr "오늘 {money_amount}의 자동 결제가 실패하였습니다."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
-msgstr ""
+msgstr "{date}에 {money_amount}의 자동 결제가 실패하였습니다."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
@@ -485,11 +485,11 @@ msgstr "은행 계좌에 청구가 이루어질 예정입니다"
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
-msgstr ""
+msgstr "{recipient}에 기부하기 위해 은행계좌({partial_account_number})에서 {money_amount}을(를) 직접 인출하였습니다."
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
-msgstr ""
+msgstr "{recipients}에게 기부하기 위해 은행계좌({partial_account_number})에서 {money_amount}을(를) 직접 인출하였습니다."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
@@ -519,11 +519,11 @@ msgstr "지불이 성공적으로 이루어졌습니다"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
-msgstr ""
+msgstr "오늘 시작된 {money_amount}의 자동 결제가 성공했습니다."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
-msgstr ""
+msgstr "{date}에 시작된 {money_amount}의 자동 결제가 성공했습니다."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
@@ -828,7 +828,7 @@ msgid "When an automatic donation renewal payment is upcoming"
 msgstr "자동 기부 갱신을 위한 지불이 다가올 때"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr ""
+msgstr "더 이상 유효한 결제수단이 없을 때"
 
 msgid "When a donation renewal payment has been aborted"
 msgstr "기부 갱신 지불이 중단되었을 때"
@@ -994,11 +994,11 @@ msgstr "{0} 은(는) 유효한 도메인 이름이 아닙니다."
 
 #, python-brace-format
 msgid "Our attempt to resolve the domain {domain_name} failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "도메인{domain_name}을 확인하지 못했습니다(오류: “{error_message}”)."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr ""
+msgstr "{domain_name} 이메일 서버와의 연결을 실패했습니다(오류: “{error_message}”)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -1087,7 +1087,7 @@ msgstr "{username} 님은 {rejected_currency} 기부를 받지 않습니다."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
-msgstr ""
+msgstr "해당 {money_amount}는 요구하지 않은 통화입니다({expected_currency})."
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "존재하지 않는 걸 지우려고 하는 것 같군요."
@@ -1226,11 +1226,11 @@ msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n}년치 {money_amount}"
 
 msgid "The submitted password is incorrect."
-msgstr ""
+msgstr "제출한 비밀번호가 올바르지 않습니다."
 
 #, python-brace-format
 msgid "“{0}” is not a valid account ID."
-msgstr ""
+msgstr "“{0}” 은 유효한 계정ID가 아닙니다."
 
 #, python-brace-format
 msgid "No account has the username “{username}”."
@@ -1534,19 +1534,19 @@ msgid "You're still not logged in as {0}."
 msgstr "아직도 {0} 사용자로 로그인되어 있지 않습니다."
 
 msgid "Please fill in your password to authenticate yourself:"
-msgstr ""
+msgstr "본인 인증을 위하여 비밀번호를 입력해주세요:"
 
 msgid "Or log in via email if you've lost your password:"
-msgstr ""
+msgstr "또는 비밀번호를 잊어버렸을 경우 이메일로 로그인해 주세요:"
 
 msgid "Log in via email"
 msgstr "이메일로 로그인"
 
 msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
-msgstr ""
+msgstr "계정에 비밀번호가 없기에 이메일을 통하여 본인임을 인증하여 주세요:"
 
 msgid "Your session has expired."
-msgstr ""
+msgstr "세션이 만료되었습니다."
 
 msgid "Password (optional)"
 msgstr "비밀번호 (선택)"
@@ -1562,7 +1562,7 @@ msgid "Avatar"
 msgstr "아바타"
 
 msgid "Default avatar"
-msgstr ""
+msgstr "기본 아바타"
 
 msgid "Find great people to donate to"
 msgstr "기부할 좋은 사람들을 찾아보세요"
@@ -1650,7 +1650,7 @@ msgstr "본사 주소"
 
 #, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr ""
+msgstr "하위 메뉴 {submenu_label}를 표시"
 
 msgid "Introduction"
 msgstr "소개"
@@ -1710,13 +1710,13 @@ msgid "Goal"
 msgstr "목표"
 
 msgid "Descriptions"
-msgstr ""
+msgstr "설명"
 
 msgid "Linked Accounts"
 msgstr "다른 곳의 계정"
 
 msgid "Instruments"
-msgstr ""
+msgstr "수단"
 
 msgid "Schedule"
 msgstr "계획"
@@ -1889,9 +1889,8 @@ msgstr "현재 {name}님께 매주 {money_amount}를 기부하고 있으나, {na
 msgid "Modify"
 msgstr "수정하기"
 
-#, fuzzy
 msgid "Discontinue"
-msgstr "중지"
+msgstr "중단"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
@@ -1951,9 +1950,8 @@ msgstr "수동 갱신"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "기부를 갱신하도록 이메일로 다시 알림을 보내 드립니다."
 
-#, fuzzy
 msgid "Discontinue the donation"
-msgstr "기부 중지하기"
+msgstr "기부 중단"
 
 msgid "Cancel the pledge"
 msgstr "공약 취소"
