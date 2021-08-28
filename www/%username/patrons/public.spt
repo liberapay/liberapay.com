@@ -1,0 +1,32 @@
+from pando.utils import utcnow
+
+from liberapay.utils import get_participant
+
+[---]
+
+participant = get_participant(state, restrict=False)
+
+public_patrons = website.db.all("""
+    SELECT tip.ctime::date AS pledge_date
+         , tipper_p.id AS patron_id
+         , tipper_p.username AS patron_username
+         , coalesce(tipper_p.public_name, '') AS patron_public_name
+         , (tip.amount).currency AS donation_currency
+         , (tip.amount).amount AS weekly_amount
+         , tipper_p.avatar_url AS patron_avatar_url
+      FROM current_tips tip
+      JOIN participants tipper_p ON tipper_p.id = tip.tipper
+     WHERE tip.tippee = %s
+       AND tip.secrecy_level = 0
+       AND tip.paid_in_advance > 0
+       AND tip.renewal_mode > 0
+  ORDER BY tip.ctime, tip.id
+""", (participant.id,))
+
+response.headers[b'Content-Disposition'] = (
+    "attachment; filename*=UTF-8''liberapay-public-patrons-of-%s-%s.csv" %
+    (participant.username, utcnow().date())
+).encode('utf8')
+
+[---] text/csv via csv_dump
+public_patrons

@@ -38,6 +38,54 @@ communities = participant.get_communities()
 
 langs = participant.get_statement_langs()
 
+if participant.see_patrons:
+    n_public_patrons = website.db.one("""
+        SELECT count(*)
+          FROM current_tips tip
+         WHERE tip.tippee = %s
+           AND tip.secrecy_level = 0
+           AND tip.paid_in_advance > 0
+           AND tip.renewal_mode > 0
+    """, (participant.id,), max_age=5)
+    public_patrons = website.db.all("""
+        SELECT tipper_p.id
+             , tipper_p.avatar_url
+             , coalesce(tipper_p.public_name, tipper_p.username) AS name
+             , tip.amount AS weekly_amount
+          FROM current_tips tip
+          JOIN participants tipper_p ON tipper_p.id = tip.tipper
+         WHERE tip.tippee = %s
+           AND tip.secrecy_level = 0
+           AND tip.paid_in_advance > 0
+           AND tip.renewal_mode > 0
+           AND tipper_p.hide_from_lists = 0
+      ORDER BY convert(tip.amount, 'EUR') * random()::numeric DESC
+         LIMIT 12
+    """, (participant.id,), max_age=5) if n_public_patrons else ()
+
+n_public_donees = website.db.one("""
+    SELECT count(*)
+      FROM current_tips tip
+     WHERE tip.tipper = %s
+       AND tip.secrecy_level = 0
+       AND tip.paid_in_advance > 0
+       AND tip.renewal_mode > 0
+""", (participant.id,), max_age=5)
+public_donees = website.db.all("""
+    SELECT tippee_p.id
+         , tippee_p.avatar_url
+         , coalesce(tippee_p.username, tippee_p.public_name) AS name
+         , tip.amount AS weekly_amount
+      FROM current_tips tip
+      JOIN participants tippee_p ON tippee_p.id = tip.tippee
+     WHERE tip.tipper = %s
+       AND tip.secrecy_level = 0
+       AND tip.paid_in_advance > 0
+       AND tip.renewal_mode > 0
+  ORDER BY convert(tip.amount, 'EUR') * random()::numeric DESC
+     LIMIT 12
+""", (participant.id,), max_age=5) if n_public_donees else ()
+
 show_income = not participant.hide_receiving and participant.accepts_tips
 
 [-----------------------------------------------------------------------------]
@@ -167,6 +215,66 @@ show_income = not participant.hide_receiving and participant.accepts_tips
                 % endfor
             </ul>
         % endif
+    % endif
+
+    % if participant.see_patrons and n_public_patrons
+    <h3>{{ _("Patrons") }}
+        &nbsp;
+        <small><a href="{{ participant.path('patrons/public.csv') }}">{{ fontawesome('download', _("Export as CSV")) }}</a></small>
+    </h3>
+
+    <p>{{ ngettext(
+        "{username} has {n} public patron.",
+        "{username} has {n} public patrons.",
+        username=participant.username,
+        n=n_public_patrons,
+    ) }}</p>
+
+    <div class="paragraph">
+    % for p in public_patrons
+        <div class="mini-user">
+            <a href="/~{{ p.id }}/">
+                {{ avatar_img(p) }}
+                <div class="name">{{ p.name }}</div>
+                <div class="amount">{{ _(
+                    "{money_amount}{small}/week{end_small}",
+                    money_amount=p.weekly_amount,
+                    small='<small>'|safe, end_small='</small>'|safe
+                ) }}</div>
+            </a>
+        </div>
+    % endfor
+    </div>
+    % endif
+
+    % if n_public_donees
+    <h3>{{ _("Donees") }}
+        &nbsp;
+        <small><a href="{{ participant.path('giving/public.csv') }}">{{ fontawesome('download', _("Export as CSV")) }}</a></small>
+    </h3>
+
+    <p>{{ ngettext(
+        "{username} donates publicly to {n} creator.",
+        "{username} donates publicly to {n} creators.",
+        username=participant.username,
+        n=n_public_donees,
+    ) }}</p>
+
+    <div class="paragraph">
+    % for p in public_donees
+        <div class="mini-user">
+            <a href="/~{{ p.id }}/">
+                {{ avatar_img(p) }}
+                <div class="name">{{ p.name }}</div>
+                <div class="amount">{{ _(
+                    "{money_amount}{small}/week{end_small}",
+                    money_amount=p.weekly_amount,
+                    small='<small>'|safe, end_small='</small>'|safe
+                ) }}</div>
+            </a>
+        </div>
+    % endfor
+    </div>
     % endif
 
     <h3>{{ _("History") }}</h3>
