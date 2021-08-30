@@ -13,7 +13,7 @@ from oauthlib.oauth2 import BackendApplicationClient, InvalidGrantError, TokenEx
 from requests import Session
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
-from liberapay.exceptions import LazyResponse
+from liberapay.exceptions import LazyResponse, TooManyRequests
 from liberapay.i18n.base import to_age
 from liberapay.website import website
 
@@ -123,6 +123,10 @@ class Platform:
         is_user_session = bool(sess)
         if not sess:
             sess = self.get_app_session(domain)
+            state = website.state.get(None)
+            if state:
+                source = state['request'].source
+                website.db.hit_rate_limit('elsewhere-lookup.ip-addr', source, TooManyRequests)
         kw.setdefault('timeout', self.api_timeout)
         if hasattr(self, 'api_headers'):
             kw.setdefault('headers', {}).update(self.api_headers)
@@ -209,16 +213,16 @@ class Platform:
         if percent_remaining < 0.5:
             reset_delta = reset - datetime.utcnow().replace(tzinfo=utc)
             reset_delta = format_timedelta(reset_delta, add_direction=True, locale='en')
-            log_msg = (
-                '{0}: {1:.1%} of ratelimit has been consumed, '
-                '{2} requests remaining, resets {3}.'
-            ).format(domain, 1 - percent_remaining, remaining, reset_delta)
             log_lvl = logging.WARNING
             if percent_remaining < 0.2:
                 log_lvl = logging.ERROR
             elif percent_remaining < 0.05:
                 log_lvl = logging.CRITICAL
-            logger.log(log_lvl, log_msg)
+            logger.log(
+                log_lvl,
+                '%s: %.1f%% of ratelimit has been consumed, %i requests remaining, resets %s.',
+                domain, (1 - percent_remaining) * 100, remaining, reset_delta
+            )
 
     def extract_user_info(self, info, source):
         """
