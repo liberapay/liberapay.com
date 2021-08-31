@@ -257,7 +257,7 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        <div class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
             "Liberapay does not store money, the entire amount of your payment will "
             "go immediately to the {payment_provider} accounts of {recipient_names}.",
             payment_provider='PayPal', recipient_names=payment.recipient_names
@@ -265,7 +265,7 @@ title = _("Funding your donations")
             "Liberapay does not store money, the entire amount of your payment will "
             "go immediately to the {payment_provider} account of {recipient_name}.",
             payment_provider='PayPal', recipient_name=payment.recipient_names[0]
-        ) }}</div>
+        ) }}</p>
 
         <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
             "PayPal payments are currently not anonymous, the recipient will "
