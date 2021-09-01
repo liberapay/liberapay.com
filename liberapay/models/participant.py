@@ -585,7 +585,7 @@ class Participant(Model, MixinTeam):
         assert self.authenticated
         self.session = session or self.start_session(**session_kw)
         creds = '%i:%i:%s' % (self.id, self.session.id, self.session.secret)
-        set_cookie(cookies, SESSION, creds, self.session.mtime + SESSION_TIMEOUT)
+        set_cookie(cookies, SESSION, creds, self.session.mtime + TEN_YEARS)
 
     def sign_out(self, cookies):
         """End the user's current session.
