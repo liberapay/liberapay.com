@@ -473,16 +473,6 @@ class FeeExceedsAmount(LazyResponse400):
 class TransactionFeeTooHigh(Exception): pass
 
 
-class PaydayIsRunning(LazyResponseXXX):
-    code = 503
-
-    def msg(self, _):
-        return _(
-            "Sorry, we're running payday right now, and we're not set up to do "
-            "payouts while payday is running. Please check back in a few hours."
-        )
-
-
 class InvalidNumber(LazyResponse400):
     def msg(self, _):
         return _('"{0}" is not a valid number.', *self.args)

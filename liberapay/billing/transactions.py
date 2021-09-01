@@ -15,7 +15,7 @@ from mangopay.utils import Money
 from liberapay.billing.fees import skim_credit
 from liberapay.constants import FEE_PAYOUT_WARN
 from liberapay.exceptions import (
-    NegativeBalance, NotEnoughWithdrawableMoney, PaydayIsRunning,
+    NegativeBalance, NotEnoughWithdrawableMoney,
     FeeExceedsAmount, TransactionFeeTooHigh, TransferError,
     AccountSuspended,
 )
@@ -78,10 +78,6 @@ def payout(db, route, amount, ignore_high_fee=False):
     participant = route.participant
     if participant.is_suspended:
         raise AccountSuspended()
-
-    payday = db.one("SELECT * FROM paydays WHERE ts_start > ts_end")
-    if payday:
-        raise PaydayIsRunning
 
     ba = BankAccount.get(route.address, user_id=participant.mangopay_user_id)
 
