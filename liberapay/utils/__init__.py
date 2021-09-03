@@ -591,6 +591,8 @@ def check_address(addr):
 
 
 def check_address_v2(addr):
+    if not addr:
+        return False
     for k in ('country', 'city', 'postal_code', 'local_address'):
         if not addr.get(k):
             return False
@@ -599,6 +601,21 @@ def check_address_v2(addr):
         # Related: https://github.com/liberapay/liberapay.com/issues/1056
         return False
     return True
+
+
+def render_postal_address(addr, single_line=False):
+    if not check_address_v2(addr):
+        return
+    # FIXME The rendering below is simplistic, we should implement
+    #       https://github.com/liberapay/liberapay.com/issues/1056
+    elements = [addr['local_address'], addr['city'], addr['postal_code']]
+    if addr.get('region'):
+        elements.append(addr['region'])
+    elements.append(LOCALE_EN.countries[addr['country']])
+    if single_line:
+        return ', '.join(elements)
+    else:
+        return '\n'.join(elements)
 
 
 def mkdir_p(path):
