@@ -98,7 +98,7 @@ class Locale(babel.core.Locale):
         plus_sign = self.number_symbols.get('plusSign', '+')
         if ';' in delta_p:
             pos, neg = delta_p.split(';')
-            assert len(neg) > len(pos)
+            assert len(neg) >= len(pos), (self, neg, pos)
             assert minus_sign in neg
             pos = neg.replace(minus_sign, plus_sign)
             self.currency_delta_pattern = parse_pattern('%s;%s' % (pos, neg))
@@ -431,12 +431,10 @@ def to_age(dt, **kw):
 
 def regularize_locale(loc):
     if loc == 'no':
-
         # There are two forms of written Norwegian, Bokmål and Nynorsk, and
         # while ISO 639 includes `no` as a "macrolanguage", the CLDR (upon
         # which Babel, our i18n/l10n library, depends), does not include it at
         # all. Therefore, if a client sends `no` we interpret it as `nb_NO`.
-
         loc = 'nb_NO'
     return loc.replace('-', '_').lower()
 

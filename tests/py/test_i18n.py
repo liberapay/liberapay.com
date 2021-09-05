@@ -73,6 +73,13 @@ class Tests(Harness):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh-CN', want='state')
         assert state['locale'] == self.website.locales['zh']
 
+    def test_swiss_german(self):
+        state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'de-ch', want='state')
+        locale = state['locale']
+        assert locale is self.website.locales['de_ch']
+        assert locale.format_money(Money('5200.00', 'EUR')) == '€ 5’200.00'
+        assert locale.parse_money_amount('5’200.00', 'EUR') == Money('5200.00', 'EUR')
+
     def test_get_currencies_for(self):
         # Unidentified donor with a Swiss IP address, giving to a creator in France.
         alice = self.make_participant('alice', main_currency='EUR', accepted_currencies='EUR,USD')
