@@ -5,7 +5,7 @@ import stripe
 from liberapay.i18n.base import Percent
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.stripe import get_partial_iban
-from liberapay.utils import get_participant, render
+from liberapay.utils import get_participant, render, render_postal_address
 
 [---]
 
@@ -28,8 +28,16 @@ payin = website.db.one("""
 if payin is None:
     raise response.error(404)
 
+payer_email = payer.get_email_address()
+if not payer_email:
+    raise response.error(500, "missing payer email")
+
 payer_identity = payer.get_current_identity() or {}
 payer_name = payer_identity.get('name')
+organization_name = payer_identity.get('organization_name')
+headquarters_address = render_postal_address(
+    payer_identity.get('headquarters_address'), single_line=True,
+)
 
 route = ExchangeRoute.from_id(payer, payin.route)
 if route.network.startswith('stripe-'):
@@ -62,11 +70,6 @@ if route.network.startswith('stripe-'):
     if not payer_name:
         customer = stripe.Customer.retrieve(route.remote_user_id)
         payer_name = customer.name
-
-if not payer_name:
-    payer_name = payer.get_email_address()
-    if not payer_name:
-        raise response.error(500, "missing payer_name")
 
 settlement_date = website.db.one("""
     SELECT pe.timestamp::date
@@ -110,12 +113,11 @@ output.body = render(globals(), allow_partial_i18n=False)
 
 % block content
 
-    <h1>{{ _("Receipt") }}</h1>
+    <h1>{{ _("Payment receipt") }}</h1>
 
     <p>{{ _(
-        "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received.",
+        "The payment of {money_amount} initiated on {date} has been received.",
         money_amount=payin.amount,
-        payer=payer_name,
         date=payin.ctime.date()
     ) }}</p>
 
@@ -180,7 +182,19 @@ output.body = render(globals(), allow_partial_i18n=False)
     </table>
     % endif
 
-    <h2>{{ _("Payment Details") }}</h2>
+    <h2>{{ _("Payer") }}</h2>
+    % if payer_name
+    {{ _("Name: {0}", payer_name) }}<br>
+    % endif
+    {{ _("Email address: {0}", payer_email) }}<br>
+    % if organization_name
+    {{ _("Organization name: {0}", organization_name) }}<br>
+    % endif
+    % if headquarters_address
+    {{ _("Headquarters address: {0}", headquarters_address) }}<br>
+    % endif
+
+    <h2>{{ _("Payment details") }}</h2>
     % if card_last4
     {{ _(
         "Payment method: {brand} card, number ending in {last4}",
