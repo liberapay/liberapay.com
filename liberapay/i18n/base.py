@@ -301,14 +301,13 @@ class Locale(babel.core.Locale):
             if string != proper and string.rstrip('0') != (proper + decimal_symbol):
                 # Irregular number format (e.g. `10.00` in German)
                 try:
-                    decimal_alt = Decimal(
+                    proper_alt = (
                         string.replace(decimal_symbol, '').replace(group_symbol, '.')
                     )
                 except (InvalidOperation, ValueError):
                     raise AmbiguousNumber(string, [proper])
                 else:
-                    proper_alt = self.format_decimal(decimal_alt, decimal_quantization=False)
-                    raise AmbiguousNumber(string, [proper, proper_alt])
+                    raise AmbiguousNumber(string, [proper_alt, proper])
         # Check that the amount is within the acceptable range.
         if maximum is not None and decimal > maximum:
             raise InvalidNumber(string)
