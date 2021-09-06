@@ -657,6 +657,11 @@ def share_source_strings(catalog, shared_strings):
 
 
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
+    def compute_percentage(it, total):
+        return sum(
+            (compute_percentage(s, len(s)) if isinstance(s, tuple) else 1) for s in it if s
+        ) / total
+
     # Load the base locales
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
@@ -668,11 +673,18 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 continue
             lang = parts[0]
             with open(os.path.join(localeDir, file), 'rb') as f:
-                l = locales[lang.lower()] = Locale(lang)
+                l = Locale(lang)
                 c = l.catalog = read_po(f)
                 share_source_strings(c, source_strings)
                 c.plural_func = get_function_from_rule(c.plural_expr)
                 replace_unused_singulars(c)
+                l.completion = compute_percentage(
+                    (m.string for m in c if m.id and not m.fuzzy), len(c)
+                )
+                if l.completion == 0:
+                    continue
+                else:
+                    locales[lang.lower()] = l
                 try:
                     l.countries = make_sorted_dict(COUNTRIES, l.territories)
                 except KeyError:
@@ -696,6 +708,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
         if base:
             l = locales[loc_id.lower()] = Locale.parse(loc_id)
             l.catalog = base.catalog
+            l.completion = base.completion
             l.countries = base.countries
             l.languages_2 = base.languages_2
 
@@ -708,25 +721,17 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             del babel.localedata._cache[key]
 
     # Prepare a unique and sorted list for use in the language switcher
-    percent = lambda l, total: sum((percent(s, len(s)) if isinstance(s, tuple) else 1) for s in l if s) / total
-    for l in list(locales.values()):
-        if l.language == 'en':
-            l.completion = 1
-            continue
-        l.completion = percent([m.string for m in l.catalog if m.id and not m.fuzzy], len(l.catalog))
-        if l.completion == 0:
-            del locales[l.language]
     loc_url = canonical_scheme+'://%s.'+canonical_host
     domain, port = (canonical_host.split(':') + [None])[:2]
     port = int(port) if port else socket.getservbyname(canonical_scheme, 'tcp')
     subdomains = {
         l.subdomain: loc_url % l.subdomain for l in locales.values()
-        if resolve(l.subdomain + '.' + domain, port)
+        if not l.territory and resolve(l.subdomain + '.' + domain, port)
     }
     lang_list = sorted(
         (
             (l.completion, l.language, l.language_name.title(), loc_url % l.subdomain)
-            for l in set(locales.values()) if l.completion > 0.5
+            for l in set(locales.values()) if not l.territory and l.completion > 0.5
         ),
         key=lambda t: (-t[0], t[1]),
     )

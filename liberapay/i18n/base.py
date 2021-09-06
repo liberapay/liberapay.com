@@ -368,6 +368,7 @@ LOCALES = {}
 LOCALE_EN = LOCALES['en'] = Locale('en')
 LOCALE_EN.catalog = Catalog('en')
 LOCALE_EN.catalog.plural_func = lambda n: n != 1
+LOCALE_EN.completion = 1
 LOCALE_EN.countries = COUNTRIES
 LOCALE_EN.languages_2 = LANGUAGES_2
 
