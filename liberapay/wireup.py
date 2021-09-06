@@ -657,7 +657,7 @@ def share_source_strings(catalog, shared_strings):
 
 
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
-    # Load the locales
+    # Load the base locales
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
     source_strings = {}
@@ -684,6 +684,20 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
         except Exception as e:
             tell_sentry(e)
     del source_strings
+
+    # Load the variants
+    for loc_id in babel.localedata.locale_identifiers():
+        if loc_id in locales:
+            continue
+        i = loc_id.rfind('_')
+        if i == -1:
+            continue
+        base = locales.get(loc_id[:i])
+        if base:
+            l = locales[loc_id.lower()] = Locale.parse(loc_id)
+            l.catalog = base.catalog
+            l.countries = base.countries
+            l.languages_2 = base.languages_2
 
     # Unload the Babel data that we no longer need
     # We load a lot of data to populate the LANGUAGE_NAMES dict, we don't want
