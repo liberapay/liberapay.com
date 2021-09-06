@@ -3370,9 +3370,12 @@ msgstr "Transaktions-ID: {0}"
 msgid "This document is not an invoice."
 msgstr "Dieses Dokument ist keine Rechnung."
 
+msgid "Payment receipt"
+msgstr ""
+
 #, python-brace-format
-msgid "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received."
-msgstr "Wir bestätigen, dass die Zahlung über {money_amount} von {payer} am {date} empfangen wurde."
+msgid "The payment of {money_amount} initiated on {date} has been received."
+msgstr ""
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
@@ -3398,6 +3401,28 @@ msgstr[1] "Das Geld wurde an folgende Empfänger gespendet:"
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
 msgstr "{recipient}, Mitglied des Teams {team_name}"
+
+msgid "Payer"
+msgstr ""
+
+#, python-brace-format
+msgid "Name: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Email address: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Organization name: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Headquarters address: {0}"
+msgstr ""
+
+msgid "Payment details"
+msgstr ""
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"

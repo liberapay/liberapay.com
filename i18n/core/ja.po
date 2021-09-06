@@ -3342,9 +3342,12 @@ msgstr "取引 ID：{0}"
 msgid "This document is not an invoice."
 msgstr "この文書は請求書ではありません。"
 
+msgid "Payment receipt"
+msgstr ""
+
 #, python-brace-format
-msgid "We confirm that the payment of {money_amount} initiated by {payer} on {date} has been received."
-msgstr "私たちは {date} に {payer} によって開始された {money_amount} の支払いが受け取られたことを確認します。"
+msgid "The payment of {money_amount} initiated on {date} has been received."
+msgstr ""
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
@@ -3369,6 +3372,28 @@ msgstr[0] "金銭は以下の受領者に寄付されました："
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
 msgstr "{recipient}、{team_name} チームのメンバー"
+
+msgid "Payer"
+msgstr ""
+
+#, python-brace-format
+msgid "Name: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Email address: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Organization name: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Headquarters address: {0}"
+msgstr ""
+
+msgid "Payment details"
+msgstr ""
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
