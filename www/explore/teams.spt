@@ -1,42 +1,30 @@
-from math import ceil
-
 [---]
 
 per_page = 18
 current_page = request.qs.get_int('page', default=1, minimum=1)
-with website.db.get_cursor() as cursor:
-    nteams = cursor.one("""
-        CREATE TEMP TABLE teams ON COMMIT DROP AS
-            SELECT p AS participant
-                 , t.*
-                 , ( SELECT s.content
-                       FROM statements s
-                      WHERE s.participant = p.id
-                        AND s.type = 'summary'
-                   ORDER BY s.lang = %s DESC, s.id
-                      LIMIT 1
-                   ) AS summary
-              FROM ( SELECT team AS id, count(member) AS nmembers
-                       FROM current_takes
-                   GROUP BY team
-                    ) AS t
-              JOIN participants p ON p.id = t.id
-             WHERE p.status = 'active'
-               AND p.hide_from_lists = 0;
-
-        SELECT count(1) FROM teams;
-    """, (locale.language,))
-    last_page = max(int(ceil(nteams / per_page)), 1)
-    if current_page > last_page:
-        response.redirect("?page=%i" % last_page)
-    teams = cursor.all("""
-        SELECT *
-          FROM teams t
-      ORDER BY convert((t.participant).receiving, 'EUR') DESC
-             , (t.participant).join_time DESC
-         LIMIT %s
-        OFFSET %s
-    """, (per_page, (current_page - 1) * per_page))
+teams = website.db.all("""
+    SELECT p AS participant
+         , t.*
+         , ( SELECT s.content
+               FROM statements s
+              WHERE s.participant = p.id
+                AND s.type = 'summary'
+           ORDER BY s.lang = %s DESC, s.id
+              LIMIT 1
+           ) AS summary
+      FROM ( SELECT team AS id, count(member) AS nmembers
+               FROM current_takes
+           GROUP BY team
+            ) AS t
+      JOIN participants p ON p.id = t.id
+     WHERE p.status = 'active'
+       AND p.hide_from_lists = 0
+  ORDER BY convert(p.receiving, 'EUR') DESC
+         , p.join_time DESC
+     LIMIT %s
+    OFFSET %s
+""", (locale.language, per_page + 1, (current_page - 1) * per_page))
+has_more = len(teams) > per_page
 
 title = _("Explore")
 subhead = _("Teams")
@@ -60,19 +48,16 @@ subhead = _("Teams")
     len(teams)
 ) }}</p>
 % else
-<p>{{ _(
-    "List of teams on Liberapay, page {number} of {total}:"
-    , number=current_page, total=last_page
-) }}</p>
+<p>{{ _("List of teams on Liberapay, page {number}:", number=current_page) }}</p>
 % endif
 
 <div class="inline-boxes">
-    % for team in teams
+    % for team in teams[:per_page]
         {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
     % endfor
 </div>
 
-{{ simple_pager(current_page, last_page) }}
+{{ simple_pager(current_page, has_more) }}
 
 <br>
 <p><a class="btn btn-primary btn-lg" href="/about/teams">{{ _("Create a team") }}</a></p>

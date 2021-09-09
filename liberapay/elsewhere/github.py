@@ -1,6 +1,6 @@
 from liberapay.elsewhere._base import PlatformOAuth2
 from liberapay.elsewhere._exceptions import CantReadMembership
-from liberapay.elsewhere._extractors import key, drop_keys
+from liberapay.elsewhere._extractors import key
 from liberapay.elsewhere._paginators import header_links_paginator
 
 
@@ -43,7 +43,6 @@ class GitHub(PlatformOAuth2):
     x_avatar_url = key('avatar_url')
     x_is_team = key('type', clean=lambda t: t.lower() == 'organization')
     x_description = key('bio')
-    x_extra_info_drop = drop_keys(lambda k: k.endswith('_url'))
 
     # Repo info extractors
     x_repo_id = key('id')
@@ -54,7 +53,6 @@ class GitHub(PlatformOAuth2):
     x_repo_is_fork = key('fork')
     x_repo_stars_count = key('stargazers_count')
     x_repo_owner_id = key('owner', clean=lambda d: d['id'])
-    x_repo_extra_info_drop = drop_keys(lambda k: k.endswith('_url'))
 
     def get_CantReadMembership_url(self, account):
         return 'https://github.com/orgs/%s/people' % account.user_name

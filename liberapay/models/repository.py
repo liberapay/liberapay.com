@@ -1,4 +1,3 @@
-import json
 from time import sleep
 
 from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
@@ -48,7 +47,6 @@ def upsert_repos(cursor, repos, participant, info_fetched_at):
         if not repo.owner_id or not repo.last_update:
             continue
         repo.participant = participant.id
-        repo.extra_info = json.dumps(repo.extra_info)
         repo.info_fetched_at = info_fetched_at
         cols, vals = zip(*repo.__dict__.items())
         on_conflict_set = ','.join('{0}=excluded.{0}'.format(col) for col in cols)

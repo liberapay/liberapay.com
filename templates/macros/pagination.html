@@ -23,15 +23,15 @@
     </ul>
 % endmacro
 
-% macro simple_pager(current_page, last_page)
-    % if last_page != 1
+% macro simple_pager(current_page, has_more)
+    % if current_page > 1 or has_more
     <ul class="pager">
         % if current_page > 1
             <li class="previous"><a href="{{ request.path.raw if current_page == 2 else '?page=%i' % (current_page - 1) }}">
                 ← {{ _("Previous") }}
             </a></li>
         % endif
-        % if current_page < last_page
+        % if has_more
             <li class="next"><a href="?page={{ current_page + 1 }}">
                 {{ _("View More") if current_page == 1 else _("Next") }} →
             </a></li>
