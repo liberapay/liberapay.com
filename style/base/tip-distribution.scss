@@ -18,11 +18,11 @@
         height: $font-size-base * 0.75;
         margin: 0 0.5ex -1px 0;
         &.green {
-            background: $btn-success-bg;
+            background: $success;
         }
     }
 }
-@media (max-width: $screen-sm-min - 1) {
+@nclude media-breakpoint-down(md) {
     .tip-distribution {
         .percentages {
             white-space: normal;

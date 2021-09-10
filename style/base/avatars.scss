@@ -43,7 +43,7 @@ img.avatar {
     vertical-align: middle;
 }
 
-@media (max-width: $screen-sm-min - 1) {
+@include media-breakpoint-down(md) {
     .avatar-inline {
         margin-bottom: 0.3em;
     }

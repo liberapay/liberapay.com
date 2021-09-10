@@ -16,7 +16,11 @@
 }
 
 .font-lg {
-    font-size: $font-size-large;
+    font-size: $font-size-lg;
+}
+
+.font-md {
+    font-size: $font-size-base;
 }
 
 .inline-block {
@@ -32,7 +36,7 @@
 }
 
 .paragraph {
-    margin-bottom: ($line-height-computed / 2);
+    margin-bottom: ($line-height-base / 2);
 }
 
 .pre-wrap {
@@ -79,7 +83,7 @@
     }
 }
 
-@media (max-width: $screen-sm-min - 1) {
+@include media-breakpoint-down(xs) {
     .block-xs {
         display: block;
     }

@@ -805,7 +805,7 @@ def load_scss_variables(project_root):
     # Get the names of all the variables
     with open(project_root + '/style/variables.scss') as f:
         variables = f.read()
-    names = [m.group(1) for m in re.finditer(r'^\$([\w-]+):', variables, re.M)]
+    names = [m.group(1) for m in re.finditer(r'^\$([\w-]+): +(?!(map-merge)?\()', variables, re.M)]
     # Compile a big rule that uses all the variables
     props = ''.join('-x-{0}: ${0};'.format(name) for name in names)
     css = sass.compile(string=('%s\nx { %s }' % (variables, props)))

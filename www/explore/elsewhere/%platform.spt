@@ -84,17 +84,19 @@ subhead = _("Social Networks")
 % if not platform
 
     <p>{{ _("Which platform would you like to explore?") }}</p>
+    <div class="font-md">
     % for p, d in platforms.values()
         % set n_connected_accounts = d['n_connected_accounts']
         % if n_connected_accounts or p in website.follow_platforms
-        <div class="card card-default card-md card-narrow text-center overlaid">
-            <h2 class="text-info">{{ platform_logo(p) }}<br>{{ p.display_name }}</h2>
+        <div class="card card-290 card-body overlaid">
+            <h3 class="text-info">{{ platform_logo(p) }}<br>{{ p.display_name }}</h3>
             <p>{{ ngettext("{n} connected account", "{n} connected accounts", n_connected_accounts) }}</p>
             <a class="overlay" href="/explore/elsewhere/{{ p.name }}" draggable="false"
                 ><span class="sr-only">{{ _("Explore {0}", p.display_name) }}</span></a>
         </div>
         % endif
     % endfor
+    </div>
 
 % else
 
