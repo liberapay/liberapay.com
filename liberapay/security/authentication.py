@@ -236,7 +236,7 @@ def start_user_as_anon():
 def authenticate_user_if_possible(csrf_token, request, response, state, user, _):
     """This signs the user in.
     """
-    if request.line.uri.startswith(b'/assets/'):
+    if state.get('etag'):
         return
 
     db = state['website'].db

@@ -206,18 +206,16 @@ algorithm.functions = [
     csrf.add_csrf_token_to_state,
     set_up_i18n,
     authentication.start_user_as_anon,
-    csrf.reject_forgeries,
-    authentication.authenticate_user_if_possible,
-    add_currency_to_state,
-
-    detect_obsolete_browsers,
 
     algorithm['dispatch_path_to_filesystem'],
-    algorithm['raise_404_if_missing'],
-
     http_caching.get_etag_for_file if env.cache_static else noop,
     http_caching.try_to_serve_304 if env.cache_static else noop,
 
+    csrf.reject_forgeries,
+    authentication.authenticate_user_if_possible,
+    add_currency_to_state,
+    detect_obsolete_browsers,
+    algorithm['raise_404_if_missing'],
     enforce_rate_limits,
 
     algorithm['load_resource_from_filesystem'],
