@@ -147,12 +147,12 @@ elif step == '2':
                             elsewhere = cursor.one("""
                             INSERT INTO elsewhere
                                         (platform, user_id, user_name, display_name, email,
-                                         is_team, avatar_url, extra_info, domain, participant)
+                                         is_team, avatar_url, domain, participant)
                                  VALUES (%s, %s, %s, %s, %s,
-                                         %s, %s, %s, '', %s)
+                                         %s, %s, '', %s)
                               RETURNING elsewhere::elsewhere_with_participant
                             """, (e.platform, e.user_id, e.user_name, e.display_name, e.email,
-                                  e.is_team, e.avatar_url, json.dumps(e.extra_info), tippee.id))
+                                  e.is_team, e.avatar_url, tippee.id))
                         del e
                     tippee = elsewhere.participant
                 if tippee == p:
@@ -188,13 +188,12 @@ elif step == '2':
                     else:
                         elsewhere.append(('self-conflict', e))
                     continue
-                e['extra_info'] = json.dumps(e['extra_info'])
                 added = website.db.one("""
                     INSERT INTO elsewhere
                                 (platform, user_id, user_name, display_name, email,
-                                 is_team, extra_info, domain, participant)
+                                 is_team, domain, participant)
                          VALUES (%(platform)s, %(user_id)s, %(user_name)s, %(display_name)s, %(email)s,
-                                 %(is_team)s, %(extra_info)s, '', %(p_id)s)
+                                 %(is_team)s, '', %(p_id)s)
                     ON CONFLICT (platform, user_id, domain) DO NOTHING
                       RETURNING true AS added
                 """, dict(e, p_id=p.id))

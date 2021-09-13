@@ -1809,6 +1809,10 @@ class Participant(Model, MixinTeam):
     # ======
 
     def add_event(self, c, type, payload, recorder=None):
+        if recorder is None:
+            state = website.state.get(None)
+            if state:
+                recorder = getattr(state.get('user'), 'id', None)
         return c.one("""
             INSERT INTO events
                         (participant, type, payload, recorder)

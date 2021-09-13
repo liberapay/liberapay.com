@@ -97,15 +97,15 @@ def add_caching_to_response(website, response, request=None, etag=None):
     """
     if response.code not in (200, 304):
         return
-    if b'Cache-Control' in response.headers:
-        # The caching policy has already been defined somewhere else
-        return
+    cache_control = response.headers.get(b'Cache-Control', b'')
     if etag:
-        try:
-            assert not response.headers.cookie
-        except Exception as e:
-            website.tell_sentry(e)
-            response.headers.cookie.clear()
+        if response.headers.cookie and not cache_control.startswith(b'no-'):
+            website.warning("cookies in a cacheable response, not supposed to happen")
+            response.headers[b'Cache-Control'] = b'no-cache'
+            return
+        if cache_control:
+            # The caching policy has already been defined somewhere else
+            return
         # https://developers.google.com/speed/docs/best-practices/caching
         response.headers[b'Etag'] = etag.encode('ascii')
         if request.qs.get('etag'):
@@ -114,6 +114,6 @@ def add_caching_to_response(website, response, request=None, etag=None):
         else:
             # Otherwise we cache for 1 hour
             response.headers[b'Cache-Control'] = b'public, max-age=3600'
-    else:
+    elif not cache_control:
         # This is a dynamic resource, disable caching by default
         response.headers[b'Cache-Control'] = b'no-cache'

@@ -1,5 +1,5 @@
 from liberapay.elsewhere._base import PlatformOAuth1
-from liberapay.elsewhere._extractors import drop_keys, key, not_available
+from liberapay.elsewhere._extractors import key, not_available
 from liberapay.elsewhere._paginators import query_param_paginator
 
 
@@ -36,4 +36,3 @@ class Twitter(PlatformOAuth1):
                        clean=lambda v: v.replace('_normal.', '.'))
     x_follows_count = key('friends_count')
     x_description = key('description')
-    x_extra_info_drop = drop_keys('id')

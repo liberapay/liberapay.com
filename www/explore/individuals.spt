@@ -1,40 +1,28 @@
-from math import ceil
-
 [---]
 
 per_page = 18
 current_page = request.qs.get_int('page', default=1, minimum=1)
-with website.db.get_cursor() as cursor:
-    nindividuals = cursor.one("""
-        CREATE TEMP TABLE individuals ON COMMIT DROP AS
-            SELECT p
-                 , ( SELECT s.content
-                       FROM statements s
-                      WHERE s.participant = p.id
-                        AND s.type = 'summary'
-                   ORDER BY s.lang = %s DESC, s.id
-                      LIMIT 1
-                   ) AS summary
-              FROM participants p
-             WHERE p.kind = 'individual'
-               AND p.status = 'active'
-               AND (p.goal > 0 OR p.goal IS NULL)
-               AND p.hide_receiving IS NOT TRUE
-               AND p.hide_from_lists = 0
-               AND p.receiving > 0;
-
-        SELECT count(1) FROM individuals;
-    """, (locale.language,))
-    last_page = max(int(ceil(nindividuals / per_page)), 1)
-    if current_page > last_page:
-        response.redirect("?page=%i" % last_page)
-    individuals = cursor.all("""
-        SELECT *
-          FROM individuals i
-      ORDER BY convert((i.p).receiving, 'EUR') DESC, (i.p).join_time DESC
-         LIMIT %s
-        OFFSET %s
-    """, (per_page, (current_page - 1) * per_page))
+individuals = website.db.all("""
+    SELECT p
+         , ( SELECT s.content
+               FROM statements s
+              WHERE s.participant = p.id
+                AND s.type = 'summary'
+           ORDER BY s.lang = %s DESC, s.id
+              LIMIT 1
+           ) AS summary
+      FROM participants p
+     WHERE p.kind = 'individual'
+       AND p.status = 'active'
+       AND (p.goal > 0 OR p.goal IS NULL)
+       AND p.hide_receiving IS NOT TRUE
+       AND p.hide_from_lists = 0
+       AND p.receiving > 0
+  ORDER BY convert(p.receiving, 'EUR') DESC, p.join_time DESC
+     LIMIT %s
+    OFFSET %s
+""", (locale.language, per_page + 1, (current_page - 1) * per_page))
+has_more = len(individuals) > per_page
 
 title = _("Explore")
 subhead = _("Individuals")
@@ -52,16 +40,15 @@ subhead = _("Individuals")
         <p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
     % else
         <p>{{ _(
-            "List of individuals on Liberapay, page {number} of {total}:"
-            , number=current_page, total=last_page
+            "List of individuals on Liberapay, page {number}:", number=current_page
         ) }}</p>
     % endif
     <div class="inline-boxes">
-        % for p, summary in individuals
+        % for p, summary in individuals[:per_page]
             {{ profile_box_embedded(p, summary) }}
         % endfor
     </div>
-    {{ simple_pager(current_page, last_page) }}
+    {{ simple_pager(current_page, has_more) }}
     <br>
 % else
 <p>{{ _("Nothing to show.") }}</p>

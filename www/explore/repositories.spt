@@ -1,32 +1,20 @@
-from math import ceil
-
 [---]
 
 per_page = 20
 current_page = request.qs.get_int('page', default=1, minimum=1)
-with website.db.get_cursor() as cursor:
-    nrepos = cursor.one("""
-        CREATE TEMP TABLE repos ON COMMIT DROP AS
-            SELECT r, p
-              FROM repositories r
-              JOIN elsewhere e ON e.platform = r.platform AND e.domain = '' AND e.user_id = r.owner_id
-              JOIN participants p ON p.id = e.participant
-             WHERE r.stars_count > 1
-               AND r.show_on_profile
-               AND p.status = 'active';
-
-        SELECT count(1) FROM repos;
-    """, (locale.language,))
-    last_page = max(int(ceil(nrepos / per_page)), 1)
-    if current_page > last_page:
-        response.redirect("?page=%i" % last_page)
-    repos = cursor.all("""
-        SELECT *
-          FROM repos
-      ORDER BY (r).stars_count DESC, (r).id DESC
-         LIMIT %s
-        OFFSET %s
-    """, (per_page, (current_page - 1) * per_page))
+repos = website.db.all("""
+    SELECT r, p
+      FROM repositories r
+      JOIN elsewhere e ON e.platform = r.platform AND e.domain = '' AND e.user_id = r.owner_id
+      JOIN participants p ON p.id = e.participant
+     WHERE r.stars_count > 1
+       AND r.show_on_profile
+       AND p.status = 'active'
+  ORDER BY r.stars_count DESC, r.id DESC
+     LIMIT %s
+    OFFSET %s
+""", (per_page + 1, (current_page - 1) * per_page))
+has_more = len(repos) > per_page
 
 title = _("Explore")
 subhead = _("Repositories")
@@ -46,13 +34,13 @@ subhead = _("Repositories")
 ) }}</p>
 % else
 <p>{{ _(
-    "List of repositories currently linked to a Liberapay account, page {number} of {total}:"
-    , number=current_page, total=last_page
+    "List of repositories currently linked to a Liberapay account, page {number}:",
+    number=current_page
 ) }}</p>
 % endif
 
 <div class="inline-boxes">
-% for repo, owner in repos
+% for repo, owner in repos[:per_page]
     <div class="inline-box repo">
     <div class="panel panel-default">
     <div class="panel-body">
@@ -75,7 +63,7 @@ subhead = _("Repositories")
 % endfor
 </div>
 
-{{ simple_pager(current_page, last_page) }}
+{{ simple_pager(current_page, has_more) }}
 
 <br><br>
 <p class="buttons text-center">

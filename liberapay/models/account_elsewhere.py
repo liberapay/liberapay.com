@@ -2,14 +2,12 @@ from datetime import timedelta
 import json
 from urllib.parse import urlsplit, urlunsplit
 import uuid
-import xml.etree.ElementTree as ET
 
 from markupsafe import Markup
 from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
-import xmltodict
 
 from ..constants import AVATAR_QUERY, DOMAIN_RE, RATE_LIMITS, SUMMARY_MAX_SIZE
 from ..cron import logger
@@ -121,11 +119,6 @@ class AccountElsewhere(Model):
                netloc.endswith('libravatar.org'):
                 query = AVATAR_QUERY
             i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
-
-        # Serialize extra_info
-        if isinstance(i.extra_info, ET.Element):
-            i.extra_info = xmltodict.parse(ET.tostring(i.extra_info))
-        i.extra_info = json.dumps(i.extra_info)
 
         d = dict(i.__dict__)
         d.pop('email', None)

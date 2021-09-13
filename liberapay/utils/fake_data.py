@@ -128,7 +128,6 @@ def fake_elsewhere(db, participant, platform):
         user_id=fake_text_id(),
         user_name=participant.id,
         participant=participant.id,
-        extra_info=None,
         domain='',
     )
 

@@ -1,31 +1,19 @@
-from math import ceil
-
 [---]
 
 per_page = 18
 current_page = request.qs.get_int('page', default=1, minimum=1)
-with website.db.get_cursor() as cursor:
-    npledgees = cursor.one("""
-        CREATE TEMP TABLE pledgees ON COMMIT DROP AS
-            SELECT e, p
-              FROM participants p
-              JOIN elsewhere e ON e.participant = p.id
-             WHERE p.status = 'stub'
-               AND p.receiving > 0
-               AND p.hide_from_lists = 0;
-
-        SELECT count(1) FROM pledgees;
-    """, (locale.language,))
-    last_page = max(int(ceil(npledgees / per_page)), 1)
-    if current_page > last_page:
-        response.redirect("?page=%i" % last_page)
-    pledgees = cursor.all("""
-        SELECT (e, p)::elsewhere_with_participant
-          FROM pledgees
-      ORDER BY (p).npatrons DESC, convert((p).receiving, 'EUR') DESC, (e).id DESC
-         LIMIT %s
-        OFFSET %s
-    """, (per_page, (current_page - 1) * per_page))
+pledgees = website.db.all("""
+    SELECT (e, p)::elsewhere_with_participant
+      FROM participants p
+      JOIN elsewhere e ON e.participant = p.id
+     WHERE p.status = 'stub'
+       AND p.receiving > 0
+       AND p.hide_from_lists = 0
+  ORDER BY p.npatrons DESC, convert(p.receiving, 'EUR') DESC, e.id DESC
+     LIMIT %s
+    OFFSET %s
+""", (per_page + 1, (current_page - 1) * per_page))
+has_more = len(pledgees) > per_page
 
 title = _("Explore")
 subhead = _("Unclaimed Donations")
@@ -52,11 +40,11 @@ subhead = _("Unclaimed Donations")
             "inviting them to join Liberapay or asking them why they haven't."
         ) }}</p>
         <div class="inline-boxes">
-        % for p in pledgees
+        % for p in pledgees[:per_page]
             {{ profile_box_embedded_elsewhere(p) }}
         % endfor
         </div>
-        {{ simple_pager(current_page, last_page) }}
+        {{ simple_pager(current_page, has_more) }}
     % else
         <p>{{ _("There are no unclaimed donations right now.") }}</p>
     % endif

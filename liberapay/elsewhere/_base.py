@@ -272,9 +272,6 @@ class Platform:
                 r.avatar_url = 'https://seccdn.libravatar.org/avatar/'+gravatar_id
         r.is_team = self.x_is_team(r, info, False)
         r.description = self.x_description(r, info, None)
-        r.extra_info = info
-        if hasattr(self, 'x_extra_info_drop'):
-            self.x_extra_info_drop(r.extra_info)
         return r
 
     def get_team_members(self, account, page_url=None):
@@ -344,8 +341,6 @@ class Platform:
         r = self.api_get(account.domain, page_url, sess=sess)
         follows, count, pages_urls = self.api_paginator(r, self.api_parser(r))
         follows = [self.extract_user_info(f, account.domain) for f in follows]
-        if count == -1 and hasattr(self, 'x_follows_count'):
-            count = self.x_follows_count(None, account.extra_info, -1)
         return follows, count, pages_urls
 
     def extract_repo_info(self, info):
@@ -363,9 +358,6 @@ class Platform:
             r.last_update = parse_date(r.last_update)
         r.is_fork = self.x_repo_is_fork(r, info, None)
         r.stars_count = self.x_repo_stars_count(r, info, None)
-        r.extra_info = info
-        if hasattr(self, 'x_repo_extra_info_drop'):
-            self.x_repo_extra_info_drop(r.extra_info)
         return r
 
     def get_repos(self, account, page_url=None, sess=None, refresh=True):
@@ -394,8 +386,6 @@ class Platform:
                 raise TokenExpiredError()
             # Note: we can't pass the page_url below, because it contains the old user_name
             return self.get_repos(account, page_url=None, sess=sess, refresh=False)
-        if count == -1 and hasattr(self, 'x_repos_count'):
-            count = self.x_repos_count(None, account.extra_info, -1)
         return repos, count, pages_urls
 
     def get_starred_repos(self, account, sess, page_url=None):
