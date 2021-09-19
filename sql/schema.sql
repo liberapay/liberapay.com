@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '147'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '148'::jsonb);
 
 
 -- app configuration
@@ -187,7 +187,6 @@ CREATE TABLE elsewhere
 , display_name          text
 , avatar_url            text
 , is_team               boolean         NOT NULL DEFAULT FALSE
-, extra_info            json
 , token                 json
 , connect_token         text
 , connect_expires       timestamptz
@@ -229,7 +228,6 @@ CREATE TABLE repositories
 , last_update           timestamptz     NOT NULL
 , is_fork               boolean
 , stars_count           int
-, extra_info            json
 , info_fetched_at       timestamptz     NOT NULL DEFAULT now()
 , participant           bigint          REFERENCES participants
 , show_on_profile       boolean         NOT NULL DEFAULT FALSE

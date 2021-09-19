@@ -3024,3 +3024,7 @@ CREATE OR REPLACE AGGREGATE min(currency_amount) (
     sfunc = min,
     stype = currency_amount
 );
+
+-- migration #148
+ALTER TABLE elsewhere DROP COLUMN extra_info;
+ALTER TABLE repositories DROP COLUMN extra_info;
