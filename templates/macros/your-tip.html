@@ -237,6 +237,7 @@
     % elif tippee_p.see_patrons or tippee_is_stub
     <p>{{ _("Please select a privacy level for this donation:") }}</p>
     <ul class="list-group radio-group">
+        % if tippee_p.payment_providers != 2
         <li class="list-group-item">
         <label>
             <input type="radio" name="secrecy_level" value="2" required
@@ -250,6 +251,7 @@
             </div>
         </label>
         </li>
+        % endif
         <li class="list-group-item">
         <label>
             <input type="radio" name="secrecy_level" value="1" required
