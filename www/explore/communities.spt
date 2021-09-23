@@ -1,17 +1,14 @@
-query_cache = website.db_qc5
-
 [---]
 
-ncommunities = query_cache.one("SELECT count(*) FROM communities")
+ncommunities = website.db.one("SELECT count(*) FROM communities", max_age=5)
 
-communities_top = query_cache.all("""
+communities_top = website.db.all("""
     SELECT c.*, replace(name, '_', ' ') AS pretty_name
          , ( SELECT content
                FROM statements
-          LEFT JOIN enumerate(string_to_array(%s, ' ')) langs ON langs.value = statements.lang
               WHERE participant = c.participant
                 AND type = 'subtitle'
-           ORDER BY langs.rank NULLS LAST, statements.id
+           ORDER BY lang = %s DESC, statements.id
               LIMIT 1
            ) AS subtitle
       FROM communities c
@@ -20,10 +17,9 @@ communities_top = query_cache.all("""
        AND cp.hide_from_lists = 0
   ORDER BY nmembers DESC, random()
      LIMIT 15
-""", (' '.join(request.accept_langs),))
+""", (locale.language,), max_age=30)
 
-communities_langs = set(query_cache.all("SELECT DISTINCT lang FROM communities"))
-communities_loc = query_cache.all("""
+communities_loc = website.db.all("""
     SELECT c.*, replace(name, '_', ' ') AS pretty_name
          , ( SELECT content
                FROM statements s
@@ -35,9 +31,10 @@ communities_loc = query_cache.all("""
       JOIN participants cp ON cp.id = c.participant
      WHERE lang = %s
        AND cp.hide_from_lists = 0
+       AND nmembers > 0
   ORDER BY nmembers DESC, random()
      LIMIT 15
-""", (([l for l in request.accept_langs if l in communities_langs] + [''])[0],))
+""", (locale.language,), max_age=30)
 
 title = _("Explore")
 subhead = _("Communities")
@@ -70,7 +67,7 @@ subhead = _("Communities")
     </div>
 </form>
 
-<h3 class="banderole success">{{ _("Popular Communities") }}</h3>
+<h3 class="banderole success">{{ _("Largest communities") }}</h3>
 <div>
     % for community in communities_top
     <div class="community">
@@ -83,7 +80,7 @@ subhead = _("Communities")
     % endfor
 </div>
 
-<h3 class="banderole success">{{ _("Top Communities In Your Language") }}</h3>
+<h3 class="banderole success">{{ _("Largest communities in {language}", language=locale) }}</h3>
 <div>
 % if communities_loc
     % for community in communities_loc

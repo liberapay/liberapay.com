@@ -1,12 +1,10 @@
 from collections import OrderedDict
 
-query_cache = website.db_qc5
-
 INF = float('inf')
 
 [---]
 
-platforms = query_cache.all("""
+platforms = website.db.all("""
     SELECT platform, json_build_object('n_connected_accounts', c, 'min_id', min_id)
       FROM (
         SELECT e.platform, count(*) as c, min(p.id) as min_id
@@ -17,7 +15,7 @@ platforms = query_cache.all("""
       GROUP BY e.platform
            ) a
   ORDER BY c DESC, platform ASC
-""")
+""", max_age=60)
 platforms = OrderedDict(
     (p_name, (getattr(website.platforms, p_name), d)) for p_name, d in platforms
 )
@@ -47,7 +45,7 @@ if platform:
     last_shown = request.qs.get_int('last_shown', INF)
 
     def get_participants(random):
-        return query_cache.all("""
+        return website.db.all("""
             SELECT p
                  , ( SELECT s.content
                        FROM statements s
@@ -64,7 +62,7 @@ if platform:
                AND p.id < %s
           ORDER BY (CASE WHEN %s THEN random() ELSE 0 END), p.id DESC
              LIMIT %s
-        """, (locale.language, platform_name, last_shown, random, limit))
+        """, (locale.language, platform_name, last_shown, random, limit), max_age=15)
 
     get_other_platforms = lambda: [
         p for p, d in platforms.values() if p.name != platform_name

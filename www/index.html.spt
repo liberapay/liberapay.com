@@ -3,8 +3,6 @@ from math import ceil
 from liberapay.i18n.base import LANGUAGES_2
 from liberapay.models.participant import Participant
 
-query_cache = website.db_qc5
-
 n_langs = len(website.lang_list)
 n_langs_2 = len(LANGUAGES_2)
 n_good_translations = len([t[0] for t in website.lang_list if t[0] >= 0.95])
@@ -16,17 +14,17 @@ platforms_with_repos = [p.display_name for p in website.platforms.hasattr('api_r
 if not website.db:
     response.redirect('/about/')
 
-sponsors = query_cache.all("""
+sponsors = website.db.all("""
     SELECT username, giving, avatar_url
       FROM ( SELECT *
                FROM sponsors
            ORDER BY convert(giving, 'EUR') * random()::numeric DESC
               LIMIT 10 ) foo
   ORDER BY convert(giving, 'EUR') DESC
-""")
-nsponsors = query_cache.one("SELECT count(*) FROM sponsors")
+""", max_age=300)
+nsponsors = website.db.one("SELECT count(*) FROM sponsors", max_age=300)
 
-recent = query_cache.one("""
+recent = website.db.one("""
     WITH _users AS (
              SELECT join_time
                FROM participants
@@ -52,7 +50,7 @@ recent = query_cache.one("""
          , (SELECT basket_sum(amount) FROM _pledges) AS pledges_amount
          , (SELECT transfer_volume FROM _payday) AS newest_payday_transfer_volume
          , (SELECT nactive FROM _payday) AS newest_payday_nactive
-""")
+""", max_age=15)
 
 [---]
 % from 'templates/macros/avatar-url.html' import avatar_img, avatar_default with context

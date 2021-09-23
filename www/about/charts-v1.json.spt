@@ -1,8 +1,6 @@
-query_cache = website.db_qc5
-
 [---]
 
-charts = [r._asdict() for r in query_cache.all("""\
+charts = [r._asdict() for r in website.db.all("""\
 
     SELECT ts_start::date           AS date
          , week_deposits
@@ -11,7 +9,7 @@ charts = [r._asdict() for r in query_cache.all("""\
      WHERE stage IS NULL
   ORDER BY ts_start DESC
 
-""")]
+""", max_age=600)]
 for c in charts:
     for k in ('week_deposits', 'week_withdrawals'):
         c[k] = c[k].fuzzy_sum('EUR')

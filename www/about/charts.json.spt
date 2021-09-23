@@ -1,12 +1,10 @@
-query_cache = website.db_qc5
-
 [---]
 
 currency = request.qs.get('currency', 'EUR')
 if currency not in constants.CURRENCIES:
     raise response.invalid_input(currency, 'currency', 'querystring')
 
-charts = [r._asdict() for r in query_cache.all("""\
+charts = [r._asdict() for r in website.db.all("""\
 
     SELECT ts_start::date           AS date
          , nparticipants::text
@@ -18,7 +16,7 @@ charts = [r._asdict() for r in query_cache.all("""\
      WHERE stage IS NULL
   ORDER BY ts_start DESC
 
-""")]
+""", max_age=600)]
 for c in charts:
     for k in ('transfer_volume', 'week_payins'):
         if c[k] is None:
