@@ -1,12 +1,9 @@
 from liberapay.i18n.currencies import Money, MoneyBasket
 
-db = website.db
-db_qc5 = website.db_qc5
-
 [---]
 
 title = _("Stats")
-escrow = db_qc5.one("SELECT basket_sum(balance) FROM wallets") or MoneyBasket()
+escrow = website.db.one("SELECT basket_sum(balance) FROM wallets", max_age=600) or MoneyBasket()
 
 [---] text/html
 

@@ -3,17 +3,16 @@ from liberapay.i18n.currencies import Money, MoneyBasket
 [---]
 
 db = website.db
-db_qc5 = website.db_qc5
 
 title = _("Stats")
 zero = Money.ZEROS[currency]
-nusers = db_qc5.one("""
+nusers = db.one("""
     SELECT count(*)
       FROM participants
      WHERE status = 'active'
        AND kind IN ('individual', 'organization');
-""")
-tips_stats = db_qc5.one("""
+""", max_age=60)
+tips_stats = db.one("""
     SELECT count(*), basket_sum(amount)
       FROM current_tips
       JOIN participants p ON p.id = tipper
@@ -22,7 +21,7 @@ tips_stats = db_qc5.one("""
        AND is_funded
        AND p.status = 'active'
        AND p2.status = 'active'
-""")
+""", max_age=60)
 active_tips_count = getattr(tips_stats, 'count', None) or 0
 active_tips_sum = getattr(tips_stats, 'basket_sum', None) or MoneyBasket()
 if active_tips_count:
@@ -30,7 +29,7 @@ if active_tips_count:
 else:
     average_tip = zero
 
-average_tippees = int(db_qc5.one("""\
+average_tippees = int(db.one("""\
     SELECT round(avg(ntippees))
       FROM ( SELECT count(tippee) as ntippees
                FROM current_tips
@@ -42,7 +41,7 @@ average_tippees = int(db_qc5.one("""\
                 AND p2.status = 'active'
            GROUP BY tipper
            ) AS bar
-""") or 0)
+""", max_age=60) or 0)
 
 last_payday = db.one("SELECT * FROM paydays ORDER BY ts_end DESC LIMIT 1")
 

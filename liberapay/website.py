@@ -39,10 +39,7 @@ class Website(_Website):
         ]
 
     def warning(self, msg):
-        try:
-            raise Warning(msg)
-        except Warning as e:
-            self.tell_sentry(e)
+        self.tell_sentry(Warning(msg))
 
     def wireup(self, minimal=False):
         from liberapay import wireup

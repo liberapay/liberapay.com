@@ -42,7 +42,6 @@ from liberapay.security.crypto import Cryptograph
 from liberapay.utils import find_files, markdown, resolve
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
-from liberapay.utils.query_cache import QueryCache
 from liberapay.utils.types import Object
 from liberapay.version import get_version
 from liberapay.website import Website
@@ -194,11 +193,10 @@ def database(env, tell_sentry):
     except (psycopg2.ProgrammingError, NeedDatabase):
         pass
 
-    use_qc = not env.override_query_cache
-    qc1 = QueryCache(db, threshold=(1 if use_qc else 0))
-    qc5 = QueryCache(db, threshold=(5 if use_qc else 0))
+    if db and env.override_query_cache:
+        db.cache.max_size = 0
 
-    return {'db': db, 'db_qc1': qc1, 'db_qc5': qc5}
+    return {'db': db}
 
 
 class AppConf:

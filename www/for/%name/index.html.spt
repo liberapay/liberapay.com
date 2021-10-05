@@ -1,7 +1,5 @@
 from liberapay.utils import get_community, markdown
 
-query_cache = website.db_qc1
-
 [---]
 
 community = get_community(state, restrict=False)
@@ -12,7 +10,7 @@ offset = request.qs.get_int('offset', 0)
 if limit not in (18, 60):
     raise response.invalid_input(limit, 'limit', 'querystring')
 
-members = query_cache.all("""
+members = website.db.all("""
     SELECT p
          , ( SELECT s.content
                FROM statements s
@@ -29,7 +27,7 @@ members = query_cache.all("""
   ORDER BY cc.ctime DESC
      LIMIT %s
     OFFSET %s
-""", (locale.language, community.id, limit, offset))
+""", (locale.language, community.id, limit, offset), max_age=0)
 
 title = pretty_name = community.pretty_name
 
