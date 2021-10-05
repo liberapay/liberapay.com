@@ -936,7 +936,7 @@ msgid "This account is closed"
 msgstr "Denne konto er lukket"
 
 msgid "Authentication required"
-msgstr ""
+msgstr "Godkendelse er påkrævet"
 
 msgid "We're unable to process your request right now, sorry."
 msgstr "Vi kan ikke behandle din anmodning lige nu, undskyld."
@@ -1400,7 +1400,7 @@ msgid "Proceed"
 msgstr "Forsæt"
 
 msgid "Reauthentication required"
-msgstr ""
+msgstr "Gengodkendelse er påkrævet"
 
 msgid "Please try again in a few minutes."
 msgstr "Prøv venligst igen om et par minutter."
@@ -1545,19 +1545,19 @@ msgid "You're still not logged in as {0}."
 msgstr "Du er stadig ikke logget ind som {0}."
 
 msgid "Please fill in your password to authenticate yourself:"
-msgstr ""
+msgstr "Udfyld din adgangskode for at autentificere dig selv:"
 
 msgid "Or log in via email if you've lost your password:"
-msgstr ""
+msgstr "Eller log ind via e-mail hvis du har mistet din adgangskode:"
 
 msgid "Log in via email"
 msgstr "Log ind via e-mail"
 
 msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
-msgstr ""
+msgstr "Din konto har ikke en adgangskode, så du skal autentificere dig selv via e-mail:"
 
 msgid "Your session has expired."
-msgstr ""
+msgstr "Din session er udløbet."
 
 msgid "Password (optional)"
 msgstr "Adgangskode (valgfrit)"
@@ -2720,9 +2720,9 @@ msgstr "Vi kan ikke opkræve kun {donation_amount} fra dig. Minimumsbeløbet er 
 msgid "Please select or input a payment amount:"
 msgstr "Vælg venligst eller indtast et betalingsbeløb:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Liberapay opbevarer ikke penge. Hele beløbet for din betaling går straks til {recipient_names} {payment_provider} kontoer."
+msgstr "Liberapay opbevarer ikke penge. Hele beløbet fra din betaling går straks til {recipient_names} {payment_provider} kontoer."
 
 #, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
@@ -3368,11 +3368,11 @@ msgid "This document is not an invoice."
 msgstr "Dette dokument er ikke en faktura."
 
 msgid "Payment receipt"
-msgstr ""
+msgstr "Betalingskvittering"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has been received."
-msgstr ""
+msgstr "Betalingen af {money_amount} påbegyndt {date} er blevet modtaget."
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
@@ -3400,26 +3400,26 @@ msgid "{recipient}, member of the {team_name} team"
 msgstr "{recipient}, medlem af teamet {team_name}"
 
 msgid "Payer"
-msgstr ""
+msgstr "Betaler"
 
 #, python-brace-format
 msgid "Name: {0}"
-msgstr ""
+msgstr "Navn:{0}"
 
 #, python-brace-format
 msgid "Email address: {0}"
-msgstr ""
+msgstr "E-mailadresse: {0}"
 
 #, python-brace-format
 msgid "Organization name: {0}"
-msgstr ""
+msgstr "Organisationsnavn: {0}"
 
 #, python-brace-format
 msgid "Headquarters address: {0}"
-msgstr ""
+msgstr "Hovedkvarterets adresse: {0}"
 
 msgid "Payment details"
-msgstr ""
+msgstr "Betalingsdetaljer"
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
@@ -4472,7 +4472,7 @@ msgstr "En team-konto {bold}opbevarer ikke penge{end_bold} til senere brug. Hver
 
 #, fuzzy, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "Hvis en Liberapay team-konto ikke passer til dine behov, kan du i stedet bruge {link_start}Open Collective{link_end} platformen, som tillader et team at være \"vært\" for en registreret nonprofit organisation. Denne \"pengeansvarlige vært\" er den lovlige ejer af teamets midler, fører tilsyn med, hvordan de bruges, og tager et gebyr på 5%. (Vi planlægger at implementere et lignende system i Liberapay, men vi ved ikke, hvornår det bliver gjort.)"
+msgstr "Hvis en Liberapay team-konto ikke passer til dine behov, kan du i stedet bruge {link_start}Open Collective{link_end} platformen, som tillader et team at være \"vært\" for en registreret nonprofit organisation. Denne \"pengeansvarlige vært\" er den lovlige ejer af teamets midler, fører tilsyn med hvordan de bruges og tager et gebyr på 5%. (Vi planlægger at implementere et lignende system i Liberapay, men vi ved ikke, hvornår det bliver gjort.)"
 
 msgid "Creating a team"
 msgstr "At skabe et team"
@@ -4671,7 +4671,7 @@ msgstr "Top {0} individer på Liberapay er:"
 
 #, python-brace-format
 msgid "List of individuals on Liberapay, page {number}:"
-msgstr ""
+msgstr "Liste over personer på Liberapay, side {number}:"
 
 #, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
@@ -4679,7 +4679,7 @@ msgstr "Top {0} organisationer på Liberapay er:"
 
 #, python-brace-format
 msgid "List of organizations on Liberapay, page {number}:"
-msgstr ""
+msgstr "Liste over organisationer på Liberapay, side {number}:"
 
 msgid "Create an organization account"
 msgstr "Lav en organisations-konto"
@@ -4710,7 +4710,7 @@ msgstr[1] "De {n} mest populære repositories, der i øjeblikket er knyttet til 
 
 #, python-brace-format
 msgid "List of repositories currently linked to a Liberapay account, page {number}:"
-msgstr ""
+msgstr "Liste over repositories for tiden linket til en Liberapay konto, side {number}:"
 
 #, python-brace-format
 msgid "by {author_name}"
@@ -4733,7 +4733,7 @@ msgstr[1] "De øverste {n} teams på Liberapay er:"
 
 #, python-brace-format
 msgid "List of teams on Liberapay, page {number}:"
-msgstr ""
+msgstr "Liste over teams på Liberapay, side {number}:"
 
 msgid "Create a team"
 msgstr "Lav et team"
