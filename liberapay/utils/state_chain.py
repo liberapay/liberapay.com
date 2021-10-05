@@ -97,6 +97,8 @@ def detect_obsolete_browsers(request, response, state):
     """Respond with a warning message if the user agent seems to be obsolete.
     """
     if b'MSIE' in request.headers.get(b'User-Agent', b''):
+        if state.get('etag'):
+            return
         cookie = request.headers.cookie.get('obsolete_browser_warning')
         if cookie and cookie.value == 'ignore':
             return
