@@ -1915,6 +1915,38 @@ class Participant(Model, MixinTeam):
                 sleep(1)
 
 
+    # Recipient settings
+    # ==================
+
+    @cached_property
+    def recipient_settings(self):
+        return self.db.one("""
+            SELECT *
+              FROM recipient_settings
+             WHERE participant = %s
+        """, (self.id,), default=Object(
+            participant=self.id,
+            patron_visibilities=(7 if self.status == 'stub' else 0),
+        ))
+
+    def update_recipient_settings(self, **kw):
+        cols, vals = zip(*kw.items())
+        updates = ','.join('{0}=excluded.{0}'.format(col) for col in cols)
+        cols = ', '.join(cols)
+        placeholders = ', '.join(['%s']*len(vals))
+        with self.db.get_cursor() as cursor:
+            settings = cursor.one("""
+                INSERT INTO recipient_settings
+                            (participant, {0})
+                     VALUES (%s, {1})
+                ON CONFLICT (participant) DO UPDATE
+                        SET {2}
+                  RETURNING *
+            """.format(cols, placeholders, updates), (self.id,) + vals)
+            self.add_event(cursor, 'recipient_settings', kw)
+        self.recipient_settings = settings
+
+
     # Random Stuff
     # ============
 

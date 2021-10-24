@@ -38,7 +38,8 @@ communities = participant.get_communities()
 
 langs = participant.get_statement_langs()
 
-if participant.see_patrons:
+patron_visibilities = participant.recipient_settings.patron_visibilities
+if patron_visibilities > 1:
     n_public_patrons = website.db.one("""
         SELECT count(*)
           FROM current_tips tip
@@ -217,7 +218,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         % endif
     % endif
 
-    % if participant.see_patrons and n_public_patrons
+    % if patron_visibilities > 1 and n_public_patrons
     <h3>{{ _("Patrons") }}
         &nbsp;
         <small><a href="{{ participant.path('patrons/public.csv') }}">{{ fontawesome('download', _("Export as CSV")) }}</a></small>

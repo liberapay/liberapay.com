@@ -229,15 +229,30 @@
         </label>
         </li>
     </ul>
-    % if tippee_p.see_patrons == False
+    % set patron_visibilities = tippee_p.recipient_settings.patron_visibilities
+    % set paypal_only = tippee_p.payment_providers == 2
+    % if paypal_only and patron_visibilities.__and__(1)
+        % set patron_visibilities = patron_visibilities.__xor__(1).__or__(2)
+    % endif
+    % if patron_visibilities == 1
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
         "{username} has chosen not to see who their patrons are, so your donation will be secret.",
         username=tippee_name
     ) }}</p>
-    % elif tippee_p.see_patrons or tippee_is_stub
+    % elif patron_visibilities == 2
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "This donation won't be secret, you will appear in {username}'s private list of patrons.",
+        username=tippee_name
+    ) }}</p>
+    % elif patron_visibilities == 4
+    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+        "{username} discloses who their patrons are, your donation will be public.",
+        username=tippee_name
+    ) }}</p>
+    % elif patron_visibilities
     <p>{{ _("Please select a privacy level for this donation:") }}</p>
     <ul class="list-group radio-group">
-        % if tippee_p.payment_providers != 2
+        % if patron_visibilities.__and__(1)
         <li class="list-group-item">
         <label>
             <input type="radio" name="secrecy_level" value="2" required
@@ -252,6 +267,7 @@
         </label>
         </li>
         % endif
+        % if patron_visibilities.__and__(2)
         <li class="list-group-item">
         <label>
             <input type="radio" name="secrecy_level" value="1" required
@@ -265,6 +281,8 @@
             </div>
         </label>
         </li>
+        % endif
+        % if patron_visibilities.__and__(4)
         <li class="list-group-item">
         <label>
             <input type="radio" name="secrecy_level" value="0" required
@@ -278,6 +296,7 @@
             </div>
         </label>
         </li>
+        % endif
     </ul>
     % else
     <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
