@@ -22,7 +22,7 @@ recent_donation_changes = website.db.all("""
                FROM tips t
               WHERE t.tippee = %(p_id)s
                 AND t.mtime > current_timestamp - interval '30 days'
-                AND t.hidden IS NOT true
+                AND t.visibility > 0
            ORDER BY t.mtime DESC, t.tipper
               LIMIT 30
            ) t

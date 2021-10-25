@@ -12,12 +12,12 @@ today = utcnow().date()
 scope = request.qs.get_choice('scope', ('active', 'all'))
 if scope == 'active':
     patrons = website.db.all("""
-        SELECT (CASE WHEN tip.secrecy_level < 2 THEN tip.tipper ELSE NULL END) AS patron_id
-             , (CASE WHEN tip.secrecy_level < 2 THEN coalesce(tipper_p.username, '') ELSE '' END) AS patron_username
-             , (CASE WHEN tip.secrecy_level < 2 THEN coalesce(tipper_p.public_name, '') ELSE '' END) AS patron_public_name
-             , ( CASE WHEN tip.secrecy_level = 0 THEN 'public'
-                      WHEN tip.secrecy_level = 1 THEN 'private'
-                                                 ELSE 'secret'
+        SELECT (CASE WHEN tip.visibility > 1 THEN tip.tipper::text ELSE '' END) AS patron_id
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.username, '') ELSE '' END) AS patron_username
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.public_name, '') ELSE '' END) AS patron_public_name
+             , ( CASE WHEN tip.visibility = 3 THEN 'public'
+                      WHEN tip.visibility = 2 THEN 'private'
+                                              ELSE 'secret'
                  END
                ) AS visibility
              , (tip.amount).currency AS donation_currency
@@ -46,12 +46,12 @@ if scope == 'active':
     ).encode('utf8')
 elif scope == 'all':
     patrons = website.db.all("""
-        SELECT (CASE WHEN tip.secrecy_level < 2 THEN tip.tipper ELSE NULL END) AS patron_id
-             , (CASE WHEN tip.secrecy_level < 2 THEN coalesce(tipper_p.username, '') ELSE '' END) AS patron_username
-             , (CASE WHEN tip.secrecy_level < 2 THEN coalesce(tipper_p.public_name, '') ELSE '' END) AS patron_public_name
-             , ( CASE WHEN tip.secrecy_level = 0 THEN 'public'
-                      WHEN tip.secrecy_level = 1 THEN 'private'
-                                                 ELSE 'secret'
+        SELECT (CASE WHEN tip.visibility > 1 THEN tip.tipper::text ELSE '' END) AS patron_id
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.username, '') ELSE '' END) AS patron_username
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.public_name, '') ELSE '' END) AS patron_public_name
+             , ( CASE WHEN tip.visibility = 3 THEN 'public'
+                      WHEN tip.visibility = 2 THEN 'private'
+                                              ELSE 'secret'
                  END
                ) AS visibility
              , (tip.amount).currency AS donation_currency

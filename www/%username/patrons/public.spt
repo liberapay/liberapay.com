@@ -17,7 +17,7 @@ public_patrons = website.db.all("""
       FROM current_tips tip
       JOIN participants tipper_p ON tipper_p.id = tip.tipper
      WHERE tip.tippee = %s
-       AND tip.secrecy_level = 0
+       AND tip.visibility = 3
        AND tip.paid_in_advance > 0
        AND tip.renewal_mode > 0
   ORDER BY tip.ctime, tip.id

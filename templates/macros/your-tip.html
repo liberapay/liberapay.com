@@ -255,8 +255,8 @@
         % if patron_visibilities.__and__(1)
         <li class="list-group-item">
         <label>
-            <input type="radio" name="secrecy_level" value="2" required
-                   {{ 'checked' if tip.secrecy_level in (2, None) else '' }} />
+            <input type="radio" name="visibility" value="1" required
+                   {{ 'checked' if tip.visibility == 1 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Secret donation") }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -270,8 +270,8 @@
         % if patron_visibilities.__and__(2)
         <li class="list-group-item">
         <label>
-            <input type="radio" name="secrecy_level" value="1" required
-                   {{ 'checked' if tip.secrecy_level == 1 else '' }} />
+            <input type="radio" name="visibility" value="2" required
+                   {{ 'checked' if tip.visibility == 2 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Private donation") }}</h5>
                 <p class="list-group-item-text">{{ _(
@@ -285,8 +285,8 @@
         % if patron_visibilities.__and__(4)
         <li class="list-group-item">
         <label>
-            <input type="radio" name="secrecy_level" value="0" required
-                   {{ 'checked' if tip.secrecy_level == 0 else '' }} />
+            <input type="radio" name="visibility" value="3" required
+                   {{ 'checked' if tip.visibility == 3 else '' }} />
             <div class="radio-label">
                 <h5 class="list-group-item-heading">{{ _("Public donation") }}</h5>
                 <p class="list-group-item-text">{{ _(

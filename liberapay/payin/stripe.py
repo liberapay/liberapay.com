@@ -708,9 +708,13 @@ def generate_transfer_description(pt):
          WHERE id = %s
     """, (pt.team or pt.recipient,))
     if pt.team:
-        return f"anonymous donation for team {name} via Liberapay"
+        name = f"team {name}"
+    if pt.visibility == 3:
+        return f"public donation for {name} via Liberapay"
+    if pt.visibility == 2:
+        return f"private donation for {name} via Liberapay"
     else:
-        return f"anonymous donation for {name} via Liberapay"
+        return f"secret donation for {name} via Liberapay"
 
 
 def record_refunds(db, payin, charge):

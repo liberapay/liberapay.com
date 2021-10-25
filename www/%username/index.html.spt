@@ -44,7 +44,7 @@ if patron_visibilities > 1:
         SELECT count(*)
           FROM current_tips tip
          WHERE tip.tippee = %s
-           AND tip.secrecy_level = 0
+           AND tip.visibility = 3
            AND tip.paid_in_advance > 0
            AND tip.renewal_mode > 0
     """, (participant.id,), max_age=5)
@@ -56,7 +56,7 @@ if patron_visibilities > 1:
           FROM current_tips tip
           JOIN participants tipper_p ON tipper_p.id = tip.tipper
          WHERE tip.tippee = %s
-           AND tip.secrecy_level = 0
+           AND tip.visibility = 3
            AND tip.paid_in_advance > 0
            AND tip.renewal_mode > 0
            AND tipper_p.hide_from_lists = 0
@@ -68,7 +68,7 @@ n_public_donees = website.db.one("""
     SELECT count(*)
       FROM current_tips tip
      WHERE tip.tipper = %s
-       AND tip.secrecy_level = 0
+       AND tip.visibility = 3
        AND tip.paid_in_advance > 0
        AND tip.renewal_mode > 0
 """, (participant.id,), max_age=5)
@@ -80,7 +80,7 @@ public_donees = website.db.all("""
       FROM current_tips tip
       JOIN participants tippee_p ON tippee_p.id = tip.tippee
      WHERE tip.tipper = %s
-       AND tip.secrecy_level = 0
+       AND tip.visibility = 3
        AND tip.paid_in_advance > 0
        AND tip.renewal_mode > 0
   ORDER BY convert(tip.amount, 'EUR') * random()::numeric DESC
