@@ -3,13 +3,17 @@ class ElsewhereError(Exception):
     """Base class for elsewhere exceptions."""
 
 
+class BadUserId(ElsewhereError):
+    pass
+
+
 class CantReadMembership(ElsewhereError):
     pass
 
 
-class UserNotFound(ElsewhereError):
+class InvalidServerResponse(ElsewhereError):
     pass
 
 
-class BadUserId(ElsewhereError):
+class UserNotFound(ElsewhereError):
     pass

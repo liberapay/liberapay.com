@@ -17,7 +17,7 @@ from liberapay.exceptions import LazyResponse, TooManyRequests
 from liberapay.i18n.base import to_age
 from liberapay.website import website
 
-from ._exceptions import BadUserId, UserNotFound
+from ._exceptions import ElsewhereError, BadUserId, InvalidServerResponse, UserNotFound
 from ._extractors import not_available
 
 
@@ -58,6 +58,20 @@ class UserInfo:
 
 class RepoInfo:
     pass
+
+
+def parse_as_json(response):
+    try:
+        return response.json()
+    except Exception as e:
+        raise InvalidServerResponse(f"{e.__class__.__name__}: {e}")
+
+
+def parse_as_xml(response):
+    try:
+        return ET.fromstring(response.content)
+    except Exception as e:
+        raise InvalidServerResponse(f"{e.__class__.__name__}: {e}")
 
 
 class Platform:
@@ -104,9 +118,9 @@ class Platform:
         # Determine the appropriate response parser using `self.api_format`
         api_format = getattr(self, 'api_format', None)
         if api_format == 'json':
-            self.api_parser = lambda r: r.json()
+            self.api_parser = parse_as_json
         elif api_format == 'xml':
-            self.api_parser = lambda r: ET.fromstring(r.content)
+            self.api_parser = parse_as_xml
         elif api_format:
             raise ValueError('unknown API format: '+str(api_format))
 
@@ -382,7 +396,7 @@ class Platform:
             from liberapay.models.account_elsewhere import UnableToRefreshAccount
             try:
                 account = account.refresh_user_info()
-            except (UnableToRefreshAccount, UserNotFound):
+            except (ElsewhereError, UnableToRefreshAccount):
                 raise TokenExpiredError()
             # Note: we can't pass the page_url below, because it contains the old user_name
             return self.get_repos(account, page_url=None, sess=sess, refresh=False)
