@@ -174,7 +174,9 @@ def look_up_redirections(request, response):
     r = website.db.one("""
         SELECT *
           FROM redirections
-         WHERE %s LIKE from_prefix
+         WHERE starts_with(%s, from_prefix)
+      ORDER BY length(from_prefix) DESC
+         LIMIT 1
     """, (path.lower(),))
     if r:
         location = r.to_prefix + path[len(r.from_prefix.rstrip('%')):]
