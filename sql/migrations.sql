@@ -3028,3 +3028,6 @@ CREATE OR REPLACE AGGREGATE min(currency_amount) (
 -- migration #148
 ALTER TABLE elsewhere DROP COLUMN extra_info;
 ALTER TABLE repositories DROP COLUMN extra_info;
+
+-- migration #149
+UPDATE redirections SET from_prefix = substring(from_prefix for length(from_prefix) - 1) WHERE right(from_prefix, 1) = '%';
