@@ -5,7 +5,7 @@ from postgres.orm import Model
 
 from liberapay.constants import RATE_LIMITS
 from liberapay.cron import logger
-from liberapay.elsewhere._exceptions import UserNotFound
+from liberapay.elsewhere._exceptions import ElsewhereError
 from liberapay.models.account_elsewhere import UnableToRefreshAccount
 from liberapay.models.participant import Participant
 from liberapay.utils import utcnow
@@ -106,8 +106,8 @@ def _refetch_repos_for_account(rl_prefix, rl_key, participant, account):
     )
     try:
         account = account.refresh_user_info()
-    except (UnableToRefreshAccount, UserNotFound) as e:
-        logger.debug("The refetch failed: %s" % e)
+    except (ElsewhereError, UnableToRefreshAccount) as e:
+        logger.debug(f"The refetch failed: {e.__class__.__name__}: {e}")
     sleep(1)
 
     logger.debug(

@@ -11,7 +11,9 @@ from psycopg2 import IntegrityError
 
 from ..constants import AVATAR_QUERY, DOMAIN_RE, RATE_LIMITS, SUMMARY_MAX_SIZE
 from ..cron import logger
-from ..elsewhere._exceptions import BadUserId, UserNotFound
+from ..elsewhere._exceptions import (
+    BadUserId, ElsewhereError, InvalidServerResponse, UserNotFound,
+)
 from ..exceptions import InvalidId
 from ..security.crypto import constant_time_compare
 from ..utils import excerpt_intro
@@ -324,7 +326,7 @@ class AccountElsewhere(Model):
             raise UnableToRefreshAccount("user_id and user_name lookups are both impossible")
         try:
             info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
-        except UserNotFound:
+        except (InvalidServerResponse, UserNotFound) as e:
             if not self.missing_since:
                 self.db.run("""
                     UPDATE elsewhere
@@ -332,7 +334,7 @@ class AccountElsewhere(Model):
                      WHERE id = %s
                        AND missing_since IS NULL
                 """, (self.id,))
-            raise
+            raise UnableToRefreshAccount(f"{e.__class__.__name__}: {e}")
         if info.user_id is None:
             raise UnableToRefreshAccount("user_id is None")
         return self.upsert(info)
@@ -416,8 +418,8 @@ def refetch_elsewhere_data():
     logger.debug("Refetching data of %r" % account)
     try:
         account2 = account.refresh_user_info()
-    except (UnableToRefreshAccount, UserNotFound) as e:
-        logger.debug("The refetch failed: %s" % e)
+    except (ElsewhereError, UnableToRefreshAccount) as e:
+        logger.debug(f"The refetch failed: {e.__class__.__name__}: {e}")
         return
     if account2.id != account.id:
         raise UnableToRefreshAccount(f"IDs don't match: {account2.id} != {account.id}")

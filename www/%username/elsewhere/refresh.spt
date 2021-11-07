@@ -12,7 +12,7 @@ for account in accounts:
     try:
         account.refresh_user_info()
     except Exception as e:
-        errors.append(str(e))
+        errors.append(f"{e.__class__.__name__}: {e}")
         continue
     i += 1
 

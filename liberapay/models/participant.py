@@ -2238,7 +2238,7 @@ class Participant(Model, MixinTeam):
                     }
                     # Delete and update previous redirections
                     c.run("""
-                        DELETE FROM redirections WHERE from_prefix = %(new)s || '%%';
+                        DELETE FROM redirections WHERE from_prefix = %(new)s;
                         UPDATE redirections
                            SET to_prefix = %(new)s
                              , mtime = now()
@@ -2251,7 +2251,7 @@ class Participant(Model, MixinTeam):
                             c.run("""
                                 INSERT INTO redirections
                                             (from_prefix, to_prefix)
-                                     VALUES (%(old)s || '%%', %(new)s)
+                                     VALUES (%(old)s, %(new)s)
                                 ON CONFLICT (from_prefix) DO UPDATE
                                         SET to_prefix = excluded.to_prefix
                                           , mtime = now()

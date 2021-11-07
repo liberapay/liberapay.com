@@ -32,9 +32,9 @@
     <li><a href="/about/teams">{{ _("Create a new team") }}</a></li>
     <li class="divider"></li>
     <li>
-        <form action="/sign-out" method="POST" {% if request.method not in constants.SAFE_METHODS
-              %} target="_blank" {% endif %}>
-            <input name="back_to" type="hidden" value="{{ request.line.uri.decoded }}" />
+        % set method_is_unsafe = request.method not in constants.SAFE_METHODS
+        <form action="/sign-out" method="POST" {% if method_is_unsafe %} target="_blank" {% endif %}>
+            <input name="back_to" type="hidden" value="{{ '/' if method_is_unsafe else request.line.uri.decoded }}" />
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
             <button class="btn navbar-btn" type="submit">
                 <span class="glyphicon glyphicon-log-out"></span>
