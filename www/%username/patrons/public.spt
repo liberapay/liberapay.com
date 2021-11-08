@@ -12,7 +12,9 @@ public_patrons = website.db.all("""
          , tipper_p.username AS patron_username
          , coalesce(tipper_p.public_name, '') AS patron_public_name
          , (tip.amount).currency AS donation_currency
-         , (tip.amount).amount AS weekly_amount
+         , ( CASE WHEN tipper_p.hide_giving THEN 'private'
+                                            ELSE (tip.amount).amount::text
+             END ) AS weekly_amount
          , tipper_p.avatar_url AS patron_avatar_url
       FROM current_tips tip
       JOIN participants tipper_p ON tipper_p.id = tip.tipper

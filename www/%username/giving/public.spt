@@ -12,7 +12,9 @@ public_donees = website.db.all("""
          , tippee_p.username AS donee_username
          , coalesce(tippee_p.public_name, '') AS donee_public_name
          , (tip.amount).currency AS donation_currency
-         , (tip.amount).amount AS weekly_amount
+         , ( CASE WHEN tippee_p.hide_receiving THEN 'private'
+                                               ELSE (tip.amount).amount::text
+             END ) AS weekly_amount
          , coalesce(tippee_p.avatar_url, '') AS donee_avatar_url
       FROM current_tips tip
       JOIN participants tippee_p ON tippee_p.id = tip.tippee

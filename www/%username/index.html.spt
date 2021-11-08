@@ -52,6 +52,7 @@ if patron_visibilities > 1:
         SELECT tipper_p.id
              , tipper_p.avatar_url
              , coalesce(tipper_p.public_name, tipper_p.username) AS name
+             , tipper_p.hide_giving
              , tip.amount AS weekly_amount
           FROM current_tips tip
           JOIN participants tipper_p ON tipper_p.id = tip.tipper
@@ -76,6 +77,7 @@ public_donees = website.db.all("""
     SELECT tippee_p.id
          , tippee_p.avatar_url
          , coalesce(tippee_p.username, tippee_p.public_name) AS name
+         , tippee_p.hide_receiving
          , tip.amount AS weekly_amount
       FROM current_tips tip
       JOIN participants tippee_p ON tippee_p.id = tip.tippee
@@ -237,11 +239,13 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             <a href="/~{{ p.id }}/">
                 {{ avatar_img(p) }}
                 <div class="name">{{ p.name }}</div>
+                % if not p.hide_giving and not participant.hide_receiving
                 <div class="amount">{{ _(
                     "{money_amount}{small}/week{end_small}",
                     money_amount=p.weekly_amount,
                     small='<small>'|safe, end_small='</small>'|safe
                 ) }}</div>
+                % endif
             </a>
         </div>
     % endfor
@@ -267,11 +271,13 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             <a href="/~{{ p.id }}/">
                 {{ avatar_img(p) }}
                 <div class="name">{{ p.name }}</div>
+                % if not p.hide_receiving and not participant.hide_giving
                 <div class="amount">{{ _(
                     "{money_amount}{small}/week{end_small}",
                     money_amount=p.weekly_amount,
                     small='<small>'|safe, end_small='</small>'|safe
                 ) }}</div>
+                % endif
             </a>
         </div>
     % endfor

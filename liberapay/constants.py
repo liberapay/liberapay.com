@@ -383,8 +383,8 @@ POSTAL_ADDRESS_KEYS_STRIPE = (
 )
 
 PRIVACY_FIELDS = OrderedDict([
-    ('hide_giving', (_("Hide total giving from others."), False)),
-    ('hide_receiving', (_("Hide total receiving from others."), False)),
+    ('hide_giving', (_("Do not publish the amounts of money I send."), False)),
+    ('hide_receiving', (_("Do not publish the amounts of money I receive."), False)),
     ('hide_from_search', (_("Hide this profile from search results on Liberapay."), True)),
     ('profile_noindex', (_("Tell web search engines not to index this profile."), True)),
     ('hide_from_lists', (_("Prevent this profile from being listed on Liberapay."), True)),
