@@ -360,7 +360,7 @@ title = _("Migrating from Gratipay")
                     "{0} is already connected to a different Liberapay account.",
                     existing_account.email
                 ) }}</div>
-                <p>{{ _("If this address belongs, to you please log in before continuing:") }}</p>
+                <p>{{ _("If this address belongs to you, please log in before continuing:") }}</p>
                 <button class="btn btn-default"
                         name="log-in.id" value="{{ existing_account.email }}"
                         >{{ _("Log in") }}</button>
