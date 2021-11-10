@@ -56,7 +56,7 @@ elif step == '2':
             if r.status_code != 200:
                 raise response.error(502, _(
                     "Fetching your account data from {platform} has failed (error code {x}). "
-                    "If the problem persists please contact support@liberapay.com."
+                    "If the problem persists, please contact support@liberapay.com."
                     , platform=platform, x=r.status_code
                 ))
             data = r.json()
@@ -309,8 +309,8 @@ title = _("Migrating from Gratipay")
                 <li>{{ _("basic account data (username, avatar, some privacy settings, etc.)") }}</li>
                 <li>{{ _("profile descriptions") }}</li>
                 <li>{{ _("teams (we will create them for you)") }}</li>
-                <li>{{ _("ongoing donations (if the donee hasn't joined Liberapay yet a pledge will be created instead)") }}</li>
-                <li>{{ _("elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)", platform=platform) }}</li>
+                <li>{{ _("ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)") }}</li>
+                <li>{{ _("elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)", platform=platform) }}</li>
                 <li>{{ _("email addresses (we won't ask you to prove ownership when it's already been verified by {platform})", platform=platform) }}</li>
             </ul>
             <p>{{ _("and what we cannot import:") }}</p>
@@ -360,7 +360,7 @@ title = _("Migrating from Gratipay")
                     "{0} is already connected to a different Liberapay account.",
                     existing_account.email
                 ) }}</div>
-                <p>{{ _("If this address belongs to you please log in before continuing:") }}</p>
+                <p>{{ _("If this address belongs, to you please log in before continuing:") }}</p>
                 <button class="btn btn-default"
                         name="log-in.id" value="{{ existing_account.email }}"
                         >{{ _("Log in") }}</button>

@@ -319,11 +319,11 @@ msgid ""
 "\n"
 "For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
 "\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.” then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
+"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
 "\n"
 "The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
 "\n"
-"If you receive donations on Liberapay you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
+"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
 "\n"
 "We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
 "\n"
@@ -502,7 +502,7 @@ msgstr "我們自您的銀行帳戶{partial_account_number}直接扣貸了{money
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "本操作的執行乃基於您在{acceptance_date} 簽署的 {link_start}義務{mandate_id}{link_end}，同意授權 Liberapay (SEPA creditor{creditor_identifier})傳送指示給銀行可自您的帳戶扣款。"
 
-msgid "If you did not authorize this payment please let us know, we will refund it."
+msgid "If you did not authorize this payment, please let us know, we will refund it."
 msgstr "若您未授權此次付款請即通知失我方，我們會退回它。"
 
 #, python-brace-format
@@ -1149,7 +1149,7 @@ msgid "The attempt to distribute all the money in your wallet failed: {money_amo
 msgstr "钱包余额分配失败：{money_amount}仍在您的钱包中。"
 
 #, python-brace-format
-msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists please contact support@liberapay.com."
+msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
 msgstr "無法送信到{email_address}，請檢查該地址是否有效後重試。如果該問題無法解決，請聯絡 support@liberapay.com。"
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
@@ -1971,7 +1971,7 @@ msgstr "文件#{id}正在被確認。"
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
 msgstr "文件#{id}已被拒絕：{refused_reason_type} - {refused_reason_message}。"
 
-msgid "If you need assistance you can send an email to support@liberapay.com."
+msgid "If you need assistance, you can send an email to support@liberapay.com."
 msgstr "若需要幫助，請聯繫 support@liberapay.com。"
 
 msgid "Income Range"
@@ -2220,7 +2220,7 @@ msgid "Accepting foreign currencies can increase your income by convincing peopl
 msgstr "接受外幣可以提高收入說服其它國家的人捐款支助，不過國際支付通常會有較高的手續費且滙率波動會減少您的收入。"
 
 #, python-brace-format
-msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
+msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe 可自動將基金轉成您主動使用的貨幣，而 PayPal 除非有明白告之則預設為外幣支付。如果是商務級 PayPal 帳戶則可選擇自動將收入支付的外幣轉成主要使用貨幣。此選項目前放在{link_open}收款頁的偏好設定{link_close}之下。"
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
@@ -3774,7 +3774,7 @@ msgid "Withdrawing Money"
 msgstr "取領錢款"
 
 #, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
+msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
 msgstr "你的 Liberapay 錢包被取走了{0}元。如果滙款成功，將有 {1} 會轉入到你的銀行戶頭，而手續費則為 {2} 。"
 
 #, python-brace-format
@@ -4144,7 +4144,7 @@ msgid "By default, the total amount you give and the total amount you receive ar
 msgstr "默認情況下，您捐輸的數額與收取的金額為公開資訊(可選擇不要公開此資訊)。"
 
 #, python-brace-format
-msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
+msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so, you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
 msgstr "Liberapay 是一個開放專案，你可以協助我們：{1}翻譯{0}，{2}改善程式碼{0}，以及 {3}管理它的法律實體{0}。如果符合這三點，你可以加入 {4} Liberapay 團隊{0} 並收取用戶捐助給我們的捐款以維持本服務繼續運作。"
 
 msgid "Why should you donate?"
@@ -4942,7 +4942,7 @@ msgid "Log In"
 msgstr "登入"
 
 #, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
+msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
 msgstr "無法從{platform}獲取你的帳戶信息（錯誤代碼{x}）。若該問題仍舊存在請聯繫support@liberapay.com。"
 
 msgid "Migrating from Gratipay"
@@ -4979,7 +4979,7 @@ msgid "ongoing donations (if the donee hasn't joined Liberapay yet a pledge will
 msgstr "目前的捐款（若收款方未加入Liberapay我們會為你創建一個承諾）"
 
 #, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)"
+msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
 msgstr "其他帳號（若你的Twitter等帳號已經連結到你的{platform}帳號，它也會被連結到Liberapay帳號）"
 
 #, python-brace-format
@@ -5005,7 +5005,7 @@ msgstr "請輸入一個電子郵件 (你的 {platform} 帳號未有主要電郵)
 msgid "Does this existing account belong to you?"
 msgstr "這個已註冊的帳號是你的嗎？"
 
-msgid "If this address belongs to you please log in before continuing:"
+msgid "If this address belongs to you, please log in before continuing:"
 msgstr "若該地址是你的請登入以繼續："
 
 msgid "Otherwise please input an email address which does belong to you:"

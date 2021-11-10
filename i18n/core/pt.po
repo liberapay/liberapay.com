@@ -325,11 +325,11 @@ msgid ""
 "\n"
 "For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
 "\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.” then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
+"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
 "\n"
 "The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
 "\n"
-"If you receive donations on Liberapay you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
+"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
 "\n"
 "We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
 "\n"
@@ -508,7 +508,7 @@ msgstr "Iniciamos um débito direto de {money_amount} da sua conta bancária ({p
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "A operação está a ser realizada conforme o {link_start}mandato {mandate_id}{link_end} assinado por si em {acceptance_date}, a autorizar a Liberapay (credora SEPA {creditor_identifier}) a enviar instruções ao seu banco para debitar a sua conta."
 
-msgid "If you did not authorize this payment please let us know, we will refund it."
+msgid "If you did not authorize this payment, please let us know, we will refund it."
 msgstr "Se você não autorizou o pagamento, nos avise para que reembolsemos."
 
 #, python-brace-format
@@ -1159,7 +1159,7 @@ msgid "The attempt to distribute all the money in your wallet failed: {money_amo
 msgstr "Falha ao distribuir os fundos da sua carteira: Sobrou {money_amount}."
 
 #, python-brace-format
-msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists please contact support@liberapay.com."
+msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
 msgstr "Falha ao enviar um e-mail para {email_address}. Verifique se o e-mail é válido e tente novamente. Entre em contato pelo support@liberapay.com se o problema persistir."
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
@@ -1989,7 +1989,7 @@ msgstr "Documento #{id} validado."
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
 msgstr "Documento #{id} recusado: {refused_reason_type} - {refused_reason_message}."
 
-msgid "If you need assistance you can send an email to support@liberapay.com."
+msgid "If you need assistance, you can send an email to support@liberapay.com."
 msgstr "Se precisar de ajuda, entre em contato pelo support@liberapay.com."
 
 msgid "Income Range"
@@ -2239,7 +2239,7 @@ msgid "Accepting foreign currencies can increase your income by convincing peopl
 msgstr "Aceitar moedas estrangeiras pode aumentar a sua renda ao convencer pessoas de outros países a doar para você, mas pagamentos internacionais geralmente tem uma percentagem maior de taxas, e as flutuações nas taxas de câmbio podem reduzir a estabilidade da sua renda."
 
 #, python-brace-format
-msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
+msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe converte tudo para sua moeda principal automaticamente, mas o PayPal, por padrão, mantém os pagamentos em moedas estrangeiras até que você diga o que fazer. Se você tiver uma conta comercial do PayPal, poderá converter automaticamente todos os pagamentos recebidos em moedas estrangeiras para a moeda principal. A opção está na página \"{link_open}Preferências para receber pagamentos{link_close}\"."
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
@@ -3811,7 +3811,7 @@ msgid "Withdrawing Money"
 msgstr "Retirando"
 
 #, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
+msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
 msgstr "{0} foram retirados da sua carteira Liberapay. Se a transferência for realizada com sucesso, {1} serão depositados na sua conta bancária e {2} serão pagos em taxas."
 
 #, python-brace-format
@@ -4184,7 +4184,7 @@ msgid "By default, the total amount you give and the total amount you receive ar
 msgstr "Por padrão, o total que se doa e recebe são públicos (você pode ocultá-los)."
 
 #, python-brace-format
-msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
+msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so, you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
 msgstr "Liberapay é um projeto aberto, pode ajudar-no {1}a traduzi-lo{0}, {2}a otimizar o seu código{0} e {3}a gerir a sua entidade jurídica{0}. Se  colaborar, poderá entrar na {4}equipe Liberapay{0} e receber uma parte do que os nossos utilizadores doam para manter o serviço funcionando."
 
 msgid "Why should you donate?"
@@ -5008,7 +5008,7 @@ msgid "Log In"
 msgstr "Entrar"
 
 #, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
+msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
 msgstr "Falha na descarrega de dados da sua conta do {platform} (código do erro {x}). Entre em contato pelo support@liberapay.com se o problema persistir."
 
 msgid "Migrating from Gratipay"
@@ -5045,7 +5045,7 @@ msgid "ongoing donations (if the donee hasn't joined Liberapay yet a pledge will
 msgstr "doações em curso (se o destinatário ainda não entrou no Liberapay, uma promessa de doação será criada)"
 
 #, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)"
+msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
 msgstr "contas diversas (por exemplo, se o seu Twitter está vinculado à sua conta {platform}, ele também ficará vinculado ao Liberapay)"
 
 #, python-brace-format
@@ -5071,7 +5071,7 @@ msgstr "Digite um e-mail (a sua conta {platform} não tem um e-mail principal):"
 msgid "Does this existing account belong to you?"
 msgstr "A conta existente é sua?"
 
-msgid "If this address belongs to you please log in before continuing:"
+msgid "If this address belongs to you, please log in before continuing:"
 msgstr "Se este e-mail é seu, entre antes de continuar:"
 
 msgid "Otherwise please input an email address which does belong to you:"
