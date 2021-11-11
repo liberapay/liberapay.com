@@ -318,11 +318,11 @@ msgid ""
 "\n"
 "For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
 "\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.” then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
+"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
 "\n"
 "The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
 "\n"
-"If you receive donations on Liberapay you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
+"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
 "\n"
 "We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
 "\n"
@@ -501,7 +501,7 @@ msgstr "お使いの銀行口座（{partial_account_number}）からの {money_a
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "この操作は、あなたが {acceptance_date} にサインした{link_start}委任 {mandate_id}{link_end}にもとづいて実行され、あなたの口座から引き落とす指示をLiberapay（SEPA 債権者 {creditor_identifier}）があなたの銀行に送信すること、その指示に従ってあなたの銀行があなたの口座から引き落とすことを承認します。"
 
-msgid "If you did not authorize this payment please let us know, we will refund it."
+msgid "If you did not authorize this payment, please let us know, we will refund it."
 msgstr "この支払いを承認していない場合はお知らせください。返金いたします。"
 
 #, python-brace-format
@@ -1148,7 +1148,7 @@ msgid "The attempt to distribute all the money in your wallet failed: {money_amo
 msgstr "ウォレットのすべての金銭を分配できませんでした：{money_amount} が残っています。"
 
 #, python-brace-format
-msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists please contact support@liberapay.com."
+msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
 msgstr "{email_address} へのメールの送信に失敗しました。メールアドレスが正しいことを確認し、再試行してください。問題が解決しない場合は、support@liberapay.com までお問い合わせください。"
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
@@ -1970,7 +1970,7 @@ msgstr "ドキュメント #{id} は確認されました。"
 msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
 msgstr "ドキュメント #{id} は拒否されました：{refused_reason_type} - {refused_reason_message}。"
 
-msgid "If you need assistance you can send an email to support@liberapay.com."
+msgid "If you need assistance, you can send an email to support@liberapay.com."
 msgstr "支援が必要な場合は、support@liberapay.com にメールをお送りいただけます。"
 
 msgid "Income Range"
@@ -2219,7 +2219,7 @@ msgid "Accepting foreign currencies can increase your income by convincing peopl
 msgstr "外貨を承認することで、あなたに寄付するよう他国の人々を説得することが容易になり、収入を増やすことができます。ただし、国をまたいだ支払いは手数料が高くなることが多く、また、為替レートの変動はあなたの収入の安定性を低下させる可能性があります。"
 
 #, python-brace-format
-msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
+msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
 msgstr "Stripe は自動的にあなたのメインの通貨に資金を両替します。一方、PayPal はデフォルトでは、あなたの指示があるまで、外貨での支払いを保留します。ビジネス PayPal アカウントをお持ちの場合には、外貨でのすべての入金を自動的にメインの通貨に両替することを選択できます。このオプションは現在 {link_open}Preferences for receiving payments{link_close} ページにあります。"
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
@@ -3773,7 +3773,7 @@ msgid "Withdrawing Money"
 msgstr "出金"
 
 #, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful {1} will land in your bank account and {2} will be paid in fees."
+msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
 msgstr "{0}がLiberapayウォレットから引き落とされます。成功した場合、{1}は銀行口座に入金され、{2}は手数料として徴収されます。"
 
 #, python-brace-format
@@ -4143,7 +4143,7 @@ msgid "By default, the total amount you give and the total amount you receive ar
 msgstr "デフォルトでは、寄付した合計金額と受け取った合計金額は公開されます（この情報の共有をオプトアウトすることができます）。"
 
 #, python-brace-format
-msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
+msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so, you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
 msgstr "Liberapay はオープンソースのプロジェクトです。誰でも{1}翻訳{0}、{2}コードの向上{0}、{3}法人の管理{0}の手伝いをすることができます。これらの作業をすると、{4}Liberapay チーム{0}に参加して、サービスを維持するためにユーザーの皆さんが寄付してくださったお金の分け前を受け取ることができます。"
 
 msgid "Why should you donate?"
@@ -4940,7 +4940,7 @@ msgid "Log In"
 msgstr "ログイン"
 
 #, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists please contact support@liberapay.com."
+msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
 msgstr "{platform} からのアカウントデータの取得に失敗しました（エラーコード {x}）。この問題が再発する場合は、support@liberapay.com までお問い合わせください。"
 
 msgid "Migrating from Gratipay"
@@ -4977,7 +4977,7 @@ msgid "ongoing donations (if the donee hasn't joined Liberapay yet a pledge will
 msgstr "現在進行中の寄付（受贈者が Liberapay に参加していない場合、代わりに担保が作成されます）"
 
 #, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account it will also be linked on Liberapay)"
+msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
 msgstr "その他のアカウント（例えば、お使いの Twitter アカウントが {platform} アカウントと連携されている場合、Liberapay とも連携されます）"
 
 #, python-brace-format
@@ -5003,7 +5003,7 @@ msgstr "メールアドレスを入力してください（お使いの {platfor
 msgid "Does this existing account belong to you?"
 msgstr "この存在するアカウントはあなたのものですか？"
 
-msgid "If this address belongs to you please log in before continuing:"
+msgid "If this address belongs to you, please log in before continuing:"
 msgstr "このアドレスがあなたのものである場合、続行する前にログインしてください："
 
 msgid "Otherwise please input an email address which does belong to you:"
