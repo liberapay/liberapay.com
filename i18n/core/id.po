@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Indonesian "
-"<https://hosted.weblate.org/projects/liberapay/core/id/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2021-11-16 04:50+0000\n"
+"Last-Translator: Alief Gilang <aliefgilang54@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/liberapay/core/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
@@ -481,11 +483,11 @@ msgstr "Perlu waktu beberapa hari kerja sampai dana muncul di rekening bank Anda
 msgid "Your bank account is going to be debited"
 msgstr "Rekening bank Anda akan didebit"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
 msgstr "Debit langsung sebanyak {money_amount} dari akun bank anda ({partial_account_number}) telah diinisiaasi untuk mendanai donasi anda kepada {recipient}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
 msgstr "Debit langsung sebanyak {money_amount} dari akun bank anda ({partial_account_number}) telah diinisiaasi untuk mendanai donasi anda kepada {recipients}."
 
@@ -897,7 +899,7 @@ msgstr "Besar"
 msgid "Maximum"
 msgstr "Maksimum"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
 msgstr "Anda telah menggunakan kuota permintaan anda, anda dapat mencoba lagi {in_N_minutes}."
 
@@ -986,7 +988,7 @@ msgstr "Alamat email anda telah mencapai jumlah maksimum dari batas yang kami iz
 msgid "'{0}' is not a valid email address."
 msgstr "'{0}' adalah alamat email yang tidak valid."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} is not a valid domain name."
 msgstr "{0} bukan nama domain yang valid."
 
@@ -1006,9 +1008,9 @@ msgstr "'{domain_name}' email domain tidak valid."
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Alamat email {email_address} dimasukkan daftar hitam karena ada keluhan yang diterima {timespan_ago}. Silakan kirim email dari alamat itu ke support@liberapay.com jika anda ingin kami menghapusnya dari daftar hitam."
+msgstr "Alamat email {email_address} dimasukkan daftar hitam karena ada keluhan yang diterima {timespan_ago}. Silakan kirim surel dari alamat tersebut ke support@liberapay.com jika anda ingin kami menghapusnya dari daftar hitam."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
@@ -1509,7 +1511,6 @@ msgstr "Tujuan: {0}"
 msgid "Modify your donation"
 msgstr "Modifikasi donasi Anda"
 
-#, fuzzy
 msgid "Pledge"
 msgstr "Penjamin"
 
@@ -1751,9 +1752,9 @@ msgstr "Kata sandi baru"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} belum mengkonfigurasi metode pembayaran apapun, jadi donasi Anda tidak dapat sebenarnya diproses saat ini. Kami akan memberitahukan Anda kapan pembayaran dapat dilaksanakan."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express)."
+msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express), atau dengan debit langsung dari akun bank Euro (untuk donasi dalam euro saja)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
@@ -1793,7 +1794,6 @@ msgstr "per minggu"
 msgid "Modify your pledge"
 msgstr ""
 
-#, fuzzy
 msgid "Pledges"
 msgstr "Penjamin"
 
@@ -1947,7 +1947,6 @@ msgstr ""
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr ""
 
-#, fuzzy
 msgid "Discontinue the donation"
 msgstr "Hentikan donasi"
 
@@ -2343,13 +2342,13 @@ msgstr "Liberapay memungkinkan anda untuk menginternasionalkan teks anda. Gunaka
 msgid "Current language: {0}"
 msgstr "Bahasa saat ini: {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Short description in {language}"
-msgstr "Deskripsi singkat"
+msgstr "Deskripsi singkat dalam {language}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Full description in {language}"
-msgstr "Penyataan lengkap"
+msgstr "Deskripsi lengkap dalam {language}"
 
 msgid "Markdown supported."
 msgstr ""
@@ -3284,9 +3283,9 @@ msgstr ""
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal memungkinkan menerima uang di banyak negara dibandingkan Stripe, tetapi Paypal tidak terintegrasi dengan baik ke Liberapay."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "liberapay_receipt_{number}"
-msgstr "tandaterima_liberapay_{number}"
+msgstr "liberapay_receipt_{number}"
 
 msgid "Receipt"
 msgstr "Tanda terima"
@@ -4531,9 +4530,9 @@ msgstr ""
 msgid "Largest communities"
 msgstr "Komunitas Populer"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Largest communities in {language}"
-msgstr "Komunitas Teratas Dalam Bahasa Anda"
+msgstr "Komunitas terbesar dalam {language}"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "Maaf, kami belum menemukan satupun. Mengapa Anda tidak memulainya?"
