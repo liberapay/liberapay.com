@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-16 04:54+0000\n"
-"Last-Translator: Kristian Amadeus <amadeus.kristian@gmail.com>\n"
+"PO-Revision-Date: 2021-11-17 07:53+0000\n"
+"Last-Translator: Alief Gilang <aliefgilang54@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/liberapay/core/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -276,7 +276,7 @@ msgstr "Anda punya pembayaran dengan total {amount} dijadwallkan pada {payment_d
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "Anda punya {n} pembayaran dijadwalkan untuk memperbarui donasi anda, tapi kami tidak bisa memprosesnya dikarenakan tidak ada alat pembayaran yang valid."
+msgstr[0] "Anda punya {n} pembayaran dijadwalkan untuk memperbarui donasi anda, tetapi kami tidak bisa memprosesnya dikarenakan tidak ada alat pembayaran yang valid."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "Berikut tanggal pembayaran, jumlah, dan penerima:"
@@ -682,7 +682,7 @@ msgid "Confirm the payment"
 msgstr "Konfirmasi pembayaran"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr ""
+msgstr "Anda dapat mempermudah pelanggan anda untuk mendukung anda melalui Liberapay"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
@@ -2529,13 +2529,13 @@ msgstr "{money_amount}{small}/bulan{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/tahun{end_small}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago}."
-msgstr "Memulai {timespan_ago}."
+msgstr "Dimulai {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Modified {timespan_ago_2}."
-msgstr "Memulai {timespan_ago_1}. Modifikasi {timespan_ago_2}."
+msgstr "Dimulai {timespan_ago_1}. Dimodifikasi {timespan_ago_2}."
 
 msgid "Automatic renewals are enabled for this donation, but are currently impossible due to payment processor limitations."
 msgstr ""
@@ -2552,9 +2552,9 @@ msgstr "Tidak aktif karena penerima tidak lagi menerima/menyetujui donasi."
 msgid "Active"
 msgstr "Aktif"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Pembayaran berikutnya {in_N_weeks_months_or_years}."
+msgstr "Pembayaran berikutnya dalam {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Perbarui sekarang"
@@ -2587,7 +2587,7 @@ msgstr "Mengulang kembali"
 msgid "Hide"
 msgstr "Sembunyikan"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
 msgstr "Dimulai {timespan_ago_1}. Dihentikan {timespan_ago_2}."
 
@@ -2662,7 +2662,7 @@ msgid "All your donations are funded."
 msgstr "Semua donasi Anda didanai."
 
 msgid "Request in progress, please wait…"
-msgstr "Permintaan sedang diproses, harap menunggu. . ."
+msgstr "Permintaan sedang diproses, harap menunggu…"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
@@ -2697,9 +2697,9 @@ msgstr "Silakan pilih atau masukan jumlah pembayaran:"
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Seluruh jumlah pembayaran anda akan segera dipindahke ke {payment_provider} dengan akun {recipient_name}."
+msgstr "Liberapay tidak menyimpan uang, seluruh jumlah pembayaran anda akan segera dipindahkan ke {payment_provider} dengan akun {recipient_name}."
 
 msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
 msgstr "Pembayaran PayPal saat ini tidak sebagai anonim, penerima dapat melihat nama dan alamat email anda."
@@ -2738,9 +2738,8 @@ msgstr "Gunakan rekening bank lain"
 msgid "Payment instrument:"
 msgstr ""
 
-#, fuzzy
 msgid "Please input your name and card number:"
-msgstr "Silakan masukan nomor kartu anda:"
+msgstr "Silahkan masukkan nama dan nomor kartu anda:"
 
 msgid "Jane Doe"
 msgstr "Jane Doe"
@@ -2914,7 +2913,7 @@ msgstr[0] "dengan {n} lainnya"
 msgid "History"
 msgstr "Riwayat"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} joined {timespan_ago}."
 msgstr "{username} bergabung {timespan_ago}."
 
@@ -3168,11 +3167,11 @@ msgstr "Tim tidak dapat bergabung dalam tim"
 msgid "You can't invite an inactive user to join a team."
 msgstr "Anda tidak dapat mengundang pengguna yang tidak aktif kedalam tim."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
 msgstr "{username} telah diundang untuk bergabung kedalam tim ini {timespan_ago}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
 msgstr "{username} telah menolak untuk bergabung kedalam tim ini {timespan_ago}."
 
@@ -3204,21 +3203,21 @@ msgid "Mark all notifications as read"
 msgstr "Tandai semua pemberitahuan sebagai sudah dibaca"
 
 msgid "This notification is marked for deletion."
-msgstr ""
+msgstr "Notifikasi ini ditandai untuk dihapus."
 
 msgid "Restore"
 msgstr "Pulihkan"
 
 msgid "Mark as read"
-msgstr ""
+msgstr "Tandai telah dibaca"
 
 msgid "Remove"
 msgstr "Hapus"
 
 msgid "An error occurred while rendering this notification."
-msgstr ""
+msgstr "Sebuah kesalahan terjadi ketika sedang memproses notifikasi ini."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
 msgstr "Rincian kesalahan ini telah direkam. Jika anda memutuskan untuk menghubungi kami, harap sertakan kode identifikasi kesalahan berikut dalam pesan anda: {0}."
 
@@ -3260,9 +3259,8 @@ msgstr "Mata uang: {0}"
 msgid "Added on {date}"
 msgstr ""
 
-#, fuzzy
 msgid "This account cannot receive payments. To fix this, log in to the account and complete the verification process. After that, reconnect the account if you still see this message."
-msgstr "Akun ini tidak dapat menerima pembayaran."
+msgstr "Akun ini tidak dapat menerima pembayaran. Untuk memperbaiki ini, masuk ke dalam akun dan selesaikan proses verifikasi. Setelah itu, hubungkan kembali akun jika anda masih melihat pesan ini."
 
 #, python-brace-format
 msgid "Manage this {platform} account"
@@ -3338,69 +3336,69 @@ msgid "This document is not an invoice."
 msgstr "Dokumen ini tidak dalam faktur/tagihan."
 
 msgid "Payment receipt"
-msgstr ""
+msgstr "Bukti pembayaran"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has been received."
-msgstr ""
+msgstr "Pembayaran {money_amount} diinisiasi pada {date} telah diterima."
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
-msgstr ""
+msgstr "Dana secara otomatis akan dikonversi dari {presentment_currency} ke {settlement_currency} dengan tarif {exchange_rate}."
 
 #, python-brace-format
 msgid "However, the payment was fully refunded on {refund_date}."
-msgstr ""
+msgstr "Namun, pembayaran telah dikembalikan sepenuhnya pada {refund_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} was paid in processing fees and {1} was distributed as detailed below."
-msgstr ""
+msgstr "{0} telah terbayar dalam tarif proses dan {1} telah didistribusikan seperti yang dijelaskan dibawah."
 
 #, python-brace-format
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
-msgstr ""
+msgstr "Namun, {x_percent} dari pembayaran ({refund_amount}) telah dikembalikan pada {refund_date}."
 
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
-msgstr[0] ""
+msgstr[0] "Dana telah didonasikan kepada penerima berikut :"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
-msgstr ""
+msgstr "{recipient}, anggota dari tim {team_name}"
 
 msgid "Payer"
-msgstr ""
+msgstr "Pembayar"
 
 #, python-brace-format
 msgid "Name: {0}"
-msgstr ""
+msgstr "Nama: {0}"
 
 #, python-brace-format
 msgid "Email address: {0}"
-msgstr ""
+msgstr "Alamat surel: {0}"
 
 #, python-brace-format
 msgid "Organization name: {0}"
-msgstr ""
+msgstr "Nama organisasi: {0}"
 
 #, python-brace-format
 msgid "Headquarters address: {0}"
-msgstr ""
+msgstr "Alamat Pusat: {0}"
 
 msgid "Payment details"
-msgstr ""
+msgstr "Detail pembayaran"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
-msgstr ""
+msgstr "Metode pembayaran: kartu {brand}, nomor berakhir di {last4}"
 
 #, python-brace-format
 msgid "Payment method: direct debit of bank account {partial_account_number}"
-msgstr ""
+msgstr "Metode pembayaran: debit langsung dari akun bank {partial_account_number}"
 
 #, python-brace-format
 msgid "Settlement date: {0}"
-msgstr ""
+msgstr "Tanggal settlement: {0}"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Anda tidak dapat menerima donasi baru hingga anda melakukan konfigurasi proses pembayaran."
@@ -3439,7 +3437,7 @@ msgstr "Donasi telah diturunkan dari {old_amount} menjadi {new_amount} per mingg
 
 #, python-brace-format
 msgid "A donation of {amount} per week has been restarted."
-msgstr ""
+msgstr "Donasi dengan jumlah {amount} per minggu telah diaktifkan ulang."
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "Tabel di bawah mencantumkan donasi yang anda terima, dikelompokkan berdasarkan jumlah."
@@ -3481,17 +3479,17 @@ msgid_plural "You have starred {n} repositories on {platform}."
 msgstr[0] "Anda telah memberi bintang pada {n} repositori di platform {platform}."
 
 msgid "The payment instrument has been successfully added."
-msgstr ""
+msgstr "Alat pembayaran telah berhasil ditambahkan."
 
 msgid "Forget this card number after one payment."
-msgstr ""
+msgstr "Lupakan kartu ini setelah satu pembayaran."
 
 #, python-brace-format
 msgid "By providing your IBAN, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
 msgstr ""
 
 msgid "Forget this bank account number after one payment."
-msgstr ""
+msgstr "Lupakan akun bank ini setelah satu pembayaran."
 
 msgid "The BIC you provided appears to be invalid."
 msgstr "BIC (Bank International Code) yang Anda berikan tampaknya tidak benar."
@@ -3499,50 +3497,50 @@ msgstr "BIC (Bank International Code) yang Anda berikan tampaknya tidak benar."
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
-msgstr[0] ""
+msgstr[0] "Anda memiliki {n} alat pembayaran yang terhubung."
 
 msgid "Bank Account"
-msgstr ""
+msgstr "Akun Bank"
 
 msgid "default"
-msgstr "baku"
+msgstr "bawaan"
 
 msgid "view mandate"
-msgstr ""
+msgstr "lihat mandat"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
-msgstr ""
+msgstr "Kadaluarsa dalam {month} {year}"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} failed."
-msgstr ""
+msgstr "Pembayaran terakhir yang diinisiasi pada {date} gagal."
 
 #, python-brace-format
 msgid "The last payment initiated on {date} is pending."
-msgstr ""
+msgstr "Pembayaran terakhir yang diinisiasi pada {date} sedang menunggu keputusan."
 
 #, python-brace-format
 msgid "The last payment initiated on {date} was successful."
-msgstr ""
+msgstr "Pembayaran terakhir yang diinisiasi pada {date} berhasil."
 
 msgid "This payment instrument hasn't been used yet."
-msgstr ""
+msgstr "Alat pembayaran ini tidak pernah digunakan sebelumnya."
 
 msgid "Set as default"
-msgstr ""
+msgstr "Atur sebagai bawaan"
 
 msgid "You don't have any valid payment instrument."
-msgstr ""
+msgstr "Anda tidak punya alat pembayaran yang valid."
 
 msgid "Add a payment instrument:"
-msgstr ""
+msgstr "Tambahkan alat pembayaran:"
 
 msgid "Add a card"
-msgstr ""
+msgstr "Tambahkan kartu"
 
 msgid "Add a bank account"
-msgstr ""
+msgstr "Tambahkan akun bank"
 
 msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
 msgstr "Anda masih memiliki uang di akun Liberapay ini, silakan pilih metode pencairan di bawah ini atau hubungi divisi dukungan."
@@ -4127,7 +4125,7 @@ msgid "Each creator can select which of these currencies to accept."
 msgstr ""
 
 msgid "What is Liberapay?"
-msgstr ""
+msgstr "Apa itu Liberapay?"
 
 msgid "Liberapay is a way to donate money recurrently to people whose work you appreciate."
 msgstr ""
@@ -4508,7 +4506,7 @@ msgstr "Tutup akun tim"
 msgid "A team account is automatically closed when its last member leaves."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
 msgstr "Perubahan terakhir {timespan_ago} oleh {username}."
 
@@ -4526,9 +4524,8 @@ msgstr[0] ""
 msgid "Search communities"
 msgstr ""
 
-#, fuzzy
 msgid "Largest communities"
-msgstr "Komunitas Populer"
+msgstr "Komunitas Terbesar"
 
 #, python-brace-format
 msgid "Largest communities in {language}"
@@ -4776,7 +4773,7 @@ msgid "Contact the people who benefit from your work and ask them to support you
 msgstr ""
 
 msgid "How it works for donors"
-msgstr ""
+msgstr "Bagaimana ini bekerja bagi para donatur"
 
 msgid "1. Set up a donation"
 msgstr ""
@@ -4798,7 +4795,7 @@ msgid "We will notify you whenever a donation needs to be renewed. If you've opt
 msgstr ""
 
 msgid "How it works for creators"
-msgstr "Bagaimana ini bekerja bagi para pencipta"
+msgstr "Bagaimana ini bekerja bagi para kreator"
 
 msgid "1. Create your profile"
 msgstr "1. Buat profil Anda"
@@ -4817,7 +4814,7 @@ msgid "3. Reach out to your audience"
 msgstr ""
 
 msgid "How it works internally"
-msgstr ""
+msgstr "Bagaimana ini bekerja secara internal"
 
 #, python-brace-format
 msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
@@ -5106,7 +5103,7 @@ msgstr "Apa benar Anda {0}?"
 
 #, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
-msgstr ""
+msgstr "Percobaan anda untuk mengklaim akun ini telah gagal karena anda masuk ke {0} sebagai orang lain. Mohon untuk keluar dan {1} coba lagi {2}."
 
 #, python-brace-format
 msgid "{0} is a private team"
@@ -5124,9 +5121,9 @@ msgstr[0] "{0} adalah tim dengan {n} anggota publik"
 msgid "Explore unclaimed donations"
 msgstr "Jelajahi donasi yang belum diklaim"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr ""
+msgstr "Halaman ini untuk penjamin terhadap {platform} pengguna {user_name}:"
 
 msgid "No description available."
 msgstr "Tidak ada deskripsi."
@@ -5164,7 +5161,7 @@ msgid "Are you {user_name}?"
 msgstr "Apakah anda {user_name}?"
 
 msgid "You can't or don't want to join Liberapay?"
-msgstr ""
+msgstr "Anda tidak bisa atau tidak ingin bergabung dengan Liberapay?"
 
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
 msgstr ""
