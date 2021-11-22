@@ -42,6 +42,7 @@ Liberapay.init = function() {
     Liberapay.payments.init();
     Liberapay.s3_uploader_init();
     Liberapay.stripe_init();
+    Liberapay.view_unsettling.init();
 
     $('div[href]').css('cursor', 'pointer').on('click auxclick', function(event) {
         if (event.target.tagName == 'A') {
