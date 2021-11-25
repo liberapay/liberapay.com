@@ -229,6 +229,82 @@
         </label>
         </li>
     </ul>
+    % set patron_visibilities = tippee_p.recipient_settings.patron_visibilities
+    % set paypal_only = tippee_p.payment_providers == 2
+    % if paypal_only and patron_visibilities.__and__(1)
+        % set patron_visibilities = patron_visibilities.__xor__(1).__or__(2)
+    % endif
+    % if patron_visibilities == 1
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "{username} has chosen not to see who their patrons are, so your donation will be secret.",
+        username=tippee_name
+    ) }}</p>
+    % elif patron_visibilities == 2
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "This donation won't be secret, you will appear in {username}'s private list of patrons.",
+        username=tippee_name
+    ) }}</p>
+    % elif patron_visibilities == 4
+    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+        "{username} discloses who their patrons are, your donation will be public.",
+        username=tippee_name
+    ) }}</p>
+    % elif patron_visibilities
+    <p>{{ _("Please select a privacy level for this donation:") }}</p>
+    <ul class="list-group radio-group">
+        % if patron_visibilities.__and__(1)
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="visibility" value="1" required
+                   {{ 'checked' if tip.visibility == 1 else '' }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Secret donation") }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "Only you will know that you donate to {username}.",
+                    username=tippee_name
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+        % endif
+        % if patron_visibilities.__and__(2)
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="visibility" value="2" required
+                   {{ 'checked' if tip.visibility == 2 else '' }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Private donation") }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "You will appear in {username}'s private list of patrons.",
+                    username=tippee_name
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+        % endif
+        % if patron_visibilities.__and__(4)
+        <li class="list-group-item">
+        <label>
+            <input type="radio" name="visibility" value="3" required
+                   {{ 'checked' if tip.visibility == 3 else '' }} />
+            <div class="radio-label">
+                <h5 class="list-group-item-heading">{{ _("Public donation") }}</h5>
+                <p class="list-group-item-text">{{ _(
+                    "Everybody will be able to see that you support {username}.",
+                    username=tippee_name
+                ) }}</p>
+            </div>
+        </label>
+        </li>
+        % endif
+    </ul>
+    % else
+    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
+        "{username} hasn't yet specified whether they want to see who their patrons are, "
+        "so your donation will be secret.",
+        username=tippee_name
+    ) }}</p>
+    % endif
     <br>
     <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
         (_("Modify your pledge") if pledging else _("Modify your donation"))

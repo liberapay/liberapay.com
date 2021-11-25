@@ -268,7 +268,7 @@ title = _("Funding your donations")
                     % elif payment.auto_renewal
                     <small class="text-warning">{{ _("Doesn't support automatic renewal") }}</small>
                     % else
-                    <small class="text-warning">{{ _("Not anonymous") }}</small>
+                    <small class="text-warning">{{ _("Reveals your name and email address to the recipient") }}</small>
                     % endif
                 </h4>
                 % if possible

@@ -17,7 +17,7 @@ from ..utils import group_by
 
 ProtoTransfer = namedtuple(
     'ProtoTransfer',
-    'amount recipient destination context unit_amount period team',
+    'amount recipient destination context unit_amount period team visibility',
 )
 
 
@@ -63,7 +63,7 @@ def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
         for t in proto_transfers:
             payin_transfers.append(prepare_payin_transfer(
                 cursor, payin, t.recipient, t.destination, t.context, t.amount,
-                t.unit_amount, t.period, t.team,
+                t.visibility, t.unit_amount, t.period, t.team,
             ))
 
     return payin, payin_transfers
@@ -240,8 +240,8 @@ def adjust_payin_transfers(db, payin, net_amount):
                         unit_amount = (d.amount / n_periods).round(allow_zero=False)
                         prepare_payin_transfer(
                             db, payin, d.recipient, d.destination, 'team-donation',
-                            d.amount, unit_amount, tip.period,
-                            team=team.id
+                            d.amount, tip.visibility, unit_amount, tip.period,
+                            team=team.id,
                         )
             else:
                 pt = transfers[0]
@@ -303,7 +303,7 @@ def resolve_tip(
         )
         return [ProtoTransfer(
             payment_amount, tippee, destination, 'personal-donation',
-            tip.periodic_amount, tip.period, None,
+            tip.periodic_amount, tip.period, None, tip.visibility,
         )]
 
 
@@ -450,6 +450,7 @@ def resolve_team_donation(
                         (t.resolved_amount / n_periods).round(allow_zero=False),
                         tip.period,
                         team.id,
+                        tip.visibility,
                     )
                     for t in selected_takes if t.resolved_amount != 0
                 ]
@@ -460,7 +461,7 @@ def resolve_team_donation(
     account = payment_accounts[member.id]
     return [ProtoTransfer(
         payment_amount, member, account, 'team-donation',
-        tip.periodic_amount, tip.period, team.id,
+        tip.periodic_amount, tip.period, team.id, tip.visibility,
     )]
 
 
@@ -571,8 +572,8 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None, pa
 
 
 def prepare_payin_transfer(
-    db, payin, recipient, destination, context, amount,
-    unit_amount=None, period=None, team=None
+    db, payin, recipient, destination, context, amount, visibility,
+    unit_amount=None, period=None, team=None,
 ):
     """Prepare the allocation of funds from a payin.
 
@@ -581,6 +582,7 @@ def prepare_payin_transfer(
         recipient (Participant): the user who will receive the money
         destination (Record): a row from the `payment_accounts` table
         amount (Money): the amount of money that will be received
+        visibility (int): a copy of `tip.visibility`
         unit_amount (Money): the `periodic_amount` of a recurrent donation
         period (str): the period of a recurrent payment
         team (int): the ID of the project this payment is tied to
@@ -601,14 +603,14 @@ def prepare_payin_transfer(
     return db.one("""
         INSERT INTO payin_transfers
                (payin, payer, recipient, destination, context, amount,
-                unit_amount, n_units, period, team,
+                unit_amount, n_units, period, team, visibility,
                 status, ctime)
         VALUES (%s, %s, %s, %s, %s, %s,
-                %s, %s, %s, %s,
+                %s, %s, %s, %s, %s,
                 'pre', clock_timestamp())
      RETURNING *
     """, (payin.id, payin.payer, recipient.id, destination.pk, context, amount,
-          unit_amount, n_units, period, team))
+          unit_amount, n_units, period, team, visibility))
 
 
 def update_payin_transfer(

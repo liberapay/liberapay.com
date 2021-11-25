@@ -115,6 +115,7 @@ def fake_tip(db, tipper, tippee):
         amount=Money(amount, 'EUR'),
         period=period,
         periodic_amount=Money(periodic_amount, 'EUR'),
+        visibility=1,
     )
 
 

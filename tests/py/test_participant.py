@@ -77,7 +77,7 @@ class TestTakeOver(Harness):
         assert tips[3].amount == EUR('5.00')
         assert tips[3].renewal_mode == 0
         assert tips[3].paid_in_advance is None
-        assert tips[3].hidden is True
+        assert tips[3].visibility == -1
         self.db.self_check()
 
     def test_idempotent(self):

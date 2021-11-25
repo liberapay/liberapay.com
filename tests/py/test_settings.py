@@ -137,3 +137,39 @@ class TestUsername(Harness):
         assert alice.pending_notifs == 0
         bob = bob.refetch()
         assert bob.pending_notifs == 1
+
+
+class TestRecipientSettings(Harness):
+
+    def test_enabling_and_disabling_non_secret_donations(self):
+        alice = self.make_participant('alice')
+        assert alice.recipient_settings.patron_visibilities == 0
+        # Check that the donation form isn't proposing the visibility options
+        r = self.client.GET('/alice/donate')
+        assert r.code == 200
+        assert 'name="visibility"' not in r.text
+        assert 'Secret donation' not in r.text
+        assert 'Private donation' not in r.text
+        assert 'Public donation' not in r.text
+        # Enable non-secret donations
+        r = self.client.PxST('/alice/patrons/', {'see_patrons': 'yes'}, auth_as=alice)
+        assert r.code == 302
+        del alice.recipient_settings
+        assert alice.recipient_settings.patron_visibilities == 7
+        r = self.client.GET('/alice/donate')
+        assert r.code == 200
+        assert 'name="visibility"' in r.text
+        assert 'Secret donation' in r.text
+        assert 'Private donation' in r.text
+        assert 'Public donation' in r.text
+        # Disable non-secret donations
+        r = self.client.PxST('/alice/patrons/', {'see_patrons': 'no'}, auth_as=alice)
+        assert r.code == 302
+        del alice.recipient_settings
+        assert alice.recipient_settings.patron_visibilities == 1
+        r = self.client.GET('/alice/donate')
+        assert r.code == 200
+        assert 'name="visibility"' not in r.text
+        assert 'Secret donation' not in r.text
+        assert 'Private donation' not in r.text
+        assert 'Public donation' not in r.text

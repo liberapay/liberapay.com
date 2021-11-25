@@ -11,9 +11,9 @@ title = _("Introduction")
     <p>{{ _("Liberapay is a way to donate money recurrently to people whose work you appreciate.") }}</p>
 
     <p>{{ _(
-        "Payments come with no strings attached. You don't know exactly who is "
-        "giving to you, and donations are capped at {0} per week per donor to "
-        "dampen undue influence."
+        "Payments come with no strings attached. By default, recipients don't "
+        "know who their patrons are, and donations are capped at {0} per week "
+        "per donor to dampen undue influence."
         , constants.DONATION_LIMITS[currency]['weekly'][1]
     ) }}</p>
 

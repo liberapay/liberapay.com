@@ -16,8 +16,8 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Ledger")
 user_is_admin = user.is_acting_as('admin')
-subpath = 'ledger/' if user_is_admin else ''
 admin_override = user_is_admin and (participant != user or 'override' in request.qs)
+subpath = 'ledger/' if admin_override else ''
 translated_status = {
     None: '',
     'pre': _('preparing'),
@@ -179,25 +179,59 @@ if participant.join_time:
     <tr class="{{ 'zero' if event['status'] == 'failed' }}">
         <td class="description">
         % set context = event['context']
+        % set visibility = event['visibility']
+        % if visibility > 1 or admin_override
+            % set payer_link = ('<a href="/{0}/{1}">{0}</a>'|safe).format(event['payer_username'], subpath)
+        % else
+            % set payer_link = ''
+        % endif
         % if 'payer' in event
             % if context == 'personal-donation'
-                {{ _("anonymous donation") }}
+                {{ _(
+                    "public donation from {donor_name}", donor_name=payer_link
+                ) if visibility == 3 else _(
+                    "private donation from {donor_name}", donor_name=payer_link
+                ) if visibility == 2 else _(
+                    "secret donation"
+                ) }}
             % elif context == 'team-donation'
-                {{ _("anonymous donation for your role in the {0} team",
-                     ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
+                % set team_link = ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])
+                {{ _(
+                    "public donation from {donor_name} for your role in the {team_name} team",
+                    donor_name=payer_link, team_name=team_link
+                ) if visibility == 3 else _(
+                    "private donation from {donor_name} for your role in the {team_name} team",
+                    donor_name=payer_link, team_name=team_link
+                ) if visibility == 2 else _(
+                    "secret donation for your role in the {team_name} team",
+                    team_name=team_link
+                ) }}
             % endif
-            % if admin_override
-                <span class="monospace text-danger">
-                (from <a href="/{{ event['payer_username'] }}/{{ subpath }}">{{ event['payer_username'] }}</a>)
-                </span>
+            % if admin_override and visibility < 2
+                <span class="monospace text-danger">(from {{ payer_link }})</span>
             % endif
         % else
-            % set to = ('<a href="/{0}/">{0}</a>'|safe).format(event['recipient_username'])
+            % set to = ('<a href="/{0}/{1}">{0}</a>'|safe).format(event['recipient_username'], subpath)
             % if context == 'personal-donation'
-                {{ _("donation to {0}", to) }}
+                {{ _(
+                    "public donation to {recipient_name}", recipient_name=to
+                ) if visibility == 3 else _(
+                    "private donation to {recipient_name}", recipient_name=to
+                ) if visibility == 2 else _(
+                    "secret donation to {recipient_name}", recipient_name=to
+                ) }}
             % elif context == 'team-donation'
-                {{ _("donation to {0} for their role in the {1} team", to,
-                     ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])) }}
+                % set team_link = ('<a href="/{0}/">{0}</a>'|safe).format(event['team_name'])
+                {{ _(
+                    "public donation to {recipient_name} for their role in the {team_name} team",
+                    recipient_name=to, team_name=team_link
+                ) if visibility == 3 else _(
+                    "private donation to {recipient_name} for their role in the {team_name} team",
+                    recipient_name=to, team_name=team_link
+                ) if visibility == 2 else _(
+                    "secret donation to {recipient_name} for their role in the {team_name} team",
+                    recipient_name=to, team_name=team_link
+                ) }}
             % endif
         % endif
         % if event['unit_amount']

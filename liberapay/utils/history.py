@@ -471,7 +471,7 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     outgoing_transfers = db.all("""
         SELECT tr.id, tr.ctime, tr.payin, tr.recipient, tr.context, tr.status, tr.error
              , tr.amount, tr.fee, tr.unit_amount, tr.n_units, tr.period
-             , tr.reversed_amount
+             , tr.reversed_amount, tr.visibility
              , p.username AS recipient_username, p2.username AS team_name
              , r.network AS payin_method
           FROM payin_transfers tr
@@ -487,7 +487,7 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     incoming_transfers = db.all("""
         SELECT tr.id, tr.ctime, tr.payin, tr.payer, tr.context, tr.status, tr.error
              , tr.amount, tr.fee, tr.unit_amount, tr.n_units, tr.period
-             , tr.reversed_amount
+             , tr.reversed_amount, tr.visibility
              , p.username AS payer_username, p2.username AS team_name
              , r.network AS payin_method
           FROM payin_transfers tr

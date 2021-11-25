@@ -160,6 +160,16 @@ elif payin_id:
         else:
             raise NotImplementedError()
     route = ExchangeRoute.from_id(payer, payin.route)
+    tell_payer_to_fill_profile = (
+        payin.status in ('pending', 'succeeded') and
+        website.db.one("""
+            SELECT count(*)
+              FROM payin_transfers
+             WHERE payin = %s
+               AND visibility = 3
+        """, (payin.id,)) > 0 and
+        not (participant.public_name or participant.username)
+    )
 
 else:
     routes = website.db.all("""
@@ -270,6 +280,17 @@ title = _("Funding your donations")
             currency=Currency(payin.amount.currency),
         ) }}</p>
         % endif
+    % endif
+
+    % if tell_payer_to_fill_profile
+    <hr>
+    <p>{{ _(
+        "Since you've chosen to make a public donation, we recommend that you "
+        "complete your public profile."
+    ) }}</p>
+    <a class="btn btn-primary" href="{{ payer.path('edit/username') }}">{{
+        _("Edit your profile")
+    }}</a>
     % endif
 
     % if status != 'failed'

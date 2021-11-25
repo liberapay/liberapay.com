@@ -10,6 +10,7 @@ from liberapay.utils import form_post_success, get_participant, group_by
 
 
 RENEWAL_MODE_START_DATE = date(2020, 2, 7)
+VISIBILITY_START_DATE = date(2021, 12, 9)
 THIRTY_DAYS = timedelta(days=30)
 
 [-----------------------------------------------------------------------------]
@@ -21,6 +22,7 @@ freeload = participant.get_last_event_of_type('freeload')
 if freeload and freeload.ts < recently:
     freeload = None
 auto_renewal_hint = participant.get_last_event_of_type('auto_renewal_hint')
+visibility_hint = participant.get_last_event_of_type('visibility_hint')
 if request.method == 'POST':
     if request.body.get('freeload') == 'yes':
         if not freeload:
@@ -31,9 +33,9 @@ if request.method == 'POST':
             website.db.run("""
                 INSERT INTO tips
                           ( ctime, tipper, tippee, amount, period, periodic_amount
-                          , paid_in_advance, renewal_mode )
+                          , paid_in_advance, renewal_mode, visibility )
                      SELECT ctime, tipper, tippee, amount, period, periodic_amount
-                          , paid_in_advance, 2
+                          , paid_in_advance, 2, visibility
                        FROM current_tips
                       WHERE tipper = %s
                         AND renewal_mode = 1
@@ -47,6 +49,21 @@ if request.method == 'POST':
     elif 'hide' in request.body:
         tippee_id = request.body.get_int('hide')
         participant.hide_tip_to(tippee_id)
+    elif 'visibility' in request.body:
+        visibility = request.body.get_int('visibility', minimum=0, maximum=3)
+        if visibility > 0:
+            website.db.run("""
+                INSERT INTO tips
+                          ( ctime, tipper, tippee, amount, period, periodic_amount
+                          , paid_in_advance, renewal_mode, visibility )
+                     SELECT ctime, tipper, tippee, amount, period, periodic_amount
+                          , paid_in_advance, renewal_mode, %(new_visibility)s
+                       FROM current_tips
+                      WHERE tipper = %(p_id)s
+                        AND visibility <> %(new_visibility)s
+                        AND renewal_mode > 0
+            """, dict(p_id=participant.id, new_visibility=visibility))
+        participant.add_event(website.db, 'tips_visibility', visibility)
     else:
         raise response.error(400)
     form_post_success(state)
@@ -90,6 +107,11 @@ show_automatic_renewal_hint = (
     any(tip.renewal_mode == 1 and tip.mtime.date() <= RENEWAL_MODE_START_DATE
         for tip in chain(tips, pledges))
 )
+show_visibility_hint = (
+    visibility_hint is None and
+    any(tip.visibility == 1 and tip.mtime.date() <= VISIBILITY_START_DATE
+        for tip in chain(tips, pledges))
+)
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
     currency: (
@@ -126,7 +148,7 @@ next_payday = compute_next_payday_date()
 
 % from "templates/macros/avatar-url.html" import avatar_img with context
 % from 'templates/macros/elsewhere.html' import platform_icon
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import fontawesome, glyphicon
 % from "templates/macros/payment-methods.html" import payment_methods_icons with context
 
 % block content
@@ -173,6 +195,31 @@ next_payday = compute_next_payday_date()
             ) }}</button>
             <button class="btn btn-default" name="auto_renewal" value="no">{{ _(
                 "No"
+            ) }}</button>
+        </form>
+    </div>
+    % if show_visibility_hint
+    <br>
+    % endif
+% endif
+
+% if show_visibility_hint
+    <div class="text-info">
+        {{ glyphicon('info-sign') }} {{ _(
+            "Liberapay now supports non-anonymous donations, do you want to "
+            "modify the visibility of all your donations at once?"
+        ) }}
+        &nbsp;
+        <form action="" class="inline-block buttons" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <button class="btn btn-primary" name="visibility" value="3">{{ _(
+                "Reveal my donations to everyone"
+            ) }}</button>
+            <button class="btn btn-primary" name="visibility" value="2">{{ _(
+                "Reveal my donations to the beneficiaries only"
+            ) }}</button>
+            <button class="btn btn-default" name="visibility" value="0">{{ _(
+                "Keep my donations as they are"
             ) }}</button>
         </form>
     </div>
@@ -268,17 +315,25 @@ next_payday = compute_next_payday_date()
                     ) }}</p>
                 % endif
                 <p>
+                    % if tip.visibility == 3
+                        {{ fontawesome('eye') }} {{ _("Public donation") }}
+                    % elif tip.visibility == 2
+                        {{ fontawesome('eye-slash') }} {{ _("Private donation") }}
+                    % else
+                        {{ fontawesome('user-secret') }} {{ _("Secret donation") }}
+                    % endif
+                    &nbsp;&nbsp;
                     % if tip.renewal_mode == 2
                         % if tip.tippee_p.payment_providers == 2
-                            <span class="text-warning">{{ glyphicon('repeat') }} {{ _(
+                            </p><p class="text-warning">{{ fontawesome('repeat') }} {{ _(
                                 "Automatic renewals are enabled for this donation, but are "
                                 "currently impossible due to payment processor limitations."
-                            ) }}</span>
+                            ) }}</p>
                         % else
-                            {{ glyphicon('repeat') }} {{ _("Automatic renewal") }}
+                            {{ fontawesome('repeat') }} {{ _("Automatic renewal") }}
                         % endif
                     % else
-                        {{ glyphicon('user') }} {{ _("Manual renewal") }}
+                        {{ fontawesome('hand-pointer-o') }} {{ _("Manual renewal") }}
                     % endif
                 </p>
                 % if tippee.is_suspended
@@ -320,9 +375,9 @@ next_payday = compute_next_payday_date()
                         <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{
                             _("Awaiting payment.")
                         }}</p>
-                        <a class="btn btn-default"
+                        <a class="btn btn-success"
                            href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
-                           {{ glyphicon('repeat') }} {{ _("Renew") }}
+                           {{ fontawesome('repeat') }} {{ _("Renew") }}
                         </a>
                         &nbsp; {{ payment_methods_icons(tippee) }}
                     % else

@@ -1,0 +1,103 @@
+from pando.utils import utcnow
+
+from liberapay.utils import get_participant
+
+[---]
+
+participant = get_participant(state, restrict=True, allow_member=True)
+if user != participant and user.recipient_settings.patron_visibilities < 2:
+    raise response.error(403, "You haven't opted-in to see who your patrons are.")
+
+today = utcnow().date()
+scope = request.qs.get_choice('scope', ('active', 'all'))
+if scope == 'active':
+    patrons = website.db.all("""
+        SELECT (CASE WHEN tip.visibility > 1 THEN tip.tipper::text ELSE '' END) AS patron_id
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.username, '') ELSE '' END) AS patron_username
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.public_name, '') ELSE '' END) AS patron_public_name
+             , ( CASE WHEN tip.visibility = 3 THEN 'public'
+                      WHEN tip.visibility = 2 THEN 'private'
+                                              ELSE 'secret'
+                 END
+               ) AS visibility
+             , (tip.amount).currency AS donation_currency
+             , (tip.amount).amount AS weekly_amount
+             , tip.ctime::date AS pledge_date
+             , tip.mtime::date AS last_modification_date
+             , ( SELECT pt.ctime::date
+                   FROM payin_transfers pt
+                  WHERE pt.payer = tip.tipper
+                    AND coalesce(pt.team, pt.recipient) = tip.tippee
+                    AND pt.status = 'succeeded'
+               ORDER BY pt.ctime
+                  LIMIT 1
+               ) AS first_payment_date
+             , tipper_p.avatar_url AS patron_avatar_url
+          FROM current_tips tip
+          JOIN participants tipper_p ON tipper_p.id = tip.tipper
+         WHERE tip.tippee = %s
+           AND tip.paid_in_advance > 0
+           AND tipper_p.is_suspended IS NOT true
+      ORDER BY tip.ctime, tip.id
+    """, (participant.id,))
+    response.headers[b'Content-Disposition'] = (
+        "attachment; filename*=UTF-8''liberapay-active-patrons-%s-%s.csv" %
+        (participant.username, today)
+    ).encode('utf8')
+elif scope == 'all':
+    patrons = website.db.all("""
+        SELECT (CASE WHEN tip.visibility > 1 THEN tip.tipper::text ELSE '' END) AS patron_id
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.username, '') ELSE '' END) AS patron_username
+             , (CASE WHEN tip.visibility > 1 THEN coalesce(tipper_p.public_name, '') ELSE '' END) AS patron_public_name
+             , ( CASE WHEN tip.visibility = 3 THEN 'public'
+                      WHEN tip.visibility = 2 THEN 'private'
+                                              ELSE 'secret'
+                 END
+               ) AS visibility
+             , (tip.amount).currency AS donation_currency
+             , (tip.amount).amount AS weekly_amount
+             , tip.ctime::date AS pledge_date
+             , tip.mtime::date AS last_modification_date
+             , ( SELECT pt.ctime::date
+                   FROM payin_transfers pt
+                  WHERE pt.payer = tip.tipper
+                    AND coalesce(pt.team, pt.recipient) = tip.tippee
+               ORDER BY pt.ctime
+                  LIMIT 1
+               ) AS first_payment_date
+             , ( SELECT pt.ctime::date
+                   FROM payin_transfers pt
+                  WHERE pt.payer = tip.tipper
+                    AND coalesce(pt.team, pt.recipient) = tip.tippee
+                    AND pt.status = 'succeeded'
+               ORDER BY pt.ctime DESC
+                  LIMIT 1
+               ) AS last_payment_date
+             , ( SELECT count(*)
+                   FROM transfers tr
+                  WHERE tr.tipper = tip.tipper
+                    AND coalesce(tr.team, tr.tippee) = tip.tippee
+                    AND tr.context IN ('tip', 'take')
+                    AND tr.status = 'succeeded'
+               ) AS number_of_weeks_active
+             , ( SELECT (sum(pt.amount, tip.amount::currency)).amount
+                   FROM payin_transfers pt
+                  WHERE pt.payer = tip.tipper
+                    AND coalesce(pt.team, pt.recipient) = tip.tippee
+                    AND pt.status = 'succeeded'
+               ) AS sum_received
+             , tipper_p.avatar_url AS patron_avatar_url
+          FROM current_tips tip
+          JOIN participants tipper_p ON tipper_p.id = tip.tipper
+         WHERE tip.tippee = %s
+           AND tip.paid_in_advance IS NOT NULL
+           AND tipper_p.is_suspended IS NOT true
+      ORDER BY tip.ctime, tip.id
+    """, (participant.id,))
+    response.headers[b'Content-Disposition'] = (
+        "attachment; filename*=UTF-8''liberapay-patrons-%s-%s.csv" %
+        (participant.username, today)
+    ).encode('utf8')
+
+[---] text/csv via csv_dump
+patrons
