@@ -889,11 +889,11 @@ msgstr "Кредитна/Дебетова картка"
 msgid "Direct Debit"
 msgstr "Пряме списання"
 
-msgid "Hide total giving from others."
-msgstr "Сховати загальну суму витрат від інших."
+msgid "Do not publish the amounts of money I send."
+msgstr ""
 
-msgid "Hide total receiving from others."
-msgstr "Сховати загальну суму надходжень від інших."
+msgid "Do not publish the amounts of money I receive."
+msgstr ""
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "Не показувати цей профіль в результатах пошуку по Liberapay."
@@ -1477,6 +1477,9 @@ msgstr "Розклад платежів"
 msgid "Receiving"
 msgstr "Прибутки"
 
+msgid "Patrons"
+msgstr "Спонсори"
+
 msgid "Payment Processors"
 msgstr "Платіжні системи"
 
@@ -1812,9 +1815,6 @@ msgstr "Поштовий індекс"
 msgid "Address within the city"
 msgstr "Адреса в межах міста"
 
-msgid "Patrons"
-msgstr "Спонсори"
-
 msgid "Income"
 msgstr "Надходження"
 
@@ -1980,6 +1980,46 @@ msgstr "Поновлення власноруч"
 
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Нагадування про поновлення внеску буде надіслано вам електронною поштою."
+
+#, python-brace-format
+msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
+msgstr ""
+
+#, python-brace-format
+msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} discloses who their patrons are, your donation will be public."
+msgstr ""
+
+msgid "Please select a privacy level for this donation:"
+msgstr ""
+
+msgid "Secret donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Only you will know that you donate to {username}."
+msgstr ""
+
+msgid "Private donation"
+msgstr ""
+
+#, python-brace-format
+msgid "You will appear in {username}'s private list of patrons."
+msgstr ""
+
+msgid "Public donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Everybody will be able to see that you support {username}."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
+msgstr ""
 
 msgid "Discontinue the donation"
 msgstr "Припинити допомагати"
@@ -2556,6 +2596,18 @@ msgstr "Тепер Liberapay підтримує автоматичне поно�
 msgid "Yes, activate automatic renewals"
 msgstr "Так, увімкнути автоматичне поновлення"
 
+msgid "Liberapay now supports non-anonymous donations, do you want to modify the visibility of all your donations at once?"
+msgstr ""
+
+msgid "Reveal my donations to everyone"
+msgstr ""
+
+msgid "Reveal my donations to the beneficiaries only"
+msgstr ""
+
+msgid "Keep my donations as they are"
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Ви ввімкнули автоматичне поновлення для деяких або всіх ваших внесків, але у вас немає дійсного платіжного засобу, за допомогою якого ми могли б здійснювати автоматичні платежі, коли прийде час."
 
@@ -2565,10 +2617,6 @@ msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "Ви маєте {n} внесок в очікуванні на оплати."
 msgstr[1] "Ви маєте {n} внески в очікуванні на оплати."
 msgstr[2] "Ви маєте {n} внесків очікуванні на оплати."
-
-#, python-brace-format
-msgid "{money_amount}{small}/week{end_small}"
-msgstr "{money_amount}{small}/тиждень{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
@@ -2699,8 +2747,8 @@ msgstr "Не підтримує {currency}"
 msgid "Doesn't support automatic renewal"
 msgstr "Не підтримує автоматичне поновлення"
 
-msgid "Not anonymous"
-msgstr "Не анонімно"
+msgid "Reveals your name and email address to the recipient"
+msgstr ""
 
 msgid "Pay with PayPal"
 msgstr "Оплата за допомогою PayPal"
@@ -2754,8 +2802,8 @@ msgstr "Liberapay не зберігає кошти, вся сума вашого
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Liberapay не зберігає кошти, вся сума вашого платежу відразу перейде на рахунок {payment_provider} {recipient_name}."
 
-msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr "Платежі PayPal тепер не анонімні, одержувач побачить ваше ім'я та адресу електронної пошти."
+msgid "PayPal reveals your name and email address to the recipient."
+msgstr ""
 
 msgid "Initiate the payment"
 msgstr "Розпочати оплату"
@@ -2773,6 +2821,9 @@ msgstr "Обробник платежів ({name}) ще не може оброб
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Ваш банк може відхилити цей платіж. Ми радимо надіслати банку копію {link_start}доручення{link_end}, якщо ви не впевнені, що він належним чином обробляє прямі дебетові інструкції в {currency}."
+
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr ""
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2972,6 +3023,26 @@ msgid_plural "with {n} others"
 msgstr[0] "з {n} іншим"
 msgstr[1] "з {n} іншими"
 msgstr[2] "з {n} іншими"
+
+msgid "Export as CSV"
+msgstr "Експортувати в CSV"
+
+#, python-brace-format
+msgid "{username} has {n} public patron."
+msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Donees"
+msgstr ""
+
+#, python-brace-format
+msgid "{username} donates publicly to {n} creator."
+msgid_plural "{username} donates publicly to {n} creators."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "History"
 msgstr "Історія"
@@ -3179,20 +3250,52 @@ msgstr "стягнення"
 msgid "error message: {0}"
 msgstr "повідомлення про помилку: {0}"
 
-msgid "anonymous donation"
-msgstr "таємний внесок"
+#, python-brace-format
+msgid "public donation from {donor_name}"
+msgstr ""
 
 #, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "таємний внесок за вашу роль в команді {0}"
+msgid "private donation from {donor_name}"
+msgstr ""
+
+msgid "secret donation"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "внесок для {0}"
+msgid "public donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "внесок для {0} за роль в команді {1}"
+msgid "private donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3289,6 +3392,54 @@ msgstr "Немає сповіщень для показу."
 
 msgid "Next Page →"
 msgstr "Наступна сторінка →"
+
+#, python-brace-format
+msgid "You have {n} active patron giving you {money_amount} per week."
+msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "You don't have any active patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} doesn't have any active patrons."
+msgstr ""
+
+msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
+msgstr ""
+
+msgid "Enable non-anonymous donations"
+msgstr ""
+
+#, python-brace-format
+msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
+msgstr ""
+
+msgid "Data export"
+msgstr ""
+
+msgid "Download the list of currently active patrons"
+msgstr ""
+
+msgid "Download the record of all patrons in the last ten years"
+msgstr ""
+
+#, python-brace-format
+msgid "View the patrons of {username}"
+msgstr ""
+
+msgid "You are not a member of any team."
+msgstr "Ви не перебуваєте в жодній команді."
+
+#, python-brace-format
+msgid "{username} isn't a member of any team."
+msgstr ""
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3471,9 +3622,6 @@ msgstr "Ви не можете отримувати нові внески, до�
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Внески через команди становлять {income_percent} ваших надходжень ({team_income} з {total_income}) і {patrons_percent} від ваших спонсорів ({nteampatrons} {npatrons})."
-
-msgid "You are not a member of any team."
-msgstr "Ви не перебуваєте в жодній команді."
 
 msgid "Details of Donations"
 msgstr "Подробиці внесків"
@@ -3746,9 +3894,6 @@ msgstr[0] "Сума допомоги становить {money_amount} для {n
 msgstr[1] "Сума допомоги становить {money_amount} для {n} осіб"
 msgstr[2] "Сума допомоги становить {money_amount} для {n} осіб"
 
-msgid "Export as CSV"
-msgstr "Експортувати в CSV"
-
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
@@ -3799,6 +3944,10 @@ msgstr "відшкодування невдалого виведення гро�
 msgid "canceled"
 msgstr "відхилено"
 
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "таємний внесок за вашу роль в команді {0}"
+
 msgid "in arrears"
 msgstr "заборгованість"
 
@@ -3808,6 +3957,9 @@ msgstr "повернення внеску"
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "повернення {link_open}витрат #{invoice_id}{link_close} від {payer}"
+
+msgid "anonymous donation"
+msgstr "таємний внесок"
 
 msgid "one-off donation from someone closing their account"
 msgstr "одноразовий внесок від когось, хто закрив свій обліковий запис"
@@ -3828,12 +3980,20 @@ msgstr "повернення комісії"
 msgid "final gift to {0}"
 msgstr "останній подарунок для {0}"
 
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "внесок для {0} за роль в команді {1}"
+
 msgid "refund of anonymous donation"
 msgstr "відшкодування анонімного внеску"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "сплата {link_open}рахунку #{invoice_id}{link_close} для {payee}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "внесок для {0}"
 
 msgid "The amount cannot be zero."
 msgstr "Сума не може дорівнювати нулю."
@@ -4213,8 +4373,8 @@ msgid "Liberapay is a way to donate money recurrently to people whose work you a
 msgstr "Liberapay — це спосіб робити повторювані грошові внески людям, чию роботу ви цінуєте."
 
 #, python-brace-format
-msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "Платежі надходять без жодних умов. Ви точно не знаєте, хто платить вам, а платежі обмежено сумою {0} на тиждень від одного спонсора, щоб знизити надмірний вплив."
+msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
+msgstr ""
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Типово, загальна сума, яку ви надаєте, і загальна сума, яку ви отримуєте, є загальнодоступною (ви можете приховати ці дані)."
@@ -5019,6 +5179,10 @@ msgstr[2] "Наразі на сайті {n} спонсорів, цей розд�
 
 msgid "The list below is rotated pseudorandomly."
 msgstr "Наведений перелік оновлюється псевдовипадковим чином."
+
+#, python-brace-format
+msgid "{money_amount}{small}/week{end_small}"
+msgstr "{money_amount}{small}/тиждень{end_small}"
 
 msgid "Thanks"
 msgstr "Дякуємо"

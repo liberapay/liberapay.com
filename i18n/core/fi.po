@@ -878,11 +878,11 @@ msgstr "Credit/Debit -kortti"
 msgid "Direct Debit"
 msgstr "Suoraveloitus"
 
-msgid "Hide total giving from others."
-msgstr "Piilota annettujen lahjoitusten summa muilta."
+msgid "Do not publish the amounts of money I send."
+msgstr ""
 
-msgid "Hide total receiving from others."
-msgstr "Piilota vastaanotettujen lahjoitusten summa muilta."
+msgid "Do not publish the amounts of money I receive."
+msgstr ""
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "Piilota tämä profiili Liberapay-palvelun hakutuloksista."
@@ -1463,6 +1463,9 @@ msgstr "Maksuaikataulu"
 msgid "Receiving"
 msgstr "Vastaanottaminen"
 
+msgid "Patrons"
+msgstr "Tukijoita"
+
 msgid "Payment Processors"
 msgstr "Maksunkäsittelijät"
 
@@ -1796,9 +1799,6 @@ msgstr "Postinumero"
 msgid "Address within the city"
 msgstr "Katuosoite"
 
-msgid "Patrons"
-msgstr "Tukijoita"
-
 msgid "Income"
 msgstr "Tulot"
 
@@ -1962,6 +1962,46 @@ msgstr "Manuaalinen uusiminen"
 
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Muistutus lahjoituksesi uusimisesta lähetetään sinulle sähköpostitse."
+
+#, python-brace-format
+msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
+msgstr ""
+
+#, python-brace-format
+msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} discloses who their patrons are, your donation will be public."
+msgstr ""
+
+msgid "Please select a privacy level for this donation:"
+msgstr ""
+
+msgid "Secret donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Only you will know that you donate to {username}."
+msgstr ""
+
+msgid "Private donation"
+msgstr ""
+
+#, python-brace-format
+msgid "You will appear in {username}'s private list of patrons."
+msgstr ""
+
+msgid "Public donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Everybody will be able to see that you support {username}."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
+msgstr ""
 
 msgid "Discontinue the donation"
 msgstr "Keskeytä lahjoitus"
@@ -2533,6 +2573,18 @@ msgstr "Liberapay-palvelussa on nyt mahdollista uusituttaa lahjoitukset automaat
 msgid "Yes, activate automatic renewals"
 msgstr "Kyllä, aktivoi automaattiset lahjoitukset"
 
+msgid "Liberapay now supports non-anonymous donations, do you want to modify the visibility of all your donations at once?"
+msgstr ""
+
+msgid "Reveal my donations to everyone"
+msgstr ""
+
+msgid "Reveal my donations to the beneficiaries only"
+msgstr ""
+
+msgid "Keep my donations as they are"
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Olet ottanut käyttöön lahjoituksissasi automaattisia uusimisia, mutta et ole asettanut mitään maksuvälinettä, jolla automaattinen uusiminen toteutettaisiin."
 
@@ -2541,10 +2593,6 @@ msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "Sinulla on {n} lahjoitus odottamassa maksua."
 msgstr[1] "Sinulla on {n} lahjoitusta odottamassa maksua."
-
-#, python-brace-format
-msgid "{money_amount}{small}/week{end_small}"
-msgstr "{money_amount}{small}/viikko{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
@@ -2674,8 +2722,8 @@ msgstr "{currency} ei kelpaa"
 msgid "Doesn't support automatic renewal"
 msgstr "Automaattinen uusiminen ei ole tuettu"
 
-msgid "Not anonymous"
-msgstr "Ei nimetön"
+msgid "Reveals your name and email address to the recipient"
+msgstr ""
 
 msgid "Pay with PayPal"
 msgstr "Maksa PayPalilla"
@@ -2728,8 +2776,8 @@ msgstr "Liberapay ei säilö rahaa. Koko maksamasi summa lähetetään välittö
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Liberapay ei säilö rahaa. Koko maksamasi summa lähetetään välittömästi vastaanottajan {recipient_name} {payment_provider}-tilille."
 
-msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr "PayPal-maksut eivät ole anonyymejä. Vastaanottaja näkee nimesi ja sähköpostiosoitteesi."
+msgid "PayPal reveals your name and email address to the recipient."
+msgstr ""
 
 msgid "Initiate the payment"
 msgstr "Toimeenpane maksu"
@@ -2747,6 +2795,9 @@ msgstr "Maksunkäsittelijä {name} ei vielä pysty käsittelemään {currency}-m
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Pankkisi hylkäsi tämän maksun. Suosittelemme lähettämän pankkiisi kopion {link_start}määräyksestä{link_end}, mikäli et ole varma, että se käsittelee {currency}-määräiset suoraveloituspyynnöt asianmukaisesti."
+
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr ""
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2941,6 +2992,24 @@ msgid "with {n} other"
 msgid_plural "with {n} others"
 msgstr[0] "{n} toisen kanssa"
 msgstr[1] "{n} muun kanssa"
+
+msgid "Export as CSV"
+msgstr "Lataa CSV-tiedostona"
+
+#, python-brace-format
+msgid "{username} has {n} public patron."
+msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Donees"
+msgstr ""
+
+#, python-brace-format
+msgid "{username} donates publicly to {n} creator."
+msgid_plural "{username} donates publicly to {n} creators."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "History"
 msgstr "Historia"
@@ -3148,20 +3217,52 @@ msgstr "veloitus"
 msgid "error message: {0}"
 msgstr "virheilmoitus: {0}"
 
-msgid "anonymous donation"
-msgstr "nimetön lahjoitus"
+#, python-brace-format
+msgid "public donation from {donor_name}"
+msgstr ""
 
 #, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "nimetön lahjoitus roolistasi ryhmässä {0}"
+msgid "private donation from {donor_name}"
+msgstr ""
+
+msgid "secret donation"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "lahjoitus→{0}"
+msgid "public donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "lahjoitus käyttäjälle {0} roolistaan ryhmässä {1}"
+msgid "private donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3258,6 +3359,53 @@ msgstr "Ei näytettäviä ilmoituksia."
 
 msgid "Next Page →"
 msgstr "Seuraava sivu →"
+
+#, python-brace-format
+msgid "You have {n} active patron giving you {money_amount} per week."
+msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "You don't have any active patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} doesn't have any active patrons."
+msgstr ""
+
+msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
+msgstr ""
+
+msgid "Enable non-anonymous donations"
+msgstr ""
+
+#, python-brace-format
+msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
+msgstr ""
+
+msgid "Data export"
+msgstr ""
+
+msgid "Download the list of currently active patrons"
+msgstr ""
+
+msgid "Download the record of all patrons in the last ten years"
+msgstr ""
+
+#, python-brace-format
+msgid "View the patrons of {username}"
+msgstr ""
+
+msgid "You are not a member of any team."
+msgstr "Et ole minkään ryhmän jäsen."
+
+#, python-brace-format
+msgid "{username} isn't a member of any team."
+msgstr ""
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3439,9 +3587,6 @@ msgstr "Et voi vastaanottaa lahjoituksia ennen kuin olet määrittänyt maksujen
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Ryhmien kautta saadut lahjoitukset muodostavat {income_percent} tuloistasi ({team_income}/{total_income}); {patrons_percent} tulee henkilökohtaisista lahjoituksista ({nteampatrons}/{npatrons} lahjoittajaa)."
-
-msgid "You are not a member of any team."
-msgstr "Et ole minkään ryhmän jäsen."
 
 msgid "Details of Donations"
 msgstr "Lahjoitusten yksityiskohtaiset tiedot"
@@ -3711,9 +3856,6 @@ msgid_plural "{money_amount} in donations to {n} people"
 msgstr[0] "{money_amount} lahjoituksessa yhdelle henkilölle"
 msgstr[1] "{money_amount} lahjoituksissa {n} henkilölle"
 
-msgid "Export as CSV"
-msgstr "Lataa CSV-tiedostona"
-
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
@@ -3761,6 +3903,10 @@ msgstr "epäonnistuneen oton palautus (virheilmoitus: {0})"
 msgid "canceled"
 msgstr "peruttu"
 
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "nimetön lahjoitus roolistasi ryhmässä {0}"
+
 msgid "in arrears"
 msgstr "erääntyneet"
 
@@ -3770,6 +3916,9 @@ msgstr "lahjoituksen palautus"
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "kulukorvaus koskien {link_open}laskua #{invoice_id}{link_close} maksajalta {payer}"
+
+msgid "anonymous donation"
+msgstr "nimetön lahjoitus"
 
 msgid "one-off donation from someone closing their account"
 msgstr "kertaluontoinen lahjoitus tilinsä sulkeneelta"
@@ -3790,12 +3939,20 @@ msgstr "kulujen hyvitys"
 msgid "final gift to {0}"
 msgstr "viimeinen lahja→{0}"
 
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "lahjoitus käyttäjälle {0} roolistaan ryhmässä {1}"
+
 msgid "refund of anonymous donation"
 msgstr "nimettömän lahjoituksen palautus"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{link_open}laskun #{invoice_id}{link_close} maksu käyttäjälle {payee}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "lahjoitus→{0}"
 
 msgid "The amount cannot be zero."
 msgstr "Määrä ei voi olla nolla."
@@ -4173,8 +4330,8 @@ msgid "Liberapay is a way to donate money recurrently to people whose work you a
 msgstr "Liberapay on keino lahjoittaa rahaa toistuvasti henkilöille, joiden työtä arvostat."
 
 #, python-brace-format
-msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "Maksuihin ei sisälly velvoitteita. Et tiedä kuka tarkkaan ottaen sinulle lahjoittaa, ja lahjoitukset rajataan {0} viikossa, jottei kenelläkään olisi ylenpalttisesti vaikutusvaltaa."
+msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
+msgstr ""
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Oletuksena lahjoittamasi sekä vastaanottamasi rahasummat yhteensä ovat julkista tietoa, mutta voit muuttaa niiden näkyvyyden halutessasi."
@@ -4956,6 +5113,10 @@ msgstr[1] "Tällä hetkellä meillä on {n} sponsoria. Tämä osio on keinomme k
 
 msgid "The list below is rotated pseudorandomly."
 msgstr "Allaolevaa listaa sekoitellaan sattumanvaraisesti."
+
+#, python-brace-format
+msgid "{money_amount}{small}/week{end_small}"
+msgstr "{money_amount}{small}/viikko{end_small}"
 
 msgid "Thanks"
 msgstr "Kiitokset"

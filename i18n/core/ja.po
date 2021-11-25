@@ -867,11 +867,11 @@ msgstr "クレジット/デビッドカード"
 msgid "Direct Debit"
 msgstr "口座自動振替"
 
-msgid "Hide total giving from others."
-msgstr "寄付した総金額を非表示にします。"
+msgid "Do not publish the amounts of money I send."
+msgstr ""
 
-msgid "Hide total receiving from others."
-msgstr "寄付された総金額を非表示にします。"
+msgid "Do not publish the amounts of money I receive."
+msgstr ""
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "このプロフィールを Liberapay の検索結果に表示しないようにします。"
@@ -1449,6 +1449,9 @@ msgstr "支払いスケジュール"
 msgid "Receiving"
 msgstr "受け取り"
 
+msgid "Patrons"
+msgstr "パトロン"
+
 msgid "Payment Processors"
 msgstr "決済サービス"
 
@@ -1780,9 +1783,6 @@ msgstr "郵便番号"
 msgid "Address within the city"
 msgstr "都市内の住所"
 
-msgid "Patrons"
-msgstr "パトロン"
-
 msgid "Income"
 msgstr "収入"
 
@@ -1945,6 +1945,46 @@ msgstr "手動更新"
 
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "寄付を更新するためのリマインダーがメールで送信されます。"
+
+#, python-brace-format
+msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
+msgstr ""
+
+#, python-brace-format
+msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} discloses who their patrons are, your donation will be public."
+msgstr ""
+
+msgid "Please select a privacy level for this donation:"
+msgstr ""
+
+msgid "Secret donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Only you will know that you donate to {username}."
+msgstr ""
+
+msgid "Private donation"
+msgstr ""
+
+#, python-brace-format
+msgid "You will appear in {username}'s private list of patrons."
+msgstr ""
+
+msgid "Public donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Everybody will be able to see that you support {username}."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
+msgstr ""
 
 #, fuzzy
 msgid "Discontinue the donation"
@@ -2512,6 +2552,18 @@ msgstr "Liberapayが自動更新をサポートするようになりました。
 msgid "Yes, activate automatic renewals"
 msgstr "はい、自動更新を有効にします"
 
+msgid "Liberapay now supports non-anonymous donations, do you want to modify the visibility of all your donations at once?"
+msgstr ""
+
+msgid "Reveal my donations to everyone"
+msgstr ""
+
+msgid "Reveal my donations to the beneficiaries only"
+msgstr ""
+
+msgid "Keep my donations as they are"
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "寄付の一部またはすべての自動更新を有効にしましたが、自動で支払いを開始できる有効な支払い方法がありません。"
 
@@ -2519,10 +2571,6 @@ msgstr "寄付の一部またはすべての自動更新を有効にしました
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "{n} 件の寄付の支払いが待機中です。"
-
-#, python-brace-format
-msgid "{money_amount}{small}/week{end_small}"
-msgstr "{money_amount}{small}/週{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
@@ -2652,8 +2700,8 @@ msgstr "{currency} は使用できません"
 msgid "Doesn't support automatic renewal"
 msgstr "自動更新をサポートしていません"
 
-msgid "Not anonymous"
-msgstr "匿名でない"
+msgid "Reveals your name and email address to the recipient"
+msgstr ""
 
 msgid "Pay with PayPal"
 msgstr "PayPalで支払う"
@@ -2705,8 +2753,8 @@ msgstr "あなたの支払いの全額は、{recipient_names} さんの {payment
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "あなたの支払いの全額は、{recipient_name} さんの {payment_provider} アカウントに今すぐに移動します。"
 
-msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr "現在、PayPal の支払いは匿名ではありません。受領者はあなたのお名前とメールアドレスを見ることができます。"
+msgid "PayPal reveals your name and email address to the recipient."
+msgstr ""
 
 msgid "Initiate the payment"
 msgstr "支払いを開始する"
@@ -2723,6 +2771,9 @@ msgstr "支払い処理業者（{name}）は、まだこの受取人の{currency
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
+msgstr ""
+
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
 msgstr ""
 
 #, python-brace-format
@@ -2913,6 +2964,22 @@ msgstr[0] "{username} は {n} 個のチームのメンバーです："
 msgid "with {n} other"
 msgid_plural "with {n} others"
 msgstr[0] "他に {n} 人が参加"
+
+msgid "Export as CSV"
+msgstr "CSVにエクスポート"
+
+#, python-brace-format
+msgid "{username} has {n} public patron."
+msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+
+msgid "Donees"
+msgstr ""
+
+#, python-brace-format
+msgid "{username} donates publicly to {n} creator."
+msgid_plural "{username} donates publicly to {n} creators."
+msgstr[0] ""
 
 msgid "History"
 msgstr "履歴"
@@ -3120,20 +3187,52 @@ msgstr "料金"
 msgid "error message: {0}"
 msgstr "エラーメッセージ：{0}"
 
-msgid "anonymous donation"
-msgstr "匿名の寄付"
+#, python-brace-format
+msgid "public donation from {donor_name}"
+msgstr ""
 
 #, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "{0} チームでの役割に対する匿名の寄付"
+msgid "private donation from {donor_name}"
+msgstr ""
+
+msgid "secret donation"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "{0} への寄付"
+msgid "public donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "{1} チームでの役割に対する {0} への寄付"
+msgid "private donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3230,6 +3329,52 @@ msgstr "表示する通知はありません。"
 
 msgid "Next Page →"
 msgstr "次のページ→"
+
+#, python-brace-format
+msgid "You have {n} active patron giving you {money_amount} per week."
+msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
+msgstr[0] ""
+
+msgid "You don't have any active patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} doesn't have any active patrons."
+msgstr ""
+
+msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
+msgstr ""
+
+msgid "Enable non-anonymous donations"
+msgstr ""
+
+#, python-brace-format
+msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
+msgstr ""
+
+msgid "Data export"
+msgstr ""
+
+msgid "Download the list of currently active patrons"
+msgstr ""
+
+msgid "Download the record of all patrons in the last ten years"
+msgstr ""
+
+#, python-brace-format
+msgid "View the patrons of {username}"
+msgstr ""
+
+msgid "You are not a member of any team."
+msgstr "どのチームのメンバーでもありません。"
+
+#, python-brace-format
+msgid "{username} isn't a member of any team."
+msgstr ""
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3410,9 +3555,6 @@ msgstr "決済サービスを設定するまで、新しい寄付を受け取る
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "チームを通した寄付は、あなたの収入の {income_percent} を占めます（{total_income} のうち {team_income}）。また、あなたの寄付者のうち {patrons_percent} を占めます（{npatrons} のうち {nteampatrons}）。"
-
-msgid "You are not a member of any team."
-msgstr "どのチームのメンバーでもありません。"
 
 msgid "Details of Donations"
 msgstr "寄付の詳細"
@@ -3679,9 +3821,6 @@ msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
 msgstr[0] "{money_amount}の{n}人への継続支援"
 
-msgid "Export as CSV"
-msgstr "CSVにエクスポート"
-
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
@@ -3726,6 +3865,10 @@ msgstr "失敗した出金の払い戻し（エラーメッセージ：{0}）"
 msgid "canceled"
 msgstr "キャンセルされました"
 
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "{0} チームでの役割に対する匿名の寄付"
+
 msgid "in arrears"
 msgstr "延滞中"
 
@@ -3735,6 +3878,9 @@ msgstr "寄付の払い戻し"
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "{payer} さんからの {link_open}経費 #{invoice_id}{link_close} の払い戻し"
+
+msgid "anonymous donation"
+msgstr "匿名の寄付"
 
 msgid "one-off donation from someone closing their account"
 msgstr "アカウントを閉鎖した人からの1回限りの寄付"
@@ -3755,12 +3901,20 @@ msgstr "手数料の払い戻し"
 msgid "final gift to {0}"
 msgstr "{0}への最後の寄付"
 
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "{1} チームでの役割に対する {0} への寄付"
+
 msgid "refund of anonymous donation"
 msgstr "匿名の寄付の払い戻し"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "{payee} さんへの{link_open}経費 #{invoice_id}{link_close}の支払い"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "{0} への寄付"
 
 msgid "The amount cannot be zero."
 msgstr "金額を0にすることはできません。"
@@ -4136,8 +4290,8 @@ msgid "Liberapay is a way to donate money recurrently to people whose work you a
 msgstr "Liberapay は、皆さんが感謝している仕事をする人に継続的にお金を寄付する方法です。"
 
 #, python-brace-format
-msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "支払いには文字列が添付されていません。誰があなたに寄付しているのか正確には分からず、不当に特定の支援者が影響力を持つのを防ぐために寄付は支援者1人につき毎週{0}に制限されます。"
+msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
+msgstr ""
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "デフォルトでは、寄付した合計金額と受け取った合計金額は公開されます（この情報の共有をオプトアウトすることができます）。"
@@ -4897,6 +5051,10 @@ msgstr[0] "現在このプラットフォームには {n} のスポンサーが�
 
 msgid "The list below is rotated pseudorandomly."
 msgstr "以下のリストは擬似ランダムに変更されます。"
+
+#, python-brace-format
+msgid "{money_amount}{small}/week{end_small}"
+msgstr "{money_amount}{small}/週{end_small}"
 
 msgid "Thanks"
 msgstr "謝辞"

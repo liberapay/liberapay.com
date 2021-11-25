@@ -867,11 +867,11 @@ msgstr "Kartu kredit/Debit"
 msgid "Direct Debit"
 msgstr "Debit langsung"
 
-msgid "Hide total giving from others."
-msgstr "Sembunyikan total pemberian dari orang lain."
+msgid "Do not publish the amounts of money I send."
+msgstr ""
 
-msgid "Hide total receiving from others."
-msgstr "Sembunyikan total penerimaan dari orang lain."
+msgid "Do not publish the amounts of money I receive."
+msgstr ""
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "Sembunyikan profil ini dari hasil pencarian Liberapay."
@@ -1449,6 +1449,9 @@ msgstr "Jadwal Pembayaran"
 msgid "Receiving"
 msgstr "Menerima"
 
+msgid "Patrons"
+msgstr "Patron-patron"
+
 msgid "Payment Processors"
 msgstr "Pemroses Pembayaran"
 
@@ -1780,9 +1783,6 @@ msgstr "Kode pos"
 msgid "Address within the city"
 msgstr "Alamat dalam kota"
 
-msgid "Patrons"
-msgstr "Patron-patron"
-
 msgid "Income"
 msgstr "Pemasukan"
 
@@ -1943,6 +1943,46 @@ msgid "Manual renewal"
 msgstr "Perbarui secara manual"
 
 msgid "A reminder to renew your donation will be sent to you via email."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
+msgstr ""
+
+#, python-brace-format
+msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} discloses who their patrons are, your donation will be public."
+msgstr ""
+
+msgid "Please select a privacy level for this donation:"
+msgstr ""
+
+msgid "Secret donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Only you will know that you donate to {username}."
+msgstr ""
+
+msgid "Private donation"
+msgstr ""
+
+#, python-brace-format
+msgid "You will appear in {username}'s private list of patrons."
+msgstr ""
+
+msgid "Public donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Everybody will be able to see that you support {username}."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr ""
 
 msgid "Discontinue the donation"
@@ -2507,6 +2547,18 @@ msgstr ""
 msgid "Yes, activate automatic renewals"
 msgstr ""
 
+msgid "Liberapay now supports non-anonymous donations, do you want to modify the visibility of all your donations at once?"
+msgstr ""
+
+msgid "Reveal my donations to everyone"
+msgstr ""
+
+msgid "Reveal my donations to the beneficiaries only"
+msgstr ""
+
+msgid "Keep my donations as they are"
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr ""
 
@@ -2514,10 +2566,6 @@ msgstr ""
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "Anda memiliki {n} donasi yang menunggu pembayaran."
-
-#, python-brace-format
-msgid "{money_amount}{small}/week{end_small}"
-msgstr "{money_amount}{small}/minggu{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
@@ -2646,8 +2694,8 @@ msgstr ""
 msgid "Doesn't support automatic renewal"
 msgstr ""
 
-msgid "Not anonymous"
-msgstr "Bukan anonim"
+msgid "Reveals your name and email address to the recipient"
+msgstr ""
 
 msgid "Pay with PayPal"
 msgstr ""
@@ -2699,8 +2747,8 @@ msgstr ""
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "Liberapay tidak menyimpan uang, seluruh jumlah pembayaran anda akan segera dipindahkan ke {payment_provider} dengan akun {recipient_name}."
 
-msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr "Pembayaran PayPal saat ini tidak sebagai anonim, penerima dapat melihat nama dan alamat email anda."
+msgid "PayPal reveals your name and email address to the recipient."
+msgstr ""
 
 msgid "Initiate the payment"
 msgstr "Memulai pembayaran"
@@ -2717,6 +2765,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
+msgstr ""
+
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
 msgstr ""
 
 #, python-brace-format
@@ -2907,6 +2958,22 @@ msgstr[0] ""
 msgid "with {n} other"
 msgid_plural "with {n} others"
 msgstr[0] "dengan {n} lainnya"
+
+msgid "Export as CSV"
+msgstr "Expor sebagai CSV"
+
+#, python-brace-format
+msgid "{username} has {n} public patron."
+msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+
+msgid "Donees"
+msgstr ""
+
+#, python-brace-format
+msgid "{username} donates publicly to {n} creator."
+msgid_plural "{username} donates publicly to {n} creators."
+msgstr[0] ""
 
 msgid "History"
 msgstr "Riwayat"
@@ -3114,20 +3181,52 @@ msgstr "Ongkos"
 msgid "error message: {0}"
 msgstr "Pesan error: {0}"
 
-msgid "anonymous donation"
-msgstr "Donasi anonim"
+#, python-brace-format
+msgid "public donation from {donor_name}"
+msgstr ""
 
 #, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "Donasi anonim untuk tugas anda dalam tim {0}"
+msgid "private donation from {donor_name}"
+msgstr ""
+
+msgid "secret donation"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "Donasi untuk {0}"
+msgid "public donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "Donasi kepada {0} untuk tugas mereka dalam tim {1}"
+msgid "private donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3224,6 +3323,52 @@ msgstr "Tidak ada notifikasi untuk ditampilkan."
 
 msgid "Next Page →"
 msgstr "Halaman selanjutnya →"
+
+#, python-brace-format
+msgid "You have {n} active patron giving you {money_amount} per week."
+msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
+msgstr[0] ""
+
+msgid "You don't have any active patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} doesn't have any active patrons."
+msgstr ""
+
+msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
+msgstr ""
+
+msgid "Enable non-anonymous donations"
+msgstr ""
+
+#, python-brace-format
+msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
+msgstr ""
+
+msgid "Data export"
+msgstr ""
+
+msgid "Download the list of currently active patrons"
+msgstr ""
+
+msgid "Download the record of all patrons in the last ten years"
+msgstr ""
+
+#, python-brace-format
+msgid "View the patrons of {username}"
+msgstr ""
+
+msgid "You are not a member of any team."
+msgstr "Anda bukan anggota kelompok manapun."
+
+#, python-brace-format
+msgid "{username} isn't a member of any team."
+msgstr ""
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3404,9 +3549,6 @@ msgstr "Anda tidak dapat menerima donasi baru hingga anda melakukan konfigurasi 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Donasi melalui tim merupakan {income_percent} dari penghasilan anda ({team_income} dari {total_income}) dan {patrons_percent} dari pemberi donor anda ({nteampatrons} dari {npatrons})."
-
-msgid "You are not a member of any team."
-msgstr "Anda bukan anggota kelompok manapun."
 
 msgid "Details of Donations"
 msgstr "Perincian donasi"
@@ -3673,9 +3815,6 @@ msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
 msgstr[0] ""
 
-msgid "Export as CSV"
-msgstr "Expor sebagai CSV"
-
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
@@ -3720,6 +3859,10 @@ msgstr "Pengembalian dana dari penarikan yang gagal (pesan error: {0})"
 msgid "canceled"
 msgstr "Dibatalkan"
 
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "Donasi anonim untuk tugas anda dalam tim {0}"
+
 msgid "in arrears"
 msgstr ""
 
@@ -3729,6 +3872,9 @@ msgstr "Pengembalian dana donasi"
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "penggantian {link_open} biaya #{invoice_id} {link_close} dari {payer}"
+
+msgid "anonymous donation"
+msgstr "Donasi anonim"
 
 msgid "one-off donation from someone closing their account"
 msgstr "sumbangan satu kali dari seseorang yang menutup akun mereka"
@@ -3749,12 +3895,20 @@ msgstr "pengembalian biaya"
 msgid "final gift to {0}"
 msgstr "pemberian terakhir ke {0}"
 
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "Donasi kepada {0} untuk tugas mereka dalam tim {1}"
+
 msgid "refund of anonymous donation"
 msgstr "pengembalian donasi anonim"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "pembayaran {link_open} biaya # {invoice_id} {link_close} ke {payee}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "Donasi untuk {0}"
 
 msgid "The amount cannot be zero."
 msgstr "Nilai tidak dapat nol."
@@ -4129,7 +4283,7 @@ msgid "Liberapay is a way to donate money recurrently to people whose work you a
 msgstr ""
 
 #, python-brace-format
-msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
+msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
 msgstr ""
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
@@ -4887,6 +5041,10 @@ msgstr[0] ""
 
 msgid "The list below is rotated pseudorandomly."
 msgstr ""
+
+#, python-brace-format
+msgid "{money_amount}{small}/week{end_small}"
+msgstr "{money_amount}{small}/minggu{end_small}"
 
 msgid "Thanks"
 msgstr "Terima kasih"

@@ -867,11 +867,11 @@ msgstr "信用卡/ 簽帳金融卡"
 msgid "Direct Debit"
 msgstr "自動撥款"
 
-msgid "Hide total giving from others."
-msgstr "不顯示別人給予的捐款。"
+msgid "Do not publish the amounts of money I send."
+msgstr ""
 
-msgid "Hide total receiving from others."
-msgstr "不顯示從他人收到的總額。"
+msgid "Do not publish the amounts of money I receive."
+msgstr ""
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "我的資訊不要出現在 Liberapay 的搜尋結果中。"
@@ -1449,6 +1449,9 @@ msgstr "付款排程"
 msgid "Receiving"
 msgstr "收取"
 
+msgid "Patrons"
+msgstr "贊助者"
+
 msgid "Payment Processors"
 msgstr "支付處理工具"
 
@@ -1780,9 +1783,6 @@ msgstr "郵編代碼"
 msgid "Address within the city"
 msgstr "含城市的地址資訊"
 
-msgid "Patrons"
-msgstr "贊助者"
-
 msgid "Income"
 msgstr "收入"
 
@@ -1945,6 +1945,46 @@ msgstr "手動支付"
 
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "會以郵件寄給您捐款支付通知。"
+
+#, python-brace-format
+msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
+msgstr ""
+
+#, python-brace-format
+msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} discloses who their patrons are, your donation will be public."
+msgstr ""
+
+msgid "Please select a privacy level for this donation:"
+msgstr ""
+
+msgid "Secret donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Only you will know that you donate to {username}."
+msgstr ""
+
+msgid "Private donation"
+msgstr ""
+
+#, python-brace-format
+msgid "You will appear in {username}'s private list of patrons."
+msgstr ""
+
+msgid "Public donation"
+msgstr ""
+
+#, python-brace-format
+msgid "Everybody will be able to see that you support {username}."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
+msgstr ""
 
 #, fuzzy
 msgid "Discontinue the donation"
@@ -2512,6 +2552,18 @@ msgstr "Liberapay 現支援自動定期扣款，您是否要將所有的捐款�
 msgid "Yes, activate automatic renewals"
 msgstr "好，激活自動定期付款"
 
+msgid "Liberapay now supports non-anonymous donations, do you want to modify the visibility of all your donations at once?"
+msgstr ""
+
+msgid "Reveal my donations to everyone"
+msgstr ""
+
+msgid "Reveal my donations to the beneficiaries only"
+msgstr ""
+
+msgid "Keep my donations as they are"
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "您已啟動自動定期付款功能，但您並未設置有效的付款方式可讓我們代為自動在指定日期扣款。"
 
@@ -2519,10 +2571,6 @@ msgstr "您已啟動自動定期付款功能，但您並未設置有效的付款
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
 msgstr[0] "您有{n}筆捐款等待支付。"
-
-#, python-brace-format
-msgid "{money_amount}{small}/week{end_small}"
-msgstr "{money_amount}{small}/週{end_small}"
 
 #, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
@@ -2652,8 +2700,8 @@ msgstr "不支援 {currency}"
 msgid "Doesn't support automatic renewal"
 msgstr "不支援自動付款"
 
-msgid "Not anonymous"
-msgstr "非匿名"
+msgid "Reveals your name and email address to the recipient"
+msgstr ""
 
 msgid "Pay with PayPal"
 msgstr "PayPal 支付"
@@ -2705,8 +2753,8 @@ msgstr "您支付的全額將會立即進入 {payment_provider}底下的 {recipi
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "你捐助的總額會立即透過{payment_provider}移到{recipient_name}帳戶底下。"
 
-msgid "PayPal payments are currently not anonymous, the recipient will see your name and email address."
-msgstr "PayPal 付款方式目前無法匿名，收款人會看到您的名字和電郵信箱。"
+msgid "PayPal reveals your name and email address to the recipient."
+msgstr ""
 
 msgid "Initiate the payment"
 msgstr "啟動支付"
@@ -2723,6 +2771,9 @@ msgstr "支付商{name}無法直接為此位收款人處理{currency}款項，�
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
+msgstr ""
+
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
 msgstr ""
 
 #, python-brace-format
@@ -2913,6 +2964,22 @@ msgstr[0] "{username} 是 {n} 個團隊的成員："
 msgid "with {n} other"
 msgid_plural "with {n} others"
 msgstr[0] "與 {n} 其它"
+
+msgid "Export as CSV"
+msgstr "導出為CSV檔"
+
+#, python-brace-format
+msgid "{username} has {n} public patron."
+msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+
+msgid "Donees"
+msgstr ""
+
+#, python-brace-format
+msgid "{username} donates publicly to {n} creator."
+msgid_plural "{username} donates publicly to {n} creators."
+msgstr[0] ""
 
 msgid "History"
 msgstr "記錄"
@@ -3120,20 +3187,52 @@ msgstr "收費"
 msgid "error message: {0}"
 msgstr "錯誤訊息： {0}"
 
-msgid "anonymous donation"
-msgstr "匿名捐款"
+#, python-brace-format
+msgid "public donation from {donor_name}"
+msgstr ""
 
 #, python-brace-format
-msgid "anonymous donation for your role in the {0} team"
-msgstr "因你在 {0} 團隊的角色，所得到的匿名捐款"
+msgid "private donation from {donor_name}"
+msgstr ""
+
+msgid "secret donation"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0}"
-msgstr "捐贈給 {0}"
+msgid "public donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
-msgid "donation to {0} for their role in the {1} team"
-msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
+msgid "private donation from {donor_name} for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation for your role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name}"
+msgstr ""
+
+#, python-brace-format
+msgid "public donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "private donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
+
+#, python-brace-format
+msgid "secret donation to {recipient_name} for their role in the {team_name} team"
+msgstr ""
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3230,6 +3329,52 @@ msgstr "無通知可顯示。"
 
 msgid "Next Page →"
 msgstr "下一頁 →"
+
+#, python-brace-format
+msgid "You have {n} active patron giving you {money_amount} per week."
+msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
+msgstr[0] ""
+
+msgid "You don't have any active patrons."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} doesn't have any active patrons."
+msgstr ""
+
+msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
+msgstr ""
+
+msgid "Enable non-anonymous donations"
+msgstr ""
+
+#, python-brace-format
+msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
+msgstr ""
+
+msgid "Data export"
+msgstr ""
+
+msgid "Download the list of currently active patrons"
+msgstr ""
+
+msgid "Download the record of all patrons in the last ten years"
+msgstr ""
+
+#, python-brace-format
+msgid "View the patrons of {username}"
+msgstr ""
+
+msgid "You are not a member of any team."
+msgstr "你並不是任何團隊的成員。"
+
+#, python-brace-format
+msgid "{username} isn't a member of any team."
+msgstr ""
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3410,9 +3555,6 @@ msgstr "你必須設定支付方法才能收取新的捐款。"
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "透過團隊獲的捐款佔總收入的{income_percent}({total_income}當中的{team_income})，捐款者當中的{patrons_percent}({npatrons}的{nteampatrons})。"
-
-msgid "You are not a member of any team."
-msgstr "你並不是任何團隊的成員。"
 
 msgid "Details of Donations"
 msgstr "捐款的詳細資訊"
@@ -3679,9 +3821,6 @@ msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
 msgstr[0] "向{n}人提供{money_amount}之捐款"
 
-msgid "Export as CSV"
-msgstr "導出為CSV檔"
-
 #, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
@@ -3726,6 +3865,10 @@ msgstr "提領失敗的退款 (錯誤訊息： {0} )"
 msgid "canceled"
 msgstr "已取消"
 
+#, python-brace-format
+msgid "anonymous donation for your role in the {0} team"
+msgstr "因你在 {0} 團隊的角色，所得到的匿名捐款"
+
 msgid "in arrears"
 msgstr "到期未付款"
 
@@ -3735,6 +3878,9 @@ msgstr "捐贈退款"
 #, python-brace-format
 msgid "reimbursement of {link_open}expense #{invoice_id}{link_close} from {payer}"
 msgstr "{link_open}費用的報梢 #{invoice_id}{link_close} 來自 {payer}"
+
+msgid "anonymous donation"
+msgstr "匿名捐款"
 
 msgid "one-off donation from someone closing their account"
 msgstr "來自某位已關閉帳戶者的一次性捐款"
@@ -3755,12 +3901,20 @@ msgstr "費用退回"
 msgid "final gift to {0}"
 msgstr "最後禮物給 {0}"
 
+#, python-brace-format
+msgid "donation to {0} for their role in the {1} team"
+msgstr "因為 {0} 在 {1} 團隊的角色所得到的捐款"
+
 msgid "refund of anonymous donation"
 msgstr "匿名捐贈的退款"
 
 #, python-brace-format
 msgid "payment of {link_open}expense #{invoice_id}{link_close} to {payee}"
 msgstr "費用{link_open}的支付 #{invoice_id}{link_close} 給 {payee}"
+
+#, python-brace-format
+msgid "donation to {0}"
+msgstr "捐贈給 {0}"
 
 msgid "The amount cannot be zero."
 msgstr "金額不能為零。"
@@ -4136,8 +4290,8 @@ msgid "Liberapay is a way to donate money recurrently to people whose work you a
 msgstr "Liberapay是一種持續循環地捐助方式來感謝你所欣賞的工作背後的貢獻者。"
 
 #, python-brace-format
-msgid "Payments come with no strings attached. You don't know exactly who is giving to you, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "付款沒有附加字串。你不會確定知道誰捐助你，且每位贊助人每週最多只能捐助{0}次，以減少過度影響。"
+msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
+msgstr ""
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "默認情況下，您捐輸的數額與收取的金額為公開資訊(可選擇不要公開此資訊)。"
@@ -4898,6 +5052,10 @@ msgstr[0] "目前平台上有{n} 贊助者，這部份是我們向他們表達�
 
 msgid "The list below is rotated pseudorandomly."
 msgstr "下方的列表是仿隨機的旋轉。"
+
+#, python-brace-format
+msgid "{money_amount}{small}/week{end_small}"
+msgstr "{money_amount}{small}/週{end_small}"
 
 msgid "Thanks"
 msgstr "謝謝"
