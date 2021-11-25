@@ -82,6 +82,8 @@ def reject_forgeries(state, request, response, website, _):
     try:
         cookie_token = request.headers.cookie[CSRF_TOKEN].value
     except KeyError:
+        cookie_token = ""
+    if not cookie_token:
         raise response.error(403, _(
             "A security check has failed. Please make sure your browser is "
             "configured to allow cookies for {domain}, then try again.",
