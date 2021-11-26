@@ -96,21 +96,43 @@
     </nav>
 
     <div id="main">
-    % block main
-        {% block before_container %}{% endblock %}
-        <div class="container">
-        % block before_content
-            % block heading
-                % if title
-                    <h1 class="main-title {{ 'hidden-xs hidden-sm' if subhead else '' }}">{{ title }}</h1>
-                % endif
-            % endblock
-            <div id="subnav">{% block subnav %}{% endblock %}</div>
-        % endblock
-        {% block content %}{% endblock %}
-        {% block after_content %}{% endblock %}
+    % if participant and participant.id != user.id
+        % set is_unsettling = participant.is_unsettling
+        % set hide_profile = is_unsettling and 'always_view_unsettling' not in request.headers.cookie
+    % endif
+    
+    % if hide_profile
+        <div id="unsettling-content-display">
+            <h3 class="text-center">This page is marked as containing potentially upsetting or embarrassing content. Viewing it is unrecommended if you are a minor<h3>
+            <h3 class="text-center">Would you still like to view it?</h3>
+            
+
+            <div class="text-center">
+                <button class="btn btn-warning display-unsettling-once" type="button" data-toggle="collapse" data-target="#unsettling-content">View this page</button>
+                <button class="btn btn-warning display-unsettling-opt-in" type="button" data-toggle="collapse" data-target="#unsettling-content">Always view unsettling pages (in this browser)</button> 
+            </div>
         </div>
-    % endblock
+
+        <div class="collapse" id="unsettling-content">
+            % block main
+                {% block before_container %}{% endblock %}
+                <div class="container">
+                % block before_content
+                    % block heading
+                        % if title
+                            <h1 class="main-title {{ 'hidden-xs hidden-sm' if subhead else '' }}">{{ title }}</h1>
+                        % endif
+                    % endblock
+                    <div id="subnav">{% block subnav %}{% endblock %}</div>
+                % endblock
+                {% block content %}{% endblock %}
+                {% block after_content %}{% endblock %}
+                </div>
+            % endblock
+        </div>
+    % else
+        {{ self.main() }}
+    % endif
     </div>
 
     <footer class="container" role="navigation">

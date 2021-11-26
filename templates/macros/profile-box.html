@@ -2,7 +2,7 @@
 % from 'templates/macros/elsewhere.html' import platform_icon
 
 % macro profile_box_embedded_wrapper(participant, path, style='default')
-<div class="inline-box">
+<div class="inline-box" style="filter: blur(8px); -webkit-filter: blur(8px);">
     <div class="panel panel-{{ style }} profile-box-embedded"
          href="{{ path }}">
         <div class="panel-body">
@@ -23,6 +23,7 @@
 
 % macro profile_box_embedded_participant(participant, summary, nmembers=None)
     % set username = participant.username
+    % set unsettling = participant.is_unsettling
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
 

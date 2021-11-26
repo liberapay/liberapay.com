@@ -17,9 +17,7 @@ MARK_CLASSES = {
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
-print('participant is', participant.is_unsettling)
 title = _("{username}'s profile", username=participant.username)
-print('request header cookies are', request.headers.cookie)
 
 lang = request.qs.get('lang')
 if lang:
@@ -41,12 +39,6 @@ communities = participant.get_communities()
 langs = participant.get_statement_langs()
 
 show_income = not participant.hide_receiving and participant.accepts_tips
-
-is_unsettling = participant.is_unsettling
-always_view_unsettling = False
-if hasattr(request.headers, 'view_unsettling'):
-    always_view_unsettling = True
-view_unsettling_content = is_unsettling and always_view_unsettling
 
 
 [-----------------------------------------------------------------------------]
@@ -116,7 +108,7 @@ view_unsettling_content = is_unsettling and always_view_unsettling
 % endif
 % endblock
 
-% block profile_info
+% block content
     % if statement
         <h3 id="statement">{{ _("Statement") }}</h3>
         <section class="profile-statement" lang="{{ lang }}">
@@ -224,24 +216,3 @@ view_unsettling_content = is_unsettling and always_view_unsettling
     % endif
     % endif
 % endblock
-
-% block content
-    % if is_unsettling and not view_unsettling
-        <div id="unsettling-content-display">
-            <h3 class="text-center">The profile you are about to view is considered NSFW<h3>
-            <h3 class="text-center">Would you still like to view it?</h3>
-            
-
-            <div class="text-center">
-                <button class="btn btn-primary display-unsettling-once" type="button" data-toggle="collapse" data-target="#unsettling-content">View NSFW Pofile</button>
-                <button class="btn btn-primary display-unsettling-opt-in" type="button" data-toggle="collapse" data-target="#unsettling-content">Always View NSFW Profiles</button> 
-            </div>
-        </div>
-
-        <div class="collapse" id="unsettling-content">
-            {{ self.profile_info() }}
-        </div>
-    % else
-        {{ self.profile_info() }}
-    % endif
-% endblock 
