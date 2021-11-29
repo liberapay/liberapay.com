@@ -18,9 +18,10 @@
 
 % macro members_listing(participant)
     % from "templates/macros/avatar-url.html" import avatar_img with context
+    
     <div>
         % for t in participant.get_current_takes_for_display()
-            <div class="mini-user">
+            <div class="mini-user {{ 'mini-user-blur' if t.is_unsettling and 'always_view_unsettling' not in request.headers.cookie}}">
                 <a href="/{{ t.member_name }}/">
                     {{ avatar_img(t) }}
                     <span class="name">{{ t.member_name }}</span>

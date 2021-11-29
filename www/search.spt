@@ -1,5 +1,6 @@
 from liberapay.i18n.base import LANGUAGES_2, SEARCH_CONFS, strip_accents
 from liberapay.utils import markdown
+from liberapay.website import website
 
 [---]
 
@@ -117,7 +118,8 @@ if query:
                         "Found matching usernames",
                         len(usernames)) }}</h3>
         % for result in usernames
-        <div class="mini-user">
+        % set participant = website.db.Participant.from_username(result.username)
+        <div class="mini-user {{ 'mini-user-blur' if participant.is_unsettling and 'always_view_unsettling' not in request.headers.cookie}}">
             <a href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="name">{{ result.username }}</div>

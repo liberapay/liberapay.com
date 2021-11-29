@@ -17,6 +17,6 @@ Liberapay.view_unsettling.opt_in = function () {
         $(this).remove();
         $("#unsettling-content-display").remove();
 
-        document.cookie = 'always_view_unsettling=True';
+        document.cookie = 'always_view_unsettling=True;domain=;path=/';
     });
 };

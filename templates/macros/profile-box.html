@@ -5,7 +5,7 @@
 <div class="inline-box" style="filter: blur(8px); -webkit-filter: blur(8px);">
     <div class="panel panel-{{ style }} profile-box-embedded"
          href="{{ path }}">
-        <div class="panel-body">
+        <div class="panel-body {{ 'panel-blur' if participant.is_unsettling and 'always_view_unsettling' not in request.headers.cookie}}">
             <a href="{{ path }}" class="avatar-inline">{{
                 avatar_img(participant, size=120)
             }}</a>
