@@ -81,7 +81,8 @@ if query:
                  , json_build_object(
                        'id', p.id,
                        'username', p.username,
-                       'avatar_url', p.avatar_url
+                       'avatar_url', p.avatar_url, 
+                       'is_unsettling', p.is_unsettling
                    ) as owner
               FROM repositories r
               JOIN participants p ON p.id = r.participant
@@ -119,7 +120,8 @@ if query:
                         len(usernames)) }}</h3>
         % for result in usernames
         % set participant = website.db.Participant.from_username(result.username)
-        <div class="mini-user {{ 'mini-user-blur' if participant.is_unsettling and 'always_view_unsettling' not in request.headers.cookie}}">
+        % set blur = participant.is_unsettling and 'always_view_unsettling' not in request.headers.cookie
+        <div class="mini-user {{ 'mini-user-blur' if blur and participant.id != user.id }}">
             <a href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="name">{{ result.username }}</div>
@@ -156,12 +158,19 @@ if query:
                         len(repositories)) }}</h3>
         % for repo in repositories
             % set owner = repo.owner
+            % set blur = owner.is_unsettling and 'always_view_unsettling' not in request.headers.cookie
             <div class="paragraph">
-                <a href="/{{ owner.username }}/" class="avatar-inline">
-                    {{ avatar_img(owner, size=28) }}
-                </a>
+                <div class="repo-search-display {{ 'repo-search-blur' if blur and owner.id != user.id }}">
+                    <a href="/{{ owner.username }}/" class="avatar-inline">
+                        {{ avatar_img(owner, size=28) }}
+                    </a>
+                        {{ _(
+                        "{username} ",
+                        username=('<a href="/{0}/">{0}</a>'|safe).format(owner.username),
+                    ) }}
+                </div>
                 {{ _(
-                    "{username} has a repository named {repo_name} in their {platform} account",
+                    "has a repository named {repo_name} in their {platform} account",
                     username=('<a href="/{0}/">{0}</a>'|safe).format(owner.username),
                     repo_name='<em>%s</em>'|safe % (repo.name + (fork if repo.is_fork else '')),
                     platform=website.platforms[repo.platform].display_name,

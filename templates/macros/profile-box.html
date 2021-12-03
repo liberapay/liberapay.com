@@ -2,10 +2,11 @@
 % from 'templates/macros/elsewhere.html' import platform_icon
 
 % macro profile_box_embedded_wrapper(participant, path, style='default')
-<div class="inline-box" style="filter: blur(8px); -webkit-filter: blur(8px);">
+% set blur = participant.is_unsettling and 'always_view_unsettling' not in request.headers.cookie
+<div class="inline-box">
     <div class="panel panel-{{ style }} profile-box-embedded"
          href="{{ path }}">
-        <div class="panel-body {{ 'panel-blur' if participant.is_unsettling and 'always_view_unsettling' not in request.headers.cookie}}">
+        <div class="panel-body {{ 'panel-blur' if blur and user.id != participant.id }}">
             <a href="{{ path }}" class="avatar-inline">{{
                 avatar_img(participant, size=120)
             }}</a>
