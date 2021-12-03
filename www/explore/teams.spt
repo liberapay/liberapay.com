@@ -19,6 +19,7 @@ teams = website.db.all("""
       JOIN participants p ON p.id = t.id
      WHERE p.status = 'active'
        AND p.hide_from_lists = 0
+       AND p.npatrons > 0
   ORDER BY convert(p.receiving, 'EUR') DESC
          , p.join_time DESC
      LIMIT %s
