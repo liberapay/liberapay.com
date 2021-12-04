@@ -117,7 +117,7 @@ class Locale(babel.core.Locale):
                 s2 = s2[0]
         if not s2:
             s2 = s
-            if self is not LOCALE_EN:
+            if self.language != 'en':
                 self = LOCALE_EN
                 state['partial_translation'] = True
         if a or kw:
@@ -141,7 +141,7 @@ class Locale(babel.core.Locale):
                 website.tell_sentry(e)
         if not s2:
             s2 = s if n == 1 else p
-            if self is not LOCALE_EN:
+            if self.language != 'en':
                 self = LOCALE_EN
                 state['partial_translation'] = True
         kw['n'] = self.format_decimal(n) or n

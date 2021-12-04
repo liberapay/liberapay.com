@@ -73,6 +73,14 @@ class Tests(Harness):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh-CN', want='state')
         assert state['locale'] == self.website.locales['zh']
 
+    def test_american_english(self):
+        state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'en-us', want='state')
+        locale = state['locale']
+        assert locale is self.website.locales['en_us']
+        assert locale.format_money(Money('5200.00', 'USD')) == '$5,200.00'
+        assert locale.parse_money_amount('5,200.00', 'USD') == Money('5200.00', 'USD')
+        assert not state.get('partial_translation')
+
     def test_swiss_german(self):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'de-ch', want='state')
         locale = state['locale']
