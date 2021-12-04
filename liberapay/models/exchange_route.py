@@ -324,6 +324,35 @@ class ExchangeRoute(Model):
         else:
             raise NotImplementedError(self.network)
 
+    def get_postal_address(self):
+        if self.network.startswith('stripe-'):
+            if self.address.startswith('pm_'):
+                return self.stripe_payment_method.billing_details.address
+            else:
+                return self.stripe_source.owner.address
+        else:
+            raise NotImplementedError(self.network)
+
+    def set_postal_address(self, addr):
+        if self.network.startswith('stripe-'):
+            addr = addr.copy()
+            addr['state'] = addr.pop('region')
+            lines = addr.pop('local_address', '').splitlines()
+            addr['line1'] = lines[0] if lines else None
+            addr['line2'] = lines[1] if len(lines) > 1 else None
+            if self.address.startswith('pm_'):
+                self.stripe_payment_method = stripe.PaymentMethod.modify(
+                    self.address,
+                    billing_details={'address': addr},
+                )
+            else:
+                self.stripe_source = stripe.Source.modify(
+                    self.address,
+                    owner={'address': addr},
+                )
+        else:
+            raise NotImplementedError(self.network)
+
     def has_been_charged_successfully(self):
         return bool(self.db.one("""
             SELECT 1
