@@ -378,9 +378,6 @@ POSTAL_ADDRESS_KEYS = (
 POSTAL_ADDRESS_KEYS_LIBERAPAY = (
     'country', 'region', 'city', 'postal_code', 'local_address'
 )
-POSTAL_ADDRESS_KEYS_STRIPE = (
-    'line1', 'line2', 'city', 'state', 'postal_code', 'country'
-)
 
 PRIVACY_FIELDS = OrderedDict([
     ('hide_giving', (_("Hide total giving from others."), False)),
