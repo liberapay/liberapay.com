@@ -1,6 +1,6 @@
 % from "templates/macros/icons.html" import glyphicon
 
-% macro postal_address_form_v2(prefix='postal_address', saved=None, country=None, required=True)
+% macro postal_address_form_v2(prefix='postal_address', saved=None, required=True)
 
     % set required = 'required' if required else ''
 
@@ -8,7 +8,7 @@
         <span>{{ _("Country") }}</span>
         <select name="{{ prefix }}.country" class="form-control country" {{ required }}>
             <option></option>
-            % set country = country or saved.country
+            % set country = saved.country or request.country
             % for code, name in locale.countries.items()
                 <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
             % endfor

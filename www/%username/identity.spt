@@ -36,10 +36,6 @@ if request.method == 'POST':
             if v['city'] or v['postal_code'] or v['local_address']:
                 if not check_address_v2(v):
                     error = _("The provided postal address is incomplete.")
-                else:
-                    newlines = v['local_address'].count('\n')
-                    if newlines > 1:
-                        error = "`local_address` value contains too many newlines (%i > %i)" % (newlines, 1)
             for subkey, subvalue in v.items():
                 if len(subvalue) > 200:
                     error = "`%s` value is too long (%i > %i)" % (subkey, len(subvalue), 200)

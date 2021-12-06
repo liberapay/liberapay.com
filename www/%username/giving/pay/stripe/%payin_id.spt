@@ -15,13 +15,14 @@ from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import (
     charge, create_source_from_token, repr_stripe_error, settle_payin,
 )
-from liberapay.utils import get_participant
+from liberapay.utils import check_address_v2, get_participant
 
 STRIPE_BIT = 1
 
 [---]
 
 payer = get_participant(state, restrict=True)
+identity = payer.get_current_identity() or {}
 
 del currency
 
@@ -64,17 +65,22 @@ if request.method == 'POST':
             payin_amount, amount_min, amount_max
         ))
 
+    postal_address = {
+        k: body.get('postal_address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_LIBERAPAY
+    }
+    if postal_address.get('local_address'):
+        if check_address_v2(postal_address):
+            if postal_address != identity.get('postal_address'):
+                identity['postal_address'] = postal_address
+                payer.insert_identity(identity)
+    else:
+        postal_address = None
+
     try:
         if 'token' in body:
             return_url = payer.url('giving/pay/stripe/complete')
             one_off = body.get('keep') != 'true'
-            owner_address = {
-                k: body.get('owner.address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_STRIPE
-            }
-            if 'line1' not in owner_address:
-                owner_address = None
             owner_info = {
-                'address': owner_address,
                 'email': payer.get_email_address(),
                 'name': body.get('owner.name'),
             }
@@ -102,6 +108,10 @@ if request.method == 'POST':
         raise response.error(400, _(
             "The payment instrument is invalid, please select or add another one."
         ))
+
+    if postal_address and not (route.get_postal_address() or {}).get('line1'):
+        route.set_postal_address(postal_address)
+
     transfer_amounts = resolve_amounts(
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
@@ -195,6 +205,26 @@ if tippees:
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
     payment = PayinProspect(payer, tips, 'stripe')
+    postal_address_is_required = (
+        payment_type == 'sdd' or
+        # Note: this isn't really accurate, but it's good enough for now.
+        website.db.one("""
+            SELECT true
+              FROM payment_accounts a
+             WHERE ( a.participant IN %(tippee_ids)s OR
+                     a.participant IN (
+                         SELECT take.member
+                           FROM current_takes take
+                          WHERE take.team IN %(tippee_ids)s
+                            AND take.amount <> 0
+                     )
+                   )
+               AND a.provider = 'stripe'
+               AND a.country = 'IN'
+               AND a.is_current
+             LIMIT 1
+        """, tippee_ids=tuple(tip.tippee for tip in tips))
+    )
     del tips
 
 elif not payin_id:
@@ -213,6 +243,8 @@ response.headers[b'Content-Security-Policy'] = csp
 title = _("Funding your donations")
 
 [---] text/html
+% from "templates/macros/postal-addresses.html" import postal_address_form_v2 with context
+
 % extends "templates/layouts/base-thin.html"
 
 % block thin_content
@@ -467,6 +499,14 @@ title = _("Funding your donations")
             </label>
             <br>
         </fieldset>
+        % endif
+
+        % if postal_address_is_required
+        <p>{{ _("Postal address:") }}</p>
+        <div class="block-labels max-width-500">{{
+            postal_address_form_v2(saved=identity.get('postal_address'))
+        }}</div>
+        <br>
         % endif
 
         <div class="text-info">{{ glyphicon('info-sign') }} {{ _(
