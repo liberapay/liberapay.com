@@ -337,7 +337,9 @@ class ExchangeRoute(Model):
         if self.network.startswith('stripe-'):
             addr = addr.copy()
             addr['state'] = addr.pop('region')
-            addr['line1'], addr['line2'], *_ignore = addr.pop('local_address').splitlines()
+            lines = addr.pop('local_address', '').splitlines()
+            addr['line1'] = lines[0] if lines else None
+            addr['line2'] = lines[1] if len(lines) > 1 else None
             if self.address.startswith('pm_'):
                 self.stripe_payment_method = stripe.PaymentMethod.modify(
                     self.address,
