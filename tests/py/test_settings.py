@@ -3,7 +3,7 @@ from liberapay.testing import Harness
 from liberapay.models.participant import Participant
 
 
-ALL_OFF = {'privacy': PROFILE_VISIBILITY_FIELDS_S}
+ALL_OFF = {'visibility': PROFILE_VISIBILITY_FIELDS_S}
 ALL_ON = dict({k: 'on' for k in PROFILE_VISIBILITY_FIELDS}, **ALL_OFF)
 
 
@@ -14,23 +14,10 @@ class TestPrivacy(Harness):
         self.alice = self.make_participant('alice')
 
     def hit_edit(self, expected_code=302, **kw):
-        response = self.client.PxST("/alice/edit/privacy", auth_as=self.alice, **kw)
+        response = self.client.PxST("/alice/edit/visibility", auth_as=self.alice, **kw)
         if response.code != expected_code:
             print(response.text)
         return response
-
-    def test_participant_can_modify_privacy_settings(self):
-        # turn them all on
-        self.hit_edit(data=ALL_ON)
-        alice = Participant.from_id(self.alice.id)
-        for k in PROFILE_VISIBILITY_FIELDS:
-            assert getattr(alice, k) in (1, 3, True)
-
-        # turn them all off
-        self.hit_edit(data=ALL_OFF)
-        alice = Participant.from_id(self.alice.id)
-        for k in PROFILE_VISIBILITY_FIELDS:
-            assert getattr(alice, k) in (0, 2, False)
 
     # Related to is-searchable
 
@@ -49,6 +36,31 @@ class TestPrivacy(Harness):
         self.make_participant('A-Team', kind='group', hide_from_lists=1).add_member(alice)
         assert 'A-Team' not in self.client.GET("/explore/teams/").text
 
+
+class TestVisibility(Harness):
+
+    def setUp(self):
+        Harness.setUp(self)
+        self.alice = self.make_participant('alice')
+
+    def hit_edit(self, expected_code=302, **kw):
+        response = self.client.PxST("/alice/edit/visibility", auth_as=self.alice, **kw)
+        if response.code != expected_code:
+            print(response.text)
+        return response
+
+    def test_participant_can_modify_visibility_settings(self):
+        # turn them all on
+        self.hit_edit(data=ALL_ON)
+        alice = Participant.from_id(self.alice.id)
+        for k in PROFILE_VISIBILITY_FIELDS:
+            assert getattr(alice, k) in (1, 3, True)
+
+        # turn them all off
+        self.hit_edit(data=ALL_OFF)
+        alice = Participant.from_id(self.alice.id)
+        for k in PROFILE_VISIBILITY_FIELDS:
+            assert getattr(alice, k) in (0, 2, False)
 
     def test_unsettling_participant_blurred(self):
         self.make_participant('bob', is_unsettling=1)
