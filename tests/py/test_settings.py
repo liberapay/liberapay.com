@@ -1,10 +1,10 @@
-from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
+from liberapay.constants import PROFILE_VISIBILITY_FIELDS, PROFILE_VISIBILITY_FIELDS_S
 from liberapay.testing import Harness
 from liberapay.models.participant import Participant
 
 
-ALL_OFF = {'privacy': PRIVACY_FIELDS_S}
-ALL_ON = dict({k: 'on' for k in PRIVACY_FIELDS}, **ALL_OFF)
+ALL_OFF = {'privacy': PROFILE_VISIBILITY_FIELDS_S}
+ALL_ON = dict({k: 'on' for k in PROFILE_VISIBILITY_FIELDS}, **ALL_OFF)
 
 
 class TestPrivacy(Harness):
@@ -23,13 +23,13 @@ class TestPrivacy(Harness):
         # turn them all on
         self.hit_edit(data=ALL_ON)
         alice = Participant.from_id(self.alice.id)
-        for k in PRIVACY_FIELDS:
+        for k in PROFILE_VISIBILITY_FIELDS:
             assert getattr(alice, k) in (1, 3, True)
 
         # turn them all off
         self.hit_edit(data=ALL_OFF)
         alice = Participant.from_id(self.alice.id)
-        for k in PRIVACY_FIELDS:
+        for k in PROFILE_VISIBILITY_FIELDS:
             assert getattr(alice, k) in (0, 2, False)
 
     # Related to is-searchable
