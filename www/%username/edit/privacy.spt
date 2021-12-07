@@ -1,4 +1,4 @@
-from liberapay.constants import PRIVACY_FIELDS
+from liberapay.constants import PROFILE_VISIBILITY_FIELDS
 from liberapay.utils import form_post_success, get_participant
 
 [---]
@@ -9,9 +9,9 @@ if request.method == 'POST':
     print('request is', request)
     fields = request.body['privacy'].split()
     for field in fields:
-        if field not in PRIVACY_FIELDS:
+        if field not in PROFILE_VISIBILITY_FIELDS:
             continue
-        if not (PRIVACY_FIELDS[field][1] or participant.is_person):
+        if not (PROFILE_VISIBILITY_FIELDS[field][1] or participant.is_person):
             continue
         value = request.body.get(field) == 'on'
         if isinstance(getattr(participant, field), bool):
@@ -35,10 +35,10 @@ subhead = _("Privacy")
     <form action="" method="POST" class="js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        <input type="hidden" name="privacy" value="{{ constants.PRIVACY_FIELDS_S }}" />
+        <input type="hidden" name="privacy" value="{{ constants.PROFILE_VISIBILITY_FIELDS_S }}" />
         <div class="checkbox">
         % set has_override = set()
-        % for name, (label, show_for_teams) in constants.PRIVACY_FIELDS.items()
+        % for name, (label, show_for_teams) in constants.PROFILE_VISIBILITY_FIELDS.items()
         % if show_for_teams or participant.kind != 'group'
         <label>
             <input type="checkbox" name="{{ name }}" {{ 'checked' if participant[name].__and__(1) else '' }} />
