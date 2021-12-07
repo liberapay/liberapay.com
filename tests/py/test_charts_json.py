@@ -128,8 +128,8 @@ class TestChartsJson(Harness):
         self.run_payday()
         self.run_payday()
         r = self.client.PxST(
-            '/carl/edit/privacy',
-            {'privacy': 'hide_receiving', 'hide_receiving': 'on'},
+            '/carl/edit/visibility',
+            {'visibility': 'hide_receiving', 'hide_receiving': 'on'},
             auth_as=self.carl,
         )
         assert r.code == 302

@@ -29,8 +29,8 @@ class Tests(Harness):
 
         # Hide alice's giving
         r = self.client.PxST(
-            '/alice/edit/privacy',
-            {'privacy': 'hide_giving', 'hide_giving': 'on'},
+            '/alice/edit/visibility',
+            {'visibility': 'hide_giving', 'hide_giving': 'on'},
             auth_as=self.alice,
         )
         assert r.code == 302
@@ -41,8 +41,8 @@ class Tests(Harness):
 
         # Hide alice's receiving
         r = self.client.PxST(
-            '/alice/edit/privacy',
-            {'privacy': 'hide_receiving', 'hide_receiving': 'on'},
+            '/alice/edit/visibility',
+            {'visibility': 'hide_receiving', 'hide_receiving': 'on'},
             auth_as=self.alice,
         )
         assert r.code == 302

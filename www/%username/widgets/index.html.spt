@@ -43,7 +43,7 @@ response.headers[b'Content-Security-Policy'] = csp
     <p class="alert alert-warning">{{ _(
         "This widget is not available because it is not compatible with the "
         "{link_open}privacy settings{link_close} you have chosen.",
-        link_open=('<a href="{0}edit/privacy">'|safe).format(profile_url),
+        link_open=('<a href="{0}edit/visibility">'|safe).format(profile_url),
         link_close='</a>'|safe
     ) }}</p>
     % else
@@ -60,7 +60,7 @@ response.headers[b'Content-Security-Policy'] = csp
     <p class="alert alert-warning">{{ _(
         "This widget is not available because it is not compatible with the "
         "{link_open}privacy settings{link_close} you have chosen.",
-        link_open=('<a href="{0}edit/privacy">'|safe).format(profile_url),
+        link_open=('<a href="{0}edit/visibility">'|safe).format(profile_url),
         link_close='</a>'|safe
     ) }}</p>
     % else
