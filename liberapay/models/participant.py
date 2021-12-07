@@ -2663,7 +2663,7 @@ class Participant(Model, MixinTeam):
                 if u.id == t.id:
                     t.set_attributes(is_funded=u.is_funded)
             self.schedule_renewals()
-        if update_tippee:
+        if update_tippee and t.is_funded:
             # Update receiving amount of tippee
             tippee.update_receiving()
 
