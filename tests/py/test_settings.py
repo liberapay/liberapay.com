@@ -50,6 +50,20 @@ class TestPrivacy(Harness):
         assert 'A-Team' not in self.client.GET("/explore/teams/").text
 
 
+    def test_unsettling_participant_blurred(self):
+        self.make_participant('bob', is_unsettling=1)
+        bob_search_result = self.client.GET("/search?q=bob").text
+        assert '<div class="mini-user mini-user-blur">' in bob_search_result
+
+    def test_participant_view_unsettling_prompt(self):
+        self.make_participant('bob', is_unsettling=1)
+        view_unsettling_prompt = """This page is marked as containing potentially upsetting or embarrassing content. \
+                                    Viewing it is unrecommended if you are a minor. \
+                                    Would you still like to view it?""".replace("  ", "")
+        bobs_page = self.client.GET("/bob/").text
+        assert view_unsettling_prompt in bobs_page
+
+
 class TestUsername(Harness):
 
     def test_participant_can_set_username(self):
