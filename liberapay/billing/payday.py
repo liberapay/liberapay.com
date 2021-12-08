@@ -999,6 +999,7 @@ class Payday:
             p = self.db.Participant.from_id(tippee_id)
             if p.status != 'active' or not p.accepts_tips:
                 continue
+            self.generate_add_profile_description_notification(p, previous_ts_end)
             for t in transfers:
                 t['amount'] = Money(**t['amount'])
             by_team = {
@@ -1026,6 +1027,27 @@ class Payday:
             )
             n += 1
         log("Sent %i income notifications." % n)
+
+    def generate_add_profile_description_notification(self, p, previous_ts_end):
+        """Send a notification to users without a profile description to add one
+        if they begin to receive payments. #2013"""
+        if not any(p.get_statement(p.get_statement_langs())):
+            # select the last transfer before this pay period
+            last_transfer = website.db.one("""
+                SELECT timestamp
+                FROM transfers t
+                WHERE timestamp <= %s
+                AND t.tippee = %s
+                AND status = 'succeeded'
+                AND t.context IN ('tip', 'take', 'partial-take')
+                ORDER BY timestamp DESC
+                LIMIT 1
+                """, (previous_ts_end, p.id,), back_as=dict)
+            # send new notif only if this is the first transfer
+            if not last_transfer:
+                p.notify('add_profile_description', force_email=True)
+                log("Sent update_profile notification to user %s." % p.id)
+
 
     def generate_payment_account_required_notifications(self):
         n = 0
