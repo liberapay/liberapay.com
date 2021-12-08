@@ -1,0 +1,18 @@
+{{ _("Your Liberapay account is missing a profile description.") }}
+
+[---] text/html
+<p>{{ _(
+    "As a Liberapay member who is actively receiving payments, you are required "
+    "to include a description on your profile that explains what you do, why "
+    "you've chosen to ask for donations, what the money will be used for, etc. "
+    "Failure to include a profile description may result in your account being "
+    "marked as suspicious, which can ultimately lead to removal from the platform. "
+    "To add a profile description, go to Profile > Descriptions and include either "
+    "a short or full profile description."
+) }}</p>
+
+<p><a href="{{ participant.url('edit/statement') }}"
+    style="{{ button_style('primary') }}">
+    {{ _("Edit your profile description") }}
+</a></p>
+
