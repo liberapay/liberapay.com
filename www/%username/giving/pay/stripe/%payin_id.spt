@@ -176,13 +176,13 @@ elif payin_id:
     route = ExchangeRoute.from_id(payer, payin.route)
     tell_payer_to_fill_profile = (
         payin.status in ('pending', 'succeeded') and
+        not (payer.public_name or payer.username) and
         website.db.one("""
             SELECT count(*)
               FROM payin_transfers
              WHERE payin = %s
                AND visibility = 3
-        """, (payin.id,)) > 0 and
-        not (participant.public_name or participant.username)
+        """, (payin.id,)) > 0
     )
 
 else:
