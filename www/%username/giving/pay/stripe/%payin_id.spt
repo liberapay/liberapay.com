@@ -72,6 +72,7 @@ if request.method == 'POST':
         if check_address_v2(postal_address):
             if postal_address != identity.get('postal_address'):
                 identity['postal_address'] = postal_address
+                identity['name'] = body.get('owner.name')
                 payer.insert_identity(identity)
     else:
         postal_address = None
