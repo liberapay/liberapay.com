@@ -238,20 +238,6 @@ a.account-link[href="#not-available"] {
     -webkit-filter: blur(4px);
 }
 
-.mini-user-blur {
-    filter: blur(3px);
-    -webkit-filter: blur(3px);
-}
-
-.repo-search-blur {
-    filter: blur(2.5px);
-    -webkit-filter: blur(2.5px);
-}
-
-.repo-search-display {
-    display: inline;
-}
-
 .profile-header {
     align-items: center;
     clear: both;
@@ -394,6 +380,15 @@ p.summary {
     }
 }
 
+.repo-search-blur {
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+}
+
+.repo-search-display {
+    display: inline;
+}
+
 @media (max-width: $screen-xs-min - 1) {
     .inline-boxes > .inline-box {
         display: block;
@@ -471,6 +466,11 @@ input.search {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+
+.mini-user-blur {
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
 }
 
 .user-admin {
