@@ -42,6 +42,7 @@ class TestVisibility(Harness):
     def setUp(self):
         Harness.setUp(self)
         self.alice = self.make_participant('alice')
+        self.view_unsettling_prompt = "This page is marked as containing potentially upsetting or embarrassing content."
 
     def hit_edit(self, expected_code=302, **kw):
         response = self.client.PxST("/alice/edit/visibility", auth_as=self.alice, **kw)
@@ -62,18 +63,29 @@ class TestVisibility(Harness):
         for k in PROFILE_VISIBILITY_FIELDS:
             assert getattr(alice, k) in (0, 2, False)
 
-    def test_unsettling_participant_blurred(self):
+    def test_unsettling_participant_blurred_search(self):
         self.make_participant('bob', is_unsettling=1)
         bob_search_result = self.client.GET("/search?q=bob").text
         assert '<div class="mini-user mini-user-blur">' in bob_search_result
+    
+    def test_unsettling_team_blurred(self):
+        alice = Participant.from_username('alice')
+        self.make_participant('A-Team', kind="group", is_unsettling=1).add_member(alice)
+        response = self.client.GET("/explore/teams")
+        explore_page = response.text
+        cookies = response.headers.cookie
+        assert 'always_view_unsettling' not in cookies
+        assert '<div class="panel-body panel-blur">' in explore_page
 
     def test_participant_view_unsettling_prompt(self):
         self.make_participant('bob', is_unsettling=1)
-        view_unsettling_prompt = """This page is marked as containing potentially upsetting or embarrassing content. \
-                                    Viewing it is unrecommended if you are a minor. \
-                                    Would you still like to view it?""".replace("  ", "")
         bobs_page = self.client.GET("/bob/").text
-        assert view_unsettling_prompt in bobs_page
+        assert self.view_unsettling_prompt in bobs_page
+
+    def test_participant_always_view_unsettling_cookie_set(self):
+        self.make_participant('bob', is_unsettling=1)
+        bob_search_result = self.client.GET("/search?q=bob", cookies={'always_view_unsettling': 'True'}).text
+        assert self.view_unsettling_prompt not in bob_search_result
 
 
 class TestUsername(Harness):
