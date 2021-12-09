@@ -2,11 +2,12 @@ import stripe
 
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.stripe import create_source_from_token, repr_stripe_error
-from liberapay.utils import form_post_success, get_participant
+from liberapay.utils import check_address_v2, form_post_success, get_participant
 
 [---]
 
 participant = get_participant(state, restrict=True)
+identity = participant.get_current_identity() or {}
 
 if request.method == 'POST':
     body = request.body
@@ -14,13 +15,7 @@ if request.method == 'POST':
     return_url = participant.url('routes/')
     try:
         if 'token' in body:
-            owner_address = {
-                k: body.get('owner.address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_STRIPE
-            }
-            if 'line1' not in owner_address:
-                owner_address = None
             owner_info = {
-                'address': owner_address,
                 'email': participant.get_email_address(),
                 'name': body.get('owner.name'),
             }
@@ -49,6 +44,13 @@ if request.method == 'POST':
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
         ))
+    postal_address = {
+        k: body.get('postal_address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_LIBERAPAY
+    }
+    if check_address_v2(postal_address):
+        if postal_address != identity.get('postal_address'):
+            identity['postal_address'] = postal_address
+            participant.insert_identity(identity)
     msg = _("The payment instrument has been successfully added.")
     form_post_success(state, redirect_url=participant.path('routes/'), msg=msg)
 
@@ -64,9 +66,10 @@ response.headers[b'Content-Security-Policy'] = csp
 title = _("Add a payment instrument")
 
 [---] text/html
-% extends "templates/layouts/settings.html"
-
 % from "templates/macros/icons.html" import fontawesome
+% from "templates/macros/postal-addresses.html" import postal_address_form_v2 with context
+
+% extends "templates/layouts/settings.html"
 
 % block content
 
@@ -122,6 +125,11 @@ title = _("Add a payment instrument")
             </label>
         </fieldset>
         % endif
+        <p>{{ _("Postal address:") }}</p>
+        <div class="block-labels max-width-500">{{
+            postal_address_form_v2(saved=identity.get('postal_address'))
+        }}</div>
+        <br>
         <button class="btn btn-primary btn-lg">{{ _("Save") }}</button>
     </form>
 
