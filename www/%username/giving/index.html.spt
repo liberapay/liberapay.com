@@ -10,7 +10,7 @@ from liberapay.utils import form_post_success, get_participant, group_by
 
 
 RENEWAL_MODE_START_DATE = date(2020, 2, 7)
-VISIBILITY_START_DATE = date(2021, 12, 9)
+VISIBILITY_START_DATE = date(2021, 12, 10)
 THIRTY_DAYS = timedelta(days=30)
 
 [-----------------------------------------------------------------------------]
@@ -112,6 +112,10 @@ show_visibility_hint = (
     any(tip.visibility == 1 and tip.mtime.date() <= VISIBILITY_START_DATE
         for tip in chain(tips, pledges))
 )
+show_incomplete_profile_warning = (
+    not (participant.public_name or participant.username) and
+    any(tip.visibility == 3 for tip in chain(tips, pledges))
+)
 tips_by_currency = group_by(tips, lambda t: t.amount.currency)
 tips_by_currency = {
     currency: (
@@ -198,7 +202,7 @@ next_payday = compute_next_payday_date()
             ) }}</button>
         </form>
     </div>
-    % if show_visibility_hint
+    % if show_visibility_hint or show_incomplete_profile_warning or show_missing_route_warning
     <br>
     % endif
 % endif
@@ -222,6 +226,20 @@ next_payday = compute_next_payday_date()
                 "Keep my donations as they are"
             ) }}</button>
         </form>
+    </div>
+    % if show_missing_route_warning
+    <br>
+    % endif
+% elif show_incomplete_profile_warning
+    <div class="text-info">
+        {{ glyphicon('info-sign') }} {{ _(
+            "Since you've chosen to make a public donation, we recommend that you "
+            "complete your public profile."
+        ) }}
+        &nbsp;
+        <span class="buttons"><a class="btn btn-primary" href="{{ participant.path('edit/username') }}">{{
+            _("Edit your profile")
+        }}</a></span>
     </div>
     % if show_missing_route_warning
     <br>
