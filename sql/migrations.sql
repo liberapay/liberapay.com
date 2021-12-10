@@ -3045,6 +3045,7 @@ CREATE TABLE recipient_settings
 , patron_visibilities   int      NOT NULL CHECK (patron_visibilities > 0)
 );
 UPDATE tips SET visibility = -1 WHERE hidden AND visibility = 1;
+UPDATE tips SET visibility = 1 WHERE visibility IS NULL;
 DROP FUNCTION compute_arrears(current_tips);
 DROP CAST (current_tips AS tips);
 DROP VIEW current_tips;
