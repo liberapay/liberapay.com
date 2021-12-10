@@ -22,7 +22,7 @@ freeload = participant.get_last_event_of_type('freeload')
 if freeload and freeload.ts < recently:
     freeload = None
 auto_renewal_hint = participant.get_last_event_of_type('auto_renewal_hint')
-visibility_hint = participant.get_last_event_of_type('visibility_hint')
+visibility_hint = participant.get_last_event_of_type('tips_visibility')
 if request.method == 'POST':
     if request.body.get('freeload') == 'yes':
         if not freeload:
