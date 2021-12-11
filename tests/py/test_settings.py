@@ -37,7 +37,7 @@ class TestPrivacy(Harness):
         assert 'A-Team' not in self.client.GET("/explore/teams/").text
 
 
-class TestVisibility(Harness):
+class TestProfileVisibility(Harness):
 
     def setUp(self):
         Harness.setUp(self)
@@ -66,7 +66,7 @@ class TestVisibility(Harness):
     def test_unsettling_participant_blurred_search(self):
         self.make_participant('bob', is_unsettling=1)
         bob_search_result = self.client.GET("/search?q=bob").text
-        assert '<div class="mini-user mini-user-blur">' in bob_search_result
+        assert '<div class="mini-user blur-3px">' in bob_search_result
     
     def test_unsettling_team_blurred(self):
         alice = Participant.from_username('alice')
@@ -75,7 +75,7 @@ class TestVisibility(Harness):
         explore_page = response.text
         cookies = response.headers.cookie
         assert 'always_view_unsettling' not in cookies
-        assert '<div class="panel-body panel-blur">' in explore_page
+        assert '<div class="panel-body blur-4px">' in explore_page
 
     def test_participant_view_unsettling_prompt(self):
         self.make_participant('bob', is_unsettling=1)

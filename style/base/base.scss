@@ -233,11 +233,6 @@ a.account-link[href="#not-available"] {
     }
 }
 
-.panel-blur {
-    filter: blur(4px);
-    -webkit-filter: blur(4px);
-}
-
 .profile-header {
     align-items: center;
     clear: both;
@@ -380,11 +375,6 @@ p.summary {
     }
 }
 
-.repo-search-blur {
-    filter: blur(3px);
-    -webkit-filter: blur(3px);
-}
-
 .repo-search-display {
     display: inline;
 }
@@ -466,11 +456,6 @@ input.search {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-}
-
-.mini-user-blur {
-    filter: blur(3px);
-    -webkit-filter: blur(3px);
 }
 
 .user-admin {
@@ -1163,4 +1148,14 @@ fieldset#amount {
 abbr[title] {
     /* Bootstrap 3.3.6 adds a bottom border but doesn't disable text-decoration */
     text-decoration: none;
+}
+
+.blur-3px {
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+}
+
+.blur-4px {
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
 }

@@ -6,7 +6,7 @@
 <div class="inline-box">
     <div class="panel panel-{{ style }} profile-box-embedded"
          href="{{ path }}">
-        <div class="panel-body {{ 'panel-blur' if blur and user.id != participant.id }}">
+        <div class="panel-body {{ 'blur-4px' if blur and user.id != participant.id }}">
             <a href="{{ path }}" class="avatar-inline">{{
                 avatar_img(participant, size=120)
             }}</a>
@@ -24,7 +24,6 @@
 
 % macro profile_box_embedded_participant(participant, summary, nmembers=None)
     % set username = participant.username
-    % set unsettling = participant.is_unsettling
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
 

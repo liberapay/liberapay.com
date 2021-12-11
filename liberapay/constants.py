@@ -385,7 +385,7 @@ PROFILE_VISIBILITY_FIELDS = OrderedDict([
     ('hide_from_search', (_("Hide this profile from search results on Liberapay."), True)),
     ('profile_noindex', (_("Tell web search engines not to index this profile."), True)),
     ('hide_from_lists', (_("Prevent this profile from being listed on Liberapay."), True)),
-    ('is_unsettling', (_("Mark this profile as unsettling"), True)),
+    ('is_unsettling', (_("Mark this profile as displaying content that is upsetting or embarrassing."), True)),
 ])
 PROFILE_VISIBILITY_FIELDS_S = ' '.join(PROFILE_VISIBILITY_FIELDS.keys())
 

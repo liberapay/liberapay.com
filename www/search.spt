@@ -121,7 +121,7 @@ if query:
         % for result in usernames
         % set participant = website.db.Participant.from_username(result.username)
         % set blur = participant.is_unsettling and 'always_view_unsettling' not in request.headers.cookie
-        <div class="mini-user {{ 'mini-user-blur' if blur and participant.id != user.id }}">
+        <div class="mini-user {{ 'blur-3px' if blur and participant.id != user.id }}">
             <a href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="name">{{ result.username }}</div>
@@ -160,7 +160,7 @@ if query:
             % set owner = repo.owner
             % set blur = owner.is_unsettling and 'always_view_unsettling' not in request.headers.cookie
             <div class="paragraph">
-                <div class="repo-search-display {{ 'repo-search-blur' if blur and owner.id != user.id }}">
+                <div class="repo-search-display {{ 'blur-3px' if blur and owner.id != user.id }}">
                     <a href="/{{ owner.username }}/" class="avatar-inline">
                         {{ avatar_img(owner, size=28) }}
                     </a>

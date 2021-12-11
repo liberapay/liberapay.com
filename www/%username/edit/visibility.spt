@@ -5,8 +5,6 @@ from liberapay.utils import form_post_success, get_participant
 participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
-    print('participant is', participant)
-    print('request is', request)
     fields = request.body['visibility'].split()
     for field in fields:
         if field not in PROFILE_VISIBILITY_FIELDS:
