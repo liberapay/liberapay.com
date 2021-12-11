@@ -32,3 +32,24 @@ class TestDonating(Harness):
         assert tip.amount == USD('1.00')
         assert tip.renewal_mode == 2
         assert tip.visibility == 3
+
+    def test_donation_form_v2_does_not_overwrite_visibility(self):
+        creator = self.make_participant('creator', accepted_currencies=None)
+        self.add_payment_account(creator, 'stripe')
+        donor = self.make_participant('donor')
+        donor.set_tip_to(creator, USD('10.00'), renewal_mode=1, visibility=3)
+        r = self.client.PxST(
+            '/creator/tip',
+            {
+                'currency': 'USD',
+                'selected_amount': '1.00',
+                'renewal_mode': '2',
+            },
+            auth_as=donor,
+        )
+        assert r.code == 302
+        assert r.headers[b'Location'].startswith(b'/donor/giving/')
+        tip = donor.get_tip_to(creator)
+        assert tip.amount == USD('1.00')
+        assert tip.renewal_mode == 2
+        assert tip.visibility == 3
