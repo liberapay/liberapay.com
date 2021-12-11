@@ -2023,13 +2023,9 @@ class Participant(Model, MixinTeam):
         """Return a list of teams this user is a member of.
         """
         return self.db.all("""
-            SELECT take.team AS id, team.username AS name, team.avatar_url
-                 , ( SELECT count(*)
-                       FROM current_takes take2
-                      WHERE take2.team = take.team
-                   ) AS nmembers
+            SELECT team_p
               FROM current_takes take
-              JOIN participants team ON team.id = take.team
+              JOIN participants team_p ON team_p.id = take.team
              WHERE take.member = %s
         """, (self.id,))
 
