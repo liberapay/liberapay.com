@@ -22,11 +22,7 @@
     <div>
         % for t in participant.get_current_takes_for_display()
             % set blur = t.is_unsettling and 'always_view_unsettling' not in request.headers.cookie
-<<<<<<< HEAD
             <div class="mini-user {{ 'blur-3px' if blur and t.id != user.id }}">
-=======
-            <div class="mini-user {{ 'mini-user-blur' if blur and t.id != user.id }}">
->>>>>>> 2faaf781829831874e7d681daec0a7ce2368daca
                 <a href="/{{ t.member_name }}/">
                     {{ avatar_img(t) }}
                     <span class="name">{{ t.member_name }}</span>
