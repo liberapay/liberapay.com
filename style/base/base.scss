@@ -233,6 +233,11 @@ a.account-link[href="#not-available"] {
     }
 }
 
+.panel-blur {
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+}
+
 .profile-header {
     align-items: center;
     clear: both;
@@ -375,6 +380,14 @@ p.summary {
     }
 }
 
+<<<<<<< HEAD
+=======
+.repo-search-blur {
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+}
+
+>>>>>>> 2faaf781829831874e7d681daec0a7ce2368daca
 .repo-search-display {
     display: inline;
 }
@@ -456,6 +469,11 @@ input.search {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+
+.mini-user-blur {
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
 }
 
 .user-admin {

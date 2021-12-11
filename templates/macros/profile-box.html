@@ -24,6 +24,7 @@
 
 % macro profile_box_embedded_participant(participant, summary, nmembers=None)
     % set username = participant.username
+    % set unsettling = participant.is_unsettling
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
 

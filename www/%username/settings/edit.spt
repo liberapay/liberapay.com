@@ -48,8 +48,8 @@ if 'new-password' in body:
     p.update_password(body['new-password'], checked=checked)
     form_post_success(state, msg=_("Your password has been changed."))
 
-elif 'privacy' in body:
-    response.redirect(p.path('edit/privacy'), code=307)
+elif 'visibility' in body:
+    response.redirect(p.path('edit/visibility'), code=307)
 
 elif 'visibility' in body:
     response.redirect(p.path('edit/visibility'), code=307)
