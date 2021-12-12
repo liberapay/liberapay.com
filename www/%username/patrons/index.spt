@@ -84,6 +84,7 @@ subhead = _("Patrons")
 
 % if participant.is_person
     <h3 id="teams">{{ _("Teams") }}</h3>
+    % set teams = participant.get_teams()
     % if teams
         % for team in teams
             <h4>{{ team.username }}</h4>

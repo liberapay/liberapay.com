@@ -20,8 +20,8 @@ class Tests(Harness):
     def test_get_teams_for_member(self):
         b_team = self.make_participant('B-Team', kind='group')
         b_team.add_member(self.bob)
-        actual = self.alice.get_teams().pop().nmembers
-        assert actual == 1
+        actual = self.alice.get_teams()
+        assert actual == [self.a_team]
 
     def test_preclude_adding_stub_participant(self):
         stub_participant = self.make_stub()

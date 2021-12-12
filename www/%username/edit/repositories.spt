@@ -182,9 +182,9 @@ subhead = _("Repositories")
         <p>{{ _("We can also import lists of repositories for your teams:") }}</p>
         <div class="buttons">
         % for team in teams
-            <a class="btn btn-default text-center" href="/{{ team.name }}/edit/repositories">
+            <a class="btn btn-default text-center" href="/{{ team.username }}/edit/repositories">
                 <span class="avatar-inline">{{ avatar_img(team, size=28) }}</span><br>
-                {{ team.name }}
+                {{ team.username }}
             </a>
         % endfor
         </div>

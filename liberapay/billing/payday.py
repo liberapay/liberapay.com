@@ -1012,7 +1012,7 @@ class Payday:
             personal, personal_npatrons = by_team.pop(None, nothing)
             teams = p.get_teams()
             team_ids = set(t.id for t in teams) | set(by_team.keys())
-            team_names = {t.id: t.name for t in teams}
+            team_names = {t.id: t.username for t in teams}
             get_username = lambda i: team_names.get(i) or self.db.one(
                 "SELECT username FROM participants WHERE id = %s", (i,)
             )
