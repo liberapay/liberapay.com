@@ -3,7 +3,7 @@ from liberapay.utils import form_post_success, get_participant
 [---]
 
 participant = get_participant(state, restrict=True, allow_member=True)
-if user != participant and not user.recipient_settings.patron_visibilities < 2:
+if user != participant and user.recipient_settings.patron_visibilities < 2:
     raise response.error(403, "You haven't opted-in to see who your patrons are.")
 
 if request.method == 'POST':
@@ -97,7 +97,7 @@ subhead = _("Patrons")
             ) }}</p>
             <p><a class="btn btn-default" href="{{ team.path('patrons') }}">{{
                 _("View the patrons of {username}", username=team.username)
-            }}</p>
+            }}</a></p>
         % endfor
     % else
         <p>{{ _(
