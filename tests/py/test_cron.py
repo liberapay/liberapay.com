@@ -273,3 +273,25 @@ class TestCronJobs(EmailHarness):
         assert 'missing a profile description' in emails[1]['subject']
         assert '0.23' in emails[0]['subject']
         assert emails[0]['to'][0] == 'ethan <%s>' % ethan.email
+        ethan.leave_team(team)
+
+        ### fast forward 6 months,
+        self.db.run("UPDATE notifications SET ts = ts - interval '700 days'")
+        self.db.run("UPDATE transfers SET timestamp = timestamp - interval '700 days'")
+        generate_profile_description_missing_notifications()
+        emails = self.get_emails()
+        # no one should get an email about creating a description
+        # because no one received payments in last 6 months
+        assert emails == []
+        # send bob a tip, 
+        # bob should get a fresh missing description email but ethan shouldn't
+        charles.set_tip_to(bob, EUR('4.50'))
+        self.make_payin_and_transfer(charles_card, bob, EUR('4.50'))
+        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
+        Payday.start().run()
+        generate_profile_description_missing_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 2
+        assert 'missing a profile description' in emails[1]['subject']
+        assert '4.50' in emails[0]['subject']
+        assert emails[0]['to'][0] == 'bob <%s>' % bob.email

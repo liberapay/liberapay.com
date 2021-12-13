@@ -8,6 +8,7 @@ def generate_profile_description_missing_notifications():
     tippees_without_description = website.db.all("""
         SELECT DISTINCT tippee FROM transfers t
         WHERE status = 'succeeded'
+        AND t.timestamp >= (current_timestamp - interval '180 days')
         AND t.context IN ('tip', 'take', 'partial-take')
         AND t.tippee NOT IN (
             SELECT DISTINCT participant
@@ -16,7 +17,7 @@ def generate_profile_description_missing_notifications():
         AND t.tippee NOT IN (
             SELECT DISTINCT participant FROM notifications n
             WHERE n.event = 'profile_description_missing'
-            AND timestamp >= (current_timestamp - interval '180 days')
+            AND ts >= (current_timestamp - interval '180 days')
         )
     """)
 
