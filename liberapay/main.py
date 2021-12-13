@@ -26,6 +26,7 @@ from pando.utils import maybe_encode
 
 from liberapay import utils
 from liberapay.billing.payday import Payday, create_payday_issue
+from liberapay.billing.cron import generate_profile_description_missing_notifications
 from liberapay.cron import Cron, Daily, Weekly
 from liberapay.exceptions import PayinMethodIsUnavailable, TooManyAttempts
 from liberapay.i18n.base import (
@@ -179,6 +180,7 @@ if conf:
     cron(Daily(hour=18), Payday.update_cached_amounts, True)
     cron(intervals.get('notify_patrons', 1200), Participant.notify_patrons, True)
     cron(intervals.get('migrate_identities', 120), Participant.migrate_identities, True)
+    cron(Daily(hour=19), generate_profile_description_missing_notifications, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
     cron(Daily(hour=1), clean_up_emails, True)
