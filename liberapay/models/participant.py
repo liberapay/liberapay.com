@@ -2639,7 +2639,7 @@ class Participant(Model, MixinTeam):
                           )
                         , coalesce(
                               %(visibility)s,
-                              (SELECT visibility FROM current_tip),
+                              (SELECT abs(visibility) FROM current_tip),
                               1
                           ) )
               RETURNING tips
