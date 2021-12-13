@@ -223,7 +223,7 @@ class TestCronJobs(EmailHarness):
         assert emails[0]['to'][0] == 'bob <%s>' % bob.email
         assert 'missing a profile description' in emails[0]['subject']
 
-        ### should only send missing description email after first payday
+        # ## should only send missing description email after first payday
         # send more payments
         alex.set_tip_to(bob, EUR('4.50'))
         charles.set_tip_to(dave, EUR('4.50'))
@@ -246,10 +246,10 @@ class TestCronJobs(EmailHarness):
                 profile_desc_emails.remove(email)
         emails = profile_desc_emails
 
-        # should be none, bob already got an email about updating profile 
+        # should be none, bob already got an email about updating profile
         assert emails == []
 
-        ### team members should get these emails too
+        # ## team members should get these emails too
         # create team user
         ethan = self.make_participant('ethan', email='ethan@example.org')
         self.add_payment_account(ethan, 'stripe', country='FR', default_currency='EUR')
@@ -275,15 +275,16 @@ class TestCronJobs(EmailHarness):
         assert emails[0]['to'][0] == 'ethan <%s>' % ethan.email
         ethan.leave_team(team)
 
-        ### fast forward 6 months,
-        self.db.run("UPDATE notifications SET ts = ts - interval '700 days'")
-        self.db.run("UPDATE transfers SET timestamp = timestamp - interval '700 days'")
+        # ## fast forward 6 months,
+        self.db.run("UPDATE notifications SET ts = ts - interval '181 days'")
+        self.db.run("UPDATE transfers SET timestamp = timestamp - interval '181 days'")
         generate_profile_description_missing_notifications()
         emails = self.get_emails()
         # no one should get an email about creating a description
         # because no one received payments in last 6 months
         assert emails == []
-        # send bob a tip, 
+
+        # send bob a tip,
         # bob should get a fresh missing description email but ethan shouldn't
         charles.set_tip_to(bob, EUR('4.50'))
         self.make_payin_and_transfer(charles_card, bob, EUR('4.50'))
