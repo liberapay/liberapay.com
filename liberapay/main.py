@@ -26,7 +26,6 @@ from pando.utils import maybe_encode
 
 from liberapay import utils
 from liberapay.billing.payday import Payday, create_payday_issue
-from liberapay.billing.cron import generate_profile_description_missing_notifications
 from liberapay.cron import Cron, Daily, Weekly
 from liberapay.exceptions import PayinMethodIsUnavailable, TooManyAttempts
 from liberapay.i18n.base import (
@@ -37,6 +36,7 @@ from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import (
     Participant, clean_up_closed_accounts, send_account_disabled_notifications,
+    generate_profile_description_missing_notifications
 )
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
