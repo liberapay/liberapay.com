@@ -3299,9 +3299,6 @@ class Participant(Model, MixinTeam):
                      , t.renewal_mode
                      , t.visibility
                      , p.payment_providers
-                     , ( t.paid_in_advance IS NULL OR
-                         t.paid_in_advance < (t.amount * 3)
-                       ) AS awaits_payment
                   FROM current_tips t
                   JOIN participants p ON p.id = t.tippee
                  WHERE t.tipper = %s

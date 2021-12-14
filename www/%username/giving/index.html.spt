@@ -85,13 +85,7 @@ cancelled_pledges = [x for x in pledges if x.renewal_mode <= 0]
 # don't filter until after cancelled are looked at
 tips = [t for t in tips if t.renewal_mode > 0]
 ntips = len(tips)
-ntips_awaiting_payment = sum(
-    1 for t in tips if (
-        t.awaits_payment and
-        t.tippee_p.payment_providers > 0 and
-        t.tippee not in has_pending_transfer
-    )
-)
+ntips_awaiting_payment = participant.get_tips_awaiting_payment()[1]
 show_missing_route_warning = (
     any(tip.renewal_mode == 2 for tip in tips) and
     website.db.one("""
