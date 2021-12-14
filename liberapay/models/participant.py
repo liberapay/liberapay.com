@@ -3334,7 +3334,7 @@ class Participant(Model, MixinTeam):
 
         return tips, pledges
 
-    def get_tips_awaiting_payment(self):
+    def get_tips_awaiting_payment(self, weeks_early=3):
         """Fetch a list of the user's donations that need to be renewed, and
         determine if some of them can be grouped into a single charge.
 
@@ -3357,7 +3357,7 @@ class Participant(Model, MixinTeam):
              WHERE t.tipper = %s
                AND t.renewal_mode > 0
                AND ( t.paid_in_advance IS NULL OR
-                     t.paid_in_advance < (t.amount * 3)
+                     t.paid_in_advance < (t.amount * %s)
                    )
                AND p.status = 'active'
                AND ( p.goal IS NULL OR p.goal >= 0 )
@@ -3378,7 +3378,7 @@ class Participant(Model, MixinTeam):
                    ) NULLS FIRST
                  , (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
-        """, (self.id,))
+        """, (self.id, weeks_early))
         return self.group_tips_into_payments(tips)
 
     def group_tips_into_payments(self, tips):
