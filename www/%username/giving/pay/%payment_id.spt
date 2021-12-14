@@ -120,7 +120,7 @@ elif retry_id:
     # if possible.
     disable_stripe = 'stripe' in payment.providers and (
         error.startswith("As per Indian regulations, only registered Indian businesses ") or
-        error.startswith("Stripe doesn't currently support destination charges with accounts in ")
+        error.startswith("Stripe doesn't currently support ")
     )
     if disable_stripe:
         payment.providers.remove('stripe')
