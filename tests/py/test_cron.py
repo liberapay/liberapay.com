@@ -171,7 +171,7 @@ class TestCronJobs(EmailHarness):
         emails = self.get_emails()
         assert not emails
 
-    def test_first_payday_notifies_participants_without_description(self):
+    def test_profile_description_missing_notification(self):
         # alex: no description, doesn't receive payments. No email
         alex = self.make_participant('alex', email='alex@example.org')
         # bob: no description, receives payments. Email
