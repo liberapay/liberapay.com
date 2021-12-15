@@ -344,12 +344,12 @@ recent = website.db.one("""
                     <a href="/{{ p.username }}/">
                         {{ avatar_img(p) }}
                         <div class="name">{{ p.username }}</div>
-                        <div class="amount">{{ _(
-                            "{money_amount}{small}/week{end_small}",
-                            money_amount=p.giving,
-                            small='<small>'|safe, end_small='</small>'|safe
-                        ) }}</div>
                     </a>
+                    <div class="amount">{{ _(
+                        "{money_amount}{small}/week{end_small}",
+                        money_amount=p.giving,
+                        small='<small>'|safe, end_small='</small>'|safe
+                    ) }}</div>
                 </div>
             % endfor
         % endif

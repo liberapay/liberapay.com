@@ -26,6 +26,7 @@ teams = website.db.all("""
     OFFSET %s
 """, (locale.language, per_page + 1, (current_page - 1) * per_page))
 has_more = len(teams) > per_page
+teams = teams[:per_page]
 
 title = _("Explore")
 subhead = _("Teams")
@@ -53,7 +54,7 @@ subhead = _("Teams")
 % endif
 
 <div class="inline-boxes">
-    % for team in teams[:per_page]
+    % for team in teams
         {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
     % endfor
 </div>

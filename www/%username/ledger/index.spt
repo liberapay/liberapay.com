@@ -103,6 +103,7 @@ if participant.join_time:
 % endif
 
 % set show_id = user_is_admin
+% set show_patrons = participant.recipient_settings.patron_visibilities > 1
 <div class="row">
 <div class="col-lg-10">
 % if events
@@ -180,12 +181,12 @@ if participant.join_time:
         <td class="description">
         % set context = event['context']
         % set visibility = event['visibility']
-        % if visibility > 1 or admin_override
-            % set payer_link = ('<a href="/{0}/{1}">{0}</a>'|safe).format(event['payer_username'], subpath)
-        % else
-            % set payer_link = ''
-        % endif
         % if 'payer' in event
+            % if (visibility > 1 and show_patrons) or admin_override
+                % set payer_link = ('<a href="/{0}/{1}">{0}</a>'|safe).format(event['payer_username'], subpath)
+            % else
+                % set payer_link = ('<em>{0}</em>'|safe).format(_("hidden"))
+            % endif
             % if context == 'personal-donation'
                 {{ _(
                     "public donation from {donor_name}", donor_name=payer_link
