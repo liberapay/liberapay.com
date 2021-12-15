@@ -15,6 +15,7 @@ repos = website.db.all("""
     OFFSET %s
 """, (per_page + 1, (current_page - 1) * per_page))
 has_more = len(repos) > per_page
+repos = repos[:per_page]
 
 title = _("Explore")
 subhead = _("Repositories")
@@ -40,7 +41,7 @@ subhead = _("Repositories")
 % endif
 
 <div class="inline-boxes">
-% for repo, owner in repos[:per_page]
+% for repo, owner in repos
     <div class="inline-box repo">
     <div class="panel panel-default">
     <div class="panel-body">
