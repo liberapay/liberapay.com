@@ -2585,6 +2585,9 @@ msgstr ""
 msgid "Keep my donations as they are"
 msgstr ""
 
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Olet ottanut käyttöön lahjoituksissasi automaattisia uusimisia, mutta et ole asettanut mitään maksuvälinettä, jolla automaattinen uusiminen toteutettaisiin."
 
@@ -2796,9 +2799,6 @@ msgstr "Maksunkäsittelijä {name} ei vielä pysty käsittelemään {currency}-m
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Pankkisi hylkäsi tämän maksun. Suosittelemme lähettämän pankkiisi kopion {link_start}määräyksestä{link_end}, mikäli et ole varma, että se käsittelee {currency}-määräiset suoraveloituspyynnöt asianmukaisesti."
 
-msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
-msgstr ""
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Maksu veloitetaan {brand}-kortiltasi (viimeiset neljä numeroa: {last4})."
@@ -2838,6 +2838,9 @@ msgstr "Syöttämällä IBAN-numerosi ja hyväksymällä maksun, valtuutat {plat
 
 msgid "Remember the bank account number for future payments"
 msgstr "Muista pankkitilinumero tulevia maksuja varten"
+
+msgid "Postal address:"
+msgstr "Postiosoite:"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3002,6 +3005,10 @@ msgid_plural "{username} has {n} public patrons."
 msgstr[0] ""
 msgstr[1] ""
 
+#, python-brace-format
+msgid "{username} doesn't publish how much they give."
+msgstr "{username} ei julkaise antamiensa lahjoitusten summaa."
+
 msgid "Donees"
 msgstr ""
 
@@ -3010,6 +3017,10 @@ msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr "{username} ei paljasta Liberapay-tulojaan."
 
 msgid "History"
 msgstr "Historia"
@@ -3034,10 +3045,6 @@ msgstr "Viikoittaiset {currency}-määräiset tulot"
 
 msgid "Number of Patrons Per Week"
 msgstr "Tukijoita viikossa"
-
-#, python-brace-format
-msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr "{username} ei paljasta Liberapay-tulojaan."
 
 msgid "Invoice documents are private."
 msgstr "Tulodokumentit ovat yksityisiä."
@@ -4358,9 +4365,6 @@ msgstr "Tätä sivustoa hallinnoi Liberapay, voittoa tavoittelematon yhdistys, j
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay noudattaa EU:n lainsäädäntöä. Valvomme maksuliikennettä yhteistyökumppaniemme kanssa mahdollisten väärinkäytösten, rahanpesun ja terrorismin rahoituksen varalta."
-
-msgid "Postal address:"
-msgstr "Postiosoite:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

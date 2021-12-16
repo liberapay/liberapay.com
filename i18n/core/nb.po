@@ -14,35 +14,38 @@ msgid "The {language} translation of this page is not yet complete."
 msgstr "Den {language}e oversettelsen av denne siden er ikke ferdig enda."
 
 msgid "Your Liberapay account has been disabled"
-msgstr "Din Liberapay-konto har blitt avslått"
+msgstr "Liberapay-kontoen din har blitt deaktivert"
 
 msgid "Your Liberapay account has been marked as fraudulent by a staff member. You are no longer able to send and receive payments."
-msgstr "Din Liberapay-konto har blitt markert som svindel av en medarbeider. Du vil ikke lenger kunne motta betalinger."
+msgstr "Din Liberapay-konto har blitt markert som svindel av en medarbeider. Du vil ikke lenger kunne sende eller motta betalinger."
 
+#, fuzzy
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
 msgstr "Din Liberapay-konto har blitt markert som nettsøppel av en medarbeider. Den er nå skjult."
 
+#, fuzzy
 msgid "Greetings,"
 msgstr "Hei du,"
 
+#, fuzzy
 msgid "Something wrong? This email was sent automatically, but you can contact us by replying to it."
 msgstr "Er det noe som ikke stemmer? Denne e-posten ble sendt automatisk, men du kan besvare den for å få hjelp."
 
 msgid "Change your email settings"
-msgstr "Endre dine e-postinnstillinger"
+msgstr "Endre e-postinnstillingene dine"
 
 #, python-brace-format
 msgid "It's time to renew your donation to {username} on Liberapay"
-msgstr "Det er på tide å fornye din dinasjon til {username} på Liberapay"
+msgstr "Det er på tide å fornye donasjonen din til {username} på Liberapay"
 
 msgid "It's time to renew your donations on Liberapay"
-msgstr "Det er på tide å fornye dine donasjoner på Liberapay"
+msgstr "Det er på tide å fornye donasjonene dine på Liberapay"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
-msgstr "Din betaling av {amount} til {recipient} avventer betaling."
+msgstr "Betalingen din på {amount} til {recipient} venter på betaling."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
 msgstr[0] "Du har {n} donasjon som venter på å bli fornyet:"
@@ -58,7 +61,7 @@ msgstr[0] "Forny denne donasjonen"
 msgstr[1] "Forny disse donasjonene"
 
 msgid "Manage your donations"
-msgstr "Administrer dine donasjoner"
+msgstr "Administrer donasjonene dine"
 
 #, python-brace-format
 msgid "It's past time to renew your donation to {username} on Liberapay"
@@ -2592,6 +2595,9 @@ msgstr ""
 msgid "Keep my donations as they are"
 msgstr ""
 
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Du har skrudd på automatiske fornyelser for noen eller alle donasjonene dine, men du har ikke noe gyldig betalingsmiddel som lar oss igangsette automatiske betalinger når den tid kommer."
 
@@ -2804,9 +2810,6 @@ msgstr "Betalingsformidleren ({name}) kan ikke behandle {currency}-direktedebite
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Banken din kan avvise denne betalingen. Vi anbefaler å sende en kopi av {link_start}mandatet{link_end} til banken din hvis du ikker er sikker på at den håndterer {currency}-instruks om direktedebitering riktig."
 
-msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
-msgstr ""
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Ditt {brand}-kort vil bli belastet (siste fire siffer: {last4})."
@@ -2846,6 +2849,9 @@ msgstr "Ved å oppgi din IBAN, og bekrefte denne betalinger, godkjenner du {plat
 
 msgid "Remember the bank account number for future payments"
 msgstr "Husk bankkontonummeret for fremtidige betalinger"
+
+msgid "Postal address:"
+msgstr "Postadresse:"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3010,6 +3016,10 @@ msgid_plural "{username} has {n} public patrons."
 msgstr[0] ""
 msgstr[1] ""
 
+#, python-brace-format
+msgid "{username} doesn't publish how much they give."
+msgstr "{username} har ikke offentliggjort hvor mye de gir."
+
 msgid "Donees"
 msgstr ""
 
@@ -3018,6 +3028,10 @@ msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr "{username} tilkjennegir ikke hvor mye de mottar gjennom Liberapay."
 
 msgid "History"
 msgstr "Historikk"
@@ -3042,10 +3056,6 @@ msgstr "Inntekt per uke (i {currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "Ukentlig antall kronerullere"
-
-#, python-brace-format
-msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr "{username} tilkjennegir ikke hvor mye de mottar gjennom Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Fakturadokumenter er private."
@@ -4384,9 +4394,6 @@ msgstr "Denne hjemmesiden styres av Liberapay, en veldedig organisasjon juridisk
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay overholder lovverket i EU. Ved hjelp av våre partnere overvåker vi betalinger for mulig svindel, hvitvasking og finansiering av terror."
 
-msgid "Postal address:"
-msgstr "Postadresse:"
-
 #, python-brace-format
 msgid "This website is hosted on {0} by:"
 msgstr "Denne nettsiden betjenes på {0}, av:"
@@ -5589,9 +5596,11 @@ msgstr "Du kan også gi et tilbud om donasjoner til folk som ikke er registert p
 msgid "Sign In"
 msgstr "Logg inn"
 
+#, fuzzy
 msgid "If you already have an account, log in:"
 msgstr "Hvis du allerede har en konto, logg inn:"
 
+#, fuzzy
 msgid "Otherwise, sign up:"
 msgstr "Eller, registrer deg:"
 
@@ -5603,4 +5612,4 @@ msgstr "Registrer deg"
 
 #, python-brace-format
 msgid "You are already logged in as {0}."
-msgstr "Du er allerede innlogget som {0}."
+msgstr "Du er allerede logget inn som {0}."

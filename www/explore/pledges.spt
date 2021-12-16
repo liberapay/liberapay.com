@@ -14,6 +14,7 @@ pledgees = website.db.all("""
     OFFSET %s
 """, (per_page + 1, (current_page - 1) * per_page))
 has_more = len(pledgees) > per_page
+pledgees = pledgees[:per_page]
 
 title = _("Explore")
 subhead = _("Unclaimed Donations")
@@ -40,7 +41,7 @@ subhead = _("Unclaimed Donations")
             "inviting them to join Liberapay or asking them why they haven't."
         ) }}</p>
         <div class="inline-boxes">
-        % for p in pledgees[:per_page]
+        % for p in pledgees
             {{ profile_box_embedded_elsewhere(p) }}
         % endfor
         </div>

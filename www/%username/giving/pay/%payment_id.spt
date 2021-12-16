@@ -49,7 +49,8 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
 
-donation_groups, n_fundable = payer.get_tips_awaiting_payment()
+weeks_early = request.qs.get_int('weeks_early', default=3)
+donation_groups, n_fundable = payer.get_tips_awaiting_payment(weeks_early)
 n_payments = len(donation_groups['fundable'])
 donations_not_fundable = (
     donation_groups['no_provider'] +
@@ -119,7 +120,7 @@ elif retry_id:
     # if possible.
     disable_stripe = 'stripe' in payment.providers and (
         error.startswith("As per Indian regulations, only registered Indian businesses ") or
-        error.startswith("Stripe doesn't currently support destination charges with accounts in ")
+        error.startswith("Stripe doesn't currently support ")
     )
     if disable_stripe:
         payment.providers.remove('stripe')

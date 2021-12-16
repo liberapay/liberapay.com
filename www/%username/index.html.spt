@@ -239,14 +239,20 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             <a href="/~{{ p.id }}/">
                 {{ avatar_img(p) }}
                 <div class="name">{{ p.name }}</div>
-                % if not p.hide_giving and not participant.hide_receiving
+            </a>
+            % if p.hide_giving
+                <div class="text-muted">{{ fontawesome('eye-slash', _(
+                    "{username} doesn't publish how much they give.",
+                    username=p.name
+                )) }}</div>
+            % elif participant.hide_receiving
+            % else
                 <div class="amount">{{ _(
                     "{money_amount}{small}/week{end_small}",
                     money_amount=p.weekly_amount,
                     small='<small>'|safe, end_small='</small>'|safe
                 ) }}</div>
-                % endif
-            </a>
+            % endif
         </div>
     % endfor
     </div>
@@ -271,14 +277,20 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             <a href="/~{{ p.id }}/">
                 {{ avatar_img(p) }}
                 <div class="name">{{ p.name }}</div>
-                % if not p.hide_receiving and not participant.hide_giving
+            </a>
+            % if p.hide_receiving
+                <div class="text-muted">{{ fontawesome('eye-slash', _(
+                    "{username} does not disclose how much they receive through Liberapay.",
+                    username=p.name
+                )) }}</div>
+            % elif participant.hide_giving
+            % else
                 <div class="amount">{{ _(
                     "{money_amount}{small}/week{end_small}",
                     money_amount=p.weekly_amount,
                     small='<small>'|safe, end_small='</small>'|safe
                 ) }}</div>
-                % endif
-            </a>
+            % endif
         </div>
     % endfor
     </div>

@@ -64,10 +64,21 @@ Liberapay.stripe_form_init = function($form) {
             $form.submit();
             return;
         }
+        var local_address = $form.find('input[name="postal_address.local_address"]').val();
+        local_address = !!local_address ? local_address.split(/(?:\r\n?|\n)/g) : [null];
+        if (local_address.length === 1) {
+            local_address.push(null);
+        }
         if (element_type == 'iban') {
             var tokenData = {};
             tokenData.currency = 'EUR';
             tokenData.account_holder_name = $form.find('input[name="owner.name"]').val();
+            tokenData.address_country = $form.find('input[name="postal_address.country"]').val();
+            tokenData.address_state = $form.find('input[name="postal_address.region"]').val();
+            tokenData.address_city = $form.find('input[name="postal_address.city"]').val();
+            tokenData.address_zip = $form.find('input[name="postal_address.postal_code"]').val();
+            tokenData.address_line1 = local_address[0];
+            tokenData.address_line2 = local_address[1];
             stripe.createToken(element, tokenData).then(Liberapay.wrap(function(result) {
                 if (result.error) {
                     $errorElement.text(result.error.message);
@@ -85,12 +96,12 @@ Liberapay.stripe_form_init = function($form) {
             var pmData = {
                 billing_details: {
                     address: {
-                        city: $form.find('input[name="owner.address.city"]').val(),
-                        country: $form.find('input[name="owner.address.country"]').val(),
-                        line1: $form.find('input[name="owner.address.line1"]').val(),
-                        line2: $form.find('input[name="owner.address.line2"]').val(),
-                        postal_code: $form.find('input[name="owner.address.postal_code"]').val(),
-                        state: $form.find('input[name="owner.address.state"]').val(),
+                        city: $form.find('input[name="postal_address.city"]').val(),
+                        country: $form.find('input[name="postal_address.country"]').val(),
+                        line1: local_address[0],
+                        line2: local_address[1],
+                        postal_code: $form.find('input[name="postal_address.postal_code"]').val(),
+                        state: $form.find('input[name="postal_address.region"]').val(),
                     },
                     email: $form.find('input[name="owner.email"]').val(),
                     name: $form.find('input[name="owner.name"]').val(),

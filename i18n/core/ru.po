@@ -2609,6 +2609,9 @@ msgstr ""
 msgid "Keep my donations as they are"
 msgstr ""
 
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Вы включили автоматическое продление для некоторых или всех своих пожертвований, но у вас нет действующего платежного инструмента, который позволил бы нам инициировать автоматические платежи, когда придет время."
 
@@ -2823,9 +2826,6 @@ msgstr "Обработчик платежей ({name}) пока не может 
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Ваш банк может отклонить этот платеж. Мы рекомендуем отправить копию {link_start}поручения{link_end} в ваш банк, если вы не уверены, что он должным образом обрабатывает инструкции {currency} прямого дебета."
 
-msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
-msgstr ""
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Мы взимаем с вашей {brand} карты (последние четыре цифры {last4})."
@@ -2865,6 +2865,9 @@ msgstr "Предоставляя IBAN и подтверждая этот пла�
 
 msgid "Remember the bank account number for future payments"
 msgstr "Запомните номер банковского счета для будущих платежей"
+
+msgid "Postal address:"
+msgstr "Почтовый адрес:"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3035,6 +3038,10 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
+#, python-brace-format
+msgid "{username} doesn't publish how much they give."
+msgstr "{username} не публикует информации о том, как много он отдаёт."
+
 msgid "Donees"
 msgstr ""
 
@@ -3044,6 +3051,10 @@ msgid_plural "{username} donates publicly to {n} creators."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr "{username} не раскрывает, сколько они получают через Liberapay."
 
 msgid "History"
 msgstr "История"
@@ -3068,10 +3079,6 @@ msgstr "Доход за неделю (в {currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "Количество спонсоров в неделю"
-
-#, python-brace-format
-msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr "{username} не раскрывает, сколько они получают через Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Документы со счетами конфиденциальны."
@@ -4403,9 +4410,6 @@ msgstr "Этот сайт управляется Liberapay, некоммерче
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay соблюдает законы Европейского Союза. С помощью наших партнеров мы отслеживаем транзакции на предмет возможного мошенничества, отмывания денег и финансирования терроризма."
-
-msgid "Postal address:"
-msgstr "Почтовый адрес:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

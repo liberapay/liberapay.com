@@ -1470,7 +1470,7 @@ msgid "Payment Processors"
 msgstr "Zahlungsdienstleister"
 
 msgid "Ledger"
-msgstr "Konto"
+msgstr "Hauptbuch"
 
 msgid "Wallet"
 msgstr "Brieftasche"
@@ -1482,7 +1482,7 @@ msgid "Identity"
 msgstr "Identität"
 
 msgid "Account"
-msgstr "Konto"
+msgstr "Benutzerkonto"
 
 msgid "Emails"
 msgstr "E-Mails"
@@ -2585,6 +2585,9 @@ msgstr ""
 msgid "Keep my donations as they are"
 msgstr ""
 
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Sie haben automatische Erneuerungen für einige oder all Ihre Spenden aktiviert, aber Sie haben keine gültigen Zahlungsmethode, die uns ermöglichen würde, die automatischen Zahlungen auszuführen, wenn die Zeit kommt."
 
@@ -2796,9 +2799,6 @@ msgstr "Der Zahlungsdienstleister ({name}) kann keine Abbuchungen in {currency} 
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Ihre Bank kann diese Zahlung abwiesen. Wir empfehlen daher, Ihrer Bank eine Kopie {link_start}des Mandats{link_end} zuzusenden, wenn Sie sich nicht sicher sind, dass sie Abbuchungsaufträge in {currency} ordentlich ausführt."
 
-msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
-msgstr ""
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "Wir werden Ihre {brand}-Karte belasten (letzte vier Stellen: {last4})."
@@ -2838,6 +2838,9 @@ msgstr "Indem Sie ihre IBAN angeben und diese Zahlung bestätigen, erlauben Sie 
 
 msgid "Remember the bank account number for future payments"
 msgstr "Die Kontonummer für zukünftige Zahlungen speichern"
+
+msgid "Postal address:"
+msgstr "Postanschrift:"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3002,6 +3005,10 @@ msgid_plural "{username} has {n} public patrons."
 msgstr[0] ""
 msgstr[1] ""
 
+#, python-brace-format
+msgid "{username} doesn't publish how much they give."
+msgstr "{username} veröffentlicht nicht wie viel sie spenden."
+
 msgid "Donees"
 msgstr ""
 
@@ -3010,6 +3017,10 @@ msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr "{username} gibt nicht an, wie viel sie über Liberapay erhalten."
 
 msgid "History"
 msgstr "Verlauf"
@@ -3034,10 +3045,6 @@ msgstr "Einkommen pro Woche (in {currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "Anzahl Unterstützer pro Woche"
-
-#, python-brace-format
-msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr "{username} gibt nicht an, wie viel sie über Liberapay erhalten."
 
 msgid "Invoice documents are private."
 msgstr "Rechnungsdokumente sind privat."
@@ -4359,9 +4366,6 @@ msgstr "Diese Website wird von Liberapay verwaltet. Liberapay ist eine Non-Profi
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay verpflichtet sich, die gesetzlichen Bestimmungen der Europäischen Union einzuhalten. Mit Hilfe unserer Partner überwachen wir Transaktionen auf mögliche Betrugsfälle, Geldwäsche und Terrorismusfinanzierung."
-
-msgid "Postal address:"
-msgstr "Postanschrift:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

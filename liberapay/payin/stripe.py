@@ -132,7 +132,7 @@ def try_other_destinations(db, payin, payer):
         reroute = (
             error.startswith("As per Indian regulations, ") or
             error.startswith("For 'sepa_debit' payments, we currently require ") or
-            error.startswith("Stripe doesn't currently support destination charges with accounts in ")
+            error.startswith("Stripe doesn't currently support ")
         )
         if reroute:
             excluded_destinations.add(db.one("""

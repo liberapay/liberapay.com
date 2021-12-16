@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '149'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '150'::jsonb);
 
 
 -- app configuration
@@ -174,6 +174,15 @@ CREATE TRIGGER update_profile_visibility
     FOR EACH ROW EXECUTE PROCEDURE update_profile_visibility();
 
 
+-- settings specific to users who want to receive donations
+
+CREATE TABLE recipient_settings
+( participant           bigint   PRIMARY KEY REFERENCES participants
+, patron_visibilities   int      NOT NULL CHECK (patron_visibilities > 0)
+-- Three bits: 1 is for "secret", 2 is for "private", 4 is for "public".
+);
+
+
 -- elsewhere -- social network accounts attached to participants
 
 CREATE TABLE elsewhere
@@ -262,7 +271,8 @@ CREATE TABLE tips
 , paid_in_advance   currency_amount
 , renewal_mode      int               NOT NULL DEFAULT 1
   -- 0 means no renewal, 1 means manual renewal, 2 means automatic renewal
-, hidden            boolean
+, visibility        int               NOT NULL CHECK (visibility >= -3 AND visibility <> 0 AND visibility <= 3)
+  -- 1 means secret, 2 means private, 3 means public, negative numbers mean hidden
 , CONSTRAINT no_self_tipping CHECK (tipper <> tippee)
 , CONSTRAINT paid_in_advance_currency_chk CHECK (paid_in_advance::currency = amount::currency)
  );
@@ -543,6 +553,8 @@ CREATE TABLE payin_transfers
 , team          bigint                   REFERENCES participants
 , fee           currency_amount
 , reversed_amount   currency_amount      CHECK (NOT (reversed_amount < 0))
+, visibility    int                      NOT NULL CHECK (visibility >= 1 AND visibility <= 3)
+  -- same meanings as for tips, but negative numbers aren't allowed
 , CONSTRAINT reversal_currency_chk CHECK (reversed_amount::currency = amount::currency)
 , CONSTRAINT self_chk CHECK (payer <> recipient)
 , CONSTRAINT team_chk CHECK ((context = 'team-donation') = (team IS NOT NULL))

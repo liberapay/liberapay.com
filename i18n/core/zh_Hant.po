@@ -2564,6 +2564,9 @@ msgstr ""
 msgid "Keep my donations as they are"
 msgstr ""
 
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr ""
+
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "您已啟動自動定期付款功能，但您並未設置有效的付款方式可讓我們代為自動在指定日期扣款。"
 
@@ -2773,9 +2776,6 @@ msgstr "支付商{name}無法直接為此位收款人處理{currency}款項，�
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr ""
 
-msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
-msgstr ""
-
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
 msgstr "我們將會從您的{brand}卡片(末四碼為:{last4})扣款。"
@@ -2815,6 +2815,9 @@ msgstr "提供 IBAN 資訊和確認這筆支付，您授權我方的支付服務
 
 msgid "Remember the bank account number for future payments"
 msgstr "記住此銀行帳戶資訊便於未來的支付用"
+
+msgid "Postal address:"
+msgstr "郵政地址："
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2973,6 +2976,10 @@ msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
 msgstr[0] ""
 
+#, python-brace-format
+msgid "{username} doesn't publish how much they give."
+msgstr "{username} 並未公開其向他人捐款的金額。"
+
 msgid "Donees"
 msgstr ""
 
@@ -2980,6 +2987,10 @@ msgstr ""
 msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
 msgstr[0] ""
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr "{username} 沒有透露他們通過透過 Liberapay 收到了多少。"
 
 msgid "History"
 msgstr "記錄"
@@ -3004,10 +3015,6 @@ msgstr "每週收入 ({currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "每週贊助人的數目"
-
-#, python-brace-format
-msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr "{username} 沒有透露他們通過透過 Liberapay 收到了多少。"
 
 msgid "Invoice documents are private."
 msgstr "發票文件為私密。"
@@ -4318,9 +4325,6 @@ msgstr "這個網站由 Liberapay 負責管理，它是一個 2015 於法國成�
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay 依循歐盟法規，在合伙人的協助下我們會監控可能的詐騙、洗錢和恐怖金融交易。"
-
-msgid "Postal address:"
-msgstr "郵政地址："
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

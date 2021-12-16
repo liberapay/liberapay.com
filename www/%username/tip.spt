@@ -70,7 +70,7 @@ if request.method == 'POST':
         else:
             raise response.error(400, _("The donation amount is missing."))
     renewal_mode = request.body.get_int('renewal_mode', default=1, minimum=1, maximum=2)
-    visibility = request.body.get_int('visibility', default=1, minimum=1, maximum=3)
+    visibility = request.body.get_int('visibility', default=None, minimum=1, maximum=3)
     out = tipper.set_tip_to(tippee, amount, period, renewal_mode=renewal_mode, visibility=visibility)
     if not out:
         raise response.error(400, _("This donation doesn't exist or has already been stopped."))

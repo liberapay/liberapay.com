@@ -364,7 +364,7 @@ msgid "We have detected that your password is a commonly used one. It appears ma
 msgstr "Kami mengesan kata laluan anda antara kata laluan kerap digunakan. Ia muncul banyak kali dalam pelbagai pangkalan data yang bocor, membuatkan ia sangat tidak selamat."
 
 msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr "Kami mengesan kata laluan anda telah terjejas: ia muncul dalam pelbagai kebocoran data awam."
+msgstr "Kami mengesan kata laluan anda telah terjejas: ia muncul dalam pelbagai kebocoran data umum."
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
@@ -879,10 +879,10 @@ msgid "Direct Debit"
 msgstr "Debit Terus"
 
 msgid "Do not publish the amounts of money I send."
-msgstr ""
+msgstr "Jangan terbitkan jumlah wang yang saya hantar."
 
 msgid "Do not publish the amounts of money I receive."
-msgstr ""
+msgstr "Jangan terbitkan jumlah wang yang saya terima."
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "Sembunyikan profil ini daripada hasil carian di Liberapay."
@@ -1965,43 +1965,43 @@ msgstr "Peringatan untuk memperbaharui derma anda akan dihantar kepada anda mela
 
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
-msgstr ""
+msgstr "{username} telah memilih untuk tidak melihat siapa pelanggannya, jadi derma anda akan dirahsiakan."
 
 #, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr ""
+msgstr "Derma ini tidak akan dirahsiakan, anda akan dipaparkan di senarai peribadi pelanggan {username}."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
-msgstr ""
+msgstr "{username} mendedahkan siapa pelanggannya, derma anda akan boleh dilihat orang ramai."
 
 msgid "Please select a privacy level for this donation:"
-msgstr ""
+msgstr "Sila pilih tahap privasi untuk derma ini:"
 
 msgid "Secret donation"
-msgstr ""
+msgstr "Derma rahsia"
 
 #, python-brace-format
 msgid "Only you will know that you donate to {username}."
-msgstr ""
+msgstr "Hanya anda akan tahu bahawa anda derma ke {username}."
 
 msgid "Private donation"
-msgstr ""
+msgstr "Derma peribadi"
 
 #, python-brace-format
 msgid "You will appear in {username}'s private list of patrons."
-msgstr ""
+msgstr "Anda akan dipaparkan dalam senarai peribadi pelanggan {username}."
 
 msgid "Public donation"
-msgstr ""
+msgstr "Derma terbuka"
 
 #, python-brace-format
 msgid "Everybody will be able to see that you support {username}."
-msgstr ""
+msgstr "Semua orang akan mampu melihat bahawa anda menyokong {username}."
 
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
-msgstr ""
+msgstr "{username} masih belum menyatakan sama ada beliau ingin melihat siapa pelanggannya, jadi derma anda akan dirahsiakan."
 
 msgid "Discontinue the donation"
 msgstr "Tamatkan derma"
@@ -2574,16 +2574,19 @@ msgid "Yes, activate automatic renewals"
 msgstr "Ya, aktifkan pembaharuan automatik"
 
 msgid "Liberapay now supports non-anonymous donations, do you want to modify the visibility of all your donations at once?"
-msgstr ""
+msgstr "Liberapay kini menyokong derma bukan tanpa nama, adakah anda ingin ubah kebolehlihatan kesemua derma anda serentak?"
 
 msgid "Reveal my donations to everyone"
-msgstr ""
+msgstr "Dedahkan derma saya kepada semua orang"
 
 msgid "Reveal my donations to the beneficiaries only"
-msgstr ""
+msgstr "Dedahkan derma saya kepada benefisiari sahaja"
 
 msgid "Keep my donations as they are"
-msgstr ""
+msgstr "Kekalkan derma saya seperti sediakala"
+
+msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
+msgstr "Memandangkan anda memilih untuk membuat derma terbuka, kami menggalakkan anda melengkapkan profil awam anda."
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Anda telah membolehkan pembaharuan automatik untuk sesetengah atau kesemua derma anda, tetapi anda masih belum mempunyai instrumen pembayaran sah yang akan membolehkan kami memulakan pembayaran automatik apabila tiba masanya."
@@ -2723,7 +2726,7 @@ msgid "Doesn't support automatic renewal"
 msgstr "Tidak menyokong pembaharuan automatik"
 
 msgid "Reveals your name and email address to the recipient"
-msgstr ""
+msgstr "Dedahkan nama dan alamat e-mel anda kepada penerima"
 
 msgid "Pay with PayPal"
 msgstr "Bayar dengan PayPal"
@@ -2777,7 +2780,7 @@ msgid "Liberapay does not store money, the entire amount of your payment will go
 msgstr "Liberapay tidak menyimpan wang, Keseluruhan jumlah pembayaran anda akan pergi ke akaun {payment_provider} milik {recipient_name} dengan serta-merta."
 
 msgid "PayPal reveals your name and email address to the recipient."
-msgstr ""
+msgstr "PayPal mendedahkan nama dan alamat e-mel anda kepada penerima."
 
 msgid "Initiate the payment"
 msgstr "Mulakan pembayaran"
@@ -2795,9 +2798,6 @@ msgstr "Pemproses pembayaran ({name}) masih tidak mampu memproses debit terus {c
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Bank anda boleh tolak pembayaran ini. Kami menggalakkan anda hantar salinan {link_start}mandat{link_end} ke bank anda jika anda tidak pasti sama ada ia mengurus arahan debit terus {currency} atau tidak."
-
-msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
-msgstr ""
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2838,6 +2838,9 @@ msgstr "Dengan menyediakan nombor IBAN anda dan mengesahkan pembayaran ini, anda
 
 msgid "Remember the bank account number for future payments"
 msgstr "Ingat nombor akaun bank untuk pembayaran pada masa akan datang"
+
+msgid "Postal address:"
+msgstr "Alamat surat-menyurat:"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2999,17 +3002,25 @@ msgstr "Eksport sebagai CSV"
 #, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} mempunyai {n} pelanggan terbuka."
+msgstr[1] "{username} mempunyai {n} pelanggan terbuka."
+
+#, python-brace-format
+msgid "{username} doesn't publish how much they give."
+msgstr "{username} tidak tunjuk berapa banyak mereka berikan."
 
 msgid "Donees"
-msgstr ""
+msgstr "Penerima derma"
 
 #, python-brace-format
 msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} menderma secara terbuka kepada {n} pencipta."
+msgstr[1] "{username} menderma secara terbuka kepada {n} pencipta."
+
+#, python-brace-format
+msgid "{username} does not disclose how much they receive through Liberapay."
+msgstr "{username} tidak berkongsi maklumat penerimaan mereka menerusi Liberapay."
 
 msgid "History"
 msgstr "Sejarah"
@@ -3034,10 +3045,6 @@ msgstr "Pendapatan Setiap Minggu (dalam {currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "Jumlah Penderma Setiap Minggu"
-
-#, python-brace-format
-msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr "{username} tidak berkongsi maklumat penerimaan mereka menerusi Liberapay."
 
 msgid "Invoice documents are private."
 msgstr "Dokumen invois adalah sulit."
@@ -3219,50 +3226,50 @@ msgstr "mesej ralat: {0}"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
-msgstr ""
+msgstr "derma terbuka daripada {donor_name}"
 
 #, python-brace-format
 msgid "private donation from {donor_name}"
-msgstr ""
+msgstr "derma peribadi daripada {donor_name}"
 
 msgid "secret donation"
-msgstr ""
+msgstr "derma rahsia"
 
 #, python-brace-format
 msgid "public donation from {donor_name} for your role in the {team_name} team"
-msgstr ""
+msgstr "derma terbuka daripada {donor_name} untuk peranan anda dalam kumpulan {team_name}"
 
 #, python-brace-format
 msgid "private donation from {donor_name} for your role in the {team_name} team"
-msgstr ""
+msgstr "derma peribadi daripada {donor_name} untuk peranan anda dalam kumpulan {team_name}"
 
 #, python-brace-format
 msgid "secret donation for your role in the {team_name} team"
-msgstr ""
+msgstr "derma rahsia untuk peranan anda dalam kumpulan {team_name}"
 
 #, python-brace-format
 msgid "public donation to {recipient_name}"
-msgstr ""
+msgstr "derma terbuka kepada {recipient_name}"
 
 #, python-brace-format
 msgid "private donation to {recipient_name}"
-msgstr ""
+msgstr "derma peribadi kepada {recipient_name}"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name}"
-msgstr ""
+msgstr "derma rahsia kepada {recipient_name}"
 
 #, python-brace-format
 msgid "public donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "derma terbuka kepada {recipient_name} untuk peranannya dalam kumpulan {team_name}"
 
 #, python-brace-format
 msgid "private donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "derma peribadi kepada {recipient_name} untuk peranannya dalam kumpulan {team_name}"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "derma rahsia kepada {recipient_name} untuk peranannya dalam kumpulan {team_name}"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3363,49 +3370,49 @@ msgstr "Halaman Seterusnya →"
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Anda mempunyai {n} pelanggan aktif memberikan anda {money_amount} setiap minggu."
+msgstr[1] "Anda mempunyai {n} pelanggan aktif memberikan anda {money_amount} keseluruhannya setiap minggu."
 
 msgid "You don't have any active patrons."
-msgstr ""
+msgstr "Anda tidak mempunyai pelanggan aktif."
 
 #, python-brace-format
 msgid "{username} doesn't have any active patrons."
-msgstr ""
+msgstr "{username} tidak mempunyai pelanggan aktif."
 
 msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr ""
+msgstr "Liberapay kini menyokong derma bukan tanpa nama, adakah anda ingin ketahui siapa pelanggan anda?"
 
 msgid "Enable non-anonymous donations"
-msgstr ""
+msgstr "Bolehkan derma bukan tanpa nama"
 
 #, python-brace-format
 msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr ""
+msgstr "Anda telah memilih untuk melihat siapa pelanggan anda. Jika anda mengubah fikiran, sila {link_start}klik sini untuk lumpuhkan derma bukan tanpa nama{link_end}."
 
 #, python-brace-format
 msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr ""
+msgstr "Anda telah memilih untuk tidak melihat siapa pelanggan anda. Jika anda mengubah fikiran, sila {link_start}klik sini untuk membolehkan derma bukan tanpa nama{link_end}."
 
 msgid "Data export"
-msgstr ""
+msgstr "Eksport data"
 
 msgid "Download the list of currently active patrons"
-msgstr ""
+msgstr "Muat turun senarai pelanggan aktif semasa"
 
 msgid "Download the record of all patrons in the last ten years"
-msgstr ""
+msgstr "Muat turun rekod kesemua pelanggan dalam sepuluh tahun terdahulu"
 
 #, python-brace-format
 msgid "View the patrons of {username}"
-msgstr ""
+msgstr "Lihat pelanggan bagi {username}"
 
 msgid "You are not a member of any team."
 msgstr "Anda bukan ahli mana-mana kumpulan."
 
 #, python-brace-format
 msgid "{username} isn't a member of any team."
-msgstr ""
+msgstr "{username} bukan ahli mana-mana kumpulan."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -4331,7 +4338,7 @@ msgstr "Liberapay ialah salah satu cara untuk menderma wang secara berulang kepa
 
 #, python-brace-format
 msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr ""
+msgstr "Pembayaran datang tanpa syarat. Secara lalainya, penerima tidak tahu siapa pelanggannya, dan derma dihadkan kepada {0} setiap minggu setiap penderma untuk mengendurkan pengaruh berlebihan."
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Secara lalainya, jumlah keseluruhan pemberian dan penerimaan anda ditunjukkan kepada orang awam (anda boleh menyembunyikannya)."
@@ -4358,9 +4365,6 @@ msgstr "Laman web ini diuruskan oleh Liberapay, sebuah organisasi tidak untung y
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay mematuhi undang-undang Kesatuan Eropah. Dengan bantuan rakan kongsi kami, kami memantau transaksi untuk mengelakkan penipuan, pengubahan wang haram, dan dana pengganas."
-
-msgid "Postal address:"
-msgstr "Alamat surat-menyurat:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"
@@ -5324,7 +5328,7 @@ msgid ""
 msgstr ""
 "Kami tidak dapat mengenalpasti sama ada anda ahli kumpulan {team_name} di {platform_name} atau tidak.\n"
 "\n"
-"Sila {link_start}pastikan keahlian kumpulan anda ditetapkan sebagai umum{link_end}."
+"Sila {link_start}pastikan keahlian kumpulan anda ditetapkan sebagai awam{link_end}."
 
 #, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
