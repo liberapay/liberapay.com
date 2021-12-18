@@ -172,22 +172,22 @@ class TestCronJobs(EmailHarness):
         assert not emails
 
     def test_profile_description_missing_notification(self):
-        # alex: no description, doesn't receive payments. No email
+        # alex: no description, doesn't receive payments, shouldn't be notified
         alex = self.make_participant('alex', email='alex@example.org')
-        # bob: no description, receives payments. Email
+        # bob: no description, receives payments, should be notified
         bob = self.make_participant('bob', email='bob@example.org')
-        # charles: has description, doesn't receives payments. No email
+        # charles: has description, doesn't receives payments, shouldn't be notified
         charles = self.make_participant('charles', email='charles@example.org')
-        # dave: has description, receives payments. No email
+        # dave: has description, receives payments, shouldn't be notified
         dave = self.make_participant('dave', email='dave@example.org')
 
         # add payment accounts for bob and dave and cards for alex and charles
-        self.add_payment_account(bob, 'stripe', country='FR', default_currency='EUR')
-        self.add_payment_account(dave, 'stripe', country='FR', default_currency='EUR')
+        self.add_payment_account(bob, 'stripe')
+        self.add_payment_account(dave, 'stripe')
         alex_card = self.upsert_route(alex, 'stripe-card')
         charles_card = self.upsert_route(charles, 'stripe-card')
 
-        # set descriptions
+        # add profile descriptions
         charles.upsert_statement('en', "Profile statement.")
         dave.upsert_statement('en', "Profile statement.")
 
@@ -197,103 +197,33 @@ class TestCronJobs(EmailHarness):
         self.make_payin_and_transfer(alex_card, bob, EUR('4.50'))
         self.make_payin_and_transfer(charles_card, dave, EUR('4.50'))
 
-        # run first paydays
-        self.db.run("""
-            UPDATE scheduled_payins
-               SET ctime = ctime - interval '12 hours'
-                 , execution_date = execution_date - interval '2 weeks'
-        """)
-        Payday.start().run()
+        # run the cron job
         generate_profile_description_missing_notifications()
         emails = self.get_emails()
-
-        # 2 income notifications (bob, dave)
-        # 2 donation renewal reminders (alex, charles)
-        # 1 missing description reminder (bob)
-        assert len(emails) == 5
-
-        # get emails about updating profile only
-        profile_desc_emails = emails.copy()
-        for email in emails:
-            if "missing a profile description" not in email['subject']:
-                profile_desc_emails.remove(email)
-        emails = profile_desc_emails
-
-        # should be just one (bob)
         assert len(emails) == 1
         assert emails[0]['to'][0] == 'bob <%s>' % bob.email
-        assert 'missing a profile description' in emails[0]['subject']
+        assert emails[0]['subject'] == "Your Liberapay profile is incomplete"
 
-        # ## should only send missing description email after first payday
-        # send more payments
-        alex.set_tip_to(bob, EUR('4.50'))
-        charles.set_tip_to(dave, EUR('4.50'))
-        self.make_payin_and_transfer(alex_card, bob, EUR('4.50'))
-        self.make_payin_and_transfer(charles_card, dave, EUR('4.50'))
-
-        # run 2nd payday
-        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
-        Payday.start().run()
+        # run the cron job again, there shouldn't be any new notification
         generate_profile_description_missing_notifications()
         emails = self.get_emails()
+        assert not emails
 
-        # 2 income notifications (bob, dave)
-        assert len(emails) == 2
-
-        # get emails about updating profile only
-        profile_desc_emails = emails.copy()
-        for email in emails:
-            if "missing a profile description" not in email['subject']:
-                profile_desc_emails.remove(email)
-        emails = profile_desc_emails
-
-        # should be none, bob already got an email about updating profile
-        assert emails == []
-
-        # ## team members should get these emails too
-        # create team user
+        # users who receive through teams should also be notified
         ethan = self.make_participant('ethan', email='ethan@example.org')
-        self.add_payment_account(ethan, 'stripe', country='FR', default_currency='EUR')
-
-        # send more payments
+        self.add_payment_account(ethan, 'stripe')
         team = self.make_participant('team', kind='group', email='team@example.com')
         charles.set_tip_to(team, EUR('0.25'))
         team.add_member(ethan)
         team.set_take_for(ethan, EUR('0.23'), team)
-        self.make_payin_and_transfer(charles_card, team, EUR('0.50'))
-
-        # run 3rd payday
-        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
-        Payday.start().run()
+        self.make_payin_and_transfer(charles_card, team, EUR('5.00'))
         generate_profile_description_missing_notifications()
         emails = self.get_emails()
-
-        # 1 income notification (ethan)
-        # 1 missing description reminder (ethan)
-        assert len(emails) == 2
-        assert 'missing a profile description' in emails[1]['subject']
-        assert '0.23' in emails[0]['subject']
+        assert len(emails) == 1
         assert emails[0]['to'][0] == 'ethan <%s>' % ethan.email
-        ethan.leave_team(team)
+        assert emails[0]['subject'] == "Your Liberapay profile is incomplete"
 
-        # ## fast forward 6 months,
-        self.db.run("UPDATE notifications SET ts = ts - interval '181 days'")
-        self.db.run("UPDATE transfers SET timestamp = timestamp - interval '181 days'")
+        # run the cron job again, there shouldn't be any new notification
         generate_profile_description_missing_notifications()
         emails = self.get_emails()
-        # no one should get an email about creating a description
-        # because no one received payments in last 6 months
-        assert emails == []
-
-        # send bob a tip,
-        # bob should get a fresh missing description email but ethan shouldn't
-        charles.set_tip_to(bob, EUR('4.50'))
-        self.make_payin_and_transfer(charles_card, bob, EUR('4.50'))
-        self.db.run("UPDATE notifications SET ts = ts - interval '1 week'")
-        Payday.start().run()
-        generate_profile_description_missing_notifications()
-        emails = self.get_emails()
-        assert len(emails) == 2
-        assert 'missing a profile description' in emails[1]['subject']
-        assert '4.50' in emails[0]['subject']
-        assert emails[0]['to'][0] == 'bob <%s>' % bob.email
+        assert not emails
