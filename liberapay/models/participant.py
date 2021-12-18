@@ -3998,26 +3998,27 @@ def send_account_disabled_notifications():
     return len(participants)
 
 def generate_profile_description_missing_notifications():
-    """Send a notification to users without a profile description to add one
-    if they begin to receive payments. #2013"""
-
-    tippees_without_description = website.db.all("""
-        SELECT DISTINCT tippee FROM transfers t
-        WHERE status = 'succeeded'
-        AND t.timestamp >= (current_timestamp - interval '180 days')
-        AND t.context IN ('tip', 'take', 'partial-take')
-        AND t.tippee NOT IN (
-            SELECT DISTINCT participant
-            FROM statements
-        )
-        AND t.tippee NOT IN (
-            SELECT DISTINCT participant FROM notifications n
-            WHERE n.event = 'profile_description_missing'
-            AND ts >= (current_timestamp - interval '180 days')
-        )
+    """Notify users who receive donations but don't have a profile description.
+    """
+    participants = website.db.all("""
+        SELECT p
+          FROM participants p
+         WHERE p.status = 'active'
+           AND p.kind IN ('individual', 'organization')
+           AND p.receiving > 0
+           AND p.id NOT IN (SELECT DISTINCT participant FROM statements)
+           AND p.id NOT IN (
+                   SELECT DISTINCT n.participant
+                     FROM notifications n
+                    WHERE n.event = 'profile_description_missing'
+                      AND n.ts >= (current_timestamp - interval '6 months')
+               )
     """)
-
-    for tippee_id in tippees_without_description:
-        p = website.db.Participant.from_id(tippee_id)
+    for p in participants:
+        sleep(1)
         p.notify('profile_description_missing', force_email=True)
-        print("Sent update_profile notification to user %s." % p.id)
+    n = len(participants)
+    if n:
+        s = '' if n == 1 else 's'
+        print(f"Sent {n} profile_description_missing notification{s}.")
+    return n
