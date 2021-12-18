@@ -158,9 +158,10 @@ elif payin_id:
     """, dict(payin=payin_id, payer=payer.id))
     if not payin:
         raise response.error(404, "unknown payin ID in URL path")
+    route = ExchangeRoute.from_id(payer, payin.route)
     try:
         if payin.status == 'pre':
-            payin = charge(website.db, payin, payer)
+            payin = charge(website.db, payin, payer, route)
             if payin.id != int(payin_id):
                 response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
         elif payin.status == 'awaiting_payer_action':
@@ -172,7 +173,6 @@ elif payin_id:
             client_secret = act.client_secret
         else:
             raise NotImplementedError()
-    route = ExchangeRoute.from_id(payer, payin.route)
     tell_payer_to_fill_profile = (
         payin.status in ('pending', 'succeeded') and
         not (payer.public_name or payer.username) and

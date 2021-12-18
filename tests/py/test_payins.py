@@ -1404,7 +1404,7 @@ class TestPayinsStripe(Harness):
             }'''),
             stripe.api_key
         )
-        payin2 = try_other_destinations(self.db, payin, self.donor)
+        payin2 = try_other_destinations(self.db, payin, self.donor, None)[0]
         assert payin2.status == 'succeeded'
         pt2 = self.db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin2.id,))
         assert pt2.recipient == self.creator_2.id
