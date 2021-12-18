@@ -1,18 +1,17 @@
-{{ _("Your Liberapay account is missing a profile description.") }}
+{{ _("Your Liberapay profile is incomplete") }}
 
 [---] text/html
 <p>{{ _(
-    "As a Liberapay member who is actively receiving payments, you are required "
-    "to include a description on your profile that explains what you do, why "
-    "you've chosen to ask for donations, what the money will be used for, etc. "
-    "Failure to include a profile description may result in your account being "
-    "marked as suspicious, which can ultimately lead to removal from the platform. "
-    "To add a profile description, go to Profile > Descriptions and include either "
-    "a short or full profile description."
+    "Your {link_start}public profile page{link_end} is missing a description. "
+    "Without this information, we may be unable to confirm that your use of our "
+    "platform is legitimate, and consequently your account may be marked as "
+    "fraudulent and disabled. An incomplete profile is also less likely to "
+    "attract donations, so we strongly recommend that you fill yours.",
+    link_start=('<a href="%s">'|safe) % participant.url(),
+    link_end='</a>'|safe
 ) }}</p>
 
-<p><a href="{{ participant.url('edit/statement') }}"
-    style="{{ button_style('primary') }}">
-    {{ _("Edit your profile description") }}
-</a></p>
+<p><a href="{{ participant.url('edit/statement') }}" style="{{ button_style('primary') }}">{{
+    _("Edit your profile")
+}}</a></p>
 
