@@ -6,12 +6,12 @@ from psycopg2.extras import execute_values
 
 from liberapay.cron import Daily, Weekly
 from liberapay.i18n.currencies import fetch_currency_exchange_rates
-from liberapay.models.participant import send_account_disabled_notifications
-from liberapay.testing.emails import EmailHarness
-from liberapay.models.participant import \
-    generate_profile_description_missing_notifications
-from liberapay.billing.payday import Payday
+from liberapay.models.participant import (
+    generate_profile_description_missing_notifications,
+    send_account_disabled_notifications,
+)
 from liberapay.testing import EUR
+from liberapay.testing.emails import EmailHarness
 
 
 utcnow = datetime.utcnow
