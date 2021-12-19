@@ -36,6 +36,7 @@ from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import (
     Participant, clean_up_closed_accounts, send_account_disabled_notifications,
+    generate_profile_description_missing_notifications
 )
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
@@ -170,10 +171,12 @@ if conf:
     cron(intervals.get('refetch_repos', 60), refetch_repos, True)
     cron(Weekly(weekday=3, hour=2), create_payday_issue, True)
     cron(intervals.get('clean_up_counters', 3600), website.db.clean_up_counters, True)
+    cron(Daily(hour=1), clean_up_emails, True)
     cron(Daily(hour=2), reschedule_renewals, True)
     cron(Daily(hour=3), send_upcoming_debit_notifications, True)
     cron(Daily(hour=4), execute_scheduled_payins, True)
     cron(Daily(hour=8), clean_up_closed_accounts, True)
+    cron(Daily(hour=12), generate_profile_description_missing_notifications, True)
     cron(Daily(hour=16), fetch_currency_exchange_rates, True)
     cron(Daily(hour=17), paypal.sync_all_pending_payments, True)
     cron(Daily(hour=18), Payday.update_cached_amounts, True)
@@ -181,7 +184,6 @@ if conf:
     cron(intervals.get('migrate_identities', 120), Participant.migrate_identities, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
-    cron(Daily(hour=1), clean_up_emails, True)
 
     cron('once', website.cryptograph.rotate_stored_data, True)
 

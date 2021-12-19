@@ -6,7 +6,11 @@ from psycopg2.extras import execute_values
 
 from liberapay.cron import Daily, Weekly
 from liberapay.i18n.currencies import fetch_currency_exchange_rates
-from liberapay.models.participant import send_account_disabled_notifications
+from liberapay.models.participant import (
+    generate_profile_description_missing_notifications,
+    send_account_disabled_notifications,
+)
+from liberapay.testing import EUR
 from liberapay.testing.emails import EmailHarness
 
 
@@ -164,5 +168,62 @@ class TestCronJobs(EmailHarness):
         assert 'spam' in emails[1]['text']
         # Check that the notifications aren't sent again
         send_account_disabled_notifications()
+        emails = self.get_emails()
+        assert not emails
+
+    def test_profile_description_missing_notification(self):
+        # alex: no description, doesn't receive payments, shouldn't be notified
+        alex = self.make_participant('alex', email='alex@example.org')
+        # bob: no description, receives payments, should be notified
+        bob = self.make_participant('bob', email='bob@example.org')
+        # charles: has description, doesn't receives payments, shouldn't be notified
+        charles = self.make_participant('charles', email='charles@example.org')
+        # dave: has description, receives payments, shouldn't be notified
+        dave = self.make_participant('dave', email='dave@example.org')
+
+        # add payment accounts for bob and dave and cards for alex and charles
+        self.add_payment_account(bob, 'stripe')
+        self.add_payment_account(dave, 'stripe')
+        alex_card = self.upsert_route(alex, 'stripe-card')
+        charles_card = self.upsert_route(charles, 'stripe-card')
+
+        # add profile descriptions
+        charles.upsert_statement('en', "Profile statement.")
+        dave.upsert_statement('en', "Profile statement.")
+
+        # send payments
+        alex.set_tip_to(bob, EUR('4.50'))
+        charles.set_tip_to(dave, EUR('4.50'))
+        self.make_payin_and_transfer(alex_card, bob, EUR('4.50'))
+        self.make_payin_and_transfer(charles_card, dave, EUR('4.50'))
+
+        # run the cron job
+        generate_profile_description_missing_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'][0] == 'bob <%s>' % bob.email
+        assert emails[0]['subject'] == "Your Liberapay profile is incomplete"
+
+        # run the cron job again, there shouldn't be any new notification
+        generate_profile_description_missing_notifications()
+        emails = self.get_emails()
+        assert not emails
+
+        # users who receive through teams should also be notified
+        ethan = self.make_participant('ethan', email='ethan@example.org')
+        self.add_payment_account(ethan, 'stripe')
+        team = self.make_participant('team', kind='group', email='team@example.com')
+        charles.set_tip_to(team, EUR('0.25'))
+        team.add_member(ethan)
+        team.set_take_for(ethan, EUR('0.23'), team)
+        self.make_payin_and_transfer(charles_card, team, EUR('5.00'))
+        generate_profile_description_missing_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'][0] == 'ethan <%s>' % ethan.email
+        assert emails[0]['subject'] == "Your Liberapay profile is incomplete"
+
+        # run the cron job again, there shouldn't be any new notification
+        generate_profile_description_missing_notifications()
         emails = self.get_emails()
         assert not emails

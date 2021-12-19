@@ -3996,3 +3996,29 @@ def send_account_disabled_notifications():
     if sent:
         print(f"Sent {sent} account_disabled notification{'' if sent == 1 else 's'}.")
     return len(participants)
+
+def generate_profile_description_missing_notifications():
+    """Notify users who receive donations but don't have a profile description.
+    """
+    participants = website.db.all("""
+        SELECT p
+          FROM participants p
+         WHERE p.status = 'active'
+           AND p.kind IN ('individual', 'organization')
+           AND p.receiving > 0
+           AND p.id NOT IN (SELECT DISTINCT participant FROM statements)
+           AND p.id NOT IN (
+                   SELECT DISTINCT n.participant
+                     FROM notifications n
+                    WHERE n.event = 'profile_description_missing'
+                      AND n.ts >= (current_timestamp - interval '6 months')
+               )
+    """)
+    for p in participants:
+        sleep(1)
+        p.notify('profile_description_missing', force_email=True)
+    n = len(participants)
+    if n:
+        s = '' if n == 1 else 's'
+        print(f"Sent {n} profile_description_missing notification{s}.")
+    return n

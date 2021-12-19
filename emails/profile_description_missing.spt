@@ -1,0 +1,17 @@
+{{ _("Your Liberapay profile is incomplete") }}
+
+[---] text/html
+<p>{{ _(
+    "Your {link_start}public profile page{link_end} is missing a description. "
+    "Without this information, we may be unable to confirm that your use of our "
+    "platform is legitimate, and consequently your account may be marked as "
+    "fraudulent and disabled. An incomplete profile is also less likely to "
+    "attract donations, so we strongly recommend that you fill yours.",
+    link_start=('<a href="%s">'|safe) % participant.url(),
+    link_end='</a>'|safe
+) }}</p>
+
+<p><a href="{{ participant.url('edit/statement') }}" style="{{ button_style('primary') }}">{{
+    _("Edit your profile")
+}}</a></p>
+
