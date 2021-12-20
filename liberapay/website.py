@@ -122,7 +122,7 @@ def wrap_method(method):
         try:
             self._fail_with_undefined_error()
         except Exception as e:
-            website.tell_sentry(e)
+            website.tell_sentry(e, level='warning')
         return method(self, *a, **kw)
     return f
 
@@ -146,5 +146,5 @@ JINJA_ENV_COMMON = dict(
     line_statement_prefix='%',
     auto_reload=env.aspen_changes_reload,
     extensions=['jinja2.ext.do'],
-    # undefined=CustomUndefined,
+    undefined=CustomUndefined,
 )

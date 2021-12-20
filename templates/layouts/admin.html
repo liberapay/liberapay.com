@@ -6,7 +6,7 @@
     <div class="content-col">{% block content %}{% endblock %}</div>
     <nav class="nav-col">
         <input id="subnav-admin" class="subnav-toggler sr-only" type="checkbox" />
-        <label for="subnav-admin">{{ title + (': ' + subhead if subhead else '') }} <span class="caret"></span></label>
+        <label for="subnav-admin">{{ title + (': ' + subhead if subhead is defined else '') }} <span class="caret"></span></label>
         <ul class="nav nav-aside text-center">{{ nav_admin() }}</ul>
     </nav>
 </div>

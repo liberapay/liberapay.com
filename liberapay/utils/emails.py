@@ -23,7 +23,7 @@ from liberapay.exceptions import (
     InvalidEmailDomain, NonEmailDomain, TooManyAttempts,
 )
 from liberapay.utils import deserialize
-from liberapay.website import website, CustomUndefined, JINJA_ENV_COMMON
+from liberapay.website import website, JINJA_ENV_COMMON
 
 
 class EmailVerificationResult(Enum):
@@ -34,7 +34,6 @@ class EmailVerificationResult(Enum):
     SUCCEEDED = auto()
 
 
-JINJA_ENV_COMMON = dict(JINJA_ENV_COMMON, undefined=CustomUndefined)
 jinja_env = Environment(**JINJA_ENV_COMMON)
 jinja_env_html = Environment(**dict(
     JINJA_ENV_COMMON,

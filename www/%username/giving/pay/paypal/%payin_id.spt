@@ -132,7 +132,7 @@ title = _("Funding your donations")
 
 % block thin_content
 
-% if payin
+% if payin is defined
     % set status = payin.status
     % if status == 'succeeded'
         <div class="alert alert-success">{{ _(

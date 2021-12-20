@@ -15,7 +15,7 @@ if participant.kind not in ('individual', 'organization'):
 title = participant.username
 error = ''
 
-identity = participant.get_current_identity()
+identity = participant.get_current_identity() or {}
 
 if request.method == 'POST':
     body = request.body
@@ -71,6 +71,13 @@ if request.method == 'POST':
 
 elif participant.mangopay_user_id and (participant.balance or not identity):
     raise response.redirect(participant.path('identity-v1'))
+
+else:
+    for k in constants.IDENTITY_FIELDS:
+        if k in ('headquarters_address', 'postal_address'):
+            identity.setdefault(k, {})
+        else:
+            identity.setdefault(k, '')
 
 [---] text/html
 % from "templates/macros/identity.html" import identity_form with context

@@ -115,7 +115,7 @@ class TestClosing(Harness):
         alice.erase_personal_information()
         new_alice = Participant.from_username('alice')
 
-        assert alice.get_statement(['en']) == (None, None)
+        assert alice.get_statement(['en']) is None
         assert alice.hide_giving == new_alice.hide_giving == True
         assert alice.hide_receiving == new_alice.hide_receiving == True
         assert alice.avatar_url == new_alice.avatar_url == None
@@ -158,7 +158,7 @@ class TestClosing(Harness):
         assert cleaned == 1
 
         alice = alice.refetch()
-        assert alice.get_statement(['en']) == (None, None)
+        assert alice.get_statement(['en']) is None
         assert alice.goal == EUR(-1)
         assert alice.avatar_url == None
         assert alice.email == 'alice@example.com'
@@ -184,7 +184,7 @@ class TestClosing(Harness):
         alice.update_status('active')
         new_alice = Participant.from_username('alice')
 
-        assert alice.get_statement(['en']).content
+        assert alice.get_statement(['en'])
         assert alice.goal == new_alice.goal == EUR(100)
         assert alice.hide_giving == new_alice.hide_giving == True
         assert alice.hide_receiving == new_alice.hide_receiving == True

@@ -94,7 +94,8 @@ if payin.refunded_amount:
     """, (payin.id,))
 
 payin_transfers = website.db.all("""
-    SELECT pt.amount, pt.recipient, recipient.username AS recipient_username
+    SELECT pt.amount, pt.reversed_amount
+         , pt.recipient, recipient.username AS recipient_username
          , pt.team, team.username AS team_name
       FROM payin_transfers pt
       JOIN participants recipient ON recipient.id = pt.recipient
@@ -195,12 +196,12 @@ output.body = render(globals(), allow_partial_i18n=False)
     % endif
 
     <h2>{{ _("Payment details") }}</h2>
-    % if card_last4
+    % if card_last4 is defined
     {{ _(
         "Payment method: {brand} card, number ending in {last4}",
         brand=constants.CARD_BRANDS.get(card_brand, card_brand), last4=card_last4
     ) }}
-    % elif partial_iban
+    % elif partial_iban is defined
     {{ _(
         "Payment method: direct debit of bank account {partial_account_number}",
         partial_account_number=partial_iban

@@ -52,7 +52,7 @@ title = pretty_name = community.pretty_name
 
     <h2 class="no-margin-top">{{ title }}
         <small>{{
-            community.participant.get_statement(request.accept_langs, 'subtitle')[0] or ''
+            community.participant.get_statement(request.accept_langs, 'subtitle') or ''
         }}</small>
     </h2>
 
@@ -107,9 +107,11 @@ title = pretty_name = community.pretty_name
     </form>
 
     % set sidebar = community.participant.get_statement(request.accept_langs, 'sidebar')
-    <section class="community-sidebar" lang="{{ sidebar.lang or '' }}">{{
-        markdown.render(sidebar.content or '')
+    % if sidebar
+    <section class="community-sidebar" lang="{{ sidebar.lang }}">{{
+        markdown.render(sidebar)
     }}</section>
+    % endif
 
 </div>
 </div>

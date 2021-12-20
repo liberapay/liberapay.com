@@ -49,6 +49,7 @@ if request.method == 'POST':
             raise response.redirect(participant.path('edit/statement', {'lang': switch_lang}))
 
 else:
+    action = None
     lang = request.qs.get('lang')
     switch_lang = None
     if lang:
@@ -56,9 +57,8 @@ else:
             raise response.invalid_input(lang, 'lang', 'querystring')
         statement = participant.get_statement(lang)
     else:
-        statement, lang = participant.get_statement(request.accept_langs)
-        if not lang:
-            lang = locale.language
+        statement = participant.get_statement(request.accept_langs)
+        lang = statement.lang if statement else locale.language
     summary = participant.get_statement(lang, 'summary') or ''
 
 select_langs = get_lang_options(request, locale, participant.get_statement_langs())

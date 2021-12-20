@@ -26,7 +26,6 @@ identity = payer.get_current_identity() or {}
 
 del currency
 
-client_secret = None
 payment_type = request.qs.get('method', 'card')
 
 if request.method == 'POST':
@@ -263,13 +262,13 @@ title = _("Funding your donations")
 
 % block thin_content
 
-% if client_secret
+% if client_secret is defined
 
     <p>{{ _("More information is required in order to process this payment.") }}</p>
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
     <div id="stripe_next_action" data-client_secret="{{ client_secret }}"></div>
 
-% elif payin
+% elif payin is defined
     % set status = payin.status
     % if status == 'succeeded'
         <div class="alert alert-success">{{ _(

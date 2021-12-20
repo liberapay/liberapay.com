@@ -31,7 +31,11 @@ gratipay_response = SimpleNamespace(
         payment_instructions=[dict()],  # TODO
         elsewhere=[dict()],  # TODO
         statements=[dict()],  # TODO
-        teams=[dict()],  # TODO
+        teams=[
+            dict(slug=None),
+            dict(slug='test'),
+            dict(slug='conflict'),
+        ],
     ),
     status_code=200,
 )
@@ -44,6 +48,7 @@ class TestMigrate(Harness):
         assert r.code == 200
         assert "Welcome, alice!" in r.text, r.text
         # Step 2
+        self.make_participant('conflict')
         resources = self.website.request_processor.resources
         cache_entry = resources.cache[abspath('www/migrate.spt')]
         simplate_context = cache_entry.resource.page_one

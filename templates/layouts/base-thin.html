@@ -5,7 +5,11 @@
 % block content
 <div class="row">
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-        {% block heading %}<h1 class="main-title thin-title">{{ title }}</h1>{% endblock %}
+        % block heading
+            % if title is defined
+                <h1 class="main-title thin-title">{{ title }}</h1>
+            % endif
+        % endblock
         {% block thin_content %}{% endblock %}
     </div>
 </div>

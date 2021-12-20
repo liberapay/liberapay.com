@@ -314,7 +314,7 @@ title = "Users Admin"
         % endif
         </p>
 
-        % if row.payments
+        % if row.payments|default(false)
         <p><strong>Incoming payments:</strong><br>
             % for pt in row.payments
                 <span class="symbol-3ex">{{ payment_method_icon(pt.payin_method) }}</span>

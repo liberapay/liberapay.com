@@ -22,7 +22,7 @@
 
     % if 'postal_address.country' in wanted
     <label>
-        % set country = identity.postal_address['country'] or request.country
+        % set country = identity.postal_address.get('country') or request.country
         <span>{{ _("Country (residence)") }}</span>
         <select name="postal_address.country" class="form-control country" {{ required }}>
             <option></option>
@@ -67,7 +67,7 @@
             }}</span>
         </span>
         <input name="occupation" {{ required }} maxlength=200
-               class="form-control" value="{{ identity.occupation or '' }}" />
+               class="form-control" value="{{ identity.occupation }}" />
     </label>
     % endif
 
