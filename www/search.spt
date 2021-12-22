@@ -147,7 +147,7 @@ if query:
     </div>
 
     % if repositories
-    % set fork = ' ' + _("(fork)")
+    {% set fork = ' ' + _("(fork)") %}
     <div>
         <h3>{{ ngettext("Found a matching repository",
                         "Found matching repositories",
