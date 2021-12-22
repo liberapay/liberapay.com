@@ -2067,12 +2067,12 @@ class Participant(Model, MixinTeam):
     # ===========
 
     def create_community(self, name, **kw):
-        return Community.create(name, self.id, **kw)
+        return Community.create(name, self, **kw)
 
-    def upsert_community_membership(self, on, c_id):
+    def upsert_community_membership(self, on, c_id, cursor=None):
         p_id = self.id
         if on:
-            self.db.run("""
+            (cursor or self.db).run("""
                 INSERT INTO community_memberships
                             (community, participant, is_on)
                      VALUES (%(c_id)s, %(p_id)s, %(on)s)
@@ -2081,7 +2081,7 @@ class Participant(Model, MixinTeam):
                           , mtime = current_timestamp
             """, locals())
         else:
-            self.db.run("""
+            (cursor or self.db).run("""
                 UPDATE community_memberships
                    SET is_on = %(on)s
                      , mtime = current_timestamp

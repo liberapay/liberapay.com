@@ -75,7 +75,7 @@ class TestCommunityActions(Harness):
         Harness.setUp(self)
         self.alice = self.make_participant("alice")
         self.bob = self.make_participant("bob")
-        self.community = Community.create('test', self.alice.id)
+        self.community = Community.create('test', self.alice)
 
     def test_post_bad_name_returns_404(self):
         response = self.client.PxST('/for/Bad:Name!/subscribe',
@@ -127,7 +127,7 @@ class TestCommunityEdit(Harness):
     def setUp(self):
         Harness.setUp(self)
         self.alice = self.make_participant("alice")
-        self.community = Community.create('test', self.alice.id)
+        self.community = Community.create('test', self.alice)
 
     def test_creator_can_edit_community(self):
         data = {'lang': 'en', 'subtitle': '', 'sidebar': ''}

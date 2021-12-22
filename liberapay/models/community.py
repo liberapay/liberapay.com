@@ -36,7 +36,7 @@ class Community(Model):
         self.set_attributes(participant=participant)
 
     @classmethod
-    def create(cls, name, creator_id, lang='mul'):
+    def create(cls, name, creator, lang='mul'):
         name = unicodedata.normalize('NFKC', name)
         if name_re.match(name) is None:
             raise InvalidCommunityName(name)
@@ -48,12 +48,14 @@ class Community(Model):
                          VALUES ('community', 'active', now())
                       RETURNING id
                 """)
-                return cursor.one("""
+                community = cursor.one("""
                     INSERT INTO communities
                                 (name, creator, lang, participant)
                          VALUES (%s, %s, %s, %s)
                       RETURNING communities.*::community_with_participant
-                """, (name, creator_id, lang, p_id))
+                """, (name, creator.id, lang, p_id))
+                creator.upsert_community_membership(True, community.id, cursor)
+                return community
         except IntegrityError:
             raise CommunityAlreadyExists(name)
 

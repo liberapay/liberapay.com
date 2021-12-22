@@ -11,7 +11,7 @@ class TestSearch(Harness):
 
     def test_basic_search_with_results(self):
         alice = self.make_participant('alice')
-        Community.create('alice', alice.id)
+        Community.create('alice', alice)
         response = self.client.GET('/search?q=alice')
         assert response.code == 200
 
