@@ -1505,32 +1505,34 @@ class Participant(Model, MixinTeam):
         # If email_unverified_address is on, allow sending to an unverified email address.
         if email_unverified_address and not self.email:
             context['email'] = self.get_email_address()
-        # Check that this notification isn't a duplicate
-        context = serialize(context)
-        n = self.db.one("""
-            SELECT count(*)
-              FROM notifications
-             WHERE participant = %(p_id)s
-               AND event = %(event)s
-               AND ( idem_key = %(idem_key)s OR
-                     ts::date = current_date AND context = %(context)s )
-        """, locals())
-        if n > 0:
-            raise DuplicateNotification(p_id, event, idem_key)
         # Check that the participant is active
         if self.status != 'active':
             website.warning(
                 f"A {event!r} notification is being inserted for inactive participant ~{self.id}"
             )
             email = False
-        # Okay, add the notification to the queue
-        email_status = 'queued' if email else None
-        n_id = self.db.one("""
-            INSERT INTO notifications
-                        (participant, event, context, web, email, email_status, idem_key)
-                 VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(email_status)s, %(idem_key)s)
-              RETURNING id;
-        """, locals())
+        context = serialize(context)
+        with self.db.get_cursor() as cursor:
+            # Check that this notification isn't a duplicate
+            n = cursor.one("""
+                LOCK TABLE notifications IN SHARE ROW EXCLUSIVE MODE;
+                SELECT count(*)
+                  FROM notifications
+                 WHERE participant = %(p_id)s
+                   AND event = %(event)s
+                   AND ( idem_key = %(idem_key)s OR
+                         ts::date = current_date AND context = %(context)s )
+            """, locals())
+            if n > 0:
+                raise DuplicateNotification(p_id, event, idem_key)
+            # Okay, add the notification to the queue
+            email_status = 'queued' if email else None
+            n_id = cursor.one("""
+                INSERT INTO notifications
+                            (participant, event, context, web, email, email_status, idem_key)
+                     VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(email_status)s, %(idem_key)s)
+                  RETURNING id;
+            """, locals())
         if not web:
             return n_id
         self.set_attributes(pending_notifs=self.pending_notifs + 1)
