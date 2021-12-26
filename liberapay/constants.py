@@ -313,6 +313,8 @@ PAYIN_AMOUNTS = {
                 'EUR': Money('52000.00', 'EUR'),
                 'USD': Money('52000.00', 'USD'),
             }),
+            # Stripe has per-account limits for SEPA Direct Debits. Liberapay's
+            # account has a per-debit limit of €75k, and no weekly limit.
         },
     },
 }
