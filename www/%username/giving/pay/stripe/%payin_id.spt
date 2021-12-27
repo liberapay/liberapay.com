@@ -88,10 +88,14 @@ if request.method == 'POST':
                 body.word('token'), one_off, payin_amount, owner_info, return_url
             )
             route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
+            if body.parse_boolean('set_as_default', default=False):
+                route.set_as_default()
         elif 'stripe_pm_id' in body:
             one_off = body.get('keep') != 'true'
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
+            if body.parse_boolean('set_as_default', default=False):
+                route.set_as_default()
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
@@ -505,6 +509,10 @@ title = _("Funding your donations")
             <label>
                 <input type="checkbox" name="keep" value="true" checked />
                 {{ _("Remember the card number for next time") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
             <br><br>
         </fieldset>
@@ -531,6 +539,10 @@ title = _("Funding your donations")
             <label>
                 <input type="checkbox" name="keep" value="true" checked />
                 {{ _("Remember the bank account number for future payments") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
             <br>
         </fieldset>

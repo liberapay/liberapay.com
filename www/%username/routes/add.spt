@@ -44,6 +44,8 @@ if request.method == 'POST':
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
         ))
+    if body.parse_boolean('set_as_default', default=False):
+        route.set_as_default()
     postal_address = {
         k: body.get('postal_address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_LIBERAPAY
     }
@@ -98,6 +100,10 @@ title = _("Add a payment instrument")
             <label>
                 <input type="checkbox" name="one_off" value="true" />
                 {{ _("Forget this card number after one payment.") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
         </fieldset>
         % elif network == 'stripe-sdd'
@@ -124,6 +130,10 @@ title = _("Add a payment instrument")
             <label>
                 <input type="checkbox" name="one_off" value="true" />
                 {{ _("Forget this bank account number after one payment.") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
         </fieldset>
         % endif
