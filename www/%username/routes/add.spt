@@ -137,7 +137,7 @@ title = _("Add a payment instrument")
             </label>
         </fieldset>
         % endif
-        <p>{{ _("Postal address:") }}</p>
+        <p>{{ _("Please input your postal address:") }}</p>
         <div class="block-labels max-width-500">{{
             postal_address_form_v2(saved=identity.get('postal_address'))
         }}</div>
