@@ -39,14 +39,6 @@ langs = participant.get_statement_langs()
 
 patron_visibilities = participant.recipient_settings.patron_visibilities
 if patron_visibilities > 1:
-    n_public_patrons = website.db.one("""
-        SELECT count(*)
-          FROM current_tips tip
-         WHERE tip.tippee = %s
-           AND tip.visibility = 3
-           AND tip.paid_in_advance > 0
-           AND tip.renewal_mode > 0
-    """, (participant.id,), max_age=5)
     public_patrons = website.db.all("""
         SELECT tipper_p.id
              , tipper_p.avatar_url
@@ -60,18 +52,21 @@ if patron_visibilities > 1:
            AND tip.paid_in_advance > 0
            AND tip.renewal_mode > 0
            AND tipper_p.hide_from_lists = 0
-      ORDER BY convert(tip.amount, 'EUR') * random()::numeric DESC
-         LIMIT 12
-    """, (participant.id,), max_age=5) if n_public_patrons else ()
+      ORDER BY (convert(tip.amount, 'EUR')).amount DESC
+         LIMIT 11
+    """, (participant.id,), max_age=5)
+    n_public_patrons = len(public_patrons)
+    if n_public_patrons == 11:
+        public_patrons.pop()
+        n_public_patrons = website.db.one("""
+            SELECT count(*)
+              FROM current_tips tip
+             WHERE tip.tippee = %s
+               AND tip.visibility = 3
+               AND tip.paid_in_advance > 0
+               AND tip.renewal_mode > 0
+        """, (participant.id,), max_age=5)
 
-n_public_donees = website.db.one("""
-    SELECT count(*)
-      FROM current_tips tip
-     WHERE tip.tipper = %s
-       AND tip.visibility = 3
-       AND tip.paid_in_advance > 0
-       AND tip.renewal_mode > 0
-""", (participant.id,), max_age=5)
 public_donees = website.db.all("""
     SELECT tippee_p.id
          , tippee_p.avatar_url
@@ -84,9 +79,9 @@ public_donees = website.db.all("""
        AND tip.visibility = 3
        AND tip.paid_in_advance > 0
        AND tip.renewal_mode > 0
-  ORDER BY convert(tip.amount, 'EUR') * random()::numeric DESC
-     LIMIT 12
-""", (participant.id,), max_age=5) if n_public_donees else ()
+""", (participant.id,), max_age=5)
+public_donees.sort(key=lambda r: (-r.weekly_amount.convert('EUR').amount, r.name))
+n_public_donees = len(public_donees)
 
 show_income = not participant.hide_receiving and participant.accepts_tips
 
@@ -231,6 +226,10 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         username=participant.username,
         n=n_public_patrons,
     ) }}</p>
+
+    % if n_public_patrons > len(public_patrons)
+    <p>{{ ngettext("", "The top {n} patrons are:", len(public_patrons)) }}</p>
+    % endif
 
     <div class="paragraph">
     % for p in public_patrons

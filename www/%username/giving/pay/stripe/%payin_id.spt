@@ -88,10 +88,14 @@ if request.method == 'POST':
                 body.word('token'), one_off, payin_amount, owner_info, return_url
             )
             route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
+            if body.parse_boolean('set_as_default', default=False):
+                route.set_as_default()
         elif 'stripe_pm_id' in body:
             one_off = body.get('keep') != 'true'
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
+            if body.parse_boolean('set_as_default', default=False):
+                route.set_as_default()
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
@@ -158,9 +162,10 @@ elif payin_id:
     """, dict(payin=payin_id, payer=payer.id))
     if not payin:
         raise response.error(404, "unknown payin ID in URL path")
+    route = ExchangeRoute.from_id(payer, payin.route)
     try:
         if payin.status == 'pre':
-            payin = charge(website.db, payin, payer)
+            payin = charge(website.db, payin, payer, route)
             if payin.id != int(payin_id):
                 response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
         elif payin.status == 'awaiting_payer_action':
@@ -172,7 +177,6 @@ elif payin_id:
             client_secret = act.client_secret
         else:
             raise NotImplementedError()
-    route = ExchangeRoute.from_id(payer, payin.route)
     tell_payer_to_fill_profile = (
         payin.status in ('pending', 'succeeded') and
         not (payer.public_name or payer.username) and
@@ -505,6 +509,10 @@ title = _("Funding your donations")
             <label>
                 <input type="checkbox" name="keep" value="true" checked />
                 {{ _("Remember the card number for next time") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
             <br><br>
         </fieldset>
@@ -531,13 +539,17 @@ title = _("Funding your donations")
             <label>
                 <input type="checkbox" name="keep" value="true" checked />
                 {{ _("Remember the bank account number for future payments") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
             <br>
         </fieldset>
         % endif
 
         % if postal_address_is_required
-        <p>{{ _("Postal address:") }}</p>
+        <p>{{ _("Please input your postal address:") }}</p>
         <div class="block-labels max-width-500">{{
             postal_address_form_v2(saved=identity.get('postal_address'))
         }}</div>

@@ -185,7 +185,7 @@ if participant.join_time:
             % if (visibility > 1 and show_patrons) or admin_override
                 % set payer_link = ('<a href="/{0}/{1}">{0}</a>'|safe).format(event['payer_username'], subpath)
             % else
-                % set payer_link = ('<em>{0}</em>'|safe).format(_("hidden"))
+                {% set payer_link = ('<em>{0}</em>'|safe).format(_("hidden")) %}
             % endif
             % if context == 'personal-donation'
                 {{ _(

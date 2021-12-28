@@ -44,6 +44,8 @@ if request.method == 'POST':
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
         ))
+    if body.parse_boolean('set_as_default', default=False):
+        route.set_as_default()
     postal_address = {
         k: body.get('postal_address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_LIBERAPAY
     }
@@ -52,7 +54,9 @@ if request.method == 'POST':
             identity['postal_address'] = postal_address
             participant.insert_identity(identity)
     msg = _("The payment instrument has been successfully added.")
-    form_post_success(state, redirect_url=participant.path('routes/'), msg=msg)
+    ntips_awaiting_payment = participant.get_tips_awaiting_payment()[1]
+    redirect_url = participant.path('giving/pay' if ntips_awaiting_payment else 'routes/')
+    form_post_success(state, redirect_url=redirect_url, msg=msg)
 
 network = request.qs['type']
 
@@ -96,6 +100,10 @@ title = _("Add a payment instrument")
             <label>
                 <input type="checkbox" name="one_off" value="true" />
                 {{ _("Forget this card number after one payment.") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
         </fieldset>
         % elif network == 'stripe-sdd'
@@ -122,10 +130,14 @@ title = _("Add a payment instrument")
             <label>
                 <input type="checkbox" name="one_off" value="true" />
                 {{ _("Forget this bank account number after one payment.") }}
+            </label><br>
+            <label>
+                <input type="checkbox" name="set_as_default" value="true" checked />
+                {{ _("Use this payment instrument by default for future payments") }}
             </label>
         </fieldset>
         % endif
-        <p>{{ _("Postal address:") }}</p>
+        <p>{{ _("Please input your postal address:") }}</p>
         <div class="block-labels max-width-500">{{
             postal_address_form_v2(saved=identity.get('postal_address'))
         }}</div>
