@@ -1745,9 +1745,6 @@ msgstr "Araçlar"
 msgid "Schedule"
 msgstr "Plan"
 
-msgid "Statement"
-msgstr "Açıklama"
-
 msgid "Members"
 msgstr "Üyeler"
 
@@ -2839,6 +2836,9 @@ msgstr "Bu veriler şifreli bir bağlantı aracılığıyla doğrudan {name} öd
 msgid "Remember the card number for next time"
 msgstr "Bir dahaki sefere kart numarasını hatırla"
 
+msgid "Use this payment instrument by default for future payments"
+msgstr ""
+
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Lütfen adınızı ve IBAN numaranızı yazın (Uluslararası Banka Hesap Numaranızı):"
 
@@ -2849,8 +2849,8 @@ msgstr "IBAN numaranızı vererek ve bu ödemeyi onaylayarak {platform} ve ödem
 msgid "Remember the bank account number for future payments"
 msgstr "Gelecekteki ödemeler için banka hesap numarasını hatırla"
 
-msgid "Postal address:"
-msgstr "Posta adresi:"
+msgid "Please input your postal address:"
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2990,6 +2990,9 @@ msgstr "Bu profil yalnızca {language} dilinde kullanılabilir"
 msgid "Edit"
 msgstr "Düzenle"
 
+msgid "Statement"
+msgstr "Açıklama"
+
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
 msgstr "{0} diğer platformlarda aşağıdaki hesaplara sahiptir:"
@@ -3014,6 +3017,12 @@ msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
 msgstr[0] "{username}, {n} herkese açık sponsora sahip."
 msgstr[1] "{username}, {n} herkese açık sponsora sahip."
+
+#, python-brace-format
+msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
+msgid_plural "The top {n} patrons are:"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "{username} doesn't publish how much they give."
@@ -3233,6 +3242,9 @@ msgstr "ücretlendir"
 #, python-brace-format
 msgid "error message: {0}"
 msgstr "hata mesajı: {0}"
+
+msgid "hidden"
+msgstr ""
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -4374,6 +4386,9 @@ msgstr "Bu web sitesi, 2015 yılında yasal olarak Fransa'da kurulmuş kar amac�
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay Avrupa Birliği yasalarına uymaktadır. Ortaklarımızın yardımıyla olası dolandırıcılık, kara para aklama ve terörizmin finansmanı için işlemleri izliyoruz."
+
+msgid "Postal address:"
+msgstr "Posta adresi:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

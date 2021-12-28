@@ -1745,9 +1745,6 @@ msgstr "Όργανα"
 msgid "Schedule"
 msgstr "Πρόγραμμα"
 
-msgid "Statement"
-msgstr "Δήλωση"
-
 msgid "Members"
 msgstr "Μέλη"
 
@@ -2839,6 +2836,9 @@ msgstr "Τα δεδομένα αυτά θα αποστέλλονται απευ�
 msgid "Remember the card number for next time"
 msgstr "Θυμηθείτε τον αριθμό της κάρτας για την επόμενη φορά"
 
+msgid "Use this payment instrument by default for future payments"
+msgstr ""
+
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Παρακαλώ εισάγετε το όνομα σας και το IBAN σας (Διεθνής Αριθμός Τραπεζικού Λογαριασμού):"
 
@@ -2849,8 +2849,8 @@ msgstr "Παρέχοντας τον IBAN του λογαριασμού σας κ
 msgid "Remember the bank account number for future payments"
 msgstr "Θυμηθείτε τον αριθμό τραπεζικού λογαριασμού για μελλοντικές πληρωμές"
 
-msgid "Postal address:"
-msgstr "Ταχυδρομική διεύθυνση:"
+msgid "Please input your postal address:"
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2990,6 +2990,9 @@ msgstr "Αυτό το προφίλ είναι διαθέσιμο μόνο σε {
 msgid "Edit"
 msgstr "Επεξεργασία"
 
+msgid "Statement"
+msgstr "Δήλωση"
+
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
 msgstr "Ο/Η {0} έχει τους ακόλουθους λογαριασμούς σε άλλες πλατφόρμες:"
@@ -3012,6 +3015,12 @@ msgstr "Εξαγωγή ως CSV"
 #, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
+msgid_plural "The top {n} patrons are:"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -3233,6 +3242,9 @@ msgstr "χρέωση"
 #, python-brace-format
 msgid "error message: {0}"
 msgstr "μήνυμα σφάλματος: {0}"
+
+msgid "hidden"
+msgstr ""
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -4374,6 +4386,9 @@ msgstr "Η διαχείριση του παρόντος δικτυακού τό�
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Το Liberapay συμμορφώνεται με τους νόμους της Ευρωπαϊκής Ένωσης. Με τη βοήθεια των συνεργατών μας παρακολουθούμε τις συναλλαγές για πιθανή απάτη, ξέπλυμα χρήματος και χρηματοδότηση της τρομοκρατίας."
+
+msgid "Postal address:"
+msgstr "Ταχυδρομική διεύθυνση:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

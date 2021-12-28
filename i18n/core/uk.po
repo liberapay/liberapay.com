@@ -1761,9 +1761,6 @@ msgstr "Інструменти"
 msgid "Schedule"
 msgstr "Розклад"
 
-msgid "Statement"
-msgstr "Опис"
-
 msgid "Members"
 msgstr "Учасники"
 
@@ -2865,6 +2862,9 @@ msgstr "Цю інформацію буде надіслано обробнику
 msgid "Remember the card number for next time"
 msgstr "Використати цей номер картки наступного разу"
 
+msgid "Use this payment instrument by default for future payments"
+msgstr ""
+
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Введіть своє ім’я та свій IBAN (Міжнародний номер банківського рахунку):"
 
@@ -2875,8 +2875,8 @@ msgstr "Надавши свій IBAN та підтвердивши цей пла
 msgid "Remember the bank account number for future payments"
 msgstr "Запам’ятати номер банківського рахунку для подальших платежів"
 
-msgid "Postal address:"
-msgstr "Поштова адреса:"
+msgid "Please input your postal address:"
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3019,6 +3019,9 @@ msgstr "Цей профіль доступний лише {language}"
 msgid "Edit"
 msgstr "Змінити"
 
+msgid "Statement"
+msgstr "Опис"
+
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
 msgstr "{0} володіє такими обліковими записами на інших платформах:"
@@ -3046,6 +3049,13 @@ msgid_plural "{username} has {n} public patrons."
 msgstr[0] "{username} має {n} відкритого мецената."
 msgstr[1] "{username} має {n} відкритих меценатів."
 msgstr[2] "{username} має {n} відкритих меценатів."
+
+#, python-brace-format
+msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
+msgid_plural "The top {n} patrons are:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
 msgid "{username} doesn't publish how much they give."
@@ -3266,6 +3276,9 @@ msgstr "стягнення"
 #, python-brace-format
 msgid "error message: {0}"
 msgstr "повідомлення про помилку: {0}"
+
+msgid "hidden"
+msgstr ""
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -4418,6 +4431,9 @@ msgstr "Цей сайт управляється Liberapay, некомерцій
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay дотримується законодавства Європейського Союзу. За допомогою наших партнерів ми перевіряємо операції на предмет можливого шахрайства, відмивання грошей та фінансування тероризму."
+
+msgid "Postal address:"
+msgstr "Поштова адреса:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

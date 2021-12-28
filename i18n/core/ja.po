@@ -1729,9 +1729,6 @@ msgstr "手段"
 msgid "Schedule"
 msgstr "スケジュール"
 
-msgid "Statement"
-msgstr "声明"
-
 msgid "Members"
 msgstr "メンバー"
 
@@ -2816,6 +2813,9 @@ msgstr "このデータは、暗号化された接続を通して、決済サー
 msgid "Remember the card number for next time"
 msgstr "カード番号を保存"
 
+msgid "Use this payment instrument by default for future payments"
+msgstr ""
+
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "あなたのお名前と IBAN（International Bank Account Number）を入力してください："
 
@@ -2826,8 +2826,8 @@ msgstr "IBAN を提供し、この支払いを確認することにより、あ�
 msgid "Remember the bank account number for future payments"
 msgstr "今後の支払いのために、銀行の口座番号を保存"
 
-msgid "Postal address:"
-msgstr "住所："
+msgid "Please input your postal address:"
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2964,6 +2964,9 @@ msgstr "このプロフィールは{language}でのみ利用可能です"
 msgid "Edit"
 msgstr "編集"
 
+msgid "Statement"
+msgstr "声明"
+
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
 msgstr "{0} は他のプラットフォームで以下のアカウントを所有しています："
@@ -2984,6 +2987,11 @@ msgstr "CSVにエクスポート"
 #, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
+msgid_plural "The top {n} patrons are:"
 msgstr[0] ""
 
 #, python-brace-format
@@ -3203,6 +3211,9 @@ msgstr "料金"
 #, python-brace-format
 msgid "error message: {0}"
 msgstr "エラーメッセージ：{0}"
+
+msgid "hidden"
+msgstr ""
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -4335,6 +4346,9 @@ msgstr "この Web サイトは法律上 2005 年にフランスで設立され�
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay は EU（欧州連合）の法律に従っています。パートナーの皆様のご協力のもと、起こりうる詐欺・資金洗浄・テロへの資金供与を防ぐために取引を監視しています。"
+
+msgid "Postal address:"
+msgstr "住所："
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

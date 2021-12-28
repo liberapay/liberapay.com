@@ -1745,9 +1745,6 @@ msgstr "Medel"
 msgid "Schedule"
 msgstr "Schema"
 
-msgid "Statement"
-msgstr "Uttalande"
-
 msgid "Members"
 msgstr "Medlemmar"
 
@@ -2841,6 +2838,9 @@ msgstr "Denna data kommer skickas direkt till betalningsförmedlaren {name} via 
 msgid "Remember the card number for next time"
 msgstr "Kom ihåg kortnummret inför nästa gång"
 
+msgid "Use this payment instrument by default for future payments"
+msgstr ""
+
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Vänligen ange ditt namn och IBAN (International Bank Account Number):"
 
@@ -2851,8 +2851,8 @@ msgstr "Genom att ange ditt IBAN och bekräfta denna betalning så tillåter du 
 msgid "Remember the bank account number for future payments"
 msgstr "Kom ihåg bankkontonummret för framtida betalningar"
 
-msgid "Postal address:"
-msgstr "Postadress:"
+msgid "Please input your postal address:"
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2992,6 +2992,9 @@ msgstr "Denna profil är endast tillgänglig på {language}"
 msgid "Edit"
 msgstr "Redigera"
 
+msgid "Statement"
+msgstr "Uttalande"
+
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
 msgstr "{0} äger följande konton på andra platformar:"
@@ -3014,6 +3017,12 @@ msgstr "Exportera som CSV"
 #, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
+msgid_plural "The top {n} patrons are:"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -3235,6 +3244,9 @@ msgstr "kostnad"
 #, python-brace-format
 msgid "error message: {0}"
 msgstr "felmeddelande: {0}"
+
+msgid "hidden"
+msgstr ""
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -4377,6 +4389,9 @@ msgstr "Denna hemsida hanteras av Liberapay, en ideel organisation grundad 2015 
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay följer EU-lagstiftningen. Med hjälp av våra partners övervakar vi transaktioner för eventuellt bedrägeri, penningtvätt och finansiering av terrorism."
+
+msgid "Postal address:"
+msgstr "Postadress:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"

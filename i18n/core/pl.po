@@ -1761,9 +1761,6 @@ msgstr "Instrumenty"
 msgid "Schedule"
 msgstr "Harmonogram"
 
-msgid "Statement"
-msgstr "Oświadczenie"
-
 msgid "Members"
 msgstr "Członkowie"
 
@@ -2865,6 +2862,9 @@ msgstr "Te dane zostaną bezpośrednio przekazane naszemu pośrednikowi {name} z
 msgid "Remember the card number for next time"
 msgstr "Zapamiętaj numer karty na przyszłość"
 
+msgid "Use this payment instrument by default for future payments"
+msgstr ""
+
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Wprowadź swoją nazwę i IBAN (Międzynarodowy Numer Konta Bankowego):"
 
@@ -2875,8 +2875,8 @@ msgstr "Podając swój IBAN i potwierdzając tę płatność, upoważniasz {plat
 msgid "Remember the bank account number for future payments"
 msgstr "Zapamiętaj numer konta bankowego dla przyszłych płatności"
 
-msgid "Postal address:"
-msgstr "Adres pocztowy:"
+msgid "Please input your postal address:"
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3019,6 +3019,9 @@ msgstr "Ten profil jest dostępny tylko w języku {language}m"
 msgid "Edit"
 msgstr "Edycja"
 
+msgid "Statement"
+msgstr "Oświadczenie"
+
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
 msgstr "{0} posiada następujące konta na innych platformach:"
@@ -3046,6 +3049,13 @@ msgid_plural "{username} has {n} public patrons."
 msgstr[0] "{username} ma {n} publicznego patrona."
 msgstr[1] "{username} ma {n} publicznych patronów."
 msgstr[2] "{username} ma {n} publicznych patronów."
+
+#, python-brace-format
+msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
+msgid_plural "The top {n} patrons are:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
 msgid "{username} doesn't publish how much they give."
@@ -3266,6 +3276,9 @@ msgstr "pobranie"
 #, python-brace-format
 msgid "error message: {0}"
 msgstr "treść błędu: {0}"
+
+msgid "hidden"
+msgstr ""
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
@@ -4418,6 +4431,9 @@ msgstr "Strona na której się znajdujesz jest zarządzana przez Liberapay, orga
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "Liberapay jest zgodny z prawem Unii Europejskiej. Z pomocą naszych partnerów monitorujemy transakcje pod kątem możliwych oszustw, prania pieniędzy i finansowania terroryzmu."
+
+msgid "Postal address:"
+msgstr "Adres pocztowy:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"
