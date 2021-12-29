@@ -4,7 +4,7 @@ if not user.ANON:
     response.redirect(request.qs.get('back_to', '/'), trusted_url=False)
 
 title = _("Sign In")
-response.no_navbar_sign_in = True
+response.navbar_sign_in = False
 
 [---] text/html
 % extends "templates/layouts/base-thin.html"
