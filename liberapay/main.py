@@ -285,6 +285,10 @@ if hasattr(aspen.http.mapping.Mapping, 'get_choice'):
     raise Warning('aspen.http.mapping.Mapping.get_choice() already exists')
 aspen.http.mapping.Mapping.get_choice = utils.get_choice
 
+if hasattr(aspen.http.mapping.Mapping, 'get_color'):
+    raise Warning('aspen.http.mapping.Mapping.get_color() already exists')
+aspen.http.mapping.Mapping.get_color = utils.get_color
+
 if hasattr(aspen.http.mapping.Mapping, 'word'):
     raise Warning('aspen.http.mapping.Mapping.word() already exists')
 aspen.http.mapping.Mapping.word = utils.word

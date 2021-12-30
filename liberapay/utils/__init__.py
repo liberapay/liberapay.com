@@ -495,6 +495,21 @@ def get_choice(d, k, choices, default=NO_DEFAULT):
     return r
 
 
+color_re = re.compile(r"^[0-9a-f]{6}$")
+
+
+def get_color(d, k, default=NO_DEFAULT):
+    try:
+        r = d[k]
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    if not color_re.match(r):
+        raise Response().error(400, "`%s` value %r is not a valid hexadecimal color" % (k, r))
+    return r
+
+
 def word(mapping, k, pattern=r'^\w+$', unicode=False):
     r = mapping[k]
     if not r:
