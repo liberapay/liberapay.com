@@ -80,11 +80,11 @@ if account:
         "{platform} account should fix the problem.",
         platform=platform.display_name
     ) }}</p>
-    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope])
+    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope|default('')])
         {{ _("Reconnect") }}
     % endcall
 % elif not account or not sess
-    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope])
+    % call auth_button(platform.name, 'connect', extra_scopes=[platform.oauth_follows_scope|default('')])
         {{ _("Connect your {platform} account", platform=platform.display_name) }}
     % endcall
 % elif not follows

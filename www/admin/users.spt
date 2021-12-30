@@ -222,7 +222,7 @@ title = "Users Admin"
 <div class="row user-admin">
     <div class="col-md-2 mini-user-admin">
         <a href="/{{ p.username }}/">
-            <div class="name">{{ row.c_name or p.username }}<br>({{ p.kind }}, {{ p.status }})</div>
+            <div class="name">{{ row.c_name|default(None) or p.username }}<br>({{ p.kind }}, {{ p.status }})</div>
             {{ avatar_img(p, size=120) }}
             <div class="age">{{ locale.format_timedelta(to_age(p.join_time), add_direction=True) if p.join_time }}</div>
         </a>
@@ -232,7 +232,7 @@ title = "Users Admin"
         % endif
     </div>
     <div class="col-md-6">
-    % if row.c_creator
+    % if row.c_creator|default(None)
         <p><strong>Created by:</strong> <a href="/~{{ row.c_creator }}/">~{{ row.c_creator }}</a></p>
     % endif
     % set elsewhere = p.get_accounts_elsewhere()
