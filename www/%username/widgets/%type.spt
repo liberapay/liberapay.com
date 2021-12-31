@@ -27,7 +27,8 @@ if participant.hide_giving and t_is_giving or \
     raise response.error(403)
 
 response.headers[b'Cache-Control'] = b'public, max-age=3600'
-response.headers[b'Vary'] = b'Accept-Language'
+if request.hostname == website.canonical_host:
+    response.headers[b'Vary'] = b'Accept-Language'
 
 [---] application/javascript via jinja2_html_jswrapped
 <a href="{{ participant.url('' if t_is_giving else 'donate') }}"
