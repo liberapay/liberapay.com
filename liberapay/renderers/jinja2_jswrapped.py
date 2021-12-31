@@ -6,7 +6,7 @@ class Renderer(base.Factory.Renderer):
 
     def render_content(self, context):
         content = super().render_content(context)
-        return 'document.write(%s)' % to_javascript(content)
+        return 'document.write(%s)' % to_javascript(content.strip())
 
 
 class Factory(base.Factory):
