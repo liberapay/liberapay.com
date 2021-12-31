@@ -75,6 +75,11 @@ except TokenExpiredError:
         "{platform} returned an error, please retry the operation from the beginning.",
         platform=platform.display_name
     ))
+if domain and not account.user_id:
+    raise response.error(502, _(
+        "Is {0} really a {1} server? It is currently not acting like one.",
+        domain, platform.display_name,
+    ))
 participant = account.participant
 
 if action_user_id:
@@ -100,7 +105,7 @@ if action_user_id and account_user_id != action_user_id:
             "There doesn't seem to be a user named {0} on {1}.",
             action_user_id, platform.display_name
         ))
-    if not claimed_account.is_team:
+    if not claimed_account.is_team or not claimed_account.user_id:
         then = '/on/%s/%s/failure.html'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))
     try:
