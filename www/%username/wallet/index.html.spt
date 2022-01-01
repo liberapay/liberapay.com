@@ -220,7 +220,7 @@ if user_is_admin:
     <tr class="day-open">
         <td class="date">
             {{ locale.format_date(event['date'], 'long') }}
-            % if event['payday_number']
+            % if event.get('payday_number')
                 &mdash; {{ _("Weekly Payday #{0}", event['payday_number']) }}
             % endif
         </td>

@@ -3,6 +3,7 @@ import hashlib
 import json
 import logging
 from urllib.parse import quote as urlquote, urlsplit
+import warnings
 import xml.etree.ElementTree as ET
 
 from babel.dates import format_timedelta
@@ -478,6 +479,8 @@ class PlatformOAuth1(Platform):
                              callback_uri=callback_url)
 
     def get_auth_url(self, domain, **kw):
+        if kw:
+            warnings.warn(f"{self.get_auth_url} received unknown keyword arguments: {kw}")
         sess = self.get_auth_session(domain)
         auth_url = self.auth_url.format(domain=domain)
         r = sess.fetch_request_token(auth_url+self.request_token_path)
@@ -551,6 +554,8 @@ class PlatformOAuth2(Platform):
         )
 
     def get_auth_url(self, domain, extra_scopes=[], **kw):
+        if kw:
+            warnings.warn(f"{self.get_auth_url} received unknown keyword arguments: {kw}")
         sess = self.get_auth_session(domain, extra_scopes=extra_scopes)
         url, state = sess.authorization_url(self.auth_url.format(domain=domain))
         return url, state, ''

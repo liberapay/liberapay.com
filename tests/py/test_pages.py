@@ -12,6 +12,11 @@ from liberapay.wireup import NoDB
 
 class TestPages(Harness):
 
+    def test_homepage_contains_log_in_link(self):
+        r = self.client.GET('/')
+        assert r.code == 200
+        assert '>Log In or Create Account<' in r.text
+
     def test_homepage_in_all_supported_langs(self):
         self.make_participant('alice')
         self.db.run("UPDATE participants SET join_time = now() - INTERVAL '1 hour'")

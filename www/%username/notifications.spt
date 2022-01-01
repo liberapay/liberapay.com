@@ -63,7 +63,7 @@ participant.render_notifications(state, before=before, limit=limit)
                 _("Restore")
             }}</button>
         % else
-            % set subject = notif.subject|default('')
+            % set subject = notif.subject|default('', True)
             % set html = notif.html|default('')
             <h3 class="alert-header">
                 <span class="title">{{ subject|safe }}</span>

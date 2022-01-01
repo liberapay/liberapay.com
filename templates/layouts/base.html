@@ -63,7 +63,7 @@
                 % endblock
             % if user
                 % include "templates/layouts/components/navbar-logged-in.html"
-            % elif response.no_navbar_sign_in|default(false)
+            % elif response.no_navbar_sign_in|default(True)
                 % from "templates/macros/sign-in-link.html" import sign_in_link with context
                 <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
             % endif

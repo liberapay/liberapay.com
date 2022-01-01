@@ -3620,7 +3620,9 @@ class Participant(Model, MixinTeam):
 
         if isinstance(account, AccountElsewhere):
             platform, domain, user_id = account.platform, account.domain, account.user_id
+            assert user_id, f"user_id is {user_id!r}"
         else:
+            assert account[2], f"user_id is {account[2]!r}"
             platform, domain, user_id = map(str, account)
 
         CREATE_TEMP_TABLE_FOR_TIPS = """

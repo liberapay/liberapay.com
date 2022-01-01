@@ -26,7 +26,7 @@ if request.method == 'POST':
         for tr in sp.transfers:
             tippee = website.db.Participant.from_id(tr['tippee_id'])
             payer.stop_tip_to(tippee, update_schedule=False)
-            payer.schedule_renewals()
+        payer.schedule_renewals()
     elif action == 'modify':
         new_amount = request.body.get('amount')
         if new_amount:

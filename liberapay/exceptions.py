@@ -45,7 +45,7 @@ class LazyResponse(Response):
 
 class AuthRequired(LazyResponse):
     html_template = 'templates/exceptions/AuthRequired.html'
-    no_navbar_sign_in = True
+    navbar_sign_in = False
 
     def __init__(self):
         Response.__init__(self, 403, '')

@@ -35,7 +35,7 @@ def _sum(cls, amounts, currency):
         a += m.amount
     return cls(a, currency)
 
-def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
+def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None, fuzzy=False):
     if not isinstance(amount, Decimal):
         try:
             amount = Decimal(str(amount))
@@ -56,6 +56,7 @@ def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None):
         raise InvalidNumber(amount)
     self.amount = amount
     self.currency = currency
+    self.fuzzy = fuzzy
 
 def _Money_eq(self, other):
     if isinstance(other, self.__class__):
@@ -239,9 +240,7 @@ class MoneyBasket:
             elif m.amount:
                 a += m.convert(currency, rounding=None).amount
                 fuzzy = True
-        r = Money(a, currency, rounding=rounding)
-        r.fuzzy = fuzzy
-        return r
+        return Money(a, currency, rounding=rounding, fuzzy=fuzzy)
 
 
 def fetch_currency_exchange_rates(db=None):
