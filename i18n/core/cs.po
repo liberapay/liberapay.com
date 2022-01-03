@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"PO-Revision-Date: 2022-01-04 07:55+0000\n"
+"Last-Translator: Jiří Podhorecký <j.podhorecky@volny.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 4.10.1\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
@@ -344,6 +346,25 @@ msgid ""
 "\n"
 "You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
 msgstr ""
+"Náš zpracovatel plateb (Mangopay) ukončuje spolupráci, takže doporučujeme, abyste {link1_start}odebrali peníze ze svého účtu{link_end} do 26. července.\n"
+"\n"
+"Kliknutím na výše uvedený odkaz se dostanete na novou stránku s názvem \"Vyprázdnění peněženky\" a budete vyzváni k výběru ze dvou možností.\n"
+"\n"
+"Pokud jako dárce používáte Liberapay, doporučujeme zvolit první možnost, zejména pokud chcete Liberapay používat i nadále. Tato první možnost rozdělí všechny peníze z vaší peněženky lidem, kteří by je za normálních okolností časem obdrželi. Příjemci budou moci vidět, že tento náhlý příval příjmů odpovídá několikatýdenním darům.\n"
+"\n"
+"Pokud například přispíváte 1 dolar týdně dvěma tvůrcům a máte v peněžence 40 dolarů, pak každý tvůrce obdrží 20 dolarů a za 20 týdnů obdržíte náš obvyklý e-mail s upozorněním, že je čas znovu přidat peníze.\n"
+"\n"
+"Upozorňujeme, že výplata může z různých důvodů selhat. Pokud se zobrazí chybová zpráva typu \"Pokus o rozdělení všech peněz v peněžence se nezdařil: XX.XX zbývá.\", pak je problém pravděpodobně na straně příjemce, například někdo, kdo nevyplnil identifikační formulář, nebo tým, který neurčil, jak má být příjem rozdělen mezi členy.\n"
+"\n"
+"Druhou možností je získat peníze zpět, pokud možno vrácením peněz, jinak jejich vyplacením na svůj bankovní účet.\n"
+"\n"
+"Pokud přijímáte dary na Liberapay, možná budete chtít s výběrem příjmu týden počkat, abyste dali svým patronům šanci převést zbývající část darů ze svých peněženek na tu vaši.\n"
+"\n"
+"Jakmile bude integrace nového platebního procesoru dokončena, budeme vás informovat a sdělíme vám, zda je třeba něco udělat, abyste mohli opět začít přijímat dary na Liberapay.\n"
+"\n"
+"Pokud jste členem týmu, měli byste se ujistit, že je váš příjem nastaven a aktualizován. To můžete udělat na {link2_start}své stránce \"Přijímání\" {link_end}.\n"
+"\n"
+"Více informací najdete v {link3_start}tomto příspěvku na blogu{link_end} a jako vždy můžete odpovědět na tento e-mail, pokud budete potřebovat pomoc.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "Heslo vašeho účtu Liberapay je slabé"
@@ -415,14 +436,14 @@ msgstr "Pokud vaše banka platbu zpochybnila bez konzultace s vámi, měli byste
 
 #, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
-msgstr ""
+msgstr "Abyste své bance pomohli zjistit, co se stalo, můžete jí zaslat kopii {link_start}tohoto dokumentu{link_end}."
 
 msgid "Your payment has failed"
 msgstr "Vaše platba se nezdařila"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr ""
+msgstr "Automatická platba {money_amount} iniciovaná dnes se nezdařila."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
