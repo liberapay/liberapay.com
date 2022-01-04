@@ -154,6 +154,25 @@ class TestUsername(Harness):
         assert bob.pending_notifs == 1
 
 
+class TestPassword(Harness):
+
+    def test_setting_and_changing_password(self):
+        alice = self.make_participant('alice')
+        form_data = {
+            'new-password': 'password',
+            'ignore_warning': 'true',
+        }
+        r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 302, r.text
+        form_data['cur-password'] = form_data['new-password']
+        form_data['new-password'] = 'correct horse battery staple'
+        r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 302, r.text
+        form_data['cur-password'] = ''
+        r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 403, r.text
+
+
 class TestRecipientSettings(Harness):
 
     def test_enabling_and_disabling_non_secret_donations(self):

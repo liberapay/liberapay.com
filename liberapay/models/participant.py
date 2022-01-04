@@ -36,6 +36,7 @@ from liberapay.constants import (
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
+    AccountIsPasswordless,
     BadAmount,
     BadDonationCurrency,
     BadPasswordSize,
@@ -288,9 +289,10 @@ class Participant(Model, MixinTeam):
             context (str): the operation that this authentication is part of
 
         Return type: `Participant | None`
+
+        Raises:
+            AccountIsPasswordless if the account doesn't have a password
         """
-        if not password:
-            return None
         r = cls.db.one("""
             SELECT p, s.secret
               FROM user_secrets s
@@ -299,6 +301,8 @@ class Participant(Model, MixinTeam):
                AND s.id = 0
         """, (p_id,))
         if not r:
+            raise AccountIsPasswordless()
+        if not password:
             return None
         p, stored_secret = r
         if context == 'log-in':

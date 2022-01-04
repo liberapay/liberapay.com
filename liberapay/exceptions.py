@@ -75,6 +75,10 @@ class LoginRequired(LazyResponse):
         return _("Authentication required")
 
 
+class AccountIsPasswordless(LoginRequired):
+    pass
+
+
 class NeedDatabase(LazyResponse):
     html_template = 'templates/exceptions/NeedDatabase.html'
 

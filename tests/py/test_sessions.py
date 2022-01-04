@@ -141,6 +141,15 @@ class TestLogIn(EmailHarness):
         assert notif['subject'] == "The password of your Liberapay account is weak"
         assert notif['type'] == "warning"
 
+    def test_trying_to_log_in_to_passwordless_account_with_a_password(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        r = self.log_in(alice.email, 'password', url='/alice/edit')
+        assert "Your account doesn&#39;t have a password" in r.text, r.text
+        r = self.log_in(alice.email, 'password', url='/log-in')
+        assert "Your account doesn&#39;t have a password" in r.text, r.text
+        r = self.log_in(alice.email, 'password', url='/sign-in')
+        assert "Your account doesn&#39;t have a password" in r.text, r.text
+
     def test_email_login(self):
         email = 'alice@example.net'
         alice = self.make_participant('alice', email=None)
