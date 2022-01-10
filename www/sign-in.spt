@@ -12,7 +12,7 @@ response.navbar_sign_in = False
 {% block heading %}{% endblock %}
 
 % block thin_content
-    % if state.get('log-in.email-sent-to') or state.get('log-in.carry-on')
+    % if state.get('log-in.email-sent-to') or state.get('log-in.carry-on') or state.get('log-in.password-or-email') or state.get('log-in.email')
     % include "templates/log-in-form.html"
     % else
 
