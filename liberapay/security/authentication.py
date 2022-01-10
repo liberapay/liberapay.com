@@ -224,6 +224,7 @@ def sign_in_with_form_data(body, state):
             p.check_password(password, context='login')
         p.authenticated = True
         p.sign_in(response.headers.cookie, token=session_token, suffix='.in')
+        website.logger.info(f"a new participant has joined: ~{p.id}")
         # We're done, we can clean up the body now
         body.pop('sign-in.email')
         body.pop('sign-in.currency', None)
