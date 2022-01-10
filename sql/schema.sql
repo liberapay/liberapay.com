@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '151'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '152'::jsonb);
 
 
 -- app configuration
@@ -380,6 +380,7 @@ CREATE TABLE transfers
 
 CREATE INDEX transfers_tipper_idx ON transfers (tipper);
 CREATE INDEX transfers_tippee_idx ON transfers (tippee);
+CREATE INDEX transfers_team_idx ON transfers (team) WHERE team IS NOT NULL;
 
 
 -- paydays -- payday events, stats about them

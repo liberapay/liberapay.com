@@ -3075,3 +3075,6 @@ UPDATE exchange_routes
             WHERE pi.error = 'Your card has expired. (code expired_card)'
          ORDER BY pi.route, pi.ctime DESC
        );
+
+-- migration #152
+CREATE INDEX transfers_team_idx ON transfers (team) WHERE team IS NOT NULL;
