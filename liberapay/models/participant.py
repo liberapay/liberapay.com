@@ -3059,6 +3059,23 @@ class Participant(Model, MixinTeam):
                                 for tr in new_sp.transfers
                             ]
                         new_sp.customized = True
+                    else:
+                        preserve_the_execution_date = (
+                            # Don't change the execution date if the payment was
+                            # scheduled late.
+                            new_sp.execution_date < (
+                                cur_sp.ctime.date() + timedelta(weeks=1)
+                            ) or
+                            # Don't push back a payment by only a few weeks
+                            # if we've already notified the payer.
+                            cur_sp.notifs_count and
+                            new_sp.amount == cur_sp.amount and
+                            new_sp.execution_date <= (
+                                cur_sp.execution_date + timedelta(weeks=4)
+                            )
+                        )
+                        if preserve_the_execution_date:
+                            new_sp.execution_date = cur_sp.execution_date
                     if cur_sp.id in new_dates or cur_sp.id in new_amounts:
                         new_sp.customized = cur_sp.customized
                         new_date = new_dates.get(cur_sp.id)
@@ -3077,24 +3094,8 @@ class Participant(Model, MixinTeam):
                             for tr in new_sp.transfers:
                                 tr['amount'] = tr_amounts[tr['tippee_id']]
                             new_sp.customized = True
-                        if has_scheduled_payment_changed(cur_sp, new_sp):
-                            updates.append((cur_sp, new_sp))
-                        else:
-                            unchanged.append(cur_sp)
-                    elif has_scheduled_payment_changed(cur_sp, new_sp):
-                        is_short_delay = (
-                            new_sp.amount == cur_sp.amount and
-                            new_sp.execution_date <= (
-                                cur_sp.execution_date + timedelta(weeks=4)
-                            )
-                        )
-                        if cur_sp.notifs_count and is_short_delay:
-                            # Don't push back a payment by only a few weeks
-                            # if we've already notified the payer.
-                            new_sp.execution_date = cur_sp.execution_date
-                            unchanged.append(cur_sp)
-                        else:
-                            updates.append((cur_sp, new_sp))
+                    if has_scheduled_payment_changed(cur_sp, new_sp):
+                        updates.append((cur_sp, new_sp))
                     else:
                         unchanged.append(cur_sp)
                 else:
@@ -3117,12 +3118,10 @@ class Participant(Model, MixinTeam):
                 if new_sp.automatic:
                     if new_sp.execution_date < one_week_from_today:
                         new_sp.execution_date = one_week_from_today
-                        new_sp.customized = True
             for cur_sp, new_sp in updates:
                 if new_sp.automatic and not cur_sp.automatic:
                     if new_sp.execution_date < one_week_from_today:
                         new_sp.execution_date = one_week_from_today
-                        new_sp.customized = True
 
             # Upsert the new schedule
             notify = False
