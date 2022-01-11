@@ -1266,3 +1266,151 @@ class TestPaydayForTeams(EmailHarness):
             'bob': None,
             'carl': None,
         }
+
+    def test_auto_takes_when_some_members_havent_received_enough_in_advance(self):
+        team = self.make_participant('team', kind='group', accepted_currencies=None)
+        member_1 = self.make_participant('member_1', main_currency='EUR', accepted_currencies=None)
+        team.set_take_for(member_1, EUR(-1), team)
+        member_2 = self.make_participant('member_2', main_currency='USD', accepted_currencies=None)
+        team.set_take_for(member_2, USD(-1), team)
+        member_3 = self.make_participant('member_3', main_currency='JPY', accepted_currencies=None)
+        team.set_take_for(member_3, JPY(-1), team)
+
+        stripe_account_member_1 = self.add_payment_account(
+            member_1, 'stripe', default_currency='EUR'
+        )
+        stripe_account_member_2 = self.add_payment_account(
+            member_2, 'stripe', country='US', default_currency='USD'
+        )
+        stripe_account_member_3 = self.add_payment_account(
+            member_3, 'stripe', country='JP', default_currency='JPY'
+        )
+
+        donor = self.make_participant('donor')
+        donor.set_tip_to(team, EUR('9.00'))
+
+        donor_card = self.upsert_route(donor, 'stripe-card')
+        payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('50.00'))
+        assert pt.destination == stripe_account_member_1.pk
+        payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('2.00'))
+        assert pt.destination == stripe_account_member_2.pk
+        payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('3.25'))
+        assert pt.destination == stripe_account_member_3.pk
+
+        takes = team.recompute_actual_takes(self.db)
+        actual_amounts = {take.member: take.actual_amount for take in takes}
+        assert actual_amounts == {
+            member_1.id: MoneyBasket(EUR('3.75')),
+            member_2.id: MoneyBasket(EUR('2.00')),
+            member_3.id: MoneyBasket(EUR('3.25')),
+        }
+
+        Payday.start().run()
+
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 3
+        assert transfers[0].virtual is True
+        assert transfers[0].tipper == donor.id
+        assert transfers[0].tippee == member_1.id
+        assert transfers[0].amount == EUR('3.75')
+        assert transfers[1].virtual is True
+        assert transfers[1].tipper == donor.id
+        assert transfers[1].tippee == member_2.id
+        assert transfers[1].amount == EUR('2.00')
+        assert transfers[2].virtual is True
+        assert transfers[2].tipper == donor.id
+        assert transfers[2].tippee == member_3.id
+        assert transfers[2].amount == EUR('3.25')
+
+        actual_amounts = dict(self.db.all("""
+            SELECT member, actual_amount
+              FROM current_takes
+        """))
+        assert actual_amounts == {
+            member_1.id: MoneyBasket(EUR('9.00')),
+            member_2.id: MoneyBasket(EUR('0.00')),
+            member_3.id: MoneyBasket(EUR('0.00')),
+        }
+
+        leftovers = dict(self.db.all("SELECT username, leftover FROM participants"))
+        assert leftovers == {
+            'team': MoneyBasket(),
+            'member_1': None,
+            'member_2': None,
+            'member_3': None,
+            'donor': None,
+        }
+
+    def test_auto_takes_when_none_of_the_members_have_received_enough_in_advance(self):
+        team = self.make_participant('team', kind='group', accepted_currencies=None)
+        member_1 = self.make_participant('member_1')
+        team.set_take_for(member_1, EUR(-1), team)
+        member_2 = self.make_participant('member_2')
+        team.set_take_for(member_2, EUR(-1), team)
+        member_3 = self.make_participant('member_3')
+        team.set_take_for(member_3, EUR(-1), team)
+
+        stripe_account_member_1 = self.add_payment_account(
+            member_1, 'stripe', default_currency='EUR'
+        )
+        stripe_account_member_2 = self.add_payment_account(
+            member_2, 'stripe', country='US', default_currency='USD'
+        )
+        stripe_account_member_3 = self.add_payment_account(
+            member_3, 'stripe', country='JP', default_currency='JPY'
+        )
+
+        donor = self.make_participant('donor')
+        donor.set_tip_to(team, EUR('9.00'))
+
+        donor_card = self.upsert_route(donor, 'stripe-card')
+        payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('1.00'))
+        assert pt.destination == stripe_account_member_1.pk
+        payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('3.00'))
+        assert pt.destination == stripe_account_member_2.pk
+        payin, pt = self.make_payin_and_transfer(donor_card, team, EUR('3.01'))
+        assert pt.destination == stripe_account_member_3.pk
+
+        takes = team.recompute_actual_takes(self.db)
+        actual_amounts = {take.member: take.actual_amount for take in takes}
+        assert actual_amounts == {
+            member_1.id: MoneyBasket(EUR('1.00')),
+            member_2.id: MoneyBasket(EUR('3.00')),
+            member_3.id: MoneyBasket(EUR('3.01')),
+        }
+
+        Payday.start().run()
+
+        transfers = self.db.all("SELECT * FROM transfers ORDER BY id")
+        assert len(transfers) == 3
+        assert transfers[0].virtual is True
+        assert transfers[0].tipper == donor.id
+        assert transfers[0].tippee == member_1.id
+        assert transfers[0].amount == EUR('1.00')
+        assert transfers[1].virtual is True
+        assert transfers[1].tipper == donor.id
+        assert transfers[1].tippee == member_2.id
+        assert transfers[1].amount == EUR('3.00')
+        assert transfers[2].virtual is True
+        assert transfers[2].tipper == donor.id
+        assert transfers[2].tippee == member_3.id
+        assert transfers[2].amount == EUR('3.01')
+
+        actual_amounts = dict(self.db.all("""
+            SELECT member, actual_amount
+              FROM current_takes
+        """))
+        assert actual_amounts == {
+            member_1.id: MoneyBasket(EUR('0.00')),
+            member_2.id: MoneyBasket(EUR('0.00')),
+            member_3.id: MoneyBasket(EUR('0.00')),
+        }
+
+        leftovers = dict(self.db.all("SELECT username, leftover FROM participants"))
+        assert leftovers == {
+            'team': MoneyBasket(),
+            'member_1': None,
+            'member_2': None,
+            'member_3': None,
+            'donor': None,
+        }
