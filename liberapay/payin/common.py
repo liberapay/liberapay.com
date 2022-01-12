@@ -496,7 +496,10 @@ def resolve_take_amounts(payment_amount, takes):
         t.resolved_amount = tr_amounts.get(t.member, payment_amount.zero())
 
 
-def resolve_amounts(available_amount, base_amounts, convergence_amounts=None, payday_id=1):
+def resolve_amounts(
+    available_amount, base_amounts, convergence_amounts=None, maximum_amounts=None,
+    payday_id=1,
+):
     """Compute transfer amounts.
 
     Args:
@@ -506,6 +509,8 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None, pa
             a map of IDs to raw transfer amounts
         convergence_amounts (Dict[Any, Money]):
             an optional map of IDs to ideal additional amounts
+        maximum_amounts (Dict[Any, Money]):
+            an optional map of IDs to maximum amounts
         payday_id (int):
             the ID of the current or next payday, used to rotate who receives
             the remainder when there is a tie
@@ -518,6 +523,13 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None, pa
 
     # Attempt to converge
     if convergence_amounts:
+        if maximum_amounts:
+            # Make sure the convergence amounts aren't higher than the maximums
+            inf = Money('inf', amount_left.currency)
+            convergence_amounts = {
+                k: min(v, inf if maximum_amounts.get(k) is None else maximum_amounts[k])
+                for k, v in convergence_amounts.items()
+            }
         convergence_sum = Money.sum(convergence_amounts.values(), amount_left.currency)
         if convergence_sum != 0:
             convergence_amounts = {k: v for k, v in convergence_amounts.items() if v != 0}
@@ -535,18 +547,43 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None, pa
                 base_amounts = convergence_amounts
 
     # Compute the prorated amounts
+    base_amounts = {k: v for k, v in base_amounts.items() if v != 0}
     base_sum = Money.sum(base_amounts.values(), amount_left.currency)
     base_ratio = 0 if base_sum == 0 else amount_left / base_sum
+    maxed_out = False
     for key, base_amount in sorted(base_amounts.items()):
-        if base_amount == 0:
-            continue
-        assert amount_left >= min_transfer_amount
-        amount = min((base_amount * base_ratio).round_down(), amount_left)
-        r[key] = amount + r.get(key, 0)
-        amount_left -= amount
+        prev_amount = r.get(key, 0)
+        amount = min((base_amount * base_ratio).round_down(), amount_left) + prev_amount
+        if maximum_amounts:
+            max_amount = maximum_amounts.get(key)
+            if max_amount is not None and amount >= max_amount:
+                amount = max_amount
+                maxed_out = True
+                base_amounts.pop(key)
+                base_sum -= base_amount
+        r[key] = amount
+        amount_left -= (amount - prev_amount)
 
-    # Deal with rounding errors
-    if amount_left > 0:
+    # Deal with the leftover caused by the maximums
+    if maxed_out and amount_left > 0:
+        while base_amounts and amount_left > 0:
+            prev_amount_left = amount_left
+            base_ratio = 0 if base_sum == 0 else amount_left / base_sum
+            for key, base_amount in sorted(base_amounts.items()):
+                prev_amount = r.get(key, 0)
+                amount = min((base_amount * base_ratio).round_down(), amount_left) + prev_amount
+                max_amount = maximum_amounts.get(key)
+                if max_amount is not None and amount >= max_amount:
+                    amount = max_amount
+                    base_amounts.pop(key)
+                    base_sum -= base_amount
+                r[key] = amount
+                amount_left -= (amount - prev_amount)
+            if amount_left == prev_amount_left:
+                break
+
+    # Deal with the leftover caused by rounding down
+    if amount_left > 0 and base_amounts:
         # Try to distribute in a way that doesn't skew the percentages much.
         # If there's a tie, use the payday ID to rotate the winner every week.
         i = itertools.count(1)
@@ -560,14 +597,16 @@ def resolve_amounts(available_amount, base_amounts, convergence_amounts=None, pa
                 (next(i) - payday_id) % n
             )
 
-        for key, amount in sorted(r.items(), key=compute_priority):
+        items = [(k, v) for k, v in r.items() if k in base_amounts]
+        for key, amount in sorted(items, key=compute_priority):
             r[key] += min_transfer_amount
             amount_left -= min_transfer_amount
             if amount_left == 0:
                 break
 
     # Final check and return
-    assert amount_left == 0, '%r != 0' % amount_left
+    if base_amounts:
+        assert amount_left == 0, '%r != 0' % amount_left
     return r
 
 

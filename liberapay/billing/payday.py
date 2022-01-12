@@ -393,23 +393,28 @@ class Payday:
         else:
             auto_take = fuzzy_income_sum
         for take in takes:
+            if take.paid_in_advance is None:
+                take.paid_in_advance = take.amount.zero()
             if take.amount < 0:
                 take.amount = auto_take.convert(take.amount.currency)
+                take.max_amount = take.paid_in_advance
+            else:
+                take.max_amount = min(take.amount, take.paid_in_advance)
             assert take.amount >= 0
-        total_takes = MoneyBasket(t.amount for t in takes)
-        fuzzy_takes_sum = total_takes.fuzzy_sum(ref_currency)
         tip_currencies = set(t.full_amount.currency for t in tips)
         takes_by_preferred_currency = group_by(takes, lambda t: t.main_currency)
         takes_by_secondary_currency = {c: [] for c in tip_currencies}
         resolved_takes = resolve_amounts(
-            min(fuzzy_income_sum, fuzzy_takes_sum),
+            fuzzy_income_sum,
             {take.member: take.amount.convert(ref_currency) for take in takes},
+            maximum_amounts={
+                take.member: take.max_amount.convert(ref_currency)
+                for take in takes
+            },
             payday_id=payday_id,
         )
         for take in takes:
             take.amount = resolved_takes.get(take.member) or take.amount.zero()
-            if take.paid_in_advance is None:
-                take.paid_in_advance = take.amount.zero()
             if take.accepted_currencies is None:
                 take.accepted_currencies = constants.CURRENCIES
             else:
@@ -422,6 +427,7 @@ class Payday:
                 if skip:
                     continue
                 takes_by_secondary_currency[accepted].append(take)
+        fuzzy_takes_sum = MoneyBasket(t.amount for t in takes).fuzzy_sum(ref_currency)
         tips_ratio = min(fuzzy_takes_sum / fuzzy_income_sum, 1)
         adjust_tips = tips_ratio != 1
         if adjust_tips:

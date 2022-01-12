@@ -51,6 +51,7 @@ if patron_visibilities > 1:
            AND tip.visibility = 3
            AND tip.paid_in_advance > 0
            AND tip.renewal_mode > 0
+           AND NOT tipper_p.hide_giving
            AND tipper_p.hide_from_lists = 0
       ORDER BY (convert(tip.amount, 'EUR')).amount DESC
          LIMIT 11
@@ -79,8 +80,8 @@ public_donees = website.db.all("""
        AND tip.visibility = 3
        AND tip.paid_in_advance > 0
        AND tip.renewal_mode > 0
+  ORDER BY name
 """, (participant.id,), max_age=5)
-public_donees.sort(key=lambda r: (-r.weekly_amount.convert('EUR').amount, r.name))
 n_public_donees = len(public_donees)
 
 show_income = not participant.hide_receiving and participant.accepts_tips
@@ -238,12 +239,12 @@ show_income = not participant.hide_receiving and participant.accepts_tips
                 {{ avatar_img(p) }}
                 <div class="name">{{ p.name }}</div>
             </a>
-            % if p.hide_giving
+            % if participant.hide_receiving
+            % elif p.hide_giving
                 <div class="text-muted">{{ fontawesome('eye-slash', _(
                     "{username} doesn't publish how much they give.",
                     username=p.name
                 )) }}</div>
-            % elif participant.hide_receiving
             % else
                 <div class="amount">{{ _(
                     "{money_amount}{small}/week{end_small}",
@@ -276,12 +277,12 @@ show_income = not participant.hide_receiving and participant.accepts_tips
                 {{ avatar_img(p) }}
                 <div class="name">{{ p.name }}</div>
             </a>
-            % if p.hide_receiving
+            % if participant.hide_giving
+            % elif p.hide_receiving
                 <div class="text-muted">{{ fontawesome('eye-slash', _(
                     "{username} does not disclose how much they receive through Liberapay.",
                     username=p.name
                 )) }}</div>
-            % elif participant.hide_giving
             % else
                 <div class="amount">{{ _(
                     "{money_amount}{small}/week{end_small}",

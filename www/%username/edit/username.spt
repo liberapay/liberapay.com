@@ -17,7 +17,7 @@ if request.method == 'POST':
                 "you've placed on other websites, unless those links contain your "
                 "immutable account ID ({account_id}) instead of your username.\n\n"
                 "Are you sure you want to change your username?"
-                , account_id=participant.id
+                , account_id=str(participant.id)
             )
             raise response.render('simplates/confirm.spt', state, cls='warning', msg=msg)
         try:

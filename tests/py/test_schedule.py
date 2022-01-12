@@ -691,7 +691,7 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[0].automatic is True
         payment_timedelta = scheduled_payins[0].execution_date - utcnow().date()
         assert payment_timedelta.days in (6, 7)
-        assert scheduled_payins[0].customized is True
+        assert not scheduled_payins[0].customized
         # Running the scheduler again shouldn't change anything.
         old_scheduled_payins = scheduled_payins
         alice.schedule_renewals()
@@ -730,9 +730,14 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[0].automatic is True
         payment_timedelta = scheduled_payins[0].execution_date - utcnow().date()
         assert payment_timedelta.days in (6, 7)
-        assert scheduled_payins[0].customized is True
+        assert not scheduled_payins[0].customized
         assert scheduled_payins[0].last_notif_ts is None
         assert scheduled_payins[0].notifs_count == 0
+        # Running the scheduler again shouldn't change anything.
+        old_scheduled_payins = scheduled_payins
+        alice.schedule_renewals()
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins")
+        assert old_scheduled_payins == scheduled_payins
 
 
 class TestScheduledPayins(EmailHarness):
