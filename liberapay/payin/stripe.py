@@ -113,6 +113,7 @@ def try_other_destinations(db, payin, payer, charge):
     Returns a payin.
 
     """
+    first_payin_id = payin.id
     tippee_id = db.one("""
         SELECT coalesce(team, recipient) AS tippee
           FROM payin_transfers
@@ -144,19 +145,14 @@ def try_other_destinations(db, payin, payer, charge):
                  WHERE payin = %s
             """, (payin.id,)))
         else:
-            return payin, charge
+            break
         try:
             proto_transfers = resolve_tip(
                 db, tip, tippee, 'stripe', payer, route.country, payin.amount,
                 excluded_destinations=excluded_destinations,
             )
         except (MissingPaymentAccount, NoSelfTipping):
-            return payin, charge
-        db.run("""
-            UPDATE scheduled_payins
-               SET payin = NULL
-             WHERE payin = %s
-        """, (payin.id,))
+            break
         try:
             payin, payin_transfers = prepare_payin(
                 db, payer, payin.amount, route, proto_transfers,
@@ -172,7 +168,14 @@ def try_other_destinations(db, payin, payer, charge):
                 )
         except Exception as e:
             website.tell_sentry(e)
-            return payin, charge
+            break
+    if payin.id != first_payin_id:
+        db.run("""
+            UPDATE scheduled_payins
+               SET payin = %s
+                 , mtime = current_timestamp
+             WHERE payin = %s
+        """, (payin.id, first_payin_id))
     return payin, charge
 
 
