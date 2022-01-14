@@ -95,18 +95,6 @@ class ExchangeRoute(Model):
                AND network = %s
                AND address = %s
         """, (p_id, network, address))
-        if r.status == 'chargeable' and network.startswith('stripe-'):
-            cls.db.run("""
-                DO $$
-                BEGIN
-                    UPDATE exchange_routes
-                       SET is_default = true
-                     WHERE id = %s;
-                EXCEPTION
-                    WHEN unique_violation THEN RETURN;
-                END;
-                $$
-            """, (r.id,))
         r.__dict__['participant'] = participant
         return r
 
