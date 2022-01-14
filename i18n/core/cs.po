@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-01-14 11:54+0000\n"
+"PO-Revision-Date: 2022-01-15 05:53+0000\n"
 "Last-Translator: Jiří Podhorecký <j.podhorecky@volny.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
 "Language: cs\n"
@@ -667,9 +667,9 @@ msgstr "Proto byla naplánována automatická platba ve výši {money_amount} na
 #, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Pokud chcete tuto nadcházející platbu změnit nebo zrušit, klikněte na následující odkaz: {link_start}spravovat můj splátkový kalendář{link_end}."
+msgstr[1] "Pokud chcete tyto nadcházející platby změnit nebo zrušit, klikněte na následující odkaz: {link_start}spravovat můj splátkový kalendář{link_end}."
+msgstr[2] "Pokud chcete tyto nadcházející platby změnit nebo zrušit, klikněte na následující odkaz: {link_start}spravovat můj splátkový kalendář{link_end}."
 
 #, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
@@ -753,9 +753,9 @@ msgstr "{2} přejmenoval tým „{0}“ na „{1}“."
 #, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Obnovení příspěvku Liberapay: nadcházející stržení částky {money_amount}"
+msgstr[1] "Obnovení příspěvku Liberapay: nadcházející výdaje v celkové výši {money_amount}"
+msgstr[2] "Obnovení příspěvku Liberapay: nadcházející výdaje v celkové výši {money_amount}"
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
@@ -769,8 +769,8 @@ msgstr "Tato zpráva je připomínkou, že dne {debit_date} bude z vašeho vých
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "Tato zpráva je upozorněním, že během následujících {n} dnů bude z vašeho výchozího platebního nástroje strženo celkem {amount} za účelem obnovení vašich příspěvků."
+msgstr[2] "Tato zpráva je upozorněním, že během následujících {n} dnů bude z vašeho výchozího platebního nástroje strženo celkem {amount} za účelem obnovení vašich příspěvků."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -2182,9 +2182,9 @@ msgstr "Tento účet je dočasně pozastaven, příspěvky pro něj nebudou zpra
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{username} má v současné době {n} mecenáše, který ho podporuje."
+msgstr[1] "{username} má v současné době připraveno {n} mecenáše, kteří ho podporují."
+msgstr[2] "{username} má v současné době připraveno {n} mecenášů, kteří ho podporují."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2718,8 +2718,8 @@ msgstr "Financování vašich příspěvků"
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "Vzhledem k právním a technickým omezením nemůžeme v současné době zpracovat všechny vaše příspěvky jako jednu platbu. Místo toho budete muset provést {n} oddělené platby. Omlouváme se za nepříjemnosti."
+msgstr[2] "Vzhledem k právním a technickým omezením nemůžeme v současné době zpracovat všechny vaše příspěvky jako jednu platbu. Místo toho budete muset provést {n} oddělených plateb. Omlouváme se za nepříjemnosti."
 
 msgid "We are able to group these donations into a single payment."
 msgstr "Tyto příspěvky můžeme seskupit do jedné platby."
@@ -2792,9 +2792,9 @@ msgstr "Platba čeká na vaše schválení."
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Máte {n} další příspěvek, který čeká na zaplacení."
+msgstr[1] "Máte {n} další příspěvky, které čekají na zaplacení."
+msgstr[2] "Máte {n} dalších příspěvků, které čekají na zaplacení."
 
 msgid "You don't have any other donation awaiting payment at this time."
 msgstr "V tuto chvíli nemáte žádný jiný příspěvek, který by čekal na zaplacení."
@@ -2931,15 +2931,15 @@ msgstr "Zpoždění vaší platby po obvyklém datu bude mít za následek, že 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Máte naplánovanou {n} platbu:"
+msgstr[1] "Máte {n} naplánované platby:"
+msgstr[2] "Máte {n} naplánovaných plateb:"
 
 msgid "You currently don't have any scheduled payment."
-msgstr ""
+msgstr "V současné době nemáte naplánovanou žádnou platbu."
 
 msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr ""
+msgstr "Opravdu chcete změnit typ účtu? Z právních důvodů pro vás budeme muset vytvořit nový účet v systému našeho platebního partnera a převést peníze z vašeho starého účtu."
 
 msgid "We can't change the type of your account during payday, please try again in a few minutes."
 msgstr "Ve dne výplaty nemůžeme změnit typ vašeho účtu, prosím zkuste to znovu za pár minut."
@@ -2969,17 +2969,17 @@ msgid "Level 2"
 msgstr "Úroveň 2"
 
 msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr ""
+msgstr "Pokud jste dokončili proces ověření totožnosti, částka, kterou můžete ročně dávat a dostávat, již není omezena."
 
 #, python-brace-format
 msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
-msgstr ""
+msgstr "Pokud dáte více než {0} za rok nebo dostanete více než {1} za rok, nebo pokud váš účet vykazuje známky podezřelé činnosti, budete muset poskytnout další informace:"
 
 msgid "The provided postal address is incomplete."
-msgstr ""
+msgstr "Uvedená poštovní adresa je neúplná."
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
-msgstr ""
+msgstr "Na této stránce můžete zobrazit a upravit identifikační údaje připojené k vašemu účtu. Přístup k těmto informacím mají pouze oprávnění pracovníci, ostatním uživatelům ani nikomu jinému je nezobrazujeme, pokud to nevyžaduje zákon nebo pokud nám k tomu nedáte pokyn."
 
 msgid "Income Shares"
 msgstr "Podíly na příjmech"
@@ -3008,15 +3008,15 @@ msgstr "Profil {username}"
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[1] "Tento profil je k dispozici ve {n} jazycích"
+msgstr[2] "Tento profil je k dispozici v {n} jazycích"
 
 msgid "Show the list of languages"
-msgstr ""
+msgstr "Zobrazit seznam jazyků"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr ""
+msgstr "Tento profil je k dispozici pouze v {language}"
 
 msgid "Edit"
 msgstr "Upravit"
@@ -3031,9 +3031,9 @@ msgstr "{0} vlastní na jiných platformách následující účty:"
 #, python-brace-format
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{username} je členem {n} týmu:"
+msgstr[1] "{username} je členem {n} týmů:"
+msgstr[2] "{username} je členem {n} týmů:"
 
 #, python-brace-format
 msgid "with {n} other"
@@ -3064,7 +3064,7 @@ msgid "{username} doesn't publish how much they give."
 msgstr "{username} nezveřejňuje kolik dává."
 
 msgid "Donees"
-msgstr ""
+msgstr "Dárci"
 
 #, python-brace-format
 msgid "{username} donates publicly to {n} creator."
@@ -3075,7 +3075,7 @@ msgstr[2] ""
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr ""
+msgstr "{username} nezveřejňuje, kolik dostává prostřednictvím Liberapay."
 
 msgid "History"
 msgstr "Historie"
@@ -3086,7 +3086,7 @@ msgstr "{username} se přidal {timespan_ago}."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username} zrušil tento účet {timespan_ago}."
 
 msgid "View income history"
 msgstr "Zobrazit historii příjmů"
@@ -3096,7 +3096,7 @@ msgstr "Není co zobrazit."
 
 #, python-brace-format
 msgid "Income Per Week (in {currency})"
-msgstr ""
+msgstr "Příjem za týden (v {currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "Počet mecenášů týdně"
@@ -3280,18 +3280,18 @@ msgid "error message: {0}"
 msgstr "chybová zpráva: {0}"
 
 msgid "hidden"
-msgstr ""
+msgstr "skryto"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
-msgstr ""
+msgstr "veřejný příspěvek od {donor_name}"
 
 #, python-brace-format
 msgid "private donation from {donor_name}"
-msgstr ""
+msgstr "soukromý příspěvek od {donor_name}"
 
 msgid "secret donation"
-msgstr ""
+msgstr "tajný příspěvek"
 
 #, python-brace-format
 msgid "public donation from {donor_name} for your role in the {team_name} team"
@@ -3331,18 +3331,18 @@ msgstr ""
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
-msgstr ""
+msgstr "Tuto platbu musí příjemce schválit ručně prostřednictvím webových stránek {provider}."
 
 #, python-brace-format
 msgid "PayPal status code: {0}"
-msgstr ""
+msgstr "Stavový kód PayPal: {0}"
 
 msgid "There were no transactions during this period."
-msgstr ""
+msgstr "V tomto období nebyly provedeny žádné transakce."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
-msgstr ""
+msgstr "Chcete-li zobrazit transakce zpracované v minulosti společností Mangopay {link_start}, přejděte na stránku Peněženka{link_end}."
 
 msgid "You are not invited to join this team."
 msgstr "Nejste pozváni do tohoto týmu."
@@ -3401,7 +3401,7 @@ msgid "Mark all notifications as read"
 msgstr "Označit všechna oznámení jako přečtená"
 
 msgid "This notification is marked for deletion."
-msgstr ""
+msgstr "Toto oznámení je označeno ke smazání."
 
 msgid "Restore"
 msgstr "Obnovit"
@@ -3415,7 +3415,7 @@ msgstr "Odstranit"
 msgid "An error occurred while rendering this notification."
 msgstr "Při vykreslování tohoto oznámení došlo k chybě."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
 msgstr "Podrobnosti o této chybě byly zaznamenány. Pokud se rozhodnete nás kontaktovat, zahrňte prosím následující chybový kód ve vaší zprávě: {0}."
 
@@ -3433,17 +3433,17 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "You don't have any active patrons."
-msgstr ""
+msgstr "Nemáte žádné aktivní mecenáše."
 
 #, python-brace-format
 msgid "{username} doesn't have any active patrons."
-msgstr ""
+msgstr "{username} nemá žádné aktivní mecenáše."
 
 msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr ""
+msgstr "Liberapay nyní podporuje neanonymní příspěvky, chcete vědět, kdo jsou vaši mecenáši?"
 
 msgid "Enable non-anonymous donations"
-msgstr ""
+msgstr "Povolit neanonymní příspěvky"
 
 #, python-brace-format
 msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
@@ -3454,13 +3454,13 @@ msgid "You've chosen not to see who your patrons are. If you change your mind, t
 msgstr ""
 
 msgid "Data export"
-msgstr ""
+msgstr "Export dat"
 
 msgid "Download the list of currently active patrons"
-msgstr ""
+msgstr "Stáhněte si seznam aktuálně aktivních mecenášů"
 
 msgid "Download the record of all patrons in the last ten years"
-msgstr ""
+msgstr "Stáhněte si záznam všech mecenášů za posledních deset let"
 
 #, python-brace-format
 msgid "View the patrons of {username}"
@@ -3478,7 +3478,7 @@ msgid "You have to {link_open}fill your profile{link_close} before you can start
 msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
-msgstr ""
+msgstr "Chcete-li dostávat příspěvky, musíte připojit alespoň jeden účet od podporovaného zpracovatele plateb. Tato stránka vám to umožní."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr ""
