@@ -11,6 +11,7 @@ from liberapay.billing.transactions import (
     record_exchange_result, lock_bundles, _record_transfer_result
 )
 from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
+from liberapay.exceptions import CommunityAlreadyExists
 from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models import community
@@ -88,7 +89,10 @@ def fake_community(db, creator):
     """Create a fake community
     """
     name = community.normalize(faker.city())
-    c = creator.create_community(name)
+    try:
+        c = creator.create_community(name)
+    except CommunityAlreadyExists:
+        return fake_community(db, creator)
     creator.upsert_community_membership(True, c.id)
     return c
 
