@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2022-01-23 01:05+0000\n"
+"Last-Translator: Hakaba Hitoyo <hakabahitoyo@yahoo.co.jp>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.11-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
@@ -14,13 +16,13 @@ msgid "The {language} translation of this page is not yet complete."
 msgstr "このページの{language}訳はまだ完成していません。"
 
 msgid "Your Liberapay account has been disabled"
-msgstr "あなたの Liberapay アカウントは無効化されています。"
+msgstr "あなたの Liberapay アカウントは無効化されています"
 
 msgid "Your Liberapay account has been marked as fraudulent by a staff member. You are no longer able to send and receive payments."
-msgstr ""
+msgstr "あなたの Liberapay アカウントは不正であるとスタッフによりマークされました。そのため、このアカウントを使って寄付金を送ったり受け取ったりすることはできません。"
 
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
-msgstr ""
+msgstr "あなたの Liberapay プロフィールはスパムであるとスタッフによりマークされました。あなたのプロフィールは表示されません。"
 
 msgid "Greetings,"
 msgstr "こんにちは、"
@@ -53,10 +55,10 @@ msgstr "{username} さんへ {amount}"
 
 msgid "Renew this donation"
 msgid_plural "Renew these donations"
-msgstr[0] "これらの寄付を更新"
+msgstr[0] "これらの寄付を更新する"
 
 msgid "Manage your donations"
-msgstr "寄付を管理"
+msgstr "寄付を管理する"
 
 #, python-brace-format
 msgid "It's past time to renew your donation to {username} on Liberapay"
@@ -1891,7 +1893,6 @@ msgstr "あなたは、現在、1 週間あたり {money_amount} を {name} に�
 msgid "Modify"
 msgstr "変更"
 
-#, fuzzy
 msgid "Discontinue"
 msgstr "停止"
 
@@ -1993,7 +1994,6 @@ msgstr ""
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr ""
 
-#, fuzzy
 msgid "Discontinue the donation"
 msgstr "寄付を停止"
 
@@ -2389,13 +2389,13 @@ msgstr "Liberapay では、あなたのテキストを国際化することが�
 msgid "Current language: {0}"
 msgstr "現在の言語：{0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Short description in {language}"
-msgstr "短い説明"
+msgstr "短い説明 ({language})"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Full description in {language}"
-msgstr "声明全文"
+msgstr "声明全文 ({language})"
 
 msgid "Markdown supported."
 msgstr "Markdown がサポートされています。"
@@ -2639,7 +2639,6 @@ msgstr "{bold}合計：{bold_end}1 週間あたり {0}〜1 か月あたり {1}�
 msgid "You are currently not donating to anyone."
 msgstr "あなたは現在、誰にも寄付していません。"
 
-#, fuzzy
 msgid "Discontinued donations"
 msgstr "寄付を停止しました"
 
@@ -2755,13 +2754,13 @@ msgstr "{donation_amount} のみを請求することはできません。最小
 msgid "Please select or input a payment amount:"
 msgstr "支払い金額を選択するか入力してください："
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "あなたの支払いの全額は、{recipient_names} さんの {payment_provider} アカウントに今すぐに移動します。"
+msgstr "Liberapay は金銭を保有しません。あなたの支払いの全額は、{recipient_names} さんの {payment_provider} アカウントに今すぐに移動します。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "あなたの支払いの全額は、{recipient_name} さんの {payment_provider} アカウントに今すぐに移動します。"
+msgstr "Liberapay は金銭を保有しません。あなたの支払いの全額は、{recipient_name} さんの {payment_provider} アカウントに今すぐに移動します。"
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr ""
@@ -3348,7 +3347,7 @@ msgstr "削除"
 msgid "An error occurred while rendering this notification."
 msgstr ""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
 msgstr "このエラーの詳細が記録されました。お問い合わせの際は、以下のエラー識別コードをメッセージに記載してください：{0}。"
 
@@ -4158,9 +4157,8 @@ msgstr "GitHub で問題を報告"
 msgid "Other communication channels:"
 msgstr "その他のお問い合わせ手段："
 
-#, fuzzy
 msgid "How is Liberapay funded? Are there fees?"
-msgstr "Liberapay の資金源は何ですか？"
+msgstr "Liberapay の資金源は何ですか？ 手数料ですか？"
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
@@ -4606,9 +4604,9 @@ msgstr "チームアカウントは単一の法人のメンバーによって使
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
 msgstr "後者の使用方法の場合、チームアカウントは{bold}金銭を保管し繰越すことができません{end_bold}。すべての支援は可能であれば複数のメンバーに、決済サービスが支援金の分割を許可していない場合など不可能なときは1人に即座に配分されます。これは支払処理の制限によるもので、メンバーが受け取る金額は、特にチームのメンバーが支援者の数よりも少ない場合は、一時的に不均衡になる可能性があります。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "もしLiberapayのチームアカウントが要求に沿わない場合、{link_start}Open Collective{link_end}プラットフォームを代わりに使うことができます。これにより登録された非営利団体がチームを「ホスト」することができます。この「会計上のホスト」はチームの資金の法的な所有者になり、どのように使われるかを監視し、5%の手数料を徴収します。(同様のシステムをLiberapayに実装する予定ですが、いつ実装されるかは未定です。)"
+msgstr "もし Liberapay のチームアカウントが要求に沿わない場合、{link_start}Open Collective{link_end} プラットフォームを代わりに使うことができます。これにより登録された非営利団体がチームを「ホスト」することができます。この「会計上のホスト」はチームの資金の法的な所有者になり、どのように使われるかを監視し、1%の手数料を徴収します。(同様のシステムをLiberapayに実装する予定ですが、いつ実装されるかは未定です。)"
 
 msgid "Creating a team"
 msgstr "チームを作成する"
@@ -4708,13 +4706,12 @@ msgstr[0] "現在 {n} のコミュニティーが Liberapay 上にあります�
 msgid "Search communities"
 msgstr "コミュニティーを検索"
 
-#, fuzzy
 msgid "Largest communities"
-msgstr "人気のコミュニティー"
+msgstr "大きなコミュニティー"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Largest communities in {language}"
-msgstr "お使いの言語のトップコミュニティー"
+msgstr "トップコミュニティー ({language})"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "申し訳ありません。該当する項目が見つかりませんでした。新しいコミュニティーを開始しませんか？"
@@ -4873,9 +4870,9 @@ msgstr "チームを作成"
 msgid "{0} community settings"
 msgstr "{0} のコミュニティー設定"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Sidebar text in {language}"
-msgstr "サイドバーテキスト"
+msgstr "サイドバーテキスト ({language})"
 
 #, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
