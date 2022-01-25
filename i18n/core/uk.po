@@ -129,51 +129,6 @@ msgid "Manage your email addresses"
 msgstr "Керування адресами електронної пошти"
 
 #, python-brace-format
-msgid "You have received approximately {0} this week"
-msgstr "Ви отримали приблизно {0} цього тижня"
-
-#, python-brace-format
-msgid "You have received {0} this week"
-msgstr "Ви отримали {0} цього тижня"
-
-#, python-brace-format
-msgid "{0} was given to you personally."
-msgstr "Вам особисто нарахували {0}."
-
-msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "Ви не перебуваєте в жодній команді, тому ви не отримаєте гроші за участь в командах."
-
-#, python-brace-format
-msgid "No money was given to you for your role in the {0} team."
-msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Ви не отримали гроші за вашу роль в {0} команді."
-msgstr[1] "Ви не отримали гроші за вашу роль в {n} командах."
-msgstr[2] "Ви не отримали гроші за вашу роль в {n} командах, в яких ви перебуваєте."
-
-#, python-brace-format
-msgid "{0} was given to you for your role in the {1} team."
-msgstr "Ви отримали {0} за вашу роль в команді {1}."
-
-#, python-brace-format
-msgid "{0} was given to you for your roles in the following teams:"
-msgstr "Ви отримали {0} за ваші ролі в таких командах:"
-
-#, python-brace-format
-msgid "{0}: {1}"
-msgstr "{0}: {1}"
-
-#, python-brace-format
-msgid "You now have {0} in your wallet."
-msgstr "Тепер у вас {0} в гаманці."
-
-msgid "See your account's transaction logs"
-msgstr "Журнал транзакцій вашого облікового запису"
-
-#, python-brace-format
-msgid "- {0}: {1}"
-msgstr "- {0}: {1}"
-
-#, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
 msgstr "Ваші надходження на Liberapay за цей тиждень, становлять близько {money_amount}"
 
@@ -208,23 +163,12 @@ msgid "NB: Donations through Liberapay are now paid in advance instead of being 
 msgstr "Примітка: Внески через Liberapay тепер сплачуються заздалегідь, замість переказу щотижня. Цифри вище відповідають тим, які ви могли отримати цього тижня за старою системою."
 
 #, python-brace-format
-msgid "You have {money_amount} in your Mangopay wallet."
-msgstr "Ви маєте {money_amount} у вашому гаманці Mangopay."
-
-msgid "Withdraw money"
-msgstr "Зняти гроші"
-
-#, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
 msgstr "Ваш рахунок для {0} прийнято - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
 msgstr "Ваш запит на оплату {amount} від {addressee_name} прийнято."
-
-#, python-brace-format
-msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "На жаль, в гаманці {0} зараз недостатньо коштів для виплати, але як тільки вони там з'являться, вам буде виплачено їх автоматично."
 
 msgid "View the invoice"
 msgstr "Переглянути рахунок"
@@ -234,14 +178,8 @@ msgid "Your invoice to {0} has been accepted and paid - Liberapay"
 msgstr "Рахунок {0} було прийнято та оплачено - Liberapay"
 
 #, python-brace-format
-msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr "Запит на виплату {amount} від {addressee_name} прийнято, гроші переміщено до вашого гаманця."
-
-msgid "Withdraw the money"
-msgstr "Зняти гроші"
-
-msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr "Однак, ви ще не можете зняти гроші, оскільки вони досі в карантині."
+msgid "Your invoice of {amount} to {addressee_name} has been paid."
+msgstr ""
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -318,51 +256,6 @@ msgstr "Опис: {0}"
 
 msgid "Unsubscribe"
 msgstr "Скасувати передплату"
-
-msgid "Liberapay is in trouble"
-msgstr "Liberapay в біді"
-
-#, python-brace-format
-msgid ""
-"Our payment processor (Mangopay) is throwing us out, so we recommend that you {link1_start}evacuate the money from your account{link_end} before July 26th.\n"
-"\n"
-"Clicking on the link above will bring you to a new page titled “Emptying your wallet” and ask you to choose between two options.\n"
-"\n"
-"If you use Liberapay as a donor the first choice is recommended, especially if you wish to continue using Liberapay. This first option distributes all the money from your wallet to the people who would have normally received it over time. The recipients will be able to see that this sudden burst of income corresponds to multiple weeks of donations.\n"
-"\n"
-"For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
-"\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
-"\n"
-"The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
-"\n"
-"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
-"\n"
-"We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
-"\n"
-"If you’re a member of a team, you should make sure that your take is set and up-to-date. You can do that from {link2_start}your “Receiving” page{link_end}.\n"
-"\n"
-"You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
-msgstr ""
-"Наш обробник платежів (Mangopay) припиняє співпрацю з нами, тому ми рекомендуємо вам {link1_start}почати виводити кошти з вашого рахунку{link_end} до 26 Липня.\n"
-"\n"
-"Натиснувши на посилання вище, ви перейдете на нову сторінку під назвою “Очищення гаманця“, де вам буде запропоновано два варіанти.\n"
-"\n"
-"Якщо ви користуєтеся Liberapay як донор, перший варіант є рекомендованим, особливо якщо ви бажаєте користуватися Liberapay і надалі. Цей перший варіант надішле гроші з вашого гаманця особам, які зазвичай отримують їх з часом. Одержувачі зможуть побачити раптовий ріст надходжень, який відповідає кільком тижням внесків.\n"
-"\n"
-"Наприклад, якщо ви вносите $1 в тиждень двом творцям, та маєте $40 у вашому гаманці, тоді кожен творець зможе отримати $20, а за 20 тижнів ви отримаєте звичайне нагадування листом, що прийшов час знову додати гроші.\n"
-"\n"
-"Будь ласка, зверніть увагу, що виплата може не вдатися з різних причин. Якщо ви отримаєте повідомлення про помилку як-от “Спроба надіслати усі гроші з вашого рахунку не вдалася: залишилося ХХ.ХХ.“, тоді проблема ймовірно на стороні одержувача, наприклад хтось не заповнив особову форму або команда яка ще не вирішила яким чином розподіляти надходження між учасниками команди.\n"
-"\n"
-"Інший варіант — повернути гроші, якщо можливо через відшкодовування, інакше кажучи, вивівши гроші на банківський рахунок.\n"
-"\n"
-"Якщо ви отримуєте внески в Liberapay, ви можете почекати тиждень, перш ніж почати виводити ваші надходження, щоб дати можливість патронам перевести залишки їхніх внесків з їхніх гаманців до вашого.\n"
-"\n"
-"Ми повідомимо вам одразу, коли інтеграцію з новою платіжною службою буде завершено та повідомимо чи необхідні якісь дії, щоб почати знову отримувати допомогу в Liberapay.\n"
-"\n"
-"Якщо ви є учасником команди, ви повинні переконатися що ваше отримання встановлено та оновлено. Ви можете зробити це через {link2_start}вашу сторінку “Прибутки“{link_end}.\n"
-"\n"
-"Докладніше {link3_start}в цьому дописі блогу{link_end} і ви як завжди можете відповісти на цей лист, якщо вам потрібна допомога.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "Пароль вашого облікового запису Liberapay ненадійний"
@@ -802,20 +695,6 @@ msgstr "Ваш обліковий запис Liberapay змінено"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Хтось намагається пов'язати адресу електронної пошти {0} з обліковим записом Liberapay, поточна адреса якого {1}. Якщо ви не робили цієї операції, вам варто натиснути на посилання нижче і вилучити невідому адресу з вашого облікового запису."
 
-msgid "Withdrawal initiated"
-msgstr "Розпочато виведення коштів"
-
-#, python-brace-format
-msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
-msgstr "Ми створили переказ суми {0} з вашого гаманця Liberapay на ваш банківський рахунок. Зауважте, що переказ може тривати кілька робочих днів."
-
-msgid "Withdrawal failure"
-msgstr "Не вдалося вивести гроші"
-
-#, python-brace-format
-msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
-msgstr "Ми намагалися переказати {0} з вашого гаманця Liberapay на ваш банківський рахунок, але переказ не вдався, отримано таке повідомлення про помилку:"
-
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Схоже, ви знайшли ваду! Перепрошуємо за незручності, ми виправимо її якнайшвидше!"
 
@@ -1122,9 +1001,6 @@ msgstr "Сума {money_amount} не в очікуваній валюті ({expe
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Здається, ви намагаєтесь видалити те, чого не існує."
 
-msgid "There isn't enough money in your wallet."
-msgstr "У вашому гаманці недостатньо коштів."
-
 #, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
 msgstr "Зараз ви не можете вивести понад {0} за один раз."
@@ -1152,10 +1028,6 @@ msgstr "Спільнота \"{0}\" вже існує."
 msgid "\"{0}\" is not a valid community name."
 msgstr "\"{0}\" не є дійсною назвою спільноти."
 
-#, python-brace-format
-msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr "Не вдалося переказати гроші, перепрошуємо. Зв'яжіться з support@liberapay.com якщо проблема не зникла. Повідомлення про помилку: {0}"
-
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Операцію заборонено, оскільки дію вашого облікового запису наразі зупинено."
 
@@ -1174,10 +1046,6 @@ msgstr "Нещодавно здійснено забагато спроб вик
 
 msgid "You're sending requests at an unusually fast pace. Please retry in a few seconds, and contact support@liberapay.com if the problem persists."
 msgstr "Ви надсилаєте запити занадто часто. Спробуйте знову за кілька секунд, і зв'яжіться з support@liberapay.com, якщо проблема не зникне."
-
-#, python-brace-format
-msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr "Спроба надіслати всі гроші з вашого гаманця не вдалася: залишилося {money_amount}."
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
@@ -1495,12 +1363,6 @@ msgstr "Платіжні системи"
 
 msgid "Ledger"
 msgstr "Облікова книга"
-
-msgid "Wallet"
-msgstr "Гаманець"
-
-msgid "Emptying your wallet"
-msgstr "Очищення гаманця"
 
 msgid "Identity"
 msgstr "Особистість"
@@ -2033,122 +1895,6 @@ msgstr "Припинити допомагати"
 
 msgid "Cancel the pledge"
 msgstr "Скасувати зобов'язання"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Ви завантажили {n} документ цього типу:"
-msgstr[1] "Ви завантажили {n} документи цього типу:"
-msgstr[2] "Ви завантажили {n} документів цього типу:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "Документ #{id} чекає перевірки."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "Документ #{id} перевірено."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Документ #{id} відхилено: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance, you can send an email to support@liberapay.com."
-msgstr "Якщо вам потрібна допомога, надішліть листа на адресу support@liberapay.com."
-
-msgid "Income Range"
-msgstr "Межі надходжень"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Менше за {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Понад {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Між {0} та {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Скільки грошей ви заробляєте в рік, приблизно."
-
-msgid "Identity Proof"
-msgstr "Посвідчення особи"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Паспорт, ID-картка (лицева та зворотна сторони) або водійське посвідчення міжнародного зразка."
-
-msgid "Articles of Association"
-msgstr "Статут компанії"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Затверджений статут компанії (Статут) - формальний меморандум, прийнятий власниками, в якому вказано такі дані: юридична назва, рід діяльності, юридична адреса, тип акціонерного товариства."
-
-msgid "Registration Proof"
-msgstr "Свідоцтво про реєстрацію"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Витяг з реєстру підприємств, виданий впродовж останніх трьох місяців."
-
-msgid "Proof of registration from the official authority."
-msgstr "Підтвердження реєстрації від офіційного органу."
-
-msgid "Shareholder Declaration"
-msgstr "Перелік власників"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Завантажте та заповніть {link_start} форму переліку власників {link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Відомості про юридичного представника"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "Ці поля про юридичного представника організації (можливо, про вас)."
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Підтримуються такі формати файлів: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Максимальний розмір кожного з файлів {0}Мб."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Через фінансовий регламент нам потрібно знати, хто ви. Лише уповноважений персонал зможе бачити ці дані й ми не покажемо їх іншим користувачам або будь-кому іншому, крім передбачених законом випадків."
-
-msgid "Given Name"
-msgstr "Ім'я"
-
-msgid "Family Name"
-msgstr "Прізвище"
-
-msgid "Country (nationality)"
-msgstr "Країна (національність)"
-
-msgid "Organization Type"
-msgstr "Тип організації"
-
-msgid "Business"
-msgstr "Комерційна"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Я згоден з {0}умовами користування MangoPay{1}"
-
-msgid "Address"
-msgstr "Адреса"
-
-msgid "Address (second line)"
-msgstr "Адреса (другий рядок)"
-
-msgid "Region"
-msgstr "Регіон"
-
-msgid "Postal Code"
-msgstr "Поштовий індекс"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Ви потрібні людям, які роблять внесок у розвиток суспільства, для підтримки їхньої праці. Створення вільного програмного забезпечення, розповсюдження вільних знань вимагають часу та коштують грошей не лише для початку роботи, але і для можливості продовжувати її."
@@ -2936,17 +2682,8 @@ msgstr[2] "Ви маєте {n} запланованих платежів:"
 msgid "You currently don't have any scheduled payment."
 msgstr "Наразі у вас немає запланованих платежів."
 
-msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr "Ви впевнені, що бажаєте змінити тип облікового запису? Через правові причини нам доведеться створити для вас новий обліковий запис в платіжній системі наших партнерів та перерахувати гроші з вашого старого облікового запису."
-
-msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr "Ми не можемо змінити тип облікового запису в день виплат, спробуйте ще раз за кілька хвилин."
-
-msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
-msgstr "Ви впевнені, що бажаєте змінити ваші особисті дані? В цьому випадку вам, можливо, знадобиться знову виконати підтвердження особи."
-
-msgid "You haven't filled all the required fields."
-msgstr "Ви не заповнили усі обов'язкові поля."
+msgid "The provided postal address is incomplete."
+msgstr "Надана поштова адреса є неповною."
 
 msgid "Invalid date of birth."
 msgstr "Неправильна дата народження."
@@ -2954,27 +2691,8 @@ msgstr "Неправильна дата народження."
 msgid "Your identity information has been updated."
 msgstr "Особисті дані оновлено."
 
-msgid "Your identity information has been registered."
-msgstr "Особисті дані зареєстровано."
-
-msgid "You have to agree to MangoPay's Terms of Service."
-msgstr "Вам необхідно прийняти умови обслуговування MangoPay."
-
 msgid "JavaScript is required"
 msgstr "Потрібна підтримка JavaScript"
-
-msgid "Level 2"
-msgstr "Рівень 2"
-
-msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr "Ви завершили процес підтвердження особи, але суму грошей, яку ви можете віддавати та отримувати на рік, більше не обмежено."
-
-#, python-brace-format
-msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
-msgstr "Якщо ви віддаєте понад {0} на рік, або отримуєте понад {1} на рік, або у вашого облікового запису помічено ознаки підозрілої діяльності, то вам буде необхідно надати додаткові відомості:"
-
-msgid "The provided postal address is incomplete."
-msgstr "Надана поштова адреса є неповною."
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
 msgstr "Ця сторінка дає змогу переглядати та змінювати відомості про особу, пов'язану з вашим обліковим записом. Доступ до цих даних може мати лише уповноважений персонал, ми не показуємо їх іншим користувачам чи будь-кому іншому, якщо це не передбачено законодавством або якщо ви не доручите це нам."
@@ -3158,6 +2876,9 @@ msgstr "Надіслати"
 msgid "Accept and Pay"
 msgstr "Прийняти та сплатити"
 
+msgid "Mark as paid"
+msgstr ""
+
 #, python-brace-format
 msgid "Message: {0}"
 msgstr "Повідомлення: {0}"
@@ -3256,6 +2977,10 @@ msgstr "Вказані підсумки не включають внесків �
 #, python-brace-format
 msgid "Total money received: {0}"
 msgstr "Всього грошей отримано: {0}"
+
+#, python-brace-format
+msgid "{0}: {1}"
+msgstr "{0}: {1}"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
@@ -3529,56 +3254,6 @@ msgstr "PayPal дає змогу отримувати гроші в більші
 msgid "liberapay_receipt_{number}"
 msgstr "рахунок_liberapay_{number}"
 
-msgid "Receipt"
-msgstr "Рахунок"
-
-#, python-brace-format
-msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr "Ми підтверджуємо отримання переказу, створеного {payer} {date}."
-
-#, python-brace-format
-msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr "З {0}, які ми надіслали, {1} надійшло на обліковий запис {owner_name} ({link}), та {2} сплачено у вигляді комісії."
-
-msgid "Beneficiaries"
-msgstr "Отримувачі"
-
-#, python-brace-format
-msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
-msgstr "Гроші підуть на фінансування внесків для {name} в Liberapay. У наведеній таблиці показано внески в порядку їх створення ({datetime}, UTC)."
-
-msgid "Recipient"
-msgstr "Отримувач"
-
-msgid "Amount per week"
-msgstr "Сума на тиждень"
-
-msgid "Payment Details"
-msgstr "Подробиці платежу"
-
-#, python-brace-format
-msgid "Payment method: {0}"
-msgstr "Спосіб оплати: {0}"
-
-#, python-brace-format
-msgid "Debited card: {number} ({brand}, {country})"
-msgstr "Картка списання: {number} ({brand}, {country})"
-
-#, python-brace-format
-msgid "Debited account: {0}"
-msgstr "Рахунок списання: {0}"
-
-#, python-brace-format
-msgid "Execution date: {0}"
-msgstr "Дата виконання: {0}"
-
-#, python-brace-format
-msgid "Transaction ID: {0}"
-msgstr "ID транзакції: {0}"
-
-msgid "This document is not an invoice."
-msgstr "Цей документ не є рахунком."
-
 msgid "Payment receipt"
 msgstr "Квитанція про оплату"
 
@@ -3602,11 +3277,17 @@ msgstr "{0} було сплачено за обробку, а {1} розподі
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
 msgstr "Однак, {x_percent} платежу ({refund_amount}) було відшкодовано {refund_date}."
 
+msgid "Beneficiaries"
+msgstr "Отримувачі"
+
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
 msgstr[0] "Гроші надіслано такому одержувачу:"
 msgstr[1] "Гроші надіслано таким одержувачам:"
 msgstr[2] "Гроші надіслано таким одержувачам:"
+
+msgid "Recipient"
+msgstr "Отримувач"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
@@ -3643,8 +3324,19 @@ msgid "Payment method: direct debit of bank account {partial_account_number}"
 msgstr "Спосіб оплати: прямий переказ на банківський рахунок {partial_account_number}"
 
 #, python-brace-format
+msgid "Payment method: {0}"
+msgstr "Спосіб оплати: {0}"
+
+#, python-brace-format
 msgid "Settlement date: {0}"
 msgstr "Дата розрахунку: {0}"
+
+#, python-brace-format
+msgid "Transaction ID: {0}"
+msgstr "ID транзакції: {0}"
+
+msgid "This document is not an invoice."
+msgstr "Цей документ не є рахунком."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Ви не можете отримувати нові внески, доки не налаштовано обробку платежів."
@@ -3736,9 +3428,6 @@ msgstr "Надавши свій IBAN, ви дозволите {platform} та {p
 msgid "Forget this bank account number after one payment."
 msgstr "Забути номер цього банківського рахунку після одного платежу."
 
-msgid "The BIC you provided appears to be invalid."
-msgstr "Здається введений BIC недійсний."
-
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
@@ -3789,34 +3478,8 @@ msgstr "Додати картку"
 msgid "Add a bank account"
 msgstr "Додати банківський рахунок"
 
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "У вас залишились гроші у цьому обліковому записі Liberapay, виберіть серед запропонованих способів виплати, або зв'яжіться зі службою підтримки."
-
 msgid "Close Account"
 msgstr "Закрити обліковий запис"
-
-#, python-brace-format
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr "У вас {0} в гаманці. Що з ними робити?"
-
-#, python-brace-format
-msgid "Give it to the {0}people I donate to{1}"
-msgstr "Віддати {0} людям, котрим я допомагаю {1}"
-
-msgid "Donate it to Liberapay"
-msgstr "Допомогти Liberapay"
-
-msgid "This option is recommended for small amounts."
-msgstr "Цей параметр рекомендовано для невеликих сум."
-
-msgid "Withdraw it to my bank account"
-msgstr "Вивести їх на мій банківський рахунок"
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr "Якщо нічого з переліченого не підходить, зв'яжіться з support@liberapay.com."
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr "У вас є незавершений переказ на ваш банківський рахунок. Якщо він не відбудеться, гроші знову з'являться в вашому гаманці, а обліковий запис знову відкриється автоматично."
 
 msgid "Data retention"
 msgstr "Зберігання даних"
@@ -3889,23 +3552,14 @@ msgstr "Цього внеску не існує або його вже зупи�
 msgid "Your donation to {0} has been stopped."
 msgstr "Ваш внесок {0} зупинено."
 
-msgid "Your wallet is empty."
-msgstr "Ваш гаманець пустий."
+msgid "This is no longer possible."
+msgstr ""
 
 msgid "Export History"
 msgstr "Історія експорту"
 
-#, python-brace-format
-msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
-msgstr "У вас близько {converted_amount} на рахунку (точно: {exact_amounts})."
-
-#, python-brace-format
-msgid "You have {money_amount} in your account."
-msgstr "На вашому рахунку {money_amount}."
-
-#, python-brace-format
-msgid "Their balance is {0}."
-msgstr "Їхній баланс {0}."
+msgid "Wallet"
+msgstr "Гаманець"
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
@@ -4021,114 +3675,6 @@ msgstr "сплата {link_open}рахунку #{invoice_id}{link_close} для 
 #, python-brace-format
 msgid "donation to {0}"
 msgstr "внесок для {0}"
-
-msgid "The amount cannot be zero."
-msgstr "Сума не може дорівнювати нулю."
-
-#, python-brace-format
-msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "Комісія транзакції буде високою: {0}% ({1}/{2}). Все одно продовжити?"
-
-msgid "Withdrawing Money"
-msgstr "Виведення грошей"
-
-#, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
-msgstr "{0} було виведено з вашого гаманця Liberapay. Якщо переказ буде успішним, на ваш банківський рахунок надійде {1}, а комісія становитиме {2}."
-
-#, python-brace-format
-msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr "Спроба нарахувати {0} на ваш банківський рахунок не вдалася. Повідомлення про помилку: {1}"
-
-#, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "У вашому гаманці Liberapay {0}."
-
-msgid "Which currency do you want to withdraw?"
-msgstr "В якій валюті ви бажаєте вивести?"
-
-#, python-brace-format
-msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr "Виведення в євро без комісії. Виведення в доларах США коштуватиме {0} за переказ, незалежно від країни призначення."
-
-msgid "There are no fees when withdrawing euros to your bank account."
-msgstr "Комісії за виведення євро на ваш банківський рахунок немає."
-
-#, python-brace-format
-msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr "Виведення доларів США коштує {0} за переказ, незалежно від країни одержувача."
-
-msgid "Bank account"
-msgstr "Банківський рахунок"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Routing Number"
-msgstr "Код банку"
-
-msgid "Account Number"
-msgstr "Номер рахунку"
-
-msgid "Bank Account Type"
-msgstr "Тип банківського рахунку"
-
-msgid "Bank Name"
-msgstr "Назва банку"
-
-msgid "Institution Number"
-msgstr "Номер установи"
-
-msgid "Branch Code"
-msgstr "Код підрозділу"
-
-msgid "Sort Code"
-msgstr "Код сортування"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Банківський Ідентифікаційний код)"
-
-msgid "SEPA / IBAN"
-msgstr "SEPA / IBAN"
-
-msgid "USA"
-msgstr "США"
-
-msgid "Canada"
-msgstr "Канада"
-
-msgid "UK"
-msgstr "Великобританія"
-
-msgid "Other"
-msgstr "Інше"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Номер міжнародного банківського рахунку)"
-
-msgid "This IBAN is invalid."
-msgstr "Неправильний IBAN."
-
-msgid "checking"
-msgstr "перевірка"
-
-msgid "savings"
-msgstr "збереження"
-
-msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr "Коди SWIFT довжиною від 8 до 11 символів. Перші 6 символів - літери. Інші можуть бути літерами або цифрами. Наприклад: CMBRFR2BCME"
-
-msgid "only letters (a-z) and digits (0-9) are allowed"
-msgstr "допустимі лише латинські літери (a-z) та цифри (0-9)"
-
-msgid "This account number is invalid."
-msgstr "Цей номер рахунку недійсний."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Наступні поля про законного власника банківського рахунку."
-
-msgid "The bank account must belong to you, sending money to third parties is not allowed."
-msgstr "Ваш банківський рахунок повинен належати вам, пересилання грошей третім особам заборонено."
 
 #, python-brace-format
 msgid "Account number: {0}"
@@ -4446,10 +3992,6 @@ msgstr "Умови користування"
 msgid "Privacy Policy"
 msgstr "Політика приватності"
 
-#, python-brace-format
-msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
-msgstr "{0} був першим платіжним партнером Liberapay, але ми не співпрацюємо з 2018 року. Далі наведено копії договору, який ви повинні були прийняти, щоб надіслати або отримати гроші через Liberapay до серпня 2018 року: "
-
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Ця сторінка містить посилання та відомості про логотип Liberapay. Ми сподіваємось, що це буде вам особливо корисно, якщо ви пишете статтю про Liberapay або якщо хочете додати власні посилання на свій профіль Liberapay на своєму вебсайті."
 
@@ -4606,25 +4148,6 @@ msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{
 msgstr "Дякуємо {link_open}всім, хто надіслав нам звіт через HackerOne{link_close}."
 
 #, python-brace-format
-msgid "{0} is escrowed within Liberapay."
-msgstr "{0} заблоковано у Liberapay."
-
-msgid "Deposits (€)"
-msgstr "Зарахування (€)"
-
-msgid "Money moved into Liberapay"
-msgstr "Гроші нараховані в Liberapay"
-
-msgid "weeks"
-msgstr "тижні"
-
-msgid "Withdrawals (€)"
-msgstr "Виведено (€)"
-
-msgid "Money moved out of Liberapay"
-msgstr "Гроші виведені з Liberapay"
-
-#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
 msgstr[0] "Liberapay запущено {timespan_ago} і він зараз налічує {n} користувача."
@@ -4671,6 +4194,9 @@ msgstr "Відкрито рахунків"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Кількість відкритих особистих рахунків та рахунків організацій у Liberapay"
+
+msgid "weeks"
+msgstr "тижні"
 
 msgid "Active Users"
 msgstr "Активних користувачів"

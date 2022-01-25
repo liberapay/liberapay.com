@@ -126,50 +126,6 @@ msgid "Manage your email addresses"
 msgstr "Gestioneu les adreces de correu electrònic"
 
 #, python-brace-format
-msgid "You have received approximately {0} this week"
-msgstr "Aquesta setmana heu rebut aproximadament {0}"
-
-#, python-brace-format
-msgid "You have received {0} this week"
-msgstr "Aquesta setmana heu rebut {0}"
-
-#, python-brace-format
-msgid "{0} was given to you personally."
-msgstr "{0} us els van donar personalment."
-
-msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "No sou membre de cap equip, per tant no heu rebut diners per la participació en equips."
-
-#, python-brace-format
-msgid "No money was given to you for your role in the {0} team."
-msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "No heu rebut diners per la participació en l'equip {0}."
-msgstr[1] "No heu rebut diners per la participació en els {n} dels que sou membre."
-
-#, python-brace-format
-msgid "{0} was given to you for your role in the {1} team."
-msgstr "Heu rebut {0} per la participació en l'equip {1}."
-
-#, python-brace-format
-msgid "{0} was given to you for your roles in the following teams:"
-msgstr "Heu rebut {0} per la participació en els equips següents:"
-
-#, python-brace-format
-msgid "{0}: {1}"
-msgstr "{0}: {1}"
-
-#, python-brace-format
-msgid "You now have {0} in your wallet."
-msgstr "Ara teniu {0} en la cartera."
-
-msgid "See your account's transaction logs"
-msgstr "Mostra els registres de transaccions del compte"
-
-#, python-brace-format
-msgid "- {0}: {1}"
-msgstr "- {0}: {1}"
-
-#, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
 msgstr "Aquesta setmana teniu uns ingressos de Liberapay aproximats de {money_amount}"
 
@@ -202,23 +158,12 @@ msgid "NB: Donations through Liberapay are now paid in advance instead of being 
 msgstr "NB: els donatius via Liberapay ara es paguen a l'avançada en comptes de fer transferències setmanals. Les xifres anteriors equivalen a la quantitat que hauríeu rebut aquesta setmana amb el sistema anterior."
 
 #, python-brace-format
-msgid "You have {money_amount} in your Mangopay wallet."
-msgstr "Teniu {money_amount} en la cartera de Mangopay."
-
-msgid "Withdraw money"
-msgstr "Retira diners"
-
-#, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
 msgstr "S'ha acceptat la factura de {0} - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
 msgstr "S'ha acceptat la petició de pagament de {amount} des de l'adreça {addressee_name}."
-
-#, python-brace-format
-msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "Malauradament, la cartera {0} no conté prou diners per a pagar-vos en aquest moment, però tan aviat com en tingui es tramitarà el pagament automàticament."
 
 msgid "View the invoice"
 msgstr "Mostra la factura"
@@ -228,14 +173,8 @@ msgid "Your invoice to {0} has been accepted and paid - Liberapay"
 msgstr "S'ha acceptat i pagat la vostra factura a {0} - Liberapay"
 
 #, python-brace-format
-msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr "S'ha acceptat la petició de pagament de {amount} des de l'adreça {addressee_name}, i els diners s'han transferit a la vostra cartera."
-
-msgid "Withdraw the money"
-msgstr "Retira els diners"
-
-msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr "Tot i això, encara no podeu retirar els diners que encara estiguin en quarantena."
+msgid "Your invoice of {amount} to {addressee_name} has been paid."
+msgstr ""
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -311,51 +250,6 @@ msgstr "Descripció: {0}"
 
 msgid "Unsubscribe"
 msgstr "Cancel·la la subscripció"
-
-msgid "Liberapay is in trouble"
-msgstr "Liberapay té problemes"
-
-#, python-brace-format
-msgid ""
-"Our payment processor (Mangopay) is throwing us out, so we recommend that you {link1_start}evacuate the money from your account{link_end} before July 26th.\n"
-"\n"
-"Clicking on the link above will bring you to a new page titled “Emptying your wallet” and ask you to choose between two options.\n"
-"\n"
-"If you use Liberapay as a donor the first choice is recommended, especially if you wish to continue using Liberapay. This first option distributes all the money from your wallet to the people who would have normally received it over time. The recipients will be able to see that this sudden burst of income corresponds to multiple weeks of donations.\n"
-"\n"
-"For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
-"\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
-"\n"
-"The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
-"\n"
-"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
-"\n"
-"We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
-"\n"
-"If you’re a member of a team, you should make sure that your take is set and up-to-date. You can do that from {link2_start}your “Receiving” page{link_end}.\n"
-"\n"
-"You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
-msgstr ""
-"El nostre proveïdor de pagaments (Mangopay) ens fa fora, així que us recomanem que {link1_start}retireu tots els diners del compte{link_end} abans del 26 de juliol.\n"
-"\n"
-"En fer clic a l'enllaç anterior, anireu a una pàgina titulada «Buidatge de la cartera» i haureu de triar entre dues opcions.\n"
-"\n"
-"Si utilitzeu el Liberapay com a donant, us recomanem la primera opció. Especialment si voleu continuar utilitzant el Liberapay. Aquesta primera opció distribueix tots els diners de la cartera a les persones que normalment haurien rebut amb el temps. Els destinataris podran veure que aquesta explosió sobtada d'ingressos correspon a diverses setmanes de donatius.\n"
-"\n"
-"Per exemple, si esteu donant 1 € per setmana a 2 creadors, i teniu 40 € a la cartera, cada creador rebrà 20 € i, a partir d'aquí, en 20 setmanes rebreu el correu electrònic habitual que us recordarà que és hora d'afegir diners de nou a la cartera.\n"
-"\n"
-"Tingueu en compte que el desemborsament pot fallar per diferents motius. Si obteniu un missatge d'error similar a «Ha fallat l'intent de distribuir tots els diners la vostra cartera ha fallat: XX,XX romanent», llavors el problema probablement és al costat del destinatari, per exemple, algú que no hagi emplenat el formulari d'identitat o un equip que no ha definit com s'han de dividir els ingressos entre els membres.\n"
-"\n"
-"L'altra opció és recuperar els vostres diners, si és possible, mitjançant un reemborsament, o bé retirar-los al vostre compte bancari.\n"
-"\n"
-"Si rebeu donatius al Liberapay, podeu esperar una setmana abans de retirar els ingressos per tal que els vostres donants puguin transferir la resta dels donatius des de les seves carteres cap a la vostra.\n"
-"\n"
-"Us informarem tan aviat com s'hagi finalitzat la integració d'un nou processador de pagaments i us expliquem si hi ha res que hàgiu de fer per a tornar a rebre donatius al Liberapay.\n"
-"\n"
-"Si sou membre d'un equip, cal que us assegureu de tenir definida i actualitzada la vostra fracció. Podeu fer-ho des de {link2_start}la pàgina «Rebre» {link_end}.\n"
-"\n"
-"Podeu trobar més informació a {link3_start}aquesta entrada del blog{link_end} (en anglès) i, com sempre, podeu respondre a aquest correu electrònic si us cal ajuda.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "La contrasenya del compte de Liberapay és dèbil"
@@ -791,20 +685,6 @@ msgstr "S'està modificant el vostre compte de Liberapay"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Algú intenta d'associar l'adreça electrònica {0} al compte de Liberapay que actualment té associada l'adreça {1}. Si no heu sol·licitat aquesta operació, aleshores hauríeu de fer clic en l'enllaç següent i suprimir l'adreça anòmala del vostre compte."
 
-msgid "Withdrawal initiated"
-msgstr "S'ha iniciat el reintegrament"
-
-#, python-brace-format
-msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
-msgstr "Hem iniciat una transferència de {0} des de la vostra cartera de Liberapay al vostre compte bancari. Tingueu en compte que la transacció pot trigar alguns dies a completar-se."
-
-msgid "Withdrawal failure"
-msgstr "Ha fallat el reintegrament"
-
-#, python-brace-format
-msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
-msgstr "Hem intentat transferir {0} de la vostra cartera de Liberapay al vostre compte bancari, però la transferència ha fallat amb aquest missatge:"
-
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Sembla que heu trobat un error! Disculpeu les molèsties, el corregirem tan aviat com sigui possible!"
 
@@ -1111,9 +991,6 @@ msgstr "La quantitat {money_amount} no és en la divisa esperada ({expected_curr
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Sembla que esteu intentant de suprimir alguna cosa que no existeix."
 
-msgid "There isn't enough money in your wallet."
-msgstr "No hi ha prou diners en la cartera."
-
 #, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
 msgstr "Aquest cop no podeu retirar més de {0}."
@@ -1141,10 +1018,6 @@ msgstr "La comunitat «{0}» ja existeix."
 msgid "\"{0}\" is not a valid community name."
 msgstr "«{0}» no és un nom de comunitat vàlid."
 
-#, python-brace-format
-msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr "La transferència de diners ha fallat. Poseu-vos en contacte amb support@liberapay.com si el problema persisteix. Missatge d'error: {0}"
-
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "No esteu autoritzat a fer això perquè el compte està suspès."
 
@@ -1163,10 +1036,6 @@ msgstr "Recentment, hi ha hagut molts intents d'efectuar aquesta acció. Torneu 
 
 msgid "You're sending requests at an unusually fast pace. Please retry in a few seconds, and contact support@liberapay.com if the problem persists."
 msgstr "Esteu enviant massa peticions a un ritme inusualment ràpid. Torneu a intentar-ho en una segons i contacteu amb support@liberapay.com si el problema persisteix."
-
-#, python-brace-format
-msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr "Ha fallat l'intent de distribuir tot els diners la vostra cartera ha fallat: {money_amount} romanent."
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
@@ -1481,12 +1350,6 @@ msgstr "Processadors de pagament"
 
 msgid "Ledger"
 msgstr "Registre"
-
-msgid "Wallet"
-msgstr "Cartera"
-
-msgid "Emptying your wallet"
-msgstr "Buidatge de la vostra cartera"
 
 msgid "Identity"
 msgstr "Identitat"
@@ -2015,121 +1878,6 @@ msgstr "Atura el donatiu"
 
 msgid "Cancel the pledge"
 msgstr "Cancel·la el compromís"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Heu pujat {n} document d'aquest tipus:"
-msgstr[1] "Heu pujat {n} documents d'aquest tipus:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "El document núm. {id} està pendent de validar."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "El document núm. {id} s'ha validat."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "S'ha rebutjat el document núm. {id}: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance, you can send an email to support@liberapay.com."
-msgstr "Si us cal assistència, podeu enviar un correu a support@liberapay.com."
-
-msgid "Income Range"
-msgstr "Interval d'ingressos"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Menys de {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Més de {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Entre {0} i {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Quants diners ingresseu anualment, aproximadament."
-
-msgid "Identity Proof"
-msgstr "Prova d'identitat"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Passaport, document d'identitat (per ambdós costats) o carnet de conduir del Regne Unit."
-
-msgid "Articles of Association"
-msgstr "Estatuts de l'associació"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Articles certificats de l'associació (estatuts) - l'escriptura formal declarada pels emprenedors, en la que es menciona la informació següent: nom del negoci, activitat, adreça registrada i participació."
-
-msgid "Registration Proof"
-msgstr "Prova de registre"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Extracte del registre mercantil emès durant els últims 3 mesos."
-
-msgid "Proof of registration from the official authority."
-msgstr "Prova de registre de l'autoritat oficial."
-
-msgid "Shareholder Declaration"
-msgstr "Declaració d'accionariat"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Baixeu i empleneu el {link_start}formulari de la declaració d'accionistes{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Informació de representants legals"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "Els camps següents són sobre el representant legal de l'organització (probablement, vós mateix)."
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "S'admeten els formats de fitxes següents: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "La mida màxima de cada fitxer és de {0} MB."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Ens cal saber qui sou per a complir amb la regulació financera. Només el personal autoritzat podrà veure aquesta informació, no la mostrarem a altres usuaris i ningú altre si no és obligat per llei."
-
-msgid "Given Name"
-msgstr "Nom"
-
-msgid "Family Name"
-msgstr "Cognoms"
-
-msgid "Country (nationality)"
-msgstr "País de nacionalitat"
-
-msgid "Organization Type"
-msgstr "Tipus d'organització"
-
-msgid "Business"
-msgstr "Negoci"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Accepto les {0}Condicions de servei de MangoPay{1}"
-
-msgid "Address"
-msgstr "Adreça"
-
-msgid "Address (second line)"
-msgstr "Adreça (segona línia)"
-
-msgid "Region"
-msgstr "Regió"
-
-msgid "Postal Code"
-msgstr "Codi postal"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Les persones que col·laboren en el bé comú necessiten el vostre suport a la seva tasca. Coses com el desenvolupament en programari lliure o la difusió del coneixement lliure costen temps i diners, però no només la feina inicial, sinó també per a mantenir-lo en el temps."
@@ -2908,17 +2656,8 @@ msgstr[1] "Teniu {n} pagaments planificats:"
 msgid "You currently don't have any scheduled payment."
 msgstr "Ara mateix no teniu cap pagament planificat."
 
-msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr "Esteu segur de canviar el tipus de compte? Per raons legals us haurem de crear un compte nou en el sistema de pagaments del nostre soci i fer una transferència dels diners des del compte antic."
-
-msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr "No podem canviar el tipus de compte durant el dia de paga. Torneu a intentar-ho en uns pocs minuts."
-
-msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
-msgstr "Esteu segur de canviar la informació d'identitat? Si ho feu, haureu de realitzar una altra vegada el procés de verificació."
-
-msgid "You haven't filled all the required fields."
-msgstr "No heu emplenat tots els camps requerits."
+msgid "The provided postal address is incomplete."
+msgstr "L'adreça postal que heu proporcionat no és completa."
 
 msgid "Invalid date of birth."
 msgstr "La data de naixement no és vàlida."
@@ -2926,27 +2665,8 @@ msgstr "La data de naixement no és vàlida."
 msgid "Your identity information has been updated."
 msgstr "S'ha actualitzat la vostra informació personal."
 
-msgid "Your identity information has been registered."
-msgstr "S'ha enregistrat la vostra informació d'identitat."
-
-msgid "You have to agree to MangoPay's Terms of Service."
-msgstr "Cal que accepteu les condicions del servei de MangoPay."
-
 msgid "JavaScript is required"
 msgstr "Es requereix Javascript"
-
-msgid "Level 2"
-msgstr "Nivell 2"
-
-msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr "Heu completat el procés de verificació d'identitat. Ara no teniu cap limitació en la quantitat de diners que podeu donar i rebre anualment."
-
-#, python-brace-format
-msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
-msgstr "Si doneu més de {0} en un any, o rebeu més de {1} en un any, o si el vostre compte mostra signes d'activitat sospitosa, haureu de proporcionar informació addicional:"
-
-msgid "The provided postal address is incomplete."
-msgstr "L'adreça postal que heu proporcionat no és completa."
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
 msgstr "Aquesta pàgina us permet veure i modificar la informació identificativa associada al vostre compte. Només el personal autoritzat poc accedir a aquesta informació. No la mostrem als altres usuaris ni a ningú altre, llevat que sigui requerit per la llei o que ens doneu instruccions per a fer-ho."
@@ -3124,6 +2844,9 @@ msgstr "Envia"
 msgid "Accept and Pay"
 msgstr "Accepta i paga"
 
+msgid "Mark as paid"
+msgstr ""
+
 #, python-brace-format
 msgid "Message: {0}"
 msgstr "Missatge: {0}"
@@ -3222,6 +2945,10 @@ msgstr "Les quantitats totals de sota no inclouen els donatius fet via l'antic s
 #, python-brace-format
 msgid "Total money received: {0}"
 msgstr "Total de diners rebuts: {0}"
+
+#, python-brace-format
+msgid "{0}: {1}"
+msgstr "{0}: {1}"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
@@ -3494,56 +3221,6 @@ msgstr "PayPal permet rebre diners en més països que Stripe, però no està ta
 msgid "liberapay_receipt_{number}"
 msgstr "rebut_liberapay_{number}"
 
-msgid "Receipt"
-msgstr "Rebut"
-
-#, python-brace-format
-msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr "Us confirmem la recepció d'una transferència iniciada per {payer} el {date}."
-
-#, python-brace-format
-msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr "Dels {0} que s'han enviat, s'han enviat {1} al compte de {owner_name} ({link}) i s'han pagat {2} en concepte de comissions de transferència."
-
-msgid "Beneficiaries"
-msgstr "Beneficiaris"
-
-#, python-brace-format
-msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
-msgstr "Els diners finançaran els donatius de {name} al Liberapay. La taula següent mostra els donatius tal com eren quan es va iniciar el pagament ({datetime}, UTC)."
-
-msgid "Recipient"
-msgstr "Destinatari"
-
-msgid "Amount per week"
-msgstr "Quantitat setmanal"
-
-msgid "Payment Details"
-msgstr "Detalls del pagament"
-
-#, python-brace-format
-msgid "Payment method: {0}"
-msgstr "Mètode de pagament: {0}"
-
-#, python-brace-format
-msgid "Debited card: {number} ({brand}, {country})"
-msgstr "Targeta on es girarà el càrrec: {number} ({brand}, {country})"
-
-#, python-brace-format
-msgid "Debited account: {0}"
-msgstr "Compte on es girarà el càrrec: {0}"
-
-#, python-brace-format
-msgid "Execution date: {0}"
-msgstr "Data d'execució: {0}"
-
-#, python-brace-format
-msgid "Transaction ID: {0}"
-msgstr "ID de la transacció: {0}"
-
-msgid "This document is not an invoice."
-msgstr "Aquest document no és una factura."
-
 msgid "Payment receipt"
 msgstr ""
 
@@ -3567,10 +3244,16 @@ msgstr "S'han pagat {0} en comissions de processaments i {1} s'han distribuït c
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
 msgstr "Tot i això, es va reemborsar un {x_percent} del pagament ({refund_amount}) en data {refund_date}."
 
+msgid "Beneficiaries"
+msgstr "Beneficiaris"
+
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
 msgstr[0] "Els diners s'han donat al beneficiari següent:"
 msgstr[1] "Els diners s'han donat als beneficiaris següents:"
+
+msgid "Recipient"
+msgstr "Destinatari"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
@@ -3607,8 +3290,19 @@ msgid "Payment method: direct debit of bank account {partial_account_number}"
 msgstr "Mètode de pagament: càrrec directe al compte bancari {partial_account_number}"
 
 #, python-brace-format
+msgid "Payment method: {0}"
+msgstr "Mètode de pagament: {0}"
+
+#, python-brace-format
 msgid "Settlement date: {0}"
 msgstr "Data de l'operació: {0}"
+
+#, python-brace-format
+msgid "Transaction ID: {0}"
+msgstr "ID de la transacció: {0}"
+
+msgid "This document is not an invoice."
+msgstr "Aquest document no és una factura."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "No podreu rebre donatius nous fins que configureu un processador de pagaments."
@@ -3699,9 +3393,6 @@ msgstr "En proporcionar el vostre IBAN, autoritzeu {platform} i {provider}, el n
 msgid "Forget this bank account number after one payment."
 msgstr "Oblida aquest número de compte després d'un únic pagament."
 
-msgid "The BIC you provided appears to be invalid."
-msgstr "El BIC que heu indicat sembla no és vàlid."
-
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
@@ -3751,34 +3442,8 @@ msgstr "Afegeix una targeta"
 msgid "Add a bank account"
 msgstr "Afegeix un compte bancari"
 
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "Encara teniu diners en aquest compte Liberapay, trieu a sota un mètode de desemborsament o contacteu amb nosaltres."
-
 msgid "Close Account"
 msgstr "Tanca el compte"
-
-#, python-brace-format
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr "Teniu {0} a la cartera. Què hem de fer-ne?"
-
-#, python-brace-format
-msgid "Give it to the {0}people I donate to{1}"
-msgstr "Dona-ho a les {0}persones a qui he fet donatius{1}"
-
-msgid "Donate it to Liberapay"
-msgstr "Feu un donatiu al Liberapay"
-
-msgid "This option is recommended for small amounts."
-msgstr "Aquesta opció és recomanada per a petites quantitats."
-
-msgid "Withdraw it to my bank account"
-msgstr "Retira-ho al meu compte bancari"
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr "Si cap de les opcions no us és útil, contacteu amb support@liberapay.com."
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr "Teniu una transferència pendent al vostre compte bancari. Si falla, els diners tornaran a aparèixer en la vostra cartera de Liberapay i el vostre compte es reobrirà automàticament."
 
 msgid "Data retention"
 msgstr "Retenció de dades"
@@ -3851,23 +3516,14 @@ msgstr "Aquest donatiu no existeix o ja s'ha aturat."
 msgid "Your donation to {0} has been stopped."
 msgstr "S'ha aturat el vostre donatiu a {0}."
 
-msgid "Your wallet is empty."
-msgstr "La vostra cartera és buida."
+msgid "This is no longer possible."
+msgstr ""
 
 msgid "Export History"
 msgstr "Exporta l'historial"
 
-#, python-brace-format
-msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
-msgstr "Teniu aproximadament {converted_amount} en el compte (valor exacte: {exact_amounts})."
-
-#, python-brace-format
-msgid "You have {money_amount} in your account."
-msgstr "Teniu {money_amount} en el compte."
-
-#, python-brace-format
-msgid "Their balance is {0}."
-msgstr "El saldo és {0}."
+msgid "Wallet"
+msgstr "Cartera"
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
@@ -3979,114 +3635,6 @@ msgstr "pagament de la {link_open}despesa núm. {invoice_id}{link_close} a {paye
 #, python-brace-format
 msgid "donation to {0}"
 msgstr "donatiu a {0}"
-
-msgid "The amount cannot be zero."
-msgstr "La quantitat no pot ser zero."
-
-#, python-brace-format
-msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "La comissió de transacció seria elevada: {0}% ({1}/{2}). Voleu procedir igualment?"
-
-msgid "Withdrawing Money"
-msgstr "Retirada de diners"
-
-#, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
-msgstr "S'han pres {0} de la vostra cartera de Liberapay. Si la transferència es realitza correctament, arribaran {1} en el vostre compte bancari i es pagaran {2} en comissions."
-
-#, python-brace-format
-msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr "L'intent d'enviar {0} al vostre compte bancari ha fallat. El missatge d'error és: {1}"
-
-#, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "Teniu {0} en la vostra cartera de Liberapay."
-
-msgid "Which currency do you want to withdraw?"
-msgstr "En quina divisa voleu retirar?"
-
-#, python-brace-format
-msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr "La retirada d'euros és gratuïta. La retirada de dòlars dels EUA té un cost de {0} per transferència sigui quin sigui el país de destinació."
-
-msgid "There are no fees when withdrawing euros to your bank account."
-msgstr "No hi ha cap comissió en retirar euros al vostre compte bancari."
-
-#, python-brace-format
-msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr "La retirada de dòlars dels EUA costa {0} per transferència, a qualsevol país de destinació."
-
-msgid "Bank account"
-msgstr "Compte bancari"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Routing Number"
-msgstr "Número d'encaminament (EUA)"
-
-msgid "Account Number"
-msgstr "Número de compte"
-
-msgid "Bank Account Type"
-msgstr "Tipus de compte bancari"
-
-msgid "Bank Name"
-msgstr "Nom del banc"
-
-msgid "Institution Number"
-msgstr "Número de la institució"
-
-msgid "Branch Code"
-msgstr "Codi de sucursal"
-
-msgid "Sort Code"
-msgstr "Codi de classificació"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (codi d'identificació bancària)"
-
-msgid "SEPA / IBAN"
-msgstr "SEPA / IBAN"
-
-msgid "USA"
-msgstr "EUA"
-
-msgid "Canada"
-msgstr "Canadà"
-
-msgid "UK"
-msgstr "Regne Unit"
-
-msgid "Other"
-msgstr "Altre"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (número internacional de compte bancari)"
-
-msgid "This IBAN is invalid."
-msgstr "Aquest IBAN no és vàlid."
-
-msgid "checking"
-msgstr "compte corrent"
-
-msgid "savings"
-msgstr "compte d'estalvis"
-
-msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr "Els codis SWIFT estan definits per 8 o 11 caràcters. Els primers 6 caràcters són lletres, la resta poden ser lletres o dígits. Per exemple: CMBRFR2BCME"
-
-msgid "only letters (a-z) and digits (0-9) are allowed"
-msgstr "només es permeten lletres (a-z) i dígits (0-9)"
-
-msgid "This account number is invalid."
-msgstr "Aquest número de compte no és vàlid."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Els camps següents són en referència al titular legal del compte bancari."
-
-msgid "The bank account must belong to you, sending money to third parties is not allowed."
-msgstr "Heu de ser titular del compte bancari. No és permès enviar diners a terceres parts."
 
 #, python-brace-format
 msgid "Account number: {0}"
@@ -4402,10 +3950,6 @@ msgstr "Condicions del servei"
 msgid "Privacy Policy"
 msgstr "Política de privadesa"
 
-#, python-brace-format
-msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
-msgstr "{0} fa ser, inicialment, un soci de pagaments amb Liberapay, però ens va abandonar el 2018. Tot seguit podeu consultar una còpia del contracte que havíeu d'acceptar per a enviar o rebre diners via Liberapay abans d'agost de 2018: "
-
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Aquesta pàgina conté enllaços i informació sobre el logotip del Liberapay. Esperem que us siguin útils si escriviu cap article sobre Liberapay o si voleu afegir enllaços personalitzats al vostre perfil de Liberapay en el vostre lloc web."
 
@@ -4561,25 +4105,6 @@ msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{
 msgstr "Gràcies a {link_open}tothom que ens han enviat un informe via HackerOne{link_close}."
 
 #, python-brace-format
-msgid "{0} is escrowed within Liberapay."
-msgstr "{0} són en dipòsit en Liberapay."
-
-msgid "Deposits (€)"
-msgstr "Dipòsits (€)"
-
-msgid "Money moved into Liberapay"
-msgstr "Diners ingressats a Liberapay"
-
-msgid "weeks"
-msgstr "setmanes"
-
-msgid "Withdrawals (€)"
-msgstr "Retirades (€)"
-
-msgid "Money moved out of Liberapay"
-msgstr "Diners retirats de Liberapay"
-
-#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
 msgstr[0] "Liberapay va iniciar l'activitat {timespan_ago} i té {n} usuari."
@@ -4620,6 +4145,9 @@ msgstr "Comptes oberts"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "El nombre de comptes de persones i organitzacions obertes en Liberapay"
+
+msgid "weeks"
+msgstr "setmanes"
 
 msgid "Active Users"
 msgstr "Usuaris actius"

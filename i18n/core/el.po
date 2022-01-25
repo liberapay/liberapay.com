@@ -126,50 +126,6 @@ msgid "Manage your email addresses"
 msgstr "Διαχειριστείτε τις διευθύνσεις ηλεκτρονικού ταχυδρομείου σας"
 
 #, python-brace-format
-msgid "You have received approximately {0} this week"
-msgstr "Έλαβες περίπου {0} αυτήν τη βδομάδα"
-
-#, python-brace-format
-msgid "You have received {0} this week"
-msgstr "Λάβατε {0} αυτή τη βδομάδα"
-
-#, python-brace-format
-msgid "{0} was given to you personally."
-msgstr "{0} δόθηκαν σε εσάς προσωπικά."
-
-msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "Δεν είστε μέλος καμίας ομάδας, γι' αυτό δε λάβατε καθόλου χρήματα για συμμετοχή σε ομάδες."
-
-#, python-brace-format
-msgid "No money was given to you for your role in the {0} team."
-msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Δε δόθηκαν καθόλου χρήματα σε σένα για το ρόλο σου στην ομάδα {0}."
-msgstr[1] "Δε δόθηκαν καθόλου χρήματα σε σένα για το ρόλο σου στις ομάδες {n} στις οποίες είσαι μέλος."
-
-#, python-brace-format
-msgid "{0} was given to you for your role in the {1} team."
-msgstr "{0} δόθηκαν σε σένα για το ρόλο σου στην ομάδα {1}."
-
-#, python-brace-format
-msgid "{0} was given to you for your roles in the following teams:"
-msgstr "{0} δόθηκαν σε σένα για τους ρόλους σου στις ακόλουθες ομάδες:"
-
-#, python-brace-format
-msgid "{0}: {1}"
-msgstr "{0}:{1}"
-
-#, python-brace-format
-msgid "You now have {0} in your wallet."
-msgstr "Έχεις τώρα {0} στο πορτοφόλι σου."
-
-msgid "See your account's transaction logs"
-msgstr "Δες το ιστορικό συναλλαγών του λογαριασμού σου"
-
-#, python-brace-format
-msgid "- {0}: {1}"
-msgstr "- {0}:{1}"
-
-#, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
 msgstr "Το Liberapay εισόδημά σου είναι περίπου {money_amount} αυτή τη βδομάδα"
 
@@ -202,23 +158,12 @@ msgid "NB: Donations through Liberapay are now paid in advance instead of being 
 msgstr "Σημειώση: Οι δωρεές μέσω του Liberapay από τώρα και στο εξής θα καταβάλλονται εκ των προτέρων αντί να μεταφέρονται σε εβδομαδιαία βάση. Οι παραπάνω αριθμοί ταιριάζουν με ότι θα είχατε λάβει αυτήν την εβδομάδα σύμφωνα με το παλαιό σύστημα."
 
 #, python-brace-format
-msgid "You have {money_amount} in your Mangopay wallet."
-msgstr "Έχετε {money_amount} στο Mangopay πορτοφόλι σας."
-
-msgid "Withdraw money"
-msgstr "Απόσυρση χρημάτων"
-
-#, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
 msgstr "Το τιμολόγιό σου {0} έγινε αποδεκτό - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
 msgstr "Η αίτηση σου για πληρωμή {amount} από {addressee_name} έγινε αποδεκτή."
-
-#, python-brace-format
-msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "Δυστυχώς το πορτοφόλι {0} αυτή τη στιγμή δεν περιέχει αρκετά λεφτά για την πληρωμή, αλλά μόλις αυτά είναι διαθέσιμα θα πληρωθείς αυτόματα."
 
 msgid "View the invoice"
 msgstr "Δες το τιμολόγιο"
@@ -228,14 +173,8 @@ msgid "Your invoice to {0} has been accepted and paid - Liberapay"
 msgstr "Το τιμολόγιο για {0} έχει γίνει αποδεκτό και πληρωθεί - Liberapay"
 
 #, python-brace-format
-msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr "Η αίτησή σου για πληρωμή {amount} από {addressee_name} έχει γίνει αποδεκτή και τα λεφτά έχουν μεταφερθεί στο πορτοφόλι σου."
-
-msgid "Withdraw the money"
-msgstr "Απόσυρση χρημάτων"
-
-msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr "Ωστόσο δεν μπορείτε να αποσύρετε τα χρήματα ακόμα καθώς είναι ακόμα σε περιορισμό."
+msgid "Your invoice of {amount} to {addressee_name} has been paid."
+msgstr ""
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -311,51 +250,6 @@ msgstr "Περιγραφή: {0}"
 
 msgid "Unsubscribe"
 msgstr "Κατάργηση εγγραφής"
-
-msgid "Liberapay is in trouble"
-msgstr "Το Liberapay βρίσκεται σε μπελάδες"
-
-#, python-brace-format
-msgid ""
-"Our payment processor (Mangopay) is throwing us out, so we recommend that you {link1_start}evacuate the money from your account{link_end} before July 26th.\n"
-"\n"
-"Clicking on the link above will bring you to a new page titled “Emptying your wallet” and ask you to choose between two options.\n"
-"\n"
-"If you use Liberapay as a donor the first choice is recommended, especially if you wish to continue using Liberapay. This first option distributes all the money from your wallet to the people who would have normally received it over time. The recipients will be able to see that this sudden burst of income corresponds to multiple weeks of donations.\n"
-"\n"
-"For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
-"\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
-"\n"
-"The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
-"\n"
-"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
-"\n"
-"We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
-"\n"
-"If you’re a member of a team, you should make sure that your take is set and up-to-date. You can do that from {link2_start}your “Receiving” page{link_end}.\n"
-"\n"
-"You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
-msgstr ""
-"Ο Επεξεργαστή πληρωμών (Mangopay) μας διώχνει, οπότε σας προτείνουμε ότι σας {link1_start} να αδειάσετε τα χρήματα από τον λογαριασμό σας {link_end} πριν από τις 26 Ιουλίου 2018.\n"
-"\n"
-"Κάνοντας κλικ στον παραπάνω σύνδεσμο θα σας φέρει σε μια νέα σελίδα με τον τίτλο «Αδειάσετε το πορτοφόλι σας» και θα σας ζητήσει να επιλέξετε ανάμεσα σε δύο επιλογές.\n"
-"\n"
-"Εάν χρησιμοποιείτε Liberapay ως δωρητής συνιστάται η πρώτη επιλογή, ειδικά εάν επιθυμείτε να συνεχίσετε να χρησιμοποιείτε το Liberapay. Αυτή η πρώτη επιλογή διανέμει όλα τα χρήματα από το πορτοφόλι σας, στους ανθρώπους που κανονικά θα τα λάμβαναν στο πέρασμα του χρόνου. Οι παραλήπτες θα είναι σε θέση να δουν ότι αυτή η ξαφνική έκρηξη του εισοδήματος που αντιστοιχεί σε δωρεές για πολλές εβδομάδες.\n"
-"\n"
-"Για παράδειγμα, εάν εσείς δωρίζετε $1 ανά εβδομάδα για 2 δημιουργούς, και έχετε 40 δολάρια στο πορτοφόλι σας, τότε κάθε δημιουργός θα λάβει $20 και 20 εβδομάδες από τώρα θα λάβετε συνηθισμένο email μας, υπενθυμίζοντάς σας ότι είναι καιρός να προσθέσετε και πάλι χρήματα.\n"
-"\n"
-"Παρακαλείστε να σημειώσετε ότι η εκταμίευση ενδέχεται να αποτύχει για διάφορους λόγους. Αν λάβετε ένα μήνυμα λάθους όπως «απέτυχε η προσπάθεια να κατανείμουμε όλα τα χρήματα στο πορτοφόλι σας: XX. XX παραμένει.» τότε το πρόβλημα είναι πιθανώς παραλήπτη την πλευρά, για παράδειγμα για κάποιον που δεν έχει συμπληρώσει τη φόρμα ταυτότητας ή μια ομάδα που δεν έχει καθοριστεί πώς το εισόδημα πρέπει να κατανέμεται μεταξύ των μελών.\n"
-"\n"
-"Η άλλη επιλογή είναι να πάρετε τα χρήματά σας πίσω, αν είναι δυνατόν μέσω της επιστροφής, αλλιώς αποσύροντας το στον τραπεζικό σας λογαριασμό.\n"
-"\n"
-"Εάν λαμβάνετε δωρεές στο Liberapay, μπορεί να θέλετε να περιμένετε μια εβδομάδα πριν αποσύρει το εισόδημά σας, προκειμένου να δώσει προστάτες σας μια ευκαιρία για να μεταφέρετε το υπόλοιπο της τις δωρεές τους από τα πορτοφόλια τους με τη δική σας.\n"
-"\n"
-"Θα σας ενημερώσουμε αμέσως μόλις η ένταξη ενός νέου επεξεργαστή πληρωμής είναι πλήρης, και θα σας πω αν υπάρχει κάτι που πρέπει να κάνετε για να ξεκινήσετε να λαμβάνετε δωρεές στο Liberapay και πάλι.\n"
-"\n"
-"Εάν είστε μέλος μιας ομάδας, θα πρέπει να βεβαιωθείτε ότι έχει οριστεί να σας και ενημερωμένα. Μπορείτε να το κάνετε από {link2_start} σας σελίδα «Λήψη» {link_end}.\n"
-"\n"
-"Μπορείτε να βρείτε περισσότερες πληροφορίες στο {link3_start} αυτό το blog post {link_end}, και όπως πάντα μπορείτε να απαντήσετε σε αυτό το email, αν χρειάζεστε βοήθεια.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "Ο κωδικός πρόσβασης του λογαριασμό Liberapay σας είναι αδύναμος"
@@ -791,20 +685,6 @@ msgstr "Ο λογαριασμός σας της Liberapay τροποποιείτ
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Κάποιος προσπαθεί να συσχετίσει τη διεύθυνση ηλεκτρονικού ταχυδρομείου {0} με το λογαριασμό Liberapay του οποίου η τρέχουσα διεύθυνση είναι {1}. Εάν δεν ξεκινήσατε αυτήν τη λειτουργία, τότε θα πρέπει να πατήστε στον παρακάτω σύνδεσμο και να καταργήσετε την ανώμαλη διεύθυνση από το λογαριασμό σας."
 
-msgid "Withdrawal initiated"
-msgstr "Η απόσυρση έχει ξεκινήσει"
-
-#, python-brace-format
-msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
-msgstr "Έχουμε ξεκινήσει μια μεταφορά {0} από το Liberapay πορτοφόλι σου στον τραπεζικό σου λογαριασμό. Παρακαλώ σημειώστε ότι μπορεί να χρειαστούν αρκετές εργάσιμες μέρες για την ολοκλήρωση της συναλλαγής."
-
-msgid "Withdrawal failure"
-msgstr "Η απόσυρση απέτυχε"
-
-#, python-brace-format
-msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
-msgstr "Δοκιμάσαμε να μεταφέρουμε {0} από το Liberapay πορτοφόλι σου στον τραπεζικό σου λογαριασμό, αλλά η συναλλαγή απέτυχε με αυτό το μήνυμα:"
-
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Φαίνεται ότι βρήκες κάποιο σφάλμα! Συγγνώμη για την ταλαιπωρία, θα το φτιάξουμε το συντομότερο!"
 
@@ -1111,9 +991,6 @@ msgstr "Το ποσό {money_amount} δεν είναι στο αναμενόμε
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Φαίνεται ότι προσπαθείτε να διαγράψετε κάτι που δεν υπάρχει."
 
-msgid "There isn't enough money in your wallet."
-msgstr "Δεν υπάρχουν αρκετά λεφτά στο πορτοφόλι σου."
-
 #, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
 msgstr "Δεν μπορείς να αποσύρεις περισσότερα από {0} αυτή τη στιγμή."
@@ -1141,10 +1018,6 @@ msgstr "Η κοινότητα \"{0}\" υπάρχει ήδη."
 msgid "\"{0}\" is not a valid community name."
 msgstr "Το \"{0}\" δεν είναι έγκυρο όνομα κοινότητας."
 
-#, python-brace-format
-msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr "Η μεταφορά των χρημάτων απέτυχε, συγγνώμη. Παρακαλώ επικοινώνησε με το support@liberapay.com αν το πρόβλημα επιμένει. Μήνυμα σφάλματος: {0}"
-
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Δεν επιτρέπεται να το κάνεις αυτό γιατί ο λογαριασμός σου έχει προς το παρόν ανασταλεί."
 
@@ -1163,10 +1036,6 @@ msgstr "Έχουν γίνει πολλές απόπειρες για να γίν
 
 msgid "You're sending requests at an unusually fast pace. Please retry in a few seconds, and contact support@liberapay.com if the problem persists."
 msgstr "Στέλνετε αιτήσεις σε ασυνήθιστα γρήγορο ρυθμό. Παρακαλούμε δοκιμάστε σε μερικά δευτερόλεπτα, και επικοινωνήστε με το support@liberapay.com αν το πρόβλημα επιμένει."
-
-#, python-brace-format
-msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr "Απέτυχε η προσπάθεια να κατανείμουμε όλα τα χρήματα στο πορτοφόλι σας: {money_amount} παραμένουν."
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
@@ -1481,12 +1350,6 @@ msgstr "Επεξεργαστές Πληρωμής"
 
 msgid "Ledger"
 msgstr "Λογιστικό βιβλίο"
-
-msgid "Wallet"
-msgstr "Πορτοφόλι"
-
-msgid "Emptying your wallet"
-msgstr "Αδειάζετε το πορτοφόλι σας"
 
 msgid "Identity"
 msgstr "Ταυτότητα"
@@ -2015,121 +1878,6 @@ msgstr "Διακοπή της δωρεάς"
 
 msgid "Cancel the pledge"
 msgstr "Ακυρώστε την υπόσχεση"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Έχετε ανεβάσει {n} αρχείο αυτού του τύπου:"
-msgstr[1] "Έχετε ανεβάσει {n} αρχεία αυτού του τύπου:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "Το αρχείο #{id} περιμένει επικύρωση."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "Το αρχείο #{id} έχει επικυρωθεί."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Το αρχείο #{id} έχει απορριφθεί: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance, you can send an email to support@liberapay.com."
-msgstr "Αν χρειάζεστε βοήθεια μπορείτε να στείλετε email στο support@liberapay.com."
-
-msgid "Income Range"
-msgstr "Εύρος εισοδήματος"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Λιγότερο από {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Περισσότερο από {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Ανάμεσα σε {0} και {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Πόσα χρήματα κερδίζετε το χρόνο, κατά προσέγγιση."
-
-msgid "Identity Proof"
-msgstr "Απόδειξη Ταυτότητας"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Διαβατήριο, ή Ταυτότητα (μπροστά και πίσω), ή Άδεια Οδήγησης Ηνωμένου Βασιλείου."
-
-msgid "Articles of Association"
-msgstr "Καταστατικό Έγγραφο"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Πιστοποιημένα καταστατικά έγγραφα (Νομοθετικό) - επίσημα ιδρυτικά έγγραφα από τους επιχειρηματίες, στα οποία αναφέρονται οι ακόλουθες πληροφορίες: όνομα επιχείρησης, δραστηριότητα, εγγεγραμμένη διεύθυνση, μετοχική δομή."
-
-msgid "Registration Proof"
-msgstr "Απόδειξη εγγραφής"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Απόσπασμα από το Εταιρικό Μητρώο που εκδόθηκε μέσα στους τελευταίους τρεις μήνες."
-
-msgid "Proof of registration from the official authority."
-msgstr "Απόδειξη εγγραφής από την επίσημη αρχή."
-
-msgid "Shareholder Declaration"
-msgstr "Ανακήρυξη μετόχου"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Παρακαλώ κατέβασε και συμπλήρωσε την {link_start} φόρμα ανακύρηξης της μετοχικής δομής{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Πληροφορίες Νομικού Εκπροσώπου"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "Τα ακόλουθα πεδία είναι σχετικά με τον νομικό εκπρόσωπο του οργανισμού (πιθανώς εσύ)."
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "Υποστηρίζονται οι ακόλουθοι τύποι αρχείων: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "Το μέγιστο μέγεθος κάθε αρχείου είναι {0}ΜΒ."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Απαιτείται να γνωρίζουμε ποιοι είστε ούτως ώστε να συμμορφωθούμε με τους οικονομικούς κανονισμούς. Μόνο εξουσιοδοτημένο προσωπικό θα μπορεί να δει αυτήν την πληροφορία, δε θα τη δείξουμε σε άλλους χρήστες ή οποιονδήποτε άλλον εκτός αν απαιτείται από τη νομοθεσία."
-
-msgid "Given Name"
-msgstr "Όνομα"
-
-msgid "Family Name"
-msgstr "Επίθετο"
-
-msgid "Country (nationality)"
-msgstr "Χώρα (υπηκοότητα)"
-
-msgid "Organization Type"
-msgstr "Τύπος Οργανισμού"
-
-msgid "Business"
-msgstr "Επιχείρηση"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Συμφωνώ με {0} τους Όρους Χρήσης του MangoPay{1}"
-
-msgid "Address"
-msgstr "Διεύθυνση"
-
-msgid "Address (second line)"
-msgstr "Διεύθυνση (δεύτερη γραμμή)"
-
-msgid "Region"
-msgstr "Περιοχή"
-
-msgid "Postal Code"
-msgstr "Ταχυδρομικός κώδικας"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Οι άνθρωποι που συμβάλλουν στα κοινά χρειάζονται εσάς να τους στηρίζετε το έργο τους. Αναπτύσσοντας ελεύθερο λογισμικό, διαδίδοντας ελεύθερη γνώση, αυτά τα πράγματα παίρνουν χρόνο και κοστίζουν χρήματα, όχι μόνο για να κάνουν την αρχική εργασία, αλλά επίσης για να διατηρηθούν σε βάθος χρόνου."
@@ -2908,17 +2656,8 @@ msgstr[1] "Έχετε {n} προγραμματισμένες πληρωμές:"
 msgid "You currently don't have any scheduled payment."
 msgstr "Προς το παρόν δεν έχετε καμία προγραμματισμένη πληρωμή."
 
-msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr "Είστε σίγουροι ότι θέλετε να αλλάξετε τον τύπο του λογαριασμού σας; Για νομικούς λόγους θα πρέπει να δημιουργήσουμε έναν νέο λογαριασμό για εσάς στο σύστημα του συνεργάτη πληρωμών μας και να μεταφέρουμε τα χρήματα από τον παλιό σας λογαριασμό."
-
-msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr "Δεν μπορούμε να αλλάξουμε τον τύπο του λογαριασμού σας κατά τη διάρκεια της ημέρας πληρωμής, παρακαλούμε προσπαθήστε ξανά σε λίγα λεπτά."
-
-msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
-msgstr "Είστε σίγουροι ότι θέλετε να αλλάξετε τα στοιχεία της ταυτότητάς σας; Εάν ναι, ενδέχεται να χρειαστεί να περάσετε ξανά από τη διαδικασία επαλήθευσης της ταυτότητας."
-
-msgid "You haven't filled all the required fields."
-msgstr "Δεν έχετε συμπληρώσει όλα τα απαιτούμενα πεδία."
+msgid "The provided postal address is incomplete."
+msgstr "Η παρεχόμενη ταχυδρομική διεύθυνση είναι ελλιπής."
 
 msgid "Invalid date of birth."
 msgstr "Μη έγκυρη ημερομηνία γέννησης."
@@ -2926,27 +2665,8 @@ msgstr "Μη έγκυρη ημερομηνία γέννησης."
 msgid "Your identity information has been updated."
 msgstr "Τα στοιχεία ταυτότητάς σας έχουν ενημερωθεί."
 
-msgid "Your identity information has been registered."
-msgstr "Τα στοιχεία ταυτότητάς σας έχουν καταχωρισθεί."
-
-msgid "You have to agree to MangoPay's Terms of Service."
-msgstr "Πρέπει να συμφωνήσετε με τους Όρους Παροχής Υπηρεσιών της MangoPay."
-
 msgid "JavaScript is required"
 msgstr "Απαιτείται JavaScript"
-
-msgid "Level 2"
-msgstr "Επίπεδο 2"
-
-msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr "Έχετε ολοκληρώσει τη διαδικασία επαλήθευσης της ταυτότητας, το χρηματικό ποσό που μπορείτε να δώσετε και να λάβετε ετησίως δεν περιορίζεται πλέον."
-
-#, python-brace-format
-msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
-msgstr "Εάν δίνετε περισσότερα από {0} σε ένα έτος ή λαμβάνετε περισσότερα από {1} σε ένα έτος ή εάν ο λογαριασμός σας παρουσιάζει ενδείξεις ύποπτης δραστηριότητας, τότε θα πρέπει να παράσχετε πρόσθετες πληροφορίες:"
-
-msgid "The provided postal address is incomplete."
-msgstr "Η παρεχόμενη ταχυδρομική διεύθυνση είναι ελλιπής."
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
 msgstr "Αυτή η σελίδα σας επιτρέπει να προβάλλετε και να τροποποιείτε τις πληροφορίες ταυτότητας που συνδέονται με το λογαριασμό σας. Μόνο το εξουσιοδοτημένο προσωπικό μπορεί να έχει πρόσβαση σε αυτές τις πληροφορίες, δεν τις εμφανίζουμε σε άλλους χρήστες ή σε οποιονδήποτε άλλον, εκτός αν απαιτείται από το νόμο ή αν μας δώσετε σχετική εντολή."
@@ -3124,6 +2844,9 @@ msgstr "Αποστολή"
 msgid "Accept and Pay"
 msgstr "Αποδοχή και Πληρωμή"
 
+msgid "Mark as paid"
+msgstr ""
+
 #, python-brace-format
 msgid "Message: {0}"
 msgstr "Μήνυμα: {0}"
@@ -3222,6 +2945,10 @@ msgstr "Τα παρακάτω σύνολα δεν περιλαμβάνουν τ�
 #, python-brace-format
 msgid "Total money received: {0}"
 msgstr "Σύνολο εισπραχθέντων χρημάτων: {0}"
+
+#, python-brace-format
+msgid "{0}: {1}"
+msgstr "{0}:{1}"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
@@ -3494,56 +3221,6 @@ msgstr "Το PayPal επιτρέπει τη λήψη χρημάτων σε πο�
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_απόδειξη_παραλαβής_{number}"
 
-msgid "Receipt"
-msgstr "Απόδειξη"
-
-#, python-brace-format
-msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr "Επιβεβαιώνουμε την παραλαβή μιας μεταφοράς που ξεκίνησε από {payer} στο {date}."
-
-#, python-brace-format
-msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr "Από το αποσταλέν ποσό, {0} κατατέθηκαν στον λογαριασμό του {owner_name} ({link}), και {2} δαπανήθηκαν σε τέλη μεταφοράς."
-
-msgid "Beneficiaries"
-msgstr "Ωφελούμενοι"
-
-#, python-brace-format
-msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
-msgstr "Τα χρήματα θα τροφοδοτήσουν τις δωρεές του {name} στο Liberapay. Ο παρακάτω πίνακας δείχνει τις δωρεές όπως ήταν όταν εκκινήθηκε η πληρωμή ({datetime}, UTC)."
-
-msgid "Recipient"
-msgstr "Αποδέκτης"
-
-msgid "Amount per week"
-msgstr "Ποσό ανά εβδομάδα"
-
-msgid "Payment Details"
-msgstr "Λεπτομέρειες Πληρωμής"
-
-#, python-brace-format
-msgid "Payment method: {0}"
-msgstr "Μέθοδος πληρωμής: {0}"
-
-#, python-brace-format
-msgid "Debited card: {number} ({brand}, {country})"
-msgstr "Χρεωστική κάρτα: {number} ({brand}, {country})"
-
-#, python-brace-format
-msgid "Debited account: {0}"
-msgstr "Χρεωσμένος λογαριασμός: {0}"
-
-#, python-brace-format
-msgid "Execution date: {0}"
-msgstr "Ημερομηνία εκτέλεσης: {0}"
-
-#, python-brace-format
-msgid "Transaction ID: {0}"
-msgstr "Αναγνωριστικό συναλλαγής: {0}"
-
-msgid "This document is not an invoice."
-msgstr "Το παρόν παραστατικό δεν αποτελεί τιμολόγιο."
-
 msgid "Payment receipt"
 msgstr "Απόδειξη πληρωμής"
 
@@ -3567,10 +3244,16 @@ msgstr "{0} καταβλήθηκε σε τέλη διεκπεραίωσης κα
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
 msgstr "Ωστόσο, το {x_percent} της πληρωμής ({refund_amount}) επιστράφηκε στις {refund_date}."
 
+msgid "Beneficiaries"
+msgstr "Ωφελούμενοι"
+
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
 msgstr[0] "Τα χρήματα έχουν δωρηθεί στον ακόλουθο δικαιούχο:"
 msgstr[1] "Τα χρήματα έχουν δωρηθεί στους ακόλουθους δικαιούχους:"
+
+msgid "Recipient"
+msgstr "Αποδέκτης"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
@@ -3607,8 +3290,19 @@ msgid "Payment method: direct debit of bank account {partial_account_number}"
 msgstr "Τρόπος πληρωμής: πάγια εντολή τραπεζικού λογαριασμού {partial_account_number}"
 
 #, python-brace-format
+msgid "Payment method: {0}"
+msgstr "Μέθοδος πληρωμής: {0}"
+
+#, python-brace-format
 msgid "Settlement date: {0}"
 msgstr "Ημερομηνία διακανονισμού: {0}"
+
+#, python-brace-format
+msgid "Transaction ID: {0}"
+msgstr "Αναγνωριστικό συναλλαγής: {0}"
+
+msgid "This document is not an invoice."
+msgstr "Το παρόν παραστατικό δεν αποτελεί τιμολόγιο."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Δεν μπορείτε να λαμβάνετε νέες δωρεές μέχρι να ρυθμίσετε την επεξεργασία πληρωμών."
@@ -3699,9 +3393,6 @@ msgstr ""
 msgid "Forget this bank account number after one payment."
 msgstr "Ξεχάστε αυτόν τον αριθμό τραπεζικού λογαριασμού μετά από μία πληρωμή."
 
-msgid "The BIC you provided appears to be invalid."
-msgstr "Ο κωδικός BIC που δώσατε φαίνεται να μην είναι έγκυρος."
-
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
@@ -3751,34 +3442,8 @@ msgstr "Προσθήκη μίας κάρτας"
 msgid "Add a bank account"
 msgstr "Προσθήκη ενός τραπεζικού λογαριασμού"
 
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "Έχετε ακόμη χρήματα σε αυτόν τον λογαριασμό Liberapay, παρακαλούμε επιλέξτε μια μέθοδο εκταμίευσης παρακάτω ή επικοινωνήστε με την υποστήριξη."
-
 msgid "Close Account"
 msgstr "Κλείσιμο λογαριασμού"
-
-#, python-brace-format
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr "Έχετε {0} στο πορτοφόλι σας. Τι πρέπει να κάνουμε με αυτό;"
-
-#, python-brace-format
-msgid "Give it to the {0}people I donate to{1}"
-msgstr "Δώστε τα στους {0} ανθρώπους στους οποίους κάνω δωρεές{1}"
-
-msgid "Donate it to Liberapay"
-msgstr "Δωρίστε το στο Liberapay"
-
-msgid "This option is recommended for small amounts."
-msgstr "Αυτή η επιλογή συνιστάται για μικρά ποσά."
-
-msgid "Withdraw it to my bank account"
-msgstr "Ανάληψη στον τραπεζικό μου λογαριασμό"
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr "Εάν καμία από τις δύο επιλογές δεν σας εξυπηρετεί, επικοινωνήστε με το support@liberapay.com."
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr "Έχετε μία εκκρεμή μεταφορά στον τραπεζικό σας λογαριασμό. Εάν αποτύχει, τα χρήματα θα εμφανιστούν ξανά στο πορτοφόλι σας και ο λογαριασμός σας θα ανοίξει αυτόματα ξανά."
 
 msgid "Data retention"
 msgstr "Διατήρηση δεδομένων"
@@ -3851,23 +3516,14 @@ msgstr "Αυτή η δωρεά δεν υπάρχει ή έχει ήδη διακ
 msgid "Your donation to {0} has been stopped."
 msgstr "Η δωρεά σας στο {0} έχει σταματήσει."
 
-msgid "Your wallet is empty."
-msgstr "Το πορτοφόλι σας είναι άδειο."
+msgid "This is no longer possible."
+msgstr ""
 
 msgid "Export History"
 msgstr "Εξαγωγή Ιστορικού"
 
-#, python-brace-format
-msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
-msgstr "Έχετε περίπου {converted_amount} στο λογαριασμό σας (ακριβώς: {exact_amounts})."
-
-#, python-brace-format
-msgid "You have {money_amount} in your account."
-msgstr "Έχετε {money_amount} στο λογαριασμό σας."
-
-#, python-brace-format
-msgid "Their balance is {0}."
-msgstr "Το ισοζύγιό τους είναι {0}."
+msgid "Wallet"
+msgstr "Πορτοφόλι"
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
@@ -3979,114 +3635,6 @@ msgstr "πληρωμή {link_open}των δαπανών #{invoice_id}{link_close
 #, python-brace-format
 msgid "donation to {0}"
 msgstr "δωρεά για {0}"
-
-msgid "The amount cannot be zero."
-msgstr "Το ποσό δεν μπορεί να είναι 0."
-
-#, python-brace-format
-msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "Η αμοιβή συναλλαγής θα είναι υψηλή: {0}% ({1}/{2}). Προχωρήστε ούτως ή άλλως;"
-
-msgid "Withdrawing Money"
-msgstr "Απόσυρση χρημάτων"
-
-#, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
-msgstr ""
-
-#, python-brace-format
-msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr ""
-
-#, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "Έχετε {0} στο Liberapay πορτοφόλι σας."
-
-msgid "Which currency do you want to withdraw?"
-msgstr "Ποιο νόμισμα θέλετε να κάνετε ανάληψη;"
-
-#, python-brace-format
-msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr "Η ανάληψη ευρώ είναι δωρεάν. Ανάληψη δολαρίων ΗΠΑ κοστίζει {0} ανά μεταφορά, ανεξάρτητα από τη χώρα προορισμού."
-
-msgid "There are no fees when withdrawing euros to your bank account."
-msgstr "Δεν υπάρχουν χρεώσεις κατά την ανάληψη ευρώ στον τραπεζικό σας λογαριασμό."
-
-#, python-brace-format
-msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr "Η ανάληψη δολαρίων ΗΠΑ κοστίζει {0} ανά μεταφορά, ανεξάρτητα από τη χώρα προορισμού."
-
-msgid "Bank account"
-msgstr "Τραπεζικός Λογαριασμός"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Routing Number"
-msgstr "Αριθμός δρομολόγησης"
-
-msgid "Account Number"
-msgstr "Αριθμός Λογαριασμού"
-
-msgid "Bank Account Type"
-msgstr "Τύπος Τραπεζικού Λογαριασμού"
-
-msgid "Bank Name"
-msgstr "Όνομα Τράπεζας"
-
-msgid "Institution Number"
-msgstr "Αριθμός Ιδρύματος"
-
-msgid "Branch Code"
-msgstr "Κωδικός Υποκαταστήματος"
-
-msgid "Sort Code"
-msgstr "Κωδικός Ταξινόμησης"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (Κωδικός αναγνώρισης τράπεζας)"
-
-msgid "SEPA / IBAN"
-msgstr "SEPA / ΙΒΑΝ"
-
-msgid "USA"
-msgstr "ΗΠΑ"
-
-msgid "Canada"
-msgstr "Καναδάς"
-
-msgid "UK"
-msgstr "ΗΒ"
-
-msgid "Other"
-msgstr "Άλλη"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (Διεθνής Αριθμός Τραπεζικού Λογαριασμού)"
-
-msgid "This IBAN is invalid."
-msgstr "Αυτό το IBAN είναι άκυρο."
-
-msgid "checking"
-msgstr "έλεγχος"
-
-msgid "savings"
-msgstr "αποταμίευση"
-
-msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr "Οι κωδικοί SWIFT έχουν μήκος 8 ή 11 χαρακτήρες. Οι πρώτοι 6 χαρακτήρες είναι γράμματα, οι υπόλοιποι μπορούν να είναι γράμματα ή ψηφία. Παράδειγμα: CMBRFR2BCME"
-
-msgid "only letters (a-z) and digits (0-9) are allowed"
-msgstr "επιτρέπονται μόνο γράμματα (a-z) και ψηφία (0-9)"
-
-msgid "This account number is invalid."
-msgstr "Αυτός ο αριθμός λογαριασμού είναι άκυρος."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "Τα ακόλουθα πεδία αφορούν τον νόμιμο κάτοχο του τραπεζικού λογαριασμού."
-
-msgid "The bank account must belong to you, sending money to third parties is not allowed."
-msgstr "Ο τραπεζικός λογαριασμός πρέπει να σας ανήκει, δεν επιτρέπεται η αποστολή χρημάτων σε τρίτους."
 
 #, python-brace-format
 msgid "Account number: {0}"
@@ -4401,10 +3949,6 @@ msgstr "Όροι Υπηρεσίας"
 msgid "Privacy Policy"
 msgstr "Πολιτική απορρήτου"
 
-#, python-brace-format
-msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
-msgstr ""
-
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Αυτή η σελίδα εμπεριέχει συνδέσμους και πληροφορίες για το λογότυπο του Liberapay. Ελπίζουμε ότι θα το βρείτε (…) χρήσιμο αν γράφετε ένα άρθρο για το Liberapay ή αν θέλετε να προσθέσετε (…) συνδέσμους στο Liberapay προφίλ σας στην ιστοσελίδα σας."
 
@@ -4560,25 +4104,6 @@ msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{
 msgstr ""
 
 #, python-brace-format
-msgid "{0} is escrowed within Liberapay."
-msgstr "{0} είναι κατατεθειμένο στο Liberapay."
-
-msgid "Deposits (€)"
-msgstr "Καταθέσεις (€)"
-
-msgid "Money moved into Liberapay"
-msgstr "Χρήματα που μεταφέρθηκαν στο Liberapay"
-
-msgid "weeks"
-msgstr "εβδομάδες"
-
-msgid "Withdrawals (€)"
-msgstr "Αναλήψεις (€)"
-
-msgid "Money moved out of Liberapay"
-msgstr "Χρήματα που μεταφέρθηκαν από το Liberapay"
-
-#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
 msgstr[0] "Η Liberapay ξεκίνησε {timespan_ago} και έχει {n} χρήστη."
@@ -4619,6 +4144,9 @@ msgstr "Ανοιχτοί λογαριασμοί"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Αριθμός ανοικτών ατομικών λογαριασμών και λογαριασμών οργανισμών στη Liberapay"
+
+msgid "weeks"
+msgstr "εβδομάδες"
 
 msgid "Active Users"
 msgstr "Ενεργοί Χρήστες"

@@ -126,50 +126,6 @@ msgid "Manage your email addresses"
 msgstr "Administri viajn retpoŝtadresojn"
 
 #, python-brace-format
-msgid "You have received approximately {0} this week"
-msgstr "Vi ricevis ĉirkaŭ {0} ĉi-semajne"
-
-#, python-brace-format
-msgid "You have received {0} this week"
-msgstr "Vi ricevis {0} ĉi-semajne"
-
-#, python-brace-format
-msgid "{0} was given to you personally."
-msgstr "{0} estis donita al vi persone."
-
-msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "Vi ne estas membro de teamo, do vi ne ricevis monon pro partopreno en teamo."
-
-#, python-brace-format
-msgid "No money was given to you for your role in the {0} team."
-msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "Neniu mono estis donita al vi pro via rolo en la teamo {0}."
-msgstr[1] "Neniu mono estis donita al vi por viaj roloj en la {n} teamoj, kie vi estas membro."
-
-#, python-brace-format
-msgid "{0} was given to you for your role in the {1} team."
-msgstr "{0} estis donita al vi pro via rolo en la teamo {1}."
-
-#, python-brace-format
-msgid "{0} was given to you for your roles in the following teams:"
-msgstr "{0} estis donita al vi pro viaj roloj en la jenaj teamoj:"
-
-#, python-brace-format
-msgid "{0}: {1}"
-msgstr "{0}: {1}"
-
-#, python-brace-format
-msgid "You now have {0} in your wallet."
-msgstr "Vi nun havas {0} en via monujo."
-
-msgid "See your account's transaction logs"
-msgstr "Vidi la historion de transakcioj de via konto"
-
-#, python-brace-format
-msgid "- {0}: {1}"
-msgstr "- {0}: {1}"
-
-#, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
 msgstr "Via Liberapay-enspezo estas proksimume {money_amount} ĉi-semajne"
 
@@ -202,23 +158,12 @@ msgid "NB: Donations through Liberapay are now paid in advance instead of being 
 msgstr "Atentu: donacoj tra Liberapay nun estas antaŭpagataj anstataŭ esti semajne transdonitaj. La supraj nombroj kongruas tion kion vi ricevus ĉi-semajne per la antaŭa sistemo."
 
 #, python-brace-format
-msgid "You have {money_amount} in your Mangopay wallet."
-msgstr "Vi havas {money_amount} en via Mangopay-monujo."
-
-msgid "Withdraw money"
-msgstr "Retiri monon"
-
-#, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
 msgstr "Via fakturo al {0} estis akceptita - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
 msgstr "Via peto por pago de {amount} el {addressee_name} estis akceptita."
-
-#, python-brace-format
-msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "Bedaŭrinde, la monujo de {0} ne enhavas sufiĉe da mono por pagi vin nun, sed kiam estos sufiĉe, vi estos aŭtomate pagita."
 
 msgid "View the invoice"
 msgstr "Vidi la fakturon"
@@ -228,14 +173,8 @@ msgid "Your invoice to {0} has been accepted and paid - Liberapay"
 msgstr "Via fakturo al {0} estis akceptita kaj pagita - Liberapay"
 
 #, python-brace-format
-msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr "Via peto por pago de {amount} el {addressee_name} estis akceptita, kaj la mono estis transdonita al via monujo."
-
-msgid "Withdraw the money"
-msgstr "Retiri la monon"
-
-msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr "Tamen, vi ankoraŭ ne povas retiri la monon, ĉar ĝi estas en kvaranteno."
+msgid "Your invoice of {amount} to {addressee_name} has been paid."
+msgstr ""
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -311,51 +250,6 @@ msgstr "Priskribo: {0}"
 
 msgid "Unsubscribe"
 msgstr "Malaboni"
-
-msgid "Liberapay is in trouble"
-msgstr "Liberapay havas problemojn"
-
-#, python-brace-format
-msgid ""
-"Our payment processor (Mangopay) is throwing us out, so we recommend that you {link1_start}evacuate the money from your account{link_end} before July 26th.\n"
-"\n"
-"Clicking on the link above will bring you to a new page titled “Emptying your wallet” and ask you to choose between two options.\n"
-"\n"
-"If you use Liberapay as a donor the first choice is recommended, especially if you wish to continue using Liberapay. This first option distributes all the money from your wallet to the people who would have normally received it over time. The recipients will be able to see that this sudden burst of income corresponds to multiple weeks of donations.\n"
-"\n"
-"For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
-"\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
-"\n"
-"The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
-"\n"
-"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
-"\n"
-"We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
-"\n"
-"If you’re a member of a team, you should make sure that your take is set and up-to-date. You can do that from {link2_start}your “Receiving” page{link_end}.\n"
-"\n"
-"You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
-msgstr ""
-"Nia provizantoj de pagservo (Mangopay) estas elĵetinta nin, do ni rekomendas ke vi {link1_start}evakuas la monon el via konto{link_end} antaŭ la 26a Julio.\n"
-"\n"
-"Alklaki la antaŭan ligilon alkondukos vin al nova paĝo nomiĝita \"Malpleniganta vian monujon\" kaj demandos vin ke vi elektas inter duaj opcioj.\n"
-"\n"
-"Se vi uzas Liberapay kiel donacanto, la unua opcio estas rekomendita, precipe se vi volas uzadi Liberapay. Ĉi unua opcio distribuas ĉian la monon el via monero al la homoj, kiu normale ricevu post tempe. La ricevantoj povos vidi, ke la subita enspezado korespondas pri kelkaj donacaj semajnoj.\n"
-"\n"
-"Ekzemple, se vi donas 1 $ semajne al 2 kreantoj kaj vi havis 40 $ en via monujo, ĉia kreanto ricevos 20 $, kaj 20 semajnoj post nun vi ricevos nian kutiman poŝton memoriganta ke ĝi estas tempo por doni monon denove.\n"
-"\n"
-"Atentu ke la elspezo povas fiaski pro multaj kaŭzoj. Se vi ricevas erarmesaĝon kiel \"La provo distribui la ĉian monon en via monujo malsukcesis: XX.XX restas.\", la problemo estas probable en la flanko de la ricevanto, ekzemple iu kiu ne plenis la identican formularon aŭ teamo kiu ne specifis kie la enspezo devas esti dispartigi inter anoj.\n"
-"\n"
-"La alia elekteblo estas retrovi vian monon. Se ebla per repago, aliamaniere per retiri ĝin al via bankokonto.\n"
-"\n"
-"Se vi ricevas donacojn en Liberapay, vi eblas esperi unan semajnon antaŭ retiri vian enspezon por ebligi al via donacanto la eblon de transdoni siajn restantajn donacojn el siaj monujoj al via.\n"
-"\n"
-"Ni informos vin tuj kiam la integrado de nova provizantoj de pagservo estas finita, kaj diris al vi se ekzistas io ke vi devas fari por ekricevi donacojn en Liberapay ree.\n"
-"\n"
-"Se vi estas ano el teamo, vi devas certigi ke via parto estas agordita kaj ĝisdata. Vi povas fari ĝin en {link2_start}via \"Ricevado\" paĝo{link_end}.\n"
-"\n"
-"Vi povas trovi pli informaĵon en {link3_start}ĉia blogaĵo{link_end} (nur angle), kaj kiel ĉiam vi povas respondi al ĉi tia retmesaĝo se vi bezonas helpon.\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "La pasvorto de via Liberapay-konto estas malforta"
@@ -791,20 +685,6 @@ msgstr "Via Liberapay-konto estas ŝanĝita"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "Iu klopodas asocii la retpoŝtadreso {0} kun la Liberapay-konto kies nuna adreso estas {1}. Se vi ne ekis tiun operacion, vi devus alklaki la malsupran ligilon kaj forigi la suspektindan adreson de via konto."
 
-msgid "Withdrawal initiated"
-msgstr "Retiro komencita"
-
-#, python-brace-format
-msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
-msgstr "Ni komencis transdonon de {0} de via Liberapay-monujo al via bankokonto. Atentu, ke transakcia kompletiĝo povas bezoni plurajn labortagojn."
-
-msgid "Withdrawal failure"
-msgstr "Retiro malsukcesa"
-
-#, python-brace-format
-msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
-msgstr "Ni provis transdoni {0} el via Liberapay-monujo al via bankokonto, sed la transdono malsukcesis kun tiu mesaĝo:"
-
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Ŝajne vi trovis cimon! Pardonon pro la ĝeno, ni forigos ĝin plej frue!"
 
@@ -1111,9 +991,6 @@ msgstr "La kvanto {money_amount} ne estas de la atendita valuto ({expected_curre
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Ŝajnas ke vi provas forigi ion, kio ne ekzistas."
 
-msgid "There isn't enough money in your wallet."
-msgstr "Ne troviĝas sufiĉe da mono en via monujo."
-
 #, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
 msgstr "Vi ne povas retiri pli ol {0} nun."
@@ -1141,10 +1018,6 @@ msgstr "La komunumo \"{0}\" jam ekzistas."
 msgid "\"{0}\" is not a valid community name."
 msgstr "\"{0}\" ne estas valida komunuma nomo."
 
-#, python-brace-format
-msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr "Pardonon, la mona transdono malsukcesis. Kontaktu support@liberapay.com se la problemo daŭras. Erarmesaĝo: {0}"
-
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Vi ne rajtas fari tion, ĉar via konto estas haltigita."
 
@@ -1163,10 +1036,6 @@ msgstr "Estis tro da provoj por fari tion lastatempe, reprovu poste (ekz. post s
 
 msgid "You're sending requests at an unusually fast pace. Please retry in a few seconds, and contact support@liberapay.com if the problem persists."
 msgstr "Vi sendas petojn nekutime rapide. Bonvolu reprovi post kelkaj sekundoj, kaj kontakti support@liberapay.com se la problemo daŭras."
-
-#, python-brace-format
-msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr "La provo distribui ĉian monon en vian monujon malsukcesis: {money_amount} restas."
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
@@ -1481,12 +1350,6 @@ msgstr "Provizantoj de Pagservo"
 
 msgid "Ledger"
 msgstr "Kontoregistro"
-
-msgid "Wallet"
-msgstr "Monujo"
-
-msgid "Emptying your wallet"
-msgstr "Malplenigado de via monujo"
 
 msgid "Identity"
 msgstr "Identeco"
@@ -2015,121 +1878,6 @@ msgstr "Ĉesigi la donacon"
 
 msgid "Cancel the pledge"
 msgstr "Nuligi la promeson"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "Vi alŝutis {n} dokumenton de ĉi tiu speco:"
-msgstr[1] "Vi alŝutis {n} dokumentojn de ĉi tiu speco:"
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "Dokumento #{id} atendas validigon."
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "Dokumento #{id} estis validigita."
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "Dokumento #{id} estis malakceptita: {refused_reason_type} - {refused_reason_message}."
-
-msgid "If you need assistance, you can send an email to support@liberapay.com."
-msgstr "Se vi bezonas helpon, vi povas sendi retmesaĝon al support@liberapay.com."
-
-msgid "Income Range"
-msgstr "Enspeza intervalo"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "Malpli ol {0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "Pli ol {0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "Inter {0} kaj {1}"
-
-msgid "How much money you earn per year, approximately."
-msgstr "Kiom vi enspezas jare, proksimume."
-
-msgid "Identity Proof"
-msgstr "Identeca pruvo"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "Pasporto, aŭ identiga karto (fronto kaj malfronto), aŭ Unuiĝinta-Reĝlanda kondukpermesilo."
-
-msgid "Articles of Association"
-msgstr "Asociaj statutoj"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "Atestataj statutoj - oficiala dokumento deklarita de la entreprenistoj, kie jenaj informoj legeblas: nomo de la entrepreno, agadkampo, registrita adreso, akciado."
-
-msgid "Registration Proof"
-msgstr "Pruvo de registrado"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "Eltiraĵo el la oficiala registro de firmaoj, liverita en la lastaj tri monatoj."
-
-msgid "Proof of registration from the official authority."
-msgstr "Pruvo de registrado el la oficiala aŭtoritato."
-
-msgid "Shareholder Declaration"
-msgstr "Deklaro de akciuloj"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "Bonvolu elŝuti kaj plenigi la {link_start}formularon por la deklaro de akciuloj{link_end}."
-
-msgid "Legal Representative Information"
-msgstr "Informoj pri la leĝa reprezentanto"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "La jenaj kampoj estas pri la leĝa reprezentanto de la organizo (vi, verŝajne)."
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "La jenaj formatoj estas subtenataj: {0}."
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "La maksimuma grandeco de ĉiu dosiero estas {0}MB."
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "Ni bezonas scii, kiu vi estas, por konformiĝi al financaj reguloj. Nur rajtigita dungitaro povos vidi tiuj informoj, ni ne montros ilin al aliaj uzantoj aŭ iu ajn alia krom leĝe postulata."
-
-msgid "Given Name"
-msgstr "Antaŭa nomo"
-
-msgid "Family Name"
-msgstr "Lasta nomo"
-
-msgid "Country (nationality)"
-msgstr "Lando (nacieco)"
-
-msgid "Organization Type"
-msgstr "Speco de organizo"
-
-msgid "Business"
-msgstr "Entrepreno"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "Mi konsentas kun la {0}uzkondiĉoj de MangoPay{1}"
-
-msgid "Address"
-msgstr "Adreso"
-
-msgid "Address (second line)"
-msgstr "Adreso (dua linio)"
-
-msgid "Region"
-msgstr "Regiono"
-
-msgid "Postal Code"
-msgstr "Poŝtkodo"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Homoj kiuj kontribuas al komunaĵoj bezonas vian subtenon. Konstruado de libera programo, disvastigado de libera scio... - tiuj aferoj postulas tempon kaj kostas monon, ne nur por fari la komencan laboron, sed ankaŭ por daŭrigi ĝin dum tempo."
@@ -2908,17 +2656,8 @@ msgstr[1] "Vi havas {n} planitajn pagojn:"
 msgid "You currently don't have any scheduled payment."
 msgstr "Vi havas neniun planitan pagon."
 
-msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr "Ĉu vi certas, ke vi volas ŝanĝi vian kontospecon? Pro leĝaj kialoj, ni devos krei novan konton por vi en la sistemo de nia pagpartnero, kaj transdoni la monon el la malnova konto."
-
-msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr "Ni ne povas ŝanĝi la kontospecon dum pagotago, reprovu post kelkaj minutoj."
-
-msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
-msgstr "Ĉu vi certas, ke vi volas ŝanĝi viajn identecajn informojn? Se jes, eblas ke vi devos refari la procedon por konfirmi identecon."
-
-msgid "You haven't filled all the required fields."
-msgstr "Vi ne plenigis ĉiujn devigajn kampojn."
+msgid "The provided postal address is incomplete."
+msgstr "La poŝtadreso donita ne estas kompleta."
 
 msgid "Invalid date of birth."
 msgstr "Nevalida dato de naskiĝo."
@@ -2926,27 +2665,8 @@ msgstr "Nevalida dato de naskiĝo."
 msgid "Your identity information has been updated."
 msgstr "Viaj identecaj informoj estis ĝisdatigitaj."
 
-msgid "Your identity information has been registered."
-msgstr "Viaj identecaj informoj estis konservitaj."
-
-msgid "You have to agree to MangoPay's Terms of Service."
-msgstr "Vi devas konsenti kun la uzkondiĉoj de MangoPay."
-
 msgid "JavaScript is required"
 msgstr "JavaScript estas bezonata"
-
-msgid "Level 2"
-msgstr "Nivelo 2"
-
-msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr "Vi plenumis la procedon por konfirmi identecon, la kvanto de mono, kiun vi povas doni aŭ ricevi jare ne plu estas limigita."
-
-#, python-brace-format
-msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
-msgstr "Se vi donacas pli ol {0} jare, aŭ ricevas pli ol {1} jare, aŭ se via konto montras signojn de suspektinda agado, tiam vi devos aldoni pliajn informojn:"
-
-msgid "The provided postal address is incomplete."
-msgstr "La poŝtadreso donita ne estas kompleta."
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
 msgstr "Tiu paĝo ebligas vin vidi kaj ŝanĝi la identecaj informoj ligitaj al via konto. Nur rajtigitan laborantaron povas aliri tiujn informojn, ni ne montras ĝin al aliaj uzantoj aŭ iuj ajn krom leĝe devigita aŭ se vi instrukcias nin."
@@ -3124,6 +2844,9 @@ msgstr "Sendi"
 msgid "Accept and Pay"
 msgstr "Akcepti kaj pagi"
 
+msgid "Mark as paid"
+msgstr ""
+
 #, python-brace-format
 msgid "Message: {0}"
 msgstr "Mesaĝo: {0}"
@@ -3222,6 +2945,10 @@ msgstr "La totaloj sube ne inkludas donacojn per la malnova sistemo de monujo. V
 #, python-brace-format
 msgid "Total money received: {0}"
 msgstr "Suma mono ricevita: {0}"
+
+#, python-brace-format
+msgid "{0}: {1}"
+msgstr "{0}: {1}"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
@@ -3494,56 +3221,6 @@ msgstr "PayPal permesas ricevi monon en multe pli da landoj ol Stripe, sed ĝi n
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_kvitanco_{number}"
 
-msgid "Receipt"
-msgstr "Kvitanco"
-
-#, python-brace-format
-msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr "Ni konfirmas ricevon de transdono komencita de {payer} en {date}."
-
-#, python-brace-format
-msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr "El {0}, kiuj estis senditaj, {1} iris al la konto de {owner_name} ({link}), kaj {2} estis peradkostoj."
-
-msgid "Beneficiaries"
-msgstr "Ricevantoj"
-
-#, python-brace-format
-msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
-msgstr "La mono financos la donacojn de {name} en Liberapay. La suba tabelo montras la donacojn tiel, kiel ili estis kiam la pago ekis ({datetime}, UTC)."
-
-msgid "Recipient"
-msgstr "Ricevanto"
-
-msgid "Amount per week"
-msgstr "Semajna kvanto"
-
-msgid "Payment Details"
-msgstr "Detaloj pri la pago"
-
-#, python-brace-format
-msgid "Payment method: {0}"
-msgstr "Pagmetodo: {0}"
-
-#, python-brace-format
-msgid "Debited card: {number} ({brand}, {country})"
-msgstr "Debetita karto: {number} ({brand}, {country})"
-
-#, python-brace-format
-msgid "Debited account: {0}"
-msgstr "Debetita konto: {0}"
-
-#, python-brace-format
-msgid "Execution date: {0}"
-msgstr "Dato de eko: {0}"
-
-#, python-brace-format
-msgid "Transaction ID: {0}"
-msgstr "Numero de transakcio: {0}"
-
-msgid "This document is not an invoice."
-msgstr "Ĉi tiu dokumento ne estas fakturo."
-
 msgid "Payment receipt"
 msgstr "Paga kvitanco"
 
@@ -3567,10 +3244,16 @@ msgstr "{0} estis pagitaj por peradkostoj kaj {1} estis disdonitaj kiel klarigit
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
 msgstr "Tamen {x_percent} de la pago ({refund_amount}) estis repagita je {refund_date}."
 
+msgid "Beneficiaries"
+msgstr "Ricevantoj"
+
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
 msgstr[0] "La mono ĵus estis donita al la sekva ricevanto:"
 msgstr[1] "La mono ĵus estis donita al la sekvaj ricevantoj:"
+
+msgid "Recipient"
+msgstr "Ricevanto"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
@@ -3607,8 +3290,19 @@ msgid "Payment method: direct debit of bank account {partial_account_number}"
 msgstr "Pagmetodo: rekta debeto aŭ bankokonto {partial_account_number}"
 
 #, python-brace-format
+msgid "Payment method: {0}"
+msgstr "Pagmetodo: {0}"
+
+#, python-brace-format
 msgid "Settlement date: {0}"
 msgstr "Pagdato: {0}"
+
+#, python-brace-format
+msgid "Transaction ID: {0}"
+msgstr "Numero de transakcio: {0}"
+
+msgid "This document is not an invoice."
+msgstr "Ĉi tiu dokumento ne estas fakturo."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Vi ne povas ricevi novajn donacojn ĝis vi agordas pagan traktadon."
@@ -3699,9 +3393,6 @@ msgstr "Provizante vian IBAN-on, vi permesas {platform} kaj {provider}, niaj pro
 msgid "Forget this bank account number after one payment."
 msgstr "Forgesi ĉi tiun nombron de bankokonto post unu pago."
 
-msgid "The BIC you provided appears to be invalid."
-msgstr "La BIC, kiun vi donis, ŝajnas nevalida."
-
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
@@ -3751,34 +3442,8 @@ msgstr "Aldoni karton"
 msgid "Add a bank account"
 msgstr "Aldoni bankokonton"
 
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "Vi ankoraŭ havas monon en tiu Liberapay-konto, bonvolu elekti metodon por eluzi vian monon sube, aŭ kontaktu nin."
-
 msgid "Close Account"
 msgstr "Fermi konton"
-
-#, python-brace-format
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr "Vi havas {0} en via monujo. Kion ni devus fari kun ĝi?"
-
-#, python-brace-format
-msgid "Give it to the {0}people I donate to{1}"
-msgstr "Doni ĝin al {0}la homoj, al kiuj mi donacas{1}"
-
-msgid "Donate it to Liberapay"
-msgstr "Donaci ĝin al Liberapay"
-
-msgid "This option is recommended for small amounts."
-msgstr "Tiu elekteblo estas rekomendata por malgrandaj kvantoj."
-
-msgid "Withdraw it to my bank account"
-msgstr "Retiri ĝin al mia bankokonto"
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr "Se neniu elekteblo bonas por vi, bonvolu kontakti support@liberapay.com."
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr "Vi havas okazantan transdonon al via bankokonto. Se ĝi malsukcesas, la mono reaperos en via monujo kaj via konto estos aŭtomate remalfermita."
 
 msgid "Data retention"
 msgstr "Datumkonservado"
@@ -3851,23 +3516,14 @@ msgstr "Tiu donaco ne ekzistas aŭ jam estis ĉesigita."
 msgid "Your donation to {0} has been stopped."
 msgstr "Via donaco al {0} estis ĉesigita."
 
-msgid "Your wallet is empty."
-msgstr "Via monujo estas malplena."
+msgid "This is no longer possible."
+msgstr ""
 
 msgid "Export History"
 msgstr "Eksporti historion"
 
-#, python-brace-format
-msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
-msgstr "Vi havas ĉirkaŭ {converted_amount} en via konto (precize: {exact_amounts})."
-
-#, python-brace-format
-msgid "You have {money_amount} in your account."
-msgstr "Vi havas {money_amount} en via konto."
-
-#, python-brace-format
-msgid "Their balance is {0}."
-msgstr "Ilia saldo estas {0}."
+msgid "Wallet"
+msgstr "Monujo"
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
@@ -3979,114 +3635,6 @@ msgstr "pago de {link_open}elspezo n-ro {invoice_id}{link_close} al {payee}"
 #, python-brace-format
 msgid "donation to {0}"
 msgstr "donaco al {0}"
-
-msgid "The amount cannot be zero."
-msgstr "La kvanto ne povas esti nulo."
-
-#, python-brace-format
-msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "La transakcia peradkosto estus alta: {0}% ({1}/{2}). Ĉu tamen daŭrigi?"
-
-msgid "Withdrawing Money"
-msgstr "Retirado de mono"
-
-#, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
-msgstr "{0} estis prenita(j) el via Liberapay-monujo. Se la transdono estas sukcesa {1} iros al via bankokonto kaj {2} estos peradkostoj."
-
-#, python-brace-format
-msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr "La provo sendi {0} al via bankokonto malsukcesis. Erarmesaĝo: {1}"
-
-#, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "Vi havas {0} en via Liberapay-monujo."
-
-msgid "Which currency do you want to withdraw?"
-msgstr "Kiun valuton vi ŝatus retiri?"
-
-#, python-brace-format
-msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr "Retiri eŭroj estas senpaga. Retiri usonajn dolarojn kostas po {0} por transdono senrigarde al la cellando."
-
-msgid "There are no fees when withdrawing euros to your bank account."
-msgstr "Ne estas peradkostoj por retiri eŭrojn al via bankokonto."
-
-#, python-brace-format
-msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr "Retiri usonajn dolarojn kostas {0} por ĉiu transdono, kio ajn estus la destina lando."
-
-msgid "Bank account"
-msgstr "Bankokonto"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Routing Number"
-msgstr "Banka kodo (Routing Number)"
-
-msgid "Account Number"
-msgstr "Numero de konto"
-
-msgid "Bank Account Type"
-msgstr "Speco de bankokonto"
-
-msgid "Bank Name"
-msgstr "Nomo de banko"
-
-msgid "Institution Number"
-msgstr "Institucia nombro"
-
-msgid "Branch Code"
-msgstr "Agenteja kodo"
-
-msgid "Sort Code"
-msgstr "Ordiga kodo (Sort Code)"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "Banka identiga kodo (BIC: Bank Identifier Code)"
-
-msgid "SEPA / IBAN"
-msgstr "SEPA / IBAN"
-
-msgid "USA"
-msgstr "Usono"
-
-msgid "Canada"
-msgstr "Kanado"
-
-msgid "UK"
-msgstr "Unuiĝinta Reĝlando"
-
-msgid "Other"
-msgstr "Alia"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "Bankokonta numero (IBAN: International Bank Account Number)"
-
-msgid "This IBAN is invalid."
-msgstr "Tiu IBAN ne estas valida."
-
-msgid "checking"
-msgstr "Konto por uzi (checking)"
-
-msgid "savings"
-msgstr "Konto por konservi (savings)"
-
-msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr "SWIFT-kodoj estas longaj je 8 aŭ 11 signoj. La 6 unuaj signoj estas literoj, la resto povas esti literoj aŭ ciferoj. Ekzemple: CMBRFR2BCME"
-
-msgid "only letters (a-z) and digits (0-9) are allowed"
-msgstr "nur literoj (a-z) kaj ciferoj (0-9) estas permesataj"
-
-msgid "This account number is invalid."
-msgstr "Tiu numero de konto ne estas valida."
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "La jenaj kampoj estas pri la leĝa posedanto de la bankokonto."
-
-msgid "The bank account must belong to you, sending money to third parties is not allowed."
-msgstr "La bankokonto devas esti via, sendi monon al eksteruloj ne estas permesita."
 
 #, python-brace-format
 msgid "Account number: {0}"
@@ -4401,10 +3949,6 @@ msgstr "Uzkondiĉoj"
 msgid "Privacy Policy"
 msgstr "Privateca politiko"
 
-#, python-brace-format
-msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
-msgstr "{0} estis la unua pagservo partnero de Liberapay, sed ili forlasis nin en 2018. Malsupren estas kopioj de la kontrakto, kiun vi devis akcepti por sendi kaj ricevi monon per Liberapay antaŭ Aŭgusto 2018: "
-
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Ĉi tiu paĝo havas ligilojn al kaj informon pri la emblemo de Liberapay. Ni esperas, ke vi trovos ĝin precipe utila, se vi skribas artikolon pri Liberapay aŭ se vi volas aldoni proprajn ligilojn al via profilo de Liberapay en via paĝaro."
 
@@ -4560,25 +4104,6 @@ msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{
 msgstr "Danke al {link_open}ĉiuj, kiuj sendis al ni raporton per HackerOne{link_close}."
 
 #, python-brace-format
-msgid "{0} is escrowed within Liberapay."
-msgstr "{0} estas prizorgataj ene de Liberapay."
-
-msgid "Deposits (€)"
-msgstr "Deponoj (€)"
-
-msgid "Money moved into Liberapay"
-msgstr "Mono transdonita al Liberapay"
-
-msgid "weeks"
-msgstr "semajnoj"
-
-msgid "Withdrawals (€)"
-msgstr "Retiroj (€)"
-
-msgid "Money moved out of Liberapay"
-msgstr "Mono transdonita el Liberapay"
-
-#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
 msgstr[0] "Liberapay estis lanĉita {timespan_ago} kaj havas {n} uzanton."
@@ -4619,6 +4144,9 @@ msgstr "Malfermitaj kontoj"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "Nombro de Liberapay-kontoj malfermitaj, kiuj apartenas al unuopuloj aŭ organizoj"
+
+msgid "weeks"
+msgstr "semajnoj"
 
 msgid "Active Users"
 msgstr "Aktivaj uzantoj"

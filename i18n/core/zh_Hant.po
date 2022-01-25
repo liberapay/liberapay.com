@@ -123,49 +123,6 @@ msgid "Manage your email addresses"
 msgstr "管理你的電郵地址"
 
 #, python-brace-format
-msgid "You have received approximately {0} this week"
-msgstr "您本週已收到大約 {0} 個"
-
-#, python-brace-format
-msgid "You have received {0} this week"
-msgstr "您本週已收到 {0} 個"
-
-#, python-brace-format
-msgid "{0} was given to you personally."
-msgstr "{0}是指定给你的."
-
-msgid "You are not a member of any team, so you haven't received any money for participation in teams."
-msgstr "您不是任何團隊的成員，因此沒有收到參與團隊的款項。"
-
-#, python-brace-format
-msgid "No money was given to you for your role in the {0} team."
-msgid_plural "No money was given to you for your roles in the {n} teams you are a member of."
-msgstr[0] "在您參與的 {n} 個團隊中，沒有支付給您的款項。"
-
-#, python-brace-format
-msgid "{0} was given to you for your role in the {1} team."
-msgstr "為了您在 {1} 團隊中的貢獻，{0} 已給予您。"
-
-#, python-brace-format
-msgid "{0} was given to you for your roles in the following teams:"
-msgstr "為了您對以下團隊的貢獻，已給予您 {0}："
-
-#, python-brace-format
-msgid "{0}: {1}"
-msgstr "{0}：{1}"
-
-#, python-brace-format
-msgid "You now have {0} in your wallet."
-msgstr "目前錢包內餘額有 {0}。"
-
-msgid "See your account's transaction logs"
-msgstr "查看您的帳號的交易記錄"
-
-#, python-brace-format
-msgid "- {0}: {1}"
-msgstr "- {0}：{1}"
-
-#, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
 msgstr "您本週在 Liberapay 收入大約為 {money_amount}"
 
@@ -196,23 +153,12 @@ msgid "NB: Donations through Liberapay are now paid in advance instead of being 
 msgstr "NB: 在 Liberapay 捐款現在由每週匯款改為事先支付。上方的數目是在舊系統中本週將可收到的款項。"
 
 #, python-brace-format
-msgid "You have {money_amount} in your Mangopay wallet."
-msgstr "您的 Mangopay 錢包有{money_amount}。"
-
-msgid "Withdraw money"
-msgstr "提領錢款"
-
-#, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
 msgstr "您向 {0} 的請款已被接受 - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
 msgstr "你向 {addressee_name} 請求支付{amount} 的金額已被接受了。"
-
-#, python-brace-format
-msgid "Unfortunately the wallet of {0} does not contain enough money to pay you right now, but as soon as it does you will be paid automatically."
-msgstr "很抱歉，{0} 的電子錢包裏目前並沒有足夠的錢支付給你，一旦有錢後就會立即自動付款給你。"
 
 msgid "View the invoice"
 msgstr "檢視請款資料"
@@ -222,14 +168,8 @@ msgid "Your invoice to {0} has been accepted and paid - Liberapay"
 msgstr "您向 {0} 的請款已被接受並已支付 - Liberapay"
 
 #, python-brace-format
-msgid "Your request for a payment of {amount} from {addressee_name} has been accepted, and the money has been transferred to your wallet."
-msgstr "您向 {addressee_name} 請求支付 {amount} 的請款已被接受，資金已經轉入您的錢包裡。"
-
-msgid "Withdraw the money"
-msgstr "提領現金"
-
-msgid "However you cannot withdraw the money yet as it is still in quarantine."
-msgstr "但是，由於這筆資金仍在隔離狀態中，您目前還不能提領它。"
+msgid "Your invoice of {amount} to {addressee_name} has been paid."
+msgstr ""
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -304,51 +244,6 @@ msgstr "簡介：{0}"
 
 msgid "Unsubscribe"
 msgstr "取消訂閱"
-
-msgid "Liberapay is in trouble"
-msgstr "Liberapay有麻烦了"
-
-#, python-brace-format
-msgid ""
-"Our payment processor (Mangopay) is throwing us out, so we recommend that you {link1_start}evacuate the money from your account{link_end} before July 26th.\n"
-"\n"
-"Clicking on the link above will bring you to a new page titled “Emptying your wallet” and ask you to choose between two options.\n"
-"\n"
-"If you use Liberapay as a donor the first choice is recommended, especially if you wish to continue using Liberapay. This first option distributes all the money from your wallet to the people who would have normally received it over time. The recipients will be able to see that this sudden burst of income corresponds to multiple weeks of donations.\n"
-"\n"
-"For example, if you’re donating $1 per week to 2 creators, and you have $40 in your wallet, then each creator will receive $20, and 20 weeks from now you’ll receive our usual email reminding you that it’s time to add money again.\n"
-"\n"
-"Please note that the disbursement may fail for various reasons. If you get an error message like “The attempt to distribute all the money in your wallet failed: XX.XX remains.”, then the problem is probably on the recipient side, for example someone who hasn’t filled the identity form or a team that hasn’t defined how the income should be split between the members.\n"
-"\n"
-"The other option is to get your money back, if possible through a refund, otherwise by withdrawing it to your bank account.\n"
-"\n"
-"If you receive donations on Liberapay, you may want to wait a week before withdrawing your income in order to give your patrons a chance to transfer the remaining of their donations from their wallets to yours.\n"
-"\n"
-"We’ll inform you as soon as the integration of a new payment processor is complete, and tell you if there’s anything you need to do to start receiving donations on Liberapay again.\n"
-"\n"
-"If you’re a member of a team, you should make sure that your take is set and up-to-date. You can do that from {link2_start}your “Receiving” page{link_end}.\n"
-"\n"
-"You can find more information in {link3_start}this blog post{link_end}, and as always you can reply to this email if you need help.\n"
-msgstr ""
-"我們的支付服務提供商（Mangopay）正在拋棄我們，所以我們建議您在7月26日前{link1_start}從您的錢包中取出所有餘額{link_end}。\n"
-"\n"
-"點擊以上連結後會開啟一個名爲「清空您的錢包」的頁面，並請您在以下兩種方案中選擇：\n"
-"\n"
-"若您以資助者方式使用Liberapay，尤其您希望繼續使用Liberapay，我們則推薦第一種方案。該方案將您所有的餘額分配至您平時支持的創作者手中。收款的創作者會立即收到相當於數週的捐款額的大筆收入。\n"
-"\n"
-"舉例說明，若您向兩位創作者每週捐獻$1，且您的錢包還剩$40，每位創作者則會收到$20，且20周後您將會在電郵中收到我們平時的儲值通知。\n"
-"\n"
-"請注意支付可能會由於各種原因失敗。若您收到「錢包餘額分配失敗：XX.XX元仍在您的錢包中。」，則該問題應存在於收款者一側，例如未完成身份驗證的個人，或是未設置成員收入分成的團隊。\n"
-"\n"
-"另一種方案則是提現，若情況允許則通過信用卡退款，反則可向銀行賬戶退款。\n"
-"\n"
-"若您在Liberapay上收到捐款，您可能會希望等待一週再提現，以確保您的支持者有機會將餘額轉入您的錢包中。\n"
-"\n"
-"我們會在第一時間通知新支付服務提供商的啓用，並且告訴您是否需要採取下一步行動來繼續收到捐款。\n"
-"\n"
-"若您是一個團隊的成員，您需確保最新的成員分成設定。您可通過{link2_start}「收款」頁面{link_end}來設置。\n"
-"\n"
-"您可在{link3_start}此文章{link_end}中瞭解更多訊息，也可回覆本郵件來獲取幫助。\n"
 
 msgid "The password of your Liberapay account is weak"
 msgstr "您的 Liberapay 密碼不安全"
@@ -780,20 +675,6 @@ msgstr "您的 Liberapay 帳號已被修改"
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
 msgstr "某人試圖將電子郵件地址 {0} 關聯到您的 Liberapay 帳號，其目前的帳號為 {1}。如果您並未執行此操作，請點擊下方的連結並將異常的地址從您的帳號中移除。"
 
-msgid "Withdrawal initiated"
-msgstr "要求提領"
-
-#, python-brace-format
-msgid "We have initiated a transfer of {0} from your Liberapay wallet to your bank account. Please note that it can take several business days for the transaction to complete."
-msgstr "我們從你的 Liberapay 電子錢包轉出了 {0} 到你的銀行帳戶。請留意這個流程可能要花上幾個工作天完成。"
-
-msgid "Withdrawal failure"
-msgstr "提領失敗"
-
-#, python-brace-format
-msgid "We tried to transfer {0} from your Liberapay wallet to your bank account, but the transfer failed with this message:"
-msgstr "我們試著從你的 Liberapay 電子錢包轉出 {0}金額到你的銀行帳戶，但卻收到以下失敗的訊息："
-
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "看來你發現了系統上的一個問題！抱歉造成不便，我們會儘快修復！"
 
@@ -1100,9 +981,6 @@ msgstr ""
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "看來你似乎要刪除一些不存在的東西。"
 
-msgid "There isn't enough money in your wallet."
-msgstr "你的電子錢包裏沒有足夠的錢。"
-
 #, python-brace-format
 msgid "You can't withdraw more than {0} at this time."
 msgstr "這次的提款不能超過 {0} 數額。"
@@ -1130,10 +1008,6 @@ msgstr "\"{0}\" 社群已經存在。"
 msgid "\"{0}\" is not a valid community name."
 msgstr "\"{0}\" 不是一個有效的社群名稱。"
 
-#, python-brace-format
-msgid "Transferring the money failed, sorry. Please contact support@liberapay.com if the problem persists. Error message: {0}"
-msgstr "這筆捐款的轉帳失敗了，如果問題一直無法解決，請聯絡 support@liberapay.com。錯誤訊息 : {0}"
-
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "因為你的帳戶目前被停權，所以無法進行這個動作。"
 
@@ -1152,10 +1026,6 @@ msgstr "本操作已被尝试多次。请以后（例如一周内）重试或联
 
 msgid "You're sending requests at an unusually fast pace. Please retry in a few seconds, and contact support@liberapay.com if the problem persists."
 msgstr "您的网络请求发送次数异常频繁。请在几秒后重试，如果问题依旧存在，请联系 support@liberapay.com。"
-
-#, python-brace-format
-msgid "The attempt to distribute all the money in your wallet failed: {money_amount} remains."
-msgstr "钱包余额分配失败：{money_amount}仍在您的钱包中。"
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
@@ -1467,12 +1337,6 @@ msgstr "支付處理工具"
 
 msgid "Ledger"
 msgstr "總帳"
-
-msgid "Wallet"
-msgstr "錢包"
-
-msgid "Emptying your wallet"
-msgstr "清空電子錢包"
 
 msgid "Identity"
 msgstr "身份"
@@ -1999,120 +1863,6 @@ msgstr "停止捐款"
 
 msgid "Cancel the pledge"
 msgstr "取消捐款承諾"
-
-#, python-brace-format
-msgid "You have uploaded {n} document of this type:"
-msgid_plural "You have uploaded {n} documents of this type:"
-msgstr[0] "你已經上傳了{n}個此類文件："
-
-#, python-brace-format
-msgid "Document #{id} is awaiting validation."
-msgstr "文件#{id}正在等待確認。"
-
-#, python-brace-format
-msgid "Document #{id} has been validated."
-msgstr "文件#{id}正在被確認。"
-
-#, python-brace-format
-msgid "Document #{id} has been rejected: {refused_reason_type} - {refused_reason_message}."
-msgstr "文件#{id}已被拒絕：{refused_reason_type} - {refused_reason_message}。"
-
-msgid "If you need assistance, you can send an email to support@liberapay.com."
-msgstr "若需要幫助，請聯繫 support@liberapay.com。"
-
-msgid "Income Range"
-msgstr "收入範圍"
-
-#, python-brace-format
-msgid "Less than {0}"
-msgstr "少於{0}"
-
-#, python-brace-format
-msgid "More than {0}"
-msgstr "多於{0}"
-
-#, python-brace-format
-msgid "Between {0} and {1}"
-msgstr "{0}和{1}之間"
-
-msgid "How much money you earn per year, approximately."
-msgstr "你的大概年收入。"
-
-msgid "Identity Proof"
-msgstr "身分證件"
-
-msgid "Passport, or ID Card (front and back), or UK driving licence."
-msgstr "護照，或身分證（正反面），或英國駕照。"
-
-msgid "Articles of Association"
-msgstr "公司章程"
-
-msgid "Certified articles of association (Statute) - formal memorandum stated by the entrepreneurs, in which the following information is mentioned: business name, activity, registered address, shareholding."
-msgstr "認證的公司章程 - 由股東書面固定下來的正式文件，需有以下信息：公司名稱、經營活動、註冊地址、持股信息。"
-
-msgid "Registration Proof"
-msgstr "公司註冊證明"
-
-msgid "Extract from the Company Register issued within the last three months."
-msgstr "最近三個月內的公司名冊摘要。"
-
-msgid "Proof of registration from the official authority."
-msgstr "官方的公司註冊證明。"
-
-msgid "Shareholder Declaration"
-msgstr "股東聲明"
-
-#, python-brace-format
-msgid "Please download and fill the {link_start}shareholder declaration form{link_end}."
-msgstr "請下載並填寫{link_start}股東聲明表{link_end}。"
-
-msgid "Legal Representative Information"
-msgstr "法定代表信息"
-
-msgid "The following fields are about the organization's legal representative (you, probably)."
-msgstr "底下欄位是關於組織的法定代表(可能是你 )."
-
-#, python-brace-format
-msgid "The following file formats are supported: {0}."
-msgstr "支持以下文件格式：{0}。"
-
-#, python-brace-format
-msgid "The maximum size of each file is {0}MB."
-msgstr "文件最大小不得超過{0}MB。"
-
-msgid "We need to know who you are in order to comply with financial regulations. Only authorized personnel will be able to see this information, we will not show it to other users or anyone else unless required by law."
-msgstr "由於財務規定我們需要知道你的身份。我们具有高级权限的员工才可以看见此信息，除非违背法律，否则我们永远不会透露给其他人。"
-
-msgid "Given Name"
-msgstr "名字"
-
-msgid "Family Name"
-msgstr "姓氏"
-
-msgid "Country (nationality)"
-msgstr "國家 (國籍)"
-
-msgid "Organization Type"
-msgstr "組織類型"
-
-msgid "Business"
-msgstr "商业"
-
-#, python-brace-format
-msgid "I agree to {0}MangoPay's Terms of Service{1}"
-msgstr "我同意 {0}MangoPay的服務條款{1}"
-
-msgid "Address"
-msgstr "地址"
-
-msgid "Address (second line)"
-msgstr "地址 (第二行)"
-
-msgid "Region"
-msgstr "地區"
-
-msgid "Postal Code"
-msgstr "郵政編號"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
@@ -2883,17 +2633,8 @@ msgstr[0] "您有{n}筆排定的付款："
 msgid "You currently don't have any scheduled payment."
 msgstr "您目前無任何排定的付款。"
 
-msgid "Are you sure you want to change the type of your account? For legal reasons we will have to create a new account for you in our payment partner's system, and transfer the money from your old account."
-msgstr "你確定切換帳戶種類？由於法律原因我們會在支付夥伴的系統中重新註冊帳號，並將錢從舊帳號中轉移出來。"
-
-msgid "We can't change the type of your account during payday, please try again in a few minutes."
-msgstr "我們不能在捐款日更改你的帳號種類，請在幾分鐘後重試。"
-
-msgid "Are you sure you want to change your identity information? If you do, you may have to go through the identity verification process again."
-msgstr "你確定更改你的身分信息？若你確定，你可能需要重新驗證自己的身分。"
-
-msgid "You haven't filled all the required fields."
-msgstr "你沒有填寫必要欄位。"
+msgid "The provided postal address is incomplete."
+msgstr "被提供的地址未完整。"
 
 msgid "Invalid date of birth."
 msgstr "無效的出生日期。"
@@ -2901,27 +2642,8 @@ msgstr "無效的出生日期。"
 msgid "Your identity information has been updated."
 msgstr "你的身份資訊已更新。"
 
-msgid "Your identity information has been registered."
-msgstr "你的身份资訊被被登記。"
-
-msgid "You have to agree to MangoPay's Terms of Service."
-msgstr "你必須同意MangoPay的服務條款。"
-
 msgid "JavaScript is required"
 msgstr "須使用JavaScript"
-
-msgid "Level 2"
-msgstr "第二級別"
-
-msgid "You have completed the identity verification process, the amount of money you can give and receive per year is no longer limited."
-msgstr "你已完成身分驗證，你每年能夠捐贈或收到的金額已不再受到限制。"
-
-#, python-brace-format
-msgid "If you give more than {0} in a year, or receive more than {1} in a year, or if your account shows signs of suspicious activity, then you will have to provide additional information:"
-msgstr "若你在一年內捐款超過{0}，或是在一年內收到超過{1}，或是你的帳號被懷疑存在可疑活動，你需要提供以下額外信息："
-
-msgid "The provided postal address is incomplete."
-msgstr "被提供的地址未完整。"
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
 msgstr "本頁可讓用戶檢視與修改其帳號下的身份資訊，唯有被授權者才能查看這些資料。除非法令規定或當事人要求，我們不會向他人展示這些個人資訊。"
@@ -3093,6 +2815,9 @@ msgstr "傳送"
 msgid "Accept and Pay"
 msgstr "接受並支付"
 
+msgid "Mark as paid"
+msgstr ""
+
 #, python-brace-format
 msgid "Message: {0}"
 msgstr "訊息： {0}"
@@ -3191,6 +2916,10 @@ msgstr "下方總數並未包含舊電子錢包系統的捐款，用戶可在{li
 #, python-brace-format
 msgid "Total money received: {0}"
 msgstr "收款總額：{0}"
+
+#, python-brace-format
+msgid "{0}: {1}"
+msgstr "{0}：{1}"
 
 #, python-brace-format
 msgid "Total money sent: {0}"
@@ -3462,56 +3191,6 @@ msgstr "比起 Stripe，PayPal 可接受收款的國家數量更多，但它並�
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_receipt_{number}"
 
-msgid "Receipt"
-msgstr "收據"
-
-#, python-brace-format
-msgid "We confirm the receipt of a transfer initiated by {payer} on {date}."
-msgstr "我們在 {date}　確認收到了由 {payer} 發出的轉帳。"
-
-#, python-brace-format
-msgid "Of the {0} that were sent, {1} went into the account of {owner_name} ({link}), and {2} were paid in transaction fees."
-msgstr "所送出的 {0} 金額中， {1} 進入了 {owner_name} 帳戶({link})，而 {2} 則是交易手續費。"
-
-msgid "Beneficiaries"
-msgstr "受益人"
-
-#, python-brace-format
-msgid "The money will fund the donations of {name} on Liberapay. The table below shows the donations as they were when the payment was initiated ({datetime}, UTC)."
-msgstr "這筆錢將會用在Liberapay上頭給 {name} 的捐款，下方的表格顯示 ({datetime}, UTC 計時的捐款支付)。"
-
-msgid "Recipient"
-msgstr "受贈者"
-
-msgid "Amount per week"
-msgstr "每週的數量"
-
-msgid "Payment Details"
-msgstr "付款細節"
-
-#, python-brace-format
-msgid "Payment method: {0}"
-msgstr "支付方式： {0}"
-
-#, python-brace-format
-msgid "Debited card: {number} ({brand}, {country})"
-msgstr "借貨卡: {number} ({brand}, {country})"
-
-#, python-brace-format
-msgid "Debited account: {0}"
-msgstr "借貸數目: {0}"
-
-#, python-brace-format
-msgid "Execution date: {0}"
-msgstr "執行日期: {0}"
-
-#, python-brace-format
-msgid "Transaction ID: {0}"
-msgstr "交易 ID： {0}"
-
-msgid "This document is not an invoice."
-msgstr "此文件不是發票。"
-
 msgid "Payment receipt"
 msgstr ""
 
@@ -3535,9 +3214,15 @@ msgstr "{0} 支付了處理費，{1} 分發如下。"
 msgid "However, {x_percent} of the payment ({refund_amount}) was refunded on {refund_date}."
 msgstr "將會在{refund_date}退款{refund_amount}，為{x_percent}比例之金額。"
 
+msgid "Beneficiaries"
+msgstr "受益人"
+
 msgid "The money has been donated to the following recipient:"
 msgid_plural "The money has been donated to the following recipients:"
 msgstr[0] "這些錢已捐給以下收款人："
+
+msgid "Recipient"
+msgstr "受贈者"
 
 #, python-brace-format
 msgid "{recipient}, member of the {team_name} team"
@@ -3574,8 +3259,19 @@ msgid "Payment method: direct debit of bank account {partial_account_number}"
 msgstr "支付方式：直接從銀行帳號 {partial_account_number} 提出"
 
 #, python-brace-format
+msgid "Payment method: {0}"
+msgstr "支付方式： {0}"
+
+#, python-brace-format
 msgid "Settlement date: {0}"
 msgstr "結算日期：{0}"
+
+#, python-brace-format
+msgid "Transaction ID: {0}"
+msgstr "交易 ID： {0}"
+
+msgid "This document is not an invoice."
+msgstr "此文件不是發票。"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "你必須設定支付方法才能收取新的捐款。"
@@ -3665,9 +3361,6 @@ msgstr "提供您的銀行帳戶資料代表將授權同意我們的支付服務
 msgid "Forget this bank account number after one payment."
 msgstr "一次性付款後不保留此銀行帳號。"
 
-msgid "The BIC you provided appears to be invalid."
-msgstr "你提供的BIC似乎無效。"
-
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
@@ -3716,34 +3409,8 @@ msgstr "新增信用卡資料"
 msgid "Add a bank account"
 msgstr "新增銀行帳戶資料"
 
-msgid "You still have money in this Liberapay account, please choose a disbursement method below or contact support."
-msgstr "你在這個 Liberapay帳戶還有剩錢，請選擇要花費的方式或是聯絡用戶支援。"
-
 msgid "Close Account"
 msgstr "關閉帳戶"
-
-#, python-brace-format
-msgid "You have {0} in your wallet. What should we do with it?"
-msgstr "你的電子錢包裏有 {0} 。我們要如何處置它呢？"
-
-#, python-brace-format
-msgid "Give it to the {0}people I donate to{1}"
-msgstr "把它交付給 {0}I 捐贈給 {1}"
-
-msgid "Donate it to Liberapay"
-msgstr "將之捐贈給 Liberapay"
-
-msgid "This option is recommended for small amounts."
-msgstr "小額度捐款建說此選項。"
-
-msgid "Withdraw it to my bank account"
-msgstr "转账至银行账户"
-
-msgid "If neither option works for you, please contact support@liberapay.com."
-msgstr "如果這些選項都不適合你，請聯絡用戶支援 support@liberapay.com。"
-
-msgid "You have a pending transfer to your bank account. If it fails, the money will reappear in your wallet and your account will be automatically reopened."
-msgstr "你有待處理的銀行轉入交易。如果它失敗了，這筆錢會出現在你的電子錢包而你的帳戶會自動重開。"
 
 msgid "Data retention"
 msgstr "数据保留"
@@ -3816,23 +3483,14 @@ msgstr "此筆捐款不存在或已經停止。"
 msgid "Your donation to {0} has been stopped."
 msgstr "你給予 {0} 的捐款已停止。"
 
-msgid "Your wallet is empty."
-msgstr "您的錢包已見底。"
+msgid "This is no longer possible."
+msgstr ""
 
 msgid "Export History"
 msgstr "導出歷史記錄"
 
-#, python-brace-format
-msgid "You have approximately {converted_amount} in your account (exactly: {exact_amounts})."
-msgstr "你的帳戶 (exactly: {exact_amounts})大約有 {converted_amount}元。"
-
-#, python-brace-format
-msgid "You have {money_amount} in your account."
-msgstr "你的帳戶中有 {money_amount} 錢。"
-
-#, python-brace-format
-msgid "Their balance is {0}."
-msgstr "他們的收支為 {0}。"
+msgid "Wallet"
+msgstr "錢包"
 
 #, python-brace-format
 msgid "This page only shows transactions processed by Mangopay, to view other payments {link_start}go to the Ledger page{link_end}."
@@ -3940,114 +3598,6 @@ msgstr "費用{link_open}的支付 #{invoice_id}{link_close} 給 {payee}"
 #, python-brace-format
 msgid "donation to {0}"
 msgstr "捐贈給 {0}"
-
-msgid "The amount cannot be zero."
-msgstr "金額不能為零。"
-
-#, python-brace-format
-msgid "The transaction fee would be high: {0}% ({1}/{2}). Proceed anyway?"
-msgstr "交易手續費將高達 {0}% ({1}/{2})。繼續進行嗎？"
-
-msgid "Withdrawing Money"
-msgstr "取領錢款"
-
-#, python-brace-format
-msgid "{0} have been taken from your Liberapay wallet. If the transfer is successful, {1} will land in your bank account, and {2} will be paid in fees."
-msgstr "你的 Liberapay 錢包被取走了{0}元。如果滙款成功，將有 {1} 會轉入到你的銀行戶頭，而手續費則為 {2} 。"
-
-#, python-brace-format
-msgid "The attempt to send {0} to your bank account has failed. Error message: {1}"
-msgstr "企圖轉 {0} 到你銀行戶頭 的這筆交易失敗了，回傳的錯誤訊息為： {1}"
-
-#, python-brace-format
-msgid "You have {0} in your Liberapay wallet."
-msgstr "你的 Liberapay錢包裏有 {0} 。"
-
-msgid "Which currency do you want to withdraw?"
-msgstr "你想使用哪種貨幣取領？"
-
-#, python-brace-format
-msgid "Withdrawing euros is free. Withdrawing US dollars costs {0} per transfer regardless of the destination country."
-msgstr "提領歐元不須手續費，提領美元則不管滙款目的地國家每筆交易都要收取{0}費用。"
-
-msgid "There are no fees when withdrawing euros to your bank account."
-msgstr "將歐元提領回您的銀行帳戶時不會有手續費。"
-
-#, python-brace-format
-msgid "Withdrawing US dollars costs {0} per transfer, whatever the destination country is."
-msgstr "用美元取領，無論轉往何國，手續費每次{0}。"
-
-msgid "Bank account"
-msgstr "銀行帳戶"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "Routing Number"
-msgstr "路由號碼"
-
-msgid "Account Number"
-msgstr "帳戶號碼"
-
-msgid "Bank Account Type"
-msgstr "銀行 帳戶類型"
-
-msgid "Bank Name"
-msgstr "銀行名稱"
-
-msgid "Institution Number"
-msgstr "機構號碼"
-
-msgid "Branch Code"
-msgstr "分行代碼"
-
-msgid "Sort Code"
-msgstr "分類代碼"
-
-msgid "BIC (Bank Identifier Code)"
-msgstr "BIC (銀行識別碼)"
-
-msgid "SEPA / IBAN"
-msgstr "SEPA / IBAN"
-
-msgid "USA"
-msgstr "美國"
-
-msgid "Canada"
-msgstr "加拿大"
-
-msgid "UK"
-msgstr "英國"
-
-msgid "Other"
-msgstr "其它國家"
-
-msgid "IBAN (International Bank Account Number)"
-msgstr "IBAN (國際銀行帳戶數字)"
-
-msgid "This IBAN is invalid."
-msgstr "這個 IBAN 無效。"
-
-msgid "checking"
-msgstr "支票帳號"
-
-msgid "savings"
-msgstr "儲蓄帳號"
-
-msgid "SWIFT codes are 8 or 11 characters long. The first 6 characters are letters, the rest can be letters or digits. Example: CMBRFR2BCME"
-msgstr "SWIFT代碼通常為8至11字符長。前6個字符為字母，之後可為字母或數字。如：CMBRFR2BCME"
-
-msgid "only letters (a-z) and digits (0-9) are allowed"
-msgstr "只能使用英文字母 (a-z) 和數字(0-9)"
-
-msgid "This account number is invalid."
-msgstr "帳戶號碼無效。"
-
-msgid "The following fields are about the legal owner of the bank account."
-msgstr "下列欄位是關於銀行帳戶的法定所有者。"
-
-msgid "The bank account must belong to you, sending money to third parties is not allowed."
-msgstr "銀行帳戶須為您所持有，不能轉滙給第三人。"
 
 #, python-brace-format
 msgid "Account number: {0}"
@@ -4361,10 +3911,6 @@ msgstr "服務條款"
 msgid "Privacy Policy"
 msgstr "隐私权政策"
 
-#, python-brace-format
-msgid "{0} was Liberapay's initial payment partner, but they quit on us in 2018. Below are copies of the contract you had to accept in order to send or receive money through Liberapay prior to August 2018: "
-msgstr "{0} 是 Liberapay 一開始的支付合作商，但 2018 他們停止雙方合作關係，下方是我們當初的合約複本，用戶必須同意此合約才能利用 Liberapay 收送捐款。 "
-
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "此頁面包含了關於 Liberapay 圖示的連結與資訊。如果您正在撰寫關於 Liberapay 的文章，或是您想要在您的網站上加入連到您的 Liberapay 簡介的自訂連結的話，我們希望您能在這裡找到有用的資訊。"
 
@@ -4519,25 +4065,6 @@ msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{
 msgstr "感謝利用{link_open}HackerOne 回報問題的每位使用者{link_close}。"
 
 #, python-brace-format
-msgid "{0} is escrowed within Liberapay."
-msgstr "{0} 目前在Liberapay保管。"
-
-msgid "Deposits (€)"
-msgstr "儲值金 (€)"
-
-msgid "Money moved into Liberapay"
-msgstr "錢滙入了 Liberapay"
-
-msgid "weeks"
-msgstr "週數"
-
-msgid "Withdrawals (€)"
-msgstr "提領 (€)"
-
-msgid "Money moved out of Liberapay"
-msgstr "錢自 Liberapay 轉出"
-
-#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
 msgstr[0] "Liberapay 於 {timespan_ago} 年前啟動，目前有 {n} 用戶。"
@@ -4572,6 +4099,9 @@ msgstr "打開帳戶"
 
 msgid "Number of open individual and organization accounts on Liberapay"
 msgstr "在Liberapay 開設個人與組織帳戶的數目"
+
+msgid "weeks"
+msgstr "週數"
 
 msgid "Active Users"
 msgstr "活躍用戶"
