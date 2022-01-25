@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '153'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '154'::jsonb);
 
 
 -- app configuration
@@ -40,9 +40,7 @@ CREATE TABLE participants
 , status                participant_status      NOT NULL DEFAULT 'stub'
 , join_time             timestamptz             DEFAULT NULL
 
-, balance               currency_amount         NOT NULL
 , goal                  currency_amount         DEFAULT NULL
-, mangopay_user_id      text                    DEFAULT NULL UNIQUE
 
 , hide_giving           boolean                 NOT NULL DEFAULT FALSE
 , hide_receiving        boolean                 NOT NULL DEFAULT FALSE
@@ -87,12 +85,10 @@ CREATE TABLE participants
 , marked_as             account_mark
 , is_unsettling         int                     NOT NULL DEFAULT 0
 
-, CONSTRAINT balance_chk CHECK (NOT ((status <> 'active' OR kind IN ('group', 'community')) AND balance <> 0))
 , CONSTRAINT giving_chk CHECK (NOT (kind IN ('group', 'community') AND giving <> 0))
 , CONSTRAINT goal_chk CHECK (NOT (kind IN ('group', 'community') AND status='active' AND goal IS NOT NULL AND goal <= 0))
 , CONSTRAINT join_time_chk CHECK ((status='stub') = (join_time IS NULL))
 , CONSTRAINT kind_chk CHECK ((status='stub') = (kind IS NULL))
-, CONSTRAINT mangopay_chk CHECK (NOT (mangopay_user_id IS NULL AND balance <> 0))
 , CONSTRAINT secret_team_chk CHECK (NOT (kind IN ('group', 'community') AND hide_receiving))
  );
 
@@ -127,7 +123,6 @@ CREATE FUNCTION initialize_amounts() RETURNS trigger AS $$
         NEW.giving = coalesce_currency_amount(NEW.giving, NEW.main_currency);
         NEW.receiving = coalesce_currency_amount(NEW.receiving, NEW.main_currency);
         NEW.taking = coalesce_currency_amount(NEW.taking, NEW.main_currency);
-        NEW.balance = coalesce_currency_amount(NEW.balance, NEW.main_currency);
         RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
@@ -330,17 +325,6 @@ CREATE TABLE wallets
 
 CREATE UNIQUE INDEX ON wallets (owner, (balance::currency), is_current);
 CREATE UNIQUE INDEX ON wallets (remote_owner_id, (balance::currency));
-
-CREATE FUNCTION recompute_balance(bigint) RETURNS currency_amount AS $$
-    UPDATE participants p
-       SET balance = (
-               SELECT sum(w.balance, p.main_currency)
-                 FROM wallets w
-                WHERE w.owner = p.id
-           )
-     WHERE id = $1
- RETURNING balance;
-$$ LANGUAGE SQL STRICT;
 
 
 -- transfers -- balance transfers from one user to another
@@ -938,25 +922,6 @@ CREATE TABLE balances_at
 );
 
 
--- all the money that has ever entered the system
-
-CREATE TABLE cash_bundles
-( id           bigserial         PRIMARY KEY
-, owner        bigint            REFERENCES participants
-, origin       bigint            NOT NULL REFERENCES exchanges
-, amount       currency_amount   NOT NULL CHECK (amount > 0)
-, ts           timestamptz       NOT NULL
-, withdrawal   int               REFERENCES exchanges
-, disputed     boolean
-, locked_for   int               REFERENCES transfers
-, wallet_id    text
-, CONSTRAINT in_or_out CHECK ((owner IS NULL) <> (withdrawal IS NULL))
-, CONSTRAINT wallet_chk CHECK ((wallet_id IS NULL) = (owner IS NULL))
-);
-
-CREATE INDEX cash_bundles_owner_idx ON cash_bundles (owner);
-
-
 -- whitelist (via profile_noindex) of noteworthy organizational donors
 
 CREATE OR REPLACE VIEW sponsors AS
@@ -1025,29 +990,6 @@ CREATE TABLE debts
 , settlement      int             REFERENCES transfers
 , CONSTRAINT settlement_chk CHECK ((status = 'paid') = (settlement IS NOT NULL))
 );
-
-
--- mangopay_users - links mangopay user accounts to our local participants
-
-CREATE TABLE mangopay_users
-( id            text     PRIMARY KEY
-, participant   bigint   NOT NULL REFERENCES participants
-);
-
-CREATE OR REPLACE FUNCTION upsert_mangopay_user_id() RETURNS trigger AS $$
-    BEGIN
-        INSERT INTO mangopay_users
-                    (id, participant)
-             VALUES (NEW.mangopay_user_id, NEW.id)
-        ON CONFLICT (id) DO NOTHING;
-        RETURN NULL;
-    END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER upsert_mangopay_user_id
-    AFTER INSERT OR UPDATE OF mangopay_user_id ON participants
-    FOR EACH ROW WHEN (NEW.mangopay_user_id IS NOT NULL)
-    EXECUTE PROCEDURE upsert_mangopay_user_id();
 
 
 -- rate limiting
