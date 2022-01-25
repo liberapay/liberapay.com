@@ -54,6 +54,9 @@ if request.method == 'POST':
     elif action in ('accept', 'reject'):
         new_status = action + 'ed'
         allowed_user_id = invoice.addressee
+    elif action == 'mark_as_paid':
+        new_status = 'paid'
+        allowed_user_id = invoice.addressee
     else:
         response.invalid_input(action, 'action', 'body')
     if user.id != allowed_user_id:
@@ -83,7 +86,14 @@ if request.method == 'POST':
             invoice=invoice,
             addressee_name=addressee.username,
             accepted_by=user.username,
-            withdrawable=participant.can_withdraw(invoice.amount),
+            force_email=True,
+        )
+    elif action == 'mark_as_paid':
+        addressee.mark_notifications_as_read('new_invoice', idem_key=str(invoice.id))
+        sender.notify(
+            'invoice_paid',
+            invoice=invoice,
+            addressee_name=addressee.username,
             force_email=True,
         )
     elif action == 'reject':
@@ -180,6 +190,12 @@ title = _("Invoice #{0}", i_id)
         <button class="btn btn-success btn-lg" name="action" value="accept">{{ _("Accept and Pay") }}</button>
         &nbsp;&nbsp;&nbsp;
         <a class="btn btn-warning btn-lg" href="?action=reject">{{ _("Reject") }}</a>
+    </form>
+% elif invoice.status == 'accepted' and user == addressee
+    <br>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-success btn-lg" name="action" value="mark_as_paid">{{ _("Mark as paid") }}</button>
     </form>
 % endif
 

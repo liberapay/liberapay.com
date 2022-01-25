@@ -1,35 +1,13 @@
-from liberapay.utils import b64encode_s, get_participant
+from liberapay.utils import get_participant
 
 [---]
 
 participant = get_participant(state, restrict=True)
 
 if request.method == 'POST':
-    disburse_to = request.body.get('disburse_to')
-    if participant.balance and disburse_to is None:
-        error = _("You still have money in this Liberapay account, please "
-                  "choose a disbursement method below or contact support.")
-    elif disburse_to == 'payout':
-        response.redirect(participant.path('wallet/payout/'+b64encode_s(request.path.raw)))
-    elif disburse_to == 'liberapay':
-        participant.donate_remaining_balances_to_liberapay()
-    else:
-        participant.close(disburse_to)
-        participant.sign_out(response.headers.cookie)
-        response.redirect('/%s/' % participant.username)
-
-pending_payouts = website.db.one("""
-    SELECT count(*)
-      FROM exchanges
-     WHERE participant = %s
-       AND amount < 0
-       AND refund_ref IS NULL
-       AND ( status = 'created' OR
-             status = 'succeeded' AND timestamp > (current_timestamp - interval '24 hours')
-           )
-""", (participant.id,))
-
-balances = participant.get_balances()
+    participant.close()
+    participant.sign_out(response.headers.cookie)
+    response.redirect('/%s/' % participant.username)
 
 title = _("Close Account")
 subhead = participant.username
@@ -41,54 +19,8 @@ subhead = participant.username
 
 % block content
 
-    % if error is defined
-        <div class="alert alert-danger">{{ error }}</div>
-    % endif
-
     <form method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-
-        % if participant.balance > 0
-
-        <h3>{{ _("Wallet") }}</h3>
-
-        <p>{{ _("You have {0} in your wallet. What should we do with it?",
-                balances) }}</p>
-        <div class="paragraph">
-            <label>
-                <input type="radio" name="disburse_to" value="downstream" />
-                {{ _("Give it to the {0}people I donate to{1}",
-                     '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
-            </label><br>
-            <label>
-                <input type="radio" name="disburse_to" value="liberapay" />
-                {{ _("Donate it to Liberapay") }}
-                <p class="text-info">
-                    {{ glyphicon('info-sign') }}
-                    {{ _("This option is recommended for small amounts.") }}
-                </p>
-            </label><br>
-            <label>
-                <input type="radio" name="disburse_to" value="payout" />
-                {{ _("Withdraw it to my bank account") }}
-            </label>
-        </div>
-        <p>{{ _(
-            "If neither option works for you, please contact support@liberapay.com."
-        ) }}</p>
-
-        % elif pending_payouts
-
-        <h3>{{ _("Wallet") }}</h3>
-
-        <p class="alert alert-warning">{{ _(
-            "You have a pending transfer to your bank account. If it fails, "
-            "the money will reappear in your wallet and your account will be "
-            "automatically reopened."
-        ) }}</p>
-
-        % endif
-
 
         <h3>{{ _("Data retention") }}</h3>
 

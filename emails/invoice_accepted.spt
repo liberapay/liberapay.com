@@ -6,11 +6,5 @@
     , addressee_name=addressee_name, amount=LegacyMoney(invoice.amount)
 ) }}</p>
 
-<p>{{ _(
-    "Unfortunately the wallet of {0} does not contain enough money to pay you right "
-    "now, but as soon as it does you will be paid automatically."
-    , addressee_name
-) }}</p>
-
 <p><a href="{{ participant.url('invoices/%s' % invoice.id, log_in='no') }}"
       >{{ _("View the invoice") }}</a></p>

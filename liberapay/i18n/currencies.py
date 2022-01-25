@@ -1,101 +1,33 @@
-from collections import defaultdict, OrderedDict
+from collections import OrderedDict
 from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
 from numbers import Number
 import operator
 
 from babel.numbers import get_currency_precision
-from mangopay.exceptions import CurrencyMismatch
-from mangopay.utils import Money
 import requests
 import xmltodict
 
-from ..constants import CURRENCIES, D_CENT, D_ZERO, D_MAX
 from ..exceptions import InvalidNumber
 from ..website import website
 
 
-def _convert(self, c, rounding=ROUND_HALF_UP):
-    if self.currency == c:
-        return self
-    if 'EUR' in (self.currency, c):
-        rate = website.currency_exchange_rates[(self.currency, c)]
-    else:
-        rate = (
-            website.currency_exchange_rates[(self.currency, 'EUR')] *
-            website.currency_exchange_rates[('EUR', c)]
-        )
-    amount = self.amount * rate
-    return Money(amount, c, rounding=rounding)
+D_CENT = Decimal('0.01')
+D_MAX = Decimal('999999999999.99')
+D_ZERO = Decimal('0.00')
 
-def _sum(cls, amounts, currency):
-    a = Money.ZEROS[currency].amount
-    for m in amounts:
-        if m.currency != currency:
-            raise CurrencyMismatch(m.currency, currency, 'sum')
-        a += m.amount
-    return cls(a, currency)
 
-def _Money_init(self, amount=Decimal('0'), currency=None, rounding=None, fuzzy=False):
-    if not isinstance(amount, Decimal):
-        try:
-            amount = Decimal(str(amount))
-        except InvalidOperation:
-            raise InvalidNumber(amount)
-        # Why `str(amount)`? Because:
-        # >>> Decimal(0.23)
-        # Decimal('0.2300000000000000099920072216264088638126850128173828125')
-        # >>> Decimal(str(0.23))
-        # Decimal('0.23')
-    if rounding is not None:
-        minimum = Money.MINIMUMS[currency].amount
-        try:
-            amount = amount.quantize(minimum, rounding=rounding)
-        except InvalidOperation:
-            raise InvalidNumber(str(amount))
-    if amount > D_MAX:
-        raise InvalidNumber(amount)
-    self.amount = amount
-    self.currency = currency
-    self.fuzzy = fuzzy
+class CurrencyMismatch(ValueError):
+    pass
 
-def _Money_eq(self, other):
-    if isinstance(other, self.__class__):
-        return self.amount == other.amount and self.currency == other.currency
-    if isinstance(other, (Decimal, Number)):
-        return self.amount == other
-    if isinstance(other, MoneyBasket):
-        return other.__eq__(self)
-    return False
 
-def _Money_hash(self):
-    return hash((self.currency, self.amount))
-
-def _Money_parse(cls, amount_str, default_currency='EUR'):
-    split_str = amount_str.split()
-    if len(split_str) == 2:
-        return Money(*split_str)
-    elif len(split_str) == 1:
-        return Money(split_str, default_currency)
-    else:
-        raise ValueError("%r is not a valid money amount" % amount_str)
-
-def _Money_round(self, rounding=ROUND_HALF_UP, allow_zero=True):
-    r = Money(self.amount, self.currency, rounding=rounding)
-    if not allow_zero:
-        if self.amount == 0:
-            raise ValueError("can't round zero away from zero")
-        if r.amount == 0:
-            return self.minimum() if self.amount > 0 else -self.minimum()
-    return r
-
-class _Minimums(defaultdict):
+class _Minimums(dict):
     def __missing__(self, currency):
         exponent = get_currency_precision(currency)
         minimum = Money((D_CENT if exponent == 2 else Decimal(10) ** (-exponent)), currency)
         self[currency] = minimum
         return minimum
 
-class _Zeros(defaultdict):
+class _Zeros(dict):
     def __missing__(self, currency):
         minimum = Money.MINIMUMS[currency].amount
         zero = Money((D_ZERO if minimum is D_CENT else minimum - minimum), currency)
@@ -103,24 +35,259 @@ class _Zeros(defaultdict):
         return zero
 
 
-Money.__init__ = _Money_init
-Money.__eq__ = _Money_eq
-Money.__hash__ = _Money_hash
-Money.__iter__ = lambda m: iter((m.amount, m.currency))
-Money.__repr__ = lambda m: '<Money "%s">' % m
-Money.__str__ = lambda m: '%(amount)s %(currency)s' % m.__dict__
-Money.__unicode__ = Money.__str__
-Money.convert = _convert
-Money.for_json = lambda m: {'amount': str(m.amount), 'currency': m.currency}
-Money.minimum = lambda m: Money.MINIMUMS[m.currency]
-Money.MINIMUMS = _Minimums()
-Money.parse = classmethod(_Money_parse)
-Money.round = _Money_round
-Money.round_down = lambda m: m.round(ROUND_DOWN)
-Money.round_up = lambda m: m.round(ROUND_UP)
-Money.sum = classmethod(_sum)
-Money.zero = lambda m: Money.ZEROS[m.currency]
-Money.ZEROS = _Zeros()
+class Money:
+    __slots__ = ('amount', 'currency', 'fuzzy')
+
+    MINIMUMS = _Minimums()
+    ZEROS = _Zeros()
+
+    def __init__(self, amount=Decimal('0'), currency=None, rounding=None, fuzzy=False):
+        if not isinstance(amount, Decimal):
+            try:
+                amount = Decimal(str(amount))
+            except InvalidOperation:
+                raise InvalidNumber(amount)
+            # Why `str(amount)`? Because:
+            # >>> Decimal(0.23)
+            # Decimal('0.2300000000000000099920072216264088638126850128173828125')
+            # >>> Decimal(str(0.23))
+            # Decimal('0.23')
+        if rounding is not None:
+            minimum = Money.MINIMUMS[currency].amount
+            try:
+                amount = amount.quantize(minimum, rounding=rounding)
+            except InvalidOperation:
+                raise InvalidNumber(str(amount))
+        if amount > D_MAX:
+            raise InvalidNumber(amount)
+        self.amount = amount
+        self.currency = currency
+        self.fuzzy = fuzzy
+
+    def __abs__(self):
+        return self.__class__(abs(self.amount), self.currency)
+
+    def __add__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '+')
+            other = other.amount
+        amount = self.amount + other
+        return self.__class__(amount, self.currency)
+
+    def __bool__(self):
+        return bool(self.amount)
+
+    def __ceil__(self):
+        return self.__class__(self.amount.__ceil__(), self.currency)
+
+    def __divmod__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, 'divmod')
+            if other.amount == 0:
+                raise ZeroDivisionError()
+            return divmod(self.amount, other.amount)
+        if isinstance(other, (Decimal, Number)):
+            if other == 0:
+                raise ZeroDivisionError()
+            whole, remainder = divmod(self.amount, other)
+            return (self.__class__(whole, self.currency),
+                    self.__class__(remainder, self.currency))
+        return NotImplemented
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.amount == other.amount and self.currency == other.currency
+        if isinstance(other, (Decimal, Number)):
+            return self.amount == other
+        if isinstance(other, MoneyBasket):
+            return other.__eq__(self)
+        return False
+
+    def __float__(self):
+        return float(self.amount)
+
+    def __floor__(self):
+        return self.__class__(self.amount.__floor__(), self.currency)
+
+    def __floordiv__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '//')
+            if other.amount == 0:
+                raise ZeroDivisionError()
+            return self.amount // other.amount
+        if isinstance(other, (Decimal, Number)):
+            if other == 0:
+                raise ZeroDivisionError()
+            amount = self.amount // other
+            return self.__class__(amount, self.currency)
+        return NotImplemented
+
+    def __ge__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '>=')
+            other = other.amount
+        return self.amount >= other
+
+    def __gt__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '>')
+            other = other.amount
+        return self.amount > other
+
+    def __hash__(self):
+        return hash((self.currency, self.amount))
+
+    def __int__(self):
+        return int(self.amount)
+
+    def __iter__(self):
+        return iter((self.amount, self.currency))
+
+    def __le__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '<=')
+            other = other.amount
+        return self.amount <= other
+
+    def __lt__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '<')
+            other = other.amount
+        return self.amount < other
+
+    def __mod__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '%')
+            return self.amount % other.amount
+        if isinstance(other, (Decimal, Number)):
+            if other == 0:
+                raise ZeroDivisionError()
+            return self.__class__(self.amount % other, self.currency)
+        return NotImplemented
+
+    def __mul__(self, other):
+        if isinstance(other, Money):
+            raise TypeError("multiplying two sums of money isn't supported")
+        return self.__class__(self.amount * other, self.currency)
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __neg__(self):
+        return self.__class__(-self.amount, self.currency)
+
+    def __pos__(self):
+        return self.__class__(+self.amount, self.currency)
+
+    def __pow__(self, other):
+        if isinstance(other, Money):
+            raise TypeError("multiplying two sums of money isn't supported")
+        return self.__class__(self.amount ** other, self.currency)
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __repr__(self):
+        return f'<Money "{self}">'
+
+    def __round__(self, ndigits=0):
+        return self.__class__(round(self.amount, ndigits), self.currency)
+
+    def __rsub__(self, other):
+        return (-self).__add__(other)
+
+    def __str__(self):
+        return f'{self.amount} {self.currency}'
+
+    def __sub__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '-')
+            other = other.amount
+        return self.__class__(self.amount - other, self.currency)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __truediv__(self, other):
+        if isinstance(other, Money):
+            if other.currency != self.currency:
+                raise CurrencyMismatch(self.currency, other.currency, '/')
+            if other.amount == 0:
+                raise ZeroDivisionError()
+            return self.amount / other.amount
+        if isinstance(other, (Decimal, Number)):
+            if other == 0:
+                raise ZeroDivisionError()
+            return self.__class__(self.amount / other, self.currency)
+        return NotImplemented
+
+    def __trunc__(self):
+        return self.__class__(self.amount.__trunc__(), self.currency)
+
+    def convert(self, c, rounding=ROUND_HALF_UP):
+        if self.currency == c:
+            return self
+        if 'EUR' in (self.currency, c):
+            rate = website.currency_exchange_rates[(self.currency, c)]
+        else:
+            rate = (
+                website.currency_exchange_rates[(self.currency, 'EUR')] *
+                website.currency_exchange_rates[('EUR', c)]
+            )
+        amount = self.amount * rate
+        return Money(amount, c, rounding=rounding)
+
+    def for_json(self):
+        return {'amount': str(self.amount), 'currency': self.currency}
+
+    def minimum(self):
+        return self.MINIMUMS[self.currency]
+
+    @classmethod
+    def parse(cls, amount_str, default_currency='EUR'):
+        split_str = amount_str.split()
+        if len(split_str) == 2:
+            return Money(*split_str)
+        elif len(split_str) == 1:
+            return Money(split_str, default_currency)
+        else:
+            raise ValueError("%r is not a valid money amount" % amount_str)
+
+    def round(self, rounding=ROUND_HALF_UP, allow_zero=True):
+        r = Money(self.amount, self.currency, rounding=rounding)
+        if not allow_zero:
+            if self.amount == 0:
+                raise ValueError("can't round zero away from zero")
+            if r.amount == 0:
+                return self.minimum() if self.amount > 0 else -self.minimum()
+        return r
+
+    def round_down(self):
+        return self.round(ROUND_DOWN)
+
+    def round_up(self):
+        return self.round(ROUND_UP)
+
+    @classmethod
+    def sum(cls, amounts, currency):
+        a = Money.ZEROS[currency].amount
+        for m in amounts:
+            if m.currency != currency:
+                raise CurrencyMismatch(m.currency, currency, 'sum')
+            a += m.amount
+        return cls(a, currency)
+
+    def zero(self):
+        return self.ZEROS[self.currency]
 
 
 class MoneyBasket:
@@ -128,6 +295,7 @@ class MoneyBasket:
     __slots__ = ('amounts', '__dict__')
 
     def __init__(self, *args, **decimals):
+        from ..constants import CURRENCIES
         self.amounts = OrderedDict(
             (currency, decimals.get(currency, Money.ZEROS[currency].amount))
             for currency in CURRENCIES

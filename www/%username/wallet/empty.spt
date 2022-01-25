@@ -1,69 +1,9 @@
-from liberapay.utils import b64encode_s, get_participant
-
+from liberapay.utils import get_participant
 [---]
-
 participant = get_participant(state, restrict=True)
-
-if request.method == 'POST':
-    disburse_to = request.body['disburse_to']
-    if disburse_to == 'payout':
-        response.redirect(participant.path('wallet/payout/'+b64encode_s(request.line.uri.decoded)))
-    elif disburse_to == 'downstream':
-        participant.distribute_balances_to_donees()
-    elif disburse_to == 'liberapay':
-        participant.donate_remaining_balances_to_liberapay()
-    else:
-        raise response.invalid_input(disburse_to, 'disburse_to', 'body')
-
-balances = participant.get_balances()
-
-title = _("Emptying your wallet")
-
 [---] text/html
-% from "templates/macros/icons.html" import glyphicon
-
 % extends "templates/layouts/base-thin.html"
 
 % block thin_content
-
-    % if balances == 0
-        <div class="alert alert-success">{{ _("Your wallet is empty.") }}</div>
-        % if 'close' in request.qs
-            <a class="btn btn-default btn-lg" href="{{ participant.path('settings/close') }}">{{
-                _("Close Account")
-            }}</a>
-        % endif
-    % else
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-
-            <p>{{ _("You have {0} in your wallet. What should we do with it?",
-                    balances) }}</p>
-            <div class="paragraph">
-                <label>
-                    <input type="radio" name="disburse_to" value="downstream" />
-                    {{ _("Give it to the {0}people I donate to{1}",
-                         '<a href="%s">'|safe % participant.path('giving'), '</a>'|safe) }}
-                </label><br>
-                <label>
-                    <input type="radio" name="disburse_to" value="liberapay" />
-                    {{ _("Donate it to Liberapay") }}
-                    <p class="text-info">
-                        {{ glyphicon('info-sign') }}
-                        {{ _("This option is recommended for small amounts.") }}
-                    </p>
-                </label><br>
-                <label>
-                    <input type="radio" name="disburse_to" value="payout" />
-                    {{ _("Withdraw it to my bank account") }}
-                </label>
-            </div>
-            <p>{{ _(
-                "If neither option works for you, please contact support@liberapay.com."
-            ) }}</p>
-
-            <button class="btn btn-danger btn-lg">{{ _("Proceed") }}</button>
-        </form>
-    % endif
-
+    <p class="alert alert-danger">{{ _("This is no longer possible.") }}</p>
 % endblock

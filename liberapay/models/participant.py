@@ -17,7 +17,6 @@ import aspen_jinja2_renderer
 from cached_property import cached_property
 from dateutil.parser import parse as parse_date
 from html2text import html2text
-import mangopay
 from markupsafe import escape as htmlescape
 from pando import json, Response
 from pando.utils import utcnow
@@ -57,7 +56,6 @@ from liberapay.exceptions import (
     TooManyPasswordLogins,
     TooManyRequests,
     TooManyUsernameChanges,
-    UnableToDistributeBalance,
     UnableToSendEmail,
     UnexpectedCurrency,
     UsernameAlreadyTaken,
@@ -72,12 +70,12 @@ from liberapay.exceptions import (
     VerificationEmailAlreadySent,
 )
 from liberapay.i18n import base as i18n
-from liberapay.i18n.currencies import Money, MoneyBasket
+from liberapay.i18n.currencies import Money
 from liberapay.models._mixin_team import MixinTeam
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.community import Community
 from liberapay.models.tip import Tip
-from liberapay.payin.common import resolve_amounts, resolve_take_amounts
+from liberapay.payin.common import resolve_amounts
 from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
@@ -222,15 +220,6 @@ class Participant(Model, MixinTeam):
         """.format('p.id' if id_only else 'p'), (email.lower(),))
 
     @classmethod
-    def from_mangopay_user_id(cls, mangopay_user_id):
-        return cls.db.one("""
-            SELECT p
-              FROM mangopay_users u
-              JOIN participants p ON p.id = u.participant
-             WHERE u.id = %s
-        """, (mangopay_user_id,))
-
-    @classmethod
     def check_id(cls, p_id):
         try:
             p_id = int(p_id)
@@ -241,34 +230,6 @@ class Participant(Model, MixinTeam):
     @classmethod
     def get_id_for(cls, type_of_id, id_value):
         return getattr(cls, 'from_' + type_of_id)(id_value, id_only=True)
-
-    @classmethod
-    def get_chargebacks_account(cls, currency):
-        p = cls.db.one("""
-            SELECT p
-              FROM participants p
-             WHERE mangopay_user_id = 'CREDIT'
-        """)
-        if not p:
-            p = cls.make_stub(
-                goal=Money(-1, currency),
-                hide_from_search=3,
-                hide_from_lists=3,
-                join_time=utcnow(),
-                kind='organization',
-                mangopay_user_id='CREDIT',
-                status='active',
-                username='_chargebacks_',
-            )
-        wallet = cls.db.one("""
-            INSERT INTO wallets
-                        (remote_id, balance, owner, remote_owner_id)
-                 VALUES (%s, %s, %s, 'CREDIT')
-            ON CONFLICT (remote_id) DO UPDATE
-                    SET remote_owner_id = 'CREDIT'  -- dummy update
-              RETURNING *
-        """, ('CREDIT_' + currency, Money.ZEROS[currency], p.id))
-        return p, wallet
 
     def refetch(self):
         r = self.db.one("SELECT p FROM participants p WHERE id = %s", (self.id,))
@@ -745,239 +706,16 @@ class Participant(Model, MixinTeam):
     # Closing
     # =======
 
-    class AccountNotEmpty(Exception): pass
-
-    def final_check(self, cursor):
-        """Sanity-check that balance has been dealt with.
-        """
-        if self.balance != 0:
-            raise self.AccountNotEmpty
-
-    class UnknownDisbursementStrategy(Exception): pass
-
-    def close(self, disbursement_strategy=None):
+    def close(self):
         """Close the participant's account.
         """
-
-        if disbursement_strategy is None:
-            pass  # No balance, supposedly. final_check will make sure.
-        elif disbursement_strategy == 'downstream':
-            # This in particular needs to come before clear_tips_giving.
-            self.distribute_balances_to_donees()
-        else:
-            raise self.UnknownDisbursementStrategy
-
         with self.db.get_cursor() as cursor:
             self.clear_tips_giving(cursor)
             self.clear_takes(cursor)
             if self.kind == 'group':
                 self.remove_all_members(cursor)
             self.clear_subscriptions(cursor)
-            self.final_check(cursor)
             self.update_status('closed', cursor)
-
-    def distribute_balances_to_donees(self, arrears_only=False):
-        """Distribute the user's balance(s) downstream.
-        """
-        if self.balance == 0:
-            return
-
-        tips = self.db.all("""
-            SELECT tip.amount, tip.tippee, tip.ctime, tip.periodic_amount
-                 , tip.paid_in_advance, tip.renewal_mode
-                 , tippee_p
-                 , compute_arrears(tip) AS arrears_due
-              FROM current_tips tip
-              JOIN participants tippee_p ON tippee_p.id = tip.tippee
-             WHERE tip.tipper = %s
-               AND tippee_p.status = 'active'
-               AND (tippee_p.mangopay_user_id IS NOT NULL OR tippee_p.kind = 'group')
-               AND tippee_p.is_suspended IS NOT TRUE
-        """, (self.id,))
-        if arrears_only:
-            tips = [tip for tip in tips if tip.arrears_due > 0]
-        for tip in tips:
-            if tip.tippee_p.kind == 'group':
-                currency = tip.amount.currency
-                tip.team = Participant.from_id(tip.tippee)
-                unfiltered_takes = tip.team.get_current_takes_for_payment(
-                    currency, tip.amount
-                )
-                tip.takes = [
-                    t for t in unfiltered_takes
-                    if t.mangopay_user_id and not t.is_suspended and t.member != self.id
-                ]
-                if len(unfiltered_takes) == 1 and tip.takes and tip.takes[0].amount == 0:
-                    # Team of one with a zero take
-                    tip.takes[0].amount.amount = Decimal('1')
-                tip.total_takes = MoneyBasket(t.amount for t in tip.takes)
-        tips = [t for t in tips if getattr(t, 'total_takes', -1) != 0]
-        if not tips:
-            raise UnableToDistributeBalance(self.balance)
-
-        transfers = []
-        for wallet in self.get_current_wallets():
-            if wallet.balance == 0:
-                continue
-            currency = wallet.balance.currency
-            tips_in_this_currency = sorted(
-                [t for t in tips if t.amount.currency == currency],
-                key=lambda t: (t.amount, t.ctime), reverse=True
-            )
-            if not tips_in_this_currency:
-                continue
-            zero = Money.ZEROS[currency]
-            for_arrears = {
-                tip.tippee: max(tip.arrears_due, zero) for tip in tips_in_this_currency
-            }
-            for_arrears_sum = Money.sum(for_arrears.values(), currency)
-            if wallet.balance < for_arrears_sum:
-                for_arrears = resolve_amounts(wallet.balance, for_arrears)
-                for_arrears_sum = wallet.balance
-            renewable_tips = [
-                tip for tip in tips_in_this_currency
-                if tip.renewal_mode > 0 and tip.tippee_p.accepts_tips
-            ]
-            if renewable_tips and not arrears_only and wallet.balance > for_arrears_sum:
-                for tip in renewable_tips:
-                    if tip.paid_in_advance is None:
-                        tip.paid_in_advance = zero
-                max_advance_weeks = max(
-                    t.paid_in_advance / t.amount for t in renewable_tips
-                )
-                if max_advance_weeks < 1:
-                    max_advance_weeks = 1
-                for tip in renewable_tips:
-                    tip.convergence_amount = max((
-                        tip.amount * max_advance_weeks - tip.paid_in_advance
-                    ), zero)
-                for_advances = resolve_amounts(
-                    wallet.balance - for_arrears_sum,
-                    {tip.tippee: tip.amount for tip in renewable_tips},
-                    {tip.tippee: tip.convergence_amount for tip in renewable_tips},
-                )
-            else:
-                for_advances = {}
-            for tip in tips_in_this_currency:
-                arrears = for_arrears.get(tip.tippee, zero)
-                advance = for_advances.get(tip.tippee, zero)
-                if tip.tippee_p.kind == 'group':
-                    team_id = tip.tippee
-                    if arrears:
-                        resolved_takes = resolve_amounts(
-                            arrears,
-                            {take.member: take.amount for take in tip.takes},
-                        )
-                        n_weeks = arrears / tip.amount
-                        for take in tip.takes:
-                            resolved_amount = resolved_takes.get(take.member, zero)
-                            if resolved_amount > 0:
-                                unit_amount = (resolved_amount / n_weeks).round(allow_zero=False)
-                                transfers.append(
-                                    [take.member, None, resolved_amount, team_id, wallet, unit_amount]
-                                )
-                    if advance:
-                        resolve_take_amounts(advance, tip.takes)
-                        n_weeks = advance / tip.periodic_amount
-                        for take in tip.takes:
-                            resolved_amount = take.resolved_amount
-                            if resolved_amount > 0:
-                                unit_amount = (resolved_amount / n_weeks).round(allow_zero=False)
-                                transfers.append(
-                                    [take.member, resolved_amount, None, team_id, wallet, unit_amount]
-                                )
-                            del take.resolved_amount
-                else:
-                    transfers.append(
-                        [tip.tippee, advance, arrears, None, wallet, tip.amount]
-                    )
-
-        if not transfers:
-            raise UnableToDistributeBalance(self.balance)
-
-        from liberapay.billing.transactions import transfer
-        db = self.db
-        tipper = self.id
-        for tippee, advance, arrears, team, wallet, unit_amount in transfers:
-            if arrears:
-                context = 'take-in-arrears' if team else 'tip-in-arrears'
-                balance = transfer(
-                    db, tipper, tippee, arrears, context,
-                    team=team, unit_amount=unit_amount,
-                    tipper_mango_id=self.mangopay_user_id,
-                    tipper_wallet_id=wallet.remote_id
-                )[0]
-            if advance:
-                assert not arrears_only
-                context = 'take-in-advance' if team else 'tip-in-advance'
-                balance = transfer(
-                    db, tipper, tippee, advance, context,
-                    team=team, unit_amount=unit_amount,
-                    tipper_mango_id=self.mangopay_user_id,
-                    tipper_wallet_id=wallet.remote_id
-                )[0]
-
-        self.set_attributes(balance=balance)
-        self.schedule_renewals()
-
-        if self.balance != 0:
-            raise UnableToDistributeBalance(self.balance)
-
-    def donate_remaining_balances_to_liberapay(self):
-        """Donate what's left in the user's wallets to Liberapay.
-        """
-        self.transfer_remaining_balances_to_liberapay(donate=True)
-
-    def transfer_remaining_balances_to_liberapay(self, donate=False):
-        LiberapayOrg = self.from_username('LiberapayOrg')
-        Liberapay = self.from_username('Liberapay')
-        tip = self.get_tip_to(LiberapayOrg)
-        if not tip.amount:
-            tip = self.get_tip_to(Liberapay)
-        context, team = None, None
-        if donate:
-            if tip.amount:
-                if tip.tippee == Liberapay.id:
-                    team = Liberapay.id
-            else:
-                context = 'final-gift'
-        else:
-            context = 'indirect-payout'
-        from liberapay.billing.transactions import transfer
-        for wallet in self.get_current_wallets():
-            if wallet.balance == 0:
-                continue
-            if context:
-                balance = transfer(
-                    self.db, self.id, LiberapayOrg.id, wallet.balance, context,
-                    team=team, unit_amount=tip.amount.convert(wallet.balance.currency) or None,
-                    tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
-                )[0]
-            else:
-                arrears_due = self.db.one("""
-                    SELECT compute_arrears(tip)
-                      FROM tips tip
-                     WHERE tip.id = %s
-                """, (tip.id,)).convert(wallet.balance.currency)
-                arrears = min(max(arrears_due, 0), wallet.balance)
-                advance = wallet.balance - arrears
-                assert arrears > 0 or advance > 0
-                assert (arrears + advance) == wallet.balance
-                if arrears:
-                    context = 'take-in-arrears' if team else 'tip-in-arrears'
-                    balance = transfer(
-                        self.db, self.id, LiberapayOrg.id, arrears, context,
-                        team=team, unit_amount=tip.amount.convert(wallet.balance.currency) or None,
-                        tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
-                    )[0]
-                if advance:
-                    context = 'take-in-advance' if team else 'tip-in-advance'
-                    balance = transfer(
-                        self.db, self.id, LiberapayOrg.id, advance, context,
-                        team=team, unit_amount=tip.amount.convert(wallet.balance.currency) or None,
-                        tipper_mango_id=self.mangopay_user_id, tipper_wallet_id=wallet.remote_id
-                    )[0]
-        self.set_attributes(balance=balance)
 
     def clear_tips_giving(self, cursor):
         """Turn off the renewal of all tips from a given user.
@@ -1754,62 +1492,6 @@ class Participant(Model, MixinTeam):
                 """, (sp.id,))
 
 
-    # Wallets and balances
-    # ====================
-
-    def get_withdrawable_amount(self, currency):
-        return self.db.one("""
-            SELECT sum(amount)
-              FROM cash_bundles
-             WHERE owner = %s
-               AND disputed IS NOT TRUE
-               AND locked_for IS NULL
-               AND (amount).currency = %s
-        """, (self.id, currency)) or Money.ZEROS[currency]
-
-    def can_withdraw(self, amount):
-        return self.get_withdrawable_amount(amount.currency) >= amount
-
-    def get_current_wallet(self, currency=None, create=False):
-        currency = currency or self.main_currency
-        w = self.db.one("""
-            SELECT *
-              FROM wallets
-             WHERE owner = %s
-               AND balance::currency = %s
-               AND is_current
-        """, (self.id, currency))
-        if w or not create:
-            return w
-        from liberapay.billing.transactions import create_wallet
-        return create_wallet(self.db, self, currency)
-
-    def get_current_wallets(self, cursor=None):
-        return (cursor or self.db).all("""
-            SELECT *
-              FROM wallets
-             WHERE owner = %s
-               AND is_current
-        """, (self.id,))
-
-    def get_balance_in(self, currency):
-        return self.db.one("""
-            SELECT balance
-              FROM wallets
-             WHERE owner = %s
-               AND balance::currency = %s
-               AND is_current
-        """, (self.id, currency)) or Money.ZEROS[currency]
-
-    def get_balances(self):
-        return self.db.one("""
-            SELECT basket_sum(balance)
-              FROM wallets
-             WHERE owner = %s
-               AND is_current
-        """, (self.id,)) or MoneyBasket()
-
-
     # Events
     # ======
 
@@ -2146,20 +1828,12 @@ class Participant(Model, MixinTeam):
         return True
 
     def pay_invoice(self, invoice):
-        assert self.id == invoice.addressee
-        wallet = self.get_current_wallet(invoice.amount.currency)
-        if not wallet or wallet.balance < invoice.amount:
-            return False
-        from liberapay.billing.transactions import transfer
-        balance = transfer(
-            self.db, self.id, invoice.sender, invoice.amount, invoice.nature,
-            invoice=invoice.id,
-            tipper_mango_id=self.mangopay_user_id,
-            tipper_wallet_id=wallet.remote_id,
-        )[0]
-        self.update_invoice_status(invoice.id, 'paid')
-        self.set_attributes(balance=balance)
-        return True
+        """
+        This function used to transfer money between Mangopay wallets. It needs
+        to be rewritten to implement other payment methods (e.g. PayPal, Wise,
+        Stripe).
+        """
+        return False
 
 
     # Currencies
@@ -2180,7 +1854,6 @@ class Participant(Model, MixinTeam):
             r = cursor.one("""
                 UPDATE participants
                    SET main_currency = %(new_currency)s
-                     , balance = convert(balance, %(new_currency)s)
                      , goal = convert(goal, %(new_currency)s)
                      , giving = convert(giving, %(new_currency)s)
                      , receiving = convert(receiving, %(new_currency)s)
@@ -2501,11 +2174,6 @@ class Participant(Model, MixinTeam):
               FROM current_tips t
               JOIN participants p2 ON p2.id = t.tippee
              WHERE t.tipper = %s
-          ORDER BY ( p2.status = 'active' AND
-                     (p2.goal IS NULL OR p2.goal >= 0) AND
-                     (p2.mangopay_user_id IS NOT NULL OR p2.kind = 'group')
-                   ) DESC
-                 , p2.join_time IS NULL, t.ctime ASC
         """, (self.id,))
         has_donated_recently = (cursor or self.db).one("""
             SELECT DISTINCT tr.tipper AS x
@@ -3481,17 +3149,6 @@ class Participant(Model, MixinTeam):
         return -1
 
 
-    # Payment accounts
-    # ================
-
-    def get_mangopay_account(self):
-        """Fetch the mangopay account for this participant.
-        """
-        if not self.mangopay_user_id:
-            return
-        return mangopay.resources.User.get(self.mangopay_user_id)
-
-
     # Identity (v2)
     # =============
 
@@ -3513,73 +3170,6 @@ class Participant(Model, MixinTeam):
                         (participant, info)
                  VALUES (%s, %s)
         """, (self.id, website.cryptograph.encrypt_dict(info)))
-
-    @classmethod
-    def migrate_identities(cls):
-        participants = cls.db.all("""
-            SELECT p.id
-              FROM participants p
-             WHERE p.mangopay_user_id IS NOT NULL
-               AND p.balance = 0
-               AND p.status = 'active'
-               AND NOT EXISTS (
-                       SELECT 1
-                         FROM identities i
-                        WHERE i.participant = p.id
-                   )
-               AND NOT EXISTS (
-                       SELECT 1
-                         FROM exchanges e
-                        WHERE e.participant = p.id
-                          AND e.amount < 0
-                          AND e.timestamp > (current_timestamp - interval '7 days')
-                   )
-          ORDER BY p.id
-             LIMIT 20
-        """)
-        for p_id in participants:
-            sleep(1)
-            p = cls.from_id(p_id)
-            mp_account = p.get_mangopay_account()
-            individual = mp_account.PersonType == 'NATURAL'
-            prefix = '' if individual else 'LegalRepresentative'
-            addr = getattr(
-                mp_account,
-                'Address' if individual else 'LegalRepresentativeAddress'
-            )
-            hq_addr = getattr(mp_account, 'HeadquartersAddress', None)
-            p.insert_identity({
-                'birthdate': getattr(mp_account, prefix + 'Birthday').isoformat(),
-                'name': ' '.join((
-                    getattr(mp_account, prefix + 'FirstName'),
-                    getattr(mp_account, prefix + 'LastName'),
-                )),
-                'headquarters_address': {
-                    'country': hq_addr.Country,
-                    'region': hq_addr.Region,
-                    'city': hq_addr.City,
-                    'postal_code': hq_addr.PostalCode,
-                    'local_address': '\n'.join(filter(None, (
-                        hq_addr.AddressLine1, hq_addr.AddressLine2
-                    ))),
-                } if hq_addr else None,
-                'verified_by_mangopay': mp_account.kyc_level != 'LIGHT',
-                'nationality': getattr(mp_account, prefix + 'Nationality'),
-                'occupation': mp_account.Occupation if individual else None,
-                'organization_name': '' if individual else mp_account.Name,
-                'postal_address': {
-                    'country': (
-                        addr.Country or
-                        getattr(mp_account, prefix + 'CountryOfResidence')
-                    ),
-                    'region': addr.Region,
-                    'city': addr.City,
-                    'postal_code': addr.PostalCode,
-                    'local_address': '\n'.join(filter(None, (
-                        addr.AddressLine1, addr.AddressLine2
-                    ))),
-                } if addr else None,
-            })
 
 
     # Accounts Elsewhere

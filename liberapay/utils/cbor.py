@@ -56,21 +56,19 @@ default_encoders[Markup] = encode_Markup
 # Spec: https://liberapay.github.io/specs/cbor-money.html
 
 def encode_Money(encoder, value):
-    if set(value.__dict__.keys()) == {'amount', 'currency'}:
-        encoder.encode_semantic(CBORTag(77111, '%s%s' % (value.currency, value.amount)))
-    else:
-        attrs = {
-            k: v for k, v in value.__dict__.items()
-            if k not in {'amount', 'currency'}
-        }
+    if value.fuzzy:
+        attrs = {'fuzzy': True}
         encoder.encode_semantic(CBORTag(77111, [value.currency, value.amount, attrs]))
+    else:
+        encoder.encode_semantic(CBORTag(77111, '%s%s' % (value.currency, value.amount)))
 
 
 def decode_Money(decoder, value, shareable_index=None):
     if type(value) is list:
         r = Money(amount=value[1], currency=value[0])
         if len(value) > 2:
-            r.__dict__.update(value[2])
+            for k, v in value[2].items():
+                setattr(r, k, v)
             if len(value) > 3:
                 raise ValueError("the array is longer than expected (%i > 3)" % len(value))
     elif type(value) is str:

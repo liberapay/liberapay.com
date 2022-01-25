@@ -69,10 +69,6 @@ recent_donation_changes = website.db.all("""
 % if not participant.payment_providers
     <p>{{ _("You can't receive new donations until you've configured payment processing.") }}</p>
     <p><a class="btn btn-primary" href="{{ participant.path('payment') }}">{{ _("Configure payment processing") }}</a></p>
-% elif participant.balance > 0
-    <p>{{ _("You have {money_amount} in your Mangopay wallet.", money_amount=participant.balance) }}</p>
-    <p><a class="btn btn-default" href="{{ participant.path('wallet/payout/' + b64encode_s(request.path.raw)) }}"
-          >{{ _("Withdraw money") }}</a></p>
 % endif
 
 <h3 id="teams">{{ _("Teams") }}</h3>

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from liberapay.utils import get_participant, render
+from liberapay.utils import check_address_v2, get_participant, render, render_postal_address
 from liberapay.utils.history import get_wallet_ledger
 
 STATUS_MAP = {
@@ -56,20 +56,14 @@ output.body = render(globals(), allow_partial_i18n=False)
             <p class="text-muted">{{ _("Account number: {0}", participant.id) }}</p>
         </div>
         <address class="col-xs-6 monospace">
-        % set account = participant.get_mangopay_account()
-        % if account.PersonType == 'LEGAL'
-            {{ account.Name }}<br>
-        % else
-            {{ account.FirstName }} {{ account.LastName }}<br>
-        % endif
-        % set postal_address = account.HeadquartersAddress or account.Address
-        % if postal_address.Country
-            {{ postal_address.AddressLine1 }}<br>
-            % if postal_address.AddressLine2
-            {{ postal_address.AddressLine2 }}<br>
+        % set identity = participant.get_current_identity()
+        % set name = identity.get('organization_name') or identity.get('name')
+        % if name
+            {{ name }}<br>
+            % set postal_address = identity.get('headquarters_address') or identity.get('postal_address')
+            % if check_address_v2(postal_address)
+                {{ render_postal_address(postal_address).replace('\n', '<br>'|safe) }}
             % endif
-            {{ postal_address.PostalCode }} {{ postal_address.City }}<br>
-            {{ locale.countries.get(postal_address.Country, postal_address.Country) }}
         % endif
         </address>
     </div>
@@ -308,7 +302,7 @@ output.body = render(globals(), allow_partial_i18n=False)
     % endif
     <footer>
         <div>{{ locale.format_date(today, 'long') }}</div>
-        <div><em>This document is not official, it's only a prototype.</em></div>
+        <div></div>
         <div></div>
     </footer>
 

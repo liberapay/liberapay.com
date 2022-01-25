@@ -168,7 +168,7 @@ PostgreSQL is designed to prevent data loss, so it does a lot of synchronous dis
 
 ### Tinkering with payments
 
-Liberapay was built on top of [MangoPay](https://www.mangopay.com/) for payments, however they [kicked us out](https://medium.com/liberapay-blog/liberapay-is-in-trouble-b58b40714d82) so we've shifted to integrating with multiple payment processors. We currently support [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/). However, support for Mangopay hasn't been completely removed yet.
+Liberapay currently supports two payment processors: [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/).
 
 #### Testing Stripe webhooks
 

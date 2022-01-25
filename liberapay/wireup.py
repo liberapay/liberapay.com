@@ -1,6 +1,5 @@
 from decimal import Decimal
 import json
-import logging
 from operator import itemgetter
 import os
 import re
@@ -228,9 +227,6 @@ class AppConf:
         linuxfr_id=str,
         linuxfr_secret=str,
         log_emails=bool,
-        mangopay_base_url=str,
-        mangopay_client_id=str,
-        mangopay_client_password=str,
         openstreetmap_api_url=str,
         openstreetmap_auth_url=str,
         openstreetmap_callback=str,
@@ -349,39 +345,6 @@ def mail(app_conf, env, project_root='.'):
         log_email = lambda *a, **kw: None
 
     return {'emails': emails, 'log_email': log_email, 'mailer': mailer}
-
-
-def billing(app_conf):
-    if not app_conf:
-        return
-    import mangopay
-    sandbox = 'sandbox' in app_conf.mangopay_base_url
-    mangopay.sandbox = sandbox
-    handler = mangopay.APIRequest(
-        client_id=app_conf.mangopay_client_id,
-        passphrase=app_conf.mangopay_client_password,
-        sandbox=sandbox,
-        timeout=app_conf.socket_timeout,
-    )
-    mangopay.get_default_handler = mangopay.base.get_default_handler = \
-        mangopay.query.get_default_handler = lambda: handler
-
-    # https://github.com/Mangopay/mangopay2-python-sdk/issues/95
-    if not sandbox:
-        mangopay.api.logger.setLevel(logging.CRITICAL)
-
-    # https://github.com/Mangopay/mangopay2-python-sdk/issues/118
-    mangopay.resources.LegalUser.person_type = 'LEGAL'
-
-    # https://github.com/Mangopay/mangopay2-python-sdk/issues/144
-    import liberapay.billing.watcher
-    mangopay.signals.request_finished.connect(liberapay.billing.watcher.on_response)
-
-    # https://github.com/Mangopay/mangopay2-python-sdk/issues/157
-    cls = mangopay.resources.DirectPayIn
-    field = mangopay.fields.Field(api_name='Billing')
-    field.add_to_class(cls, 'billing')
-    cls._meta.api_names[field.api_name] = field.name
 
 
 def stripe(app_conf):
@@ -842,7 +805,6 @@ full_chain = StateChain(
     csp,
     app_conf,
     mail,
-    billing,
     stripe,
     username_restrictions,
     load_i18n,

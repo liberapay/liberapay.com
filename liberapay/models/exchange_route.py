@@ -2,7 +2,6 @@ from calendar import monthrange
 from datetime import date
 
 from cached_property import cached_property
-from mangopay.resources import Card, Mandate
 from postgres.orm import Model
 import stripe
 
@@ -39,17 +38,10 @@ class ExchangeRoute(Model):
     @classmethod
     def from_network(cls, participant, network, currency=None):
         participant_id = participant.id
-        if network.startswith('mango-'):
-            remote_user_id = participant.mangopay_user_id
-        elif network.startswith('stripe-'):
-            remote_user_id = None
-        else:
-            raise NotImplementedError(network)
         r = cls.db.all("""
             SELECT r
               FROM exchange_routes r
              WHERE participant = %(participant_id)s
-               AND COALESCE(remote_user_id = %(remote_user_id)s, true)
                AND network::text = %(network)s
                AND status = 'chargeable'
                AND COALESCE(currency::text, '') = COALESCE(%(currency)s::text, '')
@@ -78,8 +70,6 @@ class ExchangeRoute(Model):
     def insert(cls, participant, network, address, status,
                one_off=False, remote_user_id=None, country=None, currency=None):
         p_id = participant.id
-        if network.startswith('mango-'):
-            remote_user_id = participant.mangopay_user_id
         r = cls.db.one("""
             INSERT INTO exchange_routes AS r
                         (participant, network, address, status,
@@ -100,10 +90,10 @@ class ExchangeRoute(Model):
 
     @classmethod
     def upsert_generic_route(cls, participant, network):
-        if network.startswith('mango-'):
-            remote_user_id = participant.mangopay_user_id
-        elif network == 'paypal':
+        if network == 'paypal':
             remote_user_id = 'x'
+        else:
+            raise NotImplementedError(network)
         r = cls.db.one("""
             INSERT INTO exchange_routes AS r
                         (participant, network, address, one_off, status, remote_user_id)
@@ -211,16 +201,6 @@ class ExchangeRoute(Model):
                     assert source.status not in ('chargeable', 'pending')
                     self.update_status(source.status)
                     return
-        elif self.network == 'mango-cc':
-            card = obj or Card.get(self.address)
-            if card.Active:
-                card.Active = False
-                card.save()
-                assert card.Active is False, card.Active
-        if self.mandate:
-            mandate = Mandate.get(self.mandate)
-            if mandate.Status in ('SUBMITTED', 'ACTIVE'):
-                mandate.cancel()
         self.update_status('canceled')
 
     def set_as_default(self):
