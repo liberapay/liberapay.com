@@ -46,12 +46,12 @@ subhead = _("Patrons")
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % if patron_visibilities == 0
         <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
-            "Liberapay now supports non-anonymous donations, do you want to know "
+            "Liberapay now supports non-anonymous donations. Do you want to know "
             "who your patrons are?"
         ) }}</p>
         <p class="buttons">
             <button class="btn btn-primary" name="see_patrons" value="yes">{{ _(
-                "Enable non-anonymous donations"
+                "Allow non-anonymous donations"
             ) }}</button>
             &nbsp;&nbsp;
             <button class="btn btn-default" name="see_patrons" value="no">{{ _("No") }}</button>
@@ -59,14 +59,14 @@ subhead = _("Patrons")
     % elif patron_visibilities > 1
         <p class="text-muted">{{ _(
             "You have opted-in to see who your patrons are. If you change your mind, "
-            "then {link_start}click here to disable non-anonymous donations{link_end}.",
+            "then {link_start}click here to turn off non-anonymous donations{link_end}.",
             link_start='<button class="link" name="see_patrons" value="no">'|safe,
             link_end='</button>'|safe
         ) }}</p>
     % else
         <p class="text-muted">{{ _(
             "You've chosen not to see who your patrons are. If you change your mind, "
-            "then {link_start}click here to enable non-anonymous donations{link_end}.",
+            "then {link_start}click here allow non-anonymous donations{link_end}.",
             link_start='<button class="link" name="see_patrons" value="yes">'|safe,
             link_end='</button>'|safe
         ) }}</p>
@@ -76,10 +76,10 @@ subhead = _("Patrons")
 % if patron_visibilities > 1
 <h3>{{ _("Data export") }}</h3>
 <p><a href="{{ participant.path('patrons/export.csv?scope=active') }}">{{ fontawesome('download') }} {{
-    _("Download the list of currently active patrons")
+    _("Download the list of active patrons")
 }}</a></p>
 <p><a href="{{ participant.path('patrons/export.csv?scope=all') }}">{{ fontawesome('download') }} {{
-    _("Download the record of all patrons in the last ten years")
+    _("Download the record of all patrons the last ten years")
 }}</a></p>
 
 % if participant.is_person
