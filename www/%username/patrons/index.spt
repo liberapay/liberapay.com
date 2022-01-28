@@ -66,7 +66,7 @@ subhead = _("Patrons")
     % else
         <p class="text-muted">{{ _(
             "You've chosen not to see who your patrons are. If you change your mind, "
-            "then {link_start}click here allow non-anonymous donations{link_end}.",
+            "then {link_start}click here to allow non-anonymous donations{link_end}.",
             link_start='<button class="link" name="see_patrons" value="yes">'|safe,
             link_end='</button>'|safe
         ) }}</p>
