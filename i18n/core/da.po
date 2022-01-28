@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-01-28 03:55+0000\n"
+"PO-Revision-Date: 2022-01-29 21:54+0000\n"
 "Last-Translator: Katharsisdrill <katharsisdrill@phillfromgchq.co.uk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/liberapay/core/da/>\n"
 "Language: da\n"
@@ -3121,49 +3121,49 @@ msgstr "Næste side →"
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du har {n} aktiv velynder, der giver dig {money_amount} om ugen."
+msgstr[1] "Du har {n} aktive velyndere, der giver dig {money_amount} om ugen."
 
 msgid "You don't have any active patrons."
-msgstr ""
+msgstr "Du har ingen aktive velyndere."
 
 #, python-brace-format
 msgid "{username} doesn't have any active patrons."
-msgstr ""
+msgstr "{username} har ingen aktive velyndere."
 
 msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr ""
+msgstr "Liberapay støtter nu ikke-anonyme donationer. Vil du vide hvem dine velyndere er?"
 
 msgid "Enable non-anonymous donations"
-msgstr ""
+msgstr "Aktiver ikke-anonyme donationer"
 
 #, python-brace-format
 msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr ""
+msgstr "Du har valgt at se hvem dine velyndere er. Hvis du ombestemmer dig, så {link_start}klik her for at deaktivere ikke-anonyme donationer{link_end}."
 
 #, python-brace-format
 msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr ""
+msgstr "Du har valgt ikke at se hvem dine velyndere er. Hvis du ombestemmer dig, så {link_start}klik her for at deaktivere ikke-anonyme donationer{link_end}."
 
 msgid "Data export"
-msgstr ""
+msgstr "Data-eksport"
 
 msgid "Download the list of currently active patrons"
-msgstr ""
+msgstr "Hent listen over nuværende aktive velyndere"
 
 msgid "Download the record of all patrons in the last ten years"
-msgstr ""
+msgstr "Download optegnelsen over alle velyndere i de sidste ti år"
 
 #, python-brace-format
 msgid "View the patrons of {username}"
-msgstr ""
+msgstr "Se {username}s velyndere"
 
 msgid "You are not a member of any team."
 msgstr "Du er ikke medlem a noget team."
 
 #, python-brace-format
 msgid "{username} isn't a member of any team."
-msgstr ""
+msgstr "{username} er ikke medlem af noget team."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3519,7 +3519,7 @@ msgid "Your donation to {0} has been stopped."
 msgstr "Din donation til {0} er blevet stoppet."
 
 msgid "This is no longer possible."
-msgstr ""
+msgstr "Dette er ikke længere muligt."
 
 msgid "Export History"
 msgstr "Eksporter Historie"
@@ -3906,7 +3906,7 @@ msgstr "Liberapay er en måde langsigtet at donere penge til folk hvis arbejde d
 
 #, python-brace-format
 msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr ""
+msgstr "Betalinger kommer uden betingelser. Som standard ved modtagerne ikke, hvem deres velyndere er, og donationer er begrænset til {0} pr. uge pr. donor for at forhindre at de får unødig indflydelse."
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Som standard er det samlede beløb, du giver, og det samlede beløb, du modtager, offentligt (du kan vælge ikke at dele denne information)."
@@ -4183,9 +4183,9 @@ msgstr "En team-konto er ikke beregnet til at blive brugt af en enkelt juridisk 
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
 msgstr "En team-konto {bold}opbevarer ikke penge{end_bold} til senere brug. Hver donation distribueres øjeblikkeligt, enten til flere medlemmer hvis det er muligt, eller til et enkelt medlem, når opdelingen af pengene ikke understøttes af betalingsprocessoren. På grund af disse begrænsninger i betalingsbehandling kan de beløb som medlemmerne modtager midlertidigt være ubalanceret, især hvis teamet har færre donorer end medlemmer."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "Hvis en Liberapay team-konto ikke passer til dine behov, kan du i stedet bruge {link_start}Open Collective{link_end} platformen, som tillader et team at være \"vært\" for en registreret nonprofit organisation. Denne \"pengeansvarlige vært\" er den lovlige ejer af teamets midler, fører tilsyn med hvordan de bruges og tager et gebyr på 5%. (Vi planlægger at implementere et lignende system i Liberapay, men vi ved ikke, hvornår det bliver gjort.)"
+msgstr "Hvis en Liberapay team-konto ikke passer til dine behov, kan du i stedet bruge {link_start}Open Collective{link_end} platformen, som tillader et team at være \"vært\" for en registreret nonprofit organisation. Denne \"pengeansvarlige vært\" er den lovlige ejer af teamets midler, fører tilsyn med hvordan de bruges og tager normalt et procent-gebyr for at finansiere sin egen drift. (Vi planlægger at implementere et lignende system i Liberapay, men vi ved ikke, hvornår det bliver gjort.)"
 
 msgid "Creating a team"
 msgstr "At skabe et team"
@@ -4286,13 +4286,12 @@ msgstr[1] "De er {n} fællesskaber på Liberapay."
 msgid "Search communities"
 msgstr "Søg i fællesskaber"
 
-#, fuzzy
 msgid "Largest communities"
-msgstr "Populære fællesskaber"
+msgstr "Største fællesskaber"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Largest communities in {language}"
-msgstr "Top Fællesskaber På Dit Sprog"
+msgstr "Største fællesskaber på {language}"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "Undskyld, vi har ikke fundet nogen. Hvorfor starter du ikke et?"
