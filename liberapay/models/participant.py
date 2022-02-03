@@ -1703,7 +1703,7 @@ class Participant(Model, MixinTeam):
             )
         if query and '?' in path:
             (path, query), extra_query = path.split('?', 1), query
-            query += '&' + extra_query[1:]
+            query = f'?{query}&{extra_query[1:]}'
         return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
 
     def get_teams(self):
