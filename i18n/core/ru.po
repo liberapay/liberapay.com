@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-02-09 08:58+0000\n"
+"PO-Revision-Date: 2022-02-14 16:36+0000\n"
 "Last-Translator: Viktor <xasertop@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
 "Language: ru\n"
@@ -342,9 +342,9 @@ msgstr "Автоматический платеж {money_amount}, инициир
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
 msgstr "Автоматический платеж {money_amount}, инициированный {date}, не прошел."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Инициированный ранее платёж на сумму {money_amount} провести не удалось."
+msgstr "Начатый ранее сегодня платёж, на сумму {money_amount}, провести не удалось."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
@@ -572,8 +572,9 @@ msgstr "Рады сообщить, что {user_name} присоединился
 msgid "Donate to {0}"
 msgstr "Сделать пожертвование для {0}"
 
+#, fuzzy
 msgid "Your Liberapay profile is incomplete"
-msgstr "Ваша учетная запись Liberapay не завершена"
+msgstr "Ваш профиль Liberapay не заполнен"
 
 #, python-brace-format
 msgid "Your {link_start}public profile page{link_end} is missing a description. Without this information, we may be unable to confirm that your use of our platform is legitimate, and consequently your account may be marked as fraudulent and disabled. An incomplete profile is also less likely to attract donations, so we strongly recommend that you fill yours."
@@ -590,7 +591,7 @@ msgid "The donation renewal payment of {money_amount} to {recipient} scheduled f
 msgstr "Платёж прерван, потому что получатель {recipient} не может получить периодический платёж на {money_amount}, запланированный на {date}."
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
-msgstr "Следующие платежи на периодические платежи были прерваны, потому что получатели не могут их получить:"
+msgstr "Следующие платежи на пожертвования были прерваны, потому что получатели не могут их получить:"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Возобновление пожертвований Liberapay: требуется аутентификация"
@@ -603,7 +604,7 @@ msgid "Confirm the payment"
 msgstr "Подтвердите оплату"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr "Вы можете упростить поддержку ваших спонсоров через Liberapay"
+msgstr "Вы можете упростить получение поддержки от ваших спонсоров с помощью Liberapay"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
@@ -838,7 +839,7 @@ msgid "This account is closed"
 msgstr "Этот аккаунт закрыт"
 
 msgid "Authentication required"
-msgstr "Требуется аутентификация"
+msgstr "Требуется авторизация"
 
 msgid "We're unable to process your request right now, sorry."
 msgstr "Извините, сейчас мы не можем обработать ваш запрос."
@@ -923,9 +924,9 @@ msgstr "Адрес электронной почты {email_address} занес�
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
 msgstr "Адрес электронной почты {email_address} занесён в черный список из-за жалобы, полученной {timespan_ago}. Отправьте письмо с этого адреса на support@liberapay.com, если хотите, чтобы мы удалили его из чёрного списка."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr "Домен электронной почты {domain} на {date} был занесен в черный список, потому что сервер отбросил все сообщения. Если поведение не продолжается, пожалуйста, свяжитесь с нами, чтобы мы удалили этот домен из черного списка."
+msgstr "Домен электронной почты {domain} был занесен в черный список {date}, так как он возвращал все сообщения. Пожалуйста, свяжитесь с нами, если это не так, и вы хотите, чтобы мы удалили этот домен из черного списка."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
@@ -1804,9 +1805,9 @@ msgstr "Выберите или введите сумму:"
 #, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] "Валюта {currency_name} – не та, которую вы предпочитаете? Поддерживается еще {n} другая:"
-msgstr[1] "Валюта {currency_name} – не та, которую вы предпочитаете? Поддерживаются еще {n} других:"
-msgstr[2] "Валюта {currency_name} – не та, которую вы предпочитаете? Поддерживаются еще {n} других:"
+msgstr[0] "{currency_name} – не та валюта, которую вы предпочитаете? Поддерживается еще {n} другая:"
+msgstr[1] "{currency_name} – не та валюта, которую вы предпочитаете? Поддерживается еще {n} другие:"
+msgstr[2] "{currency_name} – не та валюта, которую вы предпочитаете? Поддерживается еще {n} других:"
 
 #, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
@@ -3044,15 +3045,15 @@ msgstr "секретное пожертвование {recipient_name}"
 
 #, python-brace-format
 msgid "public donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "публичное пожертвование {recipient_name} за его роль в команде {team_name}"
 
 #, python-brace-format
 msgid "private donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "приватное пожертвование {recipient_name} за их роль в команде {team_name}"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "секретное пожертвование {recipient_name} за их роль в команде {team_name}"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3300,7 +3301,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Name: {0}"
-msgstr ""
+msgstr "Имя: {0}"
 
 #, python-brace-format
 msgid "Email address: {0}"
