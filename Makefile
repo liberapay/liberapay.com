@@ -120,6 +120,7 @@ i18n_update: _i18n_rebase _i18n_pull _i18n_extract
 	fi
 	@echo "Running i18n browse test..."
 	@$(MAKE) --no-print-directory pytest-i18n-browse
+	@PYTHONPATH=. $(env_bin)/python cli/convert-chinese.py
 	@echo "All done, check that everything is okay then push to master."
 
 _i18n_rebase:
