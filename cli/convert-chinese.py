@@ -1,42 +1,34 @@
-import opencc
 from babel.messages.pofile import read_po, write_po
+import opencc
 
 
-# Converts traditional to simplified
+# Paths to the Traditional and Simplified Chinese translation files
+t_path = 'i18n/core/zh_Hant.po'
+s_path = 'i18n/core/zh_Hans.po'
+
+# Initialize the converter from traditional to simplified
 t2s_converter = opencc.OpenCC('t2s.json')
-# Converts simplified to traditional
+# Initialize the converter from simplified to traditional
 s2t_converter = opencc.OpenCC('s2t.json')
 
-# Create path variables
-t_path = '../i18n/core/zh_Hant.po'
-s_path = '../i18n/core/zh_Hans.po'
+# Open and parse the translation (PO) files
+with open(t_path, 'rb') as po:
+    t_catalog = read_po(po, locale='zh_Hant')
+with open(s_path, 'rb') as po:
+    s_catalog = read_po(po, locale='zh_Hans')
 
-# Open Traditional Chinese po file and create babel catalog
-with open(t_path, 'rb') as pot:
-    t_catalog = read_po(pot, locale='zh_Hant')
+# Complete each catalog with the translations from the other one
+for s_msg in s_catalog:
+    if not s_msg.id:
+        continue
+    t_msg = t_catalog._messages[t_catalog._key_for(s_msg.id)]
+    if t_msg.string and not s_msg.string:
+        s_msg.string = t2s_converter.convert(t_msg.string)
+    elif s_msg.string and not t_msg.string:
+        t_msg.string = s2t_converter.convert(s_msg.string)
 
-# Open Simplified Chinese po file and create babel catalog
-with open(s_path, 'rb') as pot:
-    s_catalog = read_po(pot, locale='zh_Hans')
-
-# If message string is in t_catalog and not s_catalog, convert and insert into s_catalog
-for s_message in s_catalog:
-    if not s_message.string:
-        for t_message in t_catalog:
-            if t_message.id == s_message.id:
-                s_message.string = t2s_converter.convert(t_message.string)
-
-# Write result to zh_Hans.po
-with open(s_path, 'wb') as pot:
-    write_po(pot, s_catalog, width=0)    
-
-# If message string is in s_catalog and not t_catalog, convert and insert into t_catalog
-for t_message in t_catalog:
-    if not t_message.string:
-        for s_message in s_catalog:
-            if s_message.id == t_message.id:
-                t_message.string = s2t_converter.convert(s_message.string) 
-
-# Write result to zh_Hant.po
-with open(t_path, 'wb') as pot:
-    write_po(pot, t_catalog, width=0)  
+# Save the changes
+with open(t_path, 'wb') as po:
+    write_po(po, t_catalog, width=0)
+with open(s_path, 'wb') as po:
+    write_po(po, s_catalog, width=0)
