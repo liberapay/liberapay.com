@@ -1,4 +1,4 @@
-from liberapay.i18n.base import LANGUAGES_2, get_lang_options
+from liberapay.i18n.base import ACCEPTED_LANGUAGES, get_lang_options
 from liberapay.utils import excerpt_intro, form_post_success, get_participant, markdown
 
 [---]
@@ -20,9 +20,9 @@ if request.method == 'POST':
         else:
             action = 'edit'
 
-    if lang not in LANGUAGES_2:
+    if lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'lang', 'body')
-    if switch_lang and switch_lang not in LANGUAGES_2:
+    if switch_lang and switch_lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'switch_lang', 'body')
 
     if len(summary) > constants.SUMMARY_MAX_SIZE:
@@ -53,7 +53,7 @@ else:
     lang = request.qs.get('lang')
     switch_lang = None
     if lang:
-        if lang not in LANGUAGES_2:
+        if lang not in ACCEPTED_LANGUAGES:
             raise response.invalid_input(lang, 'lang', 'querystring')
         statement = participant.get_statement(lang)
     else:

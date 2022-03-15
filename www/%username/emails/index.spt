@@ -2,11 +2,12 @@ from collections import OrderedDict
 from datetime import timedelta
 
 from liberapay.constants import EVENTS, EVENTS_S
+from liberapay.i18n.base import LOCALES_DEFAULT_MAP
 from liberapay.utils import form_post_success, get_participant, utcnow
 from liberapay.utils.emails import normalize_and_check_email_address
 
 EMAIL_LANGS = OrderedDict(sorted([
-    (l.language, l.language_name.title()) for l in set(website.locales.values())
+    (l.tag, l.title(l.display_name)) for l in website.locales.values()
 ], key=lambda t: t[1]))
 
 [---]
@@ -18,6 +19,7 @@ if request.method == 'POST':
     body = request.body
     if 'set_email_lang' in body:
         email_lang = body['set_email_lang']
+        email_lang = LOCALES_DEFAULT_MAP.get(email_lang, email_lang)
         if email_lang not in website.locales:
             raise response.invalid_input(email_lang, 'set_email_lang', 'body')
         participant.set_email_lang(email_lang)
@@ -53,7 +55,7 @@ if request.method == 'POST':
     form_post_success(state, msg=msg)
 
 if not participant.email_lang:
-    participant.set_email_lang(locale.language)
+    participant.set_email_lang(locale.tag)
 
 title = participant.username
 subhead = _("Email settings")
@@ -144,7 +146,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
     <form action="" method="POST" class="form-inline js-submit">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <select class="form-control" name="set_email_lang">{{
-            lang_options(EMAIL_LANGS, email_locale.language)
+            lang_options(EMAIL_LANGS, email_locale.tag)
         }}</select>
         <button class="btn btn-default">{{ _("Save") }}</button>
     </form>

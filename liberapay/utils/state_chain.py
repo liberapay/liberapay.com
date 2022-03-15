@@ -6,6 +6,7 @@ import pando.state_chain
 from requests.exceptions import ConnectionError, Timeout
 
 from .. import constants
+from ..i18n.base import LOCALES_DEFAULT_MAP
 from ..exceptions import LazyResponse, TooManyRequests
 
 
@@ -39,7 +40,7 @@ def raise_response_to_OPTIONS_request(request, response):
         raise response
 
 
-def canonize(request, website):
+def canonize(request, response, website):
     """Enforce a certain scheme and hostname.
 
     This is a Pando state chain function to ensure that requests are served on a
@@ -49,6 +50,7 @@ def canonize(request, website):
         request.hostname = host = request.headers[b'Host'].decode('idna')
     except UnicodeDecodeError:
         request.hostname = host = ''
+    request.subdomain = None
     if request.path.raw.startswith('/callbacks/'):
         # Don't redirect callbacks
         if request.path.raw[-1] == '/':
@@ -63,34 +65,31 @@ def canonize(request, website):
     canonical_host = website.canonical_host
     canonical_scheme = website.canonical_scheme
     scheme = request.headers.get(b'X-Forwarded-Proto', b'http')
-    bad_scheme = scheme.decode('ascii', 'replace') != canonical_scheme
-    bad_host = False
-    if canonical_host:
-        if host == canonical_host:
-            pass
-        elif host.endswith('.'+canonical_host):
-            subdomain = host[:-len(canonical_host)-1]
-            if subdomain in website.locales:
-                accept_langs = request.headers.get(b'Accept-Language', b'')
-                accept_langs = subdomain.encode('idna') + b',' + accept_langs
-                request.headers[b'Accept-Language'] = accept_langs
-            else:
-                bad_host = True
+    scheme_is_canonical = scheme.decode('ascii', 'replace') == canonical_scheme
+    host_is_canonical = True
+    if canonical_host and host != canonical_host:
+        if host.endswith(website.dot_canonical_host):
+            request.subdomain = host[:-len(website.dot_canonical_host)]
+            host_is_canonical = (
+                request.subdomain in website.locales or
+                request.subdomain in LOCALES_DEFAULT_MAP
+            )
         else:
-            bad_host = True
-    if bad_scheme or bad_host:
-        url = '%s://%s' % (canonical_scheme, canonical_host if bad_host else host)
+            host_is_canonical = False
+    if not (scheme_is_canonical and host_is_canonical):
+        url = f'{canonical_scheme}://{host if host_is_canonical else canonical_host}'
         if request.method in constants.SAFE_METHODS:
-            # Redirect to a particular path for idempotent methods.
+            # For idempotent methods, preserve the path and querystring.
             url += request.line.uri.path.decoded
             if request.line.uri.querystring:
                 url += '?' + request.line.uri.querystring.decoded
+            # Allow caching the redirect for an hour when in production.
+            if website.env.instance_type == 'production':
+                response.headers[b'Cache-Control'] = b'public, max-age=3600'
         else:
             # For non-idempotent methods, redirect to homepage.
             url += '/'
-        response = Response()
-        response.headers[b'Cache-Control'] = b'public, max-age=86400'
-        response.redirect(url)
+        raise response.redirect(url)
 
 
 def detect_obsolete_browsers(request, response, state):

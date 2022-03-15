@@ -1,5 +1,5 @@
 from liberapay.exceptions import AuthRequired
-from liberapay.i18n.base import LANGUAGES_2, get_lang_options
+from liberapay.i18n.base import ACCEPTED_LANGUAGES, get_lang_options
 from liberapay.models.community import name_maxlength, normalize
 
 [---]
@@ -18,7 +18,7 @@ if request.method == 'POST':
         ))
     body = request.body
     lang = body['lang']
-    if lang not in LANGUAGES_2 and lang != 'mul':
+    if lang not in ACCEPTED_LANGUAGES and lang != 'mul':
         raise response.invalid_input(lang, 'lang', 'body')
     c = user.create_community(body['name'], lang=lang)
     response.redirect('/for/'+c.name+'/edit')

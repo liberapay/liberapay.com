@@ -1,12 +1,14 @@
 from collections import namedtuple, OrderedDict
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
+from sys import intern
 from unicodedata import combining, normalize
 
 import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
 from babel.messages.pofile import Catalog
 from babel.numbers import parse_pattern
+from cached_property import cached_property
 from markupsafe import Markup
 from pando.utils import utcnow
 
@@ -296,17 +298,24 @@ class Locale(babel.core.Locale):
             raise InvalidNumber(string)
         return money
 
+    @cached_property
+    def global_tag(self):
+        "The BCP47 tag for this locale, in lowercase, without the territory."
+        return intern('-'.join(filter(None, (self.language, self.script))).lower())
+
+    @cached_property
+    def tag(self):
+        "The BCP47 tag for this locale, in lowercase."
+        return intern(
+            '-'.join(filter(None, (self.language, self.script, self.territory))).lower()
+        )
+
     @staticmethod
     def title(s):
         return s[0].upper() + s[1:] if s and s[0].islower() else s
 
-    @property
-    def subdomain(self):
-        return 'zh' if self.language == 'zh_Hant' else self.language
 
-
-ALIASES = {k: v.lower() for k, v in babel.core.LOCALE_ALIASES.items()}
-ALIASES_R = {v: k for k, v in ALIASES.items()}
+LOCALE_EN = Locale('en')
 
 
 def strip_accents(s):
@@ -331,38 +340,52 @@ COUNTRY_CODES = """
     TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW
 """.split()
 
-COUNTRIES = make_sorted_dict(COUNTRY_CODES, Locale('en').territories)
+COUNTRIES = make_sorted_dict(COUNTRY_CODES, LOCALE_EN.territories)
 
-CURRENCIES_MAP = {}
-today = utcnow().date()
-for country, currencies in babel.core.get_global('territory_currencies').items():
-    for currency, start_date, end_date, tender in currencies:
-        if currency not in CURRENCIES:
-            continue
-        if start_date:
-            start_date = date(*start_date)
-        if end_date:
-            end_date = date(*end_date)
-        if (start_date is None or start_date <= today) and (end_date is None or end_date >= today):
-            assert country not in CURRENCIES_MAP
-            CURRENCIES_MAP[country] = currency
-del today
 
-LANGUAGE_CODES_2 = """
-    aa af ak am ar as az be bg bm bn bo br bs ca cs cy da de dz ee el en eo es
-    et eu fa ff fi fo fr ga gd gl gu gv ha he hi hr hu hy ia id ig ii is it ja
-    ka ki kk kl km kn ko ks kw ky lg ln lo lt lu lv mg mk ml mn mr ms mt my nb
-    nd ne nl nn nr om or os pa pl ps pt rm rn ro ru rw se sg si sk sl sn so sq
-    sr ss st sv sw ta te tg th ti tn to tr ts uk ur uz ve vi vo xh yo zh zu
+def make_currencies_map():
+    """Build a dict with country codes as keys and currency codes as values.
+
+    This code is in a function so that its transient variables are garbage
+    collected automatically, without needing an explicit `del` statement.
+    """
+    r = {}
+    today = utcnow().date()
+    for country, currencies in babel.core.get_global('territory_currencies').items():
+        for currency, start_date, end_date, tender in currencies:
+            if currency not in CURRENCIES:
+                continue
+            if start_date:
+                start_date = date(*start_date)
+            if end_date:
+                end_date = date(*end_date)
+            if (start_date is None or start_date <= today) and (end_date is None or end_date >= today):
+                assert country not in r
+                r[country] = currency
+    return r
+
+CURRENCIES_MAP = make_currencies_map()
+
+
+ACCEPTED_LANGUAGE_CODES = """
+    af ak am ar as az be bg bm bn bo br bs ca cs cy da de dz ee el en eo es et
+    eu fa ff fi fo fr ga gd gl gu gv ha he hi hr hu hy ia id ig ii is it ja ka
+    ki kk kl km kn ko ks kw ky lg ln lo lt lu lv mg mk ml mn mr ms mt my nb nd
+    ne nl nn om or os pa pl ps pt rm rn ro ru rw se sg si sk sl sn so sq sr sv
+    sw ta te tg th ti to tr uk ur uz vi vo xh yo zh zh_Hans zh_Hant zu
 """.split()
 
 Locale.LANGUAGE_NAMES = {
-    code: babel.localedata.load(code)['languages'][code]
-    for code in LANGUAGE_CODES_2
-    if babel.localedata.exists(code)
+    code.replace('_', '-').lower(): babel.localedata.load(code)['languages'][code]
+    for code in ACCEPTED_LANGUAGE_CODES
 }
 
-LANGUAGES_2 = make_sorted_dict(LANGUAGE_CODES_2, Locale('en').languages)
+del ACCEPTED_LANGUAGE_CODES
+
+LOCALE_EN._data['languages'] = {
+    intern(k.replace('_', '-').lower()): v for k, v in LOCALE_EN.languages.items()
+}
+ACCEPTED_LANGUAGES = make_sorted_dict(Locale.LANGUAGE_NAMES, LOCALE_EN.languages)
 
 LOCALES = {}
 LOCALE_EN = LOCALES['en'] = Locale('en')
@@ -370,8 +393,24 @@ LOCALE_EN.catalog = Catalog('en')
 LOCALE_EN.catalog.plural_func = lambda n: n != 1
 LOCALE_EN.completion = 1
 LOCALE_EN.countries = COUNTRIES
-LOCALE_EN.languages_2 = LANGUAGES_2
+LOCALE_EN.accepted_languages = ACCEPTED_LANGUAGES
 
+# For languages that have multiple written forms, one of them must be chosen as the
+# default, because the browser doesn't always specify which one the reader wants.
+LOCALES_DEFAULT_MAP = {
+    # Norwegian (no) has two main written forms: Bokmål (nb) and Nynorsk (nn).
+    # We default to Bokmål because it's the most used.
+    'no': 'nb',
+    # Chinese (zh) has two main written forms: Traditional (zh-hant) and Simplified (zh-hans).
+    # We default to Simplified because it's the most used.
+    'zh': 'zh-hans',
+    # For each territory, we default to the language in official use in that territory.
+    'zh-cn': 'zh-hans-cn',
+    'zh-hk': 'zh-hant-hk',
+    'zh-mo': 'zh-hant-mo',
+    'zh-sg': 'zh-hans-sg',
+    'zh-tw': 'zh-hant-tw',
+}
 
 SEARCH_CONFS = dict((
     ('da', 'danish'),
@@ -430,44 +469,46 @@ def to_age(dt, **kw):
     return delta
 
 
-def regularize_locale(loc):
-    if loc == 'no':
-        # There are two forms of written Norwegian, Bokmål and Nynorsk, and
-        # while ISO 639 includes `no` as a "macrolanguage", the CLDR (upon
-        # which Babel, our i18n/l10n library, depends), does not include it at
-        # all. Therefore, if a client sends `no` we interpret it as `nb_NO`.
-        loc = 'nb_NO'
-    return loc.replace('-', '_').lower()
-
-
-def regularize_locales(locales):
-    """Yield locale strings in the same format as they are in LOCALES.
-    """
-    locales = [regularize_locale(loc) for loc in locales]
-    locales_set = set(locales)
-    for loc in locales:
-        yield loc
-        parts = loc.split('_')
-        if len(parts) > 1 and parts[0] not in locales_set:
-            # Insert "fr" after "fr_fr" if it's not somewhere in the list
-            yield parts[0]
-        alias = ALIASES.get(loc)
-        if alias and alias not in locales_set:
-            # Insert "fr_fr" after "fr" if it's not somewhere in the list
-            yield alias
-    if 'en' not in locales_set and 'en_us' not in locales_set:
-        yield 'en'
-        yield 'en_us'
-
-
 def parse_accept_lang(accept_lang):
-    languages = (lang.split(";", 1)[0] for lang in accept_lang.split(","))
-    return regularize_locales(languages)
+    """Parse an HTTP `Accept-Language` header. Yields lowercase BCP47 tags.
+    """
+    langs = [lang.split(";", 1)[0].lower() for lang in accept_lang.split(",")]
+    langs_set = set(langs)
+    for lang in langs:
+        yield lang
+        parts = lang.split('-')
+        if len(parts) > 1 and parts[0] not in langs_set:
+            # e.g. insert "fr" after "fr-fr" if it's not somewhere else in the list.
+            # It would probably be better to insert the base lang after the
+            # last matching sublang instead of after the first one, but that's
+            # probably not worth the extra cost.
+            yield parts[0]
+            langs_set.add(parts[0])
+        fallback_lang = LOCALES_DEFAULT_MAP.get(lang)
+        if fallback_lang and fallback_lang not in langs_set:
+            yield fallback_lang
+            langs_set.add(fallback_lang)
+    # Add English as the ultimate fallback.
+    if 'en' not in langs_set:
+        yield 'en'
 
 
-def match_lang(languages):
+def match_lang(languages, country=None):
+    """
+    Find the best locale based on the list of accepted languages and the country
+    of origin of the request.
+    """
+    if country:
+        country = country.lower()
+    get_locale = LOCALES.get
+    get_default = LOCALES_DEFAULT_MAP.get
     for lang in languages:
-        loc = LOCALES.get(lang)
+        if lang[-3:-2] != '-':
+            territorial_lang = f"{lang}-{country}"
+            loc = get_locale(territorial_lang) or get_locale(get_default(territorial_lang))
+            if loc:
+                return loc
+        loc = get_locale(lang) or get_locale(get_default(lang))
         if loc:
             return loc
     return LOCALE_EN
@@ -478,20 +519,28 @@ def get_lang_options(request, locale, previously_used_langs, add_multi=False):
     langs = OrderedDict()
     if add_multi:
         langs.update([('mul', locale.languages.get('mul', 'Multilingual'))])
-    langs.update((k, v) for k, v in locale.languages_2.items() if k in pref_langs)
+    langs.update((k, v) for k, v in locale.accepted_languages.items() if k in pref_langs)
     langs.update([('', '---')])  # Separator
-    langs.update(locale.languages_2)
+    langs.update(locale.accepted_languages)
     return langs
 
 
 def set_up_i18n(state, request=None, exception=None):
     if request is None:
-        add_helpers_to_context(state, LOCALE_EN)
-        return
-    accept_lang = request.headers.get(b"Accept-Language", b"").decode('ascii', 'replace')
-    langs = request.accept_langs = list(parse_accept_lang(accept_lang))
-    loc = match_lang(langs)
-    add_helpers_to_context(state, loc)
+        locale = LOCALE_EN
+    else:
+        langs = request.accept_langs = []
+        subdomain = request.subdomain
+        if subdomain:
+            langs.append(subdomain)
+            i = subdomain.find('-')
+            if i > 0:
+                langs.append(subdomain[:i])
+        langs.extend(parse_accept_lang(
+            request.headers.get(b"Accept-Language", b"").decode('ascii', 'replace')
+        ))
+        locale = match_lang(langs, request.country)
+    add_helpers_to_context(state, locale)
 
 
 def _return_(a):

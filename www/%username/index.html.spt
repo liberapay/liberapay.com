@@ -24,8 +24,10 @@ if lang:
     statement = participant.get_statement(lang)
     if not statement:
         raise response.error(404)
-    if lang in website.subdomains and request.hostname.split('.', 1)[0] != lang:
-        raise response.redirect(website.subdomains[lang] + request.path.raw)
+    _locale = website.locales.get(lang)
+    if _locale and _locale.base_url and request.subdomain != _locale.tag:
+        raise response.redirect(_locale.base_url + request.path.raw)
+    del _locale
 else:
     statement = participant.get_statement(request.accept_langs)
     lang = statement.lang if statement else locale.language
@@ -102,7 +104,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block profile_alternates
 % if statement
-    % set language_name_in_current_locale = locale.languages_2.get(lang, lang)
+    % set language_name_in_current_locale = locale.languages.get(lang, lang)
     % if len(langs) > 1
         <nav class="dropdown dropdown-hover pull-right" title="{{ ngettext('', 'This profile is available in {n} languages', len(langs)) }}">
             % if lang != locale.language
@@ -115,12 +117,13 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             <ul class="dropdown-menu dropdown-menu-right">
             % for l in langs
                 <li class="{{ 'active' if l == lang else '' }}">
-                    % if l in website.subdomains
-                    <a href="{{ website.subdomains[l] + request.path.raw }}" rel="alternate" hreflang="{{ l }}" lang="{{ l }}">{{
+                    % set _locale = website.locales.get(l)
+                    % if _locale and _locale.base_url
+                    <a href="{{ _locale.base_url + request.path.raw }}" rel="alternate" hreflang="{{ l }}" lang="{{ l }}">{{
                         locale.LANGUAGE_NAMES.get(l, l) }}</a>
                     % else
                     <a href="{{ participant.url('') }}?lang={{ l }}" rel="alternate" lang="{{ l }}">{{
-                        locale.LANGUAGE_NAMES.get(l, locale.languages_2.get(l, l.upper())) }}</a>
+                        locale.LANGUAGE_NAMES.get(l, locale.languages.get(l, l.upper())) }}</a>
                     % endif
                 </li>
             % endfor

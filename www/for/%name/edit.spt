@@ -1,4 +1,4 @@
-from liberapay.i18n.base import LANGUAGES_2, get_lang_options
+from liberapay.i18n.base import ACCEPTED_LANGUAGES, get_lang_options
 from liberapay.utils import form_post_success, get_community
 
 [---]
@@ -8,14 +8,14 @@ c = get_community(state, restrict=True)
 if request.method == 'POST':
     body = request.body
     lang, subtitle, sidebar = body['lang'], body['subtitle'], body['sidebar']
-    if lang not in LANGUAGES_2:
+    if lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'lang', 'body')
     if len(subtitle) > c.subtitle_maxlength:
         raise response.error(400, "subtitle too long")
     if len(sidebar) > c.sidebar_maxlength:
         raise response.error(400, "sidebar too long")
     switch_lang = body.get('switch_lang')
-    if switch_lang and switch_lang not in LANGUAGES_2:
+    if switch_lang and switch_lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'switch_lang', 'body')
     action = body.get_choice('action', ('edit', 'publish', 'switch'), default='publish')
     if action == 'publish':

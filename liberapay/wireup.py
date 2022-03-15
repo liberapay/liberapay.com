@@ -4,9 +4,10 @@ from operator import itemgetter
 import os
 import re
 import socket
+from sys import intern
 import traceback
 
-import babel.localedata
+import babel
 from babel.messages.pofile import read_po
 from babel.numbers import parse_pattern
 import boto3
@@ -24,7 +25,7 @@ from liberapay import elsewhere
 import liberapay.billing.payday
 from liberapay.exceptions import NeedDatabase
 from liberapay.i18n.base import (
-    ALIASES, ALIASES_R, COUNTRIES, LANGUAGES_2, LOCALES, Locale, make_sorted_dict
+    ACCEPTED_LANGUAGES, COUNTRIES, LOCALES, LOCALES_DEFAULT_MAP, Locale, make_sorted_dict,
 )
 from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.i18n.plural_rules import get_function_from_rule
@@ -49,11 +50,12 @@ from liberapay.website import Website
 def canonical(env):
     canonical_scheme = env.canonical_scheme
     canonical_host = env.canonical_host
-    cookie_domain = None
+    cookie_domain = dot_canonical_host = None
     if canonical_host:
         canonical_url = '%s://%s' % (canonical_scheme, canonical_host)
+        dot_canonical_host = '.' + canonical_host
         if ':' not in canonical_host:
-            cookie_domain = '.' + canonical_host
+            cookie_domain = dot_canonical_host
     else:
         canonical_url = ''
     asset_url = canonical_url+'/assets/'
@@ -634,7 +636,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 continue
             lang = parts[0]
             with open(os.path.join(localeDir, file), 'rb') as f:
-                l = Locale(lang)
+                l = Locale.parse(lang)
                 c = l.catalog = read_po(f)
                 share_source_strings(c, source_strings)
                 c.plural_func = get_function_from_rule(c.plural_expr)
@@ -645,33 +647,73 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 if l.completion == 0:
                     continue
                 else:
-                    locales[lang.lower()] = l
+                    locales[l.tag] = l
                 try:
                     l.countries = make_sorted_dict(COUNTRIES, l.territories)
                 except KeyError:
                     l.countries = COUNTRIES
+                l._data['languages'] = {
+                    intern(k.replace('_', '-').lower()): v
+                    for k, v in l.languages.items()
+                }
                 try:
-                    l.languages_2 = make_sorted_dict(LANGUAGES_2, l.languages)
+                    l.accepted_languages = make_sorted_dict(ACCEPTED_LANGUAGES, l.languages)
                 except KeyError:
-                    l.languages_2 = LANGUAGES_2
+                    l.accepted_languages = ACCEPTED_LANGUAGES
+            if l.script and l.language not in LOCALES_DEFAULT_MAP:
+                tell_sentry(Warning(
+                    f"the default script for language {l.language!r} is not "
+                    f"defined in LOCALES_DEFAULT_MAP, using {l.script!r}"
+                ))
+                LOCALES_DEFAULT_MAP[l.language] = l.tag
         except Exception as e:
             tell_sentry(e)
     del source_strings
 
-    # Load the variants
-    for loc_id in babel.localedata.locale_identifiers():
-        if loc_id in locales:
+    # Prepare a unique and sorted list for use in the navbar language switcher
+    domain, port = (canonical_host.split(':') + [None])[:2]
+    port = int(port) if port else socket.getservbyname(canonical_scheme, 'tcp')
+    lang_list = []
+    for l in locales.values():
+        if resolve(f"{l.tag}.{domain}", port):
+            l.base_url = f"{canonical_scheme}://{l.tag}.{canonical_host}"
+            if l.completion > 0.5:
+                lang_list.append(
+                    (l.completion, l.tag, l.title(l.display_name), l.base_url)
+                )
+        else:
+            l.base_url = None
+            if l.completion > 0.75:
+                tell_sentry(Warning(
+                    f"the {l.tag} translation is {int(l.completion*100)}% complete, "
+                    f"but the {l.tag}.{canonical_host} domain doesn't exist"
+                ))
+    lang_list.sort(key=lambda t: (-t[0], t[1]))
+
+    # Load the territorial locales
+    for loc_id in sorted(babel.localedata.locale_identifiers()):
+        key = loc_id.replace('_', '-').lower()
+        if key in locales:
             continue
-        i = loc_id.rfind('_')
-        if i == -1:
-            continue
-        base = locales.get(loc_id[:i])
+        base = locales.get(key.rsplit('-', 1)[0])
         if base:
-            l = locales[loc_id.lower()] = Locale.parse(loc_id)
+            l = Locale.parse(loc_id)
+            if not l.territory or l.variant:
+                continue
             l.catalog = base.catalog
             l.completion = base.completion
+            l._data['languages'] = base.languages
             l.countries = base.countries
-            l.languages_2 = base.languages_2
+            l.accepted_languages = base.accepted_languages
+            if l.script:
+                scriptless_tag = f"{l.language}-{l.territory.lower()}"
+                if scriptless_tag not in LOCALES_DEFAULT_MAP:
+                    tell_sentry(Warning(
+                        f"the default script for language {scriptless_tag!r} is "
+                        f"not defined in LOCALES_DEFAULT_MAP, using {l.script!r}"
+                    ))
+                    LOCALES_DEFAULT_MAP[scriptless_tag] = l.tag
+            locales[l.tag] = l
 
     # Unload the Babel data that we no longer need
     # We load a lot of data to populate the LANGUAGE_NAMES dict, we don't want
@@ -681,35 +723,12 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
         if id(data_dict) not in used_data_dict_addresses:
             del babel.localedata._cache[key]
 
-    # Prepare a unique and sorted list for use in the language switcher
-    loc_url = canonical_scheme+'://%s.'+canonical_host
-    domain, port = (canonical_host.split(':') + [None])[:2]
-    port = int(port) if port else socket.getservbyname(canonical_scheme, 'tcp')
-    subdomains = {
-        l.subdomain: loc_url % l.subdomain for l in locales.values()
-        if not l.territory and resolve(l.subdomain + '.' + domain, port)
-    }
-    lang_list = sorted(
-        (
-            (l.completion, l.language, l.language_name.title(), loc_url % l.subdomain)
-            for l in set(locales.values()) if not l.territory and l.completion > 0.5
-        ),
-        key=lambda t: (-t[0], t[1]),
-    )
-
     # Add year-less date format
     year_re = re.compile(r'(^y+[^a-zA-Z]+|[^a-zA-Z]+y+$)')
     for l in locales.values():
         short_format = l.date_formats['short'].pattern
         assert short_format[0] == 'y' or short_format[-1] == 'y', (l.language, short_format)
         l.date_formats['short_yearless'] = year_re.sub('', short_format)
-
-    # Add aliases
-    for k, v in list(locales.items()):
-        locales.setdefault(ALIASES.get(k, k), v)
-        locales.setdefault(ALIASES_R.get(k, k), v)
-    for k, v in list(locales.items()):
-        locales.setdefault(k.split('_', 1)[0], v)
 
     # Add universal strings
     # These strings don't need to be translated, but they have to be in the catalogs
@@ -718,8 +737,13 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
         l.catalog.add("PayPal", "PayPal")
 
     # Patch the locales to look less formal
-    locales['fr'].currency_formats['standard'] = parse_pattern('#,##0.00\u202f\xa4')
-    locales['fr'].currencies['USD'] = 'dollar états-unien'
+    friendlier_french_currency_format = parse_pattern('#,##0.00\u202f\xa4')
+    for l in locales.values():
+        if l.language == 'fr':
+            assert l.currency_formats['standard'].pattern == '#,##0.00\xa0¤'
+            l.currency_formats['standard'] = friendlier_french_currency_format
+            assert l.currencies['USD'] == 'dollar des États-Unis'
+            l.currencies['USD'] = 'dollar états-unien'
 
     # Load the markdown files
     docs = {}
@@ -735,7 +759,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 md = heading_re.sub(r'##\1', md)
             docs.setdefault(doc, {}).__setitem__(lang, markdown.render(md))
 
-    return {'docs': docs, 'lang_list': lang_list, 'locales': locales, 'subdomains': subdomains}
+    return {'docs': docs, 'lang_list': lang_list, 'locales': locales}
 
 
 def asset_url_generator(env, asset_url, tell_sentry, www_root):

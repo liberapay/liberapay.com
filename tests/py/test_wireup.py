@@ -9,7 +9,7 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         for name in list(sys.modules):
-            if name.split('.', 1)[0] in {'aspen', 'liberapay', 'pando'}:
+            if name.split('.', 1)[0] in {'aspen', 'babel', 'liberapay', 'pando'}:
                 sys.modules.pop(name, None)
 
     def test_01_main_doesnt_fail_when_db_is_down(self):
