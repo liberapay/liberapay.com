@@ -165,12 +165,16 @@ class TestPassword(Harness):
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
         assert r.code == 302, r.text
         form_data['cur-password'] = form_data['new-password']
-        form_data['new-password'] = 'correct horse battery staple'
+        password = form_data['new-password'] = 'correct horse battery staple'
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
         assert r.code == 302, r.text
+        assert alice.authenticate_with_password(alice.id, password, context='test')
         form_data['cur-password'] = ''
+        form_data['new-password'] = 'password'
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
-        assert r.code == 403, r.text
+        assert r.code == 302, r.text
+        assert r.headers[b"Location"] == b'/alice/settings/?password_mismatch=1'
+        assert alice.authenticate_with_password(alice.id, password, context='test')
 
 
 class TestRecipientSettings(Harness):

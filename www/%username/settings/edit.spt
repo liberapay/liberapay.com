@@ -26,7 +26,7 @@ if 'new-password' in body:
             pass  # user doesn't have a password yet, allow adding one
         else:
             if not p2:
-                raise response.error(403, _("The submitted password is incorrect."))
+                raise response.redirect(p.path('settings/?password_mismatch=1'))
             del p2
 
     # Check the new password
