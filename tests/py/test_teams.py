@@ -114,6 +114,33 @@ class Tests(Harness):
         take = self.a_team.get_take_for(self.bob)
         assert take is None
 
+    def test_kicked_out_member_cannot_rejoin_without_being_invited_back(self):
+        self.a_team.invite(self.bob, self.alice)
+        r = self.client.GxT('/A-Team/membership/accept', auth_as=self.bob)
+        assert r.code == 302
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is True
+
+        admin = self.make_participant('admin', privileges=1)
+        self.a_team.remove_member(self.bob, admin)
+
+        r = self.client.GxT('/A-Team/membership/accept', auth_as=self.bob)
+        assert r.code == 403
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is False
+
+        r = self.client.GxT('/A-Team/membership/refuse', auth_as=self.bob)
+        assert r.code == 403
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is False
+
+        self.db.run("UPDATE notifications SET ts = ts - interval '8 days'")
+        self.a_team.invite(self.bob, self.alice)
+        r = self.client.GxT('/A-Team/membership/accept', auth_as=self.bob)
+        assert r.code == 302
+        is_member = self.bob.member_of(self.a_team)
+        assert is_member is True
+
 
 class Tests2(Harness):
 
