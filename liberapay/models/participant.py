@@ -478,7 +478,11 @@ class Participant(Model, MixinTeam):
 
         Args:
             suffix (str):
-                the session type ('.em' for email sessions, empty for normal sessions)
+                the session type, preceded by a dot:
+                    '.em' for email sessions
+                    '.in' for initial sessions
+                    '.pw' for password sessions
+                    '.ro' for read-only sessions
             token (str):
                 the session token, if it's already been generated
             id_min (int):
@@ -3592,6 +3596,7 @@ def send_account_disabled_notifications():
     if sent:
         print(f"Sent {sent} account_disabled notification{'' if sent == 1 else 's'}.")
     return len(participants)
+
 
 def generate_profile_description_missing_notifications():
     """Notify users who receive donations but don't have a profile description.
