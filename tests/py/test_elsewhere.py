@@ -10,6 +10,7 @@ from liberapay.testing import EUR, Harness
 from liberapay.testing.emails import EmailHarness
 import liberapay.testing.elsewhere as user_info_examples
 from liberapay.utils import b64encode_s
+from liberapay.website import website
 
 
 def get_user_info_example(platform_name):
@@ -46,8 +47,8 @@ class TestElsewhere(EmailHarness):
     def test_connect_success(self, gui, gusi, ft):
         alice = self.make_participant('alice', elsewhere='twitter')
 
-        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2}, '')
-        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1}, '')
+        gusi.return_value = website.platforms.github.extract_user_info({'id': 2}, '')
+        gui.return_value = website.platforms.github.extract_user_info({'id': 1}, '')
         ft.return_value = None
 
         then = b'/foobar'
@@ -65,8 +66,8 @@ class TestElsewhere(EmailHarness):
         alice = self.make_participant('alice')
         self.make_participant('bob')
 
-        gusi.return_value = self.client.website.platforms.github.extract_user_info({'id': 2}, '')
-        gui.return_value = self.client.website.platforms.github.extract_user_info({'id': 1}, '')
+        gusi.return_value = website.platforms.github.extract_user_info({'id': 2}, '')
+        gui.return_value = website.platforms.github.extract_user_info({'id': 1}, '')
         ft.return_value = None
 
         cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
@@ -221,16 +222,16 @@ class TestElsewhere(EmailHarness):
         assert response.code == 302
 
     def test_patrons_are_notified_after_pledgee_joins(self):
-        self.bob = self.make_participant('bob', email='bob@example.com')
-        self.dan = self.make_participant('dan', email='dan@example.com')
-        self.alice = self.make_participant('alice', email='alice@example.com')
+        bob = self.make_participant('bob', email='bob@example.com')
+        dan = self.make_participant('dan', email='dan@example.com')
+        alice = self.make_participant('alice', email='alice@example.com')
 
         dan_twitter = self.make_elsewhere('twitter', 1, 'dan')
 
-        self.alice.set_tip_to(self.dan, EUR('100'))  # Alice shouldn't receive an email.
-        self.bob.set_tip_to(dan_twitter, EUR('100'))  # Bob should receive an email.
+        alice.set_tip_to(dan, EUR('100'))  # Alice shouldn't receive an email.
+        bob.set_tip_to(dan_twitter, EUR('100'))  # Bob should receive an email.
 
-        self.dan.take_over(dan_twitter, have_confirmation=True)
+        dan.take_over(dan_twitter, have_confirmation=True)
 
         # dan hasn't connected any payment account yet, so there shouldn't be a notification
         Participant.notify_patrons()
@@ -238,7 +239,7 @@ class TestElsewhere(EmailHarness):
         assert self.mailer.call_count == 0
 
         # add a payment account and check again, but it's still too early
-        self.add_payment_account(self.dan, 'stripe')
+        self.add_payment_account(dan, 'stripe')
         Participant.notify_patrons()
         Participant.dequeue_emails()
         assert self.mailer.call_count == 0
@@ -251,7 +252,7 @@ class TestElsewhere(EmailHarness):
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'bob <bob@example.com>'
         assert "to dan" in last_email['text']
-        pay_url = f"{self.client.website.canonical_url}/bob/giving/pay?beneficiary={self.dan.id}"
+        pay_url = f"{website.canonical_url}/bob/giving/pay?beneficiary={dan.id}"
         assert pay_url in last_email['text']
 
         # check that the notification isn't sent again
