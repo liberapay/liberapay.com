@@ -251,7 +251,8 @@ class TestElsewhere(EmailHarness):
         last_email = self.get_last_email()
         assert last_email['to'][0] == 'bob <bob@example.com>'
         assert "to dan" in last_email['text']
-        assert "Change your email settings" in last_email['text']
+        pay_url = f"{self.client.website.canonical_url}/bob/giving/pay?beneficiary={self.dan.id}"
+        assert pay_url in last_email['text']
 
         # check that the notification isn't sent again
         self.mailer.reset_mock()
