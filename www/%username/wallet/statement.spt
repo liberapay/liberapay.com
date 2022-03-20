@@ -62,7 +62,7 @@ output.body = render(globals(), allow_partial_i18n=False)
             {{ name }}<br>
             % set postal_address = identity.get('headquarters_address') or identity.get('postal_address')
             % if check_address_v2(postal_address)
-                {{ render_postal_address(postal_address).replace('\n', '<br>'|safe) }}
+                {{ (render_postal_address(postal_address)|escape).replace('\n', '<br>'|safe) }}
             % endif
         % endif
         </address>

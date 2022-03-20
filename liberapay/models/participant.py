@@ -478,7 +478,11 @@ class Participant(Model, MixinTeam):
 
         Args:
             suffix (str):
-                the session type ('.em' for email sessions, empty for normal sessions)
+                the session type, preceded by a dot:
+                    '.em' for email sessions
+                    '.in' for initial sessions
+                    '.pw' for password sessions
+                    '.ro' for read-only sessions
             token (str):
                 the session token, if it's already been generated
             id_min (int):
@@ -1703,8 +1707,8 @@ class Participant(Model, MixinTeam):
             )
         if query and '?' in path:
             (path, query), extra_query = path.split('?', 1), query
-            query += '&' + extra_query[1:]
-        return '{scheme}://{host}/{username}/{path}{query}'.format(**locals())
+            query = f'?{query}&{extra_query[1:]}'
+        return f'{scheme}://{host}/{username}/{path}{query}'
 
     def get_teams(self):
         """Return a list of teams this user is a member of.
@@ -3592,6 +3596,7 @@ def send_account_disabled_notifications():
     if sent:
         print(f"Sent {sent} account_disabled notification{'' if sent == 1 else 's'}.")
     return len(participants)
+
 
 def generate_profile_description_missing_notifications():
     """Notify users who receive donations but don't have a profile description.

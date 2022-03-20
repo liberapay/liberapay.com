@@ -168,6 +168,12 @@ class MixinTeam:
 
         return take
 
+    def remove_member(self, member, admin):
+        """Forcibly remove a member from a team.
+        """
+        assert admin.has_privilege('admin')
+        self.set_take_for(member, None, admin)
+
     def get_current_takes_for_display(self, cursor=None):
         """Return a list of member takes for a team.
         """

@@ -82,11 +82,10 @@ if user_is_admin:
         </tr>
         % for w in wallets
         <tr>
-            % set user_url = '%s/Users/%s' % (mp_dashboard_url, w.remote_owner_id)
-            <td><a href="{{ user_url }}/Wallets/{{ w.remote_id }}">{{ w.remote_id }}</a></td>
+            <td>{{ w.remote_id }}</td>
             <td>{{ w.balance }}</td>
             <td>{{ 'yes' if w.is_current else 'no' }}</td>
-            <td><a href="{{ user_url }}">{{ w.remote_owner_id }}</a></td>
+            <td>{{ w.remote_owner_id }}</td>
         </tr>
         % endfor
     </table>

@@ -34,8 +34,20 @@ if action in ('accept', 'refuse'):
     invite = get_invite(team, user)
     if not invite:
         raise response.error(403, _("You are not invited to join this team."))
-    if action == 'accept' and user.member_of(team):
-        raise response.error(409, _("You have already accepted this invitation."))
+    take = website.db.one("""
+        SELECT *
+          FROM takes
+         WHERE team = %s
+           AND member = %s
+      ORDER BY mtime DESC
+         LIMIT 1
+    """, (team.id, user.id))
+    if take:
+        if take.amount is None:
+            if take.recorder != user.id and take.mtime > invite.ts:
+                raise response.error(403, _("You have been removed from this team."))
+        elif action == 'accept':
+            raise response.error(409, _("You have already accepted this invitation."))
     if action == 'refuse' and invite.type == 'invite_refuse':
         raise response.error(409, _("You have already refused this invitation."))
     notif_id = invite.payload.get('notification_id')

@@ -256,7 +256,7 @@ class AccountElsewhere(Model):
         host = website.canonical_host
         platform = self.platform
         slug = self.liberapay_slug
-        return "{scheme}://{host}/on/{platform}/{slug}/".format(**locals())
+        return f"{scheme}://{host}/on/{platform}/{slug}/"
 
     @property
     def html_url(self):

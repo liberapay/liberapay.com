@@ -421,28 +421,28 @@ def build_s3_object_url(key):
     assert endpoint.startswith('https://')
     host = endpoint[8:]
     querystring = (
-        "X-Amz-Algorithm=AWS4-HMAC-SHA256&"
-        "X-Amz-Credential={access_key}%2F{today}%2F{region}%2Fs3%2Faws4_request&"
-        "X-Amz-Date={timestamp}&"
-        "X-Amz-Expires=86400&"
-        "X-Amz-SignedHeaders=host"
-    ).format(**locals())
+        f"X-Amz-Algorithm=AWS4-HMAC-SHA256&"
+        f"X-Amz-Credential={access_key}%2F{today}%2F{region}%2Fs3%2Faws4_request&"
+        f"X-Amz-Date={timestamp}&"
+        f"X-Amz-Expires=86400&"
+        f"X-Amz-SignedHeaders=host"
+    )
     canonical_request = (
-        "GET\n"
-        "/{key}\n"
-        "{querystring}\n"
-        "host:{host}\n"
-        "\n"
-        "host\n"
-        "UNSIGNED-PAYLOAD"
-    ).format(**locals()).encode()
+        f"GET\n"
+        f"/{key}\n"
+        f"{querystring}\n"
+        f"host:{host}\n"
+        f"\n"
+        f"host\n"
+        f"UNSIGNED-PAYLOAD"
+    ).encode()
     canonical_request_hash = sha256(canonical_request).hexdigest()
     string_to_sign = (
-        "AWS4-HMAC-SHA256\n"
-        "{timestamp}\n"
-        "{today}/{region}/s3/aws4_request\n"
-        "{canonical_request_hash}"
-    ).format(**locals()).encode()
+        f"AWS4-HMAC-SHA256\n"
+        f"{timestamp}\n"
+        f"{today}/{region}/s3/aws4_request\n"
+        f"{canonical_request_hash}"
+    ).encode()
     aws4_secret_key = b"AWS4" + website.app_conf.s3_secret_key.encode()
     sig_key = hmac.new(aws4_secret_key, today.encode(), sha256).digest()
     sig_key = hmac.new(sig_key, region.encode(), sha256).digest()
