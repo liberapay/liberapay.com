@@ -688,7 +688,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                     f"the {l.tag} translation is {int(l.completion*100)}% complete, "
                     f"but the {l.tag}.{canonical_host} domain doesn't exist"
                 ))
-    lang_list.sort(key=lambda t: (-t[0], t[1]))
+    lang_list.sort(key=lambda t: (-(1 if t[0] > 0.99 else t[0]), t[1]))
 
     # Load the territorial locales
     for loc_id in sorted(babel.localedata.locale_identifiers()):
