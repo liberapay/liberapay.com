@@ -74,7 +74,7 @@ class Tests(Harness):
             raise_immediately=False,
         )
         assert r.code == 200
-        assert '<html lang="zh">' in r.text
+        assert '<html lang="zh-hans">' in r.text
 
     def test_i18n_subdomain_is_redirected_to_https(self):
         r = self.client.GET(
