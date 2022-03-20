@@ -79,7 +79,7 @@ msgstr "{username}님에 대한 매년 {amount} 기부를 {date} 이전에 갱�
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "매주  {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
+msgstr "매주 {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
@@ -214,7 +214,7 @@ msgstr "{recipients} 에게 {payment_date} 에 {amount} 만큼 기부할 금액�
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "유효한 결제 수단이 없기 때문에 기부를 계속하기 위한 {n} 개의 결제를 처리할 수 없습니다."
+msgstr[0] "유효한 결제 수단이 없기 때문에 기부를 갱신하기 위한 {n} 개의 결제를 처리할 수 없습니다."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "결제일자, 금액, 수신자는 다음과 같습니다:"
@@ -555,11 +555,11 @@ msgid "Donate to {0}"
 msgstr "{0} 에(게) 기부"
 
 msgid "Your Liberapay profile is incomplete"
-msgstr ""
+msgstr "귀하의 Liberapay 프로필이 완성되지 않았습니다"
 
 #, python-brace-format
 msgid "Your {link_start}public profile page{link_end} is missing a description. Without this information, we may be unable to confirm that your use of our platform is legitimate, and consequently your account may be marked as fraudulent and disabled. An incomplete profile is also less likely to attract donations, so we strongly recommend that you fill yours."
-msgstr ""
+msgstr "귀하의 {link_start}공개 프로필 페이지{link_end}에 세부 설명이 없습니다. 이 정보가 없으면, 귀하의 플랫폼 사용이 적절한지를 확인하지 못할 수 있으며, 결과적으로 귀하의 계정이 사기로 표시되고 비활성화될 수 있습니다. 또한 완성되지 않은 프로필은 기부를 유도하기에 좋지 않으므로, 귀하의 프로필을 채우는 것을 매우 권장드립니다."
 
 msgid "Edit your profile"
 msgstr "프로필 수정하기"
@@ -759,10 +759,10 @@ msgid "Direct Debit"
 msgstr "자동 이체"
 
 msgid "Do not publish the amounts of money I send."
-msgstr ""
+msgstr "내가 보내는 돈의 양을 공개하지 않습니다."
 
 msgid "Do not publish the amounts of money I receive."
-msgstr ""
+msgstr "내가 받는 돈의 양을 공개하지 않습니다."
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "Liberapay 내의 검색 결과에서 나의 프로필을 숨깁니다."
@@ -1808,7 +1808,7 @@ msgid "Automatic renewal"
 msgstr "자동 갱신"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr "카드 또는 은행 계좌에 바로 출금을 청구합니다. 2일 전에 알림을 받게 됩니다."
+msgstr "카드 또는 은행 계좌에 바로 출금을 청구합니다. 적어도 2일 전에 알림을 받게 됩니다."
 
 msgid "Manual renewal"
 msgstr "수동 갱신"
@@ -1818,35 +1818,35 @@ msgstr "기부를 갱신하도록 이메일로 다시 알림을 보내 드립니
 
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
-msgstr ""
+msgstr "{username}이 후원자가 누구인지 확인하지 않기로 선택했으므로, 이 기부는 비밀로 유지됩니다."
 
 #, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr ""
+msgstr "이 기부는 비밀로 유지되지 않으며 {username}님만 볼 수 있는 기부자 목록에 등재됩니다."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
-msgstr ""
+msgstr "{username}님은 기부자 목록을 공개하므로 이 기부는 공개됩니다."
 
 msgid "Please select a privacy level for this donation:"
-msgstr ""
+msgstr "이 기부에 대한 공개 설정을 선택해 주세요."
 
 msgid "Secret donation"
-msgstr ""
+msgstr "비밀 기부"
 
 #, python-brace-format
 msgid "Only you will know that you donate to {username}."
-msgstr ""
+msgstr "{username} 님에게 기부했다는 사실을 알리지 않습니다."
 
 msgid "Private donation"
-msgstr ""
+msgstr "비공개 기부"
 
 #, python-brace-format
 msgid "You will appear in {username}'s private list of patrons."
-msgstr ""
+msgstr "{username} 님의 비공개 기부자 목록에 등재됩니다."
 
 msgid "Public donation"
-msgstr ""
+msgstr "공개 기부"
 
 #, python-brace-format
 msgid "Everybody will be able to see that you support {username}."
@@ -1854,7 +1854,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
-msgstr ""
+msgstr "{username} 님이 아직 기부자 목록을 볼 지 선택하지 않았으므로 당신의 기부는 비밀로 처리됩니다."
 
 msgid "Discontinue the donation"
 msgstr "기부 중단"
@@ -1869,7 +1869,7 @@ msgid "Liberapay's recurrent donations system is designed to provide a stable cr
 msgstr "Liberapay의 반복적인 기부 시스템은 제작자에게 안정적인 크라우드펀딩을 허용하여 모두에게 이익을 주는 좋은 일을 계속할 수 있도록 돕습니다. 준비되었나요? 시작해 봅시다:"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
-msgstr "샌드박스 모드에 있습니다, 실제 결제 정보 또는 개인 정보를 입력하지 마십시오!"
+msgstr "샌드박스 모드입니다. 실제 결제 정보 또는 개인 정보를 입력하지 마십시오!"
 
 msgid "Dashboard"
 msgstr "대시보드"
@@ -1884,7 +1884,7 @@ msgstr "{username} 님의 작업을 지속되는 기부로 후원하세요."
 
 #, python-brace-format
 msgid "{username} currently doesn't accept donations. You can pledge to them, but you can't actually send them money."
-msgstr ""
+msgstr "{username}님은 현재 기부를 받지 않습니다. 기부를 약속하실 수 있지만 실제로 돈을 보낼 수는 없습니다."
 
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "이 계정은 일시적으로 정지되었으며, 기부금은 처리되지 않습니다."
@@ -1892,7 +1892,7 @@ msgstr "이 계정은 일시적으로 정지되었으며, 기부금은 처리되
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
+msgstr[0] "{username}님을 지원할 준비가 된 {n}명의 기부자가 있습니다."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -1904,7 +1904,7 @@ msgstr "{username} 님은 현재 매주 {income_amount} 만큼을 받고 있으�
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
-msgstr ""
+msgstr "{username}님의 목표는 매주 {money_amount} 만큼을 받는 것입니다. 첫 번째 기여자가 되어 보세요!"
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
@@ -1937,20 +1937,20 @@ msgid "Can I make a one-time donation?"
 msgstr "일회성 기부를 할 수는 없나요?"
 
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
-msgstr ""
+msgstr "일회성 기부는 현재 정식으로 지원하는 기능이 아니지만, 첫 결제 이후에 즉시 기부를 해지할 수 있습니다."
 
 msgid "What is this website? I don't recognize it."
-msgstr ""
+msgstr "이 사이트는 뭔가요? 전혀 모르겠는데요."
 
 msgid "You're on Liberapay, a donation platform maintained by a non-profit organisation based in France."
-msgstr ""
+msgstr "이 사이트는 Liberapay이며 프랑스의 비영리기구에서 운영하는 기부 플랫폼입니다."
 
 msgid "Is this platform secure?"
-msgstr ""
+msgstr "이 플랫폼 안전한가요?"
 
 #, python-brace-format
 msgid "Liberapay has been running for {timedelta} without any significant security incident. We do everything we can to keep your data safe and comply with the laws of the European Union ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end}, et cetera)."
-msgstr ""
+msgstr "Liberapay는 {timedelta} 동안 보안 사고 없이 운영되어 왔습니다. Liberapay는 이용자의 데이터를 안전하게 유지하고 유럽 연합의 법률을 준수합니다 ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end} 등등)."
 
 msgid "General Data Protection Regulation"
 msgstr ""
@@ -2023,13 +2023,13 @@ msgstr "다른 플랫폼에서 가지고 있는 계정을 연결하게 되면 �
 #, python-brace-format
 msgid "You currently have {n} connected account:"
 msgid_plural "You currently have {n} connected accounts:"
-msgstr[0] ""
+msgstr[0] "{n}개의 연결된 계정이 있습니다."
 
 msgid "Connect an account"
-msgstr ""
+msgstr "계정 연결하기"
 
 msgid "Our YouTube integration has been disabled by Google. We're working on re-implementing this feature in a different way."
-msgstr ""
+msgstr "Google에서 YouTube 계정 연결을 비활성화하였습니다. 이 기능을 다른 방식으로 구현하기 위한 작업을 진행하고 있습니다."
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "기부는 감사합니다만, 구체적인 모금 목표는 딱히 없습니다."
@@ -2116,16 +2116,16 @@ msgid "Excerpt that will be used in social media:"
 msgstr "소셜 미디어에서 사용될 요약:"
 
 msgid "Preview of the short description"
-msgstr ""
+msgstr "짧은 설명 미리보기"
 
 msgid "Publish"
-msgstr ""
+msgstr "발행"
 
 msgid "You haven't saved your changes, are you sure you want to discard them?"
 msgstr "바뀐 내용을 저장하지 않았습니다. 바뀐 내용을 버릴까요?"
 
 msgid "Discard"
-msgstr ""
+msgstr "버리기"
 
 msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
 msgstr "당신이 하는 일을 요약하고, 왜 기부를 요청하는 지 설명해 주세요. 짧은 요약과 긴 성명이 모두 필요합니다."
@@ -2137,13 +2137,13 @@ msgstr "Liberapay는 문구를 다른 언어로 표현할 수 있도록 허용�
 msgid "Current language: {0}"
 msgstr "현재 언어: {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Short description in {language}"
-msgstr "짧은 설명"
+msgstr "{language} 언어로 된 짧은 성명"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Full description in {language}"
-msgstr "긴 성명"
+msgstr "{language} 언어로 된 긴 성명"
 
 msgid "Markdown supported."
 msgstr "마크다운 지원됨."
@@ -2169,6 +2169,9 @@ msgid ""
 "\n"
 "Are you sure you want to change your username?"
 msgstr ""
+"계정 이름을 변경하면 프로필의 웹 주소도 변경됩니다. 옛 URL에서 새 URL로 넘어가는 넘겨주기가 생성되지만, 링크에 변경 불가능한 계정 ID ({account_id})가 포함되지 않은 경우 다른 사용자가 옛 계정 이름을 등록하면 넘겨주기가 삭제되므로 다른 웹사이트에 등록해 놓은 링크를 업데이트하는 것이 좋습니다\n"
+"\n"
+"계정 이름을 변경하려는 것이 확실한가요?"
 
 msgid "Username"
 msgstr "사용자 이름"
@@ -2226,7 +2229,7 @@ msgid "Add my email address to the blacklist"
 msgstr "이메일 주소를 블랙리스트에 추가"
 
 msgid "You have successfully disavowed having connected your email address to this Liberapay account."
-msgstr ""
+msgstr "이 이메일 주소를 Liberapay 계정에 연동할 수 없도록 거부했습니다."
 
 msgid "Would you like to block any future attempt to connect your email address to a Liberapay account, by adding it to our blacklist?"
 msgstr "이 이메일 주소를 추후에 Liberapay 계정에 연동할 수 없도록 블랙리스트에 추가하겠습니까?"
@@ -2283,7 +2286,7 @@ msgstr "언어"
 
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
-msgstr "Liberapay가 {language}로의 번역이 완료되지 않았습니다. 이메일을 영어로 대신 받아볼 수 있습니다."
+msgstr "Liberapay {language} 번역이 완료되지 않았습니다. 이메일을 영어로 대신 받아볼 수 있습니다."
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay는 당신의 도움이 필요합니다"
@@ -2305,19 +2308,19 @@ msgid "Yes, activate automatic renewals"
 msgstr "네, 자동 갱신을 켭니다"
 
 msgid "Liberapay now supports non-anonymous donations, do you want to modify the visibility of all your donations at once?"
-msgstr ""
+msgstr "이제 Liberapay에 기명 기부를 사용할 수 있습니다. 모든 기부의 공개 여부를 한 번에 조정하겠습니까?"
 
 msgid "Reveal my donations to everyone"
-msgstr ""
+msgstr "내 기부를 모두에게 공개"
 
 msgid "Reveal my donations to the beneficiaries only"
-msgstr ""
+msgstr "내 기부를 기부받는 사람에게만 공개"
 
 msgid "Keep my donations as they are"
-msgstr ""
+msgstr "익명 기부 유지"
 
 msgid "Since you've chosen to make a public donation, we recommend that you complete your public profile."
-msgstr ""
+msgstr "기부를 모두에게 공개하기로 하였으므로 공개 프로필을 작성하는 것이 좋습니다."
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr ""
@@ -2384,7 +2387,6 @@ msgstr "{bold}총계:{bold_end} 매주 {0} ~ 매달 {1} ~ 매년 {2}."
 msgid "You are currently not donating to anyone."
 msgstr "당신은 현재 누구에게도 기부하지 않고 있습니다."
 
-#, fuzzy
 msgid "Discontinued donations"
 msgstr "중단된 기부"
 
@@ -2437,7 +2439,7 @@ msgid "Currently unavailable"
 msgstr "현재 사용 불가능"
 
 msgid "Pay by card"
-msgstr ""
+msgstr "카드로 지불"
 
 msgid "Euro donations only"
 msgstr "유로 기부금 전용"
@@ -2446,7 +2448,7 @@ msgid "Euro bank accounts only"
 msgstr "유럽 계좌 전용"
 
 msgid "Pay by direct debit"
-msgstr ""
+msgstr "계좌 이체로 지불"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
@@ -2456,10 +2458,10 @@ msgid "Doesn't support automatic renewal"
 msgstr "자동 갱신을 지원하지 않음"
 
 msgid "Reveals your name and email address to the recipient"
-msgstr ""
+msgstr "이름과 이메일 주소를 수신인에게 공개하게 됩니다"
 
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "페이팔로 지불"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
@@ -2477,7 +2479,7 @@ msgstr "{charge_amount} 을(를) 성공적으로 지불했습니다."
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "결제 프로세서 {name}에서 \"{error_message}\" 오류를 반환했습니다."
+msgstr "결제 처리자 {name}에서 \"{error_message}\" 오류를 반환했습니다."
 
 msgid "The payment has been initiated."
 msgstr "결제가 시작되었습니다."
@@ -2500,16 +2502,16 @@ msgstr "{donation_amount}만 청구할 수 없습니다. 최소 지불 금액은
 msgid "Please select or input a payment amount:"
 msgstr "결제금액을 선택 또는 입력해 주세요:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "전체 지불 금액은 즉시 {recipient_names}의 {payment_provider} 계정으로 이동됩니다."
+msgstr "Liberapay는 자금을 보관하지 않으며, 지불하신 금액은 즉시 {recipient_names}의 {payment_provider} 계정으로 이동됩니다."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "전체 지불 금액은 즉시 {recipient_name}의 {payment_provider} 계정으로 이동합니다."
+msgstr "Liberapay는 자금을 보관하지 않으며, 지불하신 금액은 즉시 {recipient_name}의 {payment_provider} 계정으로 이동됩니다."
 
 msgid "PayPal reveals your name and email address to the recipient."
-msgstr ""
+msgstr "PayPal은 이름과 이메일을 돈을 받는 사람에게 공개합니다."
 
 msgid "Initiate the payment"
 msgstr "지불 시작"
@@ -2572,7 +2574,7 @@ msgid "Remember the bank account number for future payments"
 msgstr "향후 지급을 위해 은행 계좌 번호를 기억하세요"
 
 msgid "Please input your postal address:"
-msgstr ""
+msgstr "우편 주소를 입력해 주십시오:"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2612,7 +2614,7 @@ msgstr "{in_N_weeks_months_or_years} 후에 다음 지불."
 
 #, python-brace-format
 msgid "Custom amount (min={0}, max={1})"
-msgstr "맞춤 금액 (최소={0}, 최대={1})"
+msgstr "결제 금액 지정 (최소={0}, 최대={1})"
 
 msgid "If you want to modify the date of this scheduled payment, please select or input a new one:"
 msgstr ""
@@ -2669,17 +2671,17 @@ msgstr "{username} 님의 프로필"
 #, python-brace-format
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
-msgstr[0] ""
+msgstr[0] "이 프로필은 {n}개의 언어로 볼 수 있습니다"
 
 msgid "Show the list of languages"
-msgstr ""
+msgstr "언어 목록 보기"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr ""
+msgstr "이 프로필은 {language} 언어로만 볼 수 있습니다"
 
 msgid "Edit"
-msgstr "고치기"
+msgstr "편집"
 
 msgid "Statement"
 msgstr "성명 (statement)"
@@ -2704,7 +2706,7 @@ msgstr "CSV로 내보내기"
 #, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
-msgstr[0] ""
+msgstr[0] "{username}님은 {n}명의 공개 기부자가 있습니다."
 
 #, python-brace-format
 msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
@@ -2721,11 +2723,11 @@ msgstr ""
 #, python-brace-format
 msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
-msgstr[0] ""
+msgstr[0] "{username}님은 공개적으로 {n}명의 크리에이터에게 기부하고 있습니다."
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
-msgstr "{username}은(는) Liberapay를 통해 받는 금액을 공개하지 않습니다."
+msgstr "{username}님은 Liberapay를 통해 받는 금액을 공개하지 않습니다."
 
 msgid "History"
 msgstr "역사"
@@ -2736,7 +2738,7 @@ msgstr "{username} 님은 {timespan_ago}에 가입했습니다."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr ""
+msgstr "{username}님은 {timespan_ago}에 탈퇴했습니다."
 
 msgid "View income history"
 msgstr "수익 기록 보기"
@@ -2811,7 +2813,7 @@ msgid "Accept and Pay"
 msgstr "승인하고 지불"
 
 msgid "Mark as paid"
-msgstr ""
+msgstr "지불된 것으로 표시"
 
 #, python-brace-format
 msgid "Message: {0}"
@@ -2833,7 +2835,7 @@ msgstr "보여줄 것이 없습니다."
 
 #, python-brace-format
 msgid "You are not allowed to invoice {0}."
-msgstr "{0}에 청구서를 제출할 수 없습니다."
+msgstr "{0}에 청구서를 제출할 권한이 없습니다."
 
 msgid "The description is too short."
 msgstr "설명이 너무 짧습니다."
@@ -2937,54 +2939,54 @@ msgid "error message: {0}"
 msgstr "에러 메시지: {0}"
 
 msgid "hidden"
-msgstr ""
+msgstr "숨김"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
-msgstr ""
+msgstr "{donor_name}으로부터의 공개 기부"
 
 #, python-brace-format
 msgid "private donation from {donor_name}"
-msgstr ""
+msgstr "{donor_name}으로부터의 비공개 기부"
 
 msgid "secret donation"
-msgstr ""
+msgstr "비밀 기부"
 
 #, python-brace-format
 msgid "public donation from {donor_name} for your role in the {team_name} team"
-msgstr ""
+msgstr "{team_name} 팀에서의 역할에 대한 {donor_name}으로부터의 공개 기부"
 
 #, python-brace-format
 msgid "private donation from {donor_name} for your role in the {team_name} team"
-msgstr ""
+msgstr "{team_name} 팀에서의 역할에 대한 {donor_name}으로부터의 비공개 기부"
 
 #, python-brace-format
 msgid "secret donation for your role in the {team_name} team"
-msgstr ""
+msgstr "{team_name} 팀에서에 역할에 대한 비밀 기부"
 
 #, python-brace-format
 msgid "public donation to {recipient_name}"
-msgstr ""
+msgstr "{recipient_name}님에게 보내는 공개 기부"
 
 #, python-brace-format
 msgid "private donation to {recipient_name}"
-msgstr ""
+msgstr "{recipient_name}님에게 보내는 비공개 기부"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name}"
-msgstr ""
+msgstr "{recipient_name}님에게 보내는 비밀 기부"
 
 #, python-brace-format
 msgid "public donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "{team_name}팀에서의 역할에 대해 {recipient_name}님에게 보내는 공개 기부"
 
 #, python-brace-format
 msgid "private donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "{team_name}팀에서의 역할에 대해 {recipient_name}님에게 보내는 비공개 기부"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name} for their role in the {team_name} team"
-msgstr ""
+msgstr "{team_name}팀에서의 역할에 대해 {recipient_name}님에게 보내는 비밀 기부"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3070,7 +3072,7 @@ msgid "Remove"
 msgstr "제거"
 
 msgid "An error occurred while rendering this notification."
-msgstr ""
+msgstr "이 알림을 렌더링하는 도중 오류가 발생했습니다."
 
 #, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
@@ -3095,10 +3097,10 @@ msgid "{username} doesn't have any active patrons."
 msgstr ""
 
 msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr ""
+msgstr "Liberapay는 이제 기명 기부를 지원합니다. 당신을 지원하는 사람이 누구인지 알고 싶으신가요?"
 
 msgid "Enable non-anonymous donations"
-msgstr ""
+msgstr "기명 기부 보기"
 
 #, python-brace-format
 msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
@@ -3109,7 +3111,7 @@ msgid "You've chosen not to see who your patrons are. If you change your mind, t
 msgstr ""
 
 msgid "Data export"
-msgstr ""
+msgstr "데이터 내보내기"
 
 msgid "Download the list of currently active patrons"
 msgstr ""
@@ -3126,23 +3128,23 @@ msgstr "어떤 팀에도 소속되어 있지 않습니다."
 
 #, python-brace-format
 msgid "{username} isn't a member of any team."
-msgstr ""
+msgstr "{username}님은 어떤 팀에도 소속되어 있지 않습니다."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
 msgstr "기부금 수령을 시작하려면 먼저 {link_open}프로필을{link_close} 채워 주세요."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
-msgstr "기부를 받으려면 지원되는 결제 과정에서 하나 이상의 계정을 연결해야 합니다. 이 페이지에서는 그렇게 할 수 있습니다."
+msgstr "기부를 받으려면 이 페이지에서 지원되는 결제 처리자를 최소 한 개 이상 연결해야 합니다."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "기부자는 아래의 결제 계좌를 연결할 필요가 없으며, 돈을 받기 위해서만 필요합니다."
 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
-msgstr "Stripe과 PayPal 둘 다 자국에서 사용이 가능하다면 연결하기를 권해드립니다."
+msgstr "Stripe과 PayPal 둘 다 자국에서 사용이 가능하다면 연결하기를 권장합니다."
 
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Stripe를 사용하면 기증자가 Liberapay 웹사이트에서 직접 카드 또는 직불금을 지불할 수 있습니다. (직불은 현재 유럽 은행 계좌에서만 지원됩니다.)"
+msgstr "Stripe를 사용하면 기부자가 Liberapay 웹사이트에서 직접 카드 또는 계좌 이체로 지불할 수 있습니다. (계좌 이체는 현재 유럽 은행 계좌에서만 지원됩니다.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3180,14 +3182,14 @@ msgid "Connect another {platform_name} account"
 msgstr "다른 {platform_name} 계정 연결"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
-msgstr "PayPal은 Stripe보다 더 많은 나라에서 돈을 받을 수 있지만, Liberapay에 잘 호환되지 않습니다."
+msgstr "PayPal은 Stripe보다 더 많은 나라에서 돈을 받을 수 있지만, Liberapay와 잘 호환되지 않습니다."
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
 msgstr "liberapay_영수증_{number}호"
 
 msgid "Payment receipt"
-msgstr ""
+msgstr "결제 영수증"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has been received."
@@ -3228,22 +3230,22 @@ msgstr ""
 
 #, python-brace-format
 msgid "Name: {0}"
-msgstr ""
+msgstr "이름: {0}"
 
 #, python-brace-format
 msgid "Email address: {0}"
-msgstr ""
+msgstr "이메일 주소: {0}"
 
 #, python-brace-format
 msgid "Organization name: {0}"
-msgstr ""
+msgstr "조직 이름: {0}"
 
 #, python-brace-format
 msgid "Headquarters address: {0}"
-msgstr ""
+msgstr "본사 주소: {0}"
 
 msgid "Payment details"
-msgstr ""
+msgstr "결제 정보"
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
@@ -4076,7 +4078,7 @@ msgstr[0] "{n} 사용자가 기부에 참여하였습니다."
 #, python-brace-format
 msgid "{n} participant received money."
 msgid_plural "{n} participants received money."
-msgstr[0] ""
+msgstr[0] "{n} 사용자가 기부를 받았습니다."
 
 #, python-brace-format
 msgid "{n} participant was both a donor and a recipient."

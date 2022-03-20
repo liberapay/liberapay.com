@@ -1837,9 +1837,9 @@ msgstr "Μία υπενθύμιση για να ανανεώσετε την δω
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} έχει επιλέξει να μην βλέπει ποιοι είναι οι χορηγοί του, οπότε η δωρεά σας θα είναι μυστική."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr ""
+msgstr "Αυτή η δωρεά δεν θα είναι μυστική, θα εμφανιστείτε στην {username}'ιδιωτική λίστα των υποστηρικτών."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
@@ -2845,7 +2845,7 @@ msgid "Accept and Pay"
 msgstr "Αποδοχή και Πληρωμή"
 
 msgid "Mark as paid"
-msgstr ""
+msgstr "Χαρακτηρίστε ως πληρωμένο"
 
 #, python-brace-format
 msgid "Message: {0}"
@@ -3137,11 +3137,11 @@ msgstr "Ενεργοποίηση μη ανωνύμων δωρεών"
 
 #, python-brace-format
 msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr ""
+msgstr "Έχετε επιλέξει να δείτε ποιοι είναι οι θαμώνες σας. Εάν αλλάξετε γνώμη, τότε {link_start}κάντε κλικ εδώ για να απενεργοποιήσετε τις μη ανώνυμες δωρεές{link_end}."
 
 #, python-brace-format
 msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr ""
+msgstr "Έχετε επιλέξει να μην βλέπετε ποιοι είναι οι θαμώνες σας. Εάν αλλάξετε γνώμη, τότε {link_start}κάντε κλικ εδώ για να ενεργοποιήσετε τις μη ανώνυμες δωρεές{link_end}."
 
 msgid "Data export"
 msgstr "Εξαγωγή δεδομένων"
@@ -3161,7 +3161,7 @@ msgstr "Δεν είστε μέλος καμίας ομάδας."
 
 #, python-brace-format
 msgid "{username} isn't a member of any team."
-msgstr ""
+msgstr "{username} δεν είναι μέλος κάποιας ομάδας."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3517,7 +3517,7 @@ msgid "Your donation to {0} has been stopped."
 msgstr "Η δωρεά σας στο {0} έχει σταματήσει."
 
 msgid "This is no longer possible."
-msgstr ""
+msgstr "Αυτό δεν είναι πλέον δυνατό."
 
 msgid "Export History"
 msgstr "Εξαγωγή Ιστορικού"
@@ -4169,7 +4169,7 @@ msgid "The sum of charges processed during each week, expressed in {currency}."
 msgstr "Το άθροισμα των χρεώσεων που διεκπεραιώθηκαν κατά τη διάρκεια κάθε εβδομάδας, εκφρασμένο σε {currency}."
 
 msgid "You're not allowed to do this because your account has been flagged. Please contact support@liberapay.com if you want to know why and request that your account be unflagged."
-msgstr ""
+msgstr "Δεν επιτρέπεται να το κάνετε αυτό επειδή ο λογαριασμός σας έχει επισημανθεί. Επικοινωνήστε με το support@liberapay.com εάν θέλετε να μάθετε γιατί και ζητήστε να καταργηθεί η επισήμανση του λογαριασμού σας."
 
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. The donors choose how much they want to give, the team members specify how they want to share the money, and Liberapay attempts to distribute the funds accordingly."
 msgstr ""
@@ -4254,7 +4254,7 @@ msgstr "Διαγραφή μελών ομάδας"
 
 #, python-brace-format
 msgid "You can leave a team from {0}your teams dashboard{1}."
-msgstr ""
+msgstr "Μπορείτε να αποχωρήσετε από μία ομάδα από τον {0}πίνακα ελέγχου της ομάδας σας{1}."
 
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
 msgstr ""
@@ -4361,10 +4361,10 @@ msgid "Explore Pledges"
 msgstr "Εξερευνήστε τις δεσμεύσεις"
 
 msgid "A repository contains a project's data, for example the source code of an application."
-msgstr ""
+msgstr "Ένα αποθετήριο περιέχει τα δεδομένα ενός έργου, για παράδειγμα τον πηγαίο κώδικα μιας εφαρμογής."
 
 msgid "See the most popular repositories belonging to Liberapay users, and browse lists of repos that you've starred on other platforms."
-msgstr ""
+msgstr "Δείτε τα πιο δημοφιλή αποθετήρια που ανήκουν σε χρήστες της Liberapay και περιηγηθείτε σε λίστες αποθετηρίων που έχετε επισημάνει σε άλλες πλατφόρμες."
 
 msgid "Explore Repositories"
 msgstr "Εξερευνήστε Αποθετήρια"
@@ -4522,7 +4522,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Congratulations, you have reached your goal of receiving {0} per week!"
-msgstr ""
+msgstr "Συγχαρητήρια, πετύχατε το στόχο σας να λαμβάνετε {0} ανά εβδομάδα!"
 
 msgid "To receive money, do something awesome and then tell people about it:"
 msgstr "Για να λάβετε χρήματα, κάντε κάτι φοβερό και στη συνέχεια πείτε στους ανθρώπους για αυτό:"
