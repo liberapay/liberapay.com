@@ -96,7 +96,7 @@ def create_order(db, payin, payer, return_url, cancel_url, state):
         "application_context": {
             "brand_name": "Liberapay",
             "cancel_url": cancel_url,
-            "locale": locale.language.replace('_', '-'),
+            "locale": locale.tag,
             "landing_page": "BILLING",
             "shipping_preference": "NO_SHIPPING",
             "user_action": "PAY_NOW",
