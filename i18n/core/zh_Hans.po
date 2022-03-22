@@ -1111,7 +1111,7 @@ msgstr "\"{0}\"不是有效的帐户 ID。"
 msgid "No account has the username “{username}”."
 msgstr "没有使用名为\" {username}」的帐户。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
 msgstr "查无任何用户其主要电邮地址为 {email_address} 。"
 
@@ -1755,6 +1755,7 @@ msgstr "你目前每周捐款 {money_amount} 元给 {name}，但他们已不再�
 msgid "Modify"
 msgstr "修改"
 
+#, fuzzy
 msgid "Discontinue"
 msgstr "停止"
 
@@ -1856,6 +1857,7 @@ msgstr ""
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr ""
 
+#, fuzzy
 msgid "Discontinue the donation"
 msgstr "停止捐款"
 
@@ -1870,6 +1872,9 @@ msgstr "Liberapay 重复定期的捐款统系是设计用来提供稳定的众�
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "你正在使用沙盒模式，请勿输入真实的付款或个人信息！"
+
+msgid "Dashboard"
+msgstr "仪控表"
 
 #, python-brace-format
 msgid "Donate to {0} via Liberapay"
@@ -2384,6 +2389,7 @@ msgstr "{bold}总数：{bold_end} {0} 每周 ~ {1} 每月 ~ {2} 每年。"
 msgid "You are currently not donating to anyone."
 msgstr "您目前没有捐款给任何人。"
 
+#, fuzzy
 msgid "Discontinued donations"
 msgstr "停止捐款"
 
@@ -2499,11 +2505,11 @@ msgstr "我们无法只向您收取{donation_amount}金额，最低支付额度�
 msgid "Please select or input a payment amount:"
 msgstr "请选或输入支付数额："
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
 msgstr "您支付的全额将会立即进入 {payment_provider}底下的 {recipient_names} 帐户。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
 msgstr "你捐助的总额会立即透过{payment_provider}移到{recipient_name}帐户底下。"
 
@@ -3003,6 +3009,9 @@ msgstr "要查看过去利用 Mangopay 所处理的交易请到{link_start}电�
 msgid "You are not invited to join this team."
 msgstr "你未受邀请加入此团队。"
 
+msgid "You have been removed from this team."
+msgstr ""
+
 msgid "You have already accepted this invitation."
 msgstr "你已接受了这个邀请。"
 
@@ -3071,7 +3080,7 @@ msgstr "移除"
 msgid "An error occurred while rendering this notification."
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
 msgstr "该错误的详细信息已纪录。若希望联系我们，请在来信中提供以下的错误辨识码：{0}。"
 
@@ -3702,6 +3711,7 @@ msgstr "在GitHub发出问题"
 msgid "Other communication channels:"
 msgstr "其它的沟通管道："
 
+#, fuzzy
 msgid "How is Liberapay funded? Are there fees?"
 msgstr "Liberapay 如何资助成立的？"
 
@@ -3785,7 +3795,7 @@ msgstr "可用的支付方式端视收款人支援情况，如果是采 Stripe �
 msgid "What are the payment processing fees?"
 msgstr "什么是付款处理费用？"
 
-#, python-format
+#
 msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
 msgstr "手续费用视处理商、付款方式、国别和货币而定，一般其平均费用不会超过 5%。"
 
@@ -4129,7 +4139,7 @@ msgstr "团队帐号不代表能被成员的单一合法实体所用，它是用
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
 msgstr "团队帐号{bold}无法暂储款项{end_bold}留待日后使用。每笔捐款会立即分配，不管是交付多位成员或当支付处理商无法划分款项时拨给某位成员代表。由于支付限制，成员接到的款项金额暂时不平均，特别是赞助者人数少于成员的团队。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
 msgstr "如果 Liberapay 团队帐号不符您的需求，您可以利用{link_start}Open Collective{link_end}平台替代，它允许团队帐号由登记有案的非营利组织来主导。这个\"财务主人\"是为团队基木的合法拥有者，监管金钱的使用且收取 5% 手续费(我们打算未来 Liberapay 会采用类似的系统，但时程未定。)"
 
@@ -4231,6 +4241,7 @@ msgstr[0] ""
 msgid "Search communities"
 msgstr "搜寻社群"
 
+#, fuzzy
 msgid "Largest communities"
 msgstr "受欢迎的社群"
 
@@ -4493,7 +4504,7 @@ msgstr "找到您希望资助的对象，然后选择合适的金额、周期（
 msgid "2. Fund your donation"
 msgstr "2. 资助您的捐款"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "On Liberapay, donations are funded in advance. You have control over when and how much you pay. Sending more money at once usually results in a lower percentage of {0}transaction fees{1}."
 msgstr "Liberapay 的捐款是事先付钱，您可以决定何时、要放入多少钱。一次送出高额的钱可降低{0}交易手续费{1}。"
 
@@ -4581,6 +4592,7 @@ msgstr[0] ""
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
 msgstr "您还可以轻松地在您的个人资料上列出您在{platforms_list}上贡献的存储库."
 
+#, fuzzy
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay 可让用户承诺捐助那些尚未加入本站的人员。如果他们一旦完成注册，这些捐款会自动地转交给他们。我们也会传送通知给原捐款人知道。"
 
@@ -4834,7 +4846,7 @@ msgstr[0] ""
 msgid "Explore unclaimed donations"
 msgstr "查看未主胀的捐款"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
 msgstr "本页是给{platform}用户{user_name}的："
 
@@ -4862,6 +4874,7 @@ msgstr ""
 msgid "Pledge to {user_name}"
 msgstr ""
 
+#, fuzzy
 msgid "You can support individual team members:"
 msgstr "你可以直接捐款给各团队成员："
 

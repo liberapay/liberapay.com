@@ -22,10 +22,14 @@ for s_msg in s_catalog:
     if not s_msg.id:
         continue
     t_msg = t_catalog._messages[t_catalog._key_for(s_msg.id)]
-    if t_msg.string and not s_msg.string:
+    if t_msg.string and (not s_msg.string or s_msg.fuzzy and not t_msg.fuzzy):
         s_msg.string = t2s_converter.convert(t_msg.string)
-    elif s_msg.string and not t_msg.string:
+        if t_msg.fuzzy:
+            s_msg.flags.add('fuzzy')
+    elif s_msg.string and (not t_msg.string or t_msg.fuzzy and not s_msg.fuzzy):
         t_msg.string = s2t_converter.convert(s_msg.string)
+        if s_msg.fuzzy:
+            t_msg.flags.add('fuzzy')
 
 # Save the changes
 with open(t_path, 'wb') as po:
