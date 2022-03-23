@@ -18,21 +18,28 @@ with open(s_path, 'rb') as po:
     s_catalog = read_po(po, locale='zh_Hans')
 
 # Complete each catalog with the translations from the other one
+s2t_count = t2s_count = 0
 for s_msg in s_catalog:
     if not s_msg.id:
         continue
     t_msg = t_catalog._messages[t_catalog._key_for(s_msg.id)]
     if t_msg.string and (not s_msg.string or s_msg.fuzzy and not t_msg.fuzzy):
         s_msg.string = t2s_converter.convert(t_msg.string)
+        t2s_count += 1
         if t_msg.fuzzy:
             s_msg.flags.add('fuzzy')
     elif s_msg.string and (not t_msg.string or t_msg.fuzzy and not s_msg.fuzzy):
         t_msg.string = s2t_converter.convert(s_msg.string)
+        s2t_count += 1
         if s_msg.fuzzy:
             t_msg.flags.add('fuzzy')
 
 # Save the changes
-with open(t_path, 'wb') as po:
-    write_po(po, t_catalog, width=0)
-with open(s_path, 'wb') as po:
-    write_po(po, s_catalog, width=0)
+if s2t_count:
+    with open(t_path, 'wb') as po:
+        write_po(po, t_catalog, width=0)
+    print(f"added {s2t_count} machine-converted translations to {t_path}")
+if t2s_count:
+    with open(s_path, 'wb') as po:
+        write_po(po, s_catalog, width=0)
+    print(f"added {t2s_count} machine-converted translations to {s_path}")
