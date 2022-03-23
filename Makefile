@@ -106,6 +106,7 @@ _i18n_clean: $(env)
 	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator|X-Generator|Language|Project-Id-Version|Report-Msgid-Bugs-To): /d' \
 	           -e 's/^("[^:]+: ) +/\1/' \
 	           -e 's/^("Language-Team: .+? )<(.+)>\\n/\1"\n"<\2>\\n/' \
+	           -e '/^#, python-format$$/d' \
 	           -e 's/^#(, .+)?, python-format(, .+)?$$/#\1\2/' \
 	           -e '/^#: /d' \
 	           "$$f" | \
