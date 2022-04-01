@@ -74,7 +74,7 @@ title = _("{0} community settings", c.name)
         <input type="hidden" name="switch_lang" value="{{ switch_lang }}" />
         <input type="hidden" name="discard" value="yes" />
         <input type="hidden" name="subtitle" value="{{ subtitle }}" />
-        <textarea class="hidden" name="sidebar">{{ sidebar }}</textarea>
+        <textarea class="hidden" name="sidebar" lang="{{ lang }}">{{ sidebar }}</textarea>
         <div class="buttons">
             <button class="btn btn-danger" name="action" value="switch">{{ _("Discard") }}</button>
             <button class="btn btn-default" name="action" value="edit">{{ _("Edit") }}</button>
@@ -98,7 +98,7 @@ title = _("{0} community settings", c.name)
             "Short description in {language}", language=locale.Language(lang)
         ) }}</label>
         <input class="form-control" name="subtitle" value="{{ subtitle or '' }}"
-               id="subtitle" maxlength="{{ c.subtitle_maxlength }}" />
+               id="subtitle" maxlength="{{ c.subtitle_maxlength }}" lang="{{ lang }}" />
         <p class="help-block">{{ _(
             "Maximum length is {0}.", c.subtitle_maxlength
         ) }}</p>
@@ -109,7 +109,7 @@ title = _("{0} community settings", c.name)
             "Sidebar text in {language}", language=locale.Language(lang)
         ) }}</label>
         <textarea class="form-control vertical-resize" name="sidebar" rows=10
-                  id="sidebar" maxlength="{{ c.sidebar_maxlength }}"
+                  id="sidebar" maxlength="{{ c.sidebar_maxlength }}" lang="{{ lang }}"
             >{{ sidebar or '' }}</textarea>
         <p class="help-block">
             {{ _("Maximum length is {0}.", c.sidebar_maxlength) }}

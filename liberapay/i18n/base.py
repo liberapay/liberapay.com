@@ -10,6 +10,7 @@ from babel.messages.pofile import Catalog
 from babel.numbers import parse_pattern
 from cached_property import cached_property
 from markupsafe import Markup
+import opencc
 from pando.utils import utcnow
 
 from ..constants import CURRENCIES, D_MAX
@@ -325,6 +326,23 @@ def strip_accents(s):
 def make_sorted_dict(keys, d):
     items = ((k, d[k]) for k in keys)
     return OrderedDict(sorted(items, key=lambda t: strip_accents(t[1])))
+
+
+# Some languages have multiple written forms in widespread use. In particular,
+# Chinese has two main character sets (Traditional and Simplified), and we use
+# the OpenCC library to convert from one to the other.
+CONVERTERS = {
+    'zh-hans': {
+        'zh-hant': opencc.OpenCC('s2t.json').convert,
+    },
+    'zh-hant': {
+        'zh-hans': opencc.OpenCC('t2s.json').convert,
+    },
+}
+CONVERTERS['zh'] = {
+    'zh-hans': CONVERTERS['zh-hant']['zh-hans'],
+    'zh-hant': CONVERTERS['zh-hans']['zh-hant'],
+}
 
 
 COUNTRY_CODES = """

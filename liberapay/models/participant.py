@@ -641,18 +641,35 @@ class Participant(Model, MixinTeam):
     def get_statement(self, langs, type='profile'):
         """Get the participant's statement in the language that best matches
         the list provided, or the participant's "primary" statement if there
-        are no matches. Returns a `LocalizedString` object.
+        are no matches. Returns a `LocalizedString` object, or `None`.
         """
         p_id = self.id
+        convert_to = None
         if isinstance(langs, str):
+            langs = [langs]
+            langs.extend(i18n.CONVERTERS.get(langs[0], ()))
             row = self.db.one("""
                 SELECT content, lang
                   FROM statements
+                  JOIN enumerate(%(langs)s::text[]) langs ON langs.value = statements.lang
                  WHERE participant = %(p_id)s
                    AND type = %(type)s
-                   AND lang = %(langs)s
+              ORDER BY langs.rank
+                 LIMIT 1
             """, locals())
+            if row and row.lang != langs[0]:
+                convert_to = langs[0]
         else:
+            conversions = {}
+            for lang in langs:
+                conversions[lang] = None
+                converters = i18n.CONVERTERS.get(lang, ())
+                for target_lang in converters:
+                    if conversions.get(target_lang, '') is None:
+                        conversions[lang] = target_lang
+                    conversions.setdefault(target_lang, lang)
+                del converters
+            langs = list(conversions.keys())
             row = self.db.one("""
                 SELECT content, lang
                   FROM statements
@@ -662,12 +679,37 @@ class Participant(Model, MixinTeam):
               ORDER BY langs.rank NULLS LAST, statements.id
                  LIMIT 1
             """, locals())
-        return LocalizedString(*row) if row else None
+            if row:
+                convert_to = conversions.get(row.lang)
+            del conversions
+        if row:
+            content, lang = row
+            del row
+            if convert_to:
+                try:
+                    content = i18n.CONVERTERS[lang][convert_to](content)
+                    # ↑ This is a potential source of serious vulnerabilities,
+                    #   because it sends user input to third-party libraries.
+                    lang = convert_to
+                except Exception as e:
+                    website.tell_sentry(e)
+            return LocalizedString(content, lang)
 
-    def get_statement_langs(self, type='profile'):
-        return self.db.all("""
+    def get_statement_langs(self, type='profile', include_conversions=False):
+        langs = self.db.all("""
             SELECT lang FROM statements WHERE participant=%s AND type=%s
         """, (self.id, type))
+        if include_conversions:
+            langs_set = set(langs)
+            for lang in langs:
+                converters = i18n.CONVERTERS.get(lang)
+                if converters:
+                    langs_set.update(converters.keys())
+                    if any(len(l) > len(lang) for l in converters.keys()):
+                        langs_set.remove(lang)
+            langs[:] = langs_set
+            del langs_set
+        return langs
 
     def upsert_statement(self, lang, statement, type='profile'):
         if not statement:

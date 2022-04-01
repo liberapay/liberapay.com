@@ -31,13 +31,13 @@ if lang:
 else:
     statement = participant.get_statement(request.accept_langs)
     lang = statement.lang if statement else locale.language
-statement = markdown.render(statement) if statement else None
 summary = participant.get_statement(lang, 'summary')
+statement_html = markdown.render(statement) if statement else None
 
 teams = participant.get_teams_data_for_display(locale)
 communities = participant.get_communities()
 
-langs = participant.get_statement_langs()
+langs = participant.get_statement_langs(include_conversions=True)
 
 patron_visibilities = participant.recipient_settings.patron_visibilities
 if patron_visibilities > 1:
@@ -98,7 +98,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % block head_early
 {{ super() }}
 % if statement or summary
-    <meta property="og:description" content="{{ excerpt_intro(statement) or summary }}">
+    <meta property="og:description" content="{{ excerpt_intro(statement_html) or summary }}">
 % endif
 % endblock
 
@@ -159,9 +159,9 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % block content
     % if statement
         <h3 id="statement">{{ _("Statement") }}</h3>
-        <section class="profile-statement" lang="{{ lang }}">
-            {{ statement }}
-        </section>
+        <section class="profile-statement" lang="{{ statement.lang }}">{{
+            statement_html
+        }}</section>
     % endif
 
     % if participant.kind == 'group'

@@ -8,8 +8,8 @@ from os.path import dirname, join, realpath
 import unittest
 
 import html5lib
-from pando.utils import utcnow
 from pando.testing.client import Client
+from pando.utils import utcnow
 from psycopg2 import IntegrityError, InternalError
 import stripe
 
@@ -112,7 +112,7 @@ class ClientWithAuth(Client):
             r_type = r.headers[b'Content-Type']
             try:
                 if r_type.startswith(b'text/html'):
-                    html5parser.parse(r.text)
+                    r.html_tree = html5parser.parse(r.text)
                 elif r_type.startswith(b'application/json'):
                     json.loads(r.body)
                 elif r_type.startswith(b'application/javascript'):

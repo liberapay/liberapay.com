@@ -68,13 +68,31 @@ class Tests(Harness):
         assert r.code == 200
         assert '<html lang="fr">' in r.text
         assert 'À propos' in r.text
+        alice = self.make_participant('alice')
+        alice.upsert_statement('zh', "歡迎，", 'profile')
         r = self.client.GET(
-            '/',
+            '/alice',
+            HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'zh.example.com',
+            HTTP_CF_IPCOUNTRY=b'TW',
+            raise_immediately=False,
+        )
+        assert r.code == 200
+        html = r.html_tree
+        assert html.attrib["lang"] == "zh-hant-tw"
+        statement_section = html.find(".//{*}section[@lang='zh']")
+        assert statement_section, r.text
+        assert statement_section[0].text == "歡迎，"
+        r = self.client.GET(
+            '/alice',
             HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'zh-hans.example.com',
             raise_immediately=False,
         )
         assert r.code == 200
-        assert '<html lang="zh-hans">' in r.text
+        html = r.html_tree
+        assert html.attrib["lang"] == "zh-hans"
+        statement_section = html.find(".//{*}section[@lang='zh-hans']")
+        assert statement_section, r.text
+        assert statement_section[0].text == "欢迎，"
 
     def test_i18n_subdomain_is_redirected_to_https(self):
         r = self.client.GET(

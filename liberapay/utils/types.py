@@ -2,7 +2,7 @@ from types import SimpleNamespace
 
 
 class LocalizedString(str):
-    """A string with a `lang` attribute containing an ISO language code.
+    """A string with a `lang` attribute containing a lowercase BCP47 tag.
     """
 
     __slots__ = ('lang',)
