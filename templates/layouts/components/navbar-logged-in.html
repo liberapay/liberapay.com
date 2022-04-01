@@ -22,8 +22,8 @@
     <li><a href="/{{ user.username }}/notifications">{{ _("Notifications") }}</a></li>
     <li><a href="/{{ user.username }}/widgets/">{{ _("Widgets") }}</a></li>
     <li class="divider"></li>
-    <li><a href="/for/new">{{ _("Create a new community") }}</a></li>
     <li><a href="/about/teams">{{ _("Create a new team") }}</a></li>
+    {#<li><a href="/for/new">{{ _("Create a new community") }}</a></li>#}
     <li class="divider"></li>
     <li>
         % set method_is_unsafe = request.method not in constants.SAFE_METHODS
