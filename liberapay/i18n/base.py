@@ -448,25 +448,32 @@ LOCALES_DEFAULT_MAP = {
     'zh-tw': 'zh-hant-tw',
 }
 
-SEARCH_CONFS = dict((
-    ('da', 'danish'),
-    ('de', 'german'),
-    ('en', 'english'),
-    ('es', 'spanish'),
-    ('fi', 'finnish'),
-    ('fr', 'french'),
-    ('hu', 'hungarian'),
-    ('it', 'italian'),
-    ('nb', 'norwegian'),
-    ('nl', 'dutch'),
-    ('nn', 'norwegian'),
-    ('pt', 'portuguese'),
-    ('ro', 'romanian'),
-    ('ru', 'russian'),
-    ('sv', 'swedish'),
-    ('tr', 'turkish'),
-))
-
+# https://www.postgresql.org/docs/13/textsearch-intro.html#TEXTSEARCH-INTRO-CONFIGURATIONS
+SEARCH_CONFS = {
+    'ar': 'arabic',
+    'da': 'danish',
+    'de': 'german',
+    'el': 'greek',
+    'en': 'english',
+    'es': 'spanish',
+    'fi': 'finnish',
+    'fr': 'french',
+    'ga': 'irish',
+    'hu': 'hungarian',
+    'id': 'indonesian',
+    'it': 'italian',
+    'lt': 'lithuanian',
+    'nb': 'norwegian',
+    'ne': 'nepali',
+    'nl': 'dutch',
+    'nn': 'norwegian',
+    'pt': 'portuguese',
+    'ro': 'romanian',
+    'ru': 'russian',
+    'sv': 'swedish',
+    'ta': 'tamil',
+    'tr': 'turkish',
+}
 
 _ = lambda a: a
 HTTP_ERRORS = {
