@@ -581,12 +581,14 @@ class Payday:
         return transfers, leftover
 
     def transfer_for_real(self, transfers):
-        db = self.db
         print("Starting transfers (n=%i)" % len(transfers))
-        msg = "Recording transfer #%i (amount=%s context=%s team=%s)"
         for t in transfers:
-            log(msg % (t.id, t.amount, t.context, t.team))
-            db.run("""
+            self.record_transfer(t)
+
+    def record_transfer(self, t):
+        log(f"Recording transfer #{t.id} (amount={t.amount} context={t.context} team={t.team})")
+        with self.db.get_cursor() as cursor:
+            cursor.run("""
                 INSERT INTO transfers
                             (tipper, tippee, amount, context,
                              team, invoice, status,
@@ -611,7 +613,7 @@ class Payday:
                    AND t.mtime >= lt.mtime;
             """, t.__dict__)
             if t.team:
-                db.run("""
+                cursor.run("""
                     WITH latest_take AS (
                              SELECT t.*
                                FROM takes t
