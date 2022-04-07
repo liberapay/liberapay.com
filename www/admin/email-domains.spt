@@ -64,7 +64,7 @@ if domain:
 
 else:
     show = request.qs.get_choice('show', {'all', 'blacklisted'}, default='all')
-    offset = request.qs.get_int('offset', minimum=0, default=0)
+    offset = request.qs.get_int('offset', 0)
     domains_query = """
         SELECT substr(bl.address, 2) AS domain
           FROM email_blacklist bl

@@ -16,7 +16,7 @@ title = _("Account Statement")
 now = datetime.utcnow()
 today = now.date()
 year = request.qs.get_int('year', now.year, minimum=2016)
-month = request.qs.get_int('month', None, minimum=1)
+month = request.qs.get_int('month', None, minimum=1, maximum=12)
 if not month:
     if today.day > participant.join_time.day:
         month = (now.month - 1) or 12

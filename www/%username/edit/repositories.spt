@@ -50,7 +50,7 @@ if platform_name:
             selected_account_id = account.user_id
         event_type = 'fetch_repos:%s' % account.id
         last_fetch = participant.get_last_event_of_type(event_type)
-        offset = max(request.qs.get_int('offset', 0), 0)
+        offset = request.qs.get_int('offset', 0)
         if last_fetch and last_fetch.ts > utcnow() - THREE_DAYS:
             repos = participant.get_repos_on_platform(
                 platform.name, limit=LIMIT, offset=offset, owner_id=account.user_id,
