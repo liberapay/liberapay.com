@@ -10,7 +10,7 @@ if not community:
     # Community not found
     raise response.error(404)
 
-limit = min(request.qs.get_int('limit', 10), 100)
+limit = int(request.qs.get_choice('limit', {'10', '100'}, '10'))
 offset = request.qs.get_int('offset', 0)
 
 community_members = community.get_members(limit=limit, offset=offset)

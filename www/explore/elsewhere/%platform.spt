@@ -39,9 +39,7 @@ if platform:
     if order not in ('any', 'random', 'latest'):
         raise response.invalid_input(order, 'order', 'querystring')
 
-    limit = min(request.qs.get_int('limit', 18), 60)
-    if limit not in (18, 60):
-        raise response.invalid_input(limit, 'limit', 'querystring')
+    limit = int(request.qs.get_choice('limit', {'18', '60'}, '18'))
     last_shown = request.qs.get_int('last_shown', INF)
 
     def get_participants(random):
