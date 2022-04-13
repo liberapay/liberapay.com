@@ -263,7 +263,7 @@ next_payday = compute_next_payday_date()
             n=ntips_awaiting_payment
         ) }}
         &nbsp;
-        <a class="btn btn-success" href="{{ participant.path('giving/pay') }}">{{
+        <a class="btn btn-primary" href="{{ participant.path('giving/pay') }}">{{
             ngettext("Renew this donation", "Renew these donations", ntips_awaiting_payment)
         }}</a>
         </div>
@@ -384,10 +384,11 @@ next_payday = compute_next_payday_date()
                         }}</p>
                         <br>
                     % elif tip.payment_providers
-                        <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{
-                            _("Awaiting payment.")
-                        }}</p>
-                        <a class="btn btn-success"
+                        <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+                            "You need to initiate a new payment to fund this donation. "
+                            "Click on the button below to proceed."
+                        ) }}</p>
+                        <a class="btn btn-primary"
                            href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
                            {{ fontawesome('repeat') }} {{ _("Renew") }}
                         </a>
