@@ -1322,6 +1322,8 @@ class Participant(Model, MixinTeam):
         if email and not force_email:
             bit = EVENTS.get(event.split('~', 1)[0]).bit
             email = self.email_notif_bits & bit > 0
+            if not email and not web:
+                return
         p_id = self.id
         # If email_unverified_address is on, allow sending to an unverified email address.
         if email_unverified_address and not self.email:

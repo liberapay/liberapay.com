@@ -3,6 +3,7 @@ from unittest import mock
 import pytest
 
 from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
+from liberapay.constants import EVENTS
 from liberapay.i18n.currencies import MoneyBasket
 from liberapay.models.participant import Participant
 from liberapay.testing import EUR, JPY, USD, Foobar
@@ -282,6 +283,8 @@ class TestPayday(EmailHarness):
             }
 
     def test_payday_handles_paid_in_advance(self):
+        self.david.update_bit('email_notif_bits', EVENTS['income'].bit, True)
+        self.homer.update_bit('email_notif_bits', EVENTS['income'].bit, True)
         self.add_payment_account(self.david, 'stripe')
         self.add_payment_account(self.homer, 'stripe')
         self.janet.set_tip_to(self.david, EUR('0.60'))
@@ -343,6 +346,7 @@ class TestPayday(EmailHarness):
         assert '0.40' in emails[1]['text']
 
     def test_payday_notifies_participants(self):
+        self.david.update_bit('email_notif_bits', EVENTS['income'].bit, True)
         self.janet.set_tip_to(self.david, EUR('4.50'))
         self.janet.set_tip_to(self.homer, EUR('3.50'))
         team = self.make_participant('team', kind='group', email='team@example.com')
