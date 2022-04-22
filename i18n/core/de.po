@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: German "
-"<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"PO-Revision-Date: 2022-04-22 22:11+0000\n"
+"Last-Translator: Kim HOANG <foss@aggsol.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
@@ -20,7 +22,7 @@ msgid "Your Liberapay account has been marked as fraudulent by a staff member. Y
 msgstr "Ihr Liberapay Konto wurde von einem Mitarbeiter als betrügerisch markiert. Sie können keine Zahlungen mehr senden und empfangen."
 
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
-msgstr "Ihr Liberapay-Profil wurde von einem Mitarbeiter als Spam markiert. Es ist nun versteckt."
+msgstr "Ihr Liberapay Profil wurde von einem Mitarbeiter als Spam markiert. Es ist jetzt ausgeblendet."
 
 msgid "Greetings,"
 msgstr "Hallo,"
@@ -384,11 +386,11 @@ msgstr "Ihr Bankkonto wird belastet werden"
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
-msgstr "Eine Abbuchung von {money_amount} von Ihrem Bankkonto ({partial_account_number}) wurde veranlasst, um Ihre Spende an {recipient} zu finanzieren."
+msgstr "Eine Abbuchung über {money_amount} von Ihrem Bankkonto ({partial_account_number}) wurde ausgeführt, um Ihre Spende an {recipient} zu decken."
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
-msgstr "Eine Abbuchung von {money_amount} von Ihrem Bankkonto ({partial_account_number}) wurde eingeleitet, um Ihre Spenden an {recipients} zu finanzieren."
+msgstr "Eine Abbuchung über {money_amount} von Ihrem Bankkonto ({partial_account_number}) wurde eingeleitet, um Ihre Spenden an {recipients} zu finanzieren."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
@@ -651,7 +653,7 @@ msgstr "Diese Nachricht ist eine Erinnerung daran, dass {amount} von Ihrem Stand
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
 msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
-msgstr[1] "Diese Nachricht ist eine Erinnerung daran, dass ein Gesamtbetrag von {amount} von Ihrem Standardzahlungsmittel innerhalb der nächsten {n} Tage abgebucht wird, um Ihre Spenden zu erneuern."
+msgstr[1] "Diese Nachricht ist eine Erinnerung daran, dass der Betrag von {amount} Ihrem Standardzahlungsmittel innerhalb der nächsten {n} Tage abgebucht wird, um Ihre Spenden zu erneuern."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -1835,43 +1837,43 @@ msgstr "Eine Erinnerung, Ihre Spende zu erneuern, wird Ihnen per E-Mail zugesand
 
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
-msgstr ""
+msgstr "{username} zeigt seine/ihre Spender nicht an. Daher bleibt Ihre Spende geheim."
 
 #, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr ""
+msgstr "Diese Spende ist nicht geheim. Ihre Spende erscheint in der privaten Spenderliste von {username}."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
-msgstr ""
+msgstr "{username} zeigt ihre/seine Spender an. Ihre Spende ist öffentlich."
 
 msgid "Please select a privacy level for this donation:"
-msgstr ""
+msgstr "Bitte wählen Sie die Stufe der Privatsphäre für diese Spende:"
 
 msgid "Secret donation"
 msgstr "Versteckte Spende"
 
 #, python-brace-format
 msgid "Only you will know that you donate to {username}."
-msgstr ""
+msgstr "Nur Sie wissen, dass Sie an {username} gespendet haben."
 
 msgid "Private donation"
 msgstr "Private Spende"
 
 #, python-brace-format
 msgid "You will appear in {username}'s private list of patrons."
-msgstr ""
+msgstr "Sie erscheinen in der privaten Spenderliste von {username}."
 
 msgid "Public donation"
 msgstr "Öffentliche Spende"
 
 #, python-brace-format
 msgid "Everybody will be able to see that you support {username}."
-msgstr ""
+msgstr "Jeder kann sehen, dass Sie {username} unterstützen."
 
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
-msgstr ""
+msgstr "{username} hat nicht angegeben, ob er/sie ihre Spender kennen will. Ihre Spende bleibt geheim."
 
 msgid "Discontinue the donation"
 msgstr "Spende beenden"
@@ -2481,7 +2483,7 @@ msgid "Doesn't support automatic renewal"
 msgstr "Unterstützt keine automatische Erneuerung"
 
 msgid "Reveals your name and email address to the recipient"
-msgstr ""
+msgstr "Ihr Name und Ihre E-Mail-Adresse werden dem Empfänger mitgeteilt"
 
 msgid "Pay with PayPal"
 msgstr "Mit PayPay zahlen"
@@ -2526,13 +2528,13 @@ msgstr "Wir können {donation_amount} nicht einziehen. Der Mindestbetrag für ei
 msgid "Please select or input a payment amount:"
 msgstr "Bitte wählen Sie eine Bezahlmethode:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Der Gesamtbetrag Ihrer Zahlung gelangt unverzüglich auf die {payment_provider}-Konten von {recipient_names}."
+msgstr "Liberapay behält kein Geld ein. Der gesamte Betrag Ihrer Zahlung geht sofort auf das {payment_provider}-Konto von {recipient_names}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Der gesamte Betrag Ihrer Zahlung wird sofort auf das {payment_provider}-Konto von {recipient_name} eingezahlt."
+msgstr "Liberapay behält kein Geld ein. Der gesamte Betrag Ihrer Zahlung geht sofort auf das {payment_provider}-Konto von {recipient_name}."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal gibt Ihren Namen und Ihre E-Mail-Adresse an den Empfänger weiter."
@@ -2735,8 +2737,8 @@ msgstr "Als CSV exportieren"
 #, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{username} hat {n} öffentlichen Spender."
+msgstr[1] "{username} hat {n} öffentliche Spender."
 
 #, python-brace-format
 msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
@@ -3452,7 +3454,7 @@ msgid "Data retention"
 msgstr "Speicherdauer der Daten"
 
 msgid "We don't erase your email address and password immediately, so for a while you'll be able to reopen your account by simply logging in, until your account is definitively archived."
-msgstr "Wir löschen Ihre E-Mail-Adresse und Passwort nicht sofort, so dass Sie für eine Weile Ihr Konto wieder eröffnen können, indem Sie sich einfach erneut einloggen. Schließlich wird Ihr Konto dann endgültig archiviert."
+msgstr "Wir löschen Ihre E-Mail-Adresse und Passwort nicht sofort, so dass Sie für eine Weile Ihr Konto wieder eröffnen können, indem Sie sich einfach erneut einloggen. Ist das nicht der Fall, wird Ihr Konto dann endgültig archiviert."
 
 msgid "We will start to erase the personal data attached to your account 7 days after it is closed. This delay is meant to protect your account from an accidental or malicious closure."
 msgstr "Wir werden die persöhnlichen Daten deines Accounts nach frühstens 7 Tagen löschen. Diese Verzögerung ist dazu gedacht deinen Account vor versehentlicher oder bösartiger Löschung zu schützen."
@@ -3876,7 +3878,7 @@ msgstr "Was ist der „Zahltag“?"
 
 #, python-brace-format
 msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Zahltag (Payday) ist ein Programm ({0} dieses {1}), das wir jeden Mittwoch ausführen. Es führt Spenden aus und informiert die Spender und Empfänger."
+msgstr "Zahltag (Payday) ist ein Programm ({0} hier {1}), das wir jeden Mittwoch ausführen. Es führt Spenden aus und informiert die Spender und Empfänger."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Neuigkeiten erhalten Sie von uns auf den folgenden sozialen Netzwerken:"
@@ -4101,7 +4103,7 @@ msgstr "Richtlinie"
 
 #, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr "Die Details unserer Sicherheitsrichtlinien (Umfang, Belohnungen, …) finden Sie in {link_open} in unserem HackerOne-Profil{link_close}."
+msgstr "Die Details unserer Sicherheitsrichtlinien (Umfang, Belohnungen, …) finden Sie in {link_open} unserem HackerOne-Profil{link_close}."
 
 #, python-brace-format
 msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
@@ -4187,7 +4189,7 @@ msgstr "Ein Teamkonto {bold}behält kein Geld{end_bold} für die spätere Benutz
 
 #, fuzzy, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "Falls Liberapay-Teamkonten nicht zu Ihren Bedürfnissen passen, könnte Sie stattdessen die „{link_start}Open Collective{link_end}“-Plattform interessieren; diese ermöglicht es einem Team, von einer registrierten Non-Profit-Organisation „beherbergt“ zu werden. Dieser „finanztechnische Gastgeber“ ist der rechtliche Eigentümer des Teamkapitals, überwacht, wie das Kapital benutzt wird, und nimmt eine Gebühr von 5%. (Wir planen, ein ähnliches System in Liberapay einzubauen, aber wir wissen nicht, wann es fertig sein wird.)"
+msgstr "Falls Liberapay-Teamkonten nicht zu Ihren Bedürfnissen passen, könnte Sie stattdessen die „{link_start}Open Collective{link_end}“-Plattform verwenden. Dort kann ein Team von einer registrierten Non-Profit-Organisation „beherbergt“ zu werden. Dieser „Treuhänder“ ist der rechtliche Eigentümer des Teamkapitals, überwacht, wie das Kapital benutzt wird und nimmt eine Gebühr von 5%. (Wir planen, ein ähnliches System für Liberapay, aber wir wissen nicht, wann es fertig sein wird.)"
 
 msgid "Creating a team"
 msgstr "Ein Team gründen"
@@ -4288,9 +4290,8 @@ msgstr[1] "Es gibt {n} Gemeinschaften auf Liberapay."
 msgid "Search communities"
 msgstr "Gemeinschaften suchen"
 
-#, fuzzy
 msgid "Largest communities"
-msgstr "Beliebte Gemeinschaften"
+msgstr "Die größten Gruppen"
 
 #, python-brace-format
 msgid "Largest communities in {language}"
