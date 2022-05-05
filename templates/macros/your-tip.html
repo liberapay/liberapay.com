@@ -82,10 +82,12 @@
             <form action="" method="GET" class="form-inline">
                 <select class="form-control" name="currency">
                 % set paypal = tippee_p.payment_providers.__and__(2)
-                % for c in accepted_currencies
+                % set get_title = lambda c: locale.title(locale.currencies.get(c, c))
+                % set accepted_currencies_sorted = sorted(accepted_currencies, key=get_title)
+                % for c in accepted_currencies_sorted
                     % if c != new_currency
                     <option value="{{ c }}">
-                        {{ locale.title(locale.currencies.get(c, c)) }}
+                        {{ get_title(c) }}
                         ({{ locale.currency_symbols.get(c, c) }})
                         % if paypal and c not in constants.PAYPAL_CURRENCIES
                             ({{ _("not supported by PayPal") }})
