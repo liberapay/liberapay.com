@@ -628,6 +628,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     # Load the base locales
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
+    supported_currencies_en = locales['en'].supported_currencies
     source_strings = {}
     for file in os.listdir(localeDir):
         try:
@@ -657,6 +658,10 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 }
                 l.accepted_languages = make_sorted_dict(
                     ACCEPTED_LANGUAGES, l.languages, ACCEPTED_LANGUAGES
+                )
+                l.supported_currencies = make_sorted_dict(
+                    supported_currencies_en, l.currencies, supported_currencies_en,
+                    l.title,
                 )
             if l.script and l.language not in LOCALES_DEFAULT_MAP:
                 tell_sentry(Warning(
@@ -703,6 +708,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             l._data['languages'] = base.languages
             l.countries = base.countries
             l.accepted_languages = base.accepted_languages
+            l.supported_currencies = base.supported_currencies
             if l.script:
                 scriptless_tag = f"{l.language}-{l.territory.lower()}"
                 if scriptless_tag not in LOCALES_DEFAULT_MAP:

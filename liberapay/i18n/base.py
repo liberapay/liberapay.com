@@ -23,8 +23,8 @@ MONEY_AMOUNT_FORMAT = parse_pattern('#,##0.00')
 ONLY_ZERO = {'0'}
 
 
-def no_escape(s):
-    return s
+def _return_(a):
+    return a
 
 
 def LegacyMoney(o):
@@ -192,7 +192,7 @@ class Locale(babel.core.Locale):
                 elif isinstance(o, Locale):
                     o = self.languages.get(o.language) or o.language.upper()
                 elif isinstance(o, list):
-                    escape = getattr(s.__class__, 'escape', no_escape)
+                    escape = getattr(s.__class__, 'escape', _return_)
                     pattern = getattr(o, 'pattern', 'standard')
                     o = self.format_list(o, pattern, escape)
                 if wrapper:
@@ -223,7 +223,7 @@ class Locale(babel.core.Locale):
     def format_decimal(self, number, **kw):
         return self.decimal_formats[None].apply(number, self, **kw)
 
-    def format_list(self, l, pattern='standard', escape=no_escape):
+    def format_list(self, l, pattern='standard', escape=_return_):
         n = len(l)
         if n > 2:
             last = n - 2
@@ -341,8 +341,8 @@ def strip_accents(s):
     return ''.join(c for c in normalize('NFKD', s) if not combining(c))
 
 
-def make_sorted_dict(keys, d, d2={}):
-    items = ((k, d.get(k) or d2[k]) for k in keys)
+def make_sorted_dict(keys, d, d2={}, clean=_return_):
+    items = ((k, clean(d.get(k) or d2[k])) for k in keys)
     return OrderedDict(sorted(items, key=lambda t: strip_accents(t[1])))
 
 
@@ -430,6 +430,9 @@ LOCALE_EN.catalog.plural_func = lambda n: n != 1
 LOCALE_EN.completion = 1
 LOCALE_EN.countries = COUNTRIES
 LOCALE_EN.accepted_languages = ACCEPTED_LANGUAGES
+LOCALE_EN.supported_currencies = make_sorted_dict(
+    CURRENCIES, LOCALE_EN.currencies, clean=Locale.title
+)
 
 # For languages that have multiple written forms, one of them must be chosen as the
 # default, because the browser doesn't always specify which one the reader wants.
@@ -601,10 +604,6 @@ def set_up_i18n(state, request=None, exception=None):
         ))
         locale = match_lang(langs, request.country)
     add_helpers_to_context(state, locale)
-
-
-def _return_(a):
-    return a
 
 
 def add_helpers_to_context(context, loc):
