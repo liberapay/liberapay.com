@@ -323,8 +323,8 @@ def strip_accents(s):
     return ''.join(c for c in normalize('NFKD', s) if not combining(c))
 
 
-def make_sorted_dict(keys, d):
-    items = ((k, d[k]) for k in keys)
+def make_sorted_dict(keys, d, d2={}):
+    items = ((k, d.get(k) or d2[k]) for k in keys)
     return OrderedDict(sorted(items, key=lambda t: strip_accents(t[1])))
 
 

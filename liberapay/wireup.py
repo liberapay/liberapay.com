@@ -648,18 +648,16 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                     continue
                 else:
                     locales[l.tag] = l
-                try:
-                    l.countries = make_sorted_dict(COUNTRIES, l.territories)
-                except KeyError:
-                    l.countries = COUNTRIES
+                l.countries = make_sorted_dict(
+                    COUNTRIES, l.territories, COUNTRIES
+                )
                 l._data['languages'] = {
                     intern(k.replace('_', '-').lower()): v
                     for k, v in l.languages.items()
                 }
-                try:
-                    l.accepted_languages = make_sorted_dict(ACCEPTED_LANGUAGES, l.languages)
-                except KeyError:
-                    l.accepted_languages = ACCEPTED_LANGUAGES
+                l.accepted_languages = make_sorted_dict(
+                    ACCEPTED_LANGUAGES, l.languages, ACCEPTED_LANGUAGES
+                )
             if l.script and l.language not in LOCALES_DEFAULT_MAP:
                 tell_sentry(Warning(
                     f"the default script for language {l.language!r} is not "
