@@ -532,13 +532,26 @@ def match_lang(languages, country=None):
     return LOCALE_EN
 
 
-def get_lang_options(request, locale, previously_used_langs, add_multi=False):
-    pref_langs = set(request.accept_langs + previously_used_langs)
-    langs = OrderedDict()
+def get_lang_options(request, locale, actively_used_langs, add_multi=False):
+    """Get an ordered dict of languages (BCP47 tags as keys, display names as values).
+    """
+    langs = {}
+    browser_langs = set(request.accept_langs)
+    actively_used_langs = set(actively_used_langs)
+    if actively_used_langs:
+        langs.update(
+            t for t in locale.accepted_languages.items()
+            if t[0] in actively_used_langs
+        )
+        langs['-'] = '---'  # Separator
+    langs.update(
+        t for t in locale.accepted_languages.items()
+        if t[0] in browser_langs
+    )
+    if len(langs) > len(actively_used_langs):
+        langs['--'] = '---'  # Separator
     if add_multi:
-        langs.update([('mul', locale.languages.get('mul', 'Multilingual'))])
-    langs.update((k, v) for k, v in locale.accepted_languages.items() if k in pref_langs)
-    langs.update([('', '---')])  # Separator
+        langs['mul'] = locale.languages.get('mul', 'Multilingual')
     langs.update(locale.accepted_languages)
     return langs
 
