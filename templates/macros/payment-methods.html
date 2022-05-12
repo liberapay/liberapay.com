@@ -8,17 +8,19 @@
     username=tippee.username
 ) if tippee.payment_providers == 0 else _(
     "Donations to {username} can be paid using a credit or debit card "
-    "(Visa, MasterCard, American Express), or by direct debit of a Euro "
-    "bank account (for donations in Euro only).",
-    username=tippee.username
+    "({list_of_card_brands}), or by direct debit of a Euro bank account "
+    "(for donations in Euro only).",
+    username=tippee.username,
+    list_of_card_brands=["Visa", "Mastercard", "American Express", "UnionPay"],
 ) if tippee.payment_providers == 1 else _(
     "Donations to {username} are processed through PayPal.",
     username=tippee.username
 ) if tippee.payment_providers == 2 else _(
     "Donations to {username} can be paid using: a credit or debit card "
-    "(Visa, MasterCard, American Express), a Euro bank account (SEPA Direct "
-    "Debit), or a PayPal account.",
-    username=tippee.username
+    "({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or "
+    "a PayPal account.",
+    username=tippee.username,
+    list_of_card_brands=["Visa", "Mastercard", "American Express", "UnionPay"],
 ) }}
 % endmacro
 

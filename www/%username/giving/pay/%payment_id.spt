@@ -225,7 +225,7 @@ title = _("Funding your donations")
                     % if not allow_stripe_card
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
                     % else
-                    <small>Visa, MasterCard, American Express</small>
+                    <small>Visa, MasterCard, American Express, UnionPay</small>
                     % endif
                 </h4>
                 % if allow_stripe_card
