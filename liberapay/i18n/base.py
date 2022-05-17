@@ -487,10 +487,14 @@ def to_age(dt, **kw):
     return delta
 
 
-def parse_accept_lang(accept_lang):
+def parse_accept_lang(accept_lang, limit=50):
     """Parse an HTTP `Accept-Language` header. Yields lowercase BCP47 tags.
     """
-    langs = [lang.split(";", 1)[0].lower() for lang in accept_lang.split(",")]
+    langs = [
+        lang.split(";", 1)[0].lower() for lang in accept_lang.split(",", limit) if lang
+    ]
+    if len(langs) > limit:
+        langs.pop()
     langs_set = set(langs)
     for lang in langs:
         yield lang
