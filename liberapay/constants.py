@@ -22,16 +22,6 @@ def check_bits(bits):
 Event = namedtuple('Event', 'name bit title')
 
 
-class Fees(namedtuple('Fees', ('var', 'fix'))):
-    VAT = Decimal('0.17')  # 17% (Luxembourg rate)
-    VAT_1 = VAT + 1
-
-    @property
-    def with_vat(self):
-        r = (self.var * self.VAT_1 * 100, self.fix * self.VAT_1)
-        return r[0] if not r[1] else r[1].round_up() if not r[0] else r
-
-
 def to_precision(x, precision, rounding=ROUND_HALF_UP):
     """Round `x` to keep only `precision` of its most significant digits.
 
