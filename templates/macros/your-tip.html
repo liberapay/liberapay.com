@@ -134,11 +134,11 @@
         </select>
     % else
         <div class="btn-group btn-group-radio">
-            {% set periods = [
+            % set periods = [
                 ('weekly', _("per week")),
                 ('monthly', _("per month")),
                 ('yearly', _("per year")),
-            ] %}
+            ]
             % for value, label in periods
                 <label class="btn btn-default">
                     <input type="radio" name="period" value="{{ value }}" {{ 'checked' if period == value }} />

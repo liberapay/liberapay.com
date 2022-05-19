@@ -22,8 +22,9 @@ from liberapay.exceptions import (
     EmailAddressError, EmailAddressIsBlacklisted, EmailDomainIsBlacklisted,
     InvalidEmailDomain, NonEmailDomain, TooManyAttempts,
 )
+from liberapay.renderers.jinja2 import JINJA_ENV_COMMON
 from liberapay.utils import deserialize
-from liberapay.website import website, JINJA_ENV_COMMON
+from liberapay.website import website
 
 
 class EmailVerificationResult(Enum):

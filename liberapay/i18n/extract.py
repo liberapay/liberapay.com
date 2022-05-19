@@ -6,6 +6,13 @@ from babel.messages.extract import extract_python
 import jinja2.ext
 
 
+JINJA_BASE_OPTIONS = dict(
+    trim_blocks=True, lstrip_blocks=True,
+    line_statement_prefix='%',
+    extensions=['jinja2.ext.do'],
+)
+
+
 def extract_custom(extractor, *args, **kw):
     for match in extractor(*args, **kw):
         msg = match[2]
@@ -17,6 +24,13 @@ def extract_custom(extractor, *args, **kw):
 
 
 def extract_jinja2_custom(*args, **kw):
+    options = kw.setdefault('options', {})
+    for k, v in JINJA_BASE_OPTIONS.items():
+        if isinstance(v, bool):
+            v = str(v)
+        elif isinstance(v, list):
+            v = ','.join(v)
+        options.setdefault(k, v)
     return extract_custom(jinja2.ext.babel_extract, *args, **kw)
 
 
