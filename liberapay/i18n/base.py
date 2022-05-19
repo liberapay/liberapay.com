@@ -1,4 +1,4 @@
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from sys import intern
@@ -343,7 +343,7 @@ def strip_accents(s):
 
 def make_sorted_dict(keys, d, d2={}, clean=_return_):
     items = ((k, clean(d.get(k) or d2[k])) for k in keys)
-    return OrderedDict(sorted(items, key=lambda t: strip_accents(t[1])))
+    return dict(sorted(items, key=lambda t: strip_accents(t[1])))
 
 
 # Some languages have multiple written forms in widespread use. In particular,

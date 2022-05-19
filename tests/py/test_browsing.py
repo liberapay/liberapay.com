@@ -1,4 +1,3 @@
-from collections import OrderedDict
 import os
 import re
 
@@ -23,7 +22,7 @@ class BrowseTestHarness(Harness):
             if spt[spt.rfind('/')+1:].startswith('index.'):
                 return spt[i:spt.rfind('/')+1]
             return spt[i:-4]
-        urls = OrderedDict()
+        urls = {}
         for url in sorted(map(f, find_files(cls.client.www_root, '*.spt'))):
             url = url.replace('/%username/membership/', '/team/membership/') \
                      .replace('/team/membership/%action', '/team/membership/join') \

@@ -1,4 +1,4 @@
-from collections import defaultdict, namedtuple, OrderedDict
+from collections import defaultdict, namedtuple
 from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
 import re
@@ -11,7 +11,7 @@ from .i18n.currencies import D_CENT, D_ZERO, D_MAX, Money  # noqa: F401
 
 
 def ordered_set(keys):
-    return OrderedDict((k, None) for k in keys)
+    return dict.fromkeys(keys)
 
 
 def check_bits(bits):
@@ -175,7 +175,7 @@ EVENTS = [
     Event('renewal_aborted', 2**16, _("When a donation renewal payment has been aborted")),
 ]
 check_bits([e.bit for e in EVENTS])
-EVENTS = OrderedDict((e.name, e) for e in EVENTS)
+EVENTS = {e.name: e for e in EVENTS}
 EVENTS_S = ' '.join(EVENTS.keys())
 
 HTML_A = Markup('<a href="%s">%s</a>')
@@ -333,13 +333,13 @@ POSTAL_ADDRESS_KEYS_LIBERAPAY = (
     'country', 'region', 'city', 'postal_code', 'local_address'
 )
 
-PRIVACY_FIELDS = OrderedDict([
-    ('hide_giving', (_("Do not publish the amounts of money I send."), False)),
-    ('hide_receiving', (_("Do not publish the amounts of money I receive."), False)),
-    ('hide_from_search', (_("Hide this profile from search results on Liberapay."), True)),
-    ('profile_noindex', (_("Tell web search engines not to index this profile."), True)),
-    ('hide_from_lists', (_("Prevent this profile from being listed on Liberapay."), True)),
-])
+PRIVACY_FIELDS = {
+    'hide_giving': (_("Do not publish the amounts of money I send."), False),
+    'hide_receiving': (_("Do not publish the amounts of money I receive."), False),
+    'hide_from_search': (_("Hide this profile from search results on Liberapay."), True),
+    'profile_noindex': (_("Tell web search engines not to index this profile."), True),
+    'hide_from_lists': (_("Prevent this profile from being listed on Liberapay."), True),
+}
 PRIVACY_FIELDS_S = ' '.join(PRIVACY_FIELDS.keys())
 
 PRIVILEGES = dict(admin=1, run_payday=2)

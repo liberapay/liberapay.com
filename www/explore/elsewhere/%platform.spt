@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 INF = float('inf')
 
 [---]
@@ -16,12 +14,10 @@ platforms = website.db.all("""
            ) a
   ORDER BY c DESC, platform ASC
 """, max_age=60)
-platforms = OrderedDict(
-    (p_name, (getattr(website.platforms, p_name), d)) for p_name, d in platforms
-)
-for p, d in list(platforms.values()):
-    if not p.account_url:
-        del platforms[p.name]
+platforms = {
+    p_name: (getattr(website.platforms, p_name), d) for p_name, d in platforms
+    if getattr(website.platforms, p_name).account_url
+}
 
 platform_name = request.path['platform']
 if platform_name:
