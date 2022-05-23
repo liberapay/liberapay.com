@@ -8,7 +8,7 @@ from pando.testing.client import DidntRaiseResponse
 from liberapay import utils
 from liberapay.i18n.currencies import Money, MoneyBasket
 from liberapay.testing import Harness
-from liberapay.utils import markdown, b64encode_s, b64decode_s, cbor
+from liberapay.utils import markdown, b64encode_s, b64decode_s, cbor, unconfusable
 from liberapay.wireup import CSP
 
 
@@ -244,3 +244,14 @@ class Tests(Harness):
         csp2 = CSP(csp)
         assert csp == csp2
         assert csp2.directives[b'upgrade-insecure-requests'] == b''
+
+    # Unconfusable
+    # ============
+
+    def test_unconfusable_string(self):
+        self.assertEqual('user2', unconfusable.unconfusable_string('user2'))
+        self.assertEqual('alice', unconfusable.unconfusable_string('alice'))
+        latin_string = 'AlaskaJazz'
+        mixed_string = 'ΑlaskaJazz'
+        self.assertNotEqual(latin_string, mixed_string)
+        self.assertEqual(latin_string, unconfusable.unconfusable_string(mixed_string))
