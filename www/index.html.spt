@@ -1,10 +1,10 @@
 from math import ceil
 
-from liberapay.i18n.base import LANGUAGES_2
+from liberapay.i18n.base import ACCEPTED_LANGUAGES
 from liberapay.models.participant import Participant
 
 n_langs = len(website.lang_list)
-n_langs_2 = len(LANGUAGES_2)
+n_accepted_langs = len(ACCEPTED_LANGUAGES)
 n_good_translations = len([t[0] for t in website.lang_list if t[0] >= 0.95])
 
 platforms_with_repos = [p.display_name for p in website.platforms.hasattr('api_repos_path')]
@@ -265,7 +265,7 @@ recent = website.db.one("""
                 {{ ngettext(
                     "",
                     "Your profile descriptions and other texts can be published in up to {n} languages.",
-                    n_langs_2
+                    n_accepted_langs
                 ) }}
                 </dd>
             </div>

@@ -10,7 +10,7 @@ response.headers[b'Refresh'] = refresh_header
 
 [---] text/html
 <!DOCTYPE html>
-<html lang="{{ locale.language }}">
+<html lang="{{ locale.tag }}">
 <head>
     <title>Liberapay</title>
     <meta http-equiv="refresh" content="{{ refresh_header.decode('ascii') }}">

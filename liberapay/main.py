@@ -1,10 +1,11 @@
 # https://github.com/liberapay/liberapay.com/issues/1451
+from importlib import reload
 import sys
 _init_modules = globals().get('_init_modules')
 if _init_modules:
-    for name in list(sys.modules):
+    for name, module in list(sys.modules.items()):
         if name not in _init_modules:
-            sys.modules.pop(name, None)
+            reload(module)
 else:
     _init_modules = set(sys.modules.keys())
 

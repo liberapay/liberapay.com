@@ -67,16 +67,25 @@ class Tests(Harness):
 
     def test_chinese_visitor_gets_chinese_locale(self):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh', want='state')
-        assert state['locale'] == self.website.locales['zh']
-        state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh_Hans', want='state')
-        assert state['locale'] == self.website.locales['zh']
+        assert state['locale'] is self.website.locales['zh-hans']
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh-CN', want='state')
-        assert state['locale'] == self.website.locales['zh']
+        assert state['locale'] is self.website.locales['zh-hans-cn']
+        state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh-TW', want='state')
+        assert state['locale'] is self.website.locales['zh-hant-tw']
+        state = self.client.GET(
+            '/', HTTP_ACCEPT_LANGUAGE=b'zh', HTTP_CF_IPCOUNTRY='TW', want='state'
+        )
+        assert state['locale'] is self.website.locales['zh-hant-tw']
+        state = self.client.GET(
+            '/', HTTP_ACCEPT_LANGUAGE=b'zh-Hant-TW', HTTP_CF_IPCOUNTRY='CN', want='state'
+        )
+        assert state['locale'] is self.website.locales['zh-hant-tw']
 
     def test_american_english(self):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'en-us', want='state')
         locale = state['locale']
-        assert locale is self.website.locales['en_us']
+        assert locale is self.website.locales['en-us']
+        assert locale.tag == 'en-us'
         assert locale.format_money(Money('5200.00', 'USD')) == '$5,200.00'
         assert locale.parse_money_amount('5,200.00', 'USD') == Money('5200.00', 'USD')
         assert not state.get('partial_translation')
@@ -84,7 +93,8 @@ class Tests(Harness):
     def test_swiss_german(self):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'de-ch', want='state')
         locale = state['locale']
-        assert locale is self.website.locales['de_ch']
+        assert locale is self.website.locales['de-ch']
+        assert locale.tag == 'de-ch'
         assert locale.format_money(Money('5200.00', 'EUR')) == '€ 5’200.00'
         assert locale.parse_money_amount('5’200.00', 'EUR') == Money('5200.00', 'EUR')
 

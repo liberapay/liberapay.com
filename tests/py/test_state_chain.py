@@ -13,6 +13,8 @@ class Tests(Harness):
         Harness.setUp(self)
         self.client.website.canonical_scheme = 'https'
         self.client.website.canonical_host = 'example.com'
+        self._dot_canonical_host = self.client.website.dot_canonical_host
+        self.client.website.dot_canonical_host = '.example.com'
         self._cookie_domain = self.client.website.cookie_domain
         self.client.website.cookie_domain = '.example.com'
 
@@ -21,6 +23,7 @@ class Tests(Harness):
         website = self.client.website
         website.canonical_scheme = website.env.canonical_scheme
         website.canonical_host = website.env.canonical_host
+        website.dot_canonical_host = self._dot_canonical_host
         website.cookie_domain = self._cookie_domain
 
     def test_canonize_canonizes(self):
@@ -30,7 +33,6 @@ class Tests(Harness):
                                    )
         assert response.code == 302
         assert response.headers[b'Location'] == b'https://example.com/'
-        assert response.headers[b'Cache-Control'] == b'public, max-age=86400'
 
     def test_no_cookies_over_http(self):
         """
@@ -57,7 +59,7 @@ class Tests(Harness):
         finally:
             Request.from_wsgi = old_from_wsgi
 
-    def test_i18n_subdomain_works(self):
+    def test_i18n_subdomains_work(self):
         r = self.client.GET(
             '/',
             HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'fr.example.com',
@@ -66,6 +68,31 @@ class Tests(Harness):
         assert r.code == 200
         assert '<html lang="fr">' in r.text
         assert 'À propos' in r.text
+        alice = self.make_participant('alice')
+        alice.upsert_statement('zh', "歡迎，", 'profile')
+        r = self.client.GET(
+            '/alice',
+            HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'zh.example.com',
+            HTTP_CF_IPCOUNTRY=b'TW',
+            raise_immediately=False,
+        )
+        assert r.code == 200
+        html = r.html_tree
+        assert html.attrib["lang"] == "zh-hant-tw"
+        statement_section = html.find(".//{*}section[@lang='zh']")
+        assert statement_section, r.text
+        assert statement_section[0].text == "歡迎，"
+        r = self.client.GET(
+            '/alice',
+            HTTP_X_FORWARDED_PROTO=b'https', HTTP_HOST=b'zh-hans.example.com',
+            raise_immediately=False,
+        )
+        assert r.code == 200
+        html = r.html_tree
+        assert html.attrib["lang"] == "zh-hans"
+        statement_section = html.find(".//{*}section[@lang='zh-hans']")
+        assert statement_section, r.text
+        assert statement_section[0].text == "欢迎，"
 
     def test_i18n_subdomain_is_redirected_to_https(self):
         r = self.client.GET(

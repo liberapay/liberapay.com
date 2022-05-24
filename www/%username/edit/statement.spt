@@ -1,4 +1,4 @@
-from liberapay.i18n.base import LANGUAGES_2, get_lang_options
+from liberapay.i18n.base import ACCEPTED_LANGUAGES, get_lang_options
 from liberapay.utils import excerpt_intro, form_post_success, get_participant, markdown
 
 [---]
@@ -20,9 +20,9 @@ if request.method == 'POST':
         else:
             action = 'edit'
 
-    if lang not in LANGUAGES_2:
+    if lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'lang', 'body')
-    if switch_lang and switch_lang not in LANGUAGES_2:
+    if switch_lang and switch_lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'switch_lang', 'body')
 
     if len(summary) > constants.SUMMARY_MAX_SIZE:
@@ -53,7 +53,7 @@ else:
     lang = request.qs.get('lang')
     switch_lang = None
     if lang:
-        if lang not in LANGUAGES_2:
+        if lang not in ACCEPTED_LANGUAGES:
             raise response.invalid_input(lang, 'lang', 'querystring')
         statement = participant.get_statement(lang)
     else:
@@ -88,11 +88,11 @@ subhead = _("Descriptions")
         <section class="profile-statement" lang="{{ lang }}">{{ rendered_stmt }}</section>
         <hr>
         <h4>{{ _("Excerpt that will be used in social media:") }}</h4>
-        <blockquote>{{ excerpt_intro(rendered_stmt) }}</blockquote>
+        <blockquote lang="{{ lang }}">{{ excerpt_intro(rendered_stmt) }}</blockquote>
         <hr>
         % if summary
         <h3>{{ _("Preview of the short description") }}</h3>
-        <input type="hidden" name="summary" value="{{ summary }}" />
+        <input type="hidden" name="summary" value="{{ summary }}" lang="{{ lang }}" />
         {{ profile_box_embedded(participant, summary) }}
         <hr>
         % endif
@@ -147,11 +147,11 @@ subhead = _("Descriptions")
         <input name="summary" class="form-control" size=60
                maxlength="{{ constants.SUMMARY_MAX_SIZE }}"
                placeholder="{{ _('Short description in {language}', language=locale.Language(lang)) }}"
-               value="{{ summary }}" />
+               value="{{ summary }}" lang="{{ lang }}" />
         </div>
 
         <div class="form-group">
-        <textarea name="statement" rows="15"
+        <textarea name="statement" rows="15" lang="{{ lang }}"
                   class="form-control profile-statement vertical-resize"
                   placeholder="{{ _('Full description in {language}', language=locale.Language(lang)) }}"
             >{{ statement or '' }}</textarea>

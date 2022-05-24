@@ -100,13 +100,14 @@ _i18n_extract: $(env)
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
 	done
 	rm i18n/core.pot
-	@$(MAKE) --no-print-directory _i18n_clean
 
-_i18n_clean:
+_i18n_clean: $(env)
 	@for f in i18n/*/*.po; do \
+	    echo "cleaning catalog $$f"; \
 	    sed -E -e '/^"(POT?-[^-]+-Date|Last-Translator|X-Generator|Language|Project-Id-Version|Report-Msgid-Bugs-To): /d' \
 	           -e 's/^("[^:]+: ) +/\1/' \
 	           -e 's/^("Language-Team: .+? )<(.+)>\\n/\1"\n"<\2>\\n/' \
+	           -e '/^#, python-format$$/d' \
 	           -e 's/^#(, .+)?, python-format(, .+)?$$/#\1\2/' \
 	           -e '/^#: /d' \
 	           "$$f" | \
@@ -114,7 +115,10 @@ _i18n_clean:
 	    mv "$$f.new" "$$f"; \
 	done
 
-i18n_update: _i18n_rebase _i18n_pull _i18n_extract
+_i18n_convert: $(env)
+	@PYTHONPATH=. $(env_bin)/python cli/convert-chinese.py
+
+i18n_update: _i18n_rebase _i18n_pull _i18n_extract _i18n_convert _18n_clean
 	@if git commit --dry-run i18n &>/dev/null; then \
 		git commit -m "update translation catalogs" i18n; \
 	fi

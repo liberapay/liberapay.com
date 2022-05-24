@@ -217,7 +217,7 @@ def sign_in_with_form_data(body, state):
                 'headers': get_recordable_headers(request),
             }
             p = Participant.make_active(kind, currency, username, cursor=c, request_data=request_data)
-            p.set_email_lang(state['locale'].language, cursor=c)
+            p.set_email_lang(state['locale'].tag, cursor=c)
             p.add_email(email, cursor=c)
         if password:
             p.update_password(password)

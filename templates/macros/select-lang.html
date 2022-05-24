@@ -1,8 +1,13 @@
 % macro lang_options(langs, selected)
+    % if selected not in langs
+        <option value="{{ selected }}">{{
+            locale.LANGUAGE_NAMES.get(selected, selected)
+        }}</option>
+    % endif
     % for code, name in langs.items()
         <option value="{{ code }}"
                 {{ 'selected' if code == selected else '' }}
-                {{ 'disabled' if not code else '' }}
+                {{ 'disabled' if not code[0].isalpha() else '' }}
             >{{ name }}</option>
     % endfor
 % endmacro

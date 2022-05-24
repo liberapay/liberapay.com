@@ -1,4 +1,4 @@
-from liberapay.i18n.base import LANGUAGES_2, SEARCH_CONFS, strip_accents
+from liberapay.i18n.base import ACCEPTED_LANGUAGES, SEARCH_CONFS, strip_accents
 from liberapay.utils import markdown
 
 [---]
@@ -25,7 +25,7 @@ if query:
         """, locals())
 
     if scope in (None, 'statements'):
-        langs = tuple(l for l in request.accept_langs if l in LANGUAGES_2)[:3]
+        langs = tuple(l for l in request.accept_langs if l in ACCEPTED_LANGUAGES)[:3]
         search_confs = list(set(SEARCH_CONFS.get(lang, 'simple') for lang in langs))
         results['statements'] = website.db.all("""
             WITH queries AS (

@@ -362,7 +362,7 @@ title = "Users Admin"
         % if row.statements
             <br>
             % for s in row.statements or ()
-                [<em>{{ locale.languages_2.get(s.lang, s.lang) }} {{ s.type }}</em>]
+                [<em>{{ locale.languages.get(s.lang, s.lang) }} {{ s.type }}</em>]
                 % if s.type in ('profile', 'sidebar')
                     <section class="profile-statement embedded raw" lang="{{ s.lang }}">{{
                         s.content
