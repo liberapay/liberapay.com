@@ -6,7 +6,7 @@ BindsTo=webapp@%i.service
 
 [Service]
 Type=notify
-ExecStart=/usr/local/bin/cloudflared --no-autoupdate tunnel --config /etc/cloudflared/cloudflared.conf run
+ExecStart=/usr/local/bin/cloudflared --no-autoupdate tunnel --config /etc/cloudflared/cloudflared.conf --protocol h2mux run
 User=cloudflared
 Group=cloudflared
 Restart=on-failure
