@@ -118,7 +118,7 @@ _i18n_clean: $(env)
 _i18n_convert: $(env)
 	@PYTHONPATH=. $(env_bin)/python cli/convert-chinese.py
 
-i18n_update: _i18n_rebase _i18n_pull _i18n_extract _i18n_convert _18n_clean
+i18n_update: _i18n_rebase _i18n_pull _i18n_extract _i18n_convert _i18n_clean
 	@if git commit --dry-run i18n &>/dev/null; then \
 		git commit -m "update translation catalogs" i18n; \
 	fi
