@@ -17,6 +17,11 @@ def add_state_to_context(state, website):
 def attach_environ_to_request(environ, request):
     request.country = request.headers.get(b'Cf-Ipcountry', b'').decode() or None
     request.environ = environ
+    try:
+        request.hostname = request.headers[b'Host'].decode('idna')
+    except UnicodeDecodeError:
+        request.hostname = ''
+    request.subdomain = None
 
 
 def create_response_object(request, website):
@@ -46,11 +51,6 @@ def canonize(request, response, website):
     This is a Pando state chain function to ensure that requests are served on a
     certain root URL, even if multiple domains point to the application.
     """
-    try:
-        request.hostname = host = request.headers[b'Host'].decode('idna')
-    except UnicodeDecodeError:
-        request.hostname = host = ''
-    request.subdomain = None
     if request.path.raw.startswith('/callbacks/'):
         # Don't redirect callbacks
         if request.path.raw[-1] == '/':
@@ -66,6 +66,7 @@ def canonize(request, response, website):
     canonical_scheme = website.canonical_scheme
     scheme = request.headers.get(b'X-Forwarded-Proto', b'http')
     scheme_is_canonical = scheme.decode('ascii', 'replace') == canonical_scheme
+    host = request.hostname
     host_is_canonical = True
     if canonical_host and host != canonical_host:
         if host.endswith(website.dot_canonical_host):
