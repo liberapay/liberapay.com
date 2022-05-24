@@ -23,13 +23,19 @@ for s_msg in s_catalog:
     if not s_msg.id:
         continue
     t_msg = t_catalog._messages[t_catalog._key_for(s_msg.id)]
-    if t_msg.string and (not s_msg.string or s_msg.fuzzy and not t_msg.fuzzy):
-        s_msg.string = t2s_converter.convert(t_msg.string)
+    if any(t_msg.string) and (not any(s_msg.string) or s_msg.fuzzy and not t_msg.fuzzy):
+        if isinstance(s_msg.string, tuple):
+            s_msg.string = tuple(map(t2s_converter.convert, t_msg.string))
+        else:
+            s_msg.string = t2s_converter.convert(t_msg.string)
         t2s_count += 1
         if t_msg.fuzzy:
             s_msg.flags.add('fuzzy')
-    elif s_msg.string and (not t_msg.string or t_msg.fuzzy and not s_msg.fuzzy):
-        t_msg.string = s2t_converter.convert(s_msg.string)
+    elif any(s_msg.string) and (not any(t_msg.string) or t_msg.fuzzy and not s_msg.fuzzy):
+        if isinstance(s_msg.string, tuple):
+            t_msg.string = tuple(map(s2t_converter.convert, s_msg.string))
+        else:
+            t_msg.string = s2t_converter.convert(s_msg.string)
         s2t_count += 1
         if s_msg.fuzzy:
             t_msg.flags.add('fuzzy')
