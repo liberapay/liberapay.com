@@ -1,5 +1,6 @@
 from datetime import timedelta
 import logging
+import re
 from time import sleep
 
 import requests
@@ -68,6 +69,8 @@ ORDER_STATUSES_MAP = {
     'VOIDED': 'failed',
 }
 
+locale_re = re.compile("^[a-z]{2}(?:-[A-Z][a-z]{3})?(?:-(?:[A-Z]{2}))?$")
+
 
 def create_order(db, payin, payer, return_url, cancel_url, state):
     """Create an Order.
@@ -91,12 +94,25 @@ def create_order(db, payin, payer, return_url, cancel_url, state):
     """, (payin.id,))
     assert transfers
     locale, _, ngettext = state['locale'], state['_'], state['ngettext']
+    # PayPal processes BCP47 tags in a case-sensitive way, and completely rejects
+    # requests containing "improperly" cased values.
+    locale_tag = (
+        locale.language +
+        (f'-{locale.script}' if locale.script else '') +
+        (f'-{locale.territory}' if locale.territory else '')
+    )
+    if not locale_re.match(locale_tag):
+        website.tell_sentry(Warning(
+            f"the locale tag `{locale_tag}` doesn't match the format expected by PayPal; "
+            f"falling back to `{locale.language}`"
+        ))
+        locale_tag = locale.language
     data = {
         "intent": "CAPTURE",
         "application_context": {
             "brand_name": "Liberapay",
             "cancel_url": cancel_url,
-            "locale": locale.tag,
+            "locale": locale_tag,
             "landing_page": "BILLING",
             "shipping_preference": "NO_SHIPPING",
             "user_action": "PAY_NOW",
