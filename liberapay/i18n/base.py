@@ -580,7 +580,7 @@ def get_lang_options(request, locale, actively_used_langs, add_multi=False):
         t for t in locale.accepted_languages.items()
         if t[0] in browser_langs
     )
-    if len(langs) > len(actively_used_langs):
+    if len(langs) > (len(actively_used_langs) + 1):
         langs['--'] = '---'  # Separator
     if add_multi:
         langs['mul'] = locale.languages.get('mul', 'Multilingual')
