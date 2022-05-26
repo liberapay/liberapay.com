@@ -95,12 +95,27 @@ title = _("Payment Instruments")
                 % endif
                 % set exp_date = route.get_expiration_date()
                 % if exp_date
+                    % set exp_date_is_obsolete = (
+                        last_payin and last_payin.status == 'succeeded' and
+                        last_payin.ctime.date() > exp_date
+                    )
                     <br>
-                    <span class="{{ 'text-danger' if exp_date <= today else
-                                    'text-warning' if exp_date <= (today - SIXTY_DAYS) else
-                                    '' }}">{{
-                        _("Expires in {month} {year}", month=Month(exp_date.month), year=Year(exp_date.year))
-                    }}</span>
+                    % if exp_date_is_obsolete
+                    <span class="text-muted">{{ _(
+                        "Was supposed to expire in {month} {year}",
+                        month=Month(exp_date.month), year=Year(exp_date.year),
+                    ) }}</span>
+                    % elif exp_date > today
+                    <span class="text-danger">{{ _(
+                        "Expired in {month} {year}",
+                        month=Month(exp_date.month), year=Year(exp_date.year),
+                    ) }}</span>
+                    % else
+                    <span class="{{ 'text-warning' if today >= (exp_date - SIXTY_DAYS) else '' }}">{{ _(
+                        "Expires in {month} {year}",
+                        month=Month(exp_date.month), year=Year(exp_date.year)
+                    ) }}</span>
+                    % endif
                 % endif
                 % if last_payin
                     % if last_payin.status == 'failed'
