@@ -182,7 +182,7 @@ next_payday = compute_next_payday_date()
 % if show_automatic_renewal_hint
     <div class="text-info">
         {{ glyphicon('info-sign') }} {{ _(
-            "Liberapay now supports automatic renewals, do you want to switch it "
+            "Liberapay now supports automatic renewals. Do you want to switch it "
             "on for all your donations?"
         ) }}
         &nbsp;
@@ -204,7 +204,7 @@ next_payday = compute_next_payday_date()
 % if show_visibility_hint
     <div class="text-info">
         {{ glyphicon('info-sign') }} {{ _(
-            "Liberapay now supports non-anonymous donations, do you want to "
+            "Liberapay now supports non-anonymous donations. Do you want to "
             "modify the visibility of all your donations at once?"
         ) }}
         &nbsp;
@@ -227,8 +227,8 @@ next_payday = compute_next_payday_date()
 % elif show_incomplete_profile_warning
     <div class="text-info">
         {{ glyphicon('info-sign') }} {{ _(
-            "Since you've chosen to make a public donation, we recommend that you "
-            "complete your public profile."
+            "Complete your public profile to have something to show "
+            "along with your public donation."
         ) }}
         &nbsp;
         <span class="buttons"><a class="btn btn-primary" href="{{ participant.path('edit/username') }}">{{

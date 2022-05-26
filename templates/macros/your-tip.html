@@ -236,17 +236,17 @@
     % endif
     % if patron_visibilities == 1
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
-        "{username} has chosen not to see who their patrons are, so your donation will be secret.",
+        "{username} has chosen not to see own patrons, so your donation will be secret.",
         username=tippee_name
     ) }}</p>
     % elif patron_visibilities == 2
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
-        "This donation won't be secret, you will appear in {username}'s private list of patrons.",
+        "This donation won't be secret. You will appear in {username}'s private list of patrons.",
         username=tippee_name
     ) }}</p>
     % elif patron_visibilities == 4
     <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
-        "{username} discloses who their patrons are, your donation will be public.",
+        "{username} discloses own patrons, so your donation will be public.",
         username=tippee_name
     ) }}</p>
     % elif patron_visibilities
@@ -300,7 +300,7 @@
     </ul>
     % else
     <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
-        "{username} hasn't yet specified whether they want to see who their patrons are, "
+        "{username} hasn't yet chosen to see own patrons, "
         "so your donation will be secret.",
         username=tippee_name
     ) }}</p>

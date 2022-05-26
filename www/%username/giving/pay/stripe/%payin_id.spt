@@ -281,7 +281,7 @@ title = _("Funding your donations")
         <a class="btn btn-default" href="{{ payer.path('receipts/direct/%s' % payin.id) }}">{{
             _("View receipt")
         }}</a>
-    % elif status == 'failed' and payin.error.startswith("For 'sepa_debit' payments, we currently require ")
+    % elif status == 'failed' and payin.error.startswith("For 'sepa_debit' payments, Liberapay currently requires ")
         {# https://github.com/liberapay/liberapay.com/issues/1525 #}
         <div class="alert alert-danger">{{ _(
             "The payment processor ({name}) isn't able to process {currency} direct debits "
@@ -311,7 +311,7 @@ title = _("Funding your donations")
         ) }}</p>
         % if not route.has_been_charged_successfully()
         <p class="alert alert-warning">{{ _(
-            "Your bank can reject this payment. We recommend sending a copy of "
+            "Your bank can reject this payment. Send a copy of "
             "{link_start}the mandate{link_end} to your bank if you're not sure "
             "that it properly handles {currency} direct debit instructions.",
             link_start='<a href="%s">'|safe % route.get_mandate_url(),
@@ -324,8 +324,8 @@ title = _("Funding your donations")
     % if tell_payer_to_fill_profile
     <hr>
     <p>{{ _(
-        "Since you've chosen to make a public donation, we recommend that you "
-        "complete your public profile."
+        "Complete your public profile to have something to show "
+        "along with your public donation."
     ) }}</p>
     <a class="btn btn-primary" href="{{ payer.path('edit/username') }}">{{
         _("Edit your profile")
