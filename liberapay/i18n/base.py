@@ -275,7 +275,7 @@ class Locale(babel.core.Locale):
         # If first character is relavent currency symbol, remove it and pass only numeric string
         # InvalidNumber will catch error if using the wrong currency symbol
         if string.startswith(self.currency_symbols.get(currency, currency)):
-            string = string [1:]
+            string = string[1:]
         try:
             decimal = Decimal(
                 string.replace(group_symbol, '').replace(decimal_symbol, '.')
