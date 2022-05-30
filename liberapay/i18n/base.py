@@ -7,7 +7,7 @@ from unicodedata import combining, normalize
 import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
 from babel.messages.pofile import Catalog
-from babel.numbers import parse_pattern, get_currency_symbol
+from babel.numbers import parse_pattern
 from cached_property import cached_property
 from markupsafe import Markup
 import opencc
