@@ -7,7 +7,7 @@ from unicodedata import combining, normalize
 import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
 from babel.messages.pofile import Catalog
-from babel.numbers import parse_pattern
+from babel.numbers import parse_pattern, get_currency_symbol
 from cached_property import cached_property
 from markupsafe import Markup
 import opencc
@@ -272,6 +272,10 @@ class Locale(babel.core.Locale):
     def parse_money_amount(self, string, currency, maximum=D_MAX):
         group_symbol = self.number_symbols['group']
         decimal_symbol = self.number_symbols['decimal']
+        # If first character is relavent currency symbol, remove it and pass only numeric string
+        # InvalidNumber will catch error if using the wrong currency symbol
+        if string[0] == get_currency_symbol(currency):
+            string = string [1:]
         try:
             decimal = Decimal(
                 string.replace(group_symbol, '').replace(decimal_symbol, '.')
