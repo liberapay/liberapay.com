@@ -171,16 +171,16 @@ title = _("Funding your donations")
 % else
 
     <form action="" method="POST" id="paypal">
-        % if len(payment.recipient_links) == 1
+        % if len(payment.recipient_names) == 1
             <p>{{ _(
                 "Your donation of {amount} to {recipient} is awaiting payment.",
                 amount=payment.tips[0].periodic_amount,
-                recipient=payment.recipient_links[0]
+                recipient=payment.recipient_names[0]
             ) }}</p>
         % else
             <p>{{ _(
                 "Your donations to {recipients} are awaiting payment.",
-                recipients=payment.recipient_links
+                recipients=payment.recipient_names
             ) }}</p>
         % endif
         % if payment.one_periods_worth < payment.min_acceptable_amount

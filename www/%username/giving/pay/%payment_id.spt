@@ -2,6 +2,7 @@ from functools import reduce
 from math import ceil
 from types import SimpleNamespace
 
+from liberapay.i18n.base import BOLD
 from liberapay.models.participant import Participant
 from liberapay.utils import get_participant, group_by, partition
 
@@ -51,7 +52,6 @@ elif payin_id:
 
 weeks_early = request.qs.get_int('weeks_early', default=3)
 donation_groups, n_fundable = payer.get_tips_awaiting_payment(weeks_early)
-n_payments = len(donation_groups['fundable'])
 donations_not_fundable = (
     donation_groups['no_provider'] +
     donation_groups['no_taker'] +
@@ -59,27 +59,29 @@ donations_not_fundable = (
 )
 self_donations = donation_groups['self_donation']
 
-payment = None
-tippee_id = request.qs.get_int('beneficiary', default=None)
+payments = []
+tippees = request.qs.parse_list('beneficiary', int, default=None)
 retry_id = request.qs.get_int('retry', default=None)
-if tippee_id:
-    tippee = Participant.from_id(tippee_id)
-    tip = payer.get_tip_to(tippee)
-    if tip.renewal_mode == 0:
-        raise response.error(400, _(
-            "You are not donating to {username}.", username=tippee.username
-        ))
-    tip.tippee_p = tippee
-    if tip.tippee_p.payment_providers:
+if tippees:
+    tips = [tip for tip in payer.get_tips_to(tippees) if tip.renewal_mode > 0]
+    if len(set(tip.amount.currency for tip in tips)) != 1:
+        raise response.invalid_input(tippees, 'beneficiary', 'querystring')
+    tips = [tip for tip in tips if tip.tippee_p.payment_providers > 0]
+    if tips:
         payment = SimpleNamespace()
-        payment.tips = (tip,)
-        payment.currency = tip.amount.currency
+        payment.tips = tips
+        payment.currency = payment.tips[0].amount.currency
+        _provider_bits = reduce(int.__and__, (
+            tip.tippee_p.payment_providers for tip in payment.tips
+        ))
         payment.providers = [
             name for i, name in enumerate(PAYMENT_PROVIDERS)
-            if tip.tippee_p.payment_providers & 2**i > 0
+            if _provider_bits & 2**i > 0
         ]
-    else:
-        donations_not_fundable = [tip]
+        if payment.providers:
+            payments.append(payment)
+        del payment, _provider_bits
+    del tips
 
 elif retry_id:
     error = website.db.one("""
@@ -133,16 +135,17 @@ elif retry_id:
         else:
             payment.tips = tips[:1]
     # If there aren't any payment providers left, then the donations aren't fundable.
-    if not payment.providers:
+    if payment.providers:
+        payments.append(payment)
+    else:
         donations_not_fundable = payment.tips
         self_donations = ()
-        payment = None
-    del _provider_bits, disable_stripe, error
+    del payment, _provider_bits, disable_stripe, error
 
 else:
-    if n_payments:
+    for tips in donation_groups['fundable']:
         payment = SimpleNamespace()
-        payment.tips = donation_groups['fundable'][0]
+        payment.tips = tips
         payment.currency = payment.tips[0].amount.currency
         _provider_bits = reduce(
             int.__and__, (tip.tippee_p.payment_providers for tip in payment.tips)
@@ -155,11 +158,14 @@ else:
             # We don't support one-to-many through PayPal yet.
             payment.providers.remove('paypal')
         del _provider_bits
+        payments.append(payment)
 
-if payment:
+for payment in payments:
     payment.auto_renewal = any(tip.renewal_mode == 2 for tip in payment.tips)
     payment.beneficiary = 'beneficiary=' + ','.join(str(t.tippee) for t in payment.tips)
-    payment.recipient_links = [tip.tippee_p.link() for tip in payment.tips]
+    payment.recipient_names = [BOLD % tip.tippee_p.username for tip in payment.tips]
+
+n_payments = len(payments)
 
 if user == payer:
     payer.mark_notifications_as_read('donate_reminder')
@@ -172,7 +178,7 @@ title = _("Funding your donations")
 
 % block thin_content
 
-% if payment
+% if n_payments > 1
 
     % if n_fundable > 1 and not retry_id
         <p>{{ ngettext(
@@ -181,30 +187,42 @@ title = _("Funding your donations")
             n=n_fundable
         ) }}</p>
         % if n_payments > 1
-        <p class="alert alert-warning">{{ ngettext(
+        <p class="text-warning">{{ glyphicon('warning-sign') }} &nbsp;{{ ngettext(
             "",
             "Due to legal and technical limitations we are currently unable to process "
             "all your donations as a single payment. Instead you will have to make {n} "
             "separate payments. We apologize for the inconvenience.",
             n=n_payments
         ) }}</p>
-        % else
-        <p class="text-success">{{ glyphicon('ok') }} &nbsp;{{ _(
-            "We are able to group these donations into a single payment."
-        ) }}</p>
         % endif
-        <hr>
+        <br>
     % endif
 
-    % if len(payment.recipient_links) == 1
+    <div class="buttons">
+    % for payment in payments
+        <a class="btn btn-primary btn-block" href="?{{ payment.beneficiary }}">{{ _(
+            "Send money to {recipients}",
+            recipients=payment.recipient_names,
+        ) }}</a>
+    % endfor
+    </div>
+
+% elif n_payments == 1
+
+    % set payment = payments[0]
+
+    % if len(payment.recipient_names) == 1
         <p>{{ _(
             "Your donation of {amount} to {recipient} is awaiting payment.",
-            amount=payment.tips[0].periodic_amount, recipient=payment.recipient_links[0]
+            amount=payment.tips[0].periodic_amount, recipient=payment.recipient_names[0]
         ) }}</p>
     % else
         <p>{{ _(
             "Your donations to {recipients} are awaiting payment.",
-            recipients=payment.recipient_links
+            recipients=payment.recipient_names
+        ) }}</p>
+        <p class="text-success">{{ glyphicon('ok') }} &nbsp;{{ _(
+            "We are able to group these donations into a single payment."
         ) }}</p>
     % endif
 

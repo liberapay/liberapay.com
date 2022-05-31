@@ -1,6 +1,7 @@
 from decimal import Decimal, ROUND_DOWN, ROUND_UP
 
 from ..constants import PAYIN_AMOUNTS, PERIOD_CONVERSION_MAP
+from ..i18n.base import BOLD
 
 
 class PayinProspect:
@@ -133,12 +134,8 @@ class PayinProspect:
     # The properties below exist because Jinja doesn't support list comprehensions.
 
     @property
-    def recipient_links(self):
-        return [tip.tippee_p.link() for tip in self.tips]
-
-    @property
     def recipient_names(self):
-        return [tip.tippee_p.username for tip in self.tips]
+        return [BOLD % tip.tippee_p.username for tip in self.tips]
 
     @property
     def tip_ids(self):
