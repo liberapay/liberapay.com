@@ -309,8 +309,8 @@ PAYOUT_COUNTRIES = {
     """.split()),  # https://www.paypal.com/us/webapps/mpp/country-worldwide
 
     'stripe': set("""
-        AT AU BE BG CA CH CY CZ DE DK EE ES FI FR GB GR HK HU IE IT JP LT LU LV
-        MT MX MY NL NO NZ PL PT RO SE SG SI SK US
+        AT AU BE BG CA CH CY CZ DE DK EE ES FI FR GB GR HK HU IE IN IT JP LT LU
+        LV MT MX MY NL NO NZ PL PT RO SE SG SI SK US
         PR
     """.split()),  # https://stripe.com/global
 }
