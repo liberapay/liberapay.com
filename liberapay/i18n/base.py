@@ -272,7 +272,7 @@ class Locale(babel.core.Locale):
     def parse_money_amount(self, string, currency, maximum=D_MAX):
         group_symbol = self.number_symbols['group']
         decimal_symbol = self.number_symbols['decimal']
-        # If string begins or ends with relavent currency symbol, remove it and pass only numeric string
+        # If string begins or ends with relevant currency symbol, remove it and pass only numeric string
         # InvalidNumber will catch error if using the wrong currency symbol
         string = string.strip()
         currency_length = len(self.currency_symbols.get(currency, currency))
