@@ -275,13 +275,14 @@ class Locale(babel.core.Locale):
         # If string begins or ends with relevant currency symbol, remove it and pass only numeric string
         # InvalidNumber will catch error if using the wrong currency symbol
         string = string.strip()
-        currency_symbol = self.currency_symbols.get(currency, currency)
-        currency_length = len(currency_symbol)
-        if string.startswith(currency_symbol):
-            string = string[currency_length:]
-        elif string.endswith(currency_symbol):
-            string = string[0:-currency_length]
-        string = string.strip()
+        currency_symbol = self.currency_symbols.get(currency)
+        if currency_symbol:
+            symbol_length = len(currency_symbol)
+            if string.startswith(currency_symbol):
+                string = string[symbol_length:]
+            elif string.endswith(currency_symbol):
+                string = string[:-symbol_length]
+            string = string.strip()
         try:
             decimal = Decimal(
                 string.replace(group_symbol, '').replace(decimal_symbol, '.')
