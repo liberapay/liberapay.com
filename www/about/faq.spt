@@ -87,6 +87,21 @@ title = _("Frequently Asked Questions")
             '</a>'|safe) }}</p>
     </dd>
 
+
+    {{ dt(_("Is this platform secure?"), 'security') }}
+
+    <dd>{{ _(
+        "Liberapay has been running for {timedelta} without any significant "
+        "security incident. We do everything we can to keep your data safe and "
+        "comply with the laws of the European Union ({GDPR}GDPR{abbr_end}, "
+        "{PSD2}PSD2{abbr_end}, et cetera).",
+        timedelta=to_age(constants.LAUNCH_TIME, add_direction=False),
+        GDPR='<abbr title="%s">'|safe % _("General Data Protection Regulation"),
+        PSD2='<abbr title="%s">'|safe % _("Revised Payment Services Directive"),
+        abbr_end='</abbr>'|safe,
+    ) }}</dd>
+
+
     {{ dt(_("Does Liberapay respect financial regulations?"), 'regulations') }}
 
     <dd>{{ _(
