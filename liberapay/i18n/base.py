@@ -272,8 +272,8 @@ class Locale(babel.core.Locale):
     def parse_money_amount(self, string, currency, maximum=D_MAX):
         group_symbol = self.number_symbols['group']
         decimal_symbol = self.number_symbols['decimal']
-        # If string begins or ends with relevant currency symbol, remove it and pass only numeric string
-        # InvalidNumber will catch error if using the wrong currency symbol
+        # Strip the string of spaces, and of the specified currency's symbol in
+        # this locale (if that symbol exists).
         string = string.strip()
         currency_symbol = self.currency_symbols.get(currency)
         if currency_symbol:
@@ -283,12 +283,16 @@ class Locale(babel.core.Locale):
             elif string.endswith(currency_symbol):
                 string = string[:-symbol_length]
             string = string.strip()
+        # Parse the number. If the string contains unexpected characters,
+        # then an `InvalidNumber` exception is raised.
         try:
             decimal = Decimal(
                 string.replace(group_symbol, '').replace(decimal_symbol, '.')
             )
         except (InvalidOperation, ValueError):
             raise InvalidNumber(string)
+        # Check that the input isn't ambiguous.
+        # https://github.com/liberapay/liberapay.com/issues/1066
         if group_symbol in string:
             proper = self.format_decimal(decimal, decimal_quantization=False)
             if string != proper and string.rstrip('0') != (proper + decimal_symbol):
@@ -302,6 +306,7 @@ class Locale(babel.core.Locale):
                 else:
                     proper_alt = self.format_decimal(decimal_alt, decimal_quantization=False)
                     raise AmbiguousNumber(string, [proper, proper_alt])
+        # Check that the amount is within the acceptable range.
         if maximum is not None and decimal > maximum:
             raise InvalidNumber(string)
         money = Money(decimal, currency).round_down()
