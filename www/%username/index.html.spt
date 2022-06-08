@@ -35,7 +35,7 @@ summary = participant.get_statement(lang, 'summary')
 statement_html = markdown.render(statement) if statement else None
 
 teams = participant.get_teams_data_for_display(locale)
-communities = participant.get_communities()
+communities = () # participant.get_communities()
 
 langs = participant.get_statement_langs(include_conversions=True)
 
