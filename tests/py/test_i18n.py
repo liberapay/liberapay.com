@@ -65,6 +65,15 @@ class Tests(Harness):
         with self.assertRaises(AmbiguousNumber):
             LOCALE_EN.parse_money_amount("10,00", 'EUR')
 
+    def test_parse_money_amount_tolerates_spaces_and_matching_currency_symbols(self):
+        assert LOCALE_EN.parse_money_amount("$1", 'USD')
+        assert LOCALE_EN.parse_money_amount(" € 2,000.22 ", 'EUR')
+        assert LOCALE_EN.parse_money_amount("3€", 'EUR')
+        locale_fr = self.website.locales['fr-fr']
+        assert locale_fr.parse_money_amount("  4 000,99  €  ", 'EUR')
+        with self.assertRaises(InvalidNumber):
+            LOCALE_EN.parse_money_amount("$100", 'EUR')
+
     def test_chinese_visitor_gets_chinese_locale(self):
         state = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=b'zh', want='state')
         assert state['locale'] is self.website.locales['zh-hans']
