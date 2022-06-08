@@ -287,6 +287,8 @@ class Locale(babel.core.Locale):
         # then an `InvalidNumber` exception is raised.
         try:
             decimal = Decimal(
+                ''.join(string.split()).replace(decimal_symbol, '.')
+                if group_symbol.isspace() else
                 string.replace(group_symbol, '').replace(decimal_symbol, '.')
             )
         except (InvalidOperation, ValueError):
