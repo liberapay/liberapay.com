@@ -166,6 +166,8 @@ def try_other_destinations(db, payin, payer, charge):
                 payin, charge = charge_and_transfer(
                     db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
                 )
+        except NextAction:
+            raise
         except Exception as e:
             website.tell_sentry(e)
             break
