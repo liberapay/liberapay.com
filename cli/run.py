@@ -10,6 +10,9 @@ p.add_argument(
 p.add_argument(
     '-i', '--ignore-environment', default=False, action='store_true',
     help="start with an empty environment")
+p.add_argument(
+    '-s', '--set', metavar='NAME[=value]', action='append',
+    help="a specific environment variable to overwrite")
 p.add_argument('cmd', nargs=argparse.REMAINDER)
 args = p.parse_args()
 
@@ -38,5 +41,12 @@ for env_file_path in args.env.split(','):
                     raise SystemExit(f"{env_file_path}:{i}: setting variable failed: {e}")
     except FileNotFoundError:
         pass
+
+for s in (args.set or ()):
+    i = s.find('=')
+    if i == -1:
+        env.pop(s, None)
+    else:
+        env[s[:i]] = s[i+1:]
 
 os.execvpe(args.cmd[0], args.cmd, env)
