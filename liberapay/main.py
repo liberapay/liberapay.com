@@ -457,3 +457,29 @@ def _decode_body(self):
     body = self.body
     return body.decode('utf8') if isinstance(body, bytes) else body
 pando.Response.text = property(_decode_body)
+
+
+# Log some performance information
+# ================================
+
+def get_process_stats():
+    from resource import getrusage, RUSAGE_SELF
+    ru = getrusage(RUSAGE_SELF)
+    total_time = ru.ru_utime + ru.ru_stime
+    u2s_ratio = ru.ru_utime / total_time
+    # Simple Linux-only way to get the current process' memory footprint.
+    # Doc: https://www.kernel.org/doc/html/latest/filesystems/proc.html
+    try:
+        with open('/proc/self/status', 'r') as f:
+            d = dict(map(str.strip, line.split(':', 1)) for line in f)
+            res_mem, res_mem_peak = d['VmRSS'], d['VmHWM']
+            del d
+    except FileNotFoundError:
+        res_mem = res_mem_peak = '<unknown>'
+    return (
+        f"Process {os.getpid()} is ready. "
+        f"Elapsed time: {total_time:.3f}s ({u2s_ratio:.1%} in userland). "
+        f"Resident memory: {res_mem} now, {res_mem_peak} at peak. "
+    )
+
+website.logger.info(get_process_stats())
