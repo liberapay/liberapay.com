@@ -128,7 +128,7 @@ title = _("Frequently Asked Questions")
     <dd>{{ _(
         "A pledge is linked to an account on another platform (e.g. {platform}) "
         "and it can only be claimed by someone who controls this account."
-        , platform=website.platforms.list[0].display_name
+        , platform=next(iter(website.platforms)).display_name
     ).replace('\n', '<br>'|safe) }}</dd>
 
 </dl>

@@ -57,7 +57,7 @@ subhead = _("Unclaimed Donations")
 
     <p>{{ _("We can help you find pledgees if you connect your accounts:") }}</p>
     <p class="buttons">
-    % for p in website.follow_platforms
+    % for p in website.platforms if p.supports_follows
         <a class="btn btn-default" href="/on/{{ p.name }}/">{{
             platform_logo(p) }}<br>{{ p.display_name }}</a>
     % endfor

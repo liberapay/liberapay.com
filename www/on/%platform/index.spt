@@ -3,11 +3,13 @@ from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.utils import b64decode_s
 
-platforms_nav = [('/%s/' % p.name, p.display_name) for p in website.follow_platforms]
+platforms_nav = [
+    ('/%s/' % p.name, p.display_name) for p in website.platforms if p.supports_follows
+]
 
 [---]
 platform = website.platforms.get(request.path['platform'])
-if platform is None or platform not in website.follow_platforms:
+if not (platform and platform.supports_follows):
     raise response.error(404)
 
 title = _("Social Explorer")
