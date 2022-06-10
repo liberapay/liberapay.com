@@ -102,7 +102,8 @@ class Locale(babel.core.Locale):
         if ';' in delta_p:
             pos, neg = delta_p.split(';')
             assert len(neg) >= len(pos), (self, neg, pos)
-            assert minus_sign in neg
+            neg = neg.replace('-', minus_sign)
+            assert minus_sign in neg, (self, neg, minus_sign)
             pos = neg.replace(minus_sign, plus_sign)
             self.currency_delta_pattern = parse_pattern('%s;%s' % (pos, neg))
         else:
@@ -408,7 +409,7 @@ ACCEPTED_LANGUAGE_CODES = """
     eu fa ff fi fo fr ga gd gl gu gv ha he hi hr hu hy ia id ig ii is it ja ka
     ki kk kl km kn ko ks kw ky lg ln lo lt lu lv mg mk ml mn mr ms mt my nb nd
     ne nl nn om or os pa pl ps pt rm rn ro ru rw se sg si sk sl sn so sq sr sv
-    sw ta te tg th ti to tr uk ur uz vi vo xh yo zh zh_Hans zh_Hant zu
+    sw ta te tg th ti to tr uk ur uz vi xh yo zh zh_Hans zh_Hant zu
 """.split()
 
 Locale.LANGUAGE_NAMES = {
