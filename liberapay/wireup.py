@@ -601,21 +601,13 @@ def replace_unused_singulars(c):
             c[msg[1]] = m
 
 
-def share_source_strings(catalog, shared_strings):
-    """Share message IDs between catalogs to save memory.
+def intern_source_strings(catalog):
+    """Intern message IDs to save memory and speed up translation lookups.
     """
-    if not shared_strings:
-        shared_strings.update((m.id, m.id) for m in catalog)
-        return
     for m in list(catalog):
-        if not m.id:
-            continue
-        if m.id in shared_strings:
-            m.id = shared_strings[m.id]
-            catalog.delete(m.id)
-            catalog[m.id] = m
-        else:
-            shared_strings[m.id] = m.id
+        m.id = tuple(map(intern, m.id)) if isinstance(m.id, tuple) else intern(m.id)
+        catalog.delete(m.id)
+        catalog[m.id] = m
 
 
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
@@ -628,7 +620,6 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
     supported_currencies_en = locales['en'].supported_currencies
-    source_strings = {}
     for file in os.listdir(localeDir):
         try:
             parts = file.split(".")
@@ -638,7 +629,8 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             with open(os.path.join(localeDir, file), 'rb') as f:
                 l = Locale.parse(lang)
                 c = l.catalog = read_po(f)
-                share_source_strings(c, source_strings)
+                del l.catalog['']
+                intern_source_strings(c)
                 c.plural_func = get_function_from_rule(c.plural_expr)
                 replace_unused_singulars(c)
                 l.completion = compute_percentage(
@@ -670,7 +662,6 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 LOCALES_DEFAULT_MAP[l.language] = l.tag
         except Exception as e:
             tell_sentry(e)
-    del source_strings
 
     # Prepare a unique and sorted list for use in the navbar language switcher
     domain, port = (canonical_host.split(':') + [None])[:2]
