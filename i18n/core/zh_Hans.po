@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Simplified Chinese "
-"<https://hosted.weblate.org/projects/liberapay/core/zh_Hans/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2022-06-11 12:19+0000\n"
+"Last-Translator: YFdyh000 <yfdyh000@gmail.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/liberapay/core/zh_Hans/>\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.13-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
@@ -214,7 +216,7 @@ msgstr "您有一笔 {amount} 金额的捐款预计在 {payment_date} 支付给 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "您有 {n} 笔付款需要更新其捐款日程，但因缺少有效的付款方式使我们无法完成。"
+msgstr[0] "您已安排 {n} 笔付款来续捐，但因缺少有效的付款方式，我们无法处理。"
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "支付的日期、金额与收款人："
@@ -641,7 +643,7 @@ msgstr "本消息是为提醒您，即将在 {debit_date} 自您提供的付款�
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] "本消息提醒您，最近 {n} 天内将从您的默认付款方式中扣款 {amount} 以续约您的捐赠。"
+msgstr[0] "本消息提醒您，未来 {n} 天内将从您的默认付款方式中扣款 {amount} 以续约您的捐赠。"
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -2413,7 +2415,7 @@ msgstr "注资您的捐款"
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] "因法律和技术限制，我们目前无法一次性处理您的全部捐款，您将分 {n} 次完成支付。因此造成的不便我们深表歉意。"
+msgstr[0] "因法律和技术限制，我们目前无法一次性处理您的全部捐款，您必须分 {n} 次完成支付。因此造成的不便我们深表歉意。"
 
 msgid "We are able to group these donations into a single payment."
 msgstr "我们可以将这些捐款打包成单笔支付。"
@@ -4066,7 +4068,7 @@ msgstr "感谢通过 {link_open}HackerOne 报告问题的每个人{link_close}�
 #, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] "Liberapay 于 {timespan_ago} 年前启动，目前有 {n} 名用户。"
+msgstr[0] "Liberapay 于 {timespan_ago} 启动，目前有 {n} 名用户。"
 
 #, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
@@ -4562,7 +4564,7 @@ msgstr[0] "它目前也被翻译成{n}种不同的语言（{link_open}您也可�
 #, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
 msgid_plural "Your profile descriptions and other texts can be published in up to {n} languages."
-msgstr[0] "您的资料页面介绍与其他文字将以多达 {n} 种语言发布。"
+msgstr[0] "您的资料页面介绍与其他文字可用多达 {n} 种语言发布。"
 
 msgid "Multiple currencies"
 msgstr "多种货币"
@@ -4570,7 +4572,7 @@ msgstr "多种货币"
 #, python-brace-format
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
-msgstr[0] "Liberapay 一开始以欧元为主，之后加入美元，目前已支持 {n} 种货币，但尚不能处理加密货币。"
+msgstr[0] "Liberapay 一开始只接受欧元，之后加入美元，目前已支持 {n} 种货币，但尚不处理加密货币。"
 
 msgid "Integrations"
 msgstr "集成"
@@ -4623,12 +4625,12 @@ msgstr[0] "上个月有 {n} 名用户注册。最近一位注册是在 {timespan
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] "上个月有 {n} 笔新捐款被发起，每周总计资助提升 {money_amount}。"
+msgstr[0] "上个月有 {n} 笔新捐款被发起，每周总筹款金额提升了 {money_amount}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "上个月新增 {n} 笔{link_open}认捐{link_close}，等待认领的捐款本周增加了 {money_amount}。"
+msgstr[0] "上个月新增 {n} 笔{link_open}认捐{link_close}，等待认领的每周捐款增加了 {money_amount}。"
 
 #, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
