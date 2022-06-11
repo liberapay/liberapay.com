@@ -38,10 +38,10 @@ subhead = _("Linked Accounts")
     % for platform in website.platforms.hasattr('account_url')
         % if platform.name == 'youtube'
             % set disabled = true
-            {% set disabled_msg = _(
+            % set disabled_msg = _(
                 "Our YouTube integration has been disabled by Google. We're working on "
                 "re-implementing this feature in a different way."
-            ) %}
+            )
         % else
             % set disabled = participant.kind == 'group' and platform.has_teams and not hasattr(platform, 'is_team_member')
             % set disabled_msg = None

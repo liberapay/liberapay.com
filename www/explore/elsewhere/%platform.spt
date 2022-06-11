@@ -1,5 +1,4 @@
-from collections import OrderedDict
-
+EXPLORABLE_PLATORMS = tuple(p.name for p in website.platforms.hasattr('account_url'))
 INF = float('inf')
 
 [---]
@@ -10,18 +9,14 @@ platforms = website.db.all("""
         SELECT e.platform, count(*) as c, min(p.id) as min_id
           FROM elsewhere e
           JOIN participants p ON p.id = e.participant
-         WHERE p.status = 'active'
+         WHERE e.platform IN %s
+           AND p.status = 'active'
            AND p.hide_from_lists = 0
       GROUP BY e.platform
            ) a
   ORDER BY c DESC, platform ASC
-""", max_age=60)
-platforms = OrderedDict(
-    (p_name, (getattr(website.platforms, p_name), d)) for p_name, d in platforms
-)
-for p, d in list(platforms.values()):
-    if not p.account_url:
-        del platforms[p.name]
+""", (EXPLORABLE_PLATORMS,), max_age=60)
+platforms = {p_name: (website.platforms[p_name], d) for p_name, d in platforms}
 
 platform_name = request.path['platform']
 if platform_name:
@@ -39,9 +34,7 @@ if platform:
     if order not in ('any', 'random', 'latest'):
         raise response.invalid_input(order, 'order', 'querystring')
 
-    limit = min(request.qs.get_int('limit', 18), 60)
-    if limit not in (18, 60):
-        raise response.invalid_input(limit, 'limit', 'querystring')
+    limit = int(request.qs.get_choice('limit', {'18', '60'}, '18'))
     last_shown = request.qs.get_int('last_shown', INF)
 
     def get_participants(random):
@@ -84,7 +77,7 @@ subhead = _("Social Networks")
     <p>{{ _("Which platform would you like to explore?") }}</p>
     % for p, d in platforms.values()
         % set n_connected_accounts = d['n_connected_accounts']
-        % if n_connected_accounts or p in website.follow_platforms
+        % if n_connected_accounts or p.supports_follows
         <div class="card card-default card-md card-narrow text-center overlaid">
             <h2 class="text-info">{{ platform_logo(p) }}<br>{{ p.display_name }}</h2>
             <p>{{ ngettext("{n} connected account", "{n} connected accounts", n_connected_accounts) }}</p>
@@ -96,7 +89,7 @@ subhead = _("Social Networks")
 
 % else
 
-    % if platform in website.follow_platforms
+    % if platform.supports_follows
     <p class="text-center">
         <a class="btn btn-primary btn-lg btn-wrap" href="/on/{{ platform_name }}">{{
             _("Explore Your {0} Contacts", platform.display_name)

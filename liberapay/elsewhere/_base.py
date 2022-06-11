@@ -7,6 +7,7 @@ import warnings
 import xml.etree.ElementTree as ET
 
 from babel.dates import format_timedelta
+from cached_property import cached_property
 from dateutil.parser import parse as parse_date
 from pando import Response
 from pando.utils import utc
@@ -458,6 +459,10 @@ class Platform:
 
     def get_CantReadMembership_url(self, account):
         return ''
+
+    @cached_property
+    def supports_follows(self):
+        return bool(getattr(self, 'api_follows_path', None))
 
 
 class PlatformOAuth1(Platform):

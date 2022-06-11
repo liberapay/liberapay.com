@@ -294,13 +294,14 @@ recent = website.db.one("""
                     <a href="/explore/elsewhere">{{ _("Integrations") }}</a>
                 </dt>
                 <dd>
+                % set platforms_iter = iter(website.platforms)
                 {{ ngettext(
                     "",
                     "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms.",
                     len(website.platforms) - 3,
-                    platform1=website.platforms.list[0].display_name,
-                    platform2=website.platforms.list[1].display_name,
-                    platform3=website.platforms.list[2].display_name
+                    platform1=next(platforms_iter).display_name,
+                    platform2=next(platforms_iter).display_name,
+                    platform3=next(platforms_iter).display_name
                 ) }}
                 {{ _(
                     "You can also easily list on your profile the repositories you contribute to on {platforms_list}.",

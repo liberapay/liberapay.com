@@ -8,9 +8,7 @@ from liberapay.payin.common import (
     prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_tip,
     abort_payin,
 )
-from liberapay.payin.paypal import (
-    capture_order, create_order, execute_payment, sync_order, sync_payment
-)
+from liberapay.payin.paypal import capture_order, create_order, sync_order
 from liberapay.payin.prospect import PayinProspect
 from liberapay.utils import get_participant
 
@@ -96,10 +94,7 @@ if payin_id:
     elif payin.status != 'succeeded' and payin.remote_id:
         payer_id = request.qs.get('PayerID')
         if payin.remote_id.startswith('PAYID-'):
-            if payer_id:
-                payin = execute_payment(website.db, payin, payer_id)
-            else:
-                payin = sync_payment(website.db, payin)
+            raise response.error(400, "The v1 API is no longer supported.")
         else:
             if payer_id:
                 payin = capture_order(website.db, payin)

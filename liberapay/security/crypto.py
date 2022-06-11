@@ -1,5 +1,4 @@
 from binascii import b2a_base64
-from collections import OrderedDict
 from datetime import date, timedelta
 from math import log
 import os
@@ -138,10 +137,8 @@ class Cryptograph:
                 warnings.warn("dict only contains one key", CryptoWarning)
             return dic
         n = int(log(n, 2) // 8) + 2
-        # Return a new ordered dict sorted randomly
-        return OrderedDict(
-            t[1] for t in sorted((urandom(n), item) for item in dic.items())
-        )
+        # Return a new dict sorted randomly
+        return dict(sorted(dic.items(), key=lambda t: urandom(n)))
 
     def rotate_key(self):
         """Generate a new key and send it to the secrets manager.

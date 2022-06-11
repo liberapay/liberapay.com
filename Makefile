@@ -56,7 +56,7 @@ run: $(env)
 	PATH=$(env_bin):$$PATH $(with_local_env) $(env_py) app.py
 
 py: $(env)
-	PYTHONPATH=. $(with_local_env) $(env_py) -i $${main-liberapay/main.py}
+	PYTHONPATH=. $(with_local_env) -s RUN_CRON_JOBS=no $(env_py) -i $${main-liberapay/main.py}
 
 shell: py
 

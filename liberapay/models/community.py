@@ -82,8 +82,8 @@ class Community(Model):
                AND cm.is_on
           ORDER BY cm.ctime
              LIMIT %s
-            OFFSET %s;
-        """, (self.id, limit, offset))
+            OFFSET %s
+        """, (self.id, limit, offset), max_age=0)
 
     def check_membership_status(self, participant):
         return self.db.one("""

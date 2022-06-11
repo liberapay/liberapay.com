@@ -492,41 +492,41 @@ class PlatformRegistry:
     """Registry of platforms we support.
     """
 
+    __slots__ = ('_dict',)
+
     def __init__(self, platforms):
-        self.list = platforms
-        self.dict = dict((p.name, p) for p in platforms)
-        self.__dict__.update(self.dict)
-        self.order = dict((p.name, i) for i, p in enumerate(platforms))
-        self._hasattr_cache = {}
+        self._dict = {p.name: p for p in platforms}
 
     def __contains__(self, platform):
-        return platform.name in self.dict
+        return platform.name in self._dict
+
+    def __getattr__(self, name):
+        try:
+            return self._dict[name]
+        except KeyError:
+            raise AttributeError(name) from None
+
+    def __getitem__(self, name):
+        return self._dict[name]
 
     def __iter__(self):
-        return iter(self.list)
+        return iter(self._dict.values())
 
     def __len__(self):
-        return len(self.list)
-
-    def _cache_hasattr(self, attr):
-        r = PlatformRegistry([p for p in self if getattr(p, attr, None)])
-        self._hasattr_cache[attr] = r
-        return r
+        return len(self._dict)
 
     def get(self, k, default=None):
-        return self.dict.get(k, default)
+        return self._dict.get(k, default)
 
     def hasattr(self, attr):
-        r = self._hasattr_cache.get(attr)
-        return r or self._cache_hasattr(attr)
-
-    def index(self, name):
-        return self.order[name]
+        for p in self._dict.values():
+            if getattr(p, attr, None):
+                yield p
 
 
 def accounts_elsewhere(app_conf, asset, canonical_url, db):
     if not app_conf:
-        return {'platforms': db, 'follow_platforms': db}
+        return {'platforms': db}
     platforms = []
     for cls in elsewhere.CLASSES:
         conf = {
@@ -571,11 +571,10 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     """)
     n = len(order)
     order = dict(zip(order, range(n)))
-    platforms = sorted(platforms, key=lambda p: (order.get(p.name, n), p.name))
+    platforms.sort(key=lambda p: (order.get(p.name, n), p.name))
+    for i, p in enumerate(platforms):
+        p.rank = i
     platforms = PlatformRegistry(platforms)
-
-    follow_platforms = [p for p in platforms if getattr(p, 'api_follows_path', None)]
-    follow_platforms = PlatformRegistry(follow_platforms)
 
     for platform in platforms:
         if platform.fontawesome_name:
@@ -589,7 +588,7 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
             'platforms/%s.png' % platform.name,
         )
 
-    return {'platforms': platforms, 'follow_platforms': follow_platforms}
+    return {'platforms': platforms}
 
 
 def replace_unused_singulars(c):
@@ -628,6 +627,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     # Load the base locales
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
+    supported_currencies_en = locales['en'].supported_currencies
     source_strings = {}
     for file in os.listdir(localeDir):
         try:
@@ -657,6 +657,10 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
                 }
                 l.accepted_languages = make_sorted_dict(
                     ACCEPTED_LANGUAGES, l.languages, ACCEPTED_LANGUAGES
+                )
+                l.supported_currencies = make_sorted_dict(
+                    supported_currencies_en, l.currencies, supported_currencies_en,
+                    l.title,
                 )
             if l.script and l.language not in LOCALES_DEFAULT_MAP:
                 tell_sentry(Warning(
@@ -703,6 +707,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             l._data['languages'] = base.languages
             l.countries = base.countries
             l.accepted_languages = base.accepted_languages
+            l.supported_currencies = base.supported_currencies
             if l.script:
                 scriptless_tag = f"{l.language}-{l.territory.lower()}"
                 if scriptless_tag not in LOCALES_DEFAULT_MAP:

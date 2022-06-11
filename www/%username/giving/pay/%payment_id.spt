@@ -209,7 +209,7 @@ title = _("Funding your donations")
     % endif
 
     % if payment.providers == ['paypal']
-    <p>{{ _("For now this donation can only be renewed externally through PayPal.") }}</p>
+    <p>{{ _("PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:") }}</p>
     % else
     <p>{{ _("Please choose a payment method:") }}</p>
     % endif
@@ -225,7 +225,7 @@ title = _("Funding your donations")
                     % if not allow_stripe_card
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
                     % else
-                    <small>Visa, MasterCard, American Express</small>
+                    <small>Visa, MasterCard, American Express, UnionPay</small>
                     % endif
                 </h4>
                 % if allow_stripe_card

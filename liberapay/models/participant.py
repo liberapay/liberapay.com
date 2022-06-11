@@ -3234,7 +3234,7 @@ class Participant(Model, MixinTeam):
                AND coalesce(e.is_team = %s, true)
 
         """, (self.id, platform, is_team))
-        accounts.sort(key=lambda a: (website.platforms.index(a.platform), a.is_team, a.user_id))
+        accounts.sort(key=lambda a: (website.platforms[a.platform].rank, a.is_team, a.user_id))
         if url_required:
             accounts = [a for a in accounts if a.platform_data.account_url]
         return accounts

@@ -3,6 +3,7 @@
 This simplate must not reveal the email address in its response.
 """
 
+from liberapay.exceptions import LoginRequired
 from liberapay.security.csrf import require_cookie
 from liberapay.utils import get_participant
 from liberapay.utils.emails import EmailVerificationResult
@@ -29,6 +30,8 @@ elif 'email' in request.qs:
     else:
         nonce = request.qs.get('nonce', '')
         result = participant.verify_email(email_id, nonce, user, request)
+        if result == EmailVerificationResult.LOGIN_REQUIRED:
+            raise LoginRequired()
     del email_id
 else:
     result = EmailVerificationResult.FAILED
@@ -42,9 +45,6 @@ else:
     % elif result == EmailVerificationResult.REDUNDANT
         <h3>{{ _("Already Verified") }}</h3>
         <div class="alert alert-info">{{ _("This email address has already been verified.") }}</div>
-    % elif result == EmailVerificationResult.LOGIN_REQUIRED
-        <h1 class="main-title thin-title">{{ _("Authentication required") }}</h1>
-        % include "templates/log-in-form.html"
     % else
         % if result == EmailVerificationResult.STYMIED
         <h3>{{ _("Address Taken") }}</h3>
@@ -58,6 +58,7 @@ else:
         }}</p>
         % endif
     % endif
+
     <a class="btn btn-{{ 'default' if result == EmailVerificationResult.SUCCEEDED else 'primary' }}"
        href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a>
 

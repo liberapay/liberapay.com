@@ -455,7 +455,7 @@ def build_s3_object_url(key):
 NO_DEFAULT = object()
 
 
-def get_int(d, k, default=NO_DEFAULT, minimum=None, maximum=None):
+def get_int(d, k, default=NO_DEFAULT, minimum=0, maximum=2**64-1):
     try:
         r = d[k]
     except (KeyError, Response):

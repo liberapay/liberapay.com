@@ -1,18 +1,16 @@
 # coding: utf8
 
-from collections import OrderedDict
-
 from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.utils import partition
 
 PAGE_SIZE = 50
 
-REASONS = OrderedDict([
-    ("bounce", "This domain bounces back all messages."),
-    ("complaint", "The domain's admin asked us to blacklist it."),
-    ("throwaway", "This domain provides throwaway addresses."),
-    ("other", "Other"),
-])
+REASONS = {
+    "bounce": "This domain bounces back all messages.",
+    "complaint": "The domain's admin asked us to blacklist it.",
+    "throwaway": "This domain provides throwaway addresses.",
+    "other": "Other",
+}
 
 [---]
 
@@ -64,7 +62,7 @@ if domain:
 
 else:
     show = request.qs.get_choice('show', {'all', 'blacklisted'}, default='all')
-    offset = request.qs.get_int('offset', minimum=0, default=0)
+    offset = request.qs.get_int('offset', 0)
     domains_query = """
         SELECT substr(bl.address, 2) AS domain
           FROM email_blacklist bl

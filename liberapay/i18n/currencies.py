@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
 from numbers import Number
 import operator
@@ -296,10 +295,10 @@ class MoneyBasket:
 
     def __init__(self, *args, **decimals):
         from ..constants import CURRENCIES
-        self.amounts = OrderedDict(
-            (currency, decimals.get(currency, Money.ZEROS[currency].amount))
+        self.amounts = {
+            currency: decimals.get(currency, Money.ZEROS[currency].amount)
             for currency in CURRENCIES
-        )
+        }
         for arg in args:
             if isinstance(arg, Money):
                 self.amounts[arg.currency] += arg.amount

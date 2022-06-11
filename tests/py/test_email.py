@@ -353,6 +353,44 @@ class TestEmail(EmailHarness):
         assert r.code == 200, r.text
         assert check_email_blacklist(email.address) is None
 
+    def test_disavowal_can_be_reversed(self):
+        self.client.PxST('/sign-up', {
+            'sign-in.email': 'bob@liberapay.com',
+            'sign-in.username': 'bob',
+            'sign-in.currency': 'USD',
+        })
+        bob = Participant.from_username('bob')
+        email = bob.get_email('bob@liberapay.com')
+        qs = '?email.id=%s&email.nonce=%s' % (email.id, email.nonce)
+        url = '/bob/emails/disavow' + qs
+
+        # Disavow
+        r = self.client.GET('/bob/emails/disavow' + qs)
+        assert r.code == 200
+        email = bob.get_email(email.address)
+        assert email.disavowed is True
+        assert email.disavowed_time is not None
+        assert email.verified is None
+        assert email.verified_time is None
+        assert email.nonce
+
+        # Add the address to the blacklist
+        r = self.client.POST(url, {'action': 'add_to_blacklist'})
+        assert r.code == 200, r.text
+        with self.assertRaises(EmailAddressIsBlacklisted):
+            check_email_blacklist(email.address)
+
+        # Reverse the disavowal
+        r = self.client.GET('/bob/emails/confirm' + qs)
+        assert r.code == 200, r.text
+        email = bob.get_email(email.address)
+        assert email.disavowed is False
+        assert email.disavowed_time is not None
+        assert email.verified is True
+        assert email.verified_time is not None
+        assert email.nonce
+        assert check_email_blacklist(email.address) is None
+
     def test_self_disavowal_is_not_allowed(self):
         self.client.PxST('/sign-up', {
             'sign-in.email': 'bob@liberapay.com',

@@ -4,13 +4,11 @@ To avoid circular imports this module should not import any other liberapay subm
 """
 
 from contextvars import ContextVar, copy_context
-from functools import wraps
 import logging
 import os
 
 from cached_property import cached_property
 from environment import Environment, is_yesish
-from jinja2 import Undefined
 from markupsafe import Markup
 from pando.website import Website as _Website
 
@@ -111,40 +109,3 @@ website = Website(
 )
 website.env = env
 website.logger = logging.getLogger('liberapay')
-
-
-# Common Jinja configuration
-# ==========================
-
-def wrap_method(method):
-    @wraps(method)
-    def f(self, *a, **kw):
-        try:
-            self._fail_with_undefined_error()
-        except Exception as e:
-            website.tell_sentry(e, level='warning')
-        return method(self, *a, **kw)
-    return f
-
-
-class CustomUndefined(Undefined):
-    """This subclass sends errors to Sentry instead of actually raising them.
-
-    Doc: https://jinja.palletsprojects.com/en/2.11.x/api/#undefined-types
-    """
-    __iter__ = wrap_method(Undefined.__iter__)
-    __str__ = wrap_method(Undefined.__str__)
-    __len__ = wrap_method(Undefined.__len__)
-    __eq__ = wrap_method(Undefined.__eq__)
-    __ne__ = wrap_method(Undefined.__ne__)
-    __bool__ = wrap_method(Undefined.__bool__)
-    __hash__ = wrap_method(Undefined.__hash__)
-
-
-JINJA_ENV_COMMON = dict(
-    trim_blocks=True, lstrip_blocks=True,
-    line_statement_prefix='%',
-    auto_reload=env.aspen_changes_reload,
-    extensions=['jinja2.ext.do'],
-    undefined=CustomUndefined,
-)

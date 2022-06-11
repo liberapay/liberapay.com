@@ -87,6 +87,21 @@ title = _("Frequently Asked Questions")
             '</a>'|safe) }}</p>
     </dd>
 
+
+    {{ dt(_("Is this platform secure?"), 'security') }}
+
+    <dd>{{ _(
+        "Liberapay has been running for {timedelta} without any significant "
+        "security incident. We do everything we can to keep your data safe and "
+        "comply with the laws of the European Union ({GDPR}GDPR{abbr_end}, "
+        "{PSD2}PSD2{abbr_end}, et cetera).",
+        timedelta=to_age(constants.LAUNCH_TIME, add_direction=False),
+        GDPR='<abbr title="%s">'|safe % _("General Data Protection Regulation"),
+        PSD2='<abbr title="%s">'|safe % _("Revised Payment Services Directive"),
+        abbr_end='</abbr>'|safe,
+    ) }}</dd>
+
+
     {{ dt(_("Does Liberapay respect financial regulations?"), 'regulations') }}
 
     <dd>{{ _(
@@ -113,7 +128,7 @@ title = _("Frequently Asked Questions")
     <dd>{{ _(
         "A pledge is linked to an account on another platform (e.g. {platform}) "
         "and it can only be claimed by someone who controls this account."
-        , platform=website.platforms.list[0].display_name
+        , platform=next(iter(website.platforms)).display_name
     ).replace('\n', '<br>'|safe) }}</dd>
 
 </dl>
@@ -131,10 +146,11 @@ title = _("Frequently Asked Questions")
     <dd>{{ _(
         "The available payment methods depend on which payment processors are "
         "supported by the recipient. If a payment is processed by Stripe, then "
-        "most credit and debit cards (Visa, MasterCard, American Express) are "
-        "accepted, as well as SEPA Direct Debits (for Euro donations only). If "
-        "a payment is through PayPal, then it's possible to pay in various "
-        "ways, however the donor needs to have or create a PayPal account."
+        "most credit and debit cards ({list_of_card_brands}) are accepted, as "
+        "well as SEPA Direct Debits (for Euro donations only). If a payment is "
+        "through PayPal, then it's possible to pay in various ways, however "
+        "the donor needs to have or create a PayPal account.",
+        list_of_card_brands=["Visa", "Mastercard", "American Express", "UnionPay"]
     ) }}</dd>
 
 

@@ -5,10 +5,8 @@ from liberapay.utils import get_community, markdown
 community = get_community(state, restrict=False)
 participant = community.participant  # used by profile-base.html
 
-limit = min(request.qs.get_int('limit', 18), 60)
+limit = int(request.qs.get_choice('limit', {'18', '60'}, '18'))
 offset = request.qs.get_int('offset', 0)
-if limit not in (18, 60):
-    raise response.invalid_input(limit, 'limit', 'querystring')
 
 members = website.db.all("""
     SELECT p

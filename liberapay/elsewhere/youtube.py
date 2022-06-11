@@ -28,7 +28,8 @@ class Youtube(PlatformOAuth2):
     api_url = 'https://www.googleapis.com/youtube/v3'
     api_user_info_path = '/channels?part=snippet&id={user_id}'
     api_user_self_info_path = '/channels?part=snippet&mine=true'
-    api_follows_path = '/subscriptions?part=snippet&mine=true'
+    # api_follows_path = '/subscriptions?part=snippet&mine=true'
+    # ↑ https://github.com/liberapay/liberapay.com/issues/1762
     api_search_path = '/search?part=snippet&type=channel&q={query}'
 
     # User info extractors
