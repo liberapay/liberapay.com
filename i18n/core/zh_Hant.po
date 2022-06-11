@@ -1619,16 +1619,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username}尚未設定支付方法，故您的捐款目前無法進行。當對方可接受付款時，我們會通知您。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "給{username}的捐款可使用信用卡或簽帳金融卡支付 (Visa, MasterCard, American Express)。"
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "給{username}的捐款可使用信用卡或簽帳金融卡支付 ({list_of_card_brands})。"
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "給{username}捐款透過 PayPal 支付，如果沒有 PayPal 帳號還是可以使用信用卡或簽帳金額卡支付。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "捐助給{username}可使用信用卡或簽帳金融卡(Visa, MasterCard, American Express)，或是透過 PayPal 支付。"
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "捐助給{username}可使用信用卡或簽帳金融卡({list_of_card_brands})，或是透過 PayPal 支付。"
 
 msgid "Country"
 msgstr "國家"
@@ -2123,7 +2123,8 @@ msgstr "你尚未儲存變更，確定要放棄嗎？"
 msgid "Discard"
 msgstr "丟棄"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "對你的工作及尋求捐款的原因等進行描述。我們需要一個簡短的摘要和一個完整說明。"
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2367,7 +2368,8 @@ msgstr "立即更新"
 msgid "Pending payment completion."
 msgstr "待決中的付款完成。"
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "等待支付。"
 
 msgid "Renew"
@@ -2423,7 +2425,8 @@ msgstr "我們可以將這些捐款組合成一次的單筆支付。"
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "您對{recipients}的捐款正待支付處理。"
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "現在這筆捐款只能透由外部 Paypal 來延長支付期。"
 
 msgid "Please choose a payment method:"
@@ -3786,8 +3789,9 @@ msgstr "目前支援哪些貨幣和國家？"
 msgid "See the “{page_name}” page."
 msgstr "請見 “{page_name}” 頁。"
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "可用的支付方式端視收款人支援情況，如果是採 Stripe 支付，則受理大多數的信用卡/金融卡( Visa, MasterCard, American Express)，與 SEPA 金融卡(僅接受歐元捐款)。如透過 PayPal 支付，則可接受各種支付方式，但捐款人必須要有 PayPal 帳號。"
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "可用的支付方式端視收款人支援情況，如果是採 Stripe 支付，則受理大多數的信用卡/金融卡({list_of_card_brands})，與 SEPA 金融卡(僅接受歐元捐款)。如透過 PayPal 支付，則可接受各種支付方式，但捐款人必須要有 PayPal 帳號。"
 
 msgid "What are the payment processing fees?"
 msgstr "什麼是付款處理費用？"
@@ -4912,7 +4916,8 @@ msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "您在 {platform} 上關注了 {n} 個賬號。"
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "你提供的地址無效：它沒有“@”符號。"
 
 msgid "Which account?"

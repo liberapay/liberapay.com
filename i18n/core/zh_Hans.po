@@ -1619,7 +1619,7 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} 尚未设置任何支付方式，所以您目前无法进行捐款。当对方可接受付款时，我们会通知您。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
 msgstr "给 {username} 捐款可通过下列方式支付：信用卡或借记卡（Visa、MasterCard、美国运通卡）、欧洲银行账户（仅限欧元捐款）。"
 
 #, python-brace-format
@@ -1627,7 +1627,7 @@ msgid "Donations to {username} are processed through PayPal."
 msgstr "给 {username} 捐款经由 PayPal 处理。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "给 {username} 捐款可通过下列方式支付：信用卡或借记卡（Visa、MasterCard、美国运通卡）、欧洲银行账户（SEPA 直接借记）、PayPal 账户。"
 
 msgid "Country"
@@ -2121,7 +2121,8 @@ msgstr "您尚未保存更改，是否放弃更改？"
 msgid "Discard"
 msgstr "丢弃"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "介绍如你的成果、为什么寻求捐助。我们需要简短摘要与完整说明。"
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2365,7 +2366,8 @@ msgstr "立即续约"
 msgid "Pending payment completion."
 msgstr "待处理的付款完成。"
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "等待支付。"
 
 msgid "Renew"
@@ -2420,7 +2422,8 @@ msgstr "我们可以将这些捐款打包成单笔支付。"
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "您对 {recipients} 的捐款有待支付。"
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "现在这笔捐款只能通过 Paypal 来续约。"
 
 msgid "Please choose a payment method:"
@@ -3782,7 +3785,8 @@ msgstr "目前支持哪几种货币和国家/地区？"
 msgid "See the “{page_name}” page."
 msgstr "见“{page_name}”页面。"
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
 msgstr "可用的支付方式取决于收款人的设定。如果采用 Stripe 支付，则支持大多数信用卡/借记卡（Visa、MasterCard、美国运通），以及 SEPA 直接借记（仅限欧元捐款）。如果通过 PayPal 支付，则可接受各种付款方式，但捐款人必须有 PayPal 账号。"
 
 msgid "What are the payment processing fees?"
@@ -4905,7 +4909,8 @@ msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "您在 {platform} 上关注了 {n} 个账号。"
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "您提供的地址无效：没有“@”符号。"
 
 msgid "Which account?"

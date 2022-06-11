@@ -1634,16 +1634,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} ne ankoraŭ agordis ajnan pagmetodon, do fakte via donaco ne povas esti traktita nun. Ni sciigos vin kiam pago eblos."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donacoj al {username} povas esti pagataj per kreditkarto aŭ debetkarto (Visa, MasterCard, American Express), aŭ per rekta debeto de eŭra bankokonto (nur por eŭraj donacoj)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donacoj al {username} povas esti pagataj per kreditkarto aŭ debetkarto ({list_of_card_brands}), aŭ per rekta debeto de eŭra bankokonto (nur por eŭraj donacoj)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donacoj al {username} estas traktitaj per PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donacoj al {username} povas esti pagataj per: kreditkarto aŭ debetkarto (Visa, MasterCard, American Express), eŭra bankokonto (SEPA rekta debeto) aŭ PayPal-konto."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donacoj al {username} povas esti pagataj per: kreditkarto aŭ debetkarto ({list_of_card_brands}), eŭra bankokonto (SEPA rekta debeto) aŭ PayPal-konto."
 
 msgid "Country"
 msgstr "Lando"
@@ -2141,7 +2141,8 @@ msgstr "Vi ne konservis viajn ŝanĝojn. Ĉu vi certas, ke vi volas nuligi ilin?
 msgid "Discard"
 msgstr "Forigi"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Priskribu vian laboron, kial vi petas donacojn, ktp. Ni bezonas ambaŭ mallongan resumon kaj kompletan sinprezenton."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2387,7 +2388,8 @@ msgstr "Refari nun"
 msgid "Pending payment completion."
 msgstr "Atendanta pago plenumo."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Atendanta pagon."
 
 msgid "Renew"
@@ -2443,7 +2445,8 @@ msgstr "Ni povas grupigi tiujn donacojn en unu nura pago."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Viaj donacoj al {recipients} atendas pagon."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Nun tiu donaco nur povas esti refarita ekstere per PayPal."
 
 msgid "Please choose a payment method:"
@@ -3822,8 +3825,9 @@ msgstr "Kiuj landoj kaj valutoj estas subtenataj?"
 msgid "See the “{page_name}” page."
 msgstr "Vidu la “{page_name}” paĝo."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "La disponeblaj pagmetodoj dependas de kiuj provizantoj de pagservo estas subtenataj de la ricevanto. Se pago estas traktata per Stripe, tiam la plej multo de la kreditkartoj kaj debetkartoj (Visa, MasterCard, American Express) estas akceptataj, kaj ankaŭ SEPA rektaj debetoj (nur por eŭra donacoj). Se estas pago per PayPal, tiam ankaŭ eblas pagi per diversaj manieroj, tamen la donacanto bezonas krei PayPal-konton."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "La disponeblaj pagmetodoj dependas de kiuj provizantoj de pagservo estas subtenataj de la ricevanto. Se pago estas traktata per Stripe, tiam la plej multo de la kreditkartoj kaj debetkartoj ({list_of_card_brands}) estas akceptataj, kaj ankaŭ SEPA rektaj debetoj (nur por eŭra donacoj). Se estas pago per PayPal, tiam ankaŭ eblas pagi per diversaj manieroj, tamen la donacanto bezonas krei PayPal-konton."
 
 msgid "What are the payment processing fees?"
 msgstr "Kiom estas la pago-peradkostoj?"
@@ -4979,7 +4983,8 @@ msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "Vi sekvas {n} konton en {platform}."
 msgstr[1] "Vi sekvas {n} kontojn en {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "La adreso, kiun vi donis ne estas valida: ĝi ne enhavas la signon heliko (@)."
 
 msgid "Which account?"

@@ -1634,16 +1634,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} no ha configurado un método de pago todavía, así que tu donación no puede ser procesada ahora mismo. Te notificaremos cuando sea posible hacer el pago."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Las donaciones a {username} se pueden pagar usando tarjeta de crédito o de débito (Visa, MasterCard, American Express) o mediante pago domiciliado de una cuenta bancaria de euro (solo para donaciones con euros)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Las donaciones a {username} se pueden pagar usando tarjeta de crédito o de débito ({list_of_card_brands}) o mediante pago domiciliado de una cuenta bancaria de euro (solo para donaciones con euros)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Las donaciones a {username} se procesan a través de PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Las donaciones a {username} se pueden pagar usando una tarjeta de crédito o de débito (Visa, MasterCard, American Express), una cuenta bancaria de euro (Pago Domiciliado SEPA) o una cuenta de PayPal."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Las donaciones a {username} se pueden pagar usando una tarjeta de crédito o de débito ({list_of_card_brands}), una cuenta bancaria de euro (Pago Domiciliado SEPA) o una cuenta de PayPal."
 
 msgid "Country"
 msgstr "País"
@@ -2141,7 +2141,8 @@ msgstr "No has guardado tus cambios; ¿confirmas que quieres eliminarlos?"
 msgid "Discard"
 msgstr "Descartar"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Describe tu trabajo, por qué estás pidiendo donaciones, etc. Necesitamos un resumen corto y una presentación completa."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2387,7 +2388,8 @@ msgstr "Renovar ahora"
 msgid "Pending payment completion."
 msgstr "Pendiente de completar el pago."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Esperando pago."
 
 msgid "Renew"
@@ -2443,7 +2445,8 @@ msgstr "Podemos agrupar estas donaciones en un solo pago."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Tus donaciones a {recipients} están a la espera de pago."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Por ahora esta donación sólo se puede renovar de forma externa a través de PayPal."
 
 msgid "Please choose a payment method:"
@@ -3823,8 +3826,9 @@ msgstr "¿Qué países y monedas son compatibles?"
 msgid "See the “{page_name}” page."
 msgstr "Ver la página «{page_name}»."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Los métodos de pago disponibles dependen de qué procesadores de pago son admitidos por el receptor. Si un pago es procesado por Stripe, se aceptan la mayoría de tarjetas de crédito y de débito (Visa, MasterCard, American Express), así como los Pagos Domiciliados SEPA (solo para donaciones con euros). Si un pago se realiza mediante PayPal, es posible pagar de diferentes maneras; sin embargo, el donante necesita tener o crear una cuenta de PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "Los métodos de pago disponibles dependen de qué procesadores de pago son admitidos por el receptor. Si un pago es procesado por Stripe, se aceptan la mayoría de tarjetas de crédito y de débito ({list_of_card_brands}), así como los Pagos Domiciliados SEPA (solo para donaciones con euros). Si un pago se realiza mediante PayPal, es posible pagar de diferentes maneras; sin embargo, el donante necesita tener o crear una cuenta de PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "¿Cuáles son las tarifas del proceso de pago?"
@@ -4980,7 +4984,8 @@ msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "Sigues a {n} cuenta en {platform}."
 msgstr[1] "Sigues a {n} cuentas en {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "La dirección proporcionada no es válida: no contiene ningún símbolo â@â."
 
 msgid "Which account?"

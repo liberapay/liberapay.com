@@ -1619,16 +1619,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} belum mengonfigurasi metode pembayaran apa pun, jadi donasi Anda tidak dapat diproses saat ini. Kami akan memberitahu Anda kapan pembayaran dapat dilaksanakan."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express), atau dengan debit langsung dari akun bank Euro (untuk donasi dalam Euro saja)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit ({list_of_card_brands}), atau dengan debit langsung dari akun bank Euro (untuk donasi dalam Euro saja)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donasi ke {username} diproses melalui PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit (Visa, MasterCard, American Express), atau melalui PayPal."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donasi ke {username} dapat dibayar menggunakan kartu kredit atau kartu debit ({list_of_card_brands}), atau melalui PayPal."
 
 msgid "Country"
 msgstr "Negara"
@@ -2121,7 +2121,8 @@ msgstr "Anda belum menyimpan perubahan, anda yakin ingin membuang perubahan?"
 msgid "Discard"
 msgstr "Buang"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Jelaskan apa yang anda kerjakan, mengapa anda meminta donasi, dan sebagainya. Kami membutuhkan ringkasan singkat dan penyataan lengkap."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2365,7 +2366,8 @@ msgstr "Perbarui sekarang"
 msgid "Pending payment completion."
 msgstr "Selesainya pembayaran yang tertunda."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Menunggu pembayaran."
 
 msgid "Renew"
@@ -2420,7 +2422,8 @@ msgstr "Kami dapat menyatukan donasi-donasi berikut menjadi satu pembayaran."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Donasi Anda kepada {recipients} masih menunggu pembayaran."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Sekarang donasi ini hanya dapat diperbarui secara eksternal melalui PayPal."
 
 msgid "Please choose a payment method:"
@@ -3782,8 +3785,9 @@ msgstr "Negara dan bahasa apa yang didukung?"
 msgid "See the “{page_name}” page."
 msgstr "Lihat halaman “{page_name}”."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Metode pembayaran yang tersedia bergantung pada pemroses pembayaran mana yang didukung oleh penerima. Jika pembayaran diproses oleh Stripe, maka sebagian besar kartu kredit dan debit (Visa, MasterCard, American Express) diterima, serta Debit Langsung SEPA (hanya untuk donasi Euro). Jika pembayaran dilakukan melalui PayPal, maka pembayaran dapat dilakukan dengan berbagai cara, namun donatur harus memiliki atau membuat akun PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "Metode pembayaran yang tersedia bergantung pada pemroses pembayaran mana yang didukung oleh penerima. Jika pembayaran diproses oleh Stripe, maka sebagian besar kartu kredit dan debit ({list_of_card_brands}) diterima, serta Debit Langsung SEPA (hanya untuk donasi Euro). Jika pembayaran dilakukan melalui PayPal, maka pembayaran dapat dilakukan dengan berbagai cara, namun donatur harus memiliki atau membuat akun PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Berapa biaya pemrosesan pembayaran?"
@@ -4905,7 +4909,8 @@ msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "Anda mengikuti akun {n} di {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "Alamat yang Anda berikan tidak valid: tidak mengandung simbol “@”."
 
 msgid "Which account?"

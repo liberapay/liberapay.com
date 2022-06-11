@@ -1634,16 +1634,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "Ο/Η {username} δεν έχει ορίσει κάποια μέθοδο πληρωμής ακόμη, οπότε η δωρεά σας δεν μπορεί να επεξεργαστεί τώρα. Θα σας ενημερώσουμε όταν η πληρωμή είναι διαθέσιμη."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Οι δωρεές στον/ην {username} μπορούν να πληρωθούν με πιστωτική ή χρεωστική κάρτα (Visa, MasterCard, American Express) ή με άμεση χρέωση ενός τραπεζικού λογαριασμού ευρώ (μόνο για δωρεές σε ευρώ)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Οι δωρεές στον/ην {username} μπορούν να πληρωθούν με πιστωτική ή χρεωστική κάρτα ({list_of_card_brands}) ή με άμεση χρέωση ενός τραπεζικού λογαριασμού ευρώ (μόνο για δωρεές σε ευρώ)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Οι δωρεές σε {username} επεξεργάζονται μέσω PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Οι δωρεές στο {username} μπορούν να πληρωθούν χρησιμοποιώντας: πιστωτική ή χρεωστική κάρτα (Visa, MasterCard, American Express), τραπεζικό λογαριασμό ευρώ (απευθείας χρέωση SEPA) ή λογαριασμό PayPal."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Οι δωρεές στο {username} μπορούν να πληρωθούν χρησιμοποιώντας: πιστωτική ή χρεωστική κάρτα ({list_of_card_brands}), τραπεζικό λογαριασμό ευρώ (απευθείας χρέωση SEPA) ή λογαριασμό PayPal."
 
 msgid "Country"
 msgstr "Χώρα"
@@ -2141,7 +2141,8 @@ msgstr "Δεν έχετε αποθηκεύσει τις αλλαγές σας, �
 msgid "Discard"
 msgstr "Απορρίψτε"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Περιγράψτε το έργο σας, γιατί ζητάτε για δωρεές, κλπ. Χρειαζόμαστε και μια σύντομη περίληψη και μια πλήρη δήλωση."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2387,7 +2388,8 @@ msgstr "Ανανέωση τώρα"
 msgid "Pending payment completion."
 msgstr "Εκκρεμεί ολοκλήρωση πληρωμής."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Εν αναμονή πληρωμής."
 
 msgid "Renew"
@@ -2443,7 +2445,8 @@ msgstr "Μπορούμε να ομαδοποιήσουμε αυτές τις δ�
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Οι δωρεές σας στο {recipients} αναμένουν πληρωμή."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Προς το παρόν αυτή η δωρεά μπορεί να ανανεωθεί μόνο εξωτερικά μέσω PayPal."
 
 msgid "Please choose a payment method:"
@@ -3822,7 +3825,8 @@ msgstr "Ποιες χώρες και νομίσματα υποστηρίζοντ
 msgid "See the “{page_name}” page."
 msgstr "Δείτε τη σελίδα \"{page_name}\"."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
 msgstr ""
 
 msgid "What are the payment processing fees?"
@@ -4979,7 +4983,8 @@ msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "Ακολουθείτε {n} λογαριασμό στο {platform}."
 msgstr[1] "Ακολουθείτε {n} λογαριασμούς στο {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "Η διεύθυνση που έχετε παράσχει δεν είναι έγκυρη: δεν περιέχει κανένα σύμβολο \"@\"."
 
 msgid "Which account?"

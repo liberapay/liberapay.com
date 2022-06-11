@@ -1649,16 +1649,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} ещё не задал никакой метод оплаты, поэтому ваши пожертвования на самом деле не могут быть сейчас обработаны. Мы сообщим вам, когда платёж станет возможным."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Пожертвования в пользу {username} могут быть выполнены дебетовыми и кредитными картами (Visa, MasterCard, American Express) или прямым переводом на счёт в Euro bank (только для пожертвований в Евро)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Пожертвования в пользу {username} могут быть выполнены дебетовыми и кредитными картами ({list_of_card_brands}) или прямым переводом на счёт в Euro bank (только для пожертвований в Евро)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Пожертвования в адрес {username} обрабатываются системой PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Пожертвования в адрес {username} могут быть выполнены дебетовыми и кредитными картами (Visa, MasterCard, American Express), прямым переводом на счёт в Euro bank (только для пожертвований в Евро) и через систему PayPal."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Пожертвования в адрес {username} могут быть выполнены дебетовыми и кредитными картами ({list_of_card_brands}), прямым переводом на счёт в Euro bank (только для пожертвований в Евро) и через систему PayPal."
 
 msgid "Country"
 msgstr "Страна"
@@ -2161,7 +2161,8 @@ msgstr "Несохранённые изменения будут потерян�
 msgid "Discard"
 msgstr "Отклонить"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Опишите свою работу, почему вы просите делать пожертвования, и т.д. Нам нужно как краткое, так и полное описание."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2409,7 +2410,8 @@ msgstr "Обновить сейчас"
 msgid "Pending payment completion."
 msgstr "Ожидается завершение платежа."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Ожидание платежа."
 
 msgid "Renew"
@@ -2466,7 +2468,8 @@ msgstr "Мы можем объединить эти пожертвования �
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Ваши пожертвования в пользу {recipients} ожидают оплаты."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Данное пожертвование может быть обновлено только через сайт PayPal."
 
 msgid "Please choose a payment method:"
@@ -3863,8 +3866,9 @@ msgstr "Какие страны и валюты поддерживаются?"
 msgid "See the “{page_name}” page."
 msgstr "Смотрите страницу “{page_name}”."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Доступные способы оплаты зависят от того, какие платежные системы поддерживаются получателем. Если платеж обрабатывается Stripe, то принимаются большинство кредитных и дебетовых карт (Visa, MasterCard, American Express), а также прямые дебетовые платежи SEPA (только для пожертвований в евро). Если платеж осуществляется через PayPal, то оплатить можно различными способами, однако спонсору необходимо иметь или создать учетную запись PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "Доступные способы оплаты зависят от того, какие платежные системы поддерживаются получателем. Если платеж обрабатывается Stripe, то принимаются большинство кредитных и дебетовых карт ({list_of_card_brands}), а также прямые дебетовые платежи SEPA (только для пожертвований в евро). Если платеж осуществляется через PayPal, то оплатить можно различными способами, однако спонсору необходимо иметь или создать учетную запись PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Сколько составляет комиссия за перевод?"
@@ -5054,7 +5058,8 @@ msgstr[0] "Вы подписаны на {n} аккаунт на {platform}."
 msgstr[1] "Вы подписаны на {n} аккаунта на {platform}."
 msgstr[2] "Вы подписаны на {n} аккаунтов на {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "Введённый вами адрес некорректен: в нём нет символа \"@\"."
 
 msgid "Which account?"

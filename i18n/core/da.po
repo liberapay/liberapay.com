@@ -1634,16 +1634,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donationer til {username} kan betales ved hjælp af et kredit- eller betalingskort (Visa, MasterCard, American Express) eller ved direkte debitering af en Euro bankkonto (kun til donationer i Euro)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Donationer til {username} kan betales ved hjælp af et kredit- eller betalingskort ({list_of_card_brands}) eller ved direkte debitering af en Euro bankkonto (kun til donationer i Euro)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donationer til {username} bliver håndteret gennem PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort (Visa, MasterCard, American Express), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort ({list_of_card_brands}), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
 
 msgid "Country"
 msgstr "Land"
@@ -2141,7 +2141,8 @@ msgstr "Du har ikke savet ændringerne endnu, er du sikker på at du vil droppe 
 msgid "Discard"
 msgstr "Kassér"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Beskriv dit arbejde, hvorfor du søger bidrag, osv. Vi har både brug for et kort resumé og en fuld erklæring."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2387,7 +2388,8 @@ msgstr "Forny nu"
 msgid "Pending payment completion."
 msgstr "Afventer afslutning af betaling."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Venter på betaling."
 
 msgid "Renew"
@@ -2443,7 +2445,8 @@ msgstr "Vi kan samle disse donationer i en enkelt betaling."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Din donation til {recipients} venter betaling."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "For øjeblikket kan denne donation kun fornyes eksternt via PayPal."
 
 msgid "Please choose a payment method:"
@@ -3822,8 +3825,9 @@ msgstr "Hvilke lande og valutaer understøttes?"
 msgid "See the “{page_name}” page."
 msgstr "Se “{page_name}” siden."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "De tilgængelige betalingsmetoder afhænger af, hvilke betalingsprocessorer der understøttes af modtageren. Hvis en betaling behandles af Stripe, accepteres de fleste kredit- og betalingskort (Visa, MasterCard, American Express) samt SEPA Direct Debits (kun til Euro-donationer). Hvis en betaling er via PayPal, så er det muligt at betale på forskellige måder, men donoren skal have eller oprette en PayPal-konto."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "De tilgængelige betalingsmetoder afhænger af, hvilke betalingsprocessorer der understøttes af modtageren. Hvis en betaling behandles af Stripe, accepteres de fleste kredit- og betalingskort ({list_of_card_brands}) samt SEPA Direct Debits (kun til Euro-donationer). Hvis en betaling er via PayPal, så er det muligt at betale på forskellige måder, men donoren skal have eller oprette en PayPal-konto."
 
 msgid "What are the payment processing fees?"
 msgstr "Hvad er overførselsgebyrerne?"
@@ -4979,7 +4983,8 @@ msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "Du følger {n} konto på {platform}."
 msgstr[1] "Du følger {n} konti på {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "Adressen du har angivet er ikke gyldig: den indeholder ikke noget \"@\" symbol."
 
 msgid "Which account?"

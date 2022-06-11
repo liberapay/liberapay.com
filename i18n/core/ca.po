@@ -1634,16 +1634,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} encara no ha configurat cap mètode de pagament, per això ara mateix no es pot processar el vostre donatiu. Quan el pagament sigui possible, us ho notificarem."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Es poden fer donatius a {username} amb una targeta de crèdit, de dèbit (Visa, MasterCard o American Express) o via càrrec per domiciliació d'un compte bancari europeu (només per a donatius en euros)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Es poden fer donatius a {username} amb una targeta de crèdit, de dèbit ({list_of_card_brands}) o via càrrec per domiciliació d'un compte bancari europeu (només per a donatius en euros)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Els donatius a {username} es processen via PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Els donatius a {username} es poden pagar: amb targeta de crèdit o dèbit (Visa, MasterCard o American Express), amb un compte bancari europeu (càrrec directe SEPA), o amb un compte PayPal."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Els donatius a {username} es poden pagar: amb targeta de crèdit o dèbit ({list_of_card_brands}), amb un compte bancari europeu (càrrec directe SEPA), o amb un compte PayPal."
 
 msgid "Country"
 msgstr "País"
@@ -2141,7 +2141,8 @@ msgstr "No heu desat els canvis. Esteu segur de voler descartar-los?"
 msgid "Discard"
 msgstr "Descarta"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Descriviu la tasca que feu, per què demaneu donatius, etc. Ens calen un resum breu i una presentació completa."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2387,7 +2388,8 @@ msgstr "Renova-ho ara"
 msgid "Pending payment completion."
 msgstr "Compleció del pagament pendent."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Pagament en espera."
 
 msgid "Renew"
@@ -2443,7 +2445,8 @@ msgstr "Podem agrupar aquests donatius en un pagament únic."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Els donatius a {recipients} estan pendents de pagament."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Ara per ara, aquest donatiu només es pot renovar externament via PayPal."
 
 msgid "Please choose a payment method:"
@@ -3823,8 +3826,9 @@ msgstr "Quins països i divises s'admeten?"
 msgid "See the “{page_name}” page."
 msgstr "Vegeu la pàgina «{page_name}»."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Els mètodes de pagament disponibles depenen dels processadors de pagament admesos pel destinatari. Si el pagament es processa via Stripe, s'accepten la majoria de targetes de crèdit i dèbit (Visa, MasterCard i American Express), també els càrrecs directes SEPA (només per a donatius en euros). Si el pagament és via PayPal, llavors també és possible fer el pagament amb la majoria de targetes de crèdit i dèbit, però cal que el donant tingui o crei un compte PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "Els mètodes de pagament disponibles depenen dels processadors de pagament admesos pel destinatari. Si el pagament es processa via Stripe, s'accepten la majoria de targetes de crèdit i dèbit ({list_of_card_brands}), també els càrrecs directes SEPA (només per a donatius en euros). Si el pagament és via PayPal, llavors també és possible fer el pagament amb la majoria de targetes de crèdit i dèbit, però cal que el donant tingui o crei un compte PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Quines són les comissions de processament de pagaments?"
@@ -4980,7 +4984,8 @@ msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "Seguiu {n} compte a {platform}."
 msgstr[1] "Segueixes {n} comptes a {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "L'adreça que heu indicat no és vàlida: no conté cap símbol «@»."
 
 msgid "Which account?"

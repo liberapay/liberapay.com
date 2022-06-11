@@ -1649,16 +1649,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} zatím nenakonfigurovalo žádný způsob platby, takže váš dar nemůže být nyní zpracován. Jakmile bude platba možná, budeme vás informovat."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Příspěvky na účet {username} lze platit kreditní nebo debetní kartou (Visa, MasterCard, American Express) nebo přímým inkasem z bankovního účtu v eurech (pouze pro příspěvky v eurech)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Příspěvky na účet {username} lze platit kreditní nebo debetní kartou ({list_of_card_brands}) nebo přímým inkasem z bankovního účtu v eurech (pouze pro příspěvky v eurech)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Příspěvky pro {username} jsou zpracovávány přes PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Příspěvky na účet {username} lze platit pomocí: kreditní nebo debetní karty (Visa, MasterCard, American Express), bankovního účtu v eurech (SEPA Direct Debit) nebo účtu PayPal."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Příspěvky na účet {username} lze platit pomocí: kreditní nebo debetní karty ({list_of_card_brands}), bankovního účtu v eurech (SEPA Direct Debit) nebo účtu PayPal."
 
 msgid "Country"
 msgstr "Země"
@@ -2161,7 +2161,8 @@ msgstr "Neuložili jste změny, jste si jistý, že je chcete zahodit?"
 msgid "Discard"
 msgstr "Zahodit"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Popište vaši práci, proč chcete příspěvky apod. Potřebujeme jak krátký souhrn, tak celé vyjádření."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2409,7 +2410,8 @@ msgstr "Obnovit nyní"
 msgid "Pending payment completion."
 msgstr "Čeká se na dokončení platby."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Čeká se na platbu."
 
 msgid "Renew"
@@ -2466,7 +2468,8 @@ msgstr "Tyto příspěvky můžeme seskupit do jedné platby."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Vaše příspěvky pro {recipients} čekají na zaplacení."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Prozatím lze tento příspěvek obnovit pouze externě přes PayPal."
 
 msgid "Please choose a payment method:"
@@ -3862,8 +3865,9 @@ msgstr "Které země a měny jsou podporovány?"
 msgid "See the “{page_name}” page."
 msgstr "Viz stránka „{page_name}“."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Dostupné platební metody závisí na tom, které platební procesory příjemce podporuje. Pokud platbu zpracovává Stripe, je přijímána většina kreditních a debetních karet (Visa, MasterCard, American Express) a také SEPA inkasa (pouze pro příspěvky v eurech). Pokud platba probíhá prostřednictvím služby PayPal, pak je možné platit různými způsoby, dárce však musí mít nebo si vytvořit účet PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "Dostupné platební metody závisí na tom, které platební procesory příjemce podporuje. Pokud platbu zpracovává Stripe, je přijímána většina kreditních a debetních karet ({list_of_card_brands}) a také SEPA inkasa (pouze pro příspěvky v eurech). Pokud platba probíhá prostřednictvím služby PayPal, pak je možné platit různými způsoby, dárce však musí mít nebo si vytvořit účet PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Jaké jsou poplatky za zpracování plateb?"
@@ -5053,7 +5057,8 @@ msgstr[0] "Sledujete {n} účet na {platform}."
 msgstr[1] "Sledujete {n} účty na {platform}."
 msgstr[2] "Sledujete {n} účtů na {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "Adresa, kterou jste zadali není platná: neobsahuje žádný symbol „@“."
 
 msgid "Which account?"

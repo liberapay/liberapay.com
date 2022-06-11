@@ -1619,7 +1619,7 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} さんはまだ支払い方法を設定していないため、寄付を今すぐには処理できません。支払いが可能になった際に通知を送信します。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
 msgstr "{username} への寄付は、クレジットカードまたはデビットカード（Visa, MasterCard, American Express）、またはユーロ建ての銀行口座からの口座自動振替（ユーロによる寄付の場合のみ）で支払うことができます。"
 
 #, python-brace-format
@@ -1627,7 +1627,7 @@ msgid "Donations to {username} are processed through PayPal."
 msgstr "{username} さんへの寄付は PayPal を通じて処理されます。"
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "{username} への寄付は、クレジットカードまたはデビットカード（Visa, MasterCard, American Express）、ユーロ建て銀行口座（SEPA 口座自動振替）、または PayPal アカウントを使用して支払うことができます。"
 
 msgid "Country"
@@ -2121,7 +2121,8 @@ msgstr "変更が保存されていません。変更を破棄してもよろし
 msgid "Discard"
 msgstr ""
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "あなたの作品、寄付を求めている理由などを説明してください。短い要約と完全な声明の両方が必要です。"
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2365,7 +2366,8 @@ msgstr "今すぐ更新"
 msgid "Pending payment completion."
 msgstr "支払い完了を待っています。"
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "支払いを待機しています。"
 
 msgid "Renew"
@@ -2420,7 +2422,8 @@ msgstr "これらの寄付を一つの支払いにまとめることができま
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "あなたの {recipients} さんへの寄付は支払い待機中です。"
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "今のところ、この寄付は PayPal による外部の更新のみが可能です。"
 
 msgid "Please choose a payment method:"
@@ -3782,7 +3785,8 @@ msgstr "どの国と通貨がサポートされていますか？"
 msgid "See the “{page_name}” page."
 msgstr "“{page_name}” ページをご覧ください。"
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
 msgstr "使用可能な支払方法は受け取り側がサポートする決済業者によって異なります。支払いStripeによって処理される場合、ほとんどのクレジットカードとデビットカード（Visa、MasterCard、American Express）とSEPA口座引落（ユーロ寄付のみ）が利用可能です。支払いがPayPalを介して行われる場合、様々な方法で支払うことは可能ですが、寄付側はPayPalアカウントを持っているか、作成する必要があります。"
 
 msgid "What are the payment processing fees?"
@@ -4905,7 +4909,8 @@ msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] ""
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "指定されたアドレスは有効ではありません。“@\"（アットマーク）記号が含まれていません。"
 
 msgid "Which account?"

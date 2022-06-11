@@ -1649,16 +1649,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} nie skonfigurował jeszcze żadnej metody płatności, więc Twoja darowizna nie może być teraz przetworzona. Powiadomimy Cię, gdy płatność stanie się możliwa."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card (Visa, MasterCard, American Express), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Darowizny na adres {username} można zapłacić za pomocą karty kredytowej lub debetowej (Visa, MasterCard, American Express) lub za pomocą polecenia zapłaty z rachunku bankowego w euro (tylko w przypadku darowizn w euro)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
+msgstr "Darowizny na adres {username} można zapłacić za pomocą karty kredytowej lub debetowej ({list_of_card_brands}) lub za pomocą polecenia zapłaty z rachunku bankowego w euro (tylko w przypadku darowizn w euro)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Darowizny na adres {username} są przetwarzane za pośrednictwem PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card (Visa, MasterCard, American Express), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Darowizny dla {username} można zapłacić za pomocą: karty kredytowej lub debetowej (Visa, MasterCard, American Express), konta bankowego w euro (polecenie zapłaty SEPA) lub konta PayPal."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr "Darowizny dla {username} można zapłacić za pomocą: karty kredytowej lub debetowej ({list_of_card_brands}), konta bankowego w euro (polecenie zapłaty SEPA) lub konta PayPal."
 
 msgid "Country"
 msgstr "Kraj"
@@ -2161,7 +2161,8 @@ msgstr "Nie zapisano zmian, czy na pewno chcesz je odrzucić?"
 msgid "Discard"
 msgstr "Odrzuć"
 
-msgid "Describe your work, why you're asking for donations, etc. We need both a short summary and a full statement."
+#, fuzzy
+msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
 msgstr "Opisz czym się zajmujesz, dlaczego prosisz o darowizny, itp. Potrzebujemy zarówno krótkiego podsumowania, jak i pełnego oświadczenia."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
@@ -2409,7 +2410,8 @@ msgstr "Odnów teraz"
 msgid "Pending payment completion."
 msgstr "Oczekiwanie na ukończenie płatności."
 
-msgid "Awaiting payment."
+#, fuzzy
+msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Oczekująca płatność."
 
 msgid "Renew"
@@ -2466,7 +2468,8 @@ msgstr "Jesteśmy w stanie zgrupować te darowizny w jedną płatność."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Twoje darowizny dla {recipients} oczekują na płatność."
 
-msgid "For now this donation can only be renewed externally through PayPal."
+#, fuzzy
+msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Na razie darowiznę można odnowić tylko zewnętrznie za pośrednictwem PayPal."
 
 msgid "Please choose a payment method:"
@@ -3863,8 +3866,9 @@ msgstr "Które kraje i waluty są obsługiwane?"
 msgid "See the “{page_name}” page."
 msgstr "Zobacz stronę „{page_name}”."
 
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards (Visa, MasterCard, American Express) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Dostępne metody płatności zależą od tego, które procesory płatności są obsługiwane przez odbiorcę. Jeśli płatność jest przetwarzana przez Stripe, akceptowana jest większość kart kredytowych i debetowych (Visa, MasterCard, American Express), a także polecenia zapłaty SEPA (tylko w przypadku darowizn w euro). Jeśli płatność odbywa się za pośrednictwem PayPal, możliwe jest dokonanie płatności na różne sposoby, jednak darczyńca musi mieć lub utworzyć konto PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr "Dostępne metody płatności zależą od tego, które procesory płatności są obsługiwane przez odbiorcę. Jeśli płatność jest przetwarzana przez Stripe, akceptowana jest większość kart kredytowych i debetowych ({list_of_card_brands}), a także polecenia zapłaty SEPA (tylko w przypadku darowizn w euro). Jeśli płatność odbywa się za pośrednictwem PayPal, możliwe jest dokonanie płatności na różne sposoby, jednak darczyńca musi mieć lub utworzyć konto PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Ile wynoszą opłaty za obsługę płatności?"
@@ -5054,7 +5058,8 @@ msgstr[0] "Śledzisz {n} konto na {platform}."
 msgstr[1] "Śledzisz {n} konta na {platform}."
 msgstr[2] "Śledzisz {n} kont na {platform}."
 
-msgid "The address you provided is not valid: it doesn't contain any “@” symbol."
+#, fuzzy
+msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "Adres, który podałeś(-aś), jest nieprawidłowy: nie zawiera symbolu “@”."
 
 msgid "Which account?"
