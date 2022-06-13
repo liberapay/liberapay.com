@@ -7,6 +7,7 @@
 
 % macro team_takes_table(team, cls='')
     % set members = team.get_members()
+    % set paydays = website.compute_previous_and_next_payday_dates()
     % if user.id in members and members[user.id]['max_this_week']
         <p>{{ _(
             "Your nominal take from the {0} team is limited to {1} this week. "
@@ -20,8 +21,8 @@
       <thead>
         <tr>
           <th></th>
-          <th>{{ _("Last Payday") }}</th>
-          <th colspan=2>{{ _("Next Payday") }}</th>
+          <th>{{ _("Last Payday") }} ({{ paydays.last_payday }})</th>
+          <th colspan=2>{{ _("Next Payday") }} ({{ paydays.next_payday }})</th>
         </tr>
         <tr>
           <th>{{ _("Member") }}</th>

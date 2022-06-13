@@ -4,12 +4,14 @@ To avoid circular imports this module should not import any other liberapay subm
 """
 
 from contextvars import ContextVar, copy_context
+from datetime import timedelta
 import logging
 import os
 
 from cached_property import cached_property
 from environment import Environment, is_yesish
 from markupsafe import Markup
+import pando.utils
 from pando.website import Website as _Website
 
 
@@ -22,6 +24,22 @@ class Website(_Website):
         return Markup('<a href="{}://{}/%s">%s</a>').format(
             self.canonical_scheme, self.canonical_host
         )
+
+    def compute_previous_and_next_payday_dates(self):
+        today = pando.utils.utcnow().date()
+        days_till_wednesday = (3 - today.isoweekday()) % 7
+        last_payday = website.db.one("""
+            SELECT ts_end::date
+            FROM paydays
+            WHERE ts_end > ts_start
+            ORDER BY ts_end DESC
+            LIMIT 1
+        """, (today,))
+        if last_payday == today:
+            days_till_wednesday = 7
+        next_payday = today + timedelta(days=days_till_wednesday)
+        paydays = {"last_payday": last_payday, "next_payday": next_payday}
+        return paydays
 
     def link(self, path, text):
         return self._html_link % (path, text)
