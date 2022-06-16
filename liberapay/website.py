@@ -28,18 +28,17 @@ class Website(_Website):
     def compute_previous_and_next_payday_dates(self):
         today = pando.utils.utcnow().date()
         days_till_wednesday = (3 - today.isoweekday()) % 7
-        last_payday = website.db.one("""
+        last_payday = self.db.one("""
             SELECT ts_end::date
               FROM paydays
              WHERE ts_end > ts_start
           ORDER BY ts_end DESC
              LIMIT 1
-        """, (today,))
+        """)
         if last_payday == today:
             days_till_wednesday = 7
         next_payday = today + timedelta(days=days_till_wednesday)
-        paydays = {"last_payday": last_payday, "next_payday": next_payday}
-        return paydays
+        return last_payday, next_payday
 
     def link(self, path, text):
         return self._html_link % (path, text)
