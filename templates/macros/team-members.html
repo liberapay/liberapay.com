@@ -21,8 +21,8 @@
       <thead>
         <tr>
           <th></th>
-          <th>{{ _("Last Payday") }} ({{ paydays.last_payday }})</th>
-          <th colspan=2>{{ _("Next Payday") }} ({{ paydays.next_payday }})</th>
+          <th>{{ _("Last Payday") }} ({{ locale.format_date(paydays.last_payday) }})</th>
+          <th colspan=2>{{ _("Next Payday") }} ({{ locale.format_date(paydays.next_payday) }})</th>
         </tr>
         <tr>
           <th>{{ _("Member") }}</th>
