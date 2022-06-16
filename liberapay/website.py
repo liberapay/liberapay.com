@@ -11,7 +11,7 @@ import os
 from cached_property import cached_property
 from environment import Environment, is_yesish
 from markupsafe import Markup
-import pando.utils
+from pando.utils import utcnow
 from pando.website import Website as _Website
 
 
@@ -26,7 +26,7 @@ class Website(_Website):
         )
 
     def compute_previous_and_next_payday_dates(self):
-        today = pando.utils.utcnow().date()
+        today = utcnow().date()
         days_till_wednesday = (3 - today.isoweekday()) % 7
         last_payday = self.db.one("""
             SELECT ts_end::date
