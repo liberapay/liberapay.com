@@ -4,31 +4,45 @@ title = _("Global")
 % extends "templates/layouts/about.html"
 % block content
 
-<p>{{ ngettext(
-    "",
-    "Liberapay is available to creators in {stripe_link_open}{n} countries "
-    "through Stripe{link_close} and {paypal_link_open}more than 200 countries "
-    "through PayPal{link_close}.",
-    n=len(constants.PAYOUT_COUNTRIES['stripe']),
-    stripe_link_open='<a href="https://stripe.com/global">'|safe,
-    paypal_link_open='<a href="https://www.paypal.com/webapps/mpp/country-worldwide">'|safe,
-    link_close='</a>'|safe
-) }}</p>
+<h4>{{ _("Donate") }}</h4>
+
+<p>{{ _("Donations can come from anywhere in the world.") }}</p>
 
 <p>{{ ngettext(
     "",
-    "Donations can be in any of these {n} currencies:",
+    "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor.",
     n=len(constants.CURRENCIES)
 ) }}</p>
 
 <ul class="columns-sm-2 columns-md-3">
-% for c in constants.CURRENCIES
-    <li>{{ locale.title(locale.currencies.get(c, c)) }} ({{ c }})</li>
+% for c, localized_currency_name in locale.supported_currencies.items()
+    <li>{{ localized_currency_name }} ({{ c }})</li>
 % endfor
 </ul>
 
-<p>{{ _(
-    "Each creator can select which of these currencies to accept."
+<h4>{{ _("Receive") }}</h4>
+
+<p>{{ ngettext(
+    "",
+    "Liberapay is fully available to creators in {n} territories:",
+    n=len(constants.PAYOUT_COUNTRIES['stripe']),
+) }}</p>
+
+<ul class="columns-sm-2 columns-md-4">
+% for country_code, localized_country_name in locale.countries.items()
+% if country_code in constants.PAYOUT_COUNTRIES['stripe']
+    <li>{{ localized_country_name }}</li>
+% endif
+% endfor
+</ul>
+
+<p>{{ ngettext(
+    "",
+    "Additionally, Liberapay is partially available to creators in "
+    "{paypal_link_open}the {n} countries supported by PayPal{link_close}.",
+    n=len(constants.PAYOUT_COUNTRIES['paypal']),
+    paypal_link_open='<a href="https://www.paypal.com/webapps/mpp/country-worldwide">'|safe,
+    link_close='</a>'|safe
 ) }}</p>
 
 % endblock
