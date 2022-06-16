@@ -30,10 +30,10 @@ class Website(_Website):
         days_till_wednesday = (3 - today.isoweekday()) % 7
         last_payday = website.db.one("""
             SELECT ts_end::date
-            FROM paydays
-            WHERE ts_end > ts_start
-            ORDER BY ts_end DESC
-            LIMIT 1
+              FROM paydays
+             WHERE ts_end > ts_start
+          ORDER BY ts_end DESC
+             LIMIT 1
         """, (today,))
         if last_payday == today:
             days_till_wednesday = 7
