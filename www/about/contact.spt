@@ -4,15 +4,6 @@ title = _("Contact")
 % extends "templates/layouts/about.html"
 % block content
 
-    <h4>{{ _("To contact the Liberapay team privately:") }}</h4>
-    <p><a class="btn btn-primary" data-email="support&#64;liberapay.com"
-          >{{ _("Send us an email") }}</a></p>
-    <p>{{ _(
-        "If your message isn't written in English or French, then it will be translated "
-        "automatically by a machine. Our reply will be translated to your language "
-        "the same way."
-    ) }}</p>
-    <p>{{ _("We currently don't have a phone number.") }}</p>
     <p class="text-warning">{{ glyphicon("minus-sign") }} {{ _(
         "Do not contact us if you are trying to reach one of our users. We do not "
         "relay messages, and we cannot reveal the identity or contact details of "
@@ -20,8 +11,29 @@ title = _("Contact")
     ) }}</p>
 
     <br>
-    <h4>{{ _("To report a problem or make a suggestion in English:") }}</h4>
-    <p><a class="btn btn-default" href="https://github.com/liberapay/liberapay.com/issues/new"
-          >{{ _("Open an issue on GitHub") }}</a></p>
+    <h4>{{ _("To contact us privately:") }}</h4>
+    <p><a class="btn btn-primary" data-email="support&#64;liberapay.com">{{
+        _("Send an email to Liberapay")
+    }}</a></p>
+    <p>{{ _(
+        "If your message isn't written in English or French, then it will be translated "
+        "automatically by a machine. Our reply will be translated to your language "
+        "the same way."
+    ) }}</p>
+    <p>{{ _(
+        "If you think you've found a technical vulnerability in our system, please "
+        "follow the instructions in {link_start}the {page_name} page{link_end} "
+        "instead of sending us an email.",
+        link_start='<a href="/about/security">'|safe,
+        page_name=_("Security"),
+        link_end='</a>'|safe,
+    ) }}</p>
+    <p>{{ _("We currently don't have a phone number.") }}</p>
+
+    <br>
+    <h4>{{ _("To report a problem or make a suggestion publicly:") }}</h4>
+    <p><a class="btn btn-default" href="https://github.com/liberapay/liberapay.com/issues/new">{{
+        _("Open an issue on GitHub")
+    }}</a></p>
 
 % endblock
