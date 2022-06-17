@@ -35,7 +35,7 @@ class Website(_Website):
           ORDER BY ts_end DESC
              LIMIT 1
         """)
-        if last_payday == today:
+        if days_till_wednesday == 0 and last_payday == today:
             days_till_wednesday = 7
         next_payday = today + timedelta(days=days_till_wednesday)
         return last_payday, next_payday
