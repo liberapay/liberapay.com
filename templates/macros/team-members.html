@@ -21,8 +21,8 @@
       <thead>
         <tr>
           <th></th>
-          <th>{{ _("Last Payday") }}<br>({{ locale.format_date(last_payday) if last_payday else _("n/a") }})</th>
-          <th colspan=2>{{ _("Next Payday") }}<br>({{ locale.format_date(next_payday) }})</th>
+          <th>{{ _("Last Payday") }}<br><small>({{ locale.format_date(last_payday) if last_payday else _("n/a") }})</small></th>
+          <th colspan=2>{{ _("Next Payday") }}<br><small>({{ locale.format_date(next_payday) }})</small></th>
         </tr>
         <tr>
           <th>{{ _("Member") }}</th>
