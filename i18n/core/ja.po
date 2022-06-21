@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"PO-Revision-Date: 2022-06-21 07:48+0000\n"
+"Last-Translator: Bianca Emi <bemi.brando@outlook.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
@@ -169,7 +171,7 @@ msgstr "{0} への請求が承認されて支払われました - Liberapay"
 
 #, python-brace-format
 msgid "Your invoice of {amount} to {addressee_name} has been paid."
-msgstr ""
+msgstr "{addressee_name}への{amount}の請求が支払われました。"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -322,7 +324,7 @@ msgstr "支払いに失敗しました"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr ""
+msgstr "今日開始された{money_amount}の自動払いが失敗してしました。"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
@@ -1934,13 +1936,13 @@ msgid "One-time donations aren't properly supported yet, but you can discontinue
 msgstr ""
 
 msgid "What is this website? I don't recognize it."
-msgstr ""
+msgstr "このサイトは何ですか？見覚えがありません。"
 
 msgid "You're on Liberapay, a donation platform maintained by a non-profit organisation based in France."
-msgstr ""
+msgstr "あなたはLiberapayにいます。フランスに拠点を置く非営利団体によって維持されている寄付サイトです。"
 
 msgid "Is this platform secure?"
-msgstr ""
+msgstr "このサイトは安全ですか？"
 
 #, python-brace-format
 msgid "Liberapay has been running for {timedelta} without any significant security incident. We do everything we can to keep your data safe and comply with the laws of the European Union ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end}, et cetera)."
