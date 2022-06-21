@@ -26,7 +26,6 @@ class Mastodon(PlatformOAuth2):
     auth_url = 'https://{domain}/oauth/authorize'
     access_token_url = 'https://{domain}/oauth/token'
     can_auth_with_client_credentials = True
-    oauth_default_scope = ['read:accounts']
 
     # API attributes
     # https://docs.joinmastodon.org/api/rest/accounts/

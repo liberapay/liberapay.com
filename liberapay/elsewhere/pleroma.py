@@ -11,8 +11,5 @@ class Pleroma(Mastodon):
     account_url = 'https://{domain}/{user_name}'
     single_domain = False
 
-    # Auth attributes
-    oauth_default_scope = []
-
     def example_account_address(self, _):
         return _('example@pleroma.site')
