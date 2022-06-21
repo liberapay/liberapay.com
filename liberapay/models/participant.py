@@ -850,6 +850,20 @@ class Participant(Model, MixinTeam):
         for route in routes:
             route.invalidate()
 
+    def store_feedback(self, feedback):
+        """Store feedback in database if provided by user
+        """
+        feedback = '' if feedback is None else feedback.strip()
+        if feedback:
+            self.db.run("""
+                INSERT INTO feedback
+                            (participant, feedback)
+                     VALUES (%s, %s)
+                ON CONFLICT (participant) DO UPDATE
+                        SET feedback = excluded.feedback
+                          , ctime = excluded.ctime
+            """, (self.id, feedback))
+
     @cached_property
     def closed_time(self):
         return self.db.one("""
