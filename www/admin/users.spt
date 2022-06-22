@@ -27,7 +27,7 @@ if request.method == 'POST':
                 UPDATE participants
                    SET marked_as = %(new_value)s
                  WHERE id = %(p_id)s
-                   AND coalesce(marked_as::text, '') <> %(new_value)s
+                   AND coalesce(marked_as::text, '') <> coalesce(%(new_value)s, '')
              RETURNING id
             """, dict(p_id=p.id, new_value=new_value))
             if r:
