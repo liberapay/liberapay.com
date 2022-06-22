@@ -439,12 +439,8 @@ title = _("Funding your donations")
 
         <div class="text-info">{{ glyphicon('info-sign') }} {{ _(
             "Liberapay does not store money, the entire amount of your payment will "
-            "go immediately to the {payment_provider} accounts of {recipient_names}.",
-            payment_provider='Stripe', recipient_names=payment.recipient_names
-        ) if len(payment.recipient_names) > 1 else _(
-            "Liberapay does not store money, the entire amount of your payment will "
-            "go immediately to the {payment_provider} account of {recipient_name}.",
-            payment_provider='Stripe', recipient_name=payment.recipient_names[0]
+            "go immediately to the {payment_provider} accounts of the recipients.",
+            payment_provider='Stripe',
         ) }}</div>
         <br>
 
