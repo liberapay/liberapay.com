@@ -864,6 +864,25 @@ class Participant(Model, MixinTeam):
                           , ctime = excluded.ctime
             """, (self.id, feedback))
 
+    @classmethod
+    def delete_old_feedback(cls):
+        """Delete old user feedback.
+        """
+        n = cls.db.one("""
+            WITH deleted AS (
+                DELETE FROM feedback
+                 WHERE ctime < current_date - interval '1 year'
+                   AND coalesce((
+                           SELECT status = 'active'
+                             FROM participants
+                            WHERE id = feedback.participant
+                       ), true)
+             RETURNING 1
+            ) SELECT count(*) FROM deleted
+        """)
+        if n:
+            website.logger.info(f"Deleted {n} old feedbacks.")
+
     @cached_property
     def closed_time(self):
         return self.db.one("""
