@@ -1,7 +1,4 @@
-
-form[disabled] button {
-    pointer-events: none;
-}
+// Date inputs
 
 input.form-control[type="date"] {
     // Override some of Bootstrap's styles for `.form-control`
@@ -9,6 +6,31 @@ input.form-control[type="date"] {
     padding-top: 0;
     width: auto;
 }
+
+// Labels
+
+label:not([for]) {
+    font-weight: normal;
+    vertical-align: top;
+    span:first-child {
+        font-weight: 700;
+    }
+}
+
+.block-labels label {
+    display: block;
+}
+.block-labels-mb-4 label {
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+.inline-labels > label {
+    display: inline-block;
+    margin: 0 3ex 5px 0;
+}
+
+// Tweaks of Bootstrap's input groups
 
 .input-group-btn > select.btn {
     -moz-appearance: none;
@@ -41,52 +63,86 @@ input.form-control[type="date"] {
     border-left: none;
 }
 
-.radio > .with-input-group-sm {
-    & > input[type=radio] {
-        top: 5px;
-    }
-    & > div {
-        display: inline-block;
-        vertical-align: middle;
-    }
+// Buttons
+
+button.close {
+    margin-left: 5px;
+    padding: 0 5px;
 }
 
-label:not([for]) {
-    font-weight: normal;
-    vertical-align: top;
-    span:first-child {
-        font-weight: 700;
-    }
-}
-
-.form-group-small {
-    margin-bottom: 5px;
-    > label {
-        margin-bottom: 0;
+button.corner-icon {
+    background: transparent;
+    border: none;
+    color: #000;
+    float: right;
+    font-size: 18px;
+    line-height: 24px;
+    margin-left: 5px;
+    opacity: 0.2;
+    padding: 0 5px;
+    &:hover {
+        opacity: 0.5;
     }
 }
 
-.input-help {
-    display: inline-block;
-    padding: 5px;
-    vertical-align: middle;
+.btn {
+    transition: all 0.1s ease-in;
 }
 
-.block-labels label {
-    display: block;
-}
-.block-labels-mb-4 label {
-    display: block;
-    margin-bottom: 1.5rem;
+.btn-donate {
+    $base-color: #ffee16;
+    background-color: $base-color;
+    color: #1a171b;
+    &:hover {
+        background-color: lighten($base-color, 15%);
+    }
 }
 
-.inline-labels > label {
-    display: inline-block;
-    margin: 0 3ex 5px 0;
+.btn-pledge {
+    $base-color: #ffee16;
+    background-color: lighten($base-color, 5%);
+    color: #7f6e06;
+    &:hover {
+        background-color: lighten($base-color, 20%);
+        color: #5f4e06;
+    }
+}
+
+.btn-donating {
+    $base-color: lighten(#f6c915, 5%);
+    background-color: $base-color;
+    color: #1a171b;
+    &:hover {
+        background-color: lighten($base-color, 10%);
+    }
+}
+
+.buttons > .btn {
+    margin: 0 1ex 0.8em 0;
+    white-space: normal;
+}
+
+form.buttons > .btn, span.buttons > .btn {
+    margin: 5px 2ex 5px 0;
+}
+
+.btn-wrap {
+    white-space: normal;
+}
+
+form[disabled] button {
+    pointer-events: none;
 }
 
 .btn-block + p {
     margin-top: 0.5em;
+}
+
+.hover-danger:hover {
+    color: $state-danger-text !important;
+}
+.hover-info:hover {
+    color: $state-info-text !important;
 }
 
 // Input errors and warnings
@@ -144,7 +200,25 @@ input.abnormal + .tooltip, input.invalid + .tooltip {
     display: none !important;
 }
 
-// Radio lists
+// Textareas
+
+textarea.vertical-resize {
+    resize: vertical;
+}
+
+// Small input group in `.radio` list
+
+.radio > .with-input-group-sm {
+    & > input[type=radio] {
+        top: 5px;
+    }
+    & > div {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+// Bordered vertical radio lists
 
 .radio-group .list-group-item {
     padding: 0;
