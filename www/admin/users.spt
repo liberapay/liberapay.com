@@ -356,15 +356,6 @@ title = "Users Admin"
         % endif
         % endif
 
-        % if row.feedback
-        <div>
-            <strong>Feedback:</strong>
-            <div class="profile-statement embedded raw">{{ row.feedback }}</div>
-        </div>
-        % elif p.status == 'closed'
-        <p><strong>Feedback:</strong> none.<p>
-        %endif
-
         <div><strong>Profile descriptions:</strong>
         % if p.public_name
             <br>
@@ -387,6 +378,15 @@ title = "Users Admin"
             none. <span class="text-warning">{{ glyphicon('warning-sign') }}</span>
         % endif
         </div>
+
+        % if row.feedback
+        <div class="mt-3">
+            <strong>Feedback:</strong>
+            <div class="profile-statement embedded raw">{{ row.feedback }}</div>
+        </div>
+        % elif p.status == 'closed'
+        <div class="mt-3"><strong>Feedback:</strong> none.</div>
+        % endif
     % endif
     </div>
     <div class="col-md-4">

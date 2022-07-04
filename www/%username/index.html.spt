@@ -235,7 +235,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     <p>{{ ngettext("", "The top {n} patrons are:", len(public_patrons)) }}</p>
     % endif
 
-    <div class="paragraph">
+    <div class="mb-3">
     % for p in public_patrons
         <div class="mini-user">
             <a href="/~{{ p.id }}/">
@@ -273,7 +273,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         n=n_public_donees,
     ) }}</p>
 
-    <div class="paragraph">
+    <div class="mb-3">
     % for p in public_donees
         <div class="mini-user">
             <a href="/~{{ p.id }}/">

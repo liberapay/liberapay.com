@@ -59,7 +59,7 @@ if account:
 
 % block subnav
     % from "templates/macros/nav.html" import nav with context
-    <nav class="nav nav-pills">
+    <nav class="nav nav-pills mb-4">
         {{ nav(platforms_nav, base='/on') }}
     </nav>
 % endblock
@@ -67,12 +67,9 @@ if account:
 % block content
 
 % if len(accounts) > 1
-    <br>
-    <nav><ul class="nav nav-pills">{{ querystring_nav('e_user_id', accounts_nav, selected_account_id) }}</ul></nav>
-    <br>
+    <nav class="mb-4"><ul class="nav nav-pills">{{ querystring_nav('e_user_id', accounts_nav, selected_account_id) }}</ul></nav>
 % endif
 
-<div class="paragraph">
 % if user.ANON
     % from "templates/macros/sign-in-link.html" import sign_in_link with context
     {{ sign_in_link() }}<br>
@@ -111,6 +108,5 @@ if account:
 % endif
 
 % endif
-</div>
 
 % endblock

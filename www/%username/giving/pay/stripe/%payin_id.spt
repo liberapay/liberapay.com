@@ -498,8 +498,8 @@ title = _("Funding your donations")
         <fieldset id="card-form" class="form-group {{ 'hidden' if routes else '' }}">
             <p>{{ _("Please input your name and card number:") }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
-                   class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-            <div id="stripe-element" data-type="card" class="form-control paragraph"></div>
+                   class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+            <div id="stripe-element" data-type="card" class="form-control mb-3"></div>
             <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             <p class="help-block">{{ glyphicon('lock') }} {{ _(
                 "This data will be sent directly to the payment processor "
@@ -522,8 +522,8 @@ title = _("Funding your donations")
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
-                   class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-            <div id="stripe-element" data-type="iban" class="form-control paragraph"></div>
+                   class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+            <div id="stripe-element" data-type="iban" class="form-control mb-3"></div>
             <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             <p class="help-block">{{ _(
                 "By providing your IBAN and confirming this payment, you are authorizing "
