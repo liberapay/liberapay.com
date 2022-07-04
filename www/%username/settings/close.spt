@@ -53,15 +53,19 @@ subhead = participant.username
             "determine that you've been infringing a trademark)."
         ) }}</p>
         % endif
-        
+
+
+        <h3>{{ _("Feedback") }}</h3>
+
         <p>{{ _(
-            "Before you go, would you like to let us know why you're leaving? We can use your feedback to improve Liberapay."
+            "If you would like to tell us why you're closing your account, you "
+            "can leave a message here:"
         ) }}</p>
 
-        <textarea name="feedback" class="form-control"
-                maxlength="{{ constants.FEEDBACK_MAX_SIZE }}"
-                placeholder="{{ _('Reason for closing account') }}">
-        </textarea>
+        <textarea name="feedback" class="form-control" maxlength="{{ constants.FEEDBACK_MAX_SIZE }}"
+                  rows=3 placeholder="{{ _('Reason for closing account') }}"></textarea>
+        <p class="help-block">{{ _("Maximum length is {0}.", constants.FEEDBACK_MAX_SIZE) }}</p>
+
 
         <h3>{{ _("Ready?") }}</h3>
 
