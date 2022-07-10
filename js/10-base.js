@@ -120,6 +120,31 @@ Liberapay.init = function() {
     $('button[data-action="reload"]').on('click', function() {
         location.reload();
     });
+
+    // Create dynamic hint based on remaining length
+    $('input[maxlength], textarea[maxlength]').on('focus input', function() {
+        if (!maxLength) {
+            var maxLength = $(this).attr('maxlength');
+            $(this).data('maxLength', maxLength);
+            $(this).removeAttr('maxLength');
+        }
+
+        var maxLength = $(this).data('maxLength');
+        var remainingLength = maxLength - $(this).val().length;
+        var helpBlock = $(this).siblings('.help-block');
+
+        if ($(this).val().length) {
+            helpBlock.text(function (index, value) {
+                return value.slice(value.indexOf('.') + 1);
+            });
+            helpBlock.prepend(remainingLength + ' characters remaing.');
+        } else {
+            helpBlock.text(function (index, value) {
+                return value.slice(value.indexOf('.') + 1);
+            });
+            helpBlock.prepend('Maximum length is ' + maxLength + '.');
+        }
+    });
 };
 
 $(function(){ Liberapay.init(); });
