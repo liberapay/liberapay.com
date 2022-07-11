@@ -78,9 +78,7 @@ else:
 
     % if error
     <div class="alert alert-danger">{{ error }}</div>
-    % elif 'success' in request.qs
-    <div class="alert alert-success">{{ b64decode_s(request.qs.pop('success')) }}</div>
-    % else
+    % elif 'success' not in request.qs
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
     % endif
 

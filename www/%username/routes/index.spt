@@ -60,6 +60,23 @@ title = _("Payment Instruments")
 % block content
 
 % if routes
+    % if 'success' in request.qs
+        % set ntips_awaiting_payment = participant.get_tips_awaiting_payment()[1]
+        % if ntips_awaiting_payment
+            <div class="alert alert-info">
+            {{ ngettext(
+                "You have {n} donation awaiting payment.",
+                "You have {n} donations awaiting payment.",
+                n=ntips_awaiting_payment
+            ) }}
+            &nbsp;
+            <a class="btn btn-primary" href="{{ participant.path('giving/pay') }}">{{
+                ngettext("Renew this donation", "Renew these donations", ntips_awaiting_payment)
+            }}</a>
+            </div>
+        % endif
+    % endif
+
     <p>{{ ngettext(
         "You have {n} connected payment instrument.",
         "You have {n} connected payment instruments.",

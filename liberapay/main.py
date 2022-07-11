@@ -328,6 +328,14 @@ def _Querystring_serialize(self, **kw):
     return ('?' + urlencode(self, doseq=True)) if self else ''
 aspen.http.request.Querystring.serialize = _Querystring_serialize
 
+if hasattr(pando.http.request.Request, 'queued_success_messages'):
+    raise Warning('pando.http.request.Request.queued_success_messages already exists')
+def _queued_success_messages(self):
+    if not hasattr(self, '_queued_success_messages'):
+        self._queued_success_messages = map(b64decode_s, self.qs.all('success'))
+    return self._queued_success_messages
+pando.http.request.Request.queued_success_messages = property(_queued_success_messages)
+
 if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
 def _source(self):
