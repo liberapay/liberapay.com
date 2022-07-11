@@ -4,7 +4,7 @@ from decimal import Decimal
 import stripe
 import stripe.error
 
-from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS
+from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS, SEPA
 from ..exceptions import MissingPaymentAccount, NextAction, NoSelfTipping
 from ..i18n.currencies import Money
 from ..models.exchange_route import ExchangeRoute
@@ -394,6 +394,7 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
         amount_settled=amount_settled, fee=fee, intent_id=intent_id,
         refunded_amount=refunded_amount,
     )
+    del refunded_amount
 
     if charge.refunds.data:
         record_refunds(db, payin, charge)
@@ -419,26 +420,21 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
                 pt = update_payin_transfer(db, pt.id, None, charge.status, error)
             elif pt.remote_id is None and pt.status in ('pre', 'pending'):
                 pt = execute_transfer(db, pt, destination_id, charge.id)
-                if pt.status == 'failed' and pt.error.startswith("No such destination: "):
-                    undeliverable_amount += pt.amount
-                    db.run("""
-                        UPDATE payment_accounts
-                           SET is_current = null
-                         WHERE provider = 'stripe'
-                           AND id = %s
-                    """, (destination_id,))
-            elif refunded_amount and pt.remote_id:
+            elif payin.refunded_amount and pt.remote_id:
                 pt = sync_transfer(db, pt)
+            if pt.status == 'failed':
+                undeliverable_amount += pt.amount
             payin_transfers[i] = pt
         del destination_id
         if undeliverable_amount:
             refund_ratio = undeliverable_amount / net_amount
             refund_amount = (payin.amount * refund_ratio).round_up()
-            try:
-                payin = refund_payin(db, payin, refund_amount=refund_amount)
-            except Exception as e:
-                website.tell_sentry(e)
-        if refunded_amount == payin.amount and payin.ctime.year >= 2021:
+            if refund_amount > (payin.refunded_amount or 0):
+                try:
+                    payin = refund_payin(db, payin, refund_amount=refund_amount)
+                except Exception as e:
+                    website.tell_sentry(e)
+        if payin.refunded_amount == payin.amount and payin.ctime.year >= 2021:
             payin_refund_id = db.one("""
                 SELECT pr.id
                   FROM payin_refunds pr
@@ -485,11 +481,36 @@ def execute_transfer(db, pt, destination, source_transaction):
             idempotency_key='payin_transfer_%i' % pt.id,
         )
     except stripe.error.StripeError as e:
-        website.tell_sentry(e, allow_reraise=False)
-        return update_payin_transfer(db, pt.id, '', 'failed', repr_stripe_error(e))
+        error = repr_stripe_error(e)
+        if error.startswith("No such destination: "):
+            db.run("""
+                UPDATE payment_accounts
+                   SET is_current = null
+                 WHERE provider = 'stripe'
+                   AND id = %s
+            """, (destination,))
+            alternate_destination = db.one("""
+                SELECT id
+                  FROM payment_accounts
+                 WHERE participant = %(p_id)s
+                   AND provider = 'stripe'
+                   AND is_current
+                   AND charges_enabled
+                   AND country IN %(SEPA)s
+              ORDER BY default_currency = %(currency)s DESC
+                     , connection_ts
+                 LIMIT 1
+            """, dict(p_id=pt.recipient, SEPA=SEPA, currency=pt.amount.currency))
+            if alternate_destination:
+                return execute_transfer(db, pt, alternate_destination, source_transaction)
+            error = "The recipient's account no longer exists."
+            return update_payin_transfer(db, pt.id, None, 'failed', error)
+        else:
+            website.tell_sentry(e, allow_reraise=False)
+            return update_payin_transfer(db, pt.id, None, 'pending', error)
     except Exception as e:
         website.tell_sentry(e)
-        return update_payin_transfer(db, pt.id, '', 'failed', str(e))
+        return update_payin_transfer(db, pt.id, None, 'pending', str(e))
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
     pt = update_payin_transfer(db, pt.id, tr.id, 'succeeded', None)

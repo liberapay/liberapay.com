@@ -1200,7 +1200,7 @@ class TestPayinsStripe(Harness):
         assert pt1.remote_id
         assert pt2.status == 'failed'
         assert pt2.amount == EUR('48.42')
-        assert pt2.error.startswith("No such destination: 'acct_invalid'")
+        assert pt2.error == "The recipient's account no longer exists."
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded'
         assert payin.amount_settled == EUR('100.00')

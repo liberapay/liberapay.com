@@ -216,24 +216,19 @@ def adjust_payin_transfers(db, payin, net_amount):
                     })
                     for pt in transfers:
                         if pt.amount != team_amounts.get(pt.id):
-                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((team_amounts[pt.id], pt.id))
                 else:
                     team_donations = {d.recipient.id: d for d in team_donations}
                     for pt in transfers:
-                        if pt.status == 'failed':
-                            continue
                         d = team_donations.pop(pt.recipient, None)
                         if d is None:
-                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             cursor.run("""
                                 DELETE FROM payin_transfer_events
                                  WHERE payin_transfer = %(pt_id)s
-                                   AND status = 'pending';
+                                   AND status <> 'succeeded';
                                 DELETE FROM payin_transfers WHERE id = %(pt_id)s;
                             """, dict(pt_id=pt.id))
                         elif pt.amount != d.amount:
-                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((d.amount, pt.id))
                     n_periods = prorated_amount / tip.periodic_amount.convert(prorated_amount.currency)
                     for d in team_donations.values():
@@ -246,14 +241,12 @@ def adjust_payin_transfers(db, payin, net_amount):
             else:
                 pt = transfers[0]
                 if pt.amount != prorated_amount:
-                    assert pt.remote_id is None and pt.status in ('pre', 'pending')
                     updates.append((prorated_amount, pt.id))
         if updates:
             execute_batch(cursor, """
                 UPDATE payin_transfers
                    SET amount = %s
-                 WHERE id = %s
-                   AND status <> 'succeeded';
+                 WHERE id = %s;
             """, updates)
 
 
