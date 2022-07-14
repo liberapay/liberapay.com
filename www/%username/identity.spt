@@ -74,7 +74,6 @@ else:
 % extends "templates/layouts/settings.html"
 
 % block content
-<div class="paragraph">
 <form action="" method="POST">
 
     % if error
@@ -100,5 +99,4 @@ else:
     <button class="btn btn-primary btn-lg" type="submit">{{ _("Save") }}</button>
 
 </form>
-</div>
 % endblock

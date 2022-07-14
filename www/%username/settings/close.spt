@@ -5,6 +5,8 @@ from liberapay.utils import get_participant
 participant = get_participant(state, restrict=True)
 
 if request.method == 'POST':
+    feedback = request.body.get('feedback')
+    participant.store_feedback(feedback)
     participant.close()
     participant.sign_out(response.headers.cookie)
     response.redirect('/%s/' % participant.username)
@@ -51,6 +53,18 @@ subhead = participant.username
             "determine that you've been infringing a trademark)."
         ) }}</p>
         % endif
+
+
+        <h3>{{ _("Feedback") }}</h3>
+
+        <p>{{ _(
+            "If you would like to tell us why you're closing your account, you "
+            "can leave a message here:"
+        ) }}</p>
+
+        <textarea name="feedback" class="form-control" maxlength="{{ constants.FEEDBACK_MAX_SIZE }}"
+                  rows=3 placeholder="{{ _('Reason for closing account') }}"></textarea>
+        <p class="help-block">{{ _("Maximum length is {0}.", constants.FEEDBACK_MAX_SIZE) }}</p>
 
 
         <h3>{{ _("Ready?") }}</h3>

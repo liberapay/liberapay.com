@@ -51,6 +51,7 @@ if mode == 'all':
         SELECT p
              , c.name AS c_name
              , c.creator AS c_creator
+             , f.feedback AS feedback
              , ( SELECT json_build_object(
                             'address', e.address,
                             'verified', e.verified,
@@ -108,6 +109,7 @@ if mode == 'all':
                ) AS last_change
           FROM participants p
      LEFT JOIN communities c ON c.participant = p.id
+     LEFT JOIN feedback f ON f.participant = p.id
          WHERE coalesce(p.id < %s, true)
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
@@ -376,6 +378,15 @@ title = "Users Admin"
             none. <span class="text-warning">{{ glyphicon('warning-sign') }}</span>
         % endif
         </div>
+
+        % if row.feedback
+        <div class="mt-3">
+            <strong>Feedback:</strong>
+            <div class="profile-statement embedded raw">{{ row.feedback }}</div>
+        </div>
+        % elif p.status == 'closed'
+        <div class="mt-3"><strong>Feedback:</strong> none.</div>
+        % endif
     % endif
     </div>
     <div class="col-md-4">

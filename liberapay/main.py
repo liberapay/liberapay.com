@@ -181,6 +181,7 @@ if conf:
     cron(Daily(hour=16), fetch_currency_exchange_rates, True)
     cron(Daily(hour=17), paypal.sync_all_pending_payments, True)
     cron(Daily(hour=18), Payday.update_cached_amounts, True)
+    cron(Daily(hour=19), Participant.delete_old_feedback, True)
     cron(intervals.get('notify_patrons', 1200), Participant.notify_patrons, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)

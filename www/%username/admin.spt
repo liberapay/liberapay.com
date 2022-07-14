@@ -18,6 +18,10 @@ events = website.db.all("""
   ORDER BY e.ts DESC, e.id DESC
 """, (participant.id,))
 
+feedback = None if participant.status != 'closed' else website.db.one("""
+    SELECT feedback FROM feedback WHERE participant = %s
+""", (participant.id,))
+
 [---] text/html
 % from 'templates/macros/admin.html' import admin_form with context
 
@@ -28,6 +32,11 @@ events = website.db.all("""
 <h3>Admin flags</h3>
 
 {{ admin_form(participant, reload=True, style='inline-labels') }}
+
+% if feedback
+<h3>Feedback</h3>
+<div class="profile-statement embedded raw">{{ feedback }}</div>
+% endif
 
 <h3>Events</h3>
 

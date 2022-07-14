@@ -88,8 +88,8 @@ title = _("Add a payment instrument")
             <p>{{ _("Please input your name and card number:") }}</p>
             <div class="form-group">
                 <input name="owner.name" autocomplete="name" required minlength=3
-                       class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-                <div id="stripe-element" data-type="card" class="form-control paragraph"></div>
+                       class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+                <div id="stripe-element" data-type="card" class="form-control mb-3"></div>
                 <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             </div>
             <p class="help-block">{{ glyphicon('lock') }} {{ _(
@@ -113,8 +113,8 @@ title = _("Add a payment instrument")
             ) }}</p>
             <div class="form-group">
                 <input name="owner.name" autocomplete="name" required minlength=3
-                       class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-                <div id="stripe-element" data-type="iban" class="form-control paragraph"></div>
+                       class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+                <div id="stripe-element" data-type="iban" class="form-control mb-3"></div>
                 <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             </div>
             <p class="help-block">{{ _(

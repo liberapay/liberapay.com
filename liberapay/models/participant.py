@@ -850,6 +850,39 @@ class Participant(Model, MixinTeam):
         for route in routes:
             route.invalidate()
 
+    def store_feedback(self, feedback):
+        """Store feedback in database if provided by user
+        """
+        feedback = '' if feedback is None else feedback.strip()
+        if feedback:
+            self.db.run("""
+                INSERT INTO feedback
+                            (participant, feedback)
+                     VALUES (%s, %s)
+                ON CONFLICT (participant) DO UPDATE
+                        SET feedback = excluded.feedback
+                          , ctime = excluded.ctime
+            """, (self.id, feedback))
+
+    @classmethod
+    def delete_old_feedback(cls):
+        """Delete old user feedback.
+        """
+        n = cls.db.one("""
+            WITH deleted AS (
+                DELETE FROM feedback
+                 WHERE ctime < current_date - interval '1 year'
+                   AND coalesce((
+                           SELECT status = 'active'
+                             FROM participants
+                            WHERE id = feedback.participant
+                       ), true)
+             RETURNING 1
+            ) SELECT count(*) FROM deleted
+        """)
+        if n:
+            website.logger.info(f"Deleted {n} old feedbacks.")
+
     @cached_property
     def closed_time(self):
         return self.db.one("""
