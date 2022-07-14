@@ -25,6 +25,17 @@ if query:
              LIMIT 10
         """, locals())
 
+    if scope in (None, 'public_names'):
+        results['public_names'] = website.db.all("""
+            SELECT public_name, avatar_url, similarity(public_name, %(q)s) AS rank, id
+              FROM participants
+             WHERE lower(public_name) %% lower(%(q)s)
+               AND status = 'active'
+               AND hide_from_search = 0
+          ORDER BY rank DESC, public_name
+             LIMIT 10
+        """, locals())
+
     if scope in (None, 'statements'):
         langs = tuple(l for l in request.accept_langs if l in ACCEPTED_LANGUAGES)[:3]
         search_confs = list(set(SEARCH_CONFS.get(lang, 'simple') for lang in langs))
@@ -98,11 +109,12 @@ if query:
 % block content
 
     % set usernames = results.get('usernames')
+    % set public_names = results.get('public_names')
     % set communities = results.get('communities')
     % set repositories = results.get('repositories')
     % set statements = results.get('statements')
 
-    % if query and not (usernames or communities or repositories or statements)
+    % if query and not (usernames or public_names or communities or repositories or statements)
         <p class="alert alert-warning">{{
             _("Sorry, we didn't find anything matching your query."
         ) }}</p>
@@ -122,6 +134,22 @@ if query:
             <a href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="name">{{ result.username }}</div>
+            </a>
+        </div>
+        % endfor
+    </div>
+    % endif
+
+    % if public_names
+    <div class="col-md-6">
+        <h3>{{ ngettext("Found a matching public names",
+                        "Found matching public names",
+                        len(public_names)) }}</h3>
+        % for result in public_names
+        <div class="mini-user">
+            <a href="/{{ result.public_name }}/">
+                {{ avatar_img(result) }}
+                <div class="name">{{ result.public_name }}</div>
             </a>
         </div>
         % endfor
