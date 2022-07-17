@@ -12,7 +12,7 @@ from ..website import website
 from .common import abort_payin, update_payin, update_payin_transfer
 
 
-logger = logging.Logger('paypal')
+logger = logging.getLogger('paypal')
 
 session = requests.Session()
 
