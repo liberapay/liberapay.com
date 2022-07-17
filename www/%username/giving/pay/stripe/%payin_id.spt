@@ -1,5 +1,4 @@
 from datetime import timedelta
-from decimal import ROUND_HALF_UP
 from math import floor
 
 import stripe
@@ -41,7 +40,7 @@ if request.method == 'POST':
     if payin_amount == 'custom':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
-        payin_amount = Money(payin_amount, payin_currency, rounding=ROUND_HALF_UP)
+        payin_amount = Money(payin_amount, payin_currency)
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p
