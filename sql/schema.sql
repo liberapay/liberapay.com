@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '155'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '156'::jsonb);
 
 
 -- app configuration
@@ -1089,6 +1089,15 @@ CREATE TABLE identities
 );
 
 CREATE UNIQUE INDEX ON identities (participant, ctime DESC);
+
+
+-- messages left by people who have closed their accounts
+
+CREATE TABLE feedback
+( participant   bigint      PRIMARY KEY
+, feedback      text        NOT NULL
+, ctime         timestamptz NOT NULL DEFAULT current_timestamp
+);
 
 
 -- composites and functions, keep this at the end of the file

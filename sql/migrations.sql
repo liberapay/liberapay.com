@@ -3173,3 +3173,10 @@ UPDATE participants SET email_lang = 'zh-hant-mo' WHERE email_lang = 'zh-mo';
 UPDATE participants SET email_lang = 'zh-hans-sg' WHERE email_lang = 'zh-sg';
 UPDATE participants SET email_lang = 'zh-hant-tw' WHERE email_lang = 'zh-tw';
 UPDATE participants SET email_lang = 'zh-hant' WHERE email_lang = 'zh';
+
+-- migration #156
+CREATE TABLE feedback
+( participant   bigint      PRIMARY KEY
+, feedback      text        NOT NULL
+, ctime         timestamptz NOT NULL DEFAULT current_timestamp
+);
