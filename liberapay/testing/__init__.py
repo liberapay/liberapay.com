@@ -293,6 +293,7 @@ class Harness(unittest.TestCase):
         provider = route.network.split('-', 1)[0]
         proto_transfers = []
         net_amount = 0
+        sepa_only = len(transfers) > 1
         for tippee, pt_amount, opt in transfers:
             net_amount += pt_amount
             tip = opt.get('tip')
@@ -310,7 +311,8 @@ class Harness(unittest.TestCase):
             for i in range(100):
                 try:
                     proto_transfers.extend(resolve_tip(
-                        self.db, tip, tippee, provider, payer, payer_country, pt_amount
+                        self.db, tip, tippee, provider, payer, payer_country, pt_amount,
+                        sepa_only=sepa_only,
                     ))
                 except MissingPaymentAccount as e:
                     if i > 95:
