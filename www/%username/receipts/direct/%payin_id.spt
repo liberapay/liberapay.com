@@ -213,9 +213,15 @@ output.body = render(globals(), allow_partial_i18n=False)
     {{ _("Settlement date: {0}", settlement_date) }}<br>
     {{ _("Transaction ID: {0}", str(payin.id)) }}<br>
 
+    <h2>{{ _("Taxes") }}</h2>
+    <p>{{ _(
+        "This payment is a donation, no goods or services are to be provided in "
+        "exchange, no tax has been collected by Liberapay."
+    ) }}</p>
+
     <footer>
         <div>{{ locale.format_date(today) }}</div>
-        <div><em>{{ _("This document is not an invoice.") }}</em></div>
+        <div></div>
         <div></div>
     </footer>
 
