@@ -1,7 +1,9 @@
 from collections import namedtuple
 from datetime import timedelta
+from decimal import ROUND_UP
 import itertools
 from operator import attrgetter
+import warnings
 
 from pando.utils import utcnow
 from psycopg2.extras import execute_batch
@@ -19,6 +21,15 @@ ProtoTransfer = namedtuple(
     'ProtoTransfer',
     'amount recipient destination context unit_amount period team visibility',
 )
+
+
+def get_minimum_transfer_amount(provider, currency):
+    if provider == 'stripe' and currency != 'EUR':
+        # Stripe refuses transfers whose amounts are lower than the equivalent
+        # of €0.01. Since we don't know the exchange rate they're using, we add
+        # a 20% safety margin and round upward.
+        return Money('0.012', 'EUR').convert(currency, ROUND_UP)
+    return Money.MINIMUMS[currency]
 
 
 def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
@@ -173,6 +184,7 @@ def adjust_payin_transfers(db, payin, net_amount):
     payer = db.Participant.from_id(payin.payer)
     route = db.ExchangeRoute.from_id(payer, payin.route)
     provider = route.network.split('-', 1)[0]
+    min_transfer_amount = get_minimum_transfer_amount(provider, net_amount.currency)
     payer_country = route.country
     # We have to update the transfer amounts in a single transaction to
     # avoid ending up in an inconsistent state.
@@ -196,7 +208,7 @@ def adjust_payin_transfers(db, payin, net_amount):
         prorated_amounts = resolve_amounts(net_amount, {
             tippee: MoneyBasket(pt.amount for pt in grouped).fuzzy_sum(net_amount.currency)
             for tippee, grouped in transfers_by_tippee.items()
-        })
+        }, minimum_amount=min_transfer_amount)
         teams = set(pt.team for pt in payin_transfers if pt.team is not None)
         updates = []
         for tippee, prorated_amount in prorated_amounts.items():
@@ -213,27 +225,22 @@ def adjust_payin_transfers(db, payin, net_amount):
                     team_amounts = resolve_amounts(prorated_amount, {
                         pt.id: pt.amount.convert(prorated_amount.currency)
                         for pt in transfers
-                    })
+                    }, minimum_amount=min_transfer_amount)
                     for pt in transfers:
                         if pt.amount != team_amounts.get(pt.id):
-                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((team_amounts[pt.id], pt.id))
                 else:
                     team_donations = {d.recipient.id: d for d in team_donations}
                     for pt in transfers:
-                        if pt.status == 'failed':
-                            continue
                         d = team_donations.pop(pt.recipient, None)
                         if d is None:
-                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             cursor.run("""
                                 DELETE FROM payin_transfer_events
                                  WHERE payin_transfer = %(pt_id)s
-                                   AND status = 'pending';
+                                   AND status <> 'succeeded';
                                 DELETE FROM payin_transfers WHERE id = %(pt_id)s;
                             """, dict(pt_id=pt.id))
                         elif pt.amount != d.amount:
-                            assert pt.remote_id is None and pt.status in ('pre', 'pending')
                             updates.append((d.amount, pt.id))
                     n_periods = prorated_amount / tip.periodic_amount.convert(prorated_amount.currency)
                     for d in team_donations.values():
@@ -246,14 +253,12 @@ def adjust_payin_transfers(db, payin, net_amount):
             else:
                 pt = transfers[0]
                 if pt.amount != prorated_amount:
-                    assert pt.remote_id is None and pt.status in ('pre', 'pending')
                     updates.append((prorated_amount, pt.id))
         if updates:
             execute_batch(cursor, """
                 UPDATE payin_transfers
                    SET amount = %s
-                 WHERE id = %s
-                   AND status <> 'succeeded';
+                 WHERE id = %s;
             """, updates)
 
 
@@ -292,9 +297,13 @@ def resolve_tip(
         raise RecipientAccountSuspended(tippee)
 
     if tippee.kind == 'group':
+        min_transfer_amount = get_minimum_transfer_amount(
+            provider, payment_amount.currency,
+        )
         return resolve_team_donation(
             db, tippee, provider, payer, payer_country, payment_amount, tip,
             sepa_only=sepa_only, excluded_destinations=excluded_destinations,
+            min_transfer_amount=min_transfer_amount,
         )
     else:
         destination = resolve_destination(
@@ -358,7 +367,7 @@ def resolve_destination(
 
 def resolve_team_donation(
     db, team, provider, payer, payer_country, payment_amount, tip,
-    sepa_only=False, excluded_destinations=(),
+    sepa_only=False, excluded_destinations=(), min_transfer_amount=None,
 ):
     """Figure out how to distribute a donation to a team's members.
 
@@ -371,6 +380,8 @@ def resolve_team_donation(
         tip (Row): the row from the `tips` table
         sepa_only (bool): only consider destination accounts within SEPA
         excluded_destinations (set): any `payment_accounts.pk` values to exclude
+        min_transfer_amount (Money | None):
+            prevent the returned amounts from falling between zero and this value
 
     Returns:
         a list of `ProtoTransfer` objects
@@ -438,7 +449,10 @@ def resolve_team_donation(
                 t for t in takes if t.member in sepa_accounts and t.amount != 0
             ]
             if selected_takes:
-                resolve_take_amounts(payment_amount, selected_takes)
+                resolve_take_amounts(
+                    payment_amount, selected_takes,
+                    min_transfer_amount=min_transfer_amount,
+                )
                 selected_takes.sort(key=attrgetter('member'))
                 n_periods = payment_amount / tip.periodic_amount.convert(currency)
                 return [
@@ -465,12 +479,14 @@ def resolve_team_donation(
     )]
 
 
-def resolve_take_amounts(payment_amount, takes):
+def resolve_take_amounts(payment_amount, takes, min_transfer_amount=None):
     """Compute team transfer amounts.
 
     Args:
         payment_amount (Money): the total amount of money to transfer
         takes (list): rows returned by `team.get_current_takes_for_payment(...)`
+        min_transfer_amount (Money | None):
+            prevent the returned amounts from falling between zero and this value
 
     This function doesn't return anything, instead it mutates the given takes,
     adding a `resolved_amount` attribute to each one.
@@ -491,14 +507,17 @@ def resolve_take_amounts(payment_amount, takes):
         ).round_up()
         for t in takes
     }
-    tr_amounts = resolve_amounts(payment_amount, base_amounts, convergence_amounts)
+    tr_amounts = resolve_amounts(
+        payment_amount, base_amounts, convergence_amounts,
+        minimum_amount=min_transfer_amount,
+    )
     for t in takes:
         t.resolved_amount = tr_amounts.get(t.member, payment_amount.zero())
 
 
 def resolve_amounts(
     available_amount, base_amounts, convergence_amounts=None, maximum_amounts=None,
-    payday_id=1,
+    payday_id=1, minimum_amount=None,
 ):
     """Compute transfer amounts.
 
@@ -507,102 +526,150 @@ def resolve_amounts(
             the payin amount to split into transfer amounts
         base_amounts (Dict[Any, Money]):
             a map of IDs to raw transfer amounts
-        convergence_amounts (Dict[Any, Money]):
+        convergence_amounts (Dict[Any, Money] | None):
             an optional map of IDs to ideal additional amounts
-        maximum_amounts (Dict[Any, Money]):
+        maximum_amounts (Dict[Any, Money] | None):
             an optional map of IDs to maximum amounts
         payday_id (int):
             the ID of the current or next payday, used to rotate who receives
             the remainder when there is a tie
+        minimum_amount (Money | None):
+            prevent the returned amounts from falling between zero and this value
 
     Returns a copy of `base_amounts` with updated values.
     """
-    min_transfer_amount = Money.MINIMUMS[available_amount.currency]
+    currency = available_amount.currency
+    zero = Money.ZEROS[currency]
+    inf = Money('inf', currency)
+    if maximum_amounts is None:
+        maximum_amounts = {}
+    if minimum_amount is None:
+        minimum_amount = Money.MINIMUMS[currency]
     r = {}
     amount_left = available_amount
 
     # Attempt to converge
     if convergence_amounts:
-        if maximum_amounts:
-            # Make sure the convergence amounts aren't higher than the maximums
-            inf = Money('inf', amount_left.currency)
-            convergence_amounts = {
-                k: min(v, inf if maximum_amounts.get(k) is None else maximum_amounts[k])
-                for k, v in convergence_amounts.items()
-            }
-        convergence_sum = Money.sum(convergence_amounts.values(), amount_left.currency)
+        convergence_amounts = {
+            k: v for k, v in convergence_amounts.items()
+            if v != 0 and maximum_amounts.get(k) != 0
+        }
+        convergence_sum = Money.sum(convergence_amounts.values(), currency)
         if convergence_sum != 0:
-            convergence_amounts = {k: v for k, v in convergence_amounts.items() if v != 0}
-            if amount_left == convergence_sum:
-                # We have just enough money for convergence.
-                return convergence_amounts
-            elif amount_left > convergence_sum:
-                # We have more than enough money for full convergence, the extra
-                # funds will be allocated in proportion to `base_amounts`.
-                r.update(convergence_amounts)
-                amount_left -= convergence_sum
-            else:
+            if amount_left < convergence_sum:
                 # We only have enough for partial convergence, the funds will be
                 # allocated in proportion to `convergence_amounts`.
                 base_amounts = convergence_amounts
+            else:
+                if maximum_amounts:
+                    # Make sure the convergence amounts aren't higher than the maximums
+                    for k, amount in convergence_amounts.items():
+                        max_amount = maximum_amounts.get(k, inf)
+                        if amount >= max_amount:
+                            convergence_amounts[k] = max_amount
+                            convergence_sum -= (amount - max_amount)
+                            base_amounts.pop(k, None)
+                if amount_left == convergence_sum:
+                    # We have just enough money for convergence, but only if all
+                    # the amounts are above the minimum.
+                    below_minimum = {}
+                    for k, amount in list(convergence_amounts.items()):
+                        if amount < minimum_amount:
+                            below_minimum[k] = amount
+                            convergence_amounts.pop(k)
+                            convergence_sum -= amount
+                    if below_minimum:
+                        # At least one of the convergence amounts is below the
+                        # minimum.
+                        r = convergence_amounts
+                        amount_left -= convergence_sum
+                        if amount_left >= minimum_amount:
+                            # Multiple convergence amounts are below the minimum,
+                            # but their sum is greater or equal to the minimum,
+                            # so we can distribute that sum among them.
+                            base_amounts = below_minimum
+                    else:
+                        return convergence_amounts
+                else:
+                    # We have more than enough money for full convergence, the extra
+                    # funds will be allocated in proportion to `base_amounts`.
+                    r = convergence_amounts
+                    amount_left -= convergence_sum
+        del convergence_sum
+    del convergence_amounts
+
+    # Drop the amounts which can only resolve to zero
+    base_amounts = {
+        k: v for k, v in base_amounts.items()
+        if v != 0 and maximum_amounts.get(k, inf) >= minimum_amount
+    }
 
     # Compute the prorated amounts
-    base_amounts = {k: v for k, v in base_amounts.items() if v != 0}
-    base_sum = Money.sum(base_amounts.values(), amount_left.currency)
-    base_ratio = 0 if base_sum == 0 else amount_left / base_sum
-    maxed_out = False
-    for key, base_amount in sorted(base_amounts.items()):
-        prev_amount = r.get(key, 0)
-        amount = min((base_amount * base_ratio).round_down(), amount_left) + prev_amount
-        if maximum_amounts:
-            max_amount = maximum_amounts.get(key)
-            if max_amount is not None and amount >= max_amount:
+    base_sum = Money.sum(base_amounts.values(), currency)
+    while base_sum > 0 and amount_left > 0:
+        curtailed = False
+        prev_amount_left = amount_left
+        base_ratio = amount_left / base_sum
+        for key, base_amount in sorted(base_amounts.items()):
+            prev_amount = r.get(key, 0)
+            amount = min((base_amount * base_ratio).round_down(), amount_left) + prev_amount
+            max_amount = maximum_amounts.get(key, inf)
+            if amount >= max_amount:
                 amount = max_amount
-                maxed_out = True
+                curtailed = True
                 base_amounts.pop(key)
                 base_sum -= base_amount
-        r[key] = amount
-        amount_left -= (amount - prev_amount)
-
-    # Deal with the leftover caused by the maximums
-    if maxed_out and amount_left > 0:
-        while base_amounts and amount_left > 0:
-            prev_amount_left = amount_left
-            base_ratio = 0 if base_sum == 0 else amount_left / base_sum
-            for key, base_amount in sorted(base_amounts.items()):
-                prev_amount = r.get(key, 0)
-                amount = min((base_amount * base_ratio).round_down(), amount_left) + prev_amount
-                max_amount = maximum_amounts.get(key)
-                if max_amount is not None and amount >= max_amount:
-                    amount = max_amount
-                    base_amounts.pop(key)
-                    base_sum -= base_amount
+            if amount < minimum_amount and amount > 0:
+                amount = zero
+                curtailed = True
+            if amount != prev_amount:
                 r[key] = amount
                 amount_left -= (amount - prev_amount)
-            if amount_left == prev_amount_left:
-                break
+        if not curtailed or amount_left >= prev_amount_left:
+            break
 
-    # Deal with the leftover caused by rounding down
+    # Deal with the leftover caused by rounding down or by the minimum amount
     if amount_left > 0 and base_amounts:
         # Try to distribute in a way that doesn't skew the percentages much.
         # If there's a tie, use the payday ID to rotate the winner every week.
-        i = itertools.count(1)
-        n = len(r)
+        n = len(base_amounts)
 
         def compute_priority(item):
             key, current_amount = item
-            base_amount = base_amounts[key] * base_ratio
+            base_amount = base_amounts[key]
             return (
-                (current_amount - base_amount) / base_amount if base_amount else 2,
-                (next(i) - payday_id) % n
+                current_amount / base_amount,
+                (next(item_counter) - payday_id) % n
             )
 
-        items = [(k, v) for k, v in r.items() if k in base_amounts]
-        for key, amount in sorted(items, key=compute_priority):
-            r[key] += min_transfer_amount
-            amount_left -= min_transfer_amount
-            if amount_left == 0:
+        loop_counter = itertools.count(1)
+        while True:
+            prev_amount_left = amount_left
+            item_counter = itertools.count(1)
+            items = [(k, r.get(k, zero)) for k in base_amounts]
+            items.sort(key=compute_priority)
+            increment = (amount_left / len(items)).round_up()
+            for key, amount in items:
+                if amount_left < increment:
+                    increment = amount_left
+                new_amount = amount + increment
+                if new_amount < minimum_amount:
+                    new_amount = minimum_amount
+                max_amount = maximum_amounts.get(key, inf)
+                if new_amount >= max_amount:
+                    new_amount = max_amount
+                if new_amount != amount:
+                    if (new_amount - amount) > amount_left:
+                        continue
+                    r[key] = new_amount
+                    amount_left -= (new_amount - amount)
+                    if amount_left == 0:
+                        break
+            if amount_left == 0 or amount_left >= prev_amount_left:
                 break
+            i = next(loop_counter)
+            if i == 100:
+                warnings.warn("excessive number of loop iterations")
 
     # Final check and return
     if base_amounts:

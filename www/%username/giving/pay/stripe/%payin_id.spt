@@ -124,10 +124,11 @@ if request.method == 'POST':
     )
     payer_country = route.country or request.country
     proto_transfers = []
+    sepa_only = len(tips) > 1
     for tip in tips:
         proto_transfers.extend(resolve_tip(
             website.db, tip, tip.tippee_p, 'stripe', payer, payer_country,
-            transfer_amounts[tip.id]
+            transfer_amounts[tip.id], sepa_only=sepa_only,
         ))
     payin = prepare_payin(website.db, payer, payin_amount, route, proto_transfers)[0]
 

@@ -57,7 +57,7 @@ class Money:
                 amount = amount.quantize(minimum, rounding=rounding)
             except InvalidOperation:
                 raise InvalidNumber(str(amount))
-        if amount > D_MAX:
+        if amount > D_MAX and not amount.is_infinite():
             raise InvalidNumber(amount)
         self.amount = amount
         self.currency = currency
