@@ -261,22 +261,30 @@ title = "Users Admin"
         % endfor
     % else
         % if p.kind != 'community'
-            <p>
-            % if row.email
-                <strong>Email address:</strong> <span class="break-word-anywhere">{{ row.email.address }}</span>
-                % if row.email.verified
-                <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
-                % elif row.email.disavowed
-                <span class="text-danger">{{ glyphicon('exclamation-sign', "Disavowed") }}</span>
-                % elif row.email.blacklist_reason
-                <span class="text-danger">{{ glyphicon('exclamation-sign', "Blacklisted (%s)" % row.email.blacklist_reason) }}</span>
-                % else
-                <span class="text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
-                % endif
+        <div class="mb-3">
+        % if row.email
+            <strong>Email address:</strong> <span class="break-word-anywhere">{{ row.email.address }}</span>
+            % if row.email.verified
+            <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
+            % elif row.email.disavowed
+            <span class="text-danger">{{ glyphicon('exclamation-sign', "Disavowed") }}</span>
+            % elif row.email.blacklist_reason
+            <span class="text-danger">{{ glyphicon('exclamation-sign', "Blacklisted (%s)" % row.email.blacklist_reason) }}</span>
             % else
-                <strong>Email address:</strong> none.
+            <span class="text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
             % endif
-            </p>
+            &nbsp;
+            <form action="/admin/emails" method="POST" target="_blank" class="inline-block middle">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <input type="hidden" name="email" value="{{ row.email.address }}" />
+                <button class="link" name="action" value="lookup">{{
+                    glyphicon('search', "Look it up")
+                }}</button>
+            </form>
+        % else
+            <strong>Email address:</strong> none.
+        % endif
+        </div>
 
         <p><strong>Elsewhere accounts:</strong>
         % if elsewhere
