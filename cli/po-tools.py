@@ -6,11 +6,11 @@ from babel.messages.pofile import read_po, write_po
 if sys.argv[1] == 'reflag':
     # This adds the `python-brace-format` flag to messages that contain braces
     # https://github.com/python-babel/babel/issues/333
-    pot_path = sys.argv[2]
-    print('rewriting PO template file', pot_path)
+    po_path = sys.argv[2]
+    print('reflagging PO file', po_path)
     # read PO file
-    with open(pot_path, 'rb') as pot:
-        catalog = read_po(pot)
+    with open(po_path, 'rb') as po:
+        catalog = read_po(po)
     # tweak message flags
     for m in catalog:
         msg = m.id
@@ -21,8 +21,8 @@ if sys.argv[1] == 'reflag':
             m.flags.add('python-brace-format')
         m.flags.discard('python-format')
     # write back
-    with open(pot_path, 'wb') as pot:
-        write_po(pot, catalog, width=0)
+    with open(po_path, 'wb') as po:
+        write_po(po, catalog, width=0)
 
 elif sys.argv[1] == 'copy':
     po_path = sys.argv[2]
