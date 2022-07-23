@@ -3180,3 +3180,19 @@ CREATE TABLE feedback
 , feedback      text        NOT NULL
 , ctime         timestamptz NOT NULL DEFAULT current_timestamp
 );
+
+-- migration #157
+CREATE FUNCTION check_payin_transfer_update() RETURNS trigger AS $$
+    BEGIN
+        IF (OLD.status = 'succeeded' AND NEW.status = 'succeeded') THEN
+            IF (NEW.amount <> OLD.amount) THEN
+                RAISE 'modifying the amount of an already successful transfer is not allowed';
+            END IF;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER check_payin_transfer_update BEFORE UPDATE ON payin_transfers
+    FOR EACH ROW EXECUTE PROCEDURE check_payin_transfer_update();
+UPDATE payins SET remote_id = null WHERE remote_id = '';
+UPDATE payin_transfers SET remote_id = null WHERE remote_id = '';
