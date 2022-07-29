@@ -70,6 +70,26 @@ if mode == 'all':
                       , e.added_time
                   LIMIT 1
                ) AS email
+             , ( SELECT json_build_object(
+                            'funded', count(tip) FILTER (WHERE tip.status = 'funded'),
+                            'pending', count(tip) FILTER (WHERE tip.status = 'pending'),
+                            'unfunded', count(tip) FILTER (WHERE tip.status = 'unfunded')
+                        )
+                   FROM ( SELECT (CASE WHEN tip.is_funded THEN 'funded'
+                                       WHEN EXISTS (
+                                                SELECT pt.id
+                                                  FROM payin_transfers pt
+                                                  JOIN payins pi ON pi.id = pt.payin
+                                                 WHERE pt.payer = p.id
+                                                   AND coalesce(pt.team, pt.recipient) = tip.tippee
+                                                   AND (pt.status = 'pending' OR pi.status = 'pending')
+                                            ) THEN 'pending'
+                                       ELSE 'unfunded'
+                                  END) AS status
+                            FROM current_tips tip
+                           WHERE tip.tipper = p.id
+                        ) tip
+               ) AS outgoing_donations
              , ( SELECT json_agg(json_build_object(
                             'provider', a.provider,
                             'id', a.id,
@@ -177,7 +197,7 @@ elif mode == 'new_recipients':
                    'team', pt.team, 'team_name', team.username,
                    'status', pt.status, 'error', pt.error, 'payin_method', r.network,
                    'id', pt.id
-               ) ORDER BY pt.row_number) AS payments
+               ) ORDER BY pt.row_number) AS incoming_payments
           FROM ( SELECT pt.*
                       , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC, pt.id DESC)
                    FROM payin_transfers pt
@@ -303,6 +323,18 @@ title = "Users Admin"
         % endif
 
         % if p.is_person
+        % if row.outgoing_donations is defined
+        <p><strong>Outgoing donations:</strong>
+        % if any(row.outgoing_donations.values())
+            % for category, count in row.outgoing_donations.items() if count
+                {{ count }} {{ category }}{{ '.' if loop.last else ',' }}
+            % endfor
+        % else
+            none.
+        % endif
+        </p>
+        % endif
+
         <p><strong>Payment accounts:</strong>
         % if row.payment_accounts
             <br>
@@ -328,9 +360,9 @@ title = "Users Admin"
         % endif
         </p>
 
-        % if row.payments|default(false)
+        % if row.incoming_payments|default(false)
         <p><strong>Incoming payments:</strong><br>
-            % for pt in row.payments
+            % for pt in row.incoming_payments
                 <span class="symbol-3ex">{{ payment_method_icon(pt.payin_method) }}</span>
                 {{ locale.format_money(Money(**pt.amount)) }}
                 from <a href="/~{{ pt.payer }}/">{{ pt.payer_name }}</a>
