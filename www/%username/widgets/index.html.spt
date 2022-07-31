@@ -2,7 +2,7 @@ from liberapay.utils import get_participant
 
 [---]
 
-participant = get_participant(state, restrict=False)
+participant = get_participant(state, restrict=True, allow_member=True)
 title = participant.username
 subhead = _("Widgets")
 profile_url = participant.url()
