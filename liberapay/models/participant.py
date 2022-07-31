@@ -3684,6 +3684,7 @@ def generate_profile_description_missing_notifications():
          WHERE p.status = 'active'
            AND p.kind IN ('individual', 'organization')
            AND p.receiving > 0
+           AND ( p.goal IS NULL OR p.goal >= 0 )
            AND p.id NOT IN (SELECT DISTINCT participant FROM statements)
            AND p.id NOT IN (
                    SELECT DISTINCT n.participant
