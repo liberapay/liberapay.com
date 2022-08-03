@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/liberapay/core/sk/>\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -1012,8 +1012,8 @@ msgstr "Poplatok za transakciu prekročil ich výšku."
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" nie je platné číslo."
 
-#, python-brace-format
-msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+#, fuzzy, python-brace-format
+msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "\"{0}\" nie je správne formátované číslo. Pravdepodobne ste mysleli {list_of_suggestions}?"
 
 #, python-brace-format
@@ -2544,13 +2544,9 @@ msgstr "Nemôžeme vám odobrať iba {donation_amount}, minimálna platba je {mi
 msgid "Please select or input a payment amount:"
 msgstr "Prosím zvoľte alebo napíšte velkosť platby:"
 
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Liberapay neukladá vaše peniaze, celá čiastka vašej platby pôjde okamžite do {payment_provider} účtov {recipient_names}."
-
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay neukladá vaše peniaze, celá čiastka vašej platby pôjde ihneď {payment_provider} účet {recipient_name}."
+#, fuzzy, python-brace-format
+msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
+msgstr "Liberapay neukladá vaše peniaze, celá čiastka vašej platby pôjde okamžite do {payment_provider}."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal prezradí príjemcovi vaše meno a emailovú adresu."
@@ -3773,7 +3769,8 @@ msgstr "Použite tieto kódy aby ste pridali odznak na vašu web stránku alebo 
 msgid "To contact the Liberapay team privately:"
 msgstr "Aby ste kontaktovali tím Liberapay súkromne:"
 
-msgid "Send us an email"
+#, fuzzy
+msgid "Send an email to Liberapay"
 msgstr "Pošlite nám email"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
@@ -3785,7 +3782,8 @@ msgstr "V súčasnej dobe nemáme telefónne číslo."
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr "Nekontaktujte nás ak sa snažíte osloviť niektorého z našich užívateľov. Nepreposielame správy a taktiež neodhaľujeme identitu ani kontaktné údaje našich užívateľov bez platného súdneho príkazu."
 
-msgid "To report a problem or make a suggestion in English:"
+#, fuzzy
+msgid "To report a problem or make a suggestion publicly:"
 msgstr "Nahlásiť chybu alebo námet v angličtine:"
 
 msgid "Open an issue on GitHub"

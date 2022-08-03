@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Language-Team: Finnish "
 "<https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -1002,8 +1002,8 @@ msgstr "Rahansiirron kulut ylittäisivät sen summan."
 msgid "\"{0}\" is not a valid number."
 msgstr "”{0}” ei ole kelvollinen luku. Tarkasta mm. käytetty desimaalierotin."
 
-#, python-brace-format
-msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+#, fuzzy, python-brace-format
+msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "”{0}” ei ole oikein muotoiltu lukuarvo. Tarkoititko ehkä {list_of_suggestions}?"
 
 #, python-brace-format
@@ -2520,13 +2520,9 @@ msgstr "Emme voi veloittaa sinulta vain {donation_amount} summaa. Minimiveloitus
 msgid "Please select or input a payment amount:"
 msgstr "Valitse tai syötä maksun summa:"
 
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Liberapay ei säilö rahaa. Koko maksamasi summa lähetetään välittömästi vastaanottajien {recipient_names} {payment_provider}-tileille."
-
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay ei säilö rahaa. Koko maksamasi summa lähetetään välittömästi vastaanottajan {recipient_name} {payment_provider}-tilille."
+#, fuzzy, python-brace-format
+msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
+msgstr "Liberapay ei säilö rahaa. Koko maksamasi summa lähetetään välittömästi vastaanottajien {payment_provider}-tileille."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal paljastaa nimesi ja sähköpostiosoitteesi vastaanottajalle."
@@ -3733,7 +3729,8 @@ msgstr "Lisää sivustoosi tai README-tiedostoosi kunniamerkki näiden koodinpä
 msgid "To contact the Liberapay team privately:"
 msgstr "Ottaaksesi yhteyttä Liberapay-ryhmään yksityisesti:"
 
-msgid "Send us an email"
+#, fuzzy
+msgid "Send an email to Liberapay"
 msgstr "Lähetä sähköpostia"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
@@ -3745,7 +3742,8 @@ msgstr "Meillä ei tällä hetkellä ole puhelinnumeroa."
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr "Älä ota meihin yhteyttä, mikäli tarkoituksesi on ottaa yhteyttä johonkin käyttäjäämme. Emme välitä viestejä edelleen, emmekä paljasta käyttäjiemme identiteettiä tai yhteystietoja ilman oikeuden määräystä."
 
-msgid "To report a problem or make a suggestion in English:"
+#, fuzzy
+msgid "To report a problem or make a suggestion publicly:"
 msgstr "Ilmoittaaksesi ongelmasta tai ehdottaaksesi jotain englanniksi:"
 
 msgid "Open an issue on GitHub"

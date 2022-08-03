@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Language-Team: Catalan "
 "<https://hosted.weblate.org/projects/liberapay/core/ca/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -1002,8 +1002,8 @@ msgstr "La comissió de transacció superaria aquesta quantitat."
 msgid "\"{0}\" is not a valid number."
 msgstr "«{0}» no és un nombre vàlid."
 
-#, python-brace-format
-msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+#, fuzzy, python-brace-format
+msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "El nombre «{0}» no té el format correcte. Potser volíeu dir {list_of_suggestions}?"
 
 #, python-brace-format
@@ -2520,13 +2520,9 @@ msgstr "No podem girar-vos només {donation_amount}. La quantitat mínima de pag
 msgid "Please select or input a payment amount:"
 msgstr "Seleccioneu o introduïu una quantitat de pagament:"
 
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Liberapay no emmagatzema diners. La quantitat total del pagament anirà immediatament als comptes {payment_provider} de {recipient_names}."
-
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay no emmagatzema diners. La quantitat íntegra del vostre pagament anirà immediatament al compte {payment_provider} del receptor {recipient_name}."
+#, fuzzy, python-brace-format
+msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
+msgstr "Liberapay no emmagatzema diners. La quantitat total del pagament anirà immediatament als comptes {payment_provider}."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal revela el vostre nom i adreça de correu al destinatari."
@@ -3733,7 +3729,8 @@ msgstr "Useu aquests fragments de codi per a afegir un distintiu al vostre lloc 
 msgid "To contact the Liberapay team privately:"
 msgstr "Per a contactar amb l'equip del Liberapay de forma privada:"
 
-msgid "Send us an email"
+#, fuzzy
+msgid "Send an email to Liberapay"
 msgstr "Envieu-nos un correu"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
@@ -3745,7 +3742,8 @@ msgstr "No tenim cap número de telèfon."
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr "No contacteu amb nosaltres si esteu intentant de comunicar-vos amb algun dels nostres usuaris. No transmetem missatges, i no podem revelar la identitat o informació de contacte dels nostres usuaris si no teniu una ordre judicial vàlida."
 
-msgid "To report a problem or make a suggestion in English:"
+#, fuzzy
+msgid "To report a problem or make a suggestion publicly:"
 msgstr "Per a informar d'un problema o fer un suggeriment en anglès:"
 
 msgid "Open an issue on GitHub"

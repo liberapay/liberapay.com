@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Language-Team: Polish "
 "<https://hosted.weblate.org/projects/liberapay/core/pl/>\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -1012,8 +1012,8 @@ msgstr "Opłata za transakcję przekroczyłaby jej wartość."
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" nie jest prawidłową liczbą."
 
-#, python-brace-format
-msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+#, fuzzy, python-brace-format
+msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "\"{0}\" nie jest prawidłową liczbą. Czy chodziło Ci o {list_of_suggestions}?"
 
 #, python-brace-format
@@ -2544,13 +2544,9 @@ msgstr "Nie możemy obciążyć Cię tylko {donation_amount}, minimalna kwota p�
 msgid "Please select or input a payment amount:"
 msgstr "Wybierz lub wprowadź kwotę:"
 
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Liberapay nie przechowuje pieniędzy, cała kwota płatności zostanie natychmiast przekazana na konta {payment_provider} {recipient_names}."
-
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay nie przechowuje pieniędzy, cała kwota płatności zostanie natychmiast przekazana na konto {payment_provider} {recipient_name}."
+#, fuzzy, python-brace-format
+msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
+msgstr "Liberapay nie przechowuje pieniędzy, cała kwota płatności zostanie natychmiast przekazana na konta {payment_provider}."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal ujawnia odbiorcy Twoje imię i nazwisko oraz adres e-mail."
@@ -3773,7 +3769,8 @@ msgstr "Użyj tych fragmentów kodu, aby dodać odznakę na swoją stronę lub R
 msgid "To contact the Liberapay team privately:"
 msgstr "Aby skontaktować się prywatnie z zespołem Liberapay:"
 
-msgid "Send us an email"
+#, fuzzy
+msgid "Send an email to Liberapay"
 msgstr "Wyślij nam e-mail"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
@@ -3785,7 +3782,8 @@ msgstr "Aktualnie nie posiadamy numeru telefonu."
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr "Nie kontaktuj się z nami, jeśli próbujesz dotrzeć do jednego z naszych użytkowników. Nie przekazujemy wiadomości i nie możemy ujawnić tożsamości ani danych kontaktowych naszych użytkowników, chyba że masz prawomocne orzeczenie sądowe."
 
-msgid "To report a problem or make a suggestion in English:"
+#, fuzzy
+msgid "To report a problem or make a suggestion publicly:"
 msgstr "By zgłosić problem lub coś zasugerować w języku angielskim:"
 
 msgid "Open an issue on GitHub"
