@@ -2,3 +2,38 @@
     list-style-type: '→ ';
     padding-left: 2ex;
 }
+
+// Status lists
+
+ul.status-list {
+    list-style: none;
+    margin: 0 0 1em 0;
+    padding-left: 0;
+    & > li {
+        margin-bottom: 0.33em;
+        padding-left: 4ex;
+        position: relative;
+        &::before {
+            font-family: 'Glyphicons Halflings';
+            left: 1ex;
+            list-style: none;
+            position: absolute;
+        }
+    }
+}
+ul.list-yes > li::before, ul.status-list > li.ok-success::before {
+    color: $state-success-text;
+    content: '\e013';
+}
+ul.status-list > li.ok-info::before {
+    color: $state-info-text;
+    content: '\e013';
+}
+ul.status-list > li.not-ok-warning::before {
+    color: $state-warning-text;
+    content: '\e013';
+}
+ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
+    color: $state-danger-text;
+    content: '\e014';
+}

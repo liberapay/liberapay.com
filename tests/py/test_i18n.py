@@ -104,7 +104,7 @@ class Tests(Harness):
         locale = state['locale']
         assert locale is self.website.locales['de-ch']
         assert locale.tag == 'de-ch'
-        assert locale.format_money(Money('5200.00', 'EUR')) == '€ 5’200.00'
+        assert locale.format_money(Money('5200.00', 'EUR')) == 'EUR 5’200.00'
         assert locale.parse_money_amount('5’200.00', 'EUR') == Money('5200.00', 'EUR')
 
     def test_get_currencies_for(self):

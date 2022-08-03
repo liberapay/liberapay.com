@@ -1,0 +1,56 @@
+.alert-read {
+    background: transparent;
+}
+
+.alert-notification {
+    padding: 0;
+}
+.alert-header {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: $font-size-base;
+    justify-content: space-between;
+    line-height: $line-height-computed;
+    margin: 0;
+    padding: 10px 15px 10px;
+    position: relative;
+    & > .title {
+        margin-right: 2ex;
+    }
+    .actions {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        & > button {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            border: 0;
+            color: #aaa;
+            cursor: pointer;
+            padding: 0.5ex 0.75ex;
+        }
+    }
+    & > small {
+        font-size: 90%;
+        line-height: inherit;
+        margin-right: 11ex;
+    }
+}
+.alert-body {
+    border-top: 1px solid;
+    padding: 11px 15px 0;
+}
+.alert-danger > .alert-body {
+    border-top-color: $state-danger-border;
+}
+.alert-info > .alert-body {
+    border-top-color: $state-info-border;
+}
+.alert-success > .alert-body {
+    border-top-color: $state-success-border;
+}
+.alert-warning > .alert-body {
+    border-top-color: $state-warning-border;
+}

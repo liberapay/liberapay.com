@@ -17,8 +17,9 @@ if query:
         results['usernames'] = website.db.all("""
             SELECT username, avatar_url, similarity(username, %(q)s) AS rank, id
               FROM participants
-             WHERE lower(username) %% lower(%(q)s)
-               AND status = 'active'
+             WHERE status = 'active'
+               AND NOT username like '~%%'
+               AND lower(username) %% lower(%(q)s)
                AND hide_from_search = 0
           ORDER BY rank DESC, username
              LIMIT 10

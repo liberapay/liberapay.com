@@ -54,8 +54,7 @@ if request.method == 'POST':
             identity['postal_address'] = postal_address
             participant.insert_identity(identity)
     msg = _("The payment instrument has been successfully added.")
-    ntips_awaiting_payment = participant.get_tips_awaiting_payment()[1]
-    redirect_url = participant.path('giving/pay' if ntips_awaiting_payment else 'routes/')
+    redirect_url = participant.path('routes/')
     form_post_success(state, redirect_url=redirect_url, msg=msg)
 
 network = request.qs['type']

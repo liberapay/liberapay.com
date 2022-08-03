@@ -180,6 +180,8 @@ class TestCronJobs(EmailHarness):
         charles = self.make_participant('charles', email='charles@example.org')
         # dave: has description, receives payments, shouldn't be notified
         dave = self.make_participant('dave', email='dave@example.org')
+        # emma: no description, declines donations, shouldn't be notified
+        emma = self.make_participant('emma', email='emma@example.org', goal=EUR(-1))
 
         # add payment accounts for bob and dave and cards for alex and charles
         self.add_payment_account(bob, 'stripe')
@@ -196,6 +198,10 @@ class TestCronJobs(EmailHarness):
         charles.set_tip_to(dave, EUR('4.50'))
         self.make_payin_and_transfer(alex_card, bob, EUR('4.50'))
         self.make_payin_and_transfer(charles_card, dave, EUR('4.50'))
+
+        # set up a pledge to emma
+        charles.set_tip_to(emma, EUR('4.50'))
+        assert emma.receiving == EUR('4.50')
 
         # run the cron job
         generate_profile_description_missing_notifications()

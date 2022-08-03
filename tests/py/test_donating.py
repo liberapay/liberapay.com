@@ -53,3 +53,42 @@ class TestDonating(Harness):
         assert tip.amount == USD('1.00')
         assert tip.renewal_mode == 2
         assert tip.visibility == 3
+
+    def test_donation_form_v2_enforces_amount_limits(self):
+        self.make_participant('creator', accepted_currencies=None)
+        donor = self.make_participant('donor')
+        r = self.client.PxST(
+            '/creator/tip',
+            {'currency': 'GBP', 'selected_amount': '-inf'},
+            auth_as=donor,
+        )
+        assert r.code == 400
+        assert r.__class__.__name__ == 'InvalidNumber'
+        r = self.client.PxST(
+            '/creator/tip',
+            {'currency': 'JPY', 'selected_amount': '0.1'},
+            auth_as=donor,
+        )
+        assert r.code == 400
+        assert r.__class__.__name__ == 'BadAmount'
+        r = self.client.PxST(
+            '/creator/tip',
+            {'currency': 'EUR', 'selected_amount': '0.001'},
+            auth_as=donor,
+        )
+        assert r.code == 400
+        assert r.__class__.__name__ == 'BadAmount'
+        r = self.client.PxST(
+            '/creator/tip',
+            {'currency': 'USD', 'selected_amount': '100.01'},
+            auth_as=donor,
+        )
+        assert r.code == 400
+        assert r.__class__.__name__ == 'BadAmount'
+        r = self.client.PxST(
+            '/creator/tip',
+            {'currency': 'CHF', 'selected_amount': 'inf'},
+            auth_as=donor,
+        )
+        assert r.code == 400
+        assert r.__class__.__name__ == 'InvalidNumber'

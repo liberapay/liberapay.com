@@ -26,6 +26,18 @@ class TestResolveAmounts(Harness):
         resolved_amounts = resolve_amounts(EUR('6.01'), naive_amounts)
         assert resolved_amounts == expected_amounts
 
+    def test_resolve_exact_amounts(self):
+        naive_amounts = {1: EUR('20.00'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('20.00'), 2: EUR('0.01')}
+        resolved_amounts = resolve_amounts(EUR('20.01'), naive_amounts)
+        assert resolved_amounts == expected_amounts
+
+    def test_resolve_high_amounts(self):
+        naive_amounts = {1: EUR('20.00'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('40.00'), 2: EUR('0.02')}
+        resolved_amounts = resolve_amounts(EUR('40.02'), naive_amounts)
+        assert resolved_amounts == expected_amounts
+
     def test_resolve_exact_convergence(self):
         base_amounts = {1: EUR('1.23'), 2: EUR('4.56')}
         convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01')}

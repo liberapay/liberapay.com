@@ -33,12 +33,12 @@
         </ul>
     </nav>
     <div class="content-col">
-        % if 'success' in request.qs
-            % set success = request.qs.pop('success')
-            <div class="alert alert-success">{{
-                b64decode_s(success) if success else
-                _("The changes have been saved.")
-            }}</div>
+        % if request.queued_success_messages
+            % for _msg in request.queued_success_messages
+                <div class="alert alert-success">{{
+                    _msg or _("The changes have been saved.")
+                }}</div>
+            % endfor
         % endif
         {% block content %}{% endblock %}
     </div>

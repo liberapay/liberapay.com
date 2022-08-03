@@ -1322,6 +1322,8 @@ class Participant(Model, MixinTeam):
         if email and not force_email:
             bit = EVENTS.get(event.split('~', 1)[0]).bit
             email = self.email_notif_bits & bit > 0
+            if not email and not web:
+                return
         p_id = self.id
         # If email_unverified_address is on, allow sending to an unverified email address.
         if email_unverified_address and not self.email:
@@ -3682,6 +3684,7 @@ def generate_profile_description_missing_notifications():
          WHERE p.status = 'active'
            AND p.kind IN ('individual', 'organization')
            AND p.receiving > 0
+           AND ( p.goal IS NULL OR p.goal >= 0 )
            AND p.id NOT IN (SELECT DISTINCT participant FROM statements)
            AND p.id NOT IN (
                    SELECT DISTINCT n.participant
