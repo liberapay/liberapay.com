@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"PO-Revision-Date: 2022-08-03 09:17+0000\n"
+"Last-Translator: Vik <xasertop@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.14-dev\n"
 "Generated-By: Babel 2.9.1\n"
 
 #, python-brace-format
@@ -2161,9 +2163,8 @@ msgstr "Несохранённые изменения будут потерян�
 msgid "Discard"
 msgstr "Отклонить"
 
-#, fuzzy
 msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
-msgstr "Опишите свою работу, почему вы просите делать пожертвования, и т.д. Нам нужно как краткое, так и полное описание."
+msgstr "Опишите свою работу, почему вы просите пожертвования и т. д. Краткое резюме будет использовано при демонстрации вашего профиля вместе с другими, поэтому оно должно быть значимым само по себе и понятным даже для людей, которые ничего о вас не знают."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
 msgstr "Liberapay позволяет делать ваши тексты интернациональными. Используйте переключатель внизу, чтобы выбрать язык."
@@ -2410,9 +2411,8 @@ msgstr "Обновить сейчас"
 msgid "Pending payment completion."
 msgstr "Ожидается завершение платежа."
 
-#, fuzzy
 msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
-msgstr "Ожидание платежа."
+msgstr "Вам необходимо инициировать новый платеж для осуществления этого пожертвования. Нажмите на кнопку ниже, чтобы продолжить."
 
 msgid "Renew"
 msgstr "Обновить"
@@ -2468,9 +2468,8 @@ msgstr "Мы можем объединить эти пожертвования �
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Ваши пожертвования в пользу {recipients} ожидают оплаты."
 
-#, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
-msgstr "Данное пожертвование может быть обновлено только через сайт PayPal."
+msgstr "Сейчас PayPal является единственным доступным вариантом финансирования этого пожертвования. Пожалуйста, нажмите на следующую кнопку, чтобы продолжить:"
 
 msgid "Please choose a payment method:"
 msgstr "Выберите способ оплаты:"
@@ -2771,7 +2770,7 @@ msgstr[2] "У {username} {n} публичных спонсоров."
 #, python-brace-format
 msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
 msgid_plural "The top {n} patrons are:"
-msgstr[0] "Топ {n} спонсоров:"
+msgstr[0] "{n} главный спонсор:"
 msgstr[1] "Топ {n} спонсоров:"
 msgstr[2] "Топ {n} спонсоров:"
 
@@ -3500,13 +3499,13 @@ msgid "We may give your username to someone else if they ask for it, but not for
 msgstr "Мы можем отдать ваше имя пользователя кому-нибудь другому, если он попросит об этом, но не ранее, чем через год после закрытия вашего аккаунта (если не выяснится, что вы ущемляли торговую марку)."
 
 msgid "Feedback"
-msgstr ""
+msgstr "Обратная связь"
 
 msgid "If you would like to tell us why you're closing your account, you can leave a message here:"
-msgstr ""
+msgstr "Если вы хотите сообщить нам, почему закрываете свой аккаунт, можете оставить сообщение здесь:"
 
 msgid "Reason for closing account"
-msgstr ""
+msgstr "Причина закрытия аккаунта"
 
 msgid "Ready?"
 msgstr "Готовы?"
@@ -3944,7 +3943,7 @@ msgstr[2] "Liberapay доступен создателям в {stripe_link_open}
 #, python-brace-format
 msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
 msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] "Пожертвования могут быть в любой из этих {n} валюты:"
+msgstr[0] "Пожертвования могут быть в этой {n} валюте:"
 msgstr[1] "Пожертвования могут быть в любой из этих {n} валют:"
 msgstr[2] "Пожертвования могут быть в любой из этих {n} валют:"
 
@@ -4074,7 +4073,7 @@ msgstr "Stripe позволяет создателям настраивать а
 #, python-brace-format
 msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
 msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] ""
+msgstr[0] "PayPal доступен создателям в {paypal_link_open}более чем 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} страну{link_close}."
 msgstr[1] "PayPal доступен создателям в {paypal_link_open}более чем 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} страны{link_close}."
 msgstr[2] "PayPal доступен создателям в {paypal_link_open}более чем 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} стран{link_close}."
 
@@ -4701,17 +4700,17 @@ msgstr[2] "Описания вашего профиля и другие текс
 msgid "Multiple currencies"
 msgstr "Различные валюты"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
-msgstr[0] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем {n} валюту. Однако с криптовалютой мы не работаем."
-msgstr[1] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем {n} валюты. Однако с криптовалютой мы не работаем."
-msgstr[2] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем {n} валют. Однако с криптовалютой мы не работаем."
+msgstr[0] "Первой валютой Liberapay был евро, затем был добавлен доллар США, а теперь мы поддерживаем {n} валюту. Однако мы не работаем с криптовалютой."
+msgstr[1] "Первой валютой Liberapay был евро, затем был добавлен доллар США, а теперь мы поддерживаем {n} валюты. Однако мы не работаем с криптовалютой."
+msgstr[2] "Первой валютой Liberapay был евро, затем был добавлен доллар США, а теперь мы поддерживаем {n} валют. Однако мы не работаем с криптовалютой."
 
 msgid "Integrations"
 msgstr "Интеграции"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
 msgstr[0] "Вы можете привязать к своему профилю учетные записи, принадлежащие вам на {platform1}, {platform2}, {platform3} и {n} другой платформе."
@@ -5067,9 +5066,8 @@ msgstr[0] "Вы подписаны на {n} аккаунт на {platform}."
 msgstr[1] "Вы подписаны на {n} аккаунта на {platform}."
 msgstr[2] "Вы подписаны на {n} аккаунтов на {platform}."
 
-#, fuzzy
 msgid "The address you provided is not valid. Expected format: username@domain"
-msgstr "Введённый вами адрес некорректен: в нём нет символа \"@\"."
+msgstr "Введённый вами адрес некорректен. Необходимый формат: username@domain"
 
 msgid "Which account?"
 msgstr "Какой аккаунт?"
