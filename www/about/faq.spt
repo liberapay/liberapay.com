@@ -1,4 +1,21 @@
+from liberapay.i18n.base import Percent
 [---]
+# Stripe's fee is on the donor's payment, whereas PayPal's fees are on each
+# transfer from the donor to a recipient.
+average_fee_stripe = website.db.one("""
+    SELECT (sum(fee, 'EUR')).amount / (sum(amount_settled, 'EUR')).amount
+      FROM payins
+     WHERE fee IS NOT NULL
+       AND amount_settled IS NOT NULL
+       AND ctime > (current_timestamp - interval '365 days')
+""", max_age=86400)
+average_fee_paypal = website.db.one("""
+    SELECT (sum(fee, 'EUR')).amount / (sum(fee, 'EUR') + sum(amount, 'EUR')).amount
+      FROM payin_transfers
+     WHERE fee IS NOT NULL
+       AND ctime > (current_timestamp - interval '365 days')
+""", max_age=86400)
+
 title = _("Frequently Asked Questions")
 [---] text/html
 % extends "templates/layouts/about.html"
@@ -158,7 +175,11 @@ title = _("Frequently Asked Questions")
 
     <dd>{{ _(
         "The fees vary by payment processor, payment method, countries and "
-        "currencies. The average is expected to be below 5% in all cases."
+        "currencies. In the last year, the average fee percentages have been "
+        "{average_fee_stripe} for the payments processed by Stripe and "
+        "{average_fee_paypal} for the payments processed by PayPal."
+        , average_fee_stripe=Percent(average_fee_stripe, min_precision=2) if average_fee_stripe else '[unknown]'
+        , average_fee_paypal=Percent(average_fee_paypal, min_precision=2) if average_fee_paypal else '[unknown]'
     ) }}</dd>
 
 
