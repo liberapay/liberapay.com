@@ -1254,6 +1254,12 @@ msgstr "Skúsiť znova"
 msgid "This profile is marked as spam."
 msgstr "Tento profil bol označený ako spam."
 
+msgid "Other amount"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Pokračovať"
+
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Pre toto budete potrebovať účet. Prosím vyplňte jeden z formulárov nižšie."
 
@@ -1287,9 +1293,6 @@ msgstr "Obísť čiernu listinu a zopakovať"
 
 msgid "Alternatively, you can try a different email address:"
 msgstr "Alternatívne, môžete skúsiť inú emailovú adresu:"
-
-msgid "Proceed"
-msgstr "Pokračovať"
 
 msgid "Reauthentication required"
 msgstr "Je potrebné overenie"
@@ -3331,8 +3334,11 @@ msgstr "Dátum vysporiadania: {0}"
 msgid "Transaction ID: {0}"
 msgstr "ID transakcie: {0}"
 
-msgid "This document is not an invoice."
-msgstr "Tento dokument nie je faktúra."
+msgid "Taxes"
+msgstr ""
+
+msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Nemôžete prijímať nové príspevky, kým nenakonfigurujete spracovanie platieb."
@@ -3439,6 +3445,14 @@ msgstr "prednastavené"
 
 msgid "view mandate"
 msgstr "zobraziť mandát"
+
+#, python-brace-format
+msgid "Was supposed to expire in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "Expired in {month} {year}"
+msgstr ""
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3766,6 +3780,9 @@ msgstr "Odznaky z {link_open}shields.io{link_close}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Použite tieto kódy aby ste pridali odznak na vašu web stránku alebo súbor README:"
 
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr "Nekontaktujte nás ak sa snažíte osloviť niektorého z našich užívateľov. Nepreposielame správy a taktiež neodhaľujeme identitu ani kontaktné údaje našich užívateľov bez platného súdneho príkazu."
+
 msgid "To contact the Liberapay team privately:"
 msgstr "Aby ste kontaktovali tím Liberapay súkromne:"
 
@@ -3776,11 +3793,12 @@ msgstr "Pošlite nám email"
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Ak vaša správa nie je napísaná v angličtine alebo vo francúzštine, tak bude automaticky strojovo preložená. Naše odpovede budú taktiež preložené do vášho jazyka."
 
+#, python-brace-format
+msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
+msgstr ""
+
 msgid "We currently don't have a phone number."
 msgstr "V súčasnej dobe nemáme telefónne číslo."
-
-msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr "Nekontaktujte nás ak sa snažíte osloviť niektorého z našich užívateľov. Nepreposielame správy a taktiež neodhaľujeme identitu ani kontaktné údaje našich užívateľov bez platného súdneho príkazu."
 
 #, fuzzy
 msgid "To report a problem or make a suggestion publicly:"
@@ -3788,9 +3806,6 @@ msgstr "Nahlásiť chybu alebo námet v angličtine:"
 
 msgid "Open an issue on GitHub"
 msgstr "Nahláste problém na Githube"
-
-msgid "Other communication channels:"
-msgstr "Ďalšie komunikačné kanály:"
 
 msgid "How is Liberapay funded? Are there fees?"
 msgstr "Ako je financovaný Liberapay? Sú tu poplatky?"
@@ -3928,22 +3943,29 @@ msgstr "Novinky od nás môžete nájsť na nasledujúcich sociálnych sieťach:
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr "Môžete taktiež sledovať vývoj {1}software Liberapay{0}, {2}dobrodružstvo právnickej osoby Liberapay{0} a {3}obecnej diskusie tímu Liberapay{0}."
 
-#, python-brace-format
-msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgstr[1] "Liberapay je dostupný tvorcom v {stripe_link_open}{n} krajinách cez Stripe{link_close} a vo {paypal_link_open}viac ako 200 krajinách cez PayPal{link_close}."
-msgstr[2] "Liberapay je dostupný tvorcom v {stripe_link_open}{n} krajinách cez Stripe{link_close} a vo {paypal_link_open}viac ako 200 krajinách cez PayPal{link_close}."
+msgid "Donations can come from anywhere in the world."
+msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgstr[1] "Príspevky môžu byť v týchto {n} menách:"
-msgstr[2] "Príspevky môžu byť v týchto {n} menách:"
+msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
+msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-msgid "Each creator can select which of these currencies to accept."
-msgstr "Každý tvorca si môže vybrať, ktoré z týchto mien bude akceptovať."
+#, python-brace-format
+msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
+msgid_plural "Liberapay is fully available to creators in {n} territories:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
+msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "What is Liberapay?"
 msgstr "Čo je Liberapay?"
@@ -4066,11 +4088,19 @@ msgid "Stripe allows creators to configure automatic payouts to their bank accou
 msgstr "Stripe dovoluje tvorcom nastaviť automatické vyplatenia na ich bankové účty."
 
 #, python-brace-format
-msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgstr[1] "PayPal je dostupný pre tvorcov vo {paypal_link_open}viac ako 200 krajinách{link_close}, narozdiel od služby Stripe ktorá funguje v {stripe_link_open}{n} krajinách{link_close}."
-msgstr[2] "PayPal je dostupný pre tvorcov vo {paypal_link_open}viac ako 200 krajinách{link_close}, narozdiel od služby Stripe ktorá funguje v {stripe_link_open}{n} krajinách{link_close}."
+msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
+msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
+msgstr ""
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "Robíme všetko preto, aby sme ochránili každého súkromie: nesnažíme sa sledovať ľudí čo navštevujú našu stránku, zbierame iba osobné údaje ktoré nevyhnutne nepotrebujeme a nepredávame ich žiadnej tretej strane."

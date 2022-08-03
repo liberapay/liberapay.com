@@ -1228,6 +1228,12 @@ msgstr "重试"
 msgid "This profile is marked as spam."
 msgstr "此资料页面被标记为垃圾信息。"
 
+msgid "Other amount"
+msgstr ""
+
+msgid "Proceed"
+msgstr "继续"
+
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "您需要一个账户来执行此操作。请填写下列表单。"
 
@@ -1261,9 +1267,6 @@ msgstr "跳过黑名单并重试"
 
 msgid "Alternatively, you can try a different email address:"
 msgstr "您也可以尝试使用其他电子邮件地址："
-
-msgid "Proceed"
-msgstr "继续"
 
 msgid "Reauthentication required"
 msgstr "复验身份"
@@ -3263,8 +3266,11 @@ msgstr "结算日期：{0}"
 msgid "Transaction ID: {0}"
 msgstr "交易 ID：{0}"
 
-msgid "This document is not an invoice."
-msgstr "此文件不是一张发票。"
+msgid "Taxes"
+msgstr ""
+
+msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "您必须设置支付方式才能接收新的捐款。"
@@ -3367,6 +3373,14 @@ msgstr "默认"
 
 msgid "view mandate"
 msgstr "查看授权"
+
+#, python-brace-format
+msgid "Was supposed to expire in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "Expired in {month} {year}"
+msgstr ""
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3686,6 +3700,9 @@ msgstr "{link_open}Shields.io{link_close} 提供徽章"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "把这段徽章代码加入您的网站或自述文件（README）："
 
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr "我们无法帮您联系本站上的用户。恕我们不提供消息中继服务，除非您持有合法的法院命令，否则我们不会透露用户的资料或联系方式。"
+
 msgid "To contact the Liberapay team privately:"
 msgstr "如要私下联系 Liberapay 团队："
 
@@ -3696,11 +3713,12 @@ msgstr "给我们发电子邮件"
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "如果您的消息不是以英文或法文书写，我们会使用机器翻译，并以同样的方式将我们的回复翻译为原消息所用的语言。"
 
+#, python-brace-format
+msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
+msgstr ""
+
 msgid "We currently don't have a phone number."
 msgstr "我们目前没有电话号码。"
-
-msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr "我们无法帮您联系本站上的用户。恕我们不提供消息中继服务，除非您持有合法的法院命令，否则我们不会透露用户的资料或联系方式。"
 
 #, fuzzy
 msgid "To report a problem or make a suggestion publicly:"
@@ -3708,9 +3726,6 @@ msgstr "如要提出问题或建议（使用英语）："
 
 msgid "Open an issue on GitHub"
 msgstr "在 GitHub 上开启一个问题（Issue）"
-
-msgid "Other communication channels:"
-msgstr "其他通信频道："
 
 msgid "How is Liberapay funded? Are there fees?"
 msgstr "Liberapay 被谁资助？是否收费？"
@@ -3848,18 +3863,23 @@ msgstr "您可以通过以下社交平台了解我们的近况："
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr "您也可以关注 {1}Liberapay 软件{0}的开发进展、{2}了解 Liberapay 法律实体{0}，以及 {3}Liberapay 团队的日常讨论{0}。"
 
-#, python-brace-format
-msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] "{stripe_link_open}{n} 个国家/地区的创作者可以通过 Stripe{link_close}使用 Liberapay，另有超过 {paypal_link_open} 200 个国家/地区支持使用 PayPal{link_close}。"
+msgid "Donations can come from anywhere in the world."
+msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] "支持下列 {n} 种货币完成捐款："
+msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
+msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
+msgstr[0] ""
 
-msgid "Each creator can select which of these currencies to accept."
-msgstr "创作者可以选择其接受的币种。"
+#, python-brace-format
+msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
+msgid_plural "Liberapay is fully available to creators in {n} territories:"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
+msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
+msgstr[0] ""
 
 msgid "What is Liberapay?"
 msgstr "什么是 Liberapay？"
@@ -3982,9 +4002,17 @@ msgid "Stripe allows creators to configure automatic payouts to their bank accou
 msgstr "Stripe 允许创作者设置自动转账到自己的银行账户。"
 
 #, python-brace-format
-msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] "{paypal_link_open}全球200多个国家/地区{link_close}的创作者可使用 PayPal。Stripe 则仅支持{stripe_link_open} {n} 个{link_close}。"
+msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
+msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
+msgstr ""
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "我们竭尽所能保护所有人的隐私：我们不会尝试跟踪网站的访客，我们尽力只收集我们真正需要的个人信息，并且我们不会向任何人出售这些信息。"

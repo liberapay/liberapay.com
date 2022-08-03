@@ -1228,6 +1228,12 @@ msgstr "重試"
 msgid "This profile is marked as spam."
 msgstr "该资料被标记为垃圾邮件。"
 
+msgid "Other amount"
+msgstr ""
+
+msgid "Proceed"
+msgstr "繼續"
+
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "你需要一個帳戶，請填寫以下的表格。"
 
@@ -1261,9 +1267,6 @@ msgstr "跳過黑名單再重試"
 
 msgid "Alternatively, you can try a different email address:"
 msgstr "或者您可嘗試使用別的電郵信箱："
-
-msgid "Proceed"
-msgstr "繼續"
 
 msgid "Reauthentication required"
 msgstr "需要重新認證"
@@ -3269,8 +3272,11 @@ msgstr "結算日期：{0}"
 msgid "Transaction ID: {0}"
 msgstr "交易 ID： {0}"
 
-msgid "This document is not an invoice."
-msgstr "此文件不是發票。"
+msgid "Taxes"
+msgstr ""
+
+msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "你必須設定支付方法才能收取新的捐款。"
@@ -3373,6 +3379,14 @@ msgstr "預設"
 
 msgid "view mandate"
 msgstr "檢視授權要求"
+
+#, python-brace-format
+msgid "Was supposed to expire in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "Expired in {month} {year}"
+msgstr ""
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3692,6 +3706,9 @@ msgstr "{link_open}Shields.io{link_close}的徽章"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "把這段徵章的代碼加到您的網站或說明檔："
 
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr "我們無法代您聯絡本站某位用戶，恕我們不提供訊息中繼服務。除非持有合法的法院命令，我們不會揚露用戶的資料或聯絡資訊。"
+
 msgid "To contact the Liberapay team privately:"
 msgstr "私下連結 Liberapay 團隊："
 
@@ -3702,11 +3719,12 @@ msgstr "寄送電子郵件給我們"
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "若您的訊息不是英文或法文，則我們會使用機器翻譯，並將我們的回覆翻成原訊息使用的語言回信。"
 
+#, python-brace-format
+msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
+msgstr ""
+
 msgid "We currently don't have a phone number."
 msgstr "我們目前沒有電話號碼。"
-
-msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr "我們無法代您聯絡本站某位用戶，恕我們不提供訊息中繼服務。除非持有合法的法院命令，我們不會揚露用戶的資料或聯絡資訊。"
 
 #, fuzzy
 msgid "To report a problem or make a suggestion publicly:"
@@ -3714,9 +3732,6 @@ msgstr "要用英文回報問題或是提建議："
 
 msgid "Open an issue on GitHub"
 msgstr "在GitHub發出問題"
-
-msgid "Other communication channels:"
-msgstr "其它的溝通管道："
 
 #, fuzzy
 msgid "How is Liberapay funded? Are there fees?"
@@ -3855,18 +3870,23 @@ msgstr "你可以透過以下社交平台來取得我們的最近狀況："
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr "你也可以追踪{1}Liberapay 軟體{0}的開發進展， {2}了解Liberapay 法律實體{0}，以及{3}Liberapay 團隊的日常討論{0}。"
 
-#, python-brace-format
-msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] "{stripe_link_open}{n}國家的創作者可以透過 Stripe{link_close}使用 Liberapay，另有超過{paypal_link_open} 200 個國家支援 PayPal{link_close}。"
+msgid "Donations can come from anywhere in the world."
+msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] "支援下列{n}種貨幣捐款："
+msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
+msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
+msgstr[0] ""
 
-msgid "Each creator can select which of these currencies to accept."
-msgstr "創作者可以挑選其接受的貨幣種類。"
+#, python-brace-format
+msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
+msgid_plural "Liberapay is fully available to creators in {n} territories:"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
+msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
+msgstr[0] ""
 
 msgid "What is Liberapay?"
 msgstr "什麼是Liberapay？"
@@ -3989,9 +4009,17 @@ msgid "Stripe allows creators to configure automatic payouts to their bank accou
 msgstr "Stripe 可讓創作者設定自動轉帳入他們自己的銀行帳戶。"
 
 #, python-brace-format
-msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] "Paypal 目前在全球{paypal_link_open}200多個國家{link_close}通行，而 Stripe 僅支援{stripe_link_open}{n} 個國家{link_close}。"
+msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
+msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
+msgstr ""
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "我们尽所能来保护大家的隐私：我们不尝试跟踪我们网站的访客，我们争取只收集我们需要的个人信息，且我们不向任何人出卖它们。"
