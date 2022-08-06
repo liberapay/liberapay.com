@@ -183,6 +183,15 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
+    {{ dt(_("Why do I see partial refunds in the Stripe dashboard?"), 'partial-refunds') }}
+
+    <dd>{{ _(
+        "Partial refunds are how we recover Stripe's fee on single-recipient "
+        "payments. These refunds are from your Stripe account to Liberapay's, "
+        "not to the donor."
+    ) }}</dd>
+
+
     {{ dt(_("How are chargebacks handled?"), 'chargebacks') }}
 
     <dd>{{ _(
