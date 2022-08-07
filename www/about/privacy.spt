@@ -69,9 +69,11 @@ title = _("Privacy")
 <h3>{{ _("Payment processors") }}</h3>
 
 <p>{{ _(
-    "The intermediaries involved in payment processing collect information for "
-    "anti-fraud purposes, for example the name and IP address of the payer. Please "
-    "read these documents if you want more information: {links_to_policies}.",
+    "Liberapay relies on payment service providers to actually transfer money "
+    "from donors to creators, as we have neither the resources nor the desire "
+    "to directly interface with banks and payment networks. If you want to "
+    "learn about the personal data collected by these payment processors, "
+    "please read these documents: {links_to_policies}.",
     links_to_policies=[
         ('<a href="https://stripe.com/privacy">%s</a>'|safe) % _("{platform_name}'s privacy policy", platform_name='Stripe'),
         ('<a href="https://www.paypal.com/webapps/mpp/ua/privacy-full">%s</a>'|safe) % _("{platform_name}'s privacy policy", platform_name='PayPal'),
