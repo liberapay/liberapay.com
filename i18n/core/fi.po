@@ -1002,9 +1002,9 @@ msgstr "Rahansiirron kulut ylittäisivät sen summan."
 msgid "\"{0}\" is not a valid number."
 msgstr "”{0}” ei ole kelvollinen luku. Tarkasta mm. käytetty desimaalierotin."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
-msgstr "”{0}” ei ole oikein muotoiltu lukuarvo. Tarkoititko ehkä {list_of_suggestions}?"
+msgstr "”{0}” ei täsmää odotettuun numeroiden muotoilutapaan. Tarkoititko ehkä {list_of_suggestions}?"
 
 #, python-brace-format
 msgid "\"{0}\" is not a properly formatted number."
@@ -1242,7 +1242,7 @@ msgid "This profile is marked as spam."
 msgstr "Tämä tili on merkitty roskapostitukseen liittyväksi."
 
 msgid "Other amount"
-msgstr ""
+msgstr "Muu määrä"
 
 msgid "Proceed"
 msgstr "Toimeksi"
@@ -2523,7 +2523,7 @@ msgstr "Emme voi veloittaa sinulta vain {donation_amount} summaa. Minimiveloitus
 msgid "Please select or input a payment amount:"
 msgstr "Valitse tai syötä maksun summa:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
 msgstr "Liberapay ei säilö rahaa. Koko maksamasi summa lähetetään välittömästi vastaanottajien {payment_provider}-tileille."
 
@@ -3301,10 +3301,10 @@ msgid "Transaction ID: {0}"
 msgstr "Tapahtumatunnus: {0}"
 
 msgid "Taxes"
-msgstr ""
+msgstr "Verot"
 
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
-msgstr ""
+msgstr "Tämä maksu on lahjoitus. Sen vastineena ei toimiteta mitään hyödykkeitä tai palveluita, eikä Liberapay kerää veroja."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Et voi vastaanottaa lahjoituksia ennen kuin olet määrittänyt maksujen käsittelyn."
@@ -3412,11 +3412,11 @@ msgstr "näytä mandaatti"
 
 #, python-brace-format
 msgid "Was supposed to expire in {month} {year}"
-msgstr ""
+msgstr "Piti vanheta {month} {year}"
 
 #, python-brace-format
 msgid "Expired in {month} {year}"
-msgstr ""
+msgstr "Vanhentui {month} {year}"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3746,23 +3746,21 @@ msgstr "Älä ota meihin yhteyttä, mikäli tarkoituksesi on ottaa yhteyttä joh
 msgid "To contact the Liberapay team privately:"
 msgstr "Ottaaksesi yhteyttä Liberapay-ryhmään yksityisesti:"
 
-#, fuzzy
 msgid "Send an email to Liberapay"
-msgstr "Lähetä sähköpostia"
+msgstr "Lähetä sähköpostia Liberapaylle"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Mikäli viestisi ei ole kirjoitettu englanniksi tai ranskaksi, se käännetään automaattisesti konekäännöksenä. Vastauksemme kielellesi käännetään vastaavasti."
 
 #, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
-msgstr ""
+msgstr "Jos uskot löytäneesi järjestelmämme teknisen haavoittuvuuden, sen sijaan että lähettäisit sähköpostia meille, noudata {link_start}{page_name} -sivun{link_end} ohjeita."
 
 msgid "We currently don't have a phone number."
 msgstr "Meillä ei tällä hetkellä ole puhelinnumeroa."
 
-#, fuzzy
 msgid "To report a problem or make a suggestion publicly:"
-msgstr "Ilmoittaaksesi ongelmasta tai ehdottaaksesi jotain englanniksi:"
+msgstr "Ilmoittaaksesi ongelmasta tai ehdottaaksesi jotain englanniksi julkisesti:"
 
 msgid "Open an issue on GitHub"
 msgstr "Avaa issue Githubissa"
@@ -3905,25 +3903,25 @@ msgid "You can also follow the {1}development of the Liberapay software{0}, the 
 msgstr "Voit myös seurata {1}Liberapay-ohjelmiston kehitystä{0}, {2}Liberapay-oikeushenkilön seikkailuja{0}, ja {3}Liberapay-ryhmän yleistä keskustelua{0}."
 
 msgid "Donations can come from anywhere in the world."
-msgstr ""
+msgstr "Lahjoitukset voivat tulla mistä tahansa päin maailmaa."
 
 #, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mörgö"
+msgstr[1] "Lahjoittajat voivat valita jopa {n} valuutan välillä riippuen vastaanottajan valinnoista ja maksunvälitysjärjestelmän kyvyistä."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mörgö"
+msgstr[1] "Liberapay on sisällöntuottajien saatavilla {n} eri alueella:"
 
 #, python-brace-format
 msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
 msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mörgö"
+msgstr[1] "Lisäksi Liberapay on osittain saatavilla niille sisällöntuottajille, joita {paypal_link_open}Paypal tukee ({n} maata){link_close}."
 
 msgid "What is Liberapay?"
 msgstr "Mikä on Liberapay?"
@@ -4047,17 +4045,17 @@ msgstr "Stripessä sisällöntuottajien on mahdollista automatisoida siirrot omi
 
 #, python-brace-format
 msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
-msgstr ""
+msgstr "Liberapayn ja Stripen tukemista {n_liberapay_currencies} valuutasta vain {n_paypal_currencies} toimii PayPalin yhteydessä."
 
 #, python-brace-format
 msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
 msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mörgö"
+msgstr[1] "PayPal on sisällöntuottajien saatavilla yli 200 maassa, mutta Stripe tukee vain {n} maata soveltuvalla tavalla."
 
 #, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
-msgstr ""
+msgstr "Löydät lisää tietoa tuetuista maista ja valuutoista {link_start}”{page_name}” -sivulta{link_end}."
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "Teemme parhaamme varjellaksemme jokaisen yksityisyyttä: Emme yritä jäljittää, ketkä sivustollamme käyvät. Keräämme vain ne henkilötiedot, jotka tarvitsemme, emmekä myy niitä kenellekään."

@@ -1002,9 +1002,9 @@ msgstr "Les frais dépasseraient le montant de la transaction."
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" n'est pas un nombre valide."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
-msgstr "Le nombre « {0} » n'est pas correctement formaté. Peut-être vouliez-vous dire {list_of_suggestions} ?"
+msgstr "« {0} » ne correspond pas au format de nombre attendu. Peut-être vouliez-vous dire {list_of_suggestions} ?"
 
 #, python-brace-format
 msgid "\"{0}\" is not a properly formatted number."
@@ -1242,7 +1242,7 @@ msgid "This profile is marked as spam."
 msgstr "Ce profil est marqué comme spam."
 
 msgid "Other amount"
-msgstr ""
+msgstr "Autre montant"
 
 msgid "Proceed"
 msgstr "Continuer"
@@ -3301,10 +3301,10 @@ msgid "Transaction ID: {0}"
 msgstr "Numéro de transaction : {0}"
 
 msgid "Taxes"
-msgstr ""
+msgstr "Taxes"
 
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
-msgstr ""
+msgstr "Ce paiement est un don, aucun bien ni service n'est fourni en échange, aucune taxe n'a été collectée par Liberapay."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Vous ne pouvez pas recevoir de nouveaux dons tant que vous n'avez pas configuré de traitement des paiements."
@@ -3412,11 +3412,11 @@ msgstr "voir le mandat"
 
 #, python-brace-format
 msgid "Was supposed to expire in {month} {year}"
-msgstr ""
+msgstr "Devait expirer en {month} {year}"
 
 #, python-brace-format
 msgid "Expired in {month} {year}"
-msgstr ""
+msgstr "A expiré en {month} {year}"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3746,23 +3746,21 @@ msgstr "Ne nous contactez pas si vous essayez de joindre l'un de nos utilisateur
 msgid "To contact the Liberapay team privately:"
 msgstr "Pour contacter l'équipe de Liberapay en privé :"
 
-#, fuzzy
 msgid "Send an email to Liberapay"
-msgstr "Envoyez nous un courriel"
+msgstr "Envoyer un courriel à Liberapay"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Si votre message n'est pas rédigé en anglais ou en français, alors il sera traduit automatiquement par une machine. Notre réponse sera traduite dans votre langue de la même manière."
 
 #, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
-msgstr ""
+msgstr "Si vous pensez avoir trouvé une vulnérabilité technique dans notre système, veuillez suivre les instructions de {link_start}la page {page_name}{link_end} au lieu de nous envoyer un courriel."
 
 msgid "We currently don't have a phone number."
 msgstr "Nous n'avons pas encore de numéro de téléphone."
 
-#, fuzzy
 msgid "To report a problem or make a suggestion publicly:"
-msgstr "Pour signaler un problème ou faire une suggestion en anglais :"
+msgstr "Pour signaler un problème ou faire une suggestion publiquement :"
 
 msgid "Open an issue on GitHub"
 msgstr "Créez un ticket sur GitHub"
@@ -3905,25 +3903,25 @@ msgid "You can also follow the {1}development of the Liberapay software{0}, the 
 msgstr "Vous pouvez aussi suivre (en anglais) {1}le développement du logiciel Liberapay{0}, les {2}aventures de l'association Liberapay{0}, et les {3}discussions générales de l'équipe Liberapay{0}."
 
 msgid "Donations can come from anywhere in the world."
-msgstr ""
+msgstr "Les dons peuvent provenir de n'importe où dans le monde."
 
 #, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
+msgstr[1] "Les donateurs peuvent choisir jusqu'à {n} devises, en fonction des préférences du destinataire et des capacités de l'opérateur de paiement sous-jacent."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
+msgstr[1] "Liberapay est entièrement disponible pour les créateurs dans {n} territoires :"
 
 #, python-brace-format
 msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
 msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
+msgstr[1] "De plus, Liberapay est partiellement disponible pour les créateurs dans {paypal_link_open}les {n} pays gérés par PayPal{link_close}."
 
 msgid "What is Liberapay?"
 msgstr "Qu'est-ce que Liberapay ?"
@@ -4047,17 +4045,17 @@ msgstr "Stripe permet aux créateurs de configurer des paiements automatiques ve
 
 #, python-brace-format
 msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
-msgstr ""
+msgstr "PayPal ne prend en charge que {n_paypal_currencies} des {n_liberapay_currencies} devises prises en charge par Liberapay et Stripe."
 
 #, python-brace-format
 msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
 msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
+msgstr[1] "PayPal est disponible pour les créateurs dans plus de 200 pays, alors que Stripe ne prend en charge de manière appropriée que {n} pays."
 
 #, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
-msgstr ""
+msgstr "Vous pouvez trouver plus d'informations sur les pays et les devises pris en charge dans {link_start}la page « {page_name} »{link_end}."
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "Nous faisons de notre mieux pour protéger la vie privée de chacun : nous n'essayons pas de pister les personnes qui visitent notre site web, nous nous efforçons de ne collecter que les données personnelles dont nous avons réellement besoin, et nous ne les vendons à personne."
