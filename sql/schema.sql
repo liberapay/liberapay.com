@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '157'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '158'::jsonb);
 
 
 -- app configuration
@@ -52,7 +52,7 @@ CREATE TABLE participants
 , taking                currency_amount         NOT NULL CHECK (taking >= 0)
 , npatrons              integer                 NOT NULL DEFAULT 0
 
-, email_notif_bits      int                     NOT NULL DEFAULT 2147483647
+, email_notif_bits      int                     NOT NULL DEFAULT 2147483646
 , pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
 
 , avatar_src            text

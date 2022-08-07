@@ -3196,3 +3196,7 @@ CREATE TRIGGER check_payin_transfer_update BEFORE UPDATE ON payin_transfers
     FOR EACH ROW EXECUTE PROCEDURE check_payin_transfer_update();
 UPDATE payins SET remote_id = null WHERE remote_id = '';
 UPDATE payin_transfers SET remote_id = null WHERE remote_id = '';
+
+-- migration #158
+ALTER TABLE participants ALTER COLUMN email_notif_bits SET DEFAULT 2147483646;
+UPDATE notifications SET web = false WHERE event = 'income~v2';
