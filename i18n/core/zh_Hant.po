@@ -994,7 +994,7 @@ msgstr "\"{0}\" 不是一個有效的數字。"
 
 #, fuzzy, python-brace-format
 msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
-msgstr "“{0}”不是一个使用正确格式的数字。或许您想输入{list_of_suggestions}？"
+msgstr "“{0}”不匹配預期的正確數字格式。或許您想輸入 {list_of_suggestions}？"
 
 #, python-brace-format
 msgid "\"{0}\" is not a properly formatted number."
@@ -1229,7 +1229,7 @@ msgid "This profile is marked as spam."
 msgstr "该资料被标记为垃圾邮件。"
 
 msgid "Other amount"
-msgstr ""
+msgstr "其他數額"
 
 msgid "Proceed"
 msgstr "繼續"
@@ -1273,6 +1273,10 @@ msgstr "需要重新認證"
 
 msgid "Please try again in a few minutes."
 msgstr "請在幾分鐘後再試一次。"
+
+#, python-brace-format
+msgid "In order to comply with regulations, we have to ask you to also input your postal address. This information will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 msgid "We're currently experiencing technical failures. As a result most things don't work. Sorry for the inconvenience, we'll get everything back to normal ASAP."
 msgstr "目前我們遇到了技術故障，因此無法正常運作。很抱歉造成不便，我們會儘快修復以回歸正常。"
@@ -3273,10 +3277,10 @@ msgid "Transaction ID: {0}"
 msgstr "交易 ID： {0}"
 
 msgid "Taxes"
-msgstr ""
+msgstr "稅"
 
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
-msgstr ""
+msgstr "這筆款項是捐贈，不提供任何商品或服務作爲交換，Liberapay 未收取任何稅款。"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "你必須設定支付方法才能收取新的捐款。"
@@ -3382,11 +3386,11 @@ msgstr "檢視授權要求"
 
 #, python-brace-format
 msgid "Was supposed to expire in {month} {year}"
-msgstr ""
+msgstr "預計將於 {month} {year} 到期"
 
 #, python-brace-format
 msgid "Expired in {month} {year}"
-msgstr ""
+msgstr "過期於 {month} {year}"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3721,14 +3725,14 @@ msgstr "若您的訊息不是英文或法文，則我們會使用機器翻譯，
 
 #, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
-msgstr ""
+msgstr "如果您認爲您在我們的系統中發現了技術漏洞，請遵照 {link_start} {page_name} 頁面 {link_end}中的指示去做，而不是給我們發郵件。"
 
 msgid "We currently don't have a phone number."
 msgstr "我們目前沒有電話號碼。"
 
 #, fuzzy
 msgid "To report a problem or make a suggestion publicly:"
-msgstr "要用英文回報問題或是提建議："
+msgstr "如要公開報告問題或提出建議（使用英語）："
 
 msgid "Open an issue on GitHub"
 msgstr "在GitHub發出問題"
@@ -3871,22 +3875,22 @@ msgid "You can also follow the {1}development of the Liberapay software{0}, the 
 msgstr "你也可以追踪{1}Liberapay 軟體{0}的開發進展， {2}了解Liberapay 法律實體{0}，以及{3}Liberapay 團隊的日常討論{0}。"
 
 msgid "Donations can come from anywhere in the world."
-msgstr ""
+msgstr "捐款可以來自世界任何地方。"
 
 #, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] ""
+msgstr[0] "捐贈者最多可以在 {n} 種貨幣中選擇，具體取決於收款人的偏好和底層支付處理商的能力."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] ""
+msgstr[0] "Liberapay 對 {n} 個地區的創作者完全可用："
 
 #, python-brace-format
 msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
 msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] ""
+msgstr[0] "此外，Librepay 對 {paypal_link_open} {n} 個PayPal 支持的國家{link_close}中的創作者部分可用."
 
 msgid "What is Liberapay?"
 msgstr "什麼是Liberapay？"
@@ -4010,16 +4014,16 @@ msgstr "Stripe 可讓創作者設定自動轉帳入他們自己的銀行帳戶�
 
 #, python-brace-format
 msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
-msgstr ""
+msgstr "PayPal 只支持 {n_paypal_currencies} 種貨幣，Liberapay 和 Stripe 共支持{n_liberapay_currencies} 種。"
 
 #, python-brace-format
 msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
 msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] ""
+msgstr[0] "PayPal 可供 200 多個國家/地區的創作者使用，而 Stripe 僅以合適的方式支持 {n} 個國家."
 
 #, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
-msgstr ""
+msgstr "要查找支持的國家和貨幣的更多信息，請訪問 {link_start}“{page_name}”頁面{link_end}。"
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "我们尽所能来保护大家的隐私：我们不尝试跟踪我们网站的访客，我们争取只收集我们需要的个人信息，且我们不向任何人出卖它们。"
