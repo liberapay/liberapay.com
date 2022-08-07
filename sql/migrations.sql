@@ -3199,4 +3199,5 @@ UPDATE payin_transfers SET remote_id = null WHERE remote_id = '';
 
 -- migration #158
 ALTER TABLE participants ALTER COLUMN email_notif_bits SET DEFAULT 2147483646;
+DELETE FROM notifications WHERE event = 'income~v2' AND NOT email;
 UPDATE notifications SET web = false WHERE event = 'income~v2';
