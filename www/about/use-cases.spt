@@ -1,0 +1,33 @@
+[---]
+title = _("Use Cases")
+[---] text/html
+% extends "templates/layouts/about.html"
+
+% block content
+    <p>{{ _(
+        "Liberapay is meant to be used to fund the development and maintenance of common "
+        "resources. So far it only allows doing this through recurrent donations, which "
+        "makes it suitable for a limited number of use cases."
+    ) }}</p>
+    <p>{{ _("The most common of those valid use cases are:") }}</p>
+    <ul class="status-list list-yes">
+        <li>{{ _("crowdfunding the development and maintenance of freely usable software") }}</li>
+        <li>{{ _("crowdfunding the costs of providing a free online service") }}</li>
+        <li>{{ _("crowdfunding the production of freely accessible art") }}</li>
+        <li>{{ _("crowdfunding the curation and sharing of freely accessible knowledge") }}</li>
+    </ul>
+    <p>{{ _("Incorrect uses include:") }}</p>
+    <ul class="status-list list-no">
+        <li>{{ _("Begging. The money must be for something the recipient does that benefits other people.") }}</li>
+        <li>{{ _("Selling. Thanking patrons is allowed, but rewarding them is forbidden.") }}</li>
+    </ul>
+    <p>{{ _(
+        "Liberapay is built on top of payment processors that handle the actual fund "
+        "transfers. These processors have their own rules that recipients must comply "
+        "with:"
+    ) }}</p>
+    <ul>
+        <li><a href="https://stripe.com/legal/restricted-businesses">{{ _("Stripe Prohibited and Restricted Businesses") }}</a></li>
+        <li><a href="https://www.paypal.com/legalhub/paypal/acceptableuse-full">{{ _("PayPal Acceptable Use Policy") }}</a></li>
+    </ul>
+% endblock

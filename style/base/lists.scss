@@ -26,26 +26,17 @@ ul.status-list {
         padding-left: 4ex;
         position: relative;
         &::before {
-            font-family: 'Glyphicons Halflings';
             left: 1ex;
             list-style: none;
             position: absolute;
         }
     }
 }
-ul.list-yes > li::before, ul.status-list > li.ok-success::before {
+ul.list-yes > li::before {
     color: $state-success-text;
-    content: '\e013';
+    content: '✔';
 }
-ul.status-list > li.ok-info::before {
-    color: $state-info-text;
-    content: '\e013';
-}
-ul.status-list > li.not-ok-warning::before {
-    color: $state-warning-text;
-    content: '\e013';
-}
-ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
+ul.list-no > li::before {
     color: $state-danger-text;
-    content: '\e014';
+    content: '✖';
 }

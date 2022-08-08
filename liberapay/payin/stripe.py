@@ -88,7 +88,9 @@ def charge(db, payin, payer, route, update_donor=True):
                 if pt.recipient_marked_as in ('fraud', 'spam'):
                     new_status = 'failed'
                     break
-                elif pt.recipient_marked_as is None and pt.recipient_join_time >= '2022-12-23':
+                elif pt.recipient_marked_as in ('okay', 'trusted', 'unsettling'):
+                    pass
+                elif pt.recipient_join_time >= '2022-12-23':
                     new_status = 'awaiting_review'
     if new_status:
         if new_status == payin.status:
@@ -434,7 +436,7 @@ def settle_charge_and_transfers(
             refund_amount = (payin.amount * refund_ratio).round_up()
             if refund_amount > (payin.refunded_amount or 0):
                 route = db.ExchangeRoute.from_id(payer, payin.route)
-                if route.network == 'stripe-sdd' and payer.marked_as != 'trusted':
+                if route.network == 'stripe-sdd':
                     raise NotImplementedError(
                         "refunds of SEPA direct debits are dangerous"
                     )

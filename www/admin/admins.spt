@@ -48,7 +48,7 @@ title = "Admins Oversight"
         % elif marked_as == ''
             <p>{{ recorder(e) }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <code>{{ e.payload }}</code>.</p>
         % else
-            <p>{{ recorder(e) }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.ACCOUNT_MARK_CLASSES.get(marked_as, 'text-muted') }}">{{ marked_as }}</span>.</p>
+            <p>{{ recorder(e) }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.ACCOUNT_MARK_CLASSES[marked_as] }}">{{ marked_as }}</span>.</p>
         % endif
     % elif assert(e.type == 'payin_review', "unexpected event type: " + e.type)
         % if e.payload.allowed
