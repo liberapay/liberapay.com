@@ -297,13 +297,9 @@ def resolve_tip(
         raise RecipientAccountSuspended(tippee)
 
     if tippee.kind == 'group':
-        min_transfer_amount = get_minimum_transfer_amount(
-            provider, payment_amount.currency,
-        )
         return resolve_team_donation(
             db, tippee, provider, payer, payer_country, payment_amount, tip,
             sepa_only=sepa_only, excluded_destinations=excluded_destinations,
-            min_transfer_amount=min_transfer_amount,
         )
     else:
         destination = resolve_destination(
@@ -367,7 +363,7 @@ def resolve_destination(
 
 def resolve_team_donation(
     db, team, provider, payer, payer_country, payment_amount, tip,
-    sepa_only=False, excluded_destinations=(), min_transfer_amount=None,
+    sepa_only=False, excluded_destinations=(),
 ):
     """Figure out how to distribute a donation to a team's members.
 
@@ -380,8 +376,6 @@ def resolve_team_donation(
         tip (Row): the row from the `tips` table
         sepa_only (bool): only consider destination accounts within SEPA
         excluded_destinations (set): any `payment_accounts.pk` values to exclude
-        min_transfer_amount (Money | None):
-            prevent the returned amounts from falling between zero and this value
 
     Returns:
         a list of `ProtoTransfer` objects
@@ -449,6 +443,7 @@ def resolve_team_donation(
                 t for t in takes if t.member in sepa_accounts and t.amount != 0
             ]
             if selected_takes:
+                min_transfer_amount = get_minimum_transfer_amount(provider, currency)
                 resolve_take_amounts(
                     payment_amount, selected_takes,
                     min_transfer_amount=min_transfer_amount,
