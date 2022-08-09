@@ -72,10 +72,12 @@ if mode == 'all':
                ) AS email
              , ( SELECT json_build_object(
                             'funded', count(tip) FILTER (WHERE tip.status = 'funded'),
+                            'partially funded', count(tip) FILTER (WHERE tip.status = 'partially funded'),
                             'pending', count(tip) FILTER (WHERE tip.status = 'pending'),
                             'unfunded', count(tip) FILTER (WHERE tip.status = 'unfunded')
                         )
                    FROM ( SELECT (CASE WHEN tip.is_funded THEN 'funded'
+                                       WHEN tip.paid_in_advance > 0 THEN 'partially funded'
                                        WHEN EXISTS (
                                                 SELECT pt.id
                                                   FROM payin_transfers pt
