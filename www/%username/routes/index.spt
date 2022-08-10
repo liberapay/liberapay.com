@@ -122,7 +122,7 @@ title = _("Payment Instruments")
                         "Was supposed to expire in {month} {year}",
                         month=Month(exp_date.month), year=Year(exp_date.year),
                     ) }}</span>
-                    % elif exp_date > today
+                    % elif exp_date < today
                     <span class="text-danger">{{ _(
                         "Expired in {month} {year}",
                         month=Month(exp_date.month), year=Year(exp_date.year),
