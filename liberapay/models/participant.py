@@ -1308,7 +1308,7 @@ class Participant(Model, MixinTeam):
                 d['notification_ts'] = msg.ts
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
-                if not email:
+                if not email or p.status != 'active':
                     dequeue(msg, 'skipped')
                     continue
                 email_row = p.get_email(email)
@@ -1352,12 +1352,6 @@ class Participant(Model, MixinTeam):
         # If email_unverified_address is on, allow sending to an unverified email address.
         if email_unverified_address and not self.email:
             context['email'] = self.get_email_address()
-        # Check that the participant is active
-        if self.status != 'active':
-            website.warning(
-                f"A {event!r} notification is being inserted for inactive participant ~{self.id}"
-            )
-            email = False
         context = serialize(context)
         with self.db.get_cursor() as cursor:
             # Check that this notification isn't a duplicate
