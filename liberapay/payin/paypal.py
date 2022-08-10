@@ -243,7 +243,7 @@ def sync_order(db, payin):
             payin.ctime < (utcnow() - timedelta(days=30))
         )
         if expired:
-            return abort_payin(db, payin, "expired")
+            return abort_payin(db, payin, "abandoned by payer")
         error = response.text  # for Sentry
         logger.debug(error)
         raise PaymentError('PayPal')
