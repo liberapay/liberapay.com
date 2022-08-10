@@ -72,10 +72,12 @@ if mode == 'all':
                ) AS email
              , ( SELECT json_build_object(
                             'funded', count(tip) FILTER (WHERE tip.status = 'funded'),
+                            'partially funded', count(tip) FILTER (WHERE tip.status = 'partially funded'),
                             'pending', count(tip) FILTER (WHERE tip.status = 'pending'),
                             'unfunded', count(tip) FILTER (WHERE tip.status = 'unfunded')
                         )
                    FROM ( SELECT (CASE WHEN tip.is_funded THEN 'funded'
+                                       WHEN tip.paid_in_advance > 0 THEN 'partially funded'
                                        WHEN EXISTS (
                                                 SELECT pt.id
                                                   FROM payin_transfers pt
@@ -198,6 +200,7 @@ elif mode == 'new_recipients':
                    'status', pt.status, 'error', pt.error, 'payin_method', r.network,
                    'id', pt.id
                ) ORDER BY pt.row_number) AS incoming_payments
+             , f.feedback AS feedback
           FROM ( SELECT pt.*
                       , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC, pt.id DESC)
                    FROM payin_transfers pt
@@ -209,6 +212,7 @@ elif mode == 'new_recipients':
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
+     LEFT JOIN feedback f ON f.participant = p.id
          WHERE p.marked_as IS NULL
            AND pt.row_number <= 20
       GROUP BY p.id
