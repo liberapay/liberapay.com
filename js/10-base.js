@@ -120,9 +120,6 @@ Liberapay.init = function() {
     $('button[data-action="reload"]').on('click', function() {
         location.reload();
     });
-
-    // Selector for inputs and text areas with max lengths
-    // var $maxLengthTextAreas = $('input[maxlength], textarea[maxlength]');
         
     // Add remaining length indicator on page load
     $('input[maxlength], textarea[maxlength]').each(function() {
@@ -149,14 +146,11 @@ Liberapay.init = function() {
             var maxLength = $this.data('maxLength');
             var remainingLength = maxLength - $this.val().length;
             $this.siblings("span[class='remaining-length']").first().text(remainingLength);
-
-            var constraintPattern = '^[\\s\\S]{1,'+ maxLength +'}$';
-            var constraint = new RegExp(constraintPattern, '');
             
-            if (constraint.test($this.val())) {
-                $this.get(0).setCustomValidity('');
-            } else {
+            if (remainingLength < 0) {
                 $this.get(0).setCustomValidity('too many characters');
+            } else {
+                $this.get(0).setCustomValidity('');
             }
         });
     });
