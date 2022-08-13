@@ -122,10 +122,10 @@ Liberapay.init = function() {
     });
 
     // Selector for inputs and text areas with max lengths
-    var $maxLengthTextAreas = $('input[maxlength], textarea[maxlength]');
+    // var $maxLengthTextAreas = $('input[maxlength], textarea[maxlength]');
         
     // Add remaining length indicator on page load
-    $maxLengthTextAreas.each(function() {
+    $('input[maxlength], textarea[maxlength]').each(function() {
         var $this = $(this)
         var maxLength = $this.attr('maxlength');
         $this.data('maxLength', maxLength);
@@ -134,31 +134,31 @@ Liberapay.init = function() {
         maxLength = $this.data('maxLength');
         var remainingLength = maxLength - $this.val().length;
         $this.after("<span class='remaining-length'>" + remainingLength + "</span>");
-    });
 
-    // Style remaining length indicator
-    $('.remaining-length').each(function() {
-        $(this).css({
-            'float': 'right',
-            'margin-right': '5px'
+        // Style remaining length indicator
+        $('.remaining-length').each(function() {
+            $(this).css({
+                'float': 'right',
+                'margin-right': '5px'
+            });
         });
-    })
 
-    // Update remaining length dynamically
-    $maxLengthTextAreas.on('focus input', function() {
-        var $this = $(this)
-        var maxLength = $this.data('maxLength');
-        var remainingLength = maxLength - $this.val().length;
-        $this.siblings("span[class='remaining-length']").first().text(remainingLength);
+        // Update remaining length dynamically
+        $this.on('focus input', function() {
+            var $this = $(this)
+            var maxLength = $this.data('maxLength');
+            var remainingLength = maxLength - $this.val().length;
+            $this.siblings("span[class='remaining-length']").first().text(remainingLength);
 
-        var constraintPattern = '^[\\s\\S]{1,'+ maxLength +'}$';
-        var constraint = new RegExp(constraintPattern, '');
-        
-        if (constraint.test($this.val())) {
-            $this.get(0).setCustomValidity('');
-        } else {
-            $this.get(0).setCustomValidity('too many characters');
-        }
+            var constraintPattern = '^[\\s\\S]{1,'+ maxLength +'}$';
+            var constraint = new RegExp(constraintPattern, '');
+            
+            if (constraint.test($this.val())) {
+                $this.get(0).setCustomValidity('');
+            } else {
+                $this.get(0).setCustomValidity('too many characters');
+            }
+        });
     });
 };
 
