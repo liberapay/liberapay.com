@@ -96,8 +96,13 @@ class Age(timedelta):
 class Locale(babel.core.Locale):
 
     Age = Age
+    Country = Country
+    Currency = Currency
     Language = Language
     List = List
+    Month = Month
+    Percent = Percent
+    Year = Year
 
     def __init__(self, *a, **kw):
         super().__init__(*a, **kw)

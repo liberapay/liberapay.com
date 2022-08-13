@@ -278,7 +278,9 @@ def execute_scheduled_payins():
         if route.status != 'chargeable':
             retry = True
             continue
-        transfers, canceled, impossible = _filter_transfers(payer, transfers, automatic=True)
+        transfers, canceled, impossible, actionable = _filter_transfers(
+            payer, transfers, automatic=True
+        )
         if impossible:
             for tr in impossible:
                 tr['execution_date'] = execution_date
@@ -289,6 +291,17 @@ def execute_scheduled_payins():
                 email_unverified_address=True,
             )
             counts['renewal_aborted'] += 1
+        if actionable:
+            for tr in actionable:
+                tr['execution_date'] = execution_date
+                del tr['beneficiary'], tr['tip']
+            payer.notify(
+                'renewal_actionable',
+                transfers=actionable,
+                email_unverified_address=True,
+                force_email=True,
+            )
+            counts['renewal_actionable'] += 1
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
             proto_transfers = []
@@ -344,6 +357,14 @@ def execute_scheduled_payins():
                     email_unverified_address=True,
                 )
                 counts['payin_' + payin.status] += 1
+        elif actionable:
+            db.run("""
+                UPDATE scheduled_payins
+                   SET notifs_count = notifs_count + 1
+                     , last_notif_ts = now()
+                 WHERE payer = %s
+                   AND id = %s
+            """, (payer.id, sp_id))
         else:
             db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
     for k, n in sorted(counts.items()):
@@ -359,11 +380,14 @@ def _check_scheduled_payins(db, payer, payins, automatic):
     the status of the recipient's account if the `Participant.schedule_renewals()`
     method wasn't successfully called.
     """
+    reschedule = False
     for sp in list(payins):
         if isinstance(sp['amount'], dict):
             sp['amount'] = Money(**sp['amount'])
         sp['execution_date'] = date(*map(int, sp['execution_date'].split('-')))
-        canceled, impossible = _filter_transfers(payer, sp['transfers'], automatic)[1:]
+        canceled, impossible, actionable = _filter_transfers(
+            payer, sp['transfers'], automatic
+        )[1:]
         if canceled:
             if len(canceled) == len(sp['transfers']):
                 payins.remove(sp)
@@ -386,13 +410,20 @@ def _check_scheduled_payins(db, payer, payins, automatic):
                 ])))
         for tr in impossible:
             tr['impossible'] = True
+        if actionable:
+            reschedule = True
+            if len(actionable) == len(sp['transfers']):
+                payins.remove(sp)
+    if reschedule:
+        payer.schedule_renewals()
 
 
 def _filter_transfers(payer, transfers, automatic):
-    """Splits scheduled transfers into 3 lists: "okay", "canceled" and "impossible".
+    """Splits scheduled transfers into 4 lists: okay, canceled, impossible, actionable.
     """
     canceled_transfers = []
     impossible_transfers = []
+    actionable_transfers = []
     okay_transfers = []
     has_pending_transfer = set(website.db.all("""
         SELECT DISTINCT coalesce(pt.team, pt.recipient) AS tippee
@@ -411,9 +442,12 @@ def _filter_transfers(payer, transfers, automatic):
             canceled_transfers.append(tr)
         elif beneficiary.status != 'active' or beneficiary.is_suspended or \
              not beneficiary.accepts_tips or \
-             beneficiary.payment_providers == 0 or \
-             automatic and beneficiary.payment_providers & 1 == 0:
+             beneficiary.payment_providers == 0:
             impossible_transfers.append(tr)
+        elif automatic and \
+             (tip.amount.currency not in beneficiary.accepted_currencies_set or
+              beneficiary.payment_providers & 1 == 0):
+            actionable_transfers.append(tr)
         else:
             okay_transfers.append(tr)
-    return okay_transfers, canceled_transfers, impossible_transfers
+    return okay_transfers, canceled_transfers, impossible_transfers, actionable_transfers

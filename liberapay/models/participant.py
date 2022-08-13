@@ -2686,9 +2686,14 @@ class Participant(Model, MixinTeam):
                            ) x
                 """, dict(payer=self.id, tippees=tippees)))
                 for tip in renewable_tips:
-                    if tip.renewal_mode == 2 and tip.tippee_p.payment_providers & 1 == 0:
-                        # Automatic payments are only possible through Stripe.
-                        tip.renewal_mode = 1
+                    if tip.renewal_mode == 2:
+                        if tip.tippee_p.payment_providers & 1 == 0:
+                            # Automatic payments are only possible through Stripe.
+                            tip.renewal_mode = 1
+                        elif tip.amount.currency not in tip.tippee_p.accepted_currencies_set:
+                            # This tip needs to be modified because the recipient
+                            # no longer accepts that currency.
+                            tip.renewal_mode = 1
                     if tip.renewal_mode == 2:
                         last_payment_amount = last_manual_payment_amounts.get(tip.tippee)
                         if last_payment_amount:
@@ -2730,10 +2735,11 @@ class Participant(Model, MixinTeam):
                 naive_tip_groups[(tip.renewal_mode, tip.amount.currency)].append(tip)
             del renewable_tips
             # 2) Subgroup by payment processor and geography.
-            naive_tip_groups = {
-                key: self.group_tips_into_payments(tips)[0]['fundable']
-                for key, tips in naive_tip_groups.items()
-            }
+            for key, tips in naive_tip_groups.items():
+                groups = self.group_tips_into_payments(tips)[0]
+                for tip in groups['currency_conflict']:
+                    groups['fundable'].append([tip])
+                naive_tip_groups[key] = groups['fundable']
             # 3) Subgroup based on when the renewal is due and how much was paid last time.
             tip_groups = []
             due_date_getter = attrgetter('due_date')
@@ -3167,7 +3173,8 @@ class Participant(Model, MixinTeam):
 
     def group_tips_into_payments(self, tips):
         groups = dict(
-            fundable=[], no_provider=[], no_taker=[], self_donation=[], suspended=[]
+            currency_conflict=[], fundable=[], no_provider=[], no_taker=[],
+            self_donation=[], suspended=[],
         )
         n_fundable = 0
         stripe_europe = {}
@@ -3177,6 +3184,9 @@ class Participant(Model, MixinTeam):
                 groups['no_provider'].append(tip)
             elif tippee_p.is_suspended:
                 groups['suspended'].append(tip)
+            elif tip.amount.currency not in tippee_p.accepted_currencies_set:
+                n_fundable += 1
+                groups['currency_conflict'].append(tip)
             elif tippee_p.kind == 'group':
                 members = self.db.all("""
                     SELECT t.member

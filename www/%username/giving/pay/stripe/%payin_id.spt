@@ -222,6 +222,11 @@ if tippees:
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
     payment = PayinProspect(payer, tips, 'stripe')
+    for tip in tips:
+        if payment.currency not in tip.tippee_p.accepted_currencies_set:
+            raise response.redirect(payer.path(
+                'giving/pay?redirect_reason=unaccepted_currency'
+            ))
     ask_for_postal_address = (
         payment_type == 'sdd' or
         len(tips) == 1 and
