@@ -1,5 +1,4 @@
 from datetime import timedelta
-from decimal import ROUND_HALF_UP
 from math import floor
 
 from liberapay.models.exchange_route import ExchangeRoute
@@ -33,7 +32,7 @@ if request.method == 'POST':
     if payin_amount == 'custom':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
-        payin_amount = Money(payin_amount, payin_currency, rounding=ROUND_HALF_UP)
+        payin_amount = Money(payin_amount, payin_currency)
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p
@@ -254,12 +253,8 @@ title = _("Funding your donations")
 
         <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
             "Liberapay does not store money, the entire amount of your payment will "
-            "go immediately to the {payment_provider} accounts of {recipient_names}.",
-            payment_provider='PayPal', recipient_names=payment.recipient_names
-        ) if len(payment.recipient_names) > 1 else _(
-            "Liberapay does not store money, the entire amount of your payment will "
-            "go immediately to the {payment_provider} account of {recipient_name}.",
-            payment_provider='PayPal', recipient_name=payment.recipient_names[0]
+            "go immediately to the {payment_provider} accounts of the recipients.",
+            payment_provider='PayPal',
         ) }}</p>
 
         <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(

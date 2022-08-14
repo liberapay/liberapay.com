@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Language-Team: Russian "
 "<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -709,6 +709,10 @@ msgstr "Ваш запрос был отклонен нашей программ�
 msgid "Error message:"
 msgstr "Ошибка:"
 
+#, python-brace-format
+msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
+msgstr "Детали этой ошибки были зафиксированы. Если вы решите связаться с нами, включите следующий идентификатор ошибки в ваше сообщение: {0}."
+
 msgid "If you decide to contact us please include the following debugging information in your message:"
 msgstr "Если Вы хотите связаться с нами, добавьте следующую отладочную информацию в сообщение:"
 
@@ -1013,8 +1017,8 @@ msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" не является корректным числом."
 
 #, python-brace-format
-msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
-msgstr "\"{0}\" не является корректно отформатированным числом. Возможно, вы имели ввиду {list_of_suggestions}?"
+msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
+msgstr "\"{0}\" не соответствует ожидаемому числовому формату. Возможно, вы имели в виду {list_of_suggestions}?"
 
 #, python-brace-format
 msgid "\"{0}\" is not a properly formatted number."
@@ -1254,6 +1258,12 @@ msgstr "Повторить попытку"
 msgid "This profile is marked as spam."
 msgstr "Этот профиль отмечен как спам."
 
+msgid "Other amount"
+msgstr "Другая сумма"
+
+msgid "Proceed"
+msgstr "Продолжить"
+
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Вам нужен аккаунт для этого. Заполните одну из форм ниже."
 
@@ -1287,9 +1297,6 @@ msgstr "Обойти черный список и повторить попыт�
 
 msgid "Alternatively, you can try a different email address:"
 msgstr "Кроме того, вы можете попробовать другой адрес электронной почты:"
-
-msgid "Proceed"
-msgstr "Продолжить"
 
 msgid "Reauthentication required"
 msgstr "Требуется повторная аутентификация"
@@ -1636,7 +1643,7 @@ msgid "View More"
 msgstr "Показать ещё"
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Указав пароль, вы можете войти сразу, а не ждать одноразовую ссылку на почту. Помните, что Liberapay работает с деньгами, поэтому используйте стойкий пароль!"
+msgstr "Указав пароль, вы можете войти сразу, а не ждать одноразовую ссылку на почту. Помните, что Liberapay — финансовый сервис, поэтому используйте надежный пароль!"
 
 msgid "Current password"
 msgstr "Текущий пароль"
@@ -1658,7 +1665,7 @@ msgstr "Пожертвования в адрес {username} обрабатыва
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Пожертвования в адрес {username} могут быть выполнены дебетовыми и кредитными картами ({list_of_card_brands}), прямым переводом на счёт в Euro bank (только для пожертвований в Евро) и через систему PayPal."
+msgstr "Пожертвования в адрес {username} могут быть оплачены: дебетовой или кредитной картой ({list_of_card_brands}), с банковского счета в евро (переводом SEPA) или через счет PayPal."
 
 msgid "Country"
 msgstr "Страна"
@@ -2161,9 +2168,8 @@ msgstr "Несохранённые изменения будут потерян�
 msgid "Discard"
 msgstr "Отклонить"
 
-#, fuzzy
 msgid "Describe your work, why you're asking for donations, etc. The short summary will be used when showcasing your profile alongside others, so it should be meaningful on its own and intelligible even for people who don't know anything about you."
-msgstr "Опишите свою работу, почему вы просите делать пожертвования, и т.д. Нам нужно как краткое, так и полное описание."
+msgstr "Опишите свою работу, почему вы просите пожертвования и т. д. Краткое резюме будет использовано при демонстрации вашего профиля вместе с другими, поэтому оно должно быть значимым само по себе и понятным даже для людей, которые ничего о вас не знают."
 
 msgid "Liberapay allows you to internationalize your texts. Use the selector below to switch between languages."
 msgstr "Liberapay позволяет делать ваши тексты интернациональными. Используйте переключатель внизу, чтобы выбрать язык."
@@ -2410,9 +2416,8 @@ msgstr "Обновить сейчас"
 msgid "Pending payment completion."
 msgstr "Ожидается завершение платежа."
 
-#, fuzzy
 msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
-msgstr "Ожидание платежа."
+msgstr "Вам необходимо инициировать новый платеж для осуществления этого пожертвования. Нажмите на кнопку ниже, чтобы продолжить."
 
 msgid "Renew"
 msgstr "Обновить"
@@ -2468,9 +2473,8 @@ msgstr "Мы можем объединить эти пожертвования �
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Ваши пожертвования в пользу {recipients} ожидают оплаты."
 
-#, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
-msgstr "Данное пожертвование может быть обновлено только через сайт PayPal."
+msgstr "Сейчас PayPal является единственным доступным вариантом финансирования этого пожертвования. Пожалуйста, нажмите на следующую кнопку, чтобы продолжить:"
 
 msgid "Please choose a payment method:"
 msgstr "Выберите способ оплаты:"
@@ -2548,12 +2552,8 @@ msgid "Please select or input a payment amount:"
 msgstr "Пожалуйста, выберите или введите свою сумму:"
 
 #, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Liberapay не хранит деньги, вся сумма вашего платежа будет немедленно переведена на счета {payment_provider} {recipient_names}."
-
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay не хранит деньги, вся сумма вашего платежа будет немедленно переведена на счет {payment_provider} {recipient_name}."
+msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
+msgstr "Liberapay не хранит деньги, вся сумма вашего платежа будет немедленно переведена на счета {payment_provider} получателей."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal раскрывает ваше имя и адрес электронной почты получателю."
@@ -2771,7 +2771,7 @@ msgstr[2] "У {username} {n} публичных спонсоров."
 #, python-brace-format
 msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
 msgid_plural "The top {n} patrons are:"
-msgstr[0] "Топ {n} спонсоров:"
+msgstr[0] "{n} главный спонсор:"
 msgstr[1] "Топ {n} спонсоров:"
 msgstr[2] "Топ {n} спонсоров:"
 
@@ -3141,10 +3141,6 @@ msgstr "Удалить"
 msgid "An error occurred while rendering this notification."
 msgstr "Произошла ошибка при отображении этого уведомления."
 
-#, python-brace-format
-msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
-msgstr "Детали этой ошибки были зафиксированы. Если вы решите связаться с нами, включите следующий идентификатор ошибки в ваше сообщение: {0}."
-
 msgid "No notifications to show."
 msgstr "Нет уведомлений для отображения."
 
@@ -3338,8 +3334,11 @@ msgstr "Дата расчета: {0}"
 msgid "Transaction ID: {0}"
 msgstr "ID транзакции: {0}"
 
-msgid "This document is not an invoice."
-msgstr "Этот документ не является счётом."
+msgid "Taxes"
+msgstr "Налоги"
+
+msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
+msgstr "Этот платеж является пожертвованием, взамен не должны предоставляться никакие товары или услуги, Liberapay не взимает никаких налогов."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Вы не сможете получать новые пожертвования, пока не настроите поставщика платежных услуг."
@@ -3448,6 +3447,14 @@ msgid "view mandate"
 msgstr "просмотреть мандат"
 
 #, python-brace-format
+msgid "Was supposed to expire in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "Expired in {month} {year}"
+msgstr ""
+
+#, python-brace-format
 msgid "Expires in {month} {year}"
 msgstr "Истекает через {month} {year}"
 
@@ -3498,6 +3505,15 @@ msgstr "Информация о личности и записи перевод�
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
 msgstr "Мы можем отдать ваше имя пользователя кому-нибудь другому, если он попросит об этом, но не ранее, чем через год после закрытия вашего аккаунта (если не выяснится, что вы ущемляли торговую марку)."
+
+msgid "Feedback"
+msgstr "Обратная связь"
+
+msgid "If you would like to tell us why you're closing your account, you can leave a message here:"
+msgstr "Если вы хотите сообщить нам, почему закрываете свой аккаунт, можете оставить сообщение здесь:"
+
+msgid "Reason for closing account"
+msgstr "Причина закрытия аккаунта"
 
 msgid "Ready?"
 msgstr "Готовы?"
@@ -3764,29 +3780,30 @@ msgstr "Значки {link_open}Shields.io{link_close}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Используйте эти фрагменты кода, чтобы добавить значок на ваш вебсайт или в README:"
 
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr "Не связывайтесь с нами, если вы пытаетесь связаться с одним из наших пользователей. Мы не передаем сообщения и не можем раскрывать личность или контактные данные наших пользователей, если у вас нет действующего судебного решения."
+
 msgid "To contact the Liberapay team privately:"
 msgstr "Чтобы связаться с командой Liberapay в частном порядке:"
 
-msgid "Send us an email"
-msgstr "Отправьте нам письмо"
+msgid "Send an email to Liberapay"
+msgstr "Отправьте эл. письмо в Liberapay"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Если ваше сообщение написано не на английском или французском языке, оно будет автоматически переведено на компьютере. Наш ответ будет переведен на ваш язык таким же образом."
 
+#, python-brace-format
+msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
+msgstr "Если вы считаете, что нашли техническую уязвимость в нашей системе, следуйте инструкциям на {link_start}странице {page_name}{link_end} вместо того, чтобы отправлять нам эл. письмо."
+
 msgid "We currently don't have a phone number."
 msgstr "В данный момент у нас нет номера телефона."
 
-msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr "Не связывайтесь с нами, если вы пытаетесь связаться с одним из наших пользователей. Мы не передаем сообщения и не можем раскрывать личность или контактные данные наших пользователей, если у вас нет действующего судебного решения."
-
-msgid "To report a problem or make a suggestion in English:"
-msgstr "Чтобы сообщить о проблеме или внести предложение на английском языке:"
+msgid "To report a problem or make a suggestion publicly:"
+msgstr "Чтобы сообщить о проблеме или внести предложение:"
 
 msgid "Open an issue on GitHub"
 msgstr "Открыть тему на GitHub"
-
-msgid "Other communication channels:"
-msgstr "Другие способы связи:"
 
 msgid "How is Liberapay funded? Are there fees?"
 msgstr "Как финансируется Liberapay? Есть ли комиссия?"
@@ -3925,22 +3942,29 @@ msgstr "Вы можете следить за новостями в следую
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr "Вы также можете следить за {1}разработкой программного обеспечения Liberapay{0}, {2}приключениями юридического лица Liberapay{0} и за {3}обсуждением команды Liberapay{0}."
 
-#, python-brace-format
-msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] "Liberapay доступен создателям в {stripe_link_open}{n} стране через Stripe{link_close} и {paypal_link_open}более чем в 200 странах через PayPal{link_close}."
-msgstr[1] "Liberapay доступен создателям в {stripe_link_open}{n} странах через Stripe{link_close} и {paypal_link_open}более чем в 200 странах через PayPal{link_close}."
-msgstr[2] "Liberapay доступен создателям в {stripe_link_open}{n} странах через Stripe{link_close} и {paypal_link_open}более чем в 200 странах через PayPal{link_close}."
+msgid "Donations can come from anywhere in the world."
+msgstr "Пожертвования могут поступать из любой точки мира."
 
 #, python-brace-format
-msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] "Пожертвования могут быть в любой из этих {n} валюты:"
-msgstr[1] "Пожертвования могут быть в любой из этих {n} валют:"
-msgstr[2] "Пожертвования могут быть в любой из этих {n} валют:"
+msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
+msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-msgid "Each creator can select which of these currencies to accept."
-msgstr "Каждый создатель может выбрать, какую из этих валют принять."
+#, python-brace-format
+msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
+msgid_plural "Liberapay is fully available to creators in {n} territories:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
+msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "What is Liberapay?"
 msgstr "Что такое Liberapay?"
@@ -4063,11 +4087,19 @@ msgid "Stripe allows creators to configure automatic payouts to their bank accou
 msgstr "Stripe позволяет создателям настраивать автоматические выплаты на свои банковские счета."
 
 #, python-brace-format
-msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
+msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
+msgstr "PayPal поддерживает только {n_paypal_currencies} из {n_liberapay_currencies} валют, поддерживаемых Liberapay и Stripe."
+
+#, python-brace-format
+msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
+msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
 msgstr[0] ""
-msgstr[1] "PayPal доступен создателям в {paypal_link_open}более чем 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} страны{link_close}."
-msgstr[2] "PayPal доступен создателям в {paypal_link_open}более чем 200 странах{link_close}, тогда как Stripe поддерживает только {stripe_link_open}{n} стран{link_close}."
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
+msgstr "Больше информации о поддерживаемых странах и валютах можете найти на {link_start}странице \"{page_name}\"{link_end}."
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "Мы делаем всё возможное, чтобы сохранить вашу конфиденцальность: мы не пытаемся отслеживать людей, посещающих наш веб-сайт, мы стремимся собирать только ту персональную инфорацию, которая нам действительно нужна, и мы никому её не продаём."
@@ -4692,17 +4724,17 @@ msgstr[2] "Описания вашего профиля и другие текс
 msgid "Multiple currencies"
 msgstr "Различные валюты"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
-msgstr[0] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем {n} валюту. Однако с криптовалютой мы не работаем."
-msgstr[1] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем {n} валюты. Однако с криптовалютой мы не работаем."
-msgstr[2] "Первой валютой Liberapay был евро, затем был добавлен доллар США, и теперь мы поддерживаем {n} валют. Однако с криптовалютой мы не работаем."
+msgstr[0] "Первой валютой Liberapay был евро, затем был добавлен доллар США, а теперь мы поддерживаем {n} валюту. Однако мы не работаем с криптовалютой."
+msgstr[1] "Первой валютой Liberapay был евро, затем был добавлен доллар США, а теперь мы поддерживаем {n} валюты. Однако мы не работаем с криптовалютой."
+msgstr[2] "Первой валютой Liberapay был евро, затем был добавлен доллар США, а теперь мы поддерживаем {n} валют. Однако мы не работаем с криптовалютой."
 
 msgid "Integrations"
 msgstr "Интеграции"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
 msgstr[0] "Вы можете привязать к своему профилю учетные записи, принадлежащие вам на {platform1}, {platform2}, {platform3} и {n} другой платформе."
@@ -5058,9 +5090,8 @@ msgstr[0] "Вы подписаны на {n} аккаунт на {platform}."
 msgstr[1] "Вы подписаны на {n} аккаунта на {platform}."
 msgstr[2] "Вы подписаны на {n} аккаунтов на {platform}."
 
-#, fuzzy
 msgid "The address you provided is not valid. Expected format: username@domain"
-msgstr "Введённый вами адрес некорректен: в нём нет символа \"@\"."
+msgstr "Введённый вами адрес некорректен. Необходимый формат: username@domain"
 
 msgid "Which account?"
 msgstr "Какой аккаунт?"

@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Language-Team: Korean "
 "<https://hosted.weblate.org/projects/liberapay/core/ko/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -689,6 +689,10 @@ msgstr "귀하의 요청이 저희 소프트웨어에서 거부되었습니다. 
 msgid "Error message:"
 msgstr "오류 메시지:"
 
+#, python-brace-format
+msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
+msgstr "이 오류의 세부 사항이 기록되었습니다. 저희에게 연락하기로 결정하셨다면 에러 식별자 {0} 을/를 알려주세요."
+
 msgid "If you decide to contact us please include the following debugging information in your message:"
 msgstr "당사에 연락하기로 결정한 경우, 다음 디버깅 정보를 메시지에 포함해 주십시오:"
 
@@ -992,8 +996,8 @@ msgstr "출금 수수료가 원금보다 큽니다."
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\"은 올바른 숫자가 아닙니다."
 
-#, python-brace-format
-msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+#, fuzzy, python-brace-format
+msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "\"{0}\"은 (는) 올바르게 작성된 숫자가 아닙니다. 혹시 {list_of_suggestions} 을 (를) 의미하셨나요?"
 
 #, python-brace-format
@@ -1228,6 +1232,12 @@ msgstr "다시 시도하기"
 msgid "This profile is marked as spam."
 msgstr "이 프로필은 스팸으로 분류되었습니다."
 
+msgid "Other amount"
+msgstr ""
+
+msgid "Proceed"
+msgstr "진행"
+
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "이 행위를 하려면 계정이 필요합니다. 아래의 양식을 채워 주세요."
 
@@ -1261,9 +1271,6 @@ msgstr "블랙리스트를 무시하고 재시도"
 
 msgid "Alternatively, you can try a different email address:"
 msgstr "아니면, 다른 이메일 주소를 시도할 수 있습니다:"
-
-msgid "Proceed"
-msgstr "진행"
 
 msgid "Reauthentication required"
 msgstr "재인증이 필요합니다"
@@ -2499,13 +2506,9 @@ msgstr "{donation_amount}만 청구할 수 없습니다. 최소 지불 금액은
 msgid "Please select or input a payment amount:"
 msgstr "결제금액을 선택 또는 입력해 주세요:"
 
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Liberapay는 자금을 보관하지 않으며, 지불하신 금액은 즉시 {recipient_names}의 {payment_provider} 계정으로 이동됩니다."
-
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Liberapay는 자금을 보관하지 않으며, 지불하신 금액은 즉시 {recipient_name}의 {payment_provider} 계정으로 이동됩니다."
+#, fuzzy, python-brace-format
+msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
+msgstr "Liberapay는 자돈을 저장하지 않으며, 귀하의 지불 전체 금액은 수령인의 {payment_provider} 계정으로 즉시 이동합니다."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal은 이름과 이메일을 돈을 받는 사람에게 공개합니다."
@@ -3077,10 +3080,6 @@ msgstr "제거"
 msgid "An error occurred while rendering this notification."
 msgstr "이 알림을 렌더링하는 도중 오류가 발생했습니다."
 
-#, python-brace-format
-msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
-msgstr "이 오류의 세부 사항이 기록되었습니다. 저희에게 연락하기로 결정하셨다면 에러 식별자 {0} 을/를 알려주세요."
-
 msgid "No notifications to show."
 msgstr "확인할 알림이 없습니다."
 
@@ -3270,8 +3269,11 @@ msgstr ""
 msgid "Transaction ID: {0}"
 msgstr "거래 ID:{0}"
 
-msgid "This document is not an invoice."
-msgstr "이 문서는 청구서가 아닙니다."
+msgid "Taxes"
+msgstr ""
+
+msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "지불 처리를 설정할 때까지 새 기부를 받을 수 없습니다."
@@ -3376,6 +3378,14 @@ msgid "view mandate"
 msgstr ""
 
 #, python-brace-format
+msgid "Was supposed to expire in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "Expired in {month} {year}"
+msgstr ""
+
+#, python-brace-format
 msgid "Expires in {month} {year}"
 msgstr ""
 
@@ -3426,6 +3436,15 @@ msgstr "거래 기록과 신원 정보는 법률 준수를 위해 필요한 기�
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
 msgstr "다른 사용자가 원한다면 이 계정명을 사용하도록 허용할 수 있지만, 계정을 폐쇄한지 1년 안에는 불가능합니다(상표권을 침해하는 경우는 제외)."
+
+msgid "Feedback"
+msgstr ""
+
+msgid "If you would like to tell us why you're closing your account, you can leave a message here:"
+msgstr ""
+
+msgid "Reason for closing account"
+msgstr ""
 
 msgid "Ready?"
 msgstr "준비되셨습니까?"
@@ -3684,29 +3703,32 @@ msgstr "{link_open}shields.io{link_close} 제공 뱃지"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "웹사이트나 README에 다음 코드 스니핏을 사용해 뱃지를 추가하세요:"
 
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr ""
+
 msgid "To contact the Liberapay team privately:"
 msgstr ""
 
-msgid "Send us an email"
+#, fuzzy
+msgid "Send an email to Liberapay"
 msgstr "이메일을 보내세요"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr ""
 
+#, python-brace-format
+msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
+msgstr ""
+
 msgid "We currently don't have a phone number."
 msgstr "현재는 전화번호가 없습니다."
 
-msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr ""
-
-msgid "To report a problem or make a suggestion in English:"
+#, fuzzy
+msgid "To report a problem or make a suggestion publicly:"
 msgstr "영어로 문제를 보고하거나 제안할 사항이 있다면:"
 
 msgid "Open an issue on GitHub"
 msgstr "GitHub에 이슈를 열어 주세요"
-
-msgid "Other communication channels:"
-msgstr "다른 커뮤니케이션 채널:"
 
 msgid "How is Liberapay funded? Are there fees?"
 msgstr "Liberapay는 어떻게 자금을 모으나요? 수수료는요?"
@@ -3844,18 +3866,23 @@ msgstr "다음 소셜 네트워크에서 저희에 관한 업데이트를 수신
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr "{1}Liberapay 소프트웨어 개발{0}을 확인할 수 있고, {2}Liberapay 법인{0}의 상황에 대해서도 알아볼 수 있으며, {3}Liberapay 팀에 관한 일반적인 이야기{0}도 볼 수 있습니다."
 
-#, python-brace-format
-msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] ""
-
-#, python-brace-format
-msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] ""
-
-msgid "Each creator can select which of these currencies to accept."
+msgid "Donations can come from anywhere in the world."
 msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
+msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
+msgid_plural "Liberapay is fully available to creators in {n} territories:"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
+msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
+msgstr[0] ""
 
 msgid "What is Liberapay?"
 msgstr "Liberapay가 뭐죠?"
@@ -3978,9 +4005,17 @@ msgid "Stripe allows creators to configure automatic payouts to their bank accou
 msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
+msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
+msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
 msgstr[0] ""
+
+#, python-brace-format
+msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
+msgstr ""
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "저희는 모두의 개인정보를 보호하기 위해 최선을 다합니다: 저희 웹사이트를 방문하는 사용자를 추적하지 않으며, 정말 필요한 정보만을 수집하고, 이 정보를 팔지 않습니다."

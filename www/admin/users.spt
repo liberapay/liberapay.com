@@ -27,7 +27,7 @@ if request.method == 'POST':
                 UPDATE participants
                    SET marked_as = %(new_value)s
                  WHERE id = %(p_id)s
-                   AND coalesce(marked_as::text, '') <> %(new_value)s
+                   AND coalesce(marked_as::text, '') <> coalesce(%(new_value)s, '')
              RETURNING id
             """, dict(p_id=p.id, new_value=new_value))
             if r:
@@ -51,11 +51,13 @@ if mode == 'all':
         SELECT p
              , c.name AS c_name
              , c.creator AS c_creator
+             , f.feedback AS feedback
              , ( SELECT json_build_object(
                             'address', e.address,
                             'verified', e.verified,
-                            'blacklisted', EXISTS (
-                                SELECT 1
+                            'disavowed', e.disavowed,
+                            'blacklist_reason', (
+                                SELECT bl.reason
                                   FROM email_blacklist bl
                                  WHERE lower(bl.address) = lower(e.address)
                                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
@@ -68,6 +70,28 @@ if mode == 'all':
                       , e.added_time
                   LIMIT 1
                ) AS email
+             , ( SELECT json_build_object(
+                            'funded', count(tip) FILTER (WHERE tip.status = 'funded'),
+                            'partially funded', count(tip) FILTER (WHERE tip.status = 'partially funded'),
+                            'pending', count(tip) FILTER (WHERE tip.status = 'pending'),
+                            'unfunded', count(tip) FILTER (WHERE tip.status = 'unfunded')
+                        )
+                   FROM ( SELECT (CASE WHEN tip.is_funded THEN 'funded'
+                                       WHEN tip.paid_in_advance > 0 THEN 'partially funded'
+                                       WHEN EXISTS (
+                                                SELECT pt.id
+                                                  FROM payin_transfers pt
+                                                  JOIN payins pi ON pi.id = pt.payin
+                                                 WHERE pt.payer = p.id
+                                                   AND coalesce(pt.team, pt.recipient) = tip.tippee
+                                                   AND (pt.status = 'pending' OR pi.status = 'pending')
+                                            ) THEN 'pending'
+                                       ELSE 'unfunded'
+                                  END) AS status
+                            FROM current_tips tip
+                           WHERE tip.tipper = p.id
+                        ) tip
+               ) AS outgoing_donations
              , ( SELECT json_agg(json_build_object(
                             'provider', a.provider,
                             'id', a.id,
@@ -108,6 +132,7 @@ if mode == 'all':
                ) AS last_change
           FROM participants p
      LEFT JOIN communities c ON c.participant = p.id
+     LEFT JOIN feedback f ON f.participant = p.id
          WHERE coalesce(p.id < %s, true)
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
@@ -120,8 +145,9 @@ elif mode == 'new_recipients':
              , ( SELECT json_build_object(
                             'address', e.address,
                             'verified', e.verified,
-                            'blacklisted', EXISTS (
-                                SELECT 1
+                            'disavowed', e.disavowed,
+                            'blacklist_reason', (
+                                SELECT bl.reason
                                   FROM email_blacklist bl
                                  WHERE lower(bl.address) = lower(e.address)
                                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
@@ -173,7 +199,8 @@ elif mode == 'new_recipients':
                    'team', pt.team, 'team_name', team.username,
                    'status', pt.status, 'error', pt.error, 'payin_method', r.network,
                    'id', pt.id
-               ) ORDER BY pt.row_number) AS payments
+               ) ORDER BY pt.row_number) AS incoming_payments
+             , f.feedback AS feedback
           FROM ( SELECT pt.*
                       , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC, pt.id DESC)
                    FROM payin_transfers pt
@@ -185,6 +212,7 @@ elif mode == 'new_recipients':
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
+     LEFT JOIN feedback f ON f.participant = p.id
          WHERE p.marked_as IS NULL
            AND pt.row_number <= 20
       GROUP BY p.id
@@ -257,20 +285,30 @@ title = "Users Admin"
         % endfor
     % else
         % if p.kind != 'community'
-            <p>
-            % if row.email
-                <strong>Email address:</strong> <span class="break-word-anywhere">{{ row.email.address }}</span>
-                % if row.email.verified
-                <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
-                % elif row.email.blacklisted
-                <span class="text-danger">{{ glyphicon('exclamation-sign', "Blacklisted") }}</span>
-                % else
-                <span class="text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
-                % endif
+        <div class="mb-3">
+        % if row.email
+            <strong>Email address:</strong> <span class="break-word-anywhere">{{ row.email.address }}</span>
+            % if row.email.verified
+            <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
+            % elif row.email.disavowed
+            <span class="text-danger">{{ glyphicon('exclamation-sign', "Disavowed") }}</span>
+            % elif row.email.blacklist_reason
+            <span class="text-danger">{{ glyphicon('exclamation-sign', "Blacklisted (%s)" % row.email.blacklist_reason) }}</span>
             % else
-                <strong>Email address:</strong> none.
+            <span class="text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
             % endif
-            </p>
+            &nbsp;
+            <form action="/admin/emails" method="POST" target="_blank" class="inline-block middle">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <input type="hidden" name="email" value="{{ row.email.address }}" />
+                <button class="link" name="action" value="lookup">{{
+                    glyphicon('search', "Look it up")
+                }}</button>
+            </form>
+        % else
+            <strong>Email address:</strong> none.
+        % endif
+        </div>
 
         <p><strong>Elsewhere accounts:</strong>
         % if elsewhere
@@ -289,6 +327,18 @@ title = "Users Admin"
         % endif
 
         % if p.is_person
+        % if row.outgoing_donations is defined
+        <p><strong>Outgoing donations:</strong>
+        % if any(row.outgoing_donations.values())
+            % for category, count in row.outgoing_donations.items() if count
+                {{ count }} {{ category }}{{ '.' if loop.last else ',' }}
+            % endfor
+        % else
+            none.
+        % endif
+        </p>
+        % endif
+
         <p><strong>Payment accounts:</strong>
         % if row.payment_accounts
             <br>
@@ -314,9 +364,9 @@ title = "Users Admin"
         % endif
         </p>
 
-        % if row.payments|default(false)
+        % if row.incoming_payments|default(false)
         <p><strong>Incoming payments:</strong><br>
-            % for pt in row.payments
+            % for pt in row.incoming_payments
                 <span class="symbol-3ex">{{ payment_method_icon(pt.payin_method) }}</span>
                 {{ locale.format_money(Money(**pt.amount)) }}
                 from <a href="/~{{ pt.payer }}/">{{ pt.payer_name }}</a>
@@ -376,6 +426,15 @@ title = "Users Admin"
             none. <span class="text-warning">{{ glyphicon('warning-sign') }}</span>
         % endif
         </div>
+
+        % if row.feedback
+        <div class="mt-3">
+            <strong>Feedback:</strong>
+            <div class="profile-statement embedded raw">{{ row.feedback }}</div>
+        </div>
+        % elif p.status == 'closed'
+        <div class="mt-3"><strong>Feedback:</strong> none.</div>
+        % endif
     % endif
     </div>
     <div class="col-md-4">

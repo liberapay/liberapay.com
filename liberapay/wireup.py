@@ -601,21 +601,13 @@ def replace_unused_singulars(c):
             c[msg[1]] = m
 
 
-def share_source_strings(catalog, shared_strings):
-    """Share message IDs between catalogs to save memory.
+def intern_source_strings(catalog):
+    """Intern message IDs to save memory and speed up translation lookups.
     """
-    if not shared_strings:
-        shared_strings.update((m.id, m.id) for m in catalog)
-        return
     for m in list(catalog):
-        if not m.id:
-            continue
-        if m.id in shared_strings:
-            m.id = shared_strings[m.id]
-            catalog.delete(m.id)
-            catalog[m.id] = m
-        else:
-            shared_strings[m.id] = m.id
+        m.id = tuple(map(intern, m.id)) if isinstance(m.id, tuple) else intern(m.id)
+        catalog.delete(m.id)
+        catalog[m.id] = m
 
 
 def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
@@ -628,49 +620,45 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
     localeDir = os.path.join(project_root, 'i18n', 'core')
     locales = LOCALES
     supported_currencies_en = locales['en'].supported_currencies
-    source_strings = {}
     for file in os.listdir(localeDir):
-        try:
-            parts = file.split(".")
-            if not (len(parts) == 2 and parts[1] == "po"):
+        parts = file.split(".")
+        if not (len(parts) == 2 and parts[1] == "po"):
+            continue
+        lang = parts[0]
+        with open(os.path.join(localeDir, file), 'rb') as f:
+            l = Locale.parse(lang)
+            c = l.catalog = read_po(f)
+            del l.catalog['']
+            intern_source_strings(c)
+            c.plural_func = get_function_from_rule(c.plural_expr)
+            replace_unused_singulars(c)
+            l.completion = compute_percentage(
+                (m.string for m in c if m.id and not m.fuzzy), len(c)
+            )
+            if l.completion == 0:
                 continue
-            lang = parts[0]
-            with open(os.path.join(localeDir, file), 'rb') as f:
-                l = Locale.parse(lang)
-                c = l.catalog = read_po(f)
-                share_source_strings(c, source_strings)
-                c.plural_func = get_function_from_rule(c.plural_expr)
-                replace_unused_singulars(c)
-                l.completion = compute_percentage(
-                    (m.string for m in c if m.id and not m.fuzzy), len(c)
-                )
-                if l.completion == 0:
-                    continue
-                else:
-                    locales[l.tag] = l
-                l.countries = make_sorted_dict(
-                    COUNTRIES, l.territories, COUNTRIES
-                )
-                l._data['languages'] = {
-                    intern(k.replace('_', '-').lower()): v
-                    for k, v in l.languages.items()
-                }
-                l.accepted_languages = make_sorted_dict(
-                    ACCEPTED_LANGUAGES, l.languages, ACCEPTED_LANGUAGES
-                )
-                l.supported_currencies = make_sorted_dict(
-                    supported_currencies_en, l.currencies, supported_currencies_en,
-                    l.title,
-                )
-            if l.script and l.language not in LOCALES_DEFAULT_MAP:
-                tell_sentry(Warning(
-                    f"the default script for language {l.language!r} is not "
-                    f"defined in LOCALES_DEFAULT_MAP, using {l.script!r}"
-                ))
-                LOCALES_DEFAULT_MAP[l.language] = l.tag
-        except Exception as e:
-            tell_sentry(e)
-    del source_strings
+            else:
+                locales[l.tag] = l
+            l.countries = make_sorted_dict(
+                COUNTRIES, l.territories, COUNTRIES
+            )
+            l._data['languages'] = {
+                intern(k.replace('_', '-').lower()): v
+                for k, v in l.languages.items()
+            }
+            l.accepted_languages = make_sorted_dict(
+                ACCEPTED_LANGUAGES, l.languages, ACCEPTED_LANGUAGES
+            )
+            l.supported_currencies = make_sorted_dict(
+                supported_currencies_en, l.currencies, supported_currencies_en,
+                l.title,
+            )
+        if l.script and l.language not in LOCALES_DEFAULT_MAP:
+            tell_sentry(Warning(
+                f"the default script for language {l.language!r} is not "
+                f"defined in LOCALES_DEFAULT_MAP, using {l.script!r}"
+            ))
+            LOCALES_DEFAULT_MAP[l.language] = l.tag
 
     # Prepare a unique and sorted list for use in the navbar language switcher
     domain, port = (canonical_host.split(':') + [None])[:2]

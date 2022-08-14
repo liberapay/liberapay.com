@@ -21,14 +21,23 @@ title = _("Payment Processors")
     <li>{{ _("PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay.") }}</li>
     <li>{{ _("Stripe makes SEPA Direct Debits easy for European donors.") }}</li>
     <li>{{ _("Stripe allows creators to configure automatic payouts to their bank accounts.") }}</li>
+    <li>{{ _(
+        "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe.",
+        n_paypal_currencies=len(constants.PAYPAL_CURRENCIES),
+        n_liberapay_currencies=len(constants.CURRENCIES),
+    ) }}</li>
     <li>{{ ngettext(
         "",
-        "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}.",
+        "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way.",
         n=len(constants.PAYOUT_COUNTRIES['stripe']),
-        paypal_link_open='<a href="https://www.paypal.com/webapps/mpp/country-worldwide">'|safe,
-        stripe_link_open='<a href="https://stripe.com/global">'|safe,
-        link_close='</a>'|safe,
     ) }}</li>
 </ul>
+
+<p>{{ _(
+    "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}.",
+    link_start='<a href="/about/global">'|safe,
+    page_name=_("Global"),
+    link_end='</a>'|safe,
+) }}
 
 % endblock

@@ -3,11 +3,11 @@ msgid ""
 msgstr ""
 "Language-Team: Greek "
 "<https://hosted.weblate.org/projects/liberapay/core/el/>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
 msgid "The {language} translation of this page is not yet complete."
@@ -699,6 +699,10 @@ msgstr "Το αίτημά σας απορρίφθηκε από το λογισμ
 msgid "Error message:"
 msgstr "Μήνυμα σφάλματος:"
 
+#, python-brace-format
+msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
+msgstr "Οι λεπτομέρειες αυτού του σφάλματος έχουν καταγραφεί. Αν αποφασίσεις να επικοινωνήσεις μαζί μας παρακαλούμε να συμπεριλάβεις στο μήνυμά σου τον κωδικό αναγνώρισης σφάλματος που ακολουθεί: {0}."
+
 msgid "If you decide to contact us please include the following debugging information in your message:"
 msgstr "Αν αποφασίσετε να επικοινωνήσετε μαζί μας, παρακαλούμε να συμπεριλάβετε τις ακόλουθες πληροφορίες αποσφαλμάτωσης στο μήνυμά σας:"
 
@@ -1002,8 +1006,8 @@ msgstr "Το κόστος αυτής της συναλλαγής θα υπερβ
 msgid "\"{0}\" is not a valid number."
 msgstr "Το \"{0}\" δεν είναι έγκυρος αριθμός."
 
-#, python-brace-format
-msgid "\"{0}\" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?"
+#, fuzzy, python-brace-format
+msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "Το \"{0}\" δεν είναι σωστή γραφή αριθμού. Μήπως εννοούσες {list_of_suggestions};"
 
 #, python-brace-format
@@ -1241,6 +1245,12 @@ msgstr "Ξαναδοκίμασε"
 msgid "This profile is marked as spam."
 msgstr "Αυτό το προφίλ έχει επισημανθεί ως ανεπιθύμητο."
 
+msgid "Other amount"
+msgstr ""
+
+msgid "Proceed"
+msgstr "Προχωρήστε"
+
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Απαιτείται λογαριασμός για αυτό. Παρακαλώ συμπλήρωσε μια από τις παρακάτω φόρμες."
 
@@ -1274,9 +1284,6 @@ msgstr "Παράκαμψη της μαύρης λίστας και επανάλ�
 
 msgid "Alternatively, you can try a different email address:"
 msgstr "Εναλλακτικά, μπορείτε να δοκιμάσετε μια διαφορετική διεύθυνση ηλεκτρονικού ταχυδρομείου:"
-
-msgid "Proceed"
-msgstr "Προχωρήστε"
 
 msgid "Reauthentication required"
 msgstr "Απαιτείται εκ νέου πιστοποίηση"
@@ -2523,13 +2530,9 @@ msgstr "Δεν μπορούμε να σας χρεώσουμε μόνο {donatio
 msgid "Please select or input a payment amount:"
 msgstr "Παρακαλώ επιλέξτε ή εισάγετε ένα ποσό πληρωμής:"
 
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of {recipient_names}."
-msgstr "Η Liberapay δεν παρακρατεί χρήματα, το ολόποσο της πληρωμής σας θα μεταφερθεί αμέσως στους λογαριασμούς {payment_provider} του {recipient_names}."
-
-#, python-brace-format
-msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} account of {recipient_name}."
-msgstr "Όλο το ποσό της πληρωμής σας θα μεταφερθεί αμέσως στο λογαριασμό {payment_provider} του {recipient_name}."
+#, fuzzy, python-brace-format
+msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
+msgstr "Η Liberapay δεν παρακρατεί χρήματα, το ολόποσο της πληρωμής σας θα μεταφερθεί αμέσως στους λογαριασμούς {payment_provider}."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "Το PayPal αποκαλύπτει το όνομα και τη διεύθυνση ηλεκτρονικού ταχυδρομείου σας στον παραλήπτη."
@@ -2741,8 +2744,8 @@ msgstr[1] "{username} έχει {n} δημοσίους προστάτες."
 #, python-brace-format
 msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
 msgid_plural "The top {n} patrons are:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
+msgstr[1] "Οι κορυφαίοι {n} προστάτες είναι οι εξής:"
 
 #, python-brace-format
 msgid "{username} doesn't publish how much they give."
@@ -3109,10 +3112,6 @@ msgstr "Αφαίρεση"
 msgid "An error occurred while rendering this notification."
 msgstr "Παρουσιάστηκε σφάλμα κατά την απόδοση αυτής της ειδοποίησης."
 
-#, python-brace-format
-msgid "The details of this error have been recorded. If you decide to contact us, please include the following error identification code in your message: {0}."
-msgstr "Οι λεπτομέρειες αυτού του σφάλματος έχουν καταγραφεί. Αν αποφασίσεις να επικοινωνήσεις μαζί μας παρακαλούμε να συμπεριλάβεις στο μήνυμά σου τον κωδικό αναγνώρισης σφάλματος που ακολουθεί: {0}."
-
 msgid "No notifications to show."
 msgstr "Δεν υπάρχουν ειδοποιήσεις για εμφάνιση."
 
@@ -3304,8 +3303,11 @@ msgstr "Ημερομηνία διακανονισμού: {0}"
 msgid "Transaction ID: {0}"
 msgstr "Αναγνωριστικό συναλλαγής: {0}"
 
-msgid "This document is not an invoice."
-msgstr "Το παρόν παραστατικό δεν αποτελεί τιμολόγιο."
+msgid "Taxes"
+msgstr ""
+
+msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
+msgstr ""
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Δεν μπορείτε να λαμβάνετε νέες δωρεές μέχρι να ρυθμίσετε την επεξεργασία πληρωμών."
@@ -3412,6 +3414,14 @@ msgid "view mandate"
 msgstr "δείτε την εντολή"
 
 #, python-brace-format
+msgid "Was supposed to expire in {month} {year}"
+msgstr ""
+
+#, python-brace-format
+msgid "Expired in {month} {year}"
+msgstr ""
+
+#, python-brace-format
 msgid "Expires in {month} {year}"
 msgstr "Λήγει σε {month} {year}"
 
@@ -3462,6 +3472,15 @@ msgstr "Οι πληροφορίες ταυτότητας και τα αρχεί�
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
 msgstr "Μπορούμε να δώσουμε το όνομα χρήστη σας σε κάποιον άλλον αν το ζητήσει, αλλά όχι για τουλάχιστον ένα χρόνο μετά το κλείσιμο του λογαριασμού σας (εκτός αν διαπιστώσουμε ότι παραβιάζετε κάποιο εμπορικό σήμα)."
+
+msgid "Feedback"
+msgstr ""
+
+msgid "If you would like to tell us why you're closing your account, you can leave a message here:"
+msgstr ""
+
+msgid "Reason for closing account"
+msgstr ""
 
 msgid "Ready?"
 msgstr "Έτοιμοι;"
@@ -3724,29 +3743,32 @@ msgstr "Σήματα από {link_open} Shields.io {link_close}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Χρησιμοποιήστε αυτά τα αποσπάσματα κώδικα για να προσθέσετε ένα σήμα στον ιστότοπό σας ή στο README:"
 
+msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
+msgstr "Μην επικοινωνήσετε μαζί μας αν προσπαθείτε να επικοινωνήσετε με κάποιον από τους χρήστες μας. Δεν αναμεταδίδουμε μηνύματα και δεν μπορούμε να αποκαλύψουμε την ταυτότητα ή τα στοιχεία επικοινωνίας των χρηστών μας, εκτός εάν έχετε έγκυρη δικαστική εντολή."
+
 msgid "To contact the Liberapay team privately:"
 msgstr "Για να επικοινωνήσετε ιδιωτικά με την ομάδα της Liberapay:"
 
-msgid "Send us an email"
+#, fuzzy
+msgid "Send an email to Liberapay"
 msgstr "Στείλτε μας ένα μήνυμα ηλεκτρονικού ταχυδρομείου"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Εάν το μήνυμά σας δεν είναι γραμμένο στα αγγλικά ή στα γαλλικά, τότε θα μεταφραστεί αυτόματα από ένα μηχάνημα. Η απάντησή μας θα μεταφραστεί στη γλώσσα σας με τον ίδιο τρόπο."
 
+#, python-brace-format
+msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
+msgstr ""
+
 msgid "We currently don't have a phone number."
 msgstr "Προς το παρόν δεν έχουμε αριθμό τηλεφώνου."
 
-msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
-msgstr "Μην επικοινωνήσετε μαζί μας αν προσπαθείτε να επικοινωνήσετε με κάποιον από τους χρήστες μας. Δεν αναμεταδίδουμε μηνύματα και δεν μπορούμε να αποκαλύψουμε την ταυτότητα ή τα στοιχεία επικοινωνίας των χρηστών μας, εκτός εάν έχετε έγκυρη δικαστική εντολή."
-
-msgid "To report a problem or make a suggestion in English:"
+#, fuzzy
+msgid "To report a problem or make a suggestion publicly:"
 msgstr "Για να αναφέρετε ένα πρόβλημα ή να κάνετε μια πρόταση στα Αγγλικά:"
 
 msgid "Open an issue on GitHub"
 msgstr "Ανοίξτε ένα θέμα στο GitHub"
-
-msgid "Other communication channels:"
-msgstr "Άλλοι δίαυλοι επικοινωνίας:"
 
 msgid "How is Liberapay funded? Are there fees?"
 msgstr "Πώς χρηματοδοτείται η Liberapay; Υπάρχουν τέλη;"
@@ -3884,20 +3906,26 @@ msgstr "Μπορείτε να λαμβάνετε ενημερώσεις από �
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
 msgstr ""
 
-#, python-brace-format
-msgid "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgid_plural "Liberapay is available to creators in {stripe_link_open}{n} countries through Stripe{link_close} and {paypal_link_open}more than 200 countries through PayPal{link_close}."
-msgstr[0] "<unused singular (hash=b09f6ccdbfcfad83825ffedc6bd07c1b)>"
-msgstr[1] "Το Liberapay είναι διαθέσιμο σε δημιουργούς σε {stripe_link_open}{n} χώρες μέσω Stripe{link_close} και {paypal_link_open}παραπάνω από 200 χώρες μέσω PayPal{link_close}."
+msgid "Donations can come from anywhere in the world."
+msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgid_plural "Donations can be in any of these {n} currencies:"
-msgstr[0] "<unused singular (hash=1448e3800a7aafcce346397eec9966b2)>"
-msgstr[1] "Οι δωρεές μπορεί να είναι σε ένα από αυτά τα {n} συναλλάγματα:"
+msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
+msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
+msgstr[0] ""
+msgstr[1] ""
 
-msgid "Each creator can select which of these currencies to accept."
-msgstr "Κάθε δημιουργός μπορεί να επιλέξει ποιο από αυτά τα νομίσματα θα δέχεται."
+#, python-brace-format
+msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
+msgid_plural "Liberapay is fully available to creators in {n} territories:"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
+msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "What is Liberapay?"
 msgstr "Τι είναι το Liberapay;"
@@ -4020,10 +4048,18 @@ msgid "Stripe allows creators to configure automatic payouts to their bank accou
 msgstr "Η Stripe επιτρέπει στους δημιουργούς να ρυθμίζουν αυτόματες πληρωμές στους τραπεζικούς τους λογαριασμούς."
 
 #, python-brace-format
-msgid "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgid_plural "PayPal is available to creators in {paypal_link_open}more than 200 countries{link_close}, whereas Stripe only supports {stripe_link_open}{n} countries{link_close}."
-msgstr[0] "<unused singular (hash=82ad03469801eee5f002e41270bb121a)>"
-msgstr[1] "Το PayPal είναι διαθέσιμο σε δημιουργούς σε {paypal_link_open}πάνω από 200 χώρες{link_close}, ενώ το Stripe υποστηρίζει μόνο {stripe_link_open}{n} χώρες{link_close}."
+msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
+msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
+msgstr ""
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr ""
@@ -4318,14 +4354,14 @@ msgstr "Εξερευνήστε Τις {0} Επαφές Σας"
 #, python-brace-format
 msgid "<unused singular (hash=913600022f5361dd8872dc74f6b023e8)>"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=913600022f5361dd8872dc74f6b023e8)>"
+msgstr[1] "Ακολουθούν {n} τυχαίοι χρήστες Liberapay που έχουν συνδέσει τον λογαριασμό τους {0}:"
 
 #, python-brace-format
 msgid "<unused singular (hash=fa66aed7cc36b8a0d266394a9f2b8fef)>"
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=fa66aed7cc36b8a0d266394a9f2b8fef)>"
+msgstr[1] "Αυτή η σελίδα δείχνει τους {n} χρήστες της Liberapay που έχουν συνδέσει τον {0} λογαριασμό τους, με αντίστροφη χρονολογική σειρά."
 
 #, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
@@ -4374,7 +4410,7 @@ msgid "Explore Repositories"
 msgstr "Εξερευνήστε Αποθετήρια"
 
 msgid "Browse the accounts that Liberapay users have on other platforms. Find your contacts by connecting your own accounts."
-msgstr ""
+msgstr "Περιηγηθείτε στους λογαριασμούς που έχουν οι χρήστες της Liberapay σε άλλες πλατφόρμες. Βρείτε τις επαφές σας συνδέοντας τους δικούς σας λογαριασμούς."
 
 msgid "Explore Social Networks"
 msgstr "Εξερευνήστε Κοινωνικά Δίκτυα"

@@ -1025,15 +1025,17 @@ class Payday:
                 "SELECT username FROM participants WHERE id = %s", (i,)
             )
             by_team = {get_username(t_id): by_team.get(t_id, nothing) for t_id in team_ids}
-            p.notify(
+            notif_id = p.notify(
                 'income~v2',
                 total=total.fuzzy_sum(p.main_currency),
                 personal=personal,
                 personal_npatrons=personal_npatrons,
                 by_team=by_team,
+                web=False,
             )
-            n += 1
-        log("Sent %i income notifications." % n)
+            if notif_id:
+                n += 1
+        log(f"Sent {n} income notifications (out of {len(r)} tippees).")
 
     def generate_payment_account_required_notifications(self):
         n = 0

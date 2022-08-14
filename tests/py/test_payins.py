@@ -1,4 +1,3 @@
-from decimal import Decimal
 import json
 from time import sleep
 from unittest.mock import patch
@@ -26,6 +25,111 @@ class TestResolveAmounts(Harness):
         expected_amounts = {1: EUR('6.00'), 2: EUR('0.01')}
         resolved_amounts = resolve_amounts(EUR('6.01'), naive_amounts)
         assert resolved_amounts == expected_amounts
+
+    def test_resolve_exact_amounts(self):
+        naive_amounts = {1: EUR('20.00'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('20.00'), 2: EUR('0.01')}
+        resolved_amounts = resolve_amounts(EUR('20.01'), naive_amounts)
+        assert resolved_amounts == expected_amounts
+
+    def test_resolve_high_amounts(self):
+        naive_amounts = {1: EUR('20.00'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('40.00'), 2: EUR('0.02')}
+        resolved_amounts = resolve_amounts(EUR('40.02'), naive_amounts)
+        assert resolved_amounts == expected_amounts
+
+    def test_resolve_exact_convergence(self):
+        base_amounts = {1: EUR('1.23'), 2: EUR('4.56')}
+        convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01')}
+        resolved_amounts = resolve_amounts(
+            EUR('7.90'), base_amounts, convergence_amounts
+        )
+        assert resolved_amounts == convergence_amounts
+
+    def test_resolve_exact_convergence_with_minimum_amount(self):
+        base_amounts = {1: EUR('1.23'), 2: EUR('4.56')}
+        convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('7.90')}
+        resolved_amounts = resolve_amounts(
+            EUR('7.90'), base_amounts, convergence_amounts, minimum_amount=EUR('0.03'),
+        )
+        assert resolved_amounts == expected_amounts
+        convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01'), 3: EUR('0.01')}
+        expected_amounts = {1: EUR('7.89'), 2: EUR('0.02')}
+        resolved_amounts = resolve_amounts(
+            EUR('7.91'), base_amounts, convergence_amounts, minimum_amount=EUR('0.02'),
+            payday_id=1,
+        )
+        assert resolved_amounts == expected_amounts
+        convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01'), 3: EUR('0.01')}
+        expected_amounts = {1: EUR('7.89'), 3: EUR('0.02')}
+        resolved_amounts = resolve_amounts(
+            EUR('7.91'), base_amounts, convergence_amounts, minimum_amount=EUR('0.02'),
+            payday_id=2,
+        )
+        assert resolved_amounts == expected_amounts
+
+    def test_resolve_full_convergence_and_then_some(self):
+        base_amounts = {1: EUR('1.23'), 2: EUR('4.56')}
+        convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('9.12'), 2: EUR('4.57')}
+        resolved_amounts = resolve_amounts(
+            EUR('13.69'), base_amounts, convergence_amounts
+        )
+        assert resolved_amounts == expected_amounts
+
+    def test_resolve_full_convergence_and_then_some_with_maximums(self):
+        base_amounts = {1: EUR('1.23'), 2: EUR('4.56'), 3: EUR('0.01')}
+        convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01'), 3: EUR('0.01')}
+        maximum_amounts = {1: EUR('6.00'), 2: EUR('6.00'), 3: EUR('0.00')}
+        expected_amounts = {1: EUR('6.00'), 2: EUR('6.00')}
+        resolved_amounts = resolve_amounts(
+            EUR('12.00'), base_amounts, convergence_amounts,
+            maximum_amounts=maximum_amounts,
+        )
+        assert resolved_amounts == expected_amounts
+        maximum_amounts = {1: EUR('6.00'), 2: EUR('6.01'), 3: EUR('0.00')}
+        resolved_amounts = resolve_amounts(
+            EUR('12.00'), base_amounts, convergence_amounts,
+            maximum_amounts=maximum_amounts,
+        )
+        assert resolved_amounts == expected_amounts
+
+    def test_resolve_partial_convergence(self):
+        base_amounts = {1: EUR('1.23'), 2: EUR('4.56')}
+        convergence_amounts = {1: EUR('7.89'), 2: EUR('0.01')}
+        expected_amounts = {1: EUR('0.98'), 2: EUR('0.01')}
+        resolved_amounts = resolve_amounts(
+            EUR('0.99'), base_amounts, convergence_amounts
+        )
+        assert resolved_amounts == expected_amounts
+        convergence_amounts = {1: EUR('0.50'), 2: EUR('0.50')}
+        for i in range(1, 10):
+            if i % 2 == 1:
+                expected_amounts = {1: EUR('0.50'), 2: EUR('0.49')}
+            else:
+                expected_amounts = {1: EUR('0.49'), 2: EUR('0.50')}
+            resolved_amounts = resolve_amounts(
+                EUR('0.99'), base_amounts, convergence_amounts, payday_id=i,
+            )
+            assert resolved_amounts == expected_amounts
+
+    def test_resolve_amounts_with_minimum(self):
+        naive_amounts = {1: EUR('10.00'), 2: EUR('0.02')}
+        expected_amounts = {1: EUR('5.01')}
+        resolved_amounts = resolve_amounts(
+            EUR('5.01'), naive_amounts, minimum_amount=EUR('0.02')
+        )
+        assert resolved_amounts == expected_amounts
+
+    def test_resolve_amounts_with_minimum_rotates_the_winner(self):
+        naive_amounts = {1: EUR('0.30'), 2: EUR('0.20'), 3: EUR('0.10')}
+        for i in range(1, 10):
+            expected_amounts = {(i - 1) % 3 + 1: EUR('0.06')}
+            resolved_amounts = resolve_amounts(
+                EUR('0.06'), naive_amounts, minimum_amount=EUR('0.05'), payday_id=i,
+            )
+            assert resolved_amounts == expected_amounts
 
 
 class TestResolveTeamDonation(Harness):
@@ -144,16 +248,16 @@ class TestResolveTeamDonation(Harness):
         self.add_payment_account(alice, 'stripe', country='BE')
         team.add_member(alice)
         payin, payin_transfers = self.make_payin_and_transfer(
-            alice_card, team, EUR('6.90'), fee=EUR('0.60')
+            alice_card, team, EUR('6.80'), fee=EUR('0.60')
         )
         assert len(payin_transfers) == 2
-        assert payin_transfers[0].amount == EUR('5.43')
+        assert payin_transfers[0].amount == EUR('5.40')
         assert payin_transfers[0].destination == stripe_account_bob.pk
-        assert payin_transfers[0].unit_amount == EUR('0.86')
+        assert payin_transfers[0].unit_amount == EUR('0.87')
         assert payin_transfers[0].n_units == 6
-        assert payin_transfers[1].amount == EUR('0.87')
+        assert payin_transfers[1].amount == EUR('0.80')
         assert payin_transfers[1].destination == stripe_account_carl.pk
-        assert payin_transfers[1].unit_amount == EUR('0.14')
+        assert payin_transfers[1].unit_amount == EUR('0.13')
         assert payin_transfers[1].n_units == 6
         # Check that this donation has balanced the takes.
         takes = {t.member: t for t in self.db.all("""
@@ -163,9 +267,9 @@ class TestResolveTeamDonation(Harness):
         """, (team.id,))}
         weeks_of_advance_bob = takes[bob.id].paid_in_advance / takes[bob.id].amount
         weeks_of_advance_carl = takes[carl.id].paid_in_advance / takes[carl.id].amount
-        assert abs(weeks_of_advance_bob - weeks_of_advance_carl) <= Decimal('0.001')
+        assert weeks_of_advance_bob == weeks_of_advance_carl
 
-        # Test after two paydays, when takes are quite higher than incomes
+        # Test after two paydays
         Payday.start().run()
         self.db.run("UPDATE notifications SET ts = ts - interval '7 days'")
         Payday.start().run()
@@ -183,9 +287,9 @@ class TestResolveTeamDonation(Harness):
             alice_card, EUR('10.00'), [(team, USD('12.00'), {})],
         )
         assert len(payin_transfers) == 2
-        assert payin_transfers[0].amount == USD('4.01')
+        assert payin_transfers[0].amount == USD('4.00')
         assert payin_transfers[0].destination == stripe_account_bob.pk
-        assert payin_transfers[1].amount == USD('7.99')
+        assert payin_transfers[1].amount == USD('8.00')
         assert payin_transfers[1].destination == stripe_account_carl.pk
 
 
@@ -1200,7 +1304,7 @@ class TestPayinsStripe(Harness):
         assert pt1.remote_id
         assert pt2.status == 'failed'
         assert pt2.amount == EUR('48.42')
-        assert pt2.error.startswith("No such destination: 'acct_invalid'")
+        assert pt2.error == "The recipient's account no longer exists."
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded'
         assert payin.amount_settled == EUR('100.00')

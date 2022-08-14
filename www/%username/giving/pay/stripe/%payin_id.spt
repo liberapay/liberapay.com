@@ -1,5 +1,4 @@
 from datetime import timedelta
-from decimal import ROUND_HALF_UP
 from math import floor
 
 import stripe
@@ -41,7 +40,7 @@ if request.method == 'POST':
     if payin_amount == 'custom':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
-        payin_amount = Money(payin_amount, payin_currency, rounding=ROUND_HALF_UP)
+        payin_amount = Money(payin_amount, payin_currency)
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p
@@ -124,10 +123,11 @@ if request.method == 'POST':
     )
     payer_country = route.country or request.country
     proto_transfers = []
+    sepa_only = len(tips) > 1
     for tip in tips:
         proto_transfers.extend(resolve_tip(
             website.db, tip, tip.tippee_p, 'stripe', payer, payer_country,
-            transfer_amounts[tip.id]
+            transfer_amounts[tip.id], sepa_only=sepa_only,
         ))
     payin = prepare_payin(website.db, payer, payin_amount, route, proto_transfers)[0]
 
@@ -438,12 +438,8 @@ title = _("Funding your donations")
 
         <div class="text-info">{{ glyphicon('info-sign') }} {{ _(
             "Liberapay does not store money, the entire amount of your payment will "
-            "go immediately to the {payment_provider} accounts of {recipient_names}.",
-            payment_provider='Stripe', recipient_names=payment.recipient_names
-        ) if len(payment.recipient_names) > 1 else _(
-            "Liberapay does not store money, the entire amount of your payment will "
-            "go immediately to the {payment_provider} account of {recipient_name}.",
-            payment_provider='Stripe', recipient_name=payment.recipient_names[0]
+            "go immediately to the {payment_provider} accounts of the recipients.",
+            payment_provider='Stripe',
         ) }}</div>
         <br>
 
@@ -498,8 +494,8 @@ title = _("Funding your donations")
         <fieldset id="card-form" class="form-group {{ 'hidden' if routes else '' }}">
             <p>{{ _("Please input your name and card number:") }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
-                   class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-            <div id="stripe-element" data-type="card" class="form-control paragraph"></div>
+                   class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+            <div id="stripe-element" data-type="card" class="form-control mb-3"></div>
             <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             <p class="help-block">{{ glyphicon('lock') }} {{ _(
                 "This data will be sent directly to the payment processor "
@@ -522,8 +518,8 @@ title = _("Funding your donations")
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>
             <input name="owner.name" autocomplete="name" required minlength=3
-                   class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-            <div id="stripe-element" data-type="iban" class="form-control paragraph"></div>
+                   class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+            <div id="stripe-element" data-type="iban" class="form-control mb-3"></div>
             <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             <p class="help-block">{{ _(
                 "By providing your IBAN and confirming this payment, you are authorizing "

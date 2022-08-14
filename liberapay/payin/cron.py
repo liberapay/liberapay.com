@@ -292,10 +292,12 @@ def execute_scheduled_payins():
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
             proto_transfers = []
+            sepa_only = len(transfers) > 1
             for tr in transfers:
                 proto_transfers.extend(resolve_tip(
                     db, tr['tip'], tr['beneficiary'], 'stripe',
-                    payer, route.country, tr['amount']
+                    payer, route.country, tr['amount'],
+                    sepa_only=sepa_only,
                 ))
             try:
                 payin = prepare_payin(

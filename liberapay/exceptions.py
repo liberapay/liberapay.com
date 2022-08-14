@@ -478,6 +478,7 @@ class InvalidNumber(LazyResponse400):
 
 
 class AmbiguousNumber(LazyResponse400):
+    html_template = 'templates/exceptions/AmbiguousNumber.html'
 
     def __init__(self, ambiguous_string, suggestions):
         Response.__init__(self, 400, '')
@@ -487,7 +488,8 @@ class AmbiguousNumber(LazyResponse400):
     def lazy_body(self, _, locale):
         if self.suggestions:
             return _(
-                '"{0}" is not a properly formatted number. Perhaps you meant {list_of_suggestions}?',
+                '"{0}" doesn\'t match the expected number format. Perhaps you '
+                'meant {list_of_suggestions}?',
                 self.ambiguous_string,
                 list_of_suggestions=locale.List(self.suggestions, 'or')
             )

@@ -3173,3 +3173,31 @@ UPDATE participants SET email_lang = 'zh-hant-mo' WHERE email_lang = 'zh-mo';
 UPDATE participants SET email_lang = 'zh-hans-sg' WHERE email_lang = 'zh-sg';
 UPDATE participants SET email_lang = 'zh-hant-tw' WHERE email_lang = 'zh-tw';
 UPDATE participants SET email_lang = 'zh-hant' WHERE email_lang = 'zh';
+
+-- migration #156
+CREATE TABLE feedback
+( participant   bigint      PRIMARY KEY
+, feedback      text        NOT NULL
+, ctime         timestamptz NOT NULL DEFAULT current_timestamp
+);
+
+-- migration #157
+CREATE FUNCTION check_payin_transfer_update() RETURNS trigger AS $$
+    BEGIN
+        IF (OLD.status = 'succeeded' AND NEW.status = 'succeeded') THEN
+            IF (NEW.amount <> OLD.amount) THEN
+                RAISE 'modifying the amount of an already successful transfer is not allowed';
+            END IF;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER check_payin_transfer_update BEFORE UPDATE ON payin_transfers
+    FOR EACH ROW EXECUTE PROCEDURE check_payin_transfer_update();
+UPDATE payins SET remote_id = null WHERE remote_id = '';
+UPDATE payin_transfers SET remote_id = null WHERE remote_id = '';
+
+-- migration #158
+ALTER TABLE participants ALTER COLUMN email_notif_bits SET DEFAULT 2147483646;
+DELETE FROM notifications WHERE event = 'income~v2' AND NOT email;
+UPDATE notifications SET web = false WHERE event = 'income~v2';

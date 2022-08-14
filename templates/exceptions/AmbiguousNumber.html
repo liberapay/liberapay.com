@@ -1,0 +1,25 @@
+<div class="row">
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 text-center">
+    <p class="alert alert-danger">{{ response.body }}</p>
+    % set input_name = request.find_input_name(response.ambiguous_string)
+    <form action="" method="POST">
+        % include "templates/form-repost.html"
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <div class="buttons">
+        % for string in response.suggestions
+            <button class="btn btn-default" name="{{ input_name }}" value="{{ string }}">{{ string }}</button>
+        % endfor
+            <div class="inline-block middle">
+            <div class="input-group">
+                <label class="input-group-addon" for="other_amount">{{ _("Other amount") }}</label>
+                <input name="{{ input_name }}" value="{{ response.ambiguous_string }}" class="amount form-control" id="other_amount" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default">{{ _("Proceed") }}</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </form>
+    <br>
+</div>
+</div>

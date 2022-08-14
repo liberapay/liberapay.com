@@ -40,10 +40,6 @@ body {
     }
 }
 
-@mixin transition {
-    transition: all 0.1s ease-in;
-}
-
 #main {
     flex-grow: 1;
     min-height: 75%;
@@ -110,38 +106,6 @@ body {
     font-size: $font-size-h4;
 }
 
-.btn {
-    @include transition;
-}
-
-.btn-donate {
-    $base-color: #ffee16;
-    background-color: $base-color;
-    color: #1a171b;
-    &:hover {
-        background-color: lighten($base-color, 15%);
-    }
-}
-
-.btn-pledge {
-    $base-color: #ffee16;
-    background-color: lighten($base-color, 5%);
-    color: #7f6e06;
-    &:hover {
-        background-color: lighten($base-color, 20%);
-        color: #5f4e06;
-    }
-}
-
-.btn-donating {
-    $base-color: lighten(#f6c915, 5%);
-    background-color: $base-color;
-    color: #1a171b;
-    &:hover {
-        background-color: lighten($base-color, 10%);
-    }
-}
-
 input.amount {
     min-width: 5em;
     max-width: 8em;
@@ -152,10 +116,6 @@ input.amount {
 
 .langs select {
     margin: 5px 0;
-}
-
-textarea.vertical-resize {
-    resize: vertical;
 }
 
 div.account {
@@ -174,26 +134,6 @@ div.account {
 }
 .account-username {
     margin-left: 0.5ex;
-}
-
-button.close {
-    margin-left: 5px;
-    padding: 0 5px;
-}
-
-button.corner-icon {
-    background: transparent;
-    border: none;
-    color: #000;
-    float: right;
-    font-size: 18px;
-    line-height: 24px;
-    margin-left: 5px;
-    opacity: 0.2;
-    padding: 0 5px;
-}
-button.corner-icon:hover {
-    opacity: 0.5;
 }
 
 img.platform-icon {
@@ -470,10 +410,6 @@ input.search {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-}
-
-#subnav + p, #subnav + div.paragraph {
-    margin-top: 1.5em;
 }
 
 ul.emails {
@@ -808,19 +744,6 @@ p.event {
     margin-bottom: 0.5em;
 }
 
-.buttons > .btn {
-    margin: 0 5px 10px 0;
-    white-space: normal;
-}
-
-form.buttons > .btn, span.buttons > .btn {
-    margin: 5px 2ex 5px 0;
-}
-
-.btn-wrap {
-    white-space: normal;
-}
-
 .glyphicon + span {
     margin-left: 2px;
 }
@@ -829,70 +752,6 @@ span.help-title {
     border-bottom: 1px dotted;
     cursor: help;
     padding-bottom: 0.1em;
-}
-
-.alert-read {
-    background: transparent;
-}
-
-.alert-notification {
-    padding: 0;
-}
-.alert-header {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: $font-size-base;
-    justify-content: space-between;
-    line-height: $line-height-computed;
-    margin: 0;
-    padding: 10px 15px 10px;
-    position: relative;
-    & > .title {
-        margin-right: 2ex;
-    }
-    .actions {
-        position: absolute;
-        right: 10px;
-        top: 8px;
-        & > button {
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            border: 0;
-            color: #aaa;
-            cursor: pointer;
-            padding: 0.5ex 0.75ex;
-        }
-    }
-    & > small {
-        font-size: 90%;
-        line-height: inherit;
-        margin-right: 11ex;
-    }
-}
-.alert-body {
-    border-top: 1px solid;
-    padding: 11px 15px 0;
-}
-.alert-danger > .alert-body {
-    border-top-color: $state-danger-border;
-}
-.alert-info > .alert-body {
-    border-top-color: $state-info-border;
-}
-.alert-success > .alert-body {
-    border-top-color: $state-success-border;
-}
-.alert-warning > .alert-body {
-    border-top-color: $state-warning-border;
-}
-
-.hover-danger:hover {
-    color: $state-danger-text !important;
-}
-.hover-info:hover {
-    color: $state-info-text !important;
 }
 
 .overlaid {
@@ -979,84 +838,8 @@ span.help-title {
     }
 }
 
-ul.status-list {
-    list-style: none;
-    margin: 0 0 1em 0;
-    padding-left: 0;
-    & > li {
-        margin-bottom: 0.33em;
-        padding-left: 4ex;
-        position: relative;
-        &::before {
-            font-family: 'Glyphicons Halflings';
-            left: 1ex;
-            list-style: none;
-            position: absolute;
-        }
-    }
-}
-ul.list-yes > li::before, ul.status-list > li.ok-success::before {
-    color: $state-success-text;
-    content: '\e013';
-}
-ul.status-list > li.ok-info::before {
-    color: $state-info-text;
-    content: '\e013';
-}
-ul.status-list > li.not-ok-warning::before {
-    color: $state-warning-text;
-    content: '\e013';
-}
-ul.list-no > li::before, ul.status-list > li.not-ok-danger::before {
-    color: $state-danger-text;
-    content: '\e014';
-}
-
 .text-info > a {
     text-decoration: underline;
-}
-
-.card.donation {
-    margin: 5px 10px 10px 0;
-    & > .recipient {
-        display: flex;
-        font-size: $font-size-large;
-        font-weight: 500;
-        max-width: 100%;
-        & > .col-1 {
-            margin-right: 6px;
-        }
-        & > .col-2 {
-            min-width: 8ex;  // needed for the `text-overflow` below to work
-            & > .username {
-                display: block;
-                margin-bottom: 0.3em;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            & > .line-2 {
-                align-items: baseline;
-                display: flex;
-                flex-wrap: wrap;
-                & > .amount {
-                    margin: 0 6px 0.3em 0;
-                }
-                & > .actions {
-                    margin-left: -6px;
-                    & > .btn {
-                        margin-left: 6px;
-                    }
-                }
-            }
-        }
-    }
-    small {
-        color: $gray-light;
-        font-size: $font-size-small;
-    }
-    & > p:last-child {
-        margin-bottom: 0;
-    }
 }
 
 .link {

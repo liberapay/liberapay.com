@@ -428,6 +428,7 @@ STANDARD_TIPS = _StandardTips(None, {
 })
 
 SUMMARY_MAX_SIZE = 100
+FEEDBACK_MAX_SIZE = 1000
 
 TAKE_THROTTLING_THRESHOLD = MoneyAutoConvertDict(
     {k: Money('1.00', k) for k in ('EUR', 'USD')}

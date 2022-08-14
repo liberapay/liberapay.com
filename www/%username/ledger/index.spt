@@ -88,7 +88,7 @@ if participant.join_time:
         % if len(total_received_by_month) > 1
         <ul>
         % for month, money_basket in sorted(total_received_by_month.items(), reverse=True)
-            <li>{{ _("{0}: {1}", locale.months['format']['wide'][month], money_basket) }}</li>
+            <li>{{ _("{0}: {1}", locale.months['stand-alone']['wide'][month], money_basket) }}</li>
         % endfor
         </ul>
         % endif
@@ -98,7 +98,7 @@ if participant.join_time:
         % if len(total_sent_by_month) > 1
         <ul>
         % for month, money_basket in sorted(total_sent_by_month.items(), reverse=True)
-            <li>{{ _("{0}: {1}", locale.months['format']['wide'][month], money_basket) }}</li>
+            <li>{{ _("{0}: {1}", locale.months['stand-alone']['wide'][month], money_basket) }}</li>
         % endfor
         </ul>
         % endif

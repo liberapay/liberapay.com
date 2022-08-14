@@ -137,12 +137,11 @@
 
 {% block scripts %}{% endblock %}
 
-% set _successes = request.qs.all('success')
-% if _successes
+% if request.queued_success_messages
     <div id="notification-area-bottom">
-    % for _success in _successes if _success
+    % for _msg in request.queued_success_messages if _msg
         <div class="notification notification-success">{{
-            b64decode_s(_success, default=None)
+            _msg
         }}<span class="close">&times;</span></div>
     % endfor
     </div>

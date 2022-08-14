@@ -169,7 +169,7 @@ if query:
                         len(repositories)) }}</h3>
         % for repo in repositories
             % set owner = repo.owner
-            <div class="paragraph">
+            <div class="mb-3">
                 <a href="/{{ owner.username }}/" class="avatar-inline">
                     {{ avatar_img(owner, size=28) }}
                 </a>

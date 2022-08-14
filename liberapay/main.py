@@ -181,6 +181,7 @@ if conf:
     cron(Daily(hour=16), fetch_currency_exchange_rates, True)
     cron(Daily(hour=17), paypal.sync_all_pending_payments, True)
     cron(Daily(hour=18), Payday.update_cached_amounts, True)
+    cron(Daily(hour=19), Participant.delete_old_feedback, True)
     cron(intervals.get('notify_patrons', 1200), Participant.notify_patrons, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
@@ -327,6 +328,14 @@ def _Querystring_serialize(self, **kw):
     return ('?' + urlencode(self, doseq=True)) if self else ''
 aspen.http.request.Querystring.serialize = _Querystring_serialize
 
+if hasattr(pando.http.request.Request, 'queued_success_messages'):
+    raise Warning('pando.http.request.Request.queued_success_messages already exists')
+def _queued_success_messages(self):
+    if not hasattr(self, '_queued_success_messages'):
+        self._queued_success_messages = map(b64decode_s, self.qs.all('success'))
+    return self._queued_success_messages
+pando.http.request.Request.queued_success_messages = property(_queued_success_messages)
+
 if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
 def _source(self):
@@ -456,3 +465,29 @@ def _decode_body(self):
     body = self.body
     return body.decode('utf8') if isinstance(body, bytes) else body
 pando.Response.text = property(_decode_body)
+
+
+# Log some performance information
+# ================================
+
+def get_process_stats():
+    from resource import getrusage, RUSAGE_SELF
+    ru = getrusage(RUSAGE_SELF)
+    total_time = ru.ru_utime + ru.ru_stime
+    u2s_ratio = ru.ru_utime / total_time
+    # Simple Linux-only way to get the current process' memory footprint.
+    # Doc: https://www.kernel.org/doc/html/latest/filesystems/proc.html
+    try:
+        with open('/proc/self/status', 'r') as f:
+            d = dict(map(str.strip, line.split(':', 1)) for line in f)
+            res_mem, res_mem_peak = d['VmRSS'], d['VmHWM']
+            del d
+    except FileNotFoundError:
+        res_mem = res_mem_peak = '<unknown>'
+    return (
+        f"Process {os.getpid()} is ready. "
+        f"Elapsed time: {total_time:.3f}s ({u2s_ratio:.1%} in userland). "
+        f"Resident memory: {res_mem} now, {res_mem_peak} at peak. "
+    )
+
+website.logger.info(get_process_stats())

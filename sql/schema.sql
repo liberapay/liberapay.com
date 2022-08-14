@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '155'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '158'::jsonb);
 
 
 -- app configuration
@@ -52,7 +52,7 @@ CREATE TABLE participants
 , taking                currency_amount         NOT NULL CHECK (taking >= 0)
 , npatrons              integer                 NOT NULL DEFAULT 0
 
-, email_notif_bits      int                     NOT NULL DEFAULT 2147483647
+, email_notif_bits      int                     NOT NULL DEFAULT 2147483646
 , pending_notifs        int                     NOT NULL DEFAULT 0 CHECK (pending_notifs >= 0)
 
 , avatar_src            text
@@ -549,6 +549,20 @@ CREATE TABLE payin_transfers
 
 CREATE INDEX payin_transfers_payer_idx ON payin_transfers (payer);
 CREATE INDEX payin_transfers_recipient_idx ON payin_transfers (recipient);
+
+CREATE FUNCTION check_payin_transfer_update() RETURNS trigger AS $$
+    BEGIN
+        IF (OLD.status = 'succeeded' AND NEW.status = 'succeeded') THEN
+            IF (NEW.amount <> OLD.amount) THEN
+                RAISE 'modifying the amount of an already successful transfer is not allowed';
+            END IF;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_payin_transfer_update BEFORE UPDATE ON payin_transfers
+    FOR EACH ROW EXECUTE PROCEDURE check_payin_transfer_update();
 
 CREATE TABLE payin_transfer_events
 ( payin_transfer   int                     NOT NULL REFERENCES payin_transfers
@@ -1089,6 +1103,15 @@ CREATE TABLE identities
 );
 
 CREATE UNIQUE INDEX ON identities (participant, ctime DESC);
+
+
+-- messages left by people who have closed their accounts
+
+CREATE TABLE feedback
+( participant   bigint      PRIMARY KEY
+, feedback      text        NOT NULL
+, ctime         timestamptz NOT NULL DEFAULT current_timestamp
+);
 
 
 -- composites and functions, keep this at the end of the file

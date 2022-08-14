@@ -54,8 +54,7 @@ if request.method == 'POST':
             identity['postal_address'] = postal_address
             participant.insert_identity(identity)
     msg = _("The payment instrument has been successfully added.")
-    ntips_awaiting_payment = participant.get_tips_awaiting_payment()[1]
-    redirect_url = participant.path('giving/pay' if ntips_awaiting_payment else 'routes/')
+    redirect_url = participant.path('routes/')
     form_post_success(state, redirect_url=redirect_url, msg=msg)
 
 network = request.qs['type']
@@ -88,8 +87,8 @@ title = _("Add a payment instrument")
             <p>{{ _("Please input your name and card number:") }}</p>
             <div class="form-group">
                 <input name="owner.name" autocomplete="name" required minlength=3
-                       class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-                <div id="stripe-element" data-type="card" class="form-control paragraph"></div>
+                       class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+                <div id="stripe-element" data-type="card" class="form-control mb-3"></div>
                 <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             </div>
             <p class="help-block">{{ glyphicon('lock') }} {{ _(
@@ -113,8 +112,8 @@ title = _("Add a payment instrument")
             ) }}</p>
             <div class="form-group">
                 <input name="owner.name" autocomplete="name" required minlength=3
-                       class="form-control paragraph" placeholder="{{ _('Jane Doe') }}" />
-                <div id="stripe-element" data-type="iban" class="form-control paragraph"></div>
+                       class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
+                <div id="stripe-element" data-type="iban" class="form-control mb-3"></div>
                 <span id="stripe-errors" role="alert" class="invalid-msg"></span>
             </div>
             <p class="help-block">{{ _(
