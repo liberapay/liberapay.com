@@ -31,7 +31,7 @@ if query:
                AND hide_from_search = 0
                AND ( NOT username like '~%%' AND lower(username) %% lower(%(q)s)
                      OR
-                     lower(public_name) %% lower(%(q)s)
+                     public_name IS NOT NULL AND lower(public_name) %% lower(%(q)s)
                    )
           ORDER BY rank DESC, username
              LIMIT 10
