@@ -18,7 +18,7 @@ if query:
             SELECT username
                  , public_name
                  , avatar_url
-                 , 	CASE 
+                 , CASE 
                         WHEN public_name IS NULL 
                              THEN similarity(username, %(q)s)
                         WHEN similarity(username, %(q)s) >= similarity(public_name, %(q)s) 
@@ -31,6 +31,7 @@ if query:
                 OR lower(public_name) %% lower(%(q)s)
                AND status = 'active'
                AND hide_from_search = 0
+               AND NOT username like '~%%'
           ORDER BY rank DESC, username
              LIMIT 10
         """, locals())
