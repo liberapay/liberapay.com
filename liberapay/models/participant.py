@@ -1945,7 +1945,13 @@ class Participant(Model, MixinTeam):
     @cached_property
     def accepted_currencies_set(self):
         v = self.accepted_currencies
-        return CURRENCIES if v is None else set(v.split(','))
+        if v is None:
+            return CURRENCIES
+        v = set(v.split(','))
+        if self.payment_providers == 2 and not PAYPAL_CURRENCIES.intersection(v):
+            # The currency preferences are unsatisfiable, ignore them.
+            v = PAYPAL_CURRENCIES
+        return v
 
     def change_main_currency(self, new_currency, recorder):
         old_currency = self.main_currency
@@ -1978,16 +1984,12 @@ class Participant(Model, MixinTeam):
             tippee = tippee.participant
         tip_currency = tip.amount.currency
         accepted = tippee.accepted_currencies_set
-        fallback_currency = tippee.main_currency
-        if tippee.payment_providers == 2:
-            accepted = PAYPAL_CURRENCIES.intersection(accepted)
-            if not accepted:
-                # The tippee's currency preferences are unsatisfiable, ignore them.
-                accepted = PAYPAL_CURRENCIES
-                fallback_currency = 'USD'
         if tip_currency in accepted:
             return tip_currency, accepted
         else:
+            fallback_currency = tippee.main_currency
+            if fallback_currency not in accepted:
+                fallback_currency = 'USD'
             return fallback_currency, accepted
 
 
