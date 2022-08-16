@@ -125,10 +125,10 @@ Liberapay.init = function() {
     $('input[maxlength], textarea[maxlength]').each(function() {
         var $this = $(this)
         var maxLength = $this.attr('maxlength');
-        $this.data('maxLength', maxLength);
-        $this.removeAttr('maxLength');
-
-        maxLength = $this.data('maxLength');
+        var dataMaxlengthMsg = $this.data('maxlengthMsg');
+        $this.data('maxlength', maxLength);
+        $this.removeAttr('maxlength');
+        maxLength = $this.data('maxlength');
         var remainingLength = maxLength - $this.val().length;
         $this.after("<span class='remaining-length'>" + remainingLength + "</span>");
 
@@ -143,12 +143,12 @@ Liberapay.init = function() {
         // Update remaining length dynamically
         $this.on('focus input', function() {
             var $this = $(this)
-            var maxLength = $this.data('maxLength');
+            var maxLength = $this.data('maxlength');
             var remainingLength = maxLength - $this.val().length;
             $this.siblings("span[class='remaining-length']").first().text(remainingLength);
             
             if (remainingLength < 0) {
-                $this.get(0).setCustomValidity('too many characters');
+                $this.get(0).setCustomValidity(dataMaxlengthMsg);
             } else {
                 $this.get(0).setCustomValidity('');
             }
