@@ -1742,6 +1742,10 @@ class Participant(Model, MixinTeam):
             query = '?' + urlencode(query, doseq=True)
         if log_in not in ('auto', 'required', 'no'):
             raise ValueError(f"{log_in!r} isn't a valid value for the `log_in` argument")
+        if self.kind not in ('individual', 'organization'):
+            if log_in == 'required':
+                raise ValueError(f"{log_in=} isn't valid when participant kind is {self.kind!r}")
+            log_in = 'no'
         email_row = getattr(self, '_rendering_email_to', None)
         if email_row:
             extra_query = []
