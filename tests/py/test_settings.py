@@ -1,4 +1,5 @@
 from liberapay.constants import PRIVACY_FIELDS, PRIVACY_FIELDS_S
+from liberapay.exceptions import AccountIsPasswordless
 from liberapay.testing import EUR, Harness
 from liberapay.models.participant import Participant
 
@@ -156,7 +157,7 @@ class TestUsername(Harness):
 
 class TestPassword(Harness):
 
-    def test_setting_and_changing_password(self):
+    def test_setting_then_changing_then_unsetting_password(self):
         alice = self.make_participant('alice')
         form_data = {
             'new-password': 'password',
@@ -164,6 +165,7 @@ class TestPassword(Harness):
         }
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
         assert r.code == 302, r.text
+
         form_data['cur-password'] = form_data['new-password']
         password = form_data['new-password'] = 'correct horse battery staple'
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
@@ -175,6 +177,18 @@ class TestPassword(Harness):
         assert r.code == 302, r.text
         assert r.headers[b"Location"] == b'/alice/settings/?password_mismatch=1'
         assert alice.authenticate_with_password(alice.id, password, context='test')
+
+        form_data = {'action': 'unset'}
+        r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 302, r.text
+        assert r.headers[b"Location"] == b'/alice/settings/?password_mismatch=1'
+        assert alice.authenticate_with_password(alice.id, password, context='test')
+        form_data['cur-password'] = password
+        r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 302, r.text
+        assert not alice.has_password
+        with self.assertRaises(AccountIsPasswordless):
+            alice.authenticate_with_password(alice.id, password, context='test')
 
 
 class TestRecipientSettings(Harness):

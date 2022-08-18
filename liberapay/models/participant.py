@@ -332,6 +332,30 @@ class Participant(Model, MixinTeam):
             if checked:
                 self.add_event(c, 'password-check', None)
 
+    def unset_password(self):
+        params = dict(
+            p_id=self.id,
+            current_session_id=getattr(self.session, 'id', -1),
+        )
+        with self.db.get_cursor() as c:
+            r = c.one("""
+                DELETE FROM user_secrets
+                 WHERE participant = %(p_id)s
+                   AND id = 0
+             RETURNING 1
+            """, params)
+            if not r:
+                return
+            self.add_event(c, 'unset_password', None)
+            # Invalidate other password sessions
+            c.run("""
+                DELETE FROM user_secrets
+                 WHERE participant = %(p_id)s
+                   AND id >= 1 AND id <= 20
+                   AND id <> %(current_session_id)s
+                   AND secret NOT LIKE '%%.em'
+            """, params)
+
     @cached_property
     def has_password(self):
         return self.db.one(
