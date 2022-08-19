@@ -147,7 +147,7 @@
     </div>
 % endif
 
-% if state.get('partial_translation')
+% if state.get('partial_translation') or state.get('fuzzy_translation')
     % include "_i18n_warning.html"
 % endif
 

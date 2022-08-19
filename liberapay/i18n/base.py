@@ -124,6 +124,8 @@ class Locale(babel.core.Locale):
             s2 = msg.string
             if isinstance(s2, tuple):
                 s2 = s2[0]
+            if msg.fuzzy:
+                state['fuzzy_translation'] = True
         if not s2:
             s2 = s
             if self.language != 'en':
@@ -148,6 +150,9 @@ class Locale(babel.core.Locale):
                 s2 = msg.string[self.catalog.plural_func(n)]
             except Exception as e:
                 website.tell_sentry(e)
+            else:
+                if msg.fuzzy:
+                    state['fuzzy_translation'] = True
         if not s2:
             s2 = s if n == 1 else p
             if self.language != 'en':
