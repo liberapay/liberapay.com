@@ -43,20 +43,17 @@ else:
     % if result == EmailVerificationResult.SUCCEEDED
         <p class="alert alert-success">{{ _("Your email address is now verified.") }}</p>
     % elif result == EmailVerificationResult.REDUNDANT
-        <h3>{{ _("Already Verified") }}</h3>
-        <div class="alert alert-info">{{ _("This email address has already been verified.") }}</div>
-    % else
-        % if result == EmailVerificationResult.STYMIED
-        <h3>{{ _("Address Taken") }}</h3>
-        <p class="alert alert-danger">{{
-            _("This email address is already connected to a different Liberapay account.")
-        }}</p>
-        % elif result == EmailVerificationResult.FAILED
-        <h3>{{ _("Failure") }}</h3>
-        <p class="alert alert-danger">{{
-            _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.")
-        }}</p>
-        % endif
+        <p class="alert alert-info">{{ _("This email address has already been verified.") }}</p>
+    % elif result == EmailVerificationResult.STYMIED
+        <p class="alert alert-danger">{{ _(
+            "This email address is already connected to a different Liberapay account."
+        ) }}</p>
+    % elif result == EmailVerificationResult.FAILED
+        <p class="alert alert-danger">{{ _(
+            "The confirmation of your email address has failed. Please check that "
+            "the link you clicked on or copy-pasted hasn't been truncated or altered "
+            "in any way."
+        ) }}</p>
     % endif
 
     <p><a class="btn btn-{{ 'default' if result == EmailVerificationResult.SUCCEEDED else 'primary' }}"
