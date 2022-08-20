@@ -1,4 +1,5 @@
-% macro password_form(participant)
+% macro authentication_settings(participant)
+    <h3>{{ _("Password") }}</h3>
     % if request.qs.parse_boolean('password_mismatch', False)
         <p class="alert alert-danger">{{ _("The submitted password is incorrect.") }}</p>
     % elif participant.has_password
@@ -38,4 +39,7 @@
         <button class="btn btn-default" name="action" value="unset">{{ _("Unset password") }}</button>
         % endif
     </form>
+
+    <h3>{{ _("2FA") }}</h3>
+    <p>{{ _("Liberapay does not yet support two-factor authentication.") }}</p>
 % endmacro

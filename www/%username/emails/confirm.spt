@@ -59,13 +59,12 @@ else:
         % endif
     % endif
 
-    <a class="btn btn-{{ 'default' if result == EmailVerificationResult.SUCCEEDED else 'primary' }}"
-       href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a>
+    <p><a class="btn btn-{{ 'default' if result == EmailVerificationResult.SUCCEEDED else 'primary' }}"
+          href="{{ participant.path('emails') }}">{{ _("Manage your email addresses") }}</a></p>
 
     % if user == participant and not participant.has_password
-        <br><br>
-        <h2>{{ _("Password") }}</h2>
-        % from "templates/macros/password-form.html" import password_form with context
-        {{ password_form(participant) }}
+        <br>
+        % from "templates/macros/auth.html" import authentication_settings with context
+        {{ authentication_settings(participant) }}
     % endif
 % endblock

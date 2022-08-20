@@ -30,9 +30,8 @@ is_a_person = participant.kind not in ('group', 'community')
         </p>
 
         % if is_a_person
-        <h3>{{ _("Password") }}</h3>
-        % from "templates/macros/password-form.html" import password_form with context
-        {{ password_form(participant) }}
+        % from "templates/macros/auth.html" import authentication_settings with context
+        {{ authentication_settings(participant) }}
 
         <div>
             <h3>{{ _("Close") }}</h3>
