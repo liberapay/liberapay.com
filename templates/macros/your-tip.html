@@ -317,7 +317,7 @@
         _("Cancel the pledge") if pledging else _("Discontinue the donation")
     }}</button>
     % elif tippee_p.payment_providers
-    <p class="text-center">{{ payment_methods_icons(tippee_p) }}</p>
+    <p class="text-center">{{ payment_methods_icons(tippee_p, new_currency) }}</p>
     % elif not pledging
     <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
         "{username} hasn't configured any payment method yet, so your donation "
