@@ -163,8 +163,6 @@ class MixinTeam:
                       recorder=recorder.id))
             # Recompute the actual takes and update the cached amounts
             self.recompute_actual_takes(cursor, member=member)
-            # Update is_funded on member's tips
-            member.update_giving(cursor)
             # Close or reopen the team if necessary
             nmembers = cursor.one("""
                 SELECT count(*)
