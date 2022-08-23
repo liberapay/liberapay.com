@@ -2312,12 +2312,11 @@ class Participant(Model, MixinTeam):
                SET giving = coalesce_currency_amount((
                      SELECT sum(t.amount, p.main_currency)
                        FROM current_tips t
-                       JOIN participants p2 ON p2.id = t.tippee
+                       JOIN participants tippee_p ON tippee_p.id = t.tippee
                       WHERE t.tipper = %(id)s
-                        AND ( p2.status = 'active' AND
-                              (p2.goal IS NULL OR p2.goal >= 0) AND
-                              t.is_funded
-                            )
+                        AND t.is_funded
+                        AND tippee_p.status = 'active'
+                        AND (tippee_p.goal IS NULL OR tippee_p.goal >= 0)
                    ), p.main_currency)
              WHERE p.id = %(id)s
          RETURNING giving
