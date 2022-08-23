@@ -185,8 +185,6 @@ class Participant(Model, MixinTeam):
 
     def leave_team(self, team):
         team.set_take_for(self, None, self)
-        if not team.nmembers:
-            team.close()
 
     @classmethod
     def from_id(cls, id, _raise=True):

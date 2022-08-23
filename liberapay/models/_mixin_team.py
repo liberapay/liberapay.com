@@ -165,6 +165,16 @@ class MixinTeam:
             self.recompute_actual_takes(cursor, member=member)
             # Update is_funded on member's tips
             member.update_giving(cursor)
+            # Close or reopen the team if necessary
+            nmembers = cursor.one("""
+                SELECT count(*)
+                  FROM current_takes
+                 WHERE team = %s
+            """, (self.id,))
+            if nmembers == 0:
+                self.update_status('closed', cursor=cursor)
+            elif self.status == 'closed':
+                self.update_status('active', cursor=cursor)
 
         return take
 
