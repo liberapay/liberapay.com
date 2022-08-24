@@ -154,12 +154,12 @@ if result == EmailVerificationResult.SUCCEEDED:
         </form>
         % endif
     % elif result == EmailVerificationResult.REDUNDANT
-        <h3>{{ _("Already Verified") }}</h3>
         <div class="alert alert-warning">{{ _("This email address has already been verified.") }}</div>
     % elif result == EmailVerificationResult.FAILED
-        <h3>{{ _("Failure") }}</h3>
-        <div class="alert alert-danger">{{
-            _("Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way.")
-        }}</div>
+        <div class="alert alert-danger">{{ _(
+            "The confirmation of your email address has failed. Please check that "
+            "the link you clicked on or copy-pasted hasn't been truncated or altered "
+            "in any way."
+        ) }}</div>
     % endif
 % endblock
