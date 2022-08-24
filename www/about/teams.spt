@@ -13,31 +13,35 @@ if request.method == 'POST':
             "request that your account be unflagged."
         ))
     name = request.body['name'].strip()
+    team_currency = request.body.get('main_currency') or currency
+    if team_currency not in constants.CURRENCIES:
+        raise response.invalid_input(team_currency, 'main_currency', 'body')
+    team_email = request.body.get('email')
+    if team_email:
+        team_email = normalize_email_address(team_email)
+        email_is_attached_to_self = user.db.one("""
+            SELECT true AS a
+              FROM emails
+             WHERE participant = %s
+               AND address = %s
+        """, (user.id, team_email))
+        if email_is_attached_to_self:
+            raise EmailAlreadyAttachedToSelf(team_email)
+        check_email_address(team_email)
     t = Participant.from_username(name)
     if t:
         if t.kind == 'group' and t.status == 'closed' and user.id == t.closed_by:
             with website.db.get_cursor() as c:
                 t.update_status('active', c)
                 t.add_member(user, c)
+                if team_email:
+                    t.add_email(team_email, cursor=c)
+            if team_currency != t.main_currency:
+                t.change_main_currency(team_currency, user)
         else:
             raise UsernameAlreadyTaken(name)
     else:
         email_lang = locale.language
-        team_currency = request.body.get('main_currency') or currency
-        if team_currency not in constants.CURRENCIES:
-            raise response.invalid_input(team_currency, 'main_currency', 'body')
-        team_email = request.body.get('email')
-        if team_email:
-            team_email = normalize_email_address(team_email)
-            email_is_attached_to_self = user.db.one("""
-                SELECT true AS a
-                  FROM emails
-                 WHERE participant = %s
-                   AND address = %s
-            """, (user.id, team_email))
-            if email_is_attached_to_self:
-                raise EmailAlreadyAttachedToSelf(team_email)
-            check_email_address(team_email)
         throttle_takes = request.body.get('throttle_takes') == 'on'
         t = user.make_team(name, team_currency, team_email, email_lang, throttle_takes)
     response.redirect('/'+t.username+'/edit')

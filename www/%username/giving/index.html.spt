@@ -392,7 +392,7 @@ next_payday = compute_next_payday_date()
                            href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
                            {{ fontawesome('repeat') }} {{ _("Renew") }}
                         </a>
-                        &nbsp; {{ payment_methods_icons(tippee) }}
+                        &nbsp; {{ payment_methods_icons(tippee, tip.amount.currency) }}
                     % else
                         <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
                             "Cannot be renewed because the account of the recipient isn't ready to receive new payments."

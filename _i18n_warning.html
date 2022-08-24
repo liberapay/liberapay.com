@@ -1,4 +1,13 @@
+% if state.get('partial_translation')
 <div class="notification notification-warning top">{{ _(
-    "The {language} translation of this page is not yet complete."
-    , language=locale
+    "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
+    , link_start=('<a href="https://hosted.weblate.org/engage/liberapay/{}/?utm_source=liberapay-incomplete-translation-warning">'|safe).format(locale.global_tag)
+    , link_end='</a>'|safe
 ) }}</div>
+% elif state.get('fuzzy_translation')
+<div class="notification notification-warning top">{{ _(
+    "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
+    , link_start=('<a href="https://hosted.weblate.org/engage/liberapay/{}/?utm_source=liberapay-machine-translation-warning">'|safe).format(locale.global_tag)
+    , link_end='</a>'|safe
+) }}</div>
+% endif

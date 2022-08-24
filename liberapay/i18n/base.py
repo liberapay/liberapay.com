@@ -13,7 +13,7 @@ from markupsafe import Markup
 import opencc
 from pando.utils import utcnow
 
-from ..constants import CURRENCIES, D_MAX
+from ..constants import CURRENCIES, D_MAX, to_precision
 from ..exceptions import AmbiguousNumber, InvalidNumber
 from ..website import website
 from .currencies import Money, MoneyBasket
@@ -65,8 +65,13 @@ class Month(int):
     __slots__ = ()
 
 
-class Percent(Decimal):
-    __slots__ = ()
+class Percent:
+    __slots__ = ('number', 'min_precision', 'group_separator')
+
+    def __init__(self, number, min_precision=1, group_separator=True):
+        self.number = number
+        self.min_precision = min_precision
+        self.group_separator = group_separator
 
 
 class Year(int):
@@ -119,6 +124,8 @@ class Locale(babel.core.Locale):
             s2 = msg.string
             if isinstance(s2, tuple):
                 s2 = s2[0]
+            if msg.fuzzy:
+                state['fuzzy_translation'] = True
         if not s2:
             s2 = s
             if self.language != 'en':
@@ -143,6 +150,9 @@ class Locale(babel.core.Locale):
                 s2 = msg.string[self.catalog.plural_func(n)]
             except Exception as e:
                 website.tell_sentry(e)
+            else:
+                if msg.fuzzy:
+                    state['fuzzy_translation'] = True
         if not s2:
             s2 = s if n == 1 else p
             if self.language != 'en':
@@ -171,9 +181,7 @@ class Locale(babel.core.Locale):
                     elif isinstance(o, Language):
                         o = self.languages.get(o) or o.upper()
                 elif isinstance(o, (Decimal, int)):
-                    if isinstance(o, Percent):
-                        o = self.format_percent(o)
-                    elif isinstance(o, Month):
+                    if isinstance(o, Month):
                         o = self.months['stand-alone']['wide'][o]
                     elif isinstance(o, Year):
                         o = str(o)
@@ -183,6 +191,12 @@ class Locale(babel.core.Locale):
                     o = self.format_money(o)
                 elif isinstance(o, MoneyBasket):
                     o = self.format_money_basket(o)
+                elif isinstance(o, Percent):
+                    o = self.format_percent(
+                        o.number,
+                        min_precision=o.min_precision,
+                        group_separator=o.group_separator,
+                    )
                 elif isinstance(o, timedelta):
                     o = self.format_timedelta(o)
                 elif isinstance(o, date):
@@ -259,8 +273,16 @@ class Locale(babel.core.Locale):
             decimal_quantization=True
         )
 
-    def format_percent(self, number, **kw):
-        return self.percent_formats[None].apply(number, self, **kw)
+    def format_percent(self, number, min_precision=1, group_separator=True):
+        decimal_quantization = True
+        if number < 0.1 and min_precision > 1:
+            number = to_precision(number, min_precision)
+            decimal_quantization = False
+        return self.percent_formats[None].apply(
+            number, self,
+            decimal_quantization=decimal_quantization,
+            group_separator=True,
+        )
 
     def format_time(self, t, format='medium'):
         return format_time(t, format=format, locale=self)

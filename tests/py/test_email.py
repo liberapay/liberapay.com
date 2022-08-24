@@ -175,7 +175,7 @@ class TestEmail(EmailHarness):
 
     def test_verify_email_without_adding_email(self):
         response = self.hit_verify('', 'sample-nonce')
-        assert '<h3>Failure</h3>' in response.text
+        assert 'The confirmation of your email address has failed.' in response.text
 
     def test_verify_email_wrong_nonce(self):
         self.hit_email_spt('add-email', 'alice@example.com')

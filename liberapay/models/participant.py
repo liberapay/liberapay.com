@@ -185,8 +185,6 @@ class Participant(Model, MixinTeam):
 
     def leave_team(self, team):
         team.set_take_for(self, None, self)
-        if not team.nmembers:
-            team.close()
 
     @classmethod
     def from_id(cls, id, _raise=True):
@@ -331,6 +329,30 @@ class Participant(Model, MixinTeam):
             """, locals())
             if checked:
                 self.add_event(c, 'password-check', None)
+
+    def unset_password(self):
+        params = dict(
+            p_id=self.id,
+            current_session_id=getattr(self.session, 'id', -1),
+        )
+        with self.db.get_cursor() as c:
+            r = c.one("""
+                DELETE FROM user_secrets
+                 WHERE participant = %(p_id)s
+                   AND id = 0
+             RETURNING 1
+            """, params)
+            if not r:
+                return
+            self.add_event(c, 'unset_password', None)
+            # Invalidate other password sessions
+            c.run("""
+                DELETE FROM user_secrets
+                 WHERE participant = %(p_id)s
+                   AND id >= 1 AND id <= 20
+                   AND id <> %(current_session_id)s
+                   AND secret NOT LIKE '%%.em'
+            """, params)
 
     @cached_property
     def has_password(self):
@@ -1284,7 +1306,7 @@ class Participant(Model, MixinTeam):
                 d['notification_ts'] = msg.ts
                 p = cls.from_id(msg.participant)
                 email = d.get('email') or p.email
-                if not email:
+                if not email or p.status != 'active':
                     dequeue(msg, 'skipped')
                     continue
                 email_row = p.get_email(email)
@@ -1328,12 +1350,6 @@ class Participant(Model, MixinTeam):
         # If email_unverified_address is on, allow sending to an unverified email address.
         if email_unverified_address and not self.email:
             context['email'] = self.get_email_address()
-        # Check that the participant is active
-        if self.status != 'active':
-            website.warning(
-                f"A {event!r} notification is being inserted for inactive participant ~{self.id}"
-            )
-            email = False
         context = serialize(context)
         with self.db.get_cursor() as cursor:
             # Check that this notification isn't a duplicate
@@ -1742,6 +1758,10 @@ class Participant(Model, MixinTeam):
             query = '?' + urlencode(query, doseq=True)
         if log_in not in ('auto', 'required', 'no'):
             raise ValueError(f"{log_in!r} isn't a valid value for the `log_in` argument")
+        if self.kind not in ('individual', 'organization'):
+            if log_in == 'required':
+                raise ValueError(f"{log_in=} isn't valid when participant kind is {self.kind!r}")
+            log_in = 'no'
         email_row = getattr(self, '_rendering_email_to', None)
         if email_row:
             extra_query = []
@@ -1923,7 +1943,13 @@ class Participant(Model, MixinTeam):
     @cached_property
     def accepted_currencies_set(self):
         v = self.accepted_currencies
-        return CURRENCIES if v is None else set(v.split(','))
+        if v is None:
+            return CURRENCIES
+        v = set(v.split(','))
+        if self.payment_providers == 2 and not PAYPAL_CURRENCIES.intersection(v):
+            # The currency preferences are unsatisfiable, ignore them.
+            v = PAYPAL_CURRENCIES
+        return v
 
     def change_main_currency(self, new_currency, recorder):
         old_currency = self.main_currency
@@ -1956,16 +1982,12 @@ class Participant(Model, MixinTeam):
             tippee = tippee.participant
         tip_currency = tip.amount.currency
         accepted = tippee.accepted_currencies_set
-        fallback_currency = tippee.main_currency
-        if tippee.payment_providers == 2:
-            accepted = PAYPAL_CURRENCIES.intersection(accepted)
-            if not accepted:
-                # The tippee's currency preferences are unsatisfiable, ignore them.
-                accepted = PAYPAL_CURRENCIES
-                fallback_currency = 'USD'
         if tip_currency in accepted:
             return tip_currency, accepted
         else:
+            fallback_currency = tippee.main_currency
+            if fallback_currency not in accepted:
+                fallback_currency = 'USD'
             return fallback_currency, accepted
 
 
@@ -2290,12 +2312,11 @@ class Participant(Model, MixinTeam):
                SET giving = coalesce_currency_amount((
                      SELECT sum(t.amount, p.main_currency)
                        FROM current_tips t
-                       JOIN participants p2 ON p2.id = t.tippee
+                       JOIN participants tippee_p ON tippee_p.id = t.tippee
                       WHERE t.tipper = %(id)s
-                        AND ( p2.status = 'active' AND
-                              (p2.goal IS NULL OR p2.goal >= 0) AND
-                              t.is_funded
-                            )
+                        AND t.is_funded
+                        AND tippee_p.status = 'active'
+                        AND (tippee_p.goal IS NULL OR tippee_p.goal >= 0)
                    ), p.main_currency)
              WHERE p.id = %(id)s
          RETURNING giving

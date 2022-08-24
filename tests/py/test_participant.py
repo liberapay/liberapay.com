@@ -1,6 +1,8 @@
 import pytest
 
-from liberapay.constants import USERNAME_SUFFIX_BLACKLIST
+from liberapay.constants import (
+    CURRENCIES, PAYPAL_CURRENCIES, USERNAME_SUFFIX_BLACKLIST,
+)
 from liberapay.exceptions import (
     BadAmount,
     InvalidId,
@@ -221,6 +223,29 @@ class Tests(Harness):
     def test_bad_username(self):
         p = Participant.from_username('deadbeef')
         assert not p
+
+    # accepted_currencies_set
+
+    def test_accepted_currencies_set(self):
+        alice = self.make_participant('alice', accepted_currencies=None)
+        assert alice.payment_providers == 0
+        assert alice.accepted_currencies_set == CURRENCIES
+        r = self.client.PxST(
+            "/alice/edit/currencies", {
+                "accepted_currencies:TRY": "yes",
+                "main_currency": "TRY",
+            }, auth_as=alice,
+        )
+        assert r.code == 302, r.text
+        alice = alice.refetch()
+        assert alice.accepted_currencies_set == {'TRY'}
+        # Check that currency preferences are ignored when they're incompatible
+        # with the connected payment accounts.
+        assert 'TRY' not in PAYPAL_CURRENCIES
+        self.add_payment_account(alice, 'paypal')
+        alice = alice.refetch()
+        assert alice.payment_providers == 2
+        assert alice.accepted_currencies_set == PAYPAL_CURRENCIES
 
     # set_tip_to - stt
 

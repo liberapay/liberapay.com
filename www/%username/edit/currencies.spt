@@ -59,6 +59,12 @@ subhead = _("Currencies")
 
 % block form
 
+% if participant.accepted_currencies and participant.accepted_currencies_set != set(participant.accepted_currencies.split(','))
+    <p class="alert alert-warning">{{ _(
+        "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
+    ) }}</p>
+% endif
+
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
@@ -81,7 +87,7 @@ subhead = _("Currencies")
         </td>
         <td><label>
             <input type="checkbox" name="accepted_currencies:{{ c }}" value="yes"
-                   {{ 'checked' if accept_all or c in participant.accepted_currencies_set else '' }} />
+                   {{ 'checked' if accept_all or c in participant.accepted_currencies else '' }} />
             {{ _("accept") }}
         </label></td>
         <td><label>

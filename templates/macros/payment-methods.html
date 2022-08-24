@@ -24,15 +24,17 @@
 ) }}
 % endmacro
 
-% macro payment_methods_icons(tippee)
+% macro payment_methods_icons(tippee, currency=None)
 <span class="payment-icons" title="{{ describe_payment_methods(tippee) }}"
       data-toggle="tooltip" data-placement="bottom">
     % if tippee.payment_providers.__and__(1)
-        {{ fontawesome('credit-card') }}
-        {{ fontawesome('bank') }}
+        {{ fontawesome('credit-card', _("Credit/Debit Card")) }}
+        % if not currency or currency == 'EUR'
+            {{ fontawesome('bank', _("Direct Debit")) }}
+        % endif
     % endif
     % if tippee.payment_providers.__and__(2)
-        {{ fontawesome('paypal') }}
+        {{ fontawesome('paypal', "PayPal") }}
     % endif
 </span>
 % endmacro

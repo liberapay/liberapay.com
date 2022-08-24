@@ -10,9 +10,10 @@ body = request.body
 
 p = get_participant(state, restrict=True, allow_member=True)
 
-if 'new-password' in body:
+if 'new-password' in body or 'action' in body:
     if not p.is_person:
         raise response.error(403)
+    action = request.body.get_choice('action', ('set', 'unset'), default='set')
 
     # Check the old password, if necessary
     if p.session_type == 'em':
@@ -29,13 +30,18 @@ if 'new-password' in body:
                 raise response.redirect(p.path('settings/?password_mismatch=1'))
             del p2
 
+    if action == 'unset':
+        p.unset_password()
+        form_post_success(state, msg=_("Your account is now passwordless."))
+
     # Check the new password
+    new_password = body['new-password']
     password_status = None
     ignore_warning = body.get('ignore_warning') == 'true'
-    if not ignore_warning:
+    if new_password and not ignore_warning:
         website.db.hit_rate_limit('check_password', p.id, TooManyAttempts)
         try:
-            password_status = p.check_password(body['new-password'], context='update_password')
+            password_status = p.check_password(new_password, context='update_password')
         except Exception as e:
             website.tell_sentry(e)
         if password_status and password_status != 'okay':
@@ -47,7 +53,7 @@ if 'new-password' in body:
     # Update the password
     website.db.hit_rate_limit('change_password', p.id, TooManyAttempts)
     checked = password_status is not None or ignore_warning
-    p.update_password(body['new-password'], checked=checked)
+    p.update_password(new_password, checked=checked)
     form_post_success(state, msg=_("Your password has been changed."))
 
 elif 'privacy' in body:
