@@ -10,8 +10,12 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
-msgid "The {language} translation of this page is not yet complete."
-msgstr "本頁的{language}翻譯尚未完成。"
+msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
+msgstr ""
 
 msgid "Your Liberapay account has been disabled"
 msgstr "您的Liberapay帳號已被停用"
@@ -1434,6 +1438,27 @@ msgstr "如果您已{bold}遺失密碼{bold_end}或帳戶根本無密碼，請�
 msgid "Save"
 msgstr "儲存"
 
+msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
+msgstr ""
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
+msgstr ""
+
+msgid "Current password"
+msgstr "目前的密碼"
+
+msgid "New password"
+msgstr "新密碼"
+
+msgid "Unset password"
+msgstr ""
+
+msgid "2FA"
+msgstr ""
+
+msgid "Liberapay does not yet support two-factor authentication."
+msgstr ""
+
 msgid "Avatar"
 msgstr "大頭照"
 
@@ -1611,15 +1636,6 @@ msgstr "最後"
 
 msgid "View More"
 msgstr "檢視更多"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "設定密碼可讓你直接登入而無需等候收取單次使用之登入連結。但請記住，Liberapay乃是一項財務服務，故請挑選高強度的密碼！"
-
-msgid "Current password"
-msgstr "目前的密碼"
-
-msgid "New password"
-msgstr "新密碼"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -2001,6 +2017,9 @@ msgstr "您提交的设定不连贯。"
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "你目前每週收到大約 {money_amount} 外國貨幣捐款。這些捐款不會轉換成你的主要貨幣。"
 
+msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
+msgstr ""
+
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "你允许你的资助者用哪些货币捐款，且你希望他们选择哪些货币？"
 
@@ -2202,23 +2221,14 @@ msgstr "您的项目或是组织的名称。该名称会与您的用户名一起
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "允许字符：字母及数字，空格，标点。"
 
-msgid "Already Verified"
-msgstr "已通過認證"
-
 msgid "This email address has already been verified."
 msgstr "這個電郵地址已通過認證。"
-
-msgid "Address Taken"
-msgstr "已採用的地址"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "這個電郵地址已用於其它不同的Liberapay帳戶。"
 
-msgid "Failure"
-msgstr "失敗"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "請檢查你所點擊的連結或是以其它不會改變其內容的方式複制貼上。"
+msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr ""
 
 msgid "Your email address is now blacklisted."
 msgstr "您的電子郵件地址已被加入黑名單。"
@@ -2483,6 +2493,9 @@ msgstr "請求正在處理中，請稍待…"
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
 msgstr "{charge_amount}數額的支付已順利完成。"
+
+msgid "Failure"
+msgstr "失敗"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
@@ -3455,6 +3468,9 @@ msgstr "準備好了嗎？"
 msgid "Yes, close my Liberapay account"
 msgstr "是的，請關閉我的 Liberapay 帳戶"
 
+msgid "Your account is now passwordless."
+msgstr ""
+
 msgid "Your password has been changed."
 msgstr "你的密碼已作變更。"
 
@@ -3818,8 +3834,15 @@ msgstr "可用的支付方式端視收款人支援情況，如果是採 Stripe �
 msgid "What are the payment processing fees?"
 msgstr "什麼是付款處理費用？"
 
-msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
-msgstr "手續費用視處理商、付款方式、國別和貨幣而定，一般其平均費用不會超過 5%。"
+#, python-brace-format
+msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
+msgstr ""
+
+msgid "Why do I see partial refunds in the Stripe dashboard?"
+msgstr ""
+
+msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
+msgstr ""
 
 msgid "How are chargebacks handled?"
 msgstr "退款如何處置？"
@@ -4062,8 +4085,8 @@ msgid "Payment processors"
 msgstr "支付處理商"
 
 #, python-brace-format
-msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
-msgstr "支付處理的中介商基於反詐欺需收集一些資訊，例如支付者的姓名與 IP 位置。若想了解進一步資訊請閱讀以下文件：{links_to_policies}。"
+msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
+msgstr ""
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"

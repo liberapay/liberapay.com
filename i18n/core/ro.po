@@ -10,8 +10,12 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
-msgid "The {language} translation of this page is not yet complete."
-msgstr "Traducerea în {language} pentru această pagină nu este încă completă."
+msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
+msgstr ""
 
 msgid "Your Liberapay account has been disabled"
 msgstr "Contul tau Librepay a fost dezactivat"
@@ -1465,6 +1469,27 @@ msgstr "Lăsați câmpul precedent gol dacă contul dumneavoastră nu are o paro
 msgid "Save"
 msgstr "Salvează"
 
+msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
+msgstr ""
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
+msgstr ""
+
+msgid "Current password"
+msgstr "Parola curentă"
+
+msgid "New password"
+msgstr "Noua parolă"
+
+msgid "Unset password"
+msgstr ""
+
+msgid "2FA"
+msgstr ""
+
+msgid "Liberapay does not yet support two-factor authentication."
+msgstr ""
+
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -1643,15 +1668,6 @@ msgstr "Ultimul"
 
 msgid "View More"
 msgstr "Vizualizează mai multe"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Stabilirea unei parole vă permite să vă autentificați în mod direct, în loc de a aștepta după o legătură unică trimisă prin e-mail. Luați aminte că Liberapay este un seviciu financiar, deci folosiți o parolă puternică!"
-
-msgid "Current password"
-msgstr "Parola curentă"
-
-msgid "New password"
-msgstr "Noua parolă"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -2039,6 +2055,9 @@ msgstr "Configurările trimise sunt incoerente."
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "Primiți momentan echivalentul a {money_amount} pe săptămână din donații în valute străine. Aceste donații nu vor fi convertite în valuta dumneavoastră principală."
 
+msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
+msgstr ""
+
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Ce valută ar trebui donorii să vă trimită dumneavoastră, și ce valută preferați?"
 
@@ -2241,23 +2260,14 @@ msgstr "Numele întreg al proiectului sau organizației dumneavoastră. Va fi af
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Simboluri permise: alfanumerice, spații și punctuație."
 
-msgid "Already Verified"
-msgstr "Verificată deja"
-
 msgid "This email address has already been verified."
 msgstr "Această adresă de e-mail a fost verificată deja."
-
-msgid "Address Taken"
-msgstr "Adresă folosită"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Această adresă de e-mail este deja conectată la un cont diferit de Liberapay."
 
-msgid "Failure"
-msgstr "Eșec"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Verificați dacă legătura pe care ați apăsat sau ați copiat-o a fost redusă sau alterată în vreun fel."
+msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr ""
 
 msgid "Your email address is now blacklisted."
 msgstr ""
@@ -2527,6 +2537,9 @@ msgstr "Cerere în curs, așteptați…"
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
 msgstr ""
+
+msgid "Failure"
+msgstr "Eșec"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
@@ -3526,6 +3539,9 @@ msgstr "Gata?"
 msgid "Yes, close my Liberapay account"
 msgstr "Da, închide contul meu Liberapay"
 
+msgid "Your account is now passwordless."
+msgstr ""
+
 msgid "Your password has been changed."
 msgstr "Parola dumneavoastră a fost modificată."
 
@@ -3897,7 +3913,14 @@ msgstr ""
 msgid "What are the payment processing fees?"
 msgstr "Care sunt taxele de procesare ale plăților?"
 
-msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+#, python-brace-format
+msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
+msgstr ""
+
+msgid "Why do I see partial refunds in the Stripe dashboard?"
+msgstr ""
+
+msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
 msgstr ""
 
 msgid "How are chargebacks handled?"
@@ -4149,7 +4172,7 @@ msgid "Payment processors"
 msgstr ""
 
 #, python-brace-format
-msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
+msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
 msgstr ""
 
 #, python-brace-format

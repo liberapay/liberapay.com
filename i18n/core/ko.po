@@ -10,8 +10,12 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
-msgid "The {language} translation of this page is not yet complete."
-msgstr "{language} 언어로의 번역이 완료되지 않았습니다."
+msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
+msgstr ""
 
 msgid "Your Liberapay account has been disabled"
 msgstr "해당 Liberapay 계정이 비활성화되었습니다"
@@ -1434,6 +1438,27 @@ msgstr "계정에 비밀번호가 없거나 {bold}비밀번호를 잃어버린 �
 msgid "Save"
 msgstr "저장"
 
+msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
+msgstr ""
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
+msgstr ""
+
+msgid "Current password"
+msgstr "현재 비밀번호"
+
+msgid "New password"
+msgstr "새 비밀번호"
+
+msgid "Unset password"
+msgstr ""
+
+msgid "2FA"
+msgstr ""
+
+msgid "Liberapay does not yet support two-factor authentication."
+msgstr ""
+
 msgid "Avatar"
 msgstr "아바타"
 
@@ -1611,15 +1636,6 @@ msgstr "끝"
 
 msgid "View More"
 msgstr "더 보기"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "비밀번호를 설정하면 일회용 로그인 링크를 메일로 받을 필요 없이 로그인할 수 있습니다. Liberapay는 금융 서비스이므로 강한 비밀번호를 사용하는 것을 잊지 마세요!"
-
-msgid "Current password"
-msgstr "현재 비밀번호"
-
-msgid "New password"
-msgstr "새 비밀번호"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1999,6 +2015,9 @@ msgstr "제출된 설정값을 다시 검토해야 합니다."
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "현재 다른 화폐로 {money_amount} 만큼의 기부를 받고 있습니다. 이 기부는 당신의 주 화폐로 변경되지 않습니다."
 
+msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
+msgstr ""
+
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "기부자들이 어떤 화폐로 기부할 수 있도록 허용할까요? 그리고 어떤 화폐를 선호하시나요?"
 
@@ -2200,23 +2219,14 @@ msgstr "프로젝트나 조직의 이름. 프로필의 사용자 이름 옆에 �
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "허용되는 단어: 라틴 알파벳과 숫자, 그리고 구두점."
 
-msgid "Already Verified"
-msgstr "이미 확인됨"
-
 msgid "This email address has already been verified."
 msgstr "이 이메일 주소는 이미 확인되었습니다."
-
-msgid "Address Taken"
-msgstr "이메일 사용 중"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "이 이메일 주소는 다른 Liberapay 계정에 연결되어 있습니다."
 
-msgid "Failure"
-msgstr "실패"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "클릭하거나 복사-붙여넣기 한 링크가 변조되거나 링크의 일부가 잘려나가지 않았는지 확인해 주세요."
+msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr ""
 
 msgid "Your email address is now blacklisted."
 msgstr "이메일 주소가 블랙리스트에 추가되었습니다."
@@ -2480,6 +2490,9 @@ msgstr "요청 진행 중, 잠시만 기다려 주십시오…"
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
 msgstr "{charge_amount} 을(를) 성공적으로 지불했습니다."
+
+msgid "Failure"
+msgstr "실패"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
@@ -3452,6 +3465,9 @@ msgstr "준비되셨습니까?"
 msgid "Yes, close my Liberapay account"
 msgstr "네, Liberapay 계정을 닫습니다"
 
+msgid "Your account is now passwordless."
+msgstr ""
+
 msgid "Your password has been changed."
 msgstr "비밀번호가 변경되었습니다."
 
@@ -3814,7 +3830,14 @@ msgstr ""
 msgid "What are the payment processing fees?"
 msgstr "지불 대행자 수수료가 뭡니까?"
 
-msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
+#, python-brace-format
+msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
+msgstr ""
+
+msgid "Why do I see partial refunds in the Stripe dashboard?"
+msgstr ""
+
+msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
 msgstr ""
 
 msgid "How are chargebacks handled?"
@@ -4058,7 +4081,7 @@ msgid "Payment processors"
 msgstr ""
 
 #, python-brace-format
-msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
+msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
 msgstr ""
 
 #, python-brace-format

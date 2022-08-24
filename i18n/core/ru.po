@@ -10,8 +10,12 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
-msgid "The {language} translation of this page is not yet complete."
-msgstr "Перевод этой страницы на {language} ещё не завершён."
+msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
+msgstr ""
 
 msgid "Your Liberapay account has been disabled"
 msgstr "Ваша учётная запись Liberapay отключена"
@@ -1464,6 +1468,27 @@ msgstr "Если вы {bold}потеряли свой пароль{bold_end} и�
 msgid "Save"
 msgstr "Сохранить"
 
+msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
+msgstr ""
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
+msgstr ""
+
+msgid "Current password"
+msgstr "Текущий пароль"
+
+msgid "New password"
+msgstr "Новый пароль"
+
+msgid "Unset password"
+msgstr ""
+
+msgid "2FA"
+msgstr ""
+
+msgid "Liberapay does not yet support two-factor authentication."
+msgstr ""
+
 msgid "Avatar"
 msgstr "Аватар"
 
@@ -1641,15 +1666,6 @@ msgstr "В конец"
 
 msgid "View More"
 msgstr "Показать ещё"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Указав пароль, вы можете войти сразу, а не ждать одноразовую ссылку на почту. Помните, что Liberapay — финансовый сервис, поэтому используйте надежный пароль!"
-
-msgid "Current password"
-msgstr "Текущий пароль"
-
-msgid "New password"
-msgstr "Новый пароль"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -2035,6 +2051,9 @@ msgstr "Указанные настройки противоречат друг 
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "Вы уже получаете эквивалент {money_amount} в неделю от пожертвований в иностранных валютах. Эти пожертвования не будут конвертированы в вашу основную валюту."
 
+msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
+msgstr ""
+
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Какие валюты ваши спонсоры могут посылать вам, и какую из них вы предпочитаете?"
 
@@ -2239,23 +2258,14 @@ msgstr "Полное название вашего проекта или орг�
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Допустимые символы: буквы и цифры, пробелы и знаки пунктуации."
 
-msgid "Already Verified"
-msgstr "Уже подтверждён"
-
 msgid "This email address has already been verified."
 msgstr "Этот адрес электронной почты уже подтверждён."
-
-msgid "Address Taken"
-msgstr "Адрес занят"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Этот адрес электронной почты уже связан с другим аккаунтом Liberapay."
 
-msgid "Failure"
-msgstr "Ошибка"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Проверьте, что ссылка, на которую вы нажали или скопировали, не обрезана или каким-то образом изменена."
+msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr ""
 
 msgid "Your email address is now blacklisted."
 msgstr "Ваш адрес электронной почты теперь в чёрном списке."
@@ -2523,6 +2533,9 @@ msgstr "Запрос обрабатывается, пожалуйста, под�
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
 msgstr "Платёж на {charge_amount} прошёл успешно."
+
+msgid "Failure"
+msgstr "Ошибка"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
@@ -3521,6 +3534,9 @@ msgstr "Готовы?"
 msgid "Yes, close my Liberapay account"
 msgstr "Да, закрыть мой аккаунт Liberapay"
 
+msgid "Your account is now passwordless."
+msgstr ""
+
 msgid "Your password has been changed."
 msgstr "Пароль был изменён."
 
@@ -3890,8 +3906,15 @@ msgstr "Доступные способы оплаты зависят от то�
 msgid "What are the payment processing fees?"
 msgstr "Сколько составляет комиссия за перевод?"
 
-msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
-msgstr "Комиссии могут отличаться в зависимости от платёжных процессоров, методов оплаты, страны и валюты. Комиссия в среднем ожидается ниже 5% во всех случаях."
+#, python-brace-format
+msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
+msgstr ""
+
+msgid "Why do I see partial refunds in the Stripe dashboard?"
+msgstr ""
+
+msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
+msgstr ""
 
 msgid "How are chargebacks handled?"
 msgstr "Как обрабатываются возвратные платежи?"
@@ -4142,8 +4165,8 @@ msgid "Payment processors"
 msgstr "Платежные системы"
 
 #, python-brace-format
-msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
-msgstr "Посредники, участвующие в обработке платежей, собирают информацию для целей защиты от мошенничества, например, имя и IP-адрес плательщика. Пожалуйста, прочитайте эти документы, если вам нужна дополнительная информация: {links_to_policies}."
+msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
+msgstr ""
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"

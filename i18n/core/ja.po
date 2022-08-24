@@ -10,8 +10,12 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
-msgid "The {language} translation of this page is not yet complete."
-msgstr "このページの{language}訳はまだ完成していません。"
+msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
+msgstr ""
 
 msgid "Your Liberapay account has been disabled"
 msgstr "あなたの Liberapay アカウントは無効化されています"
@@ -1434,6 +1438,27 @@ msgstr "{bold}パスワードを紛失した{bold_end}場合や、アカウン�
 msgid "Save"
 msgstr "保存"
 
+msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
+msgstr ""
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
+msgstr ""
+
+msgid "Current password"
+msgstr "現在のパスワード"
+
+msgid "New password"
+msgstr "新しいパスワード"
+
+msgid "Unset password"
+msgstr ""
+
+msgid "2FA"
+msgstr ""
+
+msgid "Liberapay does not yet support two-factor authentication."
+msgstr ""
+
 msgid "Avatar"
 msgstr "アバター"
 
@@ -1611,15 +1636,6 @@ msgstr "最後へ"
 
 msgid "View More"
 msgstr "もっと見る"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "パスワードを設定することで、使い捨てのリンクがメールで送信されるのを待たずに直接ログインできるようになります。Liberapay が金融サービスであることを心に留めて、強力なパスワードを使用してください！"
-
-msgid "Current password"
-msgstr "現在のパスワード"
-
-msgid "New password"
-msgstr "新しいパスワード"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1999,6 +2015,9 @@ msgstr "送信された設定は一貫性がありません。"
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "あなたは、現在、外貨での寄付により 1 週間あたり {money_amount} 相当を受け取ります。これらの寄付は、あなたのメインの通貨に両替されません。"
 
+msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
+msgstr ""
+
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "寄贈者があなたにどの通貨を送ることを承認しますか？　また、どの通貨をメインにしますか？"
 
@@ -2200,23 +2219,14 @@ msgstr "自分のプロジェクトや組織のフルネームです。公開プ
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "使用可能な文字：英数字・スペース・句読点。"
 
-msgid "Already Verified"
-msgstr "すでに認証済みです"
-
 msgid "This email address has already been verified."
 msgstr "このメールアドレスはすでに認証されています。"
-
-msgid "Address Taken"
-msgstr "このメールアドレスは使用済みです"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "このメールアドレスはすでに別の Liberapay アカウントに連携されています。"
 
-msgid "Failure"
-msgstr "失敗しました"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "あなたがクリックした、またはコピー・アンド・ペーストしたリンクが、何らかの理由で一部分になっていたり、変更されていたりしないことを確認してください。"
+msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr ""
 
 msgid "Your email address is now blacklisted."
 msgstr "お使いのメールアドレスがブラックリストに登録されました。"
@@ -2480,6 +2490,9 @@ msgstr "リクエストは進行中です。お待ちください…"
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
 msgstr "{charge_amount}の支払いは成功しました。"
+
+msgid "Failure"
+msgstr "失敗しました"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
@@ -3452,6 +3465,9 @@ msgstr "準備できましたか？"
 msgid "Yes, close my Liberapay account"
 msgstr "Liberapay アカウントを削除"
 
+msgid "Your account is now passwordless."
+msgstr ""
+
 msgid "Your password has been changed."
 msgstr "パスワードを変更しました。"
 
@@ -3814,8 +3830,15 @@ msgstr "使用可能な支払方法は受け取り側がサポートする決済
 msgid "What are the payment processing fees?"
 msgstr "取引手数料とは何ですか？"
 
-msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
-msgstr "手数料は決済業者、決済手段、国と通貨によって様々です。ほとんどの場合において平均5%以下です。"
+#, python-brace-format
+msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
+msgstr ""
+
+msgid "Why do I see partial refunds in the Stripe dashboard?"
+msgstr ""
+
+msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
+msgstr ""
 
 msgid "How are chargebacks handled?"
 msgstr "払い戻しはどのように行われますか？"
@@ -4058,8 +4081,8 @@ msgid "Payment processors"
 msgstr "決済サービス"
 
 #, python-brace-format
-msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
-msgstr "支払い処理に関与する仲介者は、詐欺防止の目的で情報を収集します。たとえば、支払人の名前やIPアドレスなどです。 詳細については、次のドキュメントをご覧ください: {links_to_policies}。"
+msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
+msgstr ""
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"

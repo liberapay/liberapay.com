@@ -10,8 +10,12 @@ msgstr ""
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
-msgid "The {language} translation of this page is not yet complete."
-msgstr "Den {language}a översättningen av denna sida är inte färdig ännu."
+msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
+msgstr ""
+
+#, python-brace-format
+msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
+msgstr ""
 
 msgid "Your Liberapay account has been disabled"
 msgstr "Ditt Liberapay-konto har blivit inaktiverat"
@@ -1449,6 +1453,27 @@ msgstr "Om du har {bold}tappat bort ditt lösenord{bold_end}, eller om ditt kont
 msgid "Save"
 msgstr "Spara"
 
+msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
+msgstr ""
+
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
+msgstr ""
+
+msgid "Current password"
+msgstr "Nuvarande lösenord"
+
+msgid "New password"
+msgstr "Nytt lösenord"
+
+msgid "Unset password"
+msgstr ""
+
+msgid "2FA"
+msgstr ""
+
+msgid "Liberapay does not yet support two-factor authentication."
+msgstr ""
+
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -1626,15 +1651,6 @@ msgstr "Sista"
 
 msgid "View More"
 msgstr "Visa Mer"
-
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. Keep in mind that Liberapay is a financial service, use a strong password!"
-msgstr "Om du anger ett lösenord kan du logga in direkt, istället för att vänta på en engångsinloggningslänk skickad via e-mail. Kom ihåg att Liberapay är en finansiell tjänst, använd ett starkt lösenord!"
-
-msgid "Current password"
-msgstr "Nuvarande lösenord"
-
-msgid "New password"
-msgstr "Nytt lösenord"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -2017,6 +2033,9 @@ msgstr "The inmatade värdena är inte giltiga."
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "Du får för närvarande motsvarande {money_amount} per vecka från donationer i främmande valutor. Dessa donationer kommer inte att växlas till din föredragna valuta."
 
+msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
+msgstr ""
+
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Vilka valutor ska dina donatorer få skicka till dig, och vilken föredrar du?"
 
@@ -2220,23 +2239,14 @@ msgstr "Fullständiga namnet på ditt projekt eller organisation. Det kommer att
 msgid "Allowed characters: alphanumerics, spaces, and punctuation."
 msgstr "Tillåtna tecken: alfanumeriska tecken, mellanrum, och skiljetecken."
 
-msgid "Already Verified"
-msgstr "Redan verifierad"
-
 msgid "This email address has already been verified."
 msgstr "Denna e-postadress är redan verifierad."
-
-msgid "Address Taken"
-msgstr "Adress tagen"
 
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Denna e-postadress är redan ansluten till ett annat Liberapay-konto."
 
-msgid "Failure"
-msgstr "Fel"
-
-msgid "Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Var god kontrollera att länken du klickade på eller kopierade inte har blivit avkortad eller ändrad på något sätt."
+msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
+msgstr ""
 
 msgid "Your email address is now blacklisted."
 msgstr "Din e-postadress är nu svartlistad."
@@ -2505,6 +2515,9 @@ msgstr "Förfrågan behandlas, var god vänta…"
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
 msgstr "Betalningen av {charge_amount} lyckades."
+
+msgid "Failure"
+msgstr "Fel"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
@@ -3490,6 +3503,9 @@ msgstr "Redo?"
 msgid "Yes, close my Liberapay account"
 msgstr "Ja, stäng mitt Liberapay konto"
 
+msgid "Your account is now passwordless."
+msgstr ""
+
 msgid "Your password has been changed."
 msgstr "Ditt lösenord har ändrats."
 
@@ -3857,8 +3873,15 @@ msgstr "De tillgängliga betalningsmetoderna beror på de betalningsprocessorer 
 msgid "What are the payment processing fees?"
 msgstr "Vad är betalningsbearbetningsavgifterna?"
 
-msgid "The fees vary by payment processor, payment method, countries and currencies. The average is expected to be below 5% in all cases."
-msgstr "Avgifterna varierar beroende på betalningsleverantör, betalningsmetod, land och valuta. Genomsnittet förväntas vara under 5% i alla fall."
+#, python-brace-format
+msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
+msgstr ""
+
+msgid "Why do I see partial refunds in the Stripe dashboard?"
+msgstr ""
+
+msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
+msgstr ""
 
 msgid "How are chargebacks handled?"
 msgstr "Hur hanteras återkrav?"
@@ -4105,8 +4128,8 @@ msgid "Payment processors"
 msgstr "Betalningsförmedlare"
 
 #, python-brace-format
-msgid "The intermediaries involved in payment processing collect information for anti-fraud purposes, for example the name and IP address of the payer. Please read these documents if you want more information: {links_to_policies}."
-msgstr "De mellanhänder som är involverade i betalningsförmedlingen samlar information för att motverka bedrägerier, t.ex. betalarens namn och IP-adress. För mer information, läs följande dokument: {links_to_policies}."
+msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
+msgstr ""
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
