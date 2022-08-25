@@ -11,11 +11,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
-msgstr ""
+msgstr "Bu sayfanın İngilizce'den çevirisi henüz tamamlanmadı. {link_start}Katkıda bulunabilirsiniz{link_end}."
 
 #, python-brace-format
 msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
-msgstr ""
+msgstr "Bu sayfa henüz gözden geçirilmemiş ve hatalı olabilecek makine çevirisi metin içermektedir. {link_start}Katkıda bulunabilirsiniz{link_end}."
 
 msgid "Your Liberapay account has been disabled"
 msgstr "Liberapay hesabınız devre dışı bırakıldı"
@@ -1454,10 +1454,10 @@ msgid "Save"
 msgstr "Kaydet"
 
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
-msgstr ""
+msgstr "Liberapay hesabınızın parolasını değiştirmeniz gerekiyorsa, bunu aşağıdan yapabilirsiniz. Güvenli olması için, hesabınızın parolası rastgele oluşturulmalı ve başka hiçbir yerde kullanılmamalıdır. Bir parola yöneticisi kullanmanızı şiddetle tavsiye ederiz."
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr ""
+msgstr "Bir parola belirlemek, e-posta yoluyla gönderilen tek kullanımlık bir bağlantıyı beklemek yerine doğrudan oturum açmanıza olanak tanır. Ancak, bir parola yöneticisi kullanmıyorsanız hesabınızı parolasız tutmanızı tavsiye ederiz, çünkü güvenli olması için hesabınızın parolası rastgele oluşturulmalı ve başka hiçbir yerde kullanılmamalıdır."
 
 msgid "Current password"
 msgstr "Şimdiki parola"
@@ -1466,13 +1466,13 @@ msgid "New password"
 msgstr "Yeni parola"
 
 msgid "Unset password"
-msgstr ""
+msgstr "Parolayı kaldır"
 
 msgid "2FA"
-msgstr ""
+msgstr "2FA"
 
 msgid "Liberapay does not yet support two-factor authentication."
-msgstr ""
+msgstr "Liberapay henüz iki adımlı kimlik doğrulamayı desteklemiyor."
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -2034,7 +2034,7 @@ msgid "You currently receive the equivalent of {money_amount} per week from dona
 msgstr "Şu anda haftalık {money_amount} eş değerinde yabancı para cinsinden bağış alıyorsunuz. Bu bağışlar ana para biriminize dönüştürülmeyecek."
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
-msgstr ""
+msgstr "Kullandığınız ödeme işleyicisiyle uyumlu olmadığı için para birimi ayarlarınız şu anda yok sayılıyor."
 
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Bağışçılarınızın size hangi para birimlerini göndermesine izin verilmeli ve siz hangisini tercih edersiniz?"
@@ -2245,7 +2245,7 @@ msgid "This email address is already connected to a different Liberapay account.
 msgstr "Bu e-posta adresi zaten farklı bir Liberapay hesabına bağlı."
 
 msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr ""
+msgstr "E-posta adresinizin onaylanması başarısız oldu. Lütfen tıkladığınız veya kopyalayıp yapıştırdığınız bağlantının herhangi bir şekilde kırpılmadığını veya değiştirilmediğini gözden geçirin."
 
 msgid "Your email address is now blacklisted."
 msgstr "E-posta adresiniz artık kara listeye alındı."
@@ -3499,7 +3499,7 @@ msgid "Yes, close my Liberapay account"
 msgstr "Evet, Liberapay hesabımı kapat"
 
 msgid "Your account is now passwordless."
-msgstr ""
+msgstr "Hesabınız artık parolasız."
 
 msgid "Your password has been changed."
 msgstr "Parolanız değiştirildi."
@@ -3867,13 +3867,13 @@ msgstr "Ödeme işlem ücretleri nedir?"
 
 #, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
-msgstr ""
+msgstr "Ücretler ödeme işleyicisine, ödeme yöntemine, ülkelere ve para birimlerine göre değişmektedir. Geçtiğimiz yıl, ortalama ücret yüzdeleri Stripe tarafından işlenen ödemeler için {average_fee_stripe} ve PayPal tarafından işlenen ödemeler için {average_fee_paypal} olmuştur."
 
 msgid "Why do I see partial refunds in the Stripe dashboard?"
-msgstr ""
+msgstr "Stripe denetim panelinde neden kısmi geri ödemeler görüyorum?"
 
 msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
-msgstr ""
+msgstr "Stripe'ın tek alıcılı ödemelerdeki ücretini kısmi geri ödemelerle geri kazanıyoruz. Bu geri ödemeler Stripe hesabınızdan bağışçıya değil, Liberapay'e yapılır."
 
 msgid "How are chargebacks handled?"
 msgstr "Ters ibrazlar nasıl ele alınır?"
@@ -4121,7 +4121,7 @@ msgstr "Ödeme işleyicileri"
 
 #, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr ""
+msgstr "Liberapay, bağışçılardan içerik oluşturuculara para aktarmak için ödeme hizmeti sağlayıcılarını kullanmaktadır, çünkü bankalar ve ödeme ağlarıyla doğrudan arayüz oluşturmak için ne kaynaklarımız ne de isteğimiz vardır. Bu ödeme işleyicileri tarafından toplanan kişisel veriler hakkında bilgi edinmek istiyorsanız, lütfen şu belgeleri okuyun: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"

@@ -11,11 +11,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
-msgstr ""
+msgstr "Перевод этой страницы с английского ещё не завершен. {link_start}Вы можете внести свой вклад{link_end}."
 
 #, python-brace-format
 msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
-msgstr ""
+msgstr "Эта страница содержит текст с машинным переводом, который ещё проверен и может быть неточным. {link_start}Вы можете внести свой вклад{link_end}."
 
 msgid "Your Liberapay account has been disabled"
 msgstr "Ваша учётная запись Liberapay отключена"
@@ -33,7 +33,7 @@ msgid "Something wrong? This email was sent automatically, but you can contact u
 msgstr "Что-то не так? Это письмо было отправлено автоматически, но вы можете связаться с нами, ответив на него."
 
 msgid "Change your email settings"
-msgstr "Изменить настройки email"
+msgstr "Изменить настройки эл. почты"
 
 #, python-brace-format
 msgid "It's time to renew your donation to {username} on Liberapay"
@@ -660,10 +660,10 @@ msgstr "Это сообщение является напоминанием, ч�
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
 msgstr "Это сообщение является напоминанием, что {amount} будут списаны с основного платёжного инструмента {debit_date}, чтобы продлить срок действия периодических платежей для {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] "Это сообщение является напоминанием о том, что в течение следующего дня будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
+msgstr[0] "Это сообщение является напоминанием о том, что в течение следующего {n} дня будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
 msgstr[1] "Это сообщение является напоминанием о том, что в течение следующих {n} дней будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
 msgstr[2] "Это сообщение является напоминанием о том, что в течение следующих {n} дней будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
 
@@ -697,7 +697,7 @@ msgstr "Ваша учётка Liberapay изменена"
 
 #, python-brace-format
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
-msgstr "Кто-то пытается связать адрес электронной почты {0} с учёткой Liberapay, к которой уже привязан адрес {1}. Если вы не связывали адрес {0} с вашей учёткой, нажмите ссылку ниже чтобы удалить адрес."
+msgstr "Кто-то пытается связать адрес электронной почты {0} с учётной записью Liberapay, к которой уже привязан адрес {1}. Если не вы инициировали эту операцию с вашей учётной записью, нажмите ссылку ниже и удалите адрес."
 
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Похоже, вы нашли баг! Приносим извинения за причинённые неудобства, мы исправим его как можно скорее!"
@@ -915,7 +915,7 @@ msgstr "Наша попытка получить ответ от домена {d
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr "Наша попытка установить связь с {domain_name} сервером электронной почты не удалось (сообщение об ошибке: “{error_message}”)."
+msgstr "Наша попытка установить связь с сервером электронной почты {domain_name} не удалась (сообщение об ошибке: “{error_message}”)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
@@ -931,11 +931,11 @@ msgstr "Адрес электронной почты {email_address} занес�
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr "Домен электронной почты {domain} был занесен в черный список {date}, так как он возвращал все сообщения. Пожалуйста, свяжитесь с нами, если это больше не так, и вы хотите, чтобы мы удалили этот домен из черного списка."
+msgstr "Домен электронной почты {domain} был занесен в чёрный список {date}, так как он возвращал все сообщения. Пожалуйста, свяжитесь с нами, если это больше не так, и вы хотите, чтобы мы удалили этот домен из чёрного списка."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr "Домен электронной почты {domain} занесен в черный список {timespan_ago} из-за поступившей жалобы. Пожалуйста, свяжитесь с нами, если вы хотите удалить свой домен из чёрного списка."
+msgstr "Домен электронной почты {domain} занесен в чёрный список {timespan_ago} из-за поступившей жалобы. Пожалуйста, свяжитесь с нами, если вы хотите удалить свой домен из чёрного списка."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
@@ -957,7 +957,7 @@ msgid "You are not allowed to add another email address right now, please try ag
 msgstr "Вы не можете добавить другой адрес электронной почты сейчас, пожалуйста, попробуйте ещё раз через несколько дней."
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
-msgstr "С вашего IP адреса или из вашей страны было слишком много попыток входа. Попробуйте снова в течение часа и отправьте письмо по адресу support@liberapay.com, если проблема не исчезнет."
+msgstr "С вашего IP-адреса или из вашей страны было слишком много попыток входа. Попробуйте снова в течение часа и отправьте письмо по адресу support@liberapay.com, если проблема не исчезнет."
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
 msgstr "Вы исчерпали предел логинов электронной почты, пожалуйста, попробуйте завтра, или свяжитесь с нами по адресу support@liberapay.com."
@@ -1469,10 +1469,10 @@ msgid "Save"
 msgstr "Сохранить"
 
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
-msgstr ""
+msgstr "Если вам нужно изменить пароль вашей учётной записи Liberapay, вы можете сделать это ниже. В целях безопасности пароль вашей учётной записи должен быть сгенерирован случайным образом и больше нигде не использоваться. Мы настоятельно рекомендуем использовать менеджер паролей."
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr ""
+msgstr "Установка пароля позволяет вам войти в систему напрямую, а не ждать одноразовую ссылку, отправленную по электронной почте. Тем не менее, мы рекомендуем не использовать пароль для своей учётной записи, если вы не используете менеджер паролей, потому что для обеспечения безопасности пароль вашей учётной записи должен быть сгенерирован случайным образом и больше нигде не использоваться."
 
 msgid "Current password"
 msgstr "Текущий пароль"
@@ -1484,10 +1484,10 @@ msgid "Unset password"
 msgstr ""
 
 msgid "2FA"
-msgstr ""
+msgstr "2ФА"
 
 msgid "Liberapay does not yet support two-factor authentication."
-msgstr ""
+msgstr "Liberapay пока не поддерживает двухфакторную аутентификацию."
 
 msgid "Avatar"
 msgstr "Аватар"
@@ -1499,7 +1499,7 @@ msgid "Find great people to donate to"
 msgstr "Найти достойных людей, чтобы сделать им пожертвование"
 
 msgid "Whose work do you appreciate? See if they're on Liberapay"
-msgstr "Чью работу вы цените? Проверьте, есть ли он на Liberapay"
+msgstr "Чью работу вы цените? Проверьте, есть ли они на Liberapay"
 
 msgid "Disconnect"
 msgstr "Отключить"
@@ -3535,7 +3535,7 @@ msgid "Yes, close my Liberapay account"
 msgstr "Да, закрыть мой аккаунт Liberapay"
 
 msgid "Your account is now passwordless."
-msgstr ""
+msgstr "Теперь у вашей учётной записи нет пароля."
 
 msgid "Your password has been changed."
 msgstr "Пароль был изменён."
@@ -4524,10 +4524,10 @@ msgstr "У вас есть кто-нибудь на примете?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Мы можем помочь найти тех, кого вы хотите спонсировать, если вы подключите ваши аккаунты:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
-msgstr[0] "Самый популярный репозиторий, связанный с аккаунтом Liberapay:"
+msgstr[0] "{n} самых популярный репозиторий, связанный с аккаунтом Liberapay:"
 msgstr[1] "{n} самых популярных репозитория, связанных с аккаунтом Liberapay:"
 msgstr[2] "{n} самых популярных репозиториев, связанных с аккаунтом Liberapay:"
 
@@ -4548,10 +4548,10 @@ msgstr "Просмотр избранных репозиториев"
 msgid "Link your repositories to your profile"
 msgstr "Связать репозитории с вашим профилем"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The top team on Liberapay is:"
 msgid_plural "The top {n} teams on Liberapay are:"
-msgstr[0] "Самая спонсируемая команда на Liberapay:"
+msgstr[0] "Топ {n} спонсируемая команда на Liberapay:"
 msgstr[1] "Топ {n} спонсируемых команды на Liberapay:"
 msgstr[2] "Топ {n} спонсируемых команд на Liberapay:"
 

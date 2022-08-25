@@ -11,11 +11,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
-msgstr ""
+msgstr "此页面尚未完全从英语翻译到你的语言。{link_start}你可以作贡献{link_end}。"
 
 #, python-brace-format
 msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
-msgstr ""
+msgstr "此页面包含包含机器翻译文本，未经审核，可能不准确。{link_start}你可以作贡献{link_end}。"
 
 msgid "Your Liberapay account has been disabled"
 msgstr "您的 Liberapay 账号已被停用"
@@ -1439,10 +1439,10 @@ msgid "Save"
 msgstr "保存"
 
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
-msgstr ""
+msgstr "如果您需要更改您的 Liberapay 账户密码，您可以在下方这样做。为了安全起见，您的账户密码应该随机生成，不要在其他任何地方使用。我们强烈建议使用密码管理器。"
 
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr ""
+msgstr "设置密码可以让你直接登录，而不是等待通过电子邮件发送的一次性链接。然而，我们建议如果你不使用密码管理器，最好不设置账户密码，因为为了安全，您的账户密码应该是随机生成的，不用在任何其他地方。"
 
 msgid "Current password"
 msgstr "当前密码"
@@ -1451,13 +1451,13 @@ msgid "New password"
 msgstr "新密码"
 
 msgid "Unset password"
-msgstr ""
+msgstr "取消设置密码"
 
 msgid "2FA"
-msgstr ""
+msgstr "双因素认证"
 
 msgid "Liberapay does not yet support two-factor authentication."
-msgstr ""
+msgstr "Librepay 尚不支持双因素认证。"
 
 msgid "Avatar"
 msgstr "头像"
@@ -2016,7 +2016,7 @@ msgid "You currently receive the equivalent of {money_amount} per week from dona
 msgstr "您目前每周收到约 {money_amount} 外币捐款。这些捐款不会转换为您的主要货币。"
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
-msgstr ""
+msgstr "您的货币设置目前被忽略，因为它们与您正在使用的支付处理商不兼容。"
 
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "您允许您的资助者用哪些币种捐款，以及您希望他们用哪些币种？"
@@ -2225,7 +2225,7 @@ msgid "This email address is already connected to a different Liberapay account.
 msgstr "这个电子邮件地址已用于另一个 Liberapay 账户。"
 
 msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr ""
+msgstr "未能确认您的电子邮件地址。请检查您点击或复制粘贴的链接没有以任何方式被截断或更改。"
 
 msgid "Your email address is now blacklisted."
 msgstr "您的电子邮件地址已被加入黑名单。"
@@ -3463,7 +3463,7 @@ msgid "Yes, close my Liberapay account"
 msgstr "是的，关闭我的 Liberapay 账户"
 
 msgid "Your account is now passwordless."
-msgstr ""
+msgstr "您的账户现在没有密码了。"
 
 msgid "Your password has been changed."
 msgstr "已更改您的密码。"
@@ -3827,13 +3827,13 @@ msgstr "什么是支付处理费用？"
 
 #, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
-msgstr ""
+msgstr "费用因支付处理机构、支付方式、国家和货币而异。去年，Stripe 处理的支付的平均费用百分比为 {average_fee_stripe}，PayPal 处理的支付的平均百分比为 {average_fee_paypal}。"
 
 msgid "Why do I see partial refunds in the Stripe dashboard?"
-msgstr ""
+msgstr "为什么我在 Stripe 控制面板中看到部分退款?"
 
 msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
-msgstr ""
+msgstr "部分退款是我们收回 Stripe 对于单一收款人付款的费用的方式。这些退款是从你的 Stripe 账户退给 Liberapay 的，不是退给捐赠者的。"
 
 msgid "How are chargebacks handled?"
 msgstr "如何处理拒付？"
@@ -3890,7 +3890,7 @@ msgstr "捐款可以来自世界任何地方。"
 #, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] "捐赠者最多可以在 {n} 种货币中选择，具体取决于收款人的偏好和底层支付处理商的能力."
+msgstr[0] "捐赠者最多可以在 {n} 种货币中选择，具体取决于收款人的偏好和底层支付处理商的能力。"
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4029,7 +4029,7 @@ msgstr "PayPal 只支持 {n_paypal_currencies} 种货币，Liberapay 和 Stripe 
 #, python-brace-format
 msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
 msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] "PayPal 可供 200 多个国家/地区的创作者使用，而 Stripe 仅以合适的方式支持 {n} 个国家."
+msgstr[0] "PayPal 可供 200 多个国家/地区的创作者使用，而 Stripe 仅以合适的方式支持 {n} 个国家。"
 
 #, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
@@ -4077,7 +4077,7 @@ msgstr "支付处理商"
 
 #, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr ""
+msgstr "Liberapay 依靠支付服务提供商将资金从捐赠者转移到创作者手中，因为我们既没有资源也没有意愿直接与银行和支付网络连接。如果你想了解这些付款处理机构收集的个人数据，请阅读这些文档：{links_to_policies}。"
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
