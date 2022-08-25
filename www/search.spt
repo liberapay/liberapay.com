@@ -18,13 +18,10 @@ if query:
             SELECT username
                  , public_name
                  , avatar_url
-                 , CASE
-                        WHEN public_name IS NULL
-                             THEN similarity(username, %(q)s)
-                        WHEN similarity(username, %(q)s) >= similarity(public_name, %(q)s)
-                             THEN similarity(username, %(q)s)
-                        ELSE similarity(public_name, %(q)s)
-                    END AS rank
+                 , greatest(
+                       similarity(username, %(q)s),
+                       similarity(public_name, %(q)s)
+                   ) AS rank
                  , id
               FROM participants
              WHERE status = 'active'
