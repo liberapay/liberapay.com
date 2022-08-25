@@ -3578,9 +3578,8 @@ msgid ""
 "Liberapay does not store money, the entire amount of your payment will go "
 "immediately to the {payment_provider} accounts of the recipients."
 msgstr ""
-"Η Liberapay δεν παρακρατεί χρήματα, το ολόποσο της πληρωμής σας θα "
-"μεταφερθεί αμέσως στους λογαριασμούς {payment_provider} του "
-"{recipient_names}."
+"Το Liberapay δεν αποθηκεύει χρήματα, ολόκληρο το ποσό της πληρωμής σας θα "
+"πάει αμέσως στους λογαριασμούς {payment_provider} των παραληπτών."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr ""
@@ -3868,15 +3867,14 @@ msgstr[1] "Οι κορυφαίοι {n} προστάτες είναι οι εξή
 msgid "{username} doesn't publish how much they give."
 msgstr "{username} δεν δημοσιεύει πόσο δίνουν."
 
-#, fuzzy
 msgid "Donees"
-msgstr "Donees"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
 msgstr[0] "{username} δωρίζει δημόσια στον δημιουργό του {n}."
-msgstr[1] ""
+msgstr[1] "{username} δωρίζει δημόσια στον δημιουργό του {n}."
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
@@ -4289,6 +4287,7 @@ msgid_plural ""
 msgstr[0] ""
 "Έχετε {n} ενεργούς προστάτες που σας δίνουν {money_amount} ανά εβδομάδα."
 msgstr[1] ""
+"Έχετε {n} ενεργούς προστάτες που σας δίνουν {money_amount} ανά εβδομάδα."
 
 msgid "You don't have any active patrons."
 msgstr "Δεν έχετε ενεργούς θαμώνες."
@@ -5411,6 +5410,9 @@ msgstr[0] ""
 "τις προτιμήσεις του παραλήπτη και τις δυνατότητες του υποκείμενου "
 "επεξεργαστή πληρωμών."
 msgstr[1] ""
+"Οι δωρητές μπορούν να επιλέξουν μεταξύ έως και {n} νομισμάτων, ανάλογα με "
+"τις προτιμήσεις του παραλήπτη και τις δυνατότητες του υποκείμενου "
+"επεξεργαστή πληρωμών."
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -5418,6 +5420,7 @@ msgid_plural "Liberapay is fully available to creators in {n} territories:"
 msgstr[0] ""
 "Το Liberapay είναι πλήρως διαθέσιμο στους δημιουργούς στις περιοχές {n}:"
 msgstr[1] ""
+"Το Liberapay είναι πλήρως διαθέσιμο στους δημιουργούς στις περιοχές {n}:"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
@@ -5428,6 +5431,8 @@ msgstr[0] ""
 "Επιπλέον, το Liberapay είναι εν μέρει διαθέσιμο στους δημιουργούς στο "
 "{paypal_link_open}τις χώρες {n} που υποστηρίζονται από το PayPal{link_close}."
 msgstr[1] ""
+"Επιπλέον, το Liberapay είναι εν μέρει διαθέσιμο στους δημιουργούς στο "
+"{paypal_link_open}τις χώρες {n} που υποστηρίζονται από το PayPal{link_close}."
 
 msgid "What is Liberapay?"
 msgstr "Τι είναι το Liberapay;"
@@ -5663,6 +5668,8 @@ msgstr[0] ""
 "Το PayPal είναι διαθέσιμο σε δημιουργούς σε περισσότερες από 200 χώρες, ενώ "
 "το Stripe υποστηρίζει μόνο τις χώρες {n} με κατάλληλο τρόπο."
 msgstr[1] ""
+"Το PayPal είναι διαθέσιμο σε δημιουργούς σε περισσότερες από 200 χώρες, ενώ "
+"το Stripe υποστηρίζει μόνο τις χώρες {n} με κατάλληλο τρόπο."
 
 #, fuzzy, python-brace-format
 msgid ""
@@ -5896,6 +5903,8 @@ msgstr[0] ""
 "Η τελευταία ημέρα πληρωμής ήταν {timespan_ago} και μεταφέρθηκε "
 "{money_amount} μεταξύ {n} χρηστών."
 msgstr[1] ""
+"Η τελευταία ημέρα πληρωμής ήταν {timespan_ago} και μεταφέρθηκε "
+"{money_amount} μεταξύ {n} χρηστών."
 
 #, python-brace-format
 msgid "{n} participant gave money."
@@ -5913,7 +5922,7 @@ msgstr[1] "{n} συμμετέχοντες έλαβαν χρήματα."
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
 msgstr[0] "{n} ο συμμετέχων ήταν ταυτόχρονα δότης και λήπτης."
-msgstr[1] ""
+msgstr[1] "{n} ο συμμετέχων ήταν ταυτόχρονα δότης και λήπτης."
 
 #, fuzzy, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
@@ -5922,6 +5931,8 @@ msgstr[0] ""
 "Κατά μέσο όρο, οι άνθρωποι που κάνουν δωρεές δίνουν {0} ο καθένας σε έναν "
 "άλλο χρήστη."
 msgstr[1] ""
+"Κατά μέσο όρο, οι άνθρωποι που κάνουν δωρεές δίνουν {0} ο καθένας σε {n} "
+"άλλους χρήστες."
 
 msgid "Open Accounts"
 msgstr "Ανοιχτοί λογαριασμοί"
