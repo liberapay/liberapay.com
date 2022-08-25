@@ -27,11 +27,12 @@ if query:
                     END AS rank
                  , id
               FROM participants
-             WHERE lower(username) %% lower(%(q)s)
-                OR lower(public_name) %% lower(%(q)s)
-               AND status = 'active'
+             WHERE status = 'active'
                AND hide_from_search = 0
-               AND NOT username like '~%%'
+               AND ( NOT username like '~%%' AND lower(username) %% lower(%(q)s)
+                     OR
+                     public_name IS NOT NULL AND lower(public_name) %% lower(%(q)s)
+                   )
           ORDER BY rank DESC, username
              LIMIT 10
         """, locals())
