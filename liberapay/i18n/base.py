@@ -282,8 +282,8 @@ class Locale(babel.core.Locale):
 
     def format_percent(self, number, min_precision=1, group_separator=True):
         decimal_quantization = True
-        if number < 0.1 and min_precision > 1:
-            number = to_precision(number, min_precision)
+        if number < 1 and min_precision > 0:
+            number = to_precision(Decimal(str(number)), min_precision)
             decimal_quantization = False
         return self.percent_formats[None].apply(
             number, self,
