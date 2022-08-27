@@ -150,9 +150,16 @@ class Locale(babel.core.Locale):
                 s2 = msg.string[self.catalog.plural_func(n)]
             except Exception as e:
                 website.tell_sentry(e)
-            else:
+            if s2:
                 if msg.fuzzy:
                     state['fuzzy_translation'] = True
+            else:
+                n_placeholders = p.count('{')
+                s2 = next((
+                    x for x in msg.string if x and x.count('{') == n_placeholders
+                ), None)
+                if s2:
+                    state['partial_translation'] = True
         if not s2:
             s2 = s if n == 1 else p
             if self.language != 'en':
