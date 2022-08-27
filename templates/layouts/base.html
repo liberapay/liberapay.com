@@ -18,8 +18,8 @@
     % block head_alternates
     % if request.method in constants.SAFE_METHODS and response.code == 200
         <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri.decoded }}" />
-        % for l_completion, l_code, l_name, l_url in website.lang_list
-            <link rel="alternate" hreflang="{{ l_code }}" href="{{ l_url }}{{ request.line.uri.decoded }}" />
+        % for l_name, l in website.lang_list
+            <link rel="alternate" hreflang="{{ l.tag }}" href="{{ l.base_url }}{{ request.line.uri.decoded }}" />
         % endfor
     % endif
     % endblock

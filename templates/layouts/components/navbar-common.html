@@ -10,11 +10,15 @@
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu dropdown-menu-right">
-    % for l_completion, l_tag, l_name, l_url in website.lang_list
-        <li {% if l_tag == locale.global_tag %} class="active" {% endif %}
-            ><a href="{{ l_url }}{{ request.line.uri.decoded }}" rel="alternate" hreflang="{{ l_tag }}"
-                ><span lang="{{ l_tag }}">{{ l_name }}</span>{% if l_completion <= 0.99 %} &nbsp; <small>{{
-                    _("({x_percent} translated)", x_percent=locale.format_percent(l_completion))
+    % for l_name, l in website.lang_list
+        <li {% if l.tag == locale.global_tag %} class="active" {% endif %}
+            ><a href="{{ l.base_url }}{{ request.line.uri.decoded }}" rel="alternate" hreflang="{{ l.tag }}"
+                ><span lang="{{ l.tag }}">{{ l_name }}</span>{% if l.completion <= 0.99 %} &nbsp; <small>{{
+                    _("({x_percent} not yet translated)", x_percent=locale.format_percent(l.missing_translations))
+                    if l.missing_translations >= 0.01 else
+                    _("({x_percent} machine translated)", x_percent=locale.format_percent(l.fuzzy_translations))
+                    if l.fuzzy_translations >= 0.01 else
+                    ""
                 }}</small>{% endif %}</a></li>
     % endfor
         <li role="separator" class="divider"></li>

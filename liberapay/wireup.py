@@ -632,10 +632,23 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             intern_source_strings(c)
             c.plural_func = get_function_from_rule(c.plural_expr)
             replace_unused_singulars(c)
-            l.completion = compute_percentage(
-                (m.string for m in c if m.id and not m.fuzzy), len(c)
+            missing = fuzzy = 0
+            for msg in c:
+                if any(msg.string):
+                    if isinstance(msg.string, tuple):
+                        missing += sum(1 for s in msg.string if not s) / len(msg.string)
+                    if msg.fuzzy:
+                        fuzzy += 1
+                else:
+                    missing += 1
+            l.missing_translations = missing / len(c)
+            l.fuzzy_translations = fuzzy / len(c)
+            l.completion = 1 - (
+                l.missing_translations +
+                l.fuzzy_translations
             )
-            if l.completion == 0:
+            del missing, fuzzy
+            if l.missing_translations == 1:
                 continue
             else:
                 locales[l.tag] = l
@@ -668,17 +681,15 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
         if resolve(f"{l.tag}.{domain}", port):
             l.base_url = f"{canonical_scheme}://{l.tag}.{canonical_host}"
             if l.completion > 0.5:
-                lang_list.append(
-                    (l.completion, l.tag, l.title(l.display_name), l.base_url)
-                )
+                lang_list.append((l.title(l.display_name), l))
         else:
             l.base_url = None
             if l.completion > 0.75:
                 tell_sentry(Warning(
-                    f"the {l.tag} translation is {int(l.completion*100)}% complete, "
-                    f"but the {l.tag}.{canonical_host} domain doesn't exist"
+                    f"the {l.tag} translation is ready, but the {l.tag}.{canonical_host} "
+                    f"domain doesn't exist"
                 ))
-    lang_list.sort(key=lambda t: (-(1 if t[0] > 0.99 else t[0]), t[1]))
+    lang_list.sort()
 
     # Load the territorial locales
     for loc_id in sorted(babel.localedata.locale_identifiers()):
@@ -691,6 +702,8 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             if not l.territory or l.variant:
                 continue
             l.catalog = base.catalog
+            l.missing_translations = base.missing_translations
+            l.fuzzy_translations = base.fuzzy_translations
             l.completion = base.completion
             l._data['languages'] = base.languages
             l.countries = base.countries
