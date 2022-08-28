@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from sys import intern
 from unicodedata import combining, normalize
+import warnings
 
 import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
@@ -140,6 +141,8 @@ class Locale(babel.core.Locale):
         return escape(s2)
 
     def ngettext(self, state, s, p, n, *a, **kw):
+        if n == 1 and not s:
+            warnings.warn(f"missing singular | {p}")
         escape = state['escape']
         n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
         n = n or 0
