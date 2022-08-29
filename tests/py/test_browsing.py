@@ -112,5 +112,5 @@ class TestTranslations(BrowseTestHarness):
 
     def test_all_pages_in_all_supported_langs(self):
         self.browse_setup()
-        for _, l, _, _ in self.client.website.lang_list:
-            self.browse(HTTP_ACCEPT_LANGUAGE=l.encode('ascii'))
+        for _, l in self.client.website.lang_list:
+            self.browse(HTTP_ACCEPT_LANGUAGE=l.tag.encode('ascii'))

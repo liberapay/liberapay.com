@@ -149,7 +149,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
         }}</select>
         <button class="btn btn-default">{{ _("Save") }}</button>
     </form>
-    % if email_locale.completion < 0.5
+    % if email_locale.missing_translations > 0.5
         <br>
         <p class="alert alert-warning">{{ _(
             "The {language} translation of Liberapay is not yet complete, you may "

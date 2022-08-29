@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from sys import intern
 from unicodedata import combining, normalize
+import warnings
 
 import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
@@ -140,6 +141,8 @@ class Locale(babel.core.Locale):
         return escape(s2)
 
     def ngettext(self, state, s, p, n, *a, **kw):
+        if n == 1 and not s:
+            warnings.warn(f"missing singular | {p}")
         escape = state['escape']
         n, wrapper = (n.value, n.wrapper) if isinstance(n, Wrap) else (n, None)
         n = n or 0
@@ -150,9 +153,16 @@ class Locale(babel.core.Locale):
                 s2 = msg.string[self.catalog.plural_func(n)]
             except Exception as e:
                 website.tell_sentry(e)
-            else:
+            if s2:
                 if msg.fuzzy:
                     state['fuzzy_translation'] = True
+            else:
+                n_placeholders = p.count('{')
+                s2 = next((
+                    x for x in msg.string if x and x.count('{') == n_placeholders
+                ), None)
+                if s2:
+                    state['partial_translation'] = True
         if not s2:
             s2 = s if n == 1 else p
             if self.language != 'en':
@@ -275,8 +285,8 @@ class Locale(babel.core.Locale):
 
     def format_percent(self, number, min_precision=1, group_separator=True):
         decimal_quantization = True
-        if number < 0.1 and min_precision > 1:
-            number = to_precision(number, min_precision)
+        if number < 1 and min_precision > 0:
+            number = to_precision(Decimal(str(number)), min_precision)
             decimal_quantization = False
         return self.percent_formats[None].apply(
             number, self,
@@ -449,6 +459,8 @@ LOCALES = {}
 LOCALE_EN = LOCALES['en'] = Locale('en')
 LOCALE_EN.catalog = Catalog('en')
 LOCALE_EN.catalog.plural_func = lambda n: n != 1
+LOCALE_EN.missing_translations = 0
+LOCALE_EN.fuzzy_translations = 0
 LOCALE_EN.completion = 1
 LOCALE_EN.countries = COUNTRIES
 LOCALE_EN.accepted_languages = ACCEPTED_LANGUAGES

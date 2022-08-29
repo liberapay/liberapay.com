@@ -20,8 +20,8 @@ class TestPages(Harness):
     def test_homepage_in_all_supported_langs(self):
         self.make_participant('alice')
         self.db.run("UPDATE participants SET join_time = now() - INTERVAL '1 hour'")
-        for _, l, _, _ in self.client.website.lang_list:
-            r = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=l.encode('ascii'))
+        for _, l in self.client.website.lang_list:
+            r = self.client.GET('/', HTTP_ACCEPT_LANGUAGE=l.tag.encode('ascii'))
             assert r.code == 200, r.text
 
         link_default = '<link rel="alternate" hreflang="x-default" href="%s/" />'

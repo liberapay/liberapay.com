@@ -5,7 +5,9 @@ from liberapay.models.participant import Participant
 
 n_langs = len(website.lang_list)
 n_accepted_langs = len(ACCEPTED_LANGUAGES)
-n_good_translations = len([t[0] for t in website.lang_list if t[0] >= 0.95])
+n_complete_translations = sum(
+    1 for _, l in website.lang_list if l.missing_translations < 0.05
+)
 
 platforms_with_repos = [p.display_name for p in website.platforms.hasattr('api_repos_path')]
 
@@ -251,13 +253,13 @@ recent = website.db.one("""
                 {{ ngettext(
                     "Our service is currently available in {n} language.",
                     "Our service is currently available in {n} languages.",
-                    n_good_translations
+                    n_complete_translations
                 ) }}
-                % if n_langs > n_good_translations
+                % if n_langs > n_complete_translations
                 {{ ngettext(
                     "It's also partially translated into {n} other language ({link_open}you can contribute{link_close}).",
                     "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close}).",
-                    n_langs - n_good_translations,
+                    n_langs - n_complete_translations,
                     link_open='<a href="https://hosted.weblate.org/engage/liberapay/">'|safe,
                     link_close='</a>'|safe,
                 ) }}
