@@ -2183,16 +2183,19 @@ class Participant(Model, MixinTeam):
     def update_goal(self, goal, cursor=None):
         with self.db.get_cursor(cursor) as c:
             json = None if goal is None else str(goal)
+            donations_paused = goal == -2 and self.goal != -1
+            donations_resumed = goal != -1 and self.goal == -2
             self.add_event(c, 'set_goal', json)
             c.run("UPDATE participants SET goal=%s WHERE id=%s", (goal, self.id))
             self.set_attributes(goal=goal)
-            if not self.accepts_tips:
+            if not self.accepts_tips or donations_resumed:
                 tippers = c.all("""
                     SELECT p
                       FROM current_tips t
                       JOIN participants p ON p.id = t.tipper
                      WHERE t.tippee = %s
                 """, (self.id,))
+            if not self.accepts_tips:
                 for tipper in tippers:
                     tipper.update_giving(cursor=c)
                 r = c.one("""
@@ -2203,6 +2206,16 @@ class Participant(Model, MixinTeam):
                  RETURNING receiving, npatrons
                 """, (self.id,))
                 self.set_attributes(**r._asdict())
+            if donations_paused or donations_resumed:
+                for tipper in tippers:
+                    event = 'donations_paused' if donations_paused else 'donations_resumed'
+                    tipper.send_email(
+                        event,
+                        tipper.get_email(tipper.get_email_address()),
+                        recipient=self.username,
+                        donations_paused=donations_paused,
+                        donations_url=tipper.url('giving/')
+                    )
 
     def update_status(self, status, cursor=None):
         with self.db.get_cursor(cursor) as c:
