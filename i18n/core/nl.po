@@ -9,13 +9,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
-msgstr "De vertaling van deze pagina uit het Engels is nog niet volledig. {link_start}U kunt bijdragen via{link_end}."
+msgstr "De vertaling van deze pagina uit het Engels is nog niet afgerond. {link_start}U kunt bijdragen{link_end}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
-msgstr "Deze pagina bevat machinaal vertaalde tekst die nog niet is gecontroleerd en mogelijk onjuist is. {link_start}U kunt bijdragen via{link_end}."
+msgstr "Deze pagina bevat machinaal vertaalde tekst die nog niet is gecontroleerd en mogelijk onjuist is. {link_start}U kunt bijdragen{link_end}."
 
 msgid "Your Liberapay account has been disabled"
 msgstr "Uw Liberapay-account is uitgeschakeld"
@@ -1330,11 +1330,11 @@ msgstr "Wijzig een andere taal"
 
 #, python-brace-format
 msgid "({x_percent} not yet translated)"
-msgstr ""
+msgstr "({x_percent} nog niet vertaald)"
 
 #, python-brace-format
 msgid "({x_percent} machine translated)"
-msgstr ""
+msgstr "({x_percent} machine vertaald)"
 
 msgid "Help us translate Liberapay"
 msgstr "Help ons Liberapay te vertalen"
@@ -1457,13 +1457,11 @@ msgstr "Als u uw {bold}wachtwoord vergeten bent{bold_end} of als uw account hele
 msgid "Save"
 msgstr "Bewaar"
 
-#, fuzzy
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
-msgstr "Indien u het wachtwoord van uw Liberapay rekening dient te wijzigen, kunt u dat hieronder doen. Om veilig te zijn, moet het wachtwoord van uw rekening willekeurig worden gegenereerd en nergens anders worden gebruikt. Wij raden het gebruik van een wachtwoordmanager sterk aan."
+msgstr "Indien u het wachtwoord van uw Liberapay account wilt wijzigen, kunt u dat hieronder doen. Om veilig te zijn, moet het wachtwoord van uw account willekeurig worden gegenereerd en nergens anders worden gebruikt. Wij raden het gebruik van een wachtwoordmanager sterk aan."
 
-#, fuzzy
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr "Door een wachtwoord in te stellen kunt u direct inloggen, in plaats van te wachten op een link voor eenmalig gebruik die u per e-mail wordt toegestuurd. Wij raden u echter aan uw account wachtwoordloos te houden als u geen wachtwoordmanager gebruikt, want om veilig te zijn moet het wachtwoord van uw account willekeurig worden gegenereerd en nergens anders worden gebruikt."
+msgstr "Door een wachtwoord in te stellen kunt u direct inloggen, in plaats van te wachten op een link voor eenmalig gebruik die u per email wordt toegestuurd. Wij raden u echter aan uw account wachtwoordloos te houden als u geen wachtwoordmanager gebruikt, want om veilig te zijn moet het wachtwoord van uw account willekeurig worden gegenereerd en nergens anders worden gebruikt."
 
 msgid "Current password"
 msgstr "Huidig wachtwoord"
@@ -1471,15 +1469,12 @@ msgstr "Huidig wachtwoord"
 msgid "New password"
 msgstr "Nieuw wachtwoord"
 
-#, fuzzy
 msgid "Unset password"
 msgstr "Wachtwoord vergeten"
 
-#, fuzzy
 msgid "2FA"
 msgstr "2FA"
 
-#, fuzzy
 msgid "Liberapay does not yet support two-factor authentication."
 msgstr "Liberapay ondersteunt nog geen twee-factor authenticatie."
 
@@ -2042,7 +2037,6 @@ msgstr "De ingezonden instellingen zijn onsamenhangend."
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "Je ontvangt momenteel een equivalent van {money_amount} per week aan donaties in buitenlandse valuta. Deze donaties worden niet omgezet naar je hoofdvaluta."
 
-#, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Uw valuta-instellingen worden momenteel genegeerd omdat ze niet compatibel zijn met de betalingsverwerker die u gebruikt."
 
@@ -2254,9 +2248,8 @@ msgstr "Dit emailadres is al geverifieerd."
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Dit emailadres is al verbonden met een andere Liberapay-account."
 
-#, fuzzy
 msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "De bevestiging van uw e-mailadres is mislukt. Controleer of de link waarop u hebt geklikt of die u hebt gekopieerd, niet is afgekapt of op een andere manier is gewijzigd."
+msgstr "De bevestiging van uw e-mailadres is mislukt. Controleer of de link waarop u heeft geklikt of die u heeft gekopieerd, niet is afgekapt of op een andere manier is gewijzigd."
 
 msgid "Your email address is now blacklisted."
 msgstr "Uw emailadres staat nu op de blokkeerlijst."
@@ -3509,7 +3502,6 @@ msgstr "Klaar?"
 msgid "Yes, close my Liberapay account"
 msgstr "Ja, sluit mijn Liberapay-account"
 
-#, fuzzy
 msgid "Your account is now passwordless."
 msgstr "Uw account is nu zonder wachtwoord."
 
@@ -3878,17 +3870,15 @@ msgstr "De beschikbare betaalmethoden zijn afhankelijk van welke betalingsverwer
 msgid "What are the payment processing fees?"
 msgstr "Wat is de provisie?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
-msgstr "De kosten variëren per betalingsverwerker, betalingsmethode, land en valuta. In het afgelopen jaar bedroegen de gemiddelde kostenpercentages {average_fee_stripe} voor de betalingen die door Stripe worden verwerkt en {average_fee_paypal} voor de betalingen die door PayPal worden verwerkt."
+msgstr "De kosten variëren per betalingsverwerker, betalingsmethode, land en valuta. In het afgelopen jaar bedroegen de gemiddelde kostenpercentages {average_fee_stripe} voor de betalingen die door Stripe werden verwerkt en {average_fee_paypal} voor de betalingen die door PayPal werden verwerkt."
 
-#, fuzzy
 msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "Waarom zie ik gedeeltelijke terugbetalingen in het Stripe-dashboard?"
 
-#, fuzzy
 msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
-msgstr "Gedeeltelijke terugbetalingen zijn de manier waarop we de kosten van Stripe terugvorderen op betalingen van één ontvanger. Deze terugbetalingen gaan van jouw Stripe-rekening naar die van Liberapay, niet naar de donateur."
+msgstr "Gedeeltelijke terugbetalingen zijn de manier waarop we de kosten van Stripe terugvorderen op betalingen van één ontvanger. Deze terugbetalingen gaan van uw Stripe-account naar die van Liberapay, niet naar de donateur."
 
 msgid "How are chargebacks handled?"
 msgstr "Hoe worden de storneringen behandeld?"
@@ -4134,9 +4124,9 @@ msgstr "Het tweede doel is het helpen van patroons bij het vinden van de Liberap
 msgid "Payment processors"
 msgstr "Betalingsverwerkers"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr "Liberapay vertrouwt op betalingsproviders om daadwerkelijk geld over te maken van donateurs naar makers, aangezien we noch de middelen noch de wens hebben om direct te interfacen met banken en betalingsnetwerken. Als je meer wilt weten over de persoonlijke gegevens die door deze betalingsverwerkers worden verzameld, lees dan deze documenten: {links_to_policies}."
+msgstr "Liberapay vertrouwt op betalingsproviders om daadwerkelijk geld over te maken van donateurs naar makers, aangezien we noch de middelen noch de wens hebben om direct te handelen met banken en betalingsnetwerken. Als u meer wilt weten over de persoonlijke gegevens die door deze betalingsverwerkers worden verzameld, lees dan deze documenten: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
