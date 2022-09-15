@@ -37,6 +37,7 @@ class Tests(Harness):
     def test_change_goal(self):
         self.change_goal("custom", "100", expect_success=True)
         self.change_goal("0", expect_success=True)
+        self.change_goal("-1", "irrelevant", expect_success=True)
         self.change_goal("custom", "1,100.00", expect_success=True)
         self.change_goal("null", "", expect_success=True)
         self.change_goal("custom", "4000", expect_success=True)
@@ -48,9 +49,16 @@ class Tests(Harness):
             SELECT payload
               FROM events
              WHERE type = 'set_goal'
-          ORDER BY ts DESC
+          ORDER BY ts
         """)
-        assert actual == ['4000.00 EUR', None, '1100.00 EUR', '0.00 EUR', '100.00 EUR']
+        assert actual == [
+            '100.00 EUR',
+            '0.00 EUR',
+            '-1.00 EUR',
+            '1100.00 EUR',
+            None,
+            '4000.00 EUR',
+        ]
 
     def test_team_member_can_change_team_goal(self):
         team = self.make_participant('team', kind='group')
