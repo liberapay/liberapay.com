@@ -660,10 +660,10 @@ msgstr "Это сообщение является напоминанием, ч�
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
 msgstr "Это сообщение является напоминанием, что {amount} будут списаны с основного платёжного инструмента {debit_date}, чтобы продлить срок действия периодических платежей для {recipients}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] "Это сообщение является напоминанием о том, что в течение следующего {n} дня будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
+msgstr[0] "Это сообщение является напоминанием о том, что в течение {n} дня будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
 msgstr[1] "Это сообщение является напоминанием о том, что в течение следующих {n} дней будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
 msgstr[2] "Это сообщение является напоминанием о том, что в течение следующих {n} дней будет списано {amount} с вашего основного платёжного инструмента для продолжения периодических платежей."
 
@@ -3463,9 +3463,9 @@ msgstr "по умолчанию"
 msgid "view mandate"
 msgstr "просмотреть мандат"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Was supposed to expire in {month} {year}"
-msgstr "Срок действия должен был истечь в {month} {year}"
+msgstr "Срок действия должен был истечь через {month} {year}"
 
 #, python-brace-format
 msgid "Expired in {month} {year}"
@@ -3910,17 +3910,15 @@ msgstr "Доступные способы оплаты зависят от то�
 msgid "What are the payment processing fees?"
 msgstr "Сколько составляет комиссия за перевод?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
-msgstr "Комиссии варьируются в зависимости от платежного процессора, способа оплаты, стран и валют. За последний год средний процент комиссии составил {average_fee_stripe} для платежей, обрабатываемых Stripe, и {average_fee_paypal} для платежей, обрабатываемых PayPal."
+msgstr "Комиссии варьируются в зависимости от платежной системы, способа оплаты, страны и валюты. За последний год средний процент комиссии составил {average_fee_stripe} для платежей, обрабатываемых Stripe, и {average_fee_paypal} для платежей, обрабатываемых PayPal."
 
-#, fuzzy
 msgid "Why do I see partial refunds in the Stripe dashboard?"
-msgstr "Почему я вижу частичный возврат средств на приборной панели Stripe?"
+msgstr "Почему я вижу частичный возврат средств на панели Stripe?"
 
-#, fuzzy
 msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
-msgstr "Частичный возврат средств - это способ возмещения комиссии Stripe за платежи одного реципиента. Эти возвраты осуществляются с вашего счета Stripe на счет Liberapay, а не донору."
+msgstr "Частичный возврат средств — это способ возмещения комиссии Stripe за платежи одному получателю. Эти возвраты осуществляются с вашего счёта Stripe на счёт Liberapay, а не донора."
 
 msgid "How are chargebacks handled?"
 msgstr "Как обрабатываются возвратные платежи?"
@@ -3974,12 +3972,12 @@ msgstr "Вы также можете следить за {1}разработко
 msgid "Donations can come from anywhere in the world."
 msgstr "Пожертвования могут поступать из любой точки мира."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] "Доноры могут выбрать до {n} валют, в зависимости от предпочтений получателя и возможностей основного платежного процессора."
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Доноры могут выбрать до {n} валюту, в зависимости от предпочтений получателя и возможностей основного платежного процессора."
+msgstr[1] "Доноры могут выбрать до {n} валют, в зависимости от предпочтений получателя и возможностей основного платежного процессора."
+msgstr[2] "Доноры могут выбрать до {n} валют, в зависимости от предпочтений получателя и возможностей основного платежного процессора."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -3988,12 +3986,12 @@ msgstr[0] "Liberapay полностью доступна для создател
 msgstr[1] "Liberapay полностью доступна для создателей на {n} территориях:"
 msgstr[2] "Liberapay полностью доступна для создателей на {n} территориях:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
 msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] "Кроме того, Liberapay частично доступна для создателей в {paypal_link_open}странах {n}, поддерживаемых PayPal{link_close}."
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Кроме того, Liberapay частично доступна для создателей в {paypal_link_open}{n} стране, поддерживаемой PayPal{link_close}."
+msgstr[1] "Кроме того, Liberapay частично доступна для создателей в {paypal_link_open}{n} странах, поддерживаемых PayPal{link_close}."
+msgstr[2] "Кроме того, Liberapay частично доступна для создателей в {paypal_link_open}{n} странах, поддерживаемых PayPal{link_close}."
 
 msgid "What is Liberapay?"
 msgstr "Что такое Liberapay?"
@@ -4119,12 +4117,12 @@ msgstr "Stripe позволяет создателям настраивать а
 msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
 msgstr "PayPal поддерживает только {n_paypal_currencies} из {n_liberapay_currencies} валют, поддерживаемых Liberapay и Stripe."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
 msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] "PayPal доступен для создателей в более чем 200 странах, в то время как Stripe поддерживает только {n} стран."
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "PayPal доступен для создателей в более чем 200 странах, в то время как Stripe поддерживает только {n} страну."
+msgstr[1] "PayPal доступен для создателей в более чем 200 странах, в то время как Stripe поддерживает только {n} страны."
+msgstr[2] "PayPal доступен для создателей в более чем 200 странах, в то время как Stripe поддерживает только {n} стран."
 
 #, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
@@ -4170,9 +4168,9 @@ msgstr "Вторая цель состоит в том, чтобы помочь 
 msgid "Payment processors"
 msgstr "Платежные системы"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr "Liberapay полагается на поставщиков платежных услуг для фактического перевода денег от доноров к создателям, поскольку у нас нет ни ресурсов, ни желания напрямую взаимодействовать с банками и платежными сетями. Если вы хотите узнать о персональных данных, собираемых этими платежными процессорами, пожалуйста, ознакомьтесь с этими документами: {links_to_policies}."
+msgstr "Liberapay полагается на поставщиков платежных услуг для фактического перевода денег от дарителя к авторам, поскольку у нас нет ни ресурсов, ни желания напрямую взаимодействовать с банками и платежными сетями. Если вы хотите узнать о персональных данных, собираемых этими платежными системами, пожалуйста, ознакомьтесь с этими документами: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
@@ -4530,7 +4528,7 @@ msgstr "У вас есть кто-нибудь на примете?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Мы можем помочь найти тех, кого вы хотите спонсировать, если вы подключите ваши аккаунты:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
 msgstr[0] "{n} самых популярный репозиторий, связанный с аккаунтом Liberapay:"
@@ -4554,7 +4552,7 @@ msgstr "Просмотр избранных репозиториев"
 msgid "Link your repositories to your profile"
 msgstr "Связать репозитории с вашим профилем"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The top team on Liberapay is:"
 msgid_plural "The top {n} teams on Liberapay are:"
 msgstr[0] "Топ {n} спонсируемая команда на Liberapay:"
