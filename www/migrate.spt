@@ -27,6 +27,9 @@ elif step == '2':
     request.allow('POST')
     body = request.body
     conflict = None
+    conflict_resolution = body.get_choice(
+        'conflict_resolution', ('ignore', 'log_in'), default=None,
+    )
     if user.ANON:
         email = body['email_address'] or ''
         conflict = Participant.from_email(email)
@@ -36,7 +39,9 @@ elif step == '2':
             conflict = Participant.from_username(body['username'])
             if conflict:
                 conflict = (conflict, 'username')
-    if not conflict or body.get('ignore-conflict') == 'true':
+    if conflict and conflict_resolution == 'log_in':
+        raise LoginRequired()
+    if not conflict or conflict_resolution == 'ignore':
         data = None
         if not user.ANON:
             event = user.get_last_event_of_type('gratipay_import')
@@ -346,11 +351,11 @@ title = _("Migrating from Gratipay")
                 <p>{{ _("Does this existing account belong to you?") }}</p>
                 <p class="buttons">
                     <button class="btn btn-default btn-lg"
-                            name="log-in.id" value="{{ existing_account.email }}"
-                            >{{ _("Yes") }}</button>
+                            name="conflict_resolution" value="log_in"
+                            >{{ _("Yes, log in before importing the Gratipay data") }}</button>
                     <button class="btn btn-default btn-lg"
-                            name="ignore-conflict" value="true"
-                            >{{ _("No") }}</button>
+                            name="conflict_resolution" value="ignore"
+                            >{{ _("No, ignore it and create a new account") }}</button>
                 </p>
             </form>
         % else
