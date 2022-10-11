@@ -30,7 +30,7 @@ translated_status = {
 }
 
 current_year = datetime.utcnow().year
-year = request.qs.get_int('year', 0)
+year = request.qs.get_int('year', 0, minimum=2018, maximum=current_year)
 if not year:
     # Try to detect the year of the last transaction
     last_event_year = website.db.one("""
