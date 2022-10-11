@@ -1,5 +1,6 @@
 from pando import json
 
+from liberapay.exceptions import LazyResponse
 from liberapay.utils import get_participant
 
 [-----------------------]
@@ -13,23 +14,28 @@ if request.method == 'POST':
         new_tips = json.loads(request.body_bytes)
     except Exception as e:
         raise response.error(400, str(e))
-    seen = set()
+    if not isinstance(new_tips, list):
+        raise response.error(400, "the payload must be a list")
     for tip in new_tips:
-        seen.add(tip['username'])
-        one = {"username": tip['username']}
+        one = {}
+        out.append(one)
+        if not isinstance(tip, dict):
+            one['error'] = "items must be objects"
+            continue
         currency = tip.get('currency', 'EUR')
         if currency not in constants.CURRENCIES:
-            raise response.invalid_input(currency, 'currency', 'body')
+            one['error'] = f"currency code {currency!r} isn't supported"
+            continue
         try:
+            one['username'] = tip['username']
             amount = locale.parse_money_amount(tip['amount'], currency)
-            amount = participant.set_tip_to(
+            one['amount'] = participant.set_tip_to(
                 tip['username'], amount, tip['period'],
             )['amount']
-        except Exception as exc:
-            amount = "error"
-            one['error'] = exc.__class__.__name__
-        one['amount'] = amount
-        out.append(one)
+        except KeyError as e:
+            one['error'] = f"missing key {e.args[0]!r}"
+        except LazyResponse as r:
+            one['error'] = r.render_body(state)
 
 else:
     tips, pledges = participant.get_giving_details()
