@@ -28,13 +28,13 @@
     ) }}</p>
     % else
     <p>{{ _(
-        "Your donation of {amount} per week to {username} needed to be renewed before {past_date}.",
+        "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}.",
         amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
     ) if tip.period == 'weekly' else _(
-        "Your donation of {amount} per month to {username} needed to be renewed before {past_date}.",
+        "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}.",
         amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
     ) if tip.period == 'monthly' else _(
-        "Your donation of {amount} per year to {username} needed to be renewed before {past_date}.",
+        "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}.",
         amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
     ) }}</p>
     % endif
@@ -59,13 +59,13 @@
         ) }}</li>
         % else
         <li>{{ _(
-            "Your donation of {amount} per week to {username} needed to be renewed before {past_date}.",
+            "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}.",
             amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
         ) if tip.period == 'weekly' else _(
-            "Your donation of {amount} per month to {username} needed to be renewed before {past_date}.",
+            "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}.",
             amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
         ) if tip.period == 'monthly' else _(
-            "Your donation of {amount} per year to {username} needed to be renewed before {past_date}.",
+            "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}.",
             amount=tip.periodic_amount, username=tip.tippee_username, past_date=tip.due_date
         ) }}</li>
         % endif
