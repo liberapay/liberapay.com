@@ -1,5 +1,15 @@
 from liberapay.i18n.base import LOCALE_EN as locale
 
+MARKS_MAP = {
+    'trusted': 'success',
+    'okay': 'info',
+    'unsettling': 'info',
+    'controversial': 'warning',
+    'irrelevant': 'warning',
+    'misleading': 'warning',
+    'fraud': 'danger',
+    'spam': 'danger',
+}
 PAGE_SIZE = 50
 STATUS_MAP = {
     'failed': 'danger',
@@ -16,7 +26,8 @@ user.require_active_privilege('admin')
 before = request.qs.get_int('before', default=None)
 status = request.qs.get('status')
 payins = website.db.all("""
-    SELECT pi.*, p.username AS payer_name, r.network AS payin_method
+    SELECT pi.*, p.username AS payer_name, p.marked_as AS payer_marked_as
+         , r.network AS payin_method
          , ( SELECT json_agg((SELECT x FROM ( SELECT
                         pt.recipient, recipient.username AS recipient_name,
                         pt.team, team.username AS team_name,
@@ -80,7 +91,10 @@ title = "Payments Admin"
         <tr>
             <td>{{ pi.id }}</td>
             <td>{{ pi.ctime.replace(microsecond=0, tzinfo=None) }}</td>
-            <td><a href="/~{{ pi.payer }}/">{{ pi.payer_name }}</a></td>
+            <td><a href="/~{{ pi.payer }}/">{{ pi.payer_name }}</a>{% if pi.payer_marked_as %}<br>
+                <span class="text-{{ MARKS_MAP[pi.payer_marked_as] }}">[{{
+                    pi.payer_marked_as
+                }}]</span>{% endif %}</td>
             <td class="text-center">{{
                 payment_method_icon(pi.payin_method) }}&nbsp;{{
                 unicode_symbol('A', "Automatic payment") if pi.off_session else
