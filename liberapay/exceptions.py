@@ -477,19 +477,6 @@ class NonexistingElsewhere(LazyResponse400):
         return _("It seems you're trying to delete something that doesn't exist.")
 
 
-class NotEnoughWithdrawableMoney(LazyResponse400):
-    def msg(self, _):
-        return _("You can't withdraw more than {0} at this time.", *self.args)
-
-
-class FeeExceedsAmount(LazyResponse400):
-    def msg(self, _):
-        return _("The transaction's fee would exceed its amount.")
-
-
-class TransactionFeeTooHigh(Exception): pass
-
-
 class InvalidNumber(LazyResponse400):
     def msg(self, _):
         return _('"{0}" is not a valid number.', *self.args)
