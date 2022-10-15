@@ -71,9 +71,7 @@ def reject_forgeries(state, request, response, website, _):
         # Assume that methods defined as 'safe' by RFC7231 don't need protection.
         request.method in SAFE_METHODS or
         # Don't check CSRF tokens for callbacks, it's not necessary.
-        request_path.startswith('/callbacks/') or
-        # CSRF protection is turned off for this request.
-        request_path == '/migrate' and not request.qs
+        request_path.startswith('/callbacks/')
     )
     if off:
         return
