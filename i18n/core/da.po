@@ -9,13 +9,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
-msgstr "Oversættelsen af denne side fra engelsk er endnu ikke færdig. {link_start}Du kan bidrage til{link_end}."
+msgstr "Oversættelsen af denne side fra engelsk er endnu ikke færdiggjort. {link_start}Du kan bidrage{link_end}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
-msgstr "Denne side indeholder maskinoversat tekst, som endnu ikke er blevet gennemgået og derfor kan være ukorrekt. {link_start}Du kan bidrage med{link_end}."
+msgstr "Denne side indeholder maskinoversat tekst, som endnu ikke er blevet gennemset af et menneske. Den kan derfor være ukorrekt. {link_start}Du kan bidrage{link_end}."
 
 msgid "Your Liberapay account has been disabled"
 msgstr "Din Liberapay-konto er blevet deaktiveret"
@@ -1118,8 +1118,8 @@ msgstr[1] "{n} måneder a {money_amount}"
 #, python-brace-format
 msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
-msgstr[0] "{n} år a {money_amount}"
-msgstr[1] "{n} år a {money_amount}"
+msgstr[0] "{n} år á {money_amount}"
+msgstr[1] "{n} år á {money_amount}"
 
 msgid "The submitted password is incorrect."
 msgstr "Det indsendte kodeord er forkert."
@@ -1328,13 +1328,13 @@ msgstr "Juridisk"
 msgid "Switch to another language"
 msgstr "Skift til et andet sprog"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "({x_percent} not yet translated)"
-msgstr "({x_percent} endnu ikke oversat)"
+msgstr "({x_percent} er endnu ikke oversat)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "({x_percent} machine translated)"
-msgstr "({x_percent} maskinoversat)"
+msgstr "({x_percent} er maskinoversat)"
 
 msgid "Help us translate Liberapay"
 msgstr "Hjælp os med at oversætte Liberapay"
@@ -1457,13 +1457,11 @@ msgstr "Lad det foregående felt stå tomt hvis {bold}du har mistet dit kodeord{
 msgid "Save"
 msgstr "Gem"
 
-#, fuzzy
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
-msgstr "Hvis du har brug for at ændre adgangskoden til din Liberapay-konto, kan du gøre det nedenfor. For at være sikker skal adgangskoden til din konto være tilfældigt genereret og ikke bruges andre steder. Vi anbefaler på det kraftigste, at du bruger en password manager."
+msgstr "Hvis du har brug for at ændre adgangskoden til din Liberapay-konto, kan du gøre det nedenfor. For at være sikker skal adgangskoden til din konto være tilfældigt genereret og ikke bruges andre steder. Vi anbefaler på det kraftigste, at du bruger en password-manager."
 
-#, fuzzy
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr "Ved at angive en adgangskode kan du logge ind direkte i stedet for at vente på et link til engangsbrug, der sendes via e-mail. Vi anbefaler dog at holde din konto uden adgangskode, hvis du ikke bruger en adgangskodeadministrator, for at være sikker skal adgangskoden til din konto genereres tilfældigt og ikke bruges andre steder."
+msgstr "Ved at angive en adgangskode kan du logge ind direkte i stedet for at vente på et link til engangsbrug der sendes via e-mail. Vi anbefaler dog at du ikke har en adgangskode til din konto, hvis du ikke bruger en adgangskodeadministrator. For at være sikker skal adgangskoden til din konto genereres tilfældigt og ikke bruges andre steder."
 
 msgid "Current password"
 msgstr "Nuværende adgangskode"
@@ -1471,15 +1469,12 @@ msgstr "Nuværende adgangskode"
 msgid "New password"
 msgstr "Ny adgangskode"
 
-#, fuzzy
 msgid "Unset password"
 msgstr "Uindstillet adgangskode"
 
-#, fuzzy
 msgid "2FA"
 msgstr "2FA"
 
-#, fuzzy
 msgid "Liberapay does not yet support two-factor authentication."
 msgstr "Liberapay understøtter endnu ikke to-faktor-autentifikation."
 
@@ -2042,9 +2037,8 @@ msgstr "De indsendte indstillinger passer ikke sammen."
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "Du modtager i øjeblikket hvad der svarer til {money_amount} per uge fra donationer i fremmed valuta. Disse donationer vil ikke blive konverteret til din foretrukne møntfod."
 
-#, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
-msgstr "Dine valutaindstillinger ignoreres i øjeblikket, fordi de er inkompatible med den betalingsprocessor, du bruger."
+msgstr "Dine valutaindstillinger ignoreres i øjeblikket fordi de er inkompatible med den betalingsprocessor du bruger."
 
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Hvilke valutaer skal dine donorer have lov til at sende dig, og hvilken foretrækker du?"
@@ -2254,9 +2248,8 @@ msgstr "Denne e-mail er allerede blevet verificeret."
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Denne e-mail-adresse er allerede forbundet til en anden Liberapay-konto."
 
-#, fuzzy
 msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "Bekræftelsen af din e-mailadresse er mislykkedes. Kontroller venligst, at det link, du klikkede på eller kopierede ind, ikke er blevet afkortet eller ændret på nogen måde."
+msgstr "Bekræftelsen af din e-mailadresse mislykkedes. Kontroller venligst at det link du klikkede på eller kopierede ind, ikke er blevet afkortet eller ændret på nogen måde."
 
 msgid "Your email address is now blacklisted."
 msgstr "Din e-mail-adresse er nu blacklisted."
@@ -3509,7 +3502,6 @@ msgstr "Klar?"
 msgid "Yes, close my Liberapay account"
 msgstr "Ja, luk min Liberapay-konto"
 
-#, fuzzy
 msgid "Your account is now passwordless."
 msgstr "Din konto er nu uden adgangskode."
 
@@ -3877,17 +3869,15 @@ msgstr "De tilgængelige betalingsmetoder afhænger af, hvilke betalingsprocesso
 msgid "What are the payment processing fees?"
 msgstr "Hvad er overførselsgebyrerne?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
-msgstr "Gebyrerne varierer alt efter betalingsformidler, betalingsmetode, land og valuta. I det seneste år har de gennemsnitlige gebyrprocenter været {average_fee_stripe} for betalinger, der behandles af Stripe, og {average_fee_paypal} for betalinger, der behandles af PayPal."
+msgstr "Gebyrerne varierer alt efter betalingsformidler, betalingsmetode, land og valuta. I det seneste år har de gennemsnitlige gebyrprocenter været {average_fee_stripe} for betalinger der behandles af Stripe, og {average_fee_paypal} for betalinger der behandles af PayPal."
 
-#, fuzzy
 msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "Hvorfor kan jeg se delvise tilbagebetalinger i Stripe-dashboardet?"
 
-#, fuzzy
 msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
-msgstr "Delvise tilbagebetalinger er den måde, hvorpå vi inddriver Stripes gebyr for betalinger med en enkelt modtager. Disse tilbagebetalinger sker fra din Stripe-konto til Liberapays konto, ikke til donoren."
+msgstr "Delvise tilbagebetalinger er den måde hvorpå vi inddriver Stripes gebyr for betalinger med en enkelt modtager. Disse tilbagebetalinger sker fra din Stripe-konto til Liberapays konto, ikke til donoren."
 
 msgid "How are chargebacks handled?"
 msgstr "Hvordan håndteres tilbageførsler?"
@@ -4133,9 +4123,9 @@ msgstr "Det andet formål er at hjælpe bidragsydere med at finde Liberapay-kont
 msgid "Payment processors"
 msgstr "Betalingsprocessorer"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr "Liberapay er afhængig af betalingstjenesteudbydere til rent faktisk at overføre penge fra donorer til skaberne, da vi hverken har ressourcerne eller lysten til at have direkte kontakt med banker og betalingsnetværk. Hvis du vil vide mere om de personoplysninger, der indsamles af disse betalingsformidlere, kan du læse disse dokumenter: {links_to_policies}."
+msgstr "Liberapay er afhængig af betalingstjenesteudbydere til rent faktisk at overføre penge fra donorer til skaberne da vi hverken har ressourcerne eller lysten til at have direkte kontakt med banker og betalingsnetværk. Hvis du vil vide mere om de personoplysninger der indsamles af disse betalingsformidlere, kan du læse disse dokumenter: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
