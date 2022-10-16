@@ -36,6 +36,7 @@ from liberapay.constants import (
 )
 from liberapay.exceptions import (
     AccountIsPasswordless,
+    AccountSuspended,
     BadAmount,
     BadDonationCurrency,
     BadPasswordSize,
@@ -465,6 +466,11 @@ class Participant(Model, MixinTeam):
 
         The new secret is guaranteed to be different from the old one.
         """
+        if self.is_suspended:
+            if not suffix:
+                suffix = '.ro'
+            elif suffix != '.ro':
+                raise AccountSuspended()
         self.session = self.db.one(r"""
             UPDATE user_secrets
                SET mtime = current_timestamp
@@ -521,6 +527,11 @@ class Participant(Model, MixinTeam):
 
         """
         assert id_min < id_max, (id_min, id_max)
+        if self.is_suspended:
+            if not suffix:
+                suffix = '.ro'
+            elif suffix != '.ro':
+                raise AccountSuspended()
         if token:
             if not token.endswith(suffix):
                 self.check_session_token(token)
@@ -648,6 +659,8 @@ class Participant(Model, MixinTeam):
         raise Response(403, f"You don't have the {privilege} privilege.")
 
     def require_reauthentication(self):
+        if self.is_suspended:
+            raise AccountSuspended()
         state = website.state.get()
         state['log-in.reauthenticate'] = True
         email = self.get_email_address()

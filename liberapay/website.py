@@ -76,6 +76,7 @@ env = Environment(
     CANONICAL_SCHEME=str,
     COMPRESS_ASSETS=is_yesish,
     CSP_EXTRA=str,
+    HOSTNAME=str,
     SENTRY_DSN=str,
     SENTRY_RERAISE=is_yesish,
     LOG_DIR=str,

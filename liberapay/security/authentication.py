@@ -379,13 +379,19 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
     if p:
         if p.status == 'closed':
             p.update_status('active')
+        if p.is_suspended:
+            session_suffix = '.ro'
         if session_p:
             p.regenerate_session(
                 session_p.session, response.headers.cookie, suffix=session_suffix
             )
         if not p.session:
             p.sign_in(response.headers.cookie, suffix=session_suffix)
-        state['user'] = p
+        user = state['user'] = p
+
+    # Downgrade the session to read-only if the account is suspended
+    if user and user.is_suspended and not user.session.secret.endswith('.ro'):
+        user.regenerate_session(user.session, response.headers.cookie, suffix='.ro')
 
     # Redirect if appropriate
     if redirect:

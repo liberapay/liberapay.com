@@ -255,6 +255,24 @@ class NonEmailDomain(EmailAddressError):
         )
 
 
+class EmailAddressRejected(EmailAddressError):
+
+    def __init__(self, address, error_msg, mx_ip_address):
+        super().__init__(address, error_msg)
+        self.mx_ip_address = mx_ip_address
+
+    def msg(self, _):
+        return _(
+            "The email address {email_address} doesn't seem to exist. The {domain} "
+            "email server at IP address {ip_address} rejected it with the error "
+            "message “{error_message}”.",
+            email_address=f"<{self.email_address}>",
+            domain=self.email_address.rsplit('@', 1)[-1],
+            ip_address=self.mx_ip_address,
+            error_message=str(self.exception_or_message),
+        )
+
+
 class EmailAddressIsBlacklisted(LazyResponse400):
     html_template = 'templates/exceptions/EmailAddressIsBlacklisted.html'
 
@@ -457,19 +475,6 @@ class UnexpectedCurrency(LazyResponse400):
 class NonexistingElsewhere(LazyResponse400):
     def msg(self, _):
         return _("It seems you're trying to delete something that doesn't exist.")
-
-
-class NotEnoughWithdrawableMoney(LazyResponse400):
-    def msg(self, _):
-        return _("You can't withdraw more than {0} at this time.", *self.args)
-
-
-class FeeExceedsAmount(LazyResponse400):
-    def msg(self, _):
-        return _("The transaction's fee would exceed its amount.")
-
-
-class TransactionFeeTooHigh(Exception): pass
 
 
 class InvalidNumber(LazyResponse400):

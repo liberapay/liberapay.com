@@ -39,6 +39,7 @@
         <button class="btn btn-default" name="action" value="unset">{{ _("Unset password") }}</button>
         % endif
     </form>
+    <p class="help-block">{{ _("Maximum length is {0}.", constants.PASSWORD_MAX_SIZE) }}</p>
 
     <h3>{{ _("2FA") }}</h3>
     <p>{{ _("Liberapay does not yet support two-factor authentication.") }}</p>

@@ -97,12 +97,12 @@ if mode == 'all':
                             'id', a.id,
                             'country', a.country,
                             'charges_enabled', a.charges_enabled,
-                            'verified', a.verified
+                            'verified', a.verified,
+                            'is_current', a.is_current
                         ))
                    FROM ( SELECT a.*
                             FROM payment_accounts a
                            WHERE a.participant = p.id
-                             AND a.is_current
                         ORDER BY a.provider DESC, a.id DESC
                         ) a
                ) AS payment_accounts
@@ -165,12 +165,12 @@ elif mode == 'new_recipients':
                             'id', a.id,
                             'country', a.country,
                             'charges_enabled', a.charges_enabled,
-                            'verified', a.verified
+                            'verified', a.verified,
+                            'is_current', a.is_current
                         ))
                    FROM ( SELECT a.*
                             FROM payment_accounts a
                            WHERE a.participant = p.id
-                             AND a.is_current
                         ORDER BY a.provider DESC, a.id DESC
                         ) a
                ) AS payment_accounts
@@ -347,7 +347,11 @@ title = "Users Admin"
                     fontawesome('paypal', "PayPal") if account.provider == 'paypal' else
                     fontawesome(account.provider, account.provider)
                 }}</span>
-                {{ account.id }}
+                % if account.is_current
+                    {{ account.id }}
+                % else
+                    <span class="text-muted">{{ account.id }}</span>
+                % endif
                 ({{ locale.countries.get(account.country, account.country) }})
                 % if account.verified and account.charges_enabled != False
                     <span class="symbol text-success">{{ glyphicon('ok-sign', "OK") }}</span>

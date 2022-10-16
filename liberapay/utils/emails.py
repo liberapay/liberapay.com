@@ -4,7 +4,8 @@ from ipaddress import ip_address
 import json
 import logging
 from random import random
-from smtplib import SMTP, SMTPException, SMTPResponseException
+import re
+from smtplib import SMTP, SMTPException, SMTPNotSupportedError, SMTPResponseException
 import time
 
 from aspen.simplates.pagination import parse_specline, split_and_escape
@@ -20,7 +21,7 @@ from liberapay.constants import EMAIL_RE
 from liberapay.exceptions import (
     BadEmailAddress, BrokenEmailDomain, DuplicateNotification, EmailDomainUnresolvable,
     EmailAddressError, EmailAddressIsBlacklisted, EmailDomainIsBlacklisted,
-    InvalidEmailDomain, NonEmailDomain, TooManyAttempts,
+    InvalidEmailDomain, NonEmailDomain, EmailAddressRejected, TooManyAttempts,
 )
 from liberapay.renderers.jinja2 import JINJA_ENV_COMMON
 from liberapay.utils import deserialize
@@ -92,6 +93,7 @@ def normalize_and_check_email_address(email: str) -> NormalizedEmailAddress:
         BadEmailAddress: if the address is syntactically unacceptable
         BrokenEmailDomain: if we're unable to establish an SMTP connection
         EmailAddressIsBlacklisted: if the address is in our blacklist
+        EmailAddressRejected: if the SMTP server rejected the email address
         EmailDomainUnresolvable: if the DNS lookups fail
         EmailDomainIsBlacklisted: if the domain name is in our blacklist
         InvalidEmailDomain: if the domain name is syntactically invalid
@@ -146,6 +148,7 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
     Raises:
         BrokenEmailDomain: if we're unable to establish an SMTP connection
         EmailAddressIsBlacklisted: if the address is in our blacklist
+        EmailAddressRejected: if the SMTP server rejected the email address
         EmailDomainUnresolvable: if the DNS lookups fail
         EmailDomainIsBlacklisted: if the domain name is in our blacklist
         NonEmailDomain: if the domain doesn't accept email
@@ -154,68 +157,46 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
     # Check that the address isn't in our blacklist
     check_email_blacklist(email)
 
-    # Check that we can send emails to this domain
+    # Check that we can send emails to this address
     if website.app_conf.check_email_domains:
-        # First, we look in our database for addresses matching this domain and
-        # added in the last two years. If the percentage of verified addresses
-        # is high enough and the percentage of blacklisted addresses is low
-        # enough, then it's reasonable to conclude that this is a valid email
-        # domain.
-        stats = website.db.one("""
-            SELECT count(DISTINCT lower(e.address)) AS n_addresses
-                 , count(1) FILTER (WHERE e.verified) AS n_verified
-                 , ( SELECT count(DISTINCT lower(bl.address))
-                       FROM email_blacklist bl
-                      WHERE lower(bl.address) LIKE ('%%_@' || %(domain)s)
-                        AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
-                   ) AS n_blacklisted_addresses
-              FROM emails e
-             WHERE e.address LIKE ('%%_@' || %(domain)s)
-               AND e.added_time > (current_timestamp - interval '2 years')
-        """, dict(domain=email.domain))
-        is_known_good_domain = (
-            stats.n_addresses > 0 and
-            stats.n_verified / stats.n_addresses > 0.2 and
-            stats.n_blacklisted_addresses / stats.n_addresses < 0.2
-        )
-        if not is_known_good_domain:
-            # Try to resolve the domain and connect to its SMTP server(s).
-            try:
-                test_email_domain(email)
-            except EmailAddressError as e:
-                if isinstance(e, BrokenEmailDomain):
-                    global port_25_is_open
-                    if port_25_is_open is None:
-                        try:
-                            test_email_domain(normalize_email_address('test@liberapay.com'))
-                        except BrokenEmailDomain:
-                            port_25_is_open = False
-                        except Exception as e:
-                            website.tell_sentry(e)
-                        else:
-                            port_25_is_open = True
-                    if port_25_is_open is False:
-                        website.tell_sentry(e, allow_reraise=False)
-                        return
-                request = website.state.get({}).get('request')
-                if request:
-                    bypass_error = request.body.get('email.bypass_error') == 'yes'
-                else:
-                    bypass_error = False
-                if bypass_error and e.bypass_allowed:
-                    if request:
-                        website.db.hit_rate_limit('email.bypass_error', request.source, TooManyAttempts)
-                else:
-                    raise
-            except Exception as e:
-                website.tell_sentry(e)
+        try:
+            test_email_address(email)
+        except EmailAddressError as e:
+            if isinstance(e, BrokenEmailDomain):
+                global port_25_is_open
+                if port_25_is_open is None:
+                    try:
+                        test_email_address(normalize_email_address(
+                            'support@liberapay.com'
+                        ))
+                    except BrokenEmailDomain:
+                        port_25_is_open = False
+                    except Exception as e:
+                        website.tell_sentry(e)
+                    else:
+                        port_25_is_open = True
+                if port_25_is_open is False:
+                    website.tell_sentry(e, allow_reraise=False)
+                    return
+            request = website.state.get({}).get('request')
+            if request:
+                bypass_error = request.body.get('email.bypass_error') == 'yes'
+            else:
+                bypass_error = False
+            if bypass_error and e.bypass_allowed:
+                website.db.hit_rate_limit('email.bypass_error', request.source, TooManyAttempts)
+            else:
+                raise
+        except Exception as e:
+            website.tell_sentry(e)
 
 
-def test_email_domain(email: NormalizedEmailAddress):
-    """Attempt to resolve an email domain and connect to one of its SMTP servers.
+def test_email_address(email: NormalizedEmailAddress):
+    """Attempt to determine if the given email address can be reached.
 
     Raises:
         BrokenEmailDomain: if we're unable to establish an SMTP connection
+        EmailAddressRejected: if the SMTP server rejected the email address
         EmailDomainUnresolvable: if the DNS lookups fail
         NonEmailDomain: if the domain doesn't accept email (RFC 7505)
 
@@ -231,9 +212,11 @@ def test_email_domain(email: NormalizedEmailAddress):
             n_ip_addresses += 1
             try:
                 if website.app_conf.check_email_servers:
-                    test_email_server(str(ip_addr))
+                    test_email_server(str(ip_addr), email)
                 success = True
                 break
+            except EmailAddressRejected:
+                raise
             except (SMTPException, OSError) as e:
                 exceptions.append(e)
             except Exception as e:
@@ -330,10 +313,18 @@ def get_public_ip_addresses(domain):
     return addresses
 
 
-def test_email_server(ip_address: str) -> None:
-    """Attempt to connect to an SMTP server.
+enhanced_code_re = re.compile(r"(?<![0-9])[245]\.[0-9]{1,3}\.[0-9]{1,3}(?![0-9])")
+
+
+def test_email_server(ip_address: str, email=None) -> None:
+    """Attempt to connect to and interact with an SMTP server.
+
+    Args:
+        ip_address (str): the IP address of the SMTP server
+        email (NormalizedEmailAddress): an email address we want to send a message to
 
     Raises:
+        EmailAddressRejected: if `email` is provided and the server rejects it
         OSError: if a network-related system error occurs, for example if the IP
                  address is a v6 address but the system lacks an IPv6 route, or
                  if the connection times out
@@ -342,18 +333,70 @@ def test_email_server(ip_address: str) -> None:
                                 both correctly and quickly enough
 
     """
-    smtp = SMTP(timeout=5.0)
+    smtp = SMTP(None, timeout=10.0, local_hostname=website.env.hostname or None)
     if website.env.logging_level == 'debug':
         smtp.set_debuglevel(2)
     try:
         code = smtp.connect(ip_address)[0]
         if code < 0:
             raise SMTPResponseException(code, "first line received from server is invalid")
+        if not email:
+            return
+        try:
+            smtp.starttls()
+            # A second EHLO or HELO is required after TLS has been established.
+            smtp.ehlo_or_helo_if_needed()
+        except SMTPNotSupportedError:
+            pass
+        status, msg = smtp.mail('')
+        if status >= 400:
+            enhanced_code, msg = parse_SMTP_reply(msg)
+            error = repr(f"{status};{enhanced_code or ''} {msg}")
+            if len(error) > 400:
+                error = error[:399] + '…'
+            website.logger.info(f"{ip_address} rejected MAIL command: {error}")
+            return
+        status, msg = smtp.rcpt(email)
+        if status >= 400:
+            # SMTP status codes: https://tools.ietf.org/html/rfc5321#section-4.2
+            # Enhanced mail status codes: https://tools.ietf.org/html/rfc3463
+            enhanced_code, msg = parse_SMTP_reply(msg)
+            if enhanced_code:
+                cls, subject, detail = enhanced_code.split('.')
+                recipient_rejected = cls in '45' and (
+                    # Address errors
+                    subject == '1' and detail in '12346' or
+                    # Mailbox errors
+                    subject == '2' and detail in '124'
+                )
+                if recipient_rejected:
+                    raise EmailAddressRejected(email, msg, ip_address)
     finally:
         try:
             smtp.close()
         except Exception:
             pass
+
+
+def parse_SMTP_reply(msg: bytes):
+    """Look for an enhanced mail status code, and collapse into a single line.
+    """
+    msg = msg.decode('utf8', errors='backslashreplace')
+    enhanced_code = enhanced_code_re.match(msg)
+    if enhanced_code:
+        enhanced_code = enhanced_code[0]
+        # Some SMTP servers (e.g. Google's) repeat the enhanced status code at
+        # the beginning of each line of the response. We remove it to get a more
+        # readable message.
+        lines = msg.split('\n')
+        if all(line.startswith(enhanced_code) or not line for line in lines):
+            msg = ' '.join(line[len(enhanced_code):].lstrip() for line in lines)
+        else:
+            msg = msg[len(enhanced_code):].lstrip()
+        del lines
+    else:
+        msg = msg.replace('\n', ' ')
+    return enhanced_code, msg
 
 
 def check_email_blacklist(address, check_domain=True):
