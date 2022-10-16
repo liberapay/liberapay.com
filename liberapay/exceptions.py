@@ -266,7 +266,7 @@ class EmailAddressRejected(EmailAddressError):
             "The email address {email_address} doesn't seem to exist. The {domain} "
             "email server at IP address {ip_address} rejected it with the error "
             "message “{error_message}”.",
-            email_address=f"<{self.email_address}>",
+            email_address="<{}>".format(self.email_address),
             domain=self.email_address.rsplit('@', 1)[-1],
             ip_address=self.mx_ip_address,
             error_message=str(self.exception_or_message),
