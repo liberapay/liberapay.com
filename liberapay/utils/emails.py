@@ -93,8 +93,8 @@ def normalize_and_check_email_address(email: str) -> NormalizedEmailAddress:
         BadEmailAddress: if the address is syntactically unacceptable
         BrokenEmailDomain: if we're unable to establish an SMTP connection
         EmailAddressIsBlacklisted: if the address is in our blacklist
-        EmailDomainUnresolvable: if the DNS lookups fail
         EmailAddressRejected: if the SMTP server rejected the email address
+        EmailDomainUnresolvable: if the DNS lookups fail
         EmailDomainIsBlacklisted: if the domain name is in our blacklist
         InvalidEmailDomain: if the domain name is syntactically invalid
         NonEmailDomain: if the domain doesn't accept email
@@ -148,6 +148,7 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
     Raises:
         BrokenEmailDomain: if we're unable to establish an SMTP connection
         EmailAddressIsBlacklisted: if the address is in our blacklist
+        EmailAddressRejected: if the SMTP server rejected the email address
         EmailDomainUnresolvable: if the DNS lookups fail
         EmailDomainIsBlacklisted: if the domain name is in our blacklist
         NonEmailDomain: if the domain doesn't accept email
@@ -194,8 +195,8 @@ def test_email_address(email: NormalizedEmailAddress):
     """Attempt to determine if the given email address can be reached.
 
     Raises:
-        EmailAddressRejected: if the SMTP server rejected the email address
         BrokenEmailDomain: if we're unable to establish an SMTP connection
+        EmailAddressRejected: if the SMTP server rejected the email address
         EmailDomainUnresolvable: if the DNS lookups fail
         NonEmailDomain: if the domain doesn't accept email (RFC 7505)
 
@@ -339,36 +340,37 @@ def test_email_server(ip_address: str, email=None) -> None:
         code = smtp.connect(ip_address)[0]
         if code < 0:
             raise SMTPResponseException(code, "first line received from server is invalid")
+        if not email:
+            return
         try:
             smtp.starttls()
             # A second EHLO or HELO is required after TLS has been established.
             smtp.ehlo_or_helo_if_needed()
         except SMTPNotSupportedError:
             pass
-        if email:
-            status, msg = smtp.mail('')
-            if status >= 400:
-                enhanced_code, msg = parse_SMTP_reply(msg)
-                error = repr(f"{status};{enhanced_code or ''} {msg}")
-                if len(error) > 400:
-                    error = error[:399] + '…'
-                website.logger.info(f"{ip_address} rejected MAIL command: {error}")
-                return
-            status, msg = smtp.rcpt(email)
-            if status >= 400:
-                # SMTP status codes: https://tools.ietf.org/html/rfc5321#section-4.2
-                # Enhanced mail status codes: https://tools.ietf.org/html/rfc3463
-                enhanced_code, msg = parse_SMTP_reply(msg)
-                if enhanced_code:
-                    cls, subject, detail = enhanced_code.split('.')
-                    recipient_rejected = cls in '45' and (
-                        # Address errors
-                        subject == '1' and detail in '12346' or
-                        # Mailbox errors
-                        subject == '2' and detail in '124'
-                    )
-                    if recipient_rejected:
-                        raise EmailAddressRejected(email, msg, ip_address)
+        status, msg = smtp.mail('')
+        if status >= 400:
+            enhanced_code, msg = parse_SMTP_reply(msg)
+            error = repr(f"{status};{enhanced_code or ''} {msg}")
+            if len(error) > 400:
+                error = error[:399] + '…'
+            website.logger.info(f"{ip_address} rejected MAIL command: {error}")
+            return
+        status, msg = smtp.rcpt(email)
+        if status >= 400:
+            # SMTP status codes: https://tools.ietf.org/html/rfc5321#section-4.2
+            # Enhanced mail status codes: https://tools.ietf.org/html/rfc3463
+            enhanced_code, msg = parse_SMTP_reply(msg)
+            if enhanced_code:
+                cls, subject, detail = enhanced_code.split('.')
+                recipient_rejected = cls in '45' and (
+                    # Address errors
+                    subject == '1' and detail in '12346' or
+                    # Mailbox errors
+                    subject == '2' and detail in '124'
+                )
+                if recipient_rejected:
+                    raise EmailAddressRejected(email, msg, ip_address)
     finally:
         try:
             smtp.close()
