@@ -1003,6 +1003,10 @@ msgstr "Nỗ lực của chúng tôi để thiết lập kết nối với máy 
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' không phải là miền email hợp lệ."
 
+#, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "Địa chỉ email {email_address} bị đưa vào danh sách đen vì cố gắng gửi thư đến địa chỉ này không thành công {timespan_ago}."
@@ -1098,14 +1102,6 @@ msgstr "Số tiền {money_amount} không phải bằng đơn vị tiền tệ m
 #, fuzzy
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Có vẻ như bạn đang cố xóa thứ gì đó không tồn tại."
-
-#, fuzzy, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Bạn không thể rút nhiều hơn {0} vào lúc này."
-
-#, fuzzy
-msgid "The transaction's fee would exceed its amount."
-msgstr "Phí của giao dịch sẽ vượt quá số tiền của nó."
 
 #, fuzzy, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1671,6 +1667,10 @@ msgstr "Mật khẩu mới"
 #, fuzzy
 msgid "Unset password"
 msgstr "Bỏ đặt mật khẩu"
+
+#, fuzzy, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Chiều dài tối đa là {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2599,10 +2599,6 @@ msgstr "Tên đăng nhập"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Một tên duy nhất, bắt buộc đối với những người dùng muốn nhận các khoản đóng góp."
 
-#, fuzzy, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Chiều dài tối đa là {0}."
-
 #, fuzzy
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Các ký tự được phép: chữ và số latin, dấu chấm (.), Dấu gạch ngang (-) và dấu gạch dưới (_)."
@@ -2775,6 +2771,10 @@ msgstr "Vì bạn đã chọn đóng góp công khai, chúng tôi khuyên bạn 
 #, fuzzy
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Bạn đã bật tự động gia hạn cho một số hoặc tất cả các khoản đóng góp của mình, nhưng bạn không có bất kỳ công cụ thanh toán hợp lệ nào cho phép chúng tôi thực hiện thanh toán tự động khi đến thời điểm."
+
+#, fuzzy
+msgid "Donations"
+msgstr "Donations"
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -3090,6 +3090,10 @@ msgstr "Bạn có chắc chắn muốn hủy thanh toán đã lên lịch này k
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Bạn có chắc chắn muốn hủy thanh toán đã lên lịch này không? Nó sẽ ngăn các khoản đóng góp của bạn cho {recipients}."
+
+#, fuzzy
+msgid "Go back"
+msgstr "Quay lại"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
@@ -5544,172 +5548,6 @@ msgstr "Follow us"
 #, fuzzy
 msgid "Log In"
 msgstr "Log In"
-
-#, fuzzy, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Không thể tìm nạp dữ liệu tài khoản của bạn từ {platform} (mã lỗi {x}). Nếu sự cố vẫn tiếp diễn, vui lòng liên hệ support@liberapay.com."
-
-#, fuzzy
-msgid "Migrating from Gratipay"
-msgstr "Di chuyển từ Gratipay"
-
-#, fuzzy
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Rất tiếc, bạn cần quay lại Gratipay và đăng nhập trước khi bắt đầu di chuyển."
-
-#, fuzzy
-msgid "Go back"
-msgstr "Quay lại"
-
-#, fuzzy, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Xin chào, {username}!"
-
-#, fuzzy, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Vui lòng xác nhận rằng bạn muốn chúng tôi tạo tài khoản Liberapay cho bạn và nhập dữ liệu từ {platform}."
-
-#, fuzzy, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Dưới đây là tổng quan về những gì chúng tôi sẽ nhập từ {platform}:"
-
-#, fuzzy
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "dữ liệu tài khoản cơ bản (tên người dùng, hình đại diện, một số cài đặt bảo mật, v.v.)"
-
-#, fuzzy
-msgid "profile descriptions"
-msgstr "mô tả hồ sơ"
-
-#, fuzzy
-msgid "teams (we will create them for you)"
-msgstr "nhóm (chúng tôi sẽ tạo chúng cho bạn)"
-
-#, fuzzy
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "các khoản đóng góp liên tục (nếu người được tặng chưa tham gia Liberapay, một cam kết sẽ được tạo thay thế)"
-
-#, fuzzy, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "tài khoản ở nơi khác (ví dụ: nếu tài khoản Twitter của bạn được kết nối với tài khoản {platform} của bạn, nó cũng sẽ được liên kết trên Liberapay)"
-
-#, fuzzy, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "địa chỉ email (chúng tôi sẽ không yêu cầu bạn chứng minh quyền sở hữu khi nó đã được xác minh bởi {platform})"
-
-#, fuzzy
-msgid "and what we cannot import:"
-msgstr "và những gì chúng tôi không thể nhập:"
-
-#, fuzzy
-msgid "any saved credit card number"
-msgstr "bất kỳ số thẻ tín dụng đã lưu nào"
-
-#, fuzzy
-msgid "any money currently in the account"
-msgstr "bất kỳ số tiền nào hiện có trong tài khoản"
-
-#, fuzzy
-msgid "the account's history (ledger, etc.)"
-msgstr "lịch sử của tài khoản (sổ cái, v.v.)"
-
-#, fuzzy, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Vui lòng nhập địa chỉ email (tài khoản {platform} của bạn không có địa chỉ chính):"
-
-#, fuzzy
-msgid "Does this existing account belong to you?"
-msgstr "Tài khoản hiện tại này có thuộc về bạn không?"
-
-#, fuzzy
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Nếu địa chỉ này thuộc về bạn, vui lòng đăng nhập trước khi tiếp tục:"
-
-#, fuzzy
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Nếu không, vui lòng nhập địa chỉ email của bạn:"
-
-#, fuzzy, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Quá trình nhập dữ liệu từ {platform} đã được hoàn tất thành công."
-
-#, fuzzy, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Tên người dùng \"{0}\" của bạn giống với tên nhóm của bạn, vì vậy nó được gán cho nhóm thay vì tài khoản cá nhân của bạn."
-
-#, fuzzy, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "Báo cáo tiểu sử {n} đã được nhập."
-
-#, fuzzy, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Quá trình nhập không thành công, xin lỗi. Lỗi đã được ghi lại, chúng tôi sẽ sửa nó sớm nhất có thể. Định danh: {0}."
-
-#, fuzzy, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} tài khoản ở nơi khác đã được nhập:"
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Tài khoản {elsewhere_platform} \"{account_name}\" đã được liên kết với hồ sơ Liberapay của bạn."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Tài khoản {elsewhere_platform} \"{account_name}\" đã được liên kết với hồ sơ Liberapay của bạn."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Không thể liên kết tài khoản {elsewhere_platform} \"{account_name}\" với hồ sơ Liberapay của bạn vì một tài khoản {elsewhere_platform} khác đã được liên kết."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Không thể liên kết tài khoản {elsewhere_platform} \"{account_name}\" với hồ sơ Liberapay của bạn vì nó đã được liên kết với một tài khoản khác."
-
-#, fuzzy
-msgid "Manage this team"
-msgstr "Quản lý nhóm này"
-
-#, fuzzy, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Nhóm này không được tạo lại vì tài khoản có tên \"{0}\" đã tồn tại."
-
-#, fuzzy
-msgid "No teams were imported."
-msgstr "Không có đội nào được nhập."
-
-#, fuzzy
-msgid "Donations"
-msgstr "Donations"
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Khoản đóng góp của bạn {money_amount} mỗi tuần cho {name} trên {platform} đã được tạo lại trên Liberapay và được phân bổ cho {name2} dựa trên đối sánh địa chỉ email."
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Khoản đóng góp {money_amount} của bạn mỗi tuần cho {name} trên {platform} đã được tạo lại trên Liberapay như một lời cam kết với người dùng {elsewhere_platform} {name2}."
-
-#, fuzzy
-msgid "Email addresses"
-msgstr "Địa chỉ email"
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "Địa chỉ email {0} đã được liên kết với tài khoản Liberapay của bạn."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "Địa chỉ email {0} đã được liên kết với tài khoản Liberapay của bạn, tuy nhiên nó vẫn cần được xác minh."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "Địa chỉ email {0} đã được liên kết với tài khoản của bạn."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "Không thể liên kết địa chỉ email {0} với tài khoản của bạn vì nó đã được kết nối với một tài khoản khác."
 
 #, fuzzy, python-brace-format
 msgid ""

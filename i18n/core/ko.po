@@ -902,6 +902,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}'은(는) 유효한 이메일 주소가 아닙니다."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "{timespan_ago} 전에 메일을 보내려고 했으나 배달되지 않았기 때문에 {email_address} 이메일 주소가 블랙리스트에 추가되었습니다."
 
@@ -988,13 +992,6 @@ msgstr "해당 {money_amount}는 요구하지 않은 통화입니다({expected_c
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "존재하지 않는 걸 지우려고 하는 것 같군요."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "현재 {0} 이상의 돈을 출금할 수 없습니다."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "출금 수수료가 원금보다 큽니다."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1460,6 +1457,10 @@ msgstr "새 비밀번호"
 #, fuzzy
 msgid "Unset password"
 msgstr "비밀번호 설정 해제"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "최댓값은 {0}입니다."
 
 #, fuzzy
 msgid "2FA"
@@ -2213,10 +2214,6 @@ msgstr "사용자 이름"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "* 고유한 이름. 기부를 받고자 하는 경우 반드시 필요합니다."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "최댓값은 {0}입니다."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "허용되는 단어: 라틴 알파벳과 숫자, 온점(.), 대시 (-), 언더바(_)."
 
@@ -2351,6 +2348,9 @@ msgstr "기부를 모두에게 공개하기로 하였으므로 공개 프로필�
 #, fuzzy
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "기부금의 일부 또는 전체에 대해 자동 갱신을 활성화했지만 때가 되면 자동 지급을 시작할 수 있는 유효한 결제 수단이 없습니다."
+
+msgid "Donations"
+msgstr "기부"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2621,6 +2621,9 @@ msgstr "정말로 예정된 결제를 취소하겠습니까? {recipient} 님에 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "정말로 예정된 결제를 취소하겠습니까? {recipients} 님에 대한 기부가 중단됩니다."
+
+msgid "Go back"
+msgstr "뒤로 가기"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "예정된 결제의 금액을 변경하려면 아래에 새 값을 선택하거나 입력해 주세요:"
@@ -4875,170 +4878,6 @@ msgstr "팔로우하세요"
 #, fuzzy
 msgid "Log In"
 msgstr "Log In"
-
-#, fuzzy, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "{platform}에서 계정 데이터를 가져오지 못했습니다(오류 코드 {x}). 문제가 지속되면 support@liberapay.com으로 문의하십시오."
-
-#, fuzzy
-msgid "Migrating from Gratipay"
-msgstr "Gratipay에서 마이그레이션"
-
-#, fuzzy
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "죄송합니다. 마이그레이션을 시작하기 전에 Gratipay로 돌아가 로그인해야 합니다."
-
-msgid "Go back"
-msgstr "뒤로 가기"
-
-#, fuzzy, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "환영합니다, {username}!"
-
-#, fuzzy, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "귀하를 위해 Liberapay 계정을 만들고 {platform}에서 데이터를 가져오기를 원하는지 확인하십시오."
-
-#, fuzzy, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "다음은 {platform}에서 가져올 항목에 대한 개요입니다."
-
-#, fuzzy
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "기본 계정 데이터(사용자 이름, 아바타, 일부 개인 정보 설정 등)"
-
-#, fuzzy
-msgid "profile descriptions"
-msgstr "프로필 설명"
-
-#, fuzzy
-msgid "teams (we will create them for you)"
-msgstr "팀 (우리는 당신을 위해 그들을 만들 것입니다)"
-
-#, fuzzy
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "지속적인 기부 (완료가 아직 Liberapay에 가입하지 않은 경우 대신 서약이 생성됩니다)"
-
-#, fuzzy, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "다른 계정(예: Twitter 계정이 {platform} 계정에 연결된 경우 Liberapay에도 연결됨)"
-
-#, fuzzy, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "이메일 주소({platform}에서 이미 확인된 경우 소유권 증명을 요청하지 않음)"
-
-#, fuzzy
-msgid "and what we cannot import:"
-msgstr "가져올 수 없는 것:"
-
-#, fuzzy
-msgid "any saved credit card number"
-msgstr "저장된 신용 카드 번호"
-
-#, fuzzy
-msgid "any money currently in the account"
-msgstr "현재 계좌에 있는 모든 돈"
-
-#, fuzzy
-msgid "the account's history (ledger, etc.)"
-msgstr "계정의 이력(원장 등)"
-
-#, fuzzy, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "이메일 주소를 입력하십시오(귀하의 {platform} 계정에는 기본 계정이 없습니다):"
-
-#, fuzzy
-msgid "Does this existing account belong to you?"
-msgstr "이 기존 계정이 귀하의 계정입니까?"
-
-#, fuzzy
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "이 주소가 귀하의 소유인 경우 계속하기 전에 로그인하십시오."
-
-#, fuzzy
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "그렇지 않으면 귀하에게 속한 이메일 주소를 입력하십시오:"
-
-#, fuzzy, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "{platform}에서 데이터 가져오기가 성공적으로 완료되었습니다."
-
-#, fuzzy, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "귀하의 사용자 이름 \"{0}\"는 팀 이름과 동일하므로 개인 계정이 아닌 팀에 귀속되었습니다."
-
-#, fuzzy, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} 프로필 설명을 가져왔습니다."
-
-#, fuzzy, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "가져오기에 실패했습니다. 죄송합니다. 오류가 기록되었습니다. 최대한 빨리 수정하겠습니다. 식별자: {0}."
-
-#, fuzzy, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} 다른 곳에서 계정을 가져왔습니다:"
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "{elsewhere_platform} 계정 \"{account_name}\"가 귀하의 Liberapay 프로필에 연결되었습니다."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "{elsewhere_platform} 계정 \"{account_name}\"는 이미 Liberapay 프로필에 연결되었습니다."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "{elsewhere_platform} 계정 \"{account_name}\"는 다른 {elsewhere_platform} 계정이 이미 연결되어 있기 때문에 Liberapay 프로필에 연결할 수 없습니다."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "{elsewhere_platform} 계정 \"{account_name}\"는 이미 다른 계정에 연결되어 있기 때문에 Liberapay 프로필에 연결할 수 없습니다."
-
-#, fuzzy
-msgid "Manage this team"
-msgstr "이 팀 관리"
-
-#, fuzzy, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "이름이 \"{0}\"인 계정이 이미 존재하기 때문에 이 팀은 다시 생성되지 않았습니다."
-
-#, fuzzy
-msgid "No teams were imported."
-msgstr "가져온 팀이 없습니다."
-
-msgid "Donations"
-msgstr "기부"
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "{platform}의 {name}에 대한 매주 {money_amount} 기부가 Liberapay에서 재생성되고 이메일 주소 일치를 기반으로 {name2}에 할당됩니다."
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "{platform}의 {name}에 매주 {money_amount} 기부가 {elsewhere_platform} 사용자 {name2}에 대한 서약으로 Liberapay에서 재현되었습니다."
-
-#, fuzzy
-msgid "Email addresses"
-msgstr "이메일 주소"
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "이메일 주소 {0}가 귀하의 Liberapay 계정에 연결되었습니다."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "이메일 주소 {0}가 귀하의 Liberapay 계정에 연결되었지만 여전히 확인이 필요합니다."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "이메일 주소 {0}는 이미 귀하의 계정에 연결되어 있습니다."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "이메일 주소 {0}는 이미 다른 계정에 연결되어 있기 때문에 계정에 연결할 수 없습니다."
 
 #, fuzzy, python-brace-format
 msgid ""

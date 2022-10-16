@@ -921,6 +921,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "A(z) \"{domain_name}\" egy érvénytelen e-mail tartomány."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "A(z) {email_address} e-mail cím feketelistán van, mivel egy {timespan_ago}-val ez előtti üzenet küldésére tett kísérlet sikertelen volt."
 
@@ -1007,13 +1011,6 @@ msgstr "Az összeg {money_amount} nem az elvárt pénznemben van ({expected_curr
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Úgy tűnik valamit törölni próbál, ami nem létezik."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Nem vehet ki többet {0}-nál jelenleg."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "Az átutalás díja meghaladná annak az összegét."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1492,6 +1489,10 @@ msgstr "Új jelszó"
 #, fuzzy
 msgid "Unset password"
 msgstr "Be nem állított jelszó"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "A maximális hossz {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2266,10 +2267,6 @@ msgstr "Felhasználónév"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Egy egyedi név, amely a támogatásokat kapni kívánó felhasználók számára szükséges."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "A maximális hossz {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Megengedett karakterek: latin alfanumerikusok, pontok (.), kötőjelek (-) és aláhúzások (_)."
 
@@ -2410,6 +2407,10 @@ msgstr "Mivel nyilvános adományozás mellett döntött, javasoljuk, hogy tölt
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Ön engedélyezte az automatikus megújításokat néhány vagy az összes adományozására, de nem áll rendelkezésére érvényes fizetési eszköz, amely lehetővé tenné számunkra, hogy megkezdjük az automatikus kifizetéseket, amikor az ideje érkezik."
+
+#, fuzzy
+msgid "Donations"
+msgstr "Adományok"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2697,6 +2698,9 @@ msgstr "Biztos, hogy törölni szeretné ezt a tervezett kifizetést? Ez leáll�
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Biztos, hogy törölni szeretné ezt a tervezett kifizetést? Ez leállítja a {recipients} címre történő adományozását."
+
+msgid "Go back"
+msgstr "Visszalépés"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
@@ -5032,157 +5036,6 @@ msgstr "Kövessen minket"
 
 msgid "Log In"
 msgstr "Bejelentkezés"
-
-#, fuzzy, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "A számlaadatok lekérése a {platform} oldalról sikertelen volt (hibakód: {x}). Ha a probléma továbbra is fennáll, kérjük, forduljon a support@liberapay.com címre."
-
-msgid "Migrating from Gratipay"
-msgstr "Migráció a Gratipay-ből"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Hoppá, vissza kell lépnie a Gratipay-be, és be kell jelentkeznie a migráció megkezdése előtt."
-
-msgid "Go back"
-msgstr "Visszalépés"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Üdvözöljük, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Kérjük, erősítse meg, hogy azt akarja, hogy létrehozzunk egy Liberapay fiókot, és importáljuk az adatokat a(z) {platform} szolgáltatásból."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Itt egy áttekintés arról, hogy mit fogunk importálni a(z) {platform} szolgáltatásból:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "alapvető fiókadatok (felhasználónév, profilkép, néhány adatvédelmi beállítás, stb.)"
-
-msgid "profile descriptions"
-msgstr "profil leírások"
-
-msgid "teams (we will create them for you)"
-msgstr "csoportok (létre fogjuk hozni azokat az Ön számára)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "folyamatban levő adományok (ha az adomány fogadója még nem csatlakozott a Liberapay-hez, akkor egy letét lesz helyette létrehozva)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "más helyeken levő fiókok (például, ha az Ön Twitter fiókja csatlakoztatva van az Ön {platform} fiókjához, akkor az is csatlakoztatva lesz a Liberapay-hez)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "e-mail címek (nem fogjuk kérni Önt, hogy bizonyítsa, hogy a tulajdonában vannak, ha már hitelesítve lettek a(z) {platform} által)"
-
-msgid "and what we cannot import:"
-msgstr "és amit nem tudunk importálni:"
-
-msgid "any saved credit card number"
-msgstr "bármely mentett hitelkártyaszám"
-
-msgid "any money currently in the account"
-msgstr "bármennyi jelenlegi pénz a fiókban"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "a fiók előzményei (számlaelőzmények, stb.)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Kérjük, hogy adjon meg egy e-mail címet (az Ön {platform} fiókjának nincsen elsődleges e-mail címe):"
-
-msgid "Does this existing account belong to you?"
-msgstr "Ez a meglévő fiók Önhöz tartozik?"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Ha ez a cím az Öné, kérjük, hogy jelentkezzen be a folytatás előtt:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Máskülönben kérjük, hogy adjon meg egy e-mail címet amely Önhöz tartozik:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Az adatok importálása a(z) {platform} szolgáltatásból sikeresen befejeződött."
-
-#, fuzzy, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "A \"{0}\" felhasználóneved megegyezett a csapatod nevével, így a személyes fiókod helyett a csapathoz volt rendelve."
-
-#, fuzzy, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} profil nyilatkozatot importálták."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Az importálás nem sikerült, elnézést kérünk! A hibát rögzítettük és a lehető leghamarabb kijavítjuk. Azonosító: {0}."
-
-#, fuzzy, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} máshová importálták a számlát:"
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "A {elsewhere_platform} számla \"{account_name}\" hozzá lett kapcsolva az Ön Liberapay profiljához."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "A {elsewhere_platform} számla \"{account_name}\" már kapcsolódott az Ön Liberapay profiljához."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "A {elsewhere_platform} számlát \"{account_name}\" nem lehetett összekapcsolni az Ön Liberapay profiljával, mert egy másik {elsewhere_platform} számla már összekapcsolódott."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "A {elsewhere_platform} \"{account_name}\" számlát nem lehetett összekapcsolni az Ön Liberapay profiljával, mivel az már egy másik számlához volt kapcsolva."
-
-msgid "Manage this team"
-msgstr "A csapat kezelése"
-
-#, fuzzy, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Ezt a csapatot nem hoztuk létre újra, mert már létezik egy \"{0}\" nevű fiók."
-
-#, fuzzy
-msgid "No teams were imported."
-msgstr "Egyetlen csapatot sem importáltak."
-
-#, fuzzy
-msgid "Donations"
-msgstr "Adományok"
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "A {money_amount} heti adományodat a {name} címre a {platform} oldalon a Liberapay-en újrateremtették és az e-mail cím egyeztetése alapján a {name2} címre utalták."
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "A {money_amount} heti adományodat a {name} oldalon a {platform} oldalon a Liberapay-en újrateremtették a {elsewhere_platform} felhasználónak {name2}."
-
-#, fuzzy
-msgid "Email addresses"
-msgstr "Email címek"
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "A {0} e-mail címet összekapcsolták az Ön Liberapay számlájával."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "A {0} e-mail címet összekapcsolták a Liberapay számlájával, azonban még ellenőrizni kell."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "A {0} e-mail cím már kapcsolódott az Ön fiókjához."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "A {0} e-mail címet nem lehetett összekapcsolni az Ön fiókjával, mert az már egy másik fiókhoz volt kapcsolva."
 
 #, fuzzy, python-brace-format
 msgid ""

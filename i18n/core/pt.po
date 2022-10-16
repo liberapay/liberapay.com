@@ -912,6 +912,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' não é um domínio de e-mail válido."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "O endereço de e-mail {email_address} está na lista negra porque não foi possível enviar uma mensagem para ele {timespan_ago}."
 
@@ -998,13 +1002,6 @@ msgstr "A quantia {money_amount} não está na moeda esperada ({expected_currenc
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Parece que está a tentar apagar algo que não existe."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "No momento, você não pode retirar mais do que {0}."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "Taxa da transação é superior à quantia definida."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1471,6 +1468,10 @@ msgstr "Nova senha"
 
 msgid "Unset password"
 msgstr "Palavra-passe não definida"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Tamanho máximo é {0}."
 
 msgid "2FA"
 msgstr "2FA"
@@ -2223,10 +2224,6 @@ msgstr "Nome de usuário"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Um nome único, necessário para os usuários que desejam receber doações."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Tamanho máximo é {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Caracteres permitidos: alfanuméricos latinos, pontos (.), hífens ( - ) e underline (_)."
 
@@ -2361,6 +2358,9 @@ msgstr "Já que você escolheu fazer uma doação pública, recomendamos que voc
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Você permitiu renovações automáticas para algumas ou todas as suas doações, mas não tem nenhum instrumento de pagamento válido que nos permita iniciar os pagamentos automáticos quando chegar o momento."
+
+msgid "Donations"
+msgstr "Doações"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2629,6 +2629,9 @@ msgstr "Tem certeza que quer cancelar este pagamento programado? Isso interrompe
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Tem certeza que quer cancelar este pagamento programado? Isso irá parar suas doações para os {recipients}."
+
+msgid "Go back"
+msgstr "Voltar"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Se você quiser modificar o valor deste pagamento programado, selecione ou digite um novo pagamento:"
@@ -4801,156 +4804,6 @@ msgstr "Siga-nos"
 
 msgid "Log In"
 msgstr "Entrar"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Falha na descarrega de dados da sua conta do {platform} (código do erro {x}). Entre em contato pelo support@liberapay.com se o problema persistir."
-
-msgid "Migrating from Gratipay"
-msgstr "Migrando do Gratipay"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Opa, você precisa voltar ao Gratipay e entrar antes de migrar."
-
-msgid "Go back"
-msgstr "Voltar"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Bem-vindo, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Confirme que você quer que criemos uma conta Liberapay para você e que importemos os dados de {platform}."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Aqui está uma visão geral do que vamos importar de {platform}:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "dados básicos da conta (nome de usuário, avatar, configurações de privacidade,...)"
-
-msgid "profile descriptions"
-msgstr "descrições de perfil"
-
-msgid "teams (we will create them for you)"
-msgstr "equipes (vamos criá-las por você)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "doações em curso (se o destinatário ainda não entrou no Liberapay, uma promessa de doação será criada)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "contas diversas (por exemplo, se o seu Twitter está vinculado à sua conta {platform}, ele também ficará vinculado ao Liberapay)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "e-mails (não pediremos confirmação se já foi verificada pelo {platform})"
-
-msgid "and what we cannot import:"
-msgstr "e o que não podemos importar:"
-
-msgid "any saved credit card number"
-msgstr "qualquer cartão de crédito salvo"
-
-msgid "any money currently in the account"
-msgstr "qualquer fundo na conta"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "o histórico da conta (registros, ...)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Digite um e-mail (a sua conta {platform} não tem um e-mail principal):"
-
-msgid "Does this existing account belong to you?"
-msgstr "A conta existente é sua?"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Se este e-mail é seu, entre antes de continuar:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Caso contrário, digite seu e-mail:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "A importação de dados de {platform} foi concluída com sucesso."
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "O nome de usuário \"{0}\" era o mesmo do seu grupo, por isso foi dado ao grupo em vez da sua conta pessoal."
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "Foi importada {n} apresentação de perfil."
-msgstr[1] "Foram importadas {n} apresentações de perfil."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Falha ao importar. Erro registrado, corrigiremos assim que possível. Identificador: {0}."
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "Foi importada {n} conta de outro lugar:"
-msgstr[1] "Foram importadas {n} contas de outros lugares:"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "A conta \"{account_name}\" em {elsewhere_platform} foi vinculada ao seu perfil Liberapay."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "A conta \"{account_name}\" em {elsewhere_platform} já estava vinculada ao seu perfil Liberapay."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "A conta \"{account_name}\" em {elsewhere_platform} não pode ser vinculada ao seu perfil Liberapay porque outra conta {elsewhere_platform} já está vinculada."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "A conta \"{account_name}\" em {elsewhere_platform} não pode ser vinculada ao seu perfil Liberapay porque já está vinculada a outra conta."
-
-msgid "Manage this team"
-msgstr "Gerenciar grupo"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "O grupo não foi recriado porque já existe uma conta com o nome \"{0}\"."
-
-msgid "No teams were imported."
-msgstr "Nenhuma equipe importada."
-
-msgid "Donations"
-msgstr "Doações"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "A sua doação de {money_amount} por semana para {name} em {platform} foi recriada no Liberapay para {name2}, baseado no e-mail correspondente."
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "A sua doação de {money_amount} por semana para {name} em {platform} foi recriada no Liberapay como uma promessa de doação ao usuário {name2} em {elsewhere_platform}."
-
-msgid "Email addresses"
-msgstr "E-mails"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "O e-mail {0} foi vinculado à sua conta Liberapay."
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "O e-mail {0} foi vinculado à sua conta Liberapay, mas ainda precisa ser verificado."
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "O e-mail {0} já estava vinculado à sua conta."
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "O e-mail {0} não pode ser vinculado à sua conta porque já esta vinculado a outra conta."
 
 #, python-brace-format
 msgid ""

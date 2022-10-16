@@ -912,6 +912,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' ne estas valida retpoŝta domajno."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "La retpoŝtadreso {email_address} estas sur nigra listo, ĉar klopodo sendi mesaĝon al ĝi fiaskis {timespan_ago}."
 
@@ -998,13 +1002,6 @@ msgstr "La kvanto {money_amount} ne estas de la atendita valuto ({expected_curre
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Ŝajnas ke vi provas forigi ion, kio ne ekzistas."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Vi ne povas retiri pli ol {0} nun."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "La peradkostoj superus la kvanton de la transakcio."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1471,6 +1468,10 @@ msgstr "Nova pasvorto"
 
 msgid "Unset password"
 msgstr "Malŝalti pasvorton"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Maksimuma longeco estas {0}."
 
 msgid "2FA"
 msgstr "2FA"
@@ -2223,10 +2224,6 @@ msgstr "Uzantnomo"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Unika nomo, bezonata por uzantoj, kiuj volas ricevi donacojn."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maksimuma longeco estas {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Permesitaj signoj: latinalfabetaj literoj, ciferoj, punktoj (.), streketoj (-), kaj substrekoj (_)."
 
@@ -2360,6 +2357,9 @@ msgstr "Ĉar vi elektis fari publikan donacon, ni rekomendas, ke vi plenigas via
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Vi ebligis aŭtomatajn renovigojn por iuj aŭ ĉiuj el viaj donacoj, sed vi havas neniun validan pagilon, kiu permesus al ni eki aŭtomatajn pagojn, kiam la tempo venas."
+
+msgid "Donations"
+msgstr "Donacoj"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2628,6 +2628,9 @@ msgstr "Ĉu vi certas, ke vi volas nuligi ĉi tiun planitan pagon? Ĝi ĉesigos 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Ĉu vi certas, ke vi volas nuligi ĉi tiun planitan pagon? Ĝi ĉesigos viajn donacojn al {recipients}."
+
+msgid "Go back"
+msgstr "Reveni"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Se vi volas ŝanĝi la kvanton de ĉi tiu planita pago, bonvolu elekti aŭ enigi novan:"
@@ -4773,156 +4776,6 @@ msgstr "Sekvi nin"
 
 msgid "Log In"
 msgstr "Ensaluti"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "La venigado de viaj kontdatumoj el {platform} malsukcesis (erarkodo {x}). Se la problemo daŭras bonvolu kontakti support@liberapay.com."
-
-msgid "Migrating from Gratipay"
-msgstr "Migrado el Gratipay"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Ups, vi devas reiri al Gratipay kaj ensaluti antaŭ ol komenci la migradon."
-
-msgid "Go back"
-msgstr "Reveni"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Bonvenon, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Bonvolu konfirmi, ke vi volas ke ni kreu Liberapay-konton por vi kaj enportu datumojn el {platform}."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Jen superrigardo de tio, kion ni enportos el {platform}:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "bazaj konto-datumoj (uzantnomo, profilbildo, kelkaj privatecaj agordoj, ktp)"
-
-msgid "profile descriptions"
-msgstr "profilaj priskriboj"
-
-msgid "teams (we will create them for you)"
-msgstr "teamoj (ni kreos ilin por vi)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "nunaj donacadoj (se la ricevanto ankoraŭ ne aliĝis al Liberapay, promeso de donaco estos kreita)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "alilokaj kontoj (ekzemple, se via konto de Twitter estas konektita al via konto de {platform}, ĝi ankaŭ estos ligita en Liberapay)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "retpoŝtadresoj (ni ne petos pruvon de via identeco se ĝi jam estis konfirmita de {platform})"
-
-msgid "and what we cannot import:"
-msgstr "kaj jen tio, kion ni ne povas enporti:"
-
-msgid "any saved credit card number"
-msgstr "konservitaj numeroj de kreditkartoj"
-
-msgid "any money currently in the account"
-msgstr "la mono, kiu nun estas en la konto"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "la historio de la konto (kontoregistro, ktp.)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Enigu retpoŝtadreson (via konto de {platform} ne havas ĉefan):"
-
-msgid "Does this existing account belong to you?"
-msgstr "Ĉu tiu ekzistanta konto apartenas al vi?"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Se tiu adreso apartenas al vi, bonvolu ensaluti antaŭ ol daŭrigi:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Aliokaze, enigu retpoŝtadreson, kiu apartenas al vi:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "La enportado de datumoj el {platform} finiĝis sukcese."
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Via uzantnomo \"{0}\" estis la sama kiel la nomo de via teamo, do ĝi estis atribuita al la teamo anstataŭ al via persona konto."
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} profila sinprezento estis enportita."
-msgstr[1] "{n} profilaj sinprezentoj estis enportitaj."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "La enportado malsukcesis, pardonon. La eraro estis registrita, ni solvos ĝin kiel eble plej frue. Identigilo: {0}."
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} aliloka konto estis enportita:"
-msgstr[1] "{n} alilokaj kontoj estis enportitaj:"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "La konto de {elsewhere_platform} \"{account_name}\" estis ligita al via Liberapay-profilo."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "La konto de {elsewhere_platform} \"{account_name}\" jam estis ligita al via Liberapay-profilo."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "La konto de {elsewhere_platform} \"{account_name}\" ne povis esti ligita al via Liberapay-profilo, ĉar alia konto de {elsewhere_platform} jam estis ligita."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "La konto de {elsewhere_platform} \"{account_name}\" ne povis esti ligita al via Liberapay-profilo, ĉar ĝi jam estis ligita al alia konto."
-
-msgid "Manage this team"
-msgstr "Administri ĉi tiun teamon"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Tiu teamo ne estis rekreita, ĉar konto nomata \"{0}\" jam ekzistas."
-
-msgid "No teams were imported."
-msgstr "Neniu teamo estis enportita."
-
-msgid "Donations"
-msgstr "Donacoj"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Via donaco de {money_amount} semajne al {name} en {platform} estis rekreita en Liberapay kaj asignita al {name2} surbaze de kongrua retpoŝtadreso."
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Via donaco de {money_amount} semajne al {name} en {platform} estis rekreita en Liberapay kiel promeso de donaco al la uzanto {name2} de {elsewhere_platform}."
-
-msgid "Email addresses"
-msgstr "Retpoŝtadresoj"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "La retpoŝtadreso {0} estis ligita al via Liberapay-konto."
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "La retpoŝtadreso {0} estis ligita al via Liberapay-konto, sed ĝi bezonas esti konfirmita."
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "La retpoŝtadreso {0} jam estis ligita al via konto."
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "La retpoŝtadreso {0} ne povis esti ligita al via konto, ĉar ĝi jam estis konektita al alia konto."
 
 #, python-brace-format
 msgid ""

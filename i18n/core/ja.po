@@ -905,6 +905,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' は有効なメールアドレスのドメインではありません。"
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "メールアドレス{email_address}に{timespan_ago}にメッセージの送信が失敗したため、メールアドレス{email_address}はブラックリストに登録されました。"
 
@@ -991,13 +995,6 @@ msgstr "金額{money_amount} が想定していた通貨（{expected_currency} �
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "存在しないものを削除しようとしているようです。"
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "現在 {0} 回以上お金の引き出しを行うことはできません。"
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "取引手数料が取引金額を超える可能性があります。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1475,6 +1472,10 @@ msgstr "新しいパスワード"
 #, fuzzy
 msgid "Unset password"
 msgstr "パスワードの未設定"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "最大の長さは {0} です。"
 
 msgid "2FA"
 msgstr "二要素認証"
@@ -2236,10 +2237,6 @@ msgstr "ユーザー名"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "一意な名前。寄付を受け取りたいユーザーは必須です。"
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "最大の長さは {0} です。"
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "使用可能な文字：英数字・ドット（.）・ダッシュ（-）・アンダースコア（_）。"
 
@@ -2378,6 +2375,9 @@ msgstr "公開寄付を選択されたので、公開プロフィールを完成
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "寄付の一部またはすべての自動更新を有効にしましたが、自動で支払いを開始できる有効な支払い方法がありません。"
+
+msgid "Donations"
+msgstr "寄付"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2649,6 +2649,9 @@ msgstr "この定期支払いをキャンセルしてもよろしいですか？
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "この定期支払いをキャンセルしてもよろしいですか？ {recipients}への寄付が停止されます。"
+
+msgid "Go back"
+msgstr "戻る"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "この予定支払い額を変更する場合は、新しい寄付の値段を選択または入力してください:"
@@ -4780,154 +4783,6 @@ msgstr "フォロー"
 
 msgid "Log In"
 msgstr "ログイン"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "{platform} からのアカウントデータの取得に失敗しました（エラーコード {x}）。この問題が再発する場合は、support@liberapay.com までお問い合わせください。"
-
-msgid "Migrating from Gratipay"
-msgstr "Gratipay からの移行"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "移行を開始する前に Gratipay に戻ってログインする必要があります。"
-
-msgid "Go back"
-msgstr "戻る"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "{username} さん、ようこそ！"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "本当に Liberapay アカウントを作成して {platform} からデータをインポートしてもいいか確認してください。"
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "{platform} からインポートされるもの："
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "基本的なアカウントデータ（ユーザー名、アバター、一部のプライバシー設定など）"
-
-msgid "profile descriptions"
-msgstr "プロフィールの説明"
-
-msgid "teams (we will create them for you)"
-msgstr "チーム（あなたが所属するチームが作成されます）"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "現在進行中の寄付（受贈者が Liberapay に参加していない場合、代わりに担保が作成されます）"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "その他のアカウント（例えば、お使いの Twitter アカウントが {platform} アカウントと連携されている場合、Liberapay とも連携されます）"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "メールアドレス（すでに {platform} で行われている場合、所有者確認を行いません）"
-
-msgid "and what we cannot import:"
-msgstr "インポートできないもの："
-
-msgid "any saved credit card number"
-msgstr "すべての保存されたクレジットカード番号"
-
-msgid "any money currently in the account"
-msgstr "アカウント内にある現在のすべてのお金"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "アカウントの履歴（元帳など）"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "メールアドレスを入力してください（お使いの {platform} アカウントにはメインのメールアドレスがありません）："
-
-msgid "Does this existing account belong to you?"
-msgstr "この存在するアカウントはあなたのものですか？"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "このアドレスがあなたのものである場合、続行する前にログインしてください："
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "そうでない場合、あなたが所有するメールアドレスを入力してください："
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "{platform} からのデータのインポートが完了しました。"
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "あなたのユーザー名\"{0}\"はあなたのチーム名と同じものなので、ご自身の個人的なアカウントの代わりにそのチームに帰属します。"
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} 件のプロフィールの声明をインポートしました。"
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "申し訳ありませんが、インポートに失敗しました。エラーが記録されました。できる限り速やかに修正いたします。識別子：{0}。"
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} のその他のアカウントがインポートされました："
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "{elsewhere_platform} アカウント \"{account_name}\" は Liberapay のプロフィールにリンクされました。"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "{elsewhere_platform} アカウント \"{account_name}\" はすでに Liberapay のプロフィールにリンクされています。"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "別の {elsewhere_platform} アカウントがすでにリンクされているため、{elsewhere_platform} アカウント \"{account_name}\" を Liberapay のプロフィールにリンクできませんでした。"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "別のアカウントがすでにリンクされているため、{elsewhere_platform} アカウント \"{account_name}\" を Liberapay のプロフィールにリンクできませんでした。"
-
-msgid "Manage this team"
-msgstr "このチームを管理"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "\"{0}\" という名前のアカウントがすでに存在するため、このチームは再作成されませんでした。"
-
-msgid "No teams were imported."
-msgstr "チームはインポートされませんでした。"
-
-msgid "Donations"
-msgstr "寄付"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "あなたから {platform} の {name} さんへの週あたり {money_amount} の寄付は、Liberapayによって再作成され、メールアドレスの一致によって、{name2} に割り当てられました。"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "あなたから {platform} の {name} さんへの週あたり {money_amount} の寄付は、{elsewhere_platform} のユーザー {name2} さんへの約束として、Liberapayに再作成されました。"
-
-msgid "Email addresses"
-msgstr "メールアドレス"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "メールアドレス {0} がお使いの Liberapay アカウントに接続されました。"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "メールアドレス {0} がお使いの Liberapay アカウントに接続されましたが、認証が必要です。"
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "メールアドレス {0} はすでにお使いのアカウントに接続されています。"
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "メールアドレス {0} はすでに別のアカウントに連携されているため、お使いのアカウントに接続できませんでした。"
 
 #, python-brace-format
 msgid ""

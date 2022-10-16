@@ -912,6 +912,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "Το '{domain_name}' δεν είναι έγκυρος τομέας email."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου {email_address} βρίσκεται στη μαύρη λίστα επειδή μια προσπάθεια αποστολής μηνύματος σε αυτήν απέτυχε {timespan_ago}."
 
@@ -998,13 +1002,6 @@ msgstr "Το ποσό {money_amount} δεν είναι στο αναμενόμε
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Φαίνεται ότι προσπαθείτε να διαγράψετε κάτι που δεν υπάρχει."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Δεν μπορείς να αποσύρεις περισσότερα από {0} αυτή τη στιγμή."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "Το κόστος αυτής της συναλλαγής θα υπερβεί το ποσό της."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1473,6 +1470,10 @@ msgstr "Νέος κωδικός πρόσβασης"
 
 msgid "Unset password"
 msgstr "Μη καθορισμένος κωδικός πρόσβασης"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Το μέγιστο μήκος είναι {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2228,10 +2229,6 @@ msgstr "Όνομα χρήστη"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Ένα μοναδικό όνομα, που απαιτείται για τους χρήστες που επιθυμούν να λάβουν δωρεές."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Το μέγιστο μήκος είναι {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Επιτρεπόμενοι χαρακτήρες: λατινικοί αλφαριθμητικοί, τελείες (.), παύλες (-), και κάτω παύλες (_)."
 
@@ -2367,6 +2364,9 @@ msgstr "Εφόσον έχετε επιλέξει να κάνετε μια δημ
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Έχετε ενεργοποιήσει τις αυτόματες ανανεώσεις για ορισμένες ή όλες τις δωρεές σας, αλλά δεν έχετε κάποιο έγκυρο μέσο πληρωμής που θα μας επέτρεπε να ξεκινήσουμε τις αυτόματες πληρωμές όταν έρθει η ώρα."
+
+msgid "Donations"
+msgstr "Δωρεές"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2637,6 +2637,9 @@ msgstr "Είστε σίγουροι ότι θέλετε να ακυρώσετε 
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Είστε σίγουροι ότι θέλετε να ακυρώσετε αυτή τη προγραμματισμένη πληρωμή; Θα σταματήσει τις δωρεές σας στους {recipients}."
+
+msgid "Go back"
+msgstr "Επιστροφή"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Εάν θέλετε να τροποποιήσετε το ποσό αυτής της προγραμματισμένης πληρωμής, επιλέξτε ή εισαγάγετε ένα νέο ποσό:"
@@ -4822,156 +4825,6 @@ msgstr "Ακολουθήστε μας"
 
 msgid "Log In"
 msgstr "Σύνδεση"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Η ανάκτηση των δεδομένων του λογαριασμού σας από το {platform} απέτυχε (κωδικός σφάλματος {x}). Εάν το πρόβλημα εξακολουθεί να υφίσταται, επικοινωνήστε με το support@liberapay.com."
-
-msgid "Migrating from Gratipay"
-msgstr "Μετεγκατάσταση από το Gratipay"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Ουπς, πρέπει να επιστρέψετε στο Gratipay και να συνδεθείτε πριν ξεκινήσετε τη μετάβαση."
-
-msgid "Go back"
-msgstr "Επιστροφή"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Καλώς ήλθατε, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Επιβεβαιώστε ότι θέλετε να δημιουργήσουμε λογαριασμό Liberapay για εσάς και να εισάγουμε δεδομένα από {platform}."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Ακολουθεί μια επισκόπηση των όσων θα εισαγάγουμε από το {platform}:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "βασικά δεδομένα λογαριασμού (όνομα χρήστη, avatar, ορισμένες ρυθμίσεις απορρήτου κ.λπ.)"
-
-msgid "profile descriptions"
-msgstr "περιγραφές προφίλ"
-
-msgid "teams (we will create them for you)"
-msgstr "ομάδες (θα τις δημιουργήσουμε εμείς για εσάς)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "συνεχείς δωρεές (αν ο δικαιούχος δεν έχει ενταχθεί ακόμα στο Liberapay, θα δημιουργηθεί μια υπόσχεση)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "λογαριασμούς αλλού (π.χ. αν ο λογαριασμός σας στο Twitter είναι συνδεδεμένος με τον {platform} λογαριασμό σας, θα είναι επίσης συνδεδεμένος στο Liberapay)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "διευθύνσεις ηλεκτρονικού ταχυδρομείου (δεν θα σας ζητήσουμε να αποδείξετε την ιδιοκτησία όταν αυτή έχει ήδη επαληθευτεί από την {platform})"
-
-msgid "and what we cannot import:"
-msgstr "και τι δεν μπορούμε να εισάγουμε:"
-
-msgid "any saved credit card number"
-msgstr "τυχών αποθηκευμένος αριθμός πιστωτικής κάρτας"
-
-msgid "any money currently in the account"
-msgstr "τυχόν χρήματα που βρίσκονται στον λογαριασμό"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "το ιστορικό αυτού του λογαριασμού (λογιστικά βιβλία, κτλ.)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Εισαγάγετε μια διεύθυνση ηλεκτρονικού ταχυδρομείου (ο λογαριασμός σας {platform} δεν έχει πρωτεύουσα διεύθυνση):"
-
-msgid "Does this existing account belong to you?"
-msgstr "Σας ανήκει αυτός ο υπάρχων λογαριασμός;"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Εάν αυτή η διεύθυνση σας ανήκει, παρακαλούμε συνδεθείτε πριν συνεχίσετε:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Αλλιώς παρακαλώ εισάγετε μία διεύθυνση ηλεκτρονικού ταχυδρομείου που σας ανήκει:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Η εισαγωγή δεδομένων από το {platform} ολοκληρώθηκε με επιτυχία."
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Το όνομα χρήστη σας \"{0}\" ήταν το ίδιο με το όνομα της ομάδας σας, οπότε αποδόθηκε στην ομάδα αντί για τον προσωπικό σας λογαριασμό."
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "Εισήχθη δήλωση προφίλ {n}."
-msgstr[1] "Εισήχθαν δηλώσεις προφίλ {n}."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Η εισαγωγή απέτυχε, συγνώμη. Το σφάλμα καταγράφηκε, θα το διορθώσουμε το συντομότερο δυνατό. Αναγνωριστικό: {0}."
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} αλλού εισήχθη λογαριασμός:"
-msgstr[1] "{n} αλλού εισήχθησαν λογαριασμοί:"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Ο λογαριασμός {elsewhere_platform} \"{account_name}\" έχει συνδεθεί με το προφίλ σας στη Liberapay."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Ο λογαριασμός {elsewhere_platform} \"{account_name}\" ήταν ήδη συνδεδεμένος με το προφίλ σας στη Liberapay."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Ο λογαριασμός {elsewhere_platform} \"{account_name}\" δεν μπορούσε να συνδεθεί με το προφίλ σας Liberapay επειδή ένας άλλος λογαριασμός {elsewhere_platform} ήταν ήδη συνδεδεμένος."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Ο λογαριασμός {elsewhere_platform} \"{account_name}\" δεν μπορούσε να συνδεθεί με το προφίλ σας Liberapay επειδή ήταν ήδη συνδεδεμένος με άλλον λογαριασμό."
-
-msgid "Manage this team"
-msgstr "Διαχειριστείτε αυτή την ομάδα"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Αυτή η ομάδα δεν δημιουργήθηκε εκ νέου επειδή υπάρχει ήδη ένας λογαριασμός με το όνομα \"{0}\"."
-
-msgid "No teams were imported."
-msgstr "Δεν εισήχθησαν ομάδες."
-
-msgid "Donations"
-msgstr "Δωρεές"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Η δωρεά σας {money_amount} την εβδομάδα σε {name} στο {platform} έχει αναδημιουργηθεί στο Liberapay και έχει διατεθεί στο {name2} με βάση την αντιστοίχιση διευθύνσεων ηλεκτρονικού ταχυδρομείου."
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Η δωρεά σας {money_amount} ανά εβδομάδα στον {name} στο {platform} έχει αναδημιουργηθεί στο Liberapay ως υπόσχεση στον χρήστη {elsewhere_platform} {name2}."
-
-msgid "Email addresses"
-msgstr "Διευθύνσεις Ηλεκτρονικού Ταχυδρομείου"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου {0} έχει συνδεθεί στον λογαριασμό σας στο Liberapay."
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου {0} έχει συνδεθεί με το λογαριασμό σας Liberapay, ωστόσο πρέπει να επαληθευτεί."
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου {0} ήταν ήδη συνδεδεμένη με τον λογαριασμό σας."
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου {0} δεν μπορούσε να συνδεθεί στο λογαριασμό σας γιατί ήταν ήδη συνδεδεμένη σε άλλο λογαριασμό."
 
 #, python-brace-format
 msgid ""

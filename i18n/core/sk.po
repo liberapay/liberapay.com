@@ -922,6 +922,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' nie je validná emailová doména."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "Emailová adresa {email_address} je na čiernej listine pretože sa nepodarilo odoslať správu {timespan_ago}."
 
@@ -1008,13 +1012,6 @@ msgstr "Hodnota {money_amount} nie je v očakávanej mene ({expected_currency}).
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Zdá sa, že sa snažíte odstrániť niečo, čo neexistuje."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "V tomto okamžiku nejde vybrať viac než {0}."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "Poplatok za transakciu prekročil ich výšku."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1486,6 +1483,10 @@ msgstr "Nové heslo"
 
 msgid "Unset password"
 msgstr "Zrušiť heslo"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Maximálna dĺžka je {0}."
 
 msgid "2FA"
 msgstr "2FA"
@@ -2243,10 +2244,6 @@ msgstr "Uživateľské meno"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Unikátny názov, potrebný pre používateľov, ktorí si prajú prijať príspevky."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maximálna dĺžka je {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Dovolené znaky: latinka písmená a čísla, bodky (.), pomlčky (-), a podtržníky (_)."
 
@@ -2381,6 +2378,9 @@ msgstr "Vzhľadom k tomu, že ste sa rozhodli poskytnúť verejný príspevok, o
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Nastavili ste automatické obnovovanie na niektoré alebo na všetky vaše príspevky, ale nemáte žiadny funkčný platobný nástroj ktorý by dovoloval používanie automatický platieb."
+
+msgid "Donations"
+msgstr "Príspevky"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2652,6 +2652,9 @@ msgstr "Ste si istý že chcete zrušiť naplánovanú platbu? Preruší to pris
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Naozaj si prajete zrušiť túto naplánovaná platbu? Zruší to príspevky {recipients}."
+
+msgid "Go back"
+msgstr "Vrátiť sa späť"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Ak chcete upraviť čiastku tejto naplánovanej platby, prosím zvoľte alebo zadajte novú:"
@@ -4843,158 +4846,6 @@ msgstr "Sledujte nás"
 
 msgid "Log In"
 msgstr "Prihlásiť sa"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Získanie vašich dát z {platform} zlyhalo (chybový kód {x}). Ak problém pretrváva prosím kontaktujte support@liberapay.com."
-
-msgid "Migrating from Gratipay"
-msgstr "Migrácia z Gratipay"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Ups, musíte ísť späť na Gratipay a prihlásiť sa pred začatím migrácie."
-
-msgid "Go back"
-msgstr "Vrátiť sa späť"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Vitajte, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Prosím potvrďte že chcete vytvoriť Liberapay účet pre vás a importovať dáta z {platform}."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Tu je prehľad čo importujeme z {platform}:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "základné informácie o účte (užívateľské meno, avatar, niektoré nastavenia súkromia, atď.)"
-
-msgid "profile descriptions"
-msgstr "opisy profilu"
-
-msgid "teams (we will create them for you)"
-msgstr "tímy (vytvoríme ich za vás)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "prichádzajúce dary (ak sa ešte obdarovaný neprihlásil na Liberapay bude namiesto neho vytvorený sľub)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "účty inde (napr. ak je Váš Twitter pripojený na {platform}, bude pripojený aj k Liberapay)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "emailové adresy (nebudeme sa pýtať na overenie identity ak už ste boli verifikovaný {platform})"
-
-msgid "and what we cannot import:"
-msgstr "a nedokážeme importovať:"
-
-msgid "any saved credit card number"
-msgstr "akékoľvek uložené čísla kreditných kariet"
-
-msgid "any money currently in the account"
-msgstr "akékoľvek peniaze uložené na účte"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "história účtu (účtovníctvo, atď.)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Prosím vyplňte emailovú adresu (Váš {platform} účet nemá zvolenú primárnu):"
-
-msgid "Does this existing account belong to you?"
-msgstr "Patrí vám tento existujúci účet?"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Ak táto adresa patrí vám prosím prihláste sa pred pokračovaním:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Ak nie vyplňte emailovú adresu, ktorá vám patri:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Import dát z {platform} bol úspešne dokončený."
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Vaše uživateľské meno \"{0}\" bolo také isté ako meno tímu, takže bolo priradené vášmu tímu namiesto vášho osobného profilu."
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "Bolo importované {n} profilové vyhlásenie."
-msgstr[1] "Boli importované {n} profilové vyhlásenia."
-msgstr[2] "Bolo importovaných {n} profilových vyhlásení."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Import zlyhal, ospravedlňujeme sa. Error bol uschovaný a budeme sa snažiť problém vyriešiť čo najskôr. Identifikátor: {0}."
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "Bol importovaný {n} účet:"
-msgstr[1] "Boli importované {n} účty:"
-msgstr[2] "Bolo importovaných {n} účtov:"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Účet {elsewhere_platform} s menom \"{account_name}\" bol pripojený k vášmu Liberapay profilu."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Účet {elsewhere_platform} s menom \"{account_name}\" už bol pripojený k vášmu Liberapay profilu."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Účet {elsewhere_platform} s menom \"{account_name}\" nemohol byť pripojený k vášmu Liberapay účtu pretože už bol pripojený iný účet {elsewhere_platform}."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Účet {elsewhere_platform} s menom \"{account_name}\" nemohol byť pripojený k vášmu Liberapay účtu pretože už bol pripojený k inému Liberapay účtu."
-
-msgid "Manage this team"
-msgstr "Spravovať tento tím"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Tento tím nebol znovu vytvorený pretože účet s menom \"{0}\" už existuje."
-
-msgid "No teams were imported."
-msgstr "Neboli nahrané žiadne tímy."
-
-msgid "Donations"
-msgstr "Príspevky"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Váš dar {money_amount} za týždeň pre {name} na {platform} bol znovu vytvorený na Liberapay a priradený ku {name2} podľa zhody emailovej adresy."
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Váš dar {money_amount} za týždeň pre {name} na {platform} bol znovu vytvorený na Liberapay ako sľub na {elsewhere_platform} užívateľa {name2}."
-
-msgid "Email addresses"
-msgstr "Emailová adresa"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "Emailová adresa {0} bola spojená s vašim Liberapay účtom."
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "Emailová adresa {0} bola spojená s vašim Liberapay účtom, ale musí byť verifikovaná."
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "Emailová adresa {0} bola už spojený s vašim účtom."
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "Emailová adresa {0} nemohla byť spojená s vašim účtom pretože bola spojeaná už s iným účtom."
 
 #, python-brace-format
 msgid ""

@@ -1034,6 +1034,10 @@ msgstr "Theip ar ár n-iarracht nasc a bhunú leis an bhfreastalaí ríomhphoist
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "Ní fearann ríomhphoist bailí é '{domain_name}'."
 
+#, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "Tá an seoladh ríomhphoist {email_address} ar an liosta dubh toisc gur theip ar iarracht teachtaireacht a sheoladh chuige {timespan_ago}."
@@ -1129,14 +1133,6 @@ msgstr "Níl an méid {money_amount} san airgeadra ionchasach ({expected_currenc
 #, fuzzy
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Is cosúil go bhfuil tú ag iarraidh rud éigin nach ann a scriosadh."
-
-#, fuzzy, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Ní féidir leat níos mó ná {0} a tharraingt siar faoi láthair."
-
-#, fuzzy
-msgid "The transaction's fee would exceed its amount."
-msgstr "Bheadh táille an idirbhirt níos mó ná a mhéid."
 
 #, fuzzy, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1710,6 +1706,10 @@ msgstr "Pasfhocal nua"
 #, fuzzy
 msgid "Unset password"
 msgstr "Dícheangail an pasfhocal"
+
+#, fuzzy, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Is é an fad uasta {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2636,10 +2636,6 @@ msgstr "Ainm úsáideora"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Ainm uathúil, atá riachtanach d’úsáideoirí ar mian leo síntiúis a fháil."
 
-#, fuzzy, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Is é an fad uasta {0}."
-
 #, fuzzy
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Carachtair cheadaithe: alfa-uimhriúla Laidine, poncanna (.), daiseanna (-), agus béim (_)."
@@ -2814,6 +2810,10 @@ msgstr "Ós rud é gur roghnaigh tú síntiús poiblí a thabhairt, molaimid dui
 #, fuzzy
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Tá tú tar éis athnuachan uathoibríoch a chumasú do roinnt de do shíntiúis nó do gach síntiús, ach níl aon ionstraim íocaíochta bailí agat a chuirfeadh ar ár gcumas na híocaíochtaí uathoibríocha a thionscnamh nuair a thagann an t-am."
+
+#, fuzzy
+msgid "Donations"
+msgstr "Síntiúis"
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -3131,6 +3131,10 @@ msgstr "An bhfuil tú cinnte gur mhaith leat an íocaíocht sceidealaithe seo a 
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "An bhfuil tú cinnte gur mhaith leat an íocaíocht sceidealaithe seo a chealú? Cuirfidh sé stop le do thabhartais chuig {recipients}."
+
+#, fuzzy
+msgid "Go back"
+msgstr "Dul ar ais"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
@@ -5665,176 +5669,6 @@ msgstr "Lean orainn"
 #, fuzzy
 msgid "Log In"
 msgstr "Log In"
-
-#, fuzzy, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Theip ar do shonraí cuntais a fháil ó {platform} (cód earráide {x}). Má leanann an fhadhb, téigh i dteagmháil le support@liberapay.com."
-
-#, fuzzy
-msgid "Migrating from Gratipay"
-msgstr "Imirce ó Gratipay"
-
-#, fuzzy
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Úps, ní mór duit dul ar ais go Gratipay agus logáil isteach sula dtosaíonn tú ar an aistriú."
-
-#, fuzzy
-msgid "Go back"
-msgstr "Dul ar ais"
-
-#, fuzzy, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Fáilte, {username}!"
-
-#, fuzzy, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Deimhnigh le do thoil go dteastaíonn uait go gcruthóimid cuntas Liberapay duit agus go n-iompórtálfaimid sonraí ó {platform}."
-
-#, fuzzy, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Seo forbhreathnú ar an méid a iompórtálfaimid ó {platform}:"
-
-#, fuzzy
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "sonraí bunúsacha cuntais (ainm úsáideora, avatar, roinnt socruithe príobháideachais, srl.)"
-
-#, fuzzy
-msgid "profile descriptions"
-msgstr "tuairiscí próifíle"
-
-#, fuzzy
-msgid "teams (we will create them for you)"
-msgstr "foirne (cruthóimid iad duit)"
-
-#, fuzzy
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "tabhartais leanúnacha (mura bhfuil an deontaí tar éis dul isteach i Liberapay go fóill, cruthófar gealltanas ina ionad sin)"
-
-#, fuzzy, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "cuntais eile (m.sh. má tá do chuntas Twitter nasctha le do chuntas {platform}, nascfar é ar Liberapay freisin)"
-
-#, fuzzy, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "seoltaí ríomhphoist (ní iarrfaimid ort úinéireacht a chruthú nuair a bheidh sé fíoraithe cheana ag {platform})"
-
-#, fuzzy
-msgid "and what we cannot import:"
-msgstr "agus cad nach féidir linn a allmhairiú:"
-
-#, fuzzy
-msgid "any saved credit card number"
-msgstr "uimhir chárta creidmheasa ar bith atá sábháilte"
-
-#, fuzzy
-msgid "any money currently in the account"
-msgstr "aon airgead atá sa chuntas faoi láthair"
-
-#, fuzzy
-msgid "the account's history (ledger, etc.)"
-msgstr "stair an chuntais (mórleabhar, etc.)"
-
-#, fuzzy, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Cuir isteach seoladh ríomhphoist (níl ceann amháin ag do chuntas {platform}):"
-
-#, fuzzy
-msgid "Does this existing account belong to you?"
-msgstr "An leatsa an cuntas reatha seo?"
-
-#, fuzzy
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Más leatsa an seoladh seo, logáil isteach sula leanann tú ar aghaidh:"
-
-#, fuzzy
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Seachas sin cuir isteach seoladh ríomhphoist ar leatsa é:"
-
-#, fuzzy, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Tá an t-iompórtáil sonraí ó {platform} curtha i gcrích go rathúil."
-
-#, fuzzy, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Bhí d'ainm úsáideora \"{0}\" mar an gcéanna le hainm d'fhoireann, mar sin cuireadh i leith na foirne é in ionad do chuntas pearsanta."
-
-#, fuzzy, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "Iompórtáladh {n} ráiteas próifíle."
-msgstr[1] ""
-msgstr[2] ""
-
-#, fuzzy, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Theip ar an iompórtáil, tá brón orainn. Tá an earráid taifeadta, déanfaimid é a cheartú chomh luath agus is féidir. Aitheantóir: {0}."
-
-#, fuzzy, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} iompórtáladh cuntas eile:"
-msgstr[1] ""
-msgstr[2] ""
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Tá an cuntas {elsewhere_platform} \"{account_name}\" nasctha le do phróifíl Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Bhí an cuntas {elsewhere_platform} \"{account_name}\" nasctha le do phróifíl Liberapay cheana féin."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Níorbh fhéidir an cuntas {elsewhere_platform} \"{account_name}\" a nascadh le do phróifíl Liberapay toisc go raibh cuntas {elsewhere_platform} eile nasctha cheana féin."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Níorbh fhéidir an cuntas {elsewhere_platform} \"{account_name}\" a nascadh le do phróifíl Liberapay toisc go raibh sé nasctha le cuntas eile cheana féin."
-
-#, fuzzy
-msgid "Manage this team"
-msgstr "Bainistigh an fhoireann seo"
-
-#, fuzzy, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Níor athchruthaíodh an fhoireann seo toisc go bhfuil cuntas darb ainm \"{0}\" ann cheana."
-
-#, fuzzy
-msgid "No teams were imported."
-msgstr "Níor iompórtáladh aon fhoireann."
-
-#, fuzzy
-msgid "Donations"
-msgstr "Síntiúis"
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Rinneadh do dheontas {money_amount} in aghaidh na seachtaine do {name} ar {platform} a athchruthú ar Liberapay agus leithdháileadh ar {name2} bunaithe ar chomhoiriúnú seoltaí ríomhphoist."
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Rinneadh do dheontas {money_amount} in aghaidh na seachtaine do {name} ar {platform} a athchruthú ar Liberapay mar ghealltanas don úsáideoir {elsewhere_platform} {name2}."
-
-#, fuzzy
-msgid "Email addresses"
-msgstr "Seoltaí ríomhphoist"
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "Tá an seoladh ríomhphoist {0} nasctha le do chuntas Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "Tá an seoladh ríomhphoist {0} nasctha le do chuntas Liberapay, ach ní mór é a fhíorú go fóill."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "Bhí an seoladh ríomhphoist {0} nasctha le do chuntas cheana féin."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "Níorbh fhéidir an seoladh ríomhphoist {0} a nascadh le do chuntas toisc go raibh sé ceangailte le cuntas eile cheana."
 
 #, fuzzy, python-brace-format
 msgid ""

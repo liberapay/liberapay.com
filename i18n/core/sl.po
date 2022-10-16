@@ -1049,6 +1049,10 @@ msgstr "Naš poskus vzpostavitve povezave z e-poštnim strežnikom {domain_name}
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' ni veljavna e-poštna domena."
 
+#, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "E-poštni naslov {email_address} je uvrščen na črno listo, ker je bil poskus pošiljanja sporočila nanj neuspešen {timespan_ago}."
@@ -1144,14 +1148,6 @@ msgstr "Znesek {money_amount} ni v pričakovani valuti ({expected_currency})."
 #, fuzzy
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Zdi se, da poskušate izbrisati nekaj, kar ne obstaja."
-
-#, fuzzy, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Trenutno ne morete dvigniti več kot {0}."
-
-#, fuzzy
-msgid "The transaction's fee would exceed its amount."
-msgstr "Pristojbina za transakcijo bi presegla njen znesek."
 
 #, fuzzy, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1732,6 +1728,10 @@ msgstr "Novo geslo"
 #, fuzzy
 msgid "Unset password"
 msgstr "Nenastavljeno geslo"
+
+#, fuzzy, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Največja dolžina je {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2675,10 +2675,6 @@ msgstr "Uporabniško ime"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Edinstveno ime, ki je potrebno za uporabnike, ki želijo prejemati donacije."
 
-#, fuzzy, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Največja dolžina je {0}."
-
 #, fuzzy
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Dovoljeni znaki: latinske alfanumerične črke, pike (.), pomišljaji (-) in podčrtaji (_)."
@@ -2854,6 +2850,10 @@ msgstr "Ker ste se odločili za javno donacijo, vam priporočamo, da dokončate 
 #, fuzzy
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Omogočili ste samodejno obnavljanje za nekatere ali vse svoje donacije, vendar nimate veljavnega plačilnega instrumenta, ki bi nam omogočil sprožitev samodejnih plačil, ko pride čas."
+
+#, fuzzy
+msgid "Donations"
+msgstr "Donacije"
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -3178,6 +3178,10 @@ msgstr "Ste prepričani, da želite preklicati to načrtovano plačilo? To bo us
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Ste prepričani, da želite preklicati to načrtovano plačilo? To bo ustavilo vaše donacije za {recipients}."
+
+#, fuzzy
+msgid "Go back"
+msgstr "Go back"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
@@ -5770,178 +5774,6 @@ msgstr "Sledite nam"
 #, fuzzy
 msgid "Log In"
 msgstr "Log In"
-
-#, fuzzy, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Pridobivanje podatkov o vašem računu s spletne strani {platform} ni uspelo (koda napake {x}). Če se težava nadaljuje, se obrnite na support@liberapay.com."
-
-#, fuzzy
-msgid "Migrating from Gratipay"
-msgstr "Migracija iz Gratipay"
-
-#, fuzzy
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Ups, pred začetkom migracije se morate vrniti v Gratipay in se prijaviti."
-
-#, fuzzy
-msgid "Go back"
-msgstr "Go back"
-
-#, fuzzy, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Dobrodošli, {username}!"
-
-#, fuzzy, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Potrdite, da želite, da za vas ustvarimo račun Liberapay in uvozimo podatke s spletne strani {platform}."
-
-#, fuzzy, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Tukaj je pregled tega, kaj bomo uvozili iz spletišča {platform}:"
-
-#, fuzzy
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "osnovni podatki o računu (uporabniško ime, avatar, nekatere nastavitve zasebnosti itd.)"
-
-#, fuzzy
-msgid "profile descriptions"
-msgstr "opisi profilov"
-
-#, fuzzy
-msgid "teams (we will create them for you)"
-msgstr "ekipe (ustvarili jih bomo za vas)."
-
-#, fuzzy
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "tekoče donacije (če se darovalec še ni pridružil Liberapayu, bo namesto tega ustvarjena zaveza)."
-
-#, fuzzy, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "druge račune (npr. če je vaš račun na Twitterju povezan z vašim računom {platform}, bo povezan tudi z računom Liberapay)."
-
-#, fuzzy, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "e-poštni naslovi (ne bomo zahtevali dokazovanja lastništva, če je bilo to že preverjeno na spletni strani {platform})."
-
-#, fuzzy
-msgid "and what we cannot import:"
-msgstr "in česa ne moremo uvoziti:"
-
-#, fuzzy
-msgid "any saved credit card number"
-msgstr "kakršno koli shranjeno številko kreditne kartice."
-
-#, fuzzy
-msgid "any money currently in the account"
-msgstr "denar, ki je trenutno na računu."
-
-#, fuzzy
-msgid "the account's history (ledger, etc.)"
-msgstr "zgodovino računa (glavna knjiga itd.)"
-
-#, fuzzy, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Vnesite e-poštni naslov (vaš račun {platform} nima primarnega e-poštnega naslova):"
-
-#, fuzzy
-msgid "Does this existing account belong to you?"
-msgstr "Ali je ta obstoječi račun vaš?"
-
-#, fuzzy
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Če ta naslov pripada vam, se pred nadaljevanjem prijavite:"
-
-#, fuzzy
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "V nasprotnem primeru vnesite e-poštni naslov, ki vam pripada:"
-
-#, fuzzy, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Uvoz podatkov s spletne strani {platform} je bil uspešno zaključen."
-
-#, fuzzy, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Vaše uporabniško ime \"{0}\" je bilo enako imenu vaše ekipe, zato je bilo pripisano ekipi in ne vašemu osebnemu računu."
-
-#, fuzzy, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} je bila uvožena izjava o profilu."
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#, fuzzy, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Uvoz je bil neuspešen, žal. Napaka je bila zabeležena, odpravili jo bomo takoj, ko bo mogoče. Identifikator: {0}."
-
-#, fuzzy, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} drugje je bil račun uvožen:"
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Račun {elsewhere_platform} \"{account_name}\" je bil povezan z vašim profilom Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Račun {elsewhere_platform} \"{account_name}\" je bil že povezan z vašim profilom Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Računa {elsewhere_platform} \"{account_name}\" ni bilo mogoče povezati z vašim profilom Liberapay, ker je bil že povezan drug račun {elsewhere_platform}."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Računa {elsewhere_platform} \"{account_name}\" ni bilo mogoče povezati z vašim profilom Liberapay, ker je bil že povezan z drugim računom."
-
-#, fuzzy
-msgid "Manage this team"
-msgstr "Upravljanje te ekipe"
-
-#, fuzzy, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Ta skupina ni bila ponovno ustvarjena, ker že obstaja račun z imenom \"{0}\"."
-
-#, fuzzy
-msgid "No teams were imported."
-msgstr "Uvožena ni bila nobena ekipa."
-
-#, fuzzy
-msgid "Donations"
-msgstr "Donacije"
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Vaša donacija {money_amount} na teden za {name} na {platform} je bila ponovno ustvarjena na Liberapayu in dodeljena {name2} na podlagi ujemanja e-poštnih naslovov."
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Vaša donacija {money_amount} na teden za {name} na {platform} je bila na Liberapayu obnovljena kot obljuba uporabniku {elsewhere_platform} {name2} ."
-
-#, fuzzy
-msgid "Email addresses"
-msgstr "E-poštni naslovi"
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "E-poštni naslov {0} je bil povezan z vašim računom Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "E-poštni naslov {0} je bil povezan z vašim računom Liberapay, vendar ga je treba še preveriti."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "E-poštni naslov {0} je bil že povezan z vašim računom."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "E-poštnega naslova {0} ni bilo mogoče povezati z vašim računom, ker je bil že povezan z drugim računom."
 
 #, fuzzy, python-brace-format
 msgid ""

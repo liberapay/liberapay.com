@@ -902,6 +902,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "“{domain_name}”是无效的电子邮件地址。"
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "因 {timespan_ago} 无法成功向其投递消息，电子邮件 {email_address} 已被列入黑名单。"
 
@@ -988,13 +992,6 @@ msgstr "{money_amount} 金额不是以预期的币种（{expected_currency}）�
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "您似乎在尝试删除某些不存在的东西。"
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "您的这次提款不能超过 {0}。"
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "这笔交易的费用将超过它的金额。"
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1456,6 +1453,10 @@ msgstr "新密码"
 
 msgid "Unset password"
 msgstr "取消设置密码"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "最大长度是 {0}。"
 
 msgid "2FA"
 msgstr "双因素认证"
@@ -2203,10 +2204,6 @@ msgstr "用户名"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "唯一性用户名，收取捐款的用户必须填写该项。"
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "最大长度是 {0}。"
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "允许的字符：拉丁字母及数字，点（.），横杠（-），及下划线（_）。"
 
@@ -2339,6 +2336,9 @@ msgstr "既然您已选择公开捐款，我们建议您填写自己的公开资
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "您已为您的某些捐款启用自动续约，但您还未设置有效的付款方式来允许我们在指定日期自动扣款。"
+
+msgid "Donations"
+msgstr "捐款"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2604,6 +2604,9 @@ msgstr "确定要取消原定的付款？这将停止捐款给 {recipient}。"
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "确定要取消原定的付款？这将停止捐款给 {recipients}。"
+
+msgid "Go back"
+msgstr "返回"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "如果要修改该日程的捐款金额，请选择或直接输入新金额："
@@ -4703,154 +4706,6 @@ msgstr "关注我们"
 
 msgid "Log In"
 msgstr "登录"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "无法从 {platform} 获取您的账户信息（错误代码 {x}）。如果该问题持续存在，请联系 support@liberapay.com。"
-
-msgid "Migrating from Gratipay"
-msgstr "从 Gratipay 迁移"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "您需要回到 Gratipay 且在那里登录来启动此次迁移。"
-
-msgid "Go back"
-msgstr "返回"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "欢迎，{username}！"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "请确认您想要我们为您创建一个 Liberapay 账户，且从 {platform} 导入数据。"
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "以下是我们将从 {platform} 导入的数据概要："
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "基本账户信息（用户名、头像、一些隐私设置等）"
-
-msgid "profile descriptions"
-msgstr "资料页面介绍"
-
-msgid "teams (we will create them for you)"
-msgstr "团队（我们会为您创建）"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "持续捐款（如果收款方尚未加入 Liberapay，我们会为您创建一笔承诺）"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "其他账号（如果你的 Twitter 账号已链接到您的 {platform} 账号，它也会被链接到 Liberapay 账号）"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "电子邮件地址（由于 {platform} 已验证该地址，我们不再要求证明这由您持有）"
-
-msgid "and what we cannot import:"
-msgstr "和我们不能导入的："
-
-msgid "any saved credit card number"
-msgstr "任何已保存的信用卡号码"
-
-msgid "any money currently in the account"
-msgstr "任何该账号内的资金"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "账号历史（账目明细等）"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "请输入一个电子邮件（您的 {platform} 账号没有主要电子邮件地址）："
-
-msgid "Does this existing account belong to you?"
-msgstr "这个已注册的账号是你的吗？"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "如果该地址是您的，请登录以继续："
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "如果不是，请输入您持有的一个电子邮件地址："
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "从 {platform} 平台导入数据顺利完成。"
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "您的用户名“{0}”与您的团队名称相同，所以我们为其注册了一个团队账号而非个人账号。"
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} 份资料页面介绍已导入。"
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "导入失败。已记录该错误，我们会尽快修复。代码：{0}。"
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "已导入其余 {n} 个账户："
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "{elsewhere_platform} 账号“{account_name}”已经链接到您的 Liberapay 资料页面。"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "{elsewhere_platform} 账号“{account_name}”之前已经链接到您的 Liberapay 资料页面。"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "由于已经链接另一个 {elsewhere_platform} 账号，不能链接 {elsewhere_platform} 账号“{account_name}”到您的 Liberapay 资料页面。"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "{elsewhere_platform} 账号“{account_name}”已链接另一个账号，因此不能链接到您的 Liberapay 资料页面。"
-
-msgid "Manage this team"
-msgstr "管理此团队"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "已存在同名的“{0}”账号，因此无法创建这个团队。"
-
-msgid "No teams were imported."
-msgstr "没有导入团队。"
-
-msgid "Donations"
-msgstr "捐款"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "您在 {platform} 上每周对 {name} 的 {money_amount} 捐款，已转移到 Liberapay 上有相同电子邮件地址的 {name2} 账号。"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "您在 {platform} 上每周对 {name} 的 {money_amount} 捐款，已转移为 Liberapay 上对 {elsewhere_platform} 平台的 {name2} 的认捐。"
-
-msgid "Email addresses"
-msgstr "电子邮件地址"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "电子邮件地址 {0} 已连接您的 Liberapay 账号。"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "电子邮件地址 {0} 已连接到您的 Liberapay 账号，但还需验证。"
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "电子邮件地址 {0} 之前已连接到您的账号。"
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "不能将电子邮件地址 {0} 连接到您的账号，它已连接另一个账号。"
 
 #, python-brace-format
 msgid ""

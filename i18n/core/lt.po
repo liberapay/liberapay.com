@@ -1007,6 +1007,10 @@ msgstr "Mūsų bandymas užmegzti ryšį su {domain_name} el. pašto serveriu ne
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' nėra galiojantis el. pašto domenas."
 
+#, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "El. pašto adresas {email_address} yra įtrauktas į juodąjį sąrašą, nes bandymas juo išsiųsti pranešimą nepavyko {timespan_ago}."
@@ -1100,14 +1104,6 @@ msgstr "{money_amount} suma nėra nurodyta numatoma valiuta ({expected_currency}
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Atrodo, kad bandote ištrinti tai, ko nėra."
-
-#, fuzzy, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Šiuo metu negalite atsiimti daugiau nei {0}."
-
-#, fuzzy
-msgid "The transaction's fee would exceed its amount."
-msgstr "Sandorio mokestis viršytų jo sumą."
 
 #, fuzzy, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1620,6 +1616,10 @@ msgstr "Naujas slaptažodis"
 #, fuzzy
 msgid "Unset password"
 msgstr "Nustatyto slaptažodžio panaikinimas"
+
+#, fuzzy, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Didžiausias ilgis - {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2492,10 +2492,6 @@ msgstr "Naudotojo vardas"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Unikalus vardas, reikalingas naudotojams, kurie nori gauti dovanų."
 
-#, fuzzy, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Didžiausias ilgis - {0}."
-
 #, fuzzy
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Leidžiami ženklai: lotyniški raidiniai skaitmeniniai simboliai, taškai (.), brūkšneliai (-) ir pabraukimai (_)."
@@ -2665,6 +2661,10 @@ msgstr "Kadangi nusprendėte aukoti viešai, rekomenduojame užpildyti savo vie�
 #, fuzzy
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Įjungėte automatinį kai kurių ar visų savo aukų atnaujinimą, tačiau neturite jokios galiojančios mokėjimo priemonės, kuri leistų mums inicijuoti automatinius mokėjimus atėjus laikui."
+
+#, fuzzy
+msgid "Donations"
+msgstr "Paremti"
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2981,6 +2981,10 @@ msgstr "Ar tikrai norite atšaukti šį suplanuotą mokėjimą? Tai sustabdys j�
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Ar tikrai norite atšaukti šį suplanuotą mokėjimą? Tai sustabdys jūsų aukojimą {recipients}."
+
+#, fuzzy
+msgid "Go back"
+msgstr "Grįžti atgal"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
@@ -5468,176 +5472,6 @@ msgstr "Sekite mus"
 #, fuzzy
 msgid "Log In"
 msgstr "Log In"
-
-#, fuzzy, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Nepavyko gauti jūsų paskyros duomenų iš {platform} (klaidos kodas {x}). Jei problema išlieka, kreipkitės į support@liberapay.com."
-
-#, fuzzy
-msgid "Migrating from Gratipay"
-msgstr "Migravimas iš \"Gratipay"
-
-#, fuzzy
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Oi, prieš pradėdami migraciją turite grįžti į \"Gratipay\" ir prisijungti."
-
-#, fuzzy
-msgid "Go back"
-msgstr "Grįžti atgal"
-
-#, fuzzy, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Sveiki atvykę, {username}!"
-
-#, fuzzy, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Patvirtinkite, kad norite, jog sukurtume jums \"Liberapay\" paskyrą ir importuotume duomenis iš {platform}."
-
-#, fuzzy, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Čia apžvelgiama, ką importuosime iš {platform}:"
-
-#, fuzzy
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "pagrindiniai paskyros duomenys (vartotojo vardas, avataras, kai kurie privatumo nustatymai ir t. t.)."
-
-#, fuzzy
-msgid "profile descriptions"
-msgstr "profilių aprašymai"
-
-#, fuzzy
-msgid "teams (we will create them for you)"
-msgstr "komandos (mes jas sukursime už jus)"
-
-#, fuzzy
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "nuolatinės aukos (jei aukos gavėjas dar neprisijungė prie Liberapay, vietoj to bus sukurtas pažadas)."
-
-#, fuzzy, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "kitos paskyros (pvz., jei jūsų \"Twitter\" paskyra yra susieta su jūsų {platform} paskyra, ji taip pat bus susieta su \"Liberapay\")."
-
-#, fuzzy, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "el. pašto adresai (neprašysime jūsų įrodyti nuosavybės, jei ji jau patvirtinta {platform})."
-
-#, fuzzy
-msgid "and what we cannot import:"
-msgstr "ir ko negalime importuoti:"
-
-#, fuzzy
-msgid "any saved credit card number"
-msgstr "bet koks išsaugotas kredito kortelės numeris."
-
-#, fuzzy
-msgid "any money currently in the account"
-msgstr "bet kokie šiuo metu sąskaitoje esantys pinigai."
-
-#, fuzzy
-msgid "the account's history (ledger, etc.)"
-msgstr "sąskaitos istoriją (apskaitos knyga ir kt.)"
-
-#, fuzzy, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Įveskite el. pašto adresą (jūsų {platform} paskyra neturi pirminio el. pašto adreso):"
-
-#, fuzzy
-msgid "Does this existing account belong to you?"
-msgstr "Ar ši esama paskyra priklauso jums?"
-
-#, fuzzy
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Jei šis adresas priklauso jums, prieš tęsdami prisijunkite:"
-
-#, fuzzy
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Priešingu atveju įveskite jums priklausantį el. pašto adresą:"
-
-#, fuzzy, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Duomenų importas iš {platform} sėkmingai baigtas."
-
-#, fuzzy, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Jūsų vartotojo vardas \"{0}\" sutapo su komandos pavadinimu, todėl jis buvo priskirtas komandai, o ne jūsų asmeninei paskyrai."
-
-#, fuzzy, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} buvo importuotas profilio išrašas."
-msgstr[1] ""
-msgstr[2] ""
-
-#, fuzzy, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Importuoti nepavyko, atsiprašome. Klaida užregistruota, ją ištaisysime kuo greičiau. Identifikatorius: {0}."
-
-#, fuzzy, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} kitur buvo importuota paskyra:"
-msgstr[1] ""
-msgstr[2] ""
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "{elsewhere_platform} sąskaita \"{account_name}\" susieta su jūsų \"Liberapay\" profiliu."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "{elsewhere_platform} paskyra \"{account_name}\" jau buvo susieta su jūsų \"Liberapay\" profiliu."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "{elsewhere_platform} paskyros \"{account_name}\" nepavyko susieti su jūsų \"Liberapay\" profiliu, nes jau buvo susieta kita {elsewhere_platform} paskyra."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "{elsewhere_platform} paskyros \"{account_name}\" nepavyko susieti su jūsų \"Liberapay\" profiliu, nes ji jau buvo susieta su kita paskyra."
-
-#, fuzzy
-msgid "Manage this team"
-msgstr "Valdykite šią komandą"
-
-#, fuzzy, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Ši komanda nebuvo sukurta iš naujo, nes jau egzistuoja paskyra pavadinimu \"{0}\"."
-
-#, fuzzy
-msgid "No teams were imported."
-msgstr "Nebuvo importuota nė viena komanda."
-
-#, fuzzy
-msgid "Donations"
-msgstr "Paremti"
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Jūsų {money_amount} savaitinė auka {name} svetainėje {platform} buvo atkurta \"Liberapay\" ir paskirta {name2} pagal el. pašto adreso atitikimą."
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Jūsų {money_amount} per savaitę paaukota suma {name} {platform} svetainėje buvo atkurta Liberapay kaip pažadas {elsewhere_platform} naudotojui {name2}."
-
-#, fuzzy
-msgid "Email addresses"
-msgstr "El. pašto adresai"
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "El. pašto adresas {0} buvo susietas su jūsų \"Liberapay\" paskyra."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "El. pašto adresas {0} buvo susietas su jūsų \"Liberapay\" paskyra, tačiau jį dar reikia patikrinti."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "El. pašto adresas {0} jau buvo susietas su jūsų paskyra."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "El. pašto adreso {0} nepavyko susieti su jūsų paskyra, nes jis jau buvo susietas su kita paskyra."
 
 #, fuzzy, python-brace-format
 msgid ""

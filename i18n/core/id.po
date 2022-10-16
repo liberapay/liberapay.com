@@ -902,6 +902,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' adalah domain surel yang tidak valid."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "Alamat surel {email_address} masuk ke dalam daftar hitam karena upaya untuk mengirim pesan ke sana telah gagal {timespan_ago}."
 
@@ -988,13 +992,6 @@ msgstr "Uang sebesar {money_amount} tidak dalam mata uang yang diharapkan ({expe
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Sepertinya Anda mencoba untuk menghapus sesuatu yang tidak ada."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Anda tidak dapat menarik lebih dari {0} saat ini."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "Biaya transaksi akan melebihi jumlahnya."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1456,6 +1453,10 @@ msgstr "Kata sandi baru"
 
 msgid "Unset password"
 msgstr "Kata sandi tidak diatur"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Panjang maksimum adalah {0}."
 
 msgid "2FA"
 msgstr "2FA"
@@ -2203,10 +2204,6 @@ msgstr "Nama pengguna"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Nama unik, diperlukan untuk pengguna yang ingin menerima sumbangan."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Panjang maksimum adalah {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Karakter yang di izinkan: alfanumerik latin, titik (.), Tanda hubung (-), dan garis bawah (_)."
 
@@ -2339,6 +2336,9 @@ msgstr "Karena Anda telah memilih untuk memberikan sumbangan publik, kami sarank
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Anda telah mengaktifkan pembaruan otomatis untuk sebagian atau semua donasi Anda, tetapi Anda tidak memiliki alat pembayaran yang valid yang memungkinkan kami untuk memulai pembayaran otomatis ketika saatnya tiba."
+
+msgid "Donations"
+msgstr "Donasi-donasi"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2604,6 +2604,9 @@ msgstr "Apakah Anda yakin ingin membatalkan pembayaran terjadwal ini? Ini akan m
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Apakah Anda yakin ingin membatalkan pembayaran terjadwal ini? Ini akan menghentikan donasi Anda kepada {recipients}."
+
+msgid "Go back"
+msgstr "Kembali"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Jika Anda ingin mengubah jumlah pembayaran terjadwal ini, silakan pilih atau masukkan yang baru:"
@@ -4703,154 +4706,6 @@ msgstr "Ikuti kami"
 
 msgid "Log In"
 msgstr "Masuk"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Gagal mengambil data akun Anda dari {platform} (kode kesalahan {x}). Jika masalah berlanjut, silakan hubungi support@liberpay.com."
-
-msgid "Migrating from Gratipay"
-msgstr "Migrasi dari Gratipay"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Oops, anda perlu menuju kembali dan masuk Gratipay sebelum memulai migrasi."
-
-msgid "Go back"
-msgstr "Kembali"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Selamat datang, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Harap konfirmasi bahwa Anda ingin kami membuatkan akun Liberapay untuk Anda dan mengimpor data dari {platform}."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Berikut ini adalah ikhtisar tentang apa yang akan kami impor dari {platform}:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "data akun dasar (nama pengguna, avatar, beberapa pengaturan privasi, dll.)"
-
-msgid "profile descriptions"
-msgstr "deskripsi profil"
-
-msgid "teams (we will create them for you)"
-msgstr "tim (kami akan membuatkannya untuk Anda)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "sumbangan berkelanjutan (jika penerima belum bergabung dengan Liberapay, sebagai gantinya janji donasi akan dibuat)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "akun di tempat lain (misalnya jika akun Twitter Anda terhubung ke akun {platform} Anda, akun itu juga akan ditautkan ke Liberapay)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "alamat surel (kami tidak akan meminta Anda untuk membuktikan kepemilikan jika sudah diverifikasi oleh {platform})"
-
-msgid "and what we cannot import:"
-msgstr "dan apa yang tidak dapat kami impor:"
-
-msgid "any saved credit card number"
-msgstr "semua nomor kartu kredit yang disimpan"
-
-msgid "any money currently in the account"
-msgstr "uang apa pun yang saat ini ada di akun"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "riwayat akun (buku kas, dll.)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Harap masukkan alamat surel (akun {platform} Anda tidak memiliki surel utama):"
-
-msgid "Does this existing account belong to you?"
-msgstr "Apakah akun ini milik Anda?"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Jika alamat ini milik Anda, silakan log masuk sebelum melanjutkan:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Jika tidak, silakan masukkan alamat surel yang memang milik Anda:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Impor data dari {platform} telah berhasil diselesaikan."
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Nama pengguna Anda \"{0}\" sama dengan nama tim Anda, jadi itu dikaitkan dengan tim, bukan akun pribadi Anda."
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} pernyataan profil telah diimpor."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Maaf, impor gagal. Kesalahan telah dicatat, kami akan memperbaikinya sesegera mungkin. Pengenal: {0}."
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} akun di tempat lain telah diimpor:"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Akun {elsewhere_platform} \"{account_name}\" telah ditautkan ke profil Liberapay Anda."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Akun {elsewhere_platform} \"{account_name}\" telah ditautkan ke profil Liberapay Anda."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Akun {elsewhere_platform} \"{account_name}\" tidak dapat ditautkan ke profil Liberapay Anda karena akun {elsewhere_platform} lainnya telah ditautkan."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Akun {elsewhere_platform} \"{account_name}\" tidak dapat ditautkan ke profil Liberapay Anda karena sudah ditautkan ke akun lain."
-
-msgid "Manage this team"
-msgstr "Kelola tim ini"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Tim ini tidak dapat dibuat-ulang karena sebuah akun dengan nama \"{0}\" sudah ada."
-
-msgid "No teams were imported."
-msgstr "Tidak ada tim yang diimpor."
-
-msgid "Donations"
-msgstr "Donasi-donasi"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Donasi Anda sebesar {money_amount} per minggu ke {name} di {platform} telah dibuat ulang di Liberapay dan dialokasikan ke {name2} berdasarkan pencocokan alamat surel."
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Donasi Anda sebesar {money_amount} per minggu ke {name} di {platform} telah dibuat ulang di Liberapay sebagai janji kepada pengguna {name2} di {elsewhere_platform}."
-
-msgid "Email addresses"
-msgstr "Alamat email"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "Alamat email {0} telah ditautkan ke akun Liberapay Anda."
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "Alamat email {0} telah ditautkan ke akun Liberapay Anda, namun perlu diverifikasi."
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "Alamat email {0} sudah terhubung dengan akun Anda."
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "Alamat email {0} tidak dapat dihubungkan dengan akun Anda karena alamat email tersebut sudah terhubung dengan akun lain."
 
 #, python-brace-format
 msgid ""

@@ -912,6 +912,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' bukannya domain e-mel yang sah."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "Alamat e-mel {email_address} disenaraihitamkan kerana cubaan menghantar mesej kepadanya gagal {timespan_ago}."
 
@@ -998,13 +1002,6 @@ msgstr "Jumlah {money_amount} bukan di dalam mata wang yang dijangkakan ({expect
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Nampaknya anda cuba untuk memadam sesuatu yang tidak wujud."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Anda tidak boleh mengeluarkan wang lebih dari {0} pada waktu ini."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "Caj perkhidmatan transaksi akan melebihi jumlah sedia ada."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1471,6 +1468,10 @@ msgstr "Kata laluan baru"
 
 msgid "Unset password"
 msgstr "Padam kata laluan"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Panjang maksimum ialah {0}."
 
 msgid "2FA"
 msgstr "2FA"
@@ -2223,10 +2224,6 @@ msgstr "Nama pengguna"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Nama yang unik, diperlukan untuk pengguna yang ingin menerima derma."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Panjang maksimum ialah {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Aksara yang dibenarkan: angka abjad rumi, titik (.), sengkang (-), dan garis bawah (_)."
 
@@ -2360,6 +2357,9 @@ msgstr "Memandangkan anda memilih untuk membuat derma terbuka, kami menggalakkan
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Anda telah membolehkan pembaharuan automatik untuk sesetengah atau kesemua derma anda, tetapi anda masih belum mempunyai instrumen pembayaran sah yang akan membolehkan kami memulakan pembayaran automatik apabila tiba masanya."
+
+msgid "Donations"
+msgstr "Derma"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2628,6 +2628,9 @@ msgstr "Adakah anda ingin membatalkan pembayaran yang dijadualkan ini? Ia akan m
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Adakah anda ingin membatalkan pembayaran yang dijadualkan ini? Ia akan menghentikan derma anda kepada {recipients}."
+
+msgid "Go back"
+msgstr "Pergi balik"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Jika anda ingin mengubah jumlah pembayaran yang dijadualkan ini, sila pilih atau masukkan jumlah baharu:"
@@ -4774,156 +4777,6 @@ msgstr "Ikuti kami"
 
 msgid "Log In"
 msgstr "Log Masuk"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Proses mendapatkan data akaun anda dari {platform} telah gagal (kod ralat {x}). Jika masalah berlarutan sila hubungi support@liberapay.com."
-
-msgid "Migrating from Gratipay"
-msgstr "Berpindah dari Gratipay"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Alamak, anda perlu pergi balik ke Gratipay dan log masuk sebelum memulakan perpindahan."
-
-msgid "Go back"
-msgstr "Pergi balik"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Selamat datang, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Sila sahkan anda ingin kami ciptakan akaun Liberapay untuk anda dan import data dari {platform}."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Ini gambaran keseluruhan berkaitan apa kami akan import dari {platform}:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "data akaun asas (nama pengguna, avatar, beberapa tetapan privasi, dll.)"
-
-msgid "profile descriptions"
-msgstr "keterangan profil"
-
-msgid "teams (we will create them for you)"
-msgstr "kumpulan (kami akan menciptanya untuk anda)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "derma yang sedang berjalan (jika penerima derma masih belum sertai Liberapay maka perjanjian derma akan dicipta)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "akaun di tempat lain (cth. jika akaun Twitter anda dikaitkan kepada akaun {platform} anda maka ia juga akan dikaitkan di Liberapay)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "alamat e-mel (kami tidak akan minta anda membuktikan pemilikan apabila ia telah disahkan oleh {platform})"
-
-msgid "and what we cannot import:"
-msgstr "dan apa yang kami tidak boleh import:"
-
-msgid "any saved credit card number"
-msgstr "sebarang nombor kad kredit yang disimpan"
-
-msgid "any money currently in the account"
-msgstr "sebarang wang yang ada dalam akaun"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "sejarah akaun (lejar, dll.)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Sila masukkan alamat e-mel (akaun {platform} anda masih belum ada e-mel utama):"
-
-msgid "Does this existing account belong to you?"
-msgstr "Adakah akaun sedia ada ini kepunyaan anda?"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Jika alamat ini kepunyaan anda sila log masuk sebelum teruskan:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Jika tidak sila masukkan alamat e-mel kepunyaan anda:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Import data dari {platform} telah berjaya dilengkapkan."
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Nama pengguna \"{0}\" sama dengan nama kumpulan anda, jadi ia dikaitkan kepada kumpulan dan bukannya akaun peribadi anda."
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} kenyataan profil telah diimport."
-msgstr[1] "{n} kenyataan profil telah diimport."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Harap maaf, import telah gagal. Ralat telah direkodkan, kami akan baiki ia dengan segera. Pengenal pasti: {0}."
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} akaun lain telah diimport:"
-msgstr[1] "{n} akaun lain telah diimport:"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Akaun {elsewhere_platform} \"{account_name}\" telah dikaitkan dengan profil Liberapay anda."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Akaun {elsewhere_platform} \"{account_name}\" telah pun dikaitkan dengan profil Liberapay anda."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Akaun {elsewhere_platform} \"{account_name}\" tidak boleh dikaitkan kepada profil anda kerana akaun {elsewhere_platform} lain telah pun dikaitkan."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Akaun {elsewhere_platform} \"{account_name}\" tidak boleh dikaitkan dengan profil Liberapay anda kerana ia telah dikaitkan dengan akaun yang lain."
-
-msgid "Manage this team"
-msgstr "Uruskan kumpulan ini"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Kumpulan ini tidak dicipta semula kerana akaun bernama \"{0}\" telah pun wujud."
-
-msgid "No teams were imported."
-msgstr "Tiada kumpulan diimport."
-
-msgid "Donations"
-msgstr "Derma"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Derma anda {money_amount} setiap minggu kepada {name} di {platform} telah dicipta semula di Liberapay dan diserahkan kepada {name2} berdasarkan padanan alamat e-mel."
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Derma anda {money_amount} setiap minggu kepada {name} di {platform} telah dicipta semula di Liberapay sebagai perjanjian derma kepada pengguna {elsewhere_platform} bernama {name2}."
-
-msgid "Email addresses"
-msgstr "Alamat e-mel"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "Alamat e-mel {0} telah dikaitkan dengan akaun Liberapay anda."
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "Alamat e-mel {0} telah dikaitkan dengan akaun Liberapay anda, tetapi ia masih perlu disahkan."
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "Alamat e-mel {0} telah pun dikaitkan dengan akaun anda."
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "Alamat e-mel {0} tidak boleh dikaitkan dengan akaun anda kerana ia telah pun dikaitkan dengan akaun lain."
 
 #, python-brace-format
 msgid ""

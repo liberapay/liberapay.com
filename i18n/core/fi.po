@@ -912,6 +912,10 @@ msgid "'{domain_name}' is not a valid email domain."
 msgstr "Sähköpostidomainia ’{domain_name}’ ei hyväksytä."
 
 #, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
+#, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "Sähköpostiosoite {email_address} on torjuntalistalla, koska yritys lähettää sinne postia epäonnistui {timespan_ago} sitten."
 
@@ -998,13 +1002,6 @@ msgstr "{money_amount} summa ei ole odotetussa valuutassa ({expected_currency}).
 
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "Vaikuttaa siltä, että yrität poistaa jotain mitä ei ole olemassa."
-
-#, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "Tällä hetkellä et voi nostaa enempää kuin {0}."
-
-msgid "The transaction's fee would exceed its amount."
-msgstr "Rahansiirron kulut ylittäisivät sen summan."
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1474,6 +1471,10 @@ msgstr "Uusi salasana"
 #, fuzzy
 msgid "Unset password"
 msgstr "Unset salasana"
+
+#, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "Maksimipituus on {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2229,10 +2230,6 @@ msgstr "Käyttäjätunnus"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "Yksilöivä nimi, tarvitaan mikäli haluat vastaanottaa lahjoituksia."
 
-#, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "Maksimipituus on {0}."
-
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "Sallitut merkit: alfanumeeriset merkit, piste (.), väliviiva (-) ja alleviiva (_)."
 
@@ -2367,6 +2364,9 @@ msgstr "Koska olet valinnut lahjoittaa julkisesti, suosittelemme, että täydenn
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "Olet ottanut käyttöön lahjoituksissasi automaattisia uusimisia, mutta et ole asettanut mitään maksuvälinettä, jolla automaattinen uusiminen toteutettaisiin."
+
+msgid "Donations"
+msgstr "Lahjoitukset"
 
 #, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -2635,6 +2635,9 @@ msgstr "Haluatko varmasti perua tämän ajastetun maksun? Se lopettaisi lahjoitu
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Haluatko varmasti perua tämän ajastetun maksun? Se lopettaisi lahjoituksesi vastaanottajille {recipients}."
+
+msgid "Go back"
+msgstr "Palaa"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Mikäli haluat muuttaa tämän ajastetun maksun summaa, valitse tai syötä uusi:"
@@ -4784,156 +4787,6 @@ msgstr "Seuraa meitä"
 
 msgid "Log In"
 msgstr "Kirjaudu sisään"
-
-#, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "Tilitietojesi noutaminen {platform}-palvelusta epäonnistui (ivrhekoodi {x}). Jos ongelma toistuu, ota yhteyttä: support@liberapay.com (englanniksi)."
-
-msgid "Migrating from Gratipay"
-msgstr "Tiedonsiirto Gratipay-palvelusta"
-
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "Näyttää siltä, että sinun pitää palata Gratipay-palveluun ja kirjautua siellä ensin, ennen kuin siirto aloitetaan."
-
-msgid "Go back"
-msgstr "Palaa"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "Tervetuloa, {username}!"
-
-#, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "Varmista, että haluat, että sinulle luodaan Liberapay-tili käyttäen tietoja {platform}-palvelusta."
-
-#, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "Tässä on mitä noudamme {platform}-palvelusta:"
-
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "tilin perustiedot (käyttäjätunnus, avatar, joitain yksityisyystietoja yms.)"
-
-msgid "profile descriptions"
-msgstr "profiilin kuvaukset"
-
-msgid "teams (we will create them for you)"
-msgstr "ryhmät (teemme ne sinulle)"
-
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "jatkuvaa lahjoitusta (jos kohde ei ole vielä liittynyt Liberapay-palveluun, tehdään lahjoituslupaus)"
-
-#, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "muuta tiliä (esim. jos Twitter-tilisi on kytketty {platform}-tiliisi, se kytketään myös Liberapay-palvelussa)"
-
-#, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "sähköpostiosoitetta (emme pyydä vahvistamaan sen omistusta, kun se on jo varmistettu {platform}-palvelussa)"
-
-msgid "and what we cannot import:"
-msgstr "näitä emme voi tuoda:"
-
-msgid "any saved credit card number"
-msgstr "mitään tallennettuja luottokortin numeroita"
-
-msgid "any money currently in the account"
-msgstr "mitään tilillä olevaa rahaa"
-
-msgid "the account's history (ledger, etc.)"
-msgstr "tilin tapahtumahistoriaa (reskontra jne.)"
-
-#, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "Syötä sähköpostiosoitteesi (tunnuksesi {platform}-palvelussa ei sisällä pääasiallista sähköpostiosoitetta):"
-
-msgid "Does this existing account belong to you?"
-msgstr "Kuuluuko tämä olemassaoleva tili sinulle?"
-
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "Jos osoite kuuluu sinulle, kirjaudu sisään ennen jatkamista:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "Muussa tapauksessa syötä sähköpostiosoite, joka kuuluu sinulle:"
-
-#, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "Tietojen syöttäminen {platform}-palvelusta onnistui."
-
-#, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "Tunnuksesi ”{0}” oli sama kuin ryhmäsi nimi, joten tunnustus osoitettiin ryhmälle henkilökohtaisen tilisi sijaan."
-
-#, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "{n} profiilinkuvaus tuotu."
-msgstr[1] "{n} profiilinkuvausta tuotu."
-
-#, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "Tiedonsiirto valitettavasti epäonnistui. Virhe on tallennettu, ja korjaamme sen kun ehdimme. Tunniste: {0}."
-
-#, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} tili muualta tuotu:"
-msgstr[1] "{n} tiliä muualta tuotu:"
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "Tunnus ”{account_name}” {elsewhere_platform}-palvelusta on kytketty Liberapay-profiiliisi."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "Tunnus ”{account_name}” {elsewhere_platform}-palvelusta oli jo kytketty Liberapay-profiiliisi."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "Tunnusta ”{account_name}” {elsewhere_platform}-palvelusta ei voitu kytkeä Liberapay-profiiliisi, koska siihen oli jo kytketty toinen {elsewhere_platform}-tili."
-
-#, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "Tunnusta ”{account_name}” {elsewhere_platform}-palvelusta ei voitu kytkeä Liberapay-profiiliisi, koska se oli jo kytketty toiseen tiliin."
-
-msgid "Manage this team"
-msgstr "Hallinnoi tätä ryhmää"
-
-#, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "Ryhmää ei luotu uusiksi, koska tili nimeltä ”{0}” on jo olemassa."
-
-msgid "No teams were imported."
-msgstr "Ryhmiä ei tuotu."
-
-msgid "Donations"
-msgstr "Lahjoitukset"
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "Viikottainen {money_amount} lahjoituksesi {platform}-käyttäjälle {name} on luotu uusiksi Liberapay-palvelussa, ja varattu {name2}-tilille sähköpostiosoitteen perusteella."
-
-#, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "Viikottainen {money_amount} lahjoituksesi {platform}-käyttäjälle {name} on luotu uusiksi Liberapay-palvelussa lupauslahjoituksena {elsewhere_platform}-käyttäjälle {name2}."
-
-msgid "Email addresses"
-msgstr "Sähköpostiosoitteet"
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "Sähköpostiosoite {0} on kytketty Liberapay-tiliisi."
-
-#, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "Sähköpostiosoite {0} on kytketty Liberapay-tiliisi, mutta se pitää vielä varmentaa."
-
-#, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "Sähköpostiosoite {0} oli jo kytketty tiliisl."
-
-#, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "Sähköpostiosoitetta {0} ei voitu yhdistää tiliisi, koska se oli jo kytketty toiseen tiliin."
 
 #, python-brace-format
 msgid ""

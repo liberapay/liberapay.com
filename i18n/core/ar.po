@@ -1019,6 +1019,10 @@ msgstr "فشلت محاولتنا في إنشاء اتصال بخادم البر
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "\"{domain_name}\" ليس مجال بريد إلكتروني صالحًا."
 
+#, python-brace-format
+msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
 msgstr "تم وضع عنوان البريد الإلكتروني {email_address} في القائمة السوداء لأن محاولة إرسال رسالة إليه فشلت {timespan_ago}."
@@ -1113,14 +1117,6 @@ msgstr "المبلغ {money_amount} ليس بالعملة المتوقعة ({exp
 #, fuzzy
 msgid "It seems you're trying to delete something that doesn't exist."
 msgstr "يبدو أنك تحاول حذف شيء غير موجود."
-
-#, fuzzy, python-brace-format
-msgid "You can't withdraw more than {0} at this time."
-msgstr "لا يمكنك سحب أكثر من {0} في الوقت الحالي."
-
-#, fuzzy
-msgid "The transaction's fee would exceed its amount."
-msgstr "سوف تتجاوز رسوم المعاملة مبلغها."
 
 #, fuzzy, python-brace-format
 msgid "\"{0}\" is not a valid number."
@@ -1677,6 +1673,10 @@ msgstr "كلمة سر جديدة"
 #, fuzzy
 msgid "Unset password"
 msgstr "إلغاء تعيين كلمة المرور"
+
+#, fuzzy, python-brace-format
+msgid "Maximum length is {0}."
+msgstr "أقصى طول هو {0}."
 
 #, fuzzy
 msgid "2FA"
@@ -2577,10 +2577,6 @@ msgstr "إسم المستخدم"
 msgid "A unique name, required for users who wish to receive donations."
 msgstr "اسم فريد ، مطلوب للمستخدمين الذين يرغبون في تلقي التبرعات."
 
-#, fuzzy, python-brace-format
-msgid "Maximum length is {0}."
-msgstr "أقصى طول هو {0}."
-
 #, fuzzy
 msgid "Allowed characters: latin alphanumerics, dots (.), dashes (-), and underscores (_)."
 msgstr "الأحرف المسموح بها: الحروف الأبجدية الرقمية والنقاط (.) والشرطات (-) والشرطات السفلية (_)."
@@ -2755,6 +2751,10 @@ msgstr "نظرًا لأنك اخترت تقديم تبرع عام ، نوصيك 
 #, fuzzy
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
 msgstr "لقد قمت بتمكين التجديدات التلقائية لبعض أو كل تبرعاتك ، ولكن ليس لديك أي وسيلة دفع صالحة تسمح لنا ببدء المدفوعات التلقائية عندما يحين الوقت."
+
+#, fuzzy
+msgid "Donations"
+msgstr "التبرعات"
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation awaiting payment."
@@ -3083,6 +3083,10 @@ msgstr "هل أنت متأكد أنك تريد إلغاء هذه الدفعة ا
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "هل أنت متأكد أنك تريد إلغاء هذه الدفعة المجدولة؟ سيوقف تبرعاتك لـ {recipients}."
+
+#, fuzzy
+msgid "Go back"
+msgstr "العودة"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
@@ -5702,181 +5706,6 @@ msgstr "تابعونا"
 #, fuzzy
 msgid "Log In"
 msgstr "Log In"
-
-#, fuzzy, python-brace-format
-msgid "Fetching your account data from {platform} has failed (error code {x}). If the problem persists, please contact support@liberapay.com."
-msgstr "فشل جلب بيانات حسابك من {platform} (رمز الخطأ {x}). إذا استمرت المشكلة ، يرجى الاتصال support@liberapay.com."
-
-#, fuzzy
-msgid "Migrating from Gratipay"
-msgstr "الهجرة من Gratipay"
-
-#, fuzzy
-msgid "Oops, you need to go back to Gratipay and log in before starting the migration."
-msgstr "عفوًا ، يلزمك الرجوع إلى Gratipay وتسجيل الدخول قبل بدء الترحيل."
-
-#, fuzzy
-msgid "Go back"
-msgstr "العودة"
-
-#, python-brace-format
-msgid "Welcome, {username}!"
-msgstr "أهلًا بك {username} !"
-
-#, fuzzy, python-brace-format
-msgid "Please confirm that you want us to create a Liberapay account for you and import data from {platform}."
-msgstr "يرجى تأكيد رغبتك في إنشاء حساب Liberapay لك واستيراد البيانات من {platform}."
-
-#, fuzzy, python-brace-format
-msgid "Here is an overview of what we will import from {platform}:"
-msgstr "إليك نظرة عامة على ما سنستورده من {platform}:"
-
-#, fuzzy
-msgid "basic account data (username, avatar, some privacy settings, etc.)"
-msgstr "بيانات الحساب الأساسية (اسم المستخدم ، الصورة الرمزية ، بعض إعدادات الخصوصية ، إلخ.)"
-
-#, fuzzy
-msgid "profile descriptions"
-msgstr "أوصاف الملف الشخصي"
-
-#, fuzzy
-msgid "teams (we will create them for you)"
-msgstr "فرق (سننشئها لك)"
-
-#, fuzzy
-msgid "ongoing donations (if the donee hasn't joined Liberapay yet, a pledge will be created instead)"
-msgstr "التبرعات المستمرة (إذا لم ينضم الموهوب إلى Liberapay بعد ، فسيتم إنشاء تعهد بدلاً من ذلك)"
-
-#, fuzzy, python-brace-format
-msgid "elsewhere accounts (e.g. if your Twitter account is connected to your {platform} account, it will also be linked on Liberapay)"
-msgstr "حسابات في مكان آخر (على سبيل المثال ، إذا كان حسابك على Twitter متصلاً بحساب {platform} الخاص بك ، فسيتم ربطه أيضًا على Liberapay)"
-
-#, fuzzy, python-brace-format
-msgid "email addresses (we won't ask you to prove ownership when it's already been verified by {platform})"
-msgstr "عناوين البريد الإلكتروني (لن نطلب منك إثبات الملكية عندما تم التحقق منها بالفعل بواسطة {platform})"
-
-#, fuzzy
-msgid "and what we cannot import:"
-msgstr "وما لا يمكننا استيراده:"
-
-#, fuzzy
-msgid "any saved credit card number"
-msgstr "أي رقم بطاقة ائتمان محفوظ"
-
-#, fuzzy
-msgid "any money currently in the account"
-msgstr "أي أموال موجودة حاليًا في الحساب"
-
-#, fuzzy
-msgid "the account's history (ledger, etc.)"
-msgstr "تاريخ الحساب (دفتر الأستاذ ، وما إلى ذلك)"
-
-#, fuzzy, python-brace-format
-msgid "Please input an email address (your {platform} account doesn't have a primary one):"
-msgstr "الرجاء إدخال عنوان بريد إلكتروني (حساب {platform} الخاص بك ليس له عنوان أساسي):"
-
-#, fuzzy
-msgid "Does this existing account belong to you?"
-msgstr "هل هذا الحساب الحالي ملك لك؟"
-
-#, fuzzy
-msgid "If this address belongs to you, please log in before continuing:"
-msgstr "إذا كان هذا العنوان يخصك ، فالرجاء تسجيل الدخول قبل المتابعة:"
-
-msgid "Otherwise please input an email address which does belong to you:"
-msgstr "وإلا، يرجى إدخال عنوان بريد إلكتروني ملكك:"
-
-#, fuzzy, python-brace-format
-msgid "The data import from {platform} has been successfully completed."
-msgstr "تم استكمال استيراد البيانات من {platform} بنجاح."
-
-#, fuzzy, python-brace-format
-msgid "Your username \"{0}\" was the same as your team's name, so it was attributed to the team instead of your personal account."
-msgstr "كان اسم المستخدم الخاص بك \"{0}\" هو نفسه اسم فريقك ، لذلك نُسب إلى الفريق بدلاً من حسابك الشخصي."
-
-#, fuzzy, python-brace-format
-msgid "{n} profile statement was imported."
-msgid_plural "{n} profile statements were imported."
-msgstr[0] "تم استيراد بيان ملف التعريف {n}."
-msgstr[1] "تم استيراد بيان ملف التعريف {n}."
-msgstr[2] "تم استيراد بيان ملف التعريف {n}."
-msgstr[3] "تم استيراد بيان ملف التعريف {n}."
-msgstr[4] "تم استيراد بيان ملف التعريف {n}."
-msgstr[5] "تم استيراد بيان ملف التعريف {n}."
-
-#, fuzzy, python-brace-format
-msgid "The import failed, sorry. The error has been recorded, we'll fix it as soon as possible. Identifier: {0}."
-msgstr "فشل الاستيراد ، آسف. تم تسجيل الخطأ ، وسنصلحه في أسرع وقت ممكن. المعرف: {0}."
-
-#, fuzzy, python-brace-format
-msgid "{n} elsewhere account was imported:"
-msgid_plural "{n} elsewhere accounts were imported:"
-msgstr[0] "{n} تم استيراد حساب في مكان آخر:"
-msgstr[1] "{n} تم استيراد حساب في مكان آخر:"
-msgstr[2] "{n} تم استيراد حساب في مكان آخر:"
-msgstr[3] "{n} تم استيراد حساب في مكان آخر:"
-msgstr[4] "{n} تم استيراد حساب في مكان آخر:"
-msgstr[5] "{n} تم استيراد حساب في مكان آخر:"
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" has been linked to your Liberapay profile."
-msgstr "تم ربط حساب {elsewhere_platform} \"{account_name}\" بملفك الشخصي في Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" was already linked to your Liberapay profile."
-msgstr "تم ربط حساب {elsewhere_platform} \"{account_name}\" بالفعل بملفك الشخصي في Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because another {elsewhere_platform} account was already linked."
-msgstr "تعذر ربط حساب {elsewhere_platform} \"{account_name}\" بملفك الشخصي في Liberapay لأنه تم ربط حساب {elsewhere_platform} آخر بالفعل."
-
-#, fuzzy, python-brace-format
-msgid "The {elsewhere_platform} account \"{account_name}\" could not be linked to your Liberapay profile because it was already linked to another account."
-msgstr "تعذر ربط حساب {elsewhere_platform} \"{account_name}\" بملفك الشخصي في Liberapay لأنه كان مرتبطًا بالفعل بحساب آخر."
-
-#, fuzzy
-msgid "Manage this team"
-msgstr "إدارة هذا الفريق"
-
-#, fuzzy, python-brace-format
-msgid "This team was not recreated because an account named \"{0}\" already exists."
-msgstr "لم يتم إعادة إنشاء هذا الفريق نظرًا لوجود حساب يسمى \"{0}\" بالفعل."
-
-#, fuzzy
-msgid "No teams were imported."
-msgstr "لم يتم استيراد أي فرق."
-
-#, fuzzy
-msgid "Donations"
-msgstr "التبرعات"
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay and allocated to {name2} based on email address matching."
-msgstr "تم إعادة إنشاء تبرعك بمبلغ {money_amount} أسبوعيًا لـ {name} في {platform} على Liberapay وتخصيصه لـ {name2} بناءً على مطابقة عنوان البريد الإلكتروني."
-
-#, fuzzy, python-brace-format
-msgid "Your donation of {money_amount} per week to {name} on {platform} has been recreated on Liberapay as a pledge to the {elsewhere_platform} user {name2}."
-msgstr "تم إعادة إنشاء تبرعك بـ {money_amount} أسبوعيًا لـ {name} على {platform} على Liberapay كتعهد لمستخدم {elsewhere_platform} {name2}."
-
-#, fuzzy
-msgid "Email addresses"
-msgstr "عناوين البريد الإلكتروني"
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account."
-msgstr "تم ربط عنوان البريد الإلكتروني {0} بحسابك في Liberapay."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} has been linked to your Liberapay account, however it still needs to be verified."
-msgstr "تم ربط عنوان البريد الإلكتروني {0} بحسابك في Liberapay ، ومع ذلك لا يزال يتعين التحقق منه."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} was already linked to your account."
-msgstr "تم بالفعل ربط عنوان البريد الإلكتروني {0} بحسابك."
-
-#, fuzzy, python-brace-format
-msgid "The email address {0} could not be linked to your account because it was already connected to another account."
-msgstr "لا يمكن ربط عنوان البريد الإلكتروني {0} بحسابك لأنه متصل بالفعل بحساب آخر."
 
 #, fuzzy, python-brace-format
 msgid ""
