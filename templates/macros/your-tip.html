@@ -66,10 +66,17 @@
             ) }}</p>
             % else
             <p>{{ _(
-                "You are currently donating {0} per week to {1}. You can select or "
-                "input a different amount below, or stop the donation by clicking "
-                "on the Stop button."
-                , tip.amount, tippee_name
+                "You are currently donating {money_amount} per week to {recipient_name}. "
+                "The form below enables you to modify or stop your donation."
+                , money_amount=tip.periodic_amount, recipient_name=tippee_name
+            ) if tip.period == 'weekly' else _(
+                "You are currently donating {money_amount} per month to {recipient_name}. "
+                "The form below enables you to modify or stop your donation."
+                , money_amount=tip.periodic_amount, recipient_name=tippee_name
+            ) if tip.period == 'monthly' else _(
+                "You are currently donating {money_amount} per year to {recipient_name}. "
+                "The form below enables you to modify or stop your donation."
+                , money_amount=tip.periodic_amount, recipient_name=tippee_name
             ) }}</p>
             % endif
         % else
