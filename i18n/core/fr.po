@@ -84,16 +84,16 @@ msgid "Your donation of {amount} per year to {username} needs to be renewed befo
 msgstr "Votre don de {amount} par an à {username} doit être renouvelé avant le {date}."
 
 #, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "Votre don de {amount} par semaine à {username} devait être renouvelé avant le {past_date}."
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "Votre don de {amount} par mois à {username} devait être renouvelé avant le {past_date}."
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "Votre don de {amount} par an à {username} devait être renouvelé avant le {past_date}."
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -406,8 +406,8 @@ msgstr "Nous avons initié un prélèvement bancaire de {money_amount} à partir
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Cette opération s'effectue sur la base du {link_start}mandat {mandate_id}{link_end} que vous avez signé le {acceptance_date}, autorisant Liberapay (créancier SEPA {creditor_identifier}) à envoyer des instructions à votre banque pour débiter votre compte et votre banque à débiter votre compte conformément à ces instructions."
 
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Si vous n'avez pas autorisé ce paiement, veuillez nous le faire savoir, nous effectuerons un remboursement."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -585,6 +585,16 @@ msgstr "Le renouvellement du don de {money_amount} à {recipient} prévu pour le
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Les renouvellement des dons listés ci-dessous ont été annulés parce que les destinataires ne sont pas en mesure de recevoir les paiements :"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Renouvellement de don Liberapay : authentification requise"
@@ -1786,8 +1796,12 @@ msgid "Leftover"
 msgstr "Restant"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Vous donnez actuellement {money_amount} par semaine à {name}, mais ce compte n'accepte plus les dons en {currency}. Vous pouvez entrer un nouveau montant en {new_currency} ci-dessous, ou arrêter le don."
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 msgid "Modify"
 msgstr "Modifier"
@@ -1796,12 +1810,16 @@ msgid "Discontinue"
 msgstr "Interrompre"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Vous donnez actuellement {money_amount} par semaine à {name}, mais ce compte n'accepte plus les dons en {currency}. Vous pouvez sélectionner ou entrer un nouveau montant en {new_currency} ci-dessous, ou arrêter le don en cliquant sur le bouton idoine."
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Vous donnez actuellement {0} par semaine à {1}. Vous pouvez sélectionner ou entrer un montant différent ci-dessous, ou arrêter le don en cliquant sur le bouton idoine."
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 msgid "Please select or input an amount:"
 msgstr "Veuillez sélectionner ou entrer un montant :"
@@ -2035,8 +2053,8 @@ msgid "The submitted settings are incoherent."
 msgstr "Les paramètres demandés sont incohérents."
 
 #, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Vous recevez actuellement l'équivalent de {money_amount} par semaine de dons en devises étrangères. Ces dons ne seront pas convertis vers votre devise principale."
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Vos paramètres de devise sont actuellement ignorés car ils sont incompatibles avec l'opérateur de paiement que vous utilisez."
@@ -2444,12 +2462,18 @@ msgstr "Ce don arrêté a encore {money_amount} payé d'avance. Cette avance ser
 msgid "Cancelled pledges"
 msgstr "Promesses de dons annulées"
 
-#, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "Vous ne donnez pas à {username}."
-
 msgid "Funding your donations"
 msgstr "Financer vos dons"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2457,12 +2481,16 @@ msgid_plural "Due to legal and technical limitations we are currently unable to 
 msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgstr[1] "En raison de limitations légales et techniques, nous ne sommes pas en mesure de grouper tous vos dons en un seul prélèvement. Au lieu d'un, vous devrez effectuer {n} paiements séparés. Nous nous excusons pour la gêne occasionnée."
 
-msgid "We are able to group these donations into a single payment."
-msgstr "Nous sommes en mesure de grouper ces dons en un seul paiement."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Vos dons à {recipients} sont en attente de paiement."
+
+msgid "We are able to group these donations into a single payment."
+msgstr "Nous sommes en mesure de grouper ces dons en un seul paiement."
 
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "PayPal est actuellement la seule option disponible pour financer ce don. Veuillez cliquer sur le bouton ci-dessous pour continuer :"
@@ -2611,8 +2639,9 @@ msgstr "En fournissant votre IBAN et en confirmant ce paiement, vous autorisez {
 msgid "Remember the bank account number for future payments"
 msgstr "Se souvenir du numéro de compte bancaire pour les paiements futurs"
 
-msgid "Please input your postal address:"
-msgstr "Veuillez saisir votre adresse postale :"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3414,6 +3443,10 @@ msgstr "En fournissant votre IBAN, vous autorisez {platform} et {provider}, notr
 
 msgid "Forget this bank account number after one payment."
 msgstr "Oublier ce numéro de compte bancaire après un seul paiement."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."

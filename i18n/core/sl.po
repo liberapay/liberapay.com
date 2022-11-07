@@ -90,17 +90,17 @@ msgstr "Vašo mesečno donacijo {amount} za {username} je treba obnoviti pred {d
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "Vašo letno donacijo {amount} za {username} je treba obnoviti pred {date}."
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "Vašo donacijo {amount} na teden za {username} je bilo treba obnoviti pred {past_date}."
+#, python-brace-format
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "Vašo mesečno donacijo {amount} za {username} je bilo treba obnoviti pred {past_date}."
+#, python-brace-format
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "Vašo letno donacijo {amount} za {username} je bilo treba obnoviti pred {past_date}."
+#, python-brace-format
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -461,9 +461,8 @@ msgstr "Z vašega bančnega računa ({partial_account_number}) smo sprožili dir
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "{mandate_id}{link_end} Ta operacija se izvaja na podlagi pooblastila {link_start}, ki ste ga podpisali na {acceptance_date} in s katerim ste Liberapay (SEPA upnik {creditor_identifier}) pooblastili, da vaši banki pošlje navodila za obremenitev vašega računa, vaša banka pa, da v skladu s temi navodili obremeni vaš račun."
 
-#, fuzzy
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Če tega plačila niste odobrili, nam to sporočite, saj vam ga bomo povrnili."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -660,6 +659,16 @@ msgstr "Plačilo za obnovitev donacije {money_amount} za {recipient}, načrtovan
 #, fuzzy
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Naslednja plačila za podaljšanje donacij so bila prekinjena, ker jih prejemniki ne morejo prejeti:"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 #, fuzzy
 msgid "Liberapay donation renewal: authentication required"
@@ -2137,9 +2146,13 @@ msgstr "Neporabljeni prihodki se porabijo v naslednjih tednih in se ne nalagajo 
 msgid "Leftover"
 msgstr "Preostanek"
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Trenutno darujete {money_amount} na teden za {name}, vendar donacij ne sprejemajo več v {currency}. Spodaj lahko vnesete nov znesek v {new_currency} ali ustavite donacijo."
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 #, fuzzy
 msgid "Modify"
@@ -2149,13 +2162,17 @@ msgstr "Spremeni"
 msgid "Discontinue"
 msgstr "Prekinitev"
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Trenutno darujete {money_amount} na teden na {name}, vendar ne sprejemajo več donacij na {currency}. V spodnjem polju {new_currency} lahko izberete ali vnesete nov znesek ali ustavite donacijo s klikom na gumb Ustavi."
+#, python-brace-format
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Trenutno darujete {0} na teden za {1}. Spodaj lahko izberete ali vnesete drug znesek ali pa s klikom na gumb Ustavi zaustavite donacijo."
+#, python-brace-format
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, fuzzy
 msgid "Please select or input an amount:"
@@ -2437,9 +2454,9 @@ msgstr "Raziščite skupnosti"
 msgid "The submitted settings are incoherent."
 msgstr "Predložene nastavitve so neusklajene."
 
-#, fuzzy, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Trenutno iz donacij v tujih valutah prejmete ekvivalent {money_amount} na teden. Te donacije ne bodo pretvorjene v vašo glavno valuto."
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2955,13 +2972,21 @@ msgstr "Ta ustavljena donacija je še vedno {money_amount} plačana vnaprej. Ta 
 msgid "Cancelled pledges"
 msgstr "Preklicane obljube"
 
-#, fuzzy, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "Ne darujete za {username}."
-
 #, fuzzy
 msgid "Funding your donations"
 msgstr "Financiranje vaših donacij"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2971,13 +2996,17 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#, fuzzy
-msgid "We are able to group these donations into a single payment."
-msgstr "Te donacije lahko združimo v eno samo plačilo."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Vaše donacije za {recipients} čakajo na plačilo."
+
+#, fuzzy
+msgid "We are able to group these donations into a single payment."
+msgstr "Te donacije lahko združimo v eno samo plačilo."
 
 #, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
@@ -3159,9 +3188,9 @@ msgstr "Z navedbo svojega IBAN in potrditvijo tega plačila pooblaščate {platf
 msgid "Remember the bank account number for future payments"
 msgstr "Zapomnite si številko bančnega računa za prihodnja plačila."
 
-#, fuzzy
-msgid "Please input your postal address:"
-msgstr "Vnesite svoj poštni naslov:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -4106,6 +4135,10 @@ msgstr "Z navedbo številke IBAN pooblaščate {platform} in {provider}, našega
 #, fuzzy
 msgid "Forget this bank account number after one payment."
 msgstr "Po enem plačilu pozabite številko bančnega računa."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."

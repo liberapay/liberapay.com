@@ -84,16 +84,16 @@ msgid "Your donation of {amount} per year to {username} needs to be renewed befo
 msgstr "Uw donatie van {amount} per jaar aan {username} moet voor {date} worden verlengd."
 
 #, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "Uw donatie van {amount} per week aan {username} moet voor {past_date} worden verlengd."
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "Uw donatie van {amount} per maand aan {username} moest voor {past_date} worden vernieuwd."
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "Uw donatie van {amount} per jaar aan {username} moest voor {past_date} worden verlengd."
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -406,8 +406,8 @@ msgstr "We hebben een automatische incasso van {money_amount} van uw bankrekenin
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Deze operatie wordt uitgevoerd op basis van {link_start}het mandaat {mandate_id}{link_end} dat u heeft ondertekend op {acceptance_date}, waarbij u Liberapay (SEPA-crediteur {creditor_identifier}) machtigt om instructies naar uw bank te sturen om uw rekening te debiteren en uw bank om uw rekening te debiteren in overeenstemming met deze instructies."
 
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Als u geen toestemming heeft gegeven voor deze betaling, laat het ons weten, zodat wij het kunnen terugstorten."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -585,6 +585,16 @@ msgstr "De voor {date} geplande betaling van {money_amount} aan {recipient} is a
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "De volgende donatievernieuwingen zijn afgebroken omdat de ontvangers niet in staat zijn om ze te ontvangen:"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Verlenging van de Liberapay-donatie: authenticatie vereist"
@@ -1786,8 +1796,12 @@ msgid "Leftover"
 msgstr "Overgelaten geld"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "U doneert momenteel {money_amount} per week aan {name}, maar dit account accepteert geen donaties meer in {currency}. U kunt hieronder een nieuw {new_currency} bedrag selecteren of stoppen met de donatie."
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 msgid "Modify"
 msgstr "Bewerken"
@@ -1796,12 +1810,16 @@ msgid "Discontinue"
 msgstr "Beëindig"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "U doneert momenteel {money_amount} per week aan {name}, maar dit account accepteert geen donaties meer in {currency}. U kunt hieronder een nieuw {new_currency} bedrag selecteren of stop de donatie door op de Stop-knop te klikken."
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Momenteel doneert u {0} per week aan {1}. U kunt een ander bedrag selecteren of invullen hieronder of stop de donatie door op de knop te klikken."
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 msgid "Please select or input an amount:"
 msgstr "Selecteer of vul een bedrag in:"
@@ -2035,8 +2053,8 @@ msgid "The submitted settings are incoherent."
 msgstr "De ingezonden instellingen zijn onsamenhangend."
 
 #, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Je ontvangt momenteel een equivalent van {money_amount} per week aan donaties in buitenlandse valuta. Deze donaties worden niet omgezet naar je hoofdvaluta."
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Uw valuta-instellingen worden momenteel genegeerd omdat ze niet compatibel zijn met de betalingsverwerker die u gebruikt."
@@ -2444,12 +2462,18 @@ msgstr "Deze gestopte donatie heeft nog steeds {money_amount} vooruitbetaald. Da
 msgid "Cancelled pledges"
 msgstr "Geannuleerde toezeggingen"
 
-#, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "U doneert niet aan {username}."
-
 msgid "Funding your donations"
 msgstr "Financiering van uw donaties"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2457,12 +2481,16 @@ msgid_plural "Due to legal and technical limitations we are currently unable to 
 msgstr[0] "<ongebruikt enkelvoud (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgstr[1] "Door juridische en technische beperkingen kunnen we momenteel niet al uw donaties als één betaling verwerken. In plaats daarvan moet {n} losse betalingen doen. Onze excuses voor het ongemak."
 
-msgid "We are able to group these donations into a single payment."
-msgstr "Wij zijn in staat om deze donaties te groeperen in één betaling."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Je donaties aan {recipients} wachten op betaling."
+
+msgid "We are able to group these donations into a single payment."
+msgstr "Wij zijn in staat om deze donaties te groeperen in één betaling."
 
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "PayPal is momenteel de enige beschikbare optie om deze donatie te financieren. Klik op de volgende knop om verder te gaan:"
@@ -2611,8 +2639,9 @@ msgstr "Door uw IBAN te verstrekken en deze betaling te bevestigen, geeft u {pla
 msgid "Remember the bank account number for future payments"
 msgstr "Onthoud het bankrekeningnummer voor toekomstige betalingen"
 
-msgid "Please input your postal address:"
-msgstr "Vul a.u.b. uw postadres in:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3414,6 +3443,10 @@ msgstr "Door het verstrekken van uw IBAN geeft u {platform} en {provider}, onze 
 
 msgid "Forget this bank account number after one payment."
 msgstr "Vergeet dit bankrekeningnummer na één betaling."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."

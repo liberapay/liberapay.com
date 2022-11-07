@@ -82,16 +82,16 @@ msgid "Your donation of {amount} per year to {username} needs to be renewed befo
 msgstr "{username}님에 대한 매년 {amount} 기부를 {date} 이전에 갱신해야 합니다."
 
 #, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "매주 {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "매달 {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "매년 {amount}을(를) {username}에게 기부하려면 {past_date} 전까지 갱신해야 했습니다."
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -400,8 +400,8 @@ msgstr "귀하의 은행 계좌({partial_account_number})에서 직접 {money_am
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "이 작업은 {acceptance_date} 에 귀하가 Liberapay (SEPA 대행자: {creditor_identifier})가 하기 지시에 따라 귀하의 은행에 자금을 이체하도록 {link_start}허가 {mandate_id}{link_end}한 데 따른 것입니다."
 
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "혹시 이 지불을 승인하지 않았다면 알려 주십시오. 환불해 드리겠습니다."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -577,6 +577,16 @@ msgstr "{date}에 예정된 {recipient} 님에 대한 {money_amount} 기부 갱�
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "수신자가 자금을 수령할 수 없기 때문에 기부 갱신 결제가 취소되었습니다:"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Liberapay 기부 갱신: 인증 필요"
@@ -1777,8 +1787,12 @@ msgid "Leftover"
 msgstr "잔액"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "현재 {name}님께 매주 {money_amount}를 기부하고 있으나, {name}님께서 더 이상 {currency} 화폐로 기부를 받지 않습니다. 아래에서 {new_currency} 화폐로 새 액수를 입력하거나, 기부를 중단할 수 있습니다."
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 msgid "Modify"
 msgstr "수정하기"
@@ -1787,12 +1801,16 @@ msgid "Discontinue"
 msgstr "중단"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "현재 {name}님께 매주 {money_amount}를 기부하고 있으나, {name}님께서 더 이상 {currency} 화폐로 기부를 받지 않습니다. 아래에서 {new_currency} 화폐로 새 액수를 선택/입력하거나, 기부를 중단할 수 있습니다."
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "{1} 님께 매주 {0} 만큼을 기부하고 있습니다. 다른 금액을 선택하거나, 아래 중지 버튼을 눌러 기부를 중단할 수 있습니다."
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 msgid "Please select or input an amount:"
 msgstr "선택하거나 값을 넣어 주세요:"
@@ -2025,8 +2043,8 @@ msgid "The submitted settings are incoherent."
 msgstr "제출된 설정값을 다시 검토해야 합니다."
 
 #, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "현재 다른 화폐로 {money_amount} 만큼의 기부를 받고 있습니다. 이 기부는 당신의 주 화폐로 변경되지 않습니다."
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2435,24 +2453,33 @@ msgstr "이 중단된 기부는 선납된 기부금 {money_amount} 이(가) 남�
 msgid "Cancelled pledges"
 msgstr "취소된 공약"
 
-#, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "{username}에 기부하고 있지 않습니다."
-
 msgid "Funding your donations"
 msgstr "기부금 모금"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] "법적, 기술적 제한으로 인해 현재 귀하의 모든 기부를 하나의 결제로 처리할 수 없습니다. 대신 {n} 개의 개별 결제를 수행해야 합니다. 불편을 드리게 되어 사과드립니다."
 
-msgid "We are able to group these donations into a single payment."
-msgstr "이 기부들을 하나의 지불로 묶을 수 있습니다."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "{recipients}에 대한 기부금이 지급 대기 중입니다."
+
+msgid "We are able to group these donations into a single payment."
+msgstr "이 기부들을 하나의 지불로 묶을 수 있습니다."
 
 #, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
@@ -2604,8 +2631,9 @@ msgstr "귀하는 IBAN을 제공하고 이 지급을 확인함으로써 귀하�
 msgid "Remember the bank account number for future payments"
 msgstr "향후 지급을 위해 은행 계좌 번호를 기억하세요"
 
-msgid "Please input your postal address:"
-msgstr "우편 주소를 입력해 주십시오:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3411,6 +3439,10 @@ msgstr "IBAN을 제공함으로써 귀하는 {platform} 및 {provider}, 당사�
 #, fuzzy
 msgid "Forget this bank account number after one payment."
 msgstr "한 번 결제한 후 이 은행 계좌 번호를 잊어버리십시오."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."

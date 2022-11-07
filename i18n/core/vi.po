@@ -82,16 +82,16 @@ msgid "Your donation of {amount} per year to {username} needs to be renewed befo
 msgstr "Việc bạn quyên góp {amount} mỗi năm cho {username} cần phải được gia hạn trước {date}."
 
 #, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "Việc bạn quyên góp {amount} mỗi tuần cho {username} đã cần phải được gia hạn trước {past_date}."
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "Việc bạn quyên góp {amount} mỗi tháng cho {username} đã cần phải được gia hạn trước {past_date}."
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "Việc bạn quyên góp {amount} mỗi năm cho {username} đã cần phải được gia hạn trước {past_date}."
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -427,9 +427,8 @@ msgstr "Chúng tôi đã bắt đầu ghi nợ trực tiếp {money_amount} từ
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Hoạt động này đang được thực hiện dựa trên {link_start} giấy ủy quyền {mandate_id} {link_end} mà bạn đã ký vào {acceptance_date}, ủy quyền cho Liberapay (chủ nợ SEPA {creditor_identifier}) gửi hướng dẫn đến ngân hàng của bạn để ghi nợ tài khoản của bạn và ngân hàng của bạn ghi nợ tài khoản của bạn theo các hướng dẫn đó."
 
-#, fuzzy
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Nếu bạn không cho phép khoản thanh toán này, vui lòng cho chúng tôi biết, chúng tôi sẽ hoàn lại tiền."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -620,6 +619,16 @@ msgstr "Thanh toán gia hạn đóng góp từ {money_amount} sang {recipient} �
 #, fuzzy
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Các khoản thanh toán gia hạn đóng góp sau đây đã bị hủy bỏ vì người nhận không thể nhận chúng:"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 #, fuzzy
 msgid "Liberapay donation renewal: authentication required"
@@ -2076,9 +2085,13 @@ msgstr "Thu nhập chưa sử dụng sẽ được tiêu thụ trong các tuần
 msgid "Leftover"
 msgstr "Thức ăn thừa"
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Bạn hiện đang quyên góp {money_amount} mỗi tuần cho {name}, nhưng họ không còn chấp nhận đóng góp trong {currency}. Bạn có thể nhập số tiền mới vào {new_currency} bên dưới hoặc ngừng đóng góp."
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 #, fuzzy
 msgid "Modify"
@@ -2088,13 +2101,17 @@ msgstr "Chỉnh sửa"
 msgid "Discontinue"
 msgstr "Ngừng"
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Bạn hiện đang quyên góp {money_amount} mỗi tuần cho {name}, nhưng họ không còn chấp nhận đóng góp trong {currency}. Bạn có thể chọn hoặc nhập số tiền mới vào {new_currency} bên dưới hoặc dừng đóng góp bằng cách nhấp vào nút Dừng."
+#, python-brace-format
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Bạn hiện đang quyên góp {0} mỗi tuần cho {1}. Bạn có thể chọn hoặc nhập một số tiền khác bên dưới hoặc dừng đóng góp bằng cách nhấp vào nút Dừng."
+#, python-brace-format
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, fuzzy
 msgid "Please select or input an amount:"
@@ -2367,9 +2384,9 @@ msgstr "Khám phá cộng đồng"
 msgid "The submitted settings are incoherent."
 msgstr "Các cài đặt đã gửi không mạch lạc."
 
-#, fuzzy, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Bạn hiện nhận được số tiền tương đương {money_amount} mỗi tuần từ các khoản đóng góp bằng ngoại tệ. Các khoản đóng góp này sẽ không được chuyển đổi sang đơn vị tiền tệ chính của bạn."
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2873,26 +2890,35 @@ msgstr "Khoản đóng góp bị dừng này vẫn được thanh toán trước
 msgid "Cancelled pledges"
 msgstr "Cam kết bị hủy"
 
-#, fuzzy, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "Bạn không đóng góp cho {username}."
-
 #, fuzzy
 msgid "Funding your donations"
 msgstr "Tài trợ cho các khoản đóng góp của bạn"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] "Do các giới hạn về pháp lý và kỹ thuật, chúng tôi hiện không thể xử lý tất cả các khoản đóng góp của bạn dưới dạng một khoản thanh toán duy nhất. Thay vào đó, bạn sẽ phải thanh toán riêng cho {n}. Chúng tôi xin lỗi vì sự bất tiện này."
 
-#, fuzzy
-msgid "We are able to group these donations into a single payment."
-msgstr "Chúng tôi có thể nhóm các khoản đóng góp này thành một khoản thanh toán duy nhất."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Các khoản đóng góp của bạn cho {recipients} đang chờ thanh toán."
+
+#, fuzzy
+msgid "We are able to group these donations into a single payment."
+msgstr "Chúng tôi có thể nhóm các khoản đóng góp này thành một khoản thanh toán duy nhất."
 
 #, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
@@ -3071,9 +3097,9 @@ msgstr "Bằng cách cung cấp IBAN của bạn và xác nhận khoản thanh t
 msgid "Remember the bank account number for future payments"
 msgstr "Nhớ số tài khoản ngân hàng để thanh toán sau này"
 
-#, fuzzy
-msgid "Please input your postal address:"
-msgstr "Vui lòng nhập địa chỉ bưu điện của bạn:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3985,6 +4011,10 @@ msgstr "Bằng cách cung cấp IBAN, bạn đang ủy quyền cho {platform} v�
 #, fuzzy
 msgid "Forget this bank account number after one payment."
 msgstr "Quên số tài khoản ngân hàng này sau một lần thanh toán."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."

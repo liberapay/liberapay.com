@@ -84,16 +84,16 @@ msgid "Your donation of {amount} per year to {username} needs to be renewed befo
 msgstr "Vuosittainen {amount} lahjoituksesi käyttäjälle {username} tulee uusia ennen {date}."
 
 #, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "Viikoittainen {amount} lahjoituksesi käyttäjälle {username} tulee uusia ennen {past_date}."
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "Kuukausittainen {amount} lahjoituksesi käyttäjälle {username} tulee uusia ennen {past_date}."
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "Vuosittainen {amount} lahjoituksesi käyttäjälle {username} tulee uusia ennen {past_date}."
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -406,8 +406,8 @@ msgstr "Olemme toimeenpanneet {money_amount} suoraveloituksen pankkitililtäsi (
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Tämä toimenpide perustuu {acceptance_date} allekirjoittamaasi {link_start}valtakirjaan {mandate_id}{link_end}, jossa valtuutit Liberapayn (SEPA-velkojatunnus {creditor_identifier}) lähettämään pankillesi toimeksiantoja tilisi veloittamisesta, sekä pankkisi veloittamaan tiliäsi näiden toimeksiantojen mukaan."
 
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Jos et ole antanut lupaa tähän maksuun, kerro meille ja hyvitämme sen."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -585,6 +585,16 @@ msgstr "{money_amount} lahjoituksen vastaanottajalle {recipient} {date} maksu on
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Nämä lahjoituksen uusimismaksut on peruttu, koska vastaanottajat eivät kykene vastaanottamaan niitä:"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Liberapay-lahjoituksen uusiminen: tunnistautuminen tarvitaan"
@@ -1786,8 +1796,12 @@ msgid "Leftover"
 msgstr "Jäännös"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Lahjoitat {money_amount} viikoittain käyttäjälle {name}, mutta tämä ei enää ota vastaan {currency}-määräisiä lahjoituksia. Voit syöttää alle uuden summan {new_currency}-valuutassa tai keskeyttää lahjoituksen."
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 msgid "Modify"
 msgstr "Muuta"
@@ -1796,12 +1810,16 @@ msgid "Discontinue"
 msgstr "Keskeytä"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Lahjoitat {money_amount} viikoittain käyttäjälle {name}, mutta tämä ei enää ota vastaan {currency}-määräisiä lahjoituksia. Voit valita tai syöttää alle uuden summan {new_currency}-valuutassa tai keskeyttää lahjoituksen klikkaamalla Stop-nappia."
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Tällä hetkellä lahjoitat {0} viikoittain kohteeseen {1}. Voit valita tai muuttaa määrää alla, tai pysäyttää lahjoituksen Pysäytä-napilla."
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 msgid "Please select or input an amount:"
 msgstr "Valitse tai syötä määrä:"
@@ -2035,8 +2053,8 @@ msgid "The submitted settings are incoherent."
 msgstr "Asetuksesi ovat epäjohdonmukaiset."
 
 #, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Tällä hetkellä vastaanotat {money_amount} arvosta lahjoituksia vieraissa valuutoissa viikoittain. Näitä lahjoituksia ei muunneta päävaluutallesi."
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Valuutta-asetuksesi jätetään tällä hetkellä huomiotta, koska ne eivät ole yhteensopivia käyttämäsi maksunkäsittelyjärjestelmän kanssa."
@@ -2444,12 +2462,18 @@ msgstr "Tälle pysäytetylle lahjoitukselle on yhä etukäteen maksettuna {money
 msgid "Cancelled pledges"
 msgstr "Perutut lupaukset"
 
-#, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "Et lahjoita käyttäjälle {username}."
-
 msgid "Funding your donations"
 msgstr "Lahjoitustesi rahoittaminen"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2457,12 +2481,16 @@ msgid_plural "Due to legal and technical limitations we are currently unable to 
 msgstr[0] "mörgö"
 msgstr[1] "Lakisyistä ja teknisistä rajoituksista johtuen emme voi ryhmittää kaikkia lahjoituksiasi yhteen maksuun. Joudut tekemään {n} erillistä maksua. Olemme pahoillamme."
 
-msgid "We are able to group these donations into a single payment."
-msgstr "Voimme ryhmittää nämä lahjoitukset yhdeksi maksuksi."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Lahjoituksesi (kohteet: {recipients}) odottavat maksua."
+
+msgid "We are able to group these donations into a single payment."
+msgstr "Voimme ryhmittää nämä lahjoitukset yhdeksi maksuksi."
 
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Tällä hetkellä tämä lahjoitus on mahdollista uusia vain ulkoisesti PayPalin kautta. Klikkaa seuraavaa nappia jatkaaksesi:"
@@ -2611,8 +2639,9 @@ msgstr "Syöttämällä IBAN-numerosi ja hyväksymällä maksun, valtuutat {plat
 msgid "Remember the bank account number for future payments"
 msgstr "Muista pankkitilinumero tulevia maksuja varten"
 
-msgid "Please input your postal address:"
-msgstr "Syötä postiosoitteesi:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3414,6 +3443,10 @@ msgstr "Syöttämällä IBAN-numerosi valtuutat {platform} ja maksunkäsittelij�
 
 msgid "Forget this bank account number after one payment."
 msgstr "Unohda tämä tilinumero yhden maksun jälkeen."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."

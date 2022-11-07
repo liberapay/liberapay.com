@@ -82,16 +82,16 @@ msgid "Your donation of {amount} per year to {username} needs to be renewed befo
 msgstr "A(z) {amount} összegű éves adománya {username} részére megújításra vár {date} előtt."
 
 #, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "A(z) {amount} összegű heti adománya {username} részére megújításra vár {past_date} előtt."
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "A(z) {amount} összegű heti adománya {username} részére megújításra vár {past_date} előtt."
+#, python-brace-format
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "A(z) {amount} összegű heti adománya {username} részére megújításra vár {past_date} előtt."
+#, python-brace-format
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -413,8 +413,8 @@ msgstr "Kezdeményeztünk egy {money_amount} összegű terhelést a bankszámlá
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Ez a művelet a(z) {link_start}{mandate_id} azonosítójú megbízás{link_end} alapján megy végbe, amelyet {acceptance_date} napján jóváhagyott, ezzel felhatalmazva a Liberapayt ({creditor_identifier} azonosítójú SEPA-hitelező) arra, hogy utasításokat küldjön a bankjának, hogy azoknak megfelelően terheljék meg a számláját."
 
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Amennyiben nem Ön kezdeményezte ezt a fizetést, kérjük tudassa velünk, vissza fogjuk téríteni."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -591,6 +591,16 @@ msgstr "A(z) {money_amount} összegű, {recipient} számára, {date} napra ütem
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "A következő megújuló adomány kifizetések megszakadtak, mivel a kedvezményezettek nem tudják azokat fogadni:"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 #, fuzzy
 msgid "Liberapay donation renewal: authentication required"
@@ -1814,8 +1824,12 @@ msgid "Leftover"
 msgstr "Maradék"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Ön jelenleg {money_amount}-val támogatja hetente {name}-t, viszont már nem fogadnak adományokat {currency}-ban. Alább megadhat egy új összeget {new_currency}-ban, vagy befejezheti az adományozást."
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 msgid "Modify"
 msgstr "Módosítás"
@@ -1825,12 +1839,16 @@ msgid "Discontinue"
 msgstr "Leállítás"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Ön jelenleg {money_amount}-val támogatja hetente {name}-t, viszont már nem fogadnak adományokat {currency}-ban. Alább választhat vagy megadhat egy új összeget {new_currency}-ban, vagy befejezheti az adományozást, ha rákattint a Leállítás gombra."
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Ön jelenleg {0}-val támogatja hetente {1}-t. Alább választhat vagy megadhat egy új összeget, vagy befejezheti az adományozást, ha rákattint a Leállítás gombra."
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 msgid "Please select or input an amount:"
 msgstr "Kérjük válasszon vagy adjon meg egy összeget:"
@@ -2073,8 +2091,8 @@ msgid "The submitted settings are incoherent."
 msgstr "A beküldött beállítások önellentmondásosak."
 
 #, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Ön jelenleg {money_amount}-val megegyező összeget fogad hetente más pénznemekben. Ezek az adományok nem lesznek átváltva az Ön fő pénznemére."
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2498,25 +2516,34 @@ msgstr "Ez a leállított adomány még mindig a {money_amount} előre kifizetet
 msgid "Cancelled pledges"
 msgstr "Visszamondott ígéretek"
 
-#, fuzzy, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "Ön nem adományoz a {username} címre."
-
 #, fuzzy
 msgid "Funding your donations"
 msgstr "Adományok finanszírozása"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] "Jogi és technikai korlátozások miatt jelenleg nem áll módunkban az összes adományt egy összegben feldolgozni. Ehelyett a {n} oldalon kell külön-külön befizetnie. Elnézést kérünk a kellemetlenségekért."
 
-msgid "We are able to group these donations into a single payment."
-msgstr "Ezeket a támogatásokat egyetlen kifizetésbe tudjuk csoportosítani."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Az Ön {recipients} részeire küldött támogatásai kifizetésre várnak."
+
+msgid "We are able to group these donations into a single payment."
+msgstr "Ezeket a támogatásokat egyetlen kifizetésbe tudjuk csoportosítani."
 
 #, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
@@ -2679,9 +2706,9 @@ msgstr "Az IBAN megadásával és a fizetés megerősítésével Ön felhatalmaz
 msgid "Remember the bank account number for future payments"
 msgstr "Ne feledje a bankszámlaszámot a jövőbeli kifizetésekhez"
 
-#, fuzzy
-msgid "Please input your postal address:"
-msgstr "Kérjük, adja meg postacímét:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3520,6 +3547,10 @@ msgstr "Az IBAN megadásával Ön felhatalmazza a {platform} és a {provider}, a
 #, fuzzy
 msgid "Forget this bank account number after one payment."
 msgstr "Felejtse el ezt a bankszámlaszámot egy fizetés után."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."

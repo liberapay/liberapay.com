@@ -87,16 +87,16 @@ msgid "Your donation of {amount} per year to {username} needs to be renewed befo
 msgstr "Din betaling av {amount} per år til {username} må fornyes før {date}."
 
 #, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "Din donasjon på {amount} per uke til {username} må fornyes før {past_date}."
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "Din donasjon på {amount} per måned til {username} må fornyes før {past_date}."
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "Din donasjon på {amount} per år til {username} må fornyes før {past_date}."
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -410,8 +410,8 @@ msgstr "En direkte debetbetaling på {money_amount} fra din bankkonto ({partial_
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Operasjonen blir utført basert på {link_start}mandatet{mandate_id}{link_end} du signerte {acceptance_date}, noe som lar Liberapay (SEPA-kreditor {creditor_identifier}) å sende instruks til din bank om debitering av din konto og din bank om å debitere din konto i henhold til disse instruksjonene."
 
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Hvis du ikke vedkjenner deg denne betalingen, la det komme oss til kjenne, slik at den kan refunderes."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -589,6 +589,16 @@ msgstr "Fornyelse av donasjonsgjentagelse på {money_amount} til {recipient} lag
 
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Følgende fornyelser av donasjonsbetalinger har blitt avbrutt fordi mottagerne ikke kunne motta dem."
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Fornyelse av Liberpay-donasjon: identitetsbekreftelse kreves"
@@ -1799,8 +1809,12 @@ msgid "Leftover"
 msgstr "Til overs"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Du donerer for øyeblikket {money_amount} per uke til {name}, men de aksepterer ikke lenger donasjoner i {currency}. Du kan taste inn et nytt beløp i {new_currency} nedenfor, eller stoppe donasjonen."
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 msgid "Modify"
 msgstr "Endre"
@@ -1810,12 +1824,16 @@ msgid "Discontinue"
 msgstr "Stopp"
 
 #, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Du donerer for øyeblikket {money_amount} per uke til {name}, men de aksepterer ikke lenger donasjoner i {currency}. Du kan taste inn et nytt beløp i {new_currency} nedenfor, eller trykke på \"Stopp\"-knappen."
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Du donerer for tiden {0} per uke til {1}. Du kan velge å skrive inn et annet beløp nedenfor, eller stoppe donasjonen ved å trykke på \"Stopp\"-knappen."
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 msgid "Please select or input an amount:"
 msgstr "Velg eller skriv inn et beløp:"
@@ -2051,8 +2069,8 @@ msgid "The submitted settings are incoherent."
 msgstr "Innsendte innstillinger går ikke overens."
 
 #, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Du mottar i øyeblikket motsvarende {money_amount} per ike fra bidragsytere i utenlandsk valuta. Disse donasjonene vil bli konvertert til din hovedvaluta."
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2467,12 +2485,18 @@ msgstr "Den stoppede donasjonen har fremdeles {money_amount} betalt på forskudd
 msgid "Cancelled pledges"
 msgstr "Avbrutte donasjonstilbud"
 
-#, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "Du donerer ikke til {username}."
-
 msgid "Funding your donations"
 msgstr "Finansiering av dine donasjoner"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2480,12 +2504,16 @@ msgid_plural "Due to legal and technical limitations we are currently unable to 
 msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgstr[1] "Som følge av tekniske begrensninger kan din betaling kun behandles som en enkeltbetaling. Isteden vil du måtte gjøre {n} egne betalinger."
 
-msgid "We are able to group these donations into a single payment."
-msgstr "Disse donasjonene kan slås sammen til en enkeltbetaling."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Dine donasjoner til {recipients} er i påvente av betaling."
+
+msgid "We are able to group these donations into a single payment."
+msgstr "Disse donasjonene kan slås sammen til en enkeltbetaling."
 
 #, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
@@ -2635,8 +2663,9 @@ msgstr "Ved å oppgi din IBAN, og bekrefte denne betalinger, godkjenner du {plat
 msgid "Remember the bank account number for future payments"
 msgstr "Husk bankkontonummeret for fremtidige betalinger"
 
-msgid "Please input your postal address:"
-msgstr "Skriv inn din postadresse:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3447,6 +3476,10 @@ msgstr "Ved å oppgi ditt IBAN-nummer, godkjenner du {platform} og {provider}, v
 
 msgid "Forget this bank account number after one payment."
 msgstr "Glem dette bankkontonummeret etter én betaling."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."

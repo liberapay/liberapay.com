@@ -89,17 +89,17 @@ msgstr "Jūsu ziedojums {amount} mēnesī {username} ir jāatjauno līdz {date}.
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "Jūsu ziedojums {amount} gadā {username} ir jāatjauno līdz {date}."
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per week to {username} needed to be renewed before {past_date}."
-msgstr "Jūsu ziedojums {amount} nedēļā {username} bija jāatjauno pirms {past_date}."
+#, python-brace-format
+msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per month to {username} needed to be renewed before {past_date}."
-msgstr "Jūsu ziedojums {amount} mēnesī {username} bija jāatjauno pirms {past_date}."
+#, python-brace-format
+msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "Your donation of {amount} per year to {username} needed to be renewed before {past_date}."
-msgstr "Jūsu ziedojums {amount} gadā {username} bija jāatjauno pirms {past_date}."
+#, python-brace-format
+msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -456,9 +456,8 @@ msgstr "Mēs esam uzsākuši {money_amount} tiešā debeta maksājumu no jūsu b
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Šī operācija tiek veikta, pamatojoties uz {link_start}pilnvarojumu {mandate_id}{link_end}, ko Jūs parakstījāt {acceptance_date}, pilnvarojot Liberapay (SEPA kreditoru {creditor_identifier}) nosūtīt norādījumus Jūsu bankai debetēt Jūsu kontu un Jūsu bankai debetēt Jūsu kontu saskaņā ar šiem norādījumiem."
 
-#, fuzzy
-msgid "If you did not authorize this payment, please let us know, we will refund it."
-msgstr "Ja neesat autorizējis šo maksājumu, lūdzu, paziņojiet mums par to, un mēs to atmaksāsim."
+msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -653,6 +652,16 @@ msgstr "Ziedojuma atjaunošanas maksājums {money_amount} uz {recipient}, kas bi
 #, fuzzy
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Turpmāk norādītie ziedojumu atjaunošanas maksājumi ir pārtraukti, jo saņēmēji nevar tos saņemt:"
+
+msgid "Liberapay donation renewal: manual action required"
+msgstr ""
+
+#, python-brace-format
+msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
+msgstr ""
+
+msgid "The following donation renewal payments require manual action:"
+msgstr ""
 
 #, fuzzy
 msgid "Liberapay donation renewal: authentication required"
@@ -2123,9 +2132,13 @@ msgstr "Neizmantotie ienākumi tiks izlietoti nākamajās nedēļās, tie neuzkr
 msgid "Leftover"
 msgstr "Pārpalikumi"
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can input a new amount in {new_currency} below, or stop the donation."
-msgstr "Pašlaik jūs ziedojat {money_amount} nedēļā {name}, bet viņi vairs nepieņem ziedojumus {currency}. Turpmāk varat ievadīt jaunu summu {new_currency} vai pārtraukt ziedojumu."
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
+msgstr ""
+
+#, python-brace-format
+msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
+msgstr ""
 
 #, fuzzy
 msgid "Modify"
@@ -2135,13 +2148,17 @@ msgstr "Modify"
 msgid "Discontinue"
 msgstr "Pārtraukt"
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {money_amount} per week to {name}, but they no longer accept donations in {currency}. You can select or input a new amount in {new_currency} below, or stop the donation by clicking on the Stop button."
-msgstr "Pašlaik jūs ziedojat {money_amount} nedēļā {name}, bet viņi vairs nepieņem ziedojumus {currency}. Turpmāk varat izvēlēties vai ievadīt jaunu summu {new_currency} vai apturēt ziedojumu, noklikšķinot uz pogas Pārtraukt."
+#, python-brace-format
+msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You are currently donating {0} per week to {1}. You can select or input a different amount below, or stop the donation by clicking on the Stop button."
-msgstr "Pašlaik jūs ziedojat {0} nedēļā portālam {1}. Zemāk varat izvēlēties vai ievadīt citu summu, vai arī pārtraukt ziedojumu, noklikšķinot uz pogas \"Pārtraukt\"."
+#, python-brace-format
+msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
+
+#, python-brace-format
+msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
+msgstr ""
 
 #, fuzzy
 msgid "Please select or input an amount:"
@@ -2420,9 +2437,9 @@ msgstr "Izpētīt kopienas"
 msgid "The submitted settings are incoherent."
 msgstr "Iesniegtie iestatījumi ir nesaskaņoti."
 
-#, fuzzy, python-brace-format
-msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
-msgstr "Pašlaik no ziedojumiem ārvalstu valūtās jūs saņemat summu, kas līdzvērtīga {money_amount} nedēļā. Šie ziedojumi netiks konvertēti jūsu pamatvalūtā."
+#, python-brace-format
+msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
+msgstr ""
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2934,13 +2951,20 @@ msgstr "Šis apturētais ziedojums joprojām ir {money_amount} samaksāts avans�
 msgid "Cancelled pledges"
 msgstr "Atceltie solījumi"
 
-#, fuzzy, python-brace-format
-msgid "You are not donating to {username}."
-msgstr "Jūs ziedojumu nesaņemat portālam {username}."
-
 #, fuzzy
 msgid "Funding your donations"
 msgstr "Jūsu ziedojumu finansēšana"
+
+#, python-brace-format
+msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
+msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Modify your donation to {username}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2949,13 +2973,17 @@ msgstr[0] "Juridisku un tehnisku ierobežojumu dēļ mēs pašlaik nevaram apstr
 msgstr[1] ""
 msgstr[2] ""
 
-#, fuzzy
-msgid "We are able to group these donations into a single payment."
-msgstr "Šos ziedojumus mēs varam grupēt vienā maksājumā."
+#, python-brace-format
+msgid "Send money to {recipients}"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Jūsu ziedojumi {recipients} gaida maksājumu."
+
+#, fuzzy
+msgid "We are able to group these donations into a single payment."
+msgstr "Šos ziedojumus mēs varam grupēt vienā maksājumā."
 
 #, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
@@ -3136,9 +3164,9 @@ msgstr "Norādot savu IBAN un apstiprinot šo maksājumu, jūs pilnvarojat {plat
 msgid "Remember the bank account number for future payments"
 msgstr "Bankas konta numura saglabāšana turpmāko maksājumu veikšanai"
 
-#, fuzzy
-msgid "Please input your postal address:"
-msgstr "Lūdzu, ievadiet savu pasta adresi:"
+#, python-brace-format
+msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -4072,6 +4100,10 @@ msgstr "Norādot savu IBAN, jūs pilnvarojat {platform} un {provider}, mūsu mak
 #, fuzzy
 msgid "Forget this bank account number after one payment."
 msgstr "Aizmirstiet šo bankas konta numuru pēc viena maksājuma."
+
+#, python-brace-format
+msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."
