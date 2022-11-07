@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-10-17 02:09+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-10-18 11:05+0000\n"
+"Last-Translator: Joel Yliluoma <bisqwit@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -11,11 +11,11 @@ msgstr ""
 "X-Generator: Weblate 4.15-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
 msgstr "Tämän sivun käännös englannista ei ole vielä valmis. {link_start}Voit osallistua{link_end}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
 msgstr "Tämä sivu sisältää konekäännettyä tekstiä, jota ei ole vielä tarkistettu ja joka saattaa olla epätarkkaa. {link_start}Voit osallistua{link_end}."
 
@@ -913,7 +913,7 @@ msgstr "Yrityksemme ottaa yhteyttä {domain_name}-domainia käsittelevään säh
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "Sähköpostidomainia ’{domain_name}’ ei hyväksytä."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
 msgstr "Sähköpostiosoitetta {email_address} ei näytä olevan olemassa. IP-osoitteessa {ip_address} sijaitseva {domain} -sähköpostipalvelin hylkäsi sen virheilmoituksella \"{error_message}\"."
 
@@ -1327,11 +1327,11 @@ msgstr "Lakiasiat"
 msgid "Switch to another language"
 msgstr "Vaihda käyttökieltä"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "({x_percent} not yet translated)"
-msgstr "({x_percent} ei vielä käännetty)"
+msgstr "({x_percent} yhä kääntämättä)"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "({x_percent} machine translated)"
 msgstr "({x_percent} koneellisesti käännetty)"
 
@@ -1456,11 +1456,9 @@ msgstr "{bold}Jos olet hukannut salasanasi{bold_end} tai jos tililläsi ei ole s
 msgid "Save"
 msgstr "Tallenna"
 
-#, fuzzy
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
 msgstr "Jos sinun on vaihdettava Liberapay-tilisi salasana, voit tehdä sen alla. Turvallisuuden vuoksi tilisi salasanan tulisi olla satunnaisesti luotu eikä sitä saisi käyttää missään muualla. Suosittelemme vahvasti salasananhallintaohjelman käyttöä."
 
-#, fuzzy
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
 msgstr "Salasanan asettaminen antaa sinulle mahdollisuuden kirjautua sisään suoraan sen sijaan, että odottaisit sähköpostitse lähetettyä kertakäyttöistä linkkiä. Suosittelemme kuitenkin pitämään tilisi salasanattomana, jos et käytä salasanahallintaa, sillä ollakseen turvallinen tilisi salasanan tulisi olla satunnaisesti luotu eikä sitä saisi käyttää missään muualla."
 
@@ -1470,21 +1468,18 @@ msgstr "Tämänhetkinen salasana"
 msgid "New password"
 msgstr "Uusi salasana"
 
-#, fuzzy
 msgid "Unset password"
-msgstr "Unset salasana"
+msgstr "Poista salasana käytöstä"
 
 #, python-brace-format
 msgid "Maximum length is {0}."
 msgstr "Maksimipituus on {0}."
 
-#, fuzzy
 msgid "2FA"
-msgstr "2FA"
+msgstr "Kaksivaiheinen tunnistautuminen"
 
-#, fuzzy
 msgid "Liberapay does not yet support two-factor authentication."
-msgstr "Liberapay ei vielä tue kahden tekijän todennusta."
+msgstr "Liberapay ei vielä tue kaksivaiheista tunnistautumista."
 
 msgid "Avatar"
 msgstr "Avatar"
@@ -2045,9 +2040,8 @@ msgstr "Asetuksesi ovat epäjohdonmukaiset."
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "Tällä hetkellä vastaanotat {money_amount} arvosta lahjoituksia vieraissa valuutoissa viikoittain. Näitä lahjoituksia ei muunneta päävaluutallesi."
 
-#, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
-msgstr "Valuutta-asetukset jätetään tällä hetkellä huomiotta, koska ne eivät ole yhteensopivia käyttämäsi maksuprosessorin kanssa."
+msgstr "Valuutta-asetuksesi jätetään tällä hetkellä huomiotta, koska ne eivät ole yhteensopivia käyttämäsi maksunkäsittelyjärjestelmän kanssa."
 
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Mitä valuuttoja sinulle saa lahjoittaa, ja mitä otat mieluiten vastaan?"
@@ -2253,7 +2247,6 @@ msgstr "Tämä sähköpostiosoite on jo varmistettu."
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Tämä sähköpostiosoite on jo liitetty muuhun Liberapay-tiliin."
 
-#, fuzzy
 msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Sähköpostiosoitteesi vahvistaminen on epäonnistunut. Tarkista, että klikkaamasi tai kopioimasi linkki ei ole lyhentynyt tai muuttunut millään tavalla."
 
@@ -3514,7 +3507,6 @@ msgstr "Oletko valmis?"
 msgid "Yes, close my Liberapay account"
 msgstr "Kyllä, sulje Liberapay-tilini"
 
-#, fuzzy
 msgid "Your account is now passwordless."
 msgstr "Tilisi on nyt salasanaton."
 
@@ -3883,17 +3875,15 @@ msgstr "Käytettävissä olevat maksumenetelmät riippuvat siitä, mitä maksunk
 msgid "What are the payment processing fees?"
 msgstr "Mitkä ovat rahankäsittelykulut?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
-msgstr "Maksut vaihtelevat maksuprosessorin, maksutavan, maan ja valuutan mukaan. Viime vuonna keskimääräiset maksuprosentit ovat olleet {average_fee_stripe} Stripen käsittelemien maksujen osalta ja {average_fee_paypal} PayPalin käsittelemien maksujen osalta."
+msgstr "Kulut vaihtelevat maksuprosessorin, maksutavan, maan ja valuutan mukaan. Viime vuonna keskimääräiset kuluprosentit ovat olleet {average_fee_stripe} Stripen käsittelemien maksujen osalta ja {average_fee_paypal} PayPalin käsittelemien maksujen osalta."
 
-#, fuzzy
 msgid "Why do I see partial refunds in the Stripe dashboard?"
-msgstr "Miksi näen osittaisia palautuksia Stripen kojelaudalla?"
+msgstr "Miksi Stripen hallintapaneelissa näkyy osittaisia maksunpalautuksia?"
 
-#, fuzzy
 msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
-msgstr "Osittaisten palautusten avulla saamme takaisin Stripen maksun yhden vastaanottajan maksuista. Nämä palautukset tehdään Stripe-tililtäsi Liberapayn tilille, ei lahjoittajalle."
+msgstr "Osittaisten palautusten avulla saamme takaisin Stripen kulut yhden vastaanottajan maksuista. Nämä palautukset tehdään Stripe-tililtäsi Liberapayn tilille, ei lahjoittajalle."
 
 msgid "How are chargebacks handled?"
 msgstr "Miten takaisinperinnät käsitellään?"
@@ -4139,9 +4129,9 @@ msgstr "Toinen tarkoitus on auttaa tukijoita löytämään Liberapay-tilit, jotk
 msgid "Payment processors"
 msgstr "Maksunkäsittelijät"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr "Liberapay luottaa maksupalveluntarjoajiin, jotka todella siirtävät rahaa lahjoittajilta luojille, sillä meillä ei ole resursseja eikä halua toimia suoraan pankkien ja maksupalveluverkostojen kanssa. Jos haluat lisätietoja näiden maksupalveluntarjoajien keräämistä henkilötiedoista, lue nämä asiakirjat: {links_to_policies}."
+msgstr "Rahan siirtäminen lahjoittajilta sisällöntuottajille tapahtuu Liberapay-palvelussa tosiasiallisesti maksupalveluntarjoajien kautta, sillä meillä itsellämme ei ole resursseja eikä halua toimia suoraan pankkien ja maksupalveluverkostojen kanssa. Jos haluat lisätietoja näiden maksupalveluntarjoajien keräämistä henkilötiedoista, lue nämä asiakirjat: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
