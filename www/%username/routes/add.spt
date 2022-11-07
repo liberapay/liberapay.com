@@ -136,9 +136,15 @@ title = _("Add a payment instrument")
             </label>
         </fieldset>
         % endif
-        <p>{{ _("Please input your postal address:") }}</p>
+        <p>{{ _(
+            "As the payer's postal address is sometimes required to successfully "
+            "process a payment, we recommend that you input yours below. It will "
+            "be stored encrypted in our database and sent to the payment processor "
+            "({processor_name}).",
+            processor_name='Stripe',
+        ) }}</p>
         <div class="block-labels max-width-500">{{
-            postal_address_form_v2(saved=identity.get('postal_address'))
+            postal_address_form_v2(saved=identity.get('postal_address'), required=False)
         }}</div>
         <br>
         <button class="btn btn-primary btn-lg">{{ _("Save") }}</button>

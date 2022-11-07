@@ -795,4 +795,80 @@ interactions:
       request-id: [req_MBzvebyC5COQZa]
       stripe-version: ['2019-08-14']
     status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/payment_methods/pm_card_visa
+  response:
+    body: {string: "{\n  \"id\": \"pm_1M03gHFk4eGpfLOCyOmvotCB\",\n  \"object\": \"\
+        payment_method\",\n  \"billing_details\": {\n    \"address\": {\n      \"\
+        city\": null,\n      \"country\": null,\n      \"line1\": null,\n      \"\
+        line2\": null,\n      \"postal_code\": null,\n      \"state\": null\n    },\n\
+        \    \"email\": null,\n    \"name\": null,\n    \"phone\": null\n  },\n  \"\
+        card\": {\n    \"brand\": \"visa\",\n    \"checks\": {\n      \"address_line1_check\"\
+        : null,\n      \"address_postal_code_check\": null,\n      \"cvc_check\":\
+        \ null\n    },\n    \"country\": \"US\",\n    \"exp_month\": 11,\n    \"exp_year\"\
+        : 2023,\n    \"fingerprint\": \"k6ycurEAdsI1uF3b\",\n    \"funding\": \"credit\"\
+        ,\n    \"generated_from\": null,\n    \"last4\": \"4242\",\n    \"networks\"\
+        : {\n      \"available\": [\n        \"visa\"\n      ],\n      \"preferred\"\
+        : null\n    },\n    \"three_d_secure_usage\": {\n      \"supported\": true\n\
+        \    },\n    \"wallet\": null\n  },\n  \"created\": 1667482925,\n  \"customer\"\
+        : null,\n  \"livemode\": false,\n  \"metadata\": {},\n  \"type\": \"card\"\
+        \n}"}
+    headers:
+      Connection: [keep-alive]
+      Content-Length: ['924']
+      Content-Type: [application/json]
+      Date: ['Thu, 03 Nov 2022 13:42:05 GMT']
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
+      access-control-allow-credentials: ['true']
+      access-control-allow-methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      access-control-max-age: ['300']
+      cache-control: ['no-cache, no-store']
+      request-id: [req_d8PircADK50yBY]
+      stripe-version: ['2019-08-14']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/payment_methods/pm_card_visa
+  response:
+    body: {string: "{\n  \"id\": \"pm_1M06OVFk4eGpfLOCzxU6jC1D\",\n  \"object\": \"\
+        payment_method\",\n  \"billing_details\": {\n    \"address\": {\n      \"\
+        city\": null,\n      \"country\": null,\n      \"line1\": null,\n      \"\
+        line2\": null,\n      \"postal_code\": null,\n      \"state\": null\n    },\n\
+        \    \"email\": null,\n    \"name\": null,\n    \"phone\": null\n  },\n  \"\
+        card\": {\n    \"brand\": \"visa\",\n    \"checks\": {\n      \"address_line1_check\"\
+        : null,\n      \"address_postal_code_check\": null,\n      \"cvc_check\":\
+        \ null\n    },\n    \"country\": \"US\",\n    \"exp_month\": 11,\n    \"exp_year\"\
+        : 2023,\n    \"fingerprint\": \"k6ycurEAdsI1uF3b\",\n    \"funding\": \"credit\"\
+        ,\n    \"generated_from\": null,\n    \"last4\": \"4242\",\n    \"networks\"\
+        : {\n      \"available\": [\n        \"visa\"\n      ],\n      \"preferred\"\
+        : null\n    },\n    \"three_d_secure_usage\": {\n      \"supported\": true\n\
+        \    },\n    \"wallet\": null\n  },\n  \"created\": 1667493355,\n  \"customer\"\
+        : null,\n  \"livemode\": false,\n  \"metadata\": {},\n  \"type\": \"card\"\
+        \n}"}
+    headers:
+      Connection: [keep-alive]
+      Content-Length: ['924']
+      Content-Type: [application/json]
+      Date: ['Thu, 03 Nov 2022 16:35:55 GMT']
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
+      access-control-allow-credentials: ['true']
+      access-control-allow-methods: ['GET, POST, HEAD, OPTIONS, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-expose-headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
+          X-Stripe-Privileged-Session-Required']
+      access-control-max-age: ['300']
+      cache-control: ['no-cache, no-store']
+      request-id: [req_6qB0HEg2Gf2iY5]
+      stripe-version: ['2019-08-14']
+    status: {code: 200, message: OK}
 version: 1

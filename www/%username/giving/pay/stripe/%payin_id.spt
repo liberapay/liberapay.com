@@ -222,9 +222,14 @@ if tippees:
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
     payment = PayinProspect(payer, tips, 'stripe')
-    postal_address_is_required = (
+    for tip in tips:
+        if payment.currency not in tip.tippee_p.accepted_currencies_set:
+            raise response.redirect(payer.path(
+                'giving/pay?redirect_reason=unaccepted_currency'
+            ))
+    ask_for_postal_address = (
         payment_type == 'sdd' or
-        # Note: this isn't really accurate, but it's good enough for now.
+        len(tips) == 1 and
         website.db.one("""
             SELECT true
               FROM payment_accounts a
@@ -356,16 +361,16 @@ title = _("Funding your donations")
 
     <form action="javascript:" method="POST" id="stripe"
           data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
-        % if len(payment.recipient_links) == 1
+        % if len(payment.recipient_names) == 1
             <p>{{ _(
                 "Your donation of {amount} to {recipient} is awaiting payment.",
                 amount=payment.tips[0].periodic_amount,
-                recipient=payment.recipient_links[0]
+                recipient=payment.recipient_names[0]
             ) }}</p>
         % else
             <p>{{ _(
                 "Your donations to {recipients} are awaiting payment.",
-                recipients=payment.recipient_links
+                recipients=payment.recipient_names
             ) }}</p>
         % endif
         % if payment.one_periods_worth < payment.min_acceptable_amount
@@ -544,10 +549,15 @@ title = _("Funding your donations")
         </fieldset>
         % endif
 
-        % if postal_address_is_required
-        <p>{{ _("Please input your postal address:") }}</p>
+        % if ask_for_postal_address
+        <p>{{ _(
+            "In order to reduce the risk of this payment being rejected, we recommend "
+            "that you input your postal address below. It will be stored encrypted "
+            "in our database and sent to the payment processor ({processor_name}).",
+            processor_name='Stripe',
+        ) }}</p>
         <div class="block-labels max-width-500">{{
-            postal_address_form_v2(saved=identity.get('postal_address'))
+            postal_address_form_v2(saved=identity.get('postal_address'), required=False)
         }}</div>
         <br>
         % endif

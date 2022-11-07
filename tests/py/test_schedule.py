@@ -1135,6 +1135,101 @@ class TestScheduledPayins(EmailHarness):
         assert r.code == 200
         assert r.headers[b'Refresh'].startswith(b'0;url=https://hooks.stripe.com/')
 
+    def test_scheduled_automatic_payin_currency_unaccepted_before_reminder(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('1.00'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('52.00'))
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('52.00')
+
+        r = self.client.PxST('/bob/edit/currencies', {
+            'accepted_currencies:GBP': 'yes',
+            'main_currency': 'GBP',
+            'confirmed': 'true',
+        }, auth_as=bob)
+        assert r.code == 302, r.text
+        emails = self.get_emails()
+        assert len(emails) == 0
+
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET execution_date = (current_date + interval '7 days')
+                 , ctime = (ctime - interval '12 hours')
+        """)
+        send_upcoming_debit_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 0, emails[0]['subject']
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET execution_date = current_date
+                 , last_notif_ts = (last_notif_ts - interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
+        """)
+        execute_scheduled_payins()
+        emails = self.get_emails()
+        assert len(emails) == 0
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == "It's time to renew your donation to bob on Liberapay"
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].notifs_count == 1
+
+    def test_scheduled_automatic_payin_currency_unaccepted_after_reminder(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob')
+        alice.set_tip_to(bob, EUR('5.60'), renewal_mode=2)
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('56.00'))
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].amount == EUR('56.00')
+
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET execution_date = (current_date + interval '7 days')
+                 , ctime = (ctime - interval '12 hours')
+        """)
+        send_upcoming_debit_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == 'Liberapay donation renewal: upcoming debit of €56.00'
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].notifs_count == 1
+
+        send_donation_reminder_notifications()
+        emails = self.get_emails()
+        assert len(emails) == 0
+
+        r = self.client.PxST('/bob/edit/currencies', {
+            'accepted_currencies:USD': 'yes',
+            'main_currency': 'USD',
+            'confirmed': 'true',
+        }, auth_as=bob)
+        assert r.code == 302, r.text
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET execution_date = current_date
+                 , last_notif_ts = (last_notif_ts - interval '14 days')
+                 , ctime = (ctime - interval '12 hours')
+        """)
+        execute_scheduled_payins()
+        emails = self.get_emails()
+        assert len(emails) == 1
+        assert emails[0]['to'] == ['alice <alice@liberapay.com>']
+        assert emails[0]['subject'] == 'Liberapay donation renewal: manual action required'
+        scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
+        assert len(scheduled_payins) == 1
+        assert scheduled_payins[0].payin is None
+        assert scheduled_payins[0].notifs_count == 2
+
     def test_cancelling_a_scheduled_payin(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')

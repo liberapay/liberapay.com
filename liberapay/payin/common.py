@@ -10,8 +10,8 @@ from psycopg2.extras import execute_batch
 
 from ..constants import SEPA
 from ..exceptions import (
-    AccountSuspended, MissingPaymentAccount, RecipientAccountSuspended,
-    NoSelfTipping, UserDoesntAcceptTips,
+    AccountSuspended, BadDonationCurrency, MissingPaymentAccount,
+    RecipientAccountSuspended, NoSelfTipping, UserDoesntAcceptTips,
 )
 from ..i18n.currencies import Money, MoneyBasket
 from ..utils import group_by
@@ -295,6 +295,8 @@ def resolve_tip(
         raise UserDoesntAcceptTips(tippee.username)
     if tippee.is_suspended:
         raise RecipientAccountSuspended(tippee)
+    if payment_amount.currency not in tippee.accepted_currencies_set:
+        raise BadDonationCurrency(tippee, payment_amount.currency)
 
     if tippee.kind == 'group':
         return resolve_team_donation(

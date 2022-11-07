@@ -29,7 +29,9 @@ if request.method == 'POST':
             total = Money.sum((t.amount.convert(new_currency) for t in foreign_donations), new_currency)
             msg = _(
                 "You currently receive the equivalent of {money_amount} per week from donations in "
-                "foreign currencies. These donations will not be converted to your main currency.",
+                "currencies that you are about to reject. These donations will not be immediately "
+                "converted to your main currency, instead each donor will be asked to switch to an "
+                "accepted currency the next time they renew or modify their donation.",
                 money_amount=total
             )
             raise response.render('simplates/confirm.spt', state, cls='info', msg=msg, back_to=back_to)

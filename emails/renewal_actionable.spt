@@ -1,0 +1,29 @@
+{{ _("Liberapay donation renewal: manual action required") }}
+
+[---] text/html
+% if len(transfers) == 1
+    % set tr = transfers[0]
+    <p>{{ _(
+        "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action.",
+        money_amount=tr.amount, recipient=tr.tippee_username, date=tr.execution_date,
+    ) }}</p>
+% else
+    <p>{{ _("The following donation renewal payments require manual action:") }}</p>
+    <ul>
+    % for tr in transfers
+        <li>{{ _(
+            "{date}: {money_amount} to {recipient}",
+            date=tr.execution_date, money_amount=tr.amount, recipient=tr.tippee_username
+        ) }}</li>
+    % endfor
+    </ul>
+% endif
+
+<p><a href="{{ participant.url('giving/pay') }}" style="{{ button_style('primary') }}">{{
+    ngettext("Renew this donation", "Renew these donations", len(transfers)) }}</a></p>
+
+<p>{{ _(
+    "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}.",
+    link_start='<a href="%s">'|safe % participant.url('giving/'),
+    link_end='</a>'|safe
+) }}</p>

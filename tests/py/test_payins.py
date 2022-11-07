@@ -154,7 +154,7 @@ class TestResolveTeamDonation(Harness):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
         carl = self.make_participant('carl')
-        team = self.make_participant('team', kind='group')
+        team = self.make_participant('team', kind='group', accepted_currencies=None)
         alice.set_tip_to(team, EUR('1.00'))
 
         # Test without payment account

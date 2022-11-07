@@ -450,11 +450,12 @@ class UserDoesntAcceptTips(LazyResponseXXX):
 
 class BadDonationCurrency(LazyResponseXXX):
     code = 403
-    def msg(self, _):
+    def msg(self, _, locale):
         tippee, rejected_currency = self.args
         return _(
             "{username} doesn't accept donations in {rejected_currency}.",
-            username=tippee.username, rejected_currency=rejected_currency,
+            username=tippee.username,
+            rejected_currency=locale.Currency(rejected_currency),
         )
 
 

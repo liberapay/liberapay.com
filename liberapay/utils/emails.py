@@ -40,7 +40,6 @@ jinja_env = Environment(**JINJA_ENV_COMMON)
 jinja_env_html = Environment(**dict(
     JINJA_ENV_COMMON,
     autoescape=True,
-    extensions=JINJA_ENV_COMMON['extensions'] + ['jinja2.ext.autoescape'],
 ))
 
 def compile_email_spt(fpath):

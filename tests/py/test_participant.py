@@ -384,6 +384,21 @@ class Tests(Harness):
         assert len(groups['fundable']) == 2
         assert len(groups['fundable'][0]) == 3
 
+        r = self.client.PxST(
+            "/bob/edit/currencies", {
+                "accepted_currencies:USD": "yes",
+                "main_currency": "USD",
+            }, auth_as=bob,
+        )
+        assert r.code == 302, r.text
+
+        # 6th check: one of the recipients no longer accepts the donation currency
+        groups, n_fundable = alice.get_tips_awaiting_payment()
+        assert n_fundable == 4
+        assert len(groups['currency_conflict']) == 1
+        assert len(groups['fundable']) == 2
+        assert len(groups['fundable'][0]) == 2
+
     # giving, npatrons and receiving
 
     def test_only_funded_tips_count(self):

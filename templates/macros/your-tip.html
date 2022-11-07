@@ -19,15 +19,22 @@
         <input type="hidden" name="back_to" value="{{ request.line.uri.decoded }}" />
         % if currency_mismatch
             <p class="text-warning small">{{ _(
-                "You are currently donating {money_amount} per week to {name}, "
-                "but they no longer accept donations in {currency}. You can "
-                "input a new amount in {new_currency} below, or stop the "
-                "donation."
-                , money_amount=tip.amount, name=tippee_name
-                , currency=Currency(tip_currency), new_currency=Currency(new_currency)
+                "Your current donation to {name} is in {currency}, but they now only "
+                "accept donations in {accepted_currency}. You can convert your donation "
+                "to that currency, or discontinue it."
+                , name=tippee_name
+                , currency=Currency(tip_currency)
+                , accepted_currency=Currency(new_currency)
+            ) if len(accepted_currencies) == 1 else _(
+                "Your current donation to {name} is in {currency}, but they no longer "
+                "accept that currency. The suggested new currency is the {accepted_currency}, "
+                "but you can choose another one."
+                , name=tippee_name
+                , currency=Currency(tip_currency)
+                , accepted_currency=Currency(new_currency)
             ) }}</p>
         % endif
-        % set periodic_amount = None if currency_mismatch else tip.periodic_amount
+        % set periodic_amount = tip.periodic_amount.convert(new_currency)
         {{ tip_input(new_currency, tip.period, periodic_amount, disabled, small=True,
                      accepted_currencies=accepted_currencies) }}
         <button class="btn btn-{{ 'primary' if tip.renewal_mode > 0 else 'donate' }}
@@ -43,19 +50,33 @@
         % if tip.renewal_mode > 0 and not pledging
             % if currency_mismatch
             <p class="alert alert-warning">{{ _(
-                "You are currently donating {money_amount} per week to {name}, but "
-                "they no longer accept donations in {currency}. You can select or "
-                "input a new amount in {new_currency} below, or stop the donation "
-                "by clicking on the Stop button."
-                , money_amount=tip.amount, name=tippee_name
-                , currency=Currency(tip.amount.currency), new_currency=Currency(c)
+                "Your current donation to {name} is in {currency}, but they now only "
+                "accept donations in {accepted_currency}. You can convert your donation "
+                "to that currency, or discontinue it."
+                , name=tippee_name
+                , currency=Currency(tip_currency)
+                , accepted_currency=Currency(new_currency)
+            ) if len(accepted_currencies) == 1 else _(
+                "Your current donation to {name} is in {currency}, but they no longer "
+                "accept that currency. The suggested new currency is the {accepted_currency}, "
+                "but you can choose another one."
+                , name=tippee_name
+                , currency=Currency(tip_currency)
+                , accepted_currency=Currency(new_currency)
             ) }}</p>
             % else
             <p>{{ _(
-                "You are currently donating {0} per week to {1}. You can select or "
-                "input a different amount below, or stop the donation by clicking "
-                "on the Stop button."
-                , tip.amount, tippee_name
+                "You are currently donating {money_amount} per week to {recipient_name}. "
+                "The form below enables you to modify or stop your donation."
+                , money_amount=tip.periodic_amount, recipient_name=tippee_name
+            ) if tip.period == 'weekly' else _(
+                "You are currently donating {money_amount} per month to {recipient_name}. "
+                "The form below enables you to modify or stop your donation."
+                , money_amount=tip.periodic_amount, recipient_name=tippee_name
+            ) if tip.period == 'monthly' else _(
+                "You are currently donating {money_amount} per year to {recipient_name}. "
+                "The form below enables you to modify or stop your donation."
+                , money_amount=tip.periodic_amount, recipient_name=tippee_name
             ) }}</p>
             % endif
         % else
@@ -155,12 +176,13 @@
     % set tippee_p = tippee.participant if tippee_is_stub else tippee
     % set pledging = tippee_p.payment_providers == 0 or not tippee_p.accepts_tips
     % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
-    % set tip_is_standard = []
+    % set tip_is_standard = False
     <ul class="list-group radio-group">
+    % set tip_amount_in_new_currency = tip.amount.convert(new_currency)
     % for std_tip in constants.STANDARD_TIPS[new_currency]
-        % set amount_is_a_match = std_tip.weekly == tip.amount
+        % set amount_is_a_match = std_tip.weekly == tip_amount_in_new_currency
         % if amount_is_a_match
-            % do tip_is_standard.append(True)
+            % set tip_is_standard = True
         % endif
         <li class="list-group-item">
         <label>
@@ -185,8 +207,8 @@
             None
         )
         % set periodic_amount = (
-            None if tip_is_standard or tip.amount > 0 and tip.amount.currency != new_currency else
-            tip.periodic_amount or querystring_amount
+            None if tip_is_standard else
+            tip.periodic_amount.convert(new_currency) or querystring_amount
         )
         <li class="list-group-item">
         <label>

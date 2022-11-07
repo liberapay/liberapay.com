@@ -26,7 +26,7 @@
 % else
     <p>{{ _(
         "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:",
-        platform=platform, user_name=user_name, time_ago=(join_time - notification_ts),
+        platform=platform, user_name=user_name, time_ago=locale.Age(join_time - notification_ts, format_args=dict(add_direction=True)),
         liberapay_username=('<a href="{0}">{1}</a>'|safe).format(liberapay_profile_url, liberapay_username)
     ) }}</p>
     <p><a href="{{ participant.url('giving/pay?beneficiary=%i' % tippee_id) }}" style="{{ button_style('primary') }}">{{
