@@ -24,6 +24,14 @@ if sys.argv[1] == 'reflag':
     with open(po_path, 'wb') as po:
         write_po(po, catalog, width=0)
 
+elif sys.argv[1] == 'reformat':
+    po_path = sys.argv[2]
+    print('reformatting PO file', po_path)
+    with open(po_path, 'rb') as po:
+        catalog = read_po(po)
+    with open(po_path, 'wb') as po:
+        write_po(po, catalog, width=0)
+
 elif sys.argv[1] == 'copy':
     po_path = sys.argv[2]
     old_msg = sys.argv[3]

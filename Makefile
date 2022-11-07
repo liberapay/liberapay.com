@@ -159,12 +159,17 @@ _i18n_pull: _i18n_fetch
 
 _i18n_merge:
 	git reset -q master -- i18n
+	@for f in i18n/*/*.po; do \
+		if test $$(sed -E -e '/\\n"$$/{d;d}' $$f | grep -c -E '^"' 2>/dev/null) -gt 10; then \
+			PYTHONPATH=. $(env_bin)/python cli/po-tools.py reformat $$f; \
+		fi \
+	done
+	@$(MAKE) --no-print-directory _i18n_clean
 	@while true; do \
 		git add -p i18n; \
 		echo -n 'Are you done? (y/n) ' && read done; \
 		test "$$done" = 'y' && break; \
 	done
-	@$(MAKE) --no-print-directory _i18n_clean
 	git merge --continue
 	git checkout -q HEAD -- i18n
 
