@@ -418,9 +418,9 @@ msgstr "支払いに成功しました"
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
 msgstr "本日より開始された{money_amount} の自動支払いに成功しました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
-msgstr "{date} で開始された{money_amount} の自動支払いは成功しました。"
+msgstr "{date} に開始された{money_amount} の自動支払いは成功しました。"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
@@ -766,13 +766,11 @@ msgstr "クレジット/デビッドカード"
 msgid "Direct Debit"
 msgstr "口座自動振替"
 
-#, fuzzy
 msgid "Do not publish the amounts of money I send."
-msgstr "私の送金額を公表しないこと。"
+msgstr "私の送金額を公表しません。"
 
-#, fuzzy
 msgid "Do not publish the amounts of money I receive."
-msgstr "私が受け取った金額を公表しないこと。"
+msgstr "私が受け取った金額を公表しません。"
 
 msgid "Hide this profile from search results on Liberapay."
 msgstr "このプロフィールを Liberapay の検索結果に表示しないようにします。"
@@ -825,7 +823,6 @@ msgstr "まずサインインする必要があります"
 msgid "This account is closed"
 msgstr "このアカウントは削除されています"
 
-#, fuzzy
 msgid "Authentication required"
 msgstr "認証が必要"
 
@@ -904,9 +901,9 @@ msgstr "{domain_name}のメールサーバへの接続を確立できません�
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' は有効なメールアドレスのドメインではありません。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
-msgstr ""
+msgstr "メールアドレス{email_address} は存在しないようです。IPアドレス{ip_address} の{domain} メールサーバーは、エラーメッセージ \"{error_message}\" で拒否しました。"
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
@@ -989,7 +986,7 @@ msgstr "ユーザー {0} は寄付を受け付けていません。"
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username}は{rejected_currency}での寄付を受け付けていません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
 msgstr "金額{money_amount} が想定していた通貨（{expected_currency} ）ではありません。"
 
@@ -1000,7 +997,7 @@ msgstr "存在しないものを削除しようとしているようです。"
 msgid "\"{0}\" is not a valid number."
 msgstr "\"{0}\" は有効な数ではありません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
 msgstr "\"{0}\" は適切な形式の数ではありません。{list_of_suggestions} ではありませんか？"
 
@@ -1108,15 +1105,14 @@ msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} 年× {money_amount}"
 
-#, fuzzy
 msgid "The submitted password is incorrect."
 msgstr "送信されたパスワードが正しくありません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "“{0}” is not a valid account ID."
 msgstr "\"{0}\" は有効なアカウントIDではありません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has the username “{username}”."
 msgstr "ユーザー名 \"{username}\" を持つアカウントはありません。"
 
@@ -1139,9 +1135,8 @@ msgstr "メールアドレスが認証されました。"
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "セキュリティーチェックに失敗しました。お使いのブラウザーが {domain} の Cookie を許可するように設定されているか確認して、再度お試しください。"
 
-#, fuzzy
 msgid "Checking cookies…"
-msgstr "クッキーを確認する…"
+msgstr "クッキーを確認しています…"
 
 msgid "You are not authorized to access this page."
 msgstr "このページへのアクセスは許可されていません。"
