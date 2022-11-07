@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-11-07 11:34+0000\n"
-"Last-Translator: Kim Alvefur <zash@zash.se>\n"
+"PO-Revision-Date: 2022-11-07 12:54+0000\n"
+"Last-Translator: ROllerozxa <temporaryemail4meh+github@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/liberapay/core/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -913,7 +913,7 @@ msgstr "Vårt försök att upprätta en anslutning till e-mail servern för {dom
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' är inte en giltig e-postdomän."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
 msgstr "E-postadressen {email_address} verkar inte existera. E-postservern {domain} på IP-adressen {ip_address} avvisade den med felmeddelandet \"{error_message}\"."
 
@@ -1863,7 +1863,7 @@ msgstr "{username} har valt att inte visa vilka deras beskyddare är, så din do
 
 #, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr "Den här donationen kommer inte att vara hemlig utan du kommer att finnas med i {username}:s privata lista över beskyddare."
+msgstr "Den här donationen kommer inte vara hemlig utan du kommer att finnas med i {username}:s privata lista över beskyddare."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
@@ -1889,13 +1889,13 @@ msgstr "Du kommer att visas i {username}'s privata lista över beskyddare."
 msgid "Public donation"
 msgstr "Publik donation"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Everybody will be able to see that you support {username}."
-msgstr "Alla kommer att kunna se att du stöder {username}."
+msgstr "Alla kommer kunna se att du stöder {username}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
-msgstr "{username} har ännu inte angett om de vill se vilka som är deras mecenater, så din donation kommer att vara hemlig."
+msgstr "{username} har ännu inte angett om de vill se dem som är deras bidragsgivande, så din donation kommer att vara hemlig."
 
 msgid "Discontinue the donation"
 msgstr "Sluta donera"
@@ -2040,7 +2040,6 @@ msgstr "The inmatade värdena är inte giltiga."
 msgid "You currently receive the equivalent of {money_amount} per week from donations in foreign currencies. These donations will not be converted to your main currency."
 msgstr "Du får för närvarande motsvarande {money_amount} per vecka från donationer i främmande valutor. Dessa donationer kommer inte att växlas till din föredragna valuta."
 
-#, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Dina valutainställningar ignoreras för närvarande eftersom de är inkompatibla med den betalningsförmedlare du använder."
 
@@ -2248,7 +2247,6 @@ msgstr "Denna e-postadress är redan verifierad."
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Denna e-postadress är redan ansluten till ett annat Liberapay-konto."
 
-#, fuzzy
 msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
 msgstr "Bekräftelsen av din e-postadress har misslyckats. Kontrollera att länken du klickade på eller kopierade inte har förkortats eller ändrats på något sätt."
 
@@ -2412,9 +2410,8 @@ msgstr "Förnya nu"
 msgid "Pending payment completion."
 msgstr "Väntar på att betalningen är klar."
 
-#, fuzzy
 msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
-msgstr "Väntar på betalning."
+msgstr "Du måste initiera en ny betalning för att finansiera denna donation. Tryck på knappen nedan för att fortsätta."
 
 msgid "Renew"
 msgstr "Förnya"
@@ -2470,9 +2467,8 @@ msgstr "Vi har möjlighet att gruppera dessa donationer till en enda betalning."
 msgid "Your donations to {recipients} are awaiting payment."
 msgstr "Dina donationer till {recipients} väntar på betalning."
 
-#, fuzzy
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
-msgstr "För tillfället så kan denna donation endast förnyas externt via PayPal."
+msgstr "För tillfället är PayPal det enda alternativet för att förnya denna donation. Tryck på följande knapp för att fortsätta:"
 
 msgid "Please choose a payment method:"
 msgstr "Var god välj betalningsmetod:"
@@ -2492,7 +2488,6 @@ msgstr "Endast Euro donationer"
 msgid "Euro bank accounts only"
 msgstr "Endast Euro bankkonton"
 
-#, fuzzy
 msgid "Pay by direct debit"
 msgstr "Betala med direktbetalning"
 
@@ -2552,11 +2547,10 @@ msgstr "Vi kan inte bara debitera {donation_amount}, minsta möjliga belopp är 
 msgid "Please select or input a payment amount:"
 msgstr "Var god välj eller ange belopp:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
-msgstr "Liberapay lagrar inga pengar, utan hela betalningsbeloppet kommer att gå omedelbart till de konton hos {payment_provider}."
+msgstr "Liberapay lagrar själv inga pengar, hela betalningsbeloppet kommer att gå omedelbart till mottagarnas konton hos {payment_provider}."
 
-#, fuzzy
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal avslöjar ditt namn och din e-postadress för mottagaren."
 
@@ -2723,7 +2717,7 @@ msgstr "{username}s profil"
 #, python-brace-format
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
-msgstr[0] "Denna profil är tillgänglig på {n} språk."
+msgstr[0] "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgstr[1] "Denna profil är tillgänglig på {n} språk"
 
 msgid "Show the list of languages"
@@ -2777,9 +2771,8 @@ msgstr[1] "De främsta {n} bidragsgivande är:"
 msgid "{username} doesn't publish how much they give."
 msgstr "{username} publicerar inte hur mycket de ger."
 
-#, fuzzy
 msgid "Donees"
-msgstr "Donees"
+msgstr "Donerare"
 
 #, python-brace-format
 msgid "{username} donates publicly to {n} creator."
@@ -3026,7 +3019,7 @@ msgstr "privat donation från {donor_name} för din roll i teamet {team_name}"
 msgid "secret donation for your role in the {team_name} team"
 msgstr "hemlig donation för din roll i {team_name} -teamet"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "public donation to {recipient_name}"
 msgstr "offentlig donation till {recipient_name}"
 
@@ -3773,16 +3766,14 @@ msgstr "Emblem från {link_open}Shields.io{link_close}"
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Använd dessa kod-snippets för att lägga till ett emblem på din webbplats eller README:"
 
-#, fuzzy
 msgid "Do not contact us if you are trying to reach one of our users. We do not relay messages, and we cannot reveal the identity or contact details of our users unless you have a valid court order."
 msgstr "Kontakta inte oss om du försöker nå någon av våra användare. Vi vidarebefordrar inte meddelanden och vi kan inte delge identitet eller kontaktinformation för våra användare såvida du inte har en giltig begäran från en domstol eller ett domstolsbeslut."
 
 msgid "To contact the Liberapay team privately:"
 msgstr "För att kontakta Liberapay privat:"
 
-#, fuzzy
 msgid "Send an email to Liberapay"
-msgstr "Skicka oss ett e-mail"
+msgstr "Skicka e-post till Liberapay"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
 msgstr "Om ditt meddelande inte är skrivet på engelska eller franska så kommer det bli automatiskt maskinöversatt. Vårt svar kommer att översättas på samma sätt."
@@ -3794,9 +3785,8 @@ msgstr "Om du tror att du har hittat en teknisk sårbarhet i vårt system kan du
 msgid "We currently don't have a phone number."
 msgstr "Vi har förnuvarande inte något telefonnummer."
 
-#, fuzzy
 msgid "To report a problem or make a suggestion publicly:"
-msgstr "För att rapportera ett problem eller skicka in ett förslag på Engelska:"
+msgstr "För att rapportera ett problem eller skicka in ett förslag offentligt (på engelska):"
 
 msgid "Open an issue on GitHub"
 msgstr "Öppna ett ärende på GitHub"
@@ -4095,9 +4085,9 @@ msgid_plural "PayPal is available to creators in more than 200 countries, wherea
 msgstr[0] "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
 msgstr[1] "PayPal är tillgängligt för skapare i mer än 200 länder, medan Stripe endast stöder {n} länder på ett lämpligt sätt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
-msgstr "Mer information om länder och valutor som stöds finns på {link_start}på sidan \"{page_name}\"{link_end}."
+msgstr "Mer information om länder och valutor som stöds finns {link_start}på sidan \"{page_name}\"{link_end}."
 
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
 msgstr "Vi gör vårt bästa för att skydda allas integritet: vi försöker inte spåra personer som besöker vår webbplats, vi strävar efter att samla in bara den personliga information som vi faktiskt behöver, och vi säljer den inte till någon."
@@ -4260,7 +4250,7 @@ msgstr "Ett team-konto {bold}lagrar inte pengar{end_bold} för senare användnin
 
 #, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "Om Liberapays lagkonton inte passar dina behov kanske du istället vill använda plattformen {link_start}Open Collective{link_end}, som gör det möjligt för ett lag att vara \"värd\" för en registrerad ideell organisation. Denna \"skattemässiga värd\" är den juridiska ägaren till kollektivets medel, övervakar hur de används och tar vanligtvis en procentandel av donationerna för att finansiera sig själv. (Vi planerar att införa ett liknande system i Liberapay, men vi vet inte när det kommer att ske)."
+msgstr "Om Liberapays lagkonton inte passar dina behov kanske du istället vill använda plattformen {link_start}Open Collective{link_end}, som gör det möjligt för ett lag att vara \"värd\" för en registrerad ideell organisation. Denna \"skattemässiga värd\" är den juridiska ägaren till kollektivets medel, övervakar hur de används och tar vanligtvis en procentandel av donationerna för att finansiera sig själv. (Vi planerar att införa ett liknande system i Liberapay, men vi vet inte när det kommer att ske.)"
 
 msgid "Creating a team"
 msgstr "Att skapa en grupp"
@@ -4361,13 +4351,12 @@ msgstr[1] "Det finns {n} nätverk på Liberapay."
 msgid "Search communities"
 msgstr "Sök nätverk"
 
-#, fuzzy
 msgid "Largest communities"
-msgstr "Populära nätverk"
+msgstr "Största nätverk"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Largest communities in {language}"
-msgstr "Största samhällen i {language}"
+msgstr "Största communityn på {language}"
 
 msgid "Sorry, we haven't found any. Why don't you start one?"
 msgstr "Tyvärr har vi inte hittat någon. Varför inte starta en?"
@@ -4704,10 +4693,10 @@ msgstr[1] "Din profilbeskrivning och andra texter kan publiceras i upp till {n} 
 msgid "Multiple currencies"
 msgstr "Flera valutor"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
-msgstr[0] "<oanvänd singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
+msgstr[0] "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgstr[1] "Liberapays första valuta var euron, sen lades den amerikanska dollarn till, och nu stödjer vi totalt {n} valutor. Vi hanterar dock inte några kryptovalutor."
 
 msgid "Integrations"
@@ -4908,9 +4897,8 @@ msgid_plural "You follow {n} accounts on {platform}."
 msgstr[0] "Du följer {n} konto på {platform}."
 msgstr[1] "Du följer {n} konton på {platform}."
 
-#, fuzzy
 msgid "The address you provided is not valid. Expected format: username@domain"
-msgstr "Adressen du angav är inte giltig: den innehåller inte någon \"@\"-symbol."
+msgstr "Adressen du angav är inte giltig. Förväntat format: användarnamn@domän"
 
 msgid "Which account?"
 msgstr "Vilket konto?"
