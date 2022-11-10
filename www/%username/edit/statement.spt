@@ -95,6 +95,13 @@ subhead = _("Descriptions")
         <input type="hidden" name="summary" value="{{ summary }}" lang="{{ lang }}" />
         {{ profile_box_embedded(participant, summary) }}
         <hr>
+        % if participant.username in summary
+            <p class="alert alert-warning">{{ _(
+                "Including your username in the short description is redundant. "
+                "The short description is always displayed immediately below the "
+                "username."
+            ) }}</p>
+        % endif
         % endif
         <div class="buttons">
             <button class="btn btn-default btn-lg" name="action" value="edit">{{ _("Edit") }}</button>
@@ -135,8 +142,8 @@ subhead = _("Descriptions")
 
     <p>{{ _(
         "Liberapay allows you to internationalize your texts. "
-        "Use the selector below to switch between languages.")
-    }}</p>
+        "Use the selector below to switch between languages."
+    ) }}</p>
 
     <form action="" method="POST" class="statement">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
