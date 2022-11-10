@@ -657,7 +657,7 @@ def settle_destination_charge(db, payin, charge, pt, intent_id=None):
     if getattr(charge, 'transfer', None):
         tr = stripe.Transfer.retrieve(charge.transfer)
         update_transfer_metadata(tr, pt)
-        if tr.amount_reversed == 0:
+        if tr.amount_reversed < bt.fee:
             tr.reversals.create(
                 amount=bt.fee,
                 description="Stripe fee",
