@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Romanian "
-"<https://hosted.weblate.org/projects/liberapay/core/ro/>\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"PO-Revision-Date: 2022-11-14 14:17+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/liberapay/core/ro/>\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"X-Generator: Weblate 4.15-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, fuzzy, python-brace-format
@@ -87,17 +89,17 @@ msgstr "Donația ta în valoare de {amount} pe lună către {username} trebuie �
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "Donația ta în valoare de {amount} pe an către {username} trebuie înnoită înainte de {date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Donația dvs. de {amount} pe săptămână către {username} trebuia să fie reînnoită înainte de {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Donația dvs. de {amount} pe lună către {username} trebuia să fie reînnoită înainte de {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Donația dvs. de {amount} pe an către {username} trebuia să fie reînnoită înainte de {past_date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -433,8 +435,9 @@ msgstr "Am inițializat un debit direct de {money_amount} de la contul bancar al
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Această operațiune este efectuată pe baza {link_start}mandatului {mandate_id}{link_end} pe care l-ați semnat pe {acceptance_date}, prin care autorizați Liberapay (creditor SEPA {creditor_identifier}) să trimită instrucțiuni băncii dvs. pentru a vă debita contul și banca dvs. să vă debiteze contul în conformitate cu aceste instrucțiuni."
 
+#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "Dacă nu ați autorizat această plată, vă rugăm să ne anunțați. Vă vom spune dacă o rambursare poate fi inițiată de noi sau dacă trebuie să o solicitați de la banca dumneavoastră."
 
 #, fuzzy, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -625,15 +628,17 @@ msgstr "Plata de reînnoire a donației de la {money_amount} la {recipient} prog
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Următoarele plăți de reînnoire a donațiilor au fost anulate deoarece beneficiarii nu le pot primi:"
 
+#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Reînnoirea donației Liberapay: este necesară o acțiune manuală"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "Plata de reînnoire a donației de la {money_amount} la {recipient} programată pentru {date} necesită o acțiune manuală."
 
+#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "Următoarele plăți de reînnoire a donațiilor necesită o acțiune manuală:"
 
 #, fuzzy
 msgid "Liberapay donation renewal: authentication required"
@@ -1893,13 +1898,13 @@ msgstr "Veniturile neutilizate vor fi consumate în săptămânile următoare, n
 msgid "Leftover"
 msgstr "Exces"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "Donația dvs. curentă către {name} este în {currency}, dar acum acceptă doar donații în {accepted_currency}. Puteți converti donația dvs. în această monedă sau o puteți întrerupe."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "Donația dvs. actuală către {name} este în {currency}, dar nu mai acceptă această monedă. Noua monedă sugerată este {accepted_currency}, dar puteți alege alta."
 
 msgid "Modify"
 msgstr "Modifică"
@@ -1908,17 +1913,17 @@ msgstr "Modifică"
 msgid "Discontinue"
 msgstr "Întrerupeți"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "În prezent donați {money_amount} pe săptămână către {recipient_name}. Formularul de mai jos vă permite să modificați sau să opriți donația."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "În prezent donați {money_amount} pe lună către {recipient_name}. Formularul de mai jos vă permite să modificați sau să opriți donația."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "În prezent donați {money_amount} pe an către {recipient_name}. Formularul de mai jos vă permite să modificați sau să opriți donația."
 
 msgid "Please select or input an amount:"
 msgstr "Selectați sau introduceți o sumă:"
@@ -2170,9 +2175,9 @@ msgstr "Explorează comunități"
 msgid "The submitted settings are incoherent."
 msgstr "Configurările trimise sunt incoerente."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "În prezent, primiți echivalentul a {money_amount} pe săptămână din donații în valute pe care sunteți pe cale să le respingeți. Aceste donații nu vor fi convertite imediat în moneda dvs. principală, în schimb, fiecare donator va fi rugat să treacă la o monedă acceptată la următoarea reînnoire sau modificare a donației sale."
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2623,16 +2628,16 @@ msgstr "Angajamente anulate"
 msgid "Funding your donations"
 msgstr "Finanțarea donațiilor"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
+msgstr[0] "Aveți {n} donație care trebuie modificată pentru că beneficiarul nu mai acceptă moneda pe care ați ales-o."
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "Modificați donația dvs. la {username}"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2641,9 +2646,9 @@ msgstr[0] "Din cauza unor limitări legale și tehnice, în prezent nu putem pro
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "Trimiteți bani la {recipients}"
 
 #, fuzzy, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -2811,9 +2816,9 @@ msgstr "Prin furnizarea IBAN-ului dvs. și prin confirmarea acestei plăți, aut
 msgid "Remember the bank account number for future payments"
 msgstr "Ține minte numărul de cont bancar pentru plățile viitoare"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Pentru a reduce riscul ca această plată să fie respinsă, vă recomandăm să introduceți adresa dvs. poștală mai jos. Aceasta va fi stocată în mod criptat în baza noastră de date și va fi trimisă procesatorului de plăți ({processor_name})."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3668,9 +3673,9 @@ msgstr "Prin furnizarea IBAN-ului dumneavoastră, autorizați {platform} și {pr
 msgid "Forget this bank account number after one payment."
 msgstr "Uitați acest număr de cont bancar după o singură plată."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Deoarece adresa poștală a plătitorului este uneori necesară pentru a procesa cu succes o plată, vă recomandăm să o introduceți pe a dumneavoastră mai jos. Aceasta va fi stocată în mod criptat în baza noastră de date și va fi trimisă procesatorului de plăți ({processor_name})."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."

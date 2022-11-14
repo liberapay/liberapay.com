@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Norwegian "
-"<https://hosted.weblate.org/projects/liberapay/core/nb/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2022-11-14 14:17+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/liberapay/core/nb_NO/>\n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, fuzzy, python-brace-format
@@ -86,17 +88,17 @@ msgstr "Din betaling av {amount} per måned til {username} må fornyes før {dat
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "Din betaling av {amount} per år til {username} må fornyes før {date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Din donasjon på {amount} per uke til {username} skulle fornyes før {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Din donasjon på {amount} per måned til {username} skulle fornyes før {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Din donasjon på {amount} per år til {username} skulle fornyes før {past_date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -410,8 +412,9 @@ msgstr "En direkte debetbetaling på {money_amount} fra din bankkonto ({partial_
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Operasjonen blir utført basert på {link_start}mandatet{mandate_id}{link_end} du signerte {acceptance_date}, noe som lar Liberapay (SEPA-kreditor {creditor_identifier}) å sende instruks til din bank om debitering av din konto og din bank om å debitere din konto i henhold til disse instruksjonene."
 
+#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "Hvis du ikke autoriserte denne betalingen, vennligst gi oss beskjed. Vi vil fortelle deg om refusjon kan initieres av oss eller om du må be om det fra banken din."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -590,15 +593,17 @@ msgstr "Fornyelse av donasjonsgjentagelse på {money_amount} til {recipient} lag
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Følgende fornyelser av donasjonsbetalinger har blitt avbrutt fordi mottagerne ikke kunne motta dem."
 
+#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Liberapay-donasjonsfornyelse: manuell handling kreves"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "Donasjonsfornyelsesbetalingen på {money_amount} til {recipient} planlagt for {date} krever manuell handling."
 
+#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "Følgende donasjonsfornyelsesbetalinger krever manuell handling:"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Fornyelse av Liberpay-donasjon: identitetsbekreftelse kreves"
@@ -1808,13 +1813,13 @@ msgstr "Ubrukt inntekt vil bli brukt i påfølgende uker, det akkumuleres ikke p
 msgid "Leftover"
 msgstr "Til overs"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "Din nåværende donasjon til {name} er i {currency}, men de godtar nå bare donasjoner i {accepted_currency}. Du kan konvertere donasjonen din til den valutaen, eller avbryte den."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "Din nåværende donasjon til {name} er i {currency}, men de godtar ikke lenger den valutaen. Den foreslåtte nye valutaen er {accepted_currency}, men du kan velge en annen."
 
 msgid "Modify"
 msgstr "Endre"
@@ -1823,17 +1828,17 @@ msgstr "Endre"
 msgid "Discontinue"
 msgstr "Stopp"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Du donerer for øyeblikket {money_amount} per uke til {recipient_name}. Skjemaet nedenfor lar deg endre eller stoppe donasjonen din."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Du donerer for øyeblikket {money_amount} per måned til {recipient_name}. Skjemaet nedenfor lar deg endre eller stoppe donasjonen din."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Du donerer for øyeblikket {money_amount} per år til {recipient_name}. Skjemaet nedenfor lar deg endre eller stoppe donasjonen din."
 
 msgid "Please select or input an amount:"
 msgstr "Velg eller skriv inn et beløp:"
@@ -2068,9 +2073,9 @@ msgstr "Utforsk fellesskap"
 msgid "The submitted settings are incoherent."
 msgstr "Innsendte innstillinger går ikke overens."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "Du mottar for øyeblikket tilsvarende {money_amount} per uke fra donasjoner i valutaer du er i ferd med å avvise. Disse donasjonene vil ikke umiddelbart bli konvertert til hovedvalutaen din, i stedet vil hver giver bli bedt om å bytte til en akseptert valuta neste gang de fornyer eller endrer donasjonen."
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2488,15 +2493,15 @@ msgstr "Avbrutte donasjonstilbud"
 msgid "Funding your donations"
 msgstr "Finansiering av dine donasjoner"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
+msgstr[0] "Du har {n} donasjon som må endres fordi mottakeren ikke lenger godtar valutaen du hadde valgt."
 msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "Endre donasjonen din til {username}"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2504,9 +2509,9 @@ msgid_plural "Due to legal and technical limitations we are currently unable to 
 msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgstr[1] "Som følge av tekniske begrensninger kan din betaling kun behandles som en enkeltbetaling. Isteden vil du måtte gjøre {n} egne betalinger."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "Send penger til {recipients}"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -2663,9 +2668,9 @@ msgstr "Ved å oppgi din IBAN, og bekrefte denne betalinger, godkjenner du {plat
 msgid "Remember the bank account number for future payments"
 msgstr "Husk bankkontonummeret for fremtidige betalinger"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "For å redusere risikoen for at denne betalingen blir avvist, anbefaler vi at du skriver inn postadressen din nedenfor. Den vil bli lagret kryptert i vår database og sendt til betalingsbehandleren ({processor_name})."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3477,9 +3482,9 @@ msgstr "Ved å oppgi ditt IBAN-nummer, godkjenner du {platform} og {provider}, v
 msgid "Forget this bank account number after one payment."
 msgstr "Glem dette bankkontonummeret etter én betaling."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Siden betalerens postadresse noen ganger kreves for å kunne behandle en betaling, anbefaler vi at du skriver inn din nedenfor. Den vil bli lagret kryptert i vår database og sendt til betalingsbehandleren ({processor_name})."
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
