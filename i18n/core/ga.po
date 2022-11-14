@@ -93,17 +93,17 @@ msgstr "Ní mór do dheontas {amount} in aghaidh na míosa do {username} a athnu
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "Ní mór do dheontas {amount} in aghaidh na bliana do {username} a athnuachan roimh {date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Bhí do dheontas {amount} in aghaidh na seachtaine do {username} ceaptha a athnuachan roimh {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Bhí do dheontas {amount} in aghaidh na míosa do {username} ceaptha a athnuachan roimh {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Bhí do dheontas {amount} in aghaidh na bliana do {username} ceaptha a athnuachan roimh {past_date}."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -454,8 +454,9 @@ msgstr "Tá dochar díreach {money_amount} tionscanta againn ó do chuntas bainc
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Tá an oibríocht seo á déanamh bunaithe ar {link_start}an sainordú {mandate_id}{link_end} a shínigh tú ar {acceptance_date}, ag údarú do Liberapay (creidiúnaí SEPA {creditor_identifier}) treoracha a sheoladh chuig do bhanc chun do chuntas agus do bhanc a chur chun dochair chuig dochar do chuntas de réir na dtreoracha sin."
 
+#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "Murar údaraigh tú an íocaíocht seo, cuir in iúl dúinn le do thoil. Inseoidh muid duit an féidir linn aisíocaíocht a thionscnamh nó an bhfuil ort é a iarraidh ó do bhanc."
 
 #, fuzzy, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -648,15 +649,17 @@ msgstr "Cuireadh deireadh leis an íocaíocht athnuachana síntiús de {money_am
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Cuireadh deireadh leis na híocaíochtaí athnuachana síntiús seo a leanas toisc nach bhfuil na faighteoirí in ann iad a fháil:"
 
+#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Athnuachan síntiús Liberapay: gníomh láimhe ag teastáil"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "Teastaíonn beart de láimh maidir le híocaíocht athnuachana síntiús {money_amount} go {recipient} atá sceidealaithe do {date}."
 
+#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "Teastaíonn beart de láimh maidir leis na híocaíochtaí athnuachana síntiús seo a leanas:"
 
 #, fuzzy
 msgid "Liberapay donation renewal: authentication required"
@@ -2122,13 +2125,13 @@ msgstr "Déanfar ioncam neamhúsáidte a chaitheamh sna seachtainí ina dhiaidh 
 msgid "Leftover"
 msgstr "Fágtha"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "Tá do síntiús reatha do {name} in {currency}, ach ní ghlacann siad anois ach le síntiúis in {accepted_currency}. Is féidir leat do thabhartas a thiontú go dtí an t-airgeadra sin, nó scor de."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "Tá do síntiús reatha chuig {name} in {currency}, ach ní ghlacann siad leis an airgeadra sin a thuilleadh. Is é an {accepted_currency} an t-airgeadra nua molta, ach is féidir leat ceann eile a roghnú."
 
 #, fuzzy
 msgid "Modify"
@@ -2138,17 +2141,17 @@ msgstr "Athraigh"
 msgid "Discontinue"
 msgstr "Stad"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Tá {money_amount} in aghaidh na seachtaine á bhronnadh agat ar {recipient_name} faoi láthair. Cuireann an fhoirm thíos ar do chumas do dheonachán a mhodhnú nó a stopadh."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Tá {money_amount} in aghaidh na míosa á bhronnadh agat ar {recipient_name} faoi láthair. Cuireann an fhoirm thíos ar do chumas do dheonachán a mhodhnú nó a stopadh."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Tá {money_amount} in aghaidh na bliana á bhronnadh agat ar {recipient_name} faoi láthair. Cuireann an fhoirm thíos ar do chumas do dheonachán a mhodhnú nó a stopadh."
 
 #, fuzzy
 msgid "Please select or input an amount:"
@@ -2422,9 +2425,9 @@ msgstr "Déan iniúchadh ar phobail"
 msgid "The submitted settings are incoherent."
 msgstr "Tá na socruithe a cuireadh isteach neamhchomhleanúnach."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "Faoi láthair faigheann tú coibhéis {money_amount} in aghaidh na seachtaine ó thabhartais in airgeadraí a bhfuil tú ar tí diúltú dóibh. Ní dhéanfar na síntiúis seo a chomhshó láithreach go dtí do phríomh-airgeadra, ina ionad sin iarrfar ar gach deontóir aistriú chuig airgeadra a nglactar leis an chéad uair eile a dhéanfaidh siad a síntiús a athnuachan nó a mhodhnú."
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2936,16 +2939,16 @@ msgstr "Geallta cealaithe"
 msgid "Funding your donations"
 msgstr "Maoiniú do thabhartais"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
+msgstr[0] "Tá síntiús {n} agat a chaithfear a mhodhnú toisc nach nglacann an faighteoir leis an airgeadra a roghnaigh tú a thuilleadh."
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "Athraigh do dheontas go {username}"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2954,9 +2957,9 @@ msgstr[0] "Mar gheall ar shrianta dlíthiúla agus teicniúla ní féidir linn d
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "Seol airgead chuig {recipients}"
 
 #, fuzzy, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -3141,9 +3144,9 @@ msgstr "Trí do IBAN a sholáthar agus an íocaíocht seo a dhearbhú, tá tú a
 msgid "Remember the bank account number for future payments"
 msgstr "Cuimhnigh uimhir an chuntais bhainc le haghaidh íocaíochtaí amach anseo"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Chun an baol go ndiúltófar don íocaíocht seo a laghdú, molaimid duit do sheoladh poist a chur isteach thíos. Stórálfar é criptithe inár mbunachar sonraí agus seolfar chuig an bpróiseálaí íocaíochta é ({processor_name})."
 
 #, fuzzy, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -4069,9 +4072,9 @@ msgstr "Trí do IBAN a sholáthar, tá tú ag údarú do {platform} agus {provid
 msgid "Forget this bank account number after one payment."
 msgstr "Déan dearmad ar an uimhir chuntais bainc seo tar éis íocaíocht amháin."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Toisc go mbíonn seoladh poist an íocóra ag teastáil uaireanta chun íocaíocht a phróiseáil go rathúil, molaimid duit do sheoladh a ionchur thíos. Stórálfar é criptithe inár mbunachar sonraí agus seolfar chuig an bpróiseálaí íocaíochta é ({processor_name})."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."

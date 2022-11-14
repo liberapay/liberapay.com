@@ -81,17 +81,17 @@ msgstr "您每月對 {username} 的捐款（{amount}）需要在 {date} 前更�
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "您每年對 {username} 的捐款（{amount}）需要在 {date} 前更新。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "{amount} 你每周向{username} 的捐款本应在{past_date} 之前更新。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "{amount} 你每月向{username} 的捐款本应在{past_date} 之前续交。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "{amount} 你每年向{username} 的捐款本应在{past_date} 之前更新。"
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -400,8 +400,9 @@ msgstr "我們自您的銀行帳戶{partial_account_number}直接扣貸了{money
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "本操作的執行乃基於您在{acceptance_date} 簽署的 {link_start}義務{mandate_id}{link_end}，同意授權 Liberapay (SEPA creditor{creditor_identifier})傳送指示給銀行可自您的帳戶扣款。"
 
+#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "如果你没有授权这笔付款，请让我们知道。我们会告诉你是否可以由我们发起退款，或者你必须向你的银行申请退款。"
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -578,15 +579,17 @@ msgstr "因對象無法收款，原安排在{date}付給{recipient}的捐款金�
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "由於收款對象無法收款，以下的重覆捐款已遭停止："
 
+#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "利宝支付捐款续期：需要手动操作"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "{money_amount} 到{recipient} 的捐款续期付款，计划在{date} ，需要手动操作。"
 
+#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "以下捐款续期付款需要人工操作。"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Liberapay 捐款更新：需要登入"
@@ -1780,13 +1783,13 @@ msgstr "未使用的收入會在未來數週內被消費掉，它不會累積在
 msgid "Leftover"
 msgstr "餘額"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "你目前对{name} 的捐款是以{currency} ，但他们现在只接受以{accepted_currency} 。你可以将你的捐款转换为该货币，或停止捐款。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "你目前对{name} 的捐款是用{currency} ，但他们不再接受这种货币。建议的新货币是{accepted_currency} ，但你可以选择其他货币。"
 
 msgid "Modify"
 msgstr "修改"
@@ -1794,17 +1797,17 @@ msgstr "修改"
 msgid "Discontinue"
 msgstr "中止"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "{money_amount} 您目前每周向{recipient_name} 。下面的表格使您能够修改或停止您的捐款。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "{money_amount} 您目前每月向{recipient_name} 。下面的表格使您能够修改或停止您的捐款。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "{money_amount} 您目前每年向{recipient_name} 。下面的表格使您能够修改或停止您的捐赠。"
 
 msgid "Please select or input an amount:"
 msgstr "請選擇或輸入一個金額："
@@ -2034,9 +2037,9 @@ msgstr "探索社區"
 msgid "The submitted settings are incoherent."
 msgstr "您提交的设定不连贯。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "你目前每周收到相当于{money_amount} ，来自你即将拒绝的货币的捐赠。这些捐款不会被立即转换为你的主要货币，相反，每个捐款人在下次更新或修改他们的捐款时将被要求转换为可接受的货币。"
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "您的貨幣設定目前被忽略，因為它們與您使用的支付處理方式不相容。"
@@ -2443,23 +2446,23 @@ msgstr "取消請款"
 msgid "Funding your donations"
 msgstr "資助您的捐款"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
+msgstr[0] "你有{n} ，需要修改捐款，因为收件人不再接受你选择的货币。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "将您的捐款修改为{username}"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] "由於法律及技術限制，我們目前無法一次性處理您的所有捐款。因此您需要分 {n} 次支付。如有不便敬請見諒。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "寄钱给{recipients}"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -2614,9 +2617,9 @@ msgstr "提供 IBAN 資訊和確認這筆支付，您授權我方的支付服務
 msgid "Remember the bank account number for future payments"
 msgstr "記住此銀行帳戶資訊便於未來的支付用"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "为了减少该付款被拒绝的风险，我们建议你在下面输入你的邮政地址。它将被加密存储在我们的数据库中，并被发送到支付处理器({processor_name})。"
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3408,9 +3411,9 @@ msgstr "提供您的銀行帳戶資料代表將授權同意我們的支付服務
 msgid "Forget this bank account number after one payment."
 msgstr "一次性付款後不保留此銀行帳號。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "由于有时需要付款人的邮政地址才能成功处理付款，我们建议你在下面输入你的地址。它将被加密存储在我们的数据库中，并被发送到支付处理器（{processor_name} ）。"
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."

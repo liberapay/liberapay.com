@@ -87,15 +87,15 @@ msgstr "Váš príspevok v hodnote {amount} za rok pre {username} je potrebné o
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Váš dar vo výške {amount} za týždeň pre používateľa {username} mal byť obnovený pred {past_date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Váš dar vo výške {amount} mesačne pre používateľa {username} mal byť obnovený pred {past_date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Váš dar vo výške {amount} ročne pre používateľa {username} mal byť obnovený pred {past_date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -413,7 +413,7 @@ msgid "This operation is being carried out based on {link_start}the mandate {man
 msgstr "Táto akcia je založená na Vašom {link_start} mandáte {mandate_id} {link_end}, podpísanom dňa {acceptance_date}, v ktorom ste autorizovali spoločnosť Liberapay (SEPA kreditor {creditor_identifier}), aby odoslala Vašej banke platobný príkaz na inkaso z Vášho účtu a Vašu banku, inkasovať Váš účet v súlade s týmito pokynmi."
 
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "Ak ste túto platbu neautorizovali, dajte nám vedieť. Povieme vám, či vrátenie peňazí môžeme iniciovať my, alebo či o to musíte požiadať vašu banku."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -595,14 +595,14 @@ msgid "The following donation renewal payments have been aborted because the rec
 msgstr "Nasledovné obnovenia príspevkov boli zrušené pretože ich príjemcovia neboli schopný ich prijať:"
 
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Obnovenie daru Liberapay: vyžaduje sa manuálna akcia"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "Platba za obnovenie daru vo výške {money_amount} pre príjemcu {recipient} naplánovaná na {date} vyžaduje manuálnu akciu."
 
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "Nasledujúce platby za obnovenie darov vyžadujú manuálnu akciu:"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Obnovenie príspevku Liberapay: overenie potrebné"
@@ -931,9 +931,9 @@ msgstr "Nás pokus o začatie spojenia s {domain_name} emailovým serverom zlyha
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "'{domain_name}' nie je validná emailová doména."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
-msgstr "Zdá sa, že e-mailová adresa {email_address} neexistuje. E-mailový server {domain} na IP adrese {ip_address} ju odmietol s chybovým hlásením \"{error_message}\"."
+msgstr "Zdá sa, že e-mailová adresa {email_address} neexistuje. E-mailový server {domain} na adrese IP {ip_address} to odmietol s chybovou správou „{error_message}“."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
@@ -1812,11 +1812,11 @@ msgstr "Prebytok"
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "Váš aktuálny dar pre {name} je v {currency}, ale teraz prijímajú iba dary v {accepted_currency}. Svoj dar môžete previesť na túto menu alebo ho prerušiť."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "Váš aktuálny dar pre {name} je v {currency}, ale túto menu už neprijímajú. Navrhovaná nová mena je {accepted_currency}, ale môžete si vybrať inú."
 
 msgid "Modify"
 msgstr "Upraviť"
@@ -1826,15 +1826,15 @@ msgstr "Zastaviť"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Momentálne prispievate {money_amount} týždenne príjemcovi {recipient_name}. Nižšie uvedený formulár vám umožňuje upraviť alebo zastaviť váš dar."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Momentálne prispievate {money_amount} mesačne príjemcovi {recipient_name}. Nižšie uvedený formulár vám umožňuje upraviť alebo zastaviť váš dar."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Momentálne darujete {money_amount} ročne príjemcovi {recipient_name}. Nižšie uvedený formulár vám umožňuje upraviť alebo zastaviť váš dar."
 
 msgid "Please select or input an amount:"
 msgstr "Prosím vyberte alebo zadajte čiastku:"
@@ -2072,7 +2072,7 @@ msgstr "Odoslané nastavenia nie sú koherentné."
 
 #, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "V súčasnosti dostávate ekvivalent {money_amount} týždenne z darov v menách, ktoré sa chystáte odmietnuť. Tieto dary nebudú okamžite prevedené na vašu hlavnú menu, namiesto toho bude každý darca požiadaný, aby prešiel na akceptovanú menu, keď nabudúce obnoví alebo upraví svoj dar."
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Vaše nastavenia meny sú v súčasnosti ignorované, pretože nie sú kompatibilné so spracovateľom platieb, ktorého používate."
@@ -2490,13 +2490,13 @@ msgstr "Financovanie vašich príspevkov"
 #, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Máte dar {n}, ktorý je potrebné upraviť, pretože príjemca už neprijíma menu, ktorú ste si vybrali."
+msgstr[1] "Máte {n} dary, ktoré je potrebné upraviť, pretože príjemcovia už neprijímajú meny, ktoré ste si vybrali."
+msgstr[2] "Máte {n} darov, ktoré je potrebné upraviť, pretože príjemcovia už neprijímajú meny, ktoré ste si vybrali."
 
 #, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "Upravte svoj dar pre {username}"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2507,7 +2507,7 @@ msgstr[2] "Kvôli technickým a právnym obmedzeniam nie sme schopný spracovať
 
 #, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "Poslať peniaze príjemcom {recipients}"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -2666,7 +2666,7 @@ msgstr "Zapamätať si číslo bankového účtu pre budúce platby"
 
 #, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Aby ste znížili riziko odmietnutia tejto platby, odporúčame, aby ste nižšie zadali svoju poštovú adresu. Zašifrovaná bude uložená v našej databáze a odoslaná spracovateľovi platieb ({processor_name})."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3482,7 +3482,7 @@ msgstr "Zabudnúť číslo účtu po jednej platbe."
 
 #, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Keďže na úspešné spracovanie platby je niekedy potrebná poštová adresa platiteľa, odporúčame, aby ste nižšie zadali svoju. Zašifrovaná bude uložená v našej databáze a odoslaná spracovateľovi platieb ({processor_name})."
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."

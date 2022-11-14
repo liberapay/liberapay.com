@@ -85,15 +85,15 @@ msgstr "La tua donazione di {amount} all'anno a {username} deve essere rinnovata
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "La tua donazione di {amount} alla settimana a {username} doveva essere rinnovata prima del {past_date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "La tua donazione di {amount} al mese a {username} doveva essere rinnovata prima del {past_date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "La tua donazione di {amount} all'anno a {username} doveva essere rinnovata prima del {past_date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -407,7 +407,7 @@ msgid "This operation is being carried out based on {link_start}the mandate {man
 msgstr "Questa operazione viene eseguita sulla base {link_start}del mandato {mandate_id}{link_end} che hai firmato il {acceptance_date}, autorizzando Liberapay (creditore SEPA {creditor_identifier}) ad inviare istruzioni alla tua banca per addebitare il tuo conto e alla tua banca di addebitare il tuo conto in base alle istruzioni fornite."
 
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "Se non avete autorizzato questo pagamento, fatecelo sapere. Ti diremo se un rimborso può essere avviato da noi o se devi richiederlo alla tua banca."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -587,14 +587,14 @@ msgid "The following donation renewal payments have been aborted because the rec
 msgstr "I seguenti pagamenti di rinnovo di donazioni sono stati annullati perché i destinatari non sono in grado di riceverli:"
 
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Rinnovo della donazione Liberapay: necessaria un'azione manuale"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "Il pagamento del rinnovo della donazione di {money_amount} a {recipient} previsto per {date} richiede un'azione manuale."
 
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "I seguenti pagamenti di rinnovo delle donazioni richiedono un'azione manuale:"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Rinnovo delle donazioni Liberapay: richiesta autenticazione"
@@ -921,7 +921,7 @@ msgstr "Il tentativo di stabilire una connessione con il server e-mail {domain_n
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "“{domain_name}” non è un dominio e-mail valido."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
 msgstr "L'indirizzo e-mail {email_address} non sembra esistere. Il server di posta elettronica {domain} all'indirizzo IP {ip_address} lo ha rifiutato con il messaggio di errore \"{error_message}\"."
 
@@ -1797,11 +1797,11 @@ msgstr "Avanzo"
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "La tua attuale donazione a {name} è in {currency}, ma ora accettano solo donazioni in {accepted_currency}. Puoi convertire la tua donazione in quella valuta o interromperla."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "La tua attuale donazione a {name} è in {currency}, ma non accettano più quella valuta. La nuova valuta suggerita è la {accepted_currency}, ma puoi sceglierne un'altra."
 
 msgid "Modify"
 msgstr "Modifica"
@@ -1811,15 +1811,15 @@ msgstr "Interrompi"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Al momento stai donando {money_amount} a settimana a {recipient_name}. Il modulo sottostante ti consente di modificare o interrompere la tua donazione."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Al momento stai donando {money_amount} al mese a {recipient_name}. Il modulo sottostante ti consente di modificare o interrompere la tua donazione."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Al momento stai donando {money_amount} all'anno a {recipient_name}. Il modulo sottostante ti consente di modificare o interrompere la tua donazione."
 
 msgid "Please select or input an amount:"
 msgstr "Seleziona o inserisci un importo:"
@@ -2054,7 +2054,7 @@ msgstr "Le impostazioni fornite sono incoerenti."
 
 #, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "Attualmente ricevi l'equivalente di {money_amount} a settimana da donazioni in valute che stai per rifiutare. Queste donazioni non saranno immediatamente convertite nella tua valuta principale, invece ad ogni donatore verrà chiesto di passare a una valuta accettata la prossima volta che rinnoveranno o modificheranno la loro donazione."
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Le impostazioni della valuta sono attualmente ignorate perché incompatibili con l'elaboratore di pagamenti utilizzato."
@@ -2468,12 +2468,12 @@ msgstr "Finanziare le tue donazioni"
 #, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hai {n} donazione che deve essere modificata perché il destinatario non accetta più la valuta che avevi scelto."
+msgstr[1] "Hai {n} donazioni che devono essere modificate perché i destinatari non accettano più le valute che avevi scelto."
 
 #, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "Modifica la tua donazione a {username}"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2483,7 +2483,7 @@ msgstr[1] "A causa di limitazioni tecniche al momento non possiamo elaborare tut
 
 #, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "Invia denaro a {recipients}"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -2641,7 +2641,7 @@ msgstr "Ricorda il numero del conto bancario per i pagamenti futuri"
 
 #, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Per ridurre il rischio di rifiuto del pagamento, ti consigliamo di inserire il tuo indirizzo postale di seguito. Sarà memorizzato criptato nel nostro database e inviato al processore di pagamento ({processor_name})."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3446,7 +3446,7 @@ msgstr "Dimentica questo numero di conto bancario dopo un singolo pagamento."
 
 #, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Poiché l'indirizzo postale del pagatore è talvolta necessario per elaborare con successo un pagamento, si consiglia di inserire il proprio qui sotto. Sarà memorizzato criptato nel nostro database e inviato al processore di pagamento ({processor_name})."
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."

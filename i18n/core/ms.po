@@ -85,15 +85,15 @@ msgstr "Derma anda sebanyak {amount} setahun kepada {username} perlu diperbaharu
 
 #, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Derma anda sebanyak {amount} seminggu kepada {username} sepatutnya diperbaharui sebelum {past_date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Derma anda sebanyak {amount} sebulan kepada {username} sepatutnya diperbaharui sebelum {past_date}."
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Derma anda sebanyak {amount} setahun kepada {username} sepatutnya diperbaharui sebelum {past_date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -121,7 +121,7 @@ msgstr "Kami sudah tidak menghantar e-mel ke alamat anda {email_address}, kerana
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Kami tidak akan menghantar e-mel ke alamat anda {email_address}, kerana kami menerima aduan daripada penyedia e-mel. Sila hantar e-mel daripada alamat tersebut ke support@liberapay.com jika anda ingin kami membuangnya daripada senarai hitam."
+msgstr "Kami tidak akan menghantar e-mel ke alamat anda {email_address}, kerana kami menerima aduan daripada penyedia e-mel. Sila hantar e-mel daripada alamat tersebut kepada support@liberapay.com jika anda ingin kami membuangnya daripada senarai hitam."
 
 msgid "The error message from the email system was:"
 msgstr "Mesej ralat daripada sistem e-mel ialah:"
@@ -407,7 +407,7 @@ msgid "This operation is being carried out based on {link_start}the mandate {man
 msgstr "Operasi ini sedang dijalankan berdasarkan {link_start}mandat {mandate_id}{link_end} yang anda tandatangan pada {acceptance_date}, membenarkan Liberapay (kreditor SEPA {creditor_identifier}) untuk menghantar arahan kepada bank anda untuk mendebitkan akaun anda dan untuk bank anda mendebitkan akaun anda mengikut arahan tersebut."
 
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "Sekiranya anda tidak pernah membenarkan pembayaran ini, sila beritahu kami. Kami akan memberitahu anda sama ada pemulangan semula boleh dimulakan oleh pihak kami atau jika anda perlu memintanya menerusi bank anda."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -587,14 +587,14 @@ msgid "The following donation renewal payments have been aborted because the rec
 msgstr "Pembayaran pembaharuan derma berikut telah dihentikan kerana penerimanya tidak mampu menerimanya:"
 
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Pembaharuan derma Liberapay: tindakan manual diperlukan"
 
 #, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "Pembayaran pembaharuan derma sebanyak {money_amount} kepada {recipient} dijadualkan untuk {date} memerlukan tindakan manual."
 
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "Pembayaran pembaharuan derma berikut memerlukan tindakan manual:"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Pembaharuan derma Liberapay: penyahihan diperlukan"
@@ -1797,11 +1797,11 @@ msgstr "Baki"
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "Derma anda kepada {name} pada ketika ini adalah dalam {currency}, tetapi kini derma hanya diterima dalam {accepted_currency}. Anda boleh tukarkan derma anda ke mata wang tersebut, atau tamatkannya."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "Derma anda kepada {name} pada ketika ini adalah dalam {currency}, tetapi mata wang tersebut sudah tidak diterima. Mata wang baharu yang dicadangkan ialah {accepted_currency}, tetapi anda boleh pilih yang lain."
 
 msgid "Modify"
 msgstr "Ubah suai"
@@ -1811,15 +1811,15 @@ msgstr "Tamatkan"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Anda menderma sebanyak {money_amount} seminggu kepada {recipient_name} pada ketika ini. Borang berikut membolehkan anda mengubah suai atau menghentikan derma anda."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Anda menderma sebanyak {money_amount} sebulan kepada {recipient_name} pada ketika ini. Borang berikut membolehkan anda mengubah suai atau menghentikan derma anda."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Anda menderma sebanyak {money_amount} setahun kepada {recipient_name} pada ketika ini. Borang berikut membolehkan anda mengubah suai atau menghentikan derma anda."
 
 msgid "Please select or input an amount:"
 msgstr "Sila pilih atau masukkan jumlah:"
@@ -2054,7 +2054,7 @@ msgstr "Tetapan yang anda cuba simpan mempunyai ketidakserasian."
 
 #, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "Anda menerima jumlah yang setara dengan {money_amount} seminggu ketika ini daripada derma dalam mata wang yang anda bakal tolak. Derma-derma ini tidak akan ditukarkan ke mata wang utama anda serta merta, sebaliknya setiap penderma akan diminta untuk bertukar ke mata wang yang diterima pada waktu seterusnya mereka memperbaharui atau mengubah suai derma mereka."
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
 msgstr "Tetapan mata wang anda diabaikan ketika ini kerana ia tidak serasi dengan pemprosesan pembayaran yang anda guna."
@@ -2468,12 +2468,12 @@ msgstr "Tambah dana untuk derma"
 #, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Anda mempunyai {n} derma yang perlu diubah suai kerana penerima sudah tidak menerima mata wang yang anda pilih."
+msgstr[1] "Anda mempunyai {n} derma yang perlu diubah suai kerana para penerima sudah tidak menerima mata-mata wang yang anda pilih."
 
 #, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "Ubah suai derma anda kepada {username}"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2483,7 +2483,7 @@ msgstr[1] "Disebabkan had teknikal dan undang-undang, kami tidak mampu memproses
 
 #, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "Hantar wang kepada {recipients}"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -2594,7 +2594,7 @@ msgstr "Pemproses pembayaran ({name}) masih tidak mampu memproses debit terus {c
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
-msgstr "Bank anda boleh tolak pembayaran ini. Kami menggalakkan anda hantar salinan {link_start}mandat{link_end} ke bank anda jika anda tidak pasti sama ada ia mengurus arahan debit terus {currency} atau tidak."
+msgstr "Bank anda boleh tolak pembayaran ini. Kami menggalakkan anda hantar salinan {link_start}mandat{link_end} ke bank anda jika anda tidak pasti sama ada mereka mengendalikan arahan debit terus {currency} dengan betul."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2641,7 +2641,7 @@ msgstr "Ingat nombor akaun bank untuk pembayaran pada masa akan datang"
 
 #, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Untuk mengurangkan risiko pembayaran ini ditolak, kami menggalakkan anda mengisi alamat surat anda di bawah. Ia akan disimpan secara tersulit dalam pangkalan data kami dan dihantar ke pemprosesan pembayaran ({processor_name})."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3446,7 +3446,7 @@ msgstr "Lupakan nombor akaun bank ini selepas sekali bayar."
 
 #, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Memandangkan kadang kala alamat surat itu diperlukan untuk memproses pembayaran dengan jayanya, kami menggalakkan anda mengisi alamat surat anda di bawah. Ia akan disimpan secara tersulit dalam pangkalan data kami dan dihantar ke pemprosesan pembayaran ({processor_name})."
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
@@ -4728,7 +4728,7 @@ msgstr "Pelbagai mata wang"
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
 msgstr[0] "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
-msgstr[1] "Mata wang pertama yang Liberapay guna ialah euro, kemudian dolar AS ditambah, dan sekarang kami menyokong sebanyak {n} mata wang. Namun begitu, kami tidak menggunakan sebarang mata wang kripto."
+msgstr[1] "Mata wang pertama yang Liberapay guna ialah euro, kemudian dolar AS ditambah, dan sekarang kami menyokong sebanyak {n} mata wang. Namun begitu, kami tidak mengendalikan sebarang mata wang kripto."
 
 msgid "Integrations"
 msgstr "Penyepaduan"

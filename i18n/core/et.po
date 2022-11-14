@@ -83,17 +83,17 @@ msgstr "Sinu rahasüsti kasutajale {username} summas {amount} kuus tuleb pikenda
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "Sinu rahasüsti kasutajale {username} summas {amount} aastas tuleb pikendada enne {date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Teie annetus {amount} nädalas aadressil {username} pidi olema uuendatud enne {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Teie annetus {amount} kuus aadressil {username} pidi olema uuendatud enne {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "Teie annetus {amount} aastas aadressil {username} pidi olema uuendatud enne {past_date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -432,8 +432,9 @@ msgstr "Oleme kehtestanud mahaarvestuse summas {money_amount} sinu pangakontole 
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "See toiming põhineb teie poolt {acceptance_date} kuupäeval allkirjastatud {link_start}volikirjal {mandate_id}{link_end}, millega usaldate Librabay esindajat (SEPA võlausaldaja {creditor_identifier}) edastama oma pangale juhiseid enda konto depiteerimiseks ning oma pangale enda konto debiteerimiseks vastavalt samadele juhistele."
 
+#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "Kui te ei ole seda makset heaks kiitnud, siis palun andke meile sellest teada. Me ütleme teile, kas tagasimakset saab algatada meie poolt või peate seda taotlema oma pangast."
 
 #, fuzzy, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -620,15 +621,17 @@ msgstr "Kuupäevaks {date} ajastatud rahasüsti pikendamise makse summas {money_
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Järgmised rahasüsti pikendamise maksed on katkestatud, kuna saajal puudub võimalus neid vastu võtta:"
 
+#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Liberapay annetuse uuendamine: vajalik käsitsi tegutsemine"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "Annetuse uuendamise makse {money_amount} aadressil {recipient}, mis on kavas teha {date}, nõuab käsitsi sooritamist."
 
+#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "Järgmised annetuste uuendamise maksed nõuavad manuaalset tegevust:"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Liberapay rahasüsti pikendamine: tõendamine vajalik"
@@ -2057,13 +2060,13 @@ msgstr "Kasutamata jäänud tulu kulub ära järgmistel nädalatel, see ei kogun
 msgid "Leftover"
 msgstr "Ülejäänu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "Teie praegune annetus aadressile {name} on {currency}, kuid nad võtavad nüüd vastu annetusi ainult {accepted_currency}. Te saate oma annetuse konverteerida sellesse vääringusse või selle katkestada."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "Teie praegune annetus aadressile {name} on {currency}, kuid nad ei võta seda valuutat enam vastu. Soovitatav uus valuuta on {accepted_currency}, kuid te võite valida ka mõne muu valuuta."
 
 msgid "Modify"
 msgstr "Muuda"
@@ -2071,17 +2074,17 @@ msgstr "Muuda"
 msgid "Discontinue"
 msgstr "Katkesta"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Praegu annetate {money_amount} nädalas aadressil {recipient_name}. Allpool olev vorm võimaldab teil oma annetust muuta või lõpetada."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Praegu annetate {money_amount} kuus aadressile {recipient_name}. Allpool olev vorm võimaldab teil oma annetust muuta või lõpetada."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "Praegu annetate {money_amount} aastas aadressil {recipient_name}. Allpool olev vorm võimaldab teil oma annetust muuta või lõpetada."
 
 msgid "Please select or input an amount:"
 msgstr "Palun vali või sisesta summa:"
@@ -2351,9 +2354,9 @@ msgstr "Tutvu kogukondadega"
 msgid "The submitted settings are incoherent."
 msgstr "Esitatud seaded on ebajärjekindlad."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "Saate praegu nädalas annetusi, mis vastavad {money_amount} valuutas, mille te kavatsete tagasi lükata. Neid annetusi ei konverteerita kohe teie peamiseks valuutaks, vaid iga annetaja peab järgmisel korral, kui ta oma annetust uuendab või muudab, vahetama selle vastu võetud valuuta vastu."
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2865,15 +2868,15 @@ msgstr "Tühistatud lubadused"
 msgid "Funding your donations"
 msgstr "Teie annetuste rahastamine"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
+msgstr[0] "Teil on {n} annetus, mida tuleb muuta, sest saaja ei aktsepteeri enam teie valitud valuutat."
 msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "Muuda oma annetust {username}"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
@@ -2881,9 +2884,9 @@ msgid_plural "Due to legal and technical limitations we are currently unable to 
 msgstr[0] "Juriidiliste ja tehniliste piirangute tõttu ei ole meil praegu võimalik kõiki teie annetusi ühe maksena töödelda. Selle asemel peate tegema {n} eraldi makseid. Vabandame ebamugavuste pärast."
 msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "Saada raha {recipients}"
 
 #, fuzzy, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -3071,9 +3074,9 @@ msgstr "Oma IBANi esitades ja seda makset kinnitades volitate te {platform} ja {
 msgid "Remember the bank account number for future payments"
 msgstr "Jätke pangakonto number meelde tulevaste maksete tegemiseks"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Et vähendada riski, et makse tagasi lükatakse, soovitame teil sisestada oma postiaadress allpool. See salvestatakse meie andmebaasis krüpteeritult ja saadetakse makseprotsessorile ({processor_name})."
 
 #, fuzzy, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3996,9 +3999,9 @@ msgstr "Oma IBANi esitamisega volitate {platform} ja {provider}, meie makseteenu
 msgid "Forget this bank account number after one payment."
 msgstr "Unustage see pangakonto number pärast ühte makset."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "Kuna makse edukaks töötlemiseks on mõnikord vaja maksja postiaadressi, soovitame teil oma aadressi sisestada allpool. See salvestatakse meie andmebaasis krüpteeritult ja saadetakse makseprotsessorile ({processor_name})."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."

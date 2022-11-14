@@ -81,17 +81,17 @@ msgstr "{username}님에 대한 매주 {amount} 기부를 {date} 이전에 갱�
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "{username}님에 대한 매년 {amount} 기부를 {date} 이전에 갱신해야 합니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "{username}에 대한 매주 {amount} 기부는 {past_date} 이전에 갱신되어야 했습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "{username}에 대한 {amount}의 매월 기부는 {past_date} 이전에 갱신되어야 했습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr ""
+msgstr "{username}에 대한 연간 {amount} 기부는 {past_date} 이전에 갱신되어야 했습니다."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -400,8 +400,9 @@ msgstr "귀하의 은행 계좌({partial_account_number})에서 직접 {money_am
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "이 작업은 {acceptance_date} 에 귀하가 Liberapay (SEPA 대행자: {creditor_identifier})가 하기 지시에 따라 귀하의 은행에 자금을 이체하도록 {link_start}허가 {mandate_id}{link_end}한 데 따른 것입니다."
 
+#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr ""
+msgstr "이 지불을 승인하지 않은 경우 저희에게 알려주십시오. 저희가 환불을 시작할 수 있는지 또는 귀하가 은행에 요청해야 하는지 알려드리겠습니다."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -578,15 +579,17 @@ msgstr "{date}에 예정된 {recipient} 님에 대한 {money_amount} 기부 갱�
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "수신자가 자금을 수령할 수 없기 때문에 기부 갱신 결제가 취소되었습니다:"
 
+#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
-msgstr ""
+msgstr "Liberapay 기부 갱신: 수동 조치 필요"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr ""
+msgstr "{date}로 예정된 {money_amount}에 대한 기부 갱신 지불은 수동 조치가 필요합니다."
 
+#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr ""
+msgstr "다음 기부 갱신 결제에는 수동 조치가 필요합니다."
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Liberapay 기부 갱신: 인증 필요"
@@ -1786,13 +1789,13 @@ msgstr "사용되지 않는 수입은 다음 주 내에 소비될 것이며, 팀
 msgid "Leftover"
 msgstr "잔액"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr ""
+msgstr "{name}에 대한 현재 기부는 {currency}에 있지만 이제 {accepted_currency}에서만 기부를 수락합니다. 기부를 해당 통화로 변환하거나 중단할 수 있습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr ""
+msgstr "{name}에 대한 현재 기부는 {currency}이지만 더 이상 해당 통화를 허용하지 않습니다. 제안된 새 통화는 {accepted_currency}이지만 다른 통화를 선택할 수 있습니다."
 
 msgid "Modify"
 msgstr "수정하기"
@@ -1800,17 +1803,17 @@ msgstr "수정하기"
 msgid "Discontinue"
 msgstr "중단"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "현재 {recipient_name}에 매주 {money_amount}를 기부하고 있습니다. 아래 양식을 사용하여 기부를 수정하거나 중지할 수 있습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "현재 {recipient_name}에 매월 {money_amount}를 기부하고 있습니다. 아래 양식을 사용하여 기부를 수정하거나 중지할 수 있습니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr ""
+msgstr "현재 {recipient_name}에 매년 {money_amount}를 기부하고 있습니다. 아래 양식을 사용하여 기부를 수정하거나 중지할 수 있습니다."
 
 msgid "Please select or input an amount:"
 msgstr "선택하거나 값을 넣어 주세요:"
@@ -2042,9 +2045,9 @@ msgstr "커뮤니티 둘러보기"
 msgid "The submitted settings are incoherent."
 msgstr "제출된 설정값을 다시 검토해야 합니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
-msgstr ""
+msgstr "귀하는 현재 거부하려는 통화로 된 기부로부터 매주 {money_amount}에 해당하는 금액을 받습니다. 이러한 기부는 귀하의 기본 통화로 즉시 변환되지 않으며 대신 각 기부자가 다음에 기부를 갱신하거나 수정할 때 허용되는 통화로 전환하라는 요청을 받게 됩니다."
 
 #, fuzzy
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
@@ -2456,23 +2459,23 @@ msgstr "취소된 공약"
 msgid "Funding your donations"
 msgstr "기부금 모금"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
+msgstr[0] "{n} 기부금이 있습니다. 수취인이 귀하가 선택한 통화를 더 이상 받지 않기 때문에 수정해야 합니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr ""
+msgstr "기부금을 {username}로 수정"
 
 #, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
 msgstr[0] "법적, 기술적 제한으로 인해 현재 귀하의 모든 기부를 하나의 결제로 처리할 수 없습니다. 대신 {n} 개의 개별 결제를 수행해야 합니다. 불편을 드리게 되어 사과드립니다."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Send money to {recipients}"
-msgstr ""
+msgstr "{recipients}로 송금"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
@@ -2631,9 +2634,9 @@ msgstr "귀하는 IBAN을 제공하고 이 지급을 확인함으로써 귀하�
 msgid "Remember the bank account number for future payments"
 msgstr "향후 지급을 위해 은행 계좌 번호를 기억하세요"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "이 지불이 거부되는 위험을 줄이려면 아래에 우편 주소를 입력하는 것이 좋습니다. 그것은 우리의 데이터베이스에 암호화되어 저장되고 지불 프로세서({processor_name})로 보내질 것입니다."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3440,9 +3443,9 @@ msgstr "IBAN을 제공함으로써 귀하는 {platform} 및 {provider}, 당사�
 msgid "Forget this bank account number after one payment."
 msgstr "한 번 결제한 후 이 은행 계좌 번호를 잊어버리십시오."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr ""
+msgstr "지불을 성공적으로 처리하기 위해 지불인의 우편 주소가 필요할 수 있으므로 아래에 귀하의 주소를 입력하는 것이 좋습니다. 그것은 우리의 데이터베이스에 암호화되어 저장되고 지불 프로세서({processor_name})로 보내질 것입니다."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."
