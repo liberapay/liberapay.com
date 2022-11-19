@@ -168,7 +168,7 @@ PostgreSQL is designed to prevent data loss, so it does a lot of synchronous dis
 
 ### Tinkering with payments
 
-Liberapay currently supports two payment processors: [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/docs/).
+Liberapay currently supports two payment processors: [Stripe](https://stripe.com/docs) and [PayPal](https://developer.paypal.com/).
 
 #### Testing Stripe webhooks
 
@@ -178,7 +178,7 @@ You can forward Stripe's callbacks to your local Liberapay instance by running `
 
 All new dependencies need to be audited to check that they don't contain malicious code or security vulnerabilities.
 
-We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/reference/pip_install/#hash-checking-mode) to protect ourselves from dependency tampering. Thus, when adding or upgrading a dependency the new hashes need to be computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
+We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/topics/secure-installs/#hash-checking-mode) to protect ourselves from dependency tampering. Thus, when adding or upgrading a dependency the new hashes need to be computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
 
     pip install hashin
     hashin package==x.y -r requirements_base.txt -p 3.8 -p 3.9
