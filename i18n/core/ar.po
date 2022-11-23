@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Arabic "
-"<https://hosted.weblate.org/projects/liberapay/core/ar/>\n"
-"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5);\n"
+"PO-Revision-Date: 2022-11-22 13:48+0000\n"
+"Last-Translator: Laachir Deeper <adm.laachir@proton.me>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/liberapay/core/ar/>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5);\n"
+"X-Generator: Weblate 4.15-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -91,7 +93,7 @@ msgstr "يتوجب تجديد تبرعك بقيمة {amount} أسبوعياً ل
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "يجب تجديد تبرعك بـ {amount} سنويا إلى {username} قبل {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
 msgstr "كان من المفترض تجديد تبرعك بـ {amount} في الأسبوع لـ {username} قبل {past_date}."
 
@@ -99,7 +101,7 @@ msgstr "كان من المفترض تجديد تبرعك بـ {amount} في ال
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
 msgstr "كان من المفترض تجديد تبرعك بـ {amount} شهريًا لـ {username} قبل {past_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
 msgstr "كان من المفترض تجديد تبرعك بـ {amount} سنويًا لـ {username} قبل {past_date}."
 
@@ -426,13 +428,12 @@ msgstr "لقد بدأنا عملية مباشرة لخصم مبلغ {money_amoun
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
 msgstr "لقد بدأنا عملية مباشرة لخصم مبلغ {money_amount} من حسابك البنكي ({partial_account_number})."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "يتم تنفيذ هذه العملية بناءً على {link_start} التفويض {mandate_id} {link_end} الذي وقعت عليه على {acceptance_date} ، وتفويض Liberapay (دائن SEPA {creditor_identifier}) لإرسال تعليمات إلى البنك الذي تتعامل معه للخصم من حسابك ومصرفك إلى الخصم من حسابك وفقًا لتلك التعليمات."
 
-#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr "إذا لم تسمح بهذه الدفعة ، فيرجى إخبارنا بذلك. سنخبرك ما إذا كان بالإمكان بدء استرداد الأموال من قبلنا أو إذا كان عليك طلب ذلك من البنك الذي تتعامل معه."
+msgstr "إذا لم تسمح بهذه الدفعة، فيرجى إخبارنا بذلك. سنخبرك ما إذا كان بالإمكان بَدْء استرداد الأموال من قبلنا أو إذا كان عليك طلب ذلك من البنك الذي تتعامل معه."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -476,63 +477,59 @@ msgstr "يتعذر على رعاتك حاليًا إرسال الأموال إل
 msgid "Configure payment processing"
 msgstr "إعداد وسيلة الدفع"
 
-#, fuzzy
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "إذا كنت لا ترغب في تلقي التبرعات على Liberapay ، فيمكنك رفضها عن طريق تحرير ملف التعريف الخاص بك وفقًا لذلك."
+msgstr "إذا كنت لا ترغب في تلقي التبرعات على Liberapay، فيمكنك رفضها عن طريق تحرير ملف التعريف الخاص بك وفقًا لذلك."
 
-#, fuzzy
 msgid "Reject donations"
 msgstr "رفض التبرعات"
 
-#, fuzzy
 msgid "Liberapay donation renewal: your upcoming payment has changed"
 msgstr "تجديد تبرع Liberapay: تم تغيير دفعتك القادمة"
 
-#, fuzzy
 msgid "Due to changes made by you or by someone you donate to, your payment schedule has been modified as follows:"
-msgstr "نظرًا للتغييرات التي أجريتها أنت أو شخص تتبرع له ، تم تعديل جدول الدفع الخاص بك على النحو التالي:"
+msgstr "نظرًا للتغييرات التي أجريتها أنت أو شخص تتبرع له، تم تعديل جدول الدفع الخاص بك على النحو التالي:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
 msgstr "تم إلغاء دفعة {money_amount} المجدولة لـ {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
 msgstr "تم إلغاء الدفع اليدوي المجدول لـ {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
 msgstr "تمت جدولة دفعة جديدة لـ {money_amount} لـ {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A new manual payment has been scheduled for {date}."
 msgstr "تمت جدولة دفع يدوي جديد في {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} scheduled for {old_date} has been rescheduled to {new_date}."
 msgstr "تمت إعادة جدولة دفعة {money_amount} المجدولة لـ {old_date} إلى {new_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been rescheduled to {new_date}."
 msgstr "تمت إعادة جدولة الدفع اليدوي المجدول لـ {old_date} إلى {new_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The amount of the payment scheduled for {date} has been changed from {old_money_amount} to {new_money_amount}."
 msgstr "تم تغيير مبلغ الدفعة المجدولة لـ {date} من {old_money_amount} إلى {new_money_amount}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {old_money_amount} scheduled for {old_date} has been replaced by a payment of {new_money_amount} on {new_date}."
 msgstr "تم استبدال الدفع {old_money_amount} المجدول لـ {old_date} بدفع {new_money_amount} على {new_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The automatic payment of {old_money_amount} scheduled for {old_date} has been replaced by a manual payment on {new_date}."
 msgstr "تم استبدال الدفعة التلقائية لـ {old_money_amount} المجدولة لـ {old_date} بدفع يدوي على {new_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
 msgstr "تم استبدال الدفع اليدوي المجدول لـ {old_date} بدفع تلقائي بقيمة {new_money_amount} على {new_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
 msgstr[0] "لديك الآن {n} دفعة مجدولة:"
@@ -542,15 +539,15 @@ msgstr[3] "لديك الآن {n} دفعة مجدولة:"
 msgstr[4] "لديك الآن {n} دفعة مجدولة:"
 msgstr[5] "لديك الآن {n} دفعة مجدولة:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
 msgstr "{date}: دفع تلقائي بقيمة {money_amount} إلى {recipient}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{date}: automatic payment of {money_amount} split between {recipients}"
 msgstr "{date}: دفع تلقائي بقيمة {money_amount} مقسم بين {recipients}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{date}: manual payment to {recipients}"
 msgstr "{date}: دفع يدوي إلى {recipients}"
 
