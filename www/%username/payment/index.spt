@@ -129,6 +129,7 @@ subhead = _("Payment Processors")
         "bank accounts.)"
     ) }}</p>
     % if stripe_accounts
+    <div>
         % for account in stripe_accounts
         <form class="card card-default" action="" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
@@ -163,6 +164,7 @@ subhead = _("Payment Processors")
             ) }}</a>
         </form>
         % endfor
+    </div>
     <br>
     % elif country in locale.countries
         % if country in constants.PAYOUT_COUNTRIES['stripe']
