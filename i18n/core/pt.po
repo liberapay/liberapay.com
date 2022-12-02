@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Portuguese "
-"<https://hosted.weblate.org/projects/liberapay/core/pt/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2022-12-01 00:47+0000\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/liberapay/core/pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -83,15 +85,15 @@ msgstr "O seu donativo de {amount} por mês para {username} necessita de ser ren
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "O seu donativo de {amount} por ano para {username} necessita de ser renovado antes de {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
 msgstr "Sua doação de {amount} por semana para {username} deveria ser renovada antes de {past_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
 msgstr "Sua doação de {amount} por mês para {username} deveria ser renovada antes de {past_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
 msgstr "Sua doação de {amount} por ano para {username} deveria ser renovada antes de {past_date}."
 
@@ -106,7 +108,7 @@ msgid "If you wish to modify or stop a donation, click on the following link: {l
 msgstr "Se desejar alterar ou parar um donativo, clique na hiperligação seguinte: {link_start}gerenciar as minhas doações{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
-msgstr "O seu endereço de e-mail está temporariamente na lista negra"
+msgstr "O seu endereço de e-mail está temporariamente bloqueado"
 
 msgid "Your email address has been blacklisted"
 msgstr "O seu endereço de e-mail foi bloqueado"
@@ -121,7 +123,7 @@ msgstr "Não vamos enviar mais e-mails para o seu endereço {email_address} porq
 
 #, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Não vamos enviar mais e-mails para {email_address} porque recebemos uma reclamação do fornecedor de e-mail. Envie um e-mail através deste endereço de e-mail para support@liberapay.com se quiser removê-lo da lista negra."
+msgstr "Não vamos enviar mais e-mails para {email_address} porque recebemos uma reclamação do fornecedor de e-mail. Envie um e-mail através deste endereço de e-mail para support@liberapay.com se quiser desbloqueá-lo."
 
 msgid "The error message from the email system was:"
 msgstr "A mensagem de erro do sistema de e-mail foi:"
@@ -406,7 +408,6 @@ msgstr "Iniciamos um débito direto de {money_amount} da sua conta bancária ({p
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "A operação está a ser realizada conforme o {link_start}mandato {mandate_id}{link_end} assinado por si em {acceptance_date}, a autorizar a Liberapay (credora SEPA {creditor_identifier}) a enviar instruções ao seu banco para debitar a sua conta."
 
-#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
 msgstr "Se você não autorizou este pagamento, por favor nos avise. Informaremos se um reembolso pode ser iniciado por nós ou se você deve solicitá-lo ao seu banco."
 
@@ -587,15 +588,13 @@ msgstr "O pagamento da renovação da doação de {money_amount} para {recipient
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Os seguintes pagamentos de renovação de doação foram cancelados porque os destinatários não podem recebê-los:"
 
-#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
 msgstr "Renovação de doação Liberapay: ação manual necessária"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
 msgstr "O pagamento da renovação da doação de {money_amount} para {recipient} agendado para {date} requer ação manual."
 
-#, fuzzy
 msgid "The following donation renewal payments require manual action:"
 msgstr "Os seguintes pagamentos de renovação de doação exigem ação manual:"
 
@@ -899,14 +898,14 @@ msgstr "Você não pode remover seu e-mail principal."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
-msgstr "O e-mail '{0}' não foi verificado."
+msgstr "O e-mail \"{0}\" não foi verificado."
 
 msgid "You've reached the maximum number of email addresses we allow."
 msgstr "Você atingiu o número máximo de e-mails permitidos."
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
-msgstr "'{0}' não é um e-mail válido."
+msgstr "\"{0}\" não é um e-mail válido."
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
@@ -918,50 +917,50 @@ msgstr "Nossa tentativa de resolver o domínio {domain_name} falhou (error messa
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
-msgstr "Nossa tentativa de estabelecer uma conexão com o {domain_name} servidor de e-mail falhou (error message: “{error_message}”)."
+msgstr "Nossa tentativa de estabelecer uma conexão com o servidor de e-mail {domain_name} falhou (mensagem de erro: “{error_message}”)."
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
-msgstr "'{domain_name}' não é um domínio de e-mail válido."
+msgstr "\"{domain_name}\" não é um domínio de e-mail válido."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
-msgstr "O endereço de correio electrónico {email_address} parece não existir. O servidor de correio electrónico {domain} no endereço IP {ip_address} rejeitou-o com a mensagem de erro \"{error_message}\"."
+msgstr "O endereço de e-mail {email_address} parece não existir. O servidor de e-mail {domain} no endereço IP {ip_address} rejeitou-o com a mensagem de erro \"{error_message}\"."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
-msgstr "O endereço de e-mail {email_address} está na lista negra porque não foi possível enviar uma mensagem para ele {timespan_ago}."
+msgstr "O endereço de e-mail {email_address} está bloqueado porque não foi possível enviar uma mensagem para ele {timespan_ago}."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because of a complaint received {timespan_ago}. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "O e-mail {email_address} foi bloqueado porque foi denunciado {timespan_ago}. Envie um e-mail através dele para support@liberapay.com se quiser desbloqueá-lo."
+msgstr "O endereço de e-mail {email_address} foi bloqueado porque foi denunciado {timespan_ago}. Envie um e-mail através dele para support@liberapay.com se quiser desbloqueá-lo."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it was bouncing back all messages. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr "O domínio de e-mail {domain} foi colocado na lista negra em {date} porque estava devolvendo todas as mensagens. Favor entrar em contato conosco se isso foi consertado e você quiser que removamos este domínio da lista negra."
+msgstr "O domínio de e-mail {domain} foi bloqueado em {date} porque estava devolvendo todas as mensagens. Favor entrar em contato conosco se isso foi consertado e você quiser que desbloqueemos este domínio."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted because of a complaint received {timespan_ago}. Please contact us if this domain is yours and you want us to remove it from the blacklist."
-msgstr "O domínio de e-mail {domain} está na lista negra devido a uma reclamação recebida {timespan_ago}. Favor entrar em contato conosco se este domínio for seu e você quiser que o removamos ele da lista negra."
+msgstr "O domínio de e-mail {domain} está bloqueado devido a uma reclamação recebida {timespan_ago}. Favor entrar em contato conosco se este domínio for seu e você quiser que o desbloqueemos."
 
 #, python-brace-format
 msgid "The email domain {domain} was blacklisted on {date} because it provided disposable addresses. Please contact us if that is no longer true and you want us to remove this domain from the blacklist."
-msgstr "O domínio de e-mail {domain} foi colocado na lista negra em {date} porque ele fornecia endereços descartáveis. Favor entrar em contato conosco se isso não for verdade e você quiser que removamos este domínio da lista negra."
+msgstr "O domínio de e-mail {domain} foi bloqueado em {date} porque ele fornecia endereços descartáveis. Favor entrar em contato conosco se isso tiver sido consertado e você quiser que desbloqueemos este domínio."
 
 #, python-brace-format
 msgid "The email domain {domain} is blacklisted. Please contact us if you want us to remove it from the blacklist."
-msgstr "O domínio de e-mail {domain} está na lista negra. Por favor, entre em contato conosco se você quiser que o removamos da lista negra."
+msgstr "O domínio de e-mail {domain} está bloqueado. Por favor, entre em contato conosco se você quiser que o desbloqueemos."
 
 #, python-brace-format
 msgid "The email address {0} is already connected to your account."
-msgstr "O e-mail {0} já está vinculado à sua conta."
+msgstr "O endereço de e-mail {0} já está vinculado à sua conta."
 
 #, python-brace-format
 msgid "A verification email has already been sent to {email_address} recently."
 msgstr "Um e-mail de verificação já foi enviado para {email_address} recentemente."
 
 msgid "You are not allowed to add another email address right now, please try again in a few days."
-msgstr "Não foi possível adicionar outro e-mail agora, tente novamente em alguns dias."
+msgstr "Não foi possível adicionar outro endereço de e-mail agora, tente novamente em alguns dias."
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
 msgstr "Houve muitas tentativas de entrada a partir do seu IP ou país recentemente. Tente novamente em uma hora e entre em contato pelo support@liberapay.com se o problema persistir."
@@ -1152,10 +1151,10 @@ msgstr "{0} está vinculado a uma conta de grupo. Não é possível entrar como 
 
 #, python-brace-format
 msgid "\"{0}\" is not a valid email address."
-msgstr "\"{0}\" não é um e-mail válido."
+msgstr "\"{0}\" não é um endereço de e-mail válido."
 
 msgid "Your email address is now verified."
-msgstr "Seu e-mail foi verificado."
+msgstr "Seu endereço de e-mail foi verificado."
 
 #, python-brace-format
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
@@ -1193,7 +1192,7 @@ msgid "A login link is only valid for {x_hours} and can only be used once."
 msgstr "Um link para entrar na conta é válido apenas por {x_hours} e só pode ser usado uma vez."
 
 msgid "To request a new login link, input your email address:"
-msgstr "Para solicitar um novo link para entrar, insira seu e-mail:"
+msgstr "Para solicitar um novo link para entrar, insira seu endereço de e-mail:"
 
 msgid "Email address"
 msgstr "E-mail"
@@ -1798,11 +1797,11 @@ msgstr "A renda não usada será consumida nas semanas seguintes, ela não acumu
 msgid "Leftover"
 msgstr "Sobras"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
 msgstr "Sua doação atual para {name} está em {currency}, mas agora eles só aceitam doações em {accepted_currency}. Você pode converter sua doação para essa moeda ou descontinuá-la."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Sua doação atual para {name} está em {currency}, mas eles não aceitam mais essa moeda. A nova moeda sugerida é o {accepted_currency}, mas você pode escolher outra."
 
@@ -1812,15 +1811,15 @@ msgstr "Alterar"
 msgid "Discontinue"
 msgstr "Parar"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Você está doando {money_amount} por semana para {recipient_name}. O formulário abaixo permite que você modifique ou pare sua doação."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Você está doando {money_amount} por mês para {recipient_name}. O formulário abaixo permite que você modifique ou pare sua doação."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Você está doando {money_amount} por ano para {recipient_name}. O formulário abaixo permite que você modifique ou pare sua doação."
 
@@ -2055,7 +2054,7 @@ msgstr "Ver comunidades"
 msgid "The submitted settings are incoherent."
 msgstr "As configurações enviadas são incoerentes."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You currently receive the equivalent of {money_amount} per week from donations in currencies that you are about to reject. These donations will not be immediately converted to your main currency, instead each donor will be asked to switch to an accepted currency the next time they renew or modify their donation."
 msgstr "Atualmente, você recebe o equivalente a {money_amount} por semana de doações em moedas que está prestes a rejeitar. Essas doações não serão convertidas imediatamente para sua moeda principal, em vez disso, cada doador será solicitado a mudar para uma moeda aceita na próxima vez que renovar ou modificar sua doação."
 
@@ -2266,9 +2265,8 @@ msgstr "Este e-mail já foi verificado."
 msgid "This email address is already connected to a different Liberapay account."
 msgstr "Este e-mail já está conectado a uma conta Liberapay."
 
-#, fuzzy
 msgid "The confirmation of your email address has failed. Please check that the link you clicked on or copy-pasted hasn't been truncated or altered in any way."
-msgstr "A confirmação do seu endereço de correio electrónico falhou. Por favor, verifique se a ligação em que clicou ou copiou colada não foi truncada ou alterada de forma alguma."
+msgstr "A confirmação do seu endereço de e-mail falhou. Por favor, verifique se o link em que você clicou, ou copiou e colou, não foi truncado ou alterado de forma alguma."
 
 msgid "Your email address is now blacklisted."
 msgstr "Seu e-mail foi bloqueado agora."
@@ -2469,13 +2467,13 @@ msgstr "Compromissos cancelados"
 msgid "Funding your donations"
 msgstr "Financiando suas doações"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] "Você tem uma doação {n} que precisa ser modificada porque o destinatário não aceita mais a moeda que você escolheu."
-msgstr[1] ""
+msgstr[0] "Você tem {n} doação que precisa ser modificada porque o destinatário não aceita mais a moeda que você escolheu."
+msgstr[1] "Você tem {n} doações que precisam ser modificadas porque o destinatário não aceita mais a moeda que você escolheu."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Modify your donation to {username}"
 msgstr "Modifique sua doação para {username}"
 
@@ -2485,7 +2483,7 @@ msgid_plural "Due to legal and technical limitations we are currently unable to 
 msgstr[0] "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgstr[1] "Devido a limitações técnicas e legais, não podemos processar todas as suas doações como um único pagamento. Em vez disso, você terá que fazer {n} pagamentos separados. Pedimos desculpas pelo inconveniente."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Send money to {recipients}"
 msgstr "Enviar dinheiro para {recipients}"
 
@@ -2576,9 +2574,9 @@ msgstr "Não foi possível debitar apenas {donation_amount}, a quantia mínima d
 msgid "Please select or input a payment amount:"
 msgstr "Defina uma quantia de pagamento:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
-msgstr "Liberapay não armazena nada, o total do seu pagamento irá direto para as contas {payment_provider}."
+msgstr "Liberapay não armazena dinheiro. O total do seu pagamento irá direto para as contas {payment_provider} do destinatário."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "O PayPal revela seu nome e endereço de e-mail ao destinatário."
@@ -2643,7 +2641,7 @@ msgstr "Ao fornecer seu IBAN e confirmar este pagamento, você autoriza {platfor
 msgid "Remember the bank account number for future payments"
 msgstr "Lembrar número da conta bancária para futuros pagamentos"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Para reduzir o risco desse pagamento ser rejeitado, recomendamos que você insira seu endereço postal abaixo. Ele será armazenado criptografado em nosso banco de dados e enviado ao processador de pagamento ({processor_name})."
 
@@ -3057,21 +3055,21 @@ msgstr "doação pública para {recipient_name}"
 msgid "private donation to {recipient_name}"
 msgstr "doação privada para {recipient_name}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "secret donation to {recipient_name}"
 msgstr "doação secreta para {recipient_name}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "public donation to {recipient_name} for their role in the {team_name} team"
-msgstr "doação pública para {recipient_name} pelo seu papel na equipa {team_name}"
+msgstr "doação pública para {recipient_name} pelo seu papel na equipe {team_name}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "private donation to {recipient_name} for their role in the {team_name} team"
-msgstr "doação privada para {recipient_name} pelo seu papel na equipa {team_name}"
+msgstr "doação privada para {recipient_name} pelo seu papel na equipe {team_name}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "secret donation to {recipient_name} for their role in the {team_name} team"
-msgstr "doação secreta para {recipient_name} pelo seu papel na equipa {team_name}"
+msgstr "doação secreta para {recipient_name} pelo seu papel na equipe {team_name}"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3091,9 +3089,8 @@ msgstr "Para ver as antigas transações processadas pelo Mangopay na {link_star
 msgid "You are not invited to join this team."
 msgstr "Você não foi convidado para entrar nesta equipe."
 
-#, fuzzy
 msgid "You have been removed from this team."
-msgstr "Foi retirado desta equipa."
+msgstr "Você foi removido desta equipe."
 
 msgid "You have already accepted this invitation."
 msgstr "Você já aceitou este convite."
@@ -3160,7 +3157,6 @@ msgstr "Marcar como lido"
 msgid "Remove"
 msgstr "Remover"
 
-#, fuzzy
 msgid "An error occurred while rendering this notification."
 msgstr "Ocorreu um erro durante a apresentação desta notificação."
 
@@ -3170,58 +3166,52 @@ msgstr "Sem notificações para mostrar."
 msgid "Next Page →"
 msgstr "Próximo →"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
-msgstr[0] "Tem {n} patrono activo a dar-lhe {money_amount} por semana."
-msgstr[1] ""
+msgstr[0] "Você tem {n} doador ativo dando-lhe {money_amount} por semana."
+msgstr[1] "Você tem {n} doadores ativos dando-lhe {money_amount} por semana."
 
-#, fuzzy
 msgid "You don't have any active patrons."
-msgstr "Não tem nenhum patrão activo."
+msgstr "Você não tem doador ativo."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} doesn't have any active patrons."
-msgstr "{username} não tem nenhum patrão activo."
+msgstr "{username} não tem doador ativo."
 
-#, fuzzy
 msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay apoia agora doações não anónimas, quer saber quem são os seus mecenas?"
+msgstr "Liberapay apoia agora doações não anônimas, deseja saber quem são os seus doadores?"
 
-#, fuzzy
 msgid "Enable non-anonymous donations"
-msgstr "Permitir doações não anónimas"
+msgstr "Permitir doações não anônimas"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Optou por ver quem são os seus patronos. Se mudar de ideias, então {link_start}clique aqui para desactivar doações não anónimas{link_end}."
+msgstr "Você optou por ver quem são os seus doadores. Se mudar de ideia {link_start}clique aqui para desativar doações não anônimas{link_end}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Optou por não ver quem são os seus patronos. Se mudar de ideias, então {link_start}clique aqui para permitir doações não anónimas{link_end}."
+msgstr "Você optou por não ver quem são os seus doadores. Se mudar de ideia, {link_start}clique aqui para permitir doações não anônimas{link_end}."
 
-#, fuzzy
 msgid "Data export"
 msgstr "Exportação de dados"
 
-#, fuzzy
 msgid "Download the list of currently active patrons"
-msgstr "Descarregar a lista de mecenas actualmente activos"
+msgstr "Baixar a lista de doadores atualmente ativos"
 
-#, fuzzy
 msgid "Download the record of all patrons in the last ten years"
-msgstr "Descarregar o registo de todos os mecenas nos últimos dez anos"
+msgstr "Baixar o registo de todos os doadores nos últimos dez anos"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "View the patrons of {username}"
-msgstr "Ver os patronos de {username}"
+msgstr "Ver os doadores de {username}"
 
 msgid "You are not a member of any team."
 msgstr "Você não é membro de nenhuma equipe."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} isn't a member of any team."
-msgstr "{username} não é um membro de nenhuma equipa."
+msgstr "{username} não é um membro de nenhuma equipe."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3281,11 +3271,10 @@ msgstr "Com PayPal, você pode receber doações de muitos mais países que Stri
 msgid "liberapay_receipt_{number}"
 msgstr "recibo_liberapay_{number}"
 
-#, fuzzy
 msgid "Payment receipt"
 msgstr "Recibo de pagamento"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has been received."
 msgstr "O pagamento de {money_amount} iniciado em {date} foi recebido."
 
@@ -3320,29 +3309,27 @@ msgstr "Destinatário"
 msgid "{recipient}, member of the {team_name} team"
 msgstr "{recipient}, membro da equipe {team_name}"
 
-#, fuzzy
 msgid "Payer"
 msgstr "Pagador"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Name: {0}"
 msgstr "Nome: {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Email address: {0}"
-msgstr "Endereço de correio electrónico: {0}"
+msgstr "Endereço de e-mail: {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Organization name: {0}"
 msgstr "Nome da organização: {0}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Headquarters address: {0}"
 msgstr "Endereço da sede: {0}"
 
-#, fuzzy
 msgid "Payment details"
-msgstr "Dados do pagamento"
+msgstr "Detalhes do pagamento"
 
 #, python-brace-format
 msgid "Payment method: {brand} card, number ending in {last4}"
@@ -3364,13 +3351,11 @@ msgstr "Data de liquidação: {0}"
 msgid "Transaction ID: {0}"
 msgstr "ID da transação: {0}"
 
-#, fuzzy
 msgid "Taxes"
-msgstr "Impostos"
+msgstr "Taxas"
 
-#, fuzzy
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
-msgstr "Este pagamento é uma doação, nenhum bem ou serviço deve ser fornecido em troca, nenhum imposto foi cobrado por Liberapay."
+msgstr "Este pagamento é uma doação, nenhum bem ou serviço deve ser fornecido em troca, nenhuma taxa foi cobrada pelo Liberapay."
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Receber doações requer ao menos um processador de pagamentos configurado."
@@ -3461,7 +3446,7 @@ msgstr "Ao fornecer seu IBAN, você está autorizando a {platform} e o {provider
 msgid "Forget this bank account number after one payment."
 msgstr "Esqueça este número de conta após um pagamento."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Como o endereço postal do pagador às vezes é necessário para processar um pagamento com sucesso, recomendamos que você insira o seu abaixo. Ele será armazenado criptografado em nosso banco de dados e enviado ao processador de pagamento ({processor_name})."
 
@@ -3480,13 +3465,13 @@ msgstr "padrão"
 msgid "view mandate"
 msgstr "ver mandato"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Was supposed to expire in {month} {year}"
-msgstr "Devia expirar em {month} {year}"
+msgstr "Devia expirar em {month} de {year}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Expired in {month} {year}"
-msgstr "Expira em {month} {year}"
+msgstr "Expira em {month} de {year}"
 
 #, python-brace-format
 msgid "Expires in {month} {year}"
@@ -3540,15 +3525,12 @@ msgstr "Os dados de identidade e o histórico de transações são mantidos pelo
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
 msgstr "Seu nome de usuário pode ser informado para outra pessoa se a mesma solicitar, mas não antes de bater um ano de fechamento da sua conta (a menos que você tenha infringido uma marca comercial)."
 
-#, fuzzy
 msgid "Feedback"
-msgstr "Comentar"
+msgstr "Feedback"
 
-#, fuzzy
 msgid "If you would like to tell us why you're closing your account, you can leave a message here:"
-msgstr "Se quiser dizer-nos porque está a encerrar a sua conta, pode deixar aqui uma mensagem:"
+msgstr "Se quiser nos dizer porque está encerrando sua conta, pode deixar aqui uma mensagem:"
 
-#, fuzzy
 msgid "Reason for closing account"
 msgstr "Motivo do encerramento da conta"
 
@@ -3558,9 +3540,8 @@ msgstr "Pronto?"
 msgid "Yes, close my Liberapay account"
 msgstr "Sim, fechar minha conta Liberapay"
 
-#, fuzzy
 msgid "Your account is now passwordless."
-msgstr "A sua conta está agora sem palavra-passe."
+msgstr "A sua conta está agora sem senha."
 
 msgid "Your password has been changed."
 msgstr "Sua senha foi alterada."
@@ -3612,9 +3593,8 @@ msgstr "A doação não existe ou foi parada."
 msgid "Your donation to {0} has been stopped."
 msgstr "Sua doação para {0} foi parada."
 
-#, fuzzy
 msgid "This is no longer possible."
-msgstr "Isto já não é possível."
+msgstr "Isso já não é possível."
 
 msgid "Export History"
 msgstr "Exportar histórico"
