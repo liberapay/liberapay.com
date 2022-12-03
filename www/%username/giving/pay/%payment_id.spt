@@ -99,7 +99,7 @@ elif retry_id:
     if error.startswith("For 'sepa_debit' payments, we currently require "):
         allow_stripe_sdd = False
     tips = website.db.all("""
-        SELECT tip.*, tippee_p
+        SELECT DISTINCT tip.*, tippee_p
           FROM payin_transfers pt
           JOIN current_tips tip ON tip.tipper = pt.payer AND tip.tippee = coalesce(pt.team, pt.recipient)
           JOIN participants tippee_p ON tippee_p.id = tip.tippee

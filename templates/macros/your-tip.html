@@ -176,13 +176,14 @@
     % set tippee_p = tippee.participant if tippee_is_stub else tippee
     % set pledging = tippee_p.payment_providers == 0 or not tippee_p.accepts_tips
     % set tippee_name = tippee.friendly_name if tippee_is_stub else tippee.username
-    % set tip_is_standard = False
+    % set tip_is_standard = []
     <ul class="list-group radio-group">
     % set tip_amount_in_new_currency = tip.amount.convert(new_currency)
     % for std_tip in constants.STANDARD_TIPS[new_currency]
         % set amount_is_a_match = std_tip.weekly == tip_amount_in_new_currency
         % if amount_is_a_match
-            % set tip_is_standard = True
+            {# Resetting a variable inside a loop is messed up as of Jinja2 3.1.2, so we mutate a list instead. #}
+            % do tip_is_standard.append(True)
         % endif
         <li class="list-group-item">
         <label>
