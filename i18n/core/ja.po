@@ -37,7 +37,7 @@ msgstr "メール設定を変更"
 
 #, python-brace-format
 msgid "It's time to renew your donation to {username} on Liberapay"
-msgstr "Liberapay での {username} さんへの寄付を更新しましょう"
+msgstr "Liberapay で {username} さんへの寄付を更新する時期が来ました"
 
 msgid "It's time to renew your donations on Liberapay"
 msgstr "Liberapay での寄付を更新しましょう"
@@ -81,17 +81,17 @@ msgstr "{date} までに {username} さんへの毎月 {amount} の寄付を更�
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "{date} までに {username} さんへの毎年 {amount} の寄付を更新する必要があります。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr "あなたの{username}への週あたりの{amount}の寄付は{past_date}以前に更新されるはずでした。"
+msgstr "あなたの {username} さんへの週間寄付（{amount}）は {past_date} の前に更新されるはずでした。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr "あなたの{username}への月々{amount}の寄付は{past_date}以前に更新されるはずでした。"
+msgstr "あなたの {username} さんへの月々寄付（{amount}）は {past_date} の前に更新される予定でした。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr "あなたの{username}への年間{amount}の寄付は{past_date}以前に更新されるはずでした。"
+msgstr "あなたの {username} さんへの年間寄付（{amount}）は {past_date} の前に更新される予定でした。"
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -400,9 +400,8 @@ msgstr "お使いの銀行口座（{partial_account_number}）からの {money_a
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "この操作は、あなたが {acceptance_date} にサインした{link_start}委任 {mandate_id}{link_end}にもとづいて実行され、あなたの口座から引き落とす指示をLiberapay（SEPA 債権者 {creditor_identifier}）があなたの銀行に送信すること、その指示に従ってあなたの銀行があなたの口座から引き落とすことを承認します。"
 
-#, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr "お客様がこの支払いを承認していない場合、その旨をお知らせください。弊社が返金を行うか、お客様が銀行に返金依頼をする必要があるかをお知らせします。"
+msgstr "この支払いを、お客様が承認されていなかった場合、その旨をお知らせください。弊社で返金を行えるか、お客様が銀行に返金依頼をする必要があるかをお知らせします。"
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -579,17 +578,15 @@ msgstr "支払いの日時を{date}に、金額を{money_amount}に更新しま�
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "受領者が寄付を受け取れない状態のため、支払いを更新し寄付を継続することができません:"
 
-#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
-msgstr "Liberapayの寄付の更新：手動での操作が必要です。"
+msgstr "Liberapay 寄付の更新：手動での操作が必要です"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr "{date} に予定されている{money_amount} から{recipient} への寄付金更新支払いは、手動での対応が必要です。"
+msgstr "{date} に予定されている {recipient} さんへの寄付金額の更新（{money_amount}）は、手動による確認が必要です。"
 
-#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr "以下の寄付金更新の支払いには、手動での操作が必要です。"
+msgstr "以下の寄付金額更新の支払いは、手動での操作が必要です。"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Liberapayの寄付金更新：認証が必要です。"
@@ -1486,7 +1483,7 @@ msgid "Maximum length is {0}."
 msgstr "最大の長さは {0} です。"
 
 msgid "2FA"
-msgstr "二要素認証"
+msgstr "2要素認証"
 
 msgid "Liberapay does not yet support two-factor authentication."
 msgstr "Liberapayはまだ二要素認証に対応していません。"
@@ -4923,10 +4920,10 @@ msgstr "{platform} アカウントの接続"
 msgid "It looks like you don't follow anyone on {platform}."
 msgstr "あなたは{platform} で誰もフォローしていないようです。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
-msgstr[0] "あなたがフォローしている{n} のアカウントは、{platform} 。"
+msgstr[0] "{platform} では、あなたは {n} 個のアカウントをフォローしています。"
 
 msgid "The address you provided is not valid. Expected format: username@domain"
 msgstr "指定されたアドレスは有効ではありません。“@\"（アットマーク）記号が含まれていません。"
