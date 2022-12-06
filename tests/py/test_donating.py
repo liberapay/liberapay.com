@@ -4,7 +4,9 @@ from liberapay.testing import Harness, USD
 class TestDonating(Harness):
 
     def test_donation_form_v2(self):
-        creator = self.make_participant('creator', accepted_currencies=None)
+        creator = self.make_participant(
+            'creator', accepted_currencies=None, email='creator@liberapay.com',
+        )
         r = self.client.GET('/creator/donate?currency=KRW')
         assert r.code == 200
         assert ">Pledge<" in r.text
@@ -34,7 +36,9 @@ class TestDonating(Harness):
         assert tip.visibility == 3
 
     def test_donation_form_v2_does_not_overwrite_visibility(self):
-        creator = self.make_participant('creator', accepted_currencies=None)
+        creator = self.make_participant(
+            'creator', accepted_currencies=None, email='creator@liberapay.com',
+        )
         self.add_payment_account(creator, 'stripe')
         donor = self.make_participant('donor')
         donor.set_tip_to(creator, USD('10.00'), renewal_mode=1, visibility=3)
