@@ -202,6 +202,12 @@ class TestElsewhere(EmailHarness):
         response = self.client.GET('/on/github/liberapay/failure.html')
         assert response.code == 200
 
+    def test_failure_page_accepts_plausible_username_and_domain(self):
+        response = self.client.GET('/on/mastodon/liberapay@liberapay.com/failure.html')
+        assert response.code == 200
+        row = self.db.one("select * from elsewhere")
+        assert not row
+
     def test_public_json_not_opted_in(self):
         for platform in self.platforms:
             if platform.single_domain:
