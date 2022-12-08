@@ -3,6 +3,8 @@ from hashlib import blake2b
 from liberapay.utils import b64encode_s
 
 [---]
+invalid_totp = False
+
 cancel = request.qs.parse_boolean('log-in.cancel', default=False)
 p_id = request.qs.get_int('log-in.id')
 if cancel:
@@ -35,9 +37,17 @@ response.code = 200
             "to confirm or cancel.",
             identifier='<code>%s</code>'|safe % logging_in_as
         ) }}</p>
+        % if invalid_otp
+            <p class="alert alert-danger">{{ _(
+            "Invalid OTP-code. Please try again."
+            ) }}</p>
+        % endif
         <p class="flex-row space-between wrap">
             <span class="flex-col">
-                <a class="btn btn-success" href="{{ request.qs.derive(**{'log-in.confirmation': confirmation_token}) }}">{{ _(
+                <input id="log-in-link-is-valid_totp_field" class="form-control"
+                   type="text"
+                   placeholder="{{ _('One-time password (optional)') }}" />
+                <a id="log-in-link-is-valid_button" class="btn btn-success" href="{{ request.qs.derive(**{'log-in.confirmation': confirmation_token}) }}">{{ _(
                     "Log in as {identifier}",
                     identifier=logging_in_as
                 ) }}</a>

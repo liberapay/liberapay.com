@@ -1,0 +1,48 @@
+from liberapay.utils import get_participant
+
+[---]
+
+participant = get_participant(state, restrict=True)
+image = participant.generate_totp_qrcode()
+
+subhead = _("Enable Two-Factor Authentication")
+title = participant.username
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% block content
+    % if participant.is_totp_verified()
+        <p>{{ _(
+            "Two-Factor Authentication is already enabled."
+        ) }}</p>
+    % else
+        <p>{{ _(
+            "Please scan the QR-code below using an authenticator app on "
+            "your mobile device such as KeePass, FreeOTP, andOTP, "
+            "Google Authenticator, Microsoft Authenticator, 2FAS, etc."
+        ) }}</p>
+        <p>{{ _(
+            "Then type the code shown for the newly created entry "
+            "into the text box further down and press 'Verify'."
+        ) }}</p>
+        <p>{{ _(
+            "When Two-Factor Authentication is enabled, you will be asked "
+            "to enter the code from the entry in your authenticator app whenever "
+            "you wish to login."
+        ) }}</p>
+        % if request.qs.parse_boolean('failed_to_verify', False)
+            <p class="alert alert-danger">{{ _("Failed to verify the submitted code. Please try again with another one.") }}</p>
+        % endif
+        <p><img src="data:image/png;base64,{{image}}"></p>
+        <form action="{{ participant.path('settings/handle_2fa') }}" method="POST" class="form-inline buttons">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <input name="back_to" type="hidden" value="{{ participant.path('settings/') }}" />
+            <div class="form-group">
+            <input type="text" name="verification-code" class="form-control"
+                   placeholder="{{ _('Verification code') }}" />
+            </div>
+            <button class="btn btn-default">{{ _("Verify") }}</button>
+        </form>
+    % endif
+% endblock

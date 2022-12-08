@@ -21,7 +21,7 @@ if 'new-password' in body or 'action' in body:
     else:
         try:
             p2 = Participant.authenticate_with_password(
-                p.id, body.get('cur-password'), context='change_password'
+                p.id, body.get('cur-password'), '', context='change_password'
             )
         except AccountIsPasswordless:
             pass  # user doesn't have a password yet, allow adding one

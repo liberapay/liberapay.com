@@ -437,4 +437,6 @@ TAKE_THROTTLING_THRESHOLD = MoneyAutoConvertDict(
 USERNAME_MAX_SIZE = 32
 USERNAME_SUFFIX_BLACKLIST = set('.txt .html .htm .json .xml'.split())
 
+VALID_WINDOW_2FA = 5
+
 del _
