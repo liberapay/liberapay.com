@@ -701,6 +701,12 @@ def update_transfer_metadata(tr, pt):
         if isinstance(py, str):
             try:
                 py = stripe.Charge.retrieve(py, stripe_account=tr.destination)
+            except stripe.error.PermissionError as e:
+                if e.message.endswith(" Application access may have been revoked."):
+                    pass
+                else:
+                    website.tell_sentry(e)
+                return tr
             except Exception as e:
                 website.tell_sentry(e)
                 return tr
@@ -715,6 +721,11 @@ def update_transfer_metadata(tr, pt):
             attrs['stripe_account'] = tr.destination
             try:
                 py.modify(py.id, **attrs)
+            except stripe.error.PermissionError as e:
+                if e.message.endswith(" Application access may have been revoked."):
+                    pass
+                else:
+                    website.tell_sentry(e)
             except Exception as e:
                 website.tell_sentry(e)
     return tr
