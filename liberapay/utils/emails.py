@@ -366,7 +366,11 @@ def test_email_server(ip_address: str, email=None) -> None:
                     # Address errors
                     subject == '1' and detail in '12346' or
                     # Mailbox errors
-                    subject == '2' and detail in '124'
+                    subject == '2' and detail in '124' or
+                    # Microsoft's SMTP server
+                    msg.startswith("Requested action not taken: mailbox unavailable") or
+                    # Tutanota's SMTP server
+                    msg.endswith("Recipient address rejected: Recipient not found")
                 )
                 if recipient_rejected:
                     raise EmailAddressRejected(email, msg, ip_address)
