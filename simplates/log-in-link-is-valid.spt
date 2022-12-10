@@ -37,7 +37,7 @@ response.code = 200
             "to confirm or cancel.",
             identifier='<code>%s</code>'|safe % logging_in_as
         ) }}</p>
-        % if invalid_otp
+        % if invalid_totp
             <p class="alert alert-danger">{{ _(
             "Invalid OTP-code. Please try again."
             ) }}</p>
