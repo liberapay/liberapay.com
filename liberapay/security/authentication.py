@@ -262,7 +262,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             creds = [creds[0], 1, creds[1]]
         if len(creds) == 3:
             session_p, state['session_status'] = Participant.authenticate_with_session(
-                *creds, totp='', allow_downgrade=True, cookies=response.headers.cookie, context='cookie'
+                *creds, allow_downgrade=True, cookies=response.headers.cookie, context='cookie'
             )
             if session_p:
                 user = state['user'] = session_p

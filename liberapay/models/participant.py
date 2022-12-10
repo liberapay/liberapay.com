@@ -455,7 +455,7 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def authenticate_with_session(
-        cls, p_id, session_id, secret, totp=totp, allow_downgrade=False, cookies=None, context='log-in'
+        cls, p_id, session_id, secret, totp='', allow_downgrade=False, cookies=None, context='log-in'
     ):
         """Fetch a participant using its ID, but only if the provided session is valid.
 
