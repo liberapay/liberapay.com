@@ -13,7 +13,6 @@ import unicodedata
 from urllib.parse import quote as urlquote, urlencode
 import uuid
 import io
-import png
 from pyotp import totp, random_base32
 from pyqrcode import create as create_qrcode
 
@@ -245,7 +244,7 @@ class Participant(Model, MixinTeam):
     # ===================
 
     @classmethod
-    def authenticate_with_password(cls, p_id, password, totp, context='log-in'):
+    def authenticate_with_password(cls, p_id, password, totp='', context='log-in'):
         """Fetch a participant using its ID, but only if the provided password is valid.
 
         Args:
@@ -422,9 +421,9 @@ class Participant(Model, MixinTeam):
     def generate_totp_qrcode(self):
         totp_token = self.gen_totp_token()
         uri = totp.TOTP(totp_token).provisioning_uri(
-                name=f'~{self.id}',
-                image='https://liberapay.com/assets/liberapay/icon-v2_white-on-yellow.200.png',
-                issuer_name='Liberapay'
+            name=f'~{self.id}',
+            image='https://liberapay.com/assets/liberapay/icon-v2_white-on-yellow.200.png',
+            issuer_name='Liberapay'
         )
         qrcode = create_qrcode(uri)
         buffer = io.BytesIO()
@@ -434,7 +433,7 @@ class Participant(Model, MixinTeam):
 
     def verify_totp(self, totp_code):
         totp_token = self.gen_totp_token()
-        return totp.TOTP(totp_token).verify(totp_code)
+        return totp.TOTP(totp_token).verify(totp_code, valid_window=VALID_WINDOW_2FA)
 
     def enable_totp(self, verification_code):
         if self.verify_totp(verification_code):
@@ -448,8 +447,7 @@ class Participant(Model, MixinTeam):
                 SET totp_token = NULL,
                     totp_verified = false
             WHERE id = %s
-            """,
-            (self.id,))
+            """, (self.id,))
 
 
     # Session Management
@@ -457,7 +455,7 @@ class Participant(Model, MixinTeam):
 
     @classmethod
     def authenticate_with_session(
-        cls, p_id, session_id, secret, totp, allow_downgrade=False, cookies=None, context='log-in'
+        cls, p_id, session_id, secret, totp=totp, allow_downgrade=False, cookies=None, context='log-in'
     ):
         """Fetch a participant using its ID, but only if the provided session is valid.
 

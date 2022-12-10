@@ -85,7 +85,7 @@ def sign_in_with_form_data(body, state):
             else:
                 p_id = Participant.get_id_for(id_type, input_id)
             try:
-                p = Participant.authenticate_with_password(p_id, password, totp)
+                p = Participant.authenticate_with_password(p_id, password, totp=totp)
             except AccountIsPasswordless:
                 if id_type == 'email':
                     state['log-in.email'] = input_id
@@ -261,9 +261,8 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
         if len(creds) == 2:
             creds = [creds[0], 1, creds[1]]
         if len(creds) == 3:
-            creds.append('')
             session_p, state['session_status'] = Participant.authenticate_with_session(
-                *creds, allow_downgrade=True, cookies=response.headers.cookie, context='cookie'
+                *creds, totp='', allow_downgrade=True, cookies=response.headers.cookie, context='cookie'
             )
             if session_p:
                 user = state['user'] = session_p
@@ -318,8 +317,8 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
                 raise response.render('simplates/log-in-link-is-invalid.spt', state)
             required = request.qs.parse_boolean('log-in.required', default=True)
             p, reason = Participant.authenticate_with_session(
-                id, session_id, token, totp,
-                allow_downgrade=not required, cookies=response.headers.cookie
+                id, session_id, token,
+                totp=totp, allow_downgrade=not required, cookies=response.headers.cookie
             )
             if p:
                 if p.id != user.id or reason == 'require_totp':
