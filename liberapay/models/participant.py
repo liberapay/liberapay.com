@@ -271,7 +271,7 @@ class Participant(Model, MixinTeam):
             return None
         p, stored_secret = r
         if context == 'log-in':
-            if p.is_totp_verified():
+            if p.is_totp_enabled():
                 if (not totp) or (not p.verify_totp(totp)):
                     return None
             cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
@@ -399,7 +399,7 @@ class Participant(Model, MixinTeam):
     # 2FA Management (TOTP)
     # =====================
 
-    def is_totp_verified(self):
+    def is_totp_enabled(self):
         return self.db.one(
             "SELECT totp_verified FROM participants WHERE id = %s",
             (self.id,)
@@ -495,7 +495,7 @@ class Participant(Model, MixinTeam):
             return None, 'invalid'
         p, stored_secret, mtime = r
         if context == 'log-in':
-            if p.is_totp_verified():
+            if p.is_totp_enabled():
                 if (not totp) or (not p.verify_totp(totp)):
                     return p, 'require_totp'
         if not constant_time_compare(stored_secret, secret):

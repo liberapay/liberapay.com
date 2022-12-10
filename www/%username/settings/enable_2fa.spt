@@ -12,7 +12,7 @@ title = participant.username
 % extends "templates/layouts/settings.html"
 
 % block content
-    % if participant.is_totp_verified()
+    % if participant.is_totp_enabled()
         <p>{{ _(
             "Two-Factor Authentication is already enabled."
         ) }}</p>
