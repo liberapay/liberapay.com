@@ -358,7 +358,8 @@ def test_email_server(ip_address: str, email=None) -> None:
         status, msg = smtp.rcpt(email)
         if status >= 400:
             # SMTP status codes: https://tools.ietf.org/html/rfc5321#section-4.2
-            # Enhanced mail status codes: https://tools.ietf.org/html/rfc3463
+            # Enhanced mail status codes:
+            # https://www.iana.org/assignments/smtp-enhanced-status-codes/
             enhanced_code, msg = parse_SMTP_reply(msg)
             if enhanced_code:
                 cls, subject, detail = enhanced_code.split('.')
