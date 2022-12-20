@@ -12,9 +12,7 @@ from types import SimpleNamespace
 import unicodedata
 from urllib.parse import quote as urlquote, urlencode
 import uuid
-import io
 from pyotp import totp, random_base32
-from pyqrcode import create as create_qrcode
 
 import aspen_jinja2_renderer
 from cached_property import cached_property
@@ -417,19 +415,6 @@ class Participant(Model, MixinTeam):
                 (totp_token, self.id)
             )
         return totp_token
-
-    def generate_totp_qrcode(self):
-        totp_token = self.gen_totp_token()
-        uri = totp.TOTP(totp_token).provisioning_uri(
-            name=f'~{self.id}',
-            image='https://liberapay.com/assets/liberapay/icon-v2_white-on-yellow.200.png',
-            issuer_name='Liberapay'
-        )
-        qrcode = create_qrcode(uri)
-        buffer = io.BytesIO()
-        qrcode.png(buffer, scale=4)
-        image = b64encode(buffer.getvalue()).decode()
-        return image
 
     def verify_totp(self, totp_code):
         totp_token = self.gen_totp_token()
