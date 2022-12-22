@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '159'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '160'::jsonb);
 
 
 -- app configuration
@@ -727,24 +727,27 @@ CREATE VIEW current_takes AS
      WHERE amount IS NOT NULL;
 
 CREATE FUNCTION compute_payment_providers(bigint) RETURNS bigint AS $$
-    SELECT coalesce((
-        SELECT sum(DISTINCT array_position(
-                                enum_range(NULL::payment_providers),
-                                a.provider::payment_providers
-                            ))
-          FROM payment_accounts a
-         WHERE ( a.participant = $1 OR
-                 a.participant IN (
-                     SELECT t.member
-                       FROM current_takes t
-                      WHERE t.team = $1
-                        AND t.amount <> 0
-                 )
-               )
-           AND a.is_current IS TRUE
-           AND a.verified IS TRUE
-           AND coalesce(a.charges_enabled, true)
-    ), 0);
+    SELECT CASE WHEN p.email IS NULL AND p.kind <> 'group' AND p.join_time >= '2022-12-06' THEN 0
+           ELSE coalesce((
+               SELECT sum(DISTINCT array_position(
+                                       enum_range(NULL::payment_providers),
+                                       a.provider::payment_providers
+                                   ))
+                 FROM payment_accounts a
+                WHERE ( a.participant = p.id OR
+                        a.participant IN (
+                            SELECT t.member
+                              FROM current_takes t
+                             WHERE t.team = p.id
+                               AND t.amount <> 0
+                        )
+                      )
+                  AND a.is_current IS TRUE
+                  AND a.verified IS TRUE
+                  AND coalesce(a.charges_enabled, true)
+           ), 0) END
+      FROM participants p
+     WHERE p.id = $1;
 $$ LANGUAGE SQL STRICT;
 
 CREATE FUNCTION update_payment_providers() RETURNS trigger AS $$
