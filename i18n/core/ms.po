@@ -348,7 +348,7 @@ msgstr "Pembayaran {money_amount} yang dimulakan pada {date} telah gagal."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr "Mesej ralat yang diberikan oleh pemprosesan pembayaran {provider} ialah:"
+msgstr "Mesej ralat yang diberikan oleh pemproses pembayaran {provider} ialah:"
 
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
 msgstr "Anda boleh mencuba lagi, mungkin dengan kaedah pembayaran yang lain, dengan mengklik pautan di bawah:"
@@ -1368,7 +1368,7 @@ msgid "Patrons"
 msgstr "Pelanggan"
 
 msgid "Payment Processors"
-msgstr "Pemprosesan Pembayaran"
+msgstr "Pemproses Pembayaran"
 
 msgid "Ledger"
 msgstr "Lejar"
@@ -2057,7 +2057,7 @@ msgid "You currently receive the equivalent of {money_amount} per week from dona
 msgstr "Anda menerima jumlah yang setara dengan {money_amount} seminggu ketika ini daripada derma dalam mata wang yang anda bakal tolak. Derma-derma ini tidak akan ditukarkan ke mata wang utama anda serta merta, sebaliknya setiap penderma akan diminta untuk bertukar ke mata wang yang diterima pada waktu seterusnya mereka memperbaharui atau mengubah suai derma mereka."
 
 msgid "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
-msgstr "Tetapan mata wang anda diabaikan ketika ini kerana ia tidak serasi dengan pemprosesan pembayaran yang anda guna."
+msgstr "Tetapan mata wang anda diabaikan ketika ini kerana ia tidak serasi dengan pemproses pembayaran yang anda guna."
 
 msgid "Which currencies should your donors be allowed to send you, and which one do you prefer?"
 msgstr "Mata wang yang mana patut dibenarkan untuk pendermaan, dan yang mana diutamakan?"
@@ -2548,7 +2548,7 @@ msgstr "Gagal"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Pemprosesan pembayaran {name} mengembalikan ralat: “{error_message}”."
+msgstr "Pemproses pembayaran {name} mengembalikan ralat: “{error_message}”."
 
 msgid "The payment has been initiated."
 msgstr "Pembayaran telah dimulakan."
@@ -2641,7 +2641,7 @@ msgstr "Ingat nombor akaun bank untuk pembayaran pada masa akan datang"
 
 #, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr "Untuk mengurangkan risiko pembayaran ini ditolak, kami menggalakkan anda mengisi alamat surat anda di bawah. Ia akan disimpan secara tersulit dalam pangkalan data kami dan dihantar ke pemprosesan pembayaran ({processor_name})."
+msgstr "Untuk mengurangkan risiko pembayaran ini ditolak, kami menggalakkan anda mengisi alamat surat anda di bawah. Ia akan disimpan secara tersulit dalam pangkalan data kami dan dihantar ke pemproses pembayaran ({processor_name})."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2696,8 +2696,8 @@ msgstr "Melewatkan pembayaran anda melebihi tarikh biasa akan menyebabkan derma 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] "Anda mempunyai {n} pembayaran dijadual:"
-msgstr[1] "Anda mempunyai {n} pembayaran dijadual:"
+msgstr[0] "Anda mempunyai {n} pembayaran dijadualkan:"
+msgstr[1] "Anda mempunyai {n} pembayaran dijadualkan:"
 
 msgid "You currently don't have any scheduled payment."
 msgstr "Anda tidak mempunyai sebarang pembayaran yang dijadualkan."
@@ -3216,7 +3216,7 @@ msgid "You have to {link_open}fill your profile{link_close} before you can start
 msgstr "Anda perlu {link_open}mengisi profil anda{link_close} sebelum anda boleh menerima derma."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
-msgstr "Untuk menerima derma, anda mesti mengaitkan sekurang-kurangnya sebuah akaun daripada pemprosesan pembayaran yang disokong. Halaman ini membolehkan anda berbuat demikian."
+msgstr "Untuk menerima derma, anda mesti mengaitkan sekurang-kurangnya sebuah akaun daripada pemproses pembayaran yang disokong. Halaman ini membolehkan anda berbuat demikian."
 
 msgid "Donors do not need to connect any payment account below, they are only necessary to receive money."
 msgstr "Penderma tidak perlu mengaitkan sebarang akaun pembayaran di bawah, ia hanya diperlukan untuk menerima wang."
@@ -3446,7 +3446,7 @@ msgstr "Lupakan nombor akaun bank ini selepas sekali bayar."
 
 #, python-brace-format
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr "Memandangkan kadang kala alamat surat itu diperlukan untuk memproses pembayaran dengan jayanya, kami menggalakkan anda mengisi alamat surat anda di bawah. Ia akan disimpan secara tersulit dalam pangkalan data kami dan dihantar ke pemprosesan pembayaran ({processor_name})."
+msgstr "Memandangkan kadang kala alamat surat itu diperlukan untuk memproses pembayaran dengan jayanya, kami menggalakkan anda mengisi alamat surat anda di bawah. Ia akan disimpan secara tersulit dalam pangkalan data kami dan dihantar ke pemproses pembayaran ({processor_name})."
 
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
@@ -3458,7 +3458,7 @@ msgid "Bank Account"
 msgstr "Akaun Bank"
 
 msgid "default"
-msgstr "asal"
+msgstr "lalai"
 
 msgid "view mandate"
 msgstr "lihat mandat"
@@ -3491,7 +3491,7 @@ msgid "This payment instrument hasn't been used yet."
 msgstr "Alat pembayaran ini masih belum digunakan."
 
 msgid "Set as default"
-msgstr "Pilih sebagai cara utama"
+msgstr "Tetap sebagai lalai"
 
 msgid "You don't have any valid payment instrument."
 msgstr "Anda tidak mempunyai sebarang alat pembayaran yang sah."
@@ -3901,14 +3901,14 @@ msgstr "Sila lihat halaman “{page_name}”."
 
 #, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Kaedah pembayaran yang ada bergantung kepada pemprosesan pembayaran yang penerima boleh pakai. Jika pembayaran diproses oleh Stripe, maka kebanyakan kad kredit dan debit ({list_of_card_brands}) diterima, malah Debit Terus SEPA juga diterima (untuk derma Euro sahaja). Jika pembayaran diproses melalui PayPal, maka anda boleh membayar dalam pelbagai cara, namun penderma perlu ada atau cipta akaun PayPal."
+msgstr "Kaedah pembayaran yang ada bergantung kepada pemproses pembayaran yang penerima boleh pakai. Jika pembayaran diproses oleh Stripe, maka kebanyakan kad kredit dan debit ({list_of_card_brands}) diterima, malah Debit Terus SEPA juga diterima (untuk derma Euro sahaja). Jika pembayaran diproses melalui PayPal, maka anda boleh membayar dalam pelbagai cara, namun penderma perlu ada atau cipta akaun PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Apakah caj pemprosesan pembayaran?"
 
 #, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
-msgstr "Caj berlainan mengikut pemprosesan pembayaran, kaedah pembayaran, negara dan mata wang. Pada tahun lepas, peratusan caj secara puratanya ialah {average_fee_stripe} untuk pembayaran diproses oleh Stripe dan {average_fee_paypal} untuk pembayaran diproses oleh PayPal."
+msgstr "Caj berlainan mengikut pemproses pembayaran, kaedah pembayaran, negara dan mata wang. Pada tahun lepas, peratusan caj secara puratanya ialah {average_fee_stripe} untuk pembayaran diproses oleh Stripe dan {average_fee_paypal} untuk pembayaran diproses oleh PayPal."
 
 msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "Kenapa saya nampak pemulangan separa dalam papan pemuka Stripe?"
@@ -3972,7 +3972,7 @@ msgstr "Derma boleh diterima dari mana-mana tempat di dunia."
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
 msgstr[0] "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
-msgstr[1] "Penderma boleh pilih di antara sehingga {n} mata wang, bergantung kepada keutamaan penerima dan kemampuan pemprosesan pembayaran yang disandarkan."
+msgstr[1] "Penderma boleh pilih di antara sehingga {n} mata wang, bergantung kepada keutamaan penerima dan kemampuan pemproses pembayaran yang disandarkan."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4138,7 +4138,7 @@ msgstr "Pelawat laman web liberapay.com juga boleh menerima kuki yang dihantar o
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
-msgstr "Di sesetengah halaman pembayaran, kuki lebihan mungkin ditetapkan oleh pemprosesan pembayaran. Sila baca dokumen-dokumen ini jika anda inginkan maklumat lanjut: {links_to_policies}."
+msgstr "Di sesetengah halaman pembayaran, kuki lebihan mungkin ditetapkan oleh pemproses pembayaran. Sila baca dokumen-dokumen ini jika anda inginkan maklumat lanjut: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s cookie policy"
@@ -4158,11 +4158,11 @@ msgid "The second purpose is to help patrons find the Liberapay accounts of the 
 msgstr "Tujuan keduanya untuk membantu para pelanggan mencari akaun-akaun Liberapay milik pencipta yang mereka ikuti di platform-platform lain."
 
 msgid "Payment processors"
-msgstr "Pemprosesan pembayaran"
+msgstr "Pemproses pembayaran"
 
 #, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr "Liberapay bergantung kepada penyedia perkhidmatan pembayaran untuk memindahkan wang dengan betul-betul daripada penderma kepada pencipta, kerana kami tidak mempunyai sumber atau keinginan untuk mengantaramukakan dengan bank dan rangkaian pembayaran secara terus. Jika anda ingin ketahui lebih lanjut mengenai data peribadi yang dikutip oleh pemprosesan pembayaran ini, sila baca dokumen ini: {links_to_policies}."
+msgstr "Liberapay bergantung kepada penyedia perkhidmatan pembayaran untuk memindahkan wang dengan betul-betul daripada penderma kepada pencipta, kerana kami tidak mempunyai sumber atau keinginan untuk mengantaramukakan dengan bank dan rangkaian pembayaran secara terus. Jika anda ingin ketahui lebih lanjut mengenai data peribadi yang dikutip oleh pemproses pembayaran ini, sila baca dokumen ini: {links_to_policies}."
 
 #, python-brace-format
 msgid "{platform_name}'s privacy policy"
@@ -4277,7 +4277,7 @@ msgstr "Akaun kumpulan bukanlah bertujuan untuk digunakan semata-mata oleh ahli-
 
 #, python-brace-format
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
-msgstr "Akaun kumpulan {bold}tidak menyimpan wang{end_bold} untuk kegunaan kemudian. Setiap derma diagihkan serta-merta, sama ada kepada ramai ahli jika boleh, atau kepada seorang ahli apabila sesuatu wang tidak dapat dipecahkan menjadi kecil oleh pemprosesan pembayaran. Oleh kerana wujudnya batasan di pihak pemprosesan pembayaran seperti ini, jumlah yang diterima oleh ahli-ahli boleh jadi tidak seimbang pada sesetengah waktu, terutamanya jika kumpulan mempunyai penderma yang kurang berbanding ahli-ahli kumpulan."
+msgstr "Akaun kumpulan {bold}tidak menyimpan wang{end_bold} untuk kegunaan kemudian. Setiap derma diagihkan serta-merta, sama ada kepada ramai ahli jika boleh, atau kepada seorang ahli apabila sesuatu wang tidak dapat dipecahkan menjadi kecil oleh pemproses pembayaran. Oleh kerana wujudnya batasan di pihak pemprosesan pembayaran seperti ini, jumlah yang diterima oleh ahli-ahli boleh jadi tidak seimbang pada sesetengah waktu, terutamanya jika kumpulan mempunyai penderma yang kurang berbanding ahli-ahli kumpulan."
 
 #, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
@@ -4329,7 +4329,7 @@ msgid "Automatic takes"
 msgstr "Perolehan automatik"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr "Secara asalnya semua ahli kumpulan ditetapkan perolehan kepada nilai khas 'auto', yang bersamaan dengan pembahagian sama rata dari baki. Dalam erti kata lain, ahli yang menetapkan perolehan mereka secara khususnya memperolehnya dahulu, kemudian bakinya dibahagikan sama rata kepada ahli yang mengenakan perolehan automatik."
+msgstr "Secara lalainya semua ahli kumpulan ditetapkan perolehan kepada nilai khas 'auto', yang bersamaan dengan pembahagian sama rata dari baki. Dalam erti kata lain, ahli yang menetapkan perolehan mereka secara khususnya memperolehnya dahulu, kemudian bakinya dibahagikan sama rata kepada ahli yang mengenakan perolehan automatik."
 
 msgid "Regulation of take amounts"
 msgstr "Kawalan jumlah perolehan"
