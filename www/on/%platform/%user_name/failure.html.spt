@@ -3,7 +3,10 @@ from liberapay.models.account_elsewhere import get_account_elsewhere
 [---]
 
 platform, account = get_account_elsewhere(website, state, api_lookup=False)
-name = account.friendly_name
+if account:
+    name = account.friendly_name
+else:
+    name = request.path['user_name']
 
 team = request.qs.get('team', '').lower() == 'true'
 
@@ -15,7 +18,7 @@ title = _("Failure")
 <div class="alert alert-danger">
 
     % if request.qs.get('error') == 'CantReadMembership'
-        % set remediation_url = platform.get_CantReadMembership_url(account)
+        % set remediation_url = platform.get_CantReadMembership_url(account) if account else ''
         <p>{{ _(
             "We were unable to determine if you are a member of the {team_name} team on {platform_name}.\n\n"
             "Please {link_start}make sure your membership of the team is public{link_end}."
@@ -34,7 +37,7 @@ title = _("Failure")
             "Please sign out and {2}try again{3}.",
             platform.display_name,
             name,
-            '<a href="./">'|safe,
+            '<a href="/about/me/edit/elsewhere">'|safe,
             '</a>'|safe) }}</p>
 
     % else
@@ -44,7 +47,7 @@ title = _("Failure")
     <p>{{ _("Your attempt to claim this account failed because you're logged "
             "into {0} as someone else. Please sign out and {1}try again{2}.",
             platform.display_name,
-            '<a href="./">'|safe,
+            '<a href="/about/me/edit/elsewhere">'|safe,
             '</a>'|safe) }}</p>
 
     % endif

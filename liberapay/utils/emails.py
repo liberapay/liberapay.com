@@ -358,7 +358,8 @@ def test_email_server(ip_address: str, email=None) -> None:
         status, msg = smtp.rcpt(email)
         if status >= 400:
             # SMTP status codes: https://tools.ietf.org/html/rfc5321#section-4.2
-            # Enhanced mail status codes: https://tools.ietf.org/html/rfc3463
+            # Enhanced mail status codes:
+            # https://www.iana.org/assignments/smtp-enhanced-status-codes/
             enhanced_code, msg = parse_SMTP_reply(msg)
             if enhanced_code:
                 cls, subject, detail = enhanced_code.split('.')
@@ -366,7 +367,11 @@ def test_email_server(ip_address: str, email=None) -> None:
                     # Address errors
                     subject == '1' and detail in '12346' or
                     # Mailbox errors
-                    subject == '2' and detail in '124'
+                    subject == '2' and detail in '124' or
+                    # Microsoft's SMTP server
+                    msg.startswith("Requested action not taken: mailbox unavailable") or
+                    # Tutanota's SMTP server
+                    msg.endswith("Recipient address rejected: Recipient not found")
                 )
                 if recipient_rejected:
                     raise EmailAddressRejected(email, msg, ip_address)
