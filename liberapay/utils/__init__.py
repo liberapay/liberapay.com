@@ -14,7 +14,7 @@ from pando import Response, json
 from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
 
-from liberapay.constants import SAFE_METHODS
+from liberapay.constants import CURRENCIES, CURRENCY_REPLACEMENTS, SAFE_METHODS
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import (
     AuthRequired, ClosedAccount, LoginRequired, TooManyAdminActions,
@@ -471,6 +471,25 @@ def get_int(d, k, default=NO_DEFAULT, minimum=0, maximum=2**64-1):
     if maximum is not None and r > maximum:
         raise Response().error(400, "`%s` value %r is greater than %i" % (k, r, maximum))
     return r
+
+
+def get_currency(d, k, default=NO_DEFAULT, phased_out='allow'):
+    try:
+        currency = d[k]
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    if currency not in CURRENCIES:
+        replacement = CURRENCY_REPLACEMENTS.get(currency)
+        if replacement and phased_out in ('allow', 'replace'):
+            if phased_out == 'replace':
+                currency = replacement[1]
+        else:
+            raise Response().error(
+                400, "`%s` value %r isn't a supported currency code" % (k, currency)
+            )
+    return currency
 
 
 def get_money_amount(d, k, currency, default=NO_DEFAULT):

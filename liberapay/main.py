@@ -280,6 +280,10 @@ if hasattr(aspen.http.mapping.Mapping, 'get_int'):
     raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
 aspen.http.mapping.Mapping.get_int = utils.get_int
 
+if hasattr(aspen.http.mapping.Mapping, 'get_currency'):
+    raise Warning('aspen.http.mapping.Mapping.get_currency() already exists')
+aspen.http.mapping.Mapping.get_currency = utils.get_currency
+
 if hasattr(aspen.http.mapping.Mapping, 'get_money_amount'):
     raise Warning('aspen.http.mapping.Mapping.get_money_amount() already exists')
 aspen.http.mapping.Mapping.get_money_amount = utils.get_money_amount

@@ -11,9 +11,7 @@ team = get_participant(state, restrict=False)
 if team.kind != 'group':
     raise response.error(404)
 
-new_currency = request.body.get('currency', team.main_currency)
-if new_currency not in constants.CURRENCIES:
-    raise response.invalid_input(new_currency, 'currency', 'body')
+new_currency = request.body.get_currency('currency', team.main_currency)
 take = request.body['take']
 if take in {'', 'auto'}:
     take = Money(-1, new_currency)

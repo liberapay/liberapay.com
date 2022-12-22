@@ -1958,11 +1958,17 @@ class Participant(Model, MixinTeam):
         v = self.accepted_currencies
         if v is None:
             return CURRENCIES
-        v = set(v.split(','))
+        v = set(v.split(',')).intersection(CURRENCIES)
         if self.payment_providers == 2 and not PAYPAL_CURRENCIES.intersection(v):
             # The currency preferences are unsatisfiable, ignore them.
             v = PAYPAL_CURRENCIES
+            self.__dict__['accepted_currencies_overwritten'] = True
         return v
+
+    @cached_property
+    def accepted_currencies_overwritten(self):
+        self.accepted_currencies_set
+        return self.__dict__.get('accepted_currencies_overwritten', False)
 
     def change_main_currency(self, new_currency, recorder):
         old_currency = self.main_currency
