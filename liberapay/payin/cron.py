@@ -451,3 +451,32 @@ def _filter_transfers(payer, transfers, automatic):
         else:
             okay_transfers.append(tr)
     return okay_transfers, canceled_transfers, impossible_transfers, actionable_transfers
+
+
+def execute_reviewed_payins():
+    """Submit or cancel payins which have been held up for review.
+    """
+    payins = website.db.all("""
+        SELECT pi, payer_p, r
+          FROM payins pi
+          JOIN participants payer_p ON payer_p.id = pi.payer
+          JOIN exchange_routes r ON r.id = pi.route
+         WHERE pi.status = 'awaiting_review'
+           AND NOT EXISTS (
+                   SELECT 1
+                     FROM payin_transfers pt
+                     JOIN participants recipient_p ON recipient_p.id = pt.recipient
+                    WHERE pt.payin = pi.id
+                      AND recipient_p.join_time::date::text >= '2022-12-23'
+                      AND ( recipient_p.marked_as IS NULL OR
+                            ( SELECT e.ts
+                                FROM events e
+                               WHERE e.participant = pt.recipient
+                                 AND e.type = 'flags_changed'
+                            ) > (current_timestamp - interval '6 hours')
+                          )
+               )
+    """)
+    for payin, payer, route in payins:
+        route.__dict__['participant'] = payer
+        charge(website.db, payin, payer, route)

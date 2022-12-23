@@ -42,7 +42,8 @@ from liberapay.models.participant import (
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
 from liberapay.payin.cron import (
-    execute_scheduled_payins, reschedule_renewals, send_upcoming_debit_notifications,
+    execute_reviewed_payins, execute_scheduled_payins, reschedule_renewals,
+    send_upcoming_debit_notifications,
 )
 from liberapay.security import authentication, csrf, set_default_security_headers
 from liberapay.utils import (
@@ -185,6 +186,7 @@ if conf:
     cron(intervals.get('notify_patrons', 1200), Participant.notify_patrons, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
+    cron(intervals.get('execute_reviewed_payins', 3600), execute_reviewed_payins, True)
 
     cron('once', website.cryptograph.rotate_stored_data, True)
 
