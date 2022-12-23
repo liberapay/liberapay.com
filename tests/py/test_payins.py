@@ -700,7 +700,7 @@ class TestPayinsStripe(Harness):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.offset = 2100
+        cls.offset = 2200
         # https://stripe.com/docs/connect/testing
         cls.sepa_direct_debit_token = stripe.Token.create(bank_account=dict(
             country='DE',
@@ -870,8 +870,8 @@ class TestPayinsStripe(Harness):
         assert r.code == 200, r.text
         payin = self.db.one("SELECT * FROM payins")
         assert payin.status == 'succeeded', payin.error
-        assert payin.amount_settled.currency == 'EUR'
-        assert payin.fee.currency == 'EUR'
+        assert payin.amount_settled.currency == 'JPY'
+        assert payin.fee.currency == 'JPY'
         payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
         assert len(payin_transfers) == 2
         pt1, pt2 = payin_transfers
@@ -1028,10 +1028,10 @@ class TestPayinsStripe(Harness):
         assert len(payin_transfers) == 2
         pt1, pt2 = payin_transfers
         assert pt1.status == 'succeeded'
-        assert pt1.amount == EUR('49.48')
+        assert pt1.amount == EUR('49.83')
         assert pt1.remote_id is not None
         assert pt2.status == 'succeeded'
-        assert pt2.amount == EUR('49.47')
+        assert pt2.amount == EUR('49.82')
         assert pt2.remote_id is None
 
         # 7th request: test getting the receipt after the payment is settled
@@ -1255,7 +1255,7 @@ class TestPayinsStripe(Harness):
         assert pt1.amount == EUR('100.00')
         assert pt1.remote_id is None
         assert pt2.status == 'succeeded'
-        assert pt2.amount == EUR('98.95')
+        assert pt2.amount == EUR('99.65')
 
         # 6th request: test getting the receipt after the payment is settled
         r = self.client.GET('/donor/receipts/direct/%i' % payin.id, auth_as=self.donor)
