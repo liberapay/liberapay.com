@@ -368,6 +368,8 @@ def test_email_server(ip_address: str, email=None) -> None:
                     subject == '1' and detail in '12346' or
                     # Mailbox errors
                     subject == '2' and detail in '124' or
+                    # gamil.com SMTP server
+                    msg.startswith("sorry, no mailbox here by that name") or
                     # Microsoft's SMTP server
                     msg.startswith("Requested action not taken: mailbox unavailable") or
                     # Tutanota's SMTP server
