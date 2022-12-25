@@ -87,12 +87,41 @@ def charge(db, payin, payer, route):
 
     """
     assert payin.route == route.id
-    n_transfers = db.one("""
-        SELECT count(*)
+    transfers = db.all("""
+        SELECT pt.id,
+               p.marked_as AS recipient_marked_as,
+               p.join_time::date::text AS recipient_join_time
           FROM payin_transfers pt
+          JOIN participants p On p.id = pt.recipient
          WHERE pt.payin = %(payin)s
     """, dict(payin=payin.id))
-    if n_transfers == 1:
+    new_status = None
+    if payer.is_suspended:
+        new_status = 'failed'
+    elif route.network == 'stripe-sdd':
+        for pt in transfers:
+            if pt.recipient_marked_as in ('fraud', 'spam'):
+                new_status = 'failed'
+                break
+            elif pt.recipient_marked_as is None and pt.recipient_join_time >= '2022-12-23':
+                new_status = 'awaiting_review'
+    if new_status:
+        if new_status == payin.status:
+            return payin
+        else:
+            new_payin_error = 'canceled' if new_status == 'failed' else None
+            payin = update_payin(db, payin.id, None, new_status, new_payin_error)
+            for pt in transfers:
+                new_transfer_error = (
+                    "canceled because payer account is blocked"
+                    if payer.is_suspended else
+                    "canceled because destination account is blocked"
+                    if pt.recipient_marked_as in ('fraud', 'spam') else
+                    "canceled because another destination account is blocked"
+                ) if new_status == 'failed' else None
+                update_payin_transfer(db, pt.id, None, new_status, new_transfer_error)
+            return payin
+    if len(transfers) == 1:
         payin, charge = destination_charge(
             db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
         )

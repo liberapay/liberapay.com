@@ -164,7 +164,7 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     route = ExchangeRoute.from_id(payer, payin.route)
     try:
-        if payin.status == 'pre':
+        if payin.status in ('pre', 'awaiting_review'):
             payin = charge(website.db, payin, payer, route)
             if payin.id != int(payin_id):
                 response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
@@ -303,8 +303,13 @@ title = _("Funding your donations")
             ) }}</p>
         </div>
         <p><a class="btn btn-primary btn-lg" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
-    % elif status == 'pending'
-        <p class="alert alert-info">{{ _("The payment has been initiated.") }}</p>
+    % elif status in ('pending', 'awaiting_review')
+        <p class="alert alert-info">{{ _(
+            "Your payment has been initiated. It will be submitted to your bank "
+            "at a later time, after being manually checked for signs of fraud."
+        ) if status == 'awaiting_review' else _(
+            "The payment has been initiated."
+        ) }}</p>
         <p>{{ _(
             "Processing this kind of payment takes {timedelta} on average.",
             timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
