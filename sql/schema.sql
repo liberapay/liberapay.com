@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '160'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '161'::jsonb);
 
 
 -- app configuration
@@ -483,7 +483,8 @@ CREATE TABLE payment_accounts
 -- payins -- incoming payments that don't go into a donor wallet
 
 CREATE TYPE payin_status AS ENUM (
-    'pre', 'submitting', 'pending', 'succeeded', 'failed', 'awaiting_payer_action'
+    'pre', 'submitting', 'pending', 'succeeded', 'failed', 'awaiting_payer_action',
+    'awaiting_review'
 );
 
 CREATE TABLE payins
@@ -514,12 +515,16 @@ CREATE TABLE payin_events
 , UNIQUE (payin, status)
 );
 
+CREATE INDEX payins_awating_review ON payins (status) WHERE status = 'awaiting_review';
+
 
 -- payin transfers -- allocation of incoming payments to one or more recipients
 
 CREATE TYPE payin_transfer_context AS ENUM ('personal-donation', 'team-donation');
 
-CREATE TYPE payin_transfer_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
+CREATE TYPE payin_transfer_status AS ENUM (
+    'pre', 'pending', 'failed', 'succeeded', 'awaiting_review'
+);
 
 CREATE TABLE payin_transfers
 ( id            serial                   PRIMARY KEY
