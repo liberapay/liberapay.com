@@ -2605,6 +2605,9 @@ msgstr "この支払いを処理するには、より詳細な情報が必要で
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "支払い処理業者（{name}）は、まだこの受取人の{currency}口座振替を処理できません。別のお支払い方法をお試しください。"
 
+msgid "Your payment has been initiated. It will be submitted to your bank at a later time, after being manually checked for signs of fraud."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "銀行はこの支払いを拒否することができます。{link_start}マンデート{link_end} のコピーを、銀行が{currency} の口座引き落とし指示を適切に処理しているかどうかわからない場合は、銀行に送ることをお勧めします。"
@@ -2979,6 +2982,9 @@ msgstr "準備中"
 msgid "awaiting confirmation"
 msgstr "確認を待機しています"
 
+msgid "awaiting review"
+msgstr ""
+
 msgid "pending"
 msgstr "保留中"
 
@@ -3021,6 +3027,9 @@ msgstr "自動チャージ"
 
 msgid "charge"
 msgstr "料金"
+
+msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
+msgstr ""
 
 #, python-brace-format
 msgid "error message: {0}"
