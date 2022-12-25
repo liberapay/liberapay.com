@@ -33,7 +33,7 @@ from liberapay.constants import (
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
     PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_TIMEOUT,
-    USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST, VALID_WINDOW_2FA
+    USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST, TOTP_TOLERANCE_PERIODS
 )
 from liberapay.exceptions import (
     AccountIsPasswordless,
@@ -418,7 +418,7 @@ class Participant(Model, MixinTeam):
 
     def verify_totp(self, totp_code):
         totp_token = self.gen_totp_token()
-        return totp.TOTP(totp_token).verify(totp_code, valid_window=VALID_WINDOW_2FA)
+        return totp.TOTP(totp_token).verify(totp_code, valid_window=TOTP_TOLERANCE_PERIODS)
 
     def enable_totp(self, verification_code):
         if self.verify_totp(verification_code):

@@ -437,6 +437,6 @@ TAKE_THROTTLING_THRESHOLD = MoneyAutoConvertDict(
 USERNAME_MAX_SIZE = 32
 USERNAME_SUFFIX_BLACKLIST = set('.txt .html .htm .json .xml'.split())
 
-VALID_WINDOW_2FA = 5
+TOTP_TOLERANCE_PERIODS = 5 # Number of ticks (not seconds) that a code is valid after a new one is generated
 
 del _
