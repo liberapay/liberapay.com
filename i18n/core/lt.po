@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Lithuanian "
-"<https://hosted.weblate.org/projects/liberapay/core/lt/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2022-12-25 16:50+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/liberapay/core/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > 19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? 1 : 2);\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, fuzzy, python-brace-format
@@ -2938,8 +2940,9 @@ msgstr "Norint apdoroti šį mokėjimą, reikia daugiau informacijos."
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "Mokėjimų tvarkytojas ({name}) kol kas negali apdoroti {currency} tiesioginio debeto mokėjimų šiam gavėjui. Prašome pakartoti bandymą naudojant kitą mokėjimo būdą."
 
+#, fuzzy
 msgid "Your payment has been initiated. It will be submitted to your bank at a later time, after being manually checked for signs of fraud."
-msgstr ""
+msgstr "Jūsų mokėjimas inicijuotas. Vėliau, rankiniu būdu patikrinus, ar nėra sukčiavimo požymių, jis bus pateiktas jūsų bankui."
 
 #, fuzzy, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
@@ -3375,8 +3378,9 @@ msgstr "rengimas"
 msgid "awaiting confirmation"
 msgstr "laukia patvirtinimo"
 
+#, fuzzy
 msgid "awaiting review"
-msgstr ""
+msgstr "Laukiama peržiūros"
 
 #, fuzzy
 msgid "pending"
@@ -3427,8 +3431,9 @@ msgstr "automatinis įkrovimas"
 msgid "charge"
 msgstr "mokestis"
 
+#, fuzzy
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
-msgstr ""
+msgstr "Šį mokėjimą rankiniu būdu patikrins \"Liberapay\" darbuotojai, ar nėra sukčiavimo požymių."
 
 #, fuzzy, python-brace-format
 msgid "error message: {0}"
