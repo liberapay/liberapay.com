@@ -1,8 +1,13 @@
+from datetime import datetime
 from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
+from itertools import starmap, zip_longest
 from numbers import Number
 import operator
+import threading
+from time import sleep
 
 from babel.numbers import get_currency_precision
+from pando.utils import utc, utcnow
 import requests
 import xmltodict
 
@@ -10,9 +15,51 @@ from ..exceptions import InvalidNumber
 from ..website import website
 
 
+CURRENCIES = dict.fromkeys([
+    'EUR', 'USD',
+    'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
+    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD',
+    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'
+])
+
+CURRENCY_REPLACEMENTS = {
+    'HRK': (Decimal('7.53450'), 'EUR', datetime(2023, 1, 1, 1, 0, 0, tzinfo=utc)),
+}
+
 D_CENT = Decimal('0.01')
 D_MAX = Decimal('999999999999.99')
 D_ZERO = Decimal('0.00')
+
+
+def replace_currencies():
+    while True:
+        now = utcnow()
+        next_replacement_time = None
+        for currency, (rate, new_currency, time_of_switch) in CURRENCY_REPLACEMENTS.items():
+            if time_of_switch > now:
+                next_replacement_time = min(
+                    time_of_switch, next_replacement_time or time_of_switch
+                )
+                continue
+            CURRENCIES.pop(currency, None)
+        if next_replacement_time is None:
+            return
+        if threading.current_thread().name == 'MainThread':
+            t = threading.Thread(target=replace_currencies, name='replace_currencies')
+            t.daemon = True
+            t.start()
+            return
+        while next_replacement_time > utcnow():
+            sleep(max(
+                min(
+                    (next_replacement_time - utcnow()).total_seconds() * 0.8,
+                    86400
+                ),
+                0.001
+            ))
+
+
+replace_currencies()
 
 
 class CurrencyMismatch(ValueError):
@@ -51,14 +98,20 @@ class Money:
             # Decimal('0.2300000000000000099920072216264088638126850128173828125')
             # >>> Decimal(str(0.23))
             # Decimal('0.23')
+        if amount > D_MAX and not amount.is_infinite():
+            raise InvalidNumber(amount)
+        if currency not in CURRENCIES:
+            replacement = CURRENCY_REPLACEMENTS.get(currency)
+            if replacement:
+                rate, new_currency, time_of_switch = replacement
+                amount = amount / rate
+                currency = new_currency
         if rounding is not None:
             minimum = Money.MINIMUMS[currency].amount
             try:
                 amount = amount.quantize(minimum, rounding=rounding)
             except InvalidOperation:
                 raise InvalidNumber(str(amount))
-        if amount > D_MAX and not amount.is_infinite():
-            raise InvalidNumber(amount)
         self.amount = amount
         self.currency = currency
         self.fuzzy = fuzzy
@@ -289,22 +342,58 @@ class Money:
         return self.ZEROS[self.currency]
 
 
+class MoneyBasketAmounts:
+
+    __slots__ = tuple(CURRENCIES)
+
+    def __init__(self):
+        for currency in self.__slots__:
+            self[currency] = Money.ZEROS[currency].amount
+
+    def __eq__(self, other):
+        return all(starmap(tuple.__eq__, zip_longest(self.items(), other.items())))
+
+    def __getitem__(self, currency):
+        try:
+            return getattr(self, currency)
+        except AttributeError:
+            raise KeyError(f"unknown currency {currency!r}") from None
+
+    def __setitem__(self, currency, amount):
+        if currency not in CURRENCIES:
+            replacement = CURRENCY_REPLACEMENTS.get(currency)
+            if replacement:
+                rate, new_currency, time_of_switch = replacement
+                amount = amount / rate
+                currency = new_currency
+            else:
+                raise KeyError(f"unknown currency {currency!r}")
+        setattr(self, currency, amount)
+
+    def items(self):
+        return ((currency, getattr(self, currency)) for currency in self.__slots__)
+
+    def values(self):
+        return (getattr(self, currency) for currency in self.__slots__)
+
+
 class MoneyBasket:
 
     __slots__ = ('amounts', '__dict__')
 
     def __init__(self, *args, **decimals):
-        from ..constants import CURRENCIES
-        self.amounts = {
-            currency: decimals.get(currency, Money.ZEROS[currency].amount)
-            for currency in CURRENCIES
-        }
+        self.amounts = MoneyBasketAmounts()
         for arg in args:
             if isinstance(arg, Money):
                 self.amounts[arg.currency] += arg.amount
+            elif isinstance(arg, MoneyBasketAmounts):
+                for currency, amount in arg.items():
+                    self.amounts[currency] += amount
             else:
                 for m in arg:
                     self.amounts[m.currency] += m.amount
+        for currency, amount in decimals.items():
+            self.amounts[currency] = amount
 
     def __getitem__(self, currency):
         return Money(self.amounts[currency], currency)
@@ -345,19 +434,12 @@ class MoneyBasket:
     def __add__(self, other):
         if other == 0:
             return self
-        r = self.__class__(**self.amounts)
+        r = self.__class__(self.amounts)
         if isinstance(other, self.__class__):
             for currency, amount in other.amounts.items():
-                if currency in r.amounts:
-                    r.amounts[currency] += amount
-                else:
-                    r.amounts[currency] = amount
+                r.amounts[currency] += amount
         elif isinstance(other, Money):
-            currency = other.currency
-            if currency in r.amounts:
-                r.amounts[currency] += other.amount
-            else:
-                r.amounts[currency] = other.amount
+            r.amounts[other.currency] += other.amount
         else:
             raise TypeError(other)
         return r
@@ -368,19 +450,12 @@ class MoneyBasket:
     def __sub__(self, other):
         if other == 0:
             return self
-        r = self.__class__(**self.amounts)
+        r = self.__class__(self.amounts)
         if isinstance(other, self.__class__):
             for currency, v in other.amounts.items():
-                if currency in r.amounts:
-                    r.amounts[currency] -= v
-                else:
-                    r.amounts[currency] = -v
+                r.amounts[currency] -= v
         elif isinstance(other, Money):
-            currency = other.currency
-            if currency in r.amounts:
-                r.amounts[currency] -= other.amount
-            else:
-                r.amounts[currency] = -other.amount
+            r.amounts[other.currency] -= other.amount
         else:
             raise TypeError(other)
         return r

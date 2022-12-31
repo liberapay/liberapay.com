@@ -32,9 +32,7 @@ if request.method == 'POST':
 
     body = request.body
 
-    payin_currency = body['currency']
-    if payin_currency not in constants.CURRENCIES:
-        raise response.invalid_input(payin_currency, 'currency', 'body')
+    payin_currency = body.get_currency('currency')
 
     payin_amount = body['amount']
     if payin_amount == 'custom':

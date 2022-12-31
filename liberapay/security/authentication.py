@@ -8,7 +8,7 @@ from pando import Response
 from pando.utils import utcnow
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE,
+    ASCII_ALLOWED_IN_USERNAME, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
 )
 from liberapay.exceptions import (
@@ -144,11 +144,11 @@ def sign_in_with_form_data(body, state):
             raise response.error(400, 'email is required')
         email = normalize_and_check_email_address(email)
         currency = (
-            body.get('sign-in.currency') or body.get('currency') or
-            state.get('currency') or 'EUR'
+            body.get_currency('sign-in.currency', None, phased_out='replace') or
+            body.get_currency('currency', None, phased_out='replace') or
+            state.get('currency') or
+            'EUR'
         )
-        if currency not in CURRENCIES:
-            raise response.invalid_input(currency, 'sign-in.currency', 'body')
         password = body.get('sign-in.password')
         if password:
             l = len(password)

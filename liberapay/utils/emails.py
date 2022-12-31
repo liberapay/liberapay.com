@@ -190,7 +190,7 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
             website.tell_sentry(e)
 
 
-def test_email_address(email: NormalizedEmailAddress):
+def test_email_address(email: NormalizedEmailAddress, timeout: float = 30.0):
     """Attempt to determine if the given email address can be reached.
 
     Raises:
@@ -211,7 +211,7 @@ def test_email_address(email: NormalizedEmailAddress):
             n_ip_addresses += 1
             try:
                 if website.app_conf.check_email_servers:
-                    test_email_server(str(ip_addr), email)
+                    test_email_server(str(ip_addr), email, timeout * 0.7)
                 success = True
                 break
             except EmailAddressRejected:
@@ -225,7 +225,8 @@ def test_email_address(email: NormalizedEmailAddress):
             if n_attempts >= 3:
                 break
             time_elapsed = time.monotonic() - start_time
-            if time_elapsed >= website.app_conf.socket_timeout:
+            timeout = website.app_conf.socket_timeout - time_elapsed
+            if timeout <= 3:
                 break
         if not success:
             if n_ip_addresses == 0:
@@ -315,12 +316,13 @@ def get_public_ip_addresses(domain):
 enhanced_code_re = re.compile(r"(?<![0-9])[245]\.[0-9]{1,3}\.[0-9]{1,3}(?![0-9])")
 
 
-def test_email_server(ip_address: str, email=None) -> None:
+def test_email_server(ip_address: str, email=None, timeout=None) -> None:
     """Attempt to connect to and interact with an SMTP server.
 
     Args:
         ip_address (str): the IP address of the SMTP server
         email (NormalizedEmailAddress): an email address we want to send a message to
+        timeout (float | None): number of seconds to wait for a response from the SMTP server
 
     Raises:
         EmailAddressRejected: if `email` is provided and the server rejects it
@@ -332,7 +334,7 @@ def test_email_server(ip_address: str, email=None) -> None:
                                 both correctly and quickly enough
 
     """
-    smtp = SMTP(None, timeout=10.0, local_hostname=website.env.hostname or None)
+    smtp = SMTP(None, timeout=timeout, local_hostname=website.env.hostname or None)
     if website.env.logging_level == 'debug':
         smtp.set_debuglevel(2)
     try:
@@ -368,6 +370,8 @@ def test_email_server(ip_address: str, email=None) -> None:
                     subject == '1' and detail in '12346' or
                     # Mailbox errors
                     subject == '2' and detail in '124' or
+                    # gamil.com SMTP server
+                    msg.startswith("sorry, no mailbox here by that name") or
                     # Microsoft's SMTP server
                     msg.startswith("Requested action not taken: mailbox unavailable") or
                     # Tutanota's SMTP server

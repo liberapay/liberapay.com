@@ -7,11 +7,9 @@ from babel.numbers import get_currency_precision
 from markupsafe import Markup
 from pando.utils import utc
 
-from .i18n.currencies import D_CENT, D_ZERO, D_MAX, Money  # noqa: F401
-
-
-def ordered_set(keys):
-    return dict.fromkeys(keys)
+from .i18n.currencies import (  # noqa: F401
+    CURRENCIES, CURRENCY_REPLACEMENTS, D_CENT, D_ZERO, D_MAX, Money,
+)
 
 
 def check_bits(bits):
@@ -98,12 +96,6 @@ CARD_BRANDS = {
     'unknown': '',
 }
 
-CURRENCIES = ordered_set([
-    'EUR', 'USD',
-    'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
-    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD',
-    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'
-])
 
 class _DonationLimits(defaultdict):
     def __missing__(self, currency):
