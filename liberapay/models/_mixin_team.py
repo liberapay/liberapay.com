@@ -113,6 +113,8 @@ class MixinTeam:
                 return None
 
         assert isinstance(take, (None.__class__, Money))
+        if take is not None:
+            take = take.convert_if_currency_is_phased_out()
 
         with self.db.get_cursor(cursor) as cursor:
             # Lock to avoid race conditions

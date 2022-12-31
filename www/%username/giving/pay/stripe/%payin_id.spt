@@ -39,6 +39,8 @@ if request.method == 'POST':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
         payin_amount = Money(payin_amount, payin_currency)
+    payin_amount = payin_amount.convert_if_currency_is_phased_out()
+    del payin_currency
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p

@@ -44,8 +44,8 @@ INSERT INTO currency_exchange_rates VALUES
     ('ISK', 'EUR', '0.00728862973760932945'),
     ('EUR', 'NOK', '9.8068'),
     ('NOK', 'EUR', '0.10197006158991720031'),
-    ('EUR', 'HRK', '7.4085'),
-    ('HRK', 'EUR', '0.13498009043666059256'),
+    ('EUR', 'HRK', '7.53450'),
+    ('HRK', 'EUR', '0.13272280841462605349'),
     ('EUR', 'RUB', '73.0572'),
     ('RUB', 'EUR', '0.01368790481978504514'),
     ('EUR', 'TRY', '6.9725'),
@@ -79,4 +79,5 @@ INSERT INTO currency_exchange_rates VALUES
     ('EUR', 'THB', '35.577'),
     ('THB', 'EUR', '0.02810804733395171037'),
     ('EUR', 'ZAR', '16.0432'),
-    ('ZAR', 'EUR', '0.06233170439812506233');
+    ('ZAR', 'EUR', '0.06233170439812506233')
+    ON CONFLICT (source_currency, target_currency) DO UPDATE SET rate = excluded.rate;

@@ -1958,7 +1958,7 @@ class Participant(Model, MixinTeam):
         v = self.accepted_currencies
         if v is None:
             return CURRENCIES
-        v = set(v.split(',')).intersection(CURRENCIES)
+        v = set(v.split(','))
         if self.payment_providers == 2 and not PAYPAL_CURRENCIES.intersection(v):
             # The currency preferences are unsatisfiable, ignore them.
             v = PAYPAL_CURRENCIES
@@ -2200,6 +2200,10 @@ class Participant(Model, MixinTeam):
         return avatar_url
 
     def update_goal(self, goal, cursor=None):
+        if goal is not None:
+            goal = goal.convert_if_currency_is_phased_out()
+            if goal.currency != self.main_currency:
+                raise UnexpectedCurrency(goal, self.main_currency)
         with self.db.get_cursor(cursor) as c:
             json = None if goal is None else str(goal)
             self.add_event(c, 'set_goal', json)
@@ -2400,6 +2404,7 @@ class Participant(Model, MixinTeam):
         if periodic_amount == 0:
             return self.stop_tip_to(tippee)
 
+        periodic_amount = periodic_amount.convert_if_currency_is_phased_out()
         amount = (periodic_amount * PERIOD_CONVERSION_RATES[period]).round_down()
 
         if periodic_amount != 0:
@@ -2629,6 +2634,9 @@ class Participant(Model, MixinTeam):
             """, (self.id,))
             for tip, tippee_p in renewable_tips:
                 tip.tippee_p = tippee_p
+                tip.periodic_amount = tip.periodic_amount.convert_if_currency_is_phased_out()
+                tip.amount = tip.amount.convert_if_currency_is_phased_out()
+                tip.paid_in_advance = tip.paid_in_advance.convert_if_currency_is_phased_out()
             renewable_tips = [tip for tip, tippee_p in renewable_tips]
 
             # Get the existing schedule

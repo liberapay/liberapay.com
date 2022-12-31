@@ -3,11 +3,9 @@ from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_
 from itertools import starmap, zip_longest
 from numbers import Number
 import operator
-import threading
-from time import sleep
 
 from babel.numbers import get_currency_precision
-from pando.utils import utc, utcnow
+from pando.utils import utc
 import requests
 import xmltodict
 
@@ -29,37 +27,6 @@ CURRENCY_REPLACEMENTS = {
 D_CENT = Decimal('0.01')
 D_MAX = Decimal('999999999999.99')
 D_ZERO = Decimal('0.00')
-
-
-def replace_currencies():
-    while True:
-        now = utcnow()
-        next_replacement_time = None
-        for currency, (rate, new_currency, time_of_switch) in CURRENCY_REPLACEMENTS.items():
-            if time_of_switch > now:
-                next_replacement_time = min(
-                    time_of_switch, next_replacement_time or time_of_switch
-                )
-                continue
-            CURRENCIES.pop(currency, None)
-        if next_replacement_time is None:
-            return
-        if threading.current_thread().name == 'MainThread':
-            t = threading.Thread(target=replace_currencies, name='replace_currencies')
-            t.daemon = True
-            t.start()
-            return
-        while next_replacement_time > utcnow():
-            sleep(max(
-                min(
-                    (next_replacement_time - utcnow()).total_seconds() * 0.8,
-                    86400
-                ),
-                0.001
-            ))
-
-
-replace_currencies()
 
 
 class CurrencyMismatch(ValueError):
@@ -100,12 +67,6 @@ class Money:
             # Decimal('0.23')
         if amount > D_MAX and not amount.is_infinite():
             raise InvalidNumber(amount)
-        if currency not in CURRENCIES:
-            replacement = CURRENCY_REPLACEMENTS.get(currency)
-            if replacement:
-                rate, new_currency, time_of_switch = replacement
-                amount = amount / rate
-                currency = new_currency
         if rounding is not None:
             minimum = Money.MINIMUMS[currency].amount
             try:
@@ -298,6 +259,14 @@ class Money:
         amount = self.amount * rate
         return Money(amount, c, rounding=rounding)
 
+    def convert_if_currency_is_phased_out(self):
+        if self.currency not in CURRENCIES:
+            replacement = CURRENCY_REPLACEMENTS.get(self.currency)
+            if replacement:
+                rate, new_currency, time_of_switch = replacement
+                return Money(self.amount / rate, new_currency)
+        return self
+
     def for_json(self):
         return {'amount': str(self.amount), 'currency': self.currency}
 
@@ -360,15 +329,10 @@ class MoneyBasketAmounts:
             raise KeyError(f"unknown currency {currency!r}") from None
 
     def __setitem__(self, currency, amount):
-        if currency not in CURRENCIES:
-            replacement = CURRENCY_REPLACEMENTS.get(currency)
-            if replacement:
-                rate, new_currency, time_of_switch = replacement
-                amount = amount / rate
-                currency = new_currency
-            else:
-                raise KeyError(f"unknown currency {currency!r}")
-        setattr(self, currency, amount)
+        try:
+            setattr(self, currency, amount)
+        except AttributeError:
+            raise KeyError(f"unknown currency {currency!r}") from None
 
     def items(self):
         return ((currency, getattr(self, currency)) for currency in self.__slots__)
@@ -510,3 +474,7 @@ def get_currency_exchange_rates(db):
         return r
     fetch_currency_exchange_rates(db)
     return get_currency_exchange_rates(db)
+
+
+for currency in CURRENCY_REPLACEMENTS:
+    del CURRENCIES[currency]
