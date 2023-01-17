@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Hungarian "
-"<https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2023-01-12 04:49+0000\n"
+"Last-Translator: d4f5409d <d4f5409d-4b6a-4640-9ff3-155ebcdc7ab7@anonaddy.me>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -81,26 +83,26 @@ msgstr "Az Ön havi {amount} összegű, {username} felhasználónak szánt adom�
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "A(z) {amount} összegű éves adománya {username} részére megújításra vár {date} előtt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr "A {amount} heti adományát a {username} címen a {past_date} előtt kellett volna megújítani."
+msgstr "A heti {amount} adományodat {past_date} előtt meg kell újítanod neki: {username}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr "A {amount} havi adományát a {username} címen a {past_date} előtt kellett volna megújítani."
+msgstr "A havi {amount} adományodat {past_date} előtt meg kell újítanod neki: {username}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr "Az Ön {amount} évi adományát a {username} címen a {past_date} előtt kellett volna megújítani."
+msgstr "Az éves {amount} adományodat {past_date} előtt meg kell újítanod neki: {username}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] "A {n} adományt megújítás előtt áll:"
+msgstr[0] "{n} adományod megújítás előtt áll:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
-msgstr "Ha módosítani szeretné a támogatásait, kattintson a következő hivatkozásra: {link_start}támogatásaim kezelése{link_end}."
+msgstr "Ha módosítani szeretné, vagy abbahagyná a támogatásait, kattintson a következő hivatkozásra: {link_start}támogatásaim kezelése{link_end}."
 
 msgid "Your email address is temporarily blacklisted"
 msgstr "Az e-mail címe ideiglenesen feketelistára került"
@@ -171,9 +173,9 @@ msgstr "Számla megtekintése"
 msgid "Your invoice to {0} has been accepted and paid - Liberapay"
 msgstr "Az Ön számlája a(z) {0}-hoz el lett fogadva, és ki lett fizetve - Liberapay"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your invoice of {amount} to {addressee_name} has been paid."
-msgstr "A {amount} és a {addressee_name} közötti számla kifizetésre került."
+msgstr "A {amount} szóló számlát {addressee_name} részére kifizettük."
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -264,55 +266,45 @@ msgstr "Meg kéne {link_start}változtatnia{link_end} a jelszavát."
 
 #, fuzzy, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr "Az Ön {money_amount} kifizetése vitatott"
+msgstr "Az Ön {money_amount} útján történő kifizetése ellen kifogást emeltünk."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "A {money_amount} átutalását, amelyet a {date} oldalon kezdeményezett, a bankja visszavonta."
+msgstr "Az Ön bankja visszavonta az Ön által {date} megbízott {money_amount} értékű átutalást."
 
-#, fuzzy
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr "A bankja által megadott ok: nem tudta feldolgozni a fizetést."
+msgstr "A bankja által megadott indok: nem tudta feldolgozni a fizetést."
 
-#, fuzzy
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr "A bankja által megadott ok: Ön visszatérítést kért."
+msgstr "A bankja által megadott indok: Ön visszatérítést kért."
 
-#, fuzzy
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr "A bankja által megadott ok: a kifizetést nem engedélyezték."
+msgstr "A bankja által megadott indok: a kifizetést nem engedélyezték."
 
-#, fuzzy
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr "A bankja által megadott ok: a fizetés duplikátum volt."
+msgstr "A bankja által megadott indok: a fizetés duplikátum volt."
 
-#, fuzzy
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr "A bankja által megadott ok: a fizetés csalárd volt."
+msgstr "A bankja által megadott indok: a fizetés csalárd volt."
 
-#, fuzzy
 msgid "Your bank didn't provide a specific reason for this dispute."
-msgstr "A bankja nem adott konkrét okot a vitára."
+msgstr "Az Ön bankja nem indokolta meg a kifogást."
 
-#, fuzzy
 msgid "The reason provided by your bank is: the provided account details are incorrect."
-msgstr "A bankja által megadott ok: a megadott számlaadatok helytelenek."
+msgstr "A bankja által megadott indok: a megadott számlaadatok helytelenek."
 
-#, fuzzy
 msgid "The reason provided by your bank is: the account didn't contain enough money to honor the payment."
-msgstr "A bankja által megadott ok: a számlán nem volt elég pénz a kifizetés teljesítéséhez."
+msgstr "A bankja által megadott indok: a számlán nem volt elég pénz a kifizetés teljesítéséhez."
 
-#, fuzzy
 msgid "The reason provided by your bank is: the account owner didn't recognize the payment."
-msgstr "A bankja által megadott ok: a számlatulajdonos nem ismerte fel a kifizetést."
+msgstr "A bankja által megadott indok: a számlatulajdonos nem fogadta el a kifizetést."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr "A bankja által megadott ok: {reason_code_in_english}."
+msgstr "A bankja által megadott indok: {reason_code_in_english}."
 
-#, fuzzy
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
-msgstr "Ha ez a vita tévesen indult, akkor kérheti bankját, hogy vonja vissza. Kérjük, tájékoztasson minket, ha ezt megteszi, mert nekünk is üzenetet kell küldenünk a bankjának."
+msgstr "Ha ez a vita tévesen indult, akkor kérheti bankját, hogy vonja vissza. Kérjük, tájékoztasson minket, ha ezt megteszi, mert nekünk is kapcsolatba kell lépnünk a bankjával."
 
 #, fuzzy
 msgid "If the dispute isn't resolved favorably, then the disputed funds will be reclaimed from the people who have received them."
