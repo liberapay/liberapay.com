@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Spanish "
-"<https://hosted.weblate.org/projects/liberapay/core/es/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2023-01-15 07:47+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/liberapay/core/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -167,7 +169,7 @@ msgstr "Tu factura para {0} ha sido aceptada - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr "Tu petición de un pago de {amount} de {addressee_name} ha sido aceptada."
+msgstr "Se ha aceptado la petición de pago de {amount} desde la dirección {addressee_name}."
 
 msgid "View the invoice"
 msgstr "Ver la factura"
@@ -214,11 +216,11 @@ msgstr "Renovación de donación de Liberapay: sin instrumento de pago válido"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Tienes un pago de {amount} programado para {payment_date} para renovar tu donación a {recipient}, pero no podemos procesarlo porque falta un instrumento de pago válido."
+msgstr "Tiene un pago de {amount} programado {payment_date} para renovar su donación a {recipient}, pero no podemos procesarlo porque falta un instrumento de pago válido."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "Tienes un pago de {amount} programado para {payment_date} para renovar tus donaciones a {recipients}, pero no podemos procesarlo porque falta un instrumento de pago válido."
+msgstr "Tiene un pago de {amount} programado {payment_date} para renovar sus donaciones a {recipients}, pero no podemos procesarlo porque falta un instrumento de pago válido."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
@@ -396,7 +398,7 @@ msgstr "Se ha iniciado un pago domiciliado de {money_amount} desde tu cuenta ban
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr "Hemos iniciado un pago domiciliado de {money_amount} de tu cuenta ({partial_account_number}) de {bank_name}."
+msgstr "Hemos iniciado una domiciliación bancaria de {money_amount} en su cuenta {bank_name} ({partial_account_number})."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
@@ -1727,7 +1729,7 @@ msgid "View income shares"
 msgstr "Conoce cómo se reparten los ingresos"
 
 msgid "(fork)"
-msgstr "(fork)"
+msgstr "(bifurcación)"
 
 msgid "Updated this week"
 msgstr "Actualizada esta semana"
@@ -2574,7 +2576,7 @@ msgstr "Selecciona o introduce una cantidad de pago:"
 
 #, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
-msgstr "Liberapay no conserva dinero, todo el importe de tu pago irá inmediatamente a las cuentas de {payment_provider} de los destinatarios."
+msgstr "Liberapay no almacena dinero, el importe total de su pago irá inmediatamente a las cuentas {payment_provider} de los destinatarios."
 
 msgid "PayPal reveals your name and email address to the recipient."
 msgstr "PayPal revela tu nombre y dirección de correo electrónico al destinatario."
