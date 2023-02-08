@@ -5,8 +5,8 @@ python := "$(shell { command -v python3.8 || command -v python3 || command -v py
 bin_dir := $(shell $(python) -c 'import sys; print("Scripts" if sys.platform == "win32" else "bin")')
 env := env
 env_bin := $(env)/$(bin_dir)
-env_py := $(env_bin)/python
-pip := pip --disable-pip-version-check
+env_py := $(env_bin)/$(shell basename $(python))
+pip := $(env_py) -m pip --disable-pip-version-check
 with_local_env := $(env_py) cli/run.py -e defaults.env,local.env
 with_tests_env := $(env_py) cli/run.py -e defaults.env,tests/test.env,tests/local.env
 py_test := $(with_tests_env) $(env_bin)/python -m pytest -Wd $$PYTEST_ARGS
@@ -21,12 +21,12 @@ $(env): requirements*.txt
 	fi;
 	@$(python) cli/check-python-version.py
 	$(python) -m venv $(env)
-	$(env_bin)/$(pip) install wheel
-	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
+	$(pip) install wheel
+	$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
 	@touch $(env)
 
 rehash-requirements:
-	$(env_bin)/$(pip) install hashin
+	$(pip) install hashin
 	for f in requirements*.txt; do \
 	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.8 -p 3.9; \
 	done
