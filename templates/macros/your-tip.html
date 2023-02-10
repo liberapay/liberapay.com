@@ -254,8 +254,12 @@
     </ul>
     % set patron_visibilities = tippee_p.recipient_settings.patron_visibilities
     % set paypal_only = tippee_p.payment_providers == 2
-    % if paypal_only and patron_visibilities.__and__(1)
-        % set patron_visibilities = patron_visibilities.__xor__(1).__or__(2)
+    % if paypal_only
+        % if patron_visibilities == 0
+            % set patron_visibilities = 2
+        % elif patron_visibilities.__and__(1)
+            % set patron_visibilities = patron_visibilities.__xor__(1).__or__(2)
+        % endif
     % endif
     % if patron_visibilities == 1
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
