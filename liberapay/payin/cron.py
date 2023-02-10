@@ -469,7 +469,7 @@ def execute_reviewed_payins():
                     WHERE pt.payin = pi.id
                       AND recipient_p.join_time::date::text >= '2022-12-23'
                       AND ( recipient_p.marked_as IS NULL OR
-                            ( SELECT e.ts
+                            ( SELECT max(e.ts)
                                 FROM events e
                                WHERE e.participant = pt.recipient
                                  AND e.type = 'flags_changed'
