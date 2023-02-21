@@ -4,7 +4,8 @@ from liberapay.utils import form_post_success, get_participant
 
 participant = get_participant(state, restrict=True, allow_member=True)
 if user != participant and user.recipient_settings.patron_visibilities < 2:
-    raise response.error(403, "You haven't opted-in to see who your patrons are.")
+    if not user.is_acting_as('admin'):
+        response.redirect(user.path('patrons/'))
 
 if request.method == 'POST':
     see_patrons = request.body.parse_boolean('see_patrons')

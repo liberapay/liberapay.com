@@ -6,7 +6,8 @@ from liberapay.utils import get_participant
 
 participant = get_participant(state, restrict=True, allow_member=True)
 if user != participant and user.recipient_settings.patron_visibilities < 2:
-    raise response.error(403, "You haven't opted-in to see who your patrons are.")
+    if not user.is_acting_as('admin'):
+        raise response.error(403, "You haven't opted-in to see who your patrons are.")
 
 today = utcnow().date()
 scope = request.qs.get_choice('scope', ('active', 'all'))

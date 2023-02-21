@@ -83,14 +83,20 @@ def sign_in_with_form_data(body, state):
                 p_id = Participant.check_id(input_id[1:])
             else:
                 p_id = Participant.get_id_for(id_type, input_id)
-            try:
-                p = Participant.authenticate_with_password(p_id, password)
-            except AccountIsPasswordless:
-                if id_type == 'email':
-                    state['log-in.email'] = input_id
-                else:
-                    state['log-in.error'] = _("The submitted password is incorrect.")
-                return
+            if p_id:
+                try:
+                    p = Participant.authenticate_with_password(p_id, password)
+                except AccountIsPasswordless:
+                    if id_type == 'email':
+                        state['log-in.email'] = input_id
+                    else:
+                        state['log-in.error'] = _(
+                            "Your account doesn't have a password, so you'll "
+                            "have to authenticate yourself via email:"
+                        )
+                    return
+            else:
+                p = None
             if not p:
                 state['log-in.error'] = (
                     _("The submitted password is incorrect.") if p_id is not None else
