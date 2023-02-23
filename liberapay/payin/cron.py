@@ -7,7 +7,10 @@ from pando import json
 
 from ..billing.payday import compute_next_payday_date
 from ..cron import logger
-from ..exceptions import AccountSuspended, NextAction
+from ..exceptions import (
+    AccountSuspended, MissingPaymentAccount, NoSelfTipping,
+    RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
+)
 from ..i18n.currencies import Money
 from ..website import website
 from ..utils import utcnow
@@ -271,6 +274,7 @@ def execute_scheduled_payins():
            AND sp.automatic
            AND sp.payin IS NULL
            AND p.is_suspended IS NOT TRUE
+      ORDER BY sp.execution_date, sp.id
     """)
     for sp_id, execution_date, transfers, payer, route in rows:
         route.__dict__['participant'] = payer
@@ -281,16 +285,6 @@ def execute_scheduled_payins():
         transfers, canceled, impossible, actionable = _filter_transfers(
             payer, transfers, automatic=True
         )
-        if impossible:
-            for tr in impossible:
-                tr['execution_date'] = execution_date
-                del tr['beneficiary'], tr['tip']
-            payer.notify(
-                'renewal_aborted',
-                transfers=impossible,
-                email_unverified_address=True,
-            )
-            counts['renewal_aborted'] += 1
         if actionable:
             for tr in actionable:
                 tr['execution_date'] = execution_date
@@ -306,12 +300,23 @@ def execute_scheduled_payins():
             payin_amount = sum(tr['amount'] for tr in transfers)
             proto_transfers = []
             sepa_only = len(transfers) > 1
-            for tr in transfers:
-                proto_transfers.extend(resolve_tip(
-                    db, tr['tip'], tr['beneficiary'], 'stripe',
-                    payer, route.country, tr['amount'],
-                    sepa_only=sepa_only,
-                ))
+            for tr in list(transfers):
+                try:
+                    proto_transfers.extend(resolve_tip(
+                        db, tr['tip'], tr['beneficiary'], 'stripe',
+                        payer, route.country, tr['amount'],
+                        sepa_only=sepa_only,
+                    ))
+                except (
+                    MissingPaymentAccount,
+                    NoSelfTipping,
+                    RecipientAccountSuspended,
+                    UserDoesntAcceptTips,
+                ):
+                    impossible.append(tr)
+                    transfers.remove(tr)
+                    payin_amount -= tr['amount']
+        if transfers:
             try:
                 payin = prepare_payin(
                     db, payer, payin_amount, route, proto_transfers,
@@ -367,6 +372,16 @@ def execute_scheduled_payins():
             """, (payer.id, sp_id))
         else:
             db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
+        if impossible:
+            for tr in impossible:
+                tr['execution_date'] = execution_date
+                del tr['beneficiary'], tr['tip']
+            payer.notify(
+                'renewal_aborted',
+                transfers=impossible,
+                email_unverified_address=True,
+            )
+            counts['renewal_aborted'] += 1
     for k, n in sorted(counts.items()):
         logger.info("Sent %i %s notifications." % (n, k))
     if retry:
