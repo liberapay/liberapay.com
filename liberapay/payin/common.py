@@ -375,7 +375,7 @@ def resolve_team_donation(
         payer (Participant): the donor
         payer_country (str): the country code the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
-        tip (Row): the row from the `tips` table
+        tip (Tip): the donation this payment will fund
         sepa_only (bool): only consider destination accounts within SEPA
         excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
@@ -420,7 +420,7 @@ def resolve_team_donation(
     if not takes:
         raise NoSelfTipping()
     takes.sort(key=lambda t: (
-        -(t.amount / (t.paid_in_advance + payment_amount)),
+        -(t.naive_amount / (t.paid_in_advance + payment_amount)),
         t.paid_in_advance,
         t.ctime
     ))
@@ -442,7 +442,7 @@ def resolve_team_donation(
         """, dict(locals(), SEPA=SEPA, member_ids={t.member for t in takes}))}
         if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:
             selected_takes = [
-                t for t in takes if t.member in sepa_accounts and t.amount != 0
+                t for t in takes if t.member in sepa_accounts and t.nominal_amount != 0
             ]
             if selected_takes:
                 min_transfer_amount = get_minimum_transfer_amount(provider, currency)
@@ -489,18 +489,23 @@ def resolve_take_amounts(payment_amount, takes, min_transfer_amount=None):
     adding a `resolved_amount` attribute to each one.
 
     """
+    if all(t.naive_amount == 0 for t in takes):
+        replacement_amount = Money.MINIMUMS[payment_amount.currency]
+    else:
+        replacement_amount = None
     max_weeks_of_advance = 0
     for t in takes:
-        if t.amount == 0:
+        t.base_amount = replacement_amount or t.naive_amount
+        if t.base_amount == 0:
             t.weeks_of_advance = 0
             continue
-        t.weeks_of_advance = t.paid_in_advance / t.amount
+        t.weeks_of_advance = t.paid_in_advance / t.base_amount
         if t.weeks_of_advance > max_weeks_of_advance:
             max_weeks_of_advance = t.weeks_of_advance
-    base_amounts = {t.member: t.amount for t in takes}
+    base_amounts = {t.member: t.base_amount for t in takes}
     convergence_amounts = {
         t.member: (
-            t.amount * (max_weeks_of_advance - t.weeks_of_advance)
+            t.base_amount * (max_weeks_of_advance - t.weeks_of_advance)
         ).round_up()
         for t in takes
     }
