@@ -12,8 +12,10 @@
 <div class="container">
 <div class="row">
 <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-    % if participant.marked_as == 'spam'
-        <p class="alert alert-warning text-center">{{ _("This profile is marked as spam.") }}</p>
+    % if participant.is_suspended
+        <p class="alert alert-warning text-center">{{ _(
+            "This profile is marked as spam or fraud."
+        ) }}</p>
     % endif
     {% block profile_alternates %}{% endblock %}
     <div class="profile-header">

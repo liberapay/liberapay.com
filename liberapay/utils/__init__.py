@@ -88,16 +88,16 @@ def get_participant(
         if restrict:
             user.require_write_permission()
 
-    is_spam = participant.marked_as == 'spam'
-    if (restrict or is_spam) and participant != user:
+    is_blocked = participant.is_suspended
+    if (restrict or is_blocked) and participant != user:
         if allow_member and participant.kind == 'group' and user.member_of(participant):
             pass
         elif user.is_acting_as('admin'):
             log_admin_request(user, participant, request)
         elif restrict:
             raise response.error(403, _("You are not authorized to access this page."))
-        elif is_spam:
-            raise response.render('simplates/spam-profile.spt', state)
+        elif is_blocked:
+            raise response.render('simplates/blocked-profile.spt', state)
 
     status = participant.status
     if status == 'closed':
@@ -133,8 +133,8 @@ def get_community(state, restrict=False):
     else:
         user.require_write_permission()
 
-    is_spam = c.participant.marked_as == 'spam'
-    if (restrict or is_spam):
+    is_blocked = c.participant.is_suspended
+    if (restrict or is_blocked):
         if user.id == c.creator:
             pass
         elif user.is_acting_as('admin'):
@@ -145,8 +145,8 @@ def get_community(state, restrict=False):
             else:
                 _ = state['_']
                 raise response.error(403, _("You are not authorized to access this page."))
-        elif is_spam:
-            raise response.render('simplates/spam-profile.spt', state)
+        elif is_blocked:
+            raise response.render('simplates/blocked-profile.spt', state)
 
     return c
 
