@@ -1,0 +1,73 @@
+from datetime import timedelta
+
+from liberapay.constants import EPOCH
+from liberapay.i18n.base import LOCALE_EN as locale
+
+[---]
+
+user.require_active_privilege('admin')
+
+cron_jobs = {job.func.__name__: job for job in website.cron.jobs}
+job_statuses = website.db.all("SELECT * FROM cron_jobs ORDER BY name")
+for row in job_statuses:
+    row.job = cron_jobs.get(row.name)
+
+title = "Cron Jobs"
+
+[---] text/html
+% extends "templates/layouts/admin.html"
+
+% block content
+
+<ul>
+% for row in job_statuses
+    <li><code class="gray">{{ row.name }}</code> &mdash;
+        % if row.job is none
+            <strong class="text-danger">unknown</strong>
+        % elif row.last_start_time
+            % set seconds_before_next_run = row.job.seconds_before_next_run()
+            % if not row.last_success_time or row.last_success_time < row.last_start_time
+                % if row.job.running
+                    % set run_time = to_age(row.last_start_time)
+                    % set run_seconds = abs(run_time.total_seconds())
+                    % if run_seconds > 60
+                        <strong class="text-{{ 'danger' if run_seconds > 3600 else 'warning' }}">running since {{
+                            locale.format_timedelta(run_time, add_direction=True) }}</strong>
+                    % else
+                        <strong class="text-info">running since {{ locale.format_timedelta(run_time, add_direction=True) }}</strong>
+                    % endif
+                % else
+                    <strong class="text-warning">interrupted</strong>
+                % endif
+            % elif seconds_before_next_run is none
+                <span class="text-success">done</span>
+            % elif seconds_before_next_run >= 0
+                <span class="text-success">good</span>
+            % else
+                <strong class="text-warning">late</strong>
+                &mdash; Was supposed to start {{ locale.format_timedelta(timedelta(seconds=seconds_before_next_run), add_direction=True) }}
+            % endif
+            <br>
+            % if row.last_success_time and row.last_success_time > row.last_start_time
+                Last run successfully completed {{ locale.format_timedelta(to_age(row.last_success_time), add_direction=True) }}.
+                % if row.last_error_time
+                    <br>Last failure was {{ locale.format_timedelta(to_age(row.last_error_time), add_direction=True) }}
+                    <br><details><pre class="pre-wrap">{{ row.last_error }}</pre></details>
+                % endif
+            % elif row.last_error_time and row.last_error_time > row.last_start_time
+                Last run failed {{ locale.format_timedelta(to_age(row.last_error_time), add_direction=True) }}:<br>
+                <pre class="pre-wrap">{{ row.last_error }}</pre>
+            % elif not row.job.running
+                The last run started {{ locale.format_timedelta(to_age(row.last_start_time), add_direction=True) }} was interrupted by an app restart.
+            % endif
+            % if seconds_before_next_run is not none
+                Next run in {{ locale.format_timedelta(timedelta(seconds=seconds_before_next_run)) }}.
+            % endif
+        % else
+            <strong class="text-warning">not yet run</strong>
+        % endif
+    </li>
+% endfor
+</ul>
+
+% endblock

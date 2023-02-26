@@ -161,6 +161,7 @@ class Harness(unittest.TestCase):
         cls.db.run("ALTER SEQUENCE exchanges_id_seq RESTART WITH %s", (cls_id,))
         cls.db.run("ALTER SEQUENCE transfers_id_seq RESTART WITH %s", (cls_id,))
         cls.setUpVCR()
+        cls.make_table_read_only('currency_exchange_rates')
 
 
     @classmethod
@@ -212,6 +213,32 @@ class Harness(unittest.TestCase):
                 tried.add(tuple(tablenames))
         self.db.run("ALTER SEQUENCE participants_id_seq RESTART WITH 1")
         self.db.run("ALTER SEQUENCE paydays_id_seq RESTART WITH 1")
+
+
+    @classmethod
+    def make_table_read_only(cls, table_name):
+        cls.db.run("""
+            CREATE OR REPLACE FUNCTION prevent_changes() RETURNS trigger AS $$
+                BEGIN
+                    RAISE EXCEPTION
+                        'The % table is read-only by default during tests.',
+                        TG_TABLE_NAME;
+                END;
+            $$ LANGUAGE plpgsql;
+
+            CREATE OR REPLACE TRIGGER prevent_changes_to_{0}
+                BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON {0}
+                FOR EACH STATEMENT EXECUTE PROCEDURE prevent_changes();
+        """.format(table_name))
+
+
+    @contextmanager
+    def allow_changes_to(self, table_name):
+        self.db.run("DROP TRIGGER prevent_changes_to_{0} ON {0}".format(table_name))
+        try:
+            yield
+        finally:
+            self.make_table_read_only(table_name)
 
 
     def make_elsewhere(self, platform, user_id, user_name, domain='', **kw):
