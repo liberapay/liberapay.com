@@ -135,7 +135,7 @@ class TestResolveAmounts(Harness):
 
 class TestResolveTeamDonation(Harness):
 
-    def resolve(self, team, provider, payer, payer_country, payment_amount):
+    def resolve(self, team, provider, payer, payer_country, payment_amount, sepa_only=False):
         tip = self.db.one("""
             SELECT *
               FROM current_tips
@@ -143,7 +143,8 @@ class TestResolveTeamDonation(Harness):
                AND tippee = %s
         """, (payer.id, team.id))
         donations = resolve_team_donation(
-            self.db, team, provider, payer, payer_country, payment_amount, tip
+            self.db, team, provider, payer, payer_country, payment_amount, tip,
+            sepa_only=sepa_only,
         )
         if len(donations) == 1:
             assert donations[0].amount == payment_amount
@@ -184,8 +185,14 @@ class TestResolveTeamDonation(Harness):
 
         # Test with two members but only one payment account at the requested provider
         paypal_account_carl = self.add_payment_account(carl, 'paypal')
+        team.set_take_for(carl, EUR('200.00'), carl)
         account = self.resolve(team, 'stripe', alice, 'BE', EUR('42'))
         assert account == stripe_account_bob
+        team.set_take_for(carl, EUR('-1'), carl)
+        team.set_take_for(carl, EUR('200.00'), bob)
+        account = self.resolve(team, 'paypal', alice, 'BE', EUR('47'))
+        assert account == paypal_account_carl
+        team.set_take_for(carl, EUR('-1'), bob)
 
         # Test with two members and both takes set to `auto`
         stripe_account_carl = self.add_payment_account(
@@ -292,6 +299,67 @@ class TestResolveTeamDonation(Harness):
         assert payin_transfers[0].destination == stripe_account_bob.pk
         assert payin_transfers[1].amount == USD('8.00')
         assert payin_transfers[1].destination == stripe_account_carl.pk
+
+    def test_resolve_team_donation_sepa_only(self):
+        alice = self.make_participant('alice')
+        bob = self.make_participant('bob')
+        carl = self.make_participant('carl')
+        team = self.make_participant('team', kind='group', accepted_currencies=None)
+        alice.set_tip_to(team, EUR('1.00'))
+
+        # Test without payment account
+        team.add_member(bob)
+        with self.assertRaises(MissingPaymentAccount):
+            self.resolve(team, 'stripe', alice, 'FR', EUR('10'), sepa_only=True)
+
+        # Test with a single member and the take set to `auto`
+        stripe_account_bob = self.add_payment_account(bob, 'stripe', country='FR')
+        account = self.resolve(team, 'stripe', alice, 'GB', EUR('7'), sepa_only=True)
+        assert account == stripe_account_bob
+
+        # Test self donation
+        bob.set_tip_to(team, EUR('0.06'))
+        with self.assertRaises(NoSelfTipping):
+            self.resolve(team, 'stripe', bob, 'FR', EUR('6'), sepa_only=True)
+
+        # Test with two members but only one Stripe account
+        team.add_member(carl)
+        self.add_payment_account(carl, 'paypal')
+        account = self.resolve(team, 'stripe', alice, 'CH', EUR('8'), sepa_only=True)
+        assert account == stripe_account_bob
+
+        # Test with two members and both takes set to `auto`
+        self.add_payment_account(carl, 'stripe', country='JP', default_currency='JPY')
+        account = self.resolve(team, 'stripe', alice, 'PL', EUR('5.46'), sepa_only=True)
+        assert account == stripe_account_bob
+
+        # Test with two members and one non-auto take
+        team.set_take_for(carl, EUR('200.00'), carl)
+        account = self.resolve(team, 'stripe', alice, 'RU', EUR('50.02'), sepa_only=True)
+        assert account == stripe_account_bob
+
+        # Test with two members and two different non-auto takes
+        team.set_take_for(bob, EUR('100.00'), bob)
+        account = self.resolve(team, 'stripe', alice, 'BR', EUR('10'), sepa_only=True)
+        assert account == stripe_account_bob
+        account = self.resolve(team, 'stripe', alice, 'BR', EUR('1'), sepa_only=True)
+        assert account == stripe_account_bob
+
+        # Test that self donation is avoided when there are two members
+        carl.set_tip_to(team, EUR('17.89'))
+        account = self.resolve(team, 'stripe', carl, 'FR', EUR('71.56'), sepa_only=True)
+        assert account == stripe_account_bob
+
+        # Test with a suspended member
+        self.db.run("UPDATE participants SET is_suspended = true WHERE id = %s", (carl.id,))
+        account = self.resolve(team, 'stripe', alice, 'RU', EUR('7.70'), sepa_only=True)
+        assert account == stripe_account_bob
+        self.db.run("UPDATE participants SET is_suspended = false WHERE id = %s", (carl.id,))
+
+        # Test when the only member the payment can go to has their take at zero
+        team.set_take_for(bob, EUR('0'), bob)
+        with self.assertRaises(MissingPaymentAccount):
+            self.resolve(team, 'stripe', alice, 'CN', EUR('10'), sepa_only=True)
 
 
 class TestPayinAmountSuggestions(Harness):

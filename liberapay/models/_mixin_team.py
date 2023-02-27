@@ -202,17 +202,11 @@ class MixinTeam:
     def get_current_takes_for_payment(self, currency, weekly_amount):
         """
         Return the list of current takes with the extra information that the
-        `liberapay.payin.common.resolve_take_amounts` function needs to compute
+        `liberapay.payin.common.resolve_team_donation` function needs to compute
         transfer amounts.
         """
         takes = self.db.all("""
-            SELECT t.member
-                 , t.ctime
-                 , convert(t.amount, %(currency)s) AS amount
-                 , convert(
-                       coalesce_currency_amount(t.paid_in_advance, t.amount::currency),
-                       %(currency)s
-                   ) AS paid_in_advance
+            SELECT t.member, t.ctime, t.amount AS nominal_amount, t.paid_in_advance
                  , p.is_suspended
               FROM current_takes t
               JOIN participants p ON p.id = t.member
@@ -222,8 +216,8 @@ class MixinTeam:
         income_amount = self.receiving.convert(currency) + weekly_amount.convert(currency)
         if income_amount == 0:
             income_amount = Money.MINIMUMS[currency]
-        manual_takes_sum = MoneyBasket(t.amount for t in takes if t.amount > 0)
-        n_auto_takes = sum(1 for t in takes if t.amount < 0) or 1
+        manual_takes_sum = MoneyBasket(t.nominal_amount for t in takes if t.nominal_amount > 0)
+        n_auto_takes = sum(1 for t in takes if t.nominal_amount < 0) or 1
         auto_take = (
             (income_amount - manual_takes_sum.fuzzy_sum(currency)) /
             n_auto_takes
@@ -231,7 +225,9 @@ class MixinTeam:
         if auto_take < 0:
             auto_take = zero
         for t in takes:
-            t.amount = auto_take if t.amount < 0 else t.amount.convert(currency)
+            t.paid_in_advance = (t.paid_in_advance or zero).convert(currency)
+            t.naive_amount = \
+                auto_take if t.nominal_amount < 0 else t.nominal_amount.convert(currency)
         return takes
 
     def recompute_actual_takes(self, cursor, member=None):
