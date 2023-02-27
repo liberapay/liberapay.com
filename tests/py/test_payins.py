@@ -356,6 +356,11 @@ class TestResolveTeamDonation(Harness):
         assert account == stripe_account_bob
         self.db.run("UPDATE participants SET is_suspended = false WHERE id = %s", (carl.id,))
 
+        # Test when the only member the payment can go to has their take at zero
+        team.set_take_for(bob, EUR('0'), bob)
+        with self.assertRaises(MissingPaymentAccount):
+            self.resolve(team, 'stripe', alice, 'CN', EUR('10'), sepa_only=True)
+
 
 class TestPayinAmountSuggestions(Harness):
 
