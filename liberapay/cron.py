@@ -22,7 +22,7 @@ class Cron:
     def __init__(self, website):
         self.website = website
         self.conn = None
-        self._wait_for_lock_thread = None
+        self._lock_thread = None
         self.has_lock = False
         self.jobs = []
 
@@ -44,13 +44,16 @@ class Cron:
             cursor = self.conn.cursor()
             while True:
                 if cursor.one("SELECT pg_try_advisory_lock(0)"):
-                    self.has_lock = True
-                    break
-                sleep(300)
-            for job in self.jobs:
-                if job.exclusive:
-                    job.start()
-        t = self._wait_for_lock_thread = threading.Thread(target=f)
+                    if not self.has_lock:
+                        self.has_lock = True
+                        for job in self.jobs:
+                            if job.exclusive:
+                                job.start()
+                else:
+                    if self.has_lock:
+                        self.has_lock = False
+                sleep(60)
+        t = self._lock_thread = threading.Thread(target=f, name="cron_waiter")
         t.daemon = True
         t.start()
 
