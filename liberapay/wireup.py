@@ -379,7 +379,7 @@ def make_sentry_teller(env, version):
             env.sentry_dsn,
             environment=env.instance_type,
             release=version,
-            debug=False,  # Pass `True` when investigating an integration issue
+            debug=env.sentry_debug,
         )
         sentry = True
     else:
