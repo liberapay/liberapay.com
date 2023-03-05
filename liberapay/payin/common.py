@@ -391,7 +391,7 @@ def resolve_team_donation(
     if team.is_suspended:
         raise RecipientAccountSuspended(team)
     currency = payment_amount.currency
-    takes = team.get_current_takes_for_payment(currency, tip.amount)
+    takes = team.get_current_takes_for_payment(currency, tip)
     if all(t.is_suspended for t in takes):
         raise RecipientAccountSuspended(takes)
     takes = [t for t in takes if not t.is_suspended]
