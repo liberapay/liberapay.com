@@ -451,7 +451,7 @@ def make_sentry_teller(env, version):
         if not level:
             level = 'warning' if isinstance(exception, Warning) else 'error'
         scope_dict = {'level': level}
-        if state:
+        if state and send_state:
             try:
                 # https://docs.sentry.io/platforms/python/enriching-events/identify-user/
                 user_data = scope_dict['user'] = {}
