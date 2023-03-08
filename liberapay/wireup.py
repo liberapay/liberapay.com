@@ -389,9 +389,10 @@ def make_sentry_teller(env, version):
     def tell_sentry(exception, send_state=True, allow_reraise=True, level=None):
         r = {'sentry_ident': None}
 
+        state = Website.state.get(None) or {}
         if isinstance(exception, pando.Response):
-            if exception.code < 500:
-                # Only log server errors
+            if state and exception.code < 500:
+                # Only log server errors when processing a user request.
                 return r
             if not level and exception.code in (502, 504):
                 # This kind of error is usually transient and not our fault.
@@ -401,7 +402,6 @@ def make_sentry_teller(env, version):
             # Don't flood Sentry when DB is down
             return r
 
-        state = Website.state.get(None) or {}
         if isinstance(exception, PoolError):
             # If this happens, then the `DATABASE_MAXCONN` value is too low.
             state['exception'] = NeedDatabase()
