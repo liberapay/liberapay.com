@@ -1107,7 +1107,7 @@ def create_payday_issue():
         last_start = last_payday.ts_start
         if last_start is None or last_start.date() == today:
             return
-    next_payday_id = str(last_payday.id + 1 if last_payday else 1)
+    next_payday_id = last_payday.id + 1 if last_payday else 1
     # Prepare to make API requests
     app_conf = website.app_conf
     sess = requests.Session()
@@ -1122,15 +1122,19 @@ def create_payday_issue():
     # Create the next payday issue
     next_issue = {'body': '', 'labels': [label]}
     if last_issue:
-        last_issue_payday_id = str(int(last_issue['title'].split()[-1].lstrip('#')))
+        last_issue_payday_id = int(last_issue['title'].split()[-1].lstrip('#'))
         if last_issue_payday_id == next_payday_id:
             return  # already created
-        assert last_issue_payday_id == str(last_payday.id)
-        next_issue['title'] = last_issue['title'].replace(last_issue_payday_id, next_payday_id)
+        assert last_issue_payday_id == last_payday.id
+        next_issue['title'] = last_issue['title'].replace(
+            str(last_issue_payday_id), str(next_payday_id)
+        )
         next_issue['body'] = last_issue['body']
     else:
         next_issue['title'] = "Payday #%s" % next_payday_id
-    next_issue = github.api_request('POST', '', '/repos/%s/issues' % repo, json=next_issue, sess=sess).json()
+    next_issue = github.api_request(
+        'POST', '', '/repos/%s/issues' % repo, json=next_issue, sess=sess
+    ).json()
     website.db.run("""
         INSERT INTO paydays
                     (id, public_log, ts_start)
