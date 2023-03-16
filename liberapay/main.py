@@ -188,7 +188,7 @@ if conf:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
     cron(intervals.get('execute_reviewed_payins', 3600), execute_reviewed_payins, True)
 
-    cron('once', website.cryptograph.rotate_stored_data, True)
+    cron('irregular', website.cryptograph.rotate_stored_data, True)
 
 
 # Website Algorithm
