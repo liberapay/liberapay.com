@@ -294,13 +294,22 @@ def get_public_ip_addresses(domain):
 
     Returns a list of `IPv4Address` and `IPv6Address` objects.
 
-    Raises `DNSException` if the `A` or `AAAA` query fails.
+    Raises `DNSException` if both the `A` and `AAAA` queries fail.
 
     """
-    records = (
-        list(DNS.query(domain, 'A', raise_on_no_answer=False).rrset or ()) +
-        list(DNS.query(domain, 'AAAA', raise_on_no_answer=False).rrset or ())
-    )
+    records = []
+    exception = None
+    try:
+        records.extend(DNS.query(domain, 'A', raise_on_no_answer=False).rrset or ())
+    except DNSException as e:
+        exception = e
+    try:
+        records.extend(DNS.query(domain, 'AAAA', raise_on_no_answer=False).rrset or ())
+    except DNSException:
+        if exception:
+            raise exception from None
+        else:
+            raise
     # Return the list of valid global IP addresses found
     addresses = []
     for rec in records:

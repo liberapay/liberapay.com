@@ -54,6 +54,7 @@ from liberapay.exceptions import (
     TooManyCurrencyChanges,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
+    TooManyLogInAttempts,
     TooManyPasswordLogins,
     TooManyRequests,
     TooManyUsernameChanges,
@@ -421,6 +422,15 @@ class Participant(Model, MixinTeam):
             return None, 'invalid'
         if session_id < 1:
             return None, 'invalid'
+        rate_limit = session_id >= 1001 and session_id <= 1010
+        if rate_limit:
+            request = website.state.get({}).get('request')
+            if request:
+                cls.db.hit_rate_limit(
+                    'log-in.session.ip-addr', str(request.source), TooManyLogInAttempts
+                )
+            else:
+                rate_limit = False
         r = cls.db.one("""
             SELECT p, s.secret, s.mtime
               FROM user_secrets s
@@ -433,6 +443,8 @@ class Participant(Model, MixinTeam):
         p, stored_secret, mtime = r
         if not constant_time_compare(stored_secret, secret):
             return None, 'invalid'
+        if rate_limit:
+            cls.db.decrement_rate_limit('log-in.session.ip-addr', str(request.source))
         if mtime > utcnow() - SESSION_TIMEOUT:
             p.session = SimpleNamespace(id=session_id, secret=secret, mtime=mtime)
         elif allow_downgrade:

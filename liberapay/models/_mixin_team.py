@@ -199,7 +199,7 @@ class MixinTeam:
         """
         return (cursor or self.db).all(TAKES, dict(team=self.id))
 
-    def get_current_takes_for_payment(self, currency, weekly_amount):
+    def get_current_takes_for_payment(self, currency, tip):
         """
         Return the list of current takes with the extra information that the
         `liberapay.payin.common.resolve_team_donation` function needs to compute
@@ -213,7 +213,9 @@ class MixinTeam:
              WHERE t.team = %(team_id)s
         """, dict(currency=currency, team_id=self.id))
         zero = Money.ZEROS[currency]
-        income_amount = self.receiving.convert(currency) + weekly_amount.convert(currency)
+        income_amount = self.receiving.convert(currency)
+        if not tip.is_funded:
+            income_amount += tip.amount.convert(currency)
         if income_amount == 0:
             income_amount = Money.MINIMUMS[currency]
         manual_takes_sum = MoneyBasket(t.nominal_amount for t in takes if t.nominal_amount > 0)
