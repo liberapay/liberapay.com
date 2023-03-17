@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '162'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '163'::jsonb);
 
 
 -- app configuration
@@ -1119,6 +1119,17 @@ CREATE TABLE feedback
 ( participant   bigint      PRIMARY KEY
 , feedback      text        NOT NULL
 , ctime         timestamptz NOT NULL DEFAULT current_timestamp
+);
+
+
+-- background tasks
+
+CREATE TABLE cron_jobs
+( name                text          PRIMARY KEY
+, last_start_time     timestamptz
+, last_success_time   timestamptz
+, last_error_time     timestamptz
+, last_error          text
 );
 
 
