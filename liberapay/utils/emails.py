@@ -13,7 +13,6 @@ from aspen_jinja2_renderer import SimplateLoader
 import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, NXDOMAIN, Resolver
-from jinja2 import Environment
 from pando import Response
 from pando.utils import utcnow
 
@@ -23,7 +22,7 @@ from liberapay.exceptions import (
     EmailAddressError, EmailAddressIsBlacklisted, EmailDomainIsBlacklisted,
     InvalidEmailDomain, NonEmailDomain, EmailAddressRejected, TooManyAttempts,
 )
-from liberapay.renderers.jinja2 import JINJA_ENV_COMMON
+from liberapay.renderers.jinja2 import Environment
 from liberapay.utils import deserialize
 from liberapay.website import website
 
@@ -36,11 +35,8 @@ class EmailVerificationResult(Enum):
     SUCCEEDED = auto()
 
 
-jinja_env = Environment(**JINJA_ENV_COMMON)
-jinja_env_html = Environment(**dict(
-    JINJA_ENV_COMMON,
-    autoescape=True,
-))
+jinja_env = Environment()
+jinja_env_html = Environment(autoescape=True)
 
 def compile_email_spt(fpath):
     """Compile an email simplate.

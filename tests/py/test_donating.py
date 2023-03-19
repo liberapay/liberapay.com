@@ -35,6 +35,21 @@ class TestDonating(Harness):
         assert tip.renewal_mode == 2
         assert tip.visibility == 3
 
+    def test_donation_form_v2_for_paypal_only_recipient(self):
+        creator = self.make_participant(
+            'creator', accepted_currencies=None, email='creator@liberapay.com',
+        )
+        self.add_payment_account(creator, 'paypal')
+        assert creator.payment_providers == 2
+        assert creator.recipient_settings.patron_visibilities == 0
+        r = self.client.GET('/creator/donate')
+        assert r.code == 200
+        assert "This donation won&#39;t be secret, " in r.text, r.text
+        creator.update_recipient_settings(patron_visibilities=7)
+        assert creator.recipient_settings.patron_visibilities == 7
+        r = self.client.GET('/creator/donate')
+        assert r.code == 200
+
     def test_donation_form_v2_does_not_overwrite_visibility(self):
         creator = self.make_participant(
             'creator', accepted_currencies=None, email='creator@liberapay.com',

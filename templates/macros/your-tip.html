@@ -266,7 +266,7 @@
         "{username} has chosen not to see who their patrons are, so your donation will be secret.",
         username=tippee_name
     ) }}</p>
-    % elif patron_visibilities == 2 or paypal_only and patron_visibilities is None
+    % elif patron_visibilities == 2 or paypal_only and not patron_visibilities
     <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
         "This donation won't be secret, you will appear in {username}'s private list of patrons.",
         username=tippee_name
