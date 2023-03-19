@@ -304,8 +304,6 @@ def get_public_ip_addresses(domain):
     except DNSException:
         if exception:
             raise exception from None
-        else:
-            raise
     # Return the list of valid global IP addresses found
     addresses = []
     for rec in records:
