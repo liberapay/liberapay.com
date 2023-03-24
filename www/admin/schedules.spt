@@ -1,3 +1,5 @@
+from pando.utils import utcnow
+
 from liberapay.i18n.base import LOCALE_EN as locale
 
 [---]
@@ -44,6 +46,7 @@ kind = ' '.join(filter(None, (
     'future' if future else 'overdue' if future is False else '',
     'automatic' if automatic else 'manual' if automatic is False else ''
 )))
+today = utcnow().date()
 
 title = "Scheduled Payments Admin"
 
@@ -116,7 +119,7 @@ title = "Scheduled Payments Admin"
             <td class="text-muted">n/a</td>
             % endif
             % set percent_automatic_executed = row.n_automatic_executed / row.n_all * 100
-            <td{% if row.n_automatic >= 100 and percent_automatic_executed < 90 %} class="warning" {% endif %}>{{ '%.1f' % percent_automatic_executed }}</td>
+            <td{% if row.n_automatic >= 100 and percent_automatic_executed < 90 and row.execution_date < today %} class="warning" {% endif %}>{{ '%.1f' % percent_automatic_executed }}</td>
             % set percent_manual_executed = row.n_manual_executed / row.n_all * 100
             <td>{{ '%.1f' % percent_manual_executed }}</td>
             % set percent_blocked = row.n_blocked / row.n_all * 100
