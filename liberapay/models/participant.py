@@ -3767,6 +3767,25 @@ def generate_profile_description_missing_notifications():
         sleep(1)
         p.notify('profile_description_missing', force_email=True)
     n = len(participants)
+    participants = website.db.all("""
+        SELECT DISTINCT p
+          FROM payin_transfers pt
+          JOIN participants p ON p.id = pt.recipient
+         WHERE pt.status = 'awaiting_review'
+           AND p.status = 'active'
+           AND ( p.goal IS NULL OR p.goal >= 0 )
+           AND p.id NOT IN (SELECT DISTINCT participant FROM statements)
+           AND p.id NOT IN (
+                   SELECT DISTINCT n.participant
+                     FROM notifications n
+                    WHERE n.event = 'profile_description_missing'
+                      AND n.ts >= (current_timestamp - interval '1 week')
+               )
+    """)
+    for p in participants:
+        sleep(1)
+        p.notify('profile_description_missing', force_email=True)
+    n += len(participants)
     if n:
         s = '' if n == 1 else 's'
         print(f"Sent {n} profile_description_missing notification{s}.")
