@@ -11,8 +11,8 @@ from psycopg2 import IntegrityError
 
 from ..constants import AVATAR_QUERY, DOMAIN_RE, RATE_LIMITS, SUMMARY_MAX_SIZE
 from ..cron import logger
-from ..elsewhere._exceptions import (
-    BadUserId, ElsewhereError, InvalidServerResponse, UserNotFound,
+from ..elsewhere._base import (
+    ElsewhereError, InvalidServerResponse, UserNotFound,
 )
 from ..exceptions import InvalidId
 from ..security.crypto import constant_time_compare
@@ -380,15 +380,6 @@ def get_account_elsewhere(website, state, api_lookup=True):
                 "and it's not possible to create a stub profile for them.",
                 platform=platform.display_name
             ))
-        except (BadUserId, UserNotFound) as e:
-            _ = state['_']
-            if isinstance(e, BadUserId):
-                err = _("'{0}' doesn't seem to be a valid user id on {platform}.",
-                        uid, platform=platform.display_name)
-                raise response.error(400, err)
-            err = _("There doesn't seem to be a user named {0} on {1}.",
-                    uid, platform.display_name)
-            raise response.error(404, err)
         account = AccountElsewhere.upsert(user_info)
     return platform, account
 

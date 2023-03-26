@@ -5,7 +5,7 @@ from postgres.orm import Model
 
 from liberapay.constants import RATE_LIMITS
 from liberapay.cron import logger
-from liberapay.elsewhere._exceptions import ElsewhereError
+from liberapay.elsewhere._base import ElsewhereError
 from liberapay.models.account_elsewhere import UnableToRefreshAccount
 from liberapay.models.participant import Participant
 from liberapay.utils import utcnow

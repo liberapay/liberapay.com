@@ -23,9 +23,13 @@ from state_chain import StateChain
 
 from liberapay import elsewhere
 import liberapay.billing.payday
+from liberapay.elsewhere._base import (
+    BadUserId, ElsewhereError, HTTPError, RateLimitError, UserNotFound,
+)
 from liberapay.exceptions import NeedDatabase
 from liberapay.i18n.base import (
-    ACCEPTED_LANGUAGES, COUNTRIES, LOCALES, LOCALES_DEFAULT_MAP, Locale, make_sorted_dict,
+    ACCEPTED_LANGUAGES, COUNTRIES, LOCALES, LOCALES_DEFAULT_MAP, Locale,
+    make_sorted_dict, to_age,
 )
 from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.i18n.plural_rules import get_function_from_rule
@@ -438,6 +442,43 @@ def make_sentry_teller(env, version):
                 r['exception'] = None
                 r['response'] = response
                 return r
+
+        if isinstance(exception, ElsewhereError):
+            _ = state.get('_') or (lambda x: x)
+            response = state.get('response') or pando.Response()
+            r['exception'] = None
+            if isinstance(exception, BadUserId):
+                r['response'] = response.error(400, _(
+                    "'{0}' doesn't seem to be a valid user id on {platform}.",
+                    exception.uid, platform=exception.platform.display_name
+                ))
+                return r
+            elif isinstance(exception, HTTPError):
+                r['response'] = response.error(exception.status_code, _(
+                    "{0} returned an error, please try again later.",
+                    exception.domain or exception.platform.display_name
+                ))
+                return r
+            elif isinstance(exception, RateLimitError):
+                msg = _(
+                    "You've consumed your quota of requests, you can try again {in_N_minutes}.",
+                    in_N_minutes=to_age(exception.reset)
+                ) if exception.remaining == 0 and exception.reset else _(
+                    "You're making requests too fast, please try again later."
+                )
+                r['response'] = response.error(429, msg)
+                return r
+            elif isinstance(exception, UserNotFound):
+                r['response'] = response.error(404, _(
+                    "There doesn't seem to be a user named {0} on {1}.",
+                    exception.uid, exception.platform.display_name
+                ))
+                return r
+            else:
+                r['response'] = response.error(502, _(
+                    "{0} returned an error, please try again later.",
+                    exception.domain or exception.platform.display_name
+                ))
 
         if not sentry:
             # No Sentry, log to stderr instead
