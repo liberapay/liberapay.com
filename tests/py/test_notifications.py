@@ -43,7 +43,7 @@ class TestNotifications(Harness):
 
     def test_render_notifications(self):
         self.client.website.emails['test_event'] = {
-            'subject': SimplateLoader(None, """
+            '-/subject': SimplateLoader(None, """
                 Test notification subject
             """).load(jinja_env_html, None),
             'text/html': SimplateLoader(None, """
@@ -78,11 +78,11 @@ class TestNotifications(Harness):
 
     def test_render_broken_notifications(self):
         self.client.website.emails['_broken_subject'] = {
-            'subject': SimplateLoader(None, "{{ broken }}").load(jinja_env_html, None),
+            '-/subject': SimplateLoader(None, "{{ broken }}").load(jinja_env_html, None),
             'text/html': SimplateLoader(None, "").load(jinja_env_html, None)
         }
         self.client.website.emails['_broken_body'] = {
-            'subject': SimplateLoader(None, "Lorem ipsum").load(jinja_env_html, None),
+            '-/subject': SimplateLoader(None, "Lorem ipsum").load(jinja_env_html, None),
             'text/html': SimplateLoader(None, "{{ broken }}").load(jinja_env_html, None)
         }
         alice = self.make_participant('alice')

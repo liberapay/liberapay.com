@@ -1,3 +1,4 @@
+[---] -/subject
 % if len(donations) == 1
     % if overdue|default(False)
         {{ _("It's past time to renew your donation to {username} on Liberapay", username=donations[0].tippee_username) }}
