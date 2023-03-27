@@ -92,6 +92,7 @@ website.renderer_factories['jinja2'] = jinja2.Factory(rp)
 website.renderer_factories['jinja2_html_jswrapped'] = jinja2_jswrapped.Factory(rp)
 website.renderer_factories['jinja2_xml_min'] = jinja2_xml_min.Factory(rp)
 website.renderer_factories['scss'] = scss.Factory(rp)
+website.default_renderers_by_media_type['-/subject'] = 'jinja2'
 website.default_renderers_by_media_type['text/html'] = 'jinja2'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'
 
