@@ -3,10 +3,9 @@ from functools import reduce
 from importlib import import_module
 import os
 import sys
-import warnings
 
 import coverage.plugin
-import jinja2
+from jinja2 import Environment
 
 
 __version__ = '0.1'
@@ -34,6 +33,33 @@ def import_object(path):
     if module is None and import_error is not None:
         raise import_error
     return reduce(getattr, object_path, module)
+
+
+def is_block_start(line: str, env: Environment) -> bool:
+    """TODO
+    """
+    tokens = iter(line.split())
+    first_token = next(tokens, None)
+    second_token = next(tokens, None)
+    if second_token == 'block':
+        if first_token == env.line_statement_prefix:
+            return True
+        if first_token == env.block_start_string:
+            if not next(tokens, None):
+                # block name
+                return False
+            next_token = next(tokens, None)
+            if next_token == 'scoped':
+                next_token = next(tokens, None)
+            if next_token == 'required':
+                next_token = next(tokens, None)
+            return (
+                next_token == (env.block_end_string + env.block_start_string) and
+                next(tokens, None) == 'endblock' and
+                next(tokens, None) == env.block_end_string and
+                next(tokens, None) is None
+            )
+    return False
 
 
 class JinjaPlugin(coverage.plugin.CoveragePlugin):
@@ -105,15 +131,26 @@ class JinjaFileReporter(coverage.plugin.FileReporter):
     def __init__(self, filename, environment):
         super().__init__(filename)
         self.environment = environment
-
-    def lines(self):
         i = 0
         for a, b in zip(os.getcwd(), self.filename):
             if a != b:
                 break
             i += 1
-        template = self.environment.get_template(self.filename[i:])
-        return set(template_line for template_line, code_line in template.debug_info)
+        self.template = self.environment.get_template(self.filename[i:])
+
+    def lines(self):
+        return set(
+            template_line for template_line, code_line in self.template.debug_info
+        )
+
+    def excluded_lines(self):
+        with open(self.filename) as f:
+            templates_lines = f.readlines()
+        env = self.environment
+        return set(
+            template_line for template_line, code_line in self.template.debug_info
+            if is_block_start(templates_lines[template_line - 1], env)
+        )
 
     #def source_token_lines(self):
         #return super().source_token_lines()
