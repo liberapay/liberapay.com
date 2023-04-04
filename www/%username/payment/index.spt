@@ -21,7 +21,11 @@ if request.method == 'POST':
             try:
                 stripe.oauth.OAuth.deauthorize(stripe_user_id=account.id)
             except stripe.oauth_error.InvalidClientError as e:
-                if "This application is not connected to stripe account" not in str(e):
+                expected = (
+                    "No such user: " in str(e) or
+                    "This application is not connected to stripe account" in str(e)
+                )
+                if not expected:
                     website.warning("unexpected error message: " + str(e))
     elif action == 'refresh':
         account = website.db.one("""

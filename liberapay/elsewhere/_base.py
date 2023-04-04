@@ -1,7 +1,9 @@
+from dataclasses import dataclass
 from datetime import datetime
 import hashlib
 import json
 import logging
+from typing import Literal
 from urllib.parse import quote as urlquote, urlsplit
 import warnings
 import xml.etree.ElementTree as ET
@@ -9,17 +11,14 @@ import xml.etree.ElementTree as ET
 from babel.dates import format_timedelta
 from cached_property import cached_property
 from dateutil.parser import parse as parse_date
-from pando import Response
 from pando.utils import utc
 from oauthlib.oauth2 import BackendApplicationClient, InvalidGrantError, TokenExpiredError
 from requests import Session
 from requests_oauthlib import OAuth1Session, OAuth2Session
 
-from liberapay.exceptions import LazyResponse, TooManyRequests
-from liberapay.i18n.base import to_age
+from liberapay.exceptions import TooManyRequests
 from liberapay.website import website
 
-from ._exceptions import ElsewhereError, BadUserId, InvalidServerResponse, UserNotFound
 from ._extractors import not_available
 
 
@@ -174,29 +173,21 @@ class Platform:
     def api_error_handler(self, response, is_user_session, domain):
         response_text = response.text  # for Sentry
         status = response.status_code
-        if status == 404:
-            raise Response(404, response_text)
-        if status == 401 and is_user_session:
-            # https://tools.ietf.org/html/rfc5849#section-3.2
-            raise TokenExpiredError
-        if status == 403 and is_user_session:
-            # Assume that a 403 means we need more permissions (OAuth2 scopes)
-            raise InvalidGrantError
-        if status == 429 and is_user_session:
-            limit, remaining, reset = self.get_ratelimit_headers(response)
-            def msg(_):
-                if remaining == 0 and reset:
-                    return _(
-                        "You've consumed your quota of requests, you can try again {in_N_minutes}.",
-                        in_N_minutes=to_age(reset)
-                    )
-                else:
-                    return _("You're making requests too fast, please try again later.")
-            raise LazyResponse(status, msg)
+        if is_user_session:
+            if status == 401:
+                # https://tools.ietf.org/html/rfc5849#section-3.2
+                raise TokenExpiredError
+            if status == 403:
+                # Assume that a 403 means we need more permissions (OAuth2 scopes)
+                raise InvalidGrantError
+            if status == 429:
+                limit, remaining, reset = self.get_ratelimit_headers(response)
+                raise RateLimitError(limit, remaining, reset)
         if status != 200:
-            logger.warning('{} responded with {}:\n{}'.format(domain, status, response_text))
-            msg = lambda _: _("{0} returned an error, please try again later.", domain)
-            raise LazyResponse(502, msg)
+            logger.warning('{} responded with {}:\n{}'.format(
+                domain or self.display_name, status, response_text
+            ))
+            raise HTTPError(status, response_text, self, domain)
 
     def get_ratelimit_headers(self, response):
         limit, remaining, reset = None, None, None
@@ -320,22 +311,22 @@ class Platform:
         path = path.format(**{key: urlquote(value), 'domain': domain})
         def error_handler(response, is_user_session, domain):
             if response.status_code == 404:
-                raise UserNotFound(value, key, domain, self.name, response.text)
+                raise UserNotFound(value, key, domain, self, response.text)
             if response.status_code == 401 and is_user_session:
                 raise TokenExpiredError
             if response.status_code in (400, 401, 403, 414) and uncertain:
-                raise BadUserId(value, key, domain, self.name, response.text)
+                raise BadUserId(value, key, domain, self, response.text)
             self.api_error_handler(response, is_user_session, domain)
         response = self.api_get(domain, path, sess=sess, error_handler=error_handler)
         info = self.api_parser(response)
         if not info:
-            raise UserNotFound(value, key)
+            raise UserNotFound(value, key, domain, self, response.text)
         if isinstance(info, list):
             assert len(info) == 1, info
             info = info[0]
         r = self.extract_user_info(info, domain)
         if r is None:
-            raise UserNotFound(value, key)
+            raise UserNotFound(value, key, domain, self, response.text)
         return r
 
     def get_user_self_info(self, domain, sess):
@@ -575,3 +566,48 @@ class PlatformOAuth2(Platform):
                          client_secret=client_secret,
                          authorization_response=url)
         return sess
+
+
+class ElsewhereError(Exception):
+    """Base class for elsewhere exceptions."""
+
+
+@dataclass
+class BadUserId(ElsewhereError):
+    uid: str
+    uid_type: Literal['user_id', 'user_name']
+    domain: str
+    platform: Platform
+    response_text: str
+
+
+class CantReadMembership(ElsewhereError):
+    pass
+
+
+@dataclass
+class HTTPError(ElsewhereError):
+    status_code: int
+    text: str
+    platform: Platform
+    domain: str
+
+
+class InvalidServerResponse(ElsewhereError):
+    pass
+
+
+@dataclass
+class RateLimitError(ElsewhereError):
+    limit: int
+    remaining: int
+    reset: datetime
+
+
+@dataclass
+class UserNotFound(ElsewhereError):
+    uid: str
+    uid_type: Literal['user_id', 'user_name']
+    domain: str
+    platform: Platform
+    response_text: str

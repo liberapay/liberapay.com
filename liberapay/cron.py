@@ -111,14 +111,14 @@ class Job:
         period, last_start_time = self.period, self.last_start_time
         now = utcnow()
         if isinstance(period, Weekly):
-            then = now.replace(hour=period.hour, minute=10, second=0)
+            then = now.replace(hour=period.hour, minute=10, second=0, microsecond=0)
             days = (period.weekday - now.isoweekday()) % 7
             if days:
                 then += timedelta(days=days)
             if (last_start_time or EPOCH) >= then:
                 then += timedelta(days=7)
         elif isinstance(period, Daily):
-            then = now.replace(hour=period.hour, minute=5, second=0)
+            then = now.replace(hour=period.hour, minute=5, second=0, microsecond=0)
             if (last_start_time or EPOCH) >= then:
                 then += timedelta(days=1)
         elif period == 'irregular':
