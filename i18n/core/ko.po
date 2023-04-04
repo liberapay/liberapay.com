@@ -809,17 +809,6 @@ msgstr "고액"
 msgid "Maximum"
 msgstr "최대 금액"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "요청 허용량을 초과했습니다. {in_N_minutes}에 다시 시도할 수 있습니다."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "요청을 너무 빠르게 하고 있습니다, 잠시 후에 시도해 주세요."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} 오류가 발생하였습니다. 다음에 다시 시도해 주세요."
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1088,14 +1077,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "찾고 계신 {platform} 사용자께서 Liberapay에 가입하지 않았고, 가상 프로필을 생성할 수 없습니다."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}'은(는) {platform} 에서 유효한 사용자 ID로 보이지 않습니다."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "{1} 에 {0} 이름을 가진 사용자가 존재하지 않습니다."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "{team_name} 팀의 {username} 에 대한 Liberapay 기부"
 
@@ -1159,6 +1140,25 @@ msgstr "이 페이지에 접근할 권한이 없습니다."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "다른 서버에 위치한 서비스와 연결할 수 없었기 때문에 요청을 완료할 수 없었습니다. 일시적인 오류이므로, 나중에 다시 시도해 주시기 바랍니다."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}'은(는) {platform} 에서 유효한 사용자 ID로 보이지 않습니다."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} 오류가 발생하였습니다. 다음에 다시 시도해 주세요."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "요청 허용량을 초과했습니다. {in_N_minutes}에 다시 시도할 수 있습니다."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "요청을 너무 빠르게 하고 있습니다, 잠시 후에 시도해 주세요."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "{1} 에 {0} 이름을 가진 사용자가 존재하지 않습니다."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

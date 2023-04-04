@@ -816,17 +816,6 @@ msgstr "Granda"
 msgid "Maximum"
 msgstr "Maksimuma"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Vi jam atingis vian limon de petoj, vi povos provi denove {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Vi faras petojn tro rapide, reprovu poste."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} revenigis eraron, reprovu poste."
-
 msgid "example@mastodon.social"
 msgstr "ekzemplo@mastodon.social"
 
@@ -1095,14 +1084,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "La uzanto de {platform}, kiun vi serĉas, ne aliĝis al Liberapay, kaj ne eblas krei por ri lokokupilan profilon."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "Ŝajnas ke '{0}' ne estas valida uzantnumero en {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Ne ekzistas uzanto nomita {0} en {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay-donaco al {username} (teamo {team_name})"
 
@@ -1169,6 +1150,25 @@ msgstr "Vi ne rajtas aliri tiun paĝon."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "La traktado de via peto malsukcesis, ĉar nia servilo ne povis komuniki kun servo lokita en alia komputilo. Tio estas momenta problemo, bonvolu reprovi poste."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "Ŝajnas ke '{0}' ne estas valida uzantnumero en {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} revenigis eraron, reprovu poste."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Vi jam atingis vian limon de petoj, vi povos provi denove {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Vi faras petojn tro rapide, reprovu poste."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Ne ekzistas uzanto nomita {0} en {1}."
 
 msgid "This profile is marked as spam or fraud."
 msgstr "Ĉi tiu profilo estas markita kiel spamo aŭ fraŭdo."

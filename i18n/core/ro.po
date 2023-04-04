@@ -870,17 +870,6 @@ msgstr "Mare"
 msgid "Maximum"
 msgstr "Maximă"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Ați consumat norma de cereri, puteți încerca din nou {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Ați făcut cereri prea rapid, încercați din nou mai târziu."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} a returnat o eroare, încercați din nou mai târziu."
-
 msgid "example@mastodon.social"
 msgstr "exemplu@mastodon.social"
 
@@ -1152,14 +1141,6 @@ msgstr "Gateway Timeout"
 msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
 msgstr "Utilizatorul {platform} pe care îl căutați nu s-a înscris pe Liberapay și nu este posibil să creați un profil pentru el."
 
-#, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "„{0}” nu pare a fi un id valid de utilizator pe {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Nu pare a exista un utilizator numit {0} pe {1}."
-
 #, fuzzy, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Donație Liberapay pentru {username} (echipa {team_name})"
@@ -1233,6 +1214,25 @@ msgstr "Nu aveți autorizația de a accesa această pagină."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Procesarea cererii dumneavoastră a eșuat pentru că serverul nostru nu a putut comunica cu un serviciu localizat pe altă mașină. Aceasta este o problemă temporară, reîncercați mai târziu."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "„{0}” nu pare a fi un id valid de utilizator pe {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} a returnat o eroare, încercați din nou mai târziu."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Ați consumat norma de cereri, puteți încerca din nou {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Ați făcut cereri prea rapid, încercați din nou mai târziu."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Nu pare a exista un utilizator numit {0} pe {1}."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

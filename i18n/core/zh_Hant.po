@@ -806,17 +806,6 @@ msgstr "大"
 msgid "Maximum"
 msgstr "最大"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "你已用完請求的額度，可在 {in_N_minutes} 後重試。"
-
-msgid "You're making requests too fast, please try again later."
-msgstr "你所作的請求太快了，請稍後再試一次。"
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} 傳回錯誤訊息，請稍後再試。"
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1085,14 +1074,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "您所找尋的 {platform} 用戶尚未加入 Liberapay，故無法為他們建立個人小檔。"
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "‘{0}’不像是 {platform}的有效用戶名稱。"
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "在 {1} 上似乎沒有這名 {0} 用戶。"
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay 捐款給 {username} (所屬團隊 {team_name})"
 
@@ -1156,6 +1137,25 @@ msgstr "您未授權存取此頁面。"
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "處理你的請求失敗，因為我們的伺服器無法與其它機器上的服務進行通訊。這是暫時性的狀況，請稍候再試。"
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "‘{0}’不像是 {platform}的有效用戶名稱。"
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} 傳回錯誤訊息，請稍後再試。"
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "你已用完請求的額度，可在 {in_N_minutes} 後重試。"
+
+msgid "You're making requests too fast, please try again later."
+msgstr "你所作的請求太快了，請稍後再試一次。"
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "在 {1} 上似乎沒有這名 {0} 用戶。"
 
 msgid "This profile is marked as spam or fraud."
 msgstr "該資料被標記爲垃圾郵件或欺詐。"

@@ -816,17 +816,6 @@ msgstr "Groß"
 msgid "Maximum"
 msgstr "Maximal"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Sie haben Ihr Kontingent an Anfragen verbraucht. Sie können es {in_N_minutes} erneut versuchen."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Ihre Anfragen erfolgen zu schnell, bitte versuchen Sie es später noch einmal."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} gab einen Fehler aus, bitte versuchen Sie es später wieder."
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1095,14 +1084,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Der gesuchte {platform}-Benutzer ist nicht bei Liberapay angemeldet. Es ist nicht möglich, ein Basis-Profil für ihn zu erstellen."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "„{0}“ scheint kein gültiger Benutzername auf {platform} zu sein."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Anscheinend gibt es keinen Nutzer namens {0} auf {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay-Spende an {username} (Team {team_name})"
 
@@ -1169,6 +1150,25 @@ msgstr "Sie sind nicht berechtigt, diese Seite aufzurufen."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Wir konnten Ihre Anfrage nicht bearbeiten, da unser Server nicht mit einem anderen Dienst kommunizieren konnte. Dies ist ein temporäres Problem, bitte versuchen Sie es später erneut."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "„{0}“ scheint kein gültiger Benutzername auf {platform} zu sein."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} gab einen Fehler aus, bitte versuchen Sie es später wieder."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Sie haben Ihr Kontingent an Anfragen verbraucht. Sie können es {in_N_minutes} erneut versuchen."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Ihre Anfragen erfolgen zu schnell, bitte versuchen Sie es später noch einmal."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Anscheinend gibt es keinen Nutzer namens {0} auf {1}."
 
 msgid "This profile is marked as spam or fraud."
 msgstr "Dieses Profil ist als Spam oder Betrug gekennzeichnet."

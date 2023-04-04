@@ -909,17 +909,6 @@ msgstr "Didelis"
 msgid "Maximum"
 msgstr "Maximum"
 
-#, fuzzy, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Išnaudojote užklausų kvotą, galite bandyti dar kartą {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Jūs per greitai atliekate užklausas, vėliau bandykite dar kartą."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} grąžino klaidą, vėliau bandykite dar kartą."
-
 msgid "example@mastodon.social"
 msgstr "pavyzdys@mastodon.social"
 
@@ -1209,14 +1198,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Ieškomas {platform} naudotojas nėra prisijungęs prie Liberapay, todėl neįmanoma sukurti jo profilio."
 
 #, fuzzy, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' neatrodo, kad {platform} yra galiojantis naudotojo ID."
-
-#, fuzzy, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Atrodo, kad {1} nėra naudotojo, vardu {0}."
-
-#, fuzzy, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay auka {username} (komanda {team_name})"
 
@@ -1288,6 +1269,25 @@ msgstr "Jūs neturite įgaliojimų gauti prieigą prie šio puslapio."
 #, fuzzy
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Jūsų užklausos nepavyko apdoroti, nes mūsų serveriui nepavyko užmegzti ryšio su kitoje mašinoje esančia paslauga. Tai laikina problema, pabandykite vėliau."
+
+#, fuzzy, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}' neatrodo, kad {platform} yra galiojantis naudotojo ID."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} grąžino klaidą, vėliau bandykite dar kartą."
+
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Išnaudojote užklausų kvotą, galite bandyti dar kartą {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Jūs per greitai atliekate užklausas, vėliau bandykite dar kartą."
+
+#, fuzzy, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Atrodo, kad {1} nėra naudotojo, vardu {0}."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

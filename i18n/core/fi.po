@@ -819,17 +819,6 @@ msgstr "Suuri"
 msgid "Maximum"
 msgstr "Mittava"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Olet tehnyt liian paljon palvelupyyntöjä; voit yrittää uudestaan vasta {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Aiheutat palvelupyyntöjä liian nopeasti; yritä myöhemmin uudelleen."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} palautti virheen. Yritä myöhemmin uudelleen."
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1098,14 +1087,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Etsimäsi {platform}-palvelun käyttäjä ei ole liittynyt Liberapay-palveluun, eikä tälle ole mahdollista luoda tynkäprofiilia."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "”{0}” ei vaikuta olevan validi käyttäjätunnus {platform}-palvelussa."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Palvelussa {1} ei näytä olevan käyttäjää nimeltä {0}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay-lahjoitus käyttäjälle {username} (ryhmässä {team_name})"
 
@@ -1172,6 +1153,25 @@ msgstr "Sinulla ei ole käyttöoikeuksia tähän sivuun."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Pyyntösi käsittely epäonnistui, koska palvelimemme ei saanut yhteyttä toisella koneella sijaitsevaan palveluun. Tämä on tilapäinen häiriö. Yritä myöhemmin uudelleen."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "”{0}” ei vaikuta olevan validi käyttäjätunnus {platform}-palvelussa."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} palautti virheen. Yritä myöhemmin uudelleen."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Olet tehnyt liian paljon palvelupyyntöjä; voit yrittää uudestaan vasta {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Aiheutat palvelupyyntöjä liian nopeasti; yritä myöhemmin uudelleen."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Palvelussa {1} ei näytä olevan käyttäjää nimeltä {0}."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

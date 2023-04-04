@@ -816,17 +816,6 @@ msgstr "Groot"
 msgid "Maximum"
 msgstr "Maximaal"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "U heeft uw maximum aantal verzoeken verbruikt, u kunt het opnieuw proberen {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "U maakt te snel verzoeken, probeer het later opnieuw."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} resulteert in een foutmelding, probeer het later nog een keer."
-
 msgid "example@mastodon.social"
 msgstr "voorbeeld@mastodon.social"
 
@@ -1095,14 +1084,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "De persoon van {platform} die u zoekt is niet aangesloten bij Liberapay en het is niet mogelijk om een stub-profiel voor hen aan te maken."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' lijkt geen geldige account id op {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Er is geen gebruiker bekend met de naam {0} op {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay donatie aan {username} (team {team_name})"
 
@@ -1169,6 +1150,25 @@ msgstr "U bent niet gemachtigd om deze pagina te bekijken."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "De verwerking van uw aanvraag is mislukt, omdat onze server niet in staat was om te communiceren met een service op een andere machine. Dit is een tijdelijk probleem is, probeer het later opnieuw."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}' lijkt geen geldige account id op {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} resulteert in een foutmelding, probeer het later nog een keer."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "U heeft uw maximum aantal verzoeken verbruikt, u kunt het opnieuw proberen {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "U maakt te snel verzoeken, probeer het later opnieuw."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Er is geen gebruiker bekend met de naam {0} op {1}."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

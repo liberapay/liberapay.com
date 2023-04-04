@@ -816,17 +816,6 @@ msgstr "Büyük"
 msgid "Maximum"
 msgstr "En çok"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "İstek kotanızı doldurdunuz, {in_N_minutes} içinde tekrar deneyebilirsiniz."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Çok hızlı istekte bulunuyorsunuz, lütfen daha sonra tekrar deneyin."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} bir hata verdi, lütfen daha sonra yeniden deneyin."
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1095,14 +1084,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Aradığınız {platform} kullanıcısı Liberapay'e katılmadı ve onlar için bir saplama profili oluşturmak mümkün değil."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}', {platform} üzerinde geçerli bir kullanıcı kimliği gibi görünmüyor."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "{1} üzerinde {0} adında bir kullanıcı yok gibi görünüyor."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "{username} için Liberapay bağışı ({team_name} takımı)"
 
@@ -1169,6 +1150,25 @@ msgstr "Bu sayfaya erişim yetkiniz yok."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Sunucumuz başka bir makinede bulunan bir hizmetle iletişim kuramadığı için isteğiniz işlenemedi. Bu geçici bir sorundur, lütfen daha sonra tekrar deneyin."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}', {platform} üzerinde geçerli bir kullanıcı kimliği gibi görünmüyor."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} bir hata verdi, lütfen daha sonra yeniden deneyin."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "İstek kotanızı doldurdunuz, {in_N_minutes} içinde tekrar deneyebilirsiniz."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Çok hızlı istekte bulunuyorsunuz, lütfen daha sonra tekrar deneyin."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "{1} üzerinde {0} adında bir kullanıcı yok gibi görünüyor."
 
 msgid "This profile is marked as spam or fraud."
 msgstr "Bu profil spam veya hileli olarak işaretlendi."

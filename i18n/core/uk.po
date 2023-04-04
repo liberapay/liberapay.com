@@ -826,17 +826,6 @@ msgstr "Велика"
 msgid "Maximum"
 msgstr "Найбільша"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Ви використали граничну кількість запитів, спробуйте знову {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Ви робите запити занадто швидко, спробуйте ще раз пізніше."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} повернув помилку, спробуйте ще раз пізніше."
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1105,14 +1094,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Користувач {platform}, якого ви шукаєте, не долучився до Liberapay і для нього неможливо створити профіль-заглушку."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "Схоже, '{0}' не є дійсним ідентифікатором користувача на {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Не вдалося знайти користувача {0} в {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Внесок Liberapay для {username} (команда {team_name})"
 
@@ -1182,6 +1163,25 @@ msgstr "Ви не маєте дозволу на доступ до цієї ст
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Не вдалася обробити ваш запит, оскільки наш сервер не зміг зв'язатися зі службою розташованій на іншій машині. Це тимчасова проблема, спробуйте ще раз пізніше."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "Схоже, '{0}' не є дійсним ідентифікатором користувача на {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} повернув помилку, спробуйте ще раз пізніше."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Ви використали граничну кількість запитів, спробуйте знову {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Ви робите запити занадто швидко, спробуйте ще раз пізніше."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Не вдалося знайти користувача {0} в {1}."
 
 msgid "This profile is marked as spam or fraud."
 msgstr "Цей профіль позначено як спам або шахрайство."

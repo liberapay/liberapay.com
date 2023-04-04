@@ -895,18 +895,6 @@ msgstr "Suur"
 msgid "Maximum"
 msgstr "Maksimum"
 
-#, fuzzy, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Te olete oma taotluste kvoodi ära kasutanud, võite uuesti proovida {in_N_minutes}."
-
-#, fuzzy
-msgid "You're making requests too fast, please try again later."
-msgstr "Te esitate taotlusi liiga kiiresti, palun proovige hiljem uuesti."
-
-#, fuzzy, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} tagastas vea, palun proovige hiljem uuesti."
-
 #, fuzzy
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
@@ -1208,14 +1196,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Otsitav {platform} kasutaja ei ole Liberapayga liitunud ja tema jaoks ei ole võimalik profiili luua."
 
 #, fuzzy, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' ei tundu olevat kehtiv kasutajatunnus aadressil {platform}."
-
-#, fuzzy, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Tundub, et aadressil {1} ei ole kasutajat nimega {0}."
-
-#, fuzzy, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay annetus aadressile {username} (meeskond {team_name})"
 
@@ -1288,6 +1268,26 @@ msgstr "Teil ei ole õigust sellele lehele ligi pääseda."
 #, fuzzy
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Teie taotluse töötlemine ebaõnnestus, sest meie server ei saanud suhelda teises masinas asuva teenusega. See on ajutine probleem, palun proovige hiljem uuesti."
+
+#, fuzzy, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}' ei tundu olevat kehtiv kasutajatunnus aadressil {platform}."
+
+#, fuzzy, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} tagastas vea, palun proovige hiljem uuesti."
+
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Te olete oma taotluste kvoodi ära kasutanud, võite uuesti proovida {in_N_minutes}."
+
+#, fuzzy
+msgid "You're making requests too fast, please try again later."
+msgstr "Te esitate taotlusi liiga kiiresti, palun proovige hiljem uuesti."
+
+#, fuzzy, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Tundub, et aadressil {1} ei ole kasutajat nimega {0}."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

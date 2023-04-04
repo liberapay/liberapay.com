@@ -826,17 +826,6 @@ msgstr "Veľa"
 msgid "Maximum"
 msgstr "Maximálne"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Vyčerpali ste počet požiadaviek, môžete to skúsiť znova za {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Odosielate požiadavky príliš rýchlo, opakujte akciu prosím neskôr."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} skončilo s chybou, opakujte akciu prosím neskôr."
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1105,14 +1094,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Používateľ {platform} ktorého hľadáte nie je na Liberapay a nie je možné vytvoriť útržkový profil pre neho."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' sa nezdá byť platný identifikátor na {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Užívateľ s menom {0} sa nezdá byť v {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Prispievanie pomocou Liberapay pre {username} (tím {team_name})"
 
@@ -1182,6 +1163,25 @@ msgstr "Nemáte oprávnenie na prístup do tejto stránky."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Spracovávanie vašej požiadavky zlyhalo pretože náš server nebol schopný komunikovať so službou nachádzajúcou sa na ďalšom stroji. Toto je dočasná chyba, prosím skúste neskôr."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}' sa nezdá byť platný identifikátor na {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} skončilo s chybou, opakujte akciu prosím neskôr."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Vyčerpali ste počet požiadaviek, môžete to skúsiť znova za {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Odosielate požiadavky príliš rýchlo, opakujte akciu prosím neskôr."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Užívateľ s menom {0} sa nezdá byť v {1}."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

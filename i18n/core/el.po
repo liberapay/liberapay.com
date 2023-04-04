@@ -816,17 +816,6 @@ msgstr "Μεγάλο"
 msgid "Maximum"
 msgstr "Μέγιστο"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Έχετε καταναλώσει το όριο αιτημάτων σας, μπορείτε να δοκιμάσετε ξανά {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Κάνεις αιτήσεις πολύ γρήγορα, παρακαλώ δοκίμασε ξανά αργότερα."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} εμφάνισε σφάλμα, παρακαλώ δοκίμασε ξανά αργότερα."
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1095,14 +1084,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Ο {platform} χρήστης που αναζητάτε δεν έχει ενταχθεί στο Liberapay και δεν είναι δυνατή η δημιουργία προφίλ απόκομμα για αυτόν."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "Η {0} δε φαίνεται να είναι μια έγκυρη ταυτότητα χρήστη στο {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Δε φαίνεται να υπάρχει χρήστης με το όνομα {0} στο {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Δωρεά Liberapay σε {username} (ομάδα {team_name})"
 
@@ -1169,6 +1150,25 @@ msgstr "Δεν είστε εξουσιοδοτημένος για πρόσβασ
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Η επεξεργασία της αίτησής σας απέτυχε επειδή ο διακομιστής μας δεν μπόρεσε να επικοινωνήσει με μια υπηρεσία που βρίσκεται σε άλλη μηχανή. Αυτό είναι ένα προσωρινό θέμα, παρακαλώ δοκιμάστε ξανά αργότερα."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "Η {0} δε φαίνεται να είναι μια έγκυρη ταυτότητα χρήστη στο {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} εμφάνισε σφάλμα, παρακαλώ δοκίμασε ξανά αργότερα."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Έχετε καταναλώσει το όριο αιτημάτων σας, μπορείτε να δοκιμάσετε ξανά {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Κάνεις αιτήσεις πολύ γρήγορα, παρακαλώ δοκίμασε ξανά αργότερα."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Δε φαίνεται να υπάρχει χρήστης με το όνομα {0} στο {1}."
 
 msgid "This profile is marked as spam or fraud."
 msgstr "Αυτό το προφίλ επισημαίνεται ως ανεπιθύμητο ή απάτη."

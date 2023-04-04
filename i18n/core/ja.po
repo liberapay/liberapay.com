@@ -806,17 +806,6 @@ msgstr "大"
 msgid "Maximum"
 msgstr "最大"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "割り当てられた要求の数を超過しました。{in_N_minutes}に再度お試しいただけます。"
-
-msgid "You're making requests too fast, please try again later."
-msgstr "リクエストの作成が速すぎます。後ほど再度お試しください。"
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} はエラー出力しました。後ほど再度お試しください。"
-
 msgid "example@mastodon.social"
 msgstr "example@mastodon.social"
 
@@ -1085,14 +1074,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "お探しの {platform} ユーザーはまだ Liberapay に参加していないため、このユーザーの代わりのプロフィールを作成できません。"
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' は {platform} において正しいユーザー ID ではありません。"
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "{1} には {0} という名前のユーザーはいないようです。"
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "{username} さんへの Liberapay を使用した寄付（チーム {team_name}）"
 
@@ -1157,6 +1138,25 @@ msgstr "このページへのアクセスは許可されていません。"
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "サーバーが別のコンピューター上のサービスと通信できなかったため、あなたのリクエストの処理に失敗しました。これは一時的な問題です。しばらくしてから再試行してください。"
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}' は {platform} において正しいユーザー ID ではありません。"
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} はエラー出力しました。後ほど再度お試しください。"
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "割り当てられた要求の数を超過しました。{in_N_minutes}に再度お試しいただけます。"
+
+msgid "You're making requests too fast, please try again later."
+msgstr "リクエストの作成が速すぎます。後ほど再度お試しください。"
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "{1} には {0} という名前のユーザーはいないようです。"
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

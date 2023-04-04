@@ -817,17 +817,6 @@ msgstr "Nagy"
 msgid "Maximum"
 msgstr "Maximális"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Ön elérte a kérési korlátját, {in_N_minutes} újrapróbálkozhat."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Túl gyorsan tesz kéréseket, próbálja újra később."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "A(z) {0} hibát adott vissza, próbálja újra később."
-
 msgid "example@mastodon.social"
 msgstr "pelda@mastodon.social"
 
@@ -1097,14 +1086,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "A keresett {platform}-felhasználó nem csatlakozott a Liberapay-hez, és nem lehet ideiglenes profilt létrehozni a számára."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "A(z) „{0}” nem tűnik érvényes felhasználóazonosítónak a(z) {platform} platformon."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Úgy tűnik, hogy nincs {0} nevű felhasználó a(z) {1} platformon."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay-adomány {username} (csapat {team_name}) részére"
 
@@ -1171,6 +1152,25 @@ msgstr "Ön nincs bejelentkezve, hogy hozzáférhessen ehhez a laphoz."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Az Ön kérésének a feldolgozása meghiúsult, mivel egy kiszolgálónk nem tudott kommunikálni egy külső szolgáltatással. Ez egy átmeneti hiba, kérjük próbálja újra később."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "A(z) „{0}” nem tűnik érvényes felhasználóazonosítónak a(z) {platform} platformon."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "A(z) {0} hibát adott vissza, próbálja újra később."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Ön elérte a kérési korlátját, {in_N_minutes} újrapróbálkozhat."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Túl gyorsan tesz kéréseket, próbálja újra később."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Úgy tűnik, hogy nincs {0} nevű felhasználó a(z) {1} platformon."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

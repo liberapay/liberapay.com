@@ -816,17 +816,6 @@ msgstr "Gran"
 msgid "Maximum"
 msgstr "Màxim"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Heu consumit la quota de sol·licituds, podeu intentar-ho més tard {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Esteu fent sol·licituds massa ràpid. Torneu a intentar-ho més tard."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} ha retornat aquest missatge d'error, torneu a intentar més tard."
-
 msgid "example@mastodon.social"
 msgstr "exemple@mastodont.cat"
 
@@ -1095,14 +1084,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "L'usuari de {platform} que esteu cercant no s'ha unit a Liberapay, i no és possible de crear-li un esbós de perfil."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "«{0}» no sembla pas un identificador vàlid d'usuari en {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "No sembla que existeixi cap usuari amb nom {0} a {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Donatiu de Liberapay a {username} (equip {team_name})"
 
@@ -1169,6 +1150,25 @@ msgstr "No esteu autoritzat per a accedir a aquesta pàgina."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "La petició ha fallat perquè el nostre servidor no s'ha pogut comunicar amb el servei que és en una altra màquina. Aquest és un problema temporal, torneu-ho a provar més tard."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "«{0}» no sembla pas un identificador vàlid d'usuari en {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} ha retornat aquest missatge d'error, torneu a intentar més tard."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Heu consumit la quota de sol·licituds, podeu intentar-ho més tard {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Esteu fent sol·licituds massa ràpid. Torneu a intentar-ho més tard."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "No sembla que existeixi cap usuari amb nom {0} a {1}."
 
 #, fuzzy
 msgid "This profile is marked as spam or fraud."

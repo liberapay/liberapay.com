@@ -816,17 +816,6 @@ msgstr "Besar"
 msgid "Maximum"
 msgstr "Maksimum"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Anda telah menggunakan kesemua kuota permintaan, anda boleh cuba lagi {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Anda membuat permintaan terlalu laju, sila cuba lagi kemudian."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} mengembalikan ralat, sila cuba lagi kemudian."
-
 msgid "example@mastodon.social"
 msgstr "contoh@mastodon.social"
 
@@ -1095,14 +1084,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Pengguna {platform} yang anda cari belum sertai Liberapay, dan puntung profil tidak boleh dicipta untuknya."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' tidak nampak seperti pengguna yang sah di {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Nampaknya tiada pengguna yang bernama {0} di {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Derma Liberapay ke {username} (kumpulan {team_name})"
 
@@ -1169,6 +1150,25 @@ msgstr "Anda tidak dibenarkan mencapai halaman ini."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Permintaan anda gagal diproses kerana pelayan kami tidak mampu berhubung dengan perkhidmatan yang terletak di mesin yang lain. Ini isu sementara sahaja, sila cuba lagi kemudian."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}' tidak nampak seperti pengguna yang sah di {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} mengembalikan ralat, sila cuba lagi kemudian."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Anda telah menggunakan kesemua kuota permintaan, anda boleh cuba lagi {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Anda membuat permintaan terlalu laju, sila cuba lagi kemudian."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Nampaknya tiada pengguna yang bernama {0} di {1}."
 
 msgid "This profile is marked as spam or fraud."
 msgstr "Profil ini telah ditandakan sebagai spam atau fraud."
