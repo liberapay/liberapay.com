@@ -12,10 +12,9 @@
     % else
         <p>{{ _(
             "Setting a password allows you to log in directly, instead of waiting "
-            "for a single-use link sent via email. However, we recommend keeping "
-            "your account passwordless if you don't use a password manager, because "
-            "in order to be secure the password of your account should be randomly "
-            "generated and not used anywhere else."
+            "for a single-use link sent via email. However, we only recommend setting "
+            "a password if you use a password manager, because in order to be secure "
+            "the password should be randomly generated and not used anywhere else."
         ) }}</p>
     % endif
     <form action="{{ participant.path('settings/edit') }}" method="POST" class="form-inline buttons">

@@ -193,7 +193,11 @@ class ExchangeRoute(Model):
                 try:
                     source = stripe.Source.retrieve(self.address).detach()
                 except stripe.error.InvalidRequestError as e:
-                    if "does not appear to be currently attached" in str(e):
+                    ignore = (
+                        "does not appear to be currently attached" in str(e) or
+                        "No such source: " in str(e)
+                    )
+                    if ignore:
                         pass
                     else:
                         raise
