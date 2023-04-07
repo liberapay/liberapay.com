@@ -66,6 +66,18 @@ subhead = _("Patrons")
         "Liberapay supports three visibility levels for donations. Each level can "
         "be turned on or off, but at least one of them must be enabled."
     ) }}</p>
+    % if participant.payment_providers == 2 and new_patron_visibilities._and__(1)
+    <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+        "Secret donations aren't possible with PayPal. You should either disable "
+        "secret donations or {link_start}add a Stripe account{link_end}.",
+        link_start=('<a href="%s">'|safe) % participant.path('payment/'),
+        link_end='</a>'|safe,
+    ) }}</p>
+    % else
+    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+        "Secret donations aren't possible when the payer uses PayPal."
+    ) }}</p>
+    % endif
     <div class="checkbox">
         <label><input type="checkbox" name="allow_secret_donations"{% if new_patron_visibilities.__and__(1) %} checked{% endif %} /> {{ _("Allow secret donations") }}</label><br>
         <label><input type="checkbox" name="allow_private_donations"{% if new_patron_visibilities.__and__(2) %} checked{% endif %} /> {{ _("Allow private donations") }}</label><br>
