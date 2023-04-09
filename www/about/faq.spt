@@ -60,9 +60,13 @@ title = _("Frequently Asked Questions")
     ) }}
 
     <dd>{{ _(
-        "Yes. However, Liberapay isn't a shield: we can't protect anyone from being "
-        "banned by {link_open}the underlying payment processors{link_close}.",
-        link_open='<a href="/about/payment-processors">'|safe,
+        "The payment processors Liberapay supports have unfavourable policies towards "
+        "sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and "
+        "{stripe_link}Stripe prohibits it entirely{link_close}. So, while it is "
+        "possible to use Liberapay for some adult-only content, it is usually better "
+        "to use a platform specialized in such content.",
+        paypal_link='<a href="https://www.paypal.com/webapps/mpp/ua/legalhub-full">'|safe,
+        stripe_link='<a href="https://stripe.com/legal/restricted-businesses">'|safe,
         link_close='</a>'|safe,
     ) }}</dd>
 
