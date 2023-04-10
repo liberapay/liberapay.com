@@ -538,8 +538,8 @@ def word(mapping, k, pattern=r'^\w+$', unicode=False):
     return r
 
 
-FALSEISH = {'0', 'f', 'false', 'n', 'no'}
-TRUEISH = {'1', 't', 'true', 'y', 'yes'}
+FALSEISH = {'0', 'f', 'false', 'n', 'no', 'off'}
+TRUEISH = {'1', 't', 'true', 'y', 'yes', 'on'}
 NULLISH = {'', 'null', 'none'}
 
 

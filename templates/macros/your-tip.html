@@ -252,8 +252,37 @@
         </label>
         </li>
     </ul>
-    % set patron_visibilities = tippee_p.recipient_settings.patron_visibilities
-    % set paypal_only = tippee_p.payment_providers == 2
+    {{ tip_visibility_choice(
+        tippee_name,
+        tippee_p.recipient_settings.patron_visibilities,
+        tippee_p.payment_providers,
+        tip
+    ) }}
+    <br>
+    <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
+        (_("Modify your pledge") if pledging else _("Modify your donation"))
+        if tip.renewal_mode > 0 else
+        (_("Pledge") if pledging else _("Donate"))
+    }}</button>
+    % if tip.renewal_mode > 0
+    <br>
+    <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{
+        _("Cancel the pledge") if pledging else _("Discontinue the donation")
+    }}</button>
+    % elif tippee_p.payment_providers
+    <p class="text-center">{{ payment_methods_icons(tippee_p, new_currency) }}</p>
+    % elif not pledging
+    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
+        "{username} hasn't configured any payment method yet, so your donation "
+        "cannot actually be processed right now. We will notify you when payment "
+        "becomes possible.",
+        username=tippee_name
+    ) }}</p>
+    % endif
+% endmacro
+
+% macro tip_visibility_choice(tippee_name, patron_visibilities, payment_providers, tip)
+    % set paypal_only = payment_providers == 2
     % if paypal_only
         % if patron_visibilities == 0
             % set patron_visibilities = 2
@@ -329,27 +358,6 @@
     <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
         "{username} hasn't yet specified whether they want to see who their patrons are, "
         "so your donation will be secret.",
-        username=tippee_name
-    ) }}</p>
-    % endif
-    <br>
-    <button class="btn btn-primary btn-lg btn-block" {{ disabled }}>{{
-        (_("Modify your pledge") if pledging else _("Modify your donation"))
-        if tip.renewal_mode > 0 else
-        (_("Pledge") if pledging else _("Donate"))
-    }}</button>
-    % if tip.renewal_mode > 0
-    <br>
-    <button class="btn btn-danger btn-lg btn-block" name="selected_amount" value="0">{{
-        _("Cancel the pledge") if pledging else _("Discontinue the donation")
-    }}</button>
-    % elif tippee_p.payment_providers
-    <p class="text-center">{{ payment_methods_icons(tippee_p, new_currency) }}</p>
-    % elif not pledging
-    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
-        "{username} hasn't configured any payment method yet, so your donation "
-        "cannot actually be processed right now. We will notify you when payment "
-        "becomes possible.",
         username=tippee_name
     ) }}</p>
     % endif
