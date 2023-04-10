@@ -1871,6 +1871,12 @@ msgstr "手動更新"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "寄付を更新するためのリマインダーがメールで送信されます。"
 
+msgid "Discontinue the donation"
+msgstr "寄付を停止"
+
+msgid "Cancel the pledge"
+msgstr "寄付の約束を取り消す"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} は、パトロンが誰であるかを見ないことにしているので、あなたの寄付は秘密にされます。"
@@ -1914,12 +1920,6 @@ msgstr "あなたが{username} を支持していることが、誰にでもわ�
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} は、まだパトロンが誰であるかを見たいかどうかを明示していないので、あなたの寄付は秘密にされます。"
-
-msgid "Discontinue the donation"
-msgstr "寄付を停止"
-
-msgid "Cancel the pledge"
-msgstr "寄付の約束を取り消す"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "公共の場において貢献をする人たちは、自分たちの仕事を支援してもらう必要があります。自由なソフトウェアをビルドすること、そして自由な知識を広めること。これらには、最初の仕事をするためのみならず、長きにわたってそれを維持していくための時間と費用がかかります。"
@@ -3199,6 +3199,9 @@ msgstr "表示する通知はありません。"
 msgid "Next Page →"
 msgstr "次のページ→"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3212,21 +3215,33 @@ msgstr "アクティブなパトロンはいないんですね。"
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} はアクティブなパトロンがいません。"
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapayは匿名でない寄付をサポートするようになりました。あなたのパトロンが誰なのか知りたいですか？"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "匿名での寄付を可能にする"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "あなたは、パトロンが誰であるかを見るためにオプトインしました。もし気が変わったら、{link_start}ここをクリックして、匿名でない寄付を無効にしてください{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "あなたは、パトロンが誰であるかを表示しないように選択しました。もし気が変わったら、{link_start}ここをクリックして、匿名でない寄付を有効にしてください{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

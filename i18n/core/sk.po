@@ -1890,6 +1890,12 @@ msgstr "Manuálna obnova"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Cez email vám bude odoslaná pripomienka k obnoveniu príspevku."
 
+msgid "Discontinue the donation"
+msgstr "Zastaviť príspevok"
+
+msgid "Cancel the pledge"
+msgstr "Zrušiť prísľub"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} sa rozhodol nezobrazovať svojich patrónov, takže váš príspevok bude tajomstvo."
@@ -1929,12 +1935,6 @@ msgstr "Všetci uvidia, že podporujete {username}."
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} zatiaľ neuviedol, či chce vidieť, kto sú jeho patróni, takže váš príspevok bude tajný."
-
-msgid "Discontinue the donation"
-msgstr "Zastaviť príspevok"
-
-msgid "Cancel the pledge"
-msgstr "Zrušiť prísľub"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Ľudia, ktorí prispievajú spoločnosti, potrebujú podporu pre svoju prácu. Činnosti ako sú tvorba slobodného software, alebo bezplatné rozširovanie znalostí, zaberajú čas a stoja peniaze. Nie len ich tvorba, ale aj ich údržba v priebehu času."
@@ -3215,6 +3215,9 @@ msgstr "Žiadne oznámenia k zobrazeniu."
 msgid "Next Page →"
 msgstr "Ďalšia stránka →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3229,19 +3232,33 @@ msgstr "Nemáte žiadnych aktívnych prispievateľov."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} nemá žiadnych aktívnych prispievateľov."
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Po novom Liberapay podporuje aj neanonymné príspevky, chcete vidieť, kto je vašim prispievateľom?"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "Povoliť neanonymné príspevky"
-
-#, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Prihlásili ste sa, aby ste videli, kto je vašim prispievateľom. Ak si to rozmyslíte, tak {link_start}kliknite sem a neanonymné príspevky vypnite{link_end}."
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
 #, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Rozhodli ste sa nevidieť, kto je vašim prispievateľom. Pokiaľ si to rozmyslíte, {link_start}kliknite sem a povoľte neanonymné príspevky{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
+
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "Export dát"

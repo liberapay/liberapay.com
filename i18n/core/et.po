@@ -2144,6 +2144,14 @@ msgstr "Käsitsi uuendamine"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Teile saadetakse meili teel meeldetuletus annetuse uuendamiseks."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Lõpetage annetamine"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Tühista pantimine"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} on otsustanud mitte näha, kes on nende patroonid, nii et teie annetus on salajane."
@@ -2187,14 +2195,6 @@ msgstr "Kõik saavad näha, et te toetate {username}."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} ei ole veel täpsustanud, kas nad soovivad näha, kes on nende toetajad, seega jääb teie annetus salajaseks."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Lõpetage annetamine"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Tühista pantimine"
 
 #, fuzzy
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
@@ -3710,6 +3710,9 @@ msgstr "Teavitusi ei näidata."
 msgid "Next Page →"
 msgstr "Järgmine lehekülg →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3724,21 +3727,33 @@ msgstr "Teil ei ole ühtegi aktiivset klienti."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} ei ole ühtegi aktiivset klienti."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay toetab nüüd anonüümseid annetusi, kas soovite teada, kes on teie toetajad?"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Võimaldage anonüümsete annetuste tegemine"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Te olete valinud, et näha, kes on teie kliendid. Kui muudate oma meelt, siis {link_start}klõpsake siin, et keelata mitteanonüümsed annetused{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Te olete otsustanud mitte näha, kes on teie patroonid. Kui muudate oma meelt, siis {link_start}klõpsake siin, et lubada anonüümseid annetusi{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

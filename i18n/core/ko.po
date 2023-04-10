@@ -1866,6 +1866,12 @@ msgstr "수동 갱신"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "기부를 갱신하도록 이메일로 다시 알림을 보내 드립니다."
 
+msgid "Discontinue the donation"
+msgstr "기부 중단"
+
+msgid "Cancel the pledge"
+msgstr "공약 취소"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username}이 후원자가 누구인지 확인하지 않기로 선택했으므로, 이 기부는 비밀로 유지됩니다."
@@ -1905,12 +1911,6 @@ msgstr "모두가 당신이 {username}를 지원하는 것을 볼 수 있을 것
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} 님이 아직 기부자 목록을 볼 지 선택하지 않았으므로 당신의 기부는 비밀로 처리됩니다."
-
-msgid "Discontinue the donation"
-msgstr "기부 중단"
-
-msgid "Cancel the pledge"
-msgstr "공약 취소"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "공공의 이익을 위해 기여하는 사람들은 지원이 필요합니다. 자유 소프트웨어 제작, 자유로운 지식의 공유와 같은 일들은 시간을 소모하며, 초기 작업 외에도 유지보수에 자금을 필요로 합니다."
@@ -3180,6 +3180,9 @@ msgstr "확인할 알림이 없습니다."
 msgid "Next Page →"
 msgstr "다음 페이지 →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3193,19 +3196,33 @@ msgstr "활성 후원자가 없습니다."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username}에는 활성 후원자가 없습니다."
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay는 이제 기명 기부를 지원합니다. 당신을 지원하는 사람이 누구인지 알고 싶으신가요?"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "기명 기부 보기"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "후원자가 누구인지 확인하도록 선택했습니다. 마음이 바뀌면 {link_start}여기를 클릭하여 비익명 기부를 비활성화합니다{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "후원자가 누구인지 확인하지 않기로 선택했습니다. 마음이 바뀌면 {link_start}여기를 클릭하여 비익명 기부를 활성화하십시오{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "데이터 내보내기"

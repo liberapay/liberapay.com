@@ -1892,6 +1892,12 @@ msgstr "Ручное продление"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Напоминание о продлении вашего пожертвования будет отправлено вам по электронной почте."
 
+msgid "Discontinue the donation"
+msgstr "Отменить подписку на это пожертвование"
+
+msgid "Cancel the pledge"
+msgstr "Отменить обещание"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} предпочел не раскрывать его подписчиков, поэтому Ваше пожертвование останется в секрете."
@@ -1931,12 +1937,6 @@ msgstr "Все пользователи смогут узнать, что Вы �
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} еще не выбрал, кто может просматривать список его подписчиков; пока что, Ваше пожертвование будет в секрете."
-
-msgid "Discontinue the donation"
-msgstr "Отменить подписку на это пожертвование"
-
-msgid "Cancel the pledge"
-msgstr "Отменить обещание"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Людям, делающим вклад в развитие общества, нужны вы для того, чтобы поддержать их работу. Создание бесплатного программного обеспечения, распространение свободных знаний - эти вещи требуют времени и стоят денег, и не только для того, чтобы начать работу, но и чтобы иметь возможность продолжать её."
@@ -3220,6 +3220,9 @@ msgstr "Нет уведомлений для отображения."
 msgid "Next Page →"
 msgstr "Следующая страница →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3234,19 +3237,33 @@ msgstr "У вас нет активных спонсоров."
 msgid "{username} doesn't have any active patrons."
 msgstr "У {username} нет активных спонсоров."
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay теперь поддерживает неанонимные пожертвования. Хотите узнать, кто ваши меценаты?"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "Включить неанонимные пожертвования"
-
-#, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Вы выбрали функцию, позволяющую видеть, кто ваши меценаты. Если вы передумаете, {link_start}нажмите здесь, чтобы отключить неанонимные пожертвования{link_end}."
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
 #, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Вы решили не отображать ваших спонсоров. Если передумаете, {link_start}нажмите здесь, чтобы включить неанонимные пожертвования{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
+
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "Экспорт данных"

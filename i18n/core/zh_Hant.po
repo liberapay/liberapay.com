@@ -1857,6 +1857,12 @@ msgstr "手動續捐"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "會以電子郵件來提醒您續捐。"
 
+msgid "Discontinue the donation"
+msgstr "中止這項捐款"
+
+msgid "Cancel the pledge"
+msgstr "取消認捐"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} 選擇不查看誰是捐款者，所以您的捐款將是祕密的。"
@@ -1896,12 +1902,6 @@ msgstr "所有人都能看到您捐贈了 {username}。"
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} 尚未表明是否想看到誰對其進行了捐款，因此您的捐款將是祕密的。"
-
-msgid "Discontinue the donation"
-msgstr "中止這項捐款"
-
-msgid "Cancel the pledge"
-msgstr "取消認捐"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
@@ -3153,6 +3153,9 @@ msgstr "無通知可顯示。"
 msgid "Next Page →"
 msgstr "下一頁 →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3165,19 +3168,33 @@ msgstr "您沒有任何活躍的捐助者。"
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} 沒有任何活躍的捐款者。"
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay 現已支持非匿名捐贈。想要知道誰是贊助人嗎？"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "啓用非匿名捐款"
-
-#, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "您已選擇瞭解誰是贊助人。如果要改變主意，{link_start}單擊此處禁用非匿名捐款{link_end}。"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
 #, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "您已選擇不瞭解誰是贊助人。如果要改變主意，{link_start}單擊此處啓用非匿名捐款{link_end}。"
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
+
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "資料匯出"

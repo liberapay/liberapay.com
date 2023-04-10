@@ -1878,6 +1878,12 @@ msgstr "Manuaalinen uusiminen"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Muistutus lahjoituksesi uusimisesta lähetetään sinulle sähköpostitse."
 
+msgid "Discontinue the donation"
+msgstr "Keskeytä lahjoitus"
+
+msgid "Cancel the pledge"
+msgstr "Peruuta lahjoituslupaus"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} ei paljasta lahjoittajiaan, joten lahjoituksesi pysyy salaisena."
@@ -1917,12 +1923,6 @@ msgstr "Kaikki näkevät, että tuet käyttäjää {username}."
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} ei ole vielä päättänyt, haluaako julkistaa listan lahjoittajistaan, joten lahjoituksesi tulee olemaan salainen."
-
-msgid "Discontinue the donation"
-msgstr "Keskeytä lahjoitus"
-
-msgid "Cancel the pledge"
-msgstr "Peruuta lahjoituslupaus"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Yhteistä hyvää rakentavat sisällöntuottajat tarvitsevat tukeasi. Ilmaisen ohjelmiston tuottamiseen, tiedon jakamiseen ilmaiseksi ym. kuluu aikaa ja rahaa: ei vain itse työhön alunperin, vaan myös sen pitkäaikaiseen ylläpitoon."
@@ -3193,6 +3193,9 @@ msgstr "Ei näytettäviä ilmoituksia."
 msgid "Next Page →"
 msgstr "Seuraava sivu →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3206,19 +3209,33 @@ msgstr "Sinulla ei ole aktiivisia lahjoittajia."
 msgid "{username} doesn't have any active patrons."
 msgstr "Käyttäjällä {username} ei ole aktiivisia lahjoittajia."
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay tukee nykyään ei-nimettömiä lahjoituksia. Haluatko tietää, keitä lahjoittajasi ovat?"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "Salli ei-nimettömät lahjoitukset"
-
-#, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Olet valinnut nähdä, keitä lahjoittajasi ovat. Jos muutat mieltäsi, klikkaa {link_start}tästä estääksesi ei-nimettömät lahjoitukset{link_end}."
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
 #, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Olet valinnut, ettei sinulle näytetä, keitä lahjoittajasi ovat. Jos muutat mieltäsi, klikkaa {link_start}tästä salliaksesi ei-nimettömät lahjoitukset{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
+
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "Tietojen vienti"

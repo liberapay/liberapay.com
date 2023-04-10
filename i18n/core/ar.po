@@ -2131,6 +2131,14 @@ msgstr "التجديد اليدوي"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "سيتم إرسال تذكير لتجديد تبرعك إليك عبر البريد الإلكتروني."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "أوقف التبرع"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "إلغاء التعهد"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "اختار {username} عدم رؤية رعاته ، لذلك سيكون تبرعك سريًا."
@@ -2174,14 +2182,6 @@ msgstr "سيتمكن الجميع من رؤية أنك تدعم {username}."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "لم يحدد {username} بعد ما إذا كانوا يريدون معرفة رعاتهم ، لذلك سيكون تبرعك سرًا."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "أوقف التبرع"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "إلغاء التعهد"
 
 #, fuzzy
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
@@ -3734,6 +3734,9 @@ msgstr "لا توجد إخطارات لعرضها."
 msgid "Next Page →"
 msgstr "الصفحة التالية →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3752,21 +3755,33 @@ msgstr "ليس لديك أي مستفيدين نشطين."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} ليس لديه أي مستفيدين نشطين."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "تدعم Liberapay الآن التبرعات غير المجهولة ، هل تريد أن تعرف من هم رعاتك؟"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "تمكين التبرعات غير مجهولة المصدر"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "لقد قمت بالاشتراك لمعرفة من هم زبائنك. إذا غيرت رأيك ، انقر هنا {link_start} لتعطيل التبرعات غير المجهولة {link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "لقد اخترت ألا ترى من هم رعاتك. إذا غيرت رأيك ، انقر هنا {link_start} لتمكين التبرعات غير المجهولة {link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

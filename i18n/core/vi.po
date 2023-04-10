@@ -2178,6 +2178,14 @@ msgstr "Gia hạn thủ công"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Lời nhắc gia hạn đóng góp của bạn sẽ được gửi cho bạn qua email."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Ngừng quyên góp"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Hủy bỏ cam kết"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} đã chọn không xem khách hàng quen của họ là ai, vì vậy khoản đóng góp của bạn sẽ được giữ bí mật."
@@ -2221,14 +2229,6 @@ msgstr "Mọi người sẽ có thể thấy rằng bạn ủng hộ {username}.
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} vẫn chưa chỉ định liệu họ có muốn xem khách hàng quen của mình là ai hay không, vì vậy khoản đóng góp của bạn sẽ là bí mật."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Ngừng quyên góp"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Hủy bỏ cam kết"
 
 #, fuzzy
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
@@ -3728,6 +3728,9 @@ msgstr "Không có thông báo nào để hiển thị."
 msgid "Next Page →"
 msgstr "Trang tiếp theo & rarr;"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3741,21 +3744,33 @@ msgstr "Bạn không có bất kỳ khách hàng quen nào đang hoạt động.
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} không có bất kỳ khách hàng quen nào đang hoạt động."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay hiện hỗ trợ các khoản quyên góp không ẩn danh, bạn có muốn biết khách hàng quen của mình là ai không?"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Cho phép quyên góp không ẩn danh"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Bạn đã chọn tham gia để xem khách hàng quen của mình là ai. Nếu bạn thay đổi quyết định, hãy {link_start} nhấp vào đây để tắt các khoản đóng góp không ẩn danh {link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Bạn đã chọn không xem khách hàng quen của mình là ai. Nếu bạn thay đổi ý định, hãy {link_start} nhấp vào đây để bật quyên góp không ẩn danh {link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

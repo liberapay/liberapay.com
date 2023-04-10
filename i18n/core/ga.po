@@ -2215,6 +2215,14 @@ msgstr "Athnuachan láimhe"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Seolfar meabhrúchán chugat trí ríomhphost chun do shíntiús a athnuachan."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Scoir den síntiús"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Cealaigh an gealltanas"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "Roghnaigh {username} gan féachaint cé hé a bpátrúin, mar sin beidh do thabhartas faoi rún."
@@ -2258,14 +2266,6 @@ msgstr "Beidh gach duine in ann a fheiceáil go dtacaíonn tú leis {username}."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "Níl sé sonraithe fós ag {username} cé acu atá nó nach bhfuil siad ag iarraidh a fheiceáil cé hé a bpátrúin, mar sin beidh do thabhartas faoi rún."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Scoir den síntiús"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Cealaigh an gealltanas"
 
 #, fuzzy
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
@@ -3779,6 +3779,9 @@ msgstr "Níl aon fhógraí le taispeáint."
 msgid "Next Page →"
 msgstr "An Chéad Leathanach Eile →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3794,21 +3797,33 @@ msgstr "Níl aon pátrúin gníomhacha agat."
 msgid "{username} doesn't have any active patrons."
 msgstr "Níl pátrúin ghníomhacha ar bith ag {username}."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Tacaíonn Liberapay anois le síntiúis neamhaithnidiúla, ar mhaith leat a fháil amach cé hiad do phátrúin?"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Cumasaigh síntiúis neamhaithnidiúla"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Tá tú tar éis liostáil isteach féachaint cé hiad do phátrúin. Má athraíonn tú d’intinn, ansin {link_start}cliceáil anseo chun síntiúis neamhaithnidiúla a dhíchumasú{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Roghnaigh tú gan féachaint cé hiad do phátrúin. Má athraíonn tú d’intinn, ansin {link_start}cliceáil anseo chun síntiúis neamhaithnidiúla a chumasú{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

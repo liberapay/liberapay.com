@@ -1874,6 +1874,12 @@ msgstr "Renovació manual"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Se us enviarà per correu electrònic un recordatori per a renovar el donatiu."
 
+msgid "Discontinue the donation"
+msgstr "Atura el donatiu"
+
+msgid "Cancel the pledge"
+msgstr "Cancel·la el compromís"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} ha triat no veure qui són els seus mecenes, així que el vostre donatiu serà secret."
@@ -1913,12 +1919,6 @@ msgstr "Tothom podrà veure que doneu suport a {username}."
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} encara no ha indicat si vol veure els seus mecenes, per tant, el vostre donatiu serà secret."
-
-msgid "Discontinue the donation"
-msgstr "Atura el donatiu"
-
-msgid "Cancel the pledge"
-msgstr "Cancel·la el compromís"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Les persones que col·laboren en el bé comú necessiten el vostre suport a la seva tasca. Coses com el desenvolupament en programari lliure o la difusió del coneixement lliure costen temps i diners, però no només la feina inicial, sinó també per a mantenir-lo en el temps."
@@ -3186,6 +3186,9 @@ msgstr "No hi ha cap notificació per llegir."
 msgid "Next Page →"
 msgstr "Pàgina següent →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3199,19 +3202,33 @@ msgstr "No teniu cap mecenes actiu."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} no té cap mecenes actiu."
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay ara permet donatius no anònims. Voleu saber qui són els vostres mecenes?"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "Permet donatius no anònims"
-
-#, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Heu optat per veure qui són els vostres mecenes. Si canvieu de parer, {link_start}feu clic aquí per a desactivar els donatius no anònims{link_end}."
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
 #, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Heu triat de no veure qui són els vostres mecenes. Si canvieu de parer, {link_start}feu clic aquí per a habilitar els donatius no anònims{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
+
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "Exportació de dades"

@@ -2245,6 +2245,14 @@ msgstr "Ročno podaljšanje"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Opomnik za obnovitev donacije boste prejeli po e-pošti."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Prekinitev donacije"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Prekličite obljubo"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} se je odločil, da ne bo videl, kdo so njegovi pokrovitelji, zato bo vaša donacija tajna."
@@ -2288,14 +2296,6 @@ msgstr "Vsi bodo lahko videli, da podpirate spletno stran {username}."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} še ni navedel, ali želi videti, kdo so njegovi pokrovitelji, zato bo vaša donacija tajna."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Prekinitev donacije"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Prekličite obljubo"
 
 #, fuzzy
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
@@ -3843,6 +3843,9 @@ msgstr "Ni prikazanih nobenih obvestil."
 msgid "Next Page →"
 msgstr "Naslednja stran →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3859,21 +3862,33 @@ msgstr "Nimate aktivnih pokroviteljev."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} nima aktivnih pokroviteljev."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay zdaj podpira neanonimne donacije, želite vedeti, kdo so vaši pokrovitelji?"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Omogočite neanonimne donacije"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Prijavili ste se, da vidite, kdo so vaši pokrovitelji. Če si premislite, potem {link_start}kliknite tukaj in onemogočite neanonimne donacije{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Odločili ste se, da ne boste videli, kdo so vaši pokrovitelji. Če si premislite, potem {link_start}kliknite tukaj, da omogočite neanonimne donacije{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

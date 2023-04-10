@@ -1873,6 +1873,12 @@ msgstr "Elle yenile"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Bağışınızı yenilemeniz için size hatırlatma e-postası gönderilecektir."
 
+msgid "Discontinue the donation"
+msgstr "Bağışı durdur"
+
+msgid "Cancel the pledge"
+msgstr "Vaadi iptal et"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username}, sponsorlarının kim olduğunu görmemeyi seçti, bu nedenle bağışınız gizli olacak."
@@ -1912,12 +1918,6 @@ msgstr "{username} kullanıcısını desteklediğinizi herkes görebilecek."
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username}, sponsorlarının kim olduğunu görmek isteyip istemediğini henüz belirtmedi, bu nedenle bağışınız gizli olacak."
-
-msgid "Discontinue the donation"
-msgstr "Bağışı durdur"
-
-msgid "Cancel the pledge"
-msgstr "Vaadi iptal et"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Ortak varlıklara katkıda bulunan insanlar, çalışmalarını desteklemenize ihtiyaç duyar. Özgür yazılım oluşturmak, özgür bilgiyi yaymak, bunlar yalnızca ilk işi yapmak için değil, ayrıca zaman içinde sürdürmek için de zaman alır ve para gerektirir."
@@ -3182,6 +3182,9 @@ msgstr "Gösterilecek bildirim yok."
 msgid "Next Page →"
 msgstr "Sonraki Sayfa →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3195,19 +3198,33 @@ msgstr "Hiç etkin sponsorunuz yok."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} kullanıcısının hiç etkin sponsoru yok."
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay artık anonim olmayan bağışları destekliyor, sponsorlarınızın kim olduğunu bilmek ister misiniz?"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "Anonim olmayan bağışları etkinleştir"
-
-#, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Sponsorlarınızın kim olduğunu görmeyi seçtiniz. Fikrinizi değiştirirseniz, {link_start}anonim olmayan bağışları devre dışı bırakmak için buraya tıklayın{link_end}."
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
 #, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Sponsorlarınızın kim olduğunu görmemeyi seçtiniz. Fikrinizi değiştirirseniz, {link_start}anonim olmayan bağışları etkinleştirmek için buraya tıklayın{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
+
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "Verileri dışa aktar"

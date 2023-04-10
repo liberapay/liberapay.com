@@ -1982,6 +1982,13 @@ msgstr "Reînnoire manuală"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "O atenționare de reînnoire a donației vă va fi trimisă prin e-mail."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Întrerupeți donația"
+
+msgid "Cancel the pledge"
+msgstr "Anulează angajamentul"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} a ales să nu vadă cine sunt patronii lor, astfel încât donația dumneavoastră va fi secretă."
@@ -2025,13 +2032,6 @@ msgstr "Toată lumea va putea să vadă că susțineți {username}."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} nu a specificat încă dacă dorește să vadă cine sunt patronii săi, așa că donația dvs. va fi secretă."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Întrerupeți donația"
-
-msgid "Cancel the pledge"
-msgstr "Anulează angajamentul"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Oamenii ce contribuie la cultura publică au nevoie de dumneavoastră pentru a-și susține munca. Dezvoltarea programelor libere, distribuirea liberă a cunoștiințelor, sunt acțiuni ce durează timp și costă bani, nu numai pentru a face munca inițială, dar și pentru a o întreține de-alungul timpului."
@@ -3392,6 +3392,9 @@ msgstr "Nicio notificare de arătat."
 msgid "Next Page →"
 msgstr "Pagina următoare →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3407,21 +3410,33 @@ msgstr "Nu aveți niciun client activ."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} nu are niciun client activ."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay suportă acum donații non-anonime, vrei să știi cine sunt patronii tăi?"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Activați donațiile non-anonime"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Ați optat pentru a vedea cine sunt clienții dumneavoastră. Dacă vă răzgândiți, atunci {link_start}faceți clic aici pentru a dezactiva donațiile non-anonime{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Ați ales să nu vedeți cine vă sunt patronii. Dacă vă răzgândiți, atunci {link_start}faceți clic aici pentru a activa donațiile non-anonime{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

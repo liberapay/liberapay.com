@@ -1859,6 +1859,12 @@ msgstr "Perbarui secara manual"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Pengingat untuk memperbarui donasi Anda akan dikirim melalui surel."
 
+msgid "Discontinue the donation"
+msgstr "Hentikan donasi"
+
+msgid "Cancel the pledge"
+msgstr "Batalkan janji untuk berdonasi"
+
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} telah memilih untuk tidak melihat siapa sponsor mereka, jadi donasi Anda akan dirahasiakan."
@@ -1898,12 +1904,6 @@ msgstr "Semua orang akan melihat bahwa Anda mendukung {username}."
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} belum menentukan apakah mereka ingin melihat siapa pendukungnya, jadi donasi Anda akan dirahasiakan."
-
-msgid "Discontinue the donation"
-msgstr "Hentikan donasi"
-
-msgid "Cancel the pledge"
-msgstr "Batalkan janji untuk berdonasi"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Orang-orang yang berkontribusi untuk kebutuhan bersama membutuhkan Anda untuk mendukung pekerjaan mereka. Membangun perangkat lunak bebas, menyebarkan pengetahuan gratis, hal-hal ini membutuhkan waktu dan uang, tidak hanya untuk melakukan pekerjaan awal, tetapi juga untuk pemeliharaan dari waktu ke waktu."
@@ -3158,6 +3158,9 @@ msgstr "Tidak ada notifikasi untuk ditampilkan."
 msgid "Next Page →"
 msgstr "Halaman selanjutnya →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3170,19 +3173,33 @@ msgstr "Anda tidak memiliki sponsor aktif."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} tidak memiliki sponsor aktif."
 
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay sekarang mendukung donasi non-anonim, apakah Anda ingin tahu siapa sponsor Anda?"
+msgid "Visibility levels"
+msgstr ""
 
-msgid "Enable non-anonymous donations"
-msgstr "Aktifkan donasi non-anonim"
-
-#, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Anda telah memilih untuk melihat siapa sponsor Anda. Jika Anda berubah pikiran, {link_start}klik di sini untuk menonaktifkan donasi non-anonim{link_end}."
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
 #, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Anda telah memilih untuk tidak melihat siapa sponsor Anda. Jika Anda berubah pikiran, {link_start}klik di sini untuk mengaktifkan donasi non-anonim{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
+
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 msgid "Data export"
 msgstr "Pengeksporan data"

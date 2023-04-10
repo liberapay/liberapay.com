@@ -1893,6 +1893,14 @@ msgstr "Manuális megújítás"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Ki lesz küldve egy emlékeztető az adomány megújításáról az Ön e-mail címére."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Adományozás beszűntetése"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Törölje az ígéretet"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} úgy döntött, hogy nem látja, kik a támogatói, így az adománya titokban marad."
@@ -1936,14 +1944,6 @@ msgstr "Mindenki láthatja, hogy Ön a {username} honlapot támogatja."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} még nem határozta meg, hogy látni akarja-e, kik a támogatói, így az adománya titkos marad."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Adományozás beszűntetése"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Törölje az ígéretet"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Az embereknek, akik hozzájárulnak a közjavakhoz, szüksége van az Ön támogatására a munkájukhoz. A szabad szoftverek építése, és az ingyenes tudás közzététele időigényes és pénzbe kerül, nem pusztán a létrehozásuk, de a további karbantartásuk is."
@@ -3264,6 +3264,9 @@ msgstr "Nincsenek megjeleníthető értesítések."
 msgid "Next Page →"
 msgstr "Következő Oldal →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3277,21 +3280,33 @@ msgstr "Nincsenek aktív vendégeid."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} nincsenek aktív védnökei."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "A Liberapay mostantól támogatja a nem anonim adományokat, szeretné tudni, hogy kik a támogatói?"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Engedélyezze a nem anonim adományozást"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Bejelentkezett, hogy lássa, kik az Ön támogatói. Ha meggondolta magát, akkor {link_start}kattintson ide a nem anonim adományok letiltásához{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Úgy döntöttél, hogy nem látod, kik a pártfogóid. Ha meggondolta magát, akkor {link_start}kattintson ide a nem anonim adományok engedélyezéséhez{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"

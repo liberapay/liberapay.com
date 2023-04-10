@@ -2165,6 +2165,14 @@ msgstr "Hânlieding fernijing"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "In herinnering om jo donaasje te fernijen sil nei jo stjoerd wurde fia e-post."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Stopje de donaasje"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Annulearje de belofte"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} hat der foar keazen om net te sjen wa't har begeunstigers binne, dus jo donaasje sil geheim wêze."
@@ -2208,14 +2216,6 @@ msgstr "Elkenien sil sjen kinne dat jo {username} stypje."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} hat noch net oanjûn oft se wolle sjen wa't har begeunstigers binne, dus jo donaasje sil geheim wêze."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Stopje de donaasje"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Annulearje de belofte"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Minsken dy't bydrage oan it algemien nut hawwe jo nedich om harren wurk te stypjen. It bouwen fan frije software, fersprieden fan frije ynformaasje, der giet tiid en jild yn sitten, net allinnich om it wurk yn earste ynstânsje te dwaan, mar ek om it te ûnderhâlden."
@@ -3717,6 +3717,9 @@ msgstr "Gjin notifikaasjes om te sjen."
 msgid "Next Page →"
 msgstr "Folgjende side →"
 
+msgid "You have to check at least one box."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3731,21 +3734,33 @@ msgstr "Jo hawwe gjin aktive begeunstigers."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} hat gjin aktive begeunstigers."
 
-#, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay stipet no net-anonyme donaasjes, wolle jo witte wa't jo begeunstigers binne?"
+msgid "Visibility levels"
+msgstr ""
 
-#, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Net-anonyme donaasjes ynskeakelje"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Jo hawwe jo oanmeld om te sjen wa't jo begeunstigers binne. As jo fan gedachten feroarje, klik dan {link_start} hjir om net-anonime donaasjes út te skeakeljen{link_end}."
+#, python-brace-format
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Jo hawwe keazen om net te sjen wa't jo begeunstigers binne. As jo fan gedachten feroarje, klik dan {link_start} hjir om net-anonyme donaasjes yn te skeakeljen{link_end}."
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr ""
+
+msgid "Allow secret donations"
+msgstr ""
+
+msgid "Allow private donations"
+msgstr ""
+
+msgid "Allow public donations"
+msgstr ""
+
+msgid "This is what your prospective donors currently see:"
+msgstr ""
+
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr ""
 
 #, fuzzy
 msgid "Data export"
