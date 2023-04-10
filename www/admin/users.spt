@@ -71,6 +71,7 @@ if mode == 'all':
                   LIMIT 1
                ) AS email
              , ( SELECT json_build_object(
+                            'awaiting review', count(tip) FILTER (WHERE tip.status = 'awaiting review'),
                             'funded', count(tip) FILTER (WHERE tip.status = 'funded'),
                             'partially funded', count(tip) FILTER (WHERE tip.status = 'partially funded'),
                             'pending', count(tip) FILTER (WHERE tip.status = 'pending'),
@@ -86,6 +87,14 @@ if mode == 'all':
                                                    AND coalesce(pt.team, pt.recipient) = tip.tippee
                                                    AND (pt.status = 'pending' OR pi.status = 'pending')
                                             ) THEN 'pending'
+                                       WHEN EXISTS (
+                                                SELECT pt.id
+                                                  FROM payin_transfers pt
+                                                  JOIN payins pi ON pi.id = pt.payin
+                                                 WHERE pt.payer = p.id
+                                                   AND coalesce(pt.team, pt.recipient) = tip.tippee
+                                                   AND (pt.status = 'awaiting_review' OR pi.status = 'awaiting_review')
+                                            ) THEN 'awaiting review'
                                        ELSE 'unfunded'
                                   END) AS status
                             FROM current_tips tip
