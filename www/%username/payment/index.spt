@@ -76,6 +76,8 @@ has_paypal_but_not_stripe = (
     country in constants.PAYOUT_COUNTRIES['stripe']
 )
 
+allow_connect = participant.email is not None and participant.username[0] != '~'
+
 if participant.payment_providers > 0:
     participant.mark_notifications_as_read('payment_account_required')
 
@@ -89,7 +91,14 @@ subhead = _("Payment Processors")
 
 % block content
 
-    % if participant.username[0] == '~'
+    % if not participant.email
+        <p class="alert alert-warning">{{ _(
+            "You have to {link_open}confirm your email address{link_close} before "
+            "you can start to receive donations."
+            , link_open=('<a href="%s">'|safe) % participant.path('emails/')
+            , link_close='</a>'|safe
+        ) }}</p>
+    % elif participant.username[0] == '~'
         <p class="alert alert-warning">{{ _(
             "You have to {link_open}fill your profile{link_close} before you can "
             "start to receive donations."
@@ -186,11 +195,11 @@ subhead = _("Payment Processors")
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
         % if stripe_accounts
-        <button class="btn btn-default">{{
+        <button class="btn btn-default"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect another {platform_name} account", platform_name='Stripe')
         }}</button>
         % else
-        <button class="btn btn-primary">{{
+        <button class="btn btn-primary"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect {platform_name} account", platform_name='Stripe')
         }}</button>
         % endif
@@ -253,27 +262,15 @@ subhead = _("Payment Processors")
         % endif
     % endif
 
-    % if paypal_accounts
-    <a class="btn btn-default" href="/payment-providers/paypal/add">{{
-        _("Connect another {platform_name} account", platform_name='PayPal')
-    }}</a>
-    % else
-    <a class="btn btn-primary" href="/payment-providers/paypal/add">{{
-        _("Connect {platform_name} account", platform_name='PayPal')
-    }}</a>
-   % endif
-
-    {#<form action="/payment-providers/paypal/connect" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
+    <form action="/payment-providers/paypal/add" method="GET">
         % if paypal_accounts
-        <button class="btn btn-default">{{
+        <button class="btn btn-default"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect another {platform_name} account", platform_name='PayPal')
         }}</button>
         % else
-        <button class="btn btn-primary">{{
+        <button class="btn btn-primary"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect {platform_name} account", platform_name='PayPal')
         }}</button>
         % endif
-    </form>#}
+    </form>
 % endblock

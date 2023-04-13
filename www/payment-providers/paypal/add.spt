@@ -6,6 +6,9 @@ participant = user
 
 user.require_write_permission()
 
+if not participant.email or participant.username[0] == '~':
+    raise response.redirect(participant.path('payment/'))
+
 if request.method == 'POST':
     body = request.body
     country = body['country']
