@@ -1,6 +1,8 @@
 """This module provides tools for Content Security Policies.
 """
 
+from typing import Tuple
+
 
 class CSP(bytes):
 
@@ -21,10 +23,23 @@ class CSP(bytes):
             )
         return self
 
-    def allow(self, directive, value):
-        d = dict(self.directives)
+
+def csp_allow(response, *items: Tuple[bytes, bytes]) -> None:
+    csp = response.headers[b'content-security-policy']
+    d = csp.directives.copy()
+    for directive, value in items:
         old_value = d.get(directive)
-        if old_value is None and directive in self.based_on_default_src:
+        if old_value is None and directive in csp.based_on_default_src:
             old_value = d.get(b'default-src')
         d[directive] = b'%s %s' % (old_value, value) if old_value else value
-        return CSP(d)
+    response.headers[b'content-security-policy'] = CSP(d)
+
+
+def csp_allow_stripe(response) -> None:
+    # https://stripe.com/docs/security#content-security-policy
+    csp_allow(
+        response,
+        (b'connect-src', b"api.stripe.com"),
+        (b'frame-src', b"js.stripe.com hooks.stripe.com"),
+        (b'script-src', b"js.stripe.com"),
+    )
