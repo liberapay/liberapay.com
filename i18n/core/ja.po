@@ -3276,6 +3276,10 @@ msgid "{username} isn't a member of any team."
 msgstr "{username} はどのチームにも属さない。"
 
 #, python-brace-format
+msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
 msgstr "開始して寄付を受け取る前に{link_open}プロフィールを埋める{link_close}必要があります。"
 
@@ -3911,9 +3915,9 @@ msgstr "{abbr_}NSFW{_abbr} コンテンツのクリエーターはLiberapayを�
 msgid "Not safe for work"
 msgstr "業務上安全ではない"
 
-#, fuzzy, python-brace-format
-msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr "しかし、Liberapayはシールドではありません。私たちは、{link_open}、基礎となる支払処理装置によって禁止されることから誰かを保護することはできません{link_close}."
+#, python-brace-format
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr ""
 
 #, fuzzy
 msgid "Can I modify or stop my donations?"

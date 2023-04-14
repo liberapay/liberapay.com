@@ -3815,6 +3815,10 @@ msgstr "إنك لا تنتمي كعضو إلى أي فريق بعدُ."
 msgid "{username} isn't a member of any team."
 msgstr "{username} ليس عضوًا في أي فريق."
 
+#, python-brace-format
+msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
 msgstr "يجب عليك {link_open} ملء ملف التعريف الخاص بك {link_close} قبل أن تتمكن من البدء في تلقي التبرعات."
@@ -4561,9 +4565,9 @@ msgstr "هل يمكن لمنشئي محتوى {abbr_} NSFW {_abbr} استخدا�
 msgid "Not safe for work"
 msgstr "ليس آمن للعمل"
 
-#, fuzzy, python-brace-format
-msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr "نعم. ومع ذلك ، فإن Liberapay ليس درعًا: لا يمكننا حماية أي شخص من الحظر بواسطة {link_open} معالجات الدفع الأساسية {link_close}."
+#, python-brace-format
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr ""
 
 #, fuzzy
 msgid "Can I modify or stop my donations?"

@@ -3788,6 +3788,10 @@ msgstr "Te ei ole ühegi meeskonna liige."
 msgid "{username} isn't a member of any team."
 msgstr "{username} ei ole ühegi meeskonna liige."
 
+#, python-brace-format
+msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
 msgstr "Enne annetuste vastuvõtmise alustamist peate täitma oma profiili {link_open}{link_close} ."
@@ -4512,9 +4516,9 @@ msgstr "Kas {abbr_}NSFW{_abbr} sisu loojad võivad kasutada Liberapayt?"
 msgid "Not safe for work"
 msgstr "Ei ole tööks ohutu"
 
-#, fuzzy, python-brace-format
-msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr "Jah. Kuid Liberapay ei ole kilp: me ei saa kaitsta kedagi keelustamise eest, kui {link_open}on aluseks olevate makseprotsessorite{link_close}."
+#, python-brace-format
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr ""
 
 #, fuzzy
 msgid "Can I modify or stop my donations?"
