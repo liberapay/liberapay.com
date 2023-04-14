@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Chinese (Traditional) "
-"<https://hosted.weblate.org/projects/liberapay/core/zh_Hant/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2023-04-14 07:37+0000\n"
+"Last-Translator: 李奕寯 <eugenelego88@gmail.com>\n"
+"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/liberapay/core/zh_Hant/>\n"
+"Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.17-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -1343,7 +1345,7 @@ msgid "Profile"
 msgstr "個人檔案"
 
 msgid "Giving"
-msgstr "捐贈"
+msgstr "捐助"
 
 msgid "Payment Instruments"
 msgstr "付款方式"
@@ -1837,7 +1839,7 @@ msgstr "每年"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
-msgstr "{0} 每週 ~ {1} 每月 ~ {2} 每年"
+msgstr "每週 {0} ~ 每月 {1} ~ 每年 {2}"
 
 msgid "Custom"
 msgstr "自訂"
@@ -1883,7 +1885,7 @@ msgstr "私密捐助"
 
 #, python-brace-format
 msgid "Only you will know that you donate to {username}."
-msgstr "只有您知道您捐贈了 {username}。"
+msgstr "只有您自己會知道您捐助了 {username}。"
 
 msgid "Private donation"
 msgstr "私密捐助"
@@ -1941,7 +1943,7 @@ msgstr "{username}目前每週接獲{income_amount}之金額，他們已達成�
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week, they need your help to reach their funding goal ({goal_amount} per week)."
-msgstr "{username}目前每週收到{income_amount}，他們需要你的幫助來達到他們的籌款目標（每週{goal_amount}）。"
+msgstr "目前 {username} 每週收到 {income_amount}，他們需要大家的幫助來達到籌款目標（每週 {goal_amount}）。"
 
 #, python-brace-format
 msgid "{username}'s goal is to receive {money_amount} per week. Be the first to contribute!"
@@ -1949,7 +1951,7 @@ msgstr "{username} 的目標是每週收到 {money_amount}。成為第一名貢�
 
 #, python-brace-format
 msgid "{username} currently receives {money_amount} per week."
-msgstr "{username}目前每週收到{money_amount}。"
+msgstr "目前 {username} 每週收到 {money_amount}。"
 
 msgid "Recipient Identity"
 msgstr "收款者身分"
@@ -2329,14 +2331,14 @@ msgstr "語言"
 
 #, python-brace-format
 msgid "The {language} translation of Liberapay is not yet complete, you may receive emails in English instead."
-msgstr "Liberapay的{language}的翻译仍待完善，取而代之您有可能会收到英语邮件。"
+msgstr "Liberapay 的{language}翻譯仍待完善，因此您可能會收到英文的電子郵件。"
 
 msgid "Liberapay needs your support"
 msgstr "Liberapay 需要大家的支持"
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments and is only funded by the donations to {0}its own account{1}, please consider chipping in:"
-msgstr "Liberapay 不會滅扣捐款，它只依靠 {0}自身帳戶{1} 的捐款，請考慮分配小部份捐款："
+msgstr "Liberapay 不會從付款中抽成，它只依靠{0}自有帳號{1}的捐助，請考慮出資："
 
 msgid "Support Liberapay"
 msgstr "支持 Liberapay"
@@ -2428,10 +2430,10 @@ msgstr "因受領者的帳號未準備好接受新付款而無法續捐。"
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
-msgstr "{bold}總數：{bold_end} {0} 每週 ~ {1} 每月 ~ {2} 每年。"
+msgstr "{bold}總數：{bold_end} 每週 {0} ~ 每月 {1} ~ 每年 {2}。"
 
 msgid "You are currently not donating to anyone."
-msgstr "您目前沒有捐款給任何人。"
+msgstr "您目前沒有捐助任何人。"
 
 msgid "Discontinued donations"
 msgstr "已終止的捐款"
@@ -3266,11 +3268,11 @@ msgstr "管理 {platform}帳號"
 
 #, python-brace-format
 msgid "Available in {country}."
-msgstr "可用國家{country}。"
+msgstr "可在{country}使用。"
 
 #, python-brace-format
 msgid "Not available in {country}."
-msgstr "不可用國家{country}。"
+msgstr "不可在{country}使用。"
 
 #, python-brace-format
 msgid "Connect another {platform_name} account"
@@ -3720,7 +3722,7 @@ msgstr "捐贈給 {0}"
 
 #, python-brace-format
 msgid "Account number: {0}"
-msgstr "账号编号：{0}"
+msgstr "帳號編號：{0}"
 
 msgid "Debit"
 msgstr "出账"
@@ -3733,7 +3735,7 @@ msgstr "日期"
 
 #, python-brace-format
 msgid "Balance at the beginning: {0}"
-msgstr "初始余额：{0}"
+msgstr "初始餘額：{0}"
 
 #, python-brace-format
 msgid "Fee: {0}"
@@ -3741,11 +3743,11 @@ msgstr "費用：{0}"
 
 #, python-brace-format
 msgid "Balance at the end: {0}"
-msgstr "结末余额：{0}"
+msgstr "結末餘額：{0}"
 
 #, python-brace-format
 msgid "Account balance: {0}"
-msgstr "账户余额：{0}"
+msgstr "帳號餘額：{0}"
 
 #, python-brace-format
 msgid "I donate {0} per week"
@@ -3769,7 +3771,7 @@ msgstr "我們目前每週收到 {0} ，{newline} 而我們的目標是 {1}"
 
 #, python-brace-format
 msgid "We receive {0} per week"
-msgstr "我們每週收到 {0} 金額"
+msgstr "我們每週收到 {0}"
 
 msgid "Donation Button"
 msgstr "捐款按鈕"
