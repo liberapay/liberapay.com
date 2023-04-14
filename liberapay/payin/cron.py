@@ -445,7 +445,8 @@ def _filter_transfers(payer, transfers, automatic):
           FROM payin_transfers pt
           JOIN payins pi ON pi.id = pt.payin
          WHERE pt.payer = %s
-           AND ( pi.status = 'pending' OR pt.status = 'pending' )
+           AND ( pi.status IN ('awaiting_review', 'pending') OR
+                 pt.status IN ('awaiting_review', 'pending') )
     """, (payer.id,)))
     for tr in transfers:
         if isinstance(tr['amount'], dict):

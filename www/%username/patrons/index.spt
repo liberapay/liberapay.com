@@ -66,7 +66,7 @@ subhead = _("Patrons")
         "Liberapay supports three visibility levels for donations. Each level can "
         "be turned on or off, but at least one of them must be enabled."
     ) }}</p>
-    % if participant.payment_providers == 2 and new_patron_visibilities._and__(1)
+    % if participant.payment_providers == 2 and new_patron_visibilities.__and__(1)
     <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
         "Secret donations aren't possible with PayPal. You should either disable "
         "secret donations or {link_start}add a Stripe account{link_end}.",

@@ -3184,7 +3184,8 @@ class Participant(Model, MixinTeam):
                          JOIN exchange_routes r ON r.id = pi.route
                         WHERE pt.payer = t.tipper
                           AND COALESCE(pt.team, pt.recipient) = t.tippee
-                          AND ( pi.status = 'pending' OR pt.status = 'pending' )
+                          AND ( pi.status IN ('awaiting_review', 'pending') OR
+                                pt.status IN ('awaiting_review', 'pending') )
                         LIMIT 1
                    )
           ORDER BY ( SELECT 1
