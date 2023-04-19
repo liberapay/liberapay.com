@@ -3150,7 +3150,7 @@ class Participant(Model, MixinTeam):
 
         return tips, pledges
 
-    def get_tips_awaiting_payment(self, weeks_early=3):
+    def get_tips_awaiting_payment(self, weeks_early=3, exclude_recipients_of=None):
         """Fetch a list of the user's donations that need to be renewed, and
         determine if some of them can be grouped into a single charge.
 
@@ -3166,14 +3166,26 @@ class Participant(Model, MixinTeam):
         - 'suspended': the tippee's account is suspended
 
         """
+        params = dict(tipper_id=self.id, weeks_early=weeks_early)
+        if exclude_recipients_of:
+            exclude = """
+               AND t.tippee NOT IN (
+                       SELECT coalesce(pt.team, pt.recipient)
+                         FROM payin_transfers pt
+                        WHERE pt.payin = %(payin_id)s
+                   )
+            """
+            params['payin_id'] = exclude_recipients_of.id
+        else:
+            exclude = ""
         tips = self.db.all("""
             SELECT t.*, p AS tippee_p
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
-             WHERE t.tipper = %s
+             WHERE t.tipper = %(tipper_id)s
                AND t.renewal_mode > 0
                AND ( t.paid_in_advance IS NULL OR
-                     t.paid_in_advance < (t.amount * %s)
+                     t.paid_in_advance < (t.amount * %(weeks_early)s)
                    )
                AND p.status = 'active'
                AND ( p.goal IS NULL OR p.goal >= 0 )
@@ -3187,7 +3199,7 @@ class Participant(Model, MixinTeam):
                           AND ( pi.status IN ('awaiting_review', 'pending') OR
                                 pt.status IN ('awaiting_review', 'pending') )
                         LIMIT 1
-                   )
+                   ){}
           ORDER BY ( SELECT 1
                        FROM current_takes take
                       WHERE take.team = t.tippee
@@ -3195,7 +3207,7 @@ class Participant(Model, MixinTeam):
                    ) NULLS FIRST
                  , (t.paid_in_advance).amount / (t.amount).amount NULLS FIRST
                  , t.ctime
-        """, (self.id, weeks_early))
+        """.format(exclude), params)
         return self.group_tips_into_payments(tips)
 
     def group_tips_into_payments(self, tips):
