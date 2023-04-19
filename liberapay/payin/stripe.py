@@ -54,7 +54,12 @@ def repr_charge_error(charge):
     """
     if charge.status != 'failed':
         return
-    return '%s (code %s)' % (charge.failure_message, charge.failure_code)
+    if charge.failure_message or charge.failure_code:
+        if charge.failure_message and charge.failure_code:
+            return '%s (code %s)' % (charge.failure_message, charge.failure_code)
+        else:
+            return charge.failure_message or charge.failure_code
+    return ''
 
 
 def get_partial_iban(sepa_debit):
