@@ -757,6 +757,9 @@ def update_payin_transfer(
         if remote_id and pt.remote_id != remote_id:
             raise AssertionError(f"the remote IDs don't match: {pt.remote_id!r} != {remote_id!r}")
 
+        if status == 'suspended' and pt.old_status in ('failed', 'succeeded'):
+            raise ValueError(f"can't change status from {pt.old_status!r} to {status!r}")
+
         if status != pt.old_status:
             cursor.run("""
                 INSERT INTO payin_transfer_events

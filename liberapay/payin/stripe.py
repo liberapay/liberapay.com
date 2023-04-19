@@ -445,21 +445,19 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
     """, (payin.id,))
     if amount_settled is not None:
         payer = db.Participant.from_id(payin.payer)
-        if payer.is_suspended:
-            return payin
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
-            destination_id = pt.destination_id
-            if destination_id == 'acct_1ChyayFk4eGpfLOC':
+            if payer.is_suspended and pt.status not in ('failed', 'succeeded'):
+                pt = update_payin_transfer(db, pt.id, None, 'suspended', None)
+            elif pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
                 pt = update_payin_transfer(db, pt.id, None, charge.status, error)
             elif pt.remote_id is None and pt.status in ('pre', 'pending'):
-                pt = execute_transfer(db, pt, destination_id, charge.id)
+                pt = execute_transfer(db, pt, pt.destination_id, charge.id)
             elif payin.refunded_amount and pt.remote_id:
                 pt = sync_transfer(db, pt)
             if pt.status == 'failed':
                 undeliverable_amount += pt.amount
             payin_transfers[i] = pt
-        del destination_id
         if undeliverable_amount:
             refund_ratio = undeliverable_amount / net_amount
             refund_amount = (payin.amount * refund_ratio).round_up()
