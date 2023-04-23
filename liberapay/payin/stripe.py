@@ -462,6 +462,11 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
             refund_ratio = undeliverable_amount / net_amount
             refund_amount = (payin.amount * refund_ratio).round_up()
             if refund_amount > (payin.refunded_amount or 0):
+                route = db.ExchangeRoute.from_id(payer, payin.route)
+                if route.network == 'stripe-sdd' and payer.marked_as != 'trusted':
+                    raise NotImplementedError(
+                        "refunds of SEPA direct debits are dangerous"
+                    )
                 try:
                     payin = refund_payin(db, payin, refund_amount=refund_amount)
                 except Exception as e:
