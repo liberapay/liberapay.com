@@ -54,7 +54,12 @@ def repr_charge_error(charge):
     """
     if charge.status != 'failed':
         return
-    return '%s (code %s)' % (charge.failure_message, charge.failure_code)
+    if charge.failure_message or charge.failure_code:
+        if charge.failure_message and charge.failure_code:
+            return '%s (code %s)' % (charge.failure_message, charge.failure_code)
+        else:
+            return charge.failure_message or charge.failure_code
+    return ''
 
 
 def get_partial_iban(sepa_debit):
@@ -440,25 +445,28 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
     """, (payin.id,))
     if amount_settled is not None:
         payer = db.Participant.from_id(payin.payer)
-        if payer.is_suspended:
-            return payin
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
-            destination_id = pt.destination_id
-            if destination_id == 'acct_1ChyayFk4eGpfLOC':
+            if payer.is_suspended and pt.status not in ('failed', 'succeeded'):
+                pt = update_payin_transfer(db, pt.id, None, 'suspended', None)
+            elif pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
                 pt = update_payin_transfer(db, pt.id, None, charge.status, error)
             elif pt.remote_id is None and pt.status in ('pre', 'pending'):
-                pt = execute_transfer(db, pt, destination_id, charge.id)
+                pt = execute_transfer(db, pt, pt.destination_id, charge.id)
             elif payin.refunded_amount and pt.remote_id:
                 pt = sync_transfer(db, pt)
             if pt.status == 'failed':
                 undeliverable_amount += pt.amount
             payin_transfers[i] = pt
-        del destination_id
         if undeliverable_amount:
             refund_ratio = undeliverable_amount / net_amount
             refund_amount = (payin.amount * refund_ratio).round_up()
             if refund_amount > (payin.refunded_amount or 0):
+                route = db.ExchangeRoute.from_id(payer, payin.route)
+                if route.network == 'stripe-sdd' and payer.marked_as != 'trusted':
+                    raise NotImplementedError(
+                        "refunds of SEPA direct debits are dangerous"
+                    )
                 try:
                     payin = refund_payin(db, payin, refund_amount=refund_amount)
                 except Exception as e:

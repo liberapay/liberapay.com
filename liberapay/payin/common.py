@@ -757,6 +757,9 @@ def update_payin_transfer(
         if remote_id and pt.remote_id != remote_id:
             raise AssertionError(f"the remote IDs don't match: {pt.remote_id!r} != {remote_id!r}")
 
+        if status == 'suspended' and pt.old_status in ('failed', 'succeeded'):
+            raise ValueError(f"can't change status from {pt.old_status!r} to {status!r}")
+
         if status != pt.old_status:
             cursor.run("""
                 INSERT INTO payin_transfer_events
@@ -894,6 +897,7 @@ def abort_payin(db, payin, error='aborted by payer'):
 
 def record_payin_refund(
     db, payin_id, remote_id, amount, reason, description, status, error=None, ctime=None,
+    notify=None,
 ):
     """Record a charge refund.
 
@@ -906,6 +910,7 @@ def record_payin_refund(
         status (str): the current status of the refund (`refund_status` SQL type)
         error (str): error message, if the refund has failed
         ctime (datetime): when the refund was initiated
+        notify (bool | None): whether to notify the payer
 
     Returns:
         Record: the row inserted in the `payin_refunds` table
@@ -930,11 +935,12 @@ def record_payin_refund(
                     AND old.remote_id = %(remote_id)s
                ) AS old_status
     """, locals())
-    notify = (
-        refund.status in ('pending', 'succeeded') and
-        refund.status != refund.old_status and
-        refund.ctime > (utcnow() - timedelta(hours=24))
-    )
+    if notify is None:
+        notify = (
+            refund.status in ('pending', 'succeeded') and
+            refund.status != refund.old_status and
+            refund.ctime > (utcnow() - timedelta(hours=24))
+        )
     if notify:
         payin = db.one("SELECT * FROM payins WHERE id = %s", (refund.payin,))
         payer = db.Participant.from_id(payin.payer)

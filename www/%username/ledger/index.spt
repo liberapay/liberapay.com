@@ -8,6 +8,7 @@ STATUS_MAP = {
     'partially_refunded': 'warning',
     'refunded': 'danger',
     'succeeded': 'success',
+    'suspended': 'warning',
 }
 
 [---]
@@ -28,6 +29,7 @@ translated_status = {
     'succeeded': _('succeeded'),
     'partially_refunded': _('partially refunded'),
     'refunded': _('refunded'),
+    'suspended': _('suspended'),
 }
 
 current_year = datetime.utcnow().year
@@ -287,6 +289,10 @@ if participant.join_time:
                 &mdash; {{ _(
                     "Processing this kind of payment takes {timedelta} on average.",
                     timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
+                ) }}
+            % elif status == 'suspended' and 'payer' in event
+                &mdash; {{ _(
+                    "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
                 ) }}
             % endif
         % endif
