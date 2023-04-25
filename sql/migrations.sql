@@ -3328,3 +3328,8 @@ UPDATE participants
    AND email IS NOT NULL
    AND join_time >= '2022-12-06'
    AND compute_payment_providers(id) <> 0;
+
+-- migration #165
+UPDATE payins SET error = '' WHERE error = 'None (code None)';
+UPDATE payin_events SET error = '' WHERE error = 'None (code None)';
+ALTER TYPE payin_transfer_status ADD VALUE IF NOT EXISTS 'suspended';
