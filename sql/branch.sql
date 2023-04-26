@@ -32,3 +32,6 @@ UPDATE participants
    SET marked_as = marked_as
  WHERE marked_as IS NULL AND ( is_suspended OR hide_from_lists & 2 = 2 )
     OR marked_as = 'unsettling';
+
+UPDATE payin_transfers SET error = '' WHERE error = 'None (code None)';
+UPDATE payin_transfer_events SET error = '' WHERE error = 'None (code None)';
