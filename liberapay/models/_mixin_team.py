@@ -37,7 +37,19 @@ class MixinTeam:
             raise MemberLimitReached
         if member.status != 'active':
             raise InactiveParticipantAdded
-        self.set_take_for(member, Money(-1, member.main_currency), self, cursor=cursor)
+        n_auto_takes, n_manual_takes = (cursor or self.db).one("""
+            SELECT count(*) FILTER (WHERE t.amount < 0) AS n_auto_takes
+                 , count(*) FILTER (WHERE t.amount >= 0) AS n_manual_takes
+              FROM current_takes t
+             WHERE t.team = %s
+        """, (self.id,), default=(0, 0))
+        if n_auto_takes == 0 and n_manual_takes > 0:
+            # If the team only has manual takes, then the new member should
+            # start at zero instead of taking all the leftover.
+            initial_take = Money.ZEROS[member.main_currency]
+        else:
+            initial_take = Money(-1, member.main_currency)
+        self.set_take_for(member, initial_take, self, cursor=cursor)
 
     def remove_all_members(self, cursor=None):
         (cursor or self.db).run("""
