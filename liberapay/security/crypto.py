@@ -162,7 +162,7 @@ class Cryptograph:
         timestamp, data = Fernet._get_unverified_token_data(msg)
         for i, fernet in enumerate(self.fernet._fernets):
             try:
-                p = fernet._decrypt_data(data, timestamp, None, None)
+                p = fernet._decrypt_data(data, timestamp, None)
             except InvalidToken:
                 continue
             if i == 0 and not force:
