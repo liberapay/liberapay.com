@@ -1,4 +1,5 @@
 from decimal import Decimal
+from functools import partial
 import json
 from operator import itemgetter
 import os
@@ -28,7 +29,7 @@ from liberapay.elsewhere._base import (
 )
 from liberapay.exceptions import NeedDatabase
 from liberapay.i18n.base import (
-    ACCEPTED_LANGUAGES, COUNTRIES, LOCALES, LOCALES_DEFAULT_MAP, Locale,
+    ACCEPTED_LANGUAGES, COUNTRIES, LOCALE_EN, LOCALES, LOCALES_DEFAULT_MAP, Locale,
     make_sorted_dict, to_age,
 )
 from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_rates
@@ -444,7 +445,8 @@ def make_sentry_teller(env, version):
                 return r
 
         if isinstance(exception, ElsewhereError):
-            _ = state.get('_') or (lambda x: x)
+            state.setdefault('escape', lambda a: a)
+            _ = state.get('_') or partial(LOCALE_EN._, state)
             response = state.get('response') or pando.Response()
             r['exception'] = None
             if isinstance(exception, BadUserId):
