@@ -1796,13 +1796,18 @@ class Participant(Model, MixinTeam):
                     # Only send login links to the primary email address
                     session = self._email_session
                     if not session:
-                        session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
+                        try:
+                            session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
+                        except AccountSuspended:
+                            if log_in == 'required':
+                                raise
                         self._email_session = session
-                    extra_query.append(('log-in.id', self.id))
-                    extra_query.append(('log-in.key', session.id))
-                    extra_query.append(('log-in.token', session.secret))
-                    if log_in != 'required':
-                        extra_query.append(('log-in.required', 'no'))
+                    if session:
+                        extra_query.append(('log-in.id', self.id))
+                        extra_query.append(('log-in.key', session.id))
+                        extra_query.append(('log-in.token', session.secret))
+                        if log_in != 'required':
+                            extra_query.append(('log-in.required', 'no'))
                 else:
                     try:
                         raise AssertionError('%r != %r' % (email_row.address, primary_email))
