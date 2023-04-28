@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '165'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '166'::jsonb);
 
 
 -- app configuration
@@ -132,7 +132,7 @@ CREATE TRIGGER initialize_amounts
 
 CREATE FUNCTION update_profile_visibility() RETURNS trigger AS $$
     BEGIN
-        IF (NEW.marked_as IS NULL) THEN
+        IF (OLD.marked_as IS NULL AND NEW.marked_as IS NULL) THEN
             RETURN NEW;
         END IF;
         IF (NEW.marked_as = 'trusted') THEN
@@ -149,10 +149,6 @@ CREATE FUNCTION update_profile_visibility() RETURNS trigger AS $$
         END IF;
         IF (NEW.marked_as IN ('okay', 'trusted')) THEN
             NEW.profile_noindex = NEW.profile_noindex & 2147483645;
-            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
-            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
-        ELSIF (NEW.marked_as = 'unsettling') THEN
-            NEW.profile_noindex = NEW.profile_noindex | 2;
             NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
             NEW.hide_from_search = NEW.hide_from_search & 2147483645;
         ELSE
