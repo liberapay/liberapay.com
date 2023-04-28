@@ -221,7 +221,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                         db, team, provider, payer, payer_country,
                         prorated_amount, tip, sepa_only=True,
                     )
-                except (MissingPaymentAccount, NoSelfTipping):
+                except (AccountSuspended, MissingPaymentAccount, NoSelfTipping, RecipientAccountSuspended):
                     team_amounts = resolve_amounts(prorated_amount, {
                         pt.id: pt.amount.convert(prorated_amount.currency)
                         for pt in transfers
@@ -282,6 +282,7 @@ def resolve_tip(
         a list of `ProtoTransfer` objects
 
     Raises:
+        AccountSuspended: if the payer is suspended
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the donor would end up sending money to themself
         RecipientAccountSuspended: if the tippee's account is suspended
@@ -383,11 +384,14 @@ def resolve_team_donation(
         a list of `ProtoTransfer` objects
 
     Raises:
+        AccountSuspended: if the payer is suspended
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the payer would end up sending money to themself
         RecipientAccountSuspended: if the team or all of its members are suspended
 
     """
+    if payer.is_suspended:
+        raise AccountSuspended(payer)
     if team.is_suspended:
         raise RecipientAccountSuspended(team)
     currency = payment_amount.currency

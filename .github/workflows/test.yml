@@ -11,17 +11,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.8'
       - name: Install Python 3.9
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
       - name: Cache the .tox directory to speed things up
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: .tox
           key: test-${{ runner.os }}-${{ hashFiles('requirements_*.txt') }}
@@ -42,3 +42,5 @@ jobs:
         run: pip install tox
       - name: Run the tests
         run: tox
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
