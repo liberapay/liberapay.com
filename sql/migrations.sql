@@ -3356,6 +3356,10 @@ CREATE OR REPLACE FUNCTION update_profile_visibility() RETURNS trigger AS $$
             NEW.profile_noindex = NEW.profile_noindex & 2147483645;
             NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
             NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+        ELSIF (NEW.marked_as IS NULL) THEN
+            NEW.profile_noindex = NEW.profile_noindex | 2;
+            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
+            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
         ELSE
             NEW.profile_noindex = NEW.profile_noindex | 2;
             NEW.hide_from_lists = NEW.hide_from_lists | 2;
@@ -3366,8 +3370,20 @@ CREATE OR REPLACE FUNCTION update_profile_visibility() RETURNS trigger AS $$
 $$ LANGUAGE plpgsql;
 UPDATE participants
    SET marked_as = marked_as
- WHERE marked_as IS NULL AND ( is_suspended OR hide_from_lists & 2 = 2 )
-    OR marked_as = 'unsettling';
+ WHERE marked_as = 'unsettling';
+UPDATE participants AS p
+   SET is_suspended = null
+     , is_unsettling = is_unsettling & 2147483645
+     , profile_noindex = profile_noindex | 2
+     , hide_from_lists = hide_from_lists & 2147483645
+     , hide_from_search = hide_from_search & 2147483645
+ WHERE marked_as IS NULL AND EXISTS (
+           SELECT 1
+             FROM events e
+            WHERE e.participant = p.id
+              AND e.type = 'flags_changed'
+            LIMIT 1
+       );
 UPDATE payin_transfers SET error = '' WHERE error = 'None (code None)';
 UPDATE payin_transfer_events SET error = '' WHERE error = 'None (code None)';
 INSERT INTO app_conf VALUES

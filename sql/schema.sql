@@ -151,6 +151,10 @@ CREATE FUNCTION update_profile_visibility() RETURNS trigger AS $$
             NEW.profile_noindex = NEW.profile_noindex & 2147483645;
             NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
             NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+        ELSIF (NEW.marked_as IS NULL) THEN
+            NEW.profile_noindex = NEW.profile_noindex | 2;
+            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
+            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
         ELSE
             NEW.profile_noindex = NEW.profile_noindex | 2;
             NEW.hide_from_lists = NEW.hide_from_lists | 2;
