@@ -1183,7 +1183,6 @@ msgstr "Вы делаете запросы слишком быстро, попр
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Не удалось найти пользователя {0} на {1}."
 
-#, fuzzy
 msgid "This profile is marked as spam or fraud."
 msgstr "Этот профиль помечен как спам или мошенничество."
 
@@ -1483,7 +1482,6 @@ msgstr "Сохранить"
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
 msgstr "Если вам нужно изменить пароль вашей учётной записи Liberapay, вы можете сделать это ниже. В целях безопасности пароль вашей учётной записи должен быть сгенерирован случайным образом и больше нигде не использоваться. Мы настоятельно рекомендуем использовать менеджер паролей."
 
-#, fuzzy
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we only recommend setting a password if you use a password manager, because in order to be secure the password should be randomly generated and not used anywhere else."
 msgstr "Установка пароля позволяет войти в систему напрямую, а не ждать одноразовой ссылки, отправленной по электронной почте. Однако мы рекомендуем устанавливать пароль только в том случае, если вы используете менеджер паролей, поскольку для обеспечения безопасности пароль должен быть сгенерирован случайным образом и больше нигде не использоваться."
 
@@ -2017,11 +2015,9 @@ msgstr "Могу ли я сделать единовременное пожер�
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
 msgstr "Единовременные пожертвования пока не поддерживаются должным образом, но вы можете прекратить пожертвование сразу после первого платежа."
 
-#, fuzzy
 msgid "Will I get a receipt?"
 msgstr "Получу ли я квитанцию?"
 
-#, fuzzy
 msgid "A receipt is automatically available for every payment."
 msgstr "Квитанция автоматически предоставляется для каждого платежа."
 
@@ -2211,9 +2207,8 @@ msgstr "Выдержка, которая будет использоваться
 msgid "Preview of the short description"
 msgstr "Предварительный просмотр краткого описания"
 
-#, fuzzy
 msgid "Including your username in the short description is redundant. The short description is always displayed immediately below the username."
-msgstr "Включение имени пользователя в краткое описание является излишним. Краткое описание всегда отображается сразу под именем пользователя."
+msgstr "Включение вашего имени пользователя в краткое описание излишне. Краткое описание всегда отображается сразу под именем пользователя."
 
 msgid "Publish"
 msgstr "Опубликовать"
@@ -3040,9 +3035,8 @@ msgstr "частично возмещен"
 msgid "refunded"
 msgstr "возмещены"
 
-#, fuzzy
 msgid "suspended"
-msgstr "приостановлено"
+msgstr "деактивирован"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -3137,9 +3131,8 @@ msgstr "Этот платеж должен быть подтвержден по�
 msgid "PayPal status code: {0}"
 msgstr "Код состояния PayPal: {0}"
 
-#, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
-msgstr "Счет плательщика приостановлен из-за подозрения в мошенничестве или других несанкционированных действиях."
+msgstr "Счет плательщика деактивирован из-за подозрения в мошенничестве или других несанкционированных действиях."
 
 msgid "There were no transactions during this period."
 msgstr "За данный период не было транзакций."
@@ -3228,9 +3221,8 @@ msgstr "Нет уведомлений для отображения."
 msgid "Next Page →"
 msgstr "Следующая страница →"
 
-#, fuzzy
 msgid "You have to check at least one box."
-msgstr "Вы должны поставить хотя бы одну галочку."
+msgstr "Вы должны поставить галочку хотя бы в одном поле."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
@@ -3246,39 +3238,31 @@ msgstr "У вас нет активных спонсоров."
 msgid "{username} doesn't have any active patrons."
 msgstr "У {username} нет активных спонсоров."
 
-#, fuzzy
 msgid "Visibility levels"
 msgstr "Уровни видимости"
 
-#, fuzzy
 msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
 msgstr "Liberapay поддерживает три уровня видимости пожертвований. Каждый уровень можно включить или выключить, но хотя бы один из них должен быть включен."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
 msgstr "Секретные пожертвования невозможны с PayPal. Вам следует либо отключить секретные пожертвования, либо {link_start}добавить аккаунт Stripe{link_end}."
 
-#, fuzzy
 msgid "Secret donations aren't possible when the payer uses PayPal."
 msgstr "Тайные пожертвования невозможны, если плательщик использует PayPal."
 
-#, fuzzy
 msgid "Allow secret donations"
 msgstr "Разрешить тайные пожертвования"
 
-#, fuzzy
 msgid "Allow private donations"
 msgstr "Разрешить частные пожертвования"
 
-#, fuzzy
 msgid "Allow public donations"
 msgstr "Разрешить общественные пожертвования"
 
-#, fuzzy
 msgid "This is what your prospective donors currently see:"
 msgstr "Это то, что видят ваши потенциальные доноры в настоящее время:"
 
-#, fuzzy
 msgid "This is what your prospective donors will see with the new settings:"
 msgstr "Вот что увидят ваши потенциальные доноры с новыми настройками:"
 
@@ -3302,7 +3286,7 @@ msgstr "Вы не состоите ни в одной команде."
 msgid "{username} isn't a member of any team."
 msgstr "{username} не является членом какой-либо команды."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Вы должны {link_open}подтвердить свой адрес электронной почты{link_close}, прежде чем начать принимать пожертвования."
 
@@ -3943,7 +3927,7 @@ msgstr "Могут ли создатели {abbr_}NSFW{_abbr} контента �
 msgid "Not safe for work"
 msgstr "Небезопасно для работы"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
 msgstr "Платежные процессоры, которые поддерживает Liberapay, имеют неблагоприятную политику в отношении сексуального контента. {paypal_link}PayPal требует предварительного одобрения{link_close}, а {stripe_link}Stripe полностью запрещает его{link_close}. Поэтому, хотя Liberapay можно использовать для некоторых видов контента, предназначенного только для взрослых, обычно лучше использовать платформу, специализирующуюся на таком контенте."
 
