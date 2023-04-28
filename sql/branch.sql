@@ -35,3 +35,8 @@ UPDATE participants
 
 UPDATE payin_transfers SET error = '' WHERE error = 'None (code None)';
 UPDATE payin_transfer_events SET error = '' WHERE error = 'None (code None)';
+
+INSERT INTO app_conf VALUES
+    ('twitter_id', '"ikgMaoYPSKqCpQJkVtiRHvmqv"'::jsonb),
+    ('twitter_secret', '"pwInmJX3vSRuul2mqYs8iJsdkmcXSkBbYh7KB9wqK2pmkJQNm9"'::jsonb)
+    ON CONFLICT (key) DO UPDATE SET value = excluded.value;
