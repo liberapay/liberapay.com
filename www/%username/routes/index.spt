@@ -175,7 +175,7 @@ title = _("Payment Instruments")
         <div class="panel-body overlaid">
             <p class="payment-icon">{{ fontawesome('credit-card') }}</p>
             <h4>{{ _("Credit/Debit Card") }}<br>
-                <small>Visa, MasterCard, American Express, UnionPay</small>
+                <small>Visa, MasterCard, American Express, UnionPay, Discover, Diners</small>
             </h4>
             <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-card"
                 ><span class="sr-only">{{ _("Add a card") }}</span></a>
