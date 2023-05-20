@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Catalan "
-"<https://hosted.weblate.org/projects/liberapay/core/ca/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2023-05-20 04:07+0000\n"
+"Last-Translator: Ecron <ecron_89@hotmail.com>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/liberapay/core/ca/>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.18-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -223,7 +225,7 @@ msgstr "Teniu un pagament de {amount} planificat en la data {payment_date} per a
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
+msgstr[0] "Teniu {n} pagament planificat per a renovar els donatius, però no el podem processar perquè manca un instrument de pagament vàlid."
 msgstr[1] "Teniu {n} pagaments planificats per a renovar els donatius, però no els podem processar perquè manca un instrument de pagament vàlid."
 
 msgid "The payment dates, amounts and recipients are:"
@@ -665,7 +667,7 @@ msgstr "Aquest missatge és un recordatori que es farà un càrrec de {amount} e
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
 msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
-msgstr[1] "Aquest missatge és un recordatori que d'avui en {n} dies es farà un càrrec de {amount} en el vostre instrument de pagament predeterminat per a renovar els donatius."
+msgstr[1] "Aquest missatge és un recordatori que d'aquí a {n} dies es farà un càrrec total de {amount} en el vostre instrument de pagament predeterminat per a renovar els donatius."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -3002,7 +3004,6 @@ msgstr "reemborsat parcialment"
 msgid "refunded"
 msgstr "reemborsat"
 
-#, fuzzy
 msgid "suspended"
 msgstr "suspès"
 
@@ -3099,9 +3100,8 @@ msgstr "Cal que el destinatari aprovi manualment aquest apagament a través del 
 msgid "PayPal status code: {0}"
 msgstr "Codi d'estat de PayPal: {0}"
 
-#, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
-msgstr "El compte del pagador es suspèn a causa d'una sospita de frau o d'una altra acció no autoritzada."
+msgstr "El compte del pagador és suspés a causa d'una sospita de frau o d'una altra acció no autoritzada."
 
 msgid "There were no transactions during this period."
 msgstr "No va haver-hi cap transacció en aquest període."
@@ -3254,9 +3254,9 @@ msgstr "No sou membre de cap equip."
 msgid "{username} isn't a member of any team."
 msgstr "{username} no és membre de cap equip."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
-msgstr "Has de {link_open}confirmar la teva adreça de correu electrònic{link_close} abans de poder començar a rebre donacions."
+msgstr "Cal que {link_open}confirmeu l'adreça electrònica{link_close} abans de poder començar a rebre donacions."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3888,9 +3888,9 @@ msgstr "¿Poden utilitzar Liberapay els creadors de contingut {abbr_}NSFW{_abbr}
 msgid "Not safe for work"
 msgstr "No és segur per al treball"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
-msgstr "Els processadors de pagament que admet Liberapay tenen polítiques desfavorables pel que fa al contingut sexual. {paypal_link}PayPal requereix una aprovació prèvia{link_close} i {stripe_link}Stripe ho prohibeix completament{link_close}. Així, tot i que és possible utilitzar Liberapay per a alguns continguts només per a adults, normalment és millor utilitzar una plataforma especialitzada en aquest contingut."
+msgstr "Els processadors de pagament que Liberapay admet tenen polítiques desfavorables pel que fa al contingut sexual. {paypal_link}PayPal requereix una aprovació prèvia{link_close} i {stripe_link}Stripe ho prohibeix completament{link_close}. Així, tot i que és possible utilitzar Liberapay per a alguns continguts només per a adults, normalment és millor utilitzar una plataforma especialitzada en aquest tipus de contingut."
 
 msgid "Can I modify or stop my donations?"
 msgstr "Com puc modificar o aturar els meus donatius?"
