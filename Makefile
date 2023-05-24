@@ -14,7 +14,7 @@ py_test := $(with_tests_env) $(env_py) -m pytest -Wd $$PYTEST_ARGS
 echo:
 	@echo $($(var))
 
-$(env): requirements*.txt
+$(env): Makefile requirements*.txt
 	@if [ "$(python)" = "false" ]; then \
 		echo "Unable to find a 'python' executable. Please make sure that Python is installed."; \
 		exit 1; \
@@ -22,14 +22,14 @@ $(env): requirements*.txt
 	@$(python) cli/check-python-version.py
 	$(python) -m venv $(env)
 	$(pip) install wheel
-	$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
+	$(pip) install --require-hashes -r requirements_base.txt
+	$(pip) install -r requirements_tests.txt
 	@touch $(env)
 
 rehash-requirements:
 	$(pip) install hashin
-	for f in requirements*.txt; do \
-	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.8 -p 3.9; \
-	done
+	f=requirements_base.txt; \
+	sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f;
 
 clean:
 	rm -rf $(env) *.egg *.egg-info
