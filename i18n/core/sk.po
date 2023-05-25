@@ -141,7 +141,7 @@ msgid "Your Liberapay income is {money_amount} this week"
 msgstr "Váš zárobok v Liberapay tento týždeň je {money_amount}"
 
 msgid "Here is the breakdown of your income this week:"
-msgstr "Tu je rozklad Vášho zárobku tento týždeň:"
+msgstr "Tu je rozpis vášho príjmu za tento týždeň:"
 
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
@@ -390,7 +390,7 @@ msgid "It can take several business days for the funds to reappear in your bank 
 msgstr "Môže to trvať niekoľko pracovných dní kým sa prostriedky objavia na vašom bankovom účte."
 
 msgid "Your bank account is going to be debited"
-msgstr "Váš bankový účet bude účtovaný"
+msgstr "Váš bankový účet bude zaťažený"
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
@@ -2754,7 +2754,7 @@ msgid "JavaScript is required"
 msgstr "Je potrebné mať povolený JavaScript"
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
-msgstr "Na tejto stránke môžete zobraziť a upravovať vaše osobné informácie pripojené k tomuto účtu. Iba autorizovaný pracovníci majú prístup k týmto informáciám, neposkytujeme ich iným užívateľom ani žiadnej tretej strane pokiaľ to nevyžaduje zákon alebo nám neudelíte povolenie."
+msgstr "Na tejto stránke môžete zobraziť a upravovať vaše osobné informácie pripojené k tomuto účtu. K týmto informáciám má prístup iba oprávnený personál, neukazujeme ich iným používateľom ani nikomu inému, pokiaľ to nevyžaduje zákon alebo ak nám na to nedáte pokyn."
 
 msgid "Income Shares"
 msgstr "Podiel na príjmoch"
@@ -3035,7 +3035,6 @@ msgstr "čiastočne vrátený"
 msgid "refunded"
 msgstr "vrátený"
 
-#, fuzzy
 msgid "suspended"
 msgstr "pozastavené"
 
@@ -3132,7 +3131,6 @@ msgstr "Táto platba musí byť manuálne potvrdená príjemcom cez stránku {pr
 msgid "PayPal status code: {0}"
 msgstr "Stavový kód PayPal: {0}"
 
-#, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Účet platiteľa je pozastavený z dôvodu podozrenia z podvodu alebo iného neoprávneného konania."
 
@@ -3223,7 +3221,6 @@ msgstr "Žiadne oznámenia k zobrazeniu."
 msgid "Next Page →"
 msgstr "Ďalšia stránka →"
 
-#, fuzzy
 msgid "You have to check at least one box."
 msgstr "Musíte zaškrtnúť aspoň jedno políčko."
 
@@ -3241,39 +3238,31 @@ msgstr "Nemáte žiadnych aktívnych prispievateľov."
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} nemá žiadnych aktívnych prispievateľov."
 
-#, fuzzy
 msgid "Visibility levels"
 msgstr "Úrovne viditeľnosti"
 
-#, fuzzy
 msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
-msgstr "Liberapay podporuje tri úrovne viditeľnosti darov. Každú úroveň je možné zapnúť alebo vypnúť, ale aspoň jedna z nich musí byť povolená."
+msgstr "Liberapay podporuje tri úrovne viditeľnosti darov. Každá úroveň môže byť zapnutá alebo vypnutá, ale aspoň jedna z nich musí byť povolená."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
-msgstr "Tajné dary nie sú možné prostredníctvom služby PayPal. Mali by ste buď vypnúť tajné dary, alebo {link_start}pridať účet Stripe{link_end}."
+msgstr "Tajné dary nie sú možné cez PayPal. Mali by ste buď vypnúť tajné dary, alebo {link_start}pridať účet Stripe{link_end}."
 
-#, fuzzy
 msgid "Secret donations aren't possible when the payer uses PayPal."
-msgstr "Tajné dary nie sú možné, ak platca používa službu PayPal."
+msgstr "Tajné dary nie sú možné, keď platca používa službu PayPal."
 
-#, fuzzy
 msgid "Allow secret donations"
-msgstr "Povoľte tajné dary"
+msgstr "Povoliť tajné dary"
 
-#, fuzzy
 msgid "Allow private donations"
-msgstr "Umožniť súkromné dary"
+msgstr "Povoliť súkromné dary"
 
-#, fuzzy
 msgid "Allow public donations"
-msgstr "Umožniť verejné dary"
+msgstr "Povoliť verejné dary"
 
-#, fuzzy
 msgid "This is what your prospective donors currently see:"
-msgstr "To je to, čo vaši potenciálni darcovia v súčasnosti vidia:"
+msgstr "Toto momentálne vidia vaši potenciálni darcovia:"
 
-#, fuzzy
 msgid "This is what your prospective donors will see with the new settings:"
 msgstr "Toto uvidia vaši potenciálni darcovia s novými nastaveniami:"
 
@@ -3297,9 +3286,9 @@ msgstr "Nieste členom žiadneho tímu."
 msgid "{username} isn't a member of any team."
 msgstr "{username} nie je členom žiadneho tímu."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
-msgstr "Predtým, ako začnete prijímať dary, musíte {link_open}potvrdiť svoju e-mailovú adresu{link_close}."
+msgstr "Ak chcete začať prijímať dary, musíte {link_open}potvrdiť svoju e-mailovú adresu{link_close}."
 
 #, python-brace-format
 msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
@@ -3938,9 +3927,9 @@ msgstr "Môžu tvorcovia {abbr_}NSFW{_abbr} obsahu používať Liberapay?"
 msgid "Not safe for work"
 msgstr "Nie je bezpečné pre prácu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
-msgstr "Spracovatelia platieb, ktorých spoločnosť Liberapay podporuje, majú nepriaznivé zásady voči sexuálnemu obsahu. {paypal_link}PayPal vyžaduje predbežné schválenie{link_close}, a {stripe_link}Stripe ho úplne zakazuje{link_close}. Takže hoci je možné používať Liberapay na určitý obsah určený len pre dospelých, zvyčajne je lepšie použiť platformu špecializovanú na takýto obsah."
+msgstr "Spracovatelia platieb, ktorých Liberapay podporuje, majú nepriaznivú politiku voči sexuálnemu obsahu. {paypal_link}PayPal vyžaduje predbežné schválenie{link_close} a {stripe_link}Stripe to úplne zakazuje{link_close}. Takže aj keď je možné použiť Liberapay pre obsah len pre dospelých, zvyčajne je lepšie použiť platformu špecializovanú na takýto obsah."
 
 msgid "Can I modify or stop my donations?"
 msgstr "Môžem upraviť alebo zrušit moje príspevky?"
