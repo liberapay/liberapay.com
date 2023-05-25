@@ -1242,7 +1242,7 @@ class Participant(Model, MixinTeam):
         else:
             name = (self.get_current_identity() or {}).get('name')
         message['to'] = [formataddr((name, email))]
-        message['subject'] = spt['subject'].render(context).strip()
+        message['subject'] = spt['-/subject'].render(context).strip()
         self._rendering_email_to, self._email_session = email_row, None
         message['html'] = render('text/html', context_html)
         message['text'] = render('text/plain', context)
@@ -1510,7 +1510,7 @@ class Participant(Model, MixinTeam):
                 self.fill_notification_context(context)
                 context.update(notif_context)
                 context['notification_ts'] = ts
-                d['subject'] = spt['subject'].render(context).strip()
+                d['subject'] = spt['-/subject'].render(context).strip()
                 d['html'] = spt['text/html'].render(context).strip()
             except Exception as e:
                 d['sentry_ident'] = website.tell_sentry(e).get('sentry_ident')

@@ -52,11 +52,13 @@ def compile_email_spt(fpath):
     with open(fpath, 'rb') as f:
         pages = list(split_and_escape(f.read().decode('utf8')))
     for i, page in enumerate(pages, 1):
+        if i == 1:
+            assert not page.content
+            continue
         tmpl = '\n' * page.offset + page.content
         content_type, renderer = parse_specline(page.header)
-        key = 'subject' if i == 1 else content_type
         env = jinja_env_html if content_type == 'text/html' else jinja_env
-        r[key] = SimplateLoader(fpath, tmpl).load(env, fpath)
+        r[content_type] = SimplateLoader(fpath, tmpl).load(env, fpath)
     return r
 
 

@@ -40,8 +40,8 @@ if user_id:
             user_id = '>' + user_id.lstrip('@')
     else:
         if '/' in user_id:
-            split = urlsplit(user_id)
-            user_id, domain = split.path.lstrip('@').rstrip('/'), split.netloc
+            split = urlsplit(user_id.strip())
+            user_id, domain = split.path.strip('/').lstrip('@'), split.netloc
             # ↑ This use of `.netloc` instead of `.hostname` is intentional. It
             #   makes the domain name check below reject URLs which contain a
             #   username, password or port number in the netloc.
