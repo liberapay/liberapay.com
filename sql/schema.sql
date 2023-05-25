@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '166'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '167'::jsonb);
 
 
 -- app configuration
@@ -830,8 +830,8 @@ CREATE OR REPLACE FUNCTION update_payment_accounts() RETURNS trigger AS $$
     BEGIN
         UPDATE payment_accounts
            SET verified = coalesce(NEW.verified, false)
-         WHERE id = NEW.address
-           AND participant = NEW.participant;
+         WHERE participant = NEW.participant
+           AND lower(id) = lower(NEW.address);
         RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
