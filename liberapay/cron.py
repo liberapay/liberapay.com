@@ -6,6 +6,7 @@ from time import sleep
 import traceback
 
 from pando.utils import utcnow
+import psycopg2
 
 from .constants import EPOCH
 
@@ -138,14 +139,14 @@ class Job:
 
         def f():
             while True:
-                period = self.period
-                if period != 'irregular':
-                    seconds = self.seconds_before_next_run()
-                    if seconds > 0:
-                        sleep(seconds)
-                if self.exclusive and not self.cron.has_lock:
-                    return
                 try:
+                    period = self.period
+                    if period != 'irregular':
+                        seconds = self.seconds_before_next_run()
+                        if seconds > 0:
+                            sleep(seconds)
+                    if self.exclusive and not self.cron.has_lock:
+                        return
                     if isinstance(period, (float, int)) and period < 300:
                         logger.debug(f"Running {self!r}")
                     else:
@@ -161,16 +162,19 @@ class Job:
                     self.running = False
                     self.cron.website.tell_sentry(e)
                     if self.exclusive:
-                        self.cron.website.db.run("""
-                            INSERT INTO cron_jobs
-                                        (name, last_error_time, last_error)
-                                 VALUES (%s, current_timestamp, %s)
-                            ON CONFLICT (name) DO UPDATE
-                                    SET last_error_time = excluded.last_error_time
-                                      , last_error = excluded.last_error
-                        """, (func_name, traceback.format_exc()))
-                    # retry in 5 minutes
-                    sleep(300)
+                        try:
+                            self.cron.website.db.run("""
+                                INSERT INTO cron_jobs
+                                            (name, last_error_time, last_error)
+                                     VALUES (%s, current_timestamp, %s)
+                                ON CONFLICT (name) DO UPDATE
+                                        SET last_error_time = excluded.last_error_time
+                                          , last_error = excluded.last_error
+                            """, (func_name, traceback.format_exc()))
+                        except psycopg2.OperationalError:
+                            pass
+                    # retry in a minute
+                    sleep(60)
                     continue
                 else:
                     self.running = False
