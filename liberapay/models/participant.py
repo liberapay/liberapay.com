@@ -705,7 +705,8 @@ class Participant(Model, MixinTeam):
                  LIMIT 1
             """, locals())
             if row and row.lang != langs[0]:
-                convert_to = langs[0]
+                if langs[0] in i18n.CONVERTERS.get(row.lang, ()):
+                    convert_to = langs[0]
         else:
             conversions = {}
             for lang in langs:
@@ -714,7 +715,8 @@ class Participant(Model, MixinTeam):
                 for target_lang in converters:
                     if conversions.get(target_lang, '') is None:
                         conversions[lang] = target_lang
-                    conversions.setdefault(target_lang, lang)
+                    if lang in i18n.CONVERTERS.get(target_lang, ()):
+                        conversions.setdefault(target_lang, lang)
                 del converters
             langs = list(conversions.keys())
             row = self.db.one("""
