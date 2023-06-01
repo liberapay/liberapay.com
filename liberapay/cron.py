@@ -42,6 +42,16 @@ class Cron:
             return  # Already waiting
         self.conn = self.website.db.get_connection().__enter__()
         def f():
+            while True:
+                try:
+                    g()
+                except psycopg2.errors.IdleInTransactionSessionTimeout:
+                    if self.has_lock:
+                        self.has_lock = False
+                    sleep(10)
+                    self.conn = self.website.db.get_connection().__enter__()
+
+        def g():
             cursor = self.conn.cursor()
             while True:
                 if cursor.one("SELECT pg_try_advisory_lock(0)"):
@@ -53,7 +63,7 @@ class Cron:
                 else:
                     if self.has_lock:
                         self.has_lock = False
-                sleep(60)
+                sleep(55)
         t = self._lock_thread = threading.Thread(target=f, name="cron_waiter")
         t.daemon = True
         t.start()
