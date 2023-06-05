@@ -37,6 +37,7 @@ class _ANON:
 
     get_currencies_for = staticmethod(Participant.get_currencies_for)
     get_tip_to = staticmethod(Participant._zero_tip)
+    guessed_country = Participant._guessed_country
 
     def is_acting_as(self, privilege):
         return False
@@ -67,7 +68,7 @@ def sign_in_with_form_data(body, state):
 
     if body.get('log-in.id'):
         request = state['request']
-        src_addr, src_country = request.source, request.country
+        src_addr, src_country = request.source, request.source_country
         input_id = body['log-in.id'].strip()
         password = body.pop('log-in.password', None)
         id_type = None
@@ -211,7 +212,7 @@ def sign_in_with_form_data(body, state):
             raise UsernameAlreadyTaken(username)
         # Rate limit
         request = state['request']
-        src_addr, src_country = request.source, request.country
+        src_addr, src_country = request.source, request.source_country
         website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-net', get_ip_net(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.country', src_country, TooManySignUps)

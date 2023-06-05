@@ -644,7 +644,7 @@ def set_up_i18n(state, request=None, exception=None):
         langs.extend(parse_accept_lang(
             request.headers.get(b"Accept-Language", b"").decode('ascii', 'replace')
         ))
-        locale = match_lang(langs, request.country)
+        locale = match_lang(langs, request.source_country)
     add_helpers_to_context(state, locale)
 
 
@@ -668,7 +668,7 @@ class DefaultString(str):
 DEFAULT_CURRENCY = DefaultString('EUR')
 
 
-def add_currency_to_state(request, user):
+def add_currency_to_state(request, user, locale):
     qs_currency = request.qs.get('currency')
     if qs_currency in CURRENCIES:
         return {'currency': qs_currency}
@@ -678,4 +678,8 @@ def add_currency_to_state(request, user):
     if user:
         return {'currency': user.main_currency}
     else:
-        return {'currency': CURRENCIES_MAP.get(request.country) or DEFAULT_CURRENCY}
+        return {'currency': (
+            CURRENCIES_MAP.get(locale.territory) or
+            CURRENCIES_MAP.get(request.source_country) or
+            DEFAULT_CURRENCY
+        )}

@@ -121,7 +121,7 @@ if request.method == 'POST':
     transfer_amounts = resolve_amounts(
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
-    payer_country = route.country or request.country
+    payer_country = route.country or payer.guessed_country
     proto_transfers = []
     sepa_only = len(tips) > 1
     for tip in tips:

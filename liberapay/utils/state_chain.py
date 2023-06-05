@@ -15,7 +15,7 @@ def add_state_to_context(state, website):
 
 
 def attach_environ_to_request(environ, request):
-    request.country = request.headers.get(b'Cf-Ipcountry', b'').decode() or None
+    request.source_country = request.headers.get(b'Cf-Ipcountry', b'').decode() or None
     request.environ = environ
     try:
         request.hostname = request.headers[b'Host'].decode('idna')

@@ -60,7 +60,7 @@ if request.method == 'POST':
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
     route = ExchangeRoute.upsert_generic_route(payer, 'paypal')
-    payer_country = route.country or request.country
+    payer_country = route.country or payer.guessed_country
     proto_transfers = []
     for tip in tips:
         proto_transfers.extend(resolve_tip(
