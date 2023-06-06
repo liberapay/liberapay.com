@@ -8,7 +8,7 @@ from pando import json
 from ..billing.payday import compute_next_payday_date
 from ..cron import logger
 from ..exceptions import (
-    AccountSuspended, MissingPaymentAccount, NoSelfTipping,
+    AccountSuspended, BadDonationCurrency, MissingPaymentAccount, NoSelfTipping,
     RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
 )
 from ..i18n.currencies import Money
@@ -285,17 +285,6 @@ def execute_scheduled_payins():
         transfers, canceled, impossible, actionable = _filter_transfers(
             payer, transfers, automatic=True
         )
-        if actionable:
-            for tr in actionable:
-                tr['execution_date'] = execution_date
-                del tr['beneficiary'], tr['tip']
-            payer.notify(
-                'renewal_actionable',
-                transfers=actionable,
-                email_unverified_address=True,
-                force_email=True,
-            )
-            counts['renewal_actionable'] += 1
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
             proto_transfers = []
@@ -314,6 +303,10 @@ def execute_scheduled_payins():
                     UserDoesntAcceptTips,
                 ):
                     impossible.append(tr)
+                    transfers.remove(tr)
+                    payin_amount -= tr['amount']
+                except BadDonationCurrency:
+                    actionable.append(tr)
                     transfers.remove(tr)
                     payin_amount -= tr['amount']
         if transfers:
@@ -372,6 +365,17 @@ def execute_scheduled_payins():
             """, (payer.id, sp_id))
         else:
             db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
+        if actionable:
+            for tr in actionable:
+                tr['execution_date'] = execution_date
+                del tr['beneficiary'], tr['tip']
+            payer.notify(
+                'renewal_actionable',
+                transfers=actionable,
+                email_unverified_address=True,
+                force_email=True,
+            )
+            counts['renewal_actionable'] += 1
         if impossible:
             for tr in impossible:
                 tr['execution_date'] = execution_date
