@@ -3674,6 +3674,11 @@ class Participant(Model, MixinTeam):
 
     @cached_property
     def guessed_country(self):
+        identity = self.get_current_identity()
+        if identity:
+            country = identity['postal_address'].get('country')
+            if country:
+                return country
         return self._guessed_country
 
     @property
