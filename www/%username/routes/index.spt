@@ -181,7 +181,7 @@ title = _("Payment Instruments")
                 ><span class="sr-only">{{ _("Add a card") }}</span></a>
         </div>
     </div>
-    % set warn = request.country not in constants.SEPA
+    % set warn = participant.guessed_country not in constants.SEPA
     <div class="panel panel-default {{ '' if has_euro_donations else 'muted' }}">
         <div class="panel-body overlaid">
             <p class="payment-icon">{{ fontawesome('bank') }}</p>

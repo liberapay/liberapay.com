@@ -69,7 +69,7 @@ paypal_accounts = accounts_by_provider.get('paypal')
 stripe_accounts = accounts_by_provider.get('stripe')
 
 countries = set(a.country for a in accounts)
-country = list(countries)[0] if len(countries) == 1 else request.country
+country = list(countries)[0] if len(countries) == 1 else participant.guessed_country
 
 has_paypal_but_not_stripe = (
     paypal_accounts and not stripe_accounts and

@@ -74,7 +74,7 @@ title = _("Connecting a {platform} account", platform='PayPal')
         <select name="country" class="form-control" required>
             <option></option>
         % for code, name in locale.countries.items()
-            <option value="{{ code }}" {{ 'selected' if code == request.country }}>{{ name }}</option>
+            <option value="{{ code }}" {{ 'selected' if code == user.guessed_country }}>{{ name }}</option>
         % endfor
         </select>
     </label>

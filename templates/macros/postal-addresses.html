@@ -8,7 +8,7 @@
         <span>{{ _("Country") }}</span>
         <select name="{{ prefix }}.country" class="form-control country" {{ required }}>
             <option></option>
-            % set country = saved.country|default('') or request.country
+            % set country = saved.country|default('') or user.guessed_country
             % for code, name in locale.countries.items()
                 <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
             % endfor

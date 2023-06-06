@@ -3672,6 +3672,22 @@ class Participant(Model, MixinTeam):
         self.set_attributes(**{column: r})
         return 1
 
+    @cached_property
+    def guessed_country(self):
+        identity = self.get_current_identity()
+        if identity:
+            country = identity['postal_address'].get('country')
+            if country:
+                return country
+        return self._guessed_country
+
+    @property
+    def _guessed_country(self):
+        state = website.state.get(None)
+        if state:
+            locale, request = state['locale'], state['request']
+            return locale.territory or request.source_country
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.

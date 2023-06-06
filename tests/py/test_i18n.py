@@ -17,9 +17,9 @@ class Tests(Harness):
 
     def test_request_country(self):
         request = self.client.GET('/', want='request')
-        assert request.country is None
+        assert request.source_country is None
         request = self.client.GET('/', HTTP_CF_IPCOUNTRY='US', want='request')
-        assert request.country == 'US'
+        assert request.source_country == 'US'
 
     def test_state_currency(self):
         state = self.client.GET('/', want='state')

@@ -278,7 +278,7 @@ title = _("Funding your donations")
             </div>
         </div>
         % set possible = allow_stripe_sdd and payment.currency == 'EUR'
-        % set warn = request.country not in constants.SEPA
+        % set warn = payer.guessed_country not in constants.SEPA
         <div class="panel panel-default {{ '' if possible else 'muted' }}">
             <div class="panel-body overlaid">
                 <p class="payment-icon">{{ fontawesome('bank') }}</p>
