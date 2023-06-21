@@ -11,7 +11,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
-msgstr "Az oldal Angol nyelvről való lefordítása még nincs kész. {link_start}Itt tud hozzájárulni{link_end}."
+msgstr "Az oldal angol nyelvről való lefordítása még nincs kész. {link_start}Itt tud hozzájárulni{link_end}."
 
 #, python-brace-format
 msgid "This page contains machine-translated text which hasn't yet been reviewed and might be inaccurate. {link_start}You can contribute{link_end}."
@@ -181,7 +181,7 @@ msgstr "A számlája a(z) {0}-hoz vissza lett utasítva - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
-msgstr "A fizetési kérelme {amount}-ra {addressee_name}-tól vissza lett utasítva."
+msgstr "{amount} kifizetési kérelmét {addressee_name} visszautasította."
 
 #, python-brace-format
 msgid "Reason: “{0}”"
@@ -315,11 +315,11 @@ msgstr "A vitatott összegeket automatikusan visszakövetelték azoktól, akik m
 
 #, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr "Ha bankja vitatta a fizetést anélkül, hogy Önnel egyeztetett volna, akkor kérdezze meg, hogy miért. Amint a probléma rendeződött {link_start}újra elvégezheti a fizetést{link_end}."
+msgstr "Ha a bankja vitatta a kifizetést Önnel való konzultáció nélkül, akkor kérdezze meg, hogy miért. Amint a probléma megoldódott {link_start}újra elvégezheti a kifizetést{link_end}."
 
 #, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
-msgstr "Hogy segítsen bankjának kideríteni, mi történt, elküldheti nekik a {link_start}dokumentum{link_end} másolatát."
+msgstr "Hogy segítsen a bankjának kideríteni mi történt, elküldheti nekik {link_start}ennek a dokumentumnak{link_end} a másolatát."
 
 msgid "Your payment has failed"
 msgstr "A fizetése meghiúsult"
@@ -2682,9 +2682,8 @@ msgstr "Fizetési eszköz:"
 msgid "Please input your name and card number:"
 msgstr "Kérjük, adja meg nevét és kártyaszámát:"
 
-#, fuzzy
 msgid "Jane Doe"
-msgstr "Jane Doe"
+msgstr "Minta Pista"
 
 #, fuzzy, python-brace-format
 msgid "This data will be sent directly to the payment processor {name} through an encrypted connection."
