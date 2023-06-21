@@ -1058,6 +1058,7 @@ class Payday:
                           AND tipper.email IS NOT NULL
                           AND tipper.is_suspended IS NOT true
                           AND tipper.status = 'active'
+                          AND t.mtime > (current_timestamp - interval '1 year')
                    ) OR EXISTS (
                        SELECT 1
                          FROM current_takes take

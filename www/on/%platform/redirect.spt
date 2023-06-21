@@ -48,7 +48,7 @@ if user_id:
         if len(split) == 2:
             user_id, domain = split[0], split[1]
         else:
-            user_id = domain = None
+            domain = None
         del split
     if domain and not constants.DOMAIN_RE.match(domain):
         raise response.error(400, _("{0} is not a valid domain name.", repr(domain)))
