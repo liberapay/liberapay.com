@@ -176,7 +176,7 @@ elif payin_id:
         elif act.type == 'use_stripe_sdk':
             client_secret = act.client_secret
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(act.type)
     tell_payer_to_fill_profile = (
         payin.status in ('pending', 'succeeded') and
         not (payer.public_name or payer.username) and
