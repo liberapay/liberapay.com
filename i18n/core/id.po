@@ -1791,12 +1791,6 @@ msgstr "Donasi Anda saat ini ke {name} dalam {currency}, tetapi mereka sekarang 
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Donasi Anda saat ini ke {name} dalam {currency}, tetapi mereka tidak lagi menerima mata uang itu. Mata uang baru yang disarankan adalah {accepted_currency}, tetapi Anda dapat memilih mata uang lain."
 
-msgid "Modify"
-msgstr "Modifikasi"
-
-msgid "Discontinue"
-msgstr "Berhenti"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Saat ini Anda sedang menyumbang {money_amount} per minggu ke {recipient_name}. Formulir di bawah ini memungkinkan Anda untuk mengubah atau menghentikan sumbangan Anda."
@@ -2385,6 +2379,9 @@ msgstr "{money_amount}{small}/bulan{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/tahun{end_small}"
+
+msgid "Modify"
+msgstr "Modifikasi"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3243,8 +3240,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "Anda harus {link_open}mengonfirmasi alamat email Anda{link_close} sebelum dapat mulai menerima donasi."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Anda harus {link_open}mengisi data profil anda{link_close} sebelum anda dapat memulai menerima donasi."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Untuk menerima donasi anda harus terhubung dengan setidaknya satu akun dari prosesor pembayaran yang didukung. Halaman ini memungkinkan Anda untuk melakukannya."
@@ -4113,6 +4114,9 @@ msgstr "Biaya pemrosesan pembayaran melalui Stripe biasanya lebih rendah dibandi
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe memungkinkan pembaruan donasi secara otomatis, sedangkan PayPal saat ini mengharuskan donatur untuk mengonfirmasi setiap pembayarannya."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe memungkinkan untuk menyumbang ke beberapa kreator sekaligus dalam beberapa kasus, sedangkan PayPal selalu memerlukan pembayaran terpisah."

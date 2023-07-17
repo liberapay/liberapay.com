@@ -1819,13 +1819,6 @@ msgstr "A {name} címre tett jelenlegi adományod a {currency} pénznemben érke
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Az Ön jelenlegi adománya a {name} címre {currency}, de ők már nem fogadják el ezt a pénznemet. A javasolt új pénznem a {accepted_currency}, de választhatsz másikat is."
 
-msgid "Modify"
-msgstr "Módosítás"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "Leállítás"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Ön jelenleg hetente {money_amount} adományt adományoz a {recipient_name} címre. Az alábbi űrlapon módosíthatja vagy leállíthatja adományozását."
@@ -2442,6 +2435,9 @@ msgstr "{money_amount}{small}/hónap{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/év{end_small}"
+
+msgid "Modify"
+msgstr "Módosítás"
 
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3342,9 +3338,13 @@ msgstr "{username} nem tagja egyik csapatnak sem."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Mielőtt elkezdené fogadni az adományokat, meg kell erősítenie az {link_open}e-mail címet{link_close}."
 
-#, fuzzy, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Mielőtt elkezdene adományokat fogadni, ki kell töltenie a {link_open}címet{link_close}."
+#, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4319,6 +4319,9 @@ msgstr "A fizetési folyamatok feldolgozási díjai általában alacsonyabbak a 
 #, fuzzy
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "A Stripe lehetővé teszi az adományok automatikus megújítását, míg a PayPal jelenleg megköveteli, hogy az adományozók minden egyes fizetést megerősítsenek."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 #, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."

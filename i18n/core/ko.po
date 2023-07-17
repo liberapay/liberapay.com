@@ -1798,12 +1798,6 @@ msgstr "{name}에 대한 현재 기부는 {currency}에 있지만 이제 {accept
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "{name}에 대한 현재 기부는 {currency}이지만 더 이상 해당 통화를 허용하지 않습니다. 제안된 새 통화는 {accepted_currency}이지만 다른 통화를 선택할 수 있습니다."
 
-msgid "Modify"
-msgstr "수정하기"
-
-msgid "Discontinue"
-msgstr "중단"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "현재 {recipient_name}에 매주 {money_amount}를 기부하고 있습니다. 아래 양식을 사용하여 기부를 수정하거나 중지할 수 있습니다."
@@ -2398,6 +2392,9 @@ msgstr "{money_amount}{small}/월{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/년{end_small}"
+
+msgid "Modify"
+msgstr "수정하기"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3268,8 +3265,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "{link_open}이메일 주소{link_close} 를 확인해야만 기부금을 받을 수 있습니다."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "기부금 수령을 시작하려면 먼저 {link_open}프로필을{link_close} 채워 주세요."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "기부를 받으려면 이 페이지에서 지원되는 결제 처리자를 최소 한 개 이상 연결해야 합니다."
@@ -4190,6 +4191,9 @@ msgstr "지불 처리 수수료는 일반적으로 PayPal보다 Stripe가 더 �
 #, fuzzy
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe는 기부를 자동으로 갱신할 수 있는 반면 PayPal은 현재 기부자가 모든 지불을 확인하도록 요구합니다."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 #, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."

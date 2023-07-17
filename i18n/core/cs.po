@@ -1818,12 +1818,6 @@ msgstr "Váš současný příspěvek pro {name} je v {currency}, ale nyní při
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Váš současný příspěvek na účet {name} je v {currency}, ale tuto měnu již nepřijímají. Navrhovaná nová měna je {accepted_currency}, ale můžete si vybrat i jinou."
 
-msgid "Modify"
-msgstr "Upravit"
-
-msgid "Discontinue"
-msgstr "Zastavit"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "V současné době přispíváte týdně {money_amount} na {recipient_name}. Níže uvedený formulář vám umožňuje změnit nebo zastavit vaše přispívání."
@@ -2423,6 +2417,9 @@ msgstr "{money_amount}{small}/měsíc{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/rok{end_small}"
+
+msgid "Modify"
+msgstr "Upravit"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3291,8 +3288,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "Než začnete přijímat příspěvky, musíte {link_open}potvrdit svou e-mailovou adresu{link_close}."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Než začnete přijímat příspěvky, musíte {link_open}vyplnit svůj profil{link_close}."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Chcete-li dostávat příspěvky, musíte připojit alespoň jeden účet od podporovaného zpracovatele plateb. Tato stránka vám to umožní."
@@ -4181,6 +4182,9 @@ msgstr "Poplatky za zpracování plateb jsou u Stripe obvykle nižší než u Pa
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe umožňuje automatické obnovování příspěvků, zatímco PayPal v současnosti vyžaduje, aby dárci každou platbu potvrdili."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe umožňuje v některých případech přispívat více tvůrcům najednou, zatímco PayPal vyžaduje vždy samostatné platby."

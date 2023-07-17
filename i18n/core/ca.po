@@ -1803,12 +1803,6 @@ msgstr "El vostre donatiu actual a {name} és en {currency}, però ara només ac
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "El vostre donatiu actual a {name} és en {currency}, però ja no accepten aquesta moneda. La nova moneda suggerida és {accepted_currency}, però podeu triar-ne una altra."
 
-msgid "Modify"
-msgstr "Modifica"
-
-msgid "Discontinue"
-msgstr "Atura't"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Actualment, esteu donant {money_amount} setmanals a {recipient_name}. El formulari següent us permet modificar o aturar el vostre donatiu."
@@ -2401,6 +2395,9 @@ msgstr "{money_amount}{small}/mes{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/any{end_small}"
+
+msgid "Modify"
+msgstr "Modifica"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3257,8 +3254,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "Cal que {link_open}confirmeu l'adreça electrònica{link_close} abans de poder començar a rebre donacions."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Cal que {link_open}empleneu el perfil{link_close} per a poder començar a rebre donatius."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Per a rebre donatius cal que connecteu almenys un compte d'un dels processadors de pagament admesos. Aquesta pàgina us ho permet fer."
@@ -4138,6 +4139,9 @@ msgstr "Les comissions de processament de pagaments habitualment són inferiors 
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe us permet renovar els donatius de forma automàtica, mentre que actualment PayPal requereix que els donants confirmin cada pagament."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe permet fer donatius a diferents creadors a la vegada en alguns casos, mentre que PayPal sempre requereix pagaments per separat."

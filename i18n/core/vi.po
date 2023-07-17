@@ -2095,14 +2095,6 @@ msgstr "Khoản đóng góp hiện tại của bạn cho {name} ở {currency}, 
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Khoản đóng góp hiện tại của bạn cho {name} bằng {currency}, nhưng họ không còn chấp nhận đơn vị tiền tệ đó nữa. Đơn vị tiền tệ mới được đề xuất là {accepted_currency}, nhưng bạn có thể chọn một đơn vị tiền tệ khác."
 
-#, fuzzy
-msgid "Modify"
-msgstr "Chỉnh sửa"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "Ngừng"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Bạn hiện đang quyên góp {money_amount} mỗi tuần cho {recipient_name}. Biểu mẫu dưới đây cho phép bạn sửa đổi hoặc ngừng đóng góp của mình."
@@ -2819,6 +2811,10 @@ msgstr "{money_amount} {small} / tháng {end_small}"
 #, fuzzy, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount} {small} / năm {end_small}"
+
+#, fuzzy
+msgid "Modify"
+msgstr "Chỉnh sửa"
 
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3816,9 +3812,13 @@ msgstr "{username} không phải là thành viên của bất kỳ đội nào."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Bạn phải {link_open}xác nhận địa chỉ email của mình{link_close} trước khi có thể bắt đầu nhận quyên góp."
 
-#, fuzzy, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Bạn phải {link_open} điền vào hồ sơ của mình {link_close} trước khi có thể bắt đầu nhận các khoản đóng góp."
+#, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4828,6 +4828,9 @@ msgstr "Phí xử lý thanh toán với Stripe thường thấp hơn so với Pa
 #, fuzzy
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe cho phép tự động gia hạn các khoản đóng góp, trong khi PayPal hiện yêu cầu các nhà tài trợ xác nhận mọi khoản thanh toán."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 #, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."

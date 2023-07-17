@@ -1803,12 +1803,6 @@ msgstr "{name} için yaptığınız şu anki bağış {currency} para biriminde,
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "{name} için yaptığınız şu anki bağış {currency} para biriminde, ancak artık bu para birimini kabul etmiyorlar. Önerilen yeni para birimi {accepted_currency}, ancak başka bir para birimi de seçebilirsiniz."
 
-msgid "Modify"
-msgstr "Değiştir"
-
-msgid "Discontinue"
-msgstr "Durdur"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Şu anda {recipient_name} için haftalık {money_amount} tutarında bağışta bulunuyorsunuz. Aşağıdaki form, bağışınızı değiştirmenize veya durdurmanıza olanak tanır."
@@ -2401,6 +2395,9 @@ msgstr "{money_amount}{small}/ay{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/yıl{end_small}"
+
+msgid "Modify"
+msgstr "Değiştir"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3257,8 +3254,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "Bağış almaya başlayabilmeniz için {link_open}e-posta adresinizi doğrulamanız{link_close} gerekiyor."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Bağış almaya başlayabilmeniz için {link_open}profilinizi doldurmanız{link_close} gerekiyor."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Bağış almak için desteklenen bir ödeme işleyicisinden en az bir hesap bağlamanız gerekiyor. Bu sayfa bunu yapmanıza izin verir."
@@ -4137,6 +4138,9 @@ msgstr "Stripe ile ödeme işlem ücretleri genellikle PayPal'dan daha düşükt
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe bağışların otomatik olarak yenilenmesine izin verirken, PayPal şu anda bağışçıların her ödemeyi onaylamasını gerektiriyor."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe bazı durumlarda aynı anda birden fazla içerik oluşturucuya bağış yapılmasına izin verirken, PayPal her zaman ayrı ödemeler gerektiriyor."

@@ -1803,12 +1803,6 @@ msgstr "Η τρέχουσα δωρεά σας στο {name} είναι σε {cur
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Η τρέχουσα δωρεά σας στο {name} είναι σε {currency}, αλλά δεν δέχονται πλέον αυτό το νόμισμα. Το προτεινόμενο νέο νόμισμα είναι το {accepted_currency}, αλλά μπορείτε να επιλέξετε ένα άλλο."
 
-msgid "Modify"
-msgstr "Τροποποιήσετε"
-
-msgid "Discontinue"
-msgstr "Διακόψτε το"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Αυτή τη στιγμή κάνετε δωρεά {money_amount} την εβδομάδα στο {recipient_name}. Η παρακάτω φόρμα σας επιτρέπει να τροποποιήσετε ή να σταματήσετε τη δωρεά σας."
@@ -2401,6 +2395,9 @@ msgstr "{money_amount} {small}/μήνας{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount} {small}/έτος{end_small}"
+
+msgid "Modify"
+msgstr "Τροποποιήσετε"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3257,8 +3254,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "Πρέπει να {link_open}επιβεβαιώσετε τη διεύθυνση ηλεκτρονικού ταχυδρομείου σας{link_close} πριν αρχίσετε να λαμβάνετε δωρεές."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Πρέπει να {link_open}συμπληρώσετε το προφίλ σας{link_close} πριν αρχίσετε να λαμβάνετε δωρεές."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Για να λαμβάνετε δωρεές πρέπει να συνδέσετε τουλάχιστον έναν λογαριασμό από έναν υποστηριζόμενο επεξεργαστή πληρωμών. Αυτή η σελίδα σας επιτρέπει να το κάνετε."
@@ -4137,6 +4138,9 @@ msgstr "Τα τέλη επεξεργασίας πληρωμών είναι συ�
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Το Stripe επιτρέπει την αυτόματη ανανέωση των δωρεών, ενώ το PayPal απαιτεί επί του παρόντος από τους δωρητές να επιβεβαιώνουν κάθε πληρωμή."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Το Stripe επιτρέπει τη δωρεά σε πολλαπλούς δημιουργούς ταυτόχρονα σε ορισμένες περιπτώσεις, ενώ το PayPal απαιτεί πάντα ξεχωριστές πληρωμές."

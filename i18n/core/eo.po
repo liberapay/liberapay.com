@@ -1803,12 +1803,6 @@ msgstr "Via nuna donaco al {name} estas per {currency}, sed ili nune nur akcepta
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Via nuna donaco al {name} estas per {currency}, sed ili ne plu akceptas tiun valuton. La proponita nova valuto estas la {accepted_currency}, sed vi povas elekti alian."
 
-msgid "Modify"
-msgstr "Ŝanĝi"
-
-msgid "Discontinue"
-msgstr "Ĉesigi"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Vi nune donacas {money_amount} semajne al {recipient_name}. La jena formularo ebligas al vi ŝanĝi aŭ ĉesigi vian donacon."
@@ -2401,6 +2395,9 @@ msgstr "{money_amount}{small}/monato{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/jaro{end_small}"
+
+msgid "Modify"
+msgstr "Ŝanĝi"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3257,8 +3254,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "Vi devas {link_open}konfirmi vian retadreson{link_close} antaŭ ol vi povas komenci ricevi donacojn."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Vi devas {link_open}plenigi vian profilon{link_close} antaŭ vi povas ekricevi donacojn."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Por ricevi donacojn vi devas konekti minimume unu konton de subtenita provizanto de pagservo. Vi povas fari tion en ĉi tiu paĝo."
@@ -4137,6 +4138,9 @@ msgstr "La kostoj de la provizanto de pagservo kutime estas pli malgranda kun St
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe subtenas la aŭtomatan refarigon de donacoj, dum PayPal nun bezonas, ke donantoj konfirmu ĉiun pagon."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe subtenas doni al multaj kreantoj samtempe en iaj okazoj, dum PayPal ĉiam bezonas apartajn pagojn."

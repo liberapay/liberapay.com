@@ -2133,14 +2133,6 @@ msgstr "Tá do síntiús reatha do {name} in {currency}, ach ní ghlacann siad a
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Tá do síntiús reatha chuig {name} in {currency}, ach ní ghlacann siad leis an airgeadra sin a thuilleadh. Is é an {accepted_currency} an t-airgeadra nua molta, ach is féidir leat ceann eile a roghnú."
 
-#, fuzzy
-msgid "Modify"
-msgstr "Athraigh"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "Stad"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Tá {money_amount} in aghaidh na seachtaine á bhronnadh agat ar {recipient_name} faoi láthair. Cuireann an fhoirm thíos ar do chumas do dheonachán a mhodhnú nó a stopadh."
@@ -2862,6 +2854,10 @@ msgstr "{money_amount}{small}/mí{end_small}"
 #, fuzzy, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/bliain{end_small}"
+
+#, fuzzy
+msgid "Modify"
+msgstr "Athraigh"
 
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3870,9 +3866,13 @@ msgstr "Ní ball d’fhoireann ar bith é {username}."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Caithfidh tú {link_open}do sheoladh ríomhphoist a dheimhniú{link_close} sular féidir leat tosú ag fáil síntiúis."
 
-#, fuzzy, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Caithfidh tú {link_open}do phróifíl{link_close} a líonadh sular féidir leat tosú ar thabhartais a fháil."
+#, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4901,6 +4901,9 @@ msgstr "Is gnách go mbíonn na táillí próiseála íocaíochta níos ísle le
 #, fuzzy
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Ceadaíonn Stripe síntiúis a athnuachan go huathoibríoch, ach éilíonn PayPal faoi láthair ar dheontóirí gach íocaíocht a dhearbhú."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 #, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."

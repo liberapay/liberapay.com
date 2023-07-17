@@ -2142,14 +2142,6 @@ msgstr "Jūsu pašreizējais ziedojums portālam {name} ir izteikts {currency}, 
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Jūsu pašreizējais ziedojums portālam {name} ir {currency}, bet viņi vairs nepieņem šo valūtu. Ierosinātā jaunā valūta ir {accepted_currency}, bet jūs varat izvēlēties citu valūtu."
 
-#, fuzzy
-msgid "Modify"
-msgstr "Modify"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "Pārtraukt"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Pašlaik jūs ziedojat {money_amount} nedēļā portālam {recipient_name}. Izmantojot zemāk redzamo veidlapu, jūs varat mainīt vai pārtraukt ziedojumu."
@@ -2880,6 +2872,10 @@ msgstr "{money_amount}{small}/mēnesis{end_small}"
 #, fuzzy, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/gadā{end_small}"
+
+#, fuzzy
+msgid "Modify"
+msgstr "Modify"
 
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3901,9 +3897,13 @@ msgstr "{username} nav nevienas komandas biedrs."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Pirms sākat saņemt ziedojumus, jums ir jāapstiprina {link_open}e-pasta adrese{link_close}."
 
-#, fuzzy, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Pirms sākat saņemt ziedojumus, jums ir jāaizpilda {link_open}profils{link_close}."
+#, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4934,6 +4934,9 @@ msgstr "Maksājumu apstrādes maksa ar Stripe parasti ir zemāka nekā ar PayPal
 #, fuzzy
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe ļauj automātiski atjaunot ziedojumus, savukārt PayPal pašlaik pieprasa, lai ziedotāji apstiprina katru maksājumu."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 #, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."

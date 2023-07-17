@@ -1803,12 +1803,6 @@ msgstr "Ihre derzeitige Spende an {name} ist in {currency}, aber sie nehmen nur 
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Ihre aktuelle Spende an {name} ist in {currency}, aber diese Währung wird von dieser Person nicht mehr akzeptiert. Die vorgeschlagene neue Währung ist {accepted_currency}, aber Sie können auch eine andere wählen."
 
-msgid "Modify"
-msgstr "Ändern"
-
-msgid "Discontinue"
-msgstr "Beenden"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Sie spenden derzeit {money_amount} pro Woche an {recipient_name}. Mit dem nachstehenden Formular können Sie Ihre Spende ändern oder einstellen."
@@ -2401,6 +2395,9 @@ msgstr "{money_amount}{small}/Monat{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/Jahr{end_small}"
+
+msgid "Modify"
+msgstr "Ändern"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3259,8 +3256,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "Sie müssen {link_open}Ihre E-Mail-Adresse bestätigen{link_close}, bevor Sie mit dem Empfang von Spenden beginnen können."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Sie müssen {link_open}Ihr Profil vervollständigen{link_close}, bevor Sie Spenden empfangen können."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Um Spenden empfangen zu können, müssen Sie ihr Konto mit mindestens einem Zahlungsdienstleister verknüpfen. Dies können Sie hier machen."
@@ -4140,6 +4141,9 @@ msgstr "Die Gebühren für die Zahlungsabwicklung sind bei Stripe in der Regel n
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe ermöglicht die automatische Erneuerung von Spenden, wohingegen PayPal derzeit von den Spender*innen verlangt, jede Zahlung einzeln zu bestätigen."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe ermöglicht es in einigen Fällen, an mehrere Erstellende gleichzeitig zu spenden, wohingegen PayPal immer separate Zahlungen erfordert."

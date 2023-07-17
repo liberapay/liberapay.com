@@ -1788,12 +1788,6 @@ msgstr "您当前向 {name} 的捐赠是以 {currency} 进行的，但受捐方�
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "您当前向 {name} 的捐赠以 {currency} 进行，但受捐方不再接受该币种。建议的新币种为 {accepted_currency}，但您也可以选择其他币种。"
 
-msgid "Modify"
-msgstr "修改"
-
-msgid "Discontinue"
-msgstr "终止"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "您当前每周捐赠 {money_amount} 给 {recipient_name}。下面的表格允许您修改或停止您的捐赠。"
@@ -2379,6 +2373,9 @@ msgstr "{money_amount}{small}/月{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/年{end_small}"
+
+msgid "Modify"
+msgstr "修改"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3223,8 +3220,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "你必须{link_open}确认你的电子邮件地址{link_close} ，然后才能开始接收捐款。"
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "在开始收取捐款前，您必须填写{link_open}资料页面{link_close}。"
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "若要收取捐款，您须连接至少一个受支持的支付渠道账户。您可通过此页面进行连接。"
@@ -4093,6 +4094,9 @@ msgstr "通常 Stripe 的手续费低于 PayPal。"
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe 允许自动续约捐款，而 PayPal 目前要求捐款人确认每笔付款。"
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "在某些情况下，Stripe 允许同时向多个创作者捐款，而 PayPal 始终需要分别付款。"

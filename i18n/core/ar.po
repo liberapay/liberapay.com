@@ -2045,13 +2045,6 @@ msgstr "تبرعك الحالي لـ {name} موجود في {currency} ، لكن
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "تبرعك الحالي لـ {name} في {currency} ، لكنهم لم يعدوا يقبلون هذه العملة. العملة الجديدة المقترحة هي {accepted_currency} ، لكن يمكنك اختيار عملة أخرى."
 
-msgid "Modify"
-msgstr "تعديل"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "توقف"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "أنت تتبرع حاليًا بـ {money_amount} أسبوعيًا لـ {recipient_name}. يمكّنك النموذج أدناه من تعديل تبرعك أو إيقافه."
@@ -2785,6 +2778,9 @@ msgstr "{money_amount} {small} / شهر {end_small}"
 #, fuzzy, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount} {small} / سنة {end_small}"
+
+msgid "Modify"
+msgstr "تعديل"
 
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3827,9 +3823,13 @@ msgstr "{username} ليس عضوًا في أي فريق."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "يجب عليك {link_open} تأكيد عنوان بريدك الإلكتروني {link_close} قبل أن تتمكن من البدء في تلقي التبرعات."
 
-#, fuzzy, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "يجب عليك {link_open} ملء ملف التعريف الخاص بك {link_close} قبل أن تتمكن من البدء في تلقي التبرعات."
+#, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4873,6 +4873,9 @@ msgstr "عادة ما تكون رسوم معالجة الدفع أقل مع Stri
 #, fuzzy
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "يسمح Stripe بتجديد التبرعات تلقائيًا ، بينما يطلب PayPal حاليًا من المانحين تأكيد كل دفعة."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 #, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."

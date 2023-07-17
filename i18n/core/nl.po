@@ -1803,12 +1803,6 @@ msgstr "Uw huidige donatie aan {name} is in {currency}, maar ze accepteren nu al
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Uw huidige donatie aan {name} is in {currency}, maar die valuta wordt niet langer geaccepteerd. De voorgestelde nieuwe valuta is {accepted_currency}, maar u kunt ook een andere kiezen."
 
-msgid "Modify"
-msgstr "Bewerken"
-
-msgid "Discontinue"
-msgstr "Beëindig"
-
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "U doneert momenteel {money_amount} per week aan {recipient_name}. Met onderstaand formulier kunt u uw donatie wijzigen of stopzetten."
@@ -2401,6 +2395,9 @@ msgstr "{money_amount}{small}/maand{end_small}"
 #, python-brace-format
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/jaar{end_small}"
+
+msgid "Modify"
+msgstr "Bewerken"
 
 #, python-brace-format
 msgid "Started {timespan_ago}."
@@ -3257,8 +3254,12 @@ msgid "You have to {link_open}confirm your email address{link_close} before you 
 msgstr "U moet {link_open}uw e-mailadres{link_close} bevestigen voordat u donaties kunt ontvangen."
 
 #, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "U moet {link_open}uw profiel invullen{link_close} voordat u donaties kunt ontvangen."
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr ""
+
+#, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr ""
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Om donaties te ontvangen moet u ten minste één account van een ondersteunde betalingsprocessor aansluiten. Op deze pagina kunt u dit doen."
@@ -4138,6 +4139,9 @@ msgstr "De kosten voor het verwerken van de betaling zijn meestal lager bij Stri
 
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe maakt het mogelijk om donaties automatisch te verlengen, terwijl PayPal momenteel vereist dat donoren elke betaling bevestigen."
+
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr ""
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe maakt het mogelijk om in sommige gevallen aan meerdere makers tegelijk te doneren, terwijl PayPal altijd afzonderlijke betalingen vereist."
