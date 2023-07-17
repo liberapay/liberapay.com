@@ -76,7 +76,12 @@ has_paypal_but_not_stripe = (
     country in constants.PAYOUT_COUNTRIES['stripe']
 )
 
-allow_connect = participant.email is not None and participant.username[0] != '~'
+has_statement = len(participant.get_statement_langs()) > 0
+allow_connect = (
+    participant.email is not None and
+    participant.username[0] != '~' and
+    has_statement
+)
 
 if participant.payment_providers > 0:
     participant.mark_notifications_as_read('payment_account_required')
@@ -100,9 +105,16 @@ subhead = _("Payment Processors")
         ) }}</p>
     % elif participant.username[0] == '~'
         <p class="alert alert-warning">{{ _(
-            "You have to {link_open}fill your profile{link_close} before you can "
+            "You have to {link_open}set your username{link_close} before you can "
             "start to receive donations."
             , link_open=('<a href="%s">'|safe) % participant.path('edit/username')
+            , link_close='</a>'|safe
+        ) }}</p>
+    % elif not has_statement
+        <p class="alert alert-warning">{{ _(
+            "You have to {link_open}add a profile description{link_close} before "
+            "you can start to receive donations."
+            , link_open=('<a href="%s">'|safe) % participant.path('edit/statement')
             , link_close='</a>'|safe
         ) }}</p>
     % endif

@@ -83,7 +83,7 @@ elif 'state' in request.qs:
     connect_to = Participant.from_id(p_id) if isinstance(p_id, int) else user
     if not user.controls(connect_to):
         raise response.error(403, "can't connect to an account you don't control")
-    if not connect_to.email or connect_to.username[0] == '~':
+    if not connect_to.email or connect_to.username[0] == '~' or not connect_to.get_statement_langs():
         raise response.redirect(back_to)
 
     # Request the OAuth token

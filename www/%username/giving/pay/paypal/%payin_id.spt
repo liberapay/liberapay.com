@@ -42,7 +42,7 @@ if request.method == 'POST':
            AND p.payment_providers & %s > 0
       ORDER BY t.id
     """, (payer.id, set(body.parse_list('tips', int)), PAYPAL_BIT))
-    if len(set(tip.amount.currency for tip in tips)) != 1:
+    if set(tip.amount.currency for tip in tips) != {payin_amount.currency}:
         raise response.invalid_input(body.get('tips'), 'tips', 'body')
     if len(tips) > 1:
         raise response.error(400, "We don't support one-to-many payments through PayPal yet.")

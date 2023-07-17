@@ -62,6 +62,7 @@ title = "Payments Admin"
 
 <ul class="nav nav-pills">{{ querystring_nav('status', [
     (None, "All"),
+    ('awaiting_review', "Awaiting review"),
     ('failed', "Failed"),
     ('pending', "Pending"),
     ('succeeded', "Succeeded"),

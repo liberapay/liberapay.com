@@ -51,7 +51,7 @@ if request.method == 'POST':
            AND p.payment_providers & %s > 0
       ORDER BY t.id
     """, (payer.id, set(body.parse_list('tips', int)), STRIPE_BIT))
-    if len(set(tip.amount.currency for tip in tips)) != 1:
+    if set(tip.amount.currency for tip in tips) != {payin_amount.currency}:
         raise response.invalid_input(body.get('tips'), 'tips', 'body')
 
     prospect = PayinProspect(payer, tips, 'stripe')
@@ -254,13 +254,6 @@ elif not payin_id:
 
 if user == payer:
     payer.mark_notifications_as_read('donate_reminder')
-
-# https://stripe.com/docs/security#content-security-policy
-csp = response.headers[b'Content-Security-Policy']
-csp = csp.allow(b'connect-src', b"api.stripe.com")
-csp = csp.allow(b'frame-src', b"js.stripe.com hooks.stripe.com")
-csp = csp.allow(b'script-src', b"js.stripe.com")
-response.headers[b'Content-Security-Policy'] = csp
 
 title = _("Funding your donations")
 
@@ -578,5 +571,6 @@ title = _("Funding your donations")
 % endblock
 
 % block scripts
+    % do response.csp_allow_stripe()
     <script src="https://js.stripe.com/v3/"></script>
 % endblock
