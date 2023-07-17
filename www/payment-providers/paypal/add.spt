@@ -6,7 +6,7 @@ participant = user
 
 user.require_write_permission()
 
-if not participant.email or participant.username[0] == '~':
+if not participant.email or participant.username[0] == '~' or not participant.get_statement_langs():
     raise response.redirect(participant.path('payment/'))
 
 if request.method == 'POST':
