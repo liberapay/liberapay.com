@@ -1187,9 +1187,8 @@ msgstr "Ülesvoolu viga"
 msgid "Service Unavailable"
 msgstr "Teenus pole kättesaadav"
 
-#, fuzzy
 msgid "Gateway Timeout"
-msgstr "Gateway Timeout"
+msgstr "Gateway ei vasta"
 
 #, fuzzy, python-brace-format
 msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's not possible to create a stub profile for them."
@@ -1413,9 +1412,8 @@ msgstr "Jätkake"
 msgid "You need an account for this. Please fill one of the forms below."
 msgstr "Selleks on vaja kontot. Palun täitke üks allolevatest vormidest."
 
-#, fuzzy
 msgid "Create an account"
-msgstr "Create an account"
+msgstr "Loo konto"
 
 #, fuzzy
 msgid "Use an existing account"
@@ -1647,9 +1645,8 @@ msgstr "Parooli määramine võimaldab teil otse sisse logida, selle asemel et o
 msgid "Current password"
 msgstr "Old password"
 
-#, fuzzy
 msgid "New password"
-msgstr "New password"
+msgstr "Uus salasõna"
 
 #, fuzzy
 msgid "Unset password"
@@ -1984,9 +1981,8 @@ msgstr "Uuendatud sel nädalal"
 msgid "Updated {timespan_ago}"
 msgstr "Uuendatud {timespan_ago}"
 
-#, fuzzy
 msgid "Unlist"
-msgstr "Unlist"
+msgstr "Eemalda loendist"
 
 #, fuzzy
 msgid "Show on your profile"
@@ -2833,9 +2829,8 @@ msgstr "Ootab makse lõpuleviimist."
 msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
 msgstr "Selle annetuse rahastamiseks peate algatama uue makse. Jätkamiseks klõpsake alloleval nupul."
 
-#, fuzzy
 msgid "Renew"
-msgstr "Renew"
+msgstr "Uuenda"
 
 #, fuzzy
 msgid "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
@@ -3635,9 +3630,8 @@ msgstr "Te olete sellest kutsest juba keeldunud."
 msgid "You are not a member of this team."
 msgstr "Te ei ole selle meeskonna liige."
 
-#, fuzzy
 msgid "User not found."
-msgstr "Sellist kasutajat ei leidu!"
+msgstr "Kasutajat ei leitud."
 
 #, fuzzy
 msgid "A team can't join a team"
@@ -3797,13 +3791,13 @@ msgstr "{username} ei ole ühegi meeskonna liige."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Enne annetuste vastuvõtmise alustamist peate {link_open}kinnitama oma e-posti aadressi{link_close}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr ""
+msgstr "Enne annetuste vastuvõtmist peate {link_open} määrama oma kasutajanime{link_close}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr ""
+msgstr "Enne annetuste vastuvõtmist peate {link_open}lisama profiilikirjelduse{link_close}."
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4821,8 +4815,9 @@ msgstr "Maksete töötlemise tasud on Stripe'i puhul tavaliselt madalamad kui Pa
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe võimaldab annetusi automaatselt uuendada, samas kui PayPal nõuab praegu, et annetajad kinnitaksid iga makse."
 
+#, fuzzy
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr ""
+msgstr "Stripe'i kaudu tehtud annetused võivad olla salajased, samas kui PayPal võimaldab annetajatel ja abisaajatel alati üksteise nimesid ja e-posti aadresse näha."
 
 #, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
