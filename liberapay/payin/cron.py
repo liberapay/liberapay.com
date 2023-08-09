@@ -334,7 +334,7 @@ def execute_scheduled_payins():
                     force_email=True,
                 )
                 counts['renewal_unauthorized'] += 1
-                return
+                continue
             if payin.status == 'failed' and route.status == 'expired':
                 can_retry = db.one("""
                     SELECT count(*) > 0
