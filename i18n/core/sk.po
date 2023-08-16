@@ -229,7 +229,7 @@ msgstr "Máte platbu {amount} naplánovanú na {payment_date} aby ste obnovili p
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
-msgstr[1] "Máte {n} naplánované platby pre obnovenie bašeho príspevku, ale nie sme schopní ich spracovať, pretože chýba platná platobná metóda."
+msgstr[1] "Máte {n} naplánované platby pre obnovenie vašeho príspevku, ale nie sme schopní ich spracovať, pretože chýba platná platobná metóda."
 msgstr[2] "Máte {n} naplánovaných platieb pre obnovenie vašeho príspevku, ale nie sme schopní ich spracovať, pretože chýba platná platobná metóda."
 
 msgid "The payment dates, amounts and recipients are:"
@@ -1629,7 +1629,7 @@ msgid "Overview"
 msgstr "Prehľad"
 
 msgid "Organizations"
-msgstr "Organizácia"
+msgstr "Organizácie"
 
 msgid "Individuals"
 msgstr "Jednotlivci"
@@ -1928,7 +1928,7 @@ msgstr "Všetci uvidia, že podporujete {username}."
 
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
-msgstr "{username} zatiaľ neuviedol, či chce vidieť, kto sú jeho patróni, takže váš príspevok bude tajný."
+msgstr "{username} zatiaľ neuviedol, či chce vidieť, kto sú jeho darcovia, takže váš príspevok bude tajný."
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Ľudia, ktorí prispievajú spoločnosti, potrebujú podporu pre svoju prácu. Činnosti ako sú tvorba slobodného software, alebo bezplatné rozširovanie znalostí, zaberajú čas a stoja peniaze. Nie len ich tvorba, ale aj ich údržba v priebehu času."
@@ -2446,7 +2446,7 @@ msgstr "Aktívny"
 
 #, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Ďalšia platba {in_N_weeks_months_or_years}."
+msgstr "Ďalšia platba je splatná {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Obnoviť teraz"
@@ -2711,8 +2711,8 @@ msgstr "(odporúčané, malé poplatky)"
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
 msgstr[0] "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
-msgstr[1] "Ďalšia platba v {n} týždňoch ({timedelta})."
-msgstr[2] "Ďalšia platba v {n} týždňoch ({timedelta})."
+msgstr[1] "Ďalšia platba v {n} týždňoch ({timedelta})"
+msgstr[2] "Ďalšia platba v {n} týždňoch ({timedelta})"
 
 #, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
@@ -3287,13 +3287,13 @@ msgstr "{username} nie je členom žiadneho tímu."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Ak chcete začať prijímať dary, musíte {link_open}potvrdiť svoju e-mailovú adresu{link_close}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "Pred prijímaním darov si musíte {link_open}nastaviť svoje používateľské meno{link_close}."
+msgstr "{link_close} Predtým, ako začnete prijímať dary, musíte nastaviť svoje používateľské meno {link_open}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr "Než budete môcť začať prijímať dary, musíte {link_open}pridať popis profilu{link_close}."
+msgstr "Musíte si {link_open}pridať popis profilu{link_close} predtým ako začnete príjímať príspevky."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Na prijímanie príspevkov musíte pripojiť aspoň jeden účet podporovaného platobného systému."
@@ -4183,9 +4183,8 @@ msgstr "Poplatky za spracovanie platby sú nižšie v službe Stripe ako v služ
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe umožňuje automatické obnovenie darov, zatiaľ čo PayPal v súčasnosti vyžaduje, aby darcovia potvrdili každú platbu."
 
-#, fuzzy
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr "Dary cez Stripe môžu byť tajné, zatiaľ čo PayPal vždy umožňuje darcom a príjemcom vidieť si navzájom mená a e-mailové adresy."
+msgstr "Dary cez Stripe môžu byť tajné, zatiaľ čo PayPal vždy umožňuje darcom a príjemcom vidieť svoje mená a emailové adresy."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe umožňuje darovanie viacerým tvorcom naraz v niektorých prípadoch, zatiaľ čo PayPal vyžaduje samostatné platby."
@@ -4528,9 +4527,9 @@ msgstr[2] "Táto stránka ukazuje {n} Liberapay užívateľov, ktorý majú prip
 #, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
 msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
-msgstr[0] "Tu je {n} Liberapay užívateľ, ktorý má pripojený jeho {0} účet:"
-msgstr[1] "Tu sú {n} Liberapay užívatelia, ktorý majú pripojený ich {0} účet:"
-msgstr[2] "Tu sú {n} Liberapay užívatelia, ktorý majú pripojený och {0} účet:"
+msgstr[0] "Tu je {n} Liberapay užívateľ, ktorý má pripojený {0} účet:"
+msgstr[1] "Tu sú {n} Liberapay užívatelia, ktorý majú pripojený {0} účet:"
+msgstr[2] "Tu sú {n} Liberapay užívatelia, ktorý majú pripojený {0} účet:"
 
 msgid "Explore other platforms:"
 msgstr "Preskúmajte ďalšie platformy:"
