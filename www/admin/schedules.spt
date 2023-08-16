@@ -118,9 +118,9 @@ title = "Scheduled Payments Admin"
             % else
             <td class="text-muted">n/a</td>
             % endif
-            % set percent_automatic_executed = row.n_automatic_executed / row.n_automatic * 100
+            % set percent_automatic_executed = row.n_automatic_executed / row.n_automatic * 100 if row.n_automatic else 0
             <td{% if row.n_automatic >= 100 and percent_automatic_executed < 90 and row.execution_date < today %} class="warning" {% endif %}>{{ '%.1f' % percent_automatic_executed }}</td>
-            % set percent_manual_executed = row.n_manual_executed / row.n_manual * 100
+            % set percent_manual_executed = row.n_manual_executed / row.n_manual * 100 if row.n_manual else 0
             <td>{{ '%.1f' % percent_manual_executed }}</td>
             % set percent_blocked = row.n_blocked / row.n_all * 100
             <td{% if row.n_all >= 100 and percent_blocked >= 15 %} class="warning" {% endif %}>{{ '%.1f' % percent_blocked }}</td>
