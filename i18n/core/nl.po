@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Dutch "
-"<https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2023-08-25 21:56+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -446,7 +448,7 @@ msgid "You're missing out on donations through Liberapay"
 msgstr "U loopt donaties mis via Liberapay"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr "Uw patroons kunnen u momenteel geen geld sturen via Liberapay, omdat de betalingsverwerking voor uw account niet is ingesteld."
+msgstr "Uw donateurs kunnen u momenteel geen geld sturen via Liberapay, omdat de betalingsverwerking voor uw account niet is ingesteld."
 
 msgid "Configure payment processing"
 msgstr "Configureer betalingsverwerking"
@@ -607,7 +609,7 @@ msgid "Confirm the payment"
 msgstr "Bevestig de betaling"
 
 msgid "You can make it easier for your patrons to support you through Liberapay"
-msgstr "U kunt het uw patroons gemakkelijker maken om u te ondersteunen via Liberapay"
+msgstr "U kunt het uw donateurs gemakkelijker maken om u te ondersteunen via Liberapay"
 
 #, python-brace-format
 msgid "You've connected a PayPal account but no Stripe account. We strongly recommend that you also connect a Stripe account, because it's {link_open}better than PayPal{link_close} in several ways, for both you and your donors."
@@ -1368,7 +1370,7 @@ msgid "Receiving"
 msgstr "Ontvangen"
 
 msgid "Patrons"
-msgstr "Patroons"
+msgstr "Donateurs"
 
 msgid "Payment Processors"
 msgstr "Betalingsverwerkers"
@@ -1403,8 +1405,8 @@ msgstr "Afdrukken"
 #, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] "{0} heeft {n} patroon."
-msgstr[1] "{0} heeft {n} patroons."
+msgstr[0] "{0} heeft {n} donateur."
+msgstr[1] "{0} heeft {n} donateurs."
 
 #, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
@@ -1413,8 +1415,8 @@ msgstr "{0}'s doel is om {1} te ontvangen per week."
 #, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] "{0} ontvangt {1} per week van {n} patroon."
-msgstr[1] "{0} ontvangt {1} per week van {n} patroons."
+msgstr[0] "{0} ontvangt {1} per week van {n} donateur."
+msgstr[1] "{0} ontvangt {1} per week van {n} donateurs."
 
 #, python-brace-format
 msgid "Goal: {0}"
@@ -1859,7 +1861,7 @@ msgid "Automatic renewal"
 msgstr "Automatische verlenging"
 
 msgid "We'll attempt to charge your card or bank account. You will be notified at least two days before."
-msgstr "We zullen proberen uw kaart of bankrekening te belasten. U wordt ten minste twee dagen van tevoren op de hoogte gesteld."
+msgstr "We zullen proberen met uw credit card of bankrekening te betalen. U wordt ten minste twee dagen van tevoren op de hoogte gesteld."
 
 msgid "Manual renewal"
 msgstr "Handmatige verlenging"
@@ -1875,32 +1877,32 @@ msgstr "Annuleer de toezegging"
 
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
-msgstr "{username} heeft ervoor gekozen niet te zien wie hun patroons zijn, dus uw donatie zal geheim zijn."
+msgstr "{username} heeft ervoor gekozen niet te zien wie hun donateurs zijn, dus uw donatie zal geheim zijn."
 
 #, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr "Deze donatie zal niet geheim zijn, u komt in {username}'s privélijst van patroons."
+msgstr "Deze donatie zal niet geheim zijn, u komt in {username}'s privélijst van donateurs."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
-msgstr "Als {username} bekend maakt wie hun patroons zijn, zal uw donatie openbaar zijn."
+msgstr "Als {username} bekend maakt wie hun donateurs zijn, zal uw donatie openbaar zijn."
 
 msgid "Please select a privacy level for this donation:"
-msgstr "Selecteer een privacy niveau voor deze donatie:"
+msgstr "Selecteer een privacyniveau voor deze donatie:"
 
 msgid "Secret donation"
-msgstr "Geheime donatie"
+msgstr "Anonieme donatie"
 
 #, python-brace-format
 msgid "Only you will know that you donate to {username}."
 msgstr "Alleen u zult weten dat u doneert aan {username}."
 
 msgid "Private donation"
-msgstr "Privé donatie"
+msgstr "Privédonatie"
 
 #, python-brace-format
 msgid "You will appear in {username}'s private list of patrons."
-msgstr "U zult verschijnen in {username}'s privélijst van patroons."
+msgstr "U zult verschijnen in {username}'s privélijst van donateurs."
 
 msgid "Public donation"
 msgstr "Publieke donatie"
@@ -1911,7 +1913,7 @@ msgstr "Iedereen zal kunnen zien dat u {username} steunt."
 
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
-msgstr "{username} heeft nog niet aangegeven of ze willen zien wie hun patroons zijn, dus uw donatie zal geheim zijn."
+msgstr "{username} heeft nog niet aangegeven of hen wil zien wie de donateurs zijn, dus uw donatie zal geheim zijn."
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Mensen die bijdragen aan het gemeenschappelijke hebben uw hulp nodig. Het bouwen van vrije software of het verspreiden van vrije kennis kost tijd en geld. Niet alleen om het op te starten, maar ook om het te onderhouden."
@@ -1943,8 +1945,8 @@ msgstr "Dit account is tijdelijk opgeschort, donaties aan zal het niet worden ve
 #, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] "{username} heeft op dit moment {n} patroon klaar staan om hen te steunen."
-msgstr[1] "{username} heeft op dit moment {n} patroons klaar staan om hen te steunen."
+msgstr[0] "{username} heeft op dit moment {n} donateur klaar staan om hen te steunen."
+msgstr[1] "{username} heeft op dit moment {n} donateurs klaar staan om hen te steunen."
 
 #, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2312,7 +2314,7 @@ msgid "Primary"
 msgstr "Primair"
 
 msgid "Disavowed"
-msgstr "Afgewezen"
+msgstr "Niet erkend"
 
 msgid "Unverified"
 msgstr "Niet geverifieerd"
@@ -2424,7 +2426,7 @@ msgstr "Actief"
 
 #, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Volgende betaling {in_N_weeks_months_or_years}."
+msgstr "Volgende betaling verschuldigd {in_N_weeks_months_or_years}."
 
 msgid "Renew now"
 msgstr "Nu vernieuwen"
@@ -2793,14 +2795,14 @@ msgstr "exporteer als CSV"
 #, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
-msgstr[0] "{username} heeft {n} publieke patroon."
-msgstr[1] "{username} heeft {n} publieke patroons."
+msgstr[0] "{username} heeft {n} publieke donateur."
+msgstr[1] "{username} heeft {n} publieke donateurs."
 
 #, python-brace-format
 msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
 msgid_plural "The top {n} patrons are:"
-msgstr[0] "De top {n} patroon is:"
-msgstr[1] "De top {n} patroons zijn:"
+msgstr[0] "De top {n} donateur is:"
+msgstr[1] "De top {n} donateurs zijn:"
 
 #, python-brace-format
 msgid "{username} doesn't publish how much they give."
@@ -2841,7 +2843,7 @@ msgid "Income Per Week (in {currency})"
 msgstr "Inkomen per week (in {currency})"
 
 msgid "Number of Patrons Per Week"
-msgstr "Aantal patroons per week"
+msgstr "Aantal donateurs per week"
 
 msgid "Invoice documents are private."
 msgstr "Factuurdocumenten zijn privé."
@@ -3046,10 +3048,10 @@ msgstr "publieke donatie van {donor_name}"
 
 #, python-brace-format
 msgid "private donation from {donor_name}"
-msgstr "privé donatie van {donor_name}"
+msgstr "privédonatie van {donor_name}"
 
 msgid "secret donation"
-msgstr "geheime donatie"
+msgstr "anonieme donatie"
 
 #, python-brace-format
 msgid "public donation from {donor_name} for your role in the {team_name} team"
@@ -3057,11 +3059,11 @@ msgstr "publieke donatie van {donor_name} voor uw rol in het {team_name}-team"
 
 #, python-brace-format
 msgid "private donation from {donor_name} for your role in the {team_name} team"
-msgstr "privé donatie van {donor_name} voor uw rol in het {team_name}-team"
+msgstr "privédonatie van {donor_name} voor uw rol in het {team_name}-team"
 
 #, python-brace-format
 msgid "secret donation for your role in the {team_name} team"
-msgstr "geheime donatie voor uw rol in het {team_name}-team"
+msgstr "anonieme donatie voor uw rol in het {team_name}-team"
 
 #, python-brace-format
 msgid "public donation to {recipient_name}"
@@ -3069,11 +3071,11 @@ msgstr "publieke donatie aan {recipient_name}"
 
 #, python-brace-format
 msgid "private donation to {recipient_name}"
-msgstr "privé donatie aan {recipient_name}"
+msgstr "privédonatie aan {recipient_name}"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name}"
-msgstr "geheime donatie aan {recipient_name}"
+msgstr "anonieme donatie aan {recipient_name}"
 
 #, python-brace-format
 msgid "public donation to {recipient_name} for their role in the {team_name} team"
@@ -3081,11 +3083,11 @@ msgstr "publieke donatie aan {recipient_name} voor hun rol in het {team_name}-te
 
 #, python-brace-format
 msgid "private donation to {recipient_name} for their role in the {team_name} team"
-msgstr "privé donatie aan {recipient_name} voor hun rol in het {team_name}-team"
+msgstr "privédonatie aan {recipient_name} voor hun rol in het {team_name}-team"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name} for their role in the {team_name} team"
-msgstr "geheime donatie aan {recipient_name} voor hun rol in het {team_name}-team"
+msgstr "anonieme donatie aan {recipient_name} voor hun rol in het {team_name}-team"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
@@ -3191,15 +3193,15 @@ msgstr "Je moet minstens één vakje aankruisen."
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
-msgstr[0] "U heeft {n} actieve patroon die u {money_amount} per week geeft."
-msgstr[1] "U heeft {n} actieve patroons die u {money_amount} per week geven."
+msgstr[0] "U heeft {n} actieve donateur die u {money_amount} per week geeft."
+msgstr[1] "U heeft {n} actieve donateurs die u {money_amount} per week geven."
 
 msgid "You don't have any active patrons."
-msgstr "U heeft geen actieve patroons."
+msgstr "U heeft geen actieve donateurs."
 
 #, python-brace-format
 msgid "{username} doesn't have any active patrons."
-msgstr "{username} heeft geen actieve patroons."
+msgstr "{username} heeft geen actieve donateurs."
 
 msgid "Visibility levels"
 msgstr "Zichtbaarheidsniveaus"
@@ -3218,7 +3220,7 @@ msgid "Allow secret donations"
 msgstr "Anonieme donaties toestaan"
 
 msgid "Allow private donations"
-msgstr "Anonieme donaties toestaan"
+msgstr "Privédonaties toestaan"
 
 msgid "Allow public donations"
 msgstr "Publieke donaties toestaan"
@@ -3233,14 +3235,14 @@ msgid "Data export"
 msgstr "Gegevensexport"
 
 msgid "Download the list of currently active patrons"
-msgstr "Download de lijst van actieve patroons"
+msgstr "Download de lijst van actieve donateurs"
 
 msgid "Download the record of all patrons in the last ten years"
-msgstr "Download de gegevens van alle patroons van de laatste tien jaar"
+msgstr "Download de gegevens van alle donateurs van de laatste tien jaar"
 
 #, python-brace-format
 msgid "View the patrons of {username}"
-msgstr "Bekijk de patroons van {username}"
+msgstr "Bekijk de donateurs van {username}"
 
 msgid "You are not a member of any team."
 msgstr "Je bent geen lid van een team."
@@ -3977,7 +3979,7 @@ msgstr "Het minimum dat je elke gebruiker kunt geven is {0} per week, maar om de
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
-msgstr "Het maximum dat u kunt doneren is {0} per week. Dit helpt om de inkomsten te stabiliseren doordat u minder afhankelijk bent van een paar grote patroons."
+msgstr "Het maximum dat u kunt doneren is {0} per week. Dit helpt om de inkomsten te stabiliseren doordat u minder afhankelijk bent van een paar grote donateurs."
 
 msgid "Do I have to pay taxes on the income I receive from Liberapay?"
 msgstr "Moet ik belasting betalen over de inkomsten die ik ontvang uit Liberapay?"
@@ -4040,7 +4042,7 @@ msgstr "Liberapay is een manier om periodiek geld te doneren aan mensen van wie 
 
 #, python-brace-format
 msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "Aan de betalingen zijn geen voorwaarden verbonden. De ontvangers weten standaard niet wie hun patroons zijn en de donaties zijn beperkt tot {0} per week per donateur om ongepaste invloed te beperken."
+msgstr "Aan de betalingen zijn geen voorwaarden verbonden. De ontvangers weten standaard niet wie hun donateurs zijn en de donaties zijn beperkt tot {0} per week per donateur om ongepaste invloed te beperken."
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Standaard is het totale bedrag dat je opgeeft en het totale bedrag dat je ontvangt openbaar (je kan je afmelden voor het delen van deze informatie)."
@@ -4204,7 +4206,7 @@ msgid "The primary purpose of these integrations is to confirm that a Liberapay 
 msgstr "Het primaire doel van deze integraties is om te bevestigen dat een Liberapay-account niet is gecreëerd door een bedrieger die probeert te profiteren van het werk van iemand anders."
 
 msgid "The second purpose is to help patrons find the Liberapay accounts of the creators they follow on other platforms."
-msgstr "Het tweede doel is het helpen van patroons bij het vinden van de Liberapay-accounts van de makers die ze op andere platformen volgen."
+msgstr "Het tweede doel is het helpen van donateurs bij het vinden van de Liberapay-accounts van de makers die ze op andere platformen volgen."
 
 msgid "Payment processors"
 msgstr "Betalingsverwerkers"
@@ -4221,7 +4223,7 @@ msgid "Personal information leaks"
 msgstr "Lekken van persoonlijke informatie"
 
 msgid "Liberapay does not tell creators who their patrons are. However, PayPal allows the recipient of a payment to see the name and email address of the payer, so donors who don't want to reveal themselves should not choose PayPal as the payment method."
-msgstr "Liberapay vertelt de makers niet wie hun patroons zijn. Met PayPal kan de ontvanger van een betaling echter wel de naam en het emailadres van de betaler zien, dus donateurs die zich niet willen openbaren, moeten niet voor PayPal kiezen als betaalmethode."
+msgstr "Liberapay vertelt de makers niet wie hun donateurs zijn. Met PayPal kan de ontvanger van een betaling echter wel de naam en het emailadres van de betaler zien, dus donateurs die zich niet willen openbaren, moeten niet voor PayPal kiezen als betaalmethode."
 
 msgid "Similarly, PayPal allows a donor to see the name and email address of the recipient, and Stripe may expose the recipient's phone number, so creators who do not want to reveal their identities should not use these payment processors, unless they have carefully configured their accounts to only leak nonsensitive information (a business name instead of the creator's name, a dedicated email address and phone number instead of the creator's personal contact details)."
 msgstr "Op dezelfde manier laat PayPal een donor de naam en het emailadres van de ontvanger zien, en Stripe kan het telefoonnummer van de ontvanger onthullen, dus makers die hun identiteit niet willen onthullen, moeten deze betalingsverwerkers niet gebruiken, tenzij ze hun accounts zorgvuldig hebben geconfigureerd om uitsluitend niet-gevoelige informatie te lekken (een bedrijfsnaam in plaats van de naam van de maker, een specifiek emailadres en telefoonnummer in plaats van de persoonlijke contactgegevens van de maker)."
@@ -4326,7 +4328,7 @@ msgstr "Een teamaccount is niet bedoeld voor gebruik door de personen van één 
 
 #, python-brace-format
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
-msgstr "Een teamrekening {bold}slaat geen geld op{end_bold} voor later gebruik. Elke donatie wordt onmiddellijk uitgedeeld, indien mogelijk aan meerdere personen, of aan één enkel persoon wanneer het splitsen van het geld niet wordt ondersteund door de betalingsverwerker. Door deze beperkingen in de betalingsverwerking kunnen de bedragen die de personen ontvangen tijdelijk onevenwichtig zijn, vooral als het team minder patroons heeft dan personen."
+msgstr "Een teamrekening {bold}slaat geen geld op{end_bold} voor later gebruik. Elke donatie wordt onmiddellijk uitgedeeld, indien mogelijk aan meerdere personen, of aan één enkel persoon wanneer het splitsen van het geld niet wordt ondersteund door de betalingsverwerker. Door deze beperkingen in de betalingsverwerking kunnen de bedragen die de personen ontvangen tijdelijk onevenwichtig zijn, vooral als het team minder donateurs heeft dan personen."
 
 #, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
@@ -4483,7 +4485,7 @@ msgid "Liberapay provides several ways of finding great people to donate to:"
 msgstr "Liberapay heeft meerdere manieren om geweldige mensen te vinden om aan te doneren:"
 
 msgid "A team is a group of users working on a specific project."
-msgstr "Een team is een groep van mensen die werken aan een specifiek project."
+msgstr "Een team is een groep die werken aan een specifiek project."
 
 msgid "Explore Teams"
 msgstr "Verken de teams"
@@ -4673,7 +4675,7 @@ msgid "Congratulations, you have reached your goal of receiving {0} per week!"
 msgstr "Gefeliciteerd, u heeft uw doel om {0} per week te ontvangen bereikt!"
 
 msgid "To receive money, do something awesome and then tell people about it:"
-msgstr "Ontvang geld voor al het geweldigs wat je doet in drie stappen:"
+msgstr "Ontvang geld voor al het geweldigs wat u doet in drie stappen:"
 
 #, python-brace-format
 msgid "{0}Fill out your profile{1}."
@@ -4685,7 +4687,7 @@ msgstr "{0}Configureer een betaalrekening{1}."
 
 #, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr "Plaats de {0}widgets{1} op je blog of website."
+msgstr "Plaats de {0}widgets{1} op uw blog of website."
 
 msgid "Contact the people who benefit from your work and ask them to support you."
 msgstr "Neem contact op met de mensen die profiteren van uw werk en vraag hen u te ondersteunen."
@@ -4740,7 +4742,7 @@ msgstr "Liberapay wordt transparant beheerd door een {1}non-profitorganisatie{0}
 
 #, python-brace-format
 msgid "We rely on your support to keep Liberapay running and {link_start}improving{link_end}."
-msgstr "Wij zijn afhankelijk van uw steun om Liberapay te laten draaien en {link_start}door te ontwikkelen{link_end}."
+msgstr "Wij zijn afhankelijk van uw steun om Liberapay draaiende te houden en {link_start}door te ontwikkelen{link_end}."
 
 msgid "Fund Liberapay"
 msgstr "Steun Liberapay"
@@ -4750,7 +4752,7 @@ msgstr "Functies"
 
 #, python-brace-format
 msgid "A team allows members of a project to receive money and share it, without having to set up a legal entity. {0}Learn more…{1}"
-msgstr "Met een team kan een groep mensen donaties ontvangen en verdelen voor een project waar ze aan werken zonder een juridische entiteit te starten ({0}meer informatie{1})."
+msgstr "Met een team kan een groep donaties ontvangen en verdelen voor een project waar ze aan werken zonder een juridische entiteit te starten ({0}meer informatie{1})."
 
 msgid "Multiple languages"
 msgstr "Meerdere talen"
@@ -4796,7 +4798,7 @@ msgid "You can also easily list on your profile the repositories you contribute 
 msgstr "U kan ook gemakkelijk een repositories-lijst waaraan u bijdraagt van {platforms_list} weergeven op uw profiel."
 
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
-msgstr "Liberapay maakt het mogelijk om mensen geld toe te zeggen die nog geen lid zijn van de site. Er wordt geen geld ingezameld voor toezeggingen, ze worden pas echte donaties als de ontvangers zich aansluiten. Natuurlijk informeren we de donoren wanneer dat gebeurt."
+msgstr "Liberapay maakt het mogelijk om geld toe te zeggen aan mensen die nog niet geregistreerd zijn. Er wordt geen geld ingezameld voor toezeggingen, ze worden pas echte donaties als de ontvanger zich aansluit. Natuurlijk informeren we de donoren wanneer dat gebeurt."
 
 msgid "Sponsors"
 msgstr "Sponsors"
@@ -4891,7 +4893,7 @@ msgstr "Uw poging om dit account te bemachtigen is mislukt, omdat u bent ingelog
 
 #, python-brace-format
 msgid "{0} is a private team"
-msgstr "{0} is een privé team"
+msgstr "{0} is een privéteam"
 
 #, python-brace-format
 msgid "{0} is a big team"
