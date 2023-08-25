@@ -223,6 +223,22 @@ class ExchangeRoute(Model):
                 id=self.id, network=self.network
             ))
 
+    def set_as_default_for(self, currency):
+        with self.db.get_cursor() as cursor:
+            cursor.run("""
+                UPDATE exchange_routes
+                   SET is_default_for = NULL
+                 WHERE participant = %(p_id)s
+                   AND is_default_for = %(currency)s;
+                UPDATE exchange_routes
+                   SET is_default_for = %(currency)s
+                 WHERE participant = %(p_id)s
+                   AND id = %(route_id)s
+            """, dict(p_id=self.participant.id, route_id=self.id, currency=currency))
+            self.participant.add_event(cursor, 'set_default_route_for', dict(
+                id=self.id, network=self.network, currency=currency,
+            ))
+
     def set_mandate(self, mandate_id):
         self.db.run("""
             UPDATE exchange_routes
