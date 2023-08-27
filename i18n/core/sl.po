@@ -3187,6 +3187,10 @@ msgstr "Ti podatki bodo prek šifrirane povezave poslani neposredno obdelovalcu 
 msgid "Remember the card number for next time"
 msgstr "Zapomnite si številko kartice za naslednjič"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
 msgstr "Privzeta uporaba tega plačilnega instrumenta za prihodnja plačila"
@@ -4215,9 +4219,20 @@ msgstr[3] ""
 msgid "Bank Account"
 msgstr "Bančni račun"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 #, fuzzy
 msgid "default"
 msgstr "privzeto"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "view mandate"
@@ -4254,6 +4269,14 @@ msgstr "Ta plačilni instrument še ni bil uporabljen."
 #, fuzzy
 msgid "Set as default"
 msgstr "Nastavljeno kot privzeto"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

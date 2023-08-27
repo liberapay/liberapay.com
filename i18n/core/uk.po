@@ -2660,6 +2660,10 @@ msgstr "Цю інформацію буде надіслано обробнику
 msgid "Remember the card number for next time"
 msgstr "Використати цей номер картки наступного разу"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Типово використовувати цей платіжний інструмент для майбутніх платежів"
 
@@ -3540,8 +3544,19 @@ msgstr[2] "Ви під'єднали {n} платіжних засобів."
 msgid "Bank Account"
 msgstr "Банківський рахунок"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "типово"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "переглянути доручення"
@@ -3575,6 +3590,14 @@ msgstr "Цей платіжний засіб ще не використовув�
 
 msgid "Set as default"
 msgstr "Встановити типовим"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "У вас немає дійсних платіжних засобів."

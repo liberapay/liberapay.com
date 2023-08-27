@@ -2812,6 +2812,10 @@ msgstr "Aceste date vor fi trimise direct către procesatorul de plăți {name} 
 msgid "Remember the card number for next time"
 msgstr "Ține minte acest card pentru data viitoare"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
 msgstr "Utilizați acest instrument de plată în mod implicit pentru plățile viitoare"
@@ -3745,9 +3749,20 @@ msgstr[2] ""
 msgid "Bank Account"
 msgstr "Cont bancar"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 #, fuzzy
 msgid "default"
 msgstr "implicit"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "view mandate"
@@ -3784,6 +3799,14 @@ msgstr "Acest instrument de plată nu a fost utilizat încă."
 #, fuzzy
 msgid "Set as default"
 msgstr "Setați ca implicit"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

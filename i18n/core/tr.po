@@ -2635,6 +2635,10 @@ msgstr "Bu veriler şifreli bir bağlantı aracılığıyla doğrudan {name} öd
 msgid "Remember the card number for next time"
 msgstr "Bir dahaki sefere kart numarasını hatırla"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Gelecekteki ödemeler için öntanımlı olarak bu ödeme aracını kullan"
 
@@ -3503,8 +3507,19 @@ msgstr[1] "{n} tane bağlı ödeme aracınız var."
 msgid "Bank Account"
 msgstr "Banka Hesabı"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "varsayılan"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "yetkiyi görüntüle"
@@ -3538,6 +3553,14 @@ msgstr "Bu ödeme aracı henüz kullanılmadı."
 
 msgid "Set as default"
 msgstr "Öntanımlı değer olarak ayarla"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "Geçerli bir ödeme aracınız yok."

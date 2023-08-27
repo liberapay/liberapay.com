@@ -3095,6 +3095,10 @@ msgstr "Dữ liệu này sẽ được gửi trực tiếp đến bộ xử lý 
 msgid "Remember the card number for next time"
 msgstr "Nhớ số thẻ cho lần sau"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
 msgstr "Sử dụng công cụ thanh toán này theo mặc định cho các khoản thanh toán trong tương lai"
@@ -4087,8 +4091,19 @@ msgstr[0] "Bạn có {n} công cụ thanh toán được kết nối."
 msgid "Bank Account"
 msgstr "Ngày đặt hàng…"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "mặc định"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "view mandate"
@@ -4125,6 +4140,14 @@ msgstr "Công cụ thanh toán này vẫn chưa được sử dụng."
 #, fuzzy
 msgid "Set as default"
 msgstr "Chọn làm mặc định"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

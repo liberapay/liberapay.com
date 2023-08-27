@@ -2639,6 +2639,10 @@ msgstr "Denna data kommer skickas direkt till betalningsförmedlaren {name} via 
 msgid "Remember the card number for next time"
 msgstr "Kom ihåg kortnummret inför nästa gång"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Använd detta betalningsinstrument som standard för framtida betalningar"
 
@@ -3518,8 +3522,19 @@ msgstr[1] "Du har {n} anslutna betalningsmedel."
 msgid "Bank Account"
 msgstr "Bankkonto"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "standard"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "se mandat"
@@ -3553,6 +3568,14 @@ msgstr "Det här betalningsmedlet har inte använts ännu."
 
 msgid "Set as default"
 msgstr "Ställ in som standard"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "Du har inga giltiga betalningsmedel."

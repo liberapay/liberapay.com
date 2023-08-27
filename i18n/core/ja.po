@@ -2610,6 +2610,10 @@ msgstr "このデータは、暗号化された接続を通して、決済サー
 msgid "Remember the card number for next time"
 msgstr "カード番号を保存"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "今後の支払いに、この決済手段をデフォルトで使用"
 
@@ -3466,8 +3470,19 @@ msgstr[0] "{n}個の決済手段と連携済みです。"
 msgid "Bank Account"
 msgstr "銀行口座"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "デフォルト"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "委任書を見る"
@@ -3501,6 +3516,14 @@ msgstr "この決済手段はまだ使用されていません。"
 
 msgid "Set as default"
 msgstr "デフォルトに設定"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "有効な決済手段がありません。"

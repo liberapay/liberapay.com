@@ -2660,6 +2660,10 @@ msgstr "Dáta budú posielané priamo do platobného systému {name} cez zašifr
 msgid "Remember the card number for next time"
 msgstr "Zapamätajte si číslo karty na neskôr"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Použiť tento platobný nástroj ako predvoľbu pre budúce platby"
 
@@ -3540,8 +3544,19 @@ msgstr[2] "Máte pripojené {n} platobné nástroje."
 msgid "Bank Account"
 msgstr "Bankový účet"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "predvolené"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "zobraziť mandát"
@@ -3575,6 +3590,14 @@ msgstr "Platobný prostriedok ešte nebol použitý."
 
 msgid "Set as default"
 msgstr "Prednastaviť"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "Nemáte žiadny použiteľný platobný prostriedok."

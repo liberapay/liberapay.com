@@ -3162,6 +3162,10 @@ msgstr "Šie dati tiks nosūtīti tieši maksājumu apstrādātājam {name}, izm
 msgid "Remember the card number for next time"
 msgstr "Nākamreiz atcerieties kartes numuru"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
 msgstr "Nākotnes maksājumiem pēc noklusējuma izmantot šo maksājumu instrumentu"
@@ -4178,9 +4182,20 @@ msgstr[2] ""
 msgid "Bank Account"
 msgstr "Bankas konts"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 #, fuzzy
 msgid "default"
 msgstr "noklusējuma"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "view mandate"
@@ -4217,6 +4232,14 @@ msgstr "Šis maksājumu instruments vēl nav izmantots."
 #, fuzzy
 msgid "Set as default"
 msgstr "Uzstādīt kā noklusējuma"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

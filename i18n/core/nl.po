@@ -2635,6 +2635,10 @@ msgstr "Deze gegevens worden via een versleutelde verbinding rechtstreeks naar d
 msgid "Remember the card number for next time"
 msgstr "Vergeet niet het kaartnummer voor de volgende keer"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Dit betaalinstrument standaard gebruiken voor toekomstige betalingen"
 
@@ -3503,8 +3507,19 @@ msgstr[1] "U heeft {n} aangesloten betaalmethodes."
 msgid "Bank Account"
 msgstr "Bankrekening"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "standaard"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "bekijk mandaat"
@@ -3538,6 +3553,14 @@ msgstr "Deze betaalmethode is nog niet gebruikt."
 
 msgid "Set as default"
 msgstr "Instellen als standaard"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "U heeft geen geldige betaalmethode."

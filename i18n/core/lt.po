@@ -2991,6 +2991,10 @@ msgstr "Šie duomenys šifruotu ryšiu bus tiesiogiai siunčiami mokėjimo tvark
 msgid "Remember the card number for next time"
 msgstr "Kitą kartą prisiminkite kortelės numerį"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
 msgstr "Naudokite šią mokėjimo priemonę pagal nutylėjimą būsimiems mokėjimams"
@@ -3973,9 +3977,20 @@ msgstr[2] ""
 msgid "Bank Account"
 msgstr "Banko sąskaita"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 #, fuzzy
 msgid "default"
 msgstr "numatytoji"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "view mandate"
@@ -4012,6 +4027,14 @@ msgstr "Ši mokėjimo priemonė dar nebuvo naudojama."
 #, fuzzy
 msgid "Set as default"
 msgstr "Nustatyti kaip numatytąjį"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

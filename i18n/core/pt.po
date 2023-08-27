@@ -2641,6 +2641,10 @@ msgstr "Os dados serão enviados direto para o processador de pagamentos {name} 
 msgid "Remember the card number for next time"
 msgstr "Lembrar o número do cartão para futuros pagamentos"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Use este instrumento de pagamento por padrão para pagamentos futuros"
 
@@ -3522,8 +3526,19 @@ msgstr[1] "Tem {n} formas de pagamento conectado."
 msgid "Bank Account"
 msgstr "Conta bancária"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "padrão"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "ver mandato"
@@ -3557,6 +3572,14 @@ msgstr "Este forma de pagamento ainda não foi usado."
 
 msgid "Set as default"
 msgstr "Definir como padrão"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "Não tem quaisquer formas de pagamento válidos."

@@ -2666,6 +2666,10 @@ msgstr "Denne dataen vil sendes direkte til betalingsformidleren {name}, over en
 msgid "Remember the card number for next time"
 msgstr "Husk kortnummeret til neste gang"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Bruk dette betalingsinstrumentet som forvalg for fremtidige betalinger"
 
@@ -3554,8 +3558,19 @@ msgstr[1] "Du har {n} tilknyttede betalingsinstrumenter."
 msgid "Bank Account"
 msgstr "Bankkonto"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "forvalg"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "vis mandat"
@@ -3590,6 +3605,14 @@ msgstr "Dette betalingsinstrumentet har ikke blitt benyttet enda."
 
 msgid "Set as default"
 msgstr "Sett som forvalg"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

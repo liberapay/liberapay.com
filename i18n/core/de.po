@@ -2635,6 +2635,10 @@ msgstr "Diese Daten werden wir direkt an den Zahlungsdienstleister {name} über 
 msgid "Remember the card number for next time"
 msgstr "Die Nummer der Karte für das nächste Mal merken"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Verwenden Sie dieses Zahlungsinstrument standardmäßig für künftige Zahlungen"
 
@@ -3503,8 +3507,19 @@ msgstr[1] "Sie haben {n} Zahlungsmittel verknüpft."
 msgid "Bank Account"
 msgstr "Bankkonto"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "Standard"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "Mandat anzeigen"
@@ -3538,6 +3553,14 @@ msgstr "Dieses Zahlungsmittel ist noch nicht verwendet worden."
 
 msgid "Set as default"
 msgstr "Zum Standard machen"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "Sie haben keine gültigen Zahlungsmittel."

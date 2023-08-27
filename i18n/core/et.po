@@ -3066,6 +3066,10 @@ msgstr "Need andmed saadetakse krüpteeritud ühenduse kaudu otse makseprotsesso
 msgid "Remember the card number for next time"
 msgstr "Jätke kaardi number järgmiseks korraks meelde"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
 msgstr "Kasutage seda maksevahendit vaikimisi tulevaste maksete tegemiseks"
@@ -4068,9 +4072,20 @@ msgstr[1] ""
 msgid "Bank Account"
 msgstr "Pangakonto"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 #, fuzzy
 msgid "default"
 msgstr "vaikimisi"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "view mandate"
@@ -4107,6 +4122,14 @@ msgstr "Seda maksevahendit ei ole veel kasutatud."
 #, fuzzy
 msgid "Set as default"
 msgstr "Seadistatakse vaikimisi"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

@@ -2634,6 +2634,10 @@ msgstr "이 데이터는 암호화된 연결을 통해 결제 프로세서 {name
 msgid "Remember the card number for next time"
 msgstr "다음 결제를 위해 카드 번호 기억하기"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
 msgstr "향후 결제 시 기본적으로 이 결제 수단을 사용하세요."
@@ -3519,9 +3523,20 @@ msgstr[0] "{n}에 연결된 결제 수단이 있습니다."
 msgid "Bank Account"
 msgstr "은행 계좌"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 #, fuzzy
 msgid "default"
 msgstr "기본"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "view mandate"
@@ -3558,6 +3573,14 @@ msgstr "아직 사용하지 않은 결제 수단입니다."
 #, fuzzy
 msgid "Set as default"
 msgstr "기본값으로 설정"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."

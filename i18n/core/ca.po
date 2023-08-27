@@ -2635,6 +2635,10 @@ msgstr "Les dades s'envien directament al processador de pagaments {name} mitjan
 msgid "Remember the card number for next time"
 msgstr "Recorda el número de targeta per a la següent vegada"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Usa aquest instrument de pagament de forma predeterminada per a pagaments futurs"
 
@@ -3503,8 +3507,19 @@ msgstr[1] "Teniu {n} instruments de pagament enllaçats."
 msgid "Bank Account"
 msgstr "Compte bancari"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "predefinit"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "mostra el manament"
@@ -3538,6 +3553,14 @@ msgstr "Aquest instrument de pagament encara no s'ha usat."
 
 msgid "Set as default"
 msgstr "Estableix com a predeterminat"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "No teniu cap instrument de pagament vàlid."

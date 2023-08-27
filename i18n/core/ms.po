@@ -2635,6 +2635,10 @@ msgstr "Data ini akan dihantar terus ke pemproses pembayaran {name} melalui samb
 msgid "Remember the card number for next time"
 msgstr "Ingat nombor kad untuk urusan di lain hari"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Gunakan instrumen pembayaran ini secara lalainya untuk pembayaran masa hadapan"
 
@@ -3503,8 +3507,19 @@ msgstr[1] "Anda mempunyai {n} alat pembayaran yang terkait."
 msgid "Bank Account"
 msgstr "Akaun Bank"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "lalai"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "lihat mandat"
@@ -3538,6 +3553,14 @@ msgstr "Alat pembayaran ini masih belum digunakan."
 
 msgid "Set as default"
 msgstr "Tetap sebagai lalai"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "Anda tidak mempunyai sebarang alat pembayaran yang sah."

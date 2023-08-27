@@ -2644,6 +2644,10 @@ msgstr "Tiedot lähetetään suoraan maksunkäsittelijällemme ({name}) salatun 
 msgid "Remember the card number for next time"
 msgstr "Pidä kortin numero muistissa seuraavaa kertaa varten"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "Käytä oletuksena tätä maksuvälinettä tuleviin maksuihin"
 
@@ -3525,8 +3529,19 @@ msgstr[1] "Olet kytkenyt {n} maksuvälinettä."
 msgid "Bank Account"
 msgstr "Pankkitili"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "oletus"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "näytä mandaatti"
@@ -3560,6 +3575,14 @@ msgstr "Tätä maksuvälinettä ei ole vielä käytetty."
 
 msgid "Set as default"
 msgstr "Aseta oletukseksi"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "Sinulla ei ole toimivaa maksuvälinettä."

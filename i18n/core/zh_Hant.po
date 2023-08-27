@@ -2614,6 +2614,10 @@ msgstr "這個資料會透過加密連線直接送到付款處理商{name}。"
 msgid "Remember the card number for next time"
 msgstr "記住卡號以利下回使用"
 
+#, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr ""
+
 msgid "Use this payment instrument by default for future payments"
 msgstr "默認使用此付款方式進行將來的付款"
 
@@ -3481,8 +3485,19 @@ msgstr[0] "您已連結了{n}種付款方式。"
 msgid "Bank Account"
 msgstr "銀行帳號"
 
+msgid "This instrument is used by default."
+msgstr ""
+
 msgid "default"
 msgstr "預設"
+
+#, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "default for {currency}"
+msgstr ""
 
 msgid "view mandate"
 msgstr "檢視授權要求"
@@ -3516,6 +3531,14 @@ msgstr "此支付方式尚未被用過。"
 
 msgid "Set as default"
 msgstr "設成預設"
+
+#, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Set as default for {currency}"
+msgstr ""
 
 msgid "You don't have any valid payment instrument."
 msgstr "您無任何有效的支付方式。"
