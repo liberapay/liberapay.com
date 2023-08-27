@@ -2028,6 +2028,16 @@ class Participant(Model, MixinTeam):
                 fallback_currency = 'USD'
             return fallback_currency, accepted
 
+    @cached_property
+    def donates_in_multiple_currencies(self):
+        return self.db.one("""
+            SELECT count(DISTINCT amount::currency) > 1
+              FROM current_tips
+             WHERE tipper = %s
+               AND amount > 0
+               AND renewal_mode > 0
+        """, (self.id,))
+
 
     # More Random Stuff
     # =================

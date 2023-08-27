@@ -264,7 +264,8 @@ def execute_scheduled_payins():
                     AND r.status = 'chargeable'
                     AND r.network::text LIKE 'stripe-%%'
                     AND ( sp.amount::currency = 'EUR' OR r.network <> 'stripe-sdd' )
-               ORDER BY r.is_default NULLS LAST
+               ORDER BY r.is_default_for = sp.amount::currency DESC NULLS LAST
+                      , r.is_default DESC NULLS LAST
                       , r.ctime DESC
                   LIMIT 1
                ) r ON true
