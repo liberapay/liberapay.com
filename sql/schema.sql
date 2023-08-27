@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '167'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '168'::jsonb);
 
 
 -- app configuration
@@ -415,6 +415,7 @@ CREATE TABLE exchange_routes
 , country          text
 , status           route_status   NOT NULL
 , is_default       boolean
+, is_default_for   currency
 , UNIQUE (participant, network, address)
 );
 

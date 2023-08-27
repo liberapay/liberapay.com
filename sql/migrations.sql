@@ -3412,3 +3412,6 @@ UPDATE payment_accounts AS a
               AND lower(e.address) = lower(a.id)
               AND e.verified
        );
+
+-- migration #168
+ALTER TABLE exchange_routes ADD COLUMN is_default_for currency;
