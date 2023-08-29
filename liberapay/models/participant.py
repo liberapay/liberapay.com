@@ -3371,7 +3371,7 @@ class Participant(Model, MixinTeam):
         """, (self.id, platform, is_team))
         accounts.sort(key=lambda a: (website.platforms[a.platform].rank, a.is_team, a.user_id))
         if url_required:
-            accounts = [a for a in accounts if a.platform_data.account_url]
+            accounts = [a for a in accounts if a.platform_data.account_url and a.missing_since is None]
         return accounts
 
     def take_over(self, account, have_confirmation=False):
