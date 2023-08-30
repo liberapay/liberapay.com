@@ -9,7 +9,7 @@ from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
-from ..constants import AVATAR_QUERY, DOMAIN_RE, RATE_LIMITS, SUMMARY_MAX_SIZE
+from ..constants import AVATAR_QUERY, DOMAIN_RE, SUMMARY_MAX_SIZE
 from ..cron import logger
 from ..elsewhere._base import (
     ElsewhereError, InvalidServerResponse, UserNotFound,
@@ -328,12 +328,13 @@ class AccountElsewhere(Model):
             info = platform.get_user_info(self.domain, type_of_id, id_value, uncertain=False)
         except (InvalidServerResponse, UserNotFound) as e:
             if not self.missing_since:
-                self.db.run("""
+                self.set_attributes(missing_since=self.db.one("""
                     UPDATE elsewhere
                        SET missing_since = current_timestamp
                      WHERE id = %s
                        AND missing_since IS NULL
-                """, (self.id,))
+                 RETURNING missing_since
+                """, (self.id,)))
             raise UnableToRefreshAccount(f"{e.__class__.__name__}: {e}")
         if info.user_id is None:
             raise UnableToRefreshAccount("user_id is None")
@@ -386,24 +387,26 @@ def get_account_elsewhere(website, state, api_lookup=True):
 
 def refetch_elsewhere_data():
     # Note: the rate_limiting table is used to avoid blocking on errors
-    rl_prefix = 'refetch_elsewhere_data'
-    rl_cap, rl_period = RATE_LIMITS[rl_prefix]
     account = website.db.one("""
-        SELECT (e, p)::elsewhere_with_participant
-          FROM elsewhere e
-          JOIN participants p ON p.id = e.participant
-         WHERE e.info_fetched_at < now() - interval '90 days'
-           AND (e.missing_since IS NULL OR e.missing_since > (current_timestamp - interval '30 days'))
-           AND (p.status = 'active' OR p.receiving > 0)
-           AND e.platform NOT IN ('facebook', 'google', 'youtube')
-           AND check_rate_limit(%s || e.id::text, %s, %s)
-      ORDER BY e.info_fetched_at ASC
-         LIMIT 1
-    """, (rl_prefix + ':', rl_cap, rl_period))
+        WITH row AS (
+            SELECT e, p
+              FROM elsewhere e
+              JOIN participants p ON p.id = e.participant
+             WHERE e.info_fetched_at < now() - interval '90 days'
+               AND (e.missing_since IS NULL OR e.missing_since > (current_timestamp - interval '30 days'))
+               AND (e.last_fetch_attempt IS NULL OR e.last_fetch_attempt < (current_timestamp - interval '3 days'))
+               AND (p.status = 'active' OR p.receiving > 0)
+               AND e.platform NOT IN ('facebook', 'google', 'youtube')
+          ORDER BY e.info_fetched_at ASC
+             LIMIT 1
+        )
+        UPDATE elsewhere
+           SET last_fetch_attempt = current_timestamp
+         WHERE id = (SELECT (row.e).id FROM row)
+     RETURNING (SELECT (row.e, row.p)::elsewhere_with_participant FROM row)
+    """)
     if not account:
         return
-    rl_key = str(account.id)
-    website.db.hit_rate_limit(rl_prefix, rl_key)
     logger.debug("Refetching data of %r" % account)
     try:
         account2 = account.refresh_user_info()
@@ -411,8 +414,6 @@ def refetch_elsewhere_data():
         logger.debug(f"The refetch failed: {e.__class__.__name__}: {e}")
         return
     if account2.id != account.id:
-        raise UnableToRefreshAccount(f"IDs don't match: {account2.id} != {account.id}")
+        raise AssertionError(f"IDs don't match: {account2.id} != {account.id}")
     if account2.info_fetched_at < (utcnow() - timedelta(days=90)):
-        raise UnableToRefreshAccount("info_fetched_at is still far in the past")
-    # The update was successful, clean up the rate_limiting table
-    website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))
+        raise AssertionError("info_fetched_at is still far in the past")
