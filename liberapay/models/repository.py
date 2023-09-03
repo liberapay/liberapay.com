@@ -3,7 +3,6 @@ from time import sleep
 from oauthlib.oauth2 import InvalidGrantError, TokenExpiredError
 from postgres.orm import Model
 
-from liberapay.constants import RATE_LIMITS
 from liberapay.cron import logger
 from liberapay.elsewhere._base import ElsewhereError
 from liberapay.models.account_elsewhere import UnableToRefreshAccount
@@ -71,23 +70,26 @@ def upsert_repos(cursor, repos, participant, info_fetched_at):
 
 def refetch_repos():
     # Note: the rate_limiting table is used to avoid blocking on errors
-    rl_prefix = 'refetch_repos'
-    rl_cap, rl_period = RATE_LIMITS[rl_prefix]
     repo = website.db.one("""
-        SELECT r.participant, r.platform
-          FROM repositories r
-         WHERE r.info_fetched_at < now() - interval '6 days'
-           AND r.participant IS NOT NULL
-           AND r.show_on_profile
-           AND check_rate_limit(%s || r.participant::text || ':' || r.platform, %s, %s)
-      ORDER BY r.info_fetched_at ASC
-         LIMIT 1
-    """, (rl_prefix + ':', rl_cap, rl_period))
+        WITH repo AS (
+            SELECT r.*
+              FROM repositories r
+             WHERE r.info_fetched_at < now() - interval '6 days'
+               AND (r.last_fetch_attempt IS NULL OR r.last_fetch_attempt < (current_timestamp - interval '1 day'))
+               AND r.participant IS NOT NULL
+               AND r.show_on_profile
+          ORDER BY r.info_fetched_at ASC
+             LIMIT 1
+        )
+        UPDATE repositories
+           SET last_fetch_attempt = current_timestamp
+         WHERE participant = (SELECT repo.participant FROM repo)
+           AND platform = (SELECT repo.platform FROM repo)
+     RETURNING participant, platform
+    """)
     if not repo:
         return
 
-    rl_key = '%s:%s' % (repo.participant, repo.platform)
-    website.db.hit_rate_limit(rl_prefix, rl_key)
     participant = Participant.from_id(repo.participant)
     accounts = participant.get_accounts_elsewhere(repo.platform)
     if not accounts:
@@ -95,10 +97,10 @@ def refetch_repos():
     for account in accounts:
         if account.missing_since is not None:
             continue
-        _refetch_repos_for_account(rl_prefix, rl_key, participant, account)
+        _refetch_repos_for_account(participant, account)
 
 
-def _refetch_repos_for_account(rl_prefix, rl_key, participant, account):
+def _refetch_repos_for_account(participant, account):
     sess = account.get_auth_session()
     logger.debug(
         "Refetching profile data for participant ~%s from %s account %s" %
@@ -148,6 +150,3 @@ def _refetch_repos_for_account(rl_prefix, rl_key, participant, account):
     except (InvalidGrantError, TokenExpiredError) as e:
         logger.debug("The refetch failed: %s" % e)
         return
-
-    # The update was successful, clean up the rate_limiting table
-    website.db.run("DELETE FROM rate_limiting WHERE key = %s", (rl_prefix + ':' + rl_key,))

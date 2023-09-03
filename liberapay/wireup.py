@@ -581,6 +581,7 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
               JOIN participants p ON p.id = e.participant
              WHERE p.status = 'active'
                AND p.hide_from_lists = 0
+               AND e.missing_since IS NULL
           GROUP BY e.platform
                ) a
       ORDER BY c DESC, platform ASC

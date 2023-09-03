@@ -9,6 +9,7 @@ pledgees = website.db.all("""
      WHERE p.status = 'stub'
        AND p.receiving > 0
        AND p.hide_from_lists = 0
+       AND e.missing_since IS NULL
   ORDER BY p.npatrons DESC, convert(p.receiving, 'EUR') DESC, e.id DESC
      LIMIT %s
     OFFSET %s

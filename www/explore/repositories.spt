@@ -9,6 +9,7 @@ repos = website.db.all("""
       JOIN participants p ON p.id = e.participant
      WHERE r.stars_count > 1
        AND r.show_on_profile
+       AND e.missing_since IS NULL
        AND p.status = 'active'
   ORDER BY r.stars_count DESC, r.id DESC
      LIMIT %s
