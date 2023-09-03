@@ -1,7 +1,7 @@
 [---]
 
 per_page = 20
-current_page = request.qs.get_int('page', default=1, minimum=1)
+current_page = request.qs.get_int('page', default=1, minimum=1, maximum=100)
 repos = website.db.all("""
     SELECT r, p
       FROM repositories r
