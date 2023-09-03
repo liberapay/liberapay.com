@@ -70,7 +70,7 @@ def upsert_repos(cursor, repos, participant, info_fetched_at):
 
 def refetch_repos():
     # Note: the rate_limiting table is used to avoid blocking on errors
-    repo = website.db.one("""
+    repos = website.db.all("""
         WITH repo AS (
             SELECT r.*
               FROM repositories r
@@ -87,11 +87,12 @@ def refetch_repos():
            AND platform = (SELECT repo.platform FROM repo)
      RETURNING participant, platform
     """)
-    if not repo:
+    if not repos:
         return
 
-    participant = Participant.from_id(repo.participant)
-    accounts = participant.get_accounts_elsewhere(repo.platform)
+    participant_id, platform = repos[-1]
+    participant = Participant.from_id(participant_id)
+    accounts = participant.get_accounts_elsewhere(platform)
     if not accounts:
         return
     for account in accounts:
