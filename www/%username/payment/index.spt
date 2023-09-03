@@ -9,6 +9,7 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     account_pk = request.body.get_int('account_pk')
     action = request.body.get_choice('action', ('disconnect', 'refresh'), default='disconnect')
+    msg = ''
     if action == 'disconnect':
         account = website.db.one("""
             UPDATE payment_accounts
@@ -27,6 +28,7 @@ if request.method == 'POST':
                 )
                 if not expected:
                     website.warning("unexpected error message: " + str(e))
+        msg = _("The payment account has been successfully disconnected.")
     elif action == 'refresh':
         account = website.db.one("""
             SELECT *
@@ -37,25 +39,36 @@ if request.method == 'POST':
         if not account:
             raise response.invalid_input(account_pk, 'account_pk', 'body')
         if account.provider == 'stripe':
-            stripe_account = stripe.Account.retrieve(account.id)
-            website.db.run("""
-                UPDATE payment_accounts
-                   SET country = %(country)s
-                     , default_currency = %(default_currency)s
-                     , charges_enabled = %(charges_enabled)s
-                     , display_name = %(display_name)s
-                 WHERE provider = 'stripe'
-                   AND id = %(account_id)s
-            """, dict(
-                country=stripe_account.country,
-                default_currency=stripe_account.default_currency.upper(),
-                charges_enabled=stripe_account.charges_enabled,
-                display_name=stripe_account.settings.dashboard.display_name,
-                account_id=stripe_account.id,
-            ))
+            try:
+                stripe_account = stripe.Account.retrieve(account.id)
+            except stripe.error.PermissionError as e:
+                website.db.run("""
+                    UPDATE payment_accounts
+                       SET is_current = null
+                         , authorized = false
+                     WHERE id = %s
+                """, (account.id,))
+                msg = _("This payment account is no longer accessible. It is now disconnected.")
+            else:
+                website.db.run("""
+                    UPDATE payment_accounts
+                       SET country = %(country)s
+                         , default_currency = %(default_currency)s
+                         , charges_enabled = %(charges_enabled)s
+                         , display_name = %(display_name)s
+                     WHERE provider = 'stripe'
+                       AND id = %(account_id)s
+                """, dict(
+                    country=stripe_account.country,
+                    default_currency=stripe_account.default_currency.upper(),
+                    charges_enabled=stripe_account.charges_enabled,
+                    display_name=stripe_account.settings.dashboard.display_name,
+                    account_id=stripe_account.id,
+                ))
+                msg = _("The data has been successfully refreshed.")
         else:
             raise response.error(400, f"refresh isn't implemented for provider {account.provider}")
-    response.redirect(request.path.raw)
+    form_post_success(state, msg=msg, redirect_url=request.path.raw)
 
 accounts = website.db.all("""
     SELECT *
