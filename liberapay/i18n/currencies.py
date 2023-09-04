@@ -1,10 +1,9 @@
 from datetime import datetime
 from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
-from itertools import starmap, zip_longest
+from itertools import chain, starmap, zip_longest
 from numbers import Number
 import operator
 
-from babel.numbers import get_currency_precision
 from pando.utils import utc
 import requests
 import xmltodict
@@ -24,9 +23,23 @@ CURRENCY_REPLACEMENTS = {
     'HRK': (Decimal('7.53450'), 'EUR', datetime(2023, 1, 1, 1, 0, 0, tzinfo=utc)),
 }
 
+ZERO_DECIMAL_CURRENCIES = {
+    # https://developer.paypal.com/reference/currency-codes/
+    'paypal': {'HUF', 'JPY', 'TWD'},
+    # https://stripe.com/docs/currencies#presentment-currencies
+    'stripe': {
+        'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF',
+        'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF',
+    },
+}
+ZERO_DECIMAL_CURRENCIES['any'] = set(chain(*ZERO_DECIMAL_CURRENCIES.values()))
+
+
 D_CENT = Decimal('0.01')
 D_MAX = Decimal('999999999999.99')
-D_ZERO = Decimal('0.00')
+D_ONE = Decimal('1')
+D_ZERO = Decimal('0')
+D_ZERO_CENT = Decimal('0.00')
 
 
 class CurrencyMismatch(ValueError):
@@ -35,15 +48,19 @@ class CurrencyMismatch(ValueError):
 
 class _Minimums(dict):
     def __missing__(self, currency):
-        exponent = get_currency_precision(currency)
-        minimum = Money((D_CENT if exponent == 2 else Decimal(10) ** (-exponent)), currency)
+        minimum = Money(
+            D_ONE if currency in ZERO_DECIMAL_CURRENCIES['any'] else D_CENT,
+            currency
+        )
         self[currency] = minimum
         return minimum
 
 class _Zeros(dict):
     def __missing__(self, currency):
-        minimum = Money.MINIMUMS[currency].amount
-        zero = Money((D_ZERO if minimum is D_CENT else minimum - minimum), currency)
+        zero = Money(
+            D_ZERO if currency in ZERO_DECIMAL_CURRENCIES['any'] else D_ZERO_CENT,
+            currency
+        )
         self[currency] = zero
         return zero
 

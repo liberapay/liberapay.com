@@ -5,9 +5,9 @@ import string
 from faker import Faker
 from psycopg2 import IntegrityError
 
-from liberapay.constants import D_CENT, DONATION_LIMITS, PERIOD_CONVERSION_RATES
+from liberapay.constants import DONATION_LIMITS, PERIOD_CONVERSION_RATES
 from liberapay.exceptions import CommunityAlreadyExists
-from liberapay.i18n.currencies import Money
+from liberapay.i18n.currencies import D_CENT, Money
 from liberapay.models import community
 
 

@@ -3,13 +3,10 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
 import re
 
-from babel.numbers import get_currency_precision
 from markupsafe import Markup
 from pando.utils import utc
 
-from .i18n.currencies import (  # noqa: F401
-    CURRENCIES, CURRENCY_REPLACEMENTS, D_CENT, D_ZERO, D_MAX, Money,
-)
+from .i18n.currencies import CURRENCIES, D_CENT, Money  # noqa: F401
 
 
 def check_bits(bits):
@@ -385,13 +382,11 @@ SESSION_TIMEOUT = timedelta(hours=6)
 
 
 def make_standard_tip(label, weekly, currency):
-    precision = get_currency_precision(currency)
-    minimum = D_CENT if precision == 2 else Decimal(10) ** (-precision)
     return StandardTip(
         label,
         Money(weekly, currency),
-        Money((weekly / PERIOD_CONVERSION_RATES['monthly']).quantize(minimum), currency),
-        Money((weekly / PERIOD_CONVERSION_RATES['yearly']).quantize(minimum), currency),
+        Money((weekly / PERIOD_CONVERSION_RATES['monthly']), currency, rounding=ROUND_HALF_UP),
+        Money((weekly / PERIOD_CONVERSION_RATES['yearly']), currency, rounding=ROUND_HALF_UP),
     )
 
 

@@ -14,13 +14,14 @@ from pando import Response, json
 from pando.utils import to_rfc822, utcnow
 from markupsafe import Markup
 
-from liberapay.constants import CURRENCIES, CURRENCY_REPLACEMENTS, SAFE_METHODS
+from liberapay.constants import SAFE_METHODS
 from liberapay.elsewhere._paginators import _modify_query
 from liberapay.exceptions import (
     AuthRequired, ClosedAccount, LoginRequired, TooManyAdminActions,
 )
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
+from liberapay.i18n.currencies import CURRENCIES, CURRENCY_REPLACEMENTS
 from liberapay.website import website
 from liberapay.utils import cbor
 

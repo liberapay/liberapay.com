@@ -6,7 +6,7 @@ import stripe.error
 
 from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS, SEPA
 from ..exceptions import MissingPaymentAccount, NextAction, NoSelfTipping
-from ..i18n.currencies import Money
+from ..i18n.currencies import Money, ZERO_DECIMAL_CURRENCIES
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
 from .common import (
@@ -23,21 +23,16 @@ REFUND_REASONS_MAP = {
     'requested_by_customer': 'requested_by_payer',
 }
 
-# https://stripe.com/docs/currencies#presentment-currencies
-ZERO_DECIMAL_CURRENCIES = """
-    BIF CLP DJF GNF JPY KMF KRW MGA PYG RWF UGX VND VUV XAF XOF XPF
-""".split()
-
 
 def int_to_Money(amount, currency):
     currency = currency.upper()
-    if currency in ZERO_DECIMAL_CURRENCIES:
+    if currency in ZERO_DECIMAL_CURRENCIES['stripe']:
         return Money(Decimal(amount), currency)
     return Money(Decimal(amount) / 100, currency)
 
 
 def Money_to_int(m):
-    if m.currency in ZERO_DECIMAL_CURRENCIES:
+    if m.currency in ZERO_DECIMAL_CURRENCIES['stripe']:
         return int(m.amount)
     return int(m.amount * 100)
 

@@ -41,6 +41,7 @@ if request.method == 'POST':
         payin_amount = Money(payin_amount, payin_currency)
     payin_amount = payin_amount.convert_if_currency_is_phased_out()
     del payin_currency
+    payin_amount = payin_amount.round()
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p
