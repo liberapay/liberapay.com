@@ -74,14 +74,15 @@ elif event_object_type == 'charge.dispute':
              WHERE pt.payin = %s
                AND coalesce(pt.reversed_amount < pt.amount, true)
         """, (payin.id,))
-        for pt in transfers:
+        for i, pt in enumerate(transfers, 1):
             if pt.status == 'succeeded':
                 reverse_transfer(
                     website.db, pt, idempotency_key=f'{dispute.id}_pt_{pt.id}',
                 )
             elif pt.status != 'failed':
                 update_payin_transfer(
-                    website.db, pt.id, None, 'failed', 'canceled due to chargeback'
+                    website.db, pt.id, None, 'failed', 'canceled due to chargeback',
+                    update_donor=(i == len(transfers)),
                 )
     # Notify the person who initiated the payment
     payer = Participant.from_id(payin.payer)
