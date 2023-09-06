@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2023-09-05 09:25+0000\n"
+"Last-Translator: Jiří Podhorecký <j.podhorecky@volny.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -2662,7 +2664,7 @@ msgstr "Zapamatujte si číslo karty pro příště"
 
 #, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr ""
+msgstr "Použijte tento platební prostředek ve výchozím nastavení pro budoucí platby v {currency}"
 
 msgid "Use this payment instrument by default for future payments"
 msgstr "Použít tento platební nástroj jako výchozí pro budoucí platby"
@@ -3291,13 +3293,13 @@ msgstr "{username} není členem žádného týmu."
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Než začnete přijímat příspěvky, musíte {link_open}potvrdit svou e-mailovou adresu{link_close}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "Než budete moci začít přijímat dary, musíte {link_open}nastavit své uživatelské jméno{link_close}."
+msgstr "Než budete moci začít dostávat příspěvky, musíte {link_open}nastavit své uživatelské jméno{link_close}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr "Než budete moci začít přijímat dary, musíte {link_open}přidat popis profilu{link_close}."
+msgstr "Než budete moci začít dostávat příspěvky, musíte {link_open}přidat popis profilu{link_close}."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Chcete-li dostávat příspěvky, musíte připojit alespoň jeden účet od podporovaného zpracovatele plateb. Tato stránka vám to umožní."
@@ -3545,18 +3547,18 @@ msgid "Bank Account"
 msgstr "Bankovní účet"
 
 msgid "This instrument is used by default."
-msgstr ""
+msgstr "Tento prostředek se používá ve výchozím nastavení."
 
 msgid "default"
 msgstr "výchozí"
 
 #, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
-msgstr ""
+msgstr "Tento prostředek se standardně používá pro platby v {currency}."
 
 #, python-brace-format
 msgid "default for {currency}"
-msgstr ""
+msgstr "výchozí pro {currency}"
 
 msgid "view mandate"
 msgstr "zobrazit mandát"
@@ -3593,11 +3595,11 @@ msgstr "Nastavit jako výchozí"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Použijte tento prostředek ve výchozím nastavení pro platby v {currency}."
 
 #, python-brace-format
 msgid "Set as default for {currency}"
-msgstr ""
+msgstr "Nastavit jako výchozí pro {currency}"
 
 msgid "You don't have any valid payment instrument."
 msgstr "Nemáte žádný použitelný platební prostředek."
@@ -4206,9 +4208,8 @@ msgstr "Poplatky za zpracování plateb jsou u Stripe obvykle nižší než u Pa
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe umožňuje automatické obnovování příspěvků, zatímco PayPal v současnosti vyžaduje, aby dárci každou platbu potvrdili."
 
-#, fuzzy
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr "Dary prostřednictvím Stripe mohou být tajné, zatímco PayPal vždy umožňuje dárcům a příjemcům vidět navzájem svá jména a e-mailové adresy."
+msgstr "Příspěvky prostřednictvím Stripe mohou být tajné, zatímco PayPal vždy umožňuje dárcům a příjemcům vidět navzájem jména a e-mailové adresy."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe umožňuje v některých případech přispívat více tvůrcům najednou, zatímco PayPal vyžaduje vždy samostatné platby."
@@ -5127,7 +5128,7 @@ msgstr "Převést účet"
 
 #, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr ""
+msgstr "Účet {provider}, ke kterému se pokoušíte připojit, je propojen s jiným účtem Liberapay označeným jako podvodný."
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
