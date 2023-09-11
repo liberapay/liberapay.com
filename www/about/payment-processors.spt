@@ -29,7 +29,7 @@ title = _("Payment Processors")
     ) }}</li>
     <li>{{ ngettext(
         "",
-        "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way.",
+        "PayPal is available to creators in more than 100 countries, whereas Stripe only supports {n} countries in a suitable way.",
         n=len(constants.PAYOUT_COUNTRIES['stripe']),
     ) }}</li>
 </ul>

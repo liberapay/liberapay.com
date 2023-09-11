@@ -22,15 +22,27 @@ title = _("Global")
 
 <h4>{{ _("Receive") }}</h4>
 
+<p>{{ _(
+    "Donations can only be received in territories where at least one supported "
+    "payment processor is available. The currently supported payment processors are "
+    "{Stripe} and {PayPal}. Some features are only available through Stripe, so "
+    "Liberapay is fully available to creators in territories supported by Stripe, and "
+    "partially available in territories only supported by PayPal.",
+    Stripe='<a href="https://stripe.com/">Stripe</a>'|safe,
+    PayPal='<a href="https://paypal.com/">PayPal</a>'|safe,
+) }}</p>
+
+% set stripe_countries = constants.PAYOUT_COUNTRIES['stripe']
+% set paypal_only_countries = constants.PAYOUT_COUNTRIES['paypal'] - stripe_countries
 <p>{{ ngettext(
     "",
     "Liberapay is fully available to creators in {n} territories:",
-    n=len(constants.PAYOUT_COUNTRIES['stripe']),
+    n=len(stripe_countries),
 ) }}</p>
 
 <ul class="columns-sm-2 columns-md-4">
 % for country_code, localized_country_name in locale.countries.items()
-% if country_code in constants.PAYOUT_COUNTRIES['stripe']
+% if country_code in stripe_countries
     <li>{{ localized_country_name }}</li>
 % endif
 % endfor
@@ -38,11 +50,16 @@ title = _("Global")
 
 <p>{{ ngettext(
     "",
-    "Additionally, Liberapay is partially available to creators in "
-    "{paypal_link_open}the {n} countries supported by PayPal{link_close}.",
-    n=len(constants.PAYOUT_COUNTRIES['paypal']),
-    paypal_link_open='<a href="https://www.paypal.com/webapps/mpp/country-worldwide">'|safe,
-    link_close='</a>'|safe
+    "Liberapay is partially available to creators in {n} territories:",
+    n=len(paypal_only_countries),
 ) }}</p>
+
+<ul class="columns-sm-2 columns-md-4">
+% for country_code, localized_country_name in locale.countries.items()
+% if country_code in paypal_only_countries
+    <li>{{ localized_country_name }}</li>
+% endif
+% endfor
+</ul>
 
 % endblock
