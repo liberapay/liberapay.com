@@ -211,6 +211,7 @@ def send_upcoming_debit_notifications():
             max_execution_date = max(sp['execution_date'] for sp in payins)
             assert last_execution_date == max_execution_date
             context['ndays'] = (max_execution_date - utcnow().date()).days
+        currency = payins[0]['amount'].currency
         while True:
             route = db.one("""
                 SELECT r
@@ -218,11 +219,12 @@ def send_upcoming_debit_notifications():
                  WHERE r.participant = %s
                    AND r.status = 'chargeable'
                    AND r.network::text LIKE 'stripe-%%'
-              ORDER BY r.is_default NULLS LAST
+              ORDER BY r.is_default_for = %s DESC NULLS LAST
+                     , r.is_default NULLS LAST
                      , r.network = 'stripe-sdd' DESC
                      , r.ctime DESC
                  LIMIT 1
-            """, (payer.id,))
+            """, (payer.id, currency))
             if route is None:
                 break
             route.sync_status()
