@@ -110,9 +110,13 @@ class TestCronJobs(EmailHarness):
                 job.period = period
 
     def test_fetch_currency_exchange_rates(self):
-        with self.allow_changes_to('currency_exchange_rates'), self.db.get_cursor() as cursor:
-            fetch_currency_exchange_rates(cursor)
-            cursor.connection.rollback()
+        currency_exchange_rates = self.client.website.currency_exchange_rates.copy()
+        try:
+            with self.allow_changes_to('currency_exchange_rates'), self.db.get_cursor() as cursor:
+                fetch_currency_exchange_rates(cursor)
+                cursor.connection.rollback()
+        finally:
+            self.client.website.currency_exchange_rates = currency_exchange_rates
 
     def test_send_account_disabled_notifications(self):
         admin = self.make_participant('admin', privileges=1)

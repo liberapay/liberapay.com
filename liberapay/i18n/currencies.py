@@ -483,6 +483,14 @@ def fetch_currency_exchange_rates(db=None):
             ON CONFLICT (source_currency, target_currency) DO UPDATE
                     SET rate = excluded.rate
         """, dict(target=currency, rate=Decimal(fx['@rate'])))
+    # Update the local cache, unless it hasn't been created yet.
+    if hasattr(website, 'currency_exchange_rates'):
+        website.currency_exchange_rates = get_currency_exchange_rates(db)
+    # Clear the cached auto-converted money amounts, so they'll be recomputed
+    # with the new exchange rates.
+    from ..constants import MoneyAutoConvertDict
+    for d in MoneyAutoConvertDict.instances:
+        d.clear()
 
 
 def get_currency_exchange_rates(db):

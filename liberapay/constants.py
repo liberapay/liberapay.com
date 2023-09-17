@@ -1,4 +1,4 @@
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 from datetime import date, datetime, timedelta
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
 import re
@@ -48,19 +48,58 @@ def convert_symbolic_amount(amount, target_currency, precision=2, rounding=ROUND
     )
 
 
-class MoneyAutoConvertDict(defaultdict):
+class MoneyAutoConvertDict(dict):
+    __slots__ = ('constants', 'precision')
 
-    def __init__(self, *args, precision=2):
-        super().__init__(None, *args)
+    instances = []
+    # Note: our instances of this class aren't ephemeral, so a simple list is
+    #       intentionally used here instead of weak references.
+    lock = Lock()
+
+    def __init__(self, constant_items, precision=2):
+        super().__init__(constant_items)
+        self.constants = set(constant_items.keys())
         self.precision = precision
+        self.instances.append(self)
+
+    def __delitem__(self):
+        raise NotImplementedError()
+
+    def __ior__(self):
+        raise NotImplementedError()
 
     def __missing__(self, currency):
-        r = Money(
-            convert_symbolic_amount(self['EUR'].amount, currency, self.precision),
-            currency
-        )
-        self[currency] = r
+        with self.lock:
+            r = self.generate_value(currency)
+            dict.__setitem__(self, currency, r)
         return r
+
+    def __setitem__(self):
+        raise NotImplementedError()
+
+    def clear(self):
+        """Clear all the auto-converted amounts.
+        """
+        with self.lock:
+            for currency in list(self):
+                if currency not in self.constants:
+                    dict.__delitem__(self, currency)
+
+    def generate_value(self, currency):
+        return Money(
+            convert_symbolic_amount(self['EUR'].amount, currency, self.precision),
+            currency,
+            rounding=ROUND_UP,
+        )
+
+    def pop(self):
+        raise NotImplementedError()
+
+    def popitem(self):
+        raise NotImplementedError()
+
+    def update(self):
+        raise NotImplementedError()
 
 
 StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
@@ -94,15 +133,16 @@ CARD_BRANDS = {
 }
 
 
-class _DonationLimits(defaultdict):
-    def __missing__(self, currency):
+class _DonationLimits(MoneyAutoConvertDict):
+
+    def generate_value(self, currency):
         minimum = Money.MINIMUMS[currency].amount
         eur_weekly_amounts = DONATION_LIMITS_EUR_USD['weekly']
         converted_weekly_amounts = (
             convert_symbolic_amount(eur_weekly_amounts[0], currency),
             convert_symbolic_amount(eur_weekly_amounts[1], currency)
         )
-        r = {
+        return {
             'weekly': tuple(Money(x, currency) for x in converted_weekly_amounts),
             'monthly': tuple(
                 Money((x * Decimal(52) / Decimal(12)).quantize(minimum, rounding=ROUND_UP), currency)
@@ -110,8 +150,6 @@ class _DonationLimits(defaultdict):
             ),
             'yearly': tuple(Money(x * Decimal(52), currency) for x in converted_weekly_amounts),
         }
-        self[currency] = r
-        return r
 
 DONATION_LIMITS_WEEKLY_EUR_USD = (Decimal('0.01'), Decimal('100.00'))
 DONATION_LIMITS_EUR_USD = {
@@ -120,7 +158,7 @@ DONATION_LIMITS_EUR_USD = {
                      for x in DONATION_LIMITS_WEEKLY_EUR_USD),
     'yearly': tuple(x * Decimal(52) for x in DONATION_LIMITS_WEEKLY_EUR_USD),
 }
-DONATION_LIMITS = _DonationLimits(None, {
+DONATION_LIMITS = _DonationLimits({
     'EUR': {k: (Money(v[0], 'EUR'), Money(v[1], 'EUR')) for k, v in DONATION_LIMITS_EUR_USD.items()},
     'USD': {k: (Money(v[0], 'USD'), Money(v[1], 'USD')) for k, v in DONATION_LIMITS_EUR_USD.items()},
 })
@@ -386,15 +424,14 @@ def make_standard_tip(label, weekly, currency):
     )
 
 
-class _StandardTips(defaultdict):
-    def __missing__(self, currency):
-        r = [
+class _StandardTips(MoneyAutoConvertDict):
+
+    def generate_value(self, currency):
+        return [
             make_standard_tip(
                 label, convert_symbolic_amount(weekly, currency), currency
             ) for label, weekly in STANDARD_TIPS_EUR_USD
         ]
-        self[currency] = r
-        return r
 
 
 STANDARD_TIPS_EUR_USD = (
@@ -404,7 +441,7 @@ STANDARD_TIPS_EUR_USD = (
     (_("Large"), Decimal('5.00')),
     (_("Maximum"), DONATION_LIMITS_EUR_USD['weekly'][1]),
 )
-STANDARD_TIPS = _StandardTips(None, {
+STANDARD_TIPS = _StandardTips({
     'EUR': [make_standard_tip(label, weekly, 'EUR') for label, weekly in STANDARD_TIPS_EUR_USD],
     'USD': [make_standard_tip(label, weekly, 'USD') for label, weekly in STANDARD_TIPS_EUR_USD],
 })
