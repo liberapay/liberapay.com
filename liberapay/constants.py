@@ -1,12 +1,14 @@
 from collections import namedtuple
 from datetime import date, datetime, timedelta
-from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
+from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
 import re
 
 from markupsafe import Markup
 from pando.utils import utc
 
-from .i18n.currencies import CURRENCIES, D_CENT, Money  # noqa: F401
+from .i18n.currencies import (  # noqa: F401
+    convert_symbolic_amount, CURRENCIES, D_CENT, Money, MoneyAutoConvertDict,
+)
 
 
 def check_bits(bits):
@@ -15,91 +17,6 @@ def check_bits(bits):
 
 
 Event = namedtuple('Event', 'name bit title')
-
-
-def to_precision(x, precision, rounding=ROUND_HALF_UP):
-    """Round `x` to keep only `precision` of its most significant digits.
-
-    >>> to_precision(Decimal('0.0086820'), 2)
-    Decimal('0.0087')
-    >>> to_precision(Decimal('13567.89'), 3)
-    Decimal('13600')
-    >>> to_precision(Decimal('0.000'), 4)
-    Decimal('0')
-    """
-    if x == 0:
-        return Decimal(0)
-    log10 = x.log10().to_integral(ROUND_FLOOR)
-    # round
-    factor = Decimal(10) ** (log10 + 1)
-    r = (x / factor).quantize(Decimal(10) ** -precision, rounding=rounding) * factor
-    # remove trailing zeros
-    r = r.quantize(Decimal(10) ** (log10 - precision + 1))
-    return r
-
-
-def convert_symbolic_amount(amount, target_currency, precision=2, rounding=ROUND_HALF_UP):
-    from liberapay.website import website
-    rate = website.currency_exchange_rates[('EUR', target_currency)]
-    minimum = Money.MINIMUMS[target_currency].amount
-    return max(
-        to_precision(amount * rate, precision, rounding).quantize(minimum, rounding),
-        minimum
-    )
-
-
-class MoneyAutoConvertDict(dict):
-    __slots__ = ('constants', 'precision')
-
-    instances = []
-    # Note: our instances of this class aren't ephemeral, so a simple list is
-    #       intentionally used here instead of weak references.
-    lock = Lock()
-
-    def __init__(self, constant_items, precision=2):
-        super().__init__(constant_items)
-        self.constants = set(constant_items.keys())
-        self.precision = precision
-        self.instances.append(self)
-
-    def __delitem__(self):
-        raise NotImplementedError()
-
-    def __ior__(self):
-        raise NotImplementedError()
-
-    def __missing__(self, currency):
-        with self.lock:
-            r = self.generate_value(currency)
-            dict.__setitem__(self, currency, r)
-        return r
-
-    def __setitem__(self):
-        raise NotImplementedError()
-
-    def clear(self):
-        """Clear all the auto-converted amounts.
-        """
-        with self.lock:
-            for currency in list(self):
-                if currency not in self.constants:
-                    dict.__delitem__(self, currency)
-
-    def generate_value(self, currency):
-        return Money(
-            convert_symbolic_amount(self['EUR'].amount, currency, self.precision),
-            currency,
-            rounding=ROUND_UP,
-        )
-
-    def pop(self):
-        raise NotImplementedError()
-
-    def popitem(self):
-        raise NotImplementedError()
-
-    def update(self):
-        raise NotImplementedError()
 
 
 StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')

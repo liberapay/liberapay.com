@@ -1,8 +1,11 @@
 from datetime import datetime
-from decimal import Decimal, InvalidOperation, ROUND_DOWN, ROUND_HALF_UP, ROUND_UP
+from decimal import (
+    Decimal, InvalidOperation, ROUND_DOWN, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP,
+)
 from itertools import chain, starmap, zip_longest
 from numbers import Number
 import operator
+from threading import Lock
 
 from pando.utils import utc
 import requests
@@ -466,6 +469,90 @@ class MoneyBasket:
         return Money(a, currency, rounding=rounding, fuzzy=fuzzy)
 
 
+def to_precision(x, precision, rounding=ROUND_HALF_UP):
+    """Round `x` to keep only `precision` of its most significant digits.
+
+    >>> to_precision(Decimal('0.0086820'), 2)
+    Decimal('0.0087')
+    >>> to_precision(Decimal('13567.89'), 3)
+    Decimal('13600')
+    >>> to_precision(Decimal('0.000'), 4)
+    Decimal('0')
+    """
+    if x == 0:
+        return Decimal(0)
+    log10 = x.log10().to_integral(ROUND_FLOOR)
+    # round
+    factor = Decimal(10) ** (log10 + 1)
+    r = (x / factor).quantize(Decimal(10) ** -precision, rounding=rounding) * factor
+    # remove trailing zeros
+    r = r.quantize(Decimal(10) ** (log10 - precision + 1))
+    return r
+
+
+def convert_symbolic_amount(amount, target_currency, precision=2, rounding=ROUND_HALF_UP):
+    rate = website.currency_exchange_rates[('EUR', target_currency)]
+    minimum = Money.MINIMUMS[target_currency].amount
+    return max(
+        to_precision(amount * rate, precision, rounding).quantize(minimum, rounding),
+        minimum
+    )
+
+
+class MoneyAutoConvertDict(dict):
+    __slots__ = ('constants', 'precision')
+
+    instances = []
+    # Note: our instances of this class aren't ephemeral, so a simple list is
+    #       intentionally used here instead of weak references.
+    lock = Lock()
+
+    def __init__(self, constant_items, precision=2):
+        super().__init__(constant_items)
+        self.constants = set(constant_items.keys())
+        self.precision = precision
+        self.instances.append(self)
+
+    def __delitem__(self):
+        raise NotImplementedError()
+
+    def __ior__(self):
+        raise NotImplementedError()
+
+    def __missing__(self, currency):
+        with self.lock:
+            r = self.generate_value(currency)
+            dict.__setitem__(self, currency, r)
+        return r
+
+    def __setitem__(self):
+        raise NotImplementedError()
+
+    def clear(self):
+        """Clear all the auto-converted amounts.
+        """
+        with self.lock:
+            for currency in list(self):
+                if currency not in self.constants:
+                    dict.__delitem__(self, currency)
+
+    def generate_value(self, currency):
+        return Money(
+            convert_symbolic_amount(self['EUR'].amount, currency, self.precision),
+            currency,
+            rounding=ROUND_UP,
+        )
+
+    def pop(self):
+        raise NotImplementedError()
+
+    def popitem(self):
+        raise NotImplementedError()
+
+    def update(self):
+        raise NotImplementedError()
+
+
 def fetch_currency_exchange_rates(db=None):
     db = db or website.db
     currencies = set(db.one("SELECT array_to_json(enum_range(NULL::currency))"))
@@ -488,7 +575,6 @@ def fetch_currency_exchange_rates(db=None):
         website.currency_exchange_rates = get_currency_exchange_rates(db)
     # Clear the cached auto-converted money amounts, so they'll be recomputed
     # with the new exchange rates.
-    from ..constants import MoneyAutoConvertDict
     for d in MoneyAutoConvertDict.instances:
         d.clear()
 
@@ -503,3 +589,4 @@ def get_currency_exchange_rates(db):
 
 for currency in CURRENCY_REPLACEMENTS:
     del CURRENCIES[currency]
+    del currency
