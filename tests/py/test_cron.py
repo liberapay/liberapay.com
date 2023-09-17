@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from pando.utils import utcnow
 
+from liberapay.constants import PAYIN_AMOUNTS
 from liberapay.cron import Daily, Weekly
 from liberapay.i18n.currencies import fetch_currency_exchange_rates
 from liberapay.models.participant import (
@@ -110,6 +111,8 @@ class TestCronJobs(EmailHarness):
                 job.period = period
 
     def test_fetch_currency_exchange_rates(self):
+        assert PAYIN_AMOUNTS['paypal']['min_acceptable']['HUF']
+        assert 'HUF' in PAYIN_AMOUNTS['paypal']['min_acceptable']
         currency_exchange_rates = self.client.website.currency_exchange_rates.copy()
         try:
             with self.allow_changes_to('currency_exchange_rates'), self.db.get_cursor() as cursor:
@@ -117,6 +120,7 @@ class TestCronJobs(EmailHarness):
                 cursor.connection.rollback()
         finally:
             self.client.website.currency_exchange_rates = currency_exchange_rates
+        assert 'HUF' not in PAYIN_AMOUNTS['paypal']['min_acceptable']
 
     def test_send_account_disabled_notifications(self):
         admin = self.make_participant('admin', privileges=1)
