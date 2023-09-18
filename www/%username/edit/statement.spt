@@ -4,32 +4,47 @@ from liberapay.utils import excerpt_intro, form_post_success, get_participant, m
 [---]
 participant = get_participant(state, restrict=True, allow_member=True)
 
+errors = []
+
 if request.method == 'POST':
     lang = request.body['lang']
     switch_lang = request.body.get('switch_lang')
-    summary = request.body.get('summary') or ''
-    statement = request.body['statement']
-
-    action = request.body.get('action')
-    if action is None:
-        # Temporary fallback
-        if request.body.get('save') == 'true':
-            action = 'publish'
-        elif request.body.get('preview') == 'true':
-            action = 'preview'
-        else:
-            action = 'edit'
+    summary = request.body['summary'].strip()
+    statement = request.body['statement'].strip()
+    action = request.body.get_choice('action', ('edit', 'preview', 'publish', 'switch'))
 
     if lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'lang', 'body')
     if switch_lang and switch_lang not in ACCEPTED_LANGUAGES:
         raise response.invalid_input(lang, 'switch_lang', 'body')
 
-    if len(summary) > constants.SUMMARY_MAX_SIZE:
-        raise response.error(400, _(
-            "The submitted summary is too long ({0} > {1}).",
-            len(summary), constants.SUMMARY_MAX_SIZE)
-        )
+    if action != 'switch':
+        if len(summary) > constants.SUMMARY_MAX_SIZE:
+            errors.append(ngettext(
+                "",
+                "The summary can't be more than {n} characters long.",
+                constants.SUMMARY_MAX_SIZE
+            ))
+        if len(statement) < 100:
+            errors.append(ngettext(
+                "",
+                "The full description must be at least {n} characters long.",
+                n=100
+            ))
+        elif len(statement) > 50_000:
+            errors.append(ngettext(
+                "",
+                "The full description can't be more than {n} characters long.",
+                n=50_000
+            ))
+        if statement and statement == summary:
+            errors.append(_("The full description can't be identical to the summary."))
+        if summary in (participant.username, participant.public_name):
+            errors.append(_("The summary can't be only your name."))
+        if statement in (participant.username, participant.public_name):
+            errors.append(_("The description can't be only your name."))
+        if errors:
+            action = 'edit'
 
     if action == 'publish':
         participant.upsert_statement(lang, summary, 'summary')
@@ -83,8 +98,9 @@ subhead = _("Descriptions")
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="lang" value="{{ lang }}" />
-        <h3>{{ _("Statement") }}</h3>
+        <input type="hidden" name="summary" value="{{ summary }}" />
         <textarea class="hidden" name="statement">{{ statement }}</textarea>
+        <h3>{{ _("Statement") }}</h3>
         <section class="profile-statement" lang="{{ lang }}">{{ rendered_stmt }}</section>
         <hr>
         <h4>{{ _("Excerpt that will be used in social media:") }}</h4>
@@ -92,7 +108,6 @@ subhead = _("Descriptions")
         <hr>
         % if summary
         <h3>{{ _("Preview of the short description") }}</h3>
-        <input type="hidden" name="summary" value="{{ summary }}" lang="{{ lang }}" />
         {{ profile_box_embedded(participant, summary) }}
         <hr>
         % if participant.username in summary
@@ -120,9 +135,7 @@ subhead = _("Descriptions")
         <input type="hidden" name="lang" value="{{ lang }}" />
         <input type="hidden" name="switch_lang" value="{{ switch_lang }}" />
         <input type="hidden" name="discard" value="yes" />
-        % if summary
         <input type="hidden" name="summary" value="{{ summary }}" />
-        % endif
         <textarea class="hidden" name="statement">{{ statement }}</textarea>
         <div class="buttons">
             <button class="btn btn-danger btn-lg" name="action" value="switch">{{ _("Discard") }}</button>
@@ -132,6 +145,10 @@ subhead = _("Descriptions")
     </form>
 
 % else
+
+    % for error in errors
+        <p class="alert alert-danger">{{ error }}</p>
+    % endfor
 
     <p>{{ _(
         "Describe your work, why you're asking for donations, etc. The short "
