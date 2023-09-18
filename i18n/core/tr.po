@@ -2169,8 +2169,31 @@ msgid "We can also import lists of repositories for your teams:"
 msgstr "Takımlarınız için kod depolarının listelerini de içe aktarabiliriz:"
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Gönderilen özet çok uzun ({0} > {1})."
+msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgid_plural "The summary can't be more than {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgid_plural "The full description must be at least {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgid_plural "The full description can't be more than {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "The full description can't be identical to the summary."
+msgstr ""
+
+msgid "The summary can't be only your name."
+msgstr ""
+
+msgid "The description can't be only your name."
+msgstr ""
 
 msgid "This is a preview."
 msgstr "Bu bir ön izlemedir."
@@ -2769,7 +2792,7 @@ msgstr "Bu profil yalnızca {language} dilinde kullanılabilir"
 msgid "Edit"
 msgstr "Düzenle"
 
-msgid "Statement"
+msgid "Description"
 msgstr "Açıklama"
 
 #, python-brace-format
@@ -2949,9 +2972,6 @@ msgstr "Türü"
 
 msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr "(Liberapay şimdilik yalnızca bir tür faturayı desteklemektedir.)"
-
-msgid "Description"
-msgstr "Açıklama"
 
 msgid "A short description of the invoice"
 msgstr "Faturanın kısa bir açıklaması"
@@ -3252,6 +3272,15 @@ msgstr "Herhangi bir takımın üyesi değilsiniz."
 #, python-brace-format
 msgid "{username} isn't a member of any team."
 msgstr "{username} herhangi bir takımın üyesi değil."
+
+msgid "The payment account has been successfully disconnected."
+msgstr ""
+
+msgid "This payment account is no longer accessible. It is now disconnected."
+msgstr ""
+
+msgid "The data has been successfully refreshed."
+msgstr ""
 
 #, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4043,16 +4072,20 @@ msgstr[0] "Bağışçılar, alıcının tercihlerine ve temeldeki ödeme işleyi
 msgstr[1] "Bağışçılar, alıcının tercihlerine ve temeldeki ödeme işleyicisinin yeteneklerine bağlı olarak {n} para birimi arasından seçim yapabilirler."
 
 #, python-brace-format
+msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
+msgstr ""
+
+#, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
 msgstr[0] "Liberapay, {n} bölgedeki içerik oluşturucular tarafından tamamen kullanılabilir:"
 msgstr[1] "Liberapay, {n} bölgedeki içerik oluşturucular tarafından tamamen kullanılabilir:"
 
 #, python-brace-format
-msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
-msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] "Ayrıca Liberapay, {paypal_link_open}PayPal tarafından desteklenen {n} ülkedeki {link_close} içerik oluşturucular tarafından kısmen kullanılabilir."
-msgstr[1] "Ayrıca Liberapay, {paypal_link_open}PayPal tarafından desteklenen {n} ülkedeki {link_close} içerik oluşturucular tarafından kısmen kullanılabilir."
+msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
+msgid_plural "Liberapay is partially available to creators in {n} territories:"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "What is Liberapay?"
 msgstr "Liberapay nedir?"

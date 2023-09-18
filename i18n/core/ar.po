@@ -2492,9 +2492,44 @@ msgstr "يمكننا استيراد قائمة بالمستودعات الخاص
 msgid "We can also import lists of repositories for your teams:"
 msgstr "يمكننا أيضًا استيراد قوائم المستودعات لفرقك:"
 
-#, fuzzy, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "الملخص المقدم طويل جدًا ({0}> {1})."
+#, python-brace-format
+msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgid_plural "The summary can't be more than {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgid_plural "The full description must be at least {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgid_plural "The full description can't be more than {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "The full description can't be identical to the summary."
+msgstr ""
+
+msgid "The summary can't be only your name."
+msgstr ""
+
+msgid "The description can't be only your name."
+msgstr ""
 
 #, fuzzy
 msgid "This is a preview."
@@ -3237,9 +3272,8 @@ msgstr "هذا الملف الشخصي متاح فقط في {language}"
 msgid "Edit"
 msgstr "تعديل"
 
-#, fuzzy
-msgid "Statement"
-msgstr "صياغة"
+msgid "Description"
+msgstr "الوصف"
 
 #, fuzzy, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
@@ -3460,9 +3494,6 @@ msgstr "طبيعة"
 #, fuzzy
 msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr "(يدعم Liberapay نوعًا واحدًا فقط من الفاتورة في الوقت الحالي.)"
-
-msgid "Description"
-msgstr "الوصف"
 
 msgid "A short description of the invoice"
 msgstr "وصف مختصر للفاتورة"
@@ -3822,6 +3853,15 @@ msgstr "إنك لا تنتمي كعضو إلى أي فريق بعدُ."
 #, fuzzy, python-brace-format
 msgid "{username} isn't a member of any team."
 msgstr "{username} ليس عضوًا في أي فريق."
+
+msgid "The payment account has been successfully disconnected."
+msgstr ""
+
+msgid "This payment account is no longer accessible. It is now disconnected."
+msgstr ""
+
+msgid "The data has been successfully refreshed."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4756,6 +4796,10 @@ msgstr[3] "يمكن للمانحين الاختيار بين ما يصل إلى 
 msgstr[4] "يمكن للمانحين الاختيار بين ما يصل إلى {n} من العملات ، اعتمادًا على تفضيلات المستلم وقدرات معالج الدفع الأساسي."
 msgstr[5] "يمكن للمانحين الاختيار بين ما يصل إلى {n} من العملات ، اعتمادًا على تفضيلات المستلم وقدرات معالج الدفع الأساسي."
 
+#, python-brace-format
+msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
@@ -4766,15 +4810,15 @@ msgstr[3] "Liberapay متاح بالكامل لمنشئي المحتوى في م
 msgstr[4] "Liberapay متاح بالكامل لمنشئي المحتوى في مناطق {n}:"
 msgstr[5] "Liberapay متاح بالكامل لمنشئي المحتوى في مناطق {n}:"
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
-msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] "بالإضافة إلى ذلك ، فإن Liberapay متاح جزئيًا للمبدعين في {paypal_link_open} البلدان {n} المدعومة من قبل PayPal {link_close}."
-msgstr[1] "بالإضافة إلى ذلك ، فإن Liberapay متاح جزئيًا للمبدعين في {paypal_link_open} البلدان {n} المدعومة من قبل PayPal {link_close}."
-msgstr[2] "بالإضافة إلى ذلك ، فإن Liberapay متاح جزئيًا للمبدعين في {paypal_link_open} البلدان {n} المدعومة من قبل PayPal {link_close}."
-msgstr[3] "بالإضافة إلى ذلك ، فإن Liberapay متاح جزئيًا للمبدعين في {paypal_link_open} البلدان {n} المدعومة من قبل PayPal {link_close}."
-msgstr[4] "بالإضافة إلى ذلك ، فإن Liberapay متاح جزئيًا للمبدعين في {paypal_link_open} البلدان {n} المدعومة من قبل PayPal {link_close}."
-msgstr[5] "بالإضافة إلى ذلك ، فإن Liberapay متاح جزئيًا للمبدعين في {paypal_link_open} البلدان {n} المدعومة من قبل PayPal {link_close}."
+#, python-brace-format
+msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
+msgid_plural "Liberapay is partially available to creators in {n} territories:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 msgid "What is Liberapay?"
 msgstr "ما هو ليبيراباي ؟"

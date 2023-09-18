@@ -2189,8 +2189,34 @@ msgid "We can also import lists of repositories for your teams:"
 msgstr "Также можно импортировать список репозиториев ваших команд:"
 
 #, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Отправленное описание слишком длинное ({0} > {1})."
+msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgid_plural "The summary can't be more than {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgid_plural "The full description must be at least {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgid_plural "The full description can't be more than {n} characters long."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "The full description can't be identical to the summary."
+msgstr ""
+
+msgid "The summary can't be only your name."
+msgstr ""
+
+msgid "The description can't be only your name."
+msgstr ""
 
 msgid "This is a preview."
 msgstr "Это предварительный просмотр."
@@ -2797,7 +2823,7 @@ msgstr "Этот профиль доступен только на {language}"
 msgid "Edit"
 msgstr "Редактировать"
 
-msgid "Statement"
+msgid "Description"
 msgstr "Описание"
 
 #, python-brace-format
@@ -2982,9 +3008,6 @@ msgstr "Тип"
 
 msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr "(В данный момент Liberapay поддерживает только один тип счёта.)"
-
-msgid "Description"
-msgstr "Описание"
 
 msgid "A short description of the invoice"
 msgstr "Краткое описание счёта"
@@ -3286,6 +3309,15 @@ msgstr "Вы не состоите ни в одной команде."
 #, python-brace-format
 msgid "{username} isn't a member of any team."
 msgstr "{username} не является членом какой-либо команды."
+
+msgid "The payment account has been successfully disconnected."
+msgstr ""
+
+msgid "This payment account is no longer accessible. It is now disconnected."
+msgstr ""
+
+msgid "The data has been successfully refreshed."
+msgstr ""
 
 #, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4086,6 +4118,10 @@ msgstr[1] "Доноры могут выбрать до {n} валют, в зав
 msgstr[2] "Доноры могут выбрать до {n} валют, в зависимости от предпочтений получателя и возможностей основного платежного процессора."
 
 #, python-brace-format
+msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
+msgstr ""
+
+#, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
 msgstr[0] "Liberapay полностью доступна для создателей на {n} территории:"
@@ -4093,11 +4129,11 @@ msgstr[1] "Liberapay полностью доступна для создател
 msgstr[2] "Liberapay полностью доступна для создателей на {n} территориях:"
 
 #, python-brace-format
-msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
-msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] "Кроме того, Liberapay частично доступна для создателей в {paypal_link_open}{n} стране, поддерживаемой PayPal{link_close}."
-msgstr[1] "Кроме того, Liberapay частично доступна для создателей в {paypal_link_open}{n} странах, поддерживаемых PayPal{link_close}."
-msgstr[2] "Кроме того, Liberapay частично доступна для создателей в {paypal_link_open}{n} странах, поддерживаемых PayPal{link_close}."
+msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
+msgid_plural "Liberapay is partially available to creators in {n} territories:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "What is Liberapay?"
 msgstr "Что такое Liberapay?"
