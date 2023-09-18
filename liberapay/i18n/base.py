@@ -14,10 +14,11 @@ from markupsafe import Markup
 import opencc
 from pando.utils import utcnow
 
-from ..constants import to_precision
 from ..exceptions import AmbiguousNumber, InvalidNumber
 from ..website import website
-from .currencies import CURRENCIES, CURRENCY_REPLACEMENTS, D_MAX, Money, MoneyBasket
+from .currencies import (
+    CURRENCIES, CURRENCY_REPLACEMENTS, D_MAX, Money, MoneyBasket, to_precision,
+)
 
 
 MONEY_AMOUNT_FORMAT = parse_pattern('#,##0.00')

@@ -327,6 +327,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             )[0]
             if p:
                 if p.id != user.id:
+                    response.headers[b'Referrer-Policy'] = b'strict-origin'
                     submitted_confirmation_token = request.qs.get('log-in.confirmation')
                     if submitted_confirmation_token:
                         expected_confirmation_token = b64encode_s(blake2b(

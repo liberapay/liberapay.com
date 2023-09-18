@@ -5,6 +5,7 @@ from pando.utils import utcnow
 
 from liberapay.billing.payday import compute_next_payday_date
 from liberapay.i18n.base import LOCALE_EN
+from liberapay.models.participant import Participant
 from liberapay.payin.common import update_payin_transfer
 from liberapay.payin.cron import (
     execute_scheduled_payins,
@@ -742,6 +743,17 @@ class TestDonationRenewalScheduling(EmailHarness):
 
 class TestScheduledPayins(EmailHarness):
 
+    def setUp(self):
+        super().setUp()
+        schedule_renewals = Participant.schedule_renewals
+        self.sr_patch = patch.object(Participant, 'schedule_renewals', autospec=True)
+        self.sr_mock = self.sr_patch.__enter__()
+        self.sr_mock.side_effect = schedule_renewals
+
+    def tearDown(self):
+        self.sr_patch.__exit__(None, None, None)
+        super().tearDown()
+
     def test_no_scheduled_payins(self):
         self.make_participant('alice')
         send_upcoming_debit_notifications()
@@ -783,6 +795,7 @@ class TestScheduledPayins(EmailHarness):
                SET execution_date = current_date
                  , last_notif_ts = (last_notif_ts - interval '14 days')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 2
@@ -798,6 +811,7 @@ class TestScheduledPayins(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == "Your payment has succeeded"
+        assert self.sr_mock.call_count == 1
 
         scheduled_payins = self.db.all(
             "SELECT * FROM scheduled_payins ORDER BY execution_date"
@@ -859,6 +873,7 @@ class TestScheduledPayins(EmailHarness):
                SET execution_date = %(execution_date)s
              WHERE id = %(id)s
         """, manual_payin.__dict__)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 4
@@ -882,6 +897,7 @@ class TestScheduledPayins(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == "Your payment has succeeded"
+        assert self.sr_mock.call_count == 1
 
     def test_early_manual_renewal_of_automatic_donations(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
@@ -969,6 +985,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 3
@@ -978,6 +995,7 @@ class TestScheduledPayins(EmailHarness):
         assert emails[0]['subject'] == 'Liberapay donation renewal: payment aborted'
         assert emails[1]['to'] == ['alice <alice@liberapay.com>']
         assert emails[1]['subject'] == 'Liberapay donation renewal: payment aborted'
+        assert self.sr_mock.call_count == 0
 
     def test_canceled_scheduled_payin(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
@@ -1036,6 +1054,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 1
@@ -1044,6 +1063,7 @@ class TestScheduledPayins(EmailHarness):
         assert payins[0].off_session is False
         emails = self.get_emails()
         assert len(emails) == 0
+        assert self.sr_mock.call_count == 0
 
     def test_missing_route(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
@@ -1074,6 +1094,7 @@ class TestScheduledPayins(EmailHarness):
                SET execution_date = current_date
                  , last_notif_ts = (last_notif_ts - interval '14 days')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 1
@@ -1082,6 +1103,7 @@ class TestScheduledPayins(EmailHarness):
         assert payins[0].off_session is False
         emails = self.get_emails()
         assert len(emails) == 0
+        assert self.sr_mock.call_count == 0
 
     def test_scheduled_payin_requiring_authentication(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
@@ -1114,6 +1136,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 2
@@ -1130,6 +1153,7 @@ class TestScheduledPayins(EmailHarness):
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].payin == payins[1].id
+        assert self.sr_mock.call_count == 0
         # Test the payin page, it should redirect to the 3DSecure page
         r = self.client.GET(payin_page_path, auth_as=alice, raise_immediately=False)
         assert r.code == 200
@@ -1168,9 +1192,11 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         emails = self.get_emails()
         assert len(emails) == 0
+        assert self.sr_mock.call_count == 0
         send_donation_reminder_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -1220,6 +1246,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -1229,6 +1256,7 @@ class TestScheduledPayins(EmailHarness):
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].payin is None
         assert scheduled_payins[0].notifs_count == 2
+        assert self.sr_mock.call_count == 0
 
     def test_cancelling_a_scheduled_payin(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')

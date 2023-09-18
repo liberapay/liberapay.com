@@ -6,7 +6,7 @@ import stripe.error
 
 from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS, SEPA
 from ..exceptions import MissingPaymentAccount, NextAction, NoSelfTipping
-from ..i18n.currencies import Money
+from ..i18n.currencies import Money, ZERO_DECIMAL_CURRENCIES
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
 from .common import (
@@ -23,21 +23,16 @@ REFUND_REASONS_MAP = {
     'requested_by_customer': 'requested_by_payer',
 }
 
-# https://stripe.com/docs/currencies#presentment-currencies
-ZERO_DECIMAL_CURRENCIES = """
-    BIF CLP DJF GNF JPY KMF KRW MGA PYG RWF UGX VND VUV XAF XOF XPF
-""".split()
-
 
 def int_to_Money(amount, currency):
     currency = currency.upper()
-    if currency in ZERO_DECIMAL_CURRENCIES:
+    if currency in ZERO_DECIMAL_CURRENCIES['stripe']:
         return Money(Decimal(amount), currency)
     return Money(Decimal(amount) / 100, currency)
 
 
 def Money_to_int(m):
-    if m.currency in ZERO_DECIMAL_CURRENCIES:
+    if m.currency in ZERO_DECIMAL_CURRENCIES['stripe']:
         return int(m.amount)
     return int(m.amount * 100)
 
@@ -85,7 +80,7 @@ def create_source_from_token(token_id, one_off, amount, owner_info, return_url):
     )
 
 
-def charge(db, payin, payer, route):
+def charge(db, payin, payer, route, update_donor=True):
     """Initiate the Charge for the given payin.
 
     Returns the updated payin, or possibly a new payin.
@@ -116,7 +111,7 @@ def charge(db, payin, payer, route):
         else:
             new_payin_error = 'canceled' if new_status == 'failed' else None
             payin = update_payin(db, payin.id, None, new_status, new_payin_error)
-            for pt in transfers:
+            for i, pt in enumerate(transfers, 1):
                 new_transfer_error = (
                     "canceled because payer account is blocked"
                     if payer.is_suspended else
@@ -124,24 +119,31 @@ def charge(db, payin, payer, route):
                     if pt.recipient_marked_as in ('fraud', 'spam') else
                     "canceled because another destination account is blocked"
                 ) if new_status == 'failed' else None
-                update_payin_transfer(db, pt.id, None, new_status, new_transfer_error)
+                update_payin_transfer(
+                    db, pt.id, None, new_status, new_transfer_error,
+                    update_donor=(update_donor and i == len(transfers)),
+                )
             return payin
     if len(transfers) == 1:
         payin, charge = destination_charge(
-            db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
+            db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
+            update_donor=update_donor,
         )
         if payin.status == 'failed':
-            payin, charge = try_other_destinations(db, payin, payer, charge)
+            payin, charge = try_other_destinations(
+                db, payin, payer, charge, update_donor=update_donor,
+            )
     else:
         payin, charge = charge_and_transfer(
-            db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
+            db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
+            update_donor=update_donor,
         )
     if charge and charge.status == 'failed' and charge.failure_code == 'expired_card':
         route.update_status('expired')
     return payin
 
 
-def try_other_destinations(db, payin, payer, charge):
+def try_other_destinations(db, payin, payer, charge, update_donor=True):
     """Retry a failed charge with different destinations.
 
     Returns a payin.
@@ -194,11 +196,13 @@ def try_other_destinations(db, payin, payer, charge):
             )
             if len(payin_transfers) == 1:
                 payin, charge = destination_charge(
-                    db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
+                    db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
+                    update_donor=update_donor,
                 )
             else:
                 payin, charge = charge_and_transfer(
-                    db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id)
+                    db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
+                    update_donor=update_donor,
                 )
         except NextAction:
             raise
@@ -215,7 +219,9 @@ def try_other_destinations(db, payin, payer, charge):
     return payin, charge
 
 
-def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=None):
+def charge_and_transfer(
+    db, payin, payer, statement_descriptor, on_behalf_of=None, update_donor=True,
+):
     """Create a standalone Charge then multiple Transfers.
 
     Doc: https://stripe.com/docs/connect/charges-transfers
@@ -271,12 +277,14 @@ def charge_and_transfer(db, payin, payer, statement_descriptor, on_behalf_of=Non
         else:
             charge = intent.charges.data[0]
     intent_id = getattr(intent, 'id', None)
-    payin = settle_charge_and_transfers(db, payin, charge, intent_id=intent_id)
+    payin = settle_charge_and_transfers(
+        db, payin, charge, intent_id=intent_id, update_donor=update_donor,
+    )
     send_payin_notification(db, payin, payer, charge, route)
     return payin, charge
 
 
-def destination_charge(db, payin, payer, statement_descriptor):
+def destination_charge(db, payin, payer, statement_descriptor, update_donor=True):
     """Create a Destination Charge.
 
     Doc: https://stripe.com/docs/connect/destination-charges
@@ -340,7 +348,9 @@ def destination_charge(db, payin, payer, statement_descriptor):
         else:
             charge = intent.charges.data[0]
     intent_id = getattr(intent, 'id', None)
-    payin = settle_destination_charge(db, payin, charge, pt, intent_id=intent_id)
+    payin = settle_destination_charge(
+        db, payin, charge, pt, intent_id=intent_id, update_donor=update_donor,
+    )
     send_payin_notification(db, payin, payer, charge, route)
     return payin, charge
 
@@ -406,7 +416,9 @@ def settle_charge(db, payin, charge):
         return settle_charge_and_transfers(db, payin, charge)
 
 
-def settle_charge_and_transfers(db, payin, charge, intent_id=None):
+def settle_charge_and_transfers(
+    db, payin, charge, intent_id=None, update_donor=True,
+):
     """Record the result of a charge, and execute the transfers if it succeeded.
     """
     if getattr(charge, 'balance_transaction', None):
@@ -443,18 +455,31 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
          WHERE pt.payin = %s
       ORDER BY pt.id
     """, (payin.id,))
+    last = len(payin_transfers) - 1
     if amount_settled is not None:
         payer = db.Participant.from_id(payin.payer)
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
             if payer.is_suspended and pt.status not in ('failed', 'succeeded'):
-                pt = update_payin_transfer(db, pt.id, None, 'suspended', None)
+                pt = update_payin_transfer(
+                    db, pt.id, None, 'suspended', None,
+                    update_donor=(update_donor and i == last),
+                )
             elif pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
-                pt = update_payin_transfer(db, pt.id, None, charge.status, error)
+                pt = update_payin_transfer(
+                    db, pt.id, None, charge.status, error,
+                    update_donor=(update_donor and i == last),
+                )
             elif pt.remote_id is None and pt.status in ('pre', 'pending'):
-                pt = execute_transfer(db, pt, pt.destination_id, charge.id)
+                pt = execute_transfer(
+                    db, pt, pt.destination_id, charge.id,
+                    update_donor=(update_donor and i == last),
+                )
             elif payin.refunded_amount and pt.remote_id:
-                pt = sync_transfer(db, pt)
+                pt = sync_transfer(
+                    db, pt,
+                    update_donor=(update_donor and i == last),
+                )
             if pt.status == 'failed':
                 undeliverable_amount += pt.amount
             payin_transfers[i] = pt
@@ -484,17 +509,21 @@ def settle_charge_and_transfers(db, payin, charge, intent_id=None):
             for i, pt in enumerate(payin_transfers):
                 if pt.status == 'succeeded':
                     payin_transfers[i] = reverse_transfer(
-                        db, pt, payin_refund_id=payin_refund_id
+                        db, pt, payin_refund_id=payin_refund_id,
+                        update_donor=(update_donor and i == last),
                     )
 
     elif charge.status in ('failed', 'pending'):
-        for pt in payin_transfers:
-            update_payin_transfer(db, pt.id, None, charge.status, error)
+        for i, pt in enumerate(payin_transfers):
+            update_payin_transfer(
+                db, pt.id, None, charge.status, error,
+                update_donor=(update_donor and i == last),
+            )
 
     return payin
 
 
-def execute_transfer(db, pt, destination, source_transaction):
+def execute_transfer(db, pt, destination, source_transaction, update_donor=True):
     """Create a Transfer.
 
     Args:
@@ -541,16 +570,24 @@ def execute_transfer(db, pt, destination, source_transaction):
             if alternate_destination:
                 return execute_transfer(db, pt, alternate_destination, source_transaction)
             error = "The recipient's account no longer exists."
-            return update_payin_transfer(db, pt.id, None, 'failed', error)
+            return update_payin_transfer(
+                db, pt.id, None, 'failed', error, update_donor=update_donor,
+            )
         else:
             website.tell_sentry(e, allow_reraise=False)
-            return update_payin_transfer(db, pt.id, None, 'pending', error)
+            return update_payin_transfer(
+                db, pt.id, None, 'pending', error, update_donor=update_donor,
+            )
     except Exception as e:
         website.tell_sentry(e)
-        return update_payin_transfer(db, pt.id, None, 'pending', str(e))
+        return update_payin_transfer(
+            db, pt.id, None, 'pending', str(e), update_donor=update_donor,
+        )
     # `Transfer` objects don't have a `status` attribute, so if no exception was
     # raised we assume that the transfer was successful.
-    pt = update_payin_transfer(db, pt.id, tr.id, 'succeeded', None)
+    pt = update_payin_transfer(
+        db, pt.id, tr.id, 'succeeded', None, update_donor=update_donor,
+    )
     update_transfer_metadata(tr, pt)
     return pt
 
@@ -593,7 +630,10 @@ def refund_payin(db, payin, refund_amount=None):
     )
 
 
-def reverse_transfer(db, pt, reversal_amount=None, payin_refund_id=None, idempotency_key=None):
+def reverse_transfer(
+    db, pt, reversal_amount=None, payin_refund_id=None, idempotency_key=None,
+    update_donor=True,
+):
     """Create a Transfer Reversal.
 
     Args:
@@ -625,7 +665,7 @@ def reverse_transfer(db, pt, reversal_amount=None, payin_refund_id=None, idempot
             if str(e).endswith(" is already fully reversed."):
                 return update_payin_transfer(
                     db, pt.id, pt.remote_id, pt.status, pt.error,
-                    reversed_amount=pt.amount,
+                    reversed_amount=pt.amount, update_donor=update_donor,
                 )
             else:
                 raise
@@ -635,11 +675,12 @@ def reverse_transfer(db, pt, reversal_amount=None, payin_refund_id=None, idempot
                 ctime=(EPOCH + timedelta(seconds=reversal.created)),
             )
     return update_payin_transfer(
-        db, pt.id, pt.remote_id, pt.status, pt.error, reversed_amount=new_reversed_amount
+        db, pt.id, pt.remote_id, pt.status, pt.error, reversed_amount=new_reversed_amount,
+        update_donor=update_donor,
     )
 
 
-def sync_transfer(db, pt):
+def sync_transfer(db, pt, update_donor=True):
     """Fetch the transfer's data and update our database.
 
     Args:
@@ -658,11 +699,14 @@ def sync_transfer(db, pt):
         reversed_amount = None
     record_reversals(db, pt, tr)
     return update_payin_transfer(
-        db, pt.id, tr.id, 'succeeded', None, reversed_amount=reversed_amount
+        db, pt.id, tr.id, 'succeeded', None, reversed_amount=reversed_amount,
+        update_donor=update_donor,
     )
 
 
-def settle_destination_charge(db, payin, charge, pt, intent_id=None):
+def settle_destination_charge(
+    db, payin, charge, pt, intent_id=None, update_donor=True,
+):
     """Record the result of a charge, and recover the fee.
     """
     if getattr(charge, 'balance_transaction', None):
@@ -708,7 +752,7 @@ def settle_destination_charge(db, payin, charge, pt, intent_id=None):
     pt_remote_id = getattr(charge, 'transfer', None)
     pt = update_payin_transfer(
         db, pt.id, pt_remote_id, status, error, amount=net_amount,
-        reversed_amount=reversed_amount,
+        reversed_amount=reversed_amount, update_donor=update_donor,
     )
 
     return payin

@@ -172,8 +172,8 @@ if query:
 
     % if statements
     <div>
-        <h3>{{ ngettext("Found a matching user statement",
-                        "Found matching user statements",
+        <h3>{{ ngettext("Found a matching user description",
+                        "Found matching user descriptions",
                         len(statements)) }}</h3>
         % for result in statements
             <div class="panel panel-default">
