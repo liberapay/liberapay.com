@@ -100,7 +100,7 @@ subhead = _("Descriptions")
         <input type="hidden" name="lang" value="{{ lang }}" />
         <input type="hidden" name="summary" value="{{ summary }}" />
         <textarea class="hidden" name="statement">{{ statement }}</textarea>
-        <h3>{{ _("Statement") }}</h3>
+        <h3>{{ _("Description") }}</h3>
         <section class="profile-statement" lang="{{ lang }}">{{ rendered_stmt }}</section>
         <hr>
         <h4>{{ _("Excerpt that will be used in social media:") }}</h4>

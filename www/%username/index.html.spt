@@ -158,7 +158,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 
 % block content
     % if statement
-        <h3 id="statement">{{ _("Statement") }}</h3>
+        <h3 id="statement">{{ _("Description") }}</h3>
         <section class="profile-statement" lang="{{ statement.lang }}">{{
             statement_html
         }}</section>
