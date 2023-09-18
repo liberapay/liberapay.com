@@ -25,11 +25,11 @@ if request.method == 'POST':
                 "The summary can't be more than {n} characters long.",
                 constants.SUMMARY_MAX_SIZE
             ))
-        if len(statement) < 100:
+        if len(statement) < 50:
             errors.append(ngettext(
                 "",
                 "The full description must be at least {n} characters long.",
-                n=100
+                n=50
             ))
         elif len(statement) > 50_000:
             errors.append(ngettext(
