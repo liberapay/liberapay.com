@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Hungarian "
-"<https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2023-09-18 10:42+0000\n"
+"Last-Translator: Changaco <changaco@changaco.oy.lc>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.0.2\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -888,9 +890,9 @@ msgstr "A(z) „{0}” e-mail cím érvénytelen."
 msgid "{0} is not a valid domain name."
 msgstr "A(z) {0} nem érvényes tartomány név."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Our attempt to resolve the domain {domain_name} failed (error message: “{error_message}”)."
-msgstr "A {domain_name} domain feloldására tett kísérletünk sikertelen volt (hibaüzenet: \"{error_message}\")."
+msgstr "A(z) {domain_name} tartomány feloldására tett kísérletünk sikertelen volt, hibaüzenet: „{error_message}”."
 
 #, python-brace-format
 msgid "Our attempt to establish a connection with the {domain_name} email server failed (error message: “{error_message}”)."
@@ -900,9 +902,9 @@ msgstr "A(z) {domain_name} e-mail kiszolgálóval való kapcsolat létesítésé
 msgid "'{domain_name}' is not a valid email domain."
 msgstr "A(z) \"{domain_name}\" egy érvénytelen e-mail tartomány."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
-msgstr "Úgy tűnik, hogy a {email_address} e-mail cím nem létezik. A {domain} e-mail szerver a {ip_address} IP-címen a \"{error_message}\" hibaüzenettel utasította vissza."
+msgstr "Úgy tűnik, hogy az e-mail cím ({email_address}) nem létezik. A(z) {domain} e-mail szerver a(z) {ip_address} IP-címen a következő hibaüzenettel utasította vissza: „{error_message}”."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
@@ -996,9 +998,9 @@ msgstr "Úgy tűnik valamit törölni próbál, ami nem létezik."
 msgid "\"{0}\" is not a valid number."
 msgstr "A(z) \"{0}\" érvénytelen szám."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "\"{0}\" doesn't match the expected number format. Perhaps you meant {list_of_suggestions}?"
-msgstr "A(z) \"{0}\" nem egy megfelelően formázott szám. Talán úgy értette, hogy {list_of_suggestions}?"
+msgstr "„{0}” nem egyezik a várt számformátummal. Talán úgy értette, hogy {list_of_suggestions}?"
 
 #, python-brace-format
 msgid "\"{0}\" is not a properly formatted number."
@@ -1102,13 +1104,13 @@ msgstr "A fiókjának nincs jelszava, ezért e-mailt használva kell hitelesíte
 msgid "The submitted password is incorrect."
 msgstr "A megadott jelszó helytelen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "“{0}” is not a valid account ID."
-msgstr "\"{0}\" nem érvényes számlaazonosító."
+msgstr "„{0}” nem érvényes számlaazonosító."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No account has the username “{username}”."
-msgstr "Nincs olyan fiók, amelynek felhasználóneve \"{username}\"."
+msgstr "Nincs olyan fiók, amelynek a felhasználóneve „{username}”."
 
 #, python-brace-format
 msgid "No account has “{email_address}” as its primary email address."
@@ -1129,7 +1131,6 @@ msgstr "Az Ön e-mail címének ellenőrzése megtörtént."
 msgid "A security check has failed. Please make sure your browser is configured to allow cookies for {domain}, then try again."
 msgstr "Egy biztonsági ellenőrzés meghiúsult. Kérjük, ellenőrizze, hogy a böngészője úgy van-e beállítva, hogy engedélyezze a sütiket a {domain} számára, majd próbálkozzon újra."
 
-#, fuzzy
 msgid "Checking cookies…"
 msgstr "Sütik ellenőrzése…"
 
@@ -1158,9 +1159,8 @@ msgstr "Túl gyorsan tesz kéréseket, próbálja újra később."
 msgid "There doesn't seem to be a user named {0} on {1}."
 msgstr "Úgy tűnik, hogy nincs {0} nevű felhasználó a(z) {1} platformon."
 
-#, fuzzy
 msgid "This profile is marked as spam or fraud."
-msgstr "Ez a profil spamként vagy csalásként van megjelölve."
+msgstr "Ez a profil spamként vagy csalóként van megjelölve."
 
 msgid "Cancel"
 msgstr "Mégse"
