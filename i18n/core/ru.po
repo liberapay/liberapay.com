@@ -2188,35 +2188,38 @@ msgstr "Мы можем импортировать список ваших ре�
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Также можно импортировать список репозиториев ваших команд:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Резюме не может быть больше, чем {n} символов в длину."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Полное описание не может быть более {n} символов в длину."
 
+#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr ""
+msgstr "Полное описание не может быть идентичным резюме."
 
+#, fuzzy
 msgid "The summary can't be only your name."
-msgstr ""
+msgstr "Резюме не может быть только вашим именем."
 
+#, fuzzy
 msgid "The description can't be only your name."
-msgstr ""
+msgstr "Описание не может быть только вашим именем."
 
 msgid "This is a preview."
 msgstr "Это предварительный просмотр."
@@ -2686,9 +2689,9 @@ msgstr "Эта информация будет отправлена платёж
 msgid "Remember the card number for next time"
 msgstr "Использовать этот номер карты в следующий раз"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr ""
+msgstr "Используйте этот платежный инструмент по умолчанию для будущих платежей в {currency}"
 
 msgid "Use this payment instrument by default for future payments"
 msgstr "Использовать этот платежный инструмент по умолчанию для будущих платежей"
@@ -3310,14 +3313,17 @@ msgstr "Вы не состоите ни в одной команде."
 msgid "{username} isn't a member of any team."
 msgstr "{username} не является членом какой-либо команды."
 
+#, fuzzy
 msgid "The payment account has been successfully disconnected."
-msgstr ""
+msgstr "Платежный счет был успешно отключен."
 
+#, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr ""
+msgstr "Этот платежный счет больше недоступен. Теперь он отключен."
 
+#, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr ""
+msgstr "Данные успешно обновлялись."
 
 #, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -3576,19 +3582,20 @@ msgstr[2] "У вас есть {n} подключенных платежных и
 msgid "Bank Account"
 msgstr "Банковский счёт"
 
+#, fuzzy
 msgid "This instrument is used by default."
-msgstr ""
+msgstr "Этот инструмент используется по умолчанию."
 
 msgid "default"
 msgstr "по умолчанию"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
-msgstr ""
+msgstr "Этот инструмент используется по умолчанию для платежей в {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "default for {currency}"
-msgstr ""
+msgstr "по умолчанию для {currency}"
 
 msgid "view mandate"
 msgstr "просмотреть мандат"
@@ -3623,13 +3630,13 @@ msgstr "Этот платёжный инструмент еще не испол�
 msgid "Set as default"
 msgstr "Установить по умолчанию"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Используйте этот инструмент по умолчанию для платежей в {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Set as default for {currency}"
-msgstr ""
+msgstr "Установить по умолчанию для {currency}"
 
 msgid "You don't have any valid payment instrument."
 msgstr "У вас нет действующего платежного инструмента."
@@ -4117,9 +4124,9 @@ msgstr[0] "Доноры могут выбрать до {n} валюту, в за
 msgstr[1] "Доноры могут выбрать до {n} валют, в зависимости от предпочтений получателя и возможностей основного платежного процессора."
 msgstr[2] "Доноры могут выбрать до {n} валют, в зависимости от предпочтений получателя и возможностей основного платежного процессора."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr ""
+msgstr "Пожертвования могут быть получены только на территориях, где имеется по крайней мере один поддерживаемый платежный процессор. В настоящее время поддерживаются платежные процессоры {Stripe} и {PayPal}. Некоторые функции доступны только через Stripe, поэтому Liberapay полностью доступен для создателей на территориях, поддерживаемых Stripe, и частично доступен на территориях, только поддерживаемых PayPal."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4128,12 +4135,12 @@ msgstr[0] "Liberapay полностью доступна для создател
 msgstr[1] "Liberapay полностью доступна для создателей на {n} территориях:"
 msgstr[2] "Liberapay полностью доступна для создателей на {n} территориях:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay частично доступен для создателей на {n} территориях:"
 
 msgid "What is Liberapay?"
 msgstr "Что такое Liberapay?"
@@ -5162,9 +5169,9 @@ msgstr "В каком состоянии аккаунты будут после 
 msgid "Transfer the account"
 msgstr "Перенести аккаунт"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr ""
+msgstr "Счет {provider}, который вы пытаетесь подключить, связан с другой учетной записью Liberapay, помеченной как мошенническая."
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
