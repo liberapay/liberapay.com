@@ -2154,29 +2154,29 @@ msgstr "我們可以為你的團隊導入代碼庫列表："
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
-msgstr[0] "这份摘要不能超过{n}长的特性。"
+msgstr[0] "概述長度不能超過 {n} 個字符。"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
-msgstr[0] "全面描述必须至少具有长期性质{n}。"
+msgstr[0] "完整描述的最短長度是 {n} 個字符。"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
-msgstr[0] "详细描述可能不超过{n}性质。"
+msgstr[0] "完整描述的長度不能超過 {n} 個字符。"
 
 #, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr "完全说明与摘要相同。"
+msgstr "完整描述內容不能和概述相同。"
 
 #, fuzzy
 msgid "The summary can't be only your name."
-msgstr "摘要只能是你的名字。"
+msgstr "概述不能只有你的名字。"
 
 #, fuzzy
 msgid "The description can't be only your name."
-msgstr "描述只能是你的名字。"
+msgstr "描述不能只有你的名字。"
 
 msgid "This is a preview."
 msgstr "此為預覽。"
@@ -3256,15 +3256,15 @@ msgstr "{username} 不是任何團隊的成員。"
 
 #, fuzzy
 msgid "The payment account has been successfully disconnected."
-msgstr "付款账户已成功中断。"
+msgstr "成功斷開了與付款賬戶的連接。"
 
 #, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr "这一付款账户不再可用。 它现在互不关联。"
+msgstr "無法在訪問此付款賬戶。已經斷開與它的連接。"
 
 #, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr "数据已成功更新。"
+msgstr "成功刷新了該數據。"
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4049,7 +4049,7 @@ msgstr[0] "捐助者最多可以選擇 {n} 種貨幣，具體取決於受領者�
 
 #, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "只有在有至少一名支助付款程序员的地区才能收到捐款。 目前得到支持的支付程序单位为{Stripe}和{PayPal}。 某些特征只能通过加沙地带提供,因此,在得到加沙地带支持的领土内,Libera Pay完全可以提供,而只有Pal支持的领土部分可以提供。"
+msgstr "只能在至少一個受支持的支付處理商可用的地方接收捐贈。{Stripe} 和 {PayPal}是當前受支持的支付處理商。某些 Liberapay 功能只能通過 Stripe 使用，因此 Liberapay 對於在 Stripe 支持區域的創作者完全可用，而在只受 PayPal 支持的地方，你無法使用 Liberapay 的全部功能。"
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4059,7 +4059,7 @@ msgstr[0] "在以下 {n} 個地區的創作者都能用 Liberapay 收款："
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] "在{n}领土上的创作者可以部分获得解放:"
+msgstr[0] "對於在 {n} 個地方的創作者，Liberapay 僅有部分功能可用："
 
 msgid "What is Liberapay?"
 msgstr "Liberapay 是什麼？"
@@ -5075,7 +5075,7 @@ msgstr "{username}在他的{platform}帳號上有一個名叫{repo_name}的代�
 #, fuzzy
 msgid "Found a matching user description"
 msgid_plural "Found matching user descriptions"
-msgstr[0] "找到符合的使用者敘述"
+msgstr[0] "找到了相符的用戶描述"
 
 msgid "Didn't find who you were looking for?"
 msgstr "沒找到你要找的人？"
