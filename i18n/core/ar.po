@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Arabic "
-"<https://hosted.weblate.org/projects/liberapay/core/ar/>\n"
-"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5);\n"
+"PO-Revision-Date: 2023-09-19 16:31+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/liberapay/core/ar/>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5);\n"
+"X-Generator: Weblate 5.1-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -2492,44 +2494,47 @@ msgstr "يمكننا استيراد قائمة بالمستودعات الخاص
 msgid "We can also import lists of repositories for your teams:"
 msgstr "يمكننا أيضًا استيراد قوائم المستودعات لفرقك:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "الملخص لا يمكن أن يكون أكثر من 0 شخصيات طويلة."
+msgstr[1] "مخصّص (هاش=82d03d589b58d2a8c99d043ba5f91b84))"
+msgstr[2] "الملخص لا يمكن أن يكون أكثر من شخصين طويلين."
 msgstr[3] ""
 msgstr[4] ""
-msgstr[5] ""
+msgstr[5] "الملخص لا يمكن أن يكون أكثر من {n} شخصيات طويلة."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "الوصف الكامل يجب أن يكون على الأقل 0 شخصيات طويلة."
+msgstr[1] "مخصّص (هاش=e77fbb49c028c11bb9d859698c4a5363)"
+msgstr[2] "يجب أن يكون الوصف الكامل شخصين على الأقل لفترة طويلة."
 msgstr[3] ""
 msgstr[4] ""
-msgstr[5] ""
+msgstr[5] "The full description must be at least {n} characters long."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "الوصف الكامل لا يمكن أن يكون أكثر من 0 شخصيات طويلة."
+msgstr[1] "المفردات (hsh=df724b624e486f3c07109838b9b3f0)"
+msgstr[2] "الوصف الكامل لا يمكن أن يكون أكثر من شخصين طويلين."
 msgstr[3] ""
 msgstr[4] ""
-msgstr[5] ""
+msgstr[5] "الوصف الكامل لا يمكن أن يكون أكثر من {n} شخصيات طويلة."
 
+#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr ""
+msgstr "الوصف الكامل لا يمكن أن يكون مطابقاً للملخص."
 
+#, fuzzy
 msgid "The summary can't be only your name."
-msgstr ""
+msgstr "الملخص لا يمكن أن يكون اسمك فقط."
 
+#, fuzzy
 msgid "The description can't be only your name."
-msgstr ""
+msgstr "الوصف لا يمكن أن يكون اسمك فقط."
 
 #, fuzzy
 msgid "This is a preview."
@@ -3109,9 +3114,9 @@ msgstr "سيتم إرسال هذه البيانات مباشرة إلى معال
 msgid "Remember the card number for next time"
 msgstr "تذكر رقم البطاقة في المرة القادمة"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr ""
+msgstr "Use this payment instrument by default for future payments in {currency}"
 
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
@@ -3854,14 +3859,17 @@ msgstr "إنك لا تنتمي كعضو إلى أي فريق بعدُ."
 msgid "{username} isn't a member of any team."
 msgstr "{username} ليس عضوًا في أي فريق."
 
+#, fuzzy
 msgid "The payment account has been successfully disconnected."
-msgstr ""
+msgstr "وتم فصل حساب الدفع بنجاح."
 
+#, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr ""
+msgstr "ولم يعد حساب الدفع هذا متاحا. لقد تم فصله الآن."
 
+#, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr ""
+msgstr "وقد تم بنجاح تجديد البيانات."
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4157,20 +4165,21 @@ msgstr[5] "لديك {n} وسيلة دفع متصلة."
 msgid "Bank Account"
 msgstr "حساب البنك"
 
+#, fuzzy
 msgid "This instrument is used by default."
-msgstr ""
+msgstr "يستخدم هذا الصك عن طريق التقصير."
 
 #, fuzzy
 msgid "default"
 msgstr "إفتراضي"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
-msgstr ""
+msgstr "ويستخدم هذا الصك في حالة العجز عن الدفع في {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "default for {currency}"
-msgstr ""
+msgstr "التقصير في {currency}"
 
 #, fuzzy
 msgid "view mandate"
@@ -4208,13 +4217,13 @@ msgstr "لم يتم استخدام وسيلة الدفع هذه حتى الآن.
 msgid "Set as default"
 msgstr "تعيين كافتراضي"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Use this instrument by default for payments in {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Set as default for {currency}"
-msgstr ""
+msgstr "تُحدَّد في حالة عجز {currency}"
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."
@@ -4796,9 +4805,9 @@ msgstr[3] "يمكن للمانحين الاختيار بين ما يصل إلى 
 msgstr[4] "يمكن للمانحين الاختيار بين ما يصل إلى {n} من العملات ، اعتمادًا على تفضيلات المستلم وقدرات معالج الدفع الأساسي."
 msgstr[5] "يمكن للمانحين الاختيار بين ما يصل إلى {n} من العملات ، اعتمادًا على تفضيلات المستلم وقدرات معالج الدفع الأساسي."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr ""
+msgstr "ولا يمكن تلقي التبرعات إلا في الأقاليم التي يوجد فيها مجهز واحد على الأقل للمدفوعات المدعومة. ومجهزو المدفوعات المدعومين حاليا هم ]X154X[ و ]X167X[. ولا تتوفر بعض الملامح إلا عن طريق \" تراي \" ، ولذلك فإن \" ليبراباي \" متاحة تماما للمبدعين في الأقاليم التي يدعمها \" راوي \" ، وهي متاحة جزئيا في الأقاليم التي لا تحظى إلا بدعم \" بي بال \" ."
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4810,15 +4819,15 @@ msgstr[3] "Liberapay متاح بالكامل لمنشئي المحتوى في م
 msgstr[4] "Liberapay متاح بالكامل لمنشئي المحتوى في مناطق {n}:"
 msgstr[5] "Liberapay متاح بالكامل لمنشئي المحتوى في مناطق {n}:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "والتحرير متاح جزئيا للمبدعين في صفر من الأقاليم:"
+msgstr[1] "مخصَّص (hsh=853969b22957acb45a26404e37a3ef82)"
+msgstr[2] "والتحرير متاح جزئيا للمبدعين في إقليمين:"
 msgstr[3] ""
 msgstr[4] ""
-msgstr[5] ""
+msgstr[5] "الحرية متاحة جزئيا للمبدعين في أقاليم {n}:"
 
 msgid "What is Liberapay?"
 msgstr "ما هو ليبيراباي ؟"
@@ -6052,9 +6061,9 @@ msgstr "كيف ستكون الحسابات بعد التحويل"
 msgid "Transfer the account"
 msgstr "تحويل الحساب"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr ""
+msgstr "حساب {provider} كنت تحاول الاتصال هو مرتبط بحساب ليبراباي آخر واسمه الاحتيال."
 
 #, fuzzy, python-brace-format
 msgid "Connecting a {platform} account"
