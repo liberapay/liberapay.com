@@ -2191,32 +2191,32 @@ msgstr "Також можна імпортувати перелік репози
 #, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Короткий опис не може бути довшим за {n} символ."
+msgstr[1] "Короткий опис не може бути довшим за {n} символи."
+msgstr[2] "Короткий опис не може бути довшим за {n} символів."
 
 #, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Повний опис повинен містити принаймні {n} символ."
+msgstr[1] "Повний опис повинен містити принаймні {n} символи."
+msgstr[2] "Повний опис повинен містити принаймні {n} символів."
 
 #, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Повний опис не може бути довшим ніж {n} символ."
+msgstr[1] "Повний опис не може бути довшим ніж {n} символи."
+msgstr[2] "Повний опис не може бути довшим ніж {n} символів."
 
 msgid "The full description can't be identical to the summary."
-msgstr ""
+msgstr "Повний опис не може бути ідентичним короткому опису."
 
 msgid "The summary can't be only your name."
-msgstr ""
+msgstr "Короткий опис не може бути лише вашим іменем."
 
 msgid "The description can't be only your name."
-msgstr ""
+msgstr "Опис не може бути лише вашим іменем."
 
 msgid "This is a preview."
 msgstr "Це попередній огляд."
@@ -3311,13 +3311,13 @@ msgid "{username} isn't a member of any team."
 msgstr "{username} не є учасником жодної команди."
 
 msgid "The payment account has been successfully disconnected."
-msgstr ""
+msgstr "Платіжний рахунок успішно від'єднано."
 
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr ""
+msgstr "Цей платіжний рахунок недоступний. Його від'єднано."
 
 msgid "The data has been successfully refreshed."
-msgstr ""
+msgstr "Оновлення даних виконано."
 
 #, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4119,7 +4119,7 @@ msgstr[2] "Донори можуть вибирати з-поміж {n} валю
 
 #, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr ""
+msgstr "Внески можуть бути отримані лише на територіях, де доступний принаймні один підтримуваний обробник платежів. Наразі підтримуються такі платіжні системи {Stripe} та {PayPal}. Деякі функції доступні лише через Stripe, тому Liberapay повністю доступний для авторів на територіях, що підтримують Stripe, і частково доступний на територіях, що підтримують лише PayPal."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4131,9 +4131,9 @@ msgstr[2] "Liberapay повністю доступний для творців �
 #, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Liberapay частково доступний для творців на {n} території:"
+msgstr[1] "Liberapay частково доступний для творців на {n} територіях:"
+msgstr[2] "Liberapay частково доступний для творців на {n} територіях:"
 
 msgid "What is Liberapay?"
 msgstr "Що таке Liberapay?"
@@ -5213,7 +5213,6 @@ msgstr[2] "Знайдено відповідних репозиторіїв"
 msgid "{username} has a repository named {repo_name} in their {platform} account"
 msgstr "{username} має репозиторій з назвою {repo_name} в його обліковому записі {platform}"
 
-#, fuzzy
 msgid "Found a matching user description"
 msgid_plural "Found matching user descriptions"
 msgstr[0] "Знайдено збіг в описі користувача"
