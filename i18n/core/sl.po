@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Slovenian "
-"<https://hosted.weblate.org/projects/liberapay/core/sl/>\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+"PO-Revision-Date: 2023-09-20 18:43+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/liberapay/core/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 5.1-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, fuzzy, python-brace-format
@@ -2605,38 +2607,41 @@ msgstr "Seznam vaših skladišč lahko uvozimo iz:"
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Uvozimo lahko tudi sezname skladišč za vaše ekipe:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
+msgstr[3] "Povzetek ne sme biti daljši od {n} znakov."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
+msgstr[3] "Celoten opis mora biti dolg vsaj {n} znakov."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
+msgstr[3] "Celoten opis ne sme biti daljši od {n} znakov."
 
+#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr ""
+msgstr "Celoten opis ne more biti enak povzetku."
 
+#, fuzzy
 msgid "The summary can't be only your name."
-msgstr ""
+msgstr "V povzetku ne sme biti samo vaše ime."
 
+#, fuzzy
 msgid "The description can't be only your name."
-msgstr ""
+msgstr "V opisu ne sme biti samo vaše ime."
 
 #, fuzzy
 msgid "This is a preview."
@@ -3216,9 +3221,9 @@ msgstr "Ti podatki bodo prek šifrirane povezave poslani neposredno obdelovalcu 
 msgid "Remember the card number for next time"
 msgstr "Zapomnite si številko kartice za naslednjič"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr ""
+msgstr "Ta plačilni instrument privzeto uporabljajte za prihodnja plačila v {currency}"
 
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
@@ -3956,14 +3961,17 @@ msgstr "Niste član nobene ekipe."
 msgid "{username} isn't a member of any team."
 msgstr "{username} ni član nobene ekipe."
 
+#, fuzzy
 msgid "The payment account has been successfully disconnected."
-msgstr ""
+msgstr "Plačilni račun je bil uspešno odklopljen."
 
+#, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr ""
+msgstr "Ta plačilni račun ni več dostopen. Zdaj je odklopljen."
 
+#, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr ""
+msgstr "Podatki so bili uspešno osveženi."
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4253,20 +4261,21 @@ msgstr[3] ""
 msgid "Bank Account"
 msgstr "Bančni račun"
 
+#, fuzzy
 msgid "This instrument is used by default."
-msgstr ""
+msgstr "Ta instrument se uporablja privzeto."
 
 #, fuzzy
 msgid "default"
 msgstr "privzeto"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
-msgstr ""
+msgstr "Ta instrument se privzeto uporablja za plačila na spletni strani {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "default for {currency}"
-msgstr ""
+msgstr "privzeto za {currency}"
 
 #, fuzzy
 msgid "view mandate"
@@ -4304,13 +4313,13 @@ msgstr "Ta plačilni instrument še ni bil uporabljen."
 msgid "Set as default"
 msgstr "Nastavljeno kot privzeto"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Ta instrument privzeto uporabljajte za plačila na spletnem mestu {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Set as default for {currency}"
-msgstr ""
+msgstr "Nastavljeno kot privzeto za {currency}"
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."
@@ -4892,9 +4901,9 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr ""
+msgstr "Donacije lahko prejmete le na območjih, kjer je na voljo vsaj en podprt plačilni procesor. Trenutno podprti plačilni procesorji so {Stripe} in {PayPal}. Nekatere funkcije so na voljo samo prek sistema Stripe, zato je Liberapay v celoti na voljo ustvarjalcem na ozemljih, ki jih podpira Stripe, delno pa je na voljo samo na ozemljih, ki jih podpira PayPal."
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4904,13 +4913,13 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
+msgstr[3] "Liberapay je delno na voljo ustvarjalcem na območjih {n}:"
 
 #, fuzzy
 msgid "What is Liberapay?"
@@ -6126,9 +6135,9 @@ msgstr "Kakšen bo položaj računov po prenosu"
 msgid "Transfer the account"
 msgstr "Prenos računa"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr ""
+msgstr "Račun {provider}, ki ga poskušate povezati, je povezan z drugim računom Liberapay, ki je označen kot goljufiv."
 
 #, fuzzy, python-brace-format
 msgid "Connecting a {platform} account"
