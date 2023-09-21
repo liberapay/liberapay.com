@@ -739,12 +739,19 @@ def settle_destination_charge(
         tr = stripe.Transfer.retrieve(charge.transfer)
         update_transfer_metadata(tr, pt)
         if tr.amount_reversed < bt.fee:
-            tr.reversals.create(
-                amount=bt.fee,
-                description="Stripe fee",
-                metadata={'payin_id': payin.id},
-                idempotency_key='payin_fee_%i' % payin.id,
-            )
+            try:
+                tr.reversals.create(
+                    amount=bt.fee,
+                    description="Stripe fee",
+                    metadata={'payin_id': payin.id},
+                    idempotency_key='payin_fee_%i' % payin.id,
+                )
+            except stripe.error.StripeError as e:
+                # In some cases Stripe can refuse to create a reversal. This is
+                # a serious problem, it means that Liberapay is losing money,
+                # but it can't be properly resolved automatically, so here the
+                # error is merely sent to Sentry.
+                website.tell_sentry(e)
         elif tr.amount_reversed > bt.fee:
             reversed_amount = int_to_Money(tr.amount_reversed, tr.currency) - fee
             record_reversals(db, pt, tr)
