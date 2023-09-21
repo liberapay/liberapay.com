@@ -715,6 +715,7 @@ class Payday:
                          FROM participants p
                         WHERE p.kind IN ('individual', 'organization')
                           AND p.join_time < %(ts_start)s
+                          AND p.is_suspended IS NOT true
                           AND COALESCE((
                                 SELECT payload::text
                                   FROM events e
