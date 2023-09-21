@@ -3747,6 +3747,28 @@ def clean_up_closed_accounts():
     return len(participants)
 
 
+def free_up_usernames():
+    n = website.db.one("""
+        WITH updated AS (
+            UPDATE participants
+               SET username = '~' || id::text
+             WHERE username NOT LIKE '~%'
+               AND marked_as IN ('fraud', 'spam')
+               AND kind IN ('individual', 'organization')
+               AND (
+                       SELECT e.ts
+                         FROM events e
+                        WHERE e.participant = participants.id
+                          AND e.type = 'flags_changed'
+                     ORDER BY e.ts DESC
+                        LIMIT 1
+                   ) < (current_timestamp - interval '3 weeks')
+         RETURNING id
+        ) SELECT count(*) FROM updated;
+    """)
+    print(f"Freed up {n} username{'s' if n > 1 else ''}.")
+
+
 def send_account_disabled_notifications():
     """Notify the owners of accounts that have been flagged as fraud or spam.
 
