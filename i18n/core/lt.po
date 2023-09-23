@@ -2429,35 +2429,38 @@ msgstr "Jūsų saugyklų sąrašą galime importuoti iš:"
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Taip pat galime importuoti jūsų komandų saugyklų sąrašus:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Santrauka negali būti ilgesnė nei {n} simbolių."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Išsamus aprašymas turi būti ne trumpesnis kaip {n} simbolių."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Išsamus aprašymas negali būti ilgesnis nei {n} simbolių."
 
+#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr ""
+msgstr "Išsamus aprašymas negali būti identiškas santraukai."
 
+#, fuzzy
 msgid "The summary can't be only your name."
-msgstr ""
+msgstr "Santraukoje negali būti tik jūsų vardas ir pavardė."
 
+#, fuzzy
 msgid "The description can't be only your name."
-msgstr ""
+msgstr "Aprašyme negali būti tik jūsų vardas ir pavardė."
 
 msgid "This is a preview."
 msgstr "Tai yra peržiūra."
@@ -3017,9 +3020,9 @@ msgstr "Šie duomenys šifruotu ryšiu bus tiesiogiai siunčiami mokėjimo tvark
 msgid "Remember the card number for next time"
 msgstr "Kitą kartą prisiminkite kortelės numerį"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr ""
+msgstr "Naudokite šią mokėjimo priemonę pagal numatytuosius nustatymus būsimiems mokėjimams {currency}"
 
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
@@ -3717,14 +3720,17 @@ msgstr "Nesate jokios komandos narys."
 msgid "{username} isn't a member of any team."
 msgstr "{username} nėra jokios komandos narys."
 
+#, fuzzy
 msgid "The payment account has been successfully disconnected."
-msgstr ""
+msgstr "Mokėjimo sąskaita sėkmingai atjungta."
 
+#, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr ""
+msgstr "Ši mokėjimo sąskaita nebėra prieinama. Ji dabar atjungta."
 
+#, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr ""
+msgstr "Duomenys sėkmingai atnaujinti."
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -4008,20 +4014,21 @@ msgstr[2] ""
 msgid "Bank Account"
 msgstr "Banko sąskaita"
 
+#, fuzzy
 msgid "This instrument is used by default."
-msgstr ""
+msgstr "Ši priemonė naudojama pagal numatytuosius nustatymus."
 
 #, fuzzy
 msgid "default"
 msgstr "numatytoji"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
-msgstr ""
+msgstr "Ši priemonė pagal nutylėjimą naudojama mokėjimams {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "default for {currency}"
-msgstr ""
+msgstr "numatytasis nustatymas {currency}"
 
 #, fuzzy
 msgid "view mandate"
@@ -4059,13 +4066,13 @@ msgstr "Ši mokėjimo priemonė dar nebuvo naudojama."
 msgid "Set as default"
 msgstr "Nustatyti kaip numatytąjį"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Šią priemonę pagal nutylėjimą naudokite mokėjimams {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Set as default for {currency}"
-msgstr ""
+msgstr "Nustatyta kaip numatytoji reikšmė {currency}"
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."
@@ -4623,9 +4630,9 @@ msgstr[0] "Donorai gali pasirinkti iki {n} valiutų, priklausomai nuo gavėjo pa
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr ""
+msgstr "Aukos gali būti gaunamos tik tose teritorijose, kuriose yra bent vienas palaikomas mokėjimo procesorius. Šiuo metu palaikomi šie mokėjimo procesoriai: {Stripe} ir {PayPal}. Kai kuriomis funkcijomis galima naudotis tik per \"Stripe\", todėl \"Liberapay\" visiškai prieinama kūrėjams teritorijose, kurias palaiko \"Stripe\", ir iš dalies prieinama teritorijose, kurias palaiko tik \"PayPal\"."
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4634,12 +4641,12 @@ msgstr[0] "\"Liberapay\" yra visiškai prieinama kūrėjams {n} teritorijose:"
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "\"Liberapay\" iš dalies prieinama kūrėjams {n} teritorijose:"
 
 #, fuzzy
 msgid "What is Liberapay?"
@@ -5816,9 +5823,9 @@ msgstr "Kaip sąskaitos atrodys po perdavimo"
 msgid "Transfer the account"
 msgstr "Sąskaitos perkėlimas"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr ""
+msgstr "{provider} paskyra, prie kurios bandote prisijungti, yra susieta su kita \"Liberapay\" paskyra, pažymėta kaip apgaulinga."
 
 #, fuzzy, python-brace-format
 msgid "Connecting a {platform} account"

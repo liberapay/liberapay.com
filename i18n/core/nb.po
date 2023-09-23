@@ -2190,32 +2190,35 @@ msgstr "En liste av dine pakkebrønner kan importeres fra:"
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Lister over pakkebrønner fra lagene dine kan også importeres:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgstr[1] "Sammendraget kan ikke være lengre enn {n} tegn."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<ubrukt entall (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgstr[1] "Den fullstendige beskrivelsen må være på minst {n} tegn."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<ubrukt entall (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgstr[1] "Den fullstendige beskrivelsen kan ikke være lengre enn {n} tegn."
 
+#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr ""
+msgstr "Den fullstendige beskrivelsen kan ikke være identisk med sammendraget."
 
+#, fuzzy
 msgid "The summary can't be only your name."
-msgstr ""
+msgstr "Sammendraget kan ikke bare være navnet ditt."
 
+#, fuzzy
 msgid "The description can't be only your name."
-msgstr ""
+msgstr "Beskrivelsen kan ikke bare være navnet ditt."
 
 msgid "This is a preview."
 msgstr "Dette er en forhåndsvisning."
@@ -2689,9 +2692,9 @@ msgstr "Denne dataen vil sendes direkte til betalingsformidleren {name}, over en
 msgid "Remember the card number for next time"
 msgstr "Husk kortnummeret til neste gang"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr ""
+msgstr "Bruk dette betalingsinstrumentet som standard for fremtidige betalinger i {currency}"
 
 msgid "Use this payment instrument by default for future payments"
 msgstr "Bruk dette betalingsinstrumentet som forvalg for fremtidige betalinger"
@@ -3320,14 +3323,17 @@ msgstr "Du er ikke medlem av noe lag."
 msgid "{username} isn't a member of any team."
 msgstr "{username} er ikke medlem av noen lag."
 
+#, fuzzy
 msgid "The payment account has been successfully disconnected."
-msgstr ""
+msgstr "Betalingskontoen har blitt frakoblet."
 
+#, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr ""
+msgstr "Denne betalingskontoen er ikke lenger tilgjengelig. Den er nå frakoblet."
 
+#, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr ""
+msgstr "Dataene har blitt oppdatert."
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
@@ -3587,19 +3593,20 @@ msgstr[1] "Du har {n} tilknyttede betalingsinstrumenter."
 msgid "Bank Account"
 msgstr "Bankkonto"
 
+#, fuzzy
 msgid "This instrument is used by default."
-msgstr ""
+msgstr "Dette instrumentet brukes som standard."
 
 msgid "default"
 msgstr "forvalg"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
-msgstr ""
+msgstr "Dette instrumentet brukes som standard for betalinger i {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "default for {currency}"
-msgstr ""
+msgstr "standard for {currency}"
 
 msgid "view mandate"
 msgstr "vis mandat"
@@ -3635,13 +3642,13 @@ msgstr "Dette betalingsinstrumentet har ikke blitt benyttet enda."
 msgid "Set as default"
 msgstr "Sett som forvalg"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Bruk dette instrumentet som standard for betalinger i {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Set as default for {currency}"
-msgstr ""
+msgstr "Angi som standard for {currency}"
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."
@@ -4139,9 +4146,9 @@ msgid_plural "Donors can choose between up to {n} currencies, depending on the p
 msgstr[0] "Givere kan velge mellom opptil {n} valutaer, avhengig av mottakerens preferanser og evnene til den underliggende betalingsbehandleren."
 msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr ""
+msgstr "Donasjoner kan bare mottas i områder der minst én støttet betalingsbehandler er tilgjengelig. De støttede betalingsprosessorene er for øyeblikket {Stripe} og {PayPal}. Noen funksjoner er bare tilgjengelige via Stripe, så Liberapay er fullt tilgjengelig for opprettere i områder som støttes av Stripe, og delvis tilgjengelig i områder som bare støttes av PayPal."
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4149,11 +4156,11 @@ msgid_plural "Liberapay is fully available to creators in {n} territories:"
 msgstr[0] "Liberapay er fullt tilgjengelig for skapere i {n} territorier:"
 msgstr[1] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<ubrukt entall (hash=853969b22957acb45a26404e37a3ef82)>"
+msgstr[1] "Liberapay er delvis tilgjengelig for opphavere i {n} territorier:"
 
 msgid "What is Liberapay?"
 msgstr "Hva er Liberapay?"
@@ -5177,9 +5184,9 @@ msgstr "Hvordan kontoene vil være etter overførselen"
 msgid "Transfer the account"
 msgstr "Overfør kontoen"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr ""
+msgstr "Kontoen {provider} du forsøker å koble til, er knyttet til en annen Liberapay-konto som er merket som uredelig."
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
