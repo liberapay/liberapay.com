@@ -3199,10 +3199,17 @@ class Participant(Model, MixinTeam):
             SELECT t.*, p AS tippee_p
               FROM current_tips t
               JOIN participants p ON p.id = t.tippee
+         LEFT JOIN scheduled_payins sp ON sp.payer = t.tipper
+                                      AND sp.payin IS NULL
+                                      AND t.tippee::text IN (
+                                              SELECT tr->>'tippee_id'
+                                                FROM json_array_elements(sp.transfers) tr
+                                          )
              WHERE t.tipper = %(tipper_id)s
                AND t.renewal_mode > 0
                AND ( t.paid_in_advance IS NULL OR
-                     t.paid_in_advance < (t.amount * %(weeks_early)s)
+                     t.paid_in_advance < (t.amount * %(weeks_early)s) OR
+                     sp.execution_date <= (current_date + interval '%(weeks_early)s weeks')
                    )
                AND p.status = 'active'
                AND ( p.goal IS NULL OR p.goal >= 0 )
@@ -3745,6 +3752,28 @@ def clean_up_closed_accounts():
         p.erase_personal_information()
         p.invalidate_exchange_routes()
     return len(participants)
+
+
+def free_up_usernames():
+    n = website.db.one("""
+        WITH updated AS (
+            UPDATE participants
+               SET username = '~' || id::text
+             WHERE username NOT LIKE '~%'
+               AND marked_as IN ('fraud', 'spam')
+               AND kind IN ('individual', 'organization')
+               AND (
+                       SELECT e.ts
+                         FROM events e
+                        WHERE e.participant = participants.id
+                          AND e.type = 'flags_changed'
+                     ORDER BY e.ts DESC
+                        LIMIT 1
+                   ) < (current_timestamp - interval '3 weeks')
+         RETURNING id
+        ) SELECT count(*) FROM updated;
+    """)
+    print(f"Freed up {n} username{'s' if n > 1 else ''}.")
 
 
 def send_account_disabled_notifications():
