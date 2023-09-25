@@ -1,53 +1,97 @@
 # coding: utf8
 
+import json
+
 from liberapay.i18n.base import LOCALE_EN as locale
-from liberapay.utils import partition
+from liberapay.utils import form_post_success
 
 PAGE_SIZE = 50
 
 REASONS = {
-    "bounce": "This domain bounces back all messages.",
-    "complaint": "The domain's admin asked us to blacklist it.",
-    "throwaway": "This domain provides throwaway addresses.",
-    "other": "Other",
+    "bounce": (
+        "This domain bounces back all messages.",
+        "These domains bounce back all messages."
+    ),
+    "complaint": (
+        "An administrator of this domain asked us to blacklist it.",
+        "An administrator of these domains asked us to blacklist them."
+    ),
+    "throwaway": (
+        "This domain provides throwaway addresses.",
+        "These domains provide throwaway addresses.",
+    ),
+    "other": ("Other", "Other"),
 }
 
 [---]
 
 user.require_active_privilege('admin')
 
-domain = request.qs.get('domain', '').lower()
+domain = request.qs.get('domain', '').lower().strip()
 
-if domain:
-    if request.method == 'POST':
-        if not domain:
-            raise response.invalid_input(domain, 'domain', 'querystring')
-        action = request.body['action']
-        if action == 'remove_from_blacklist':
-            website.db.run("""
+if request.method == 'POST':
+    action = request.body['action']
+    if domain:
+        if 'domains' in request.body:
+            raise response.error(400, (
+                "ambiguous request: contains both `domain` in querystring and `domains` in body"
+            ))
+        addresses = ['@' + domain]
+    else:
+        addresses = [
+            '@' + domain.lstrip('@') for domain in request.body['domains'].lower().split()
+        ]
+        if not addresses:
+            raise response.invalid_input(request.body['domains'], 'domains', 'body')
+    addresses = json.dumps(addresses)
+    if action == 'remove_from_blacklist':
+        n = website.db.one("""
+            WITH updated AS (
                 UPDATE email_blacklist
                    SET ignore_after = current_timestamp
                      , ignored_by = %s
-                 WHERE lower(address) = '@' || %s
-            """, (user.id, domain))
-        elif action == 'add_to_blacklist':
-            reason = request.body['reason']
-            if reason not in REASONS:
-                raise response.invalid_input(reason, 'reason', 'body')
-            details = request.body.get('details')
-            if details and len(details) > 1024:
-                raise response.invalid_input(details, 'details', 'body')
-            if reason == 'other' and len(details) < 10:
-                raise response.error(400, "Please specify the reason.")
-            website.db.run("""
+                 WHERE %s ? lower(address)
+                   AND ( ignore_after IS NULL OR ignore_after > current_timestamp )
+             RETURNING 1
+            ) SELECT count(*) FROM updated
+        """, (user.id, addresses))
+        form_post_success(state, msg=(
+            f"{n} domain{' has' if n == 1 else 's have'} been removed from the blacklist."
+        ))
+    elif action == 'add_to_blacklist':
+        reason = request.body['reason']
+        if reason not in REASONS:
+            raise response.invalid_input(reason, 'reason', 'body')
+        details = request.body.get('details')
+        if details and len(details) > 1024:
+            raise response.invalid_input(details, 'details', 'body')
+        if reason == 'other' and len(details) < 10:
+            raise response.error(400, "Please specify the reason.")
+        n = website.db.one("""
+            WITH inserted AS (
                 INSERT INTO email_blacklist
                             (address, reason, details, added_by)
-                     VALUES ('@' || %s, %s, %s, %s)
-            """, (domain, reason, details, user.id))
-        else:
-            raise response.invalid_input(action, 'action', 'body')
-        raise response.redirect(request.line.uri.decoded)
+                     SELECT address.value, %(reason)s, %(details)s, %(added_by)s
+                       FROM json_array_elements_text(%(addresses)s) address
+                      WHERE NOT EXISTS (
+                                SELECT 1
+                                  FROM email_blacklist b
+                                 WHERE b.address = address.value
+                                   AND b.reason = %(reason)s
+                                   AND b.ignore_after IS NULL
+                            )
+                  RETURNING 1
+            ) SELECT count(*) FROM inserted
+        """, dict(
+            addresses=addresses, reason=reason, details=details, added_by=user.id,
+        ))
+        form_post_success(state, msg=(
+            f"{n} domain{' has' if n == 1 else 's have'} been added to the blacklist."
+        ))
+    else:
+        raise response.invalid_input(action, 'action', 'body')
 
+if domain:
     blacklist_entries = website.db.all("""
         SELECT bl.ts, bl.reason, bl.details, bl.ignore_after
              , added_by_p AS added_by, ignored_by_p AS ignored_by
@@ -59,7 +103,6 @@ if domain:
          LIMIT 10
     """, (domain,))
     blacklisted = any(e.ignore_after is None for e in blacklist_entries)
-
 else:
     show = request.qs.get_choice('show', {'all', 'blacklisted'}, default='all')
     offset = request.qs.get_int('offset', 0)
@@ -140,7 +183,7 @@ title = "Email Domains"
             The domain <span class="monospace">{{ domain }}</span> was added to the blacklist by {{ e.added_by.link() }}
             at {{ locale.format_time(e.ts.time()) }} on {{ locale.format_date(e.ts.date(), format='long') }}.
             <br>
-            Reason: <code class="gray">{{ REASONS.get(e.reason, e.reason) }}</code>
+            Reason: <code class="gray">{{ REASONS[e.reason][0] }}</code>
             % if e.details
                 <br>
                 Details: <code class="gray">{{ e.details }}</code>
@@ -176,8 +219,8 @@ title = "Email Domains"
             <span>Reason:</span>
             <select class="form-control" name="reason">
                 <option></option>
-            % for value, label in REASONS.items()
-                <option value="{{ value }}">{{ label }}</option>
+            % for value, labels in REASONS.items()
+                <option value="{{ value }}">{{ labels[0] }}</option>
             % endfor
             </select>
         </label>
@@ -237,12 +280,47 @@ title = "Email Domains"
         No email domains found.
     % endif
 
+    <br>
     <h3>Look up a domain</h3>
     <form action="" method="GET">
         <div class="input-group">
             <input class="form-control" type="text" name="domain" placeholder="example.net" />
             <div class="input-group-btn"><button class="btn btn-primary">Look up</button></div>
         </div>
+    </form>
+
+    <br>
+    <br>
+    <h3>Bulk edit domains</h3>
+    <form action="" method="POST" class="block-labels-mb-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <label>
+            <span>Domains (separated by new lines or any other white spaces):</span>
+            <textarea class="form-control" name="domains" placeholder="example.com&NewLine;example.net" rows=3></textarea>
+        </label>
+        <label>
+            <span>Action:</span>
+            <select class="form-control" name="action">
+                <option value="add_to_blacklist" data-toggle="enable" data-target="#reason">Blacklist the domains</option>
+                <option value="remove_from_blacklist">Unblock the domains</option>
+            </select>
+        </label>
+        <fieldset id="reason">
+            <label>
+                <span>Reason:</span>
+                <select class="form-control" name="reason">
+                    <option></option>
+                % for value, labels in REASONS.items()
+                    <option value="{{ value }}">{{ labels[1] }}</option>
+                % endfor
+                </select>
+            </label>
+            <label>
+                <span>Details (optional, unless "Other" is selected above):</span>
+                <input type="text" class="form-control" name="details" placeholder="Additional information about the blacklisting of the domains." />
+            </label>
+        </fieldset>
+        <button class="btn btn-danger">Commit</button>
     </form>
 
 % endif
