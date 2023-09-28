@@ -36,7 +36,7 @@ class TestSearch(Harness):
 
     def test_get_fuzzy_match(self):
         self.make_participant('alice')
-        response = self.client.GET('/search.json?q=alicia&scope=usernames')
+        response = self.client.GET('/search.json?q=alice_&scope=usernames')
         data = json.loads(response.text)['usernames']
         assert len(data) == 1
         assert data[0]['username'] == 'alice'
