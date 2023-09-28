@@ -14,6 +14,7 @@ class TestSearch(Harness):
         Community.create('alice', alice)
         response = self.client.GET('/search?q=alice')
         assert response.code == 200
+        assert 'alice' in response.text
 
     def test_get_non_existent_user(self):
         response = self.client.GET('/search.json?q=alice&scope=usernames')
@@ -54,3 +55,8 @@ class TestSearch(Harness):
         )
         data = json.loads(response.text)
         assert len(data['statements']) == 1
+
+    def test_html_is_returned_to_client_requesting_anything(self):
+        r = self.client.GET('/search?q=something', HTTP_ACCEPT=b'*/*')
+        assert r.code == 200
+        assert r.headers[b'Content-Type'] == b'text/html; charset=UTF-8'

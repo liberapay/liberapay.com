@@ -61,6 +61,7 @@ from liberapay.utils.state_chain import (
     create_response_object,
     delegate_error_to_simplate,
     detect_obsolete_browsers,
+    drop_accept_all_header,
     enforce_rate_limits,
     insert_constants,
     merge_responses,
@@ -211,6 +212,7 @@ algorithm.functions = [
 
     canonize,
     algorithm['extract_accept_header'],
+    drop_accept_all_header,
     set_default_security_headers,
     csrf.add_csrf_token_to_state,
     set_up_i18n,
