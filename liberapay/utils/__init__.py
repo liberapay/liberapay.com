@@ -640,19 +640,26 @@ def check_address_v2(addr):
     return True
 
 
-def render_postal_address(addr, single_line=False):
+def render_postal_address(addr, single_line=False, format='local'):
     if not check_address_v2(addr):
         return
-    # FIXME The rendering below is simplistic, we should implement
-    #       https://github.com/liberapay/liberapay.com/issues/1056
-    elements = [addr['local_address'], addr['city'], addr['postal_code']]
-    if addr.get('region'):
-        elements.append(addr['region'])
-    elements.append(LOCALE_EN.countries[addr['country']])
-    if single_line:
-        return ', '.join(elements)
+    if format == 'local':
+        # FIXME The rendering below is simplistic, we should implement
+        #       https://github.com/liberapay/liberapay.com/issues/1056
+        elements = [addr['local_address'], addr['city'], addr['postal_code']]
+        if addr.get('region'):
+            elements.append(addr['region'])
+        elements.append(LOCALE_EN.countries[addr['country']])
+        sep = ', ' if single_line else '\n'
+    elif format == 'downward':
+        elements = [LOCALE_EN.countries[addr['country']]]
+        if addr.get('region'):
+            elements.append(addr['region'])
+        elements += [addr['city'], addr['postal_code'], addr['local_address']]
+        sep = ' / ' if single_line else '\n'
     else:
-        return '\n'.join(elements)
+        raise ValueError(f"unknown `format` value {format!r}")
+    return sep.join(elements)
 
 
 def mkdir_p(path):
