@@ -2406,7 +2406,7 @@ class Participant(Model, MixinTeam):
 
 
     def set_tip_to(self, tippee, periodic_amount, period='weekly', renewal_mode=None,
-                   visibility=None, update_self=True, update_tippee=True):
+                   visibility=None, update_schedule=True, update_tippee=True):
         """Given a Participant or username, and amount as str, returns a dict.
 
         We INSERT instead of UPDATE, so that we have history to explore. The
@@ -2431,7 +2431,7 @@ class Participant(Model, MixinTeam):
             raise NoSelfTipping
 
         if periodic_amount == 0:
-            return self.stop_tip_to(tippee)
+            return self.stop_tip_to(tippee, update_schedule=update_schedule)
 
         periodic_amount = periodic_amount.convert_if_currency_is_phased_out()
         amount = (periodic_amount * PERIOD_CONVERSION_RATES[period]).round_down()
@@ -2480,12 +2480,12 @@ class Participant(Model, MixinTeam):
         t.tipper_p = self
         t.tippee_p = tippee
 
-        if update_self:
-            # Update giving amount of tipper
-            updated = self.update_giving()
-            for u in updated:
-                if u.id == t.id:
-                    t.set_attributes(is_funded=u.is_funded)
+        # Update giving amount of tipper
+        updated = self.update_giving()
+        for u in updated:
+            if u.id == t.id:
+                t.set_attributes(is_funded=u.is_funded)
+        if update_schedule:
             self.schedule_renewals()
         if update_tippee and t.is_funded:
             # Update receiving amount of tippee

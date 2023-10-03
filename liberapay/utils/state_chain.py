@@ -93,6 +93,12 @@ def canonize(request, response, website):
         raise response.redirect(url)
 
 
+def drop_accept_all_header(accept_header=None):
+    # This is a temporary workaround for a shortcoming in Aspen
+    if accept_header == '*/*':
+        return {'accept_header': None}
+
+
 def detect_obsolete_browsers(request, response, state):
     """Respond with a warning message if the user agent seems to be obsolete.
     """
