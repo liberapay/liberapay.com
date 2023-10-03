@@ -2188,38 +2188,35 @@ msgstr "Můžeme importovat vaše repozitáře z:"
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Můžeme také importovat seznamy úložišť pro vaše týmy:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Souhrn nemůže být více než {n} postavy dlouho."
+msgstr[0] "Délka textu nesmí být delší než {n} znak."
+msgstr[1] "Délka textu nesmí být delší než {n} znaky."
+msgstr[2] "Délka textu nesmí být delší než {n} znaků."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Úplný popis musí být nejméně {n} znaků."
+msgstr[0] "Úplný popis musí mít alespoň {n} znak."
+msgstr[1] "Úplný popis musí mít alespoň {n} znaky."
+msgstr[2] "Úplný popis musí mít alespoň {n} znaků."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Úplný popis nemůže být více než {n} postavy dlouho."
+msgstr[0] "Úplný popis nesmí být delší než {n} znak."
+msgstr[1] "Úplný popis nesmí být delší než {n} znaky."
+msgstr[2] "Úplný popis nesmí být delší než {n} znaků."
 
-#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr "Úplný popis nelze shodovat."
+msgstr "Úplný popis nemůže být totožný se shrnutím."
 
-#, fuzzy
 msgid "The summary can't be only your name."
-msgstr "Souhrn nemůže být jen vaše jméno."
+msgstr "Shrnutí nemůže obsahovat pouze vaše jméno."
 
-#, fuzzy
 msgid "The description can't be only your name."
-msgstr "Popis nemůže být jen vaše jméno."
+msgstr "V popisu nemůže být pouze vaše jméno."
 
 msgid "This is a preview."
 msgstr "Toto je pouze náhled."
@@ -3313,15 +3310,12 @@ msgstr "Nejste členem žádného týmu."
 msgid "{username} isn't a member of any team."
 msgstr "{username} není členem žádného týmu."
 
-#, fuzzy
 msgid "The payment account has been successfully disconnected."
 msgstr "Platební účet byl úspěšně odpojen."
 
-#, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
-msgstr "Tento platební účet není k dispozici. Nyní je odpojeno."
+msgstr "Tento platební účet již není přístupný. Nyní je odpojen."
 
-#, fuzzy
 msgid "The data has been successfully refreshed."
 msgstr "Data byla úspěšně obnovena."
 
@@ -4122,9 +4116,9 @@ msgstr[0] "Dárci si mohou vybrat až z {n} měny v závislosti na preferencích
 msgstr[1] "Dárci si mohou vybrat až z {n} měn v závislosti na preferencích příjemce a možnostech příslušného zpracovatele plateb."
 msgstr[2] "Dárci si mohou vybrat až z {n} měn v závislosti na preferencích příjemce a možnostech příslušného zpracovatele plateb."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "V místech, kde je k dispozici alespoň jeden podporovaný platební procesor. V současné době jsou podporovány platební procesory {Stripe} a {PayPal}. Některé funkce jsou k dispozici pouze prostřednictvím Stripe, takže Liberapay je plně k dispozici pro tvůrce v teritoriích podporovaných Stripe a částečně k dispozici v teritoriích pouze podporovaných PayPal."
+msgstr "Příspěvky lze přijímat pouze na územích, kde je k dispozici alespoň jeden podporovaný platební procesor. V současné době jsou podporovány tyto platební procesory: {Stripe} a {PayPal}. Některé funkce jsou dostupné pouze prostřednictvím služby Stripe, takže Liberapay je plně k dispozici tvůrcům na územích podporovaných službou Stripe a částečně na územích podporovaných pouze službou PayPal."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4133,12 +4127,12 @@ msgstr[0] "Liberapay je plně k dispozici tvůrcům na {n} území:"
 msgstr[1] "Liberapay je plně k dispozici tvůrcům na {n} územích:"
 msgstr[2] "Liberapay je plně k dispozici tvůrcům na {n} územích:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Liberapay je částečně k dispozici pro tvůrce v {n} území:"
+msgstr[0] "Liberapay je částečně k dispozici tvůrcům na {n} území:"
+msgstr[1] "Liberapay je částečně k dispozici tvůrcům na {n} územích:"
+msgstr[2] "Liberapay je částečně k dispozici tvůrcům na {n} územích:"
 
 msgid "What is Liberapay?"
 msgstr "Co je Liberapay?"
@@ -5218,7 +5212,6 @@ msgstr[2] "Nalezeny odpovídající repozitáře"
 msgid "{username} has a repository named {repo_name} in their {platform} account"
 msgstr "{username} má repozitář s názvem {repo_name} na svém účtu {platform}"
 
-#, fuzzy
 msgid "Found a matching user description"
 msgid_plural "Found matching user descriptions"
 msgstr[0] "Nalezeno odpovídající uživatelské prohlášení"

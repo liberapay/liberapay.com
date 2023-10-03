@@ -48,12 +48,12 @@ msgstr "Ir pienācis laiks atjaunot jūsu ziedojumus caur Liberapay"
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
 msgstr "Jūsu ziedojums {amount} apmērā priekš {recipient} gaida apmaksu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
-msgstr[0] ""
+msgstr[0] "Jums ir 0 ziedojumi, kas gaida atjaunošanu:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} ziedojumi, kas gaida, kad tiks atjaunoti:"
 
 #, python-brace-format
 msgid "{amount} to {username}"
@@ -100,12 +100,12 @@ msgstr "Jūsu ziedojums {amount} mēnesī {username} bija jāatjauno pirms {past
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
 msgstr "Jūsu ziedojums {amount} gadā {username} bija jāatjauno pirms {past_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation up for renewal:"
 msgid_plural "You have {n} donations up for renewal:"
-msgstr[0] ""
+msgstr[0] "Jums ir 0 ziedojumi, kas jāatjauno:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} ziedojumi, kuru termiņš ir atjaunojams:"
 
 #, fuzzy, python-brace-format
 msgid "If you wish to modify or stop a donation, click on the following link: {link_start}manage my donations{link_end}."
@@ -150,23 +150,23 @@ msgstr "Jūsu Liberapay ienākumi šonedēļ ir {money_amount}"
 msgid "Here is the breakdown of your income this week:"
 msgstr "Lūk, jūsu ienākumu sadalījums šajā nedēļā:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
 msgid_plural "Personal donations: {money_amount} from {n} donors."
-msgstr[0] ""
+msgstr[0] "Personīgie ziedojumi: {money_amount} no 0 ziedotājiem."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Personīgie ziedojumi: {money_amount} no {n} ziedotājiem."
 
 #, fuzzy
 msgid "Personal donations: none."
 msgstr "Personīgie ziedojumi: nav."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] ""
+msgstr[0] "Ziedojumi par jūsu lomu {team_name} komandā: {money_amount} no 0 ziedotājiem."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Ziedojumi par jūsu lomu {team_name} komandā: {money_amount} no {n} ziedotājiem."
 
 #, fuzzy
 msgid "Donations through teams: none (you are not a member of any team)."
@@ -240,12 +240,12 @@ msgstr "Jums ir paredzēts {amount} maksājums {payment_date}, lai atjaunotu sav
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
 msgstr "Jums ir paredzēts {amount} maksājums {payment_date}, lai atjaunotu savus ziedojumus {recipients}, bet mēs nevaram to apstrādāt, jo trūkst derīga maksājuma instrumenta."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
+msgstr[0] "Jums ir ieplānoti 0 maksājumi, lai atjaunotu savus ziedojumus, bet mēs tos nevaram apstrādāt, jo nav derīga maksāšanas instrumenta."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir ieplānoti {n} maksājumi, lai atjaunotu savus ziedojumus, bet mēs tos nevaram apstrādāt, jo nav derīga maksāšanas instrumenta."
 
 #, fuzzy
 msgid "The payment dates, amounts and recipients are:"
@@ -563,12 +563,12 @@ msgstr "Automātiskais {old_money_amount} maksājums, kas bija paredzēts {old_d
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
 msgstr "Manuālais maksājums, kas bija paredzēts {old_date}, ir aizstāts ar automātisku maksājumu {new_money_amount} vietnē {new_date}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
+msgstr[0] "Tagad jums ir 0 plānotie maksājumi:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Tagad jums ir {n} plānotie maksājumi:"
 
 #, fuzzy, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
@@ -614,12 +614,12 @@ msgstr "Ar prieku informējam, ka {user_name} pievienojās Liberapay {time_ago},
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
 msgstr "Tāpēc ir paredzēts automātisks maksājums {money_amount} {date} , lai jūsu solījumu pārvērstu darbībā."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
+msgstr[0] "Ja vēlaties mainīt vai atcelt šos gaidāmos maksājumus, noklikšķiniet uz šādas saites: {link_start}manage my payment schedule{link_end}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Ja vēlaties mainīt vai atcelt šos gaidāmos maksājumus, noklikšķiniet uz šādas saites: {link_start}manage my payment schedule{link_end}."
 
 #, fuzzy, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
@@ -725,12 +725,12 @@ msgstr "Komanda, kuras dalībnieks esat, ir pārdēvēta."
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
 msgstr "Komanda \"{0}\" ir pārdēvēta par \"{1}\" ar {2}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
+msgstr[0] "Liberapay ziedojumu atjaunošana: gaidāmie debeta maksājumi, kuru kopējā summa ir {money_amount}"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay ziedojumu atjaunošana: gaidāmie debeta maksājumi, kuru kopējā summa ir {money_amount}"
 
 #, fuzzy, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
@@ -740,12 +740,12 @@ msgstr "Šī ziņa ir atgādinājums, ka no jūsu noklusējuma maksājumu instru
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
 msgstr "Šī ziņa ir atgādinājums, ka no jūsu noklusējuma maksājumu instrumenta {amount} tiks noņemta summa {debit_date}, lai atjaunotu jūsu ziedojumus {recipients}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
-msgstr[0] ""
+msgstr[0] "Šī ziņa ir atgādinājums, ka nākamo 0 dienu laikā no jūsu noklusējuma maksājumu instrumenta tiks noņemta summa {amount}, lai atjaunotu jūsu ziedojumus."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Šī ziņa ir atgādinājums, ka nākamo {n} dienu laikā no jūsu noklusējuma maksājumu instrumenta tiks noņemta summa {amount}, lai atjaunotu jūsu ziedojumus."
 
 #, fuzzy, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -1243,26 +1243,26 @@ msgstr "Liberapay ziedojums {username} (komanda {team_name})"
 msgid "Liberapay donation to {username}"
 msgstr "Liberapay ziedojums {username}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} week of {money_amount}"
 msgid_plural "{n} weeks of {money_amount}"
-msgstr[0] ""
+msgstr[0] "0 nedēļas no {money_amount}"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} nedēļas no {money_amount}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} month of {money_amount}"
 msgid_plural "{n} months of {money_amount}"
-msgstr[0] ""
+msgstr[0] "0 mēneši {money_amount}"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} mēneši {money_amount}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
-msgstr[0] ""
+msgstr[0] "0 gadi {money_amount}"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} gadiem {money_amount}"
 
 #, fuzzy
 msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
@@ -1628,23 +1628,23 @@ msgstr "Izrakstīties"
 msgid "Print"
 msgstr "Drukāt"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
+msgstr[0] "{0} ir 0 patronu."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{0} ir {n} patrons."
 
 #, fuzzy, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
 msgstr "{0}\"mērķis ir saņemt {1} nedēļā."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] ""
+msgstr[0] "{0} saņem {1} nedēļā no 0 patroniem."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{0} saņem {1} nedēļā no {n} patroniem."
 
 #, fuzzy, python-brace-format
 msgid "Goal: {0}"
@@ -2158,19 +2158,19 @@ msgstr "Pašlaik jūs ziedojat {money_amount} gadā portālam {recipient_name}. 
 msgid "Please select or input an amount:"
 msgstr "Lūdzu, izvēlieties vai ievadiet summu:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] ""
+msgstr[0] "{currency_name} nav jūsu vēlamā valūta? Tiek atbalstītas 0 citas:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Vai {currency_name} nav jūsu vēlamā valūta? {n} tiek atbalstītas arī citas valūtas:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] ""
+msgstr[0] "{currency_name} nav jūsu vēlamā valūta? {username} pieņem arī 0 citu valūtu:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{currency_name} nav jūsu vēlamā valūta? {username} pieņem arī {n} citas:"
 
 #, fuzzy
 msgid "not supported by PayPal"
@@ -2304,12 +2304,12 @@ msgstr "{username} pašlaik nepieņem ziedojumus. Jūs varat dot viņiem solīju
 msgid "This account is temporarily suspended, donations to it will not be processed."
 msgstr "Šis konts ir uz laiku apturēts, ziedojumi tajā netiks apstrādāti."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} currently has {n} patron ready to support them."
 msgid_plural "{username} currently has {n} patrons ready to support them."
-msgstr[0] ""
+msgstr[0] "{username} pašlaik ir 0 patroni, kas gatavi tos atbalstīt."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{username} pašlaik ir {n} patroni, kas gatavi tos atbalstīt."
 
 #, fuzzy, python-brace-format
 msgid "{username} currently receives {income_amount} per week. They have reached their funding goal ({goal_amount} per week), but your donation would still help them."
@@ -2475,12 +2475,12 @@ msgstr "Stripe automātiski konvertē līdzekļus jūsu galvenajā valūtā, bet
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr "Savienojot kontus, kas jums pieder citās platformās, jūsu Liberapay profils kļūst vieglāk atrodams un palīdz pierādīt, ka esat tas, par ko sevi uzdodat."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You currently have {n} connected account:"
 msgid_plural "You currently have {n} connected accounts:"
-msgstr[0] ""
+msgstr[0] "Pašlaik jums ir 0 savienoti konti:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Pašlaik jums ir savienoti {n} konti:"
 
 #, fuzzy
 msgid "Connect an account"
@@ -2554,12 +2554,12 @@ msgstr "Jūsu profils ir atjaunināts."
 msgid "You don't have any {platform} account connected to your profile."
 msgstr "Jūsu profilam nav pievienots neviens {platform} konts."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "We found {n} repository in your {platform} account, {timespan_ago}."
 msgid_plural "A list of {n} repositories has been imported from your {platform} account, {timespan_ago}."
-msgstr[0] ""
+msgstr[0] "No jūsu {platform} konta ir importēts 0 repozitoriju saraksts, {timespan_ago}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "No jūsu {platform} konta ir importēts {n} repozitoriju saraksts, {timespan_ago}."
 
 #, fuzzy
 msgid "No repositories found."
@@ -2887,12 +2887,12 @@ msgstr "Jūs esat aktivizējis automātisko atjaunošanu dažiem vai visiem savi
 msgid "Donations"
 msgstr "Ziedojumi"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation awaiting payment."
 msgid_plural "You have {n} donations awaiting payment."
-msgstr[0] ""
+msgstr[0] "Jums ir 0 ziedojumi, kas gaida maksājumu."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} ziedojumi, kas gaida maksājumu."
 
 #, fuzzy, python-brace-format
 msgid "{money_amount}{small}/month{end_small}"
@@ -2994,23 +2994,23 @@ msgstr "Atceltie solījumi"
 msgid "Funding your donations"
 msgstr "Jūsu ziedojumu finansēšana"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] ""
+msgstr[0] "Jums ir 0 ziedojumi, kas ir jāmaina, jo saņēmēji vairs nepieņem jūsu izvēlētās valūtas."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} ziedojumi, kas ir jāmaina, jo saņēmēji vairs nepieņem jūsu izvēlētās valūtas."
 
 #, fuzzy, python-brace-format
 msgid "Modify your donation to {username}"
 msgstr "Mainiet savu ziedojumu uz {username}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] ""
+msgstr[0] "Juridisku un tehnisku ierobežojumu dēļ mēs pašlaik nevaram apstrādāt visus jūsu ziedojumus kā vienu maksājumu. Tā vietā jums būs jāveic 0 atsevišķi maksājumi. Atvainojamies par sagādātajām neērtībām."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Juridisku un tehnisku ierobežojumu dēļ mēs pašlaik nevaram apstrādāt visus jūsu ziedojumus kā vienu maksājumu. Tā vietā jums būs jāveic {n} atsevišķi maksājumi. Atvainojamies par sagādātajām neērtībām."
 
 #, fuzzy, python-brace-format
 msgid "Send money to {recipients}"
@@ -3104,12 +3104,12 @@ msgstr "Maksājums ir uzsākts."
 msgid "The payment is awaiting your approval."
 msgstr "Maksājums gaida jūsu apstiprinājumu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} other donation awaiting payment."
 msgid_plural "You have {n} other donations awaiting payment."
-msgstr[0] ""
+msgstr[0] "Jums ir 0 citi ziedojumi, kas gaida maksājumu."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} citi ziedojumi, kas gaida maksājumu."
 
 #, fuzzy
 msgid "You don't have any other donation awaiting payment at this time."
@@ -3251,12 +3251,12 @@ msgstr "(labi, mērena maksa procentos)"
 msgid "(recommended, low fee percentage)"
 msgstr "(ieteicams, zems komisijas maksas procents)"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=7e7d7b2d0419c979a2f6ac2d8feb7c01)>"
 msgid_plural "Next payment in {n} weeks ({timedelta})."
-msgstr[0] ""
+msgstr[0] "Nākamais maksājums pēc 0 nedēļām ({timedelta})."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Nākamais maksājums pēc {n} nedēļām ({timedelta})."
 
 #, fuzzy, python-brace-format
 msgid "Next payment {in_N_weeks_months_or_years}."
@@ -3274,12 +3274,12 @@ msgstr "Ja vēlaties mainīt šī plānotā maksājuma datumu, izvēlieties vai 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
 msgstr "Ja maksājumu aizkavēsiet pēc parastā datuma, jūsu ziedojums šajā laikā būs neaktīvs."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} scheduled payment:"
 msgid_plural "You have {n} scheduled payments:"
-msgstr[0] ""
+msgstr[0] "Jums ir 0 plānotie maksājumi:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} ieplānoti maksājumi:"
 
 #, fuzzy
 msgid "You currently don't have any scheduled payment."
@@ -3329,12 +3329,12 @@ msgstr "Jūsu uzņemšana tagad ir {0}."
 msgid "{username}'s profile"
 msgstr "{username}\"profils"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
 msgid_plural "This profile is available in {n} languages"
-msgstr[0] ""
+msgstr[0] "Šis profils ir pieejams 0 valodās"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Šis profils ir pieejams {n} valodās"
 
 #, fuzzy
 msgid "Show the list of languages"
@@ -3356,41 +3356,41 @@ msgstr "Apraksts"
 msgid "{0} owns the following accounts on other platforms:"
 msgstr "{0} pieder šādi konti citās platformās:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] ""
+msgstr[0] "{username} ir 0 komandu dalībnieks:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{username} ir {n} komandu dalībnieks:"
 
 #, fuzzy
 msgid "Communities"
 msgstr "Kopienas"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "with {n} other"
 msgid_plural "with {n} others"
-msgstr[0] ""
+msgstr[0] "ar 0 citiem"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "ar {n} citi"
 
 #, fuzzy
 msgid "Export as CSV"
 msgstr "Eksportēt kā CSV"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} has {n} public patron."
 msgid_plural "{username} has {n} public patrons."
-msgstr[0] ""
+msgstr[0] "{username} ir 0 publiski patroni."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{username} ir {n} publiski patroni."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d1c03a1d2b2a562ad40ed9bfab1b56e5)>"
 msgid_plural "The top {n} patrons are:"
-msgstr[0] ""
+msgstr[0] "0 labākie mecenāti ir:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Top {n} mecenāti ir:"
 
 #, fuzzy, python-brace-format
 msgid "{username} doesn't publish how much they give."
@@ -3400,12 +3400,12 @@ msgstr "{username} nepublisko, cik lielu summu viņi piešķir."
 msgid "Donees"
 msgstr "Donees"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
-msgstr[0] ""
+msgstr[0] "{username} publiski ziedo 0 radītāji."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{username} publiski ziedo {n} veidotājiem."
 
 #, fuzzy, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
@@ -3847,12 +3847,12 @@ msgstr "Nākamā lappuse →"
 msgid "You have to check at least one box."
 msgstr "Ir jāatzīmē vismaz viens lodziņš."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
-msgstr[0] ""
+msgstr[0] "Jums ir 0 aktīvi patroni, kopā {money_amount} nedēļā."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jūsu rīcībā ir {n} aktīvo patronu, kas kopā veido {money_amount} nedēļā."
 
 #, fuzzy
 msgid "You don't have any active patrons."
@@ -4181,12 +4181,12 @@ msgstr "Mēs varam importēt sarakstu ar krātuvēm, kurās esat iezīmējis zva
 msgid "Your {platform} account needs to be reconnected."
 msgstr "Jāatjaunina konta {platform} savienojums."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
-msgstr[0] ""
+msgstr[0] "Jums ir zvaigznītē atzīmēti 0 repozitoriji vietnē {platform}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir zvaigznītē {n} repozitoriji vietnē {platform}."
 
 #, fuzzy
 msgid "The payment instrument has been successfully added."
@@ -4208,12 +4208,12 @@ msgstr "Aizmirstiet šo bankas konta numuru pēc viena maksājuma."
 msgid "As the payer's postal address is sometimes required to successfully process a payment, we recommend that you input yours below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Lai veiksmīgi apstrādātu maksājumu, dažkārt ir nepieciešama maksātāja pasta adrese, tāpēc mēs iesakām ievadīt savu pasta adresi tālāk tekstā. Tā tiks saglabāta mūsu datubāzē šifrētā veidā un nosūtīta maksājumu apstrādātājam ({processor_name})."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
-msgstr[0] ""
+msgstr[0] "Jums ir pievienoti 0 maksājumu instrumenti."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} savienoti maksājumu instrumenti."
 
 #, fuzzy
 msgid "Bank Account"
@@ -4419,33 +4419,33 @@ msgstr "Šajā lapā ir redzami tikai Mangopay apstrādātie darījumi, lai apsk
 msgid "Account Statement"
 msgstr "Konta izraksts"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} in donations to {n} person"
 msgid_plural "{money_amount} in donations to {n} people"
-msgstr[0] ""
+msgstr[0] "{money_amount} ziedojumos 0 cilvēki"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{money_amount} ziedojumos {n} cilvēkiem."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} in expense reimbursements to {n} person"
 msgid_plural "{money_amount} in expense reimbursements to {n} people"
-msgstr[0] ""
+msgstr[0] "{money_amount} izdevumu atlīdzinājumos 0 cilvēkiem"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{money_amount} izdevumu atlīdzinājumi {n} cilvēkiem."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} in donations from {n} donor"
 msgid_plural "{money_amount} in donations from {n} donors"
-msgstr[0] ""
+msgstr[0] "{money_amount} ziedojumos no 0 ziedotājiem"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{money_amount} ziedojumos no {n} ziedotājiem"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{money_amount} in expense reimbursements from {n} organization"
 msgid_plural "{money_amount} in expense reimbursements from {n} organizations"
-msgstr[0] ""
+msgstr[0] "{money_amount} izdevumu atlīdzinājumos no 0 organizācijām"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{money_amount} izdevumu atlīdzinājumi no {n} organizācijām"
 
 #, fuzzy
 msgid "End of day balance"
@@ -4847,23 +4847,23 @@ msgstr "Jūs varat arī sekot līdzi Liberapay programmatūras attīstībai {1}{
 msgid "Donations can come from anywhere in the world."
 msgstr "Ziedojumi var nākt no jebkuras vietas pasaulē."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] ""
+msgstr[0] "Ziedotāji var izvēlēties līdz 0 valūtām atkarībā no saņēmēja vēlmēm un pamatā esošā maksājumu apstrādātāja iespējām."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Ziedotāji var izvēlēties līdz pat {n} valūtām atkarībā no saņēmēja vēlmēm un pamatā esošā maksājumu apstrādātāja iespējām."
 
 #, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
 msgstr "Ziedojumus var saņemt tikai tajās teritorijās, kurās ir pieejams vismaz viens atbalstīts maksājumu apstrādātājs. Pašlaik atbalstītie maksājumu apstrādātāji ir {Stripe} un {PayPal}. Dažas funkcijas ir pieejamas tikai ar Stripe starpniecību, tāpēc Liberapay ir pilnībā pieejams autoriem teritorijās, kuras atbalsta Stripe, un daļēji pieejams teritorijās, kuras atbalsta tikai PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] ""
+msgstr[0] "Liberapay ir pilnībā pieejams autoriem 0 teritorijās:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay ir pilnībā pieejams autoriem {n} teritorijās:"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
@@ -5024,12 +5024,12 @@ msgstr "Stripe ļauj autoriem konfigurēt automātiskus maksājumus uz viņu ban
 msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
 msgstr "PayPal atbalsta tikai {n_paypal_currencies} no {n_liberapay_currencies} valūtām, ko atbalsta Liberapay un Stripe."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=47f7d13f5771b30f0bcf49ea3acd518b)>"
 msgid_plural "PayPal is available to creators in more than 100 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] ""
+msgstr[0] "PayPal ir pieejams autoriem vairāk nekā 100 valstīs, savukārt Stripe atbalsta tikai 0 valstis."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "PayPal ir pieejams autoriem vairāk nekā 100 valstīs, savukārt Stripe atbalsta tikai {n} valstis piemērotā veidā."
 
 #, fuzzy, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
@@ -5131,47 +5131,47 @@ msgstr "Sīkāka informācija par mūsu drošības politiku (darbības joma, atl
 msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
 msgstr "Paldies {link_open}ikvienam, kurš mums ir nosūtījis ziņojumu, izmantojot HackerOne{link_close}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] ""
+msgstr[0] "Liberapay tika uzsākta {timespan_ago}, un tajā ir 0 lietotāju."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay tika uzsākta {timespan_ago}, un tai ir {n} lietotāji."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] ""
+msgstr[0] "Pēdējā izmaksas diena bija {timespan_ago} un pārskaitīts {money_amount} starp 0 lietotājiem."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Pēdējā izmaksas diena bija {timespan_ago} un pārskaitīts {money_amount} starp {n} lietotājiem."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] ""
+msgstr[0] "0 dalībnieki ziedoja naudu."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} dalībnieki ziedoja naudu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} participant received money."
 msgid_plural "{n} participants received money."
-msgstr[0] ""
+msgstr[0] "0 dalībnieki saņēma naudu."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} dalībnieki saņēma naudu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
-msgstr[0] ""
+msgstr[0] "0 dalībnieki bija gan donori, gan saņēmēji."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} dalībnieki bija gan donori, gan saņēmēji."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
 msgid_plural "On average, people who donate give {0} each to {n} other users."
-msgstr[0] ""
+msgstr[0] "Vidēji cilvēki, kas ziedo {0}, katrs ziedo 0 citiem lietotājiem."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Vidēji cilvēki, kas ziedo {0}, katrs ziedo {n} citiem lietotājiem."
 
 #, fuzzy
 msgid "Open Accounts"
@@ -5341,12 +5341,12 @@ msgstr "Kopienas ļauj atrast cilvēkus, kas strādā ar jums interesējošiem j
 msgid "Start a new community"
 msgstr "Jaunas kopienas izveide"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
-msgstr[0] ""
+msgstr[0] "Liberapay ir 0 kopienas."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay ir {n} kopienas."
 
 #, fuzzy
 msgid "Search communities"
@@ -5368,12 +5368,12 @@ msgstr "Atvainojiet, mēs neesam atraduši nevienu. Kāpēc jūs nevarētu kādu
 msgid "Which platform would you like to explore?"
 msgstr "Kuru platformu vēlaties izpētīt?"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} connected account"
 msgid_plural "{n} connected accounts"
-msgstr[0] ""
+msgstr[0] "0 savienoti konti"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} saistītie konti"
 
 #, fuzzy, python-brace-format
 msgid "Explore {0}"
@@ -5383,26 +5383,26 @@ msgstr "Izpētīt {0}"
 msgid "Explore Your {0} Contacts"
 msgstr "Izpētiet savus {0} kontaktus"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=913600022f5361dd8872dc74f6b023e8)>"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
-msgstr[0] ""
+msgstr[0] "Šeit ir 0 nejauši Liberapay lietotāji, kuri ir pievienojuši savu {0} kontu:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Šeit ir {n} izlases veida Liberapay lietotāji, kuri ir pieslēguši savu {0} kontu:"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=fa66aed7cc36b8a0d266394a9f2b8fef)>"
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] ""
+msgstr[0] "Šajā lapā ir redzami 0 Liberapay lietotāji, kuri ir pieslēguši savu {0} kontu apgrieztā hronoloģiskā secībā."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Šajā lapā ir redzami {n} Liberapay lietotāji, kuri ir pieslēguši savu {0} kontu apgrieztā hronoloģiskā secībā."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
 msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
-msgstr[0] ""
+msgstr[0] "Šeit ir 0 Liberapay lietotāju, kas ir pievienojuši savu {0} kontu:"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Šeit ir {n} Liberapay lietotāji, kuri ir pievienojuši savu {0} kontu:"
 
 #, fuzzy
 msgid "Explore other platforms:"
@@ -5562,12 +5562,12 @@ msgstr "Sānu joslas teksts {language}"
 msgid "This profile is marked as spam."
 msgstr "Šis profils ir atzīmēts kā surogātpasts."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
-msgstr[0] ""
+msgstr[0] "Šī kopiena tika izveidota {timespan_ago}, un tajā ir 0 dalībnieku."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Šī kopiena tika izveidota {timespan_ago}, un tajā ir {n} biedri."
 
 #, fuzzy, python-brace-format
 msgid ""
@@ -5589,12 +5589,12 @@ msgstr "Jauni dalībnieki"
 msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
 msgstr "Kopienas informatīvie biļeteni palīdzēs jums būt informētam par notiekošo un projektiem, kuriem nepieciešams atbalsts. Tie vēl nedarbojas, bet jūs jau varat tos abonēt."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} subscriber"
 msgid_plural "{n} subscribers"
-msgstr[0] ""
+msgstr[0] "0 abonentu"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} abonenti"
 
 #, fuzzy
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
@@ -5628,12 +5628,12 @@ msgstr "Jā? Tad Liberapay ir domāts jums! Izveidojiet kontu, aizpildiet savu p
 msgid "Create your account"
 msgstr "Izveidojiet savu kontu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You have {n} active donor who is giving you {money_amount} per week."
 msgid_plural "You have {n} active donors giving you a total of {money_amount} per week."
-msgstr[0] ""
+msgstr[0] "Jums ir 0 aktīvi ziedotāji, kas kopā jums nedēļā ziedo {money_amount}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jums ir {n} aktīvo ziedotāju, kas jums nedēļā kopumā ziedo {money_amount}."
 
 #, fuzzy, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
@@ -5743,48 +5743,48 @@ msgstr "Komanda ļauj projekta dalībniekiem saņemt naudu un dalīties ar to, n
 msgid "Multiple languages"
 msgstr "Vairākas valodas"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Our service is currently available in {n} language."
 msgid_plural "Our service is currently available in {n} languages."
-msgstr[0] ""
+msgstr[0] "Mūsu pakalpojums pašlaik ir pieejams 0 valodās."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Mūsu pakalpojums pašlaik ir pieejams {n} valodās."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It's also partially translated into {n} other language ({link_open}you can contribute{link_close})."
 msgid_plural "It's also partially translated into {n} other languages ({link_open}you can contribute{link_close})."
-msgstr[0] ""
+msgstr[0] "Tā ir daļēji tulkota arī 0 citās valodās ({link_open}jūs varat dot savu ieguldījumu{link_close})."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Tā ir daļēji tulkota arī {n} citās valodās ({link_open}jūs varat pievienot{link_close})."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
 msgid_plural "Your profile descriptions and other texts can be published in up to {n} languages."
-msgstr[0] ""
+msgstr[0] "Jūsu profila aprakstus un citus tekstus var publicēt līdz 0 valodās."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jūsu profila aprakstus un citus tekstus var publicēt līdz pat {n} valodās."
 
 #, fuzzy
 msgid "Multiple currencies"
 msgstr "Vairākas valūtas"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=388cb9ad8fa066190e367dfa48cec8c7)>"
 msgid_plural "Liberapay's first currency was the euro, then the US dollar was added, and now we support a total of {n} currencies. However, we do not handle any crypto-currency."
-msgstr[0] ""
+msgstr[0] "Liberapay pirmā valūta bija eiro, pēc tam tika pievienots ASV dolārs, un tagad mēs atbalstām kopumā 0 valūtas. Tomēr mēs neapstrādājam nevienu kriptovalūtu."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay pirmā valūta bija eiro, pēc tam tika pievienots ASV dolārs, un tagad mēs atbalstām {n} valūtas. Tomēr mēs neapstrādājam nevienu kriptovalūtu."
 
 #, fuzzy
 msgid "Integrations"
 msgstr "Integrācija"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=299a6b08add23ce80f4607e9a9e15261)>"
 msgid_plural "You can link to your profile the accounts you own on {platform1}, {platform2}, {platform3}, and {n} other platforms."
-msgstr[0] ""
+msgstr[0] "Savam profilam varat piesaistīt kontus, kas jums pieder {platform1}, {platform2}, {platform3} un 0 citās platformās."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Savam profilam varat piesaistīt kontus, kas jums pieder {platform1}, {platform2}, {platform3} un {n} citās platformās."
 
 #, fuzzy, python-brace-format
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
@@ -5802,12 +5802,12 @@ msgstr "Sponsori"
 msgid "Donations from businesses and nonprofits are welcome on Liberapay. If you have any questions, don't hesitate to {0}contact us{1}."
 msgstr "Uzņēmumu un bezpeļņas organizāciju ziedojumi ir laipni gaidīti Liberapay. Ja jums ir kādi jautājumi, nevilcinieties sazināties ar mums {0}{1} ."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "There is currently {n} sponsor on the platform, this section is our way of thanking them."
 msgid_plural "There are currently {n} sponsors on the platform, this section is our way of thanking them."
-msgstr[0] ""
+msgstr[0] "Pašlaik platformā ir 0 sponsori, un šajā sadaļā mēs vēlamies viņiem pateikties."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Pašlaik platformā ir {n} sponsori, un šajā sadaļā mēs vēlamies viņiem pateikties."
 
 #, fuzzy
 msgid "The list below is rotated pseudorandomly."
@@ -5829,33 +5829,33 @@ msgstr "Liberapay gūst labumu no sponsorētiem kontiem šādos atvērtā pirmko
 msgid "Recent Activity"
 msgstr "Nesen veiktās darbības"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
-msgstr[0] ""
+msgstr[0] "Pēdējā mēneša laikā ir izveidoti 0 lietotāju konti. Jaunākais no tiem bija {timespan_ago}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} lietotāja konti ir izveidoti pēdējā mēneša laikā. Jaunākais no tiem bija {timespan_ago}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] ""
+msgstr[0] "Pagājušajā mēnesī ir uzsākti 0 jauni ziedojumi, palielinot kopējo iknedēļas finansējumu par {money_amount}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} pēdējā mēneša laikā ir uzsākti jauni ziedojumi, palielinot kopējo iknedēļas finansējumu par {money_amount}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] ""
+msgstr[0] "Pagājušajā mēnesī ir veikti 0 jauni {link_open}solījumi{link_close}, pievienojot {money_amount} iknedēļas ziedojumus, kas gaida, kad tiks pieprasīti."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} jauni {link_open}solījumi{link_close} pēdējā mēneša laikā, pievienojot {money_amount} iknedēļas ziedojumus, kas gaida, kad tiks pieprasīti."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
 msgid_plural "{money_amount} was transferred last week between {n} users."
-msgstr[0] ""
+msgstr[0] "{money_amount} pagājušajā nedēļā tika pārskaitīts starp 0 lietotājiem."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{money_amount} pagājušajā nedēļā tika pārsūtīts starp {n} lietotājiem."
 
 #, fuzzy
 msgid "More stats"
@@ -5907,12 +5907,12 @@ msgstr "{0} ir privāta komanda"
 msgid "{0} is a big team"
 msgstr "{0} ir liela komanda"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
-msgstr[0] ""
+msgstr[0] "{0} ir komanda, kurā ir 0 publiski locekļi"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{0} ir komanda, kurā ir {n} publiski locekļi."
 
 #, fuzzy
 msgid "Explore unclaimed donations"
@@ -5930,12 +5930,12 @@ msgstr "Apraksts nav pieejams."
 msgid "Profile on {0}"
 msgstr "Profils vietnē {0}"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
 msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] ""
+msgstr[0] "0 Liberapay lietotāji ir apņēmušies ziedot kopā {0} nedēļā {1}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} Liberapay lietotāji ir apņēmušies ziedot kopumā {0} nedēļā {1}."
 
 #, fuzzy, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
@@ -5993,12 +5993,12 @@ msgstr "Savienojiet savu kontu {platform}"
 msgid "It looks like you don't follow anyone on {platform}."
 msgstr "Izskatās, ka jūs nesekojat nevienam vietnē {platform}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
-msgstr[0] ""
+msgstr[0] "Jūs sekojat 0 kontiem vietnē {platform}."
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Jūs sekojat {n} kontiem vietnē {platform}."
 
 #, fuzzy
 msgid "The address you provided is not valid. Expected format: username@domain"
@@ -6098,12 +6098,12 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{n} member"
 msgid_plural "{n} members"
-msgstr[0] ""
+msgstr[0] "0 dalībnieku"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "{n} biedri"
 
 #, fuzzy
 msgid "Found a matching repository"
