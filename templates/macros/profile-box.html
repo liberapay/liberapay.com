@@ -26,7 +26,7 @@
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
 
-    <p class="summary">{{ summary or '' }}</p>
+    <p class="summary" lang="{{ summary.lang|default('') }}">{{ summary or '' }}</p>
 
     <div class="numbers">
         <dl>

@@ -10,7 +10,7 @@ offset = request.qs.get_int('offset', 0)
 
 members = website.db.all("""
     SELECT p
-         , ( SELECT s.content
+         , ( SELECT (s.content, s.lang)::localized_string
                FROM statements s
               WHERE s.participant = p.id
                 AND s.type = 'summary'
