@@ -1,5 +1,11 @@
 [---]
 
+sort_by = request.qs.get_choice('sort_by', ('receiving', 'join_time'), default='receiving')
+order = request.qs.get_choice('order', ('asc', 'desc'), default='desc')
+if sort_by == 'receiving':
+    sql_order = f"convert(p.receiving, 'EUR') {order}, p.join_time {order}"
+else:
+    sql_order = f"p.{sort_by} {order}"
 per_page = 18
 current_page = request.qs.get_int('page', default=1, minimum=1, maximum=100)
 individuals = website.db.all("""
@@ -18,10 +24,10 @@ individuals = website.db.all("""
        AND p.hide_receiving IS NOT TRUE
        AND p.hide_from_lists = 0
        AND p.receiving > 0
-  ORDER BY convert(p.receiving, 'EUR') DESC, p.join_time DESC
+  ORDER BY {}
      LIMIT %s
     OFFSET %s
-""", (locale.language, per_page + 1, (current_page - 1) * per_page))
+""".format(sql_order), (locale.language, per_page + 1, (current_page - 1) * per_page))
 has_more = len(individuals) > per_page
 individuals = individuals[:per_page]
 
@@ -37,20 +43,34 @@ subhead = _("Individuals")
 % block content
 
 % if individuals
-    % if current_page == 1
+    % if current_page == 1 and sort_by == 'receiving' and order == 'desc'
         <p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
-    % else
-        <p>{{ _(
-            "List of individuals on Liberapay, page {number}:", number=current_page
-        ) }}</p>
     % endif
+
     <div class="inline-boxes">
         % for p, summary in individuals
             {{ profile_box_embedded(p, summary) }}
         % endfor
     </div>
+
     {{ simple_pager(current_page, has_more) }}
-    <br>
+
+    <form action="" class="flex-row wrap align-items-center row-gap-3 column-gap-2 mb-4" method="GET">
+        <label class="m-0" for="sort_by">{{ _("Sort by") }}</label>
+        <div>
+        <select class="form-control" name="sort_by" id="sort_by">
+            <option value="receiving" {{ 'selected' if sort_by == 'receiving' }}>{{ _("income") }}</option>
+            <option value="join_time" {{ 'selected' if sort_by == 'join_time' }}>{{ _("creation date") }}</option>
+        </select>
+        </div>
+        <div>
+        <select class="form-control" name="order" aria-label="{{ _('sort order') }}">
+            <option value="desc" {{ 'selected' if order == 'desc' }}>{{ _("in descending order") }}</option>
+            <option value="asc" {{ 'selected' if order == 'asc' }}>{{ _("in ascending order") }}</option>
+        </select>
+        </div>
+        <button class="btn btn-default">{{ _("Go") }}</button>
+    </form>
 % else
 <p>{{ _("Nothing to show.") }}</p>
 % endif

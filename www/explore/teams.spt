@@ -1,5 +1,11 @@
 [---]
 
+sort_by = request.qs.get_choice('sort_by', ('receiving', 'join_time'), default='receiving')
+order = request.qs.get_choice('order', ('asc', 'desc'), default='desc')
+if sort_by == 'receiving':
+    sql_order = f"convert(p.receiving, 'EUR') {order}, p.join_time {order}"
+else:
+    sql_order = f"p.{sort_by} {order}"
 per_page = 18
 current_page = request.qs.get_int('page', default=1, minimum=1, maximum=100)
 teams = website.db.all("""
@@ -20,11 +26,10 @@ teams = website.db.all("""
      WHERE p.status = 'active'
        AND p.hide_from_lists = 0
        AND p.npatrons > 0
-  ORDER BY convert(p.receiving, 'EUR') DESC
-         , p.join_time DESC
+  ORDER BY {}
      LIMIT %s
     OFFSET %s
-""", (locale.language, per_page + 1, (current_page - 1) * per_page))
+""".format(sql_order), (locale.language, per_page + 1, (current_page - 1) * per_page))
 has_more = len(teams) > per_page
 teams = teams[:per_page]
 
@@ -38,29 +43,48 @@ subhead = _("Teams")
 % extends "templates/layouts/explore.html"
 
 % block content
-% if current_page == 1
-<p>{{ _(
-    "A team allows members of a project to receive money and share it, without "
-    "having to set up a legal entity. {0}Learn more…{1}",
-    '<a href="/about/teams">'|safe, '</a>'|safe
-) }}</p>
-<p>{{ ngettext(
-    "The top team on Liberapay is:",
-    "The top {n} teams on Liberapay are:",
-    len(teams)
-) }}</p>
+
+% if teams
+    % if current_page == 1 and sort_by == 'receiving' and order == 'desc'
+        <p>{{ _(
+            "A team allows members of a project to receive money and share it, without "
+            "having to set up a legal entity. {0}Learn more…{1}",
+            '<a href="/about/teams">'|safe, '</a>'|safe
+        ) }}</p>
+        <p>{{ ngettext(
+            "The top team on Liberapay is:",
+            "The top {n} teams on Liberapay are:",
+            len(teams)
+        ) }}</p>
+    % endif
+
+    <div class="inline-boxes">
+        % for team in teams
+            {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
+        % endfor
+    </div>
+
+    {{ simple_pager(current_page, has_more) }}
+
+    <form action="" class="flex-row wrap align-items-center row-gap-3 column-gap-2 mb-4" method="GET">
+        <label class="m-0" for="sort_by">{{ _("Sort by") }}</label>
+        <div>
+        <select class="form-control" name="sort_by" id="sort_by">
+            <option value="receiving" {{ 'selected' if sort_by == 'receiving' }}>{{ _("income") }}</option>
+            <option value="join_time" {{ 'selected' if sort_by == 'join_time' }}>{{ _("creation date") }}</option>
+        </select>
+        </div>
+        <div>
+        <select class="form-control" name="order" aria-label="{{ _('sort order') }}">
+            <option value="desc" {{ 'selected' if order == 'desc' }}>{{ _("in descending order") }}</option>
+            <option value="asc" {{ 'selected' if order == 'asc' }}>{{ _("in ascending order") }}</option>
+        </select>
+        </div>
+        <button class="btn btn-default">{{ _("Go") }}</button>
+    </form>
 % else
-<p>{{ _("List of teams on Liberapay, page {number}:", number=current_page) }}</p>
+<p>{{ _("Nothing to show.") }}</p>
 % endif
 
-<div class="inline-boxes">
-    % for team in teams
-        {{ profile_box_embedded(team.participant, team.summary, nmembers=team.nmembers) }}
-    % endfor
-</div>
-
-{{ simple_pager(current_page, has_more) }}
-
-<br>
 <p><a class="btn btn-primary btn-lg" href="/about/teams">{{ _("Create a team") }}</a></p>
 % endblock
