@@ -20,7 +20,7 @@ repos = website.db.all("""
   ORDER BY {}
      LIMIT %s
     OFFSET %s
-""".format(sql_order), (per_page + 1, (current_page - 1) * per_page))
+""".format(sql_order), (per_page + 1, (current_page - 1) * per_page), max_age=0)
 has_more = len(repos) > per_page
 repos = repos[:per_page]
 
