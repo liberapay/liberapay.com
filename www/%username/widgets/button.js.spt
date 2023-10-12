@@ -39,4 +39,4 @@ html > body .liberapay-btn:hover {
     margin-left: 19px;
 }
 </style>
-<a class="liberapay-btn" href="{{ participant.url('donate') }}">{{ ICON }}<span>{{ _("Donate") }}</span></a>
+<a class="liberapay-btn" href="{{ participant.url('donate') }}">{{ ICON }}<span>{{ pgettext("widget", "Donate") }}</span></a>
