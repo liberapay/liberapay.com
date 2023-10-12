@@ -1,16 +1,8 @@
 
 .card {
-    border-radius: 0.5em;
     display: block;
     margin-bottom: 0.5em;
     padding: 0.5em;
-    vertical-align: top;
-}
-.card-default {
-    border: 1px solid $panel-default-border;
-}
-.card-primary {
-    border: 1px solid $panel-primary-border;
 }
 .card-md {
     font-size: $font-size-medium;
@@ -18,17 +10,30 @@
 
 @media (min-width: $screen-sm-min) {
     .card {
+        border-radius: 0.5em;
         display: inline-block;
         margin-right: 1em;
+        vertical-align: top;
         width: 450px;
     }
     .card-narrow {
         width: 290px;
     }
+    .card-center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .card-default {
+        border: 1px solid $panel-default-border;
+    }
+    .card-primary {
+        border: 1px solid $panel-primary-border;
+    }
 }
 
-@media (max-width: $screen-sm-min) {
-    .card-xs-vanish {
+@media (max-width: $screen-xs-max) {
+    .card-default, .card-primary {
         border-radius: 0;
         border-style: dashed;
         border-width: 1px 0;
@@ -39,6 +44,9 @@
             margin-top: 0;
             padding-top: 0;
         }
+    }
+    .card-xs-vanish {
+        border-width: 0;
     }
 }
 
