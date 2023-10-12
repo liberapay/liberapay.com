@@ -97,7 +97,9 @@ title = _("Teams")
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
 
     <div class="form-group">
-    <input class="form-control" name="name" size=30 maxlength="{{ constants.USERNAME_MAX_SIZE }}"
+    <input class="form-control" name="name" size=30 
+           maxlength="{{ constants.USERNAME_MAX_SIZE }}"
+           data-maxlength-msg="{{ _('Maximum length is {0}.', constants.USERNAME_MAX_SIZE) }}"
            placeholder="{{ _('Name of the team') }}" />
     </div>
     <div class="form-group">
