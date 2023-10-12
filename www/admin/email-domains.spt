@@ -78,8 +78,13 @@ else:
                 SELECT e.domain
                      , count(DISTINCT lower(e.address)) AS n_addresses
                      , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
-                  FROM ( SELECT e.*, regexp_replace(lower(e.address), '.+@', '') AS domain
+                     , count(*) FILTER (WHERE e.participant IS NOT NULL) AS n_accounts
+                     , count(*) FILTER (WHERE e.participant_marked_as IN ('fraud', 'spam')) AS n_fake_accounts
+                  FROM ( SELECT e.*
+                              , regexp_replace(lower(e.address), '.+@', '') AS domain
+                              , p.marked_as AS participant_marked_as
                            FROM emails e
+                      LEFT JOIN participants p ON p.id = e.participant
                        ) e
               GROUP BY e.domain
             )
@@ -100,6 +105,8 @@ else:
             SELECT d.domain
                  , coalesce(s.n_addresses, 0) AS n_addresses
                  , coalesce(s.n_verified, 0) AS n_verified
+                 , coalesce(s.n_accounts, 0) AS n_accounts
+                 , coalesce(s.n_fake_accounts, 0) AS n_fake_accounts
               FROM ( {domains_query}
                    ) d
          LEFT JOIN domain_stats s ON s.domain = d.domain
@@ -202,6 +209,7 @@ title = "Email Domains"
                         <th class="text-center">Connected addresses</th>
                         <th class="text-center">Verified addresses</th>
                         <th class="text-center">Blocked addresses</th>
+                        <th class="text-center">Fake accounts</th>
                         <th class="text-center">Banned?</th>
                     </tr>
                 <tbody>
@@ -213,6 +221,9 @@ title = "Email Domains"
                         <td class="text-center {{ 'danger' if percent_verified <= 0.2 else 'warning' if percent_verified <= 0.5 else '' }}">{{ d.n_verified }}</td>
                         % set percent_blacklisted = d.n_blacklisted_addresses / d.n_addresses if d.n_addresses else 0
                         <td class="text-center {{ 'danger' if percent_blacklisted > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}">{{ d.n_blacklisted_addresses }}</td>
+                        % set percent_fake = d.n_fake_accounts / (d.n_accounts or 1)
+                        <td class="text-center {{ 'danger' if percent_fake > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}"
+                            title="{{ d.n_fake_accounts }} / {{ d.n_accounts }}">{{ locale.format_percent(percent_fake) if d.n_accounts else "-" }}</td>
                         <td class="text-center {{ 'danger' if d.ban_reason else '' }}">{{ 'Yes (' + d.ban_reason + ')' if d.ban_reason else 'No' }}</td>
                     </tr>
                 % endfor
