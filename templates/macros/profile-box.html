@@ -15,19 +15,20 @@
 </div>
 % endmacro
 
-% macro profile_box_embedded(participant, summary, nmembers=None)
+% macro profile_box_embedded(participant, summary, nmembers=None, numbers=True)
     % call profile_box_embedded_wrapper(participant, participant.path(''))
-        {{ profile_box_embedded_participant(participant, summary, nmembers=nmembers) }}
+        {{ profile_box_embedded_participant(participant, summary, nmembers=nmembers, numbers=numbers) }}
     % endcall
 % endmacro
 
-% macro profile_box_embedded_participant(participant, summary, nmembers=None)
+% macro profile_box_embedded_participant(participant, summary, nmembers=None, numbers=True)
     % set username = participant.username
 
     <h4><a href="/{{ username }}/">{{ username }}</a></h4>
 
     <p class="summary" lang="{{ summary.lang|default('') }}">{{ summary or '' }}</p>
 
+    % if numbers
     <div class="numbers">
         <dl>
             <dt>{{ _("Patrons") }}</dt>
@@ -47,6 +48,7 @@
         </dl>
         % endif
     </div>
+    % endif
 % endmacro
 
 % macro profile_box_embedded_elsewhere(
