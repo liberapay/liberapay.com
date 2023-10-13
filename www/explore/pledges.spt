@@ -13,7 +13,7 @@ pledgees = website.db.all("""
   ORDER BY p.npatrons DESC, convert(p.receiving, 'EUR') DESC, e.id DESC
      LIMIT %s
     OFFSET %s
-""", (per_page + 1, (current_page - 1) * per_page))
+""", (per_page + 1, (current_page - 1) * per_page), max_age=0)
 has_more = len(pledgees) > per_page
 pledgees = pledgees[:per_page]
 
@@ -35,7 +35,6 @@ subhead = _("Unclaimed Donations")
         "the recipients join. Of course we notify the donors when that happens."
     ) }}</p>
 
-    <h3 class="banderole default">{{ _("Top pledges") }}</h3>
     % if pledgees
         <p class="alert alert-warning">{{ _(
             "Please don't spam the people and projects listed below with messages "

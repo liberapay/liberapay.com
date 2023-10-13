@@ -1,5 +1,10 @@
 [---]
 
+kind = request.qs.get_choice('kind', ('all', 'individual', 'organization', 'group'), default='all')
+if kind == 'all':
+    sql_filter = "p.kind IN ('individual', 'organization', 'group')"
+else:
+    sql_filter = f"p.kind = '{kind}'"
 sort_by = request.qs.get_choice('sort_by', ('receiving', 'join_time'), default='receiving')
 order = request.qs.get_choice('order', ('asc', 'desc'), default='desc')
 if sort_by == 'receiving':
@@ -8,33 +13,38 @@ else:
     sql_order = f"p.{sort_by} {order}"
 per_page = 18
 current_page = request.qs.get_int('page', default=1, minimum=1, maximum=100)
-individuals = website.db.all("""
-    SELECT p
+participants = website.db.all("""
+    SELECT p AS participant
          , ( SELECT (s.content, s.lang)::localized_string
                FROM statements s
               WHERE s.participant = p.id
                 AND s.type = 'summary'
-           ORDER BY s.lang = %s DESC, s.id
+           ORDER BY s.lang = %(lang)s DESC, s.id
               LIMIT 1
            ) AS summary
       FROM participants p
-     WHERE p.kind = 'individual'
+     WHERE {}
        AND p.status = 'active'
        AND (p.goal > 0 OR p.goal IS NULL)
-       AND p.hide_receiving IS NOT TRUE
        AND p.hide_from_lists = 0
        AND p.receiving > 0
+       AND p.hide_receiving IS NOT TRUE
   ORDER BY {}
-     LIMIT %s
-    OFFSET %s
-""".format(sql_order), (locale.language, per_page + 1, (current_page - 1) * per_page), max_age=0)
-has_more = len(individuals) > per_page
-individuals = individuals[:per_page]
+     LIMIT %(limit)s
+    OFFSET %(offset)s
+""".format(sql_filter, sql_order), dict(
+    lang=locale.language,
+    limit=per_page + 1,
+    offset=(current_page - 1) * per_page,
+), max_age=0)
+has_more = len(participants) > per_page
+participants = participants[:per_page]
 
 title = _("Explore")
-subhead = _("Individuals")
+subhead = _("Recipients")
 
 [---] text/html
+% from 'templates/macros/nav.html' import querystring_nav with context
 % from 'templates/macros/pagination.html' import simple_pager with context
 % from 'templates/macros/profile-box.html' import profile_box_embedded with context
 
@@ -42,13 +52,29 @@ subhead = _("Individuals")
 
 % block content
 
-% if individuals
+% if participants
     % if current_page == 1 and sort_by == 'receiving' and order == 'desc'
-        <p>{{ _("The top {0} individuals on Liberapay are:", len(individuals)) }}</p>
+        <p>{{ ngettext(
+            "The individual receiving the most money through Liberapay is:",
+            "The {n} individuals receiving the most money through Liberapay are:",
+            len(participants)
+        ) if kind == 'individual' else ngettext(
+            "The organization receiving the most money through Liberapay is:",
+            "The {n} organizations receiving the most money through Liberapay are:",
+            len(participants)
+        ) if kind == 'organization' else ngettext(
+            "The team receiving the most money through Liberapay is:",
+            "The {n} teams receiving the most money through Liberapay are:",
+            len(teams)
+        ) if kind == 'group' else ngettext(
+            "The Liberapay account receiving the most money is:",
+            "The {n} Liberapay accounts receiving the most money are:",
+            len(participants)
+        ) }}</p>
     % endif
 
     <div class="inline-boxes">
-        % for p, summary in individuals
+        % for p, summary in participants
             {{ profile_box_embedded(p, summary) }}
         % endfor
     </div>

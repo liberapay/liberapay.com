@@ -48,7 +48,7 @@ from liberapay.security.csp import CSP
 from liberapay.utils import find_files, markdown, resolve
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
-from liberapay.utils.types import Object
+from liberapay.utils.types import LocalizedString, Object
 from liberapay.version import get_version
 from liberapay.website import Website
 
@@ -169,6 +169,20 @@ def database(env, tell_sentry):
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
         register_type(new_type((oid,), 'currency_basket', cast_currency_basket))
+    except (psycopg2.ProgrammingError, NeedDatabase):
+        pass
+
+    def cast_localized_string(v, cursor):
+        if v in (None, '(,)'):
+            return None
+        else:
+            text, lang = v[1:-1].split(',')
+            if text.startswith('"') and text.endswith('"'):
+                text = text[1:-1].replace('""', '"')
+            return LocalizedString(text, lang)
+    try:
+        oid = db.one("SELECT 'localized_string'::regtype::oid")
+        register_type(new_type((oid,), 'localized_string', cast_localized_string))
     except (psycopg2.ProgrammingError, NeedDatabase):
         pass
 

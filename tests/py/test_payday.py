@@ -6,7 +6,7 @@ from liberapay.billing.payday import create_payday_issue, main, NoPayday, Payday
 from liberapay.constants import EVENTS
 from liberapay.i18n.currencies import MoneyBasket
 from liberapay.models.participant import Participant
-from liberapay.testing import EUR, JPY, USD, Foobar
+from liberapay.testing import EUR, JPY, USD, Foobar, website
 from liberapay.testing.emails import EmailHarness
 
 
@@ -56,6 +56,26 @@ class TestPayday(EmailHarness):
         # Test actually relaunching
         transfer_for_real.side_effect = None
         Payday.start().run()
+
+    def test_payday_log_can_be_accessed(self):
+        _override_payday_checks = website.env.override_payday_checks
+        website.env.override_payday_checks = True
+        try:
+            alice = self.make_participant('alice', privileges=1)
+            r = self.client.PxST('/admin/payday', data={'action': 'run_payday'}, auth_as=alice)
+            assert r.code == 302
+            assert r.headers[b'Location'] == b'/admin/payday/1'
+        finally:
+            website.env.override_payday_checks = _override_payday_checks
+        r = self.client.GET('/admin/payday/1', auth_as=alice)
+        assert r.code == 200
+        r = self.client.GxT(
+            '/admin/payday/1.txt',
+            HTTP_RANGE=b'x-lines=0-', HTTP_ACCEPT=b'text/plain',
+            auth_as=alice,
+        )
+        assert r.code == 206
+        assert r.headers[b'Content-Type'] == b'text/plain'
 
     def test_payday_id_is_serial(self):
         for i in range(1, 4):

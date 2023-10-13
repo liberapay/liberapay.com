@@ -41,7 +41,7 @@ if platform:
     def get_participants(random):
         return website.db.all("""
             SELECT p
-                 , ( SELECT s.content
+                 , ( SELECT (s.content, s.lang)::localized_string
                        FROM statements s
                       WHERE s.participant = p.id
                         AND s.type = 'summary'
