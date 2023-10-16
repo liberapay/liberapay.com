@@ -176,7 +176,7 @@ def database(env, tell_sentry):
         if v in (None, '(,)'):
             return None
         else:
-            text, lang = v[1:-1].split(',')
+            text, lang = v[1:-1].rsplit(',', 1)
             if text.startswith('"') and text.endswith('"'):
                 text = text[1:-1].replace('""', '"')
             return LocalizedString(text, lang)
