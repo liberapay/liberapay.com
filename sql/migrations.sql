@@ -3420,3 +3420,6 @@ ALTER TABLE exchange_routes ADD COLUMN is_default_for currency;
 ALTER TABLE elsewhere ADD COLUMN last_fetch_attempt timestamptz;
 ALTER TABLE repositories ADD COLUMN last_fetch_attempt timestamptz;
 DELETE FROM rate_limiting WHERE key LIKE 'refetch_%';
+
+-- migration #170
+CREATE TYPE localized_string AS (string text, lang text);

@@ -34,3 +34,8 @@ $$ LANGUAGE SQL;
 
 CREATE CAST (elsewhere AS elsewhere_with_participant)
     WITH FUNCTION load_participant_for_elsewhere(elsewhere);
+
+
+-- * LocalizedString
+
+CREATE TYPE localized_string AS (string text, lang text);
