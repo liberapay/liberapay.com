@@ -9,37 +9,25 @@ title = _("Explore")
 % extends "templates/layouts/explore.html"
 
 % block content
+<div class="text-center">
 
-    <p>{{ _(
-        "Liberapay provides several ways of finding great people to donate to:"
-    ) }}</p>
-    <br>
-
-    <div class="card card-default card-md text-center">
-        <h2 class="text-info">{{ _("Teams") }}</h2>
+    <div class="card card-default card-md text-center card-xs-vanish">
+        <h2 class="text-info">{{ _("Recipients") }}</h2>
         <p>{{ _(
-            "A team is a group of users working on a specific project."
+            "People and projects who receive donations through Liberapay."
         ) }}</p>
-        <p><a class="btn btn-info btn-lg" href="/explore/teams">{{ _("Explore Teams") }}</a></p>
+        <p><a class="btn btn-info btn-lg" href="/explore/recipients">{{ _("Explore Recipients") }}</a></p>
     </div>
 
-    <div class="card card-default card-md text-center">
-        <h2 class="text-info">{{ _("Organizations") }}</h2>
+    <div class="card card-default card-md text-center card-xs-vanish">
+        <h2 class="text-info">{{ _("Hopefuls") }}</h2>
         <p>{{ _(
-            "Great nonprofits and companies trying to improve the world."
+            "Users who are hoping to receive their first donations through Liberapay."
         ) }}</p>
-        <p><a class="btn btn-info btn-lg" href="/explore/organizations">{{ _("Explore Organizations") }}</a></p>
+        <p><a class="btn btn-info btn-lg" href="/explore/hopefuls">{{ _("Explore Hopefuls") }}</a></p>
     </div>
 
-    <div class="card card-default card-md text-center">
-        <h2 class="text-info">{{ _("Individuals") }}</h2>
-        <p>{{ _(
-            "People like you who contribute to the commons (art, knowledge, software, …)."
-        ) }}</p>
-        <p><a class="btn btn-info btn-lg" href="/explore/individuals">{{ _("Explore Individuals") }}</a></p>
-    </div>
-
-    <div class="card card-default card-md text-center">
+    <div class="card card-default card-md text-center card-xs-vanish card-center">
         <h2 class="text-info">{{ _("Pledges") }}</h2>
         <p>{{ _(
             "Liberapay allows pledging to fund people who haven't joined the site yet."
@@ -47,7 +35,7 @@ title = _("Explore")
         <p><a class="btn btn-info btn-lg" href="/explore/pledges">{{ _("Explore Pledges") }}</a></p>
     </div>
 
-    <div class="card card-default card-md text-center">
+    <div class="card card-default card-md text-center card-xs-vanish">
         <h2 class="text-info">{{ _("Repositories") }}
             <small title="{{ _("A repository contains a project's data, for example the source code of an application.") }}"
                    data-toggle="tooltip" data-placement="top"
@@ -60,7 +48,7 @@ title = _("Explore")
         <p><a class="btn btn-info btn-lg" href="/explore/repositories">{{ _("Explore Repositories") }}</a></p>
     </div>
 
-    <div class="card card-default card-md text-center">
+    <div class="card card-default card-md text-center card-xs-vanish">
         <h2 class="text-info">{{ _("Social Networks") }}</h2>
         <p>{{ _(
             "Browse the accounts that Liberapay users have on other platforms. "
@@ -69,7 +57,7 @@ title = _("Explore")
         <p><a class="btn btn-info btn-lg" href="/explore/elsewhere">{{ _("Explore Social Networks") }}</a></p>
     </div>
 
-    {#<div class="card card-default card-md text-center">
+    {#<div class="card card-default card-md text-center card-xs-vanish">
         <h2 class="text-info">{{ _("Communities") }}</h2>
         <p>{{ _(
             "Communities allow you to find people that work on things you care "
@@ -78,4 +66,5 @@ title = _("Explore")
         <p><a class="btn btn-info btn-lg" href="/explore/communities">{{ _("Explore Communities") }}</a></p>
     </div>#}
 
+</div>
 % endblock

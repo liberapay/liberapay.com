@@ -281,7 +281,7 @@ next_payday = compute_next_payday_date()
             <input type="hidden" name="currency" value="{{ currency }}" />
         % for tip in tips
             % set tippee = tip.tippee_p
-            <div class="card card-default card-xs-vanish donation">
+            <div class="card card-default donation">
                 <div class="recipient">
                     % set username = tippee.username
                     <div class="col-1"><a href="/{{ username }}/">{{
@@ -429,7 +429,7 @@ next_payday = compute_next_payday_date()
             <input type="hidden" name="currency" value="{{ currency }}" />
         % for tip in pledges
             % set e = tip.e_account
-            <div class="card card-default card-xs-vanish donation">
+            <div class="card card-default donation">
                 <div class="recipient">
                     <div class="col-1"><a href="{{ e.liberapay_path }}">{{
                         avatar_img(e.participant, size=72)
@@ -497,7 +497,7 @@ next_payday = compute_next_payday_date()
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % for tip in cancelled_tips
         % set tippee = tip.tippee_p
-        <div class="card card-default card-xs-vanish donation">
+        <div class="card card-default donation">
             <div class="recipient">
                 % set username = tippee.username
                 <div class="col-1"><a href="/{{ username }}/">{{
@@ -555,7 +555,7 @@ next_payday = compute_next_payday_date()
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % for tip in cancelled_pledges
         % set e = tip.e_account
-        <div class="card card-default card-xs-vanish donation">
+        <div class="card card-default donation">
             <div class="recipient">
                 <div class="col-1"><a href="{{ e.liberapay_path }}">{{
                     avatar_img(e.participant, size=72)
