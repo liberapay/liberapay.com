@@ -26,7 +26,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('linuxfr_secret', '"8c518595790487015cd0c33be2d04939946f99aad33c86a6af20a99bc749fb3b"'::jsonb),
     ('log_emails', 'true'::jsonb),
     ('openstreetmap_api_url', '"https://api.openstreetmap.org/api/0.6"'::jsonb),
-    ('openstreetmap_auth_url', '"http://www.openstreetmap.org"'::jsonb),
+    ('openstreetmap_auth_url', '"https://www.openstreetmap.org"'::jsonb),
     ('openstreetmap_callback', '"http://127.0.0.1:8339/on/openstreetmap/associate"'::jsonb),
     ('openstreetmap_id', '"w4eQbkobmMzpkJFwS4tM16a3lq9AFbcoNCKNcGBE"'::jsonb),
     ('openstreetmap_secret', '"W08UgEhxQnh7nMzB7GfSFcqcwPnZMmKMNyxWdcw4"'::jsonb),
