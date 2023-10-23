@@ -104,17 +104,25 @@ if domain:
     """, (domain,))
     blacklisted = any(e.ignore_after is None for e in blacklist_entries)
 else:
-    show = request.qs.get_choice('show', {'all', 'blacklisted'}, default='all')
+    show = request.qs.get_choice('show', {'all', 'new', 'top', 'blacklisted'}, default='new')
+    if show == 'all':
+        show = 'top'
+    if show == 'new':
+        order = 'first_appearance DESC, domain'
+    elif show == 'top':
+        order = 'n_addresses DESC, domain'
+    else:
+        order = 'domain'
     offset = request.qs.get_int('offset', 0)
     domains_query = """
-        SELECT substr(bl.address, 2) AS domain
+        SELECT substr(bl.address, 2) AS domain, bl.ts AS first_appearance
           FROM email_blacklist bl
          WHERE lower(bl.address) LIKE '@%%'
            AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
     """
-    if show == 'all':
+    if show != 'blacklisted':
         domains_query += """
-         UNION SELECT e.domain FROM domain_stats e
+         UNION SELECT e.domain, e.first_appearance FROM domain_stats e
         """
     email_domains = website.db.all("""
         WITH domain_stats AS (
@@ -123,6 +131,7 @@ else:
                      , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
                      , count(*) FILTER (WHERE e.participant IS NOT NULL) AS n_accounts
                      , count(*) FILTER (WHERE e.participant_marked_as IN ('fraud', 'spam')) AS n_fake_accounts
+                     , min(e.added_time) AS first_appearance
                   FROM ( SELECT e.*
                               , regexp_replace(lower(e.address), '.+@', '') AS domain
                               , p.marked_as AS participant_marked_as
@@ -146,6 +155,7 @@ else:
                ) AS ban_reason
           FROM (
             SELECT d.domain
+                 , d.first_appearance
                  , coalesce(s.n_addresses, 0) AS n_addresses
                  , coalesce(s.n_verified, 0) AS n_verified
                  , coalesce(s.n_accounts, 0) AS n_accounts
@@ -153,11 +163,11 @@ else:
               FROM ( {domains_query}
                    ) d
          LEFT JOIN domain_stats s ON s.domain = d.domain
-          ORDER BY n_addresses DESC, domain
+          ORDER BY {order}, domain
              LIMIT %s
             OFFSET %s
                ) d
-    """.format(domains_query=domains_query), (PAGE_SIZE, offset))
+    """.format(domains_query=domains_query, order=order), (PAGE_SIZE, offset))
 
 title = "Email Domains"
 
@@ -238,7 +248,8 @@ title = "Email Domains"
 % else
 
     <ul class="nav nav-pills">{{ querystring_nav('show', [
-        ('all', "All"),
+        ('new', "New"),
+        ('top', "Top"),
         ('blacklisted', "Blacklisted"),
     ], show) }}</ul>
     <br><br>
@@ -254,6 +265,7 @@ title = "Email Domains"
                         <th class="text-center">Blocked addresses</th>
                         <th class="text-center">Fake accounts</th>
                         <th class="text-center">Banned?</th>
+                        <th class="text-right">First appearance</th>
                     </tr>
                 <tbody>
                 % for d in email_domains
@@ -268,6 +280,7 @@ title = "Email Domains"
                         <td class="text-center {{ 'danger' if percent_fake > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}"
                             title="{{ d.n_fake_accounts }} / {{ d.n_accounts }}">{{ locale.format_percent(percent_fake) if d.n_accounts else "-" }}</td>
                         <td class="text-center {{ 'danger' if d.ban_reason else '' }}">{{ 'Yes (' + d.ban_reason + ')' if d.ban_reason else 'No' }}</td>
+                        <td class="text-right" title="{{ locale.format_datetime(d.first_appearance) }}">{{ locale.format_timedelta(to_age(d.first_appearance)) }}</td>
                     </tr>
                 % endfor
                 </tbody>
