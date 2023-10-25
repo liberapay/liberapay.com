@@ -103,6 +103,22 @@ if domain:
          LIMIT 10
     """, (domain,))
     blacklisted = any(e.ignore_after is None for e in blacklist_entries)
+    stats = website.db.one("""
+        SELECT count(DISTINCT lower(e.address)) AS n_addresses
+             , sum(CASE WHEN e.verified IS TRUE THEN 1 ELSE 0 END) AS n_verified
+             , count(*) FILTER (WHERE e.participant IS NOT NULL) AS n_accounts
+             , count(*) FILTER (WHERE p.marked_as IN ('fraud', 'spam')) AS n_fake_accounts
+             , min(e.added_time) AS first_appearance
+          FROM emails e
+     LEFT JOIN participants p ON p.id = e.participant
+         WHERE e.address LIKE %s
+    """, ('%@' + domain,))
+    n_blacklisted_addresses = website.db.one("""
+         SELECT count(DISTINCT lower(bl.address))
+           FROM email_blacklist bl
+          WHERE lower(bl.address) LIKE %s
+            AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+    """, ('%@' + domain,))
 else:
     show = request.qs.get_choice('show', {'all', 'new', 'top', 'blacklisted'}, default='new')
     if show == 'all':
@@ -241,6 +257,13 @@ title = "Email Domains"
         <button class="btn btn-danger">Blacklist <span class="monospace">{{ domain }}</span></button>
     % endif
     </form>
+
+    <h3>Stats</h3>
+    Connected addresses: {{ stats.n_addresses }}<br>
+    Verified addresses: {{ stats.n_verified }}<br>
+    Blocked addresses: {{ n_blacklisted_addresses }}<br>
+    % set percent_fake = stats.n_fake_accounts / (stats.n_accounts or 1)
+    Fake accounts: {{ stats.n_fake_accounts }} ({{ locale.format_percent(percent_fake) }})<br>
 
     <br><br>
     <a class="btn btn-default" href="{{ request.qs.derive(domain=None) }}">← Back to browsing email domains</a>
