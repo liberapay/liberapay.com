@@ -346,37 +346,36 @@ title = "Email Domains"
     <br><br>
 
     % if email_domains
-        <form action="" method="GET">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Domain</th>
-                        <th class="text-center">Connected addresses</th>
-                        <th class="text-center">Verified addresses</th>
-                        <th class="text-center">Blocked addresses</th>
-                        <th class="text-center">Fake accounts</th>
-                        <th class="text-center">Banned?</th>
-                        <th class="text-right">First appearance</th>
-                    </tr>
-                <tbody>
-                % for d in email_domains
-                    <tr>
-                        <td><button class="link" name="domain" value="{{ d.domain }}">{{ d.domain }}</button></td>
-                        <td class="text-center">{{ d.n_addresses }}</td>
-                        % set percent_verified = d.n_verified / d.n_addresses if d.n_addresses else 1
-                        <td class="text-center {{ 'danger' if percent_verified <= 0.2 else 'warning' if percent_verified <= 0.5 else '' }}">{{ d.n_verified }}</td>
-                        % set percent_blacklisted = d.n_blacklisted_addresses / d.n_addresses if d.n_addresses else 0
-                        <td class="text-center {{ 'danger' if percent_blacklisted > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}">{{ d.n_blacklisted_addresses }}</td>
-                        % set percent_fake = d.n_fake_accounts / (d.n_accounts or 1)
-                        <td class="text-center {{ 'danger' if percent_fake > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}"
-                            title="{{ d.n_fake_accounts }} / {{ d.n_accounts }}">{{ locale.format_percent(percent_fake) if d.n_accounts else "-" }}</td>
-                        <td class="text-center {{ 'danger' if d.ban_reason else '' }}">{{ 'Yes (' + d.ban_reason + ')' if d.ban_reason else 'No' }}</td>
-                        <td class="text-right" title="{{ locale.format_datetime(d.first_appearance) }}">{{ locale.format_timedelta(to_age(d.first_appearance)) }}</td>
-                    </tr>
-                % endfor
-                </tbody>
-            </table>
-        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th class="text-center">Connected addresses</th>
+                    <th class="text-center">Verified addresses</th>
+                    <th class="text-center">Blocked addresses</th>
+                    <th class="text-center">Fake accounts</th>
+                    <th class="text-center">Banned?</th>
+                    <th class="text-right">First appearance</th>
+                </tr>
+            </thead>
+            <tbody>
+            % for d in email_domains
+                <tr>
+                    <td><a href="?domain={{ d.domain }}">{{ d.domain }}</a></td>
+                    <td class="text-center">{{ d.n_addresses }}</td>
+                    % set percent_verified = d.n_verified / d.n_addresses if d.n_addresses else 1
+                    <td class="text-center {{ 'danger' if percent_verified <= 0.2 else 'warning' if percent_verified <= 0.5 else '' }}">{{ d.n_verified }}</td>
+                    % set percent_blacklisted = d.n_blacklisted_addresses / d.n_addresses if d.n_addresses else 0
+                    <td class="text-center {{ 'danger' if percent_blacklisted > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}">{{ d.n_blacklisted_addresses }}</td>
+                    % set percent_fake = d.n_fake_accounts / (d.n_accounts or 1)
+                    <td class="text-center {{ 'danger' if percent_fake > 0.5 else 'warning' if percent_blacklisted > 0.2 else '' }}"
+                        title="{{ d.n_fake_accounts }} / {{ d.n_accounts }}">{{ locale.format_percent(percent_fake) if d.n_accounts else "-" }}</td>
+                    <td class="text-center {{ 'danger' if d.ban_reason else '' }}">{{ 'Yes (' + d.ban_reason + ')' if d.ban_reason else 'No' }}</td>
+                    <td class="text-right" title="{{ locale.format_datetime(d.first_appearance) }}">{{ locale.format_timedelta(to_age(d.first_appearance)) }}</td>
+                </tr>
+            % endfor
+            </tbody>
+        </table>
         % if len(email_domains) == PAGE_SIZE
             <a class="btn btn-primary" href="{{ request.qs.derive(offset=offset + PAGE_SIZE) }}">Next page →</a>
         % endif
