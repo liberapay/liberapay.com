@@ -24,6 +24,17 @@ StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
 
 _ = lambda a: a
 
+ACCOUNT_MARK_CLASSES = {
+    'trusted': 'success',
+    'okay': 'info',
+    'unsettling': 'info',
+    'controversial': 'warning',
+    'irrelevant': 'warning',
+    'misleading': 'warning',
+    'fraud': 'danger',
+    'spam': 'danger',
+}
+
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
