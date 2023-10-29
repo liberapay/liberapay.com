@@ -1,16 +1,6 @@
 from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.utils import render_postal_address
 
-MARKS_MAP = {
-    'trusted': 'success',
-    'okay': 'info',
-    'unsettling': 'info',
-    'controversial': 'warning',
-    'irrelevant': 'warning',
-    'misleading': 'warning',
-    'fraud': 'danger',
-    'spam': 'danger',
-}
 PAGE_SIZE = 50
 STATUS_MAP = {
     'failed': 'danger',
@@ -109,7 +99,7 @@ title = "Payments Admin"
                     ) -}}
                 </span>
                 {% endif %}{% if pi.payer_marked_as %}<br>
-                <span class="text-{{ MARKS_MAP[pi.payer_marked_as] }}">[{{
+                <span class="text-{{ constants.ACCOUNT_MARK_CLASSES[pi.payer_marked_as] }}">[{{
                     pi.payer_marked_as
                 }}]</span>{% endif %}</td>
             <td class="text-center">{{
