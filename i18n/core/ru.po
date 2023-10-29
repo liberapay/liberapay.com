@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"PO-Revision-Date: 2023-10-29 13:30+0000\n"
+"Last-Translator: 0que <0que@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.2-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -2190,38 +2192,35 @@ msgstr "Мы можем импортировать список ваших ре�
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Также можно импортировать список репозиториев ваших команд:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Резюме не может быть больше, чем {n} символов в длину."
+msgstr[0] "Резюме не должно быть длиннее {n} символа."
+msgstr[1] "Резюме не должно быть длиннее {n} символов."
+msgstr[2] "Резюме не должно быть длиннее {n} символов."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Полное описание должно быть длиннее {n} символа."
+msgstr[1] "Полное описание должно быть длиннее {n} символов."
+msgstr[2] "Полное описание должно быть длиннее {n} символов."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Полное описание не может быть более {n} символов в длину."
+msgstr[0] "Полное описание не должно быть длиннее {n} символа."
+msgstr[1] "Полное описание не должно быть длиннее {n} символов."
+msgstr[2] "Полное описание не должно быть длиннее {n} символов."
 
-#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr "Полное описание не может быть идентичным резюме."
+msgstr "Полное описание не может быть идентично резюме."
 
-#, fuzzy
 msgid "The summary can't be only your name."
-msgstr "Резюме не может быть только вашим именем."
+msgstr "Резюме не может состоять только лишь из вашего имени."
 
-#, fuzzy
 msgid "The description can't be only your name."
-msgstr "Описание не может быть только вашим именем."
+msgstr "Описание не может состоять только лишь из вашего имени."
 
 msgid "This is a preview."
 msgstr "Это предварительный просмотр."
@@ -2693,7 +2692,7 @@ msgstr "Использовать этот номер карты в следую�
 
 #, fuzzy, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr "Используйте этот платежный инструмент по умолчанию для будущих платежей в {currency}"
+msgstr "Использовать этот платежный инструмент для будущих платежей в {currency} по умолчанию"
 
 msgid "Use this payment instrument by default for future payments"
 msgstr "Использовать этот платежный инструмент по умолчанию для будущих платежей"
@@ -3323,17 +3322,16 @@ msgstr "Платежный счет был успешно отключен."
 msgid "This payment account is no longer accessible. It is now disconnected."
 msgstr "Этот платежный счет больше недоступен. Теперь он отключен."
 
-#, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr "Данные успешно обновлялись."
+msgstr "Данные обновлены успешно."
 
 #, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
 msgstr "Вы должны {link_open}подтвердить свой адрес электронной почты{link_close}, прежде чем начать принимать пожертвования."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "Вам необходимо {link_open}установить имя пользователя{link_close}, прежде чем вы сможете начать получать пожертвования."
+msgstr "Вам необходимо {link_open}задать имя пользователя{link_close} прежде, чем вы сможете начать получать пожертвования."
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
