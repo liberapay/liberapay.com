@@ -43,9 +43,7 @@ if request.method == 'POST':
     invoice_nature = body['nature']
     if invoice_nature != 'expense':
         raise response.invalid_input(invoice_nature, 'nature', 'body')
-    currency = body['currency']
-    if currency not in constants.CURRENCIES:
-        raise response.invalid_input(currency, 'currency', 'body')
+    currency = body.get_currency('currency')
     amount = locale.parse_money_amount(body['amount'], currency)
     if amount <= 0:
         raise response.error(400, "`amount` must be greater than 0")

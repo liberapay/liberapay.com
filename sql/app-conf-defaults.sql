@@ -25,8 +25,8 @@ INSERT INTO app_conf (key, value) VALUES
     ('linuxfr_id', '"c574b5f45ce054a0750a3764b3ff8ff2c9f88fe36611272a0bf5e4e07bd3c0bf"'::jsonb),
     ('linuxfr_secret', '"8c518595790487015cd0c33be2d04939946f99aad33c86a6af20a99bc749fb3b"'::jsonb),
     ('log_emails', 'true'::jsonb),
-    ('openstreetmap_api_url', '"http://www.openstreetmap.org/api/0.6"'::jsonb),
-    ('openstreetmap_auth_url', '"http://www.openstreetmap.org"'::jsonb),
+    ('openstreetmap_api_url', '"https://api.openstreetmap.org/api/0.6"'::jsonb),
+    ('openstreetmap_auth_url', '"https://www.openstreetmap.org"'::jsonb),
     ('openstreetmap_callback', '"http://127.0.0.1:8339/on/openstreetmap/associate"'::jsonb),
     ('openstreetmap_id', '"w4eQbkobmMzpkJFwS4tM16a3lq9AFbcoNCKNcGBE"'::jsonb),
     ('openstreetmap_secret', '"W08UgEhxQnh7nMzB7GfSFcqcwPnZMmKMNyxWdcw4"'::jsonb),
@@ -52,5 +52,5 @@ INSERT INTO app_conf (key, value) VALUES
     ('twitch_id', '"9ro3g4slh0de5yijy6rqb2p0jgd7hi"'::jsonb),
     ('twitch_secret', '"o090sc7828d7gljtrqc5n4vcpx3bfx"'::jsonb),
     ('twitter_callback', '"http://127.0.0.1:8339/on/twitter/associate"'::jsonb),
-    ('twitter_id', '"h8bBZtoPNz63S5RkZdbo9R5zb"'::jsonb),
-    ('twitter_secret', '"Jye64vkWxa2dQu64feTnk0BM3j4JO8ZlTa4EQvMDwrweLkwPaw"'::jsonb);
+    ('twitter_id', '"ikgMaoYPSKqCpQJkVtiRHvmqv"'::jsonb),
+    ('twitter_secret', '"pwInmJX3vSRuul2mqYs8iJsdkmcXSkBbYh7KB9wqK2pmkJQNm9"'::jsonb);

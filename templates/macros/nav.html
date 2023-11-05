@@ -71,6 +71,7 @@
     {{ nav([
         ('/', fontawesome('home', "Index")),
         ('/admins', "Audit Log"),
+        ('/cron', "Cron Jobs"),
         ('/debug', "Debugging"),
         ('/emails', "Email Addresses"),
         ('/email-domains', "Email Domains"),
@@ -86,9 +87,8 @@
 % macro nav_explore()
     {{ nav([
         ('/', _('Overview')),
-        ('/teams', _('Teams')),
-        ('/organizations', _('Organizations')),
-        ('/individuals', _('Individuals')),
+        ('/recipients', _('Recipients')),
+        ('/hopefuls', _('Hopefuls')),
         ('/pledges', _('Unclaimed Donations')),
         ('/repositories', _('Repositories')),
         ('/elsewhere', _('Social Networks')),

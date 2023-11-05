@@ -175,14 +175,16 @@ class TestElsewhere(EmailHarness):
 
     def test_user_pages_not_found(self):
         user_name = 'adhsjakdjsdkjsajdhksda'
-        error = "There doesn't seem to be a user named %s on %s."
+        error = "There doesn&#39;t seem to be a user named %s on %s."
         for platform in self.platforms:
             if not hasattr(platform, 'api_user_name_info_path') or not platform.single_domain:
                 continue
-            r = self.client.GxT("/on/%s/%s/" % (platform.name, user_name))
-            assert r.code == 404
+            r = self.client.GET(
+                "/on/%s/%s/" % (platform.name, user_name), raise_immediately=False,
+            )
+            assert r.code == 404, r.text
             expected = error % (user_name, platform.display_name)
-            assert expected in r.text
+            assert expected in r.text, r.text
 
     def test_user_pages_xss(self):
         user_name = ">'>\"><img src=x onerror=alert(0)>"
@@ -190,7 +192,7 @@ class TestElsewhere(EmailHarness):
             if not hasattr(platform, 'api_user_name_info_path') or not platform.single_domain:
                 continue
             r = self.client.GET("/on/%s/%s/" % (platform.name, user_name), raise_immediately=False)
-            assert r.code in (400, 404)
+            assert r.code in (400, 404), r.text
 
     def test_tip_form_is_in_pledge_page(self):
         self.make_elsewhere('twitter', -1, 'alice')
@@ -201,6 +203,12 @@ class TestElsewhere(EmailHarness):
         self.client.GET('/on/github/liberapay/')  # normal case will have the db primed
         response = self.client.GET('/on/github/liberapay/failure.html')
         assert response.code == 200
+
+    def test_failure_page_accepts_plausible_username_and_domain(self):
+        response = self.client.GET('/on/mastodon/liberapay@liberapay.com/failure.html')
+        assert response.code == 200
+        row = self.db.one("select * from elsewhere")
+        assert not row
 
     def test_public_json_not_opted_in(self):
         for platform in self.platforms:

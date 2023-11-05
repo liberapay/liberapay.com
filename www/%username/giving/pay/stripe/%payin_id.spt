@@ -32,15 +32,16 @@ if request.method == 'POST':
 
     body = request.body
 
-    payin_currency = body['currency']
-    if payin_currency not in constants.CURRENCIES:
-        raise response.invalid_input(payin_currency, 'currency', 'body')
+    payin_currency = body.get_currency('currency')
 
     payin_amount = body['amount']
     if payin_amount == 'custom':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
         payin_amount = Money(payin_amount, payin_currency)
+    payin_amount = payin_amount.convert_if_currency_is_phased_out()
+    del payin_currency
+    payin_amount = payin_amount.round()
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p
@@ -51,7 +52,7 @@ if request.method == 'POST':
            AND p.payment_providers & %s > 0
       ORDER BY t.id
     """, (payer.id, set(body.parse_list('tips', int)), STRIPE_BIT))
-    if len(set(tip.amount.currency for tip in tips)) != 1:
+    if set(tip.amount.currency for tip in tips) != {payin_amount.currency}:
         raise response.invalid_input(body.get('tips'), 'tips', 'body')
 
     prospect = PayinProspect(payer, tips, 'stripe')
@@ -87,19 +88,20 @@ if request.method == 'POST':
                 body.word('token'), one_off, payin_amount, owner_info, return_url
             )
             route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
-            if body.parse_boolean('set_as_default', default=False):
-                route.set_as_default()
         elif 'stripe_pm_id' in body:
             one_off = body.get('keep') != 'true'
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
-            if body.parse_boolean('set_as_default', default=False):
-                route.set_as_default()
         else:
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
                 raise response.invalid_input(body.get('route'), 'route', 'body')
             route.sync_status()
+        if body.parse_boolean('set_as_default', default=False):
+            route.set_as_default()
+        set_as_default_for = body.get_currency('set_as_default_for', None)
+        if set_as_default_for:
+            route.set_as_default_for(set_as_default_for)
 
     except stripe.error.StripeError as e:
         raise response.error(e.http_status or 500, _(
@@ -121,7 +123,7 @@ if request.method == 'POST':
     transfer_amounts = resolve_amounts(
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
-    payer_country = route.country or request.country
+    payer_country = route.country or payer.guessed_country
     proto_transfers = []
     sepa_only = len(tips) > 1
     for tip in tips:
@@ -164,7 +166,7 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     route = ExchangeRoute.from_id(payer, payin.route)
     try:
-        if payin.status == 'pre':
+        if payin.status in ('pre', 'awaiting_review'):
             payin = charge(website.db, payin, payer, route)
             if payin.id != int(payin_id):
                 response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
@@ -176,7 +178,7 @@ elif payin_id:
         elif act.type == 'use_stripe_sdk':
             client_secret = act.client_secret
         else:
-            raise NotImplementedError()
+            raise NotImplementedError(act.type)
     tell_payer_to_fill_profile = (
         payin.status in ('pending', 'succeeded') and
         not (payer.public_name or payer.username) and
@@ -187,31 +189,6 @@ elif payin_id:
                AND visibility = 3
         """, (payin.id,)) > 0
     )
-
-else:
-    routes = website.db.all("""
-        SELECT r
-          FROM exchange_routes r
-         WHERE r.participant = %s
-           AND r.status = 'chargeable'
-           AND r.network::text LIKE %s
-           AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
-      ORDER BY r.is_default NULLS LAST
-             , r.network = 'stripe-sdd' DESC
-             , r.id DESC
-    """, (payer.id, 'stripe-' + (payment_type or '%')))
-    if routes:
-        route = None
-        while routes:
-            route = routes[0]
-            route.sync_status()
-            if route:
-                break
-            routes = routes[1:]
-        payment_type = route.network.split('-', 1)[-1]
-        del route
-    if not payment_type:
-        response.redirect(payer.path('giving/pay'))
 
 tippees = request.qs.parse_list('beneficiary', int, default=None)
 if tippees:
@@ -227,6 +204,30 @@ if tippees:
             raise response.redirect(payer.path(
                 'giving/pay?redirect_reason=unaccepted_currency'
             ))
+    routes = website.db.all("""
+        SELECT r
+          FROM exchange_routes r
+         WHERE r.participant = %s
+           AND r.status = 'chargeable'
+           AND r.network::text LIKE %s
+           AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
+      ORDER BY r.is_default_for = %s DESC NULLS LAST
+             , r.is_default DESC NULLS LAST
+             , r.network = 'stripe-sdd' DESC
+             , r.id DESC
+    """, (payer.id, 'stripe-' + (payment_type or '%'), payment.currency))
+    if routes:
+        route = None
+        while routes:
+            route = routes[0]
+            route.sync_status()
+            if route:
+                break
+            routes = routes[1:]
+        payment_type = route.network.split('-', 1)[-1]
+        del route
+    if not payment_type:
+        response.redirect(payer.path('giving/pay'))
     ask_for_postal_address = (
         payment_type == 'sdd' or
         len(tips) == 1 and
@@ -254,13 +255,6 @@ elif not payin_id:
 
 if user == payer:
     payer.mark_notifications_as_read('donate_reminder')
-
-# https://stripe.com/docs/security#content-security-policy
-csp = response.headers[b'Content-Security-Policy']
-csp = csp.allow(b'connect-src', b"api.stripe.com")
-csp = csp.allow(b'frame-src', b"js.stripe.com hooks.stripe.com")
-csp = csp.allow(b'script-src', b"js.stripe.com")
-response.headers[b'Content-Security-Policy'] = csp
 
 title = _("Funding your donations")
 
@@ -303,8 +297,13 @@ title = _("Funding your donations")
             ) }}</p>
         </div>
         <p><a class="btn btn-primary btn-lg" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
-    % elif status == 'pending'
-        <p class="alert alert-info">{{ _("The payment has been initiated.") }}</p>
+    % elif status in ('pending', 'awaiting_review')
+        <p class="alert alert-info">{{ _(
+            "Your payment has been initiated. It will be submitted to your bank "
+            "at a later time, after being manually checked for signs of fraud."
+        ) if status == 'awaiting_review' else _(
+            "The payment has been initiated."
+        ) }}</p>
         <p>{{ _(
             "Processing this kind of payment takes {timedelta} on average.",
             timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
@@ -511,10 +510,18 @@ title = _("Funding your donations")
                 <input type="checkbox" name="keep" value="true" checked />
                 {{ _("Remember the card number for next time") }}
             </label><br>
+            % if payer.donates_in_multiple_currencies
+            <label>
+                <input type="checkbox" name="set_as_default_for" value="{{ payment.currency }}" checked />
+                {{ _("Use this payment instrument by default for future payments in {currency}",
+                     currency=Currency(payment.currency)) }}
+            </label>
+            % else
             <label>
                 <input type="checkbox" name="set_as_default" value="true" checked />
                 {{ _("Use this payment instrument by default for future payments") }}
             </label>
+            % endif
             <br><br>
         </fieldset>
         % elif payment_type == 'sdd'
@@ -573,5 +580,6 @@ title = _("Funding your donations")
 % endblock
 
 % block scripts
+    % do response.csp_allow_stripe()
     <script src="https://js.stripe.com/v3/"></script>
 % endblock

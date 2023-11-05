@@ -268,7 +268,9 @@ class Tests(Harness):
     # accepted_currencies_set
 
     def test_accepted_currencies_set(self):
-        alice = self.make_participant('alice', accepted_currencies=None)
+        alice = self.make_participant(
+            'alice', accepted_currencies=None, email='alice@liberapay.com',
+        )
         assert alice.payment_providers == 0
         assert alice.accepted_currencies_set == CURRENCIES
         r = self.client.PxST(
@@ -309,7 +311,7 @@ class Tests(Harness):
 
     def test_stt_works_for_donations(self):
         alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         self.add_payment_account(bob, 'stripe')
         t = alice.set_tip_to(bob, EUR('1.00'))
         assert t['amount'] == 1
@@ -373,9 +375,9 @@ class Tests(Harness):
     # get_tips_awaiting_payment
 
     def test_get_tips_awaiting_payment(self):
-        alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
         team = self.make_participant('team', kind='group')
         team.add_member(carl)
 
@@ -415,7 +417,7 @@ class Tests(Harness):
         assert len(groups['fundable'][0]) == 3
         assert len(groups['no_provider']) == 0
 
-        dana = self.make_participant('dana')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         self.add_payment_account(dana, 'paypal')
         alice.set_tip_to(dana, EUR('1.03'))
 

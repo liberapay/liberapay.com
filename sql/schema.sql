@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '159'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '171'::jsonb);
 
 
 -- app configuration
@@ -132,7 +132,7 @@ CREATE TRIGGER initialize_amounts
 
 CREATE FUNCTION update_profile_visibility() RETURNS trigger AS $$
     BEGIN
-        IF (NEW.marked_as IS NULL) THEN
+        IF (OLD.marked_as IS NULL AND NEW.marked_as IS NULL) THEN
             RETURN NEW;
         END IF;
         IF (NEW.marked_as = 'trusted') THEN
@@ -151,7 +151,7 @@ CREATE FUNCTION update_profile_visibility() RETURNS trigger AS $$
             NEW.profile_noindex = NEW.profile_noindex & 2147483645;
             NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
             NEW.hide_from_search = NEW.hide_from_search & 2147483645;
-        ELSIF (NEW.marked_as = 'unsettling') THEN
+        ELSIF (NEW.marked_as IS NULL) THEN
             NEW.profile_noindex = NEW.profile_noindex | 2;
             NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
             NEW.hide_from_search = NEW.hide_from_search & 2147483645;
@@ -198,6 +198,7 @@ CREATE TABLE elsewhere
 , info_fetched_at       timestamptz     NOT NULL DEFAULT current_timestamp
 , description           text
 , missing_since         timestamptz
+, last_fetch_attempt    timestamptz
 , CONSTRAINT user_id_chk CHECK (user_id IS NOT NULL OR domain <> '' AND user_name IS NOT NULL)
 );
 
@@ -235,6 +236,7 @@ CREATE TABLE repositories
 , info_fetched_at       timestamptz     NOT NULL DEFAULT now()
 , participant           bigint          REFERENCES participants
 , show_on_profile       boolean         NOT NULL DEFAULT FALSE
+, last_fetch_attempt    timestamptz
 , UNIQUE (platform, remote_id)
 , UNIQUE (platform, slug)
 );
@@ -415,6 +417,7 @@ CREATE TABLE exchange_routes
 , country          text
 , status           route_status   NOT NULL
 , is_default       boolean
+, is_default_for   currency
 , UNIQUE (participant, network, address)
 );
 
@@ -483,7 +486,8 @@ CREATE TABLE payment_accounts
 -- payins -- incoming payments that don't go into a donor wallet
 
 CREATE TYPE payin_status AS ENUM (
-    'pre', 'submitting', 'pending', 'succeeded', 'failed', 'awaiting_payer_action'
+    'pre', 'submitting', 'pending', 'succeeded', 'failed', 'awaiting_payer_action',
+    'awaiting_review'
 );
 
 CREATE TABLE payins
@@ -514,12 +518,16 @@ CREATE TABLE payin_events
 , UNIQUE (payin, status)
 );
 
+CREATE INDEX payins_awating_review ON payins (status) WHERE status = 'awaiting_review';
+
 
 -- payin transfers -- allocation of incoming payments to one or more recipients
 
 CREATE TYPE payin_transfer_context AS ENUM ('personal-donation', 'team-donation');
 
-CREATE TYPE payin_transfer_status AS ENUM ('pre', 'pending', 'failed', 'succeeded');
+CREATE TYPE payin_transfer_status AS ENUM (
+    'pre', 'pending', 'failed', 'succeeded', 'awaiting_review', 'suspended'
+);
 
 CREATE TABLE payin_transfers
 ( id            serial                   PRIMARY KEY
@@ -825,8 +833,8 @@ CREATE OR REPLACE FUNCTION update_payment_accounts() RETURNS trigger AS $$
     BEGIN
         UPDATE payment_accounts
            SET verified = coalesce(NEW.verified, false)
-         WHERE id = NEW.address
-           AND participant = NEW.participant;
+         WHERE participant = NEW.participant
+           AND lower(id) = lower(NEW.address);
         RETURN NULL;
     END;
 $$ LANGUAGE plpgsql;
@@ -1111,6 +1119,17 @@ CREATE TABLE feedback
 ( participant   bigint      PRIMARY KEY
 , feedback      text        NOT NULL
 , ctime         timestamptz NOT NULL DEFAULT current_timestamp
+);
+
+
+-- background tasks
+
+CREATE TABLE cron_jobs
+( name                text          PRIMARY KEY
+, last_start_time     timestamptz
+, last_success_time   timestamptz
+, last_error_time     timestamptz
+, last_error          text
 );
 
 

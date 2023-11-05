@@ -22,7 +22,7 @@
 
     % if 'postal_address.country' in wanted
     <label>
-        % set country = identity.postal_address.get('country') or request.country
+        % set country = identity.postal_address.get('country') or user.guessed_country
         <span>{{ _("Country (residence)") }}</span>
         <select name="postal_address.country" class="form-control country" {{ required }}>
             <option></option>
@@ -35,7 +35,7 @@
 
     % if 'nationality' in wanted
     <label>
-        % set country = identity.nationality or request.country
+        % set country = identity.nationality or user.guessed_country
         <span>{{ _("Nationality") }}</span>
         <select name="nationality" class="form-control country" {{ required }}>
             <option></option>

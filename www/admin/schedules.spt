@@ -1,3 +1,5 @@
+from pando.utils import utcnow
+
 from liberapay.i18n.base import LOCALE_EN as locale
 
 [---]
@@ -24,20 +26,27 @@ else:
              , count(*) FILTER (WHERE sp.automatic) AS n_automatic
              , count(*) FILTER (WHERE NOT sp.automatic) AS n_manual
              , basket_sum(sp.amount) FILTER (WHERE sp.automatic) AS sum_automatic
+             , count(*) FILTER (WHERE sp.automatic AND sp.payin IS NOT NULL) AS n_automatic_executed
+             , count(*) FILTER (WHERE NOT sp.automatic AND sp.payin IS NOT NULL) AS n_manual_executed
+             , count(*) FILTER (WHERE p.is_suspended) AS n_blocked
           FROM scheduled_payins sp
+          JOIN participants p ON p.id = sp.payer
          WHERE coalesce(automatic = %s, true)
            AND coalesce((execution_date > current_date) = %s, true)
-           AND sp.payin IS NULL
       GROUP BY sp.execution_date
       ORDER BY sp.execution_date
     """, (automatic, future))
-    sp_count = sum(row.n_all for row in aggregates)
+    sp_count = sum(
+        row.n_all - row.n_automatic_executed - row.n_manual_executed
+        for row in aggregates
+    )
     sp_dates_count = len(aggregates)
 
 kind = ' '.join(filter(None, (
     'future' if future else 'overdue' if future is False else '',
     'automatic' if automatic else 'manual' if automatic is False else ''
 )))
+today = utcnow().date()
 
 title = "Scheduled Payments Admin"
 
@@ -97,7 +106,7 @@ title = "Scheduled Payments Admin"
     <p>There are {{ sp_count }} {{ kind }} payments scheduled on {{ sp_dates_count }} different days.</p>
     % endif
     <table class="table text-right first-col-left">
-    <thead><tr><th>execution_date<th>n_all<th>n_automatic<th>n_manual<th>sum_automatic</tr></thead>
+    <thead><tr><th>execution_date<th>n_all<th>n_automatic<th>n_manual<th>sum_automatic<th>% automatic executed<th>% manual executed<th>% blocked</tr></thead>
     <tbody>
     % for row in aggregates
         <tr><td><a href="?execution_date={{ row.execution_date }}">{{ row.execution_date }}</a></td>
@@ -109,6 +118,12 @@ title = "Scheduled Payments Admin"
             % else
             <td class="text-muted">n/a</td>
             % endif
+            % set percent_automatic_executed = row.n_automatic_executed / row.n_automatic * 100 if row.n_automatic else 0
+            <td{% if row.n_automatic >= 100 and percent_automatic_executed < 90 and row.execution_date < today %} class="warning" {% endif %}>{{ '%.1f' % percent_automatic_executed }}</td>
+            % set percent_manual_executed = row.n_manual_executed / row.n_manual * 100 if row.n_manual else 0
+            <td>{{ '%.1f' % percent_manual_executed }}</td>
+            % set percent_blocked = row.n_blocked / row.n_all * 100
+            <td{% if row.n_all >= 100 and percent_blocked >= 15 %} class="warning" {% endif %}>{{ '%.1f' % percent_blocked }}</td>
     % endfor
     </tbody>
     </table>

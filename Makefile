@@ -5,31 +5,31 @@ python := "$(shell { command -v python3.8 || command -v python3 || command -v py
 bin_dir := $(shell $(python) -c 'import sys; print("Scripts" if sys.platform == "win32" else "bin")')
 env := env
 env_bin := $(env)/$(bin_dir)
-env_py := $(env_bin)/python
-pip := pip --disable-pip-version-check
-with_local_env := $(env_py) cli/run.py -e defaults.env,local.env
-with_tests_env := $(env_py) cli/run.py -e defaults.env,tests/test.env,tests/local.env
-py_test := $(with_tests_env) $(env_bin)/python -m pytest -Wd $$PYTEST_ARGS
+env_py := $(env_bin)/$(shell basename $(python))
+pip := $(env_py) -m pip --disable-pip-version-check
+with_local_env := $(env_py) cli/run.py -e defaults.env,local.env -s PYTHONPATH=.
+with_tests_env := $(env_py) cli/run.py -e defaults.env,tests/test.env,tests/local.env -s PYTHONPATH=.
+py_test := $(with_tests_env) $(env_py) -m pytest -Wd $$PYTEST_ARGS
 
 echo:
 	@echo $($(var))
 
-$(env): requirements*.txt
+$(env): Makefile requirements*.txt
 	@if [ "$(python)" = "false" ]; then \
 		echo "Unable to find a 'python' executable. Please make sure that Python is installed."; \
 		exit 1; \
 	fi;
 	@$(python) cli/check-python-version.py
 	$(python) -m venv $(env)
-	$(env_bin)/$(pip) install wheel
-	$(env_bin)/$(pip) install --require-hashes $$(for f in requirements_*.txt; do echo "-r $$f"; done)
+	$(pip) install wheel
+	$(pip) install --require-hashes -r requirements_base.txt
+	$(pip) install -r requirements_tests.txt
 	@touch $(env)
 
 rehash-requirements:
-	$(env_bin)/$(pip) install hashin
-	for f in requirements*.txt; do \
-	    sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f -p 3.8 -p 3.9; \
-	done
+	$(pip) install hashin
+	f=requirements_base.txt; \
+	sed -E -e '/^ *#/d' -e '/^ +--hash/d' -e 's/(; .+)?\\$$//' $$f | xargs $(env_bin)/hashin -r $$f;
 
 clean:
 	rm -rf $(env) *.egg *.egg-info
@@ -49,19 +49,19 @@ data: $(env)
 	$(with_local_env) $(env_py) -m liberapay.utils.fake_data
 
 db-migrations: sql/migrations.sql
-	PYTHONPATH=. $(with_local_env) $(env_py) liberapay/models/__init__.py
+	$(with_local_env) $(env_py) liberapay/models/__init__.py
 
 run: $(env)
 	@$(MAKE) --no-print-directory db-migrations || true
 	PATH=$(env_bin):$$PATH $(with_local_env) $(env_py) app.py
 
 py: $(env)
-	PYTHONPATH=. $(with_local_env) -s RUN_CRON_JOBS=no $(env_py) -i $${main-liberapay/main.py}
+	$(with_local_env) -s RUN_CRON_JOBS=no $(env_py) -i $${main-liberapay/main.py}
 
 shell: py
 
 test-shell: $(env)
-	PYTHONPATH=. $(with_tests_env) $(env_py) -i $${main-liberapay/main.py}
+	$(with_tests_env) $(env_py) -i $${main-liberapay/main.py}
 
 test-schema: $(env)
 	$(with_tests_env) ./recreate-schema.sh test
@@ -73,25 +73,25 @@ test: test-schema pytest
 tests: test
 
 pytest: $(env)
-	PYTHONPATH=. $(py_test) ./tests/py/test_$${PYTEST-*}.py
+	$(py_test) ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
 	$(py_test) --doctest-modules liberapay
 
 pytest-cov: $(env)
-	PYTHONPATH=. $(py_test) --cov-report html --cov liberapay ./tests/py/test_$${PYTEST-*}.py
+	$(py_test) --cov-report html --cov liberapay ./tests/py/test_$${PYTEST-*}.py
 	@$(MAKE) --no-print-directory pyflakes
 	$(py_test) --doctest-modules liberapay
 
 pytest-re: $(env)
-	PYTHONPATH=. $(py_test) --lf ./tests/py/
+	$(py_test) --lf ./tests/py/
 	@$(MAKE) --no-print-directory pyflakes
 
 pytest-i18n-browse: $(env)
 	@if [ -f sql/branch.sql ]; then $(MAKE) --no-print-directory test-schema; fi
-	PYTHONPATH=. LIBERAPAY_I18N_TEST=yes $(py_test) -k TestTranslations ./tests/py/
+	LIBERAPAY_I18N_TEST=yes $(py_test) -k TestTranslations ./tests/py/
 
 pytest-profiling: $(env)
-	PYTHONPATH=. LIBERAPAY_PROFILING=yes $(py_test) -k $${k-TestPerformance} --profile-svg ./tests/py/
+	LIBERAPAY_PROFILING=yes $(py_test) -k $${k-TestPerformance} --profile-svg ./tests/py/
 
 _i18n_extract: $(env)
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot --sort-by-file $$(\
@@ -99,7 +99,7 @@ _i18n_extract: $(env)
 		grep -E '^(liberapay/.+\.py|.+\.(spt|html))$$' | \
 		python -c "import sys; print(*sorted(sys.stdin, key=lambda l: l.rsplit('/', 1)))" \
 	)
-	@PYTHONPATH=. $(env_bin)/python cli/po-tools.py reflag i18n/core.pot
+	@$(env_bin)/python cli/po-tools.py reflag i18n/core.pot
 	@for f in i18n/*/*.po; do \
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
 	done
@@ -120,7 +120,7 @@ _i18n_clean: $(env)
 	done
 
 _i18n_convert: $(env)
-	@PYTHONPATH=. $(env_bin)/python cli/convert-chinese.py
+	@$(env_bin)/python cli/convert-chinese.py
 
 i18n_update: _i18n_rebase _i18n_pull _i18n_extract _i18n_convert _i18n_clean
 	@if git commit --dry-run i18n &>/dev/null; then \
@@ -161,7 +161,7 @@ _i18n_merge:
 	git reset -q master -- i18n
 	@for f in i18n/*/*.po; do \
 		if test $$(sed -E -e '/\\n"$$/{d;d}' $$f | grep -c -E '^"' 2>/dev/null) -gt 10; then \
-			PYTHONPATH=. $(env_bin)/python cli/po-tools.py reformat $$f; \
+			$(env_bin)/python cli/po-tools.py reformat $$f; \
 		fi \
 	done
 	@$(MAKE) --no-print-directory _i18n_clean
@@ -190,4 +190,4 @@ bootstrap-upgrade:
 	rm -rf bootstrap-sass-$(version){,.tar.gz}
 
 stripe-bridge:
-	PYTHONPATH=. $(with_local_env) $(env_py) cli/stripe-bridge.py
+	$(with_local_env) $(env_py) cli/stripe-bridge.py

@@ -6,6 +6,9 @@ participant = user
 
 user.require_write_permission()
 
+if not participant.email or participant.username[0] == '~' or not participant.get_statement_langs():
+    raise response.redirect(participant.path('payment/'))
+
 if request.method == 'POST':
     body = request.body
     country = body['country']
@@ -71,7 +74,7 @@ title = _("Connecting a {platform} account", platform='PayPal')
         <select name="country" class="form-control" required>
             <option></option>
         % for code, name in locale.countries.items()
-            <option value="{{ code }}" {{ 'selected' if code == request.country }}>{{ name }}</option>
+            <option value="{{ code }}" {{ 'selected' if code == user.guessed_country }}>{{ name }}</option>
         % endfor
         </select>
     </label>

@@ -3,17 +3,21 @@ from liberapay.i18n.base import Percent
 # Stripe's fee is on the donor's payment, whereas PayPal's fees are on each
 # transfer from the donor to a recipient.
 average_fee_stripe = website.db.one("""
-    SELECT (sum(fee, 'EUR')).amount / (sum(amount_settled, 'EUR')).amount
-      FROM payins
-     WHERE fee IS NOT NULL
-       AND amount_settled IS NOT NULL
-       AND ctime > (current_timestamp - interval '365 days')
+    SELECT (sum(pi.fee, 'EUR')).amount / (sum(pi.amount_settled, 'EUR')).amount
+      FROM payins pi
+      JOIN participants payer_p ON payer_p.id = pi.payer
+     WHERE pi.fee IS NOT NULL
+       AND pi.amount_settled IS NOT NULL
+       AND pi.ctime > (current_timestamp - interval '365 days')
+       AND payer_p.is_suspended IS NOT true
 """, max_age=86400)
 average_fee_paypal = website.db.one("""
-    SELECT (sum(fee, 'EUR')).amount / (sum(fee, 'EUR') + sum(amount, 'EUR')).amount
-      FROM payin_transfers
-     WHERE fee IS NOT NULL
-       AND ctime > (current_timestamp - interval '365 days')
+    SELECT (sum(pt.fee, 'EUR')).amount / (sum(pt.fee, 'EUR') + sum(pt.amount, 'EUR')).amount
+      FROM payin_transfers pt
+      JOIN participants payer_p ON payer_p.id = pt.payer
+     WHERE pt.fee IS NOT NULL
+       AND pt.ctime > (current_timestamp - interval '365 days')
+       AND payer_p.is_suspended IS NOT true
 """, max_age=86400)
 
 title = _("Frequently Asked Questions")
@@ -56,9 +60,13 @@ title = _("Frequently Asked Questions")
     ) }}
 
     <dd>{{ _(
-        "Yes. However, Liberapay isn't a shield: we can't protect anyone from being "
-        "banned by {link_open}the underlying payment processors{link_close}.",
-        link_open='<a href="/about/payment-processors">'|safe,
+        "The payment processors Liberapay supports have unfavourable policies towards "
+        "sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and "
+        "{stripe_link}Stripe prohibits it entirely{link_close}. So, while it is "
+        "possible to use Liberapay for some adult-only content, it is usually better "
+        "to use a platform specialized in such content.",
+        paypal_link='<a href="https://www.paypal.com/webapps/mpp/ua/legalhub-full">'|safe,
+        stripe_link='<a href="https://stripe.com/legal/restricted-businesses">'|safe,
         link_close='</a>'|safe,
     ) }}</dd>
 
@@ -167,7 +175,7 @@ title = _("Frequently Asked Questions")
         "well as SEPA Direct Debits (for Euro donations only). If a payment is "
         "through PayPal, then it's possible to pay in various ways, however "
         "the donor needs to have or create a PayPal account.",
-        list_of_card_brands=["Visa", "Mastercard", "American Express", "UnionPay"]
+        list_of_card_brands=["Visa", "Mastercard", "American Express", "UnionPay", "Discover", "Diners", "JCB"]
     ) }}</dd>
 
 

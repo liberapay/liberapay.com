@@ -2,7 +2,6 @@ import os
 
 import pytest
 
-from liberapay.cron import CRON_STOP
 from liberapay.security.crypto import CryptoWarning
 from liberapay.testing import Harness
 
@@ -42,7 +41,7 @@ class TestCrypto(Harness):
 
         # Attempt to rotate the data, but it's too soon
         r = cryptograph.rotate_stored_data(wait=True)
-        assert r is CRON_STOP
+        assert r > 0
         new_ts = self.db.one("SELECT (info).ts FROM identities")
         assert new_ts == ts
 

@@ -36,15 +36,18 @@ from liberapay.i18n.currencies import Money, MoneyBasket, fetch_currency_exchang
 from liberapay.models.account_elsewhere import refetch_elsewhere_data
 from liberapay.models.community import Community
 from liberapay.models.participant import (
-    Participant, clean_up_closed_accounts, send_account_disabled_notifications,
+    Participant, clean_up_closed_accounts, free_up_usernames,
+    send_account_disabled_notifications,
     generate_profile_description_missing_notifications
 )
 from liberapay.models.repository import refetch_repos
 from liberapay.payin import paypal
 from liberapay.payin.cron import (
-    execute_scheduled_payins, reschedule_renewals, send_upcoming_debit_notifications,
+    execute_reviewed_payins, execute_scheduled_payins, reschedule_renewals,
+    send_upcoming_debit_notifications,
 )
 from liberapay.security import authentication, csrf, set_default_security_headers
+from liberapay.security.csp import csp_allow, csp_allow_stripe
 from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
 )
@@ -58,6 +61,7 @@ from liberapay.utils.state_chain import (
     create_response_object,
     delegate_error_to_simplate,
     detect_obsolete_browsers,
+    drop_accept_all_header,
     enforce_rate_limits,
     insert_constants,
     merge_responses,
@@ -91,6 +95,7 @@ website.renderer_factories['jinja2'] = jinja2.Factory(rp)
 website.renderer_factories['jinja2_html_jswrapped'] = jinja2_jswrapped.Factory(rp)
 website.renderer_factories['jinja2_xml_min'] = jinja2_xml_min.Factory(rp)
 website.renderer_factories['scss'] = scss.Factory(rp)
+website.default_renderers_by_media_type['-/subject'] = 'jinja2'
 website.default_renderers_by_media_type['text/html'] = 'jinja2'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'
 
@@ -182,11 +187,13 @@ if conf:
     cron(Daily(hour=17), paypal.sync_all_pending_payments, True)
     cron(Daily(hour=18), Payday.update_cached_amounts, True)
     cron(Daily(hour=19), Participant.delete_old_feedback, True)
+    cron(Daily(hour=20), free_up_usernames, True)
     cron(intervals.get('notify_patrons', 1200), Participant.notify_patrons, True)
     if conf.ses_feedback_queue_url:
         cron(intervals.get('fetch_email_bounces', 60), handle_email_bounces, True)
+    cron(intervals.get('execute_reviewed_payins', 3600), execute_reviewed_payins, True)
 
-    cron('once', website.cryptograph.rotate_stored_data, True)
+    cron('irregular', website.cryptograph.rotate_stored_data, True)
 
 
 # Website Algorithm
@@ -205,6 +212,7 @@ algorithm.functions = [
 
     canonize,
     algorithm['extract_accept_header'],
+    drop_accept_all_header,
     set_default_security_headers,
     csrf.add_csrf_token_to_state,
     set_up_i18n,
@@ -277,6 +285,10 @@ Morsel._reserved['samesite'] = 'SameSite'
 if hasattr(aspen.http.mapping.Mapping, 'get_int'):
     raise Warning('aspen.http.mapping.Mapping.get_int() already exists')
 aspen.http.mapping.Mapping.get_int = utils.get_int
+
+if hasattr(aspen.http.mapping.Mapping, 'get_currency'):
+    raise Warning('aspen.http.mapping.Mapping.get_currency() already exists')
+aspen.http.mapping.Mapping.get_currency = utils.get_currency
 
 if hasattr(aspen.http.mapping.Mapping, 'get_money_amount'):
     raise Warning('aspen.http.mapping.Mapping.get_money_amount() already exists')
@@ -360,6 +372,14 @@ def _find_input_name(self, value):
         if any(map(value.__eq__, values)):
             return k
 pando.http.request.Request.find_input_name = _find_input_name
+
+if hasattr(pando.Response, 'csp_allow'):
+    raise Warning('pando.Response.csp_allow() already exists')
+pando.Response.csp_allow = csp_allow
+
+if hasattr(pando.Response, 'csp_allow_stripe'):
+    raise Warning('pando.Response.csp_allow_stripe() already exists')
+pando.Response.csp_allow_stripe = csp_allow_stripe
 
 if hasattr(pando.Response, 'encode_url'):
     raise Warning('pando.Response.encode_url() already exists')

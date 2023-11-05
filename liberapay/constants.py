@@ -1,17 +1,14 @@
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 from datetime import date, datetime, timedelta
-from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP
+from decimal import Decimal, ROUND_HALF_UP, ROUND_UP
 import re
 
-from babel.numbers import get_currency_precision
 from markupsafe import Markup
 from pando.utils import utc
 
-from .i18n.currencies import D_CENT, D_ZERO, D_MAX, Money  # noqa: F401
-
-
-def ordered_set(keys):
-    return dict.fromkeys(keys)
+from .i18n.currencies import (  # noqa: F401
+    convert_symbolic_amount, CURRENCIES, D_CENT, Money, MoneyAutoConvertDict,
+)
 
 
 def check_bits(bits):
@@ -22,56 +19,21 @@ def check_bits(bits):
 Event = namedtuple('Event', 'name bit title')
 
 
-def to_precision(x, precision, rounding=ROUND_HALF_UP):
-    """Round `x` to keep only `precision` of its most significant digits.
-
-    >>> to_precision(Decimal('0.0086820'), 2)
-    Decimal('0.0087')
-    >>> to_precision(Decimal('13567.89'), 3)
-    Decimal('13600')
-    >>> to_precision(Decimal('0.000'), 4)
-    Decimal('0')
-    """
-    if x == 0:
-        return Decimal(0)
-    log10 = x.log10().to_integral(ROUND_FLOOR)
-    # round
-    factor = Decimal(10) ** (log10 + 1)
-    r = (x / factor).quantize(Decimal(10) ** -precision, rounding=rounding) * factor
-    # remove trailing zeros
-    r = r.quantize(Decimal(10) ** (log10 - precision + 1))
-    return r
-
-
-def convert_symbolic_amount(amount, target_currency, precision=2, rounding=ROUND_HALF_UP):
-    from liberapay.website import website
-    rate = website.currency_exchange_rates[('EUR', target_currency)]
-    minimum = Money.MINIMUMS[target_currency].amount
-    return max(
-        to_precision(amount * rate, precision, rounding).quantize(minimum, rounding),
-        minimum
-    )
-
-
-class MoneyAutoConvertDict(defaultdict):
-
-    def __init__(self, *args, precision=2):
-        super().__init__(None, *args)
-        self.precision = precision
-
-    def __missing__(self, currency):
-        r = Money(
-            convert_symbolic_amount(self['EUR'].amount, currency, self.precision),
-            currency
-        )
-        self[currency] = r
-        return r
-
-
 StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
 
 
 _ = lambda a: a
+
+ACCOUNT_MARK_CLASSES = {
+    'trusted': 'success',
+    'okay': 'info',
+    'unsettling': 'info',
+    'controversial': 'warning',
+    'irrelevant': 'warning',
+    'misleading': 'warning',
+    'fraud': 'danger',
+    'spam': 'danger',
+}
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "abcdefghijklmnopqrstuvwxyz"
@@ -98,22 +60,17 @@ CARD_BRANDS = {
     'unknown': '',
 }
 
-CURRENCIES = ordered_set([
-    'EUR', 'USD',
-    'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
-    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD',
-    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'
-])
 
-class _DonationLimits(defaultdict):
-    def __missing__(self, currency):
+class _DonationLimits(MoneyAutoConvertDict):
+
+    def generate_value(self, currency):
         minimum = Money.MINIMUMS[currency].amount
         eur_weekly_amounts = DONATION_LIMITS_EUR_USD['weekly']
         converted_weekly_amounts = (
             convert_symbolic_amount(eur_weekly_amounts[0], currency),
             convert_symbolic_amount(eur_weekly_amounts[1], currency)
         )
-        r = {
+        return {
             'weekly': tuple(Money(x, currency) for x in converted_weekly_amounts),
             'monthly': tuple(
                 Money((x * Decimal(52) / Decimal(12)).quantize(minimum, rounding=ROUND_UP), currency)
@@ -121,8 +78,6 @@ class _DonationLimits(defaultdict):
             ),
             'yearly': tuple(Money(x * Decimal(52), currency) for x in converted_weekly_amounts),
         }
-        self[currency] = r
-        return r
 
 DONATION_LIMITS_WEEKLY_EUR_USD = (Decimal('0.01'), Decimal('100.00'))
 DONATION_LIMITS_EUR_USD = {
@@ -131,7 +86,7 @@ DONATION_LIMITS_EUR_USD = {
                      for x in DONATION_LIMITS_WEEKLY_EUR_USD),
     'yearly': tuple(x * Decimal(52) for x in DONATION_LIMITS_WEEKLY_EUR_USD),
 }
-DONATION_LIMITS = _DonationLimits(None, {
+DONATION_LIMITS = _DonationLimits({
     'EUR': {k: (Money(v[0], 'EUR'), Money(v[1], 'EUR')) for k, v in DONATION_LIMITS_EUR_USD.items()},
     'USD': {k: (Money(v[0], 'USD'), Money(v[1], 'USD')) for k, v in DONATION_LIMITS_EUR_USD.items()},
 })
@@ -286,17 +241,13 @@ PAYMENT_METHODS = {
 
 PAYOUT_COUNTRIES = {
     'paypal': set("""
-        AD AE AG AI AL AM AN AO AR AT AU AW AZ BA BB BE BF BG BH BI BJ BM BN BO
-        BR BS BT BW BY BZ C2 CA CD CG CH CI CK CL CM CO CR CV CY CZ DE DJ DK DM
-        DO DZ EC EE EG ER ES ET FI FJ FK FM FO FR GA GD GE GF GI GL GM GN GP GR
-        GT GW GY HK HN HR HU ID IE IL IN IS IT JM JO JP KE KG KH KI KM KN KR KW
-        KY KZ LA LC LI LK LS LT LU LV MA MC MD ME MG MH MK ML MN MQ MR MS MT MU
-        MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PL
-        PM PN PT PW PY QA RE RO RS RW SA SB SC SE SG SH SI SJ SK SL SM SN SO SR
-        ST SV SZ TC TD TG TH TJ TM TN TO TT TT TT TT TV TW TZ UA UG GB US UY VA
-        VC VE VG VN VU WF WS YE YT ZA ZM ZW
+        AD AE AG AL AR AT AU BA BB BE BG BH BM BR BS BW BZ CA CH CL CO CR CY CZ
+        DE DK DM DO DZ EC EE EG ES FI FJ FO FR GB GD GE GL GR GT HK HN HR HU ID
+        IE IL IN IS IT JM JO JP KE KN KR KW KY KZ LC LI LS LT LU LV MA MC MD MT
+        MU MW MX MY MZ NC NI NL NO NZ OM PA PE PF PH PL PT PW QA RO RS SA SC SE
+        SG SI SK SM SN SV TC TH TT TW US UY VE VN ZA
         PR
-    """.split()),  # https://www.paypal.com/us/webapps/mpp/country-worldwide
+    """.split()),  # see `cli/paypal_payout_countries.py`
 
     'stripe': set("""
         AT AU BE BG CA CH CY CZ DE DK EE ES FI FR GB GI GR HK HR HU IE IT JP LI
@@ -373,11 +324,10 @@ RATE_LIMITS = {
     'log-in.email.verified': (10, 60*60*24),  # 10 per day
     'log-in.password': (3, 60*60),  # 3 per hour
     'log-in.password.ip-addr': (3, 60*60),  # 3 per hour per IP address
+    'log-in.session.ip-addr': (5, 60*60),  # 5 per hour per IP address
     'make_team': (5, 60*60*24*7),  # 5 per week
     'payin.from-user': (15, 60*60*24*7),  # 15 per week
     'payin.from-ip-addr': (15, 60*60*24*7),  # 15 per week
-    'refetch_elsewhere_data': (1, 60*60*24*7),  # retry after one week
-    'refetch_repos': (1, 60*60*24),  # retry after one day
     'sign-up.email': (1, 5*60),  # this is used to detect near-simultaneous requests,
                                  # so 5 minutes should be plenty enough
     'sign-up.ip-addr': (5, 60*60),  # 5 per hour per IP address
@@ -394,25 +344,22 @@ SESSION_TIMEOUT = timedelta(hours=6)
 
 
 def make_standard_tip(label, weekly, currency):
-    precision = get_currency_precision(currency)
-    minimum = D_CENT if precision == 2 else Decimal(10) ** (-precision)
     return StandardTip(
         label,
         Money(weekly, currency),
-        Money((weekly / PERIOD_CONVERSION_RATES['monthly']).quantize(minimum), currency),
-        Money((weekly / PERIOD_CONVERSION_RATES['yearly']).quantize(minimum), currency),
+        Money((weekly / PERIOD_CONVERSION_RATES['monthly']), currency, rounding=ROUND_HALF_UP),
+        Money((weekly / PERIOD_CONVERSION_RATES['yearly']), currency, rounding=ROUND_HALF_UP),
     )
 
 
-class _StandardTips(defaultdict):
-    def __missing__(self, currency):
-        r = [
+class _StandardTips(MoneyAutoConvertDict):
+
+    def generate_value(self, currency):
+        return [
             make_standard_tip(
                 label, convert_symbolic_amount(weekly, currency), currency
             ) for label, weekly in STANDARD_TIPS_EUR_USD
         ]
-        self[currency] = r
-        return r
 
 
 STANDARD_TIPS_EUR_USD = (
@@ -422,7 +369,7 @@ STANDARD_TIPS_EUR_USD = (
     (_("Large"), Decimal('5.00')),
     (_("Maximum"), DONATION_LIMITS_EUR_USD['weekly'][1]),
 )
-STANDARD_TIPS = _StandardTips(None, {
+STANDARD_TIPS = _StandardTips({
     'EUR': [make_standard_tip(label, weekly, 'EUR') for label, weekly in STANDARD_TIPS_EUR_USD],
     'USD': [make_standard_tip(label, weekly, 'USD') for label, weekly in STANDARD_TIPS_EUR_USD],
 })

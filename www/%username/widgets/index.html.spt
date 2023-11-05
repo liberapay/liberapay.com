@@ -8,9 +8,7 @@ subhead = _("Widgets")
 profile_url = participant.url()
 
 # The widgets use inline styles, tell the browser to accept them
-csp = response.headers[b'Content-Security-Policy']
-csp = csp.allow(b'style-src', b"'unsafe-inline'")
-response.headers[b'Content-Security-Policy'] = csp
+response.csp_allow((b'style-src', b"'unsafe-inline'"))
 
 [---]
 % extends "templates/layouts/settings.html"

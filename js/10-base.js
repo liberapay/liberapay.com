@@ -104,10 +104,21 @@ Liberapay.init = function() {
         $(this).children('input[type="radio"]').prop('checked', true).trigger('change');
     });
 
-    $('[data-toggle="enable"]').on('change', function() {
-        var $checkbox = $(this);
-        var $target = $($checkbox.data('target'));
-        $target.prop('disabled', !$checkbox.prop('checked'));
+    $('[data-toggle="enable"]').each(function() {
+        if (this.tagName == 'OPTION') {
+            var $option = $(this);
+            var $select = $option.parent();
+            $select.on('change', function() {
+                var $target = $($option.data('target'));
+                $target.prop('disabled', !$option.prop('selected'));
+            });
+        } else {
+            var $control = $(this);
+            $control.on('change', function() {
+                var $target = $($control.data('target'));
+                $target.prop('disabled', !$control.prop('checked'));
+            });
+        }
     });
 
     $('[data-email]').one('mouseover click', function () {

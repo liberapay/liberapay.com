@@ -33,8 +33,7 @@ class Mastodon(PlatformOAuth2):
     api_paginator = header_links_paginator()
     api_url = 'https://{domain}/api/v1'
     api_user_info_path = '/accounts/{user_id}'
-    # https://github.com/tootsuite/mastodon/issues/4588
-    # api_user_name_info_path = '/accounts/search?q={user_name}@{domain}'
+    api_user_name_info_path = '/accounts/lookup?acct={user_name}'
     api_user_self_info_path = '/accounts/verify_credentials'
     api_follows_path = '/accounts/{user_id}/following'
     ratelimit_headers_prefix = 'x-ratelimit-'

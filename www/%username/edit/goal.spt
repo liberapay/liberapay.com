@@ -9,7 +9,8 @@ if request.method == "POST":
         goal = None
     elif goal == "custom":
         goal = request.body["goal_custom"]
-        goal = locale.parse_money_amount(goal, participant.main_currency)
+        goal_currency = request.body.get_currency('currency', participant.main_currency)
+        goal = locale.parse_money_amount(goal, goal_currency)
         if not (goal > 0 or participant.is_person and goal.amount in (0, -1)):
             raise response.invalid_input(goal, 'goal_custom', 'body')
     else:
@@ -50,6 +51,7 @@ subhead = _("Goal")
             <span>{{ GOAL_PARTS[0] }}</span>
             <div><div class="input-group">
                 % set goal_currency = participant.main_currency
+                <input type="hidden" name="currency" value="{{ goal_currency }}" />
                 <div class="input-group-addon">{{ locale.currency_symbols.get(goal_currency, goal_currency) }}</div>
                 <input type="tel" inputmode="decimal" name="goal_custom" id="goal-custom"
                        class="amount form-control input-sm"

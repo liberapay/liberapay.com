@@ -8,6 +8,7 @@ STATUS_MAP = {
     'partially_refunded': 'warning',
     'refunded': 'danger',
     'succeeded': 'success',
+    'suspended': 'warning',
 }
 
 [---]
@@ -22,11 +23,13 @@ translated_status = {
     None: '',
     'pre': _('preparing'),
     'awaiting_payer_action': _('awaiting confirmation'),
+    'awaiting_review': _('awaiting review'),
     'pending': _('pending'),
     'failed': _('failed'),
     'succeeded': _('succeeded'),
     'partially_refunded': _('partially refunded'),
     'refunded': _('refunded'),
+    'suspended': _('suspended'),
 }
 
 current_year = datetime.utcnow().year
@@ -156,6 +159,8 @@ if participant.join_time:
         % elif event['status'] == 'awaiting_payer_action' and event['payin_method'] == 'paypal'
             &mdash;
             <a href="{{ participant.path('giving/pay/paypal/%s?cancel' % event['id']) }}">{{ _("Cancel").lower() }}</a>
+        % elif status == 'awaiting_review'
+            &mdash; {{ _("This payment is awaiting to be manually checked by Liberapay staff for signs of fraud.") }}
         % elif event['status'] == 'pending' and event['payin_method'] == 'stripe-sdd'
             &mdash; {{ _(
                 "Processing this kind of payment takes {timedelta} on average.",
@@ -278,10 +283,16 @@ if participant.join_time:
                 % else
                     {{ _("error message: {0}", event['error']) }}
                 % endif
+            % elif status == 'awaiting_review' and 'payer' in event
+                &mdash; {{ _("This payment is awaiting to be manually checked by Liberapay staff for signs of fraud.") }}
             % elif status == 'pending' and event['payin_method'] == 'stripe-sdd' and 'payer' in event
                 &mdash; {{ _(
                     "Processing this kind of payment takes {timedelta} on average.",
                     timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
+                ) }}
+            % elif status == 'suspended' and 'payer' in event
+                &mdash; {{ _(
+                    "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
                 ) }}
             % endif
         % endif

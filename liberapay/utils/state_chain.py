@@ -15,7 +15,7 @@ def add_state_to_context(state, website):
 
 
 def attach_environ_to_request(environ, request):
-    request.country = request.headers.get(b'Cf-Ipcountry', b'').decode() or None
+    request.source_country = request.headers.get(b'Cf-Ipcountry', b'').decode() or None
     request.environ = environ
     try:
         request.hostname = request.headers[b'Host'].decode('idna')
@@ -91,6 +91,12 @@ def canonize(request, response, website):
             # For non-idempotent methods, redirect to homepage.
             url += '/'
         raise response.redirect(url)
+
+
+def drop_accept_all_header(accept_header=None):
+    # This is a temporary workaround for a shortcoming in Aspen
+    if accept_header == '*/*':
+        return {'accept_header': None}
 
 
 def detect_obsolete_browsers(request, response, state):

@@ -5,7 +5,7 @@ from urllib.parse import quote as urlquote
 from oauthlib.oauth2 import OAuth2Error, TokenExpiredError
 from requests_oauthlib.oauth1_session import TokenRequestDenied
 
-from liberapay.elsewhere._exceptions import BadUserId, CantReadMembership, UserNotFound
+from liberapay.elsewhere._base import CantReadMembership
 from liberapay.exceptions import AuthRequired
 from liberapay.models.account_elsewhere import AccountElsewhere
 from liberapay.models.participant import NeedConfirmation, Participant
@@ -93,18 +93,13 @@ if action_user_id:
 if action_user_id and account_user_id != action_user_id:
     try:
         claimed_account = AccountElsewhere.upsert(platform.get_user_info(domain, user_id_type, action_user_id))
-    except NotImplementedError as e:
-        raise response.error(400, e.args[0])
-    except BadUserId:
-        raise response.error(400, _(
-            "'{0}' doesn't seem to be a valid user id on {platform}.",
-            action_user_id, platform=platform.display_name
-        ))
-    except UserNotFound:
-        raise response.error(400, _(
-            "There doesn't seem to be a user named {0} on {1}.",
-            action_user_id, platform.display_name
-        ))
+    except NotImplementedError:
+        then = '/on/%s/%s/failure.html'
+        if user_id_type == 'user_name':
+            liberapay_slug = action_user_id + (('@' + domain) if domain else '')
+        elif user_id_type == 'user_id':
+            liberapay_slug = '~' + action_user_id + ((':' + domain) if domain else '')
+        response.redirect(then % (platform.name, liberapay_slug))
     if not claimed_account.is_team or not claimed_account.user_id:
         then = '/on/%s/%s/failure.html'
         response.redirect(then % (platform.name, claimed_account.liberapay_slug))

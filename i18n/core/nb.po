@@ -824,17 +824,6 @@ msgstr "Stor"
 msgid "Maximum"
 msgstr "Så stor som mulig"
 
-#, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Du har brukt opp forespørselskvoten, og kan prøve igjen {in_N_minutes}."
-
-msgid "You're making requests too fast, please try again later."
-msgstr "Du sender forespørsler for fort, prøv igjen senere."
-
-#, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} returnerte en feil, prøv igjen senere."
-
 msgid "example@mastodon.social"
 msgstr "eksempel@mastodon.social"
 
@@ -1103,14 +1092,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "{platform}-plattformbrukeren du ser etter har ikke registrert seg på Liberapay enda, og det er ikke mulig å opprette miniprofil for vedkommende."
 
 #, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "\"{0}\" ser ikke ut til å være et gyldig brukernavn på {platform}."
-
-#, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Det ser ikke ut til å være noen bruker ved navn {0} på {1}."
-
-#, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay-donasjon til {username} (lag {team_name})"
 
@@ -1135,6 +1116,9 @@ msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} år a {money_amount}"
 msgstr[1] "{n} år a {money_amount}"
+
+msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
+msgstr "Kontoen din har ikke et passord, så du må identitetsbekrefte deg per e-post:"
 
 msgid "The submitted password is incorrect."
 msgstr "Det innsendte passordet er uriktig."
@@ -1174,6 +1158,29 @@ msgstr "Du har ikke tilgang til å denne siden."
 
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Behandlingen av forespørselen din mislyktes midlertidig, fordi Liberapay-tjeneren ikke klarte å kommunisere med en tjeneste på en annen maskin. Prøv igjen senere."
+
+#, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "\"{0}\" ser ikke ut til å være et gyldig brukernavn på {platform}."
+
+#, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} returnerte en feil, prøv igjen senere."
+
+#, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Du har brukt opp forespørselskvoten, og kan prøve igjen {in_N_minutes}."
+
+msgid "You're making requests too fast, please try again later."
+msgstr "Du sender forespørsler for fort, prøv igjen senere."
+
+#, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Det ser ikke ut til å være noen bruker ved navn {0} på {1}."
+
+#, fuzzy
+msgid "This profile is marked as spam or fraud."
+msgstr "Denne profilen er merket som spam eller svindel."
 
 msgid "Cancel"
 msgstr "Avbryt"
@@ -1260,9 +1267,6 @@ msgstr "Hvis du bruker en eksotisk nettleser og ingenting skjer, {link_start}kli
 
 msgid "Retry"
 msgstr "Prøv igjen"
-
-msgid "This profile is marked as spam."
-msgstr "Denne profilen er markert som nettsøppel."
 
 #, fuzzy
 msgid "Other amount"
@@ -1457,9 +1461,6 @@ msgstr "Eller logg inn via e-post hvis du har glemt passordet ditt:"
 msgid "Log in via email"
 msgstr "Logg inn via e-post"
 
-msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
-msgstr "Kontoen din har ikke et passord, så du må identitetsbekrefte deg per e-post:"
-
 msgid "Your session has expired."
 msgstr "Økten din har utløpt."
 
@@ -1478,8 +1479,8 @@ msgid "If you need to change the password of your Liberapay account, you can do 
 msgstr "Hvis du trenger å endre passordet til Liberapay-kontoen din, kan du gjøre det nedenfor. For å være sikker bør passordet til kontoen din genereres tilfeldig og ikke brukes noe annet sted. Vi anbefaler på det sterkeste bruk av en passordbehandler."
 
 #, fuzzy
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr "Ved å angi et passord kan du logge på direkte, i stedet for å vente på en engangslenke sendt via e-post. Vi anbefaler imidlertid å holde kontoen din uten passord hvis du ikke bruker en passordbehandling, fordi for å være sikker bør passordet til kontoen din genereres tilfeldig og ikke brukes noe annet sted."
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we only recommend setting a password if you use a password manager, because in order to be secure the password should be randomly generated and not used anywhere else."
+msgstr "Ved å angi et passord kan du logge inn direkte, i stedet for å vente på en engangskobling sendt via e-post. Vi anbefaler imidlertid bare å angi et passord hvis du bruker en passordadministrator, fordi passordet for å være sikkert bør genereres tilfeldig og ikke brukes andre steder."
 
 msgid "Current password"
 msgstr "Nåværende passord"
@@ -1629,11 +1630,13 @@ msgstr "Logoer"
 msgid "Overview"
 msgstr "Oversikt"
 
-msgid "Organizations"
-msgstr "Organisasjoner"
+#, fuzzy
+msgid "Recipients"
+msgstr "Mottakere"
 
-msgid "Individuals"
-msgstr "Personer"
+#, fuzzy
+msgid "Hopefuls"
+msgstr "Håpefulle"
 
 msgid "Unclaimed Donations"
 msgstr "Ubenyttede donasjonstilbud"
@@ -1819,13 +1822,6 @@ msgstr "Din nåværende donasjon til {name} er i {currency}, men de godtar nå b
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Din nåværende donasjon til {name} er i {currency}, men de godtar ikke lenger den valutaen. Den foreslåtte nye valutaen er {accepted_currency}, men du kan velge en annen."
 
-msgid "Modify"
-msgstr "Endre"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "Stopp"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Du donerer for øyeblikket {money_amount} per uke til {recipient_name}. Skjemaet nedenfor lar deg endre eller stoppe donasjonen din."
@@ -1890,6 +1886,13 @@ msgstr "Manuell fornyelse"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Du vil få tilsendt en påminnelse om å fornye din donasjon per e-post."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Stopp donasjonen →"
+
+msgid "Cancel the pledge"
+msgstr "Avbryt donasjonstilbudet"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} har valgt å ikke få hvite hvem sine kronerullere er, så donasjonen din vil forbli en hemmelighet."
@@ -1929,13 +1932,6 @@ msgstr "Alle vil kunne se at du støtter {username}."
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} har ikke angitt hvorvidt vedkommende vil se hvem kronerollerne sine er, så donasjonen din vil forbli en hemmelighet."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Stopp donasjonen →"
-
-msgid "Cancel the pledge"
-msgstr "Avbryt donasjonstilbudet"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Folk som bidrar til allmenningen trenger din støtte i sitt arbeid. Å skape fri programvare og å spre gratis kunnskap er ting som tar tid og koster penger. Dette gjelder ikke bare det innledende arbeidet, men også det å holde det ved like."
@@ -2014,6 +2010,14 @@ msgstr "Kan jeg sende en engangsdonasjon?"
 
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
 msgstr "Engangsdonasjoner støttes ikke ordentlig enda, men du kan la være å fornye donasjonen rett etter første betaling."
+
+#, fuzzy
+msgid "Will I get a receipt?"
+msgstr "Får jeg en kvittering?"
+
+#, fuzzy
+msgid "A receipt is automatically available for every payment."
+msgstr "En kvittering er automatisk tilgjengelig for hver betaling."
 
 msgid "What is this website? I don't recognize it."
 msgstr "Hva slags nettside er dette? Jeg kjenner den ikke igjen."
@@ -2188,9 +2192,35 @@ msgstr "En liste av dine pakkebrønner kan importeres fra:"
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Lister over pakkebrønner fra lagene dine kan også importeres:"
 
-#, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Innsendt sammendrag er for langt ({0} > {1})."
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgid_plural "The summary can't be more than {n} characters long."
+msgstr[0] "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgstr[1] "Sammendraget kan ikke være lengre enn {n} tegn."
+
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgid_plural "The full description must be at least {n} characters long."
+msgstr[0] "<ubrukt entall (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgstr[1] "Den fullstendige beskrivelsen må være på minst {n} tegn."
+
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgid_plural "The full description can't be more than {n} characters long."
+msgstr[0] "<ubrukt entall (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgstr[1] "Den fullstendige beskrivelsen kan ikke være lengre enn {n} tegn."
+
+#, fuzzy
+msgid "The full description can't be identical to the summary."
+msgstr "Den fullstendige beskrivelsen kan ikke være identisk med sammendraget."
+
+#, fuzzy
+msgid "The summary can't be only your name."
+msgstr "Sammendraget kan ikke bare være navnet ditt."
+
+#, fuzzy
+msgid "The description can't be only your name."
+msgstr "Beskrivelsen kan ikke bare være navnet ditt."
 
 msgid "This is a preview."
 msgstr "Dette er en forhåndsvisning."
@@ -2200,6 +2230,10 @@ msgstr "Utdrag som vil brukes i sosiale media:"
 
 msgid "Preview of the short description"
 msgstr "Forhåndsvisning av kort beskrivelse"
+
+#, fuzzy
+msgid "Including your username in the short description is redundant. The short description is always displayed immediately below the username."
+msgstr "Det er ikke nødvendig å inkludere brukernavnet ditt i kortbeskrivelsen. Den korte beskrivelsen vises alltid rett under brukernavnet."
 
 msgid "Publish"
 msgstr "Publiser"
@@ -2417,6 +2451,9 @@ msgstr "{money_amount}{small}/måned{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/år{end_small}"
 
+msgid "Modify"
+msgstr "Endre"
+
 #, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Startet {timespan_ago}."
@@ -2619,6 +2656,10 @@ msgstr "Mer info kreves for å formidle betalingen."
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "Betalingsformidleren ({name}) kan ikke behandle {currency}-direktedebiteringer for denne mottageren enda. Prøv igjen med en annen betalingsmetode."
 
+#, fuzzy
+msgid "Your payment has been initiated. It will be submitted to your bank at a later time, after being manually checked for signs of fraud."
+msgstr "Betalingen din er igangsatt. Den vil bli sendt til banken din på et senere tidspunkt, etter å ha blitt kontrollert manuelt for tegn på svindel."
+
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Banken din kan avvise denne betalingen. Vi anbefaler å sende en kopi av {link_start}mandatet{link_end} til banken din hvis du ikker er sikker på at den håndterer {currency}-instruks om direktedebitering riktig."
@@ -2652,6 +2693,10 @@ msgstr "Denne dataen vil sendes direkte til betalingsformidleren {name}, over en
 
 msgid "Remember the card number for next time"
 msgstr "Husk kortnummeret til neste gang"
+
+#, fuzzy, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr "Bruk dette betalingsinstrumentet som standard for fremtidige betalinger i {currency}"
 
 msgid "Use this payment instrument by default for future payments"
 msgstr "Bruk dette betalingsinstrumentet som forvalg for fremtidige betalinger"
@@ -2783,8 +2828,8 @@ msgstr "Denne profilen er kun tilgjengelig på {language}"
 msgid "Edit"
 msgstr "Rediger"
 
-msgid "Statement"
-msgstr "Budskap"
+msgid "Description"
+msgstr "Beskrivelse"
 
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
@@ -2966,9 +3011,6 @@ msgstr "Fakturatype"
 msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr "(Liberapay støtter kun én type faktura for tiden.)"
 
-msgid "Description"
-msgstr "Beskrivelse"
-
 msgid "A short description of the invoice"
 msgstr "En kort beskrivelse av fakturaen"
 
@@ -3001,6 +3043,10 @@ msgstr "forbereder"
 msgid "awaiting confirmation"
 msgstr "ventende bekreftelse"
 
+#, fuzzy
+msgid "awaiting review"
+msgstr "venter på vurdering"
+
 msgid "pending"
 msgstr "ventende"
 
@@ -3015,6 +3061,10 @@ msgstr "delvis tilbakebetalt"
 
 msgid "refunded"
 msgstr "tilbakebetalt"
+
+#, fuzzy
+msgid "suspended"
+msgstr "suspendert"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -3043,6 +3093,10 @@ msgstr "automatisk trekk"
 
 msgid "charge"
 msgstr "belast"
+
+#, fuzzy
+msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
+msgstr "Denne betalingen venter på å bli kontrollert manuelt av Liberapay-ansatte for tegn på svindel."
 
 #, python-brace-format
 msgid "error message: {0}"
@@ -3105,6 +3159,10 @@ msgstr "Denne betalingen må godkjennes manuelt av mottageren gjennom {provider}
 #, python-brace-format
 msgid "PayPal status code: {0}"
 msgstr "PayPal-statuskode: {0}"
+
+#, fuzzy
+msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
+msgstr "Betalerens konto er suspendert på grunn av mistanke om svindel eller annen uautorisert handling."
 
 msgid "There were no transactions during this period."
 msgstr "Ingen transaksjoner i denne perioden."
@@ -3193,6 +3251,10 @@ msgstr "Ingen merknader å vise."
 msgid "Next Page →"
 msgstr "Neste side →"
 
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Du må krysse av i minst én boks."
+
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3207,20 +3269,40 @@ msgid "{username} doesn't have any active patrons."
 msgstr "{username} har ingen aktive kronerullere."
 
 #, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay støtter nå ikke-anonyme donasjoner. Vil du vite hvem kronerullerne dine er?"
+msgid "Visibility levels"
+msgstr "Synlighetsnivåer"
 
 #, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Skru på ikke-anonyme donasjoner"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr "Liberapay støtter tre synlighetsnivåer for donasjoner. Hvert nivå kan slås på eller av, men minst ett av dem må være aktivert."
 
 #, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Du har valgt å se hvem dine kronerullere er. Hvis du endrer mening kan du {link_start}klikke her for å skjule dem igjen{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr "Hemmelige donasjoner er ikke mulig med PayPal. Du bør enten deaktivere hemmelige donasjoner eller {link_start}legge til en Stripe-konto{link_end}."
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Du har valgt å ikke se hvem dine kronerullere er. Hvis du endrer mening kan du {link_start}klikke her for å avsløre dem igjen{link_end}."
+#, fuzzy
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr "Hemmelige donasjoner er ikke mulig når betaleren bruker PayPal."
+
+#, fuzzy
+msgid "Allow secret donations"
+msgstr "Tillate hemmelige donasjoner"
+
+#, fuzzy
+msgid "Allow private donations"
+msgstr "Tillate private donasjoner"
+
+#, fuzzy
+msgid "Allow public donations"
+msgstr "Tillate offentlige donasjoner"
+
+#, fuzzy
+msgid "This is what your prospective donors currently see:"
+msgstr "Dette er hva potensielle givere ser for øyeblikket:"
+
+#, fuzzy
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr "Dette er hva potensielle givere vil se med de nye innstillingene:"
 
 msgid "Data export"
 msgstr "Dataeksport"
@@ -3243,9 +3325,29 @@ msgstr "Du er ikke medlem av noe lag."
 msgid "{username} isn't a member of any team."
 msgstr "{username} er ikke medlem av noen lag."
 
-#, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Du må {link_open}fylle inn profilen din{link_close} før du kan motta donasjoner."
+#, fuzzy
+msgid "The payment account has been successfully disconnected."
+msgstr "Betalingskontoen har blitt frakoblet."
+
+#, fuzzy
+msgid "This payment account is no longer accessible. It is now disconnected."
+msgstr "Denne betalingskontoen er ikke lenger tilgjengelig. Den er nå frakoblet."
+
+#, fuzzy
+msgid "The data has been successfully refreshed."
+msgstr "Dataene har blitt oppdatert."
+
+#, fuzzy, python-brace-format
+msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
+msgstr "Du må {link_open}bekrefte e-postadressen din{link_close} før du kan begynne å motta donasjoner."
+
+#, fuzzy, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr "Du må {link_open}angi brukernavnet ditt{link_close} før du kan begynne å motta donasjoner."
+
+#, fuzzy, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr "Du må {link_open}legge til en profilbeskrivelse{link_close} før du kan begynne å motta donasjoner."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "For å motta donasjoner må du koble til minst én konto fra en støttet betalingsformidler. Dette kan du gjøre på denne siden."
@@ -3493,8 +3595,20 @@ msgstr[1] "Du har {n} tilknyttede betalingsinstrumenter."
 msgid "Bank Account"
 msgstr "Bankkonto"
 
+#, fuzzy
+msgid "This instrument is used by default."
+msgstr "Dette instrumentet brukes som standard."
+
 msgid "default"
 msgstr "forvalg"
+
+#, fuzzy, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr "Dette instrumentet brukes som standard for betalinger i {currency}."
+
+#, fuzzy, python-brace-format
+msgid "default for {currency}"
+msgstr "standard for {currency}"
 
 msgid "view mandate"
 msgstr "vis mandat"
@@ -3529,6 +3643,14 @@ msgstr "Dette betalingsinstrumentet har ikke blitt benyttet enda."
 
 msgid "Set as default"
 msgstr "Sett som forvalg"
+
+#, fuzzy, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr "Bruk dette instrumentet som standard for betalinger i {currency}."
+
+#, fuzzy, python-brace-format
+msgid "Set as default for {currency}"
+msgstr "Angi som standard for {currency}"
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."
@@ -3888,9 +4010,9 @@ msgstr "Kan skapere av {abbr_}NSFW{_abbr}-innhold bruke Liberapay?"
 msgid "Not safe for work"
 msgstr "Ikke arbeidsforenlig"
 
-#, python-brace-format
-msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr "Ja. Liberapay er dog ikke et skjold: Vi kan ikke beskytte noen fra å bli bannlyst av {link_open}underliggende betalingsformidlere{link_close}."
+#, fuzzy, python-brace-format
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr "Betalingsbehandlerne Liberapay støtter har ugunstige retningslinjer for seksuelt innhold. {paypal_link}PayPal krever forhåndsgodkjenning{link_close}, og {stripe_link}Stripe forbyr det helt{link_close}. Så selv om det er mulig å bruke Liberapay for noe innhold kun for voksne, er det vanligvis bedre å bruke en plattform som er spesialisert på slikt innhold."
 
 msgid "Can I modify or stop my donations?"
 msgstr "Kan jeg endre eller stoppe mine donasjoner?"
@@ -4027,16 +4149,20 @@ msgstr[0] "Givere kan velge mellom opptil {n} valutaer, avhengig av mottakerens 
 msgstr[1] ""
 
 #, fuzzy, python-brace-format
+msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
+msgstr "Donasjoner kan bare mottas i områder der minst én støttet betalingsbehandler er tilgjengelig. De støttede betalingsprosessorene er for øyeblikket {Stripe} og {PayPal}. Noen funksjoner er bare tilgjengelige via Stripe, så Liberapay er fullt tilgjengelig for opprettere i områder som støttes av Stripe, og delvis tilgjengelig i områder som bare støttes av PayPal."
+
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
 msgstr[0] "Liberapay er fullt tilgjengelig for skapere i {n} territorier:"
 msgstr[1] ""
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
-msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] "I tillegg er Liberapay delvis tilgjengelig for skapere i {paypal_link_open} {n}-landene som støttes av PayPal{link_close}."
-msgstr[1] ""
+msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
+msgid_plural "Liberapay is partially available to creators in {n} territories:"
+msgstr[0] "<ubrukt entall (hash=853969b22957acb45a26404e37a3ef82)>"
+msgstr[1] "Liberapay er delvis tilgjengelig for opphavere i {n} territorier:"
 
 msgid "What is Liberapay?"
 msgstr "Hva er Liberapay?"
@@ -4148,6 +4274,10 @@ msgstr "Betalingsformidlingsgebyrer er vanligvis lavere med Stripe enn med PayPa
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe tillater fornying av donasjoner automatisk, mens PayPal for tiden krever at kronerullere bekrefter hver betaling."
 
+#, fuzzy
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr "Donasjoner gjennom Stripe kan være hemmelige, mens PayPal alltid lar givere og mottakere se hverandres navn og e-postadresser."
+
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe tillater donasjoner til flere skapere samtidig i noen fall, mens PayPay alltid krever separate betalinger."
 
@@ -4166,9 +4296,9 @@ msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies
 msgstr "PayPal støtter kun {n_paypal_currencies} av {n_liberapay_currencies}-valutaene som støttes av Liberapay og Stripe."
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
-msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] "PayPal er tilgjengelig for skapere i mer enn 200 land, mens Stripe kun støtter {n}-land på en passende måte."
+msgid "<unused singular (hash=47f7d13f5771b30f0bcf49ea3acd518b)>"
+msgid_plural "PayPal is available to creators in more than 100 countries, whereas Stripe only supports {n} countries in a suitable way."
+msgstr[0] "PayPal er tilgjengelig for skapere i mer enn 100 land, mens Stripe kun støtter {n}-land på en passende måte."
 msgstr[1] ""
 
 #, fuzzy, python-brace-format
@@ -4494,27 +4624,33 @@ msgstr[1] "Dette er de {n} Liberapay-brukerne som har tilknyttet sin {0}-konto:"
 msgid "Explore other platforms:"
 msgstr "Utforsk andre plattformer:"
 
-msgid "Liberapay provides several ways of finding great people to donate to:"
-msgstr "Liberapay har flere metoder for å finne fantastiske mennesker å donere til:"
-
-msgid "A team is a group of users working on a specific project."
-msgstr "Et lag er en gruppe av brukere som jobber på et spesifikt prosjekt."
-
-msgid "Explore Teams"
-msgstr "Utforsk teams"
-
-msgid "Great nonprofits and companies trying to improve the world."
-msgstr "Storslåtte veldedige organisasjoner og selskap prøver å forbedre verden."
-
-msgid "Explore Organizations"
-msgstr "Utforsk organisasjoner"
+#, fuzzy
+msgid "This page lists Liberapay users who are hoping to receive their first donations."
+msgstr "Denne siden inneholder en liste over Liberapay-brukere som håper å motta sine første donasjoner."
 
 #, fuzzy
-msgid "People like you who contribute to the commons (art, knowledge, software, …)."
-msgstr "Folk som deg som bidrar til almenningen (kunst, vitenskap, programvare, osv.)."
+msgid "Despite our efforts, some of the listed profiles may be spam or fraud."
+msgstr "Til tross for våre anstrengelser kan noen av de oppførte profilene være spam eller svindel."
 
-msgid "Explore Individuals"
-msgstr "Utforsk individer"
+#, fuzzy
+msgid "Profiles only start appearing in the list 72 hours after they're created."
+msgstr "Profiler vises først i listen 72 timer etter at de er opprettet."
+
+#, fuzzy
+msgid "People and projects who receive donations through Liberapay."
+msgstr "Personer og prosjekter som mottar donasjoner gjennom Liberapay."
+
+#, fuzzy
+msgid "Explore Recipients"
+msgstr "Utforsk mottakere"
+
+#, fuzzy
+msgid "Users who are hoping to receive their first donations through Liberapay."
+msgstr "Brukere som håper å motta sine første donasjoner gjennom Liberapay."
+
+#, fuzzy
+msgid "Explore Hopefuls"
+msgstr "Utforsk håpefulle"
 
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
 msgstr "Liberapay tillater kronerulling til folk som ikke har registrert seg på siden enda."
@@ -4537,27 +4673,46 @@ msgstr "Utforsk kontoene Liberapay-brukere har på andre plattformer. Finn dine 
 msgid "Explore Social Networks"
 msgstr "Utforsk sosiale nettverk"
 
+msgid "Individuals"
+msgstr "Personer"
+
 #, python-brace-format
 msgid "The top {0} individuals on Liberapay are:"
 msgstr "Topp {0} individer på Liberapay er:"
 
-#, python-brace-format
-msgid "List of individuals on Liberapay, page {number}:"
-msgstr "Liste over personer på Liberapay, side {number}:"
+#, fuzzy
+msgid "Sort by"
+msgstr "Sorter etter"
+
+#, fuzzy
+msgid "income"
+msgstr "inntekt"
+
+#, fuzzy
+msgid "creation date"
+msgstr "Opprettelsesdato"
+
+#, fuzzy
+msgid "sort order"
+msgstr "sorteringsrekkefølge"
+
+#, fuzzy
+msgid "in descending order"
+msgstr "i synkende rekkefølge"
+
+#, fuzzy
+msgid "in ascending order"
+msgstr "i stigende rekkefølge"
+
+msgid "Organizations"
+msgstr "Organisasjoner"
 
 #, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
 msgstr "Topp {0} organisasjoner på Liberapay er:"
 
-#, python-brace-format
-msgid "List of organizations on Liberapay, page {number}:"
-msgstr "Liste over organisasjoner på Liberapay, side {number}:"
-
 msgid "Create an organization account"
 msgstr "Opprett en organisasjonskonto"
-
-msgid "Top pledges"
-msgstr "Toppbidrag"
 
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
 msgstr "Ikke bombarder folkene og prosjektene listet opp nedenfor med invitasjoner til Liberapay, eller spørsmål om hvorfor de ikke bruker det."
@@ -4576,6 +4731,30 @@ msgstr "Tenker du på noen spesielle?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Vi kan hjelpe deg å finne bidragsytere hvis du kobler til kontoene dine:"
 
+#, fuzzy, python-brace-format
+msgid "The individual receiving the most money through Liberapay is:"
+msgid_plural "The {n} individuals receiving the most money through Liberapay are:"
+msgstr[0] "Personen som mottar mest penger gjennom Liberapay er:"
+msgstr[1] "De {n} personene som mottar mest penger gjennom Liberapay er:"
+
+#, fuzzy, python-brace-format
+msgid "The organization receiving the most money through Liberapay is:"
+msgid_plural "The {n} organizations receiving the most money through Liberapay are:"
+msgstr[0] "Den organisasjonen som mottar mest penger gjennom Liberapay er:"
+msgstr[1] "De {n} organisasjonene som mottar mest penger gjennom Liberapay er:"
+
+#, fuzzy, python-brace-format
+msgid "The team receiving the most money through Liberapay is:"
+msgid_plural "The {n} teams receiving the most money through Liberapay are:"
+msgstr[0] "Laget som mottar mest penger gjennom Liberapay er:"
+msgstr[1] "De {n} lagene som mottar mest penger gjennom Liberapay er:"
+
+#, fuzzy, python-brace-format
+msgid "The Liberapay account receiving the most money is:"
+msgid_plural "The {n} Liberapay accounts receiving the most money are:"
+msgstr[0] "Liberapay-kontoen som mottar mest penger er:"
+msgstr[1] "De {n} Liberapay-kontoene som mottar mest penger er:"
+
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
@@ -4583,15 +4762,19 @@ msgstr[0] "Det mest populære kodelageret lenket til en Liberapay-konto akkurat 
 msgstr[1] "De {n} mest populære kodelagerne lenket til en Liberapay-konto akkurat nå er:"
 
 #, python-brace-format
-msgid "List of repositories currently linked to a Liberapay account, page {number}:"
-msgstr "Liste over kodelagre som er lenket til en Liberapay-konto, side {number}:"
-
-#, python-brace-format
 msgid "by {author_name}"
 msgstr "av {author_name}"
 
 msgid "Stars"
 msgstr "Stjerner"
+
+#, fuzzy
+msgid "stars count"
+msgstr "antall stjerner"
+
+#, fuzzy
+msgid "connection date"
+msgstr "Tilkoblingsdato"
 
 msgid "Browse your favorite repositories"
 msgstr "Utforsk dine favorittkodelager"
@@ -4605,10 +4788,6 @@ msgid_plural "The top {n} teams on Liberapay are:"
 msgstr[0] "Topp-laget på Liberapay er:"
 msgstr[1] "Topp {n} lag på Liberapay er:"
 
-#, python-brace-format
-msgid "List of teams on Liberapay, page {number}:"
-msgstr "Liste over lag på Liberapay, side {number}:"
-
 msgid "Create a team"
 msgstr "Opprett et lag"
 
@@ -4619,6 +4798,9 @@ msgstr "{0} gemenskapsinnstillinger"
 #, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Sidepanelstekst på {language}"
+
+msgid "This profile is marked as spam."
+msgstr "Denne profilen er markert som nettsøppel."
 
 #, fuzzy, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
@@ -5053,6 +5235,10 @@ msgstr "Hvordan kontoene vil være etter overførselen"
 msgid "Transfer the account"
 msgstr "Overfør kontoen"
 
+#, fuzzy, python-brace-format
+msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
+msgstr "Kontoen {provider} du forsøker å koble til, er knyttet til en annen Liberapay-konto som er merket som uredelig."
+
 #, python-brace-format
 msgid "Connecting a {platform} account"
 msgstr "Kobler til en {platform}-konto"
@@ -5097,8 +5283,9 @@ msgstr[1] "Fant samsvarende kodelager"
 msgid "{username} has a repository named {repo_name} in their {platform} account"
 msgstr "{username} har et kodelager ved navn {repo_name} på deres {platform}-konto"
 
-msgid "Found a matching user statement"
-msgid_plural "Found matching user statements"
+#, fuzzy
+msgid "Found a matching user description"
+msgid_plural "Found matching user descriptions"
 msgstr[0] "Fant en samsvarende brukererklæring"
 msgstr[1] "Fant samsvarende brukererklæringer"
 

@@ -1,0 +1,74 @@
+[---]
+
+per_page = 18
+last_shown = request.qs.get_int('last_shown', default=None)
+order = request.qs.get_choice('order', ('asc', 'desc'), default='desc')
+op = '<' if order == 'desc' else '>'
+participants = website.db.all("""
+    SELECT p
+         , ( SELECT (s.content, s.lang)::localized_string
+               FROM statements s
+              WHERE s.participant = p.id
+                AND s.type = 'summary'
+           ORDER BY s.lang = %s DESC, s.id
+              LIMIT 1
+           ) AS summary
+      FROM participants p
+     WHERE p.kind IN ('individual', 'organization', 'group')
+       AND p.status = 'active'
+       AND (p.goal > 0 OR p.goal IS NULL)
+       AND p.hide_from_lists = 0
+       AND p.receiving = 0
+       AND p.payment_providers > 0
+       AND p.join_time < (current_timestamp - interval '72 hours')
+       AND coalesce(p.id {} %s, true)
+  ORDER BY p.id {}
+     LIMIT %s
+""".format(op, order), (locale.language, last_shown, per_page + 1), max_age=0)
+has_more = len(participants) > per_page
+participants = participants[:per_page]
+
+title = _("Explore")
+subhead = _("Hopefuls")
+
+[---] text/html
+% from 'templates/macros/icons.html' import glyphicon with context
+% from 'templates/macros/pagination.html' import simple_pager with context
+% from 'templates/macros/profile-box.html' import profile_box_embedded with context
+
+% extends "templates/layouts/explore.html"
+
+% block content
+
+% if participants
+    <p>{{ _("This page lists Liberapay users who are hoping to receive their first donations.") }}</p>
+    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+        "Despite our efforts, some of the listed profiles may be spam or fraud."
+    ) }}</p>
+    % if last_shown is None
+    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        "Profiles only start appearing in the list 72 hours after they're created."
+    ) }}</p>
+    % endif
+
+    <div class="inline-boxes">
+        % for p, summary in participants
+            {{ profile_box_embedded(p, summary, numbers=False) }}
+        % endfor
+    </div>
+    % if has_more
+        <ul class="pager">
+            <li class="next"><a href="{{ request.qs.derive(last_shown=participants[-1][0].id) }}">{{ _(
+                "Next Page →"
+            ) }}</a></li>
+        </ul>
+    % endif
+% else
+<p>{{ _("Nothing to show.") }}</p>
+% endif
+
+% if user.ANON
+<p><a class="btn btn-success btn-lg" href="/sign-up">{{ _("Create your account") }}</a></p>
+% endif
+
+% endblock

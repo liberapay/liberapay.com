@@ -19,6 +19,17 @@ if request.method == 'POST':
         route = ExchangeRoute.from_id(participant, request.body.get_int('set_as_default'), _raise=False)
         if route:
             route.set_as_default()
+    elif 'set_as_default_for' in request.body:
+        try:
+            route_id, currency = request.body['set_as_default_for'].split(':')
+            route_id = int(route_id)
+            if currency not in constants.CURRENCIES:
+                raise ValueError(currency)
+        except ValueError:
+            raise response.invalid_input(request.body['set_as_default_for'], 'set_as_default_for', 'body')
+        route = ExchangeRoute.from_id(participant, route_id, _raise=False)
+        if route:
+            route.set_as_default_for(currency)
     else:
         raise response.error(400, "no known action found in request body")
     form_post_success(state)
@@ -100,7 +111,16 @@ title = _("Payment Instruments")
                     <span class="text-muted">({{ locale.currencies.get(route.currency, route.currency) }})</span>
                 % endif
                 % if route.is_default
-                    &nbsp; <span class="label label-primary">{{ _("default") }}</span>
+                    &nbsp; <span class="label label-primary" title="{{ _(
+                        'This instrument is used by default.'
+                    ) }}">{{ _("default") }}</span>
+                % elif route.is_default_for
+                    &nbsp; <span class="label label-primary" title="{{ _(
+                        'This instrument is used by default for payments in {currency}.',
+                        currency=Currency(route.is_default_for)
+                    ) }}">{{ _(
+                        "default for {currency}", currency=route.is_default_for
+                    ) }}</span>
                 % endif
                 % if route.status == 'pending'
                     &nbsp; <span class="label label-warning">{{ _("pending") }}</span>
@@ -159,6 +179,16 @@ title = _("Payment Instruments")
                 <button class="btn btn-danger btn-xs" name="remove" value="{{ route.id }}">{{ _("Remove") }}</button>
             % if not route.is_default
                 <button class="btn btn-primary btn-xs" name="set_as_default" value="{{ route.id }}">{{ _("Set as default") }}</button>
+                % if last_payin and participant.donates_in_multiple_currencies
+                    <button class="btn btn-primary btn-xs"
+                            name="set_as_default_for" value="{{ route.id }}:{{ last_payin.amount.currency }}"
+                            title="{{ _(
+                                'Use this instrument by default for payments in {currency}.',
+                                currency=Currency(last_payin.amount.currency)
+                            ) }}">{{ _(
+                        "Set as default for {currency}", currency=last_payin.amount.currency
+                    ) }}</button>
+                % endif
             % endif
             </span>
         </div>
@@ -175,13 +205,13 @@ title = _("Payment Instruments")
         <div class="panel-body overlaid">
             <p class="payment-icon">{{ fontawesome('credit-card') }}</p>
             <h4>{{ _("Credit/Debit Card") }}<br>
-                <small>Visa, MasterCard, American Express, UnionPay</small>
+                <small>Visa, MasterCard, American Express, UnionPay, Discover, Diners</small>
             </h4>
             <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-card"
                 ><span class="sr-only">{{ _("Add a card") }}</span></a>
         </div>
     </div>
-    % set warn = request.country not in constants.SEPA
+    % set warn = participant.guessed_country not in constants.SEPA
     <div class="panel panel-default {{ '' if has_euro_donations else 'muted' }}">
         <div class="panel-body overlaid">
             <p class="payment-icon">{{ fontawesome('bank') }}</p>

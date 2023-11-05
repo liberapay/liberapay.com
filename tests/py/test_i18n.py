@@ -17,9 +17,9 @@ class Tests(Harness):
 
     def test_request_country(self):
         request = self.client.GET('/', want='request')
-        assert request.country is None
+        assert request.source_country is None
         request = self.client.GET('/', HTTP_CF_IPCOUNTRY='US', want='request')
-        assert request.country == 'US'
+        assert request.source_country == 'US'
 
     def test_state_currency(self):
         state = self.client.GET('/', want='state')
@@ -109,7 +109,10 @@ class Tests(Harness):
 
     def test_get_currencies_for(self):
         # Unidentified donor with a Swiss IP address, giving to a creator in France.
-        alice = self.make_participant('alice', main_currency='EUR', accepted_currencies='EUR,USD')
+        alice = self.make_participant(
+            'alice', main_currency='EUR', accepted_currencies='EUR,USD',
+            email='alice@liberapay.com',
+        )
         self.add_payment_account(alice, 'stripe', 'FR', default_currency='EUR')
         self.add_payment_account(alice, 'paypal', 'FR', default_currency='EUR')
         alice = alice.refetch()
@@ -121,7 +124,10 @@ class Tests(Harness):
 
         # Unidentified donor with an Indonesian IP address, giving to a creator in Iceland.
         # The PayPal API we're using doesn't support the Icelandic Króna, so we fall back to USD.
-        bob = self.make_participant('bob', main_currency='ISK', accepted_currencies='ISK')
+        bob = self.make_participant(
+            'bob', main_currency='ISK', accepted_currencies='ISK',
+            email='bob@liberapay.com',
+        )
         self.add_payment_account(bob, 'paypal', 'IS', default_currency='ISK')
         bob = bob.refetch()
         assert bob.payment_providers == 2

@@ -3222,3 +3222,208 @@ WITH closed as (
 INSERT INTO events (participant, type, payload)
      SELECT id, 'set_status', '"closed"'
        FROM closed;
+
+-- migration #160
+CREATE OR REPLACE FUNCTION compute_payment_providers(bigint) RETURNS bigint AS $$
+    SELECT CASE WHEN p.email IS NULL AND p.kind <> 'group' AND p.join_time >= '2022-12-06' THEN 0
+           ELSE coalesce((
+               SELECT sum(DISTINCT array_position(
+                                       enum_range(NULL::payment_providers),
+                                       a.provider::payment_providers
+                                   ))
+                 FROM payment_accounts a
+                WHERE ( a.participant = p.id OR
+                        a.participant IN (
+                            SELECT t.member
+                              FROM current_takes t
+                             WHERE t.team = p.id
+                               AND t.amount <> 0
+                        )
+                      )
+                  AND a.is_current IS TRUE
+                  AND a.verified IS TRUE
+                  AND coalesce(a.charges_enabled, true)
+           ), 0) END
+      FROM participants p
+     WHERE p.id = $1;
+$$ LANGUAGE SQL STRICT;
+
+-- migration #161
+ALTER TYPE payin_status ADD VALUE IF NOT EXISTS 'awaiting_review';
+ALTER TYPE payin_transfer_status ADD VALUE IF NOT EXISTS 'awaiting_review';
+CREATE INDEX payins_awating_review ON payins (status) WHERE status = 'awaiting_review';
+
+-- migration #162
+INSERT INTO currency_exchange_rates
+     VALUES ('HRK', 'EUR', 1 / 7.53450)
+          , ('EUR', 'HRK', 7.53450)
+ON CONFLICT (source_currency, target_currency) DO UPDATE
+        SET rate = excluded.rate;
+UPDATE participants
+   SET main_currency = 'EUR'
+     , goal = convert(goal, 'EUR')
+     , giving = convert(giving, 'EUR')
+     , receiving = convert(receiving, 'EUR')
+     , taking = convert(taking, 'EUR')
+ WHERE main_currency = 'HRK';
+UPDATE participants p
+   SET accepted_currencies = (CASE
+           WHEN accepted_currencies LIKE '%EUR%'
+           THEN replace(regexp_replace(regexp_replace(accepted_currencies, '^HRK,', ''), ',HRK$', ''), ',HRK,', ',')
+           ELSE replace(accepted_currencies, 'HRK', 'EUR')
+       END)
+ WHERE accepted_currencies LIKE '%HRK%';
+INSERT INTO tips
+          ( ctime, tipper, tippee
+          , amount, period, periodic_amount
+          , paid_in_advance, is_funded, renewal_mode, visibility )
+     SELECT ctime, tipper, tippee
+          , convert(amount, 'EUR'), period, convert(periodic_amount, 'EUR')
+          , convert(paid_in_advance, 'EUR'), is_funded, renewal_mode, visibility
+       FROM current_tips
+      WHERE (amount).currency = 'HRK';
+UPDATE scheduled_payins
+   SET amount = convert(amount, 'EUR')
+ WHERE (amount).currency = 'HRK';
+INSERT INTO takes
+            (ctime, member, team, amount, actual_amount, recorder, paid_in_advance)
+     SELECT ctime, member, team, convert(amount, 'EUR'), actual_amount, recorder, convert(paid_in_advance, 'EUR')
+       FROM current_takes
+      WHERE (amount).currency = 'HRK';
+
+-- migration #163
+CREATE TABLE cron_jobs
+( name                text          PRIMARY KEY
+, last_start_time     timestamptz
+, last_success_time   timestamptz
+, last_error_time     timestamptz
+, last_error          text
+);
+
+-- migration #164
+CREATE OR REPLACE FUNCTION compute_payment_providers(bigint) RETURNS bigint AS $$
+    SELECT coalesce((
+        SELECT sum(DISTINCT array_position(
+                                enum_range(NULL::payment_providers),
+                                a.provider::payment_providers
+                            ))
+          FROM payment_accounts a
+         WHERE ( a.participant = $1 OR
+                 a.participant IN (
+                     SELECT t.member
+                       FROM current_takes t
+                      WHERE t.team = $1
+                        AND t.amount <> 0
+                 )
+               )
+           AND a.is_current IS TRUE
+           AND a.verified IS TRUE
+           AND coalesce(a.charges_enabled, true)
+    ), 0);
+$$ LANGUAGE SQL STRICT;
+UPDATE participants
+   SET payment_providers = compute_payment_providers(id)
+ WHERE status <> 'stub'
+   AND payment_providers = 0
+   AND email IS NOT NULL
+   AND join_time >= '2022-12-06'
+   AND compute_payment_providers(id) <> 0;
+
+-- migration #165
+UPDATE payins SET error = '' WHERE error = 'None (code None)';
+UPDATE payin_events SET error = '' WHERE error = 'None (code None)';
+ALTER TYPE payin_transfer_status ADD VALUE IF NOT EXISTS 'suspended';
+
+-- migration #166
+CREATE OR REPLACE FUNCTION update_profile_visibility() RETURNS trigger AS $$
+    BEGIN
+        IF (OLD.marked_as IS NULL AND NEW.marked_as IS NULL) THEN
+            RETURN NEW;
+        END IF;
+        IF (NEW.marked_as = 'trusted') THEN
+            NEW.is_suspended = false;
+        ELSIF (NEW.marked_as IN ('fraud', 'spam')) THEN
+            NEW.is_suspended = true;
+        ELSE
+            NEW.is_suspended = null;
+        END IF;
+        IF (NEW.marked_as = 'unsettling') THEN
+            NEW.is_unsettling = NEW.is_unsettling | 2;
+        ELSE
+            NEW.is_unsettling = NEW.is_unsettling & 2147483645;
+        END IF;
+        IF (NEW.marked_as IN ('okay', 'trusted')) THEN
+            NEW.profile_noindex = NEW.profile_noindex & 2147483645;
+            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
+            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+        ELSIF (NEW.marked_as IS NULL) THEN
+            NEW.profile_noindex = NEW.profile_noindex | 2;
+            NEW.hide_from_lists = NEW.hide_from_lists & 2147483645;
+            NEW.hide_from_search = NEW.hide_from_search & 2147483645;
+        ELSE
+            NEW.profile_noindex = NEW.profile_noindex | 2;
+            NEW.hide_from_lists = NEW.hide_from_lists | 2;
+            NEW.hide_from_search = NEW.hide_from_search | 2;
+        END IF;
+        RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+UPDATE participants
+   SET marked_as = marked_as
+ WHERE marked_as = 'unsettling';
+UPDATE participants AS p
+   SET is_suspended = null
+     , is_unsettling = is_unsettling & 2147483645
+     , profile_noindex = profile_noindex | 2
+     , hide_from_lists = hide_from_lists & 2147483645
+     , hide_from_search = hide_from_search & 2147483645
+ WHERE marked_as IS NULL AND EXISTS (
+           SELECT 1
+             FROM events e
+            WHERE e.participant = p.id
+              AND e.type = 'flags_changed'
+            LIMIT 1
+       );
+UPDATE payin_transfers SET error = '' WHERE error = 'None (code None)';
+UPDATE payin_transfer_events SET error = '' WHERE error = 'None (code None)';
+INSERT INTO app_conf VALUES
+    ('twitter_id', '"ikgMaoYPSKqCpQJkVtiRHvmqv"'::jsonb),
+    ('twitter_secret', '"pwInmJX3vSRuul2mqYs8iJsdkmcXSkBbYh7KB9wqK2pmkJQNm9"'::jsonb)
+    ON CONFLICT (key) DO UPDATE SET value = excluded.value;
+
+-- migration #167
+CREATE OR REPLACE FUNCTION update_payment_accounts() RETURNS trigger AS $$
+    BEGIN
+        UPDATE payment_accounts
+           SET verified = coalesce(NEW.verified, false)
+         WHERE participant = NEW.participant
+           AND lower(id) = lower(NEW.address);
+        RETURN NULL;
+    END;
+$$ LANGUAGE plpgsql;
+UPDATE payment_accounts AS a
+   SET verified = true
+ WHERE lower(id) <> id
+   AND NOT verified
+   AND EXISTS (
+           SELECT 1
+             FROM emails e
+            WHERE e.participant = a.participant
+              AND lower(e.address) = lower(a.id)
+              AND e.verified
+       );
+
+-- migration #168
+ALTER TABLE exchange_routes ADD COLUMN is_default_for currency;
+
+-- migration #169
+ALTER TABLE elsewhere ADD COLUMN last_fetch_attempt timestamptz;
+ALTER TABLE repositories ADD COLUMN last_fetch_attempt timestamptz;
+DELETE FROM rate_limiting WHERE key LIKE 'refetch_%';
+
+-- migration #170
+CREATE TYPE localized_string AS (string text, lang text);
+
+-- migration #171
+UPDATE app_conf SET value = '"https://api.openstreetmap.org/api/0.6"'::jsonb WHERE key = 'openstreetmap_api_url';
+UPDATE app_conf SET value = '"https://www.openstreetmap.org"'::jsonb WHERE key = 'openstreetmap_auth_url';

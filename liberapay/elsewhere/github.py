@@ -1,5 +1,4 @@
-from liberapay.elsewhere._base import PlatformOAuth2
-from liberapay.elsewhere._exceptions import CantReadMembership
+from liberapay.elsewhere._base import CantReadMembership, PlatformOAuth2
 from liberapay.elsewhere._extractors import key
 from liberapay.elsewhere._paginators import header_links_paginator
 

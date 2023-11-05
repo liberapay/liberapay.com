@@ -1,5 +1,5 @@
 from binascii import b2a_base64
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 from math import log
 import os
 from os import urandom
@@ -7,10 +7,9 @@ import warnings
 
 import boto3
 from cryptography.fernet import Fernet, InvalidToken, MultiFernet
-from pando.utils import utcnow
+from pando.utils import utc, utcnow
 from psycopg2.extras import execute_batch
 
-from ..cron import CRON_ENCORE, CRON_STOP
 from ..models.encrypted import Encrypted
 from ..utils import cbor
 from ..website import website
@@ -80,12 +79,12 @@ class Cryptograph:
         if website.env.aws_secret_access_key:
             sm = self.secrets_manager = boto3.client('secretsmanager', region_name='eu-west-1')
             secret = sm.get_secret_value(SecretId='Fernet')
-            rotation_start = secret['CreatedDate'].date()
+            rotation_start = secret['CreatedDate'].replace(tzinfo=utc)
             keys = secret['SecretString'].split()
         else:
             self.secrets_manager = None
             parts = os.environ['SECRET_FERNET_KEYS'].split()
-            rotation_start = date(*map(int, parts[0].split('-')))
+            rotation_start = datetime(*map(int, parts[0].split('-')), 0, 0, 0, 0, utc)
             keys = parts[1:]
         self.fernet_rotation_start = rotation_start
         self.fernet_keys = [k.encode('ascii') for k in keys]
@@ -163,7 +162,7 @@ class Cryptograph:
         timestamp, data = Fernet._get_unverified_token_data(msg)
         for i, fernet in enumerate(self.fernet._fernets):
             try:
-                p = fernet._decrypt_data(data, timestamp, None, None)
+                p = fernet._decrypt_data(data, timestamp, None)
             except InvalidToken:
                 continue
             if i == 0 and not force:
@@ -179,11 +178,9 @@ class Cryptograph:
     def rotate_stored_data(self, wait=True):
         """Re-encrypt all the sensitive information stored in our database.
 
-        This function is a special kind of "cron job" that returns one of two
-        constants from the `liberapay.cron` module: `CRON_ENCORE`, indicating
-        that the function needs to be run again to continue its work, or
-        `CRON_STOP`, indicating that all the ciphertexts are up-to-date (or that
-        it isn't time to rotate yet).
+        This function is a special kind of "cron job" that returns either the
+        number of seconds to wait before it should be called again, or `None`
+        indicating that all the ciphertexts are up-to-date.
 
         Rows are processed in batches of 50. Timestamps are used to keep track of
         progress and to avoid overwriting new data with re-encrypted old data.
@@ -192,32 +189,34 @@ class Cryptograph:
         `wait` is set to `False`. This delay is to "ensure" that the previous
         key is no longer being used to encrypt new data.
         """
-        update_start = self.fernet_rotation_start + self.KEY_ROTATION_DELAY
         if wait:
-            if utcnow().date() < update_start:
-                return CRON_STOP
+            update_start = self.fernet_rotation_start + self.KEY_ROTATION_DELAY
+            now = utcnow()
+            if now < update_start:
+                return (update_start - now).total_seconds()
+        else:
+            update_start = utcnow()
 
-        with website.db.get_cursor() as cursor:
-            batch = cursor.all("""
-                SELECT id, info
-                  FROM identities
-                 WHERE (info).ts <= %s
-              ORDER BY (info).ts ASC
-                 LIMIT 50
-            """, (update_start,))
-            if not batch:
-                return CRON_STOP
+        while True:
+            with website.db.get_cursor() as cursor:
+                batch = cursor.all("""
+                    SELECT id, info
+                      FROM identities
+                     WHERE (info).ts <= %s
+                  ORDER BY (info).ts ASC
+                     LIMIT 50
+                """, (update_start,))
+                if not batch:
+                    return
 
-            sql = """
-                UPDATE identities
-                   SET info = ('fernet', %s, current_timestamp)::encrypted
-                 WHERE id = %s
-                   AND (info).ts = %s;
-            """
-            args_list = [
-                (self.rotate_message(r.info.payload), r.id, r.info.ts)
-                for r in batch
-            ]
-            execute_batch(cursor, sql, args_list)
-
-        return CRON_ENCORE
+                sql = """
+                    UPDATE identities
+                       SET info = ('fernet', %s, current_timestamp)::encrypted
+                     WHERE id = %s
+                       AND (info).ts = %s;
+                """
+                args_list = [
+                    (self.rotate_message(r.info.payload), r.id, r.info.ts)
+                    for r in batch
+                ]
+                execute_batch(cursor, sql, args_list)

@@ -7,9 +7,9 @@ from pando.testing.client import DidntRaiseResponse
 
 from liberapay import utils
 from liberapay.i18n.currencies import Money, MoneyBasket
+from liberapay.security.csp import CSP
 from liberapay.testing import Harness
 from liberapay.utils import markdown, b64encode_s, b64decode_s, cbor
-from liberapay.wireup import CSP
 
 
 class Tests(Harness):

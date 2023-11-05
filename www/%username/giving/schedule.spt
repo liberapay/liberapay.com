@@ -29,13 +29,13 @@ if request.method == 'POST':
     elif action == 'modify':
         new_amount = request.body.get('amount')
         if new_amount:
-            payin_currency = request.body['currency']
-            if payin_currency not in constants.CURRENCIES:
-                raise response.invalid_input(payin_currency, 'currency', 'body')
+            payin_currency = request.body.get_currency('currency')
             if new_amount == 'custom':
                 new_amount = locale.parse_money_amount(request.body['amount_custom'], payin_currency)
             else:
                 new_amount = Money(new_amount, payin_currency)
+            new_amount = new_amount.convert_if_currency_is_phased_out()
+            payin_currency = new_amount.currency
             tips = payer.get_tips_to([tr['tippee_id'] for tr in sp.transfers])
             prospect = PayinProspect(payer, tips, 'stripe')
             if payin_currency != prospect.currency:

@@ -33,11 +33,22 @@ class CustomUndefined(Undefined):
     __hash__ = wrap_method(Undefined.__hash__)
 
 
-JINJA_ENV_COMMON = dict(
-    JINJA_BASE_OPTIONS,
-    auto_reload=website.env.aspen_changes_reload,
-    undefined=CustomUndefined,
-)
+class DictWithLowercaseFallback(dict):
+
+    def __missing__(self, key):
+        return self[key.lower()]
+
+
+class Environment(base.Environment):
+
+    def __init__(self, **options):
+        super().__init__(
+            **JINJA_BASE_OPTIONS,
+            auto_reload=website.env.aspen_changes_reload,
+            undefined=CustomUndefined,
+            **options,
+        )
+        self.tests = DictWithLowercaseFallback(self.tests)
 
 
 class Renderer(base.Renderer):
@@ -58,13 +69,9 @@ class Factory(base.Factory):
     Renderer = Renderer
 
     def compile_meta(self, configuration):
-        # Override to add our own JINJA_ENV_COMMON conf
+        # Override to add our own custom Environment subclass
         loader = base.FileSystemLoader(configuration.project_root)
         return {
-            'default_env': base.Environment(loader=loader, **JINJA_ENV_COMMON),
-            'htmlescaped_env': base.Environment(
-                loader=loader,
-                autoescape=True,
-                **JINJA_ENV_COMMON
-            ),
+            'default_env': Environment(loader=loader),
+            'htmlescaped_env': Environment(loader=loader, autoescape=True),
         }

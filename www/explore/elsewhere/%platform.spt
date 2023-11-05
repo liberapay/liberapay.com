@@ -10,6 +10,7 @@ platforms = website.db.all("""
           FROM elsewhere e
           JOIN participants p ON p.id = e.participant
          WHERE e.platform IN %s
+           AND e.missing_since IS NULL
            AND p.status = 'active'
            AND p.hide_from_lists = 0
       GROUP BY e.platform
@@ -40,7 +41,7 @@ if platform:
     def get_participants(random):
         return website.db.all("""
             SELECT p
-                 , ( SELECT s.content
+                 , ( SELECT (s.content, s.lang)::localized_string
                        FROM statements s
                       WHERE s.participant = p.id
                         AND s.type = 'summary'
@@ -52,6 +53,7 @@ if platform:
              WHERE p.status = 'active'
                AND p.hide_from_lists = 0
                AND e.platform = %s
+               AND e.missing_since IS NULL
                AND p.id < %s
           ORDER BY (CASE WHEN %s THEN random() ELSE 0 END), p.id DESC
              LIMIT %s

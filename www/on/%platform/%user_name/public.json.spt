@@ -5,6 +5,8 @@ from liberapay.models.account_elsewhere import get_account_elsewhere
 response.headers[b"Access-Control-Allow-Origin"] = b"*"
 
 platform, account = get_account_elsewhere(website, state, api_lookup=False)
+if not account:
+    raise response.error(404)
 participant = account.participant
 
 if participant.status != 'stub':

@@ -61,7 +61,7 @@ subhead = _("Currencies")
 
 % block form
 
-% if participant.accepted_currencies and participant.accepted_currencies_set != set(participant.accepted_currencies.split(','))
+% if participant.accepted_currencies_overwritten
     <p class="alert alert-warning">{{ _(
         "Your currency settings are currently ignored because they're incompatible with the payment processor you're using."
     ) }}</p>

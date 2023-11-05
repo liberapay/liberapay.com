@@ -29,10 +29,10 @@ def encode_date(encoder, value):
 
 
 def decode_date(decoder, value, shareable_index=None):
-    if type(value) == str:
+    if type(value) is str:
         # We used to encode dates as strings. The original spec allowed it.
         return date(*map(int, value.split('-')))
-    elif type(value) == int:
+    elif type(value) is int:
         return EPOCH + timedelta(days=value)
     else:
         raise TypeError("expected str or int, got %r" % type(value))

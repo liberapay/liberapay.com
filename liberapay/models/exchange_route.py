@@ -193,7 +193,11 @@ class ExchangeRoute(Model):
                 try:
                     source = stripe.Source.retrieve(self.address).detach()
                 except stripe.error.InvalidRequestError as e:
-                    if "does not appear to be currently attached" in str(e):
+                    ignore = (
+                        "does not appear to be currently attached" in str(e) or
+                        "No such source: " in str(e)
+                    )
+                    if ignore:
                         pass
                     else:
                         raise
@@ -217,6 +221,22 @@ class ExchangeRoute(Model):
             """, dict(p_id=self.participant.id, route_id=self.id))
             self.participant.add_event(cursor, 'set_default_route', dict(
                 id=self.id, network=self.network
+            ))
+
+    def set_as_default_for(self, currency):
+        with self.db.get_cursor() as cursor:
+            cursor.run("""
+                UPDATE exchange_routes
+                   SET is_default_for = NULL
+                 WHERE participant = %(p_id)s
+                   AND is_default_for = %(currency)s;
+                UPDATE exchange_routes
+                   SET is_default_for = %(currency)s
+                 WHERE participant = %(p_id)s
+                   AND id = %(route_id)s
+            """, dict(p_id=self.participant.id, route_id=self.id, currency=currency))
+            self.participant.add_event(cursor, 'set_default_route_for', dict(
+                id=self.id, network=self.network, currency=currency,
             ))
 
     def set_mandate(self, mandate_id):

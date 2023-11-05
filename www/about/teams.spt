@@ -13,9 +13,7 @@ if request.method == 'POST':
             "request that your account be unflagged."
         ))
     name = request.body['name'].strip()
-    team_currency = request.body.get('main_currency') or currency
-    if team_currency not in constants.CURRENCIES:
-        raise response.invalid_input(team_currency, 'main_currency', 'body')
+    team_currency = request.body.get_currency('main_currency', None, phased_out='replace') or currency
     team_email = request.body.get('email')
     if team_email:
         team_email = normalize_email_address(team_email)

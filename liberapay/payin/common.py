@@ -221,7 +221,7 @@ def adjust_payin_transfers(db, payin, net_amount):
                         db, team, provider, payer, payer_country,
                         prorated_amount, tip, sepa_only=True,
                     )
-                except (MissingPaymentAccount, NoSelfTipping):
+                except (AccountSuspended, MissingPaymentAccount, NoSelfTipping, RecipientAccountSuspended):
                     team_amounts = resolve_amounts(prorated_amount, {
                         pt.id: pt.amount.convert(prorated_amount.currency)
                         for pt in transfers
@@ -282,6 +282,7 @@ def resolve_tip(
         a list of `ProtoTransfer` objects
 
     Raises:
+        AccountSuspended: if the payer is suspended
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the donor would end up sending money to themself
         RecipientAccountSuspended: if the tippee's account is suspended
@@ -375,7 +376,7 @@ def resolve_team_donation(
         payer (Participant): the donor
         payer_country (str): the country code the money is supposedly coming from
         payment_amount (Money): the amount of money being sent
-        tip (Row): the row from the `tips` table
+        tip (Tip): the donation this payment will fund
         sepa_only (bool): only consider destination accounts within SEPA
         excluded_destinations (set): any `payment_accounts.pk` values to exclude
 
@@ -383,15 +384,18 @@ def resolve_team_donation(
         a list of `ProtoTransfer` objects
 
     Raises:
+        AccountSuspended: if the payer is suspended
         MissingPaymentAccount: if no suitable destination has been found
         NoSelfTipping: if the payer would end up sending money to themself
         RecipientAccountSuspended: if the team or all of its members are suspended
 
     """
+    if payer.is_suspended:
+        raise AccountSuspended(payer)
     if team.is_suspended:
         raise RecipientAccountSuspended(team)
     currency = payment_amount.currency
-    takes = team.get_current_takes_for_payment(currency, tip.amount)
+    takes = team.get_current_takes_for_payment(currency, tip)
     if all(t.is_suspended for t in takes):
         raise RecipientAccountSuspended(takes)
     takes = [t for t in takes if not t.is_suspended]
@@ -420,7 +424,7 @@ def resolve_team_donation(
     if not takes:
         raise NoSelfTipping()
     takes.sort(key=lambda t: (
-        -(t.amount / (t.paid_in_advance + payment_amount)),
+        -(t.naive_amount / (t.paid_in_advance + payment_amount)),
         t.paid_in_advance,
         t.ctime
     ))
@@ -442,7 +446,7 @@ def resolve_team_donation(
         """, dict(locals(), SEPA=SEPA, member_ids={t.member for t in takes}))}
         if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:
             selected_takes = [
-                t for t in takes if t.member in sepa_accounts and t.amount != 0
+                t for t in takes if t.member in sepa_accounts and t.nominal_amount != 0
             ]
             if selected_takes:
                 min_transfer_amount = get_minimum_transfer_amount(provider, currency)
@@ -489,18 +493,23 @@ def resolve_take_amounts(payment_amount, takes, min_transfer_amount=None):
     adding a `resolved_amount` attribute to each one.
 
     """
+    if all(t.naive_amount == 0 for t in takes):
+        replacement_amount = Money.MINIMUMS[payment_amount.currency]
+    else:
+        replacement_amount = None
     max_weeks_of_advance = 0
     for t in takes:
-        if t.amount == 0:
+        t.base_amount = replacement_amount or t.naive_amount
+        if t.base_amount == 0:
             t.weeks_of_advance = 0
             continue
-        t.weeks_of_advance = t.paid_in_advance / t.amount
+        t.weeks_of_advance = t.paid_in_advance / t.base_amount
         if t.weeks_of_advance > max_weeks_of_advance:
             max_weeks_of_advance = t.weeks_of_advance
-    base_amounts = {t.member: t.amount for t in takes}
+    base_amounts = {t.member: t.base_amount for t in takes}
     convergence_amounts = {
         t.member: (
-            t.amount * (max_weeks_of_advance - t.weeks_of_advance)
+            t.base_amount * (max_weeks_of_advance - t.weeks_of_advance)
         ).round_up()
         for t in takes
     }
@@ -752,6 +761,9 @@ def update_payin_transfer(
         if remote_id and pt.remote_id != remote_id:
             raise AssertionError(f"the remote IDs don't match: {pt.remote_id!r} != {remote_id!r}")
 
+        if status == 'suspended' and pt.old_status in ('failed', 'succeeded'):
+            raise ValueError(f"can't change status from {pt.old_status!r} to {status!r}")
+
         if status != pt.old_status:
             cursor.run("""
                 INSERT INTO payin_transfer_events
@@ -889,6 +901,7 @@ def abort_payin(db, payin, error='aborted by payer'):
 
 def record_payin_refund(
     db, payin_id, remote_id, amount, reason, description, status, error=None, ctime=None,
+    notify=None,
 ):
     """Record a charge refund.
 
@@ -901,6 +914,7 @@ def record_payin_refund(
         status (str): the current status of the refund (`refund_status` SQL type)
         error (str): error message, if the refund has failed
         ctime (datetime): when the refund was initiated
+        notify (bool | None): whether to notify the payer
 
     Returns:
         Record: the row inserted in the `payin_refunds` table
@@ -925,11 +939,12 @@ def record_payin_refund(
                     AND old.remote_id = %(remote_id)s
                ) AS old_status
     """, locals())
-    notify = (
-        refund.status in ('pending', 'succeeded') and
-        refund.status != refund.old_status and
-        refund.ctime > (utcnow() - timedelta(hours=24))
-    )
+    if notify is None:
+        notify = (
+            refund.status in ('pending', 'succeeded') and
+            refund.status != refund.old_status and
+            refund.ctime > (utcnow() - timedelta(hours=24))
+        )
     if notify:
         payin = db.one("SELECT * FROM payins WHERE id = %s", (refund.payin,))
         payer = db.Participant.from_id(payin.payer)

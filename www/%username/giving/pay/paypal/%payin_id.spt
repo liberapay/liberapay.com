@@ -24,15 +24,15 @@ if request.method == 'POST':
 
     body = request.body
 
-    payin_currency = body['currency']
-    if payin_currency not in constants.CURRENCIES:
-        raise response.invalid_input(payin_currency, 'currency', 'body')
-
+    payin_currency = body.get_currency('currency')
     payin_amount = body['amount']
     if payin_amount == 'custom':
         payin_amount = locale.parse_money_amount(body['amount_custom'], payin_currency)
     else:
         payin_amount = Money(payin_amount, payin_currency)
+    payin_amount = payin_amount.convert_if_currency_is_phased_out()
+    del payin_currency
+    payin_amount = payin_amount.round()
 
     tips = website.db.all("""
         SELECT t.*, p AS tippee_p
@@ -43,7 +43,7 @@ if request.method == 'POST':
            AND p.payment_providers & %s > 0
       ORDER BY t.id
     """, (payer.id, set(body.parse_list('tips', int)), PAYPAL_BIT))
-    if len(set(tip.amount.currency for tip in tips)) != 1:
+    if set(tip.amount.currency for tip in tips) != {payin_amount.currency}:
         raise response.invalid_input(body.get('tips'), 'tips', 'body')
     if len(tips) > 1:
         raise response.error(400, "We don't support one-to-many payments through PayPal yet.")
@@ -61,7 +61,7 @@ if request.method == 'POST':
         payin_amount, {tip.id: tip.amount for tip in tips}
     )
     route = ExchangeRoute.upsert_generic_route(payer, 'paypal')
-    payer_country = route.country or request.country
+    payer_country = route.country or payer.guessed_country
     proto_transfers = []
     for tip in tips:
         proto_transfers.extend(resolve_tip(
@@ -157,7 +157,7 @@ title = _("Funding your donations")
 
     % if status != 'failed'
     <hr>
-    % set n_fundable = payer.get_tips_awaiting_payment()[1]
+    % set n_fundable = payer.get_tips_awaiting_payment(exclude_recipients_of=payin)[1]
     % if n_fundable
         <p>{{ ngettext(
             "You have {n} other donation awaiting payment.",

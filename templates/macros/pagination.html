@@ -27,12 +27,13 @@
     % if current_page > 1 or has_more
     <ul class="pager">
         % if current_page > 1
-            <li class="previous"><a href="{{ request.path.raw if current_page == 2 else '?page=%i' % (current_page - 1) }}">
+            % set prev_page = None if current_page == 2 else current_page - 1
+            <li class="previous"><a href="{{ request.qs.derive(page=prev_page) }}">
                 ← {{ _("Previous") }}
             </a></li>
         % endif
         % if has_more
-            <li class="next"><a href="?page={{ current_page + 1 }}">
+            <li class="next"><a href="{{ request.qs.derive(page=current_page + 1) }}">
                 {{ _("View More") if current_page == 1 else _("Next") }} →
             </a></li>
         % endif

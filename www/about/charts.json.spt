@@ -1,8 +1,6 @@
 [---]
 
-currency = request.qs.get('currency', 'EUR')
-if currency not in constants.CURRENCIES:
-    raise response.invalid_input(currency, 'currency', 'querystring')
+currency = request.qs.get_currency('currency', 'EUR', phased_out='disallow')
 
 charts = [r._asdict() for r in website.db.all("""\
 

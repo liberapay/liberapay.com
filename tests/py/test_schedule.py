@@ -5,6 +5,7 @@ from pando.utils import utcnow
 
 from liberapay.billing.payday import compute_next_payday_date
 from liberapay.i18n.base import LOCALE_EN
+from liberapay.models.participant import Participant
 from liberapay.payin.common import update_payin_transfer
 from liberapay.payin.cron import (
     execute_scheduled_payins,
@@ -17,8 +18,8 @@ from liberapay.testing.emails import EmailHarness
 class TestDonationRenewalScheduling(EmailHarness):
 
     def test_schedule_renewals(self):
-        alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         # pre-test
         new_schedule = alice.schedule_renewals()
         assert new_schedule == []
@@ -66,9 +67,9 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert new_schedule[0].automatic is True
 
     def test_schedule_renewals_handles_donations_to_teams(self):
-        alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
         team = self.make_participant('team', kind='group')
         team.add_member(bob)
         team.add_member(carl)
@@ -493,9 +494,9 @@ class TestDonationRenewalScheduling(EmailHarness):
 
     def test_schedule_renewals_does_not_group_payments_years_apart(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        dana = self.make_participant('dana')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         alice.set_tip_to(bob, EUR('4.20'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('42.00'))
@@ -510,7 +511,7 @@ class TestDonationRenewalScheduling(EmailHarness):
 
     def test_schedule_renewals_marks_paypal_payment_as_manual(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('5.99'), renewal_mode=2)
         alice_paypal = self.upsert_route(alice, 'paypal')
         self.make_payin_and_transfer(alice_paypal, bob, EUR('60.00'))
@@ -520,8 +521,8 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert scheduled_payins[0].automatic is False
 
     def test_schedule_renewals_handles_change_of_customized_renewal_to_automatic(self):
-        alice = self.make_participant('alice')
-        bob = self.make_participant('bob')
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('0.99'))
         alice_card = self.upsert_route(alice, 'stripe-card')
         self.make_payin_and_transfer(alice_card, bob, EUR('49.50'))
@@ -653,7 +654,7 @@ class TestDonationRenewalScheduling(EmailHarness):
     def test_no_new_renewal_is_scheduled_when_there_is_a_pending_transfer(self):
         # Set up a funded manual donation
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('4.16'), renewal_mode=1)
         alice_sdd = self.upsert_route(alice, 'stripe-sdd')
         self.make_payin_and_transfer(alice_sdd, bob, EUR('8.32'))
@@ -678,7 +679,7 @@ class TestDonationRenewalScheduling(EmailHarness):
     def test_newly_scheduled_automatic_payments_are_at_least_a_week_away(self):
         # Set up an automatic donation partially funded 4 weeks ago
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
         alice_sdd = self.upsert_route(alice, 'stripe-sdd')
         payin, pt = self.make_payin_and_transfer(alice_sdd, bob, EUR('2.00'), status='pending')
@@ -701,7 +702,7 @@ class TestDonationRenewalScheduling(EmailHarness):
     def test_late_manual_payment_switched_to_automatic_is_scheduled_a_week_away(self):
         # Set up a manual donation
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=1)
         alice_sdd = self.upsert_route(alice, 'stripe-sdd')
         payin, pt = self.make_payin_and_transfer(alice_sdd, bob, EUR('2.00'), status='pending')
@@ -742,6 +743,17 @@ class TestDonationRenewalScheduling(EmailHarness):
 
 class TestScheduledPayins(EmailHarness):
 
+    def setUp(self):
+        super().setUp()
+        schedule_renewals = Participant.schedule_renewals
+        self.sr_patch = patch.object(Participant, 'schedule_renewals', autospec=True)
+        self.sr_mock = self.sr_patch.__enter__()
+        self.sr_mock.side_effect = schedule_renewals
+
+    def tearDown(self):
+        self.sr_patch.__exit__(None, None, None)
+        super().tearDown()
+
     def test_no_scheduled_payins(self):
         self.make_participant('alice')
         send_upcoming_debit_notifications()
@@ -754,7 +766,7 @@ class TestScheduledPayins(EmailHarness):
 
     def test_one_scheduled_payin(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
         alice_card = self.attach_stripe_payment_method(alice, 'pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
@@ -783,6 +795,7 @@ class TestScheduledPayins(EmailHarness):
                SET execution_date = current_date
                  , last_notif_ts = (last_notif_ts - interval '14 days')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 2
@@ -798,6 +811,7 @@ class TestScheduledPayins(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == "Your payment has succeeded"
+        assert self.sr_mock.call_count == 1
 
         scheduled_payins = self.db.all(
             "SELECT * FROM scheduled_payins ORDER BY execution_date"
@@ -808,9 +822,9 @@ class TestScheduledPayins(EmailHarness):
 
     def test_multiple_scheduled_payins(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        dana = self.make_participant('dana')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
         alice_card = self.attach_stripe_payment_method(alice, 'pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
@@ -859,6 +873,7 @@ class TestScheduledPayins(EmailHarness):
                SET execution_date = %(execution_date)s
              WHERE id = %(id)s
         """, manual_payin.__dict__)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 4
@@ -882,12 +897,13 @@ class TestScheduledPayins(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
         assert emails[0]['subject'] == "Your payment has succeeded"
+        assert self.sr_mock.call_count == 1
 
     def test_early_manual_renewal_of_automatic_donations(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        dana = self.make_participant('dana')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         alice.set_tip_to(bob, EUR('4.10'), renewal_mode=2)
         alice_card = self.attach_stripe_payment_method(alice, 'pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('16.40'))
@@ -926,9 +942,9 @@ class TestScheduledPayins(EmailHarness):
 
     def test_canceled_and_impossible_transfers(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        dana = self.make_participant('dana')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         alice.set_tip_to(bob, EUR('4.00'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('16.00'))
@@ -969,6 +985,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 3
@@ -978,11 +995,12 @@ class TestScheduledPayins(EmailHarness):
         assert emails[0]['subject'] == 'Liberapay donation renewal: payment aborted'
         assert emails[1]['to'] == ['alice <alice@liberapay.com>']
         assert emails[1]['subject'] == 'Liberapay donation renewal: payment aborted'
+        assert self.sr_mock.call_count == 0
 
     def test_canceled_scheduled_payin(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
         alice.set_tip_to(bob, EUR('1.00'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('52.00'))
@@ -1010,7 +1028,7 @@ class TestScheduledPayins(EmailHarness):
 
     def test_scheduled_payin_suspended_payer(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('4.30'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('43.00'))
@@ -1036,6 +1054,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 1
@@ -1044,10 +1063,11 @@ class TestScheduledPayins(EmailHarness):
         assert payins[0].off_session is False
         emails = self.get_emails()
         assert len(emails) == 0
+        assert self.sr_mock.call_count == 0
 
     def test_missing_route(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('30.00'))
@@ -1074,6 +1094,7 @@ class TestScheduledPayins(EmailHarness):
                SET execution_date = current_date
                  , last_notif_ts = (last_notif_ts - interval '14 days')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 1
@@ -1082,10 +1103,11 @@ class TestScheduledPayins(EmailHarness):
         assert payins[0].off_session is False
         emails = self.get_emails()
         assert len(emails) == 0
+        assert self.sr_mock.call_count == 0
 
     def test_scheduled_payin_requiring_authentication(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('4.30'), renewal_mode=2)
         alice_card = self.attach_stripe_payment_method(alice, 'pm_card_threeDSecureRequired')
         self.make_payin_and_transfer(alice_card, bob, EUR('43.00'))
@@ -1114,6 +1136,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         payins = self.db.all("SELECT * FROM payins ORDER BY ctime")
         assert len(payins) == 2
@@ -1130,6 +1153,7 @@ class TestScheduledPayins(EmailHarness):
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].payin == payins[1].id
+        assert self.sr_mock.call_count == 0
         # Test the payin page, it should redirect to the 3DSecure page
         r = self.client.GET(payin_page_path, auth_as=alice, raise_immediately=False)
         assert r.code == 200
@@ -1137,7 +1161,7 @@ class TestScheduledPayins(EmailHarness):
 
     def test_scheduled_automatic_payin_currency_unaccepted_before_reminder(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('1.00'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('52.00'))
@@ -1168,9 +1192,11 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         emails = self.get_emails()
         assert len(emails) == 0
+        assert self.sr_mock.call_count == 0
         send_donation_reminder_notifications()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -1182,7 +1208,7 @@ class TestScheduledPayins(EmailHarness):
 
     def test_scheduled_automatic_payin_currency_unaccepted_after_reminder(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('5.60'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('56.00'))
@@ -1220,6 +1246,7 @@ class TestScheduledPayins(EmailHarness):
                  , last_notif_ts = (last_notif_ts - interval '14 days')
                  , ctime = (ctime - interval '12 hours')
         """)
+        self.sr_mock.reset_mock()
         execute_scheduled_payins()
         emails = self.get_emails()
         assert len(emails) == 1
@@ -1229,12 +1256,13 @@ class TestScheduledPayins(EmailHarness):
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].payin is None
         assert scheduled_payins[0].notifs_count == 2
+        assert self.sr_mock.call_count == 0
 
     def test_cancelling_a_scheduled_payin(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        dana = self.make_participant('dana')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
@@ -1284,9 +1312,9 @@ class TestScheduledPayins(EmailHarness):
 
     def test_rescheduling(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        dana = self.make_participant('dana')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
@@ -1333,9 +1361,9 @@ class TestScheduledPayins(EmailHarness):
 
     def test_customizing_amount(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
-        carl = self.make_participant('carl')
-        dana = self.make_participant('dana')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
+        carl = self.make_participant('carl', email='carl@liberapay.com')
+        dana = self.make_participant('dana', email='dana@liberapay.com')
         alice.set_tip_to(bob, EUR('3.00'), renewal_mode=2)
         alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
         self.make_payin_and_transfer(alice_card, bob, EUR('12.00'))
@@ -1410,7 +1438,7 @@ class TestScheduledPayins(EmailHarness):
 
     def test_reminders_to_renew_a_manual_donation(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')
-        bob = self.make_participant('bob')
+        bob = self.make_participant('bob', email='bob@liberapay.com')
         alice.set_tip_to(bob, EUR('52.00'), period='yearly')
         alice_card = self.upsert_route(alice, 'stripe-card')
         self.make_payin_and_transfer(alice_card, bob, EUR('2.00'))

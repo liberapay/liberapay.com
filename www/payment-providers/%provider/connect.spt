@@ -83,6 +83,8 @@ elif 'state' in request.qs:
     connect_to = Participant.from_id(p_id) if isinstance(p_id, int) else user
     if not user.controls(connect_to):
         raise response.error(403, "can't connect to an account you don't control")
+    if not connect_to.email or connect_to.username[0] == '~' or not connect_to.get_statement_langs():
+        raise response.redirect(back_to)
 
     # Request the OAuth token
     oauth_data = {
@@ -144,6 +146,23 @@ elif 'state' in request.qs:
         )
     else:
         raise ValueError(provider_name)
+
+    # Check that this payment account isn't connected to another Liberapay account
+    # marked as fraudulent
+    is_linked_to_fraud = website.db.one("""
+        SELECT true
+          FROM payment_accounts a
+          JOIN participants p ON p.id = a.participant
+         WHERE a.id = %(account_id)s
+           AND p.is_suspended IS TRUE
+         LIMIT 1
+    """, account_data)
+    if is_linked_to_fraud:
+        raise response.error(403, _(
+            "The {provider} account you are attempting to connect is linked to "
+            "another Liberapay account marked as fraudulent.",
+            provider=provider.display_name,
+        ))
 
     # Upsert the account in our database
     account_data['token'] = json.dumps(account_data['token'])

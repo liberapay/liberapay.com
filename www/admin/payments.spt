@@ -1,15 +1,6 @@
 from liberapay.i18n.base import LOCALE_EN as locale
+from liberapay.utils import render_postal_address
 
-MARKS_MAP = {
-    'trusted': 'success',
-    'okay': 'info',
-    'unsettling': 'info',
-    'controversial': 'warning',
-    'irrelevant': 'warning',
-    'misleading': 'warning',
-    'fraud': 'danger',
-    'spam': 'danger',
-}
 PAGE_SIZE = 50
 STATUS_MAP = {
     'failed': 'danger',
@@ -27,6 +18,13 @@ before = request.qs.get_int('before', default=None)
 status = request.qs.get('status')
 payins = website.db.all("""
     SELECT pi.*, p.username AS payer_name, p.marked_as AS payer_marked_as
+         , ( SELECT i.info
+               FROM identities i
+              WHERE i.participant = pi.payer
+                AND pi.status = 'awaiting_review'
+           ORDER BY i.ctime DESC
+              LIMIT 1
+           ) AS payer_identity
          , r.network AS payin_method
          , ( SELECT json_agg((SELECT x FROM ( SELECT
                         pt.recipient, recipient.username AS recipient_name,
@@ -62,6 +60,7 @@ title = "Payments Admin"
 
 <ul class="nav nav-pills">{{ querystring_nav('status', [
     (None, "All"),
+    ('awaiting_review', "Awaiting review"),
     ('failed', "Failed"),
     ('pending', "Pending"),
     ('succeeded', "Succeeded"),
@@ -91,8 +90,16 @@ title = "Payments Admin"
         <tr>
             <td>{{ pi.id }}</td>
             <td>{{ pi.ctime.replace(microsecond=0, tzinfo=None) }}</td>
-            <td><a href="/~{{ pi.payer }}/">{{ pi.payer_name }}</a>{% if pi.payer_marked_as %}<br>
-                <span class="text-{{ MARKS_MAP[pi.payer_marked_as] }}">[{{
+            <td><a href="/~{{ pi.payer }}/">{{ pi.payer_name }}</a>{% if pi.payer_identity %}<br>
+                % set payer_identity = pi.payer_identity.decrypt()
+                <span class="break-word-anywhere monospace">
+                    {{- payer_identity.name }}<br>
+                    {{- render_postal_address(
+                        payer_identity.postal_address, single_line=True, format='downward'
+                    ) -}}
+                </span>
+                {% endif %}{% if pi.payer_marked_as %}<br>
+                <span class="text-{{ constants.ACCOUNT_MARK_CLASSES[pi.payer_marked_as] }}">[{{
                     pi.payer_marked_as
                 }}]</span>{% endif %}</td>
             <td class="text-center">{{

@@ -17,6 +17,7 @@ title = _("Payment Processors")
 <ul>
     <li>{{ _("The payment processing fees are usually lower with Stripe than with PayPal.") }}</li>
     <li>{{ _("Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment.") }}</li>
+    <li>{{ _("Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses.") }}</li>
     <li>{{ _("Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments.") }}</li>
     <li>{{ _("PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay.") }}</li>
     <li>{{ _("Stripe makes SEPA Direct Debits easy for European donors.") }}</li>
@@ -28,7 +29,7 @@ title = _("Payment Processors")
     ) }}</li>
     <li>{{ ngettext(
         "",
-        "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way.",
+        "PayPal is available to creators in more than 100 countries, whereas Stripe only supports {n} countries in a suitable way.",
         n=len(constants.PAYOUT_COUNTRIES['stripe']),
     ) }}</li>
 </ul>

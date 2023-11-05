@@ -8,7 +8,7 @@ from pando import Response
 from pando.utils import utcnow
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, CURRENCIES, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE,
+    ASCII_ALLOWED_IN_USERNAME, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE,
     SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
 )
 from liberapay.exceptions import (
@@ -37,6 +37,7 @@ class _ANON:
 
     get_currencies_for = staticmethod(Participant.get_currencies_for)
     get_tip_to = staticmethod(Participant._zero_tip)
+    guessed_country = Participant._guessed_country
 
     def is_acting_as(self, privilege):
         return False
@@ -67,7 +68,7 @@ def sign_in_with_form_data(body, state):
 
     if body.get('log-in.id'):
         request = state['request']
-        src_addr, src_country = request.source, request.country
+        src_addr, src_country = request.source, request.source_country
         input_id = body['log-in.id'].strip()
         password = body.pop('log-in.password', None)
         totp = body.pop('log-in.totp', None)
@@ -84,14 +85,20 @@ def sign_in_with_form_data(body, state):
                 p_id = Participant.check_id(input_id[1:])
             else:
                 p_id = Participant.get_id_for(id_type, input_id)
-            try:
-                p = Participant.authenticate_with_password(p_id, password, totp=totp)
-            except AccountIsPasswordless:
-                if id_type == 'email':
-                    state['log-in.email'] = input_id
-                else:
-                    state['log-in.error'] = _("The submitted password is incorrect.")
-                return
+            if p_id:
+                try:
+                    p = Participant.authenticate_with_password(p_id, password, totp=totp)
+                except AccountIsPasswordless:
+                    if id_type == 'email':
+                        state['log-in.email'] = input_id
+                    else:
+                        state['log-in.error'] = _(
+                            "Your account doesn't have a password, so you'll "
+                            "have to authenticate yourself via email:"
+                        )
+                    return
+            else:
+                p = None
             if not p:
                 state['log-in.error'] = (
                     _("The submitted password and/or otp is incorrect.") if p_id is not None else
@@ -145,11 +152,11 @@ def sign_in_with_form_data(body, state):
             raise response.error(400, 'email is required')
         email = normalize_and_check_email_address(email)
         currency = (
-            body.get('sign-in.currency') or body.get('currency') or
-            state.get('currency') or 'EUR'
+            body.get_currency('sign-in.currency', None, phased_out='replace') or
+            body.get_currency('currency', None, phased_out='replace') or
+            state.get('currency') or
+            'EUR'
         )
-        if currency not in CURRENCIES:
-            raise response.invalid_input(currency, 'sign-in.currency', 'body')
         password = body.get('sign-in.password')
         if password:
             l = len(password)
@@ -206,7 +213,7 @@ def sign_in_with_form_data(body, state):
             raise UsernameAlreadyTaken(username)
         # Rate limit
         request = state['request']
-        src_addr, src_country = request.source, request.country
+        src_addr, src_country = request.source, request.source_country
         website.db.hit_rate_limit('sign-up.ip-addr', str(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.ip-net', get_ip_net(src_addr), TooManySignUps)
         website.db.hit_rate_limit('sign-up.country', src_country, TooManySignUps)
@@ -322,6 +329,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             )
             if p:
                 if p.id != user.id or reason == 'require_totp':
+                    response.headers[b'Referrer-Policy'] = b'strict-origin'
                     submitted_confirmation_token = request.qs.get('log-in.confirmation')
                     if submitted_confirmation_token:
                         expected_confirmation_token = b64encode_s(blake2b(

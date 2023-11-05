@@ -931,18 +931,6 @@ msgstr "Mór"
 msgid "Maximum"
 msgstr "Uasmhéid"
 
-#, fuzzy, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "D'ith tú do chuóta iarratas, is féidir leat triail eile a bhaint as {in_N_minutes}."
-
-#, fuzzy
-msgid "You're making requests too fast, please try again later."
-msgstr "Tá iarratais á ndéanamh agat ró-thapa, bain triail eile as ar ball."
-
-#, fuzzy, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "Chuir {0} earráid ar ais, bain triail eile as ar ball."
-
 #, fuzzy
 msgid "example@mastodon.social"
 msgstr "sampla@mastodon.social"
@@ -1244,14 +1232,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "Níor tháinig an t-úsáideoir {platform} atá á lorg agat isteach i Liberapay, agus ní féidir próifíl stub a chruthú dóibh."
 
 #, fuzzy, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "Ní cosúil gur aitheantas úsáideora bailí é '{0}' ar {platform}."
-
-#, fuzzy, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "Is cosúil nach bhfuil úsáideoir darb ainm {0} ar {1}."
-
-#, fuzzy, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Deontas Liberapay do {username} (foireann {team_name})"
 
@@ -1279,6 +1259,10 @@ msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} bliain de {money_amount}"
 msgstr[1] ""
 msgstr[2] ""
+
+#, fuzzy
+msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
+msgstr "Níl pasfhocal ag do chuntas, mar sin beidh ort tú féin a fhíordheimhniú trí ríomhphost:"
 
 #, fuzzy
 msgid "The submitted password is incorrect."
@@ -1323,6 +1307,30 @@ msgstr "Níl tú údaraithe rochtain a fháil ar an leathanach seo."
 #, fuzzy
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "Theip ar d'iarratas a phróiseáil toisc nach raibh ár bhfreastalaí in ann cumarsáid a dhéanamh le seirbhís atá suite ar mheaisín eile. Is fadhb shealadach í seo, bain triail eile as ar ball."
+
+#, fuzzy, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "Ní cosúil gur aitheantas úsáideora bailí é '{0}' ar {platform}."
+
+#, fuzzy, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "Chuir {0} earráid ar ais, bain triail eile as ar ball."
+
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "D'ith tú do chuóta iarratas, is féidir leat triail eile a bhaint as {in_N_minutes}."
+
+#, fuzzy
+msgid "You're making requests too fast, please try again later."
+msgstr "Tá iarratais á ndéanamh agat ró-thapa, bain triail eile as ar ball."
+
+#, fuzzy, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "Is cosúil nach bhfuil úsáideoir darb ainm {0} ar {1}."
+
+#, fuzzy
+msgid "This profile is marked as spam or fraud."
+msgstr "Tá an phróifíl seo marcáilte mar thurscar nó mar chalaois."
 
 #, fuzzy
 msgid "Cancel"
@@ -1431,10 +1439,6 @@ msgstr "Má tá brabhsálaí coimhthíocha in úsáid agat agus nach bhfuil aon 
 #, fuzzy
 msgid "Retry"
 msgstr "Bain triail eile as"
-
-#, fuzzy
-msgid "This profile is marked as spam."
-msgstr "Tá an phróifíl seo marcáilte mar thurscar."
 
 #, fuzzy
 msgid "Other amount"
@@ -1682,10 +1686,6 @@ msgid "Log in via email"
 msgstr "Logáil isteach trí ríomhphost"
 
 #, fuzzy
-msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
-msgstr "Níl pasfhocal ag do chuntas, mar sin beidh ort tú féin a fhíordheimhniú trí ríomhphost:"
-
-#, fuzzy
 msgid "Your session has expired."
 msgstr "Tá do sheisiún imithe in éag."
 
@@ -1705,8 +1705,8 @@ msgid "If you need to change the password of your Liberapay account, you can do 
 msgstr "Más gá duit pasfhocal do chuntais Liberapay a athrú, is féidir leat é sin a dhéanamh thíos. Chun a bheith slán, ba cheart pasfhocal do chuntais a ghiniúint go randamach agus gan é a úsáid in aon áit eile. Molaimid go láidir úsáid a bhaint as bainisteoir pasfhocail."
 
 #, fuzzy
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr "Má shocraíonn tú focal faire is féidir leat logáil isteach go díreach, in ionad fanacht le nasc aonúsáide a sheoltar trí ríomhphost. Mar sin féin, molaimid do chuntas a choinneáil gan pasfhocal mura n-úsáideann tú bainisteoir pasfhocail, mar d'fhonn a bheith slán ba cheart go ndéanfaí pasfhocal do chuntais a ghiniúint go randamach agus gan é a úsáid in aon áit eile."
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we only recommend setting a password if you use a password manager, because in order to be secure the password should be randomly generated and not used anywhere else."
+msgstr "Má shocraíonn tú focal faire is féidir leat logáil isteach go díreach, in ionad fanacht le nasc aonúsáide a sheoltar trí ríomhphost. Mar sin féin, ní mholaimid ach focal faire a shocrú má úsáideann tú bainisteoir pasfhocal, mar d'fhonn a bheith slán ba cheart an focal faire a ghiniúint go randamach agus gan a úsáid in aon áit eile."
 
 #, fuzzy
 msgid "Current password"
@@ -1897,12 +1897,12 @@ msgid "Overview"
 msgstr "Foramharc"
 
 #, fuzzy
-msgid "Organizations"
-msgstr "Eagraíochtaí"
+msgid "Recipients"
+msgstr "Faighteoirí"
 
 #, fuzzy
-msgid "Individuals"
-msgstr "Daoine Aonair"
+msgid "Hopefuls"
+msgstr "Dóchasach"
 
 #, fuzzy
 msgid "Unclaimed Donations"
@@ -2133,14 +2133,6 @@ msgstr "Tá do síntiús reatha do {name} in {currency}, ach ní ghlacann siad a
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Tá do síntiús reatha chuig {name} in {currency}, ach ní ghlacann siad leis an airgeadra sin a thuilleadh. Is é an {accepted_currency} an t-airgeadra nua molta, ach is féidir leat ceann eile a roghnú."
 
-#, fuzzy
-msgid "Modify"
-msgstr "Athraigh"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "Stad"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Tá {money_amount} in aghaidh na seachtaine á bhronnadh agat ar {recipient_name} faoi láthair. Cuireann an fhoirm thíos ar do chumas do dheonachán a mhodhnú nó a stopadh."
@@ -2215,6 +2207,14 @@ msgstr "Athnuachan láimhe"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "Seolfar meabhrúchán chugat trí ríomhphost chun do shíntiús a athnuachan."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Scoir den síntiús"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Cealaigh an gealltanas"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "Roghnaigh {username} gan féachaint cé hé a bpátrúin, mar sin beidh do thabhartas faoi rún."
@@ -2258,14 +2258,6 @@ msgstr "Beidh gach duine in ann a fheiceáil go dtacaíonn tú leis {username}."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "Níl sé sonraithe fós ag {username} cé acu atá nó nach bhfuil siad ag iarraidh a fheiceáil cé hé a bpátrúin, mar sin beidh do thabhartas faoi rún."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Scoir den síntiús"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Cealaigh an gealltanas"
 
 #, fuzzy
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
@@ -2356,6 +2348,14 @@ msgstr "An féidir liom síntiús aonuaire a dhéanamh?"
 #, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
 msgstr "Ní thacaítear i gceart le síntiúis aonuaire go fóill, ach is féidir leat scor de do shíntiús díreach tar éis na chéad íocaíochta."
+
+#, fuzzy
+msgid "Will I get a receipt?"
+msgstr "An bhfaighidh mé admháil?"
+
+#, fuzzy
+msgid "A receipt is automatically available for every payment."
+msgstr "Tá admháil ar fáil go huathoibríoch le haghaidh gach íocaíochta."
 
 #, fuzzy
 msgid "What is this website? I don't recognize it."
@@ -2570,8 +2570,37 @@ msgid "We can also import lists of repositories for your teams:"
 msgstr "Is féidir linn liostaí stórtha do d’fhoirne a allmhairiú freisin:"
 
 #, fuzzy, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "Tá an achoimre a cuireadh isteach rófhada ({0} > {1})."
+msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgid_plural "The summary can't be more than {n} characters long."
+msgstr[0] "gan úsáid uatha (airgead = 82d03d589b58d2a8c99d043ba5f91b84)"
+msgstr[1] "Ní féidir leis an achoimre a bheith níos mó ná 2 carachtair fada."
+msgstr[2] "Ní féidir leis an achoimre a bheith níos mó ná {n} carachtair fada."
+
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgid_plural "The full description must be at least {n} characters long."
+msgstr[0] "gan úsáid uatha (airgead tirim = e77fbb49c028c11bb9d859698c4a5363)"
+msgstr[1] "Ní mór an cur síos iomlán a bheith ar a laghad 2 carachtair fada."
+msgstr[2] "Ní mór an cur síos iomlán a bheith ar a laghad {n} carachtair fada."
+
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgid_plural "The full description can't be more than {n} characters long."
+msgstr[0] "gan úsáid uatha (airgead = df724b624e486f3c07109838b9a4b3f0) ×"
+msgstr[1] "Ní féidir leis an cur síos iomlán a bheith níos mó ná 2 carachtair fada."
+msgstr[2] "Ní féidir leis an cur síos iomlán a bheith níos mó ná {n} carachtair fada."
+
+#, fuzzy
+msgid "The full description can't be identical to the summary."
+msgstr "Ní féidir leis an cur síos iomlán a bheith comhionann leis an achoimre."
+
+#, fuzzy
+msgid "The summary can't be only your name."
+msgstr "Ní féidir leis an achoimre a bheith ach d'ainm."
+
+#, fuzzy
+msgid "The description can't be only your name."
+msgstr "Ní féidir leis an tuairisc a bheith ach d'ainm."
 
 #, fuzzy
 msgid "This is a preview."
@@ -2584,6 +2613,10 @@ msgstr "Sliocht a úsáidfear sna meáin shóisialta:"
 #, fuzzy
 msgid "Preview of the short description"
 msgstr "Réamhamharc ar an gcur síos gairid"
+
+#, fuzzy
+msgid "Including your username in the short description is redundant. The short description is always displayed immediately below the username."
+msgstr "Tá sé iomarcach d'ainm úsáideora a chur san áireamh sa chur síos gairid. Taispeántar an cur síos gairid i gcónaí díreach faoin ainm úsáideora."
 
 #, fuzzy
 msgid "Publish"
@@ -2851,6 +2884,10 @@ msgstr "{money_amount}{small}/mí{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/bliain{end_small}"
 
+#, fuzzy
+msgid "Modify"
+msgstr "Athraigh"
+
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Thosaigh {timespan_ago}."
@@ -3088,6 +3125,10 @@ msgstr "Tá tuilleadh eolais ag teastáil chun an íocaíocht seo a phróiseáil
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "Níl an próiseálaí íocaíochta ({name}) in ann {currency} dochar díreach a phróiseáil don fhaighteoir seo fós. Bain triail eile as le modh íocaíochta eile."
 
+#, fuzzy
+msgid "Your payment has been initiated. It will be submitted to your bank at a later time, after being manually checked for signs of fraud."
+msgstr "Cuireadh tús le d'íocaíocht. Cuirfear faoi bhráid do bhanc é níos déanaí, tar éis é a sheiceáil de láimh le haghaidh comharthaí calaoise."
+
 #, fuzzy, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Is féidir le do bhanc an íocaíocht seo a dhiúltú. Molaimid cóip den {link_start} den sainordú{link_end} a sheoladh chuig do bhanc mura bhfuil tú cinnte go láimhseálann sé treoracha dochair dhírigh {currency} i gceart."
@@ -3127,6 +3168,10 @@ msgstr "Seolfar na sonraí seo go díreach chuig an bpróiseálaí íocaíochta 
 #, fuzzy
 msgid "Remember the card number for next time"
 msgstr "Cuimhnigh uimhir an chárta don chéad uair eile"
+
+#, fuzzy, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr "Bain úsáid as an ionstraim íocaíochta seo de réir réamhshocraithe le haghaidh íocaíochtaí sa todhchaí i {currency}"
 
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
@@ -3281,9 +3326,8 @@ msgstr "Níl an phróifíl seo ar fáil ach i {language}"
 msgid "Edit"
 msgstr "Cuir in eagar"
 
-#, fuzzy
-msgid "Statement"
-msgstr "Ráiteas"
+msgid "Description"
+msgstr "Cur síos"
 
 #, fuzzy, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
@@ -3496,9 +3540,6 @@ msgstr "Dúlra"
 msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr "(Ní thacaíonn Liberapay ach le sonrasc de chineál amháin go dtí seo.)"
 
-msgid "Description"
-msgstr "Cur síos"
-
 #, fuzzy
 msgid "A short description of the invoice"
 msgstr "Cur síos gairid ar an sonrasc"
@@ -3536,6 +3577,10 @@ msgstr "ag ullmhú"
 msgid "awaiting confirmation"
 msgstr "ag fanacht le dearbhú"
 
+#, fuzzy
+msgid "awaiting review"
+msgstr "ag fanacht ar athbhreithniú"
+
 msgid "pending"
 msgstr "ar feitheamh"
 
@@ -3553,6 +3598,10 @@ msgstr "aisíoctha go páirteach"
 #, fuzzy
 msgid "refunded"
 msgstr "aisíoctha"
+
+#, fuzzy
+msgid "suspended"
+msgstr "ar fionraí"
 
 #, fuzzy, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -3584,6 +3633,10 @@ msgstr "muirear uathoibríoch"
 #, fuzzy
 msgid "charge"
 msgstr "muirear"
+
+#, fuzzy
+msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
+msgstr "Tá an íocaíocht seo ag fanacht le seiceáil de láimh ag foireann Liberapay le haghaidh comharthaí calaoise."
 
 #, fuzzy, python-brace-format
 msgid "error message: {0}"
@@ -3648,6 +3701,10 @@ msgstr "Ní mór don fhaighteoir an íocaíocht seo a fhaomhadh de láimh trí s
 #, fuzzy, python-brace-format
 msgid "PayPal status code: {0}"
 msgstr "Cód stádais PayPal: {0}"
+
+#, fuzzy
+msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
+msgstr "Cuirtear cuntas an íocóra ar fionraí mar gheall ar amhras faoi chalaois nó de bharr gnímh neamhúdaraithe eile."
 
 msgid "There were no transactions during this period."
 msgstr "Ní raibh aon idirbheart ann le linn na tréimhse seo."
@@ -3755,6 +3812,10 @@ msgstr "Níl aon fhógraí le taispeáint."
 msgid "Next Page →"
 msgstr "An Chéad Leathanach Eile →"
 
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Caithfidh tú bosca amháin ar a laghad a sheiceáil."
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3771,20 +3832,40 @@ msgid "{username} doesn't have any active patrons."
 msgstr "Níl pátrúin ghníomhacha ar bith ag {username}."
 
 #, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Tacaíonn Liberapay anois le síntiúis neamhaithnidiúla, ar mhaith leat a fháil amach cé hiad do phátrúin?"
+msgid "Visibility levels"
+msgstr "Leibhéil infheictheachta"
 
 #, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Cumasaigh síntiúis neamhaithnidiúla"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr "Tacaíonn Liberapay le trí leibhéal infheictheachta do thabhartais. Is féidir gach leibhéal a chasadh air nó as, ach ní mór ceann amháin acu ar a laghad a chumasú."
 
 #, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Tá tú tar éis liostáil isteach féachaint cé hiad do phátrúin. Má athraíonn tú d’intinn, ansin {link_start}cliceáil anseo chun síntiúis neamhaithnidiúla a dhíchumasú{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr "Ní féidir síntiúis rúnda a dhéanamh le PayPal. Ba cheart duit tabhartais rúnda a dhíchumasú nó {link_start}cuntas Stripe a chur leis{link_end}."
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Roghnaigh tú gan féachaint cé hiad do phátrúin. Má athraíonn tú d’intinn, ansin {link_start}cliceáil anseo chun síntiúis neamhaithnidiúla a chumasú{link_end}."
+#, fuzzy
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr "Ní féidir síntiúis rúnda a dhéanamh nuair a úsáideann an t-íocóir PayPal."
+
+#, fuzzy
+msgid "Allow secret donations"
+msgstr "Ceadaigh síntiúis rúnda"
+
+#, fuzzy
+msgid "Allow private donations"
+msgstr "Ceadaigh síntiúis phríobháideacha"
+
+#, fuzzy
+msgid "Allow public donations"
+msgstr "Ceadaigh síntiúis phoiblí"
+
+#, fuzzy
+msgid "This is what your prospective donors currently see:"
+msgstr "Seo mar a fheiceann do dheontóirí ionchasacha faoi láthair:"
+
+#, fuzzy
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr "Seo a fheicfidh do dheontóirí ionchasacha leis na socruithe nua:"
 
 #, fuzzy
 msgid "Data export"
@@ -3810,9 +3891,29 @@ msgstr "Ní ball d’fhoireann ar bith tú."
 msgid "{username} isn't a member of any team."
 msgstr "Ní ball d’fhoireann ar bith é {username}."
 
+#, fuzzy
+msgid "The payment account has been successfully disconnected."
+msgstr "Tá an cuntas íocaíochta dícheangailte go rathúil."
+
+#, fuzzy
+msgid "This payment account is no longer accessible. It is now disconnected."
+msgstr "Níl an cuntas íocaíochta seo inrochtana a thuilleadh. Tá sé dícheangailte anois."
+
+#, fuzzy
+msgid "The data has been successfully refreshed."
+msgstr "Tá na sonraí a athnuachan go rathúil."
+
 #, fuzzy, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Caithfidh tú {link_open}do phróifíl{link_close} a líonadh sular féidir leat tosú ar thabhartais a fháil."
+msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
+msgstr "Caithfidh tú {link_open}do sheoladh ríomhphoist a dheimhniú{link_close} sular féidir leat tosú ag fáil síntiúis."
+
+#, fuzzy, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr "Caithfidh tú {link_open}d'ainm úsáideora{link_close} a shocrú sular féidir leat tosú ag fáil síntiús."
+
+#, fuzzy, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr "Ní mór duit {link_open}cur síos próifíle{link_close} a chur leis sular féidir leat tosú ar shíntiúis a fháil."
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4088,8 +4189,20 @@ msgid "Bank Account"
 msgstr "Cuntas bainc"
 
 #, fuzzy
+msgid "This instrument is used by default."
+msgstr "Úsáidtear an ionstraim seo de réir réamhshocraithe."
+
+#, fuzzy
 msgid "default"
 msgstr "réamhshocraithe"
+
+#, fuzzy, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr "Úsáidtear an ionstraim seo de réir réamhshocraithe le haghaidh íocaíochtaí i {currency}."
+
+#, fuzzy, python-brace-format
+msgid "default for {currency}"
+msgstr "réamhshocraithe le haghaidh {currency}"
 
 #, fuzzy
 msgid "view mandate"
@@ -4126,6 +4239,14 @@ msgstr "Níor úsáideadh an ionstraim íocaíochta seo fós."
 #, fuzzy
 msgid "Set as default"
 msgstr "Socraigh mar réamhshocrú"
+
+#, fuzzy, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr "Bain úsáid as an ionstraim seo de réir réamhshocraithe le haghaidh íocaíochtaí i {currency}."
+
+#, fuzzy, python-brace-format
+msgid "Set as default for {currency}"
+msgstr "Socraigh mar réamhshocraithe le haghaidh {currency}"
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."
@@ -4543,8 +4664,8 @@ msgid "Not safe for work"
 msgstr "Níl sé sábháilte don obair"
 
 #, fuzzy, python-brace-format
-msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr "Tá. Ní sciath í Liberapay, áfach: ní féidir linn aon duine a chosaint ó {link_open} na próiseálaithe íocaíochta bunúsacha{link_close}."
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr "Tá beartais neamhfhabhracha i leith ábhar gnéis ag na próiseálaithe íocaíochta a dtacaíonn Liberapay leo. {paypal_link}Tá réamhcheadú{link_close} ag teastáil ó PayPal{link_close}, agus {stripe_link}Cuireann Stripe cosc iomlán air{link_close}. Mar sin, cé gur féidir Liberapay a úsáid le haghaidh roinnt ábhar do dhaoine fásta amháin, de ghnáth is fearr ardán a úsáid atá speisialaithe in ábhar den sórt sin."
 
 #, fuzzy
 msgid "Can I modify or stop my donations?"
@@ -4701,6 +4822,10 @@ msgstr[1] ""
 msgstr[2] ""
 
 #, fuzzy, python-brace-format
+msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
+msgstr "Ní féidir síntiúis a fháil ach amháin i gcríocha ina bhfuil próiseálaí íocaíochta amháin ar a laghad ar fáil. Is iad na próiseálaithe íocaíochta faoi láthair tacaíocht {Stripe} agus {PayPal}. Tá roinnt gnéithe ar fáil ach amháin trí Stripe, mar sin tá Liberapay go hiomlán ar fáil do creators i gcríocha le tacaíocht ó Stripe, agus go páirteach ar fáil i gcríocha amháin tacaíocht ó PayPal."
+
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
 msgstr[0] "Tá Liberapay ar fáil go hiomlán do chruthaitheoirí i gcríocha {n}:"
@@ -4708,11 +4833,11 @@ msgstr[1] ""
 msgstr[2] ""
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
-msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] "Ina theannta sin, tá Liberapay ar fáil go páirteach do chruthaitheoirí i {paypal_link_open} na {n} tíortha a fhaigheann tacaíocht ó PayPal{link_close}."
-msgstr[1] ""
-msgstr[2] ""
+msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
+msgid_plural "Liberapay is partially available to creators in {n} territories:"
+msgstr[0] "gan úsáid uatha (airgead = 853969b22957acb45a26404e37a3ef82)"
+msgstr[1] "Tá Liberapay ar fáil go páirteach do creators i 2 críocha:"
+msgstr[2] "Tá Liberapay ar fáil go páirteach do creators i {n} críocha:"
 
 #, fuzzy
 msgid "What is Liberapay?"
@@ -4843,6 +4968,10 @@ msgid "Stripe allows renewing donations automatically, whereas PayPal currently 
 msgstr "Ceadaíonn Stripe síntiúis a athnuachan go huathoibríoch, ach éilíonn PayPal faoi láthair ar dheontóirí gach íocaíocht a dhearbhú."
 
 #, fuzzy
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr "Is féidir le síntiúis trí Stripe a bheith rúnda, ach ligeann PayPal do dheontóirí agus d’fhaighteoirí i gcónaí ainmneacha agus seoltaí ríomhphoist a chéile a fheiceáil."
+
+#, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Ligeann Stripe síntiús a thabhairt d’ilchruthaitheoirí ag an am céanna i gcásanna áirithe, ach bíonn íocaíochtaí ar leith de dhíth ar PayPal i gcónaí."
 
@@ -4863,9 +4992,9 @@ msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies
 msgstr "Ní thacaíonn PayPal ach le {n_paypal_currencies} de na hairgeadraí {n_liberapay_currencies} a fhaigheann tacaíocht ó Liberapay agus Stripe."
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
-msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] "Tá PayPal ar fáil do chruthaitheoirí i níos mó ná 200 tír, ach ní thacaíonn Stripe ach le {n} tíortha ar bhealach oiriúnach."
+msgid "<unused singular (hash=47f7d13f5771b30f0bcf49ea3acd518b)>"
+msgid_plural "PayPal is available to creators in more than 100 countries, whereas Stripe only supports {n} countries in a suitable way."
+msgstr[0] "Tá PayPal ar fáil do chruthaitheoirí i níos mó ná 100 tír, ach ní thacaíonn Stripe ach le {n} tíortha ar bhealach oiriúnach."
 msgstr[1] ""
 msgstr[2] ""
 
@@ -5247,32 +5376,32 @@ msgid "Explore other platforms:"
 msgstr "Déan iniúchadh ar ardáin eile:"
 
 #, fuzzy
-msgid "Liberapay provides several ways of finding great people to donate to:"
-msgstr "Soláthraíonn Liberapay roinnt bealaí chun daoine iontacha a aimsiú le síntiús a thabhairt dóibh:"
+msgid "This page lists Liberapay users who are hoping to receive their first donations."
+msgstr "Liostaíonn an leathanach seo úsáideoirí Liberapay atá ag súil lena gcéad síntiúis a fháil."
 
 #, fuzzy
-msgid "A team is a group of users working on a specific project."
-msgstr "Is éard is foireann ann ná grúpa úsáideoirí a oibríonn ar thionscadal ar leith."
+msgid "Despite our efforts, some of the listed profiles may be spam or fraud."
+msgstr "In ainneoin ár n-iarrachtaí, d'fhéadfadh go mbeadh cuid de na próifílí liostaithe ina dturscar nó calaois."
 
 #, fuzzy
-msgid "Explore Teams"
-msgstr "Taiscéal na foirne"
+msgid "Profiles only start appearing in the list 72 hours after they're created."
+msgstr "Ní thosaíonn próifílí le feiceáil ar an liosta ach 72 uair tar éis iad a chruthú."
 
 #, fuzzy
-msgid "Great nonprofits and companies trying to improve the world."
-msgstr "Neamhbhrabúis Breataine agus cuideachtaí ag iarraidh feabhas a chur ar an domhan."
+msgid "People and projects who receive donations through Liberapay."
+msgstr "Daoine agus tionscadail a fhaigheann síntiúis trí Liberapay."
 
 #, fuzzy
-msgid "Explore Organizations"
-msgstr "Déan iniúchadh ar Eagraíochtaí"
+msgid "Explore Recipients"
+msgstr "Faighteoirí a fhiosrú"
 
 #, fuzzy
-msgid "People like you who contribute to the commons (art, knowledge, software, …)."
-msgstr "Daoine cosúil leatsa a chuireann leis na comóntaí (ealaín, eolas, bogearraí, …)."
+msgid "Users who are hoping to receive their first donations through Liberapay."
+msgstr "Úsáideoirí atá ag súil lena gcéad síntiúis a fháil trí Liberapay."
 
 #, fuzzy
-msgid "Explore Individuals"
-msgstr "Déan iniúchadh ar Dhaoine Aonair"
+msgid "Explore Hopefuls"
+msgstr "Déan iniúchadh ar Hopefuls"
 
 #, fuzzy
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
@@ -5302,29 +5431,49 @@ msgstr "Brabhsáil na cuntais atá ag úsáideoirí Liberapay ar ardáin eile. A
 msgid "Explore Social Networks"
 msgstr "Déan iniúchadh ar Líonraí Sóisialta"
 
+#, fuzzy
+msgid "Individuals"
+msgstr "Daoine Aonair"
+
 #, fuzzy, python-brace-format
 msgid "The top {0} individuals on Liberapay are:"
 msgstr "Is iad na {0} daoine aonair is fearr ar Liberapay:"
 
-#, fuzzy, python-brace-format
-msgid "List of individuals on Liberapay, page {number}:"
-msgstr "Liosta daoine aonair ar Liberapay, leathanach {number}:"
+#, fuzzy
+msgid "Sort by"
+msgstr "Sórtáil de réir"
+
+#, fuzzy
+msgid "income"
+msgstr "ioncam"
+
+#, fuzzy
+msgid "creation date"
+msgstr "dáta cruthaithe"
+
+#, fuzzy
+msgid "sort order"
+msgstr "ordú sórtála"
+
+#, fuzzy
+msgid "in descending order"
+msgstr "in ord íslitheach"
+
+#, fuzzy
+msgid "in ascending order"
+msgstr "in ord ardaitheach"
+
+#, fuzzy
+msgid "Organizations"
+msgstr "Eagraíochtaí"
 
 #, fuzzy, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
 msgstr "Is iad na heagraíochtaí {0} is fearr ar Liberapay:"
 
-#, fuzzy, python-brace-format
-msgid "List of organizations on Liberapay, page {number}:"
-msgstr "Liosta eagraíochtaí ar Liberapay, leathanach {number}:"
-
 #, fuzzy
 msgid "Create an organization account"
 msgstr "Cruthaigh cuntas eagraíochta"
-
-#, fuzzy
-msgid "Top pledges"
-msgstr "Geallta barr"
 
 #, fuzzy
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
@@ -5347,15 +5496,39 @@ msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Is féidir linn cabhrú leat gealltanais a aimsiú má nascann tú do chuntais:"
 
 #, fuzzy, python-brace-format
+msgid "The individual receiving the most money through Liberapay is:"
+msgid_plural "The {n} individuals receiving the most money through Liberapay are:"
+msgstr[0] "Is é an duine a fhaigheann an méid is mó airgid trí Liberapay ná:"
+msgstr[1] "Is iad an 2 dhuine aonair a fhaigheann an méid is mó airgid trí Liberapay:"
+msgstr[2] "Is iad na {n} daoine aonair a fhaigheann an méid is mó airgid trí Liberapay:"
+
+#, fuzzy, python-brace-format
+msgid "The organization receiving the most money through Liberapay is:"
+msgid_plural "The {n} organizations receiving the most money through Liberapay are:"
+msgstr[0] "Is é an eagraíocht a fhaigheann an méid is mó airgid trí Liberapay ná:"
+msgstr[1] "Is iad an 2 eagraíocht a fhaigheann an méid is mó airgid trí Liberapay:"
+msgstr[2] "Is iad na heagraíochtaí {n} a fhaigheann an méid is mó airgid trí Liberapay:"
+
+#, fuzzy, python-brace-format
+msgid "The team receiving the most money through Liberapay is:"
+msgid_plural "The {n} teams receiving the most money through Liberapay are:"
+msgstr[0] "Is í an fhoireann a fhaigheann an méid is mó airgid trí Liberapay ná:"
+msgstr[1] "Is iad an 2 fhoireann a fhaigheann an méid is mó airgid trí Liberapay:"
+msgstr[2] "Is iad na foirne {n} a fhaigheann an méid is mó airgid trí Liberapay:"
+
+#, fuzzy, python-brace-format
+msgid "The Liberapay account receiving the most money is:"
+msgid_plural "The {n} Liberapay accounts receiving the most money are:"
+msgstr[0] "Is é an cuntas Liberapay a fhaigheann an méid is mó airgid ná:"
+msgstr[1] "Is iad na 2 chuntas Liberapay a fhaigheann an méid is mó airgid:"
+msgstr[2] "Is iad na cuntais {n} Liberapay a fhaigheann an méid is mó airgid:"
+
+#, fuzzy, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
 msgstr[0] "Is é an stór is mó tóir atá nasctha le cuntas Liberapay faoi láthair ná:"
 msgstr[1] ""
 msgstr[2] ""
-
-#, fuzzy, python-brace-format
-msgid "List of repositories currently linked to a Liberapay account, page {number}:"
-msgstr "Liosta de na stórtha atá nasctha faoi láthair le cuntas Liberapay, leathanach {number}:"
 
 #, fuzzy, python-brace-format
 msgid "by {author_name}"
@@ -5364,6 +5537,14 @@ msgstr "le {author_name}"
 #, fuzzy
 msgid "Stars"
 msgstr "Réaltaí"
+
+#, fuzzy
+msgid "stars count"
+msgstr "comhaireamh réaltaí"
+
+#, fuzzy
+msgid "connection date"
+msgstr "dáta ceangail"
 
 #, fuzzy
 msgid "Browse your favorite repositories"
@@ -5380,10 +5561,6 @@ msgstr[0] "Is iad an fhoireann is fearr ar Liberapay:"
 msgstr[1] ""
 msgstr[2] ""
 
-#, fuzzy, python-brace-format
-msgid "List of teams on Liberapay, page {number}:"
-msgstr "Liosta foirne ar Liberapay, leathanach {number}:"
-
 #, fuzzy
 msgid "Create a team"
 msgstr "Cruthaigh foireann"
@@ -5395,6 +5572,10 @@ msgstr "{0} socruithe pobail"
 #, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Téacs an bharra taoibh in {language}"
+
+#, fuzzy
+msgid "This profile is marked as spam."
+msgstr "Tá an phróifíl seo marcáilte mar thurscar."
 
 #, fuzzy, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
@@ -5890,6 +6071,10 @@ msgid "Transfer the account"
 msgstr "Aistrigh an cuntas"
 
 #, fuzzy, python-brace-format
+msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
+msgstr "An {provider} cuntas go bhfuil tú ag iarraidh ceangal ceangailte le cuntas eile Liberapay marcáilte mar calaoiseach."
+
+#, fuzzy, python-brace-format
 msgid "Connecting a {platform} account"
 msgstr "Cuntas {platform} á nascadh"
 
@@ -5946,8 +6131,8 @@ msgid "{username} has a repository named {repo_name} in their {platform} account
 msgstr "Tá stór darb ainm {repo_name} ag {username} ina chuntas {platform}"
 
 #, fuzzy
-msgid "Found a matching user statement"
-msgid_plural "Found matching user statements"
+msgid "Found a matching user description"
+msgid_plural "Found matching user descriptions"
 msgstr[0] "Aimsíodh ráiteas úsáideora comhoiriúnach"
 msgstr[1] ""
 msgstr[2] ""

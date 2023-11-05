@@ -1,9 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import json
 from unittest.mock import patch
 
-from psycopg2.extras import execute_values
+from pando.utils import utcnow
 
+from liberapay.constants import PAYIN_AMOUNTS
 from liberapay.cron import Daily, Weekly
 from liberapay.i18n.currencies import fetch_currency_exchange_rates
 from liberapay.models.participant import (
@@ -14,28 +15,29 @@ from liberapay.testing import EUR
 from liberapay.testing.emails import EmailHarness
 
 
-utcnow = datetime.utcnow
-
-
 class TestCronJobs(EmailHarness):
 
     @patch('liberapay.cron.sleep')
-    @patch('liberapay.cron.datetime', autospec=True)
+    @patch('liberapay.cron.utcnow', autospec=True)
     @patch('liberapay.cron.break_after_call', return_value=True)
-    def test_cron_jobs_with_empty_db(self, bac, datetime, sleep):
+    def test_cron_jobs_with_empty_db(self, bac, cron_utcnow, sleep):
         now = utcnow()
+        self.website.cron.has_lock = True
         for job in self.website.cron.jobs:
+            print(job)
             real_func = job.func
             with patch.object(job, 'func', autospec=True) as mock_func:
                 if isinstance(job.period, Weekly):
-                    datetime.utcnow.return_value = (
+                    cron_utcnow.return_value = (
                         now.replace(hour=job.period.hour, minute=10, second=0) +
                         timedelta(days=(job.period.weekday - now.isoweekday()) % 7)
                     )
                 elif isinstance(job.period, Daily):
-                    datetime.utcnow.return_value = now.replace(
+                    cron_utcnow.return_value = now.replace(
                         hour=job.period.hour, minute=5, second=0
                     )
+                else:
+                    cron_utcnow.return_value = now
                 if isinstance(job.period, Weekly) or real_func is fetch_currency_exchange_rates:
                     mock_func.side_effect = None
                 else:
@@ -45,14 +47,10 @@ class TestCronJobs(EmailHarness):
                 assert mock_func.call_count == 1
 
     @patch('liberapay.cron.sleep')
-    @patch('liberapay.cron.datetime', autospec=True)
+    @patch('liberapay.cron.utcnow', autospec=True)
     @patch('liberapay.cron.break_before_call', return_value=True)
-    def test_weekly_and_daily_cron_jobs_at_the_wrong_time(self, bbc, datetime, sleep):
-        def forward_time(seconds):
-            datetime.utcnow.return_value += timedelta(seconds=seconds)
-
+    def test_weekly_and_daily_cron_jobs_at_the_wrong_time(self, bbc, cron_utcnow, sleep):
         now = utcnow()
-        sleep.side_effect = forward_time
         for job in self.website.cron.jobs:
             print(job)
             with patch.object(job, 'func', autospec=True) as mock_func:
@@ -60,7 +58,7 @@ class TestCronJobs(EmailHarness):
                 if isinstance(job.period, Weekly):
                     days_delta = timedelta(days=(job.period.weekday - now.isoweekday()) % 7)
                     # Wrong day
-                    datetime.utcnow.return_value = (
+                    cron_utcnow.return_value = (
                         now.replace(hour=job.period.hour, minute=10, second=0) +
                         days_delta + timedelta(days=1)
                     )
@@ -68,36 +66,36 @@ class TestCronJobs(EmailHarness):
                     job.thread.join(10)
                     assert sleep.call_count == 1
                     # Not yet time
-                    datetime.utcnow.return_value = (
+                    cron_utcnow.return_value = (
                         now.replace(hour=job.period.hour, minute=0, second=0) +
                         days_delta
                     )
                     job.start()
                     job.thread.join(10)
                     assert sleep.call_count == 2
-                    # Too late
-                    datetime.utcnow.return_value = (
+                    # Late
+                    cron_utcnow.return_value = (
                         now.replace(hour=job.period.hour, minute=20, second=0) +
                         days_delta
                     )
                     job.start()
                     job.thread.join(10)
-                    assert sleep.call_count == 4
+                    assert sleep.call_count == 2
                 elif isinstance(job.period, Daily):
                     # Not yet time
-                    datetime.utcnow.return_value = utcnow().replace(
+                    cron_utcnow.return_value = utcnow().replace(
                         hour=job.period.hour, minute=0, second=0
                     )
                     job.start()
                     job.thread.join(10)
                     assert sleep.call_count == 1
-                    # Too late
-                    datetime.utcnow.return_value = utcnow().replace(
+                    # Late
+                    cron_utcnow.return_value = utcnow().replace(
                         hour=job.period.hour, minute=10, second=0
                     )
                     job.start()
                     job.thread.join(10)
-                    assert sleep.call_count == 2
+                    assert sleep.call_count == 1
             sleep.reset_mock()
 
     def test_disabled_job_is_not_run(self):
@@ -113,15 +111,16 @@ class TestCronJobs(EmailHarness):
                 job.period = period
 
     def test_fetch_currency_exchange_rates(self):
-        fake_rates = self.db.all("SELECT * FROM currency_exchange_rates")
-        fetch_currency_exchange_rates()
-        with self.db.get_cursor() as cursor:
-            cursor.run("DELETE FROM currency_exchange_rates")
-            execute_values(cursor, """
-                INSERT INTO currency_exchange_rates
-                            (source_currency, target_currency, rate)
-                     VALUES %s
-            """, fake_rates)
+        assert PAYIN_AMOUNTS['paypal']['min_acceptable']['HUF']
+        assert 'HUF' in PAYIN_AMOUNTS['paypal']['min_acceptable']
+        currency_exchange_rates = self.client.website.currency_exchange_rates.copy()
+        try:
+            with self.allow_changes_to('currency_exchange_rates'), self.db.get_cursor() as cursor:
+                fetch_currency_exchange_rates(cursor)
+                cursor.connection.rollback()
+        finally:
+            self.client.website.currency_exchange_rates = currency_exchange_rates
+        assert 'HUF' not in PAYIN_AMOUNTS['paypal']['min_acceptable']
 
     def test_send_account_disabled_notifications(self):
         admin = self.make_participant('admin', privileges=1)

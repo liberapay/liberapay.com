@@ -885,18 +885,6 @@ msgstr "Grut"
 msgid "Maximum"
 msgstr "Maksimum"
 
-#, fuzzy, python-brace-format
-msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
-msgstr "Jo hawwe jo kwota oan oanfragen konsumearre, jo kinne it nochris besykje {in_N_minutes}."
-
-#, fuzzy
-msgid "You're making requests too fast, please try again later."
-msgstr "Jo meitsje fersiken te fluch, besykje it letter nochris."
-
-#, fuzzy, python-brace-format
-msgid "{0} returned an error, please try again later."
-msgstr "{0} hat in flater weromjûn, besykje it letter nochris."
-
 #, fuzzy
 msgid "example@mastodon.social"
 msgstr "foarbyld@mastodon.social"
@@ -1198,14 +1186,6 @@ msgid "The {platform} user you're looking for hasn't joined Liberapay, and it's 
 msgstr "De {platform} brûker wêr't jo nei sykje is net meidien oan Liberapay, en it is net mooglik om in stubprofyl foar har te meitsjen."
 
 #, fuzzy, python-brace-format
-msgid "'{0}' doesn't seem to be a valid user id on {platform}."
-msgstr "'{0}' liket gjin jildich brûkers-id te wêzen op {platform}."
-
-#, fuzzy, python-brace-format
-msgid "There doesn't seem to be a user named {0} on {1}."
-msgstr "D'r liket gjin brûker te wêzen mei de namme {0} op {1}."
-
-#, fuzzy, python-brace-format
 msgid "Liberapay donation to {username} (team {team_name})"
 msgstr "Liberapay donaasje oan {username} (team {team_name})"
 
@@ -1230,6 +1210,10 @@ msgid "{n} year of {money_amount}"
 msgid_plural "{n} years of {money_amount}"
 msgstr[0] "{n} jier fan {money_amount}"
 msgstr[1] ""
+
+#, fuzzy
+msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
+msgstr "Jo akkount hat gjin wachtwurd, dus jo moatte josels authentisearje fia e-post:"
 
 #, fuzzy
 msgid "The submitted password is incorrect."
@@ -1274,6 +1258,30 @@ msgstr "Jo binne net autorisearre om tagong te krijen ta dizze side."
 #, fuzzy
 msgid "Processing your request failed because our server was unable to communicate with a service located on another machine. This is a temporary issue, please try again later."
 msgstr "It ferwurkjen fan jo fersyk mislearre omdat ús tsjinner net yn steat wie om te kommunisearjen mei in tsjinst op in oare masine. Dit is in tydlik probleem, besykje it letter nochris."
+
+#, fuzzy, python-brace-format
+msgid "'{0}' doesn't seem to be a valid user id on {platform}."
+msgstr "'{0}' liket gjin jildich brûkers-id te wêzen op {platform}."
+
+#, fuzzy, python-brace-format
+msgid "{0} returned an error, please try again later."
+msgstr "{0} hat in flater weromjûn, besykje it letter nochris."
+
+#, fuzzy, python-brace-format
+msgid "You've consumed your quota of requests, you can try again {in_N_minutes}."
+msgstr "Jo hawwe jo kwota oan oanfragen konsumearre, jo kinne it nochris besykje {in_N_minutes}."
+
+#, fuzzy
+msgid "You're making requests too fast, please try again later."
+msgstr "Jo meitsje fersiken te fluch, besykje it letter nochris."
+
+#, fuzzy, python-brace-format
+msgid "There doesn't seem to be a user named {0} on {1}."
+msgstr "D'r liket gjin brûker te wêzen mei de namme {0} op {1}."
+
+#, fuzzy
+msgid "This profile is marked as spam or fraud."
+msgstr "Dit profyl is markearre as spam of fraude."
 
 #, fuzzy
 msgid "Cancel"
@@ -1382,10 +1390,6 @@ msgstr "As jo in eksoatyske browser brûke en der bart neat, klik dan {link_star
 #, fuzzy
 msgid "Retry"
 msgstr "Opnij besykje"
-
-#, fuzzy
-msgid "This profile is marked as spam."
-msgstr "Dit profyl is markearre as spam."
 
 #, fuzzy
 msgid "Other amount"
@@ -1628,10 +1632,6 @@ msgid "Log in via email"
 msgstr "Oanmelde fia e-mail"
 
 #, fuzzy
-msgid "Your account doesn't have a password, so you'll have to authenticate yourself via email:"
-msgstr "Jo akkount hat gjin wachtwurd, dus jo moatte josels authentisearje fia e-post:"
-
-#, fuzzy
 msgid "Your session has expired."
 msgstr "Jo sesje is ferrûn."
 
@@ -1652,8 +1652,8 @@ msgid "If you need to change the password of your Liberapay account, you can do 
 msgstr "As jo it wachtwurd fan jo Liberapay-akkount moatte feroarje, kinne jo dat hjirûnder dwaan. Om feilich te wêzen, moat it wachtwurd fan jo akkount willekeurich oanmakke wurde en net earne oars brûkt wurde. Wy riede it gebrûk fan in wachtwurdbehearder sterk oan."
 
 #, fuzzy
-msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we recommend keeping your account passwordless if you don't use a password manager, because in order to be secure the password of your account should be randomly generated and not used anywhere else."
-msgstr "It ynstellen fan in wachtwurd lit jo direkt oanmelde, ynstee fan te wachtsjen op in ienmalige keppeling ferstjoerd fia e-post. Wy riede lykwols oan om jo akkount sûnder wachtwurd te hâlden as jo gjin wachtwurdbehearder brûke, want om feilich te wêzen moat it wachtwurd fan jo akkount willekeurich oanmakke wurde en net earne oars brûkt wurde."
+msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we only recommend setting a password if you use a password manager, because in order to be secure the password should be randomly generated and not used anywhere else."
+msgstr "It ynstellen fan in wachtwurd lit jo direkt oanmelde, ynstee fan te wachtsjen op in ienmalige keppeling ferstjoerd fia e-post. Wy riede lykwols allinich oan om in wachtwurd yn te stellen as jo in wachtwurdbehearder brûke, want om feilich te wêzen moat it wachtwurd willekeurich oanmakke wurde en net earne oars brûkt wurde."
 
 #, fuzzy
 msgid "Current password"
@@ -1844,12 +1844,12 @@ msgid "Overview"
 msgstr "Oersjoch"
 
 #, fuzzy
-msgid "Organizations"
-msgstr "Organisaasjes"
+msgid "Recipients"
+msgstr "Untfangers"
 
 #, fuzzy
-msgid "Individuals"
-msgstr "Yndividuen"
+msgid "Hopefuls"
+msgstr "Hopefuls"
 
 #, fuzzy
 msgid "Unclaimed Donations"
@@ -2081,14 +2081,6 @@ msgstr "Jo hjoeddeistige donaasje oan {name} is yn {currency}, mar se akseptearj
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
 msgstr "Jo hjoeddeistige donaasje oan {name} is yn {currency}, mar se akseptearje dy munt net mear. De foarstelde nije munt is de {accepted_currency}, mar jo kinne in oare kieze."
 
-#, fuzzy
-msgid "Modify"
-msgstr "Feroarje"
-
-#, fuzzy
-msgid "Discontinue"
-msgstr "Stopje"
-
 #, fuzzy, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
 msgstr "Jo donearje op it stuit {money_amount} per wike oan {recipient_name}. It formulier hjirûnder lit jo jo donaasje wizigje of stopje."
@@ -2108,14 +2100,14 @@ msgstr "Selektearje of ynfiere in bedrach:"
 #, fuzzy, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "De {currency_name} is net jo foarkar munt? {n} oare wurdt stipe:"
+msgstr[1] "De {currency_name} is net jo foarkar munt? {n} oaren wurde stipe:"
 
 #, fuzzy, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "De {currency_name} is net jo foarkar munt? {username} akseptearret ek {n} oare:"
+msgstr[1] "De {currency_name} is net jo foarkar munt? {username} akseptearret ek {n} oaren:"
 
 #, fuzzy
 msgid "not supported by PayPal"
@@ -2165,6 +2157,14 @@ msgstr "Hânlieding fernijing"
 msgid "A reminder to renew your donation will be sent to you via email."
 msgstr "In herinnering om jo donaasje te fernijen sil nei jo stjoerd wurde fia e-post."
 
+#, fuzzy
+msgid "Discontinue the donation"
+msgstr "Stopje de donaasje"
+
+#, fuzzy
+msgid "Cancel the pledge"
+msgstr "Annulearje de belofte"
+
 #, fuzzy, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
 msgstr "{username} hat der foar keazen om net te sjen wa't har begeunstigers binne, dus jo donaasje sil geheim wêze."
@@ -2208,14 +2208,6 @@ msgstr "Elkenien sil sjen kinne dat jo {username} stypje."
 #, fuzzy, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
 msgstr "{username} hat noch net oanjûn oft se wolle sjen wa't har begeunstigers binne, dus jo donaasje sil geheim wêze."
-
-#, fuzzy
-msgid "Discontinue the donation"
-msgstr "Stopje de donaasje"
-
-#, fuzzy
-msgid "Cancel the pledge"
-msgstr "Annulearje de belofte"
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Minsken dy't bydrage oan it algemien nut hawwe jo nedich om harren wurk te stypjen. It bouwen fan frije software, fersprieden fan frije ynformaasje, der giet tiid en jild yn sitten, net allinnich om it wurk yn earste ynstânsje te dwaan, mar ek om it te ûnderhâlden."
@@ -2304,6 +2296,14 @@ msgstr "Kin ik in ienmalige donaasje meitsje?"
 #, fuzzy
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
 msgstr "Ienmalige donaasjes wurde noch net goed stipe, mar jo kinne jo donaasje direkt nei de earste betelling stopje."
+
+#, fuzzy
+msgid "Will I get a receipt?"
+msgstr "Krij ik in kwitânsje?"
+
+#, fuzzy
+msgid "A receipt is automatically available for every payment."
+msgstr "In kwitânsje is automatysk beskikber foar elke betelling."
 
 #, fuzzy
 msgid "What is this website? I don't recognize it."
@@ -2518,8 +2518,34 @@ msgid "We can also import lists of repositories for your teams:"
 msgstr "Wy kinne ek listen mei repositories ymportearje foar jo teams:"
 
 #, fuzzy, python-brace-format
-msgid "The submitted summary is too long ({0} > {1})."
-msgstr "De yntsjinne gearfetting is te lang ({0} > {1})."
+msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgid_plural "The summary can't be more than {n} characters long."
+msgstr[0] "<net brûkt iental (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
+msgstr[1] "De gearfetting kin net mear wêze as {n} tekens lang."
+
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgid_plural "The full description must be at least {n} characters long."
+msgstr[0] "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
+msgstr[1] "De folsleine beskriuwing moat op syn minst {n} tekens lang wêze."
+
+#, fuzzy, python-brace-format
+msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgid_plural "The full description can't be more than {n} characters long."
+msgstr[0] "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
+msgstr[1] "De folsleine beskriuwing kin net mear wêze as {n} tekens lang."
+
+#, fuzzy
+msgid "The full description can't be identical to the summary."
+msgstr "De folsleine beskriuwing kin net identyk wêze mei de gearfetting."
+
+#, fuzzy
+msgid "The summary can't be only your name."
+msgstr "De gearfetting kin net allinich jo namme wêze."
+
+#, fuzzy
+msgid "The description can't be only your name."
+msgstr "De beskriuwing kin net allinich jo namme wêze."
 
 #, fuzzy
 msgid "This is a preview."
@@ -2532,6 +2558,10 @@ msgstr "Úttreksel dat sil wurde brûkt yn sosjale media:"
 #, fuzzy
 msgid "Preview of the short description"
 msgstr "Foarbyld fan de koarte beskriuwing"
+
+#, fuzzy
+msgid "Including your username in the short description is redundant. The short description is always displayed immediately below the username."
+msgstr "It opnimmen fan jo brûkersnamme yn 'e koarte beskriuwing is oerstallich. De koarte beskriuwing wurdt altyd direkt ûnder de brûkersnamme werjûn."
 
 #, fuzzy
 msgid "Publish"
@@ -2798,6 +2828,10 @@ msgstr "{money_amount}{small}/moanne{end_small}"
 msgid "{money_amount}{small}/year{end_small}"
 msgstr "{money_amount}{small}/jier{end_small}"
 
+#, fuzzy
+msgid "Modify"
+msgstr "Feroarje"
+
 #, fuzzy, python-brace-format
 msgid "Started {timespan_ago}."
 msgstr "Begûn {timespan_ago}."
@@ -3030,6 +3064,10 @@ msgstr "Mear ynformaasje is nedich om dizze betelling te ferwurkjen."
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "De betellingsferwurker ({name}) is noch net yn steat om {currency} direkte debets foar dizze ûntfanger te ferwurkjen. Besykje asjebleaft opnij mei in oare betelmetoade."
 
+#, fuzzy
+msgid "Your payment has been initiated. It will be submitted to your bank at a later time, after being manually checked for signs of fraud."
+msgstr "Jo betelling is inisjearre. It sil op in letter momint wurde yntsjinne by jo bank, nei't se mei de hân kontrolearre binne op tekens fan fraude."
+
 #, fuzzy, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Jo bank kin dizze betelling ôfwize. Wy riede oan om in kopy fan {link_start}it mandaat{link_end} nei jo bank te stjoeren as jo net wis binne dat it {currency} direkte debitynstruksjes goed behannelet."
@@ -3069,6 +3107,10 @@ msgstr "Dizze gegevens wurde direkt stjoerd nei de betellingsprosessor {name} fi
 #, fuzzy
 msgid "Remember the card number for next time"
 msgstr "Unthâld it kaartnûmer foar de folgjende kear"
+
+#, fuzzy, python-brace-format
+msgid "Use this payment instrument by default for future payments in {currency}"
+msgstr "Brûk dit betelynstrumint standert foar takomstige betellingen yn {currency}"
 
 #, fuzzy
 msgid "Use this payment instrument by default for future payments"
@@ -3219,8 +3261,8 @@ msgid "Edit"
 msgstr "Bewurkje"
 
 #, fuzzy
-msgid "Statement"
-msgstr "Ferklearring"
+msgid "Description"
+msgstr "Beskriuwing"
 
 #, fuzzy, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
@@ -3427,10 +3469,6 @@ msgid "(Liberapay only supports one kind of invoice for now.)"
 msgstr "(Liberapay stipet foar no mar ien soarte faktuer.)"
 
 #, fuzzy
-msgid "Description"
-msgstr "Beskriuwing"
-
-#, fuzzy
 msgid "A short description of the invoice"
 msgstr "In koarte beskriuwing fan 'e faktuer"
 
@@ -3471,6 +3509,10 @@ msgid "awaiting confirmation"
 msgstr "wachtsje op befêstiging"
 
 #, fuzzy
+msgid "awaiting review"
+msgstr "wachtsjend op resinsje"
+
+#, fuzzy
 msgid "pending"
 msgstr "yn ôfwachting"
 
@@ -3489,6 +3531,10 @@ msgstr "foar in part werombetelle"
 #, fuzzy
 msgid "refunded"
 msgstr "werombetelle"
+
+#, fuzzy
+msgid "suspended"
+msgstr "suspended"
 
 #, fuzzy, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
@@ -3521,6 +3567,10 @@ msgstr "automatyske lading"
 #, fuzzy
 msgid "charge"
 msgstr "kosten"
+
+#, fuzzy
+msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
+msgstr "Dizze betelling wachtet om manuell te wurde kontrolearre troch Liberapay-meiwurkers op tekens fan fraude."
 
 #, fuzzy, python-brace-format
 msgid "error message: {0}"
@@ -3585,6 +3635,10 @@ msgstr "Dizze betelling moat mei de hân goedkard wurde troch de ûntfanger fia 
 #, fuzzy, python-brace-format
 msgid "PayPal status code: {0}"
 msgstr "PayPal-statuskoade: {0}"
+
+#, fuzzy
+msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
+msgstr "It akkount fan 'e betaler is ophâlden fanwege in fertinking fan fraude of oare net autorisearre aksje."
 
 #, fuzzy
 msgid "There were no transactions during this period."
@@ -3693,6 +3747,10 @@ msgstr "Gjin notifikaasjes om te sjen."
 msgid "Next Page →"
 msgstr "Folgjende side →"
 
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Jo moatte op syn minst ien fakje kontrolearje."
+
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
 msgid_plural "You have {n} active patrons giving you a total of {money_amount} per week."
@@ -3708,20 +3766,40 @@ msgid "{username} doesn't have any active patrons."
 msgstr "{username} hat gjin aktive begeunstigers."
 
 #, fuzzy
-msgid "Liberapay now supports non-anonymous donations, do you want to know who your patrons are?"
-msgstr "Liberapay stipet no net-anonyme donaasjes, wolle jo witte wa't jo begeunstigers binne?"
+msgid "Visibility levels"
+msgstr "Sichtberensnivo's"
 
 #, fuzzy
-msgid "Enable non-anonymous donations"
-msgstr "Net-anonyme donaasjes ynskeakelje"
+msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
+msgstr "Liberapay stipet trije sichtberensnivo's foar donaasjes. Elk nivo kin yn- of útskeakele wurde, mar op syn minst ien fan har moat ynskeakele wurde."
 
 #, fuzzy, python-brace-format
-msgid "You have opted-in to see who your patrons are. If you change your mind, then {link_start}click here to disable non-anonymous donations{link_end}."
-msgstr "Jo hawwe jo oanmeld om te sjen wa't jo begeunstigers binne. As jo fan gedachten feroarje, klik dan {link_start} hjir om net-anonime donaasjes út te skeakeljen{link_end}."
+msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
+msgstr "Geheime donaasjes binne net mooglik mei PayPal. Jo moatte geheime donaasjes útskeakelje of {link_start}in Stripe-akkount tafoegje{link_end}."
 
-#, fuzzy, python-brace-format
-msgid "You've chosen not to see who your patrons are. If you change your mind, then {link_start}click here to enable non-anonymous donations{link_end}."
-msgstr "Jo hawwe keazen om net te sjen wa't jo begeunstigers binne. As jo fan gedachten feroarje, klik dan {link_start} hjir om net-anonyme donaasjes yn te skeakeljen{link_end}."
+#, fuzzy
+msgid "Secret donations aren't possible when the payer uses PayPal."
+msgstr "Geheime donaasjes binne net mooglik as de betaler PayPal brûkt."
+
+#, fuzzy
+msgid "Allow secret donations"
+msgstr "Tastean geheime donaasjes"
+
+#, fuzzy
+msgid "Allow private donations"
+msgstr "Tastean privee donaasjes"
+
+#, fuzzy
+msgid "Allow public donations"
+msgstr "Tastean publike donaasjes"
+
+#, fuzzy
+msgid "This is what your prospective donors currently see:"
+msgstr "Dit is wat jo potensjele donateurs op it stuit sjogge:"
+
+#, fuzzy
+msgid "This is what your prospective donors will see with the new settings:"
+msgstr "Dit is wat jo potensjele donateurs sille sjen mei de nije ynstellingen:"
 
 #, fuzzy
 msgid "Data export"
@@ -3747,9 +3825,29 @@ msgstr "Jo binne gjin lid fan in team."
 msgid "{username} isn't a member of any team."
 msgstr "{username} is gjin lid fan in team."
 
+#, fuzzy
+msgid "The payment account has been successfully disconnected."
+msgstr "It betellingsakkount is mei súkses loskeppele."
+
+#, fuzzy
+msgid "This payment account is no longer accessible. It is now disconnected."
+msgstr "Dit betellingskonto is net mear tagonklik. It is no loskeppele."
+
+#, fuzzy
+msgid "The data has been successfully refreshed."
+msgstr "De gegevens binne mei súkses ferfarske."
+
 #, fuzzy, python-brace-format
-msgid "You have to {link_open}fill your profile{link_close} before you can start to receive donations."
-msgstr "Jo moatte {link_open}jo profyl ynfolje{link_close} foardat jo begjinne kinne donaasjes te ûntfangen."
+msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
+msgstr "Jo moatte {link_open}jo e-mailadres befêstigje{link_close} foardat jo begjinne kinne donaasjes te ûntfangen."
+
+#, fuzzy, python-brace-format
+msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
+msgstr "Jo moatte {link_open}jo brûkersnamme ynstelle{link_close} foardat jo begjinne kinne donaasjes te ûntfangen."
+
+#, fuzzy, python-brace-format
+msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
+msgstr "Jo moatte {link_open}in profylbeskriuwing tafoegje{link_close} foardat jo begjinne kinne donaasjes te ûntfangen."
 
 #, fuzzy
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
@@ -4022,8 +4120,20 @@ msgid "Bank Account"
 msgstr "Bankrekken"
 
 #, fuzzy
+msgid "This instrument is used by default."
+msgstr "Dit ynstrumint wurdt standert brûkt."
+
+#, fuzzy
 msgid "default"
 msgstr "standert"
+
+#, fuzzy, python-brace-format
+msgid "This instrument is used by default for payments in {currency}."
+msgstr "Dit ynstrumint wurdt standert brûkt foar betellingen yn {currency}."
+
+#, fuzzy, python-brace-format
+msgid "default for {currency}"
+msgstr "standert foar {currency}"
 
 #, fuzzy
 msgid "view mandate"
@@ -4060,6 +4170,14 @@ msgstr "Dit betelynstrumint is noch net brûkt."
 #, fuzzy
 msgid "Set as default"
 msgstr "Set as standert"
+
+#, fuzzy, python-brace-format
+msgid "Use this instrument by default for payments in {currency}."
+msgstr "Brûk dit ynstrumint standert foar betellingen yn {currency}."
+
+#, fuzzy, python-brace-format
+msgid "Set as default for {currency}"
+msgstr "Ynstelle as standert foar {currency}"
 
 #, fuzzy
 msgid "You don't have any valid payment instrument."
@@ -4473,8 +4591,8 @@ msgid "Not safe for work"
 msgstr "Net feilich foar wurk"
 
 #, fuzzy, python-brace-format
-msgid "Yes. However, Liberapay isn't a shield: we can't protect anyone from being banned by {link_open}the underlying payment processors{link_close}."
-msgstr "Ja. Liberapay is lykwols gjin skyld: wy kinne gjinien beskermje tsjin ferbean troch {link_open}de ûnderlizzende betellingsferwurkers{link_close}."
+msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
+msgstr "De betellingsferwurkers dy't Liberapay stipet hawwe ûngeunstich belied foar seksuele ynhâld. {paypal_link}PayPal fereasket foarôf goedkarring{link_close}, en {stripe_link}Stripe ferbiedt it folslein{link_close}. Dat, hoewol it mooglik is om Liberapay te brûken foar guon ynhâld allinich foar folwoeksenen, is it normaal better om in platfoarm te brûken spesjalisearre yn sokke ynhâld."
 
 #, fuzzy
 msgid "Can I modify or stop my donations?"
@@ -4631,16 +4749,20 @@ msgstr[0] "Donateurs kinne kieze tusken maksimaal {n} faluta, ôfhinklik fan de 
 msgstr[1] ""
 
 #, fuzzy, python-brace-format
+msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
+msgstr "Donaasjes kinne allinnich wurde ûntfongen yn gebieten dêr't op syn minst ien stipe betelling prosessor is beskikber. De op it stuit stipe betellingsferwurkers binne {Stripe} en {PayPal}. Guon funksjes binne allinich beskikber fia Stripe, sadat Liberapay folslein beskikber is foar makkers yn gebieten dy't stipe wurde troch Stripe, en foar in part beskikber yn gebieten allinich stipe troch PayPal."
+
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
 msgstr[0] "Liberapay is folslein beskikber foar makkers yn {n} gebieten:"
 msgstr[1] ""
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=ce784fd8cdb312cf56226bbd42d07d18)>"
-msgid_plural "Additionally, Liberapay is partially available to creators in {paypal_link_open}the {n} countries supported by PayPal{link_close}."
-msgstr[0] "Derneist is Liberapay foar in part beskikber foar makkers yn {paypal_link_open}de {n} lannen stipe troch PayPal{link_close}."
-msgstr[1] ""
+msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
+msgid_plural "Liberapay is partially available to creators in {n} territories:"
+msgstr[0] "<net brûkt iental (hash=853969b22957acb45a26404e37a3ef82)>"
+msgstr[1] "Liberapay is foar in part beskikber foar makkers yn {n} gebieten:"
 
 #, fuzzy
 msgid "What is Liberapay?"
@@ -4771,6 +4893,10 @@ msgid "Stripe allows renewing donations automatically, whereas PayPal currently 
 msgstr "Stripe lit donaasjes automatysk fernije, wylst PayPal op it stuit donateurs fereasket om elke betelling te befêstigjen."
 
 #, fuzzy
+msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
+msgstr "Donaasjes fia Stripe kinne geheim wêze, wylst PayPal donateurs en ûntfangers altyd de nammen en e-mailadressen fan elkoar kinne sjen."
+
+#, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe lit yn guon gefallen donearje oan meardere skeppers tagelyk, wylst PayPal altyd aparte betellingen fereasket."
 
@@ -4791,9 +4917,9 @@ msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies
 msgstr "PayPal stipet allinich {n_paypal_currencies} fan 'e {n_liberapay_currencies} faluta stipe troch Liberapay en Stripe."
 
 #, fuzzy, python-brace-format
-msgid "<unused singular (hash=901d1e29a8c2a0e16ff208c9a8fda012)>"
-msgid_plural "PayPal is available to creators in more than 200 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] "PayPal is beskikber foar makkers yn mear dan 200 lannen, wylst Stripe allinich {n} lannen op in gaadlike manier stipet."
+msgid "<unused singular (hash=47f7d13f5771b30f0bcf49ea3acd518b)>"
+msgid_plural "PayPal is available to creators in more than 100 countries, whereas Stripe only supports {n} countries in a suitable way."
+msgstr[0] "PayPal is beskikber foar makkers yn mear dan 100 lannen, wylst Stripe allinich {n} lannen op in gaadlike manier stipet."
 msgstr[1] ""
 
 #, fuzzy, python-brace-format
@@ -5162,32 +5288,32 @@ msgid "Explore other platforms:"
 msgstr "Ferkenne oare platfoarms:"
 
 #, fuzzy
-msgid "Liberapay provides several ways of finding great people to donate to:"
-msgstr "Liberapay biedt ferskate manieren om geweldige minsken te finen om te donearjen oan:"
+msgid "This page lists Liberapay users who are hoping to receive their first donations."
+msgstr "Dizze side listet Liberapay-brûkers dy't hoopje har earste donaasjes te ûntfangen."
 
 #, fuzzy
-msgid "A team is a group of users working on a specific project."
-msgstr "In team is in groep brûkers dy't wurkje oan in spesifyk projekt."
+msgid "Despite our efforts, some of the listed profiles may be spam or fraud."
+msgstr "Nettsjinsteande ús ynspannings kinne guon fan 'e neamde profilen spam of fraude wêze."
 
 #, fuzzy
-msgid "Explore Teams"
-msgstr "Ferkenne Teams"
+msgid "Profiles only start appearing in the list 72 hours after they're created."
+msgstr "Profilen begjinne pas te ferskinen yn 'e list 72 oeren nei't se makke binne."
 
 #, fuzzy
-msgid "Great nonprofits and companies trying to improve the world."
-msgstr "Grutte nonprofits en bedriuwen dy't besykje de wrâld te ferbetterjen."
+msgid "People and projects who receive donations through Liberapay."
+msgstr "Minsken en projekten dy't donaasjes krije fia Liberapay."
 
 #, fuzzy
-msgid "Explore Organizations"
-msgstr "Ferkenne Organisaasjes"
+msgid "Explore Recipients"
+msgstr "Untfangers ferkenne"
 
 #, fuzzy
-msgid "People like you who contribute to the commons (art, knowledge, software, …)."
-msgstr "Minsken lykas jo dy't bydrage oan 'e commons (keunst, kennis, software, ...)."
+msgid "Users who are hoping to receive their first donations through Liberapay."
+msgstr "Brûkers dy't hoopje har earste donaasjes te ûntfangen fia Liberapay."
 
 #, fuzzy
-msgid "Explore Individuals"
-msgstr "Ferkenne yndividuen"
+msgid "Explore Hopefuls"
+msgstr "Ferkenne Hopefuls"
 
 #, fuzzy
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
@@ -5217,29 +5343,49 @@ msgstr "Blêdzje troch de akkounts dy't Liberapay-brûkers hawwe op oare platfoa
 msgid "Explore Social Networks"
 msgstr "Ferkenne sosjale netwurken"
 
+#, fuzzy
+msgid "Individuals"
+msgstr "Yndividuen"
+
 #, fuzzy, python-brace-format
 msgid "The top {0} individuals on Liberapay are:"
 msgstr "De top {0} persoanen op Liberapay binne:"
 
-#, fuzzy, python-brace-format
-msgid "List of individuals on Liberapay, page {number}:"
-msgstr "List fan persoanen op Liberapay, side {number}:"
+#, fuzzy
+msgid "Sort by"
+msgstr "Sortearje op"
+
+#, fuzzy
+msgid "income"
+msgstr "ynkommen"
+
+#, fuzzy
+msgid "creation date"
+msgstr "skepping datum"
+
+#, fuzzy
+msgid "sort order"
+msgstr "sortearje folchoarder"
+
+#, fuzzy
+msgid "in descending order"
+msgstr "yn ôfnimmende folchoarder"
+
+#, fuzzy
+msgid "in ascending order"
+msgstr "yn oprinnende folchoarder"
+
+#, fuzzy
+msgid "Organizations"
+msgstr "Organisaasjes"
 
 #, fuzzy, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
 msgstr "De top {0} organisaasjes op Liberapay binne:"
 
-#, fuzzy, python-brace-format
-msgid "List of organizations on Liberapay, page {number}:"
-msgstr "List fan organisaasjes op Liberapay, side {number}:"
-
 #, fuzzy
 msgid "Create an organization account"
 msgstr "Meitsje in organisaasje akkount"
-
-#, fuzzy
-msgid "Top pledges"
-msgstr "Top beloften"
 
 #, fuzzy
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
@@ -5261,14 +5407,34 @@ msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Wy kinne jo helpe om beloften te finen as jo jo akkounts ferbine:"
 
 #, fuzzy, python-brace-format
+msgid "The individual receiving the most money through Liberapay is:"
+msgid_plural "The {n} individuals receiving the most money through Liberapay are:"
+msgstr[0] "It yndividu dat it measte jild ûntfangt fia Liberapay is:"
+msgstr[1] "De {n} persoanen dy't it measte jild krije fia Liberapay binne:"
+
+#, fuzzy, python-brace-format
+msgid "The organization receiving the most money through Liberapay is:"
+msgid_plural "The {n} organizations receiving the most money through Liberapay are:"
+msgstr[0] "De organisaasje dy't it measte jild krijt fia Liberapay is:"
+msgstr[1] "De {n} organisaasjes dy't it measte jild krije fia Liberapay binne:"
+
+#, fuzzy, python-brace-format
+msgid "The team receiving the most money through Liberapay is:"
+msgid_plural "The {n} teams receiving the most money through Liberapay are:"
+msgstr[0] "It team dat it measte jild krijt fia Liberapay is:"
+msgstr[1] "De {n} teams dy't it measte jild krije fia Liberapay binne:"
+
+#, fuzzy, python-brace-format
+msgid "The Liberapay account receiving the most money is:"
+msgid_plural "The {n} Liberapay accounts receiving the most money are:"
+msgstr[0] "It Liberapay-akkount dat it measte jild ûntfangt is:"
+msgstr[1] "De {n} Liberapay-akkounts dy't it measte jild ûntfange binne:"
+
+#, fuzzy, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
 msgstr[0] "It populêrste repository dat op it stuit keppele is oan in Liberapay-akkount is:"
 msgstr[1] ""
-
-#, fuzzy, python-brace-format
-msgid "List of repositories currently linked to a Liberapay account, page {number}:"
-msgstr "List fan repositories dy't op it stuit keppele binne oan in Liberapay-akkount, side {number}:"
 
 #, python-brace-format
 msgid "by {author_name}"
@@ -5276,6 +5442,14 @@ msgstr "troch {author_name}"
 
 msgid "Stars"
 msgstr "Stjerren"
+
+#, fuzzy
+msgid "stars count"
+msgstr "stjerren telle"
+
+#, fuzzy
+msgid "connection date"
+msgstr "ferbining datum"
 
 #, fuzzy
 msgid "Browse your favorite repositories"
@@ -5291,10 +5465,6 @@ msgid_plural "The top {n} teams on Liberapay are:"
 msgstr[0] "It topteam op Liberapay is:"
 msgstr[1] ""
 
-#, fuzzy, python-brace-format
-msgid "List of teams on Liberapay, page {number}:"
-msgstr "List fan teams op Liberapay, side {number}:"
-
 msgid "Create a team"
 msgstr "In team oanmeitsje"
 
@@ -5305,6 +5475,10 @@ msgstr "{0} mienskip ynstellingen"
 #, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Sydbalke tekst yn {language}"
+
+#, fuzzy
+msgid "This profile is marked as spam."
+msgstr "Dit profyl is markearre as spam."
 
 #, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
@@ -5739,6 +5913,10 @@ msgid "Transfer the account"
 msgstr "It akkount oersette"
 
 #, fuzzy, python-brace-format
+msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
+msgstr "It {provider}-akkount dat jo besykje te ferbinen is keppele oan in oar Liberapay-akkount markearre as frauduleus."
+
+#, fuzzy, python-brace-format
 msgid "Connecting a {platform} account"
 msgstr "In {platform} akkount ferbine"
 
@@ -5791,8 +5969,8 @@ msgid "{username} has a repository named {repo_name} in their {platform} account
 msgstr "{username} hat in repository neamd {repo_name} yn har {platform} akkount"
 
 #, fuzzy
-msgid "Found a matching user statement"
-msgid_plural "Found matching user statements"
+msgid "Found a matching user description"
+msgid_plural "Found matching user descriptions"
 msgstr[0] "In oerienkommende brûkersútspraak fûn"
 msgstr[1] ""
 

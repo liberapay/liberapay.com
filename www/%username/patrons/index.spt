@@ -4,12 +4,30 @@ from liberapay.utils import form_post_success, get_participant
 
 participant = get_participant(state, restrict=True, allow_member=True)
 if user != participant and user.recipient_settings.patron_visibilities < 2:
-    raise response.error(403, "You haven't opted-in to see who your patrons are.")
+    if not user.is_acting_as('admin'):
+        response.redirect(user.path('patrons/'))
 
+patron_visibilities = participant.recipient_settings.patron_visibilities
 if request.method == 'POST':
-    see_patrons = request.body.parse_boolean('see_patrons')
-    participant.update_recipient_settings(patron_visibilities=(7 if see_patrons else 1))
-    form_post_success(state)
+    if 'see_patrons' in request.body:
+        # Temporary support for legacy form
+        see_patrons = request.body.parse_boolean('see_patrons')
+        participant.update_recipient_settings(patron_visibilities=(7 if see_patrons else 1))
+        form_post_success(state)
+    new_patron_visibilities=(
+        (1 if request.body.get('allow_secret_donations') == 'on' else 0) |
+        (2 if request.body.get('allow_private_donations') == 'on' else 0) |
+        (4 if request.body.get('allow_public_donations') == 'on' else 0)
+    )
+    if new_patron_visibilities == 0:
+        raise response.error(400, _("You have to check at least one box."))
+    elif new_patron_visibilities == patron_visibilities:
+        raise response.redirect(participant.path('patrons/'))
+    if request.body.parse_boolean('confirmed', default=False):
+        participant.update_recipient_settings(patron_visibilities=new_patron_visibilities)
+        form_post_success(state)
+else:
+    new_patron_visibilities = patron_visibilities or 1
 
 title = participant.username
 subhead = _("Patrons")
@@ -41,37 +59,57 @@ subhead = _("Patrons")
     ) }}</p>
 % endif
 
-% set patron_visibilities = participant.recipient_settings.patron_visibilities
-<form action="" method="POST">
+<h3>{{ _("Visibility levels") }}</h3>
+<form action="" method="POST" id="patron_visibilities">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-    % if patron_visibilities == 0
-        <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
-            "Liberapay now supports non-anonymous donations, do you want to know "
-            "who your patrons are?"
-        ) }}</p>
-        <p class="buttons">
-            <button class="btn btn-primary" name="see_patrons" value="yes">{{ _(
-                "Enable non-anonymous donations"
-            ) }}</button>
-            &nbsp;&nbsp;
-            <button class="btn btn-default" name="see_patrons" value="no">{{ _("No") }}</button>
-        </p>
-    % elif patron_visibilities > 1
-        <p class="text-muted">{{ _(
-            "You have opted-in to see who your patrons are. If you change your mind, "
-            "then {link_start}click here to disable non-anonymous donations{link_end}.",
-            link_start='<button class="link" name="see_patrons" value="no">'|safe,
-            link_end='</button>'|safe
-        ) }}</p>
+    <p>{{ _(
+        "Liberapay supports three visibility levels for donations. Each level can "
+        "be turned on or off, but at least one of them must be enabled."
+    ) }}</p>
+    % if participant.payment_providers == 2 and new_patron_visibilities.__and__(1)
+    <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+        "Secret donations aren't possible with PayPal. You should either disable "
+        "secret donations or {link_start}add a Stripe account{link_end}.",
+        link_start=('<a href="%s">'|safe) % participant.path('payment/'),
+        link_end='</a>'|safe,
+    ) }}</p>
     % else
-        <p class="text-muted">{{ _(
-            "You've chosen not to see who your patrons are. If you change your mind, "
-            "then {link_start}click here to enable non-anonymous donations{link_end}.",
-            link_start='<button class="link" name="see_patrons" value="yes">'|safe,
-            link_end='</button>'|safe
-        ) }}</p>
+    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+        "Secret donations aren't possible when the payer uses PayPal."
+    ) }}</p>
     % endif
+    <div class="checkbox">
+        <label><input type="checkbox" name="allow_secret_donations"{% if new_patron_visibilities.__and__(1) %} checked{% endif %} /> {{ _("Allow secret donations") }}</label><br>
+        <label><input type="checkbox" name="allow_private_donations"{% if new_patron_visibilities.__and__(2) %} checked{% endif %} /> {{ _("Allow private donations") }}</label><br>
+        <label><input type="checkbox" name="allow_public_donations"{% if new_patron_visibilities.__and__(4) %} checked{% endif %} /> {{ _("Allow public donations") }}</label>
+    </div>
+    <button class="btn btn-primary">{{ _("Preview") }}</button>
 </form>
+<br>
+% from "templates/macros/your-tip.html" import tip_visibility_choice with context
+<p>{{ _("This is what your prospective donors currently see:") }}</p>
+<div class="preview max-width-750">{{
+    tip_visibility_choice(
+        participant.username,
+        patron_visibilities,
+        participant.payment_providers,
+        participant.get_tip_to(participant)
+    )
+}}</div>
+% if request.method == 'POST'
+    <br>
+    <p>{{ _("This is what your prospective donors will see with the new settings:") }}</p>
+    <div class="preview max-width-750">{{
+        tip_visibility_choice(
+            participant.username,
+            new_patron_visibilities,
+            participant.payment_providers,
+            participant.get_tip_to(participant)
+        )
+    }}</div>
+    <br>
+    <button class="btn btn-success btn-lg" form="patron_visibilities" name="confirmed" value="true">{{ _("Save") }}</button>
+% endif
 
 % if patron_visibilities > 1
 <h3>{{ _("Data export") }}</h3>

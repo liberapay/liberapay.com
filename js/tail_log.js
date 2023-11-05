@@ -4,6 +4,7 @@ Liberapay.stream_lines = function(url, data_cb, error_cb) {
     function fetch_lines(first_pos) {
         jQuery.ajax({
             url: url,
+            dataType: 'text',
             headers: {Range: 'x-lines='+first_pos+'-'},
         }).done(function(data, textStatus, xhr) {
             var file_is_partial = false;

@@ -31,6 +31,10 @@
     margin-top: 0 !important;
 }
 
+.m-0 {
+    margin: 0;
+}
+
 .mb-3 {
     margin-bottom: ($line-height-computed / 2);
 }
@@ -45,6 +49,14 @@
 
 .mt-4 {
     margin-bottom: $line-height-computed;
+}
+
+.row-gap-3 {
+    row-gap: 0.5em;
+}
+
+.column-gap-2 {
+    column-gap: 0.3em;
 }
 
 .pre-wrap {
@@ -83,6 +95,10 @@
 
 .max-width-500 {
     max-width: 500px;
+}
+
+.max-width-750 {
+    max-width: 750px;
 }
 
 @for $i from 0 through 100 {

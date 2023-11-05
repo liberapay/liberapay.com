@@ -9,7 +9,10 @@ from pando.utils import utcnow
 from ..exceptions import PaymentError
 from ..i18n.currencies import Money
 from ..website import website
-from .common import abort_payin, update_payin, update_payin_transfer
+from .common import (
+    abort_payin, update_payin, update_payin_transfer, record_payin_refund,
+    record_payin_transfer_reversal,
+)
 
 
 logger = logging.getLogger('paypal')
@@ -67,6 +70,12 @@ ORDER_STATUSES_MAP = {
     'CREATED': 'awaiting_payer_action',
     'SAVED': 'pending',
     'VOIDED': 'failed',
+}
+REFUND_STATUSES_MAP = {
+    'CANCELLED': 'failed',
+    'COMPLETED': 'succeeded',
+    'FAILED': 'failed',
+    'PENDING': 'pending',
 }
 
 locale_re = re.compile("^[a-z]{2}(?:-[A-Z][a-z]{3})?(?:-(?:[A-Z]{2}))?$")
@@ -196,12 +205,39 @@ def record_order_result(db, payin, order):
         # This payin has already been aborted, don't reset it.
         return payin
     error = order['status'] if status == 'failed' else None
-    payin = update_payin(db, payin.id, order['id'], status, error)
+    refunded_amount = sum(
+        sum(
+            Money(refund['amount']['value'], refund['amount']['currency_code'])
+            for refund in pu.get('payments', {}).get('refunds', ())
+        )
+        for pu in order['purchase_units']
+    ) or None
+    payin = update_payin(
+        db, payin.id, order['id'], status, error, refunded_amount=refunded_amount
+    )
 
     # Update the payin transfers
     for pu in order['purchase_units']:
+        pt_id = pu['reference_id']
+        reversed_amount = payin.amount.zero()
+        for refund in pu.get('payments', {}).get('refunds', ()):
+            refund_amount = refund['amount']
+            refund_amount = Money(refund_amount['value'], refund_amount['currency_code'])
+            reversed_amount += refund_amount
+            refund_description = refund['note_to_payer']
+            refund_status = REFUND_STATUSES_MAP[refund['status']]
+            refund_error = refund.get('status_details', {}).get('reason')
+            payin_refund = record_payin_refund(
+                db, payin.id, refund['id'], refund_amount, None, refund_description,
+                refund_status, refund_error, refund['create_time'], notify=False,
+
+            )
+            record_payin_transfer_reversal(
+                db, pt_id, refund['id'], payin_refund.id, refund['create_time']
+            )
+        if reversed_amount == 0:
+            reversed_amount = None
         for capture in pu.get('payments', {}).get('captures', ()):
-            pt_id = pu['reference_id']
             pt_remote_id = capture['id']
             pt_status = CAPTURE_STATUSES_MAP[capture['status']]
             pt_error = capture.get('status_details', {}).get('reason')
@@ -216,7 +252,7 @@ def record_order_result(db, payin, order):
             net_amount = Money(net_amount['value'], net_amount['currency_code'])
             update_payin_transfer(
                 db, pt_id, pt_remote_id, pt_status, pt_error,
-                amount=net_amount, fee=pt_fee
+                amount=net_amount, fee=pt_fee, reversed_amount=reversed_amount
             )
 
     return payin

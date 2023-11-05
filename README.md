@@ -164,7 +164,7 @@ If you're testing an API which uses idempotency keys (for example Stripe's API),
 
 #### Speeding up the tests
 
-PostgreSQL is designed to prevent data loss, so it does a lot of synchronous disk writes by default. To reduce the number of those blocking writes, our `recreate-schema.sh` script automatically switches the `synchronous_commit` option to `off` for the test database, however this doesn't completely disable syncing. If your PostgreSQL instance only contains data that you can afford to lose, then you can speed things up further by setting `fsync` to `off` in the server's configuration file (`postgresql.conf`).
+PostgreSQL is designed to prevent data loss, so it does a lot of synchronous disk writes by default. To reduce the number of those blocking writes, our `recreate-schema.sh` script automatically switches the `synchronous_commit` option to `off` for the test database, however this doesn't completely disable syncing. If your PostgreSQL instance only contains data that you can afford to lose, then you can speed things up further by setting `fsync` to `off`, `wal_level` to `minimal` and `max_wal_senders` to `0` in the server's configuration file (`postgresql.conf`).
 
 ### Tinkering with payments
 
@@ -181,12 +181,13 @@ All new dependencies need to be audited to check that they don't contain malicio
 We use [pip's Hash-Checking Mode](https://pip.pypa.io/en/stable/topics/secure-installs/#hash-checking-mode) to protect ourselves from dependency tampering. Thus, when adding or upgrading a dependency the new hashes need to be computed and put in the requirements file. For that you can use [hashin](https://github.com/peterbe/hashin):
 
     pip install hashin
-    hashin package==x.y -r requirements_base.txt -p 3.8 -p 3.9
-    # note: we have several requirements files, use the right one
+    hashin package==x.y -r requirements_base.txt
 
 If for some reason you need to rehash all requirements, run `make rehash-requirements`.
 
-To upgrade all the dependencies in a requirements file, run `hashin -u -r requirements_XXX.txt -p 3.8 -p 3.9`. You may have to run extra `hashin` commands if new subdependencies are missing.
+To upgrade all the dependencies in the requirements file, run `hashin -u -r requirements_base.txt`. You may have to run extra `hashin` commands if new subdependencies are missing.
+
+The testing dependencies in `requirements_tests.txt` don't follow these rules because they're not installed in production. It's up to you to isolate your development environment from the rest of your system in order to protect it from possible vulnerabilities in the testing dependencies.
 
 ### Processing personal data
 

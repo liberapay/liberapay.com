@@ -13,7 +13,6 @@ from aspen_jinja2_renderer import SimplateLoader
 import boto3
 from dns.exception import DNSException
 from dns.resolver import Cache, NXDOMAIN, Resolver
-from jinja2 import Environment
 from pando import Response
 from pando.utils import utcnow
 
@@ -23,7 +22,7 @@ from liberapay.exceptions import (
     EmailAddressError, EmailAddressIsBlacklisted, EmailDomainIsBlacklisted,
     InvalidEmailDomain, NonEmailDomain, EmailAddressRejected, TooManyAttempts,
 )
-from liberapay.renderers.jinja2 import JINJA_ENV_COMMON
+from liberapay.renderers.jinja2 import Environment
 from liberapay.utils import deserialize
 from liberapay.website import website
 
@@ -36,11 +35,8 @@ class EmailVerificationResult(Enum):
     SUCCEEDED = auto()
 
 
-jinja_env = Environment(**JINJA_ENV_COMMON)
-jinja_env_html = Environment(**dict(
-    JINJA_ENV_COMMON,
-    autoescape=True,
-))
+jinja_env = Environment()
+jinja_env_html = Environment(autoescape=True)
 
 def compile_email_spt(fpath):
     """Compile an email simplate.
@@ -56,11 +52,13 @@ def compile_email_spt(fpath):
     with open(fpath, 'rb') as f:
         pages = list(split_and_escape(f.read().decode('utf8')))
     for i, page in enumerate(pages, 1):
+        if i == 1:
+            assert not page.content
+            continue
         tmpl = '\n' * page.offset + page.content
         content_type, renderer = parse_specline(page.header)
-        key = 'subject' if i == 1 else content_type
         env = jinja_env_html if content_type == 'text/html' else jinja_env
-        r[key] = SimplateLoader(fpath, tmpl).load(env, fpath)
+        r[content_type] = SimplateLoader(fpath, tmpl).load(env, fpath)
     return r
 
 
@@ -190,7 +188,7 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
             website.tell_sentry(e)
 
 
-def test_email_address(email: NormalizedEmailAddress):
+def test_email_address(email: NormalizedEmailAddress, timeout: float = 30.0):
     """Attempt to determine if the given email address can be reached.
 
     Raises:
@@ -211,7 +209,7 @@ def test_email_address(email: NormalizedEmailAddress):
             n_ip_addresses += 1
             try:
                 if website.app_conf.check_email_servers:
-                    test_email_server(str(ip_addr), email)
+                    test_email_server(str(ip_addr), email, timeout * 0.7)
                 success = True
                 break
             except EmailAddressRejected:
@@ -225,7 +223,8 @@ def test_email_address(email: NormalizedEmailAddress):
             if n_attempts >= 3:
                 break
             time_elapsed = time.monotonic() - start_time
-            if time_elapsed >= website.app_conf.socket_timeout:
+            timeout = website.app_conf.socket_timeout - time_elapsed
+            if timeout <= 3:
                 break
         if not success:
             if n_ip_addresses == 0:
@@ -293,13 +292,20 @@ def get_public_ip_addresses(domain):
 
     Returns a list of `IPv4Address` and `IPv6Address` objects.
 
-    Raises `DNSException` if the `A` or `AAAA` query fails.
+    Raises `DNSException` if both the `A` and `AAAA` queries fail.
 
     """
-    records = (
-        list(DNS.query(domain, 'A', raise_on_no_answer=False).rrset or ()) +
-        list(DNS.query(domain, 'AAAA', raise_on_no_answer=False).rrset or ())
-    )
+    records = []
+    exception = None
+    try:
+        records.extend(DNS.query(domain, 'A', raise_on_no_answer=False).rrset or ())
+    except DNSException as e:
+        exception = e
+    try:
+        records.extend(DNS.query(domain, 'AAAA', raise_on_no_answer=False).rrset or ())
+    except DNSException:
+        if exception:
+            raise exception from None
     # Return the list of valid global IP addresses found
     addresses = []
     for rec in records:
@@ -315,12 +321,13 @@ def get_public_ip_addresses(domain):
 enhanced_code_re = re.compile(r"(?<![0-9])[245]\.[0-9]{1,3}\.[0-9]{1,3}(?![0-9])")
 
 
-def test_email_server(ip_address: str, email=None) -> None:
+def test_email_server(ip_address: str, email=None, timeout=None) -> None:
     """Attempt to connect to and interact with an SMTP server.
 
     Args:
         ip_address (str): the IP address of the SMTP server
         email (NormalizedEmailAddress): an email address we want to send a message to
+        timeout (float | None): number of seconds to wait for a response from the SMTP server
 
     Raises:
         EmailAddressRejected: if `email` is provided and the server rejects it
@@ -332,7 +339,7 @@ def test_email_server(ip_address: str, email=None) -> None:
                                 both correctly and quickly enough
 
     """
-    smtp = SMTP(None, timeout=10.0, local_hostname=website.env.hostname or None)
+    smtp = SMTP(None, timeout=timeout, local_hostname=website.env.hostname or None)
     if website.env.logging_level == 'debug':
         smtp.set_debuglevel(2)
     try:
@@ -358,7 +365,8 @@ def test_email_server(ip_address: str, email=None) -> None:
         status, msg = smtp.rcpt(email)
         if status >= 400:
             # SMTP status codes: https://tools.ietf.org/html/rfc5321#section-4.2
-            # Enhanced mail status codes: https://tools.ietf.org/html/rfc3463
+            # Enhanced mail status codes:
+            # https://www.iana.org/assignments/smtp-enhanced-status-codes/
             enhanced_code, msg = parse_SMTP_reply(msg)
             if enhanced_code:
                 cls, subject, detail = enhanced_code.split('.')
@@ -366,7 +374,13 @@ def test_email_server(ip_address: str, email=None) -> None:
                     # Address errors
                     subject == '1' and detail in '12346' or
                     # Mailbox errors
-                    subject == '2' and detail in '124'
+                    subject == '2' and detail in '124' or
+                    # gamil.com SMTP server
+                    msg.startswith("sorry, no mailbox here by that name") or
+                    # Microsoft's SMTP server
+                    msg.startswith("Requested action not taken: mailbox unavailable") or
+                    # Tutanota's SMTP server
+                    msg.endswith("Recipient address rejected: Recipient not found")
                 )
                 if recipient_rejected:
                     raise EmailAddressRejected(email, msg, ip_address)

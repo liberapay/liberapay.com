@@ -14,10 +14,11 @@ from markupsafe import Markup
 import opencc
 from pando.utils import utcnow
 
-from ..constants import CURRENCIES, D_MAX, to_precision
 from ..exceptions import AmbiguousNumber, InvalidNumber
 from ..website import website
-from .currencies import Money, MoneyBasket
+from .currencies import (
+    CURRENCIES, CURRENCY_REPLACEMENTS, D_MAX, Money, MoneyBasket, to_precision,
+)
 
 
 MONEY_AMOUNT_FORMAT = parse_pattern('#,##0.00')
@@ -435,6 +436,9 @@ def make_currencies_map():
             if (start_date is None or start_date <= today) and (end_date is None or end_date >= today):
                 assert country not in r
                 r[country] = currency
+    for currency, (_, new_currency, _) in CURRENCY_REPLACEMENTS.items():
+        if currency[:2] not in r:
+            r[currency[:2]] = new_currency
     return r
 
 CURRENCIES_MAP = make_currencies_map()
@@ -641,7 +645,7 @@ def set_up_i18n(state, request=None, exception=None):
         langs.extend(parse_accept_lang(
             request.headers.get(b"Accept-Language", b"").decode('ascii', 'replace')
         ))
-        locale = match_lang(langs, request.country)
+        locale = match_lang(langs, request.source_country)
     add_helpers_to_context(state, locale)
 
 
@@ -665,7 +669,7 @@ class DefaultString(str):
 DEFAULT_CURRENCY = DefaultString('EUR')
 
 
-def add_currency_to_state(request, user):
+def add_currency_to_state(request, user, locale):
     qs_currency = request.qs.get('currency')
     if qs_currency in CURRENCIES:
         return {'currency': qs_currency}
@@ -675,4 +679,8 @@ def add_currency_to_state(request, user):
     if user:
         return {'currency': user.main_currency}
     else:
-        return {'currency': CURRENCIES_MAP.get(request.country) or DEFAULT_CURRENCY}
+        return {'currency': (
+            CURRENCIES_MAP.get(locale.territory) or
+            CURRENCIES_MAP.get(request.source_country) or
+            DEFAULT_CURRENCY
+        )}

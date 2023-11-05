@@ -1,6 +1,6 @@
 import stripe
 
-from liberapay.utils import get_participant, group_by
+from liberapay.utils import form_post_success, get_participant, group_by
 
 [---]
 
@@ -9,6 +9,7 @@ participant = get_participant(state, restrict=True)
 if request.method == 'POST':
     account_pk = request.body.get_int('account_pk')
     action = request.body.get_choice('action', ('disconnect', 'refresh'), default='disconnect')
+    msg = ''
     if action == 'disconnect':
         account = website.db.one("""
             UPDATE payment_accounts
@@ -21,8 +22,13 @@ if request.method == 'POST':
             try:
                 stripe.oauth.OAuth.deauthorize(stripe_user_id=account.id)
             except stripe.oauth_error.InvalidClientError as e:
-                if "This application is not connected to stripe account" not in str(e):
+                expected = (
+                    "No such user: " in str(e) or
+                    "This application is not connected to stripe account" in str(e)
+                )
+                if not expected:
                     website.warning("unexpected error message: " + str(e))
+        msg = _("The payment account has been successfully disconnected.")
     elif action == 'refresh':
         account = website.db.one("""
             SELECT *
@@ -33,25 +39,36 @@ if request.method == 'POST':
         if not account:
             raise response.invalid_input(account_pk, 'account_pk', 'body')
         if account.provider == 'stripe':
-            stripe_account = stripe.Account.retrieve(account.id)
-            website.db.run("""
-                UPDATE payment_accounts
-                   SET country = %(country)s
-                     , default_currency = %(default_currency)s
-                     , charges_enabled = %(charges_enabled)s
-                     , display_name = %(display_name)s
-                 WHERE provider = 'stripe'
-                   AND id = %(account_id)s
-            """, dict(
-                country=stripe_account.country,
-                default_currency=stripe_account.default_currency.upper(),
-                charges_enabled=stripe_account.charges_enabled,
-                display_name=stripe_account.settings.dashboard.display_name,
-                account_id=stripe_account.id,
-            ))
+            try:
+                stripe_account = stripe.Account.retrieve(account.id)
+            except stripe.error.PermissionError as e:
+                website.db.run("""
+                    UPDATE payment_accounts
+                       SET is_current = null
+                         , authorized = false
+                     WHERE id = %s
+                """, (account.id,))
+                msg = _("This payment account is no longer accessible. It is now disconnected.")
+            else:
+                website.db.run("""
+                    UPDATE payment_accounts
+                       SET country = %(country)s
+                         , default_currency = %(default_currency)s
+                         , charges_enabled = %(charges_enabled)s
+                         , display_name = %(display_name)s
+                     WHERE provider = 'stripe'
+                       AND id = %(account_id)s
+                """, dict(
+                    country=stripe_account.country,
+                    default_currency=stripe_account.default_currency.upper(),
+                    charges_enabled=stripe_account.charges_enabled,
+                    display_name=stripe_account.settings.dashboard.display_name,
+                    account_id=stripe_account.id,
+                ))
+                msg = _("The data has been successfully refreshed.")
         else:
             raise response.error(400, f"refresh isn't implemented for provider {account.provider}")
-    response.redirect(request.path.raw)
+    form_post_success(state, msg=msg, redirect_url=request.path.raw)
 
 accounts = website.db.all("""
     SELECT *
@@ -65,11 +82,18 @@ paypal_accounts = accounts_by_provider.get('paypal')
 stripe_accounts = accounts_by_provider.get('stripe')
 
 countries = set(a.country for a in accounts)
-country = list(countries)[0] if len(countries) == 1 else request.country
+country = list(countries)[0] if len(countries) == 1 else participant.guessed_country
 
 has_paypal_but_not_stripe = (
     paypal_accounts and not stripe_accounts and
     country in constants.PAYOUT_COUNTRIES['stripe']
+)
+
+has_statement = len(participant.get_statement_langs()) > 0
+allow_connect = (
+    participant.email is not None and
+    participant.username[0] != '~' and
+    has_statement
 )
 
 if participant.payment_providers > 0:
@@ -85,11 +109,25 @@ subhead = _("Payment Processors")
 
 % block content
 
-    % if participant.username[0] == '~'
+    % if not participant.email
         <p class="alert alert-warning">{{ _(
-            "You have to {link_open}fill your profile{link_close} before you can "
+            "You have to {link_open}confirm your email address{link_close} before "
+            "you can start to receive donations."
+            , link_open=('<a href="%s">'|safe) % participant.path('emails/')
+            , link_close='</a>'|safe
+        ) }}</p>
+    % elif participant.username[0] == '~'
+        <p class="alert alert-warning">{{ _(
+            "You have to {link_open}set your username{link_close} before you can "
             "start to receive donations."
             , link_open=('<a href="%s">'|safe) % participant.path('edit/username')
+            , link_close='</a>'|safe
+        ) }}</p>
+    % elif not has_statement
+        <p class="alert alert-warning">{{ _(
+            "You have to {link_open}add a profile description{link_close} before "
+            "you can start to receive donations."
+            , link_open=('<a href="%s">'|safe) % participant.path('edit/statement')
             , link_close='</a>'|safe
         ) }}</p>
     % endif
@@ -182,11 +220,11 @@ subhead = _("Payment Processors")
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
         % if stripe_accounts
-        <button class="btn btn-default">{{
+        <button class="btn btn-default"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect another {platform_name} account", platform_name='Stripe')
         }}</button>
         % else
-        <button class="btn btn-primary">{{
+        <button class="btn btn-primary"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect {platform_name} account", platform_name='Stripe')
         }}</button>
         % endif
@@ -249,27 +287,15 @@ subhead = _("Payment Processors")
         % endif
     % endif
 
-    % if paypal_accounts
-    <a class="btn btn-default" href="/payment-providers/paypal/add">{{
-        _("Connect another {platform_name} account", platform_name='PayPal')
-    }}</a>
-    % else
-    <a class="btn btn-primary" href="/payment-providers/paypal/add">{{
-        _("Connect {platform_name} account", platform_name='PayPal')
-    }}</a>
-   % endif
-
-    {#<form action="/payment-providers/paypal/connect" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
+    <form action="/payment-providers/paypal/add" method="GET">
         % if paypal_accounts
-        <button class="btn btn-default">{{
+        <button class="btn btn-default"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect another {platform_name} account", platform_name='PayPal')
         }}</button>
         % else
-        <button class="btn btn-primary">{{
+        <button class="btn btn-primary"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect {platform_name} account", platform_name='PayPal')
         }}</button>
         % endif
-    </form>#}
+    </form>
 % endblock

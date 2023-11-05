@@ -33,7 +33,7 @@ class Tests(Harness):
         assert r.text.count('alice') == 0
         assert r.code == 200
         assert 'spammy' not in r.text
-        assert "This profile is marked as spam." in r.text
+        assert "This profile is marked as spam or fraud." in r.text
         r = self.client.GET('/explore/communities')
         assert r.code == 200
         assert r.text.count('C++') == 0

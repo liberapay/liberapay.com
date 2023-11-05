@@ -1,4 +1,5 @@
 from decimal import Decimal
+from functools import partial
 import json
 from operator import itemgetter
 import os
@@ -23,9 +24,13 @@ from state_chain import StateChain
 
 from liberapay import elsewhere
 import liberapay.billing.payday
+from liberapay.elsewhere._base import (
+    BadUserId, ElsewhereError, HTTPError, RateLimitError, UserNotFound,
+)
 from liberapay.exceptions import NeedDatabase
 from liberapay.i18n.base import (
-    ACCEPTED_LANGUAGES, COUNTRIES, LOCALES, LOCALES_DEFAULT_MAP, Locale, make_sorted_dict,
+    ACCEPTED_LANGUAGES, COUNTRIES, LOCALE_EN, LOCALES, LOCALES_DEFAULT_MAP, Locale,
+    make_sorted_dict, to_age,
 )
 from liberapay.i18n.currencies import Money, MoneyBasket, get_currency_exchange_rates
 from liberapay.i18n.plural_rules import get_function_from_rule
@@ -39,10 +44,11 @@ from liberapay.models.payin import Payin
 from liberapay.models.repository import Repository
 from liberapay.models.tip import Tip
 from liberapay.security.crypto import Cryptograph
+from liberapay.security.csp import CSP
 from liberapay.utils import find_files, markdown, resolve
 from liberapay.utils.emails import compile_email_spt
 from liberapay.utils.http_caching import asset_etag
-from liberapay.utils.types import Object
+from liberapay.utils.types import LocalizedString, Object
 from liberapay.version import get_version
 from liberapay.website import Website
 
@@ -60,34 +66,6 @@ def canonical(env):
         canonical_url = ''
     asset_url = canonical_url+'/assets/'
     return locals()
-
-
-class CSP(bytes):
-
-    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/default-src
-    based_on_default_src = set(b'''
-        child-src connect-src font-src frame-src img-src manifest-src
-        media-src object-src script-src style-src worker-src
-    '''.split())
-
-    def __new__(cls, x):
-        if isinstance(x, dict):
-            self = bytes.__new__(cls, b';'.join(b' '.join(t).rstrip() for t in x.items()) + b';')
-            self.directives = dict(x)
-        else:
-            self = bytes.__new__(cls, x)
-            self.directives = dict(
-                (d.split(b' ', 1) + [b''])[:2] for d in self.split(b';') if d
-            )
-        return self
-
-    def allow(self, directive, value):
-        d = dict(self.directives)
-        old_value = d.get(directive)
-        if old_value is None and directive in self.based_on_default_src:
-            old_value = d.get(b'default-src')
-        d[directive] = b'%s %s' % (old_value, value) if old_value else value
-        return CSP(d)
 
 
 def csp(canonical_host, canonical_scheme, env):
@@ -191,6 +169,20 @@ def database(env, tell_sentry):
     try:
         oid = db.one("SELECT 'currency_basket'::regtype::oid")
         register_type(new_type((oid,), 'currency_basket', cast_currency_basket))
+    except (psycopg2.ProgrammingError, NeedDatabase):
+        pass
+
+    def cast_localized_string(v, cursor):
+        if v in (None, '(,)'):
+            return None
+        else:
+            text, lang = v[1:-1].rsplit(',', 1)
+            if text.startswith('"') and text.endswith('"'):
+                text = text[1:-1].replace('""', '"')
+            return LocalizedString(text, lang)
+    try:
+        oid = db.one("SELECT 'localized_string'::regtype::oid")
+        register_type(new_type((oid,), 'localized_string', cast_localized_string))
     except (psycopg2.ProgrammingError, NeedDatabase):
         pass
 
@@ -379,7 +371,7 @@ def make_sentry_teller(env, version):
             env.sentry_dsn,
             environment=env.instance_type,
             release=version,
-            debug=False,  # Pass `True` when investigating an integration issue
+            debug=env.sentry_debug,
         )
         sentry = True
     else:
@@ -389,9 +381,10 @@ def make_sentry_teller(env, version):
     def tell_sentry(exception, send_state=True, allow_reraise=True, level=None):
         r = {'sentry_ident': None}
 
+        state = Website.state.get(None) or {}
         if isinstance(exception, pando.Response):
-            if exception.code < 500:
-                # Only log server errors
+            if state and exception.code < 500:
+                # Only log server errors when processing a user request.
                 return r
             if not level and exception.code in (502, 504):
                 # This kind of error is usually transient and not our fault.
@@ -401,7 +394,6 @@ def make_sentry_teller(env, version):
             # Don't flood Sentry when DB is down
             return r
 
-        state = Website.state.get(None) or {}
         if isinstance(exception, PoolError):
             # If this happens, then the `DATABASE_MAXCONN` value is too low.
             state['exception'] = NeedDatabase()
@@ -439,6 +431,44 @@ def make_sentry_teller(env, version):
                 r['response'] = response
                 return r
 
+        if isinstance(exception, ElsewhereError):
+            state.setdefault('escape', lambda a: a)
+            _ = state.get('_') or partial(LOCALE_EN._, state)
+            response = state.get('response') or pando.Response()
+            r['exception'] = None
+            if isinstance(exception, BadUserId):
+                r['response'] = response.error(400, _(
+                    "'{0}' doesn't seem to be a valid user id on {platform}.",
+                    exception.uid, platform=exception.platform.display_name
+                ))
+                return r
+            elif isinstance(exception, HTTPError):
+                r['response'] = response.error(exception.status_code, _(
+                    "{0} returned an error, please try again later.",
+                    exception.domain or exception.platform.display_name
+                ))
+                return r
+            elif isinstance(exception, RateLimitError):
+                msg = _(
+                    "You've consumed your quota of requests, you can try again {in_N_minutes}.",
+                    in_N_minutes=to_age(exception.reset)
+                ) if exception.remaining == 0 and exception.reset else _(
+                    "You're making requests too fast, please try again later."
+                )
+                r['response'] = response.error(429, msg)
+                return r
+            elif isinstance(exception, UserNotFound):
+                r['response'] = response.error(404, _(
+                    "There doesn't seem to be a user named {0} on {1}.",
+                    exception.uid, exception.platform.display_name
+                ))
+                return r
+            else:
+                r['response'] = response.error(502, _(
+                    "{0} returned an error, please try again later.",
+                    exception.domain or exception.platform.display_name
+                ))
+
         if not sentry:
             # No Sentry, log to stderr instead
             traceback.print_exc()
@@ -451,7 +481,7 @@ def make_sentry_teller(env, version):
         if not level:
             level = 'warning' if isinstance(exception, Warning) else 'error'
         scope_dict = {'level': level}
-        if state:
+        if state and send_state:
             try:
                 # https://docs.sentry.io/platforms/python/enriching-events/identify-user/
                 user_data = scope_dict['user'] = {}
@@ -565,6 +595,7 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
               JOIN participants p ON p.id = e.participant
              WHERE p.status = 'active'
                AND p.hide_from_lists = 0
+               AND e.missing_since IS NULL
           GROUP BY e.platform
                ) a
       ORDER BY c DESC, platform ASC

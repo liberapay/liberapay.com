@@ -21,6 +21,7 @@ from liberapay.exceptions import (
 )
 from liberapay.models.community import Community
 from liberapay.i18n.base import LOCALE_EN, add_helpers_to_context
+from liberapay.i18n.currencies import CURRENCIES, CURRENCY_REPLACEMENTS
 from liberapay.website import website
 from liberapay.utils import cbor
 
@@ -88,16 +89,16 @@ def get_participant(
         if restrict:
             user.require_write_permission()
 
-    is_spam = participant.marked_as == 'spam'
-    if (restrict or is_spam) and participant != user:
+    is_blocked = participant.is_suspended
+    if (restrict or is_blocked) and participant != user:
         if allow_member and participant.kind == 'group' and user.member_of(participant):
             pass
         elif user.is_acting_as('admin'):
             log_admin_request(user, participant, request)
         elif restrict:
             raise response.error(403, _("You are not authorized to access this page."))
-        elif is_spam:
-            raise response.render('simplates/spam-profile.spt', state)
+        elif is_blocked:
+            raise response.render('simplates/blocked-profile.spt', state)
 
     status = participant.status
     if status == 'closed':
@@ -133,8 +134,8 @@ def get_community(state, restrict=False):
     else:
         user.require_write_permission()
 
-    is_spam = c.participant.marked_as == 'spam'
-    if (restrict or is_spam):
+    is_blocked = c.participant.is_suspended
+    if (restrict or is_blocked):
         if user.id == c.creator:
             pass
         elif user.is_acting_as('admin'):
@@ -145,8 +146,8 @@ def get_community(state, restrict=False):
             else:
                 _ = state['_']
                 raise response.error(403, _("You are not authorized to access this page."))
-        elif is_spam:
-            raise response.render('simplates/spam-profile.spt', state)
+        elif is_blocked:
+            raise response.render('simplates/blocked-profile.spt', state)
 
     return c
 
@@ -473,6 +474,25 @@ def get_int(d, k, default=NO_DEFAULT, minimum=0, maximum=2**64-1):
     return r
 
 
+def get_currency(d, k, default=NO_DEFAULT, phased_out='allow'):
+    try:
+        currency = d[k]
+    except (KeyError, Response):
+        if default is NO_DEFAULT:
+            raise
+        return default
+    if currency not in CURRENCIES:
+        replacement = CURRENCY_REPLACEMENTS.get(currency)
+        if replacement and phased_out in ('allow', 'replace'):
+            if phased_out == 'replace':
+                currency = replacement[1]
+        else:
+            raise Response().error(
+                400, "`%s` value %r isn't a supported currency code" % (k, currency)
+            )
+    return currency
+
+
 def get_money_amount(d, k, currency, default=NO_DEFAULT):
     try:
         r = d[k]
@@ -519,8 +539,8 @@ def word(mapping, k, pattern=r'^\w+$', unicode=False):
     return r
 
 
-FALSEISH = {'0', 'f', 'false', 'n', 'no'}
-TRUEISH = {'1', 't', 'true', 'y', 'yes'}
+FALSEISH = {'0', 'f', 'false', 'n', 'no', 'off'}
+TRUEISH = {'1', 't', 'true', 'y', 'yes', 'on'}
 NULLISH = {'', 'null', 'none'}
 
 
@@ -620,19 +640,26 @@ def check_address_v2(addr):
     return True
 
 
-def render_postal_address(addr, single_line=False):
+def render_postal_address(addr, single_line=False, format='local'):
     if not check_address_v2(addr):
         return
-    # FIXME The rendering below is simplistic, we should implement
-    #       https://github.com/liberapay/liberapay.com/issues/1056
-    elements = [addr['local_address'], addr['city'], addr['postal_code']]
-    if addr.get('region'):
-        elements.append(addr['region'])
-    elements.append(LOCALE_EN.countries[addr['country']])
-    if single_line:
-        return ', '.join(elements)
+    if format == 'local':
+        # FIXME The rendering below is simplistic, we should implement
+        #       https://github.com/liberapay/liberapay.com/issues/1056
+        elements = [addr['local_address'], addr['city'], addr['postal_code']]
+        if addr.get('region'):
+            elements.append(addr['region'])
+        elements.append(LOCALE_EN.countries[addr['country']])
+        sep = ', ' if single_line else '\n'
+    elif format == 'downward':
+        elements = [LOCALE_EN.countries[addr['country']]]
+        if addr.get('region'):
+            elements.append(addr['region'])
+        elements += [addr['city'], addr['postal_code'], addr['local_address']]
+        sep = ' / ' if single_line else '\n'
     else:
-        return '\n'.join(elements)
+        raise ValueError(f"unknown `format` value {format!r}")
+    return sep.join(elements)
 
 
 def mkdir_p(path):

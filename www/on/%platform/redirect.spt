@@ -35,28 +35,31 @@ p = (Participant.from_id(parse_int(p_id)) if p_id else None) or user
 
 domain = ''
 if user_id:
-    if platform.single_domain:
-        if body.get('user_id_type') == 'user_name':
-            user_id = '>' + user_id.lstrip('@')
+    if '/' in user_id:
+        split = urlsplit(user_id.strip())
+        user_id, domain = split.path.strip('/').lstrip('@'), split.netloc
+        # ↑ This use of `.netloc` instead of `.hostname` is intentional. It
+        #   makes the domain name check below reject URLs which contain a
+        #   username, password or port number in the netloc.
+        del split
     else:
-        if '/' in user_id:
-            split = urlsplit(user_id)
-            user_id, domain = split.path.lstrip('@').rstrip('/'), split.netloc
-            # ↑ This use of `.netloc` instead of `.hostname` is intentional. It
-            #   makes the domain name check below reject URLs which contain a
-            #   username, password or port number in the netloc.
+        user_id = user_id.strip().lstrip('@')
+        split = user_id.rsplit('@', 1)
+        if len(split) == 2:
+            user_id, domain = split[0], split[1]
         else:
-            user_id = user_id.strip().lstrip('@')
-            split = user_id.rsplit('@', 1)
-            if len(split) == 2:
-                user_id, domain = split[0], split[1]
-            else:
-                user_id = domain = None
+            domain = None
+        del split
+    if domain and not constants.DOMAIN_RE.match(domain):
+        raise response.error(400, _("{0} is not a valid domain name.", repr(domain)))
+    if platform.single_domain:
+        domain = ''
+        if body.get('user_id_type') == 'user_name':
+            user_id = '>' + user_id
+    else:
         if not (user_id and domain):
             raise response.error(400, _("The address you provided is not valid. Expected format: username@domain"))
         user_id, domain = '>' + user_id, domain.lower()
-        if not constants.DOMAIN_RE.match(domain):
-            raise response.error(400, _("{0} is not a valid domain name.", repr(domain)))
 
 team = not p.ANON and p.kind != 'individual' and hasattr(platform, 'is_team_member')
 if user_id or (not team and platform.single_domain) or action != 'connect':
