@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"PO-Revision-Date: 2023-11-06 01:33+0000\n"
+"Last-Translator: 0que <0que@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.2-dev\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -1628,7 +1630,6 @@ msgstr "Логотипы"
 msgid "Overview"
 msgstr "Обзор"
 
-#, fuzzy
 msgid "Recipients"
 msgstr "Получатели"
 
@@ -3331,9 +3332,9 @@ msgstr "Вы должны {link_open}подтвердить свой адрес 
 msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
 msgstr "Вам необходимо {link_open}задать имя пользователя{link_close} прежде, чем вы сможете начать получать пожертвования."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr "Вы должны {link_open}добавить описание профиля{link_close}, прежде чем вы сможете начать получать пожертвования."
+msgstr "Чтобы начать получать пожертвования, вы должны {link_open}добавить описание профиля{link_close}."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Для получения пожертвований необходимо подключить хотя бы одну учетную запись от поддерживаемого обработчика платежей. Эта страница позволяет вам сделать это."
@@ -3591,7 +3592,7 @@ msgstr "по умолчанию"
 msgid "This instrument is used by default for payments in {currency}."
 msgstr "Этот инструмент используется по умолчанию для платежей в {currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "default for {currency}"
 msgstr "по умолчанию для {currency}"
 
@@ -3632,7 +3633,7 @@ msgstr "Установить по умолчанию"
 msgid "Use this instrument by default for payments in {currency}."
 msgstr "Используйте этот инструмент по умолчанию для платежей в {currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set as default for {currency}"
 msgstr "Установить по умолчанию для {currency}"
 
@@ -4124,7 +4125,7 @@ msgstr[2] "Доноры могут выбрать до {n} валют, в зав
 
 #, fuzzy, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "Пожертвования могут быть получены только на территориях, где имеется по крайней мере один поддерживаемый платежный процессор. В настоящее время поддерживаются платежные процессоры {Stripe} и {PayPal}. Некоторые функции доступны только через Stripe, поэтому Liberapay полностью доступен для создателей на территориях, поддерживаемых Stripe, и частично доступен на территориях, только поддерживаемых PayPal."
+msgstr "Пожертвования могут быть получены только на территориях, где имеется по крайней мере одна поддерживаемая платёжная система. В настоящее время поддерживаются платежные системы {Stripe} и {PayPal}. Поскольку некоторые функции доступны только через Stripe, Liberapay доступен полноценно только для создателей на территориях, поддерживаемых Stripe, и частично доступен на территориях, только поддерживаемых PayPal."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
@@ -4136,8 +4137,8 @@ msgstr[2] "Liberapay полностью доступна для создател
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Liberapay частично доступен для создателей на {n} территории:"
+msgstr[1] "Liberapay частично доступен для создателей на {n} территориях:"
 msgstr[2] "Liberapay частично доступен для создателей на {n} территориях:"
 
 msgid "What is Liberapay?"
@@ -4250,7 +4251,7 @@ msgstr "Stripe позволяет автоматически обновлять 
 
 #, fuzzy
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr "Пожертвования через Stripe могут быть секретными, тогда как PayPal всегда позволяет жертвователям и получателям видеть имена и адреса электронной почты друг друга."
+msgstr "Пожертвования через Stripe могут быть секретными, тогда как PayPal всегда сообщает спонсорам и получателям имена и адреса эл. почты друг друга."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe в некоторых случаях позволяет делать пожертвования сразу нескольким создателям, тогда как PayPal всегда требует отдельных платежей."
@@ -4606,15 +4607,14 @@ msgstr "На этой странице перечислены пользоват
 
 #, fuzzy
 msgid "Despite our efforts, some of the listed profiles may be spam or fraud."
-msgstr "Несмотря на наши усилия, некоторые из перечисленных профилей могут оказаться спамом или мошенничеством."
+msgstr "Несмотря на наши усилия, некоторые из этих профилей могут быть спамом или мошенниками."
 
 #, fuzzy
 msgid "Profiles only start appearing in the list 72 hours after they're created."
-msgstr "Профили начинают появляться в списке только через 72 часа после их создания."
+msgstr "Профили начинают отображаться в этом списке только через 72 часа после создания."
 
-#, fuzzy
 msgid "People and projects who receive donations through Liberapay."
-msgstr "Люди и проекты, получающие пожертвования через Liberapay."
+msgstr "Авторы и проекты, получающие пожертвования через Liberapay."
 
 #, fuzzy
 msgid "Explore Recipients"
@@ -4656,15 +4656,12 @@ msgstr "Частные лица"
 msgid "The top {0} individuals on Liberapay are:"
 msgstr "Топ {0} частных лиц на Liberapay:"
 
-#, fuzzy
 msgid "Sort by"
-msgstr "Сортировать по"
+msgstr "Упорядочить по"
 
-#, fuzzy
 msgid "income"
 msgstr "доход"
 
-#, fuzzy
 msgid "creation date"
 msgstr "дата создания"
 
@@ -4672,13 +4669,11 @@ msgstr "дата создания"
 msgid "sort order"
 msgstr "порядок сортировки"
 
-#, fuzzy
 msgid "in descending order"
-msgstr "в порядке убывания"
+msgstr "по убыванию"
 
-#, fuzzy
 msgid "in ascending order"
-msgstr "в порядке возрастания"
+msgstr "по возрастанию"
 
 msgid "Organizations"
 msgstr "Организации"
@@ -4708,30 +4703,30 @@ msgstr "Мы можем помочь найти тех, кого вы хотит
 #, fuzzy, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
 msgid_plural "The {n} individuals receiving the most money through Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "На сайте {n} наибольшее количество денег через Liberapay получают следующие лица:"
+msgstr[0] "Через Liberapay наибольшее количество денег получает {n} пользователь:"
+msgstr[1] "Через Liberapay наибольшее количество денег получают {n} пользователя:"
+msgstr[2] "Через Liberapay наибольшее количество денег получают {n} пользователей:"
 
 #, fuzzy, python-brace-format
 msgid "The organization receiving the most money through Liberapay is:"
 msgid_plural "The {n} organizations receiving the most money through Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "На сайте {n} представлены следующие организации, получившие наибольшее количество средств через Liberapay:"
+msgstr[0] "Через Liberapay наибольшее количество денег получает {n} организация:"
+msgstr[1] "Через Liberapay наибольшее количество денег получают {n} организации:"
+msgstr[2] "Через Liberapay наибольшее количество денег получают {n} организаций:"
 
 #, fuzzy, python-brace-format
 msgid "The team receiving the most money through Liberapay is:"
 msgid_plural "The {n} teams receiving the most money through Liberapay are:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "На сайте {n} представлены следующие команды, получившие наибольшее количество денег через Liberapay:"
+msgstr[0] "Через Liberapay наибольшее количество денег получает {n} команда:"
+msgstr[1] "Через Liberapay наибольшее количество денег получают {n} команды:"
+msgstr[2] "Через Liberapay наибольшее количество денег получают {n} команд:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay account receiving the most money is:"
 msgid_plural "The {n} Liberapay accounts receiving the most money are:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Больше всего средств поступило на счета {n} Liberapay:"
+msgstr[0] "Наибольшее количество денег через Liberapay получает {n} счёт:"
+msgstr[1] "Наибольшее количество денег через Liberapay получают {n} счёта:"
+msgstr[2] "Наибольшее количество денег через Liberapay получают {n} счетов:"
 
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
@@ -4747,11 +4742,9 @@ msgstr "от {author_name}"
 msgid "Stars"
 msgstr "Избранное"
 
-#, fuzzy
 msgid "stars count"
 msgstr "количество звезд"
 
-#, fuzzy
 msgid "connection date"
 msgstr "дата подключения"
 
@@ -5221,9 +5214,9 @@ msgstr "В каком состоянии аккаунты будут после 
 msgid "Transfer the account"
 msgstr "Перенести аккаунт"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr "Счет {provider}, который вы пытаетесь подключить, связан с другой учетной записью Liberapay, помеченной как мошенническая."
+msgstr "Счет {provider}, который вы пытаетесь подключить, привязан к другой учётной записи Liberapay, помеченной как мошеннической."
 
 #, python-brace-format
 msgid "Connecting a {platform} account"
