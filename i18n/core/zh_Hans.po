@@ -244,7 +244,7 @@ msgstr "{sender_name} 提交了一笔 {amount} 的发票报销请求。"
 
 #, python-brace-format
 msgid "Description: {0}"
-msgstr "介绍：{0}"
+msgstr "描述：{0}"
 
 msgid "Unsubscribe"
 msgstr "退订"
@@ -3735,7 +3735,7 @@ msgid "one-off donation from someone closing their account"
 msgstr "来自某位已关闭账户者的一次性捐款"
 
 msgid "chargeback"
-msgstr "拒付"
+msgstr "退款要求"
 
 msgid "debt repayment"
 msgstr "债务偿还"
@@ -3864,7 +3864,7 @@ msgstr "如果您的消息不是以英文或法文书写，我们会使用机器
 
 #, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
-msgstr "如果您认为您在我们的系统中发现了技术漏洞，请遵照 {link_start} {page_name} 页面 {link_end}中的指示去做，而不是给我们发邮件。"
+msgstr "如果您认为发现了我们系统中存在的技术漏洞，请按 {link_start} {page_name}页面{link_end} 中的说明行事，而不是给我们发电子邮件。"
 
 msgid "We currently don't have a phone number."
 msgstr "我们目前没有电话号码。"
@@ -3897,7 +3897,7 @@ msgstr "Not safe for work，不适合工作场所的内容"
 
 #, python-brace-format
 msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
-msgstr "Liberapay 支持的支付处理商有不利于性内容的政策。{paypal_link}PayPal要求预先批准{link_close} ，{stripe_link}Stripe则完全禁止{link_close} 。因此，虽然可以使用Liberapay 来为一些成人内容募款，但通常来说最好使用专门处理此类内容的平台。"
+msgstr "Liberapay 支持的支付处理商有不利于性内容的政策。{paypal_link}PayPal 要求预先审批{link_close} ，{stripe_link}Stripe 则完全禁止{link_close} 。因此，虽然可以使用 Liberapay 为一些成人内容募款，但通常还是建议使用专门处理这类内容的平台。"
 
 msgid "Can I modify or stop my donations?"
 msgstr "我可以修改或停止自己的捐款吗？"
@@ -3920,7 +3920,7 @@ msgstr "Liberapay 是一个由非营利组织推动的开放项目，这让它�
 
 #, python-brace-format
 msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
-msgstr "我们重视国际化，目前支持多种货币，并有多语言版本({link_open}欢迎各方贡献{link_close})."
+msgstr "我们重视国际化，目前支持多种货币，并提供众多语言版本（{link_open}欢迎各方贡献{link_close}）。"
 
 #, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
@@ -3967,13 +3967,13 @@ msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "为什么我在 Stripe 控制面板中看到部分退款?"
 
 msgid "Partial refunds are how we recover Stripe's fee on single-recipient payments. These refunds are from your Stripe account to Liberapay's, not to the donor."
-msgstr "部分退款是我们收回 Stripe 对于单一收款人付款的费用的方式。这些退款是从你的 Stripe 账户退给 Liberapay 的，不是退给捐赠者的。"
+msgstr "部分退款是我们在取回 Stripe 向单一收款人付款的手续费。这些退款从您的 Stripe 账户退还给 Liberapay，而非退给捐赠者。"
 
 msgid "How are chargebacks handled?"
 msgstr "如何处理拒付？"
 
 msgid "If despite our fraud prevention efforts you receive money whose origin is revealed to be fraudulent, it falls on you to pay it back."
-msgstr "尽管我们采取了措施预防欺诈，但如果您收到的资金来源涉及欺诈，则您必须退还该资金。"
+msgstr "尽管我们竭力预防，但如果您收到的资金涉及欺诈，您有责任退还。"
 
 msgid "Is there a minimum or maximum amount I can give or receive?"
 msgstr "捐赠或接收的金额是否有下限和上限？"
@@ -4028,7 +4028,7 @@ msgstr[0] "捐赠者最多可以在 {n} 种货币中选择，具体取决于收�
 
 #, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "只能在至少一个受支持的支付处理商可用的地方接收捐赠。{Stripe} 和 {PayPal}是当前受支持的支付处理商。某些 Liberapay 功能只能通过 Stripe 使用，因此 Liberapay 对于在 Stripe 支持区域的创作者完全可用，而在只受 PayPal 支持的地方，你无法使用 Liberapay 的全部功能。"
+msgstr "接收捐赠的地方须有至少一家适用的支付处理商。目前支持 {Stripe} 和 {PayPal}。Liberapay 的部分功能仅有 Stripe 支持，因此仅支持 PayPal 的地方可能无法使用 Liberapay 的全部功能。"
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
