@@ -73,7 +73,7 @@ The python code inside simplates is only for request-specific logic, common back
 
 Make sure you have the following dependencies installed first:
 
-- python ≥ 3.11
+- python ≥ 3.12
   - including the C headers of python and libffi, which are packaged separately in many Linux distributions
 - postgresql 16 (see [the official download & install docs](https://www.postgresql.org/download/))
 - make
