@@ -40,6 +40,14 @@
     </form>
     <p class="help-block">{{ _("Maximum length is {0}.", constants.PASSWORD_MAX_SIZE) }}</p>
 
-    <h3>{{ _("2FA") }}</h3>
-    <p>{{ _("Liberapay does not yet support two-factor authentication.") }}</p>
+    <h3>{{ _("Two-Factor Authentication (2FA)") }}</h3>
+    % if participant.is_totp_enabled()
+         <form action="{{ participant.path('settings/totp') }}" method="POST" class="form-inline buttons">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <input name="back_to" type="hidden" value="{{ participant.path('settings/') }}" />
+            <button class="btn btn-default" name="action" value="disable">{{ _("Disable Two-Factor Authentication") }}</button>
+        </form>
+    % else
+        <a class="btn btn-default" href="{{ participant.path('settings/totp') }}">{{ _("Enable Two-Factor Authentication") }}</a>
+    % endif
 % endmacro

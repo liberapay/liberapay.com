@@ -44,6 +44,9 @@
             <input name="log-in.password" class="form-control"
                    type="password" autocomplete="current-password"
                    placeholder="{{ _('Password') }}" required />
+            <input name="log-in.totp" class="form-control"
+                   type="text"
+                   placeholder="{{ _('One-time password (optional)') }}" />
         </div>
         <button class="btn btn-primary">{{ _("Log in") }}</button>
     </form>
@@ -91,6 +94,9 @@
 <input name="log-in.password" class="form-control"
        type="password" autocomplete="current-password"
        placeholder="{{ _('Password (optional)') }}" />
+<input name="log-in.totp" class="form-control"
+       type="text"
+       placeholder="{{ _('One-time password (optional)') }}" />
 </div>
 
 <p class="help-block">{{ _(

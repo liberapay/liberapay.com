@@ -71,6 +71,7 @@ def sign_in_with_form_data(body, state):
         src_addr, src_country = request.source, request.source_country
         input_id = body['log-in.id'].strip()
         password = body.pop('log-in.password', None)
+        totp = body.pop('log-in.totp', None)
         id_type = None
         if input_id.find('@') > 0:
             id_type = 'email'
@@ -86,7 +87,7 @@ def sign_in_with_form_data(body, state):
                 p_id = Participant.get_id_for(id_type, input_id)
             if p_id:
                 try:
-                    p = Participant.authenticate_with_password(p_id, password)
+                    p = Participant.authenticate_with_password(p_id, password, totp=totp)
                 except AccountIsPasswordless:
                     if id_type == 'email':
                         state['log-in.email'] = input_id
@@ -100,7 +101,7 @@ def sign_in_with_form_data(body, state):
                 p = None
             if not p:
                 state['log-in.error'] = (
-                    _("The submitted password is incorrect.") if p_id is not None else
+                    _("The submitted password and/or otp is incorrect.") if p_id is not None else
                     _("“{0}” is not a valid account ID.", input_id) if id_type == 'immutable' else
                     _("No account has the username “{username}”.", username=input_id) if id_type == 'username' else
                     _("No account has “{email_address}” as its primary email address.", email_address=input_id)
@@ -268,7 +269,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             creds = [creds[0], 1, creds[1]]
         if len(creds) == 3:
             session_p, state['session_status'] = Participant.authenticate_with_session(
-                *creds, allow_downgrade=True, cookies=response.headers.cookie
+                *creds, allow_downgrade=True, cookies=response.headers.cookie, context='cookie'
             )
             if session_p:
                 user = state['user'] = session_p
@@ -314,6 +315,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
         if request.qs.get('log-in.id'):
             # Email auth
             id = request.qs.get_int('log-in.id')
+            totp = request.qs.get('log-in.totp')
             session_id = request.qs.get('log-in.key')
             if not session_id or session_id < '1001' or session_id > '1010':
                 raise response.render('simplates/log-in-link-is-invalid.spt', state)
@@ -321,12 +323,12 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             if not (token and token.endswith('.em')):
                 raise response.render('simplates/log-in-link-is-invalid.spt', state)
             required = request.qs.parse_boolean('log-in.required', default=True)
-            p = Participant.authenticate_with_session(
+            p, reason = Participant.authenticate_with_session(
                 id, session_id, token,
-                allow_downgrade=not required, cookies=response.headers.cookie,
-            )[0]
+                totp=totp, allow_downgrade=not required, cookies=response.headers.cookie
+            )
             if p:
-                if p.id != user.id:
+                if p.id != user.id or reason == 'require_totp':
                     response.headers[b'Referrer-Policy'] = b'strict-origin'
                     submitted_confirmation_token = request.qs.get('log-in.confirmation')
                     if submitted_confirmation_token:
@@ -346,6 +348,8 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
                                 'querystring'
                             )
                         del request.qs['log-in.confirmation']
+                        if not p.session and reason == 'require_totp':
+                            raise response.render('simplates/log-in-link-is-valid.spt', state)
                     else:
                         raise response.render('simplates/log-in-link-is-valid.spt', state)
                 redirect = True

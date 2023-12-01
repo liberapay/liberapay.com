@@ -77,6 +77,10 @@ class AccountIsPasswordless(LoginRequired):
     pass
 
 
+class FailedToVerifyOTP(Exception):
+    pass
+
+
 class NeedDatabase(LazyResponse):
     html_template = 'templates/exceptions/NeedDatabase.html'
 

@@ -12,6 +12,7 @@ from types import SimpleNamespace
 import unicodedata
 from urllib.parse import quote as urlquote, urlencode
 import uuid
+from pyotp import totp, random_base32
 
 import aspen_jinja2_renderer
 from cached_property import cached_property
@@ -32,7 +33,7 @@ from liberapay.constants import (
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
     PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_TIMEOUT,
-    USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
+    USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST, TOTP_TOLERANCE_PERIODS
 )
 from liberapay.exceptions import (
     AccountIsPasswordless,
@@ -45,6 +46,7 @@ from liberapay.exceptions import (
     EmailAddressIsBlacklisted,
     EmailAlreadyTaken,
     EmailNotVerified,
+    FailedToVerifyOTP,
     InvalidId,
     LoginRequired,
     NonexistingElsewhere,
@@ -241,12 +243,13 @@ class Participant(Model, MixinTeam):
     # ===================
 
     @classmethod
-    def authenticate_with_password(cls, p_id, password, context='log-in'):
+    def authenticate_with_password(cls, p_id, password, totp='', context='log-in'):
         """Fetch a participant using its ID, but only if the provided password is valid.
 
         Args:
             p_id (int): the participant's ID
             password (str): the participant's password
+            totp (str): optional totp code
             context (str): the operation that this authentication is part of
 
         Return type: `Participant | None`
@@ -267,6 +270,9 @@ class Participant(Model, MixinTeam):
             return None
         p, stored_secret = r
         if context == 'log-in':
+            if p.is_totp_enabled():
+                if (not totp) or (not p.verify_totp(totp)):
+                    return None
             cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
         request = website.state.get({}).get('request')
         if request:
@@ -389,13 +395,53 @@ class Participant(Model, MixinTeam):
             self.add_event(website.db, 'password-check', None)
         return status
 
+    # 2FA Management (TOTP)
+    # =====================
+
+    def is_totp_enabled(self):
+        return self.db.one(
+            "SELECT totp_verified FROM participants WHERE id = %s",
+            (self.id,)
+        )
+
+    def gen_totp_token(self):
+        totp_token = self.db.one(
+            "SELECT totp_token FROM participants WHERE id = %s",
+            (self.id,)
+        )
+        if totp_token is None:
+            totp_token = random_base32()
+            self.db.run(
+                "UPDATE participants SET totp_token = %s WHERE id = %s",
+                (totp_token, self.id)
+            )
+        return totp_token
+
+    def verify_totp(self, totp_code):
+        totp_token = self.gen_totp_token()
+        return totp.TOTP(totp_token).verify(totp_code, valid_window=TOTP_TOLERANCE_PERIODS)
+
+    def enable_totp(self, verification_code):
+        if self.verify_totp(verification_code):
+            self.db.run("UPDATE participants SET totp_verified = true WHERE id = %s", (self.id,))
+        else:
+            raise FailedToVerifyOTP
+
+    def disable_totp(self):
+        self.db.run("""
+            UPDATE participants
+                SET totp_token = NULL,
+                    totp_verified = false
+            WHERE id = %s
+            """, (self.id,))
+
 
     # Session Management
     # ==================
 
     @classmethod
     def authenticate_with_session(
-        cls, p_id, session_id, secret, allow_downgrade=False, cookies=None,
+        cls, p_id, session_id, secret, totp='', allow_downgrade=False, cookies=None, context='log-in'
     ):
         """Fetch a participant using its ID, but only if the provided session is valid.
 
@@ -403,13 +449,15 @@ class Participant(Model, MixinTeam):
             p_id (int | str): the participant's ID
             session_id (int | str): the ID of the session
             secret (str): the actual secret
+            totp (str): optional totp code
             allow_downgrade (bool): allow downgrading to a read-only session
             cookies (SimpleCookie):
                 the response cookies, only needed when `allow_downgrade` is `True`
+            context (str): the operation that this authentication is part of
 
         Return type:
             Tuple[Participant, Literal['valid']] |
-            Tuple[None, Literal['expired', 'invalid']]
+            Tuple[None, Literal['expired', 'invalid', 'require_totp']]
         """
         if not secret:
             if session_id == '!':
@@ -441,6 +489,10 @@ class Participant(Model, MixinTeam):
         if not r:
             return None, 'invalid'
         p, stored_secret, mtime = r
+        if context == 'log-in':
+            if p.is_totp_enabled():
+                if (not totp) or (not p.verify_totp(totp)):
+                    return p, 'require_totp'
         if not constant_time_compare(stored_secret, secret):
             return None, 'invalid'
         if rate_limit:

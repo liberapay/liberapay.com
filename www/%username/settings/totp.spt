@@ -1,0 +1,84 @@
+import io
+from base64 import b64encode
+from pyotp import totp
+from pyqrcode import create as create_qrcode
+from liberapay.utils import form_post_success, get_participant
+from liberapay.exceptions import FailedToVerifyOTP
+
+[---]
+
+participant = get_participant(state, restrict=True)
+
+if request.method == 'POST':
+    body = request.body
+
+    if not participant.is_person:
+        raise response.error(403)
+
+    action = request.body.get_choice('action', ('enable', 'disable'), default='enable')
+
+    if action == 'disable':
+        participant.disable_totp()
+        form_post_success(state, msg=_("You have disabled Two-Factor Authentication."))
+    elif action == 'enable' and 'verification-code' in body:
+        verification_code = body['verification-code']
+        try:
+            participant.enable_totp(verification_code)
+        except FailedToVerifyOTP:
+            raise response.redirect(participant.path('settings/totp?failed_to_verify=1'))
+        form_post_success(state, msg=_("You have enabled Two-Factor Authentication."))
+    else:
+        raise response.error(400, "no known key found in body")
+
+totp_token = participant.gen_totp_token()
+totp_uri = totp.TOTP(totp_token).provisioning_uri(
+    name=f'~{participant.id}',
+    image='https://liberapay.com/assets/liberapay/icon-v2_white-on-yellow.200.png',
+    issuer_name='Liberapay'
+)
+qr_code = create_qrcode(totp_uri)
+buffer = io.BytesIO()
+qr_code.png(buffer, scale=4)
+qr_code_image = b64encode(buffer.getvalue()).decode()
+
+subhead = _("Enable Two-Factor Authentication")
+title = participant.username
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% block content
+    % if participant.is_totp_enabled()
+        <p>{{ _(
+            "Two-Factor Authentication is already enabled."
+        ) }}</p>
+    % else
+        <p>{{ _(
+            "Please scan the QR-code below using an authenticator app on "
+            "your mobile device such as KeePass, FreeOTP, andOTP, "
+            "Google Authenticator, Microsoft Authenticator, 2FAS, etc."
+        ) }}</p>
+        <p>{{ _(
+            "Then type the code shown for the newly created entry "
+            "into the text box further down and press 'Verify'."
+        ) }}</p>
+        <p>{{ _(
+            "When Two-Factor Authentication is enabled, you will be asked "
+            "to enter the code from the entry in your authenticator app whenever "
+            "you wish to login."
+        ) }}</p>
+        % if request.qs.parse_boolean('failed_to_verify', False)
+            <p class="alert alert-danger">{{ _("Failed to verify the submitted code. Please try again with another one.") }}</p>
+        % endif
+        <p><a href="{{totp_uri}}"><img src="data:image/png;base64,{{qr_code_image}}" alt="{{ _('QR Code') }}"></a></p>
+        <form action="{{ participant.path('settings/totp') }}" method="POST" class="form-inline buttons">
+            <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+            <input name="back_to" type="hidden" value="{{ participant.path('settings/') }}" />
+            <div class="form-group">
+            <input type="text" name="verification-code" class="form-control"
+                   placeholder="{{ _('Verification code') }}" />
+            </div>
+            <button class="btn btn-default">{{ _("Verify") }}</button>
+        </form>
+    % endif
+% endblock

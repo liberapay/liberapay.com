@@ -16,11 +16,14 @@ from liberapay.exceptions import (
     UsernameIsEmpty,
     UsernameIsRestricted,
     UsernameTooLong,
+    FailedToVerifyOTP,
 )
 from liberapay.i18n.currencies import Money
 from liberapay.models.participant import NeedConfirmation, Participant
 from liberapay.models.tip import Tip
 from liberapay.testing import EUR, USD, Harness
+
+from pyotp import totp
 
 
 class TestTakeOver(Harness):
@@ -189,6 +192,44 @@ class TestStub(Harness):
         user2 = self.make_participant('user2')
         actual = self.stub.get_tip_to(user2).amount
         assert actual == expected
+
+    def test_generate_a_totp_token(self):
+        token = self.stub.gen_totp_token()
+        assert len(token) == 32
+        assert self.stub.is_totp_enabled() == False
+
+    def test_make_sure_that_one_totp_is_generated(self):
+        token = self.stub.gen_totp_token()
+        token2 = self.stub.gen_totp_token()
+        assert token == token2
+        assert self.stub.is_totp_enabled() == False
+
+    def test_generate_new_totp_token(self):
+        token = self.stub.gen_totp_token()
+        self.stub.disable_totp()
+        token2 = self.stub.gen_totp_token()
+        assert token != token2
+        assert self.stub.is_totp_enabled() == False
+
+    def test_verify_totp_successful(self):
+        token = self.stub.gen_totp_token()
+        code = totp.TOTP(token).now()
+        assert self.stub.verify_totp(code) == True
+        assert self.stub.is_totp_enabled() == False
+
+    def test_verify_totp_failure(self):
+        assert self.stub.verify_totp('blah') == False
+        assert self.stub.is_totp_enabled() == False
+
+    def test_enable_totp_successful(self):
+        token = self.stub.gen_totp_token()
+        code = totp.TOTP(token).now()
+        assert self.stub.enable_totp(code) == None
+        assert self.stub.is_totp_enabled() == True
+
+    def test_enable_totp_failure(self):
+        with self.assertRaises(FailedToVerifyOTP):
+            self.stub.enable_totp('blah')
 
 
 class Tests(Harness):
