@@ -271,14 +271,6 @@ def check_payin_allowed(website, request, user, method=None):
 Website.check_payin_allowed = check_payin_allowed
 
 
-# Monkey patch python's stdlib
-# ============================
-
-from http.cookies import Morsel
-
-Morsel._reserved['samesite'] = 'SameSite'
-
-
 # Monkey patch aspen and pando
 # ============================
 
