@@ -1,4 +1,4 @@
-python := "$(shell { command -v python3.8 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
+python := "$(shell { command -v python3.11 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
@@ -20,7 +20,7 @@ $(env): Makefile requirements*.txt
 		exit 1; \
 	fi;
 	@$(python) cli/check-python-version.py
-	$(python) -m venv $(env)
+	$(python) -m venv --upgrade-deps $(env)
 	$(pip) install wheel
 	$(pip) install --require-hashes -r requirements_base.txt
 	$(pip) install -r requirements_tests.txt
