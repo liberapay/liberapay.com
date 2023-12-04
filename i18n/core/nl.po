@@ -224,7 +224,7 @@ msgstr "U heeft een betaling van {amount} gepland voor {payment_date} om uw dona
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
-msgstr[1] "U heeft {n} betalingen gepland om uw donaties te verlengen, maar we kunnen ze niet verwerken doordat een geldige betaalmethode ontbreekt."
+msgstr[1] "We kunnen uw betalingen niet verwerken. U heeft {n} betalingen gepland om uw donaties te verlengen, maar er ontbreekt een geldige betaalmethode."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "De betalingsdata, bedragen en ontvangers zijn:"
@@ -1613,13 +1613,11 @@ msgstr "Logo's"
 msgid "Overview"
 msgstr "Overzicht"
 
-#, fuzzy
 msgid "Recipients"
 msgstr "Ontvangers"
 
-#, fuzzy
 msgid "Hopefuls"
-msgstr "Hopefuls"
+msgstr "Kanshebbers"
 
 msgid "Unclaimed Donations"
 msgstr "Toezeggingen"
@@ -4537,33 +4535,26 @@ msgstr[1] "Hier zijn {n} Liberapay personen die hun {0}-account hebben verbonden
 msgid "Explore other platforms:"
 msgstr "Verken de andere platformen:"
 
-#, fuzzy
 msgid "This page lists Liberapay users who are hoping to receive their first donations."
-msgstr "Op deze pagina staan Liberapay gebruikers die hopen hun eerste donaties te ontvangen."
+msgstr "Op deze pagina staan Liberapay makers die hopen hun eerste donaties te ontvangen."
 
-#, fuzzy
 msgid "Despite our efforts, some of the listed profiles may be spam or fraud."
 msgstr "Ondanks onze inspanningen kunnen sommige van de vermelde profielen spam of fraude zijn."
 
-#, fuzzy
 msgid "Profiles only start appearing in the list 72 hours after they're created."
 msgstr "Profielen verschijnen pas 72 uur nadat ze zijn aangemaakt in de lijst."
 
-#, fuzzy
 msgid "People and projects who receive donations through Liberapay."
 msgstr "Mensen en projecten die donaties ontvangen via Liberapay."
 
-#, fuzzy
 msgid "Explore Recipients"
 msgstr "Ontvangers verkennen"
 
-#, fuzzy
 msgid "Users who are hoping to receive their first donations through Liberapay."
-msgstr "Gebruikers die hun eerste donaties hopen te ontvangen via Liberapay."
+msgstr "Mensen die hun eerste donaties hopen te ontvangen via Liberapay."
 
-#, fuzzy
 msgid "Explore Hopefuls"
-msgstr "Hopefuls verkennen"
+msgstr "Kanshebbers verkennen"
 
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
 msgstr "Liberapay staat donatie toezeggingen toe voor mensen die zich nog niet hebben aangemeld."
@@ -4593,27 +4584,21 @@ msgstr "Personen"
 msgid "The top {0} individuals on Liberapay are:"
 msgstr "De top {0} personen op Liberapay zijn:"
 
-#, fuzzy
 msgid "Sort by"
 msgstr "Sorteren op"
 
-#, fuzzy
 msgid "income"
 msgstr "inkomen"
 
-#, fuzzy
 msgid "creation date"
 msgstr "aanmaakdatum"
 
-#, fuzzy
 msgid "sort order"
 msgstr "sorteervolgorde"
 
-#, fuzzy
 msgid "in descending order"
 msgstr "in aflopende volgorde"
 
-#, fuzzy
 msgid "in ascending order"
 msgstr "in oplopende volgorde"
 
@@ -4642,29 +4627,29 @@ msgstr "Heb je iemand in gedachten?"
 msgid "We can help you find pledgees if you connect your accounts:"
 msgstr "Zoek bekende om aan te doneren met de vriendenzoeker:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
 msgid_plural "The {n} individuals receiving the most money through Liberapay are:"
 msgstr[0] "De persoon die het meeste geld ontvangt via Liberapay is:"
 msgstr[1] "De {n} personen die het meeste geld ontvangen via Liberapay zijn:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The organization receiving the most money through Liberapay is:"
 msgid_plural "The {n} organizations receiving the most money through Liberapay are:"
 msgstr[0] "De organisatie die het meeste geld ontvangt via Liberapay is:"
 msgstr[1] "De {n} organisaties die het meeste geld ontvangen via Liberapay zijn:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The team receiving the most money through Liberapay is:"
 msgid_plural "The {n} teams receiving the most money through Liberapay are:"
 msgstr[0] "Het team dat het meeste geld ontvangt via Liberapay is:"
 msgstr[1] "De {n} teams die het meeste geld ontvangen via Liberapay zijn:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay account receiving the most money is:"
 msgid_plural "The {n} Liberapay accounts receiving the most money are:"
-msgstr[0] "De Liberapay rekening die het meeste geld ontvangt is:"
-msgstr[1] "De {n} Liberapay rekeningen die het meeste geld ontvangen zijn:"
+msgstr[0] "Het Liberapay-account dat het meeste geld ontvangt is:"
+msgstr[1] "De {n} Liberapay-accounts die het meeste geld ontvangen zijn:"
 
 #, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
@@ -4679,11 +4664,9 @@ msgstr "door {author_name}"
 msgid "Stars"
 msgstr "Sterren"
 
-#, fuzzy
 msgid "stars count"
 msgstr "aantal sterren"
 
-#, fuzzy
 msgid "connection date"
 msgstr "verbindingsdatum"
 
@@ -4879,7 +4862,7 @@ msgstr[1] "Het is ook gedeeltelijk vertaald in {n} andere talen ({link_open}u ku
 msgid "<unused singular (hash=e8738ad6e84751becc01756b41d4dc45)>"
 msgid_plural "Your profile descriptions and other texts can be published in up to {n} languages."
 msgstr[0] "Uw profielomschrijving en andere tekst kan in {n} taal gepubliceerd worden."
-msgstr[1] "Uw profielomschrijving en andere tekst kan in {n} talen gepubliceerd worden."
+msgstr[1] "Uw profielomschrijving en andere teksten kunnen in {n} talen gepubliceerd worden."
 
 msgid "Multiple currencies"
 msgstr "Meerdere valuta's"
