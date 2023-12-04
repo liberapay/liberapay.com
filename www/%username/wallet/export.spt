@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from liberapay.utils import get_participant
 from liberapay.utils.history import export_history
@@ -9,7 +9,7 @@ participant = get_participant(state, restrict=True)
 title = participant.username
 subhead = _("Export History")
 
-current_year = datetime.utcnow().year
+current_year = datetime.now(timezone.utc).year
 year = request.qs.get_int('year', current_year)
 
 key = request.qs.get('key')

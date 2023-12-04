@@ -80,7 +80,7 @@ class Tests(Harness):
         html = r.html_tree
         assert html.attrib["lang"] == "zh-hant-tw"
         statement_section = html.find(".//{*}section[@lang='zh']")
-        assert statement_section, r.text
+        assert len(statement_section) > 0, r.text
         assert statement_section[0].text == "歡迎，"
         r = self.client.GET(
             '/alice',
@@ -91,7 +91,7 @@ class Tests(Harness):
         html = r.html_tree
         assert html.attrib["lang"] == "zh-hans"
         statement_section = html.find(".//{*}section[@lang='zh-hans']")
-        assert statement_section, r.text
+        assert len(statement_section) > 0, r.text
         assert statement_section[0].text == "欢迎，"
 
     def test_i18n_subdomain_is_redirected_to_https(self):

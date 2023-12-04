@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from liberapay.utils import get_participant
 from liberapay.utils.history import get_wallet_ledger
@@ -25,7 +25,7 @@ translated_status = {
     'succeeded': _('succeeded')
 }
 
-current_year = datetime.utcnow().year
+current_year = datetime.now(timezone.utc).year
 year = request.qs.get_int('year', 0, minimum=2016, maximum=current_year)
 if not year:
     # Try to detect the year of the last transaction
