@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 import json
 import logging
@@ -218,7 +218,7 @@ class Platform:
             return
         percent_remaining = remaining/limit
         if percent_remaining < 0.5:
-            reset_delta = reset - datetime.utcnow().replace(tzinfo=utc)
+            reset_delta = reset - datetime.now(timezone.utc)
             reset_delta = format_timedelta(reset_delta, add_direction=True, locale='en')
             log_lvl = logging.WARNING
             if percent_remaining < 0.2:

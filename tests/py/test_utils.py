@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
 from markupsafe import escape
@@ -92,11 +92,11 @@ class Tests(Harness):
     # ===============
 
     def test_is_expired(self):
-        expiration = datetime.utcnow() - timedelta(days=40)
+        expiration = datetime.now(timezone.utc) - timedelta(days=40)
         assert utils.is_card_expired(expiration.year, expiration.month)
 
     def test_not_expired(self):
-        expiration = datetime.utcnow() + timedelta(days=100)
+        expiration = datetime.now(timezone.utc) + timedelta(days=100)
         assert not utils.is_card_expired(expiration.year, expiration.month)
 
     # Markdown

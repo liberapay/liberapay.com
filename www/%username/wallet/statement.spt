@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from liberapay.utils import check_address_v2, get_participant, render, render_postal_address
 from liberapay.utils.history import get_wallet_ledger
@@ -13,7 +13,7 @@ STATUS_MAP = {
 participant = get_participant(state, restrict=True)
 title = _("Account Statement")
 
-now = datetime.utcnow()
+now = datetime.now(timezone.utc)
 today = now.date()
 year = request.qs.get_int('year', now.year, minimum=2016)
 month = request.qs.get_int('month', None, minimum=1, maximum=12)
