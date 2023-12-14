@@ -4,13 +4,9 @@
 set -eux
 
 # Install libffi-devel for misaka, and htop for when I want to look at what's going on
-yum install -y libffi-devel htop
+dnf install -y libffi-devel htop
 # Install PostgreSQL client tools and libraries
-if which amazon-linux-extras &>/dev/null; then
-    amazon-linux-extras install -y postgresql11
-else
-    dnf install -y postgresql15
-fi
+dnf install -y postgresql15
 
 # Automatically set the PG* environment variables so that `psql` connects to the liberapay database by default
 install -m 644 -o root -g root -t /etc/profile.d .platform/files/pgenv.sh
