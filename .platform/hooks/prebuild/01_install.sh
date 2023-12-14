@@ -4,9 +4,9 @@
 set -eux
 
 # Install libffi-devel for misaka, and htop for when I want to look at what's going on
-yum install -y libffi-devel htop
+dnf install -y libffi-devel htop
 # Install PostgreSQL client tools and libraries
-amazon-linux-extras install -y postgresql11
+dnf install -y postgresql15
 
 # Automatically set the PG* environment variables so that `psql` connects to the liberapay database by default
 install -m 644 -o root -g root -t /etc/profile.d .platform/files/pgenv.sh
@@ -18,7 +18,7 @@ install -m 644 -o root -g root -t /etc/systemd/system .platform/files/webapp@.so
 systemctl daemon-reload
 
 # Install cloudflared, directly from GitHub
-target_cfd_version="2021.11.0"
+target_cfd_version="2023.10.0"
 function get_installed_cfd_version() {
     if [ -x /usr/local/bin/cloudflared ]; then
         /usr/local/bin/cloudflared version | \
@@ -34,7 +34,7 @@ if [ "$installed_cfd_version" != "$target_cfd_version" ]; then
     fi
     wget "https://github.com/cloudflare/cloudflared/releases/download/$target_cfd_version/cloudflared-linux-amd64"
     hash=$(sha256sum cloudflared-linux-amd64 | cut -d' ' -f1)
-    expected_hash=cce5bc7df0187e93291135d32d159b1acd86d9ca25c3e448b8bbeab2ce976b8e
+    expected_hash=33e6876bd55c2db13a931cf812feb9cb17c071ab45d3b50c588642b022693cdc
     if [ $hash != $expected_hash ]; then
         echo "cloudflared binary downloaded from GitHub doesn't match expected hash: $hash != $expected_hash"
         exit 1

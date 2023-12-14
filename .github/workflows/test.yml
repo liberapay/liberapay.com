@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Python 3.8
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
       - name: Install Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - name: Install Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
       - name: Cache the .tox directory to speed things up
         uses: actions/cache@v3
         with:

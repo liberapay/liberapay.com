@@ -1,4 +1,4 @@
-python := "$(shell { command -v python3.8 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
+python := "$(shell { command -v python3.11 || command -v python3 || command -v python || echo false; } 2>/dev/null)"
 
 # Set the relative path to installed binaries under the project virtualenv.
 # NOTE: Creating a virtualenv on Windows places binaries in the 'Scripts' directory.
@@ -20,7 +20,7 @@ $(env): Makefile requirements*.txt
 		exit 1; \
 	fi;
 	@$(python) cli/check-python-version.py
-	$(python) -m venv $(env)
+	$(python) -m venv --upgrade-deps $(env)
 	$(pip) install wheel
 	$(pip) install --require-hashes -r requirements_base.txt
 	$(pip) install -r requirements_tests.txt
@@ -67,7 +67,7 @@ test-schema: $(env)
 	$(with_tests_env) ./recreate-schema.sh test
 
 pyflakes: $(env)
-	$(env_bin)/python -m flake8 app.py liberapay tests
+	$(env_py) -m flake8 app.py liberapay tests
 
 test: test-schema pytest
 tests: test
@@ -99,7 +99,7 @@ _i18n_extract: $(env)
 		grep -E '^(liberapay/.+\.py|.+\.(spt|html))$$' | \
 		python -c "import sys; print(*sorted(sys.stdin, key=lambda l: l.rsplit('/', 1)))" \
 	)
-	@$(env_bin)/python cli/po-tools.py reflag i18n/core.pot
+	@$(env_py) cli/po-tools.py reflag i18n/core.pot
 	@for f in i18n/*/*.po; do \
 		$(env_bin)/pybabel update -i i18n/core.pot -l $$(basename -s '.po' "$$f") -o "$$f" --ignore-obsolete --no-fuzzy-matching --no-wrap; \
 	done
@@ -120,7 +120,7 @@ _i18n_clean: $(env)
 	done
 
 _i18n_convert: $(env)
-	@$(env_bin)/python cli/convert-chinese.py
+	@$(env_py) cli/convert-chinese.py
 
 i18n_update: _i18n_rebase _i18n_pull _i18n_extract _i18n_convert _i18n_clean
 	@if git commit --dry-run i18n &>/dev/null; then \
@@ -161,7 +161,7 @@ _i18n_merge:
 	git reset -q master -- i18n
 	@for f in i18n/*/*.po; do \
 		if test $$(sed -E -e '/\\n"$$/{d;d}' $$f | grep -c -E '^"' 2>/dev/null) -gt 10; then \
-			$(env_bin)/python cli/po-tools.py reformat $$f; \
+			$(env_py) cli/po-tools.py reformat $$f; \
 		fi \
 	done
 	@$(MAKE) --no-print-directory _i18n_clean
