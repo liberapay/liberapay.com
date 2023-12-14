@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-12-13 03:22+0000\n"
+"PO-Revision-Date: 2023-12-15 03:10+0000\n"
 "Last-Translator: Đorđe Vasiljević <djordje.vasiljevich@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/liberapay/core/sr/>\n"
 "Language: sr\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.3\n"
 "Generated-By: Babel 2.10.3\n"
 
 #, python-brace-format
@@ -148,23 +148,23 @@ msgstr "Ваш Либерапаи приход је [Кс25Кс] ове неде
 msgid "Here is the breakdown of your income this week:"
 msgstr "Ево прегледа ваших прихода ове недеље:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
 msgid_plural "Personal donations: {money_amount} from {n} donors."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Личне донације: [Кс20Кс] од [Кс40Кс] донатора."
+msgstr[0] "Личне донације: {money_amount} од {n} донатора."
+msgstr[1] "Личне донације: {money_amount} од {n} донатора."
+msgstr[2] "Личне донације: {money_amount} од {n} донатора."
 
 #, fuzzy
 msgid "Personal donations: none."
 msgstr "Личне донације: нема."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Донације за вашу улогу у [Кс31Кс] тиму: [Кс49Кс] од [Кс69Кс] донатора."
+msgstr[0] "Донације за вашу улогу у тиму {team_name}: {money_amount} од {n} донатора."
+msgstr[1] "Донације за вашу улогу у тиму {team_name}: {money_amount} од {n} донатора."
+msgstr[2] "Донације за вашу улогу у тиму {team_name}: {money_amount} од {n} донатора."
 
 #, fuzzy
 msgid "Donations through teams: none (you are not a member of any team)."
@@ -238,12 +238,12 @@ msgstr "Имате заказану уплату од [Кс22Кс] за [Кс45�
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
 msgstr "Имате заказану уплату од [Кс22Кс] за [Кс45Кс] да бисте обновили своје донације за [Кс87Кс], али не можемо да је обрадимо јер недостаје важећи инструмент плаћања."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Имате заказане уплате [Кс9Кс] за обнављање ваших донација, али не можемо да их обрадимо јер недостаје важећи инструмент плаћања."
+msgstr[0] "Заказано је продужење {n} донације, али не можемо да га извршимо јер недостаје важећи платни инструмент."
+msgstr[1] "Заказано је продужење {n} донације, али не можемо да га извршимо јер недостаје важећи платни инструмент."
+msgstr[2] "Заказано је продужење {n} донација, али не можемо да га обрадимо јер недостаје важећи платни инструмент."
 
 #, fuzzy
 msgid "The payment dates, amounts and recipients are:"
@@ -397,9 +397,9 @@ msgstr "Можете покушати поново, евентуално са д
 msgid "Try again"
 msgstr "Покушајте поново"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A refund of {money_amount} has been initiated"
-msgstr "Покренут је повраћај новца у износу од [Кс12Кс]."
+msgstr "Започет је повраћај новца у износу од {money_amount}"
 
 #, fuzzy, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
@@ -561,12 +561,12 @@ msgstr "Аутоматско плаћање [Кс25Кс] заказано за [
 msgid "The manual payment scheduled for {old_date} has been replaced by an automatic payment of {new_money_amount} on {new_date}."
 msgstr "Ручно плаћање заказано за [Кс33Кс] је замењено аутоматским плаћањем од [Кс89Кс] на [Кс111Кс]."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You now have {n} scheduled payment:"
 msgid_plural "You now have {n} scheduled payments:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Сада имате [Кс13Кс] заказана плаћања:"
+msgstr[0] "Имате {n} заказану уплату:"
+msgstr[1] "Имате {n} заказане уплате:"
+msgstr[2] "Имате {n} заказаних уплата:"
 
 #, fuzzy, python-brace-format
 msgid "{date}: automatic payment of {money_amount} to {recipient}"
@@ -612,12 +612,12 @@ msgstr "Са задовољством вас обавештавамо да се 
 msgid "Consequently an automatic payment of {money_amount} has been scheduled for {date}, to turn your pledge into action."
 msgstr "Сходно томе, аутоматска уплата од [Кс37Кс] је заказана за [Кс75Кс], како би се ваше обећање претворило у дело."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you wish to modify or cancel this upcoming payment, click on the following link: {link_start}manage my payment schedule{link_end}."
 msgid_plural "If you wish to modify or cancel these upcoming payments, click on the following link: {link_start}manage my payment schedule{link_end}."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Ако желите да измените или откажете ове предстојеће уплате, кликните на следећу везу: [Кс86Кс]управљај мојим распоредом плаћања[Кс124Кс]."
+msgstr[0] "Ако желите да измените или откажете предстојећу уплату, кликните на следећи линк: {link_start}управљај распоредом уплата{link_end}."
+msgstr[1] "Ако желите да измените или откажете предстојеће уплате, кликните на следећи линк: {link_start}управљај распоредом уплата{link_end}."
+msgstr[2] "Ако желите да измените или откажете предстојеће уплате, кликните на следећи линк: {link_start}управљај распоредом уплата{link_end}."
 
 #, fuzzy, python-brace-format
 msgid "We're pleased to inform you that {user_name} joined Liberapay {time_ago}, as {liberapay_username}, so you can now turn your pledge into a real donation:"
@@ -723,12 +723,12 @@ msgstr "Тим чији сте члан је преименован"
 msgid "The team “{0}” has been renamed to “{1}” by {2}."
 msgstr "Тим „[Кс10Кс]“ је преименован у „[Кс36Кс]“ од стране [Кс44Кс]."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay donation renewal: upcoming debit of {money_amount}"
 msgid_plural "Liberapay donation renewal: upcoming debits totaling {money_amount}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Обнова Либерапаи донације: предстојећа задужења у укупном износу [Кс53Кс]"
+msgstr[0] "Liberapay ће ускоро затражити периодично плаћање од {money_amount}"
+msgstr[1] "Liberapay ће ускоро затражити периодична плаћања од {money_amount}"
+msgstr[2] "Liberapay ће ускоро затражити периодична плаћања од {money_amount}"
 
 #, fuzzy, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
@@ -1626,23 +1626,23 @@ msgstr "Одјава"
 msgid "Print"
 msgstr "Принт"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} has {n} patron."
 msgid_plural "{0} has {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "[Кс0Кс] има [Кс8Кс] покровитеље."
+msgstr[0] "{0} има {n} спонзора."
+msgstr[1] "{0} има {n} спонзора."
+msgstr[2] "{0} има {n} спонзора."
 
 #, fuzzy, python-brace-format
 msgid "{0}'s goal is to receive {1} per week."
 msgstr "Циљ [Кс0Кс] је да добије [Кс25Кс] недељно."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} receives {1} per week from {n} patron."
 msgid_plural "{0} receives {1} per week from {n} patrons."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "[Кс0Кс] прима [Кс13Кс] недељно од [Кс31Кс] покровитеља."
+msgstr[0] "{0} прима {1} недељно од {n} спонзора."
+msgstr[1] "{0} прима {1} недељно од {n} спонзора."
+msgstr[2] "{0} прима {1} недељно од {n} спонзора."
 
 #, fuzzy, python-brace-format
 msgid "Goal: {0}"
@@ -1855,9 +1855,9 @@ msgstr "Назив организације"
 msgid "Headquarters Address"
 msgstr "Адреса седишта"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Show the {submenu_label} submenu"
-msgstr "Прикажите подмени [Кс9Кс]."
+msgstr "Прикажи подмени {submenu_label}"
 
 #, fuzzy
 msgid "Introduction"
@@ -2155,12 +2155,12 @@ msgstr "Тренутно донирате [Кс27Кс] годишње за [Кс
 msgid "Please select or input an amount:"
 msgstr "Изаберите или унесите износ:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "[Кс4Кс] није ваша омиљена валута? [Кс51Кс] остали су подржани:"
+msgstr[0] "{currency_name} није ваша жељена валута? На располагању је још {n}:"
+msgstr[1] "{currency_name} није ваша жељена валута? На располагању су још {n}:"
+msgstr[2] "{currency_name} није ваша жељена валута? На располагању је још {n}:"
 
 #, fuzzy, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
@@ -3322,9 +3322,9 @@ msgstr "Ваш резултат је сада [Кс17Кс] (не можете и
 msgid "Your take is now {0}."
 msgstr "Ваш избор је сада [Кс17Кс]."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username}'s profile"
-msgstr "Профил корисника [Кс0Кс]."
+msgstr "Профил корисника {username}"
 
 #, fuzzy, python-brace-format
 msgid "<unused singular (hash=8485a1bf550d6d1f52f5274e15580f6e)>"
@@ -5055,9 +5055,9 @@ msgstr "Посетиоци веб-сајта либерапаи.цом тако�
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
 msgstr "На неким страницама за плаћање, процесор плаћања може поставити додатне колачиће. Молимо прочитајте ове документе ако желите више информација: [Кс132Кс]."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{platform_name}'s cookie policy"
-msgstr "Политика колачића [Кс0Кс]."
+msgstr "Политика коришћења колачића услуге {platform_name}"
 
 #, fuzzy
 msgid "Social networks"
@@ -5083,9 +5083,9 @@ msgstr "Процесори плаћања"
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
 msgstr "Либерапаи се ослања на пружаоце платних услуга да заправо преносе новац од донатора до креатора, јер немамо ни ресурсе ни жељу да директно комуницирамо са банкама и платним мрежама. Ако желите да сазнате више о личним подацима које прикупљају ови процесори плаћања, прочитајте ове документе: [Кс314Кс]."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{platform_name}'s privacy policy"
-msgstr "Политика приватности [Кс0Кс]."
+msgstr "Политика приватности услуге {platform_name}"
 
 #, fuzzy
 msgid "Personal information leaks"
