@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-12-15 03:10+0000\n"
-"Last-Translator: Đorđe Vasiljević <djordje.vasiljevich@gmail.com>\n"
+"PO-Revision-Date: 2023-12-15 16:42+0000\n"
+"Last-Translator: Changaco <changaco@changaco.oy.lc>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/liberapay/core/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "Више нећемо слати имејлове на вашу адре
 
 #, fuzzy, python-brace-format
 msgid "We will no longer send emails to your address {email_address}, because we've received a complaint from the email provider. Please send an email from that address to support@liberapay.com if you want us to remove it from the blacklist."
-msgstr "Више нећемо слати е-поруке на вашу адресу [Кс46Кс], јер смо примили жалбу од добављача е-поште. Молимо пошаљите имејл са те адресе на суппорт@либерапаи.цом ако желите да га уклонимо са црне листе."
+msgstr "Више нећемо слати е-поруке на вашу адресу {email_address}, јер смо примили жалбу од добављача е-поште. Молимо пошаљите имејл са те адресе на support@liberapay.com ако желите да га уклонимо са црне листе."
 
 #, fuzzy
 msgid "The error message from the email system was:"
@@ -138,11 +138,11 @@ msgstr "Управљајте својим адресама е-поште"
 
 #, fuzzy, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
-msgstr "Ваш Либерапаи приход је приближно [Кс39Кс] ове недеље"
+msgstr "Ваш Либерапаи приход је приближно {money_amount} ове недеље"
 
 #, fuzzy, python-brace-format
 msgid "Your Liberapay income is {money_amount} this week"
-msgstr "Ваш Либерапаи приход је [Кс25Кс] ове недеље"
+msgstr "Ваш Либерапаи приход је {money_amount} ове недеље"
 
 #, fuzzy
 msgid "Here is the breakdown of your income this week:"
@@ -176,11 +176,11 @@ msgstr "Напомена: Донације преко Либерапаи-а се
 
 #, fuzzy, python-brace-format
 msgid "Your invoice to {0} has been accepted - Liberapay"
-msgstr "Ваша фактура за [Кс16Кс] је прихваћена - Либерапаи"
+msgstr "Ваша фактура за {0} је прихваћена - Либерапаи"
 
 #, fuzzy, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been accepted."
-msgstr "Ваш захтев за уплату од [Кс30Кс] од [Кс44Кс] је прихваћен."
+msgstr "Ваш захтев за уплату од {amount} од {addressee_name} је прихваћен."
 
 #, fuzzy
 msgid "View the invoice"
@@ -188,23 +188,23 @@ msgstr "Погледајте фактуру"
 
 #, fuzzy, python-brace-format
 msgid "Your invoice to {0} has been accepted and paid - Liberapay"
-msgstr "Ваша фактура за [Кс16Кс] је прихваћена и плаћена - Либерапаи"
+msgstr "Ваша фактура за {0} је прихваћена и плаћена - Либерапаи"
 
 #, fuzzy, python-brace-format
 msgid "Your invoice of {amount} to {addressee_name} has been paid."
-msgstr "Ваша фактура од [Кс16Кс] до [Кс28Кс] је плаћена."
+msgstr "Ваша фактура од {amount} до {addressee_name} је плаћена."
 
 #, fuzzy, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
-msgstr "Ваша фактура за [Кс16Кс] је одбијена - Либерапаи"
+msgstr "Ваша фактура за {0} је одбијена - Либерапаи"
 
 #, fuzzy, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
-msgstr "Ваш захтев за исплату од [Кс30Кс] од [Кс44Кс] је одбијен."
+msgstr "Ваш захтев за исплату од {amount} од {addressee_name} је одбијен."
 
 #, fuzzy, python-brace-format
 msgid "Reason: “{0}”"
-msgstr "Разлог: „[Кс9Кс]“"
+msgstr "Разлог: „{0}“"
 
 #, fuzzy
 msgid "Log in to Liberapay"
@@ -212,7 +212,7 @@ msgstr "Пријавите се на Либерапаи"
 
 #, fuzzy, python-brace-format
 msgid "Someone (hopefully you) requested access to the {0} account on Liberapay."
-msgstr "Неко (надамо се да сте ви) је затражио приступ [Кс48Кс] налогу на Либерапаи-у."
+msgstr "Неко (надамо се да сте ви) је затражио приступ {0} налогу на Либерапаи-у."
 
 #, fuzzy
 msgid "Follow this link to proceed:"
@@ -224,7 +224,7 @@ msgstr "Пријавите се"
 
 #, fuzzy, python-brace-format
 msgid "Please note that the link is only valid for {0}."
-msgstr "Имајте на уму да је веза важећа само за [Кс44Кс]."
+msgstr "Имајте на уму да је веза важећа само за {0}."
 
 #, fuzzy
 msgid "Liberapay donation renewal: no valid payment instrument"
@@ -232,11 +232,11 @@ msgstr "Обнављање Либерапаи донације: нема важ�
 
 #, fuzzy, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Имате заказану уплату од [Кс22Кс] за [Кс45Кс] да бисте обновили донацију за [Кс86Кс], али не можемо да је обрадимо јер недостаје важећи инструмент плаћања."
+msgstr "Имате заказану уплату од {amount} за {payment_date} да бисте обновили донацију за {recipient}, али не можемо да је обрадимо јер недостаје важећи инструмент плаћања."
 
 #, fuzzy, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "Имате заказану уплату од [Кс22Кс] за [Кс45Кс] да бисте обновили своје донације за [Кс87Кс], али не можемо да је обрадимо јер недостаје важећи инструмент плаћања."
+msgstr "Имате заказану уплату од {amount} за {payment_date} да бисте обновили своје донације за {recipients}, али не можемо да је обрадимо јер недостаје важећи инструмент плаћања."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
@@ -251,11 +251,11 @@ msgstr "Датуми плаћања, износи и примаоци су:"
 
 #, fuzzy, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
-msgstr "[Кс0Кс]: [Кс8Кс] до [Кс26Кс]"
+msgstr "{date}: {money_amount} до {recipient}"
 
 #, fuzzy, python-brace-format
 msgid "{date}: {money_amount} split between {recipients}"
-msgstr "[Кс0Кс]: [Кс8Кс] подељено између [Кс37Кс]"
+msgstr "{date}: {money_amount} подељено између {recipients}"
 
 #, fuzzy
 msgid "Add a payment instrument"
@@ -263,15 +263,15 @@ msgstr "Додајте инструмент плаћања"
 
 #, fuzzy, python-brace-format
 msgid "Invoice from {0} on Liberapay"
-msgstr "Фактура од [Кс13Кс] на Либерапаи-у"
+msgstr "Фактура од {0} на Либерапаи-у"
 
 #, fuzzy, python-brace-format
 msgid "{sender_name} has submitted an invoice for a payment of {amount}."
-msgstr "[Кс0Кс] је доставио фактуру за плаћање од [Кс56Кс]."
+msgstr "{sender_name} је доставио фактуру за плаћање од {amount}."
 
 #, fuzzy, python-brace-format
 msgid "Description: {0}"
-msgstr "Опис: [Кс13Кс]"
+msgstr "Опис: {0}"
 
 #, fuzzy
 msgid "Unsubscribe"
@@ -291,15 +291,15 @@ msgstr "Открили смо да је ваша лозинка компроми
 
 #, fuzzy, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
-msgstr "Требало би да [Кс11Кс] промените своју лозинку [Кс43Кс] сада."
+msgstr "Требало би да {link_start}промените своју лозинку{link_end} сада."
 
 #, fuzzy, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr "Ваша уплата од [Кс16Кс] је оспорена"
+msgstr "Ваша уплата од {money_amount} је оспорена"
 
 #, fuzzy, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "Ваша банка је поништила трансфер [Кс16Кс] који сте покренули на [Кс53Кс]."
+msgstr "Ваша банка је поништила трансфер {money_amount} који сте покренули на {date}."
 
 #, fuzzy
 msgid "The reason provided by your bank is: it was unable to process the payment."
@@ -339,7 +339,7 @@ msgstr "Разлог који је навела ваша банка је: вла
 
 #, fuzzy, python-brace-format
 msgid "The reason provided by your bank is: {reason_code_in_english}."
-msgstr "Разлог који је навела ваша банка је: [Кс37Кс]."
+msgstr "Разлог који је навела ваша банка је: {reason_code_in_english}."
 
 #, fuzzy
 msgid "If this dispute was mistakenly triggered, then you can ask your bank to withdraw it. Please let us know if you do that, because we will also have to send a message to your bank."
@@ -359,11 +359,11 @@ msgstr "Спорна средства су аутоматски враћена �
 
 #, fuzzy, python-brace-format
 msgid "If your bank disputed the payment without consulting you, then you should ask them why. Once the problem has been sorted out, you can {link_start}redo the payment{link_end}."
-msgstr "Ако је ваша банка оспорила уплату без консултације са вама, онда би требало да их питате зашто. Када се проблем реши, можете [Кс134Кс]поново извршити плаћање[Кс162Кс]."
+msgstr "Ако је ваша банка оспорила уплату без консултације са вама, онда би требало да их питате зашто. Када се проблем реши, можете {link_start}поново извршити плаћање{link_end}."
 
 #, fuzzy, python-brace-format
 msgid "To help your bank figure out what happened, you can send them a copy of {link_start}this document{link_end}."
-msgstr "Да бисте помогли својој банци да схвати шта се догодило, можете им послати копију [Кс72Кс]овог документа[Кс97Кс]."
+msgstr "Да бисте помогли својој банци да схвати шта се догодило, можете им послати копију {link_start}овог документа{link_end}."
 
 #, fuzzy
 msgid "Your payment has failed"
@@ -371,23 +371,23 @@ msgstr "Ваша уплата није успела"
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr "Аутоматско плаћање [Кс25Кс] започето данас није успело."
+msgstr "Аутоматско плаћање {money_amount} започето данас није успело."
 
 #, fuzzy, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
-msgstr "Аутоматско плаћање [Кс25Кс] започето на [Кс53Кс] није успело."
+msgstr "Аутоматско плаћање {money_amount} започето на {date} није успело."
 
 #, fuzzy, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Исплата [Кс15Кс] започета раније данас није успела."
+msgstr "Исплата {money_amount} започета раније данас није успела."
 
 #, fuzzy, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr "Плаћање [Кс15Кс] започето на [Кс43Кс] није успело."
+msgstr "Плаћање {money_amount} започето на {date} није успело."
 
 #, fuzzy, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
-msgstr "Порука о грешци коју доставља процесор плаћања [Кс52Кс] је:"
+msgstr "Порука о грешци коју доставља процесор плаћања {provider} је:"
 
 #, fuzzy
 msgid "You can try again, possibly with another payment method, by clicking on the link below:"
@@ -403,11 +403,11 @@ msgstr "Започет је повраћај новца у износу од {mo
 
 #, fuzzy, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being refunded."
-msgstr "Уплата од [Кс15Кс] коју сте започели на [Кс52Кс] се враћа."
+msgstr "Уплата од {money_amount} коју сте започели на {date} се враћа."
 
 #, fuzzy, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "Уплата од [Кс15Кс] коју сте покренули на [Кс52Кс] се делимично враћа."
+msgstr "Уплата од {money_amount} коју сте покренули на {date} се делимично враћа."
 
 #, fuzzy
 msgid "Reason: the payment was a duplicate."
@@ -435,23 +435,23 @@ msgstr "Ваш банковни рачун ће бити задужен"
 
 #, fuzzy, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
-msgstr "Директно задуживање [Кс18Кс] са вашег банковног рачуна ([Кс57Кс]) је покренуто да би се финансирала ваша донација за [Кс136Кс]."
+msgstr "Директно задуживање {money_amount} са вашег банковног рачуна ({partial_account_number}) је покренуто да би се финансирала ваша донација за {recipient}."
 
 #, fuzzy, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
-msgstr "Директно задуживање [Кс18Кс] са вашег банковног рачуна ([Кс57Кс]) је покренуто да бисмо финансирали ваше донације за [Кс137Кс]."
+msgstr "Директно задуживање {money_amount} са вашег банковног рачуна ({partial_account_number}) је покренуто да бисмо финансирали ваше донације за {recipients}."
 
 #, fuzzy, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr "Покренули смо директно задуживање [Кс36Кс] са вашег [Кс61Кс] рачуна ([Кс82Кс])."
+msgstr "Покренули смо директно задуживање {money_amount} са вашег {bank_name} рачуна ({partial_account_number})."
 
 #, fuzzy, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr "Покренули смо директно задуживање [Кс36Кс] са вашег банковног рачуна ([Кс75Кс])."
+msgstr "Покренули смо директно задуживање {money_amount} са вашег банковног рачуна ({partial_account_number})."
 
 #, fuzzy, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "Ова операција се спроводи на основу [Кс45Кс]мандата [Кс69Кс][Кс81Кс] који сте потписали на [Кс111Кс], овлашћујући Либерапаи (СЕПА кредитор [Кс167Кс]) да пошаље упутства вашој банци да задужи ваш рачун и вашу банку да задужити свој рачун у складу са тим упутствима."
+msgstr "Ова операција се спроводи на основу {link_start}мандата {mandate_id}{link_end} који сте потписали на {acceptance_date}, овлашћујући Либерапаи (СЕПА кредитор {creditor_identifier}) да пошаље упутства вашој банци да задужи ваш рачун и вашу банку да задужити свој рачун у складу са тим упутствима."
 
 #, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
