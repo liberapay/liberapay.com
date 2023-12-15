@@ -33,7 +33,7 @@ if scope == 'active':
                ORDER BY pt.ctime
                   LIMIT 1
                ) AS first_payment_date
-             , tipper_p.avatar_url AS patron_avatar_url
+             , (CASE WHEN tip.visibility > 1 THEN tipper_p.avatar_url ELSE '' END) AS patron_avatar_url
           FROM current_tips tip
           JOIN participants tipper_p ON tipper_p.id = tip.tipper
          WHERE tip.tippee = %s
@@ -87,7 +87,7 @@ elif scope == 'all':
                     AND coalesce(pt.team, pt.recipient) = tip.tippee
                     AND pt.status = 'succeeded'
                ) AS sum_received
-             , tipper_p.avatar_url AS patron_avatar_url
+             , (CASE WHEN tip.visibility > 1 THEN tipper_p.avatar_url ELSE '' END) AS patron_avatar_url
           FROM current_tips tip
           JOIN participants tipper_p ON tipper_p.id = tip.tipper
          WHERE tip.tippee = %s
