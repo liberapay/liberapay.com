@@ -1,3 +1,4 @@
+import re
 import sys
 
 from babel.messages.pofile import read_po, write_po
@@ -72,6 +73,28 @@ elif sys.argv[1] == 'fix':
     else:
         assert not isinstance(m.id, tuple)
         m.id = new_msg
+    # write back
+    with open(po_path, 'wb') as po:
+        write_po(po, catalog, width=0)
+
+elif sys.argv[1] == 'drop-translations-matching':
+    drop_pattern = sys.argv[2]
+    po_path = sys.argv[3]
+    print(f'dropping translations matching {drop_pattern!r} in PO file {po_path}')
+    # read PO file
+    lang = po_path.rsplit('/', 1)[-1].split('.', 1)[0]
+    with open(po_path, 'rb') as po:
+        catalog = read_po(po, locale=lang)
+    # look for translations that match the pattern, and drop them
+    drop_re = re.compile(drop_pattern)
+    for m in catalog:
+        if isinstance(m.string, tuple):
+            m.string = tuple(
+                '' if drop_re.search(s) else s
+                for s in m.string
+            )
+        else:
+            m.string = '' if drop_re.search(m.string) else m.string
     # write back
     with open(po_path, 'wb') as po:
         write_po(po, catalog, width=0)
