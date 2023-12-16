@@ -759,10 +759,10 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
             del babel.localedata._cache[key]
 
     # Add year-less date format
-    year_re = re.compile(r'(^y+[^a-zA-Z]+|[^a-zA-Z]+y+$)')
+    year_re = re.compile(r'(^y+[^a-zA-Z]+|[^a-zA-Z]+y+$|y+[^a-zA-Z]+$)')
     for l in locales.values():
         short_format = l.date_formats['short'].pattern
-        assert short_format[0] == 'y' or short_format[-1] == 'y', (l.language, short_format)
+        assert year_re.search(short_format), (l.language, short_format)
         l.date_formats['short_yearless'] = year_re.sub('', short_format)
 
     # Add universal strings
