@@ -421,8 +421,8 @@ COUNTRY_CODES = """
     SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR
     TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW
 """.split()
-
 COUNTRIES = make_sorted_dict(COUNTRY_CODES, LOCALE_EN.territories)
+del COUNTRY_CODES
 
 
 def make_currencies_map():

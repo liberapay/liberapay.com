@@ -3,7 +3,7 @@ from liberapay.utils import form_post_success, get_participant
 [---]
 
 participant = get_participant(state, restrict=True, allow_member=True)
-if user != participant and user.recipient_settings.patron_visibilities < 2:
+if user != participant and (user.recipient_settings.patron_visibilities or 0) < 2:
     if not user.is_acting_as('admin'):
         response.redirect(user.path('patrons/'))
 
@@ -111,7 +111,7 @@ subhead = _("Patrons")
     <button class="btn btn-success btn-lg" form="patron_visibilities" name="confirmed" value="true">{{ _("Save") }}</button>
 % endif
 
-% if patron_visibilities > 1
+% if (patron_visibilities or 0) > 1
 <h3>{{ _("Data export") }}</h3>
 <p><a href="{{ participant.path('patrons/public.csv') }}">{{ icon('download') }} {{
     _("Download the list of currently active patrons who chose to make their donations public")

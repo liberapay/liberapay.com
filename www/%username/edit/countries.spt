@@ -1,0 +1,57 @@
+from liberapay.utils import form_post_success, get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=False)
+
+if request.method == 'POST':
+    accepted_countries, rejected_countries = [], []
+    for country_code in locale.countries:
+        if request.body.get(country_code) == '1':
+            accepted_countries.append(country_code)
+        else:
+            rejected_countries.append(country_code)
+    if not accepted_countries:
+        raise response.error(400, _("You have to check at least one box."))
+    if not rejected_countries:
+        new_patron_countries = None
+    elif len(accepted_countries) > len(rejected_countries):
+        new_patron_countries = '-' + ','.join(rejected_countries)
+    else:
+        new_patron_countries = ','.join(accepted_countries)
+    participant.update_recipient_settings(patron_countries=new_patron_countries)
+    form_post_success(state)
+
+accepted_countries = participant.recipient_settings.patron_countries
+accept_all = accepted_countries is None
+
+title = participant.username
+subhead = _("Countries")
+
+[---] text/html
+% from "templates/macros/icons.html" import icon with context
+
+% extends "templates/layouts/profile-edit.html"
+
+% block form
+
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+
+    <p>{{ _("Which countries should your donors be allowed to send you money from?") }}</p>
+
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
+        "We recommend limiting the origins of donations only if you are required to by law."
+    ) }}</p>
+
+    <ul class="columns-sm-3 columns-md-5 checklist">
+    % for country_code, country_name in locale.countries.items()
+        <li><label><input type="checkbox" name="{{ country_code }}" value="1"
+                          {{ 'checked' if accept_all or country_code in accepted_countries else '' }} /> {{ country_name }}</label></li>
+    % endfor
+    </ul>
+
+    <br>
+    <button class="save btn btn-lg btn-success">{{ _("Save") }}</button>
+</form>
+
+% endblock

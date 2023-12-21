@@ -145,10 +145,10 @@ title = _("Funding your donations")
     % elif status == 'failed'
         <div class="alert alert-danger">
             <h4>{{ _("Failure") }}</h4>
-            <p>{{ _(
-                "The payment processor {name} returned an error: “{error_message}”.",
-                name='PayPal', error_message=payin.error
-            ) }}</p>
+            <p>{{
+                _("PayPal status code: {0}", payin.error) if payin.error.isupper() else
+                _("error message: {0}", payin.error)
+            }}</p>
         </div>
         <p><a class="btn btn-primary" href="{{ payer.path('giving/pay') }}?retry={{ payin.id }}">{{ _("Try again") }}</a></p>
     % elif status == 'pending'

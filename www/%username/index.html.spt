@@ -28,7 +28,7 @@ communities = () # participant.get_communities()
 
 langs = participant.get_statement_langs(include_conversions=True)
 
-patron_visibilities = participant.recipient_settings.patron_visibilities
+patron_visibilities = participant.recipient_settings.patron_visibilities or 0
 if patron_visibilities > 1:
     public_patrons = website.db.all("""
         SELECT tipper_p.id

@@ -1740,14 +1740,21 @@ class Participant(Model, MixinTeam):
 
     @cached_property
     def recipient_settings(self):
-        return self.db.one("""
+        r = self.db.one("""
             SELECT *
               FROM recipient_settings
              WHERE participant = %s
         """, (self.id,), default=Object(
             participant=self.id,
-            patron_visibilities=(7 if self.status == 'stub' else 0),
+            patron_visibilities=(7 if self.status == 'stub' else None),
+            patron_countries=None,
         ))
+        if r.patron_countries:
+            if r.patron_countries.startswith('-'):
+                r.patron_countries = set(i18n.COUNTRIES) - set(r.patron_countries[1:].split(','))
+            else:
+                r.patron_countries = set(r.patron_countries.split(','))
+        return r
 
     def update_recipient_settings(self, **kw):
         cols, vals = zip(*kw.items())

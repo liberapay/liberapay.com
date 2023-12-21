@@ -195,7 +195,7 @@ class TestRecipientSettings(Harness):
 
     def test_enabling_and_disabling_non_secret_donations(self):
         alice = self.make_participant('alice')
-        assert alice.recipient_settings.patron_visibilities == 0
+        assert alice.recipient_settings.patron_visibilities is None
         # Check that the donation form isn't proposing the visibility options
         r = self.client.GET('/alice/donate')
         assert r.code == 200

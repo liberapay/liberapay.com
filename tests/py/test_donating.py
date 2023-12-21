@@ -42,7 +42,7 @@ class TestDonating(Harness):
         )
         self.add_payment_account(creator, 'paypal')
         assert creator.payment_providers == 2
-        assert creator.recipient_settings.patron_visibilities == 0
+        assert creator.recipient_settings.patron_visibilities is None
         r = self.client.GET('/creator/donate')
         assert r.code == 200
         assert "This donation won&#39;t be secret, " in r.text, r.text

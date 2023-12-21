@@ -6,7 +6,9 @@ from time import sleep
 import requests
 from pando.utils import utcnow
 
-from ..exceptions import PaymentError
+from ..exceptions import (
+    PaymentError, ProhibitedSourceCountry, UnableToDeterminePayerCountry,
+)
 from ..i18n.currencies import Money
 from ..website import website
 from .common import (
@@ -181,6 +183,35 @@ def capture_order(db, payin):
 
     Doc: https://developer.paypal.com/docs/api/orders/v2/#orders_capture
     """
+    # Check the country the payment is coming from, if a recipient cares
+    limited_recipients = db.all("""
+        SELECT recipient_p
+          FROM payin_transfers pt
+          JOIN recipient_settings rs ON rs.participant = pt.recipient
+          JOIN participants recipient_p ON recipient_p.id = pt.recipient
+         WHERE pt.payin = %s
+           AND rs.patron_countries IS NOT NULL
+    """, (payin.id,))
+    if limited_recipients:
+        url = 'https://api.%s/v2/checkout/orders/%s' % (
+            website.app_conf.paypal_domain, payin.remote_id
+        )
+        response = _init_session().get(url)
+        if response.status_code != 200:
+            raise PaymentError('PayPal')
+        order = response.json()
+        payer_country = order.get('payer', {}).get('address', {}).get('country_code')
+        if not payer_country:
+            raise UnableToDeterminePayerCountry()
+        for recipient in limited_recipients:
+            if (allowed_countries := recipient.recipient_settings.patron_countries):
+                if payer_country not in allowed_countries:
+                    state = website.state.get()
+                    _, locale = state['_'], state['locale']
+                    error = ProhibitedSourceCountry(recipient, payer_country).msg(_, locale)
+                    error += " (error code: ProhibitedSourceCountry)"
+                    return abort_payin(db, payin, error)
+    # Ask PayPal to settle the payment
     url = 'https://api.%s/v2/checkout/orders/%s/capture' % (
         website.app_conf.paypal_domain, payin.remote_id
     )
