@@ -47,9 +47,9 @@ routes = website.db.all("""
       FROM exchange_routes r
      WHERE r.participant = %s
        AND r.network IN ('stripe-card', 'stripe-sdd')
-       AND r.status IN ('chargeable', 'pending')
+       AND ( r.status IN ('chargeable', 'pending') OR %s )
   ORDER BY r.ctime DESC
-""", (participant.id,))
+""", (participant.id, user.is_acting_as('admin')))
 
 today = utcnow().date()
 
@@ -96,7 +96,7 @@ title = _("Payment Instruments")
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % for route, last_payin in routes
-        <div class="payment-instrument">
+        <div class="payment-instrument{% if route.status not in ('chargeable', 'pending') %} text-muted{% endif %}">
             <span>{{
                 fontawesome('credit-card', _("Credit/Debit Card")) if route.network == 'stripe-card' else
                 fontawesome('bank', _("Bank Account")) if route.network == 'stripe-sdd' else
@@ -124,6 +124,8 @@ title = _("Payment Instruments")
                 % endif
                 % if route.status == 'pending'
                     &nbsp; <span class="label label-warning">{{ _("pending") }}</span>
+                % elif route.status != 'chargeable'
+                    &nbsp; <span class="label label-default">{{ route.status }}</span>
                 % endif
                 <br>{{ _("Added on {date}", date=route.ctime.date()) }}
                 % set mandate_url = route.get_mandate_url()
@@ -175,6 +177,7 @@ title = _("Payment Instruments")
                     <br><span class="text-muted">{{ _("This payment instrument hasn't been used yet.") }}</span>
                 % endif
             </span>
+            % if route.status in ('chargeable', 'pending')
             <span>
                 <button class="btn btn-danger btn-xs" name="remove" value="{{ route.id }}">{{ _("Remove") }}</button>
             % if not route.is_default
@@ -191,6 +194,7 @@ title = _("Payment Instruments")
                 % endif
             % endif
             </span>
+            % endif
         </div>
     % endfor
     </form>

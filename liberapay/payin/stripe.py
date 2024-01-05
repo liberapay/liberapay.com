@@ -460,22 +460,24 @@ def settle_charge_and_transfers(
         payer = db.Participant.from_id(payin.payer)
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
-            if payer.is_suspended and pt.status not in ('failed', 'succeeded'):
-                pt = update_payin_transfer(
-                    db, pt.id, None, 'suspended', None,
-                    update_donor=(update_donor and i == last),
-                )
-            elif pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
-                pt = update_payin_transfer(
-                    db, pt.id, None, charge.status, error,
-                    update_donor=(update_donor and i == last),
-                )
-            elif pt.remote_id is None and pt.status in ('pre', 'pending'):
-                pt = execute_transfer(
-                    db, pt, pt.destination_id, charge.id,
-                    update_donor=(update_donor and i == last),
-                )
-            elif payin.refunded_amount and pt.remote_id:
+            if payer.is_suspended:
+                if pt.status not in ('failed', 'succeeded'):
+                    pt = update_payin_transfer(
+                        db, pt.id, None, 'suspended', None,
+                        update_donor=(update_donor and i == last),
+                    )
+            elif pt.remote_id is None:
+                if pt.destination_id == 'acct_1ChyayFk4eGpfLOC':
+                    pt = update_payin_transfer(
+                        db, pt.id, None, charge.status, error,
+                        update_donor=(update_donor and i == last),
+                    )
+                elif pt.status in ('pre', 'pending'):
+                    pt = execute_transfer(
+                        db, pt, pt.destination_id, charge.id,
+                        update_donor=(update_donor and i == last),
+                    )
+            else:
                 pt = sync_transfer(
                     db, pt,
                     update_donor=(update_donor and i == last),

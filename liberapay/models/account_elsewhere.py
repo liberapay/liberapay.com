@@ -392,7 +392,7 @@ def refetch_elsewhere_data():
             SELECT e, p
               FROM elsewhere e
               JOIN participants p ON p.id = e.participant
-             WHERE e.info_fetched_at < now() - interval '90 days'
+             WHERE e.info_fetched_at < now() - interval '30 days'
                AND (e.missing_since IS NULL OR e.missing_since > (current_timestamp - interval '30 days'))
                AND (e.last_fetch_attempt IS NULL OR e.last_fetch_attempt < (current_timestamp - interval '3 days'))
                AND (p.status = 'active' OR p.receiving > 0)

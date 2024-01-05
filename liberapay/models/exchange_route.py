@@ -6,7 +6,7 @@ from postgres.orm import Model
 import stripe
 
 from ..constants import CARD_BRANDS
-from ..exceptions import InvalidId
+from ..exceptions import InvalidId, TooManyAttempts
 
 
 class ExchangeRoute(Model):
@@ -70,6 +70,7 @@ class ExchangeRoute(Model):
     def insert(cls, participant, network, address, status,
                one_off=False, remote_user_id=None, country=None, currency=None):
         p_id = participant.id
+        cls.db.hit_rate_limit('add_payment_instrument', str(p_id), TooManyAttempts)
         r = cls.db.one("""
             INSERT INTO exchange_routes AS r
                         (participant, network, address, status,
