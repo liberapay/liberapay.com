@@ -57,7 +57,7 @@ if participant.join_time:
     years = list(range(current_year, max(participant.join_time.year, 2018) - 1, -1))
 
 [---] text/html
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import fontawesome, glyphicon
 % from "templates/macros/payment-methods.html" import payment_method_icon with context
 
 % extends "templates/layouts/settings.html"
@@ -184,7 +184,7 @@ if participant.join_time:
         <td class="fees">{{ locale.format_money(event['fee']) if event['fee'] else '' }}</td>
         <td class="method">{{ payment_method_icon(event['payin_method']) }}</td>
         % if show_id
-        <td class="id">{{ event['id'] }}</td>
+        <td class="id">{{ event['id'] }}{% if event['remote_id'] %} <a href="https://dashboard.stripe.com/payments/{{ event['remote_id'] }}">{{ fontawesome('external-link-square') }}</a>{% endif %}</td>
         % endif
     </tr>
     % elif event['kind'] == 'payin_transfer'

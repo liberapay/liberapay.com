@@ -460,7 +460,7 @@ def iter_payin_events(db, participant, period_start, period_end, minimize=False)
     params = locals()
     payins = db.all("""
         SELECT pi.id, pi.ctime, pi.amount, pi.status, pi.error, pi.amount_settled, pi.fee
-             , pi.refunded_amount, pi.off_session, r.network AS payin_method
+             , pi.refunded_amount, pi.off_session, pi.remote_id, r.network AS payin_method
           FROM payins pi
           JOIN exchange_routes r ON r.id = pi.route
          WHERE pi.payer = %(id)s
