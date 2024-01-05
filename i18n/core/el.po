@@ -2076,7 +2076,7 @@ msgstr "Η αποδοχή ξένων νομισμάτων μπορεί να αυ
 
 #, python-brace-format
 msgid "Stripe automatically converts funds into your main currency, but by default PayPal holds payments in foreign currencies until you tell it what to do. If you have a Business PayPal account, you can choose to automatically convert all incoming payments in foreign currencies to your main currency. This option is currently located in the “{link_open}Preferences for receiving payments{link_close}” page."
-msgstr "Το Stripe μετατρέπει αυτόματα τα χρήματα στο κύριο συνάλλαγμά σας, αλλά από προεπιλογή το PayPal κρατά τις πληρωμές σε ξένα συναλλάγματα έως ότου το πείτε τι να κάνετε. Εάν έχετε λογαριασμό Business PayPal, μπορείτε να επιλέξετε να μετατρέπετε αυτόματα όλες τις εισερχόμενες πληρωμές σε ξένα συναλλάγματα στο κύριο συνάλλαγμά σας. Αυτή η επιλογή βρίσκεται επί του παρόντος στη σελίδα \"{link_open} Προτιμήσεις για τη λήψη πληρωμών {link_close}\"."
+msgstr "Το Stripe μετατρέπει αυτόματα τα χρήματα στο κύριο συνάλλαγμά σας, αλλά από προεπιλογή το PayPal κρατά τις πληρωμές σε ξένα συναλλάγματα έως ότου το πείτε τι να κάνετε. Εάν έχετε λογαριασμό Business PayPal, μπορείτε να επιλέξετε να μετατρέπετε αυτόματα όλες τις εισερχόμενες πληρωμές σε ξένα συναλλάγματα στο κύριο συνάλλαγμά σας. Αυτή η επιλογή βρίσκεται επί του παρόντος στη σελίδα \"{link_open}Προτιμήσεις για τη λήψη πληρωμών{link_close}\"."
 
 msgid "Connecting the accounts you own on other platforms makes your Liberapay profile easier to find, and helps to demonstrate that you are who you claim to be."
 msgstr "Η σύνδεση λογαριασμών που σας ανήκουν σε άλλες πλατφόρμες κάνει το Liberapay προφίλ σας πιο εύκολο να βρεθεί, και βοηθά να επιδείξετε ότι είστε αυτοί που ισχυρίζεστε ότι είστε."
@@ -2168,33 +2168,30 @@ msgstr "Μπορούμε να εισάγουμε μια λίστα με τα α�
 msgid "We can also import lists of repositories for your teams:"
 msgstr "Μπορούμε επίσης να εισάγουμε λίστες των αποθετηρίων για τις ομάδες σας:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
 msgstr[0] "<unwinningular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
-msgstr[1] "Η περίληψη δεν μπορεί να είναι κάτι περισσότερο από τους χαρακτήρες του {n}."
+msgstr[1] "Η περίληψη δεν μπορεί να υπερβαίνει τους {n} χαρακτήρες."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
 msgstr[0] "<unwinningular (hash=e77fbb49c02c11bb9d859698c4a5363)>"
 msgstr[1] "Η πλήρης περιγραφή πρέπει να είναι τουλάχιστον {n} χαρακτήρες."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
 msgstr[0] "<unwinningular (hash=df724b624e486f3c07109838b9a4b3f0)>"
-msgstr[1] "Η πλήρης περιγραφή δεν μπορεί να είναι περισσότερο από τους χαρακτήρες του {n}."
+msgstr[1] "Η πλήρης περιγραφή δεν μπορεί να υπερβαίνει τους {n} χαρακτήρες."
 
-#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr "Η πλήρης περιγραφή δεν μπορεί να είναι ίδια με την περίληψη."
+msgstr "Η πλήρης περιγραφή δεν μπορεί να είναι πανομοιότυπη με την περίληψη."
 
-#, fuzzy
 msgid "The summary can't be only your name."
 msgstr "Η περίληψη δεν μπορεί να είναι μόνο το όνομά σας."
 
-#, fuzzy
 msgid "The description can't be only your name."
 msgstr "Η περιγραφή δεν μπορεί να είναι μόνο το όνομά σας."
 
@@ -3276,15 +3273,12 @@ msgstr "Δεν είστε μέλος καμίας ομάδας."
 msgid "{username} isn't a member of any team."
 msgstr "{username} δεν είναι μέλος κάποιας ομάδας."
 
-#, fuzzy
 msgid "The payment account has been successfully disconnected."
 msgstr "Ο λογαριασμός πληρωμών έχει αποσυνδεθεί με επιτυχία."
 
-#, fuzzy
 msgid "This payment account is no longer accessible. It is now disconnected."
 msgstr "Αυτός ο λογαριασμός πληρωμών δεν είναι πλέον προσβάσιμος. Τώρα αποσυνδέεται."
 
-#, fuzzy
 msgid "The data has been successfully refreshed."
 msgstr "Τα δεδομένα ανανεώθηκαν με επιτυχία."
 
@@ -3888,14 +3882,14 @@ msgstr "Χρησιμοποιήστε αυτόν τον κώδικα για να 
 
 #, python-brace-format
 msgid "This widget is not available because it is not compatible with the {link_open}privacy settings{link_close} you have chosen."
-msgstr "Αυτό το γραφικό στοιχείο δεν είναι διαθέσιμο επειδή δεν είναι συμβατό με τις ρυθμίσεις απορρήτου {link_open}{link_close} που έχετε επιλέξει."
+msgstr "Αυτό το γραφικό στοιχείο δεν είναι διαθέσιμο επειδή δεν είναι συμβατό με τις {link_open}ρυθμίσεις απορρήτου{link_close} που έχετε επιλέξει."
 
 msgid "Or, if you'd like a widget that shows how much you're giving:"
 msgstr "Εναλλακτικά, εάν θέλετε ένα widget που δείχνει πόσα δίνετε:"
 
 #, python-brace-format
 msgid "Badges from {link_open}Shields.io{link_close}"
-msgstr "Σήματα από {link_open} Shields.io {link_close}"
+msgstr "Σήματα από {link_open}Shields.io{link_close}"
 
 msgid "Use these code snippets to add a badge to your website or README:"
 msgstr "Χρησιμοποιήστε αυτά τα αποσπάσματα κώδικα για να προσθέσετε ένα σήμα στον ιστότοπό σας ή στο README:"
@@ -4066,7 +4060,7 @@ msgstr "Μπορείτε να λαμβάνετε ενημερώσεις από �
 
 #, python-brace-format
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
-msgstr "Μπορείτε επίσης να παρακολουθείτε την ανάπτυξη του λογισμικού Liberapay {1}{0}, τις περιπέτειες του νομικού προσώπου Liberapay {2}{0} και τις γενικές συζητήσεις της ομάδας Liberapay {3}{0} ."
+msgstr "Μπορείτε επίσης να παρακολουθείτε {1}την ανάπτυξη του λογισμικού Liberapay{0}, τις {2}περιπέτειες του νομικού προσώπου Liberapay{0} και τις {3}γενικές συζητήσεις της ομάδας Liberapay{0}."
 
 msgid "Donations can come from anywhere in the world."
 msgstr "Οι δωρεές μπορούν να προέρχονται από οπουδήποτε στον κόσμο."
@@ -4809,7 +4803,7 @@ msgstr "2. Χρηματοδότηστε τη δωρεά σας"
 
 #, python-brace-format
 msgid "On Liberapay, donations are funded in advance. You have control over when and how much you pay. Sending more money at once usually results in a lower percentage of {0}transaction fees{1}."
-msgstr "Στο Liberapay, οι δωρεές χρηματοδοτούνται εκ των προτέρων. Έχετε τον έλεγχο του πότε και πόσο πληρώνετε. Η ταυτόχρονη αποστολή περισσότερων χρημάτων έχει συνήθως ως αποτέλεσμα χαμηλότερο ποσοστό των τελών συναλλαγής {0}{1} ."
+msgstr "Στο Liberapay, οι δωρεές χρηματοδοτούνται εκ των προτέρων. Έχετε τον έλεγχο του πότε και πόσο πληρώνετε. Η ταυτόχρονη αποστολή περισσότερων χρημάτων έχει συνήθως ως αποτέλεσμα χαμηλότερο ποσοστό των {0}τελών συναλλαγής{1}."
 
 msgid "3. Keep your donation funded"
 msgstr "3. Κρατήστε τη δωρεά σας χρηματοδοτούμενη"
