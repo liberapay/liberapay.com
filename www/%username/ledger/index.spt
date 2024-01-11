@@ -184,7 +184,11 @@ if participant.join_time:
         <td class="fees">{{ locale.format_money(event['fee']) if event['fee'] else '' }}</td>
         <td class="method">{{ payment_method_icon(event['payin_method']) }}</td>
         % if show_id
-        <td class="id">{{ event['id'] }}{% if event['remote_id'] %} <a href="https://dashboard.stripe.com/payments/{{ event['remote_id'] }}">{{ fontawesome('external-link-square') }}</a>{% endif %}</td>
+        <td class="id">{{ event['id'] }}
+            {%- if event['remote_id'] and event['payin_method'].startswith('stripe-') %}
+            <a href="https://dashboard.stripe.com/payments/{{ event['remote_id'] }}">{{ fontawesome('external-link-square') }}</a>
+            {%- endif -%}
+        </td>
         % endif
     </tr>
     % elif event['kind'] == 'payin_transfer'
