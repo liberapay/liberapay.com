@@ -68,7 +68,7 @@ recent = website.db.one("""
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://{{ request.hostname }}/" />
     <meta property="og:title" content="Liberapay" />
-    <meta property="og:image" content="{{ website.asset('liberapay/icon-v2_white-on-yellow.200.png') }}" />
+    <meta property="og:image" content="{{ website.asset('liberapay/icon-v2_black-on-yellow.200.png') }}" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@liberapay" />
 % endblock
@@ -76,7 +76,7 @@ recent = website.db.one("""
 % block content
 
     <div class="jumbotron section">
-    <p><img src="{{ website.asset('liberapay/icon-v2_white-on-yellow.svg') }}" height=100 width=100 /></p>
+    <p><img src="{{ website.asset('liberapay/icon-v2_black-on-yellow.svg') }}" height=100 width=100 /></p>
     <p>{{ _("Liberapay is a recurrent donations platform.") }}</p>
     <p>{{ _("We help you fund the creators and projects you appreciate.") }}</p>
     </div>

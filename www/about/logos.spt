@@ -16,7 +16,7 @@ title = _("Logos")
 
     <p>{{ _(
         "The Liberapay logo is composed of the two letters “lp”. It's usually "
-        "colored either white-on-yellow, black-on-yellow, or just black."
+        "colored black-on-yellow or just black."
     ) }}</p>
 
     <p>{{ _(
@@ -46,12 +46,12 @@ title = _("Logos")
     ) }}</p>
 
     <div class="card text-center">
-        <p><img src="{{ website.asset('liberapay/icon-v2_white-on-yellow.svg') }}" height=150 /></p>
-        <p><a href="/assets/liberapay/icon-v2_white-on-yellow.svg?save_as=liberapay_logo_white-on-yellow.svg">
-            {{ fontawesome('download') }} {{ _("Download the white-on-yellow SVG") }}
+        <p><img src="{{ website.asset('liberapay/icon-v2_black-on-yellow.svg') }}" height=150 /></p>
+        <p><a href="/assets/liberapay/icon-v2_black-on-yellow.svg?save_as=liberapay_logo_black-on-yellow.svg">
+            {{ fontawesome('download') }} {{ _("Download the black-on-yellow SVG") }}
         </a></p>
-        <p><a href="/assets/liberapay/icon-v2_white-on-yellow.200.png?save_as=liberapay_logo_white-on-yellow_200px.png">
-            {{ fontawesome('download') }} {{ _("Download the white-on-yellow PNG ({x_y} pixels)", x_y="200×200") }}
+        <p><a href="/assets/liberapay/icon-v2_black-on-yellow.200.png?save_as=liberapay_logo_black-on-yellow_200px.png">
+            {{ fontawesome('download') }} {{ _("Download the black-on-yellow PNG ({x_y} pixels)", x_y="200×200") }}
         </a></p>
     </div>
 
