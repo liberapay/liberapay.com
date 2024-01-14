@@ -141,7 +141,7 @@ payin_id = request.path['payin_id']
 if payin_id == 'complete':
     payin = website.db.one("""
         SELECT pi.*
-          FROM payin pi
+          FROM payins pi
           JOIN exchange_routes r ON r.id = pi.route
          WHERE pi.participant = %s
            AND r.network = 'stripe'
