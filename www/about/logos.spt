@@ -47,7 +47,7 @@ title = _("Logos")
     ) }}</p>
 
     <div class="card text-center">
-        <p><img src="{{ website.asset('liberapay/icon-v2_black-on-yellow.svg') }}" height=150 /></p>
+        <p><img src="{{ website.asset('liberapay/icon-v2_black-on-yellow.svg') }}" height=150 alt="{{ _('Liberapay logo, black-on-yellow') }}" /></p>
         <p><a href="/assets/liberapay/icon-v2_black-on-yellow.svg?save_as=liberapay_logo_black-on-yellow.svg">
             {{ fontawesome('download') }} {{ _("Download the black-on-yellow SVG") }}
         </a></p>
@@ -57,7 +57,7 @@ title = _("Logos")
     </div>
 
     <div class="card text-center">
-        <p><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}" height=150 /></p>
+        <p><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}" height=150 alt="{{ _('Liberapay logo, black') }}" /></p>
         <p><a href="/assets/liberapay/icon-v2_black.svg?save_as=liberapay_logo_black.svg">
             {{ fontawesome('download') }} {{ _("Download the black SVG") }}
         </a></p>
