@@ -95,8 +95,13 @@ def charge(db, payin, payer, route, update_donor=True):
           JOIN participants p On p.id = pt.recipient
          WHERE pt.payin = %(payin)s
     """, dict(payin=payin.id))
+    payer_state = (
+        'blocked' if payer.is_suspended else
+        'invalid' if payer.status != 'active' or not payer.get_email_address() else
+        'okay'
+    )
     new_status = None
-    if payer.is_suspended:
+    if payer_state != 'okay':
         new_status = 'failed'
     elif route.network == 'stripe-sdd':
         for pt in transfers:
@@ -113,9 +118,11 @@ def charge(db, payin, payer, route, update_donor=True):
             payin = update_payin(db, payin.id, None, new_status, new_payin_error)
             for i, pt in enumerate(transfers, 1):
                 new_transfer_error = (
-                    "canceled because payer account is blocked"
-                    if payer.is_suspended else
-                    "canceled because destination account is blocked"
+                    "canceled because the payer's account is blocked"
+                    if payer_state == 'blocked' else
+                    "canceled because the payer's account is in an invalid state"
+                    if payer_state == 'invalid' else
+                    "canceled because the destination account is blocked"
                     if pt.recipient_marked_as in ('fraud', 'spam') else
                     "canceled because another destination account is blocked"
                 ) if new_status == 'failed' else None
@@ -460,7 +467,7 @@ def settle_charge_and_transfers(
         payer = db.Participant.from_id(payin.payer)
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
-            if payer.is_suspended:
+            if payer.is_suspended or not payer.get_email_address():
                 if pt.status not in ('failed', 'succeeded'):
                     pt = update_payin_transfer(
                         db, pt.id, None, 'suspended', None,

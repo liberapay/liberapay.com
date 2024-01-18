@@ -3705,6 +3705,14 @@ class Participant(Model, MixinTeam):
             locale, request = state['locale'], state['request']
             return locale.territory or request.source_country
 
+    @property
+    def can_attempt_payment(self):
+        return (
+            not self.is_suspended and
+            self.status == 'active' and
+            bool(self.get_email_address())
+        )
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.
