@@ -66,6 +66,7 @@ msgstr "管理您的捐款"
 msgid "It's past time to renew your donation to {username} on Liberapay"
 msgstr "已經超過在 Liberapay 上爲 {username} 續捐的時間了"
 
+#, fuzzy
 msgid "It's past time to renew your donations on Liberapay"
 msgstr "已經超過在 Liberapay 上續捐的時間了"
 
@@ -128,7 +129,7 @@ msgstr "管理您的電子郵件地址"
 
 #, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
-msgstr "您本週在 Liberapay 收入大約為 {money_amount}"
+msgstr "您本週在 Liberapay 的收入大約為 {money_amount}"
 
 #, python-brace-format
 msgid "Your Liberapay income is {money_amount} this week"
@@ -218,7 +219,7 @@ msgstr "您有一筆{amount}金額的捐款預計在{payment_date}要支付給{r
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "您有 {n} 筆付款需要更新其捐款安排，但因無有效的付款指示我們無法完成"
+msgstr[0] "由於您並沒有任何一個有效的付款方式，我們暫未能處理正等待續捐的 {n} 筆捐款。"
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "支付的日期、數額與收款人："
@@ -446,7 +447,7 @@ msgid "Configure payment processing"
 msgstr "設定付款方法"
 
 msgid "If you do not wish to receive donations on Liberapay, you can reject them by editing your profile accordingly."
-msgstr "如果您不希望在Liberapay上收到捐款，您可以通过编辑您的相应的个人资料来拒绝捐款。"
+msgstr "如果您不希望在Liberapay上收到捐款，您可以通過編輯您的相應的個人資料來拒絕捐款。"
 
 msgid "Reject donations"
 msgstr "拒絕捐款"
@@ -519,7 +520,7 @@ msgstr "管理付款排程"
 
 #, python-brace-format
 msgid "{0} from {1} has joined Liberapay!"
-msgstr "{0} 來自{1} 已加入 Liberapay！"
+msgstr "{0} 來自 {1} 已加入 Liberapay！"
 
 #, python-brace-format
 msgid "Your pledge to give {0} every week to {1} will be turned into action now that they have joined Liberapay. Huzzah!"
@@ -531,7 +532,7 @@ msgstr "這個連結可以檢視 {0} 的個人介紹頁面："
 
 #, python-brace-format
 msgid "{user_name} from {platform} has joined Liberapay!"
-msgstr "來自{platform}的{user_name} 已加入 Liberapay！"
+msgstr "來自 {platform} 的 {user_name} 已加入 Liberapay！"
 
 #, python-brace-format
 msgid "On {date} you pledged to donate {money_amount} to {user_name} if they joined Liberapay."
@@ -668,7 +669,7 @@ msgstr "一旦順利完成付款就可取得收據，您可在{link_start}帳戶
 msgid "Email address verification - Liberapay"
 msgstr "電子郵件地址驗證 - Liberapay"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "We've received a request to associate the email address {0} to the Liberapay account whose current address is {1}. Sound familiar?"
 msgstr "我們收到來自{0} 請求加入 Liberapay ，其電郵地址為 {1}。聽起來很熟悉吧？"
 
@@ -940,7 +941,7 @@ msgid "You are not allowed to add another email address right now, please try ag
 msgstr "你現在不能增加其他電子郵件地址，請在幾天後重試。"
 
 msgid "There have been too many attempts to log in from your IP address or country recently. Please try again in an hour and email support@liberapay.com if the problem persists."
-msgstr "您的IP地址或国家最近已尝试登录多次。请在一小时后重试，若问题仍旧存在请联系support@liberapay.com。"
+msgstr "您的IP地址或國家最近已多次嘗試登入帳戶，請在一小時後重試。若問題仍然存在，請聯繫 support@liberapay.com。"
 
 msgid "You have consumed your quota of email logins, please try again tomorrow, or contact support@liberapay.com."
 msgstr "您已用完透過電子郵件登入帳號的次數，請明日再試，或聯絡 support@liberapay.com。"
@@ -949,7 +950,7 @@ msgid "There have been too many attempts to log in to this account recently, ple
 msgstr "該帳號的登入嘗試次數過多，請幾小時後重試或使用電子郵件登入。"
 
 msgid "Too many accounts have been created recently. This either means that a lot of people are trying to join Liberapay today, or that an attacker is trying to overload our system. As a result we have to ask you to come back later (e.g. in a few hours), or send an email to support@liberapay.com. We apologize for the inconvenience."
-msgstr "最近，出現大量新增帳號。這可能是有許多人嘗試加入　Liberapay，或者一個攻擊者正試著使系統超載。因此我們請你稍等片刻（如：幾小時）後再來，或聯繫　support@liberapay.com。我們對此不便致歉。"
+msgstr "最近出現大量新帳號。這可能是有許多人嘗試加入 Liberapay，或者一個攻擊者正試著使系統超載。因此我們請你稍等片刻（如：幾小時）後再來，或聯繫 support@liberapay.com。我們對此不便致歉。"
 
 msgid "You've already created several teams recently, please come back in a week."
 msgstr "您最近已经创建了太多的团队账号，请下周再试试看。"
@@ -1026,21 +1027,21 @@ msgid "You've already changed your main currency recently, please retry later (e
 msgstr "你最近變動了主要的貨幣，請稍後（例如一週內）再試或聯絡 support@liberapay.com."
 
 msgid "There have been too many attempts to perform this action recently, please retry later (e.g. in a week) or contact support@liberapay.com if you require assistance."
-msgstr "本操作已被尝试多次。请以后（例如一周内）重试或联系support@liberapay.com以取得帮助。"
+msgstr "本操作已被嘗試過多次。請稍後（如一周内）重試或聯繫 support@liberapay.com 以取得幫助。"
 
 msgid "You're sending requests at an unusually fast pace. Please retry in a few seconds, and contact support@liberapay.com if the problem persists."
-msgstr "您的网络请求发送次数异常频繁。请在几秒后重试，如果问题依旧存在，请联系 support@liberapay.com。"
+msgstr "您傳送請求的速度異常地快，請在幾秒後重試。如過問題仍然存在，請聯繫 support@liberapay.com。"
 
 #, python-brace-format
 msgid "The attempt to send an email to {email_address} failed. Please check that the address is valid and retry. If the problem persists, please contact support@liberapay.com."
-msgstr "無法送信到{email_address}，請檢查該地址是否有效後重試。如果該問題無法解決，請聯絡 support@liberapay.com。"
+msgstr "無法傳送郵件至 {email_address}，請檢查該地址是否有效後重試。如果該問題無法解決，請聯絡 support@liberapay.com。"
 
 msgid "This payment method is currently unavailable. We apologize for the inconvenience."
 msgstr "此付款方法目前無法使用，很抱歉造成不便。"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error. Please try again and contact support@liberapay.com if the problem persists."
-msgstr "付款結算方 {name} 傳回錯誤訊息。請重試，若問題無法解決可聯絡 support@liberapay.com。"
+msgstr "付款結算方 {name} 傳回錯誤訊息，請重試。若問題無法解決可聯絡 support@liberapay.com。"
 
 msgid "Forbidden"
 msgstr "禁止"
@@ -1452,9 +1453,8 @@ msgstr "儲存"
 msgid "If you need to change the password of your Liberapay account, you can do so below. To be secure, the password of your account should be randomly generated and not used anywhere else. We strongly recommend the use of a password manager."
 msgstr "若您需要更改您的 Liberapay 帳號的密碼，您可以在下方進行。為了安全起見，您的密碼應為隨機生成，且不要在其他任何地方使用。我們強烈建議使用密碼管理器。"
 
-#, fuzzy
 msgid "Setting a password allows you to log in directly, instead of waiting for a single-use link sent via email. However, we only recommend setting a password if you use a password manager, because in order to be secure the password should be randomly generated and not used anywhere else."
-msgstr "設置密碼可以讓你直接登錄，而不是等待通過電子郵件發送的一次性鏈接。然而，我們只建議你在使用密碼管理器的情況下設置密碼，因爲爲了安全起見，密碼應該是隨機生成的，且不能在其他地方使用。"
+msgstr "設置密碼可以讓你直接登錄，而不是等待通過電子郵件發送的一次性鏈結。然而，我們只建議你在使用密碼管理器的情況下設置密碼，因爲爲了安全起見，密碼應該是隨機生成的，且不能在其他地方使用。"
 
 msgid "Current password"
 msgstr "目前的密碼"
@@ -1901,7 +1901,7 @@ msgid "People who contribute to the commons need you to support their work. Buil
 msgstr "為了人群共同利益的貢獻者需要你我來支持他們的工作，包括開發免費開源軟體、分享自由知識等等，這些工作都要耗費時間與金錢，而且不只是一開始的投入更需要長期維持的成本。"
 
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "Liberapay 重覆定期的捐款統系是設計用來提供穩定的眾資收入來源給一些創作者，讓他們可以持續優秀的作品 好讓更多人受惠。等不及要捐款了嗎？那就立即開始吧："
+msgstr "Liberapay 重覆定期的捐款系統是設計用來提供穩定的眾資收入來源給一些創作者，讓他們可以持續優秀的作品 好讓更多人受惠。等不及要捐款了嗎？那就立即開始吧："
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "你正在使用沙盒模式，請勿輸入真實的付款或個人信息！"
@@ -1911,7 +1911,7 @@ msgstr "儀控表"
 
 #, python-brace-format
 msgid "Donate to {0} via Liberapay"
-msgstr "使用Liberapay向{0}捐款"
+msgstr "使用 Liberapay 向{0}捐款"
 
 #, python-brace-format
 msgid "Support {username}'s work with a recurrent donation."
@@ -1974,7 +1974,6 @@ msgstr "我能只捐款一次嗎？"
 msgid "One-time donations aren't properly supported yet, but you can discontinue your donation immediately after the first payment."
 msgstr "目前不支援一次性捐助，不過您可以在首次付款後馬上終止捐款。"
 
-#, fuzzy
 msgid "Will I get a receipt?"
 msgstr "我會得到一張收據嗎？"
 
@@ -2151,32 +2150,29 @@ msgstr "我們可以從以下服務匯入您的儲存庫列表："
 msgid "We can also import lists of repositories for your teams:"
 msgstr "我們可以為你的團隊導入代碼庫列表："
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=82d03d589b58d2a8c99d043ba5f91b84)>"
 msgid_plural "The summary can't be more than {n} characters long."
 msgstr[0] "概述長度不能超過 {n} 個字符。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=e77fbb49c028c11bb9d859698c4a5363)>"
 msgid_plural "The full description must be at least {n} characters long."
-msgstr[0] "完整描述的最短長度是 {n} 個字符。"
+msgstr[0] "詳細描述的最短長度是 {n} 個字符。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=df724b624e486f3c07109838b9a4b3f0)>"
 msgid_plural "The full description can't be more than {n} characters long."
-msgstr[0] "完整描述的長度不能超過 {n} 個字符。"
+msgstr[0] "詳細描述的長度不能超過 {n} 個字符。"
 
-#, fuzzy
 msgid "The full description can't be identical to the summary."
-msgstr "完整描述內容不能和概述相同。"
+msgstr "詳細描述內容不能和概述相同。"
 
-#, fuzzy
 msgid "The summary can't be only your name."
-msgstr "概述不能只有你的名字。"
+msgstr "概述不能只有您的名字。"
 
-#, fuzzy
 msgid "The description can't be only your name."
-msgstr "描述不能只有你的名字。"
+msgstr "描述不能只有您的名字。"
 
 msgid "This is a preview."
 msgstr "此為預覽。"
@@ -2187,9 +2183,8 @@ msgstr "在社交媒體上使用的文字："
 msgid "Preview of the short description"
 msgstr "簡介預覽"
 
-#, fuzzy
 msgid "Including your username in the short description is redundant. The short description is always displayed immediately below the username."
-msgstr "在簡短的描述中包括你的用戶名是多餘的。簡短描述總是緊跟在用戶名的下面。"
+msgstr "在簡短的描述中包括你的用戶名是多餘的。簡短描述總是會跟在用戶名下方。"
 
 msgid "Publish"
 msgstr "發布"
@@ -3026,6 +3021,7 @@ msgstr "自動扣款"
 msgid "charge"
 msgstr "收費"
 
+#, fuzzy
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "這筆付款正在等待 Liberapay 員工進行人工審覈是否有欺詐跡象。"
 
@@ -3091,9 +3087,8 @@ msgstr "支付必須由收款者透過 {provider} 網站的手動操作來處理
 msgid "PayPal status code: {0}"
 msgstr "PayPal 狀態碼: {0}"
 
-#, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
-msgstr "由於涉嫌欺詐或其他未經授權的行爲，付款人的賬戶被暫停。"
+msgstr "由於付款人的帳戶涉嫌欺詐或其他未經授權的行為，該帳戶已被凍結。"
 
 msgid "There were no transactions during this period."
 msgstr "在此期間沒有任何交易。"
@@ -3182,7 +3177,6 @@ msgstr "無通知可顯示。"
 msgid "Next Page →"
 msgstr "下一頁 →"
 
-#, fuzzy
 msgid "You have to check at least one box."
 msgstr "你必須至少勾選一個方框。"
 
@@ -3198,27 +3192,22 @@ msgstr "您沒有任何活躍的捐助者。"
 msgid "{username} doesn't have any active patrons."
 msgstr "{username} 沒有任何活躍的捐款者。"
 
-#, fuzzy
 msgid "Visibility levels"
 msgstr "可見性等級"
 
-#, fuzzy
 msgid "Liberapay supports three visibility levels for donations. Each level can be turned on or off, but at least one of them must be enabled."
-msgstr "利寶支付支持三個級別的捐款可見性。可以打開或關閉任意級別，但至少要啓用其中一個級別。"
+msgstr "Liberapay 支持三個不同的捐助可見性等級。這些級別可以隨意開啓或關閉，但至少需要開啓一個。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Secret donations aren't possible with PayPal. You should either disable secret donations or {link_start}add a Stripe account{link_end}."
-msgstr "PayPal 無法使用祕密捐贈。要麼禁用祕密捐款，或者{link_start}添加一個 Stripe 賬戶{link_end}。"
+msgstr "PayPal 並不支持祕密捐款。您只可停用祕密捐款，或{link_start}添加一個 Stripe 帳戶{link_end}。"
 
-#, fuzzy
 msgid "Secret donations aren't possible when the payer uses PayPal."
-msgstr "付款人使用PayPal時，無法使用祕密捐贈。"
+msgstr "付款人使用 PayPal 時，無法使用祕密捐贈。"
 
-#, fuzzy
 msgid "Allow secret donations"
 msgstr "允許祕密捐贈"
 
-#, fuzzy
 msgid "Allow private donations"
 msgstr "允許私密捐贈"
 
@@ -3226,9 +3215,8 @@ msgstr "允許私密捐贈"
 msgid "Allow public donations"
 msgstr "允許公開捐贈"
 
-#, fuzzy
 msgid "This is what your prospective donors currently see:"
-msgstr "這是你的潛在捐助者目前使用的："
+msgstr "這是你的潛在捐助者目前所見的："
 
 #, fuzzy
 msgid "This is what your prospective donors will see with the new settings:"
@@ -3262,17 +3250,16 @@ msgstr "成功斷開了與付款賬戶的連接。"
 msgid "This payment account is no longer accessible. It is now disconnected."
 msgstr "無法在訪問此付款賬戶。已經斷開與它的連接。"
 
-#, fuzzy
 msgid "The data has been successfully refreshed."
-msgstr "成功刷新了該數據。"
+msgstr "成功更新了該數據。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
-msgstr "你必須{link_open}確認你的電子郵件地址{link_close} ，然後才能開始接收捐款。"
+msgstr "在開始接收捐款前必須先{link_open}確認您的電子郵件地址{link_close}。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "您必須{link_open}設置您的用戶名{link_close}才能開始接收捐款。"
+msgstr "您必須先{link_open}設置您的用戶名{link_close}才能開始接收捐款。"
 
 #, fuzzy, python-brace-format
 msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
@@ -3415,7 +3402,7 @@ msgid "Taxes"
 msgstr "稅"
 
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
-msgstr "這筆款項是捐贈，不提供任何商品或服務作爲交換，Liberapay 未收取任何稅款。"
+msgstr "這筆款項是捐贈，不提供任何商品或服務作爲交換，Liberapay 沒有收取任何稅款。"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "你必須設定支付方法才能收取新的捐款。"
@@ -3875,7 +3862,7 @@ msgid "Do not contact us if you are trying to reach one of our users. We do not 
 msgstr "我們無法代您聯絡本站某位用戶，恕我們不提供訊息中繼服務。除非持有合法的法院命令，我們不會揚露用戶的資料或聯絡資訊。"
 
 msgid "To contact the Liberapay team privately:"
-msgstr "私下連結 Liberapay 團隊："
+msgstr "私下聯絡 Liberapay 團隊："
 
 msgid "Send an email to Liberapay"
 msgstr "發送電子郵件至 Liberapay"
@@ -3916,9 +3903,9 @@ msgstr "{abbr_}NSFW{_abbr} 內容的創作者可以使用 Liberapay 嗎？"
 msgid "Not safe for work"
 msgstr "Not safe for work，不適合工作場所的內容"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment processors Liberapay supports have unfavourable policies towards sexual content. {paypal_link}PayPal requires pre-approval{link_close}, and {stripe_link}Stripe prohibits it entirely{link_close}. So, while it is possible to use Liberapay for some adult-only content, it is usually better to use a platform specialized in such content."
-msgstr "Liberapay 支持的支付處理商有不利於性內容的政策。{paypal_link}PayPal 要求預先審批{link_close} ，{stripe_link}Stripe 則完全禁止{link_close} 。因此，雖然可以使用 Liberapay 爲一些成人內容募款，但通常還是建議使用專門處理這類內容的平臺。"
+msgstr "Liberapay 支持的支付處理商對於性內容採取一些較為不利的政策 — {paypal_link}PayPal 要求預先審批{link_close} ，{stripe_link}Stripe 則完全禁止{link_close}。雖然您可以使用 Liberapay 爲成人內容募款，但我們還是建議使用專門處理這類內容的平臺。"
 
 msgid "Can I modify or stop my donations?"
 msgstr "我可以修改或停止捐款嗎？"
@@ -4169,9 +4156,8 @@ msgstr "通常 Stripe 手續費較 PayPal 便宜。"
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "Stripe 允許自動續約捐款，而 PayPal 目前要求捐款人確認每筆付款。"
 
-#, fuzzy
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr "通過 Stripe 進行的捐贈可以是私密的，而 PayPal 始終允許捐贈者和接收者查看彼此的姓名和電子郵件地址。"
+msgstr "藉由 Stripe 進行的交易可以是祕密的。如使用 PayPal 捐款，捐贈者與受惠者則一定能夠看到彼此的姓名和電郵地址。"
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "在某些情況下，Stripe 允許同時向多個創作者捐款，而 PayPal 始終需要分別付款。"
@@ -4307,7 +4293,7 @@ msgstr[0] "{n} 參與者既是捐助者，也是接受者。"
 #, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
 msgid_plural "On average, people who donate give {0} each to {n} other users."
-msgstr[0] "平均來說，捐款人約會給予 {0} 錢至{n} 另一位用戶。"
+msgstr[0] "平均來說，捐款人約會給予 {0} 錢至 {n} 另一位用戶。"
 
 msgid "Open Accounts"
 msgstr "打開帳戶"
@@ -4506,9 +4492,8 @@ msgstr "儘管做出了努力，這裏列出的用戶資料中還是可能存在
 msgid "Profiles only start appearing in the list 72 hours after they're created."
 msgstr "用戶資料至少要在創建 72 小時後纔會出現在列表中。"
 
-#, fuzzy
 msgid "People and projects who receive donations through Liberapay."
-msgstr "通過Liberapay接受捐贈的人和項目。"
+msgstr "通過 Liberapay 接受捐贈的人和專案。"
 
 #, fuzzy
 msgid "Explore Recipients"
@@ -4836,7 +4821,7 @@ msgstr[0] "您可以在 {platform1} ，{platform2} ，{platform3} 和 {n} 個其
 
 #, python-brace-format
 msgid "You can also easily list on your profile the repositories you contribute to on {platforms_list}."
-msgstr "您还可以轻松地在您的个人资料上列出您在{platforms_list}上贡献的存储库."
+msgstr "您還可以輕鬆地在您的個人資料上列出您在{platforms_list}上貢獻的儲存庫。"
 
 msgid "Liberapay allows pledging to people who haven't joined the site yet. No money is collected for pledges, they only become real donations when the recipients join. Of course we notify the donors when that happens."
 msgstr "Liberapay 允許向尚未加入本站的人認捐。認捐不收取任何款項，只有當受捐者加入時，它們才會變成真正的捐贈。當然，我們會在這種情形發生時通知捐贈者。"
