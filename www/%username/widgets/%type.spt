@@ -26,7 +26,7 @@ if participant.hide_giving and t_is_giving or \
    participant.hide_receiving and not t_is_giving:
     raise response.error(403)
 
-response.headers[b'Cache-Control'] = b'public, max-age=3600'
+response.headers[b'Cache-Control'] = b'public, max-age=3600, stale-while-revalidate=900'
 if request.hostname == website.canonical_host:
     response.headers[b'Vary'] = b'Accept-Language'
 
