@@ -9,7 +9,7 @@
 
 % block main
 <div class="content-with-nav tabs-left">
-% if request.path.raw != '/explore/'
+% if request.path.raw not in ('/explore', '/explore/')
     % from "templates/macros/nav.html" import nav_explore with context
     <nav class="nav-col">
         <input id="subnav-explore" class="subnav-toggler sr-only" type="checkbox" />
