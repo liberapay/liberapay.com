@@ -1,5 +1,6 @@
 import stripe
 
+from liberapay.exceptions import AccountSuspended
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.stripe import create_source_from_token, repr_stripe_error
 from liberapay.utils import check_address_v2, form_post_success, get_participant
@@ -10,6 +11,8 @@ participant = get_participant(state, restrict=True)
 identity = participant.get_current_identity() or {}
 
 if request.method == 'POST':
+    if not participant.can_attempt_payment:
+        raise AccountSuspended()
     body = request.body
     one_off = body.get('one_off') == 'true'
     return_url = participant.url('routes/')
