@@ -27,6 +27,7 @@ del currency
 
 payment_type = request.qs.get('method', 'card')
 
+error = None
 if request.method == 'POST':
     website.check_payin_allowed(request, user, 'stripe-' + payment_type)
 
@@ -104,44 +105,44 @@ if request.method == 'POST':
             route.set_as_default_for(set_as_default_for)
 
     except stripe.error.StripeError as e:
-        raise response.error(e.http_status or 500, _(
+        route = None
+        error = _(
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
-        ))
+        )
 
-    if not route:
-        raise response.error(400, _(
-            "The payment instrument is invalid, please select or add another one."
-        ))
+    if route:
+        try:
+            if postal_address and not (route.get_postal_address() or {}).get('line1'):
+                route.set_postal_address(postal_address)
+        except stripe.error.StripeError as e:
+            website.tell_sentry(e)
 
-    try:
-        if postal_address and not (route.get_postal_address() or {}).get('line1'):
-            route.set_postal_address(postal_address)
-    except stripe.error.StripeError as e:
-        website.tell_sentry(e)
+        transfer_amounts = resolve_amounts(
+            payin_amount, {tip.id: tip.amount for tip in tips}
+        )
+        payer_country = route.country or payer.guessed_country
+        proto_transfers = []
+        sepa_only = len(tips) > 1
+        for tip in tips:
+            proto_transfers.extend(resolve_tip(
+                website.db, tip, tip.tippee_p, 'stripe', payer, payer_country,
+                transfer_amounts[tip.id], sepa_only=sepa_only,
+            ))
+        payin = prepare_payin(website.db, payer, payin_amount, route, proto_transfers)[0]
 
-    transfer_amounts = resolve_amounts(
-        payin_amount, {tip.id: tip.amount for tip in tips}
-    )
-    payer_country = route.country or payer.guessed_country
-    proto_transfers = []
-    sepa_only = len(tips) > 1
-    for tip in tips:
-        proto_transfers.extend(resolve_tip(
-            website.db, tip, tip.tippee_p, 'stripe', payer, payer_country,
-            transfer_amounts[tip.id], sepa_only=sepa_only,
-        ))
-    payin = prepare_payin(website.db, payer, payin_amount, route, proto_transfers)[0]
+        msg = _("Request in progress, please wait…")
+        response.refresh(state, url=payer.path('giving/pay/stripe/%i' % payin.id), msg=msg)
 
-    msg = _("Request in progress, please wait…")
-    response.refresh(state, url=payer.path('giving/pay/stripe/%i' % payin.id), msg=msg)
+    elif not error:
+        error = _("The payment instrument is invalid, please select or add another one.")
 
 payin_id = request.path['payin_id']
 
 if payin_id == 'complete':
     payin = website.db.one("""
         SELECT pi.*
-          FROM payin pi
+          FROM payins pi
           JOIN exchange_routes r ON r.id = pi.route
          WHERE pi.participant = %s
            AND r.network = 'stripe'
@@ -355,6 +356,10 @@ title = _("Funding your donations")
     % endif
 
 % else
+
+    % if error is defined
+        <output class="alert alert-danger">{{ error }}</output>
+    % endif
 
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 

@@ -127,7 +127,7 @@ def send_donation_reminder_notifications():
     today = utcnow().date()
     next_payday = compute_next_payday_date()
     for payer, payins in rows:
-        if payer.is_suspended or payer.status != 'active':
+        if not payer.can_attempt_payment:
             continue
         payins.sort(key=itemgetter('execution_date'))
         _check_scheduled_payins(db, payer, payins, automatic=False)
@@ -193,7 +193,7 @@ def send_upcoming_debit_notifications():
       ORDER BY sp.payer, (sp.amount).currency
     """)
     for payer, payins in rows:
-        if payer.is_suspended or payer.status != 'active' or not payer.get_email_address():
+        if not payer.can_attempt_payment:
             continue
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
@@ -459,6 +459,8 @@ def _check_scheduled_payins(db, payer, payins, automatic):
 def _filter_transfers(payer, transfers, automatic):
     """Splits scheduled transfers into 4 lists: okay, canceled, impossible, actionable.
     """
+    if not payer.can_attempt_payment:
+        return [], list(transfers), [], []
     canceled_transfers = []
     impossible_transfers = []
     actionable_transfers = []

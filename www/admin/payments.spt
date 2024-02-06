@@ -1,5 +1,7 @@
-from liberapay.i18n.base import LOCALE_EN as locale
-from liberapay.utils import render_postal_address
+from operator import itemgetter
+
+from liberapay.i18n.base import LOCALE_EN as locale, MoneyBasket
+from liberapay.utils import group_by, render_postal_address
 
 PAGE_SIZE = 50
 STATUS_MAP = {
@@ -47,6 +49,29 @@ payins = website.db.all("""
      LIMIT %s
 """, (before, status, PAGE_SIZE))
 
+for pi in payins:
+    for pt in pi.transfers:
+        pt['amount'] = Money(**pt['amount'])
+        if pt['unit_amount']:
+            pt['unit_amount'] = Money(**pt['unit_amount'])
+        if pt['reversed_amount']:
+            pt['reversed_amount'] = Money(**pt['reversed_amount'])
+        pt['status'] = (
+            'refunded' if pt['reversed_amount'] == pt['amount'] else
+            'partially_refunded' if pt['reversed_amount'] else
+            pt['status']
+        )
+    grouped_transfers = group_by(pi.transfers, itemgetter('team'))
+    pi.transfers = grouped_transfers.pop(None, [])
+    for group in grouped_transfers.values():
+        pi.transfers.append({
+            'sum': MoneyBasket(pt['amount'] for pt in group),
+            'team_id': group[0]['team'],
+            'team_name': group[0]['team_name'],
+            'transfers': group,
+        })
+    del grouped_transfers
+
 title = "Payments Admin"
 
 [---] text/html
@@ -55,6 +80,22 @@ title = "Payments Admin"
 % from "templates/macros/payment-methods.html" import payment_method_icon with context
 
 % extends "templates/layouts/admin.html"
+
+% macro render_payin_transfer(pt, pi)
+    <li>
+    {{ locale.format_money(pt.amount) }}
+    to <a href="/~{{ pt.recipient }}/">{{ pt.recipient_name }}</a>
+    % if pt.period
+        ({{ locale.format_money(pt.unit_amount) }}/{{ pt.period[:-2] }} × {{ pt.n_units }})
+    % endif
+    % if pt.status != pi.status
+        ‒ <span class="text-{{ STATUS_MAP.get(pt.status, 'info') }}">{{ pt.status }}</span>
+        % if pt.error
+            ‒ error: <code>{{ pt.error }}</code>
+        % endif
+    % endif
+    </li>
+% endmacro
 
 % block content
 
@@ -120,28 +161,20 @@ title = "Payments Admin"
             <td>
             % if pi.transfers
                 <ul class="right-pointing-arrows">
-                % for pt in pi.transfers
+                % for item in pi.transfers
+                % if 'transfers' in item
                     <li>
-                    % do pt.__setitem__('status', (
-                        'refunded' if pt.reversed_amount == pt.amount else
-                        'partially_refunded' if pt.reversed_amount else
-                        pt.status
-                    ))
-                    {{ locale.format_money(Money(**pt.amount)) }}
-                    to <a href="/~{{ pt.recipient }}/">{{ pt.recipient_name }}</a>
-                    % if pt.team
-                        through team <a href="/~{{ pt.team }}/">{{ pt.team_name }}</a>
-                    % endif
-                    % if pt.period
-                        ({{ locale.format_money(Money(**pt.unit_amount)) }}/{{ pt.period[:-2] }} × {{ pt.n_units }})
-                    % endif
-                    % if pt.status != pi.status
-                        ‒ <span class="text-{{ STATUS_MAP.get(pt.status, 'info') }}">{{ pt.status }}</span>
-                        % if pt.error
-                            ‒ error: <code>{{ pt.error }}</code>
-                        % endif
-                    % endif
+                    {{ locale.format_money_basket(item['sum']) }}
+                    through team <a href="/~{{ item['team_id'] }}/">{{ item['team_name'] }}</a>
+                    <ul class="hooked-right-pointing-arrows">
+                    % for pt in item['transfers']
+                        {{ render_payin_transfer(pt, pi) }}
+                    % endfor
+                    </ul>
                     </li>
+                % else
+                    {{ render_payin_transfer(item, pi) }}
+                % endif
                 % endfor
                 </ul>
             % else

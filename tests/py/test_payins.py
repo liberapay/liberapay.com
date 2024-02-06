@@ -1669,7 +1669,7 @@ class TestPayinsStripe(Harness):
             assert payin.fee is None
             pt = self.db.one("SELECT * FROM payin_transfers")
             assert pt.status == 'failed'
-            assert pt.error == "canceled because destination account is blocked"
+            assert pt.error == "canceled because the destination account is blocked"
 
 
 class TestRefundsStripe(EmailHarness):
