@@ -136,26 +136,6 @@ div.account {
     margin-left: 0.5ex;
 }
 
-img.platform-icon {
-    height: 16px;
-}
-i.platform-icon {
-    display: inline-block;
-    font-size: 16px;
-    width: 16px;
-    text-align: center;
-    vertical-align: middle;
-}
-img.account-type {
-    height: 32px;
-}
-i.account-type {
-    display: inline-block;
-    font-size: 32px;
-    width: 32px;
-    text-align: center;
-    vertical-align: middle;
-}
 a.account-link[href="#not-available"] {
     color: inherit;
     cursor: default;
@@ -240,15 +220,15 @@ p.summary {
     max-width: 320px;
     text-align: center;
     width: 320px;
-    .platform-icon {
-        margin-top: -3px;
-    }
     h4 {
         margin-top: 5px;
         line-height: 23px;
         max-height: 2 * 23px;
         overflow: hidden;
         text-overflow: ellipsis;
+        .icon {
+            vertical-align: baseline;
+        }
     }
     .summary {
         height: 3 * $line-height-computed;
@@ -302,7 +282,7 @@ p.summary {
             margin: 0 1ex 0.6em 0;
         }
     }
-    .glyphicon-star {
+    .star {
         color: $gray-light;
         font-size: 80%;
     }
@@ -744,7 +724,7 @@ p.event {
     margin-bottom: 0.5em;
 }
 
-.glyphicon + span {
+.icon + span {
     margin-left: 2px;
 }
 
@@ -768,29 +748,37 @@ span.help-title {
 
 .payment-methods {
     margin-right: -10px;
-    & > div {
+    & > .panel {
         display: inline-block;
         margin-right: 10px;
-        min-height: 145px;
         text-align: center;
         vertical-align: top;
         width: 350px;
         max-width: 100%;
-    }
-    .payment-icon {
-        font-size: 2em;
+        & > .panel-body {
+            min-height: 165px;
+        }
     }
     .muted {
         color: #888;
-        .payment-icon {
+        svg {
             color: #ccc;
         }
     }
-    small.text-warning, small.text-danger {
+    h4 {
+        margin-bottom: 0;
+    }
+    small {
+        display: block;
         font-size: $font-size-medium;
         font-weight: bold;
         line-height: $font-size-medium * $line-height-base;
+        margin-top: 11px;
     }
+}
+
+.card-brands > svg {
+    margin: 0 2ex .3em 0;
 }
 
 @media (max-width: $screen-sm-min - 1) {
@@ -818,7 +806,6 @@ span.help-title {
 }
 
 .payment-icons {
-    font-size: $font-size-large;
     text-wrap: nowrap;
     vertical-align: middle;
 }

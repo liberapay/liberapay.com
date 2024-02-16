@@ -1,16 +1,61 @@
-% macro icon_span(classes)
-    <span class="{{ classes }}" aria-hidden="true"></span>
-% endmacro
+% set icons = {
+    'advertise': 'bootstrap-icons/broadcast.svg',
+    'bank-account': 'bootstrap-icons/bank2.svg',
+    'change-image': 'bootstrap-icons/images.svg',
+    'create-profile': 'bootstrap-icons/file-person.svg',
+    'direct-debit': 'bootstrap-icons/bank2.svg',
+    'disconnect': 'bootstrap-icons/x-lg.svg',
+    'discontinue': 'bootstrap-icons/stop-fill.svg',
+    'donations': 'bootstrap-icons/gift.svg',
+    'enter': 'bootstrap-icons/box-arrow-in-right.svg',
+    'external-link': 'bootstrap-icons/box-arrow-up-right.svg',
+    'exclamation-sign': 'bootstrap-icons/exclamation-circle-fill.svg',
+    'exit': 'bootstrap-icons/box-arrow-right.svg',
+    'explore': 'bootstrap-icons/globe2.svg',
+    'feed': 'bootstrap-icons/rss.svg',
+    'homepage': 'bootstrap-icons/house.svg',
+    'index': 'bootstrap-icons/list.svg',
+    'info-sign': 'bootstrap-icons/info-circle.svg',
+    'integrate': 'bootstrap-icons/gear.svg',
+    'liberapay': 'liberapay/icon-v2_black.svg',
+    'locale': 'bootstrap-icons/translate.svg',
+    'manual': 'bootstrap-icons/hand-index.svg',
+    'mark-as-read': 'bootstrap-icons/eye-fill.svg',
+    'markdown': 'bootstrap-icons/markdown-fill.svg',
+    'mastodon': 'bootstrap-icons/mastodon.svg',
+    'ok': 'bootstrap-icons/check-circle.svg',
+    'payment-card': 'bootstrap-icons/credit-card.svg',
+    'pledge': 'bootstrap-icons/balloon-heart.svg',
+    'private': 'bootstrap-icons/eye-slash.svg',
+    'public': 'bootstrap-icons/globe2.svg',
+    'ok-sign': 'bootstrap-icons/check-circle.svg',
+    'pay': 'bootstrap-icons/cash.svg',
+    'print': 'bootstrap-icons/printer.svg',
+    'question-sign': 'bootstrap-icons/question-circle.svg',
+    'refresh': 'bootstrap-icons/arrow-clockwise.svg',
+    'remove': 'bootstrap-icons/x-lg.svg',
+    'secret': 'bootstrap-icons/incognito.svg',
+    'secure': 'bootstrap-icons/shield-check.svg',
+    'set-up': 'bootstrap-icons/sliders.svg',
+    'smile': 'bootstrap-icons/emoji-smile.svg',
+    'stats': 'bootstrap-icons/bar-chart.svg',
+    'team': 'bootstrap-icons/people.svg',
+    'text-prompt': 'bootstrap-icons/input-cursor-text.svg',
+    'twitter': 'bootstrap-icons/twitter-x.svg',
+    'users': 'bootstrap-icons/person-add.svg',
+    'warning-sign': 'bootstrap-icons/exclamation-triangle-fill.svg',
+}
 
-% macro glyphicon(name, sr='')
-    <span class="glyphicon glyphicon-{{ name }}" aria-hidden="true" {% if sr %} title="{{ sr }}" {% endif %}></span>
-    % if sr
-        <span class="sr-only">{{ sr }}</span>
+% macro icon(name, sr='', size=16)
+    % set svg_path = icons.get(name) or 'bootstrap-icons/' + name + '.svg'
+    % set svg = website.read_asset(svg_path)|safe
+    % if svg
+        <span aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}" {% endif %}>{{
+            svg
+        }}</span>
+    % else
+        <img aria-hidden="true" class="icon" {% if sr %} title="{{ sr }}" {% endif %} src="/assets/nonexistent" height={{size}} width={{size}} />
     % endif
-% endmacro
-
-% macro fontawesome(name, sr='')
-    <span class="fa fa-{{ name }}" aria-hidden="true" {% if sr %} title="{{ sr }}" {% endif %}></span>
     % if sr
         <span class="sr-only">{{ sr }}</span>
     % endif

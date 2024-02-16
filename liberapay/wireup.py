@@ -605,15 +605,15 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     platforms = PlatformRegistry(platforms)
 
     for platform in platforms:
-        if platform.fontawesome_name:
-            continue
-        platform.icon = asset(
-            'platforms/%s.svg' % platform.name,
+        platform.icon_16 = asset(
+            'platforms/%s.16.webp' % platform.name,
             'platforms/%s.16.png' % platform.name,
-        )
-        platform.logo = asset(
             'platforms/%s.svg' % platform.name,
-            'platforms/%s.png' % platform.name,
+        )
+        platform.icon_32 = asset(
+            'platforms/%s.32.webp' % platform.name,
+            'platforms/%s.32.png' % platform.name,
+            'platforms/%s.svg' % platform.name,
         )
 
     return {'platforms': platforms}

@@ -56,7 +56,7 @@ recent = website.db.one("""
 
 [---]
 % from 'templates/macros/avatar-url.html' import avatar_img, avatar_default with context
-% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % set page_id = 'homepage'
 % extends "templates/layouts/base.html"
@@ -97,7 +97,7 @@ recent = website.db.one("""
             <p>{{ _("Are you a creator of commons? Do you make free art, spread free knowledge, write free software? Or something else that can be funded by recurrent donations?") }}</p>
             <p>{{ _("Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work.") }}</p>
             <div class="buttons"><a class="btn btn-success btn-lg" href="/sign-up">
-                {{ glyphicon('log-in') }} <span>{{ _("Create your account") }}</span>
+                {{ icon('enter') }} <span>{{ _("Create your account") }}</span>
             </a></div>
 
         % else
@@ -135,7 +135,7 @@ recent = website.db.one("""
         <dl class="row homepage-pitch">
             <div class="col-sm-4">
                 <dt>
-                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span><br>
+                    {{ icon('set-up') }}<br>
                     {{ _("1. Set up a donation") }}
                 </dt>
                 <dd>{{ _(
@@ -146,7 +146,7 @@ recent = website.db.one("""
             </div>
             <div class="col-sm-4">
                 <dt>
-                    <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span><br>
+                    {{ icon('pay') }}<br>
                     {{ _("2. Fund your donation") }}
                 </dt>
                 <dd>{{ _(
@@ -159,7 +159,7 @@ recent = website.db.one("""
             </div>
             <div class="col-sm-4">
                 <dt>
-                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span><br>
+                    {{ icon('repeat') }}<br>
                     {{ _("3. Keep your donation funded") }}
                 </dt>
                 <dd>{{ _(
@@ -176,7 +176,7 @@ recent = website.db.one("""
         <dl class="row homepage-pitch">
             <div class="col-sm-4">
                 <dt>
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><br>
+                    {{ icon('create-profile') }}<br>
                     {{ _("1. Create your profile") }}
                 </dt>
                 <dd>{{ _(
@@ -186,7 +186,7 @@ recent = website.db.one("""
             </div>
             <div class="col-sm-4">
                 <dt>
-                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span><br>
+                    {{ icon('integrate') }}<br>
                     {{ _("2. Configure payment processing") }}
                 </dt>
                 <dd>{{ _(
@@ -199,7 +199,7 @@ recent = website.db.one("""
             </div>
             <div class="col-sm-4">
                 <dt>
-                    <span class="glyphicon glyphicon-share" aria-hidden="true"></span><br>
+                    {{ icon('advertise') }}<br>
                     {{ _("3. Reach out to your audience") }}
                 </dt>
                 <dd>{{ _(
@@ -208,7 +208,7 @@ recent = website.db.one("""
             </div>
         </dl>
         <p class="text-center"><br><a class="btn btn-success btn-lg" href="/sign-up">
-            {{ glyphicon('log-in') }} <span>{{ _("Create your account") }}</span>
+            {{ icon('enter') }} <span>{{ _("Create your account") }}</span>
         </a></p>
     </div>
 
@@ -227,7 +227,7 @@ recent = website.db.one("""
             link_end='</a>'|safe,
         ) }}</p>
         <p><a href="/Liberapay/donate" class="btn btn-donate btn-lg"
-              >{{ glyphicon('thumbs-up') }} <span>{{ _("Fund Liberapay") }}</span></a></p>
+              >{{ icon('pay') }} <span>{{ _("Fund Liberapay") }}</span></a></p>
     </div>
 
     <div class="section">
@@ -235,7 +235,7 @@ recent = website.db.one("""
         <dl class="row homepage-pitch">
             <div class="col-sm-4">
                 <dt>
-                    <span class="fa fa-group" aria-hidden="true"></span><br>
+                    {{ icon('team') }}<br>
                     <a href="/explore/teams">{{ _("Teams") }}</a>
                 </dt>
                 <dd>{{ _(
@@ -246,7 +246,7 @@ recent = website.db.one("""
             </div>
             <div class="col-sm-4">
                 <dt>
-                    <span class="fa fa-language" aria-hidden="true"></span><br>
+                    {{ icon('locale') }}<br>
                     {{ _("Multiple languages") }}
                 </dt>
                 <dd>
@@ -273,10 +273,12 @@ recent = website.db.one("""
             </div>
             <div class="col-sm-4">
                 <dt>
-                    <sub><span class="fa fa-usd" aria-hidden="true"></span></sub>
-                    <sup><span class="fa fa-eur" aria-hidden="true"></span></sup>
-                    <sup><span class="fa fa-gbp" aria-hidden="true"></span></sup>
-                    <sub><span class="fa fa-jpy" aria-hidden="true"></span></sub>
+                    <strong aria-hidden="true">
+                        <sub>$</sub>
+                        <sup>€</sup>
+                        <sup>£</sup>
+                        <sub>¥</sub>
+                    </strong>
                     <br>
                     <a href="/about/global">{{ _("Multiple currencies") }}</a>
                 </dt>
@@ -292,7 +294,7 @@ recent = website.db.one("""
         <dl class="row homepage-pitch">
             <div class="col-sm-5 col-sm-offset-1">
                 <dt>
-                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span><br>
+                    {{ icon('link') }}<br>
                     <a href="/explore/elsewhere">{{ _("Integrations") }}</a>
                 </dt>
                 <dd>
@@ -313,7 +315,7 @@ recent = website.db.one("""
             </div>
             <div class="col-sm-5">
                 <dt>
-                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span><br>
+                    {{ icon('pledge') }}<br>
                     <a href="/explore/pledges">{{ _("Pledges") }}</a>
                 </dt>
                 <dd>{{ _(
@@ -337,7 +339,7 @@ recent = website.db.one("""
                 "There is currently {n} sponsor on the platform, this section is our way of thanking them.",
                 "There are currently {n} sponsors on the platform, this section is our way of thanking them.",
                 nsponsors
-            ) }} {{ fontawesome('smile-o') }}
+            ) }} {{ icon('smile') }}
             % if nsponsors > len(sponsors)
                 {{ _("The list below is rotated pseudorandomly.") }}
             % endif
@@ -372,21 +374,21 @@ recent = website.db.one("""
     <div class="section">
         <h2>{{ _("Recent Activity") }}</h2>
         % if recent.n_users > 1
-        <p>{{ glyphicon('user') }} <span>{{ ngettext(
+        <p>{{ icon('users') }} <span>{{ ngettext(
             "",
             "{n} user accounts have been created in the past month. The most recent was {timespan_ago}.",
             recent.n_users, timespan_ago=to_age(recent.newest_user_ts)
         ) }}</span></p>
         % endif
         % if recent.n_donations > 1
-        <p>{{ glyphicon('gift') }} <span>{{ ngettext(
+        <p>{{ icon('donations') }} <span>{{ ngettext(
             "",
             "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}.",
             n=recent.n_donations, money_amount=recent.donations_amount.fuzzy_sum(currency)
         ) }}</span></p>
         % endif
         % if recent.n_pledges > 1
-        <p>{{ glyphicon('heart') }} <span>{{ ngettext(
+        <p>{{ icon('pledge') }} <span>{{ ngettext(
             "",
             "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed.",
             n=recent.n_pledges,
@@ -396,25 +398,25 @@ recent = website.db.one("""
         ) }}</span></p>
         % endif
         % if recent.newest_payday_transfer_volume
-        <p>{{ glyphicon('transfer') }} <span>{{ ngettext(
+        <p>{{ icon('pay') }} <span>{{ ngettext(
             "",
             "{money_amount} was transferred last week between {n} users.",
             money_amount=recent.newest_payday_transfer_volume.fuzzy_sum(currency),
             n=recent.newest_payday_nactive,
         ) }}</span></p>
         % endif
-        <p><a href="/about/stats" class="btn btn-info">{{ glyphicon('stats') }} <span>{{ _("More stats") }}</span></a></p>
+        <p><a href="/about/stats" class="btn btn-info">{{ icon('stats') }} <span>{{ _("More stats") }}</span></a></p>
     </div>
 
     <div class="section no-border">
         <h2></h2>
         <p class="buttons">
             <a class="btn btn-info btn-lg" href="/about/">
-                {{ glyphicon('info-sign') }} <span>{{ _("Learn more") }}</span>
+                {{ icon('info-sign') }} <span>{{ _("Learn more") }}</span>
             </a>
             <br>
             <a class="btn btn-info btn-lg" href="/about/feeds">
-                {{ fontawesome('feed') }} <span>{{ _("Follow us") }}</span>
+                {{ icon('feed') }} <span>{{ _("Follow us") }}</span>
             </a>
         </p>
     </div>

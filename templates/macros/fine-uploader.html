@@ -1,5 +1,7 @@
 {# Docs: http://docs.fineuploader.com/features/styling.html #}
 
+% from "templates/macros/icons.html" import icon with context
+
 % macro fine_uploader_template(cls='qq-uploader', dropzone=True, edit_filenames=True)
 <div class="hidden" id="qq-template">
     <div class="qq-uploader-selector {{ cls }}" qq-drop-area-text="{{ _('Drop files here') }}">
@@ -27,7 +29,7 @@
                 <img class="qq-thumbnail-selector" qq-max-size="64" qq-server-scale>
                 <span class="qq-upload-file-selector qq-upload-file"></span>
                 % if edit_filenames
-                <span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="{{ _('Edit filename') }}"><span class="glyphicon glyphicon-pencil"></span></span>
+                <span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="{{ _('Edit filename') }}">{{ icon('text-prompt') }}</span>
                 <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
                 % endif
                 <span class="qq-upload-size-selector qq-upload-size"></span>

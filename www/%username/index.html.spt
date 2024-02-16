@@ -92,6 +92,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % extends "templates/layouts/profile.html"
 
 % from "templates/macros/elsewhere.html" import account_elsewhere with context
+% from "templates/macros/icons.html" import icon with context
 % from "templates/macros/profile-box.html" import profile_box_embedded with context
 % from "templates/macros/repos.html" import show_repo with context
 
@@ -111,7 +112,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             <span class="btn-sm">{{ language_name_in_current_locale }}</span>
             % endif
             <button class="dropdown-toggle btn font-lg" type="button" data-toggle="dropdown">
-                {{ fontawesome('language') }} <span class="caret"></span>
+                {{ icon('locale') }} <span class="caret"></span>
                 <span class="sr-only">{{ _("Show the list of languages") }}</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">
@@ -221,7 +222,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if patron_visibilities > 1 and n_public_patrons
     <h3>{{ _("Patrons") }}
         &nbsp;
-        <small><a href="{{ participant.path('patrons/public.csv') }}">{{ fontawesome('download', _("Export as CSV")) }}</a></small>
+        <small><a href="{{ participant.path('patrons/public.csv') }}">{{ icon('download', _("Export as CSV")) }}</a></small>
     </h3>
 
     <p>{{ ngettext(
@@ -244,7 +245,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             </a>
             % if participant.hide_receiving
             % elif p.hide_giving
-                <div class="text-muted">{{ fontawesome('eye-slash', _(
+                <div class="text-muted">{{ icon('private', _(
                     "{username} doesn't publish how much they give.",
                     username=p.name
                 )) }}</div>
@@ -263,7 +264,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
     % if n_public_donees
     <h3>{{ _("Donees") }}
         &nbsp;
-        <small><a href="{{ participant.path('giving/public.csv') }}">{{ fontawesome('download', _("Export as CSV")) }}</a></small>
+        <small><a href="{{ participant.path('giving/public.csv') }}">{{ icon('download', _("Export as CSV")) }}</a></small>
     </h3>
 
     <p>{{ ngettext(
@@ -282,7 +283,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
             </a>
             % if participant.hide_giving
             % elif p.hide_receiving
-                <div class="text-muted">{{ fontawesome('eye-slash', _(
+                <div class="text-muted">{{ icon('private', _(
                     "{username} does not disclose how much they receive through Liberapay.",
                     username=p.name
                 )) }}</div>

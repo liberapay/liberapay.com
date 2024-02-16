@@ -1,3 +1,5 @@
+% from "templates/macros/icons.html" import icon with context
+
 % set CLASSES = ('info', 'success', 'warning', 'danger')
 
 % macro get_cls(m)
@@ -70,8 +72,9 @@
                                 locale.format_money(nominal_take, format='amount_only') if nominal_take.amount >= 0 else ''
                             }}" placeholder="auto" />
                             <div class="input-group-btn">
-                                <button class="btn btn-default" title="{{ _('Update my nominal take') }}"
-                                    ><i class="fa fa-edit"></i></button>
+                                <button class="btn btn-default" title="{{ _('Update my nominal take') }}">{{
+                                    icon('save')
+                                }}</button>
                             </div>
                         </div>
                     </form>

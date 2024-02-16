@@ -1,3 +1,5 @@
+% from "templates/macros/icons.html" import icon with context
+
 <!DOCTYPE html>
 <html lang="{{ locale.tag }}">
 <head prefix="og: http://ogp.me/ns#">
@@ -11,9 +13,7 @@
 <body>
 
     <header class="text-right">
-        <a class="btn btn-default btn-lg print">
-            <span class="glyphicon glyphicon-print"></span> {{ _("Print") }}
-        </a>
+        <a class="btn btn-default btn-lg print">{{ icon('print') }} {{ _("Print") }}</a>
     </header>
 
     <div class="sheet"><div class="page">

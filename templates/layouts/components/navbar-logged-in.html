@@ -1,4 +1,5 @@
 % from 'templates/macros/avatar-url.html' import avatar_img with context
+% from "templates/macros/icons.html" import icon with context
 
 <li class="dropdown dropdown-hover">
 <button class="dropdown-toggle navbar-btn" type="button"
@@ -30,10 +31,7 @@
         <form action="/sign-out" method="POST" {% if method_is_unsafe %} target="_blank" {% endif %}>
             <input name="back_to" type="hidden" value="{{ '/' if method_is_unsafe else request.line.uri.decoded }}" />
             <input name="csrf_token" type="hidden" value="{{ csrf_token }}" />
-            <button class="btn navbar-btn" type="submit">
-                <span class="glyphicon glyphicon-log-out"></span>
-                <span>{{ _("Sign out") }}</span>
-            </button>
+            <button class="btn navbar-btn" type="submit">{{ icon('exit') }} <span>{{ _("Sign out") }}</span></button>
         </form>
     </li>
 </ul>
@@ -43,7 +41,7 @@
 <li><a href="/{{ user.username }}/notifications"
        title="{{ _('Notifications') }}"
        class="{{ 'navbar-warning' if user.pending_notifs else '' }}">
-    <span class="glyphicon glyphicon-info-sign"></span>
+    {{ icon('exclamation-sign') }}
     <span class="sr-only">{{ _("Notifications") }}</span>
     % if user.pending_notifs
         <span class="pending-notifs">{{ user.pending_notifs }}</span>

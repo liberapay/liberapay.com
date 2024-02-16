@@ -140,7 +140,15 @@ For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3](https://ge
 We compile Bootstrap ourselves from the SASS source in the `style/bootstrap/`
 directory. We do that to be able to easily customize it by changing values in
 `style/variables.scss`. Modifying the files in `style/bootstrap/` is probably
-not a good idea.
+a bad idea.
+
+### Icons
+
+An icon can be included in a page by calling the `icon` macro from `templates/macros/icons.html`. That file contains a mapping of icon names to file paths.
+
+For user interface icons we use [Bootstrap Icons](https://icons.getbootstrap.com/). A new icon can be added to Liberapay by simply copying its SVG file from Bootstrap Icons into the `www/assets/bootstrap-icons/` directory (and not forgetting to `git add` it, of course).
+
+If you don't find any icon in Bootstrap Icons that fits your use case, you can try to search online catalogs like [Flaticon](https://www.flaticon.com/search?type=uicon), [Icons8](https://icons8.com/icons), [Pictogrammers](https://pictogrammers.com/), [SVG Repo](https://www.svgrepo.com/) and [The Noun Project](https://thenounproject.com/). For brand icons, [Simple Icons](https://simpleicons.org/) is a good resource.
 
 ### Testing
 

@@ -1,11 +1,22 @@
-.fa-brand-color {
-    // https://logo-colors.com/
-    &.fa-bitbucket { color: #0052cc; }
-    &.fa-github { color: #24292e; }
-    &.fa-gitlab { color: #fca326; }
-    &.fa-mastodon { color: #6364ff; }
-    &.fa-pleroma { color: #fba457; }
-    &.fa-twitch { color: #6441a5; }
-    &.fa-twitter { color: #1da1f2; }
-    &.fa-youtube-play { color: #ff0000; }
+svg {
+    vertical-align: top;
+}
+.icon + span {
+    margin-left: 2px;
+}
+span.icon-16 {
+    display: inline-block;
+    line-height: 16px;
+    & > svg {
+        height: 16px;
+        width: 16px;
+    }
+}
+span.icon-32 {
+    display: inline-block;
+    line-height: 32px;
+    & > svg {
+        height: 32px;
+        width: 32px;
+    }
 }

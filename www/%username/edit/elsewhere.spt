@@ -9,7 +9,7 @@ subhead = _("Linked Accounts")
 [---] text/html
 % extends "templates/layouts/profile-edit.html"
 
-% from "templates/macros/elsewhere.html" import account_elsewhere, auth_button, platform_logo with context
+% from "templates/macros/elsewhere.html" import account_elsewhere, auth_button, platform_icon_large with context
 
 % block form
 
@@ -47,7 +47,7 @@ subhead = _("Linked Accounts")
             % set disabled_msg = None
         % endif
         % call auth_button(platform.name, 'connect', btn_cls='no-default-styles', form_cls='btn btn-default', participant=participant, disabled=disabled, disabled_msg=disabled_msg)
-            {{ platform_logo(platform) }}<br>{{ platform.display_name }}
+            {{ platform_icon_large(platform) }}<br>{{ platform.display_name }}
         % endcall
     % endfor
     </div>

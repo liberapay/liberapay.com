@@ -36,6 +36,8 @@ participant.render_notifications(state, before=before, limit=limit)
 [---] text/html
 % extends "templates/layouts/settings.html"
 
+% from "templates/macros/icons.html" import icon with context
+
 % block content
 <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
@@ -71,12 +73,14 @@ participant.render_notifications(state, before=before, limit=limit)
                 % endif
                 <span class="actions">
                     % if notif.is_new
-                    <button class="glyphicon glyphicon-eye-open hover-info" name="mark_as_read" value="{{ notif.id }}" title="{{
-                            _('Mark as read') }}"></button>&nbsp;
+                    <button class="hover-info" name="mark_as_read" value="{{ notif.id }}">{{
+                        icon('mark-as-read', _('Mark as read'))
+                    }}</button>&nbsp;
                     % endif
                     % if not notif.hidden_since
-                    <button class="glyphicon glyphicon-remove hover-danger" name="remove" value="{{ notif.id }}" title="{{
-                            _('Remove') }}"></button>
+                    <button class="hover-danger" name="remove" value="{{ notif.id }}">{{
+                        icon('remove', _("Remove"))
+                    }}</button>
                     % endif
                 </span>
             </h3>

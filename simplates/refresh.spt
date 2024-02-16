@@ -9,6 +9,7 @@ else:
 response.headers[b'Refresh'] = refresh_header
 
 [---] text/html
+% from "templates/macros/icons.html" import icon with context
 <!DOCTYPE html>
 <html lang="{{ locale.tag }}">
 <head>
@@ -18,14 +19,13 @@ response.headers[b'Refresh'] = refresh_header
     <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ website.asset('forkawesome/1.1.7/css/fork-awesome.min.css') }}" type="text/css">
     <meta name="theme-color" content="#f6c915">
 </head>
 <body>
     <nav class="navbar navbar-liberapay navbar-static-top" id="navbar" aria-hidden="true">
         <div class="container">
             <ul class="nav navbar-nav">
-                <li><a class="navbar-brand"><i class="fa fa-liberapay"></i></a></li>
+                <li><a class="navbar-brand">{{ icon('liberapay') }}</a></li>
             </ul>
         </div>
     </nav>

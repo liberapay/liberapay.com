@@ -1,14 +1,14 @@
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % macro find_donees(base_cls='btn btn-primary', extra_cls='btn-lg')
     <a class="{{ base_cls }} {{ extra_cls }}" href="/explore/"
        data-toggle="tooltip" data-placement="bottom"
        title="{{ _('Find great people to donate to') }}">
-        {{ glyphicon('globe') }} <span>{{ _("Explore") }}</span>
+        {{ icon('explore') }} <span>{{ _("Explore") }}</span>
     </a>
     <a class="{{ base_cls }} {{ extra_cls }}" href="/search"
        data-toggle="tooltip" data-placement="bottom"
        title="{{ _('Whose work do you appreciate? See if they\'re on Liberapay') }}">
-        {{ glyphicon('search') }} <span>{{ _("Search") }}</span>
+        {{ icon('text-prompt') }} <span>{{ _("Search") }}</span>
     </a>
 % endmacro

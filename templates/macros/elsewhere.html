@@ -4,7 +4,7 @@
     % set platform = account.platform_data
     <div class="account">
         <a class="account-link" rel="me" href="{{ account.html_url }}">
-            {{ platform_logo(platform) }}
+            {{ platform_icon_large(platform) }}
             <span class="sr-only">{{ platform.display_name }}:</span>
             <span class="account-username">{{ account.friendly_name_long }}</span>
         </a>
@@ -42,20 +42,12 @@
     </form>
 % endmacro
 
-% macro platform_icon(platform)
-    % if platform.fontawesome_name
-        <i class="platform-icon fa fa-{{ platform.fontawesome_name }} fa-brand-color" aria-hidden="true"></i>
-    % else
-        <img class="platform-icon" src="{{ platform.icon }}" aria-hidden="true" />
-    % endif
+% macro platform_icon_small(platform)
+    <img class="icon" height=16 width=16 src="{{ platform.icon_16 }}" alt="{{ platform.display_name }}" />
 % endmacro
 
-% macro platform_logo(platform)
-    % if platform.fontawesome_name
-        <i class="account-type fa fa-{{ platform.fontawesome_name }} fa-brand-color" aria-hidden="true"></i>
-    % else
-        <img class="account-type" src="{{ platform.logo }}" aria-hidden="true" />
-    % endif
+% macro platform_icon_large(platform)
+    <img class="icon" height=32 width=32 src="{{ platform.icon_32 }}" alt="{{ platform.display_name }}" />
 % endmacro
 
 % macro user_lookup_form()

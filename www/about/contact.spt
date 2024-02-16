@@ -2,9 +2,12 @@
 title = _("Contact")
 [---] text/html
 % extends "templates/layouts/about.html"
+
+% from "templates/macros/icons.html" import icon with context
+
 % block content
 
-    <p class="text-warning">{{ glyphicon("minus-sign") }} {{ _(
+    <p class="text-warning">{{ icon('warning-sign') }} {{ _(
         "Do not contact us if you are trying to reach one of our users. We do not "
         "relay messages, and we cannot reveal the identity or contact details of "
         "our users unless you have a valid court order."

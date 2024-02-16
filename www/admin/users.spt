@@ -237,7 +237,7 @@ title = "Users Admin"
 [---] text/html
 % from 'templates/macros/admin.html' import admin_form with context
 % from 'templates/macros/avatar-url.html' import avatar_img with context
-% from 'templates/macros/icons.html' import fontawesome, glyphicon
+% from 'templates/macros/icons.html' import icon with context
 % from 'templates/macros/nav.html' import querystring_nav with context
 % from "templates/macros/payment-methods.html" import payment_method_icon with context
 
@@ -276,7 +276,7 @@ title = "Users Admin"
         % for account in elsewhere
             <div class="account">
                 <a class="account-link" href="{{ account.html_url }}">
-                    {{ fontawesome(account.platform) }}
+                    {{ icon(account.platform) }}
                     <span class="account-username">{{ account.friendly_name_long }}</span>
                 </a>
                 <br>
@@ -297,20 +297,20 @@ title = "Users Admin"
         % if row.email
             <strong>Email address:</strong> <span class="break-word-anywhere">{{ row.email.address }}</span>
             % if row.email.verified
-            <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
+            <span class="text-success">{{ icon('ok-sign', "Verified") }}</span>
             % elif row.email.disavowed
-            <span class="text-danger">{{ glyphicon('exclamation-sign', "Disavowed") }}</span>
+            <span class="text-danger">{{ icon('exclamation-sign', "Disavowed") }}</span>
             % elif row.email.blacklist_reason
-            <span class="text-danger">{{ glyphicon('exclamation-sign', "Blacklisted (%s)" % row.email.blacklist_reason) }}</span>
+            <span class="text-danger">{{ icon('exclamation-sign', "Blacklisted (%s)" % row.email.blacklist_reason) }}</span>
             % else
-            <span class="text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
+            <span class="text-warning">{{ icon('warning-sign', "Unconfirmed") }}</span>
             % endif
             &nbsp;
             <form action="/admin/emails" method="POST" target="_blank" class="inline-block middle">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                 <input type="hidden" name="email" value="{{ row.email.address }}" />
                 <button class="link" name="action" value="lookup">{{
-                    glyphicon('search', "Look it up")
+                    icon('search', "Look it up")
                 }}</button>
             </form>
         % else
@@ -323,13 +323,13 @@ title = "Users Admin"
             <br>
             % for account in elsewhere
                 <a class="account-link" href="{{ account.html_url }}">
-                    <span class="symbol-3ex">{{ fontawesome(account.platform) }}</span>
+                    <span class="symbol-3ex">{{ icon(account.platform) }}</span>
                     <span>{{ account.friendly_name_long }}</span>
                 </a>
                 <br>
             % endfor
         % else
-            none. <span class="text-warning">{{ glyphicon('warning-sign') }}</span>
+            none. <span class="text-warning">{{ icon('warning-sign') }}</span>
         % endif
         </p>
         % endif
@@ -352,9 +352,9 @@ title = "Users Admin"
             <br>
             % for account in row.payment_accounts
                 <span class="symbol-3ex">{{
-                    fontawesome('cc-stripe', "Stripe") if account.provider == 'stripe' else
-                    fontawesome('paypal', "PayPal") if account.provider == 'paypal' else
-                    fontawesome(account.provider, account.provider)
+                    icon('stripe', "Stripe") if account.provider == 'stripe' else
+                    icon('paypal', "PayPal") if account.provider == 'paypal' else
+                    icon(account.provider, account.provider)
                 }}</span>
                 % if account.is_current
                     {{ account.id }}
@@ -363,11 +363,11 @@ title = "Users Admin"
                 % endif
                 ({{ locale.countries.get(account.country, account.country) }})
                 % if account.verified and account.charges_enabled != False
-                    <span class="symbol text-success">{{ glyphicon('ok-sign', "OK") }}</span>
+                    <span class="symbol text-success">{{ icon('ok-sign', "OK") }}</span>
                 % elif account.verified
-                    <span class="symbol text-danger">{{ glyphicon('exclamation-sign', "Disabled") }}</span>
+                    <span class="symbol text-danger">{{ icon('exclamation-sign', "Disabled") }}</span>
                 % else
-                    <span class="symbol text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
+                    <span class="symbol text-warning">{{ icon('warning-sign', "Unconfirmed") }}</span>
                 % endif
                 <br>
             % endfor
@@ -435,7 +435,7 @@ title = "Users Admin"
                 <br>
             % endfor
         % elif not p.public_name
-            none. <span class="text-warning">{{ glyphicon('warning-sign') }}</span>
+            none. <span class="text-warning">{{ icon('warning-sign') }}</span>
         % endif
         </div>
 

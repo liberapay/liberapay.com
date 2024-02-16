@@ -4,6 +4,8 @@ title = _("Privacy")
 [---] text/html
 % extends "templates/layouts/about.html"
 
+% from "templates/macros/icons.html" import icon with context
+
 % block content
 
 <p>{{ _(
@@ -18,7 +20,7 @@ title = _("Privacy")
                'stored on your machine, and resent by your browser to that same '
                'website in every subsequent request.'
            ) }}"
-           data-toggle="tooltip" data-placement="bottom">{{ glyphicon("question-sign") }}</small>
+           data-toggle="tooltip" data-placement="bottom">{{ icon("question-sign") }}</small>
 </h3>
 
 <p>{{ _(

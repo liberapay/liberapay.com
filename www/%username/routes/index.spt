@@ -66,7 +66,8 @@ title = _("Payment Instruments")
 [---] text/html
 % extends "templates/layouts/settings.html"
 
-% from "templates/macros/icons.html" import fontawesome
+% from "templates/macros/icons.html" import icon with context
+% from "templates/macros/payment-methods.html" import card_brands with context
 
 % block content
 
@@ -98,8 +99,8 @@ title = _("Payment Instruments")
     % for route, last_payin in routes
         <div class="payment-instrument{% if route.status not in ('chargeable', 'pending') %} text-muted{% endif %}">
             <span>{{
-                fontawesome('credit-card', _("Credit/Debit Card")) if route.network == 'stripe-card' else
-                fontawesome('bank', _("Bank Account")) if route.network == 'stripe-sdd' else
+                icon('payment-card', _("Payment Card"), size=32) if route.network == 'stripe-card' else
+                icon('bank-account', _("Bank Account"), size=32) if route.network == 'stripe-sdd' else
                 ''
             }}</span>
             <span>
@@ -207,24 +208,24 @@ title = _("Payment Instruments")
 <div class="payment-methods">
     <div class="panel panel-default">
         <div class="panel-body overlaid">
-            <p class="payment-icon">{{ fontawesome('credit-card') }}</p>
+            {{ icon('payment-card', size=32) }}
             <h4>{{ _("Credit/Debit Card") }}<br>
-                <small>Visa, MasterCard, American Express, UnionPay, Discover, Diners</small>
+                <small>{{ card_brands() }}</small>
             </h4>
             <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-card"
                 ><span class="sr-only">{{ _("Add a card") }}</span></a>
         </div>
     </div>
-    % set warn = participant.guessed_country not in constants.SEPA
     <div class="panel panel-default {{ '' if has_euro_donations else 'muted' }}">
         <div class="panel-body overlaid">
-            <p class="payment-icon">{{ fontawesome('bank') }}</p>
+            {{ icon('bank-account', size=32) }}
             <h4>{{ _("Bank Account") }}<br>
-                % if not has_euro_donations
-                <small class="text-warning">{{ _("Euro donations only") }}</small>
-                % else
-                <small class="text-{{ 'warning' if warn else 'info' }}">{{ _("Euro bank accounts only") }}</small>
-                % endif
+                <small>
+                    <span class="text-{{ 'info' if participant.guessed_country in constants.EUROZONE else 'warning' }}">{{
+                        _("Euro bank accounts only") }}</span><br>
+                    <span class="text-{{ 'info' if has_euro_donations else 'warning' }}">{{
+                        _("Euro donations only") }}</span>
+                </small>
             </h4>
             <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-sdd"
                 ><span class="sr-only">{{ _("Add a bank account") }}</span></a>

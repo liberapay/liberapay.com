@@ -2,23 +2,23 @@
 title = _("Follow Us")
 [---] text/html
 % extends "templates/layouts/about.html"
-% from "templates/macros/icons.html" import fontawesome
+% from "templates/macros/icons.html" import icon with context
 
 % block content
 
     <p>{{ _("You can get updates from us on the following social networks:") }}</p>
     <div class="buttons">
     <a class="btn btn-default btn-lg" href="https://medium.com/liberapay-blog">
-        {{ fontawesome('medium') }}&nbsp;Medium
+        {{ icon('medium') }}&nbsp;Medium
     </a>
     <a class="btn btn-default btn-lg" href="https://mastodon.xyz/@Liberapay">
-        {{ fontawesome('mastodon') }}&nbsp;Mastodon
+        {{ icon('mastodon') }}&nbsp;Mastodon
     </a>
     <a class="btn btn-default btn-lg" href="https://twitter.com/liberapay">
-        {{ fontawesome('twitter') }}&nbsp;Twitter
+        {{ icon('twitter') }}&nbsp;Twitter
     </a>
     <a class="btn btn-default btn-lg" href="https://www.facebook.com/Liberapay-472128142945598/">
-        {{ fontawesome('facebook') }}&nbsp;Facebook
+        {{ icon('facebook') }}&nbsp;Facebook
     </a>
     </div>
     <br>

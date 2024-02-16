@@ -67,7 +67,7 @@ title = _("Explore")
 subhead = _("Social Networks")
 
 [---] text/html
-% from "templates/macros/elsewhere.html" import platform_logo with context
+% from "templates/macros/elsewhere.html" import platform_icon_large with context
 % from 'templates/macros/profile-box.html' import profile_box_embedded with context
 
 % extends "templates/layouts/explore.html"
@@ -81,7 +81,7 @@ subhead = _("Social Networks")
         % set n_connected_accounts = d['n_connected_accounts']
         % if n_connected_accounts or p.supports_follows
         <div class="card card-default card-md card-narrow text-center overlaid">
-            <h2 class="text-info">{{ platform_logo(p) }}<br>{{ p.display_name }}</h2>
+            <h2 class="text-info">{{ platform_icon_large(p) }}<br>{{ p.display_name }}</h2>
             <p>{{ ngettext("{n} connected account", "{n} connected accounts", n_connected_accounts) }}</p>
             <a class="overlay" href="/explore/elsewhere/{{ p.name }}" draggable="false"
                 ><span class="sr-only">{{ _("Explore {0}", p.display_name) }}</span></a>
@@ -150,7 +150,7 @@ subhead = _("Social Networks")
     <nav class="buttons">
     % for platform in get_other_platforms()
         <a class="btn btn-default" href="/explore/elsewhere/{{ platform.name }}">{{
-            platform_logo(platform) }}<br>{{ platform.display_name }}</a>
+            platform_icon_large(platform) }}<br>{{ platform.display_name }}</a>
     % endfor
     </nav>
 

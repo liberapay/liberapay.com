@@ -260,9 +260,10 @@ if user == payer:
 title = _("Funding your donations")
 
 [---] text/html
-% from "templates/macros/postal-addresses.html" import postal_address_form_v2 with context
-
 % extends "templates/layouts/base-thin.html"
+
+% from "templates/macros/icons.html" import icon with context
+% from "templates/macros/postal-addresses.html" import postal_address_form_v2 with context
 
 % block thin_content
 
@@ -445,7 +446,7 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        <div class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        <div class="text-info">{{ icon('info-sign') }} {{ _(
             "Liberapay does not store money, the entire amount of your payment will "
             "go immediately to the {payment_provider} accounts of the recipients.",
             payment_provider='Stripe',
@@ -506,7 +507,7 @@ title = _("Funding your donations")
                    class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
             <div id="stripe-element" data-type="card" class="form-control mb-3"></div>
             <span id="stripe-errors" role="alert" class="invalid-msg"></span>
-            <p class="help-block">{{ glyphicon('lock') }} {{ _(
+            <p class="help-block">{{ icon('secure') }} {{ _(
                 "This data will be sent directly to the payment processor "
                 "{name} through an encrypted connection.",
                 name='<a href="https://stripe.com/" target="_blank" rel="noopener noreferrer">Stripe</a>'|safe

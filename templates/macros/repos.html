@@ -1,4 +1,4 @@
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % macro show_repo(repo, donate=False, edit=False, unlist=False)
 <div class="repo {{ 'edit' if edit or unlist else '' }}">
@@ -8,7 +8,7 @@
         {{ _("(fork)") if repo.is_fork else '' }}
         </span>
         % if repo.stars_count != None
-        <span class="inline-block text-nowrap"><small>{{ glyphicon('star') }} {{ repo.stars_count }}</small></span>
+        <span class="inline-block text-nowrap"><small>{{ icon('star') }} {{ repo.stars_count }}</small></span>
         % endif
         % set last_update = to_age(repo.last_update, granularity='week')
         <span class="inline-block"><small>{{

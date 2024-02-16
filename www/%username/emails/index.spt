@@ -64,6 +64,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 [---] text/html
 % extends "templates/layouts/settings.html"
 
+% from "templates/macros/icons.html" import icon with context
 % from "templates/macros/select-lang.html" import lang_options with context
 
 % block content
@@ -133,7 +134,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
         </div>
         <button class="btn btn-default">{{ _("Save changes") }}</button>
         <br><br>
-        <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        <p class="text-info">{{ icon('info-sign') }} {{ _(
             "Some types of notifications cannot be turned off, so they are not "
             "listed above. For example you will always be notified when we are "
             "preparing to debit your bank account."

@@ -21,7 +21,7 @@ title = _("Explore")
 subhead = _("Unclaimed Donations")
 
 [---] text/html
-% from "templates/macros/elsewhere.html" import platform_logo with context
+% from "templates/macros/elsewhere.html" import platform_icon_large with context
 % from 'templates/macros/pagination.html' import simple_pager with context
 % from 'templates/macros/profile-box.html' import profile_box_embedded_elsewhere with context
 
@@ -59,7 +59,7 @@ subhead = _("Unclaimed Donations")
     <p class="buttons">
     % for p in website.platforms if p.supports_follows
         <a class="btn btn-default" href="/on/{{ p.name }}/">{{
-            platform_logo(p) }}<br>{{ p.display_name }}</a>
+            platform_icon_large(p) }}<br>{{ p.display_name }}</a>
     % endfor
     </p>
 

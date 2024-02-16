@@ -176,7 +176,9 @@ if user == payer:
 title = _("Funding your donations")
 
 [---] text/html
-% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/icons.html" import icon with context
+% from "templates/macros/payment-methods.html" import card_brands with context
+
 % extends "templates/layouts/base-thin.html"
 
 % block thin_content
@@ -194,7 +196,7 @@ title = _("Funding your donations")
     % endif
 
     % if currency_conflicts
-        <p class="text-warning">{{ glyphicon('warning-sign') }} &nbsp;{{ ngettext(
+        <p class="text-warning">{{ icon('warning-sign') }} &nbsp;{{ ngettext(
             "You have {n} donation which needs to be modified because the "
             "recipient no longer accepts the currency you had chosen.",
             "You have {n} donations which need to be modified because the "
@@ -213,7 +215,7 @@ title = _("Funding your donations")
     % endif
 
     % if n_payments > 1
-        <p class="text-info">{{ glyphicon('info-sign') }} &nbsp;{{ ngettext(
+        <p class="text-info">{{ icon('info-sign') }} &nbsp;{{ ngettext(
             "",
             "Due to legal and technical limitations we are currently unable to process "
             "all your donations as a single payment. Instead you will have to make {n} "
@@ -246,7 +248,7 @@ title = _("Funding your donations")
             "Your donations to {recipients} are awaiting payment.",
             recipients=payment.recipient_names
         ) }}</p>
-        <p class="text-success">{{ glyphicon('ok') }} &nbsp;{{ _(
+        <p class="text-success">{{ icon('check-lg') }} &nbsp;{{ _(
             "We are able to group these donations into a single payment."
         ) }}</p>
     % endif
@@ -263,12 +265,12 @@ title = _("Funding your donations")
         % if provider == 'stripe'
         <div class="panel panel-default {{ '' if allow_stripe_card else 'muted' }}">
             <div class="panel-body overlaid">
-                <p class="payment-icon">{{ fontawesome('credit-card-alt') }}</p>
-                <h4>{{ _("Card") }}<br>
+                {{ icon('payment-card', size=32) }}
+                <h4>{{ _("Credit/Debit Card") }}<br>
                     % if not allow_stripe_card
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
                     % else
-                    <small>Visa, MasterCard, American Express, UnionPay, Discover, Diners</small>
+                    <small>{{ card_brands() }}</small>
                     % endif
                 </h4>
                 % if allow_stripe_card
@@ -281,7 +283,7 @@ title = _("Funding your donations")
         % set warn = payer.guessed_country not in constants.SEPA
         <div class="panel panel-default {{ '' if possible else 'muted' }}">
             <div class="panel-body overlaid">
-                <p class="payment-icon">{{ fontawesome('bank') }}</p>
+                {{ icon('direct-debit', size=32) }}
                 <h4>{{ _("Direct Debit") }}<br>
                     % if not allow_stripe_sdd
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
@@ -301,7 +303,7 @@ title = _("Funding your donations")
         % set possible = allow_paypal and payment.currency in constants.PAYPAL_CURRENCIES
         <div class="panel panel-default {{ '' if possible else 'muted' }}">
             <div class="panel-body overlaid">
-                <p class="payment-icon">{{ fontawesome('paypal') }}</p>
+                {{ icon('paypal', size=32) }}
                 <h4>PayPal<br>
                     % if not allow_paypal
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>

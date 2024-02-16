@@ -216,9 +216,10 @@ else:
 title = "Email Domains"
 
 [---] text/html
-% from 'templates/macros/nav.html' import querystring_nav with context
-
 % extends "templates/layouts/admin.html"
+
+% from "templates/macros/icons.html" import icon with context
+% from 'templates/macros/nav.html' import querystring_nav with context
 
 % block content
 
@@ -311,13 +312,13 @@ title = "Email Domains"
                     % for ea in p.addresses
                         <span class="break-word-anywhere">{{ ea.address }}</span>
                         % if ea.verified
-                        <span class="text-success">{{ glyphicon('ok-sign', "Verified") }}</span>
+                        <span class="text-success">{{ icon('ok-sign', "Verified") }}</span>
                         % elif ea.disavowed
-                        <span class="text-danger">{{ glyphicon('exclamation-sign', "Disavowed") }}</span>
+                        <span class="text-danger">{{ icon('exclamation-sign', "Disavowed") }}</span>
                         % elif ea.blacklist_reason
-                        <span class="text-danger">{{ glyphicon('exclamation-sign', "Blacklisted (%s)" % ea.blacklist_reason) }}</span>
+                        <span class="text-danger">{{ icon('exclamation-sign', "Blacklisted (%s)" % ea.blacklist_reason) }}</span>
                         % else
-                        <span class="text-warning">{{ glyphicon('warning-sign', "Unconfirmed") }}</span>
+                        <span class="text-warning">{{ icon('warning-sign', "Unconfirmed") }}</span>
                         % endif
                         <br>
                     % endfor

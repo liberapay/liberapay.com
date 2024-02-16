@@ -55,7 +55,7 @@ title = participant.username
 subhead = _("Currencies")
 
 [---] text/html
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % extends "templates/layouts/profile-edit.html"
 
@@ -101,14 +101,14 @@ subhead = _("Currencies")
     % endfor
     </table>
 
-    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
         "Accepting foreign currencies can increase your income by convincing "
         "people in other countries to donate to you, but international payments "
         "usually result in a higher percentage of fees, and fluctuations in "
         "exchange rates can lessen the stability of your income."
     ) }}</p>
 
-    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-warning">{{ icon('info-sign') }} {{ _(
         "Stripe automatically converts funds into your main currency, but by "
         "default PayPal holds payments in foreign currencies until you tell it "
         "what to do. If you have a Business PayPal account, you can choose to "

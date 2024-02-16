@@ -78,7 +78,7 @@ if is_team:
                 % endif
                 % if platform.account_url
                 <a class="account-link" href="{{ account.html_url }}">
-                    <span class="fa fa-external-link" aria-hidden="true"></span>
+                    {{ icon('external-link') }}
                     {{ _("Profile on {0}", platform.display_name) }}</a>
                 % endif
             </div>

@@ -8,7 +8,6 @@ class GitHub(PlatformOAuth2):
     # Platform attributes
     name = 'github'
     display_name = 'GitHub'
-    fontawesome_name = name
     account_url = 'https://github.com/{user_name}'
     repo_url = 'https://github.com/{slug}'
     has_teams = True

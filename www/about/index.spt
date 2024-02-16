@@ -2,7 +2,7 @@
 title = _("Introduction")
 [---] text/html
 % extends "templates/layouts/about.html"
-% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % block content
 
@@ -45,10 +45,10 @@ title = _("Introduction")
 
     <p>
         <a class="btn btn-info" href="/about/feeds">
-            {{ fontawesome('feed') }} <span>{{ _("Follow us") }}</span>
+            {{ icon('feed') }} <span>{{ _("Follow us") }}</span>
         </a>
         <a class="btn btn-success" href="/sign-up">
-            {{ glyphicon('log-in') }} <span>{{ _("Create your account") }}</span>
+            {{ icon('enter') }} <span>{{ _("Create your account") }}</span>
         </a>
     </p>
 

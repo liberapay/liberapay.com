@@ -77,7 +77,6 @@ def parse_as_xml(response):
 
 class Platform:
 
-    fontawesome_name = None
     has_teams = False
     optional_user_name = False
     single_domain = True
