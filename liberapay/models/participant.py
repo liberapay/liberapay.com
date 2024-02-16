@@ -1794,7 +1794,7 @@ class Participant(Model, MixinTeam):
             extra_query = []
             if log_in == 'required' or log_in == 'auto' and not self.has_password:
                 primary_email = self.get_email_address()
-                if email_row.address.lower() == primary_email.lower():
+                if primary_email and email_row.address.lower() == primary_email.lower():
                     # Only send login links to the primary email address
                     session = self._email_session
                     if not session:
@@ -1810,13 +1810,8 @@ class Participant(Model, MixinTeam):
                         extra_query.append(('log-in.token', session.secret))
                         if log_in != 'required':
                             extra_query.append(('log-in.required', 'no'))
-                else:
-                    try:
-                        raise AssertionError('%r != %r' % (email_row.address, primary_email))
-                    except AssertionError as e:
-                        website.tell_sentry(e)
-                        if log_in == 'required':
-                            raise
+                elif log_in == 'required':
+                    raise AssertionError('%r != %r' % (email_row.address, primary_email))
             if not email_row.verified:
                 if not email_row.nonce:
                     email_row = self._rendering_email_to = self.db.one("""

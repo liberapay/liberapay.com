@@ -10,7 +10,7 @@ $body
         _("Something wrong? This email was sent automatically, but you can contact us by replying to it.")
     }}</div>
     <div style="font-size: 14px; padding-top: 12px;">
-        <a href="https://liberapay.com/about/me/emails/"
+        <a href="{{ participant.url('emails/') }}"
            style="text-decoration: underline;">{{
             _("Change your email settings")
         }}</a>.
@@ -29,4 +29,4 @@ $body
 
 {{ _("Something wrong? This email was sent automatically, but you can contact us by replying to it.") }}
 
-{{ _("Change your email settings") }}: https://liberapay.com/about/me/emails/
+{{ _("Change your email settings") }}: {{ participant.url('emails/') }}
