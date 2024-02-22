@@ -3427,3 +3427,8 @@ CREATE TYPE localized_string AS (string text, lang text);
 -- migration #171
 UPDATE app_conf SET value = '"https://api.openstreetmap.org/api/0.6"'::jsonb WHERE key = 'openstreetmap_api_url';
 UPDATE app_conf SET value = '"https://www.openstreetmap.org"'::jsonb WHERE key = 'openstreetmap_auth_url';
+
+-- migration #172
+UPDATE participants
+   SET avatar_url = 'https://pbs.twimg.com/' || regexp_replace(substr(avatar_url, 24), '%2F', '/', 'g')
+ WHERE avatar_url LIKE 'https://nitter.net/pic/%';
