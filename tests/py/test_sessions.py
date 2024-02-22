@@ -155,6 +155,7 @@ class TestLogIn(EmailHarness):
         alice = self.make_participant('alice', email=None)
         alice.add_email(email)
         alice.close()
+        self.db.run("DELETE FROM user_secrets")
 
         # Sanity checks
         email_row = alice.get_email(email)
@@ -248,6 +249,7 @@ class TestLogIn(EmailHarness):
         alice = self.make_participant('alice', email=None)
         alice.add_email(email)
         Participant.dequeue_emails()
+        self.db.run("DELETE FROM user_secrets")
         self.db.run("UPDATE emails SET nonce = null")
 
         # Initiate email log-in

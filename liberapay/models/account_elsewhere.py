@@ -193,9 +193,6 @@ class AccountElsewhere(Model):
                     raise
 
         # Return account after propagating avatar_url to participant
-        avatar_url = account.avatar_url
-        if avatar_url and avatar_url.startswith('https://pbs.twimg.com/'):
-            avatar_url = 'https://nitter.net/pic/' + avatar_url[22:].replace('/', '%2F')
         account.participant.update_avatar(check=False)
         return account
 

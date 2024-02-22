@@ -88,6 +88,10 @@ elif event_object_type == 'charge.dispute':
     payer = Participant.from_id(payin.payer)
     if dispute.status in ('needs_response', 'lost'):
         try:
+            due_by = dispute.evidence_details.due_by
+        except AttributeError:
+            due_by = 0
+        try:
             payer.notify(
                 'payin_disputed',
                 email_unverified_address=True,
@@ -97,7 +101,10 @@ elif event_object_type == 'charge.dispute':
                 payin_amount=payin.amount,
                 payin_ctime=payin.ctime,
                 dispute_reason=dispute.reason,
-                dispute_can_be_withdrawn=dispute.status == 'needs_response',
+                dispute_can_be_withdrawn=(
+                    dispute.status == 'needs_response' and
+                    due_by > utcnow().timestamp()
+                ),
                 mandate_url=route.get_mandate_url(),
             )
         except DuplicateNotification:

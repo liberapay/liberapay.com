@@ -81,9 +81,11 @@ title = "Payments Admin"
 
 % extends "templates/layouts/admin.html"
 
-% macro render_payin_transfer(pt, pi)
+% macro render_payin_transfer(pt, pi, show_amount=True)
     <li>
+    % if show_amount
     {{ locale.format_money(pt.amount) }}
+    % endif
     to <a href="/~{{ pt.recipient }}/">{{ pt.recipient_name }}</a>
     % if pt.period
         ({{ locale.format_money(pt.unit_amount) }}/{{ pt.period[:-2] }} × {{ pt.n_units }})
@@ -167,8 +169,9 @@ title = "Payments Admin"
                     {{ locale.format_money_basket(item['sum']) }}
                     through team <a href="/~{{ item['team_id'] }}/">{{ item['team_name'] }}</a>
                     <ul class="hooked-right-pointing-arrows">
+                    % set show_amount = len(item['transfers']) > 1
                     % for pt in item['transfers']
-                        {{ render_payin_transfer(pt, pi) }}
+                        {{ render_payin_transfer(pt, pi, show_amount=show_amount) }}
                     % endfor
                     </ul>
                     </li>
