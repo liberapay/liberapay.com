@@ -49,9 +49,9 @@ subhead = _("Goal")
             <input type="radio" name="goal" id="goal-yes" value="custom"
                    {{ 'checked' if participant.goal and participant.goal > 0 else '' }}/>
             <span>{{ GOAL_PARTS[0] }}</span>
+            % set goal_currency = participant.main_currency
+            <input type="hidden" name="currency" value="{{ goal_currency }}" />
             <div><div class="input-group">
-                % set goal_currency = participant.main_currency
-                <input type="hidden" name="currency" value="{{ goal_currency }}" />
                 <div class="input-group-addon">{{ locale.currency_symbols.get(goal_currency, goal_currency) }}</div>
                 <input type="tel" inputmode="decimal" name="goal_custom" id="goal-custom"
                        class="amount form-control input-sm"
