@@ -107,7 +107,6 @@ def header_links_paginator(total_header=None):
 
 def keys_paginator(page_key, **kw):
     # https://confluence.atlassian.com/display/BITBUCKET/Version+2#Version2-Pagingthroughobjectcollections
-    # https://developers.facebook.com/docs/graph-api/using-graph-api/v2.2#paging
     paging_key = kw.get('paging')
     total_key = kw.get('total')
     links_keys_map = tuple((k, kw.get(k, k)) for k in links_keys)

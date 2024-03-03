@@ -20,11 +20,6 @@ Liberapay.init = function() {
 
     Liberapay.forms.jsSubmit();
 
-    // http://stackoverflow.com/questions/7131909/facebook-callback-appends-to-return-url
-    if (window.location.hash == '#_=_') {
-        window.location.hash = ''; // leaves a # behind
-    }
-
     var success_re = /([?&])success=[^&]*/;
     if (success_re.test(location.search)) {
         history.replaceState(null, null,

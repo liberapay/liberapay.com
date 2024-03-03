@@ -393,7 +393,7 @@ def refetch_elsewhere_data():
                AND (e.missing_since IS NULL OR e.missing_since > (current_timestamp - interval '30 days'))
                AND (e.last_fetch_attempt IS NULL OR e.last_fetch_attempt < (current_timestamp - interval '3 days'))
                AND (p.status = 'active' OR p.receiving > 0)
-               AND e.platform NOT IN ('facebook', 'google', 'youtube')
+               AND e.platform <> 'youtube'
           ORDER BY e.info_fetched_at ASC
              LIMIT 1
         )
