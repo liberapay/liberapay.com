@@ -3432,3 +3432,7 @@ UPDATE app_conf SET value = '"https://www.openstreetmap.org"'::jsonb WHERE key =
 UPDATE participants
    SET avatar_url = 'https://pbs.twimg.com/' || regexp_replace(substr(avatar_url, 24), '%2F', '/', 'g')
  WHERE avatar_url LIKE 'https://nitter.net/pic/%';
+
+-- migration #173
+DELETE FROM elsewhere WHERE platform in ('facebook', 'google');
+DELETE FROM app_conf WHERE key LIKE 'facebook_%';
