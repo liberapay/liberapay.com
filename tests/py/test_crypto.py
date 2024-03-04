@@ -1,4 +1,5 @@
 import os
+import warnings
 
 import pytest
 
@@ -57,13 +58,13 @@ class TestCrypto(Harness):
         assert new_info_2.payload == new_info.payload
 
     def test_encrypt_dict_warns_of_single_key(self):
-        with pytest.warns(CryptoWarning, match="dict only contains one key") as warnings:
+        with pytest.warns(CryptoWarning, match="dict only contains one key") as w:
             self.website.cryptograph.encrypt_dict({"long_single_key": None})
-        assert len(warnings) == 1
-        with pytest.warns(None) as warnings:
+        assert len(w) == 1
+        with warnings.catch_warnings(record=True) as w:
             self.website.cryptograph.encrypt_dict({})
             self.website.cryptograph.encrypt_dict({0: 1, 2: 3, 4: 5})
-        assert len(warnings) == 0
+        assert len(w) == 0
 
     def test_encrypt_dict_randomizes_order(self):
         cryptograph = self.website.cryptograph
