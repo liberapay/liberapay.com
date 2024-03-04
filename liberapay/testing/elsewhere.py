@@ -218,61 +218,6 @@ twitter = lambda: {
     "listed_count": 7
 }
 
-facebook = lambda: {
-    "id": "187701977",
-    "first_name": "Chad",
-    "gender": "male",
-    "last_name": "Whitacre",
-    "link": "https://www.facebook.com/whit537",
-    "locale": "en_US",
-    "name": "Chad Whitacre",
-    "username": "whit537"
-}
-
-google = lambda: {
-    "resourceName": "people/110791859286178226496",
-    "etag": "%EgkBAj0DBgo1Ny4aDAECAwQFBgcICQoLDCIMVXJJdG5BdEg2eXc9",
-    "names": [
-        {
-            "metadata": {
-                "primary": True,
-                "source": {
-                    "type": "PROFILE",
-                    "id": "110791859286178226496"
-                }
-            },
-            "displayName": "Arthur Panda",
-            "familyName": "Panda",
-            "givenName": "Arthur",
-            "displayNameLastFirst": "Panda, Arthur"
-        }
-    ],
-    "nicknames": [
-        {
-            "metadata": {
-                "primary": True,
-                "source": {
-                    "type": "PROFILE",
-                    "id": "110791859286178226496"
-                }
-            },
-            "value": "Changaco"
-        }
-    ],
-    "photos": [
-        {
-            "metadata": {
-                "primary": True,
-                "source": {
-                    "type": "PROFILE",
-                    "id": "110791859286178226496"
-                }
-            },
-            "url": "https://lh6.googleusercontent.com/-JMfIhnfsuPw/AAAAAAAAAAI/AAAAAAAAABY/M5ldFOyJAPs/s100/photo.jpg"
-        }
-    ]
-}
-
 twitch = lambda: {
     "data": [{
         "id": "44322889",

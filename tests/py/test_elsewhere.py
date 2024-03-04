@@ -80,10 +80,10 @@ class TestElsewhere(EmailHarness):
     def test_connect_failure(self):
         alice = self.make_participant('alice')
         error = 'User canceled the Dialog flow'
-        url = '/on/facebook/associate?error_message=%s&state=deadbeef' % error
+        url = '/on/github/associate?error_message=%s&state=deadbeef' % error
         cookie = b64encode_s(json.dumps(['query_data', 'connect', '', '2']))
         response = self.client.GxT(url, auth_as=alice,
-                                   cookies={'facebook_deadbeef': cookie})
+                                   cookies={'github_deadbeef': cookie})
         assert response.code == 502, response.text
         assert error in response.text
 
