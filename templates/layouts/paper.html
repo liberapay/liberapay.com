@@ -1,5 +1,3 @@
-% from "templates/macros/icons.html" import icon with context
-
 <!DOCTYPE html>
 <html lang="{{ locale.tag }}">
 <head prefix="og: http://ogp.me/ns#">
@@ -12,8 +10,8 @@
 </head>
 <body>
 
-    <header class="text-right">
-        <a class="btn btn-default btn-lg print">{{ icon('print') }} {{ _("Print") }}</a>
+    <header class="text-center">
+        <a class="btn btn-primary btn-lg print">{{ _("Print") }}</a>
     </header>
 
     <div class="sheet"><div class="page">
@@ -29,6 +27,10 @@
 
         {% block content %}{% endblock %}
     </div></div>
+
+    <footer class="text-center">
+        <a class="btn btn-primary btn-lg print">{{ _("Print") }}</a>
+    </footer>
 
     <script src="{{ website.asset('paper.js') }}"></script>
 

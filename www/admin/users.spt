@@ -237,6 +237,7 @@ title = "Users Admin"
 [---] text/html
 % from 'templates/macros/admin.html' import admin_form with context
 % from 'templates/macros/avatar-url.html' import avatar_img with context
+% from 'templates/macros/elsewhere.html' import platform_icon_small with context
 % from 'templates/macros/icons.html' import icon with context
 % from 'templates/macros/nav.html' import querystring_nav with context
 % from "templates/macros/payment-methods.html" import payment_method_icon with context
@@ -275,19 +276,19 @@ title = "Users Admin"
     % if p.status == 'stub'
         % for account in elsewhere
             <div class="account">
+                <span aria-hidden="true">{{ platform_icon_small(account.platform_data) }}</span>
                 <a class="account-link" href="{{ account.html_url }}">
-                    {{ icon(account.platform) }}
+                    <span class="sr-only">{{ account.platform_data.display_name }}:</span>
                     <span class="account-username">{{ account.friendly_name_long }}</span>
                 </a>
-                <br>
-                % if account.description
-                    <section class="profile-statement embedded raw">{{
-                        account.get_excerpt(500)
-                    }}</section>
-                % else
-                    (no description)
-                % endif
             </div>
+            % if account.description
+                <section class="profile-statement embedded raw">{{
+                    account.get_excerpt(500)
+                }}</section>
+            % else
+                (no description)
+            % endif
         % else
             (ghost stub account)
         % endfor
@@ -322,8 +323,8 @@ title = "Users Admin"
         % if elsewhere
             <br>
             % for account in elsewhere
-                <a class="account-link" href="{{ account.html_url }}">
-                    <span class="symbol-3ex">{{ icon(account.platform) }}</span>
+                <a href="{{ account.html_url }}">
+                    <span class="symbol-3ex">{{ platform_icon_small(account.platform_data) }}</span>
                     <span>{{ account.friendly_name_long }}</span>
                 </a>
                 <br>

@@ -1,60 +1,57 @@
-% set icons = {
-    'advertise': 'bootstrap-icons/broadcast.svg',
-    'bank-account': 'bootstrap-icons/bank2.svg',
-    'change-image': 'bootstrap-icons/images.svg',
-    'create-profile': 'bootstrap-icons/file-person.svg',
-    'direct-debit': 'bootstrap-icons/bank2.svg',
-    'disconnect': 'bootstrap-icons/x-lg.svg',
-    'discontinue': 'bootstrap-icons/stop-fill.svg',
-    'donations': 'bootstrap-icons/gift.svg',
-    'enter': 'bootstrap-icons/box-arrow-in-right.svg',
-    'external-link': 'bootstrap-icons/box-arrow-up-right.svg',
-    'exclamation-sign': 'bootstrap-icons/exclamation-circle-fill.svg',
-    'exit': 'bootstrap-icons/box-arrow-right.svg',
-    'explore': 'bootstrap-icons/globe2.svg',
-    'feed': 'bootstrap-icons/rss.svg',
-    'homepage': 'bootstrap-icons/house.svg',
-    'index': 'bootstrap-icons/list.svg',
-    'info-sign': 'bootstrap-icons/info-circle.svg',
-    'integrate': 'bootstrap-icons/gear.svg',
-    'liberapay': 'liberapay/icon-v2_black.svg',
-    'locale': 'bootstrap-icons/translate.svg',
-    'manual': 'bootstrap-icons/hand-index.svg',
-    'mark-as-read': 'bootstrap-icons/eye-fill.svg',
-    'markdown': 'bootstrap-icons/markdown-fill.svg',
-    'mastodon': 'bootstrap-icons/mastodon.svg',
-    'ok': 'bootstrap-icons/check-circle.svg',
-    'payment-card': 'bootstrap-icons/credit-card.svg',
-    'pledge': 'bootstrap-icons/balloon-heart.svg',
-    'private': 'bootstrap-icons/eye-slash.svg',
-    'public': 'bootstrap-icons/globe2.svg',
-    'ok-sign': 'bootstrap-icons/check-circle.svg',
-    'pay': 'bootstrap-icons/cash.svg',
-    'print': 'bootstrap-icons/printer.svg',
-    'question-sign': 'bootstrap-icons/question-circle.svg',
-    'refresh': 'bootstrap-icons/arrow-clockwise.svg',
-    'remove': 'bootstrap-icons/x-lg.svg',
-    'secret': 'bootstrap-icons/incognito.svg',
-    'secure': 'bootstrap-icons/shield-check.svg',
-    'set-up': 'bootstrap-icons/sliders.svg',
-    'smile': 'bootstrap-icons/emoji-smile.svg',
-    'stats': 'bootstrap-icons/bar-chart.svg',
-    'team': 'bootstrap-icons/people.svg',
-    'text-prompt': 'bootstrap-icons/input-cursor-text.svg',
-    'twitter': 'bootstrap-icons/twitter-x.svg',
-    'users': 'bootstrap-icons/person-add.svg',
-    'warning-sign': 'bootstrap-icons/exclamation-triangle-fill.svg',
+% set icon_aliases = {
+    'advertise': 'broadcast',
+    'bank-account': 'bank2',
+    'change-image': 'images',
+    'create-profile': 'file-person',
+    'direct-debit': 'bank2',
+    'disconnect': 'x-lg',
+    'discontinue': 'stop-fill',
+    'donations': 'gift',
+    'enter': 'box-arrow-in-right',
+    'external-link': 'box-arrow-up-right',
+    'exclamation-sign': 'exclamation-circle-fill',
+    'exit': 'box-arrow-right',
+    'explore': 'globe2',
+    'feed': 'rss',
+    'homepage': 'house',
+    'index': 'list',
+    'info-sign': 'info-circle',
+    'integrate': 'gear',
+    'locale': 'translate',
+    'manual': 'hand-index',
+    'mark-as-read': 'eye-fill',
+    'markdown': 'markdown-fill',
+    'mastodon': 'mastodon',
+    'ok': 'check-circle',
+    'payment-card': 'credit-card',
+    'pledge': 'balloon-heart',
+    'private': 'eye-slash',
+    'public': 'globe2',
+    'ok-sign': 'check-circle',
+    'pay': 'cash',
+    'print': 'printer',
+    'question-sign': 'question-circle',
+    'refresh': 'arrow-clockwise',
+    'remove': 'x-lg',
+    'secret': 'incognito',
+    'secure': 'shield-check',
+    'set-up': 'sliders',
+    'smile': 'emoji-smile',
+    'stats': 'bar-chart',
+    'team': 'people',
+    'text-prompt': 'input-cursor-text',
+    'twitter': 'twitter-x',
+    'users': 'person-add',
+    'warning-sign': 'exclamation-triangle-fill',
 }
 
 % macro icon(name, sr='', size=16)
-    % set svg_path = icons.get(name) or 'bootstrap-icons/' + name + '.svg'
-    % set svg = website.read_asset(svg_path)|safe
-    % if svg
-        <span aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}" {% endif %}>{{
-            svg
-        }}</span>
+    % set name = icon_aliases.get(name, name)
+    % if soft_assert(name in website.icon_names, "unknown icon name %r" % name)
+        <svg aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}"{% endif %}{#
+            #}><use xlink:href="{{ website.asset('icons.svg', domain=False) }}#{{ name }}"/></svg>
     % else
-        <img aria-hidden="true" class="icon" {% if sr %} title="{{ sr }}" {% endif %} src="/assets/nonexistent" height={{size}} width={{size}} />
+        <img aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}"{% endif %} src="/assets/nonexistent" />
     % endif
     % if sr
         <span class="sr-only">{{ sr }}</span>

@@ -3,13 +3,12 @@
 % macro account_elsewhere(account, edit=False)
     % set platform = account.platform_data
     <div class="account">
+        <span aria-hidden="true">{{ platform_icon_large(platform) }}</span>
         <a class="account-link" rel="me" href="{{ account.html_url }}">
-            {{ platform_icon_large(platform) }}
             <span class="sr-only">{{ platform.display_name }}:</span>
             <span class="account-username">{{ account.friendly_name_long }}</span>
         </a>
         % if edit
-            &nbsp;&nbsp;&nbsp;
             <form action="/{{ account.participant.username }}/elsewhere/delete"
                   method="POST" class="inline-block js-submit">
                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -43,11 +42,11 @@
 % endmacro
 
 % macro platform_icon_small(platform)
-    <img class="icon" height=16 width=16 src="{{ platform.icon_16 }}" alt="{{ platform.display_name }}" />
+    <img class="icon icon-16" src="{{ platform.icon_16 }}" alt="{{ platform.display_name }}" />
 % endmacro
 
 % macro platform_icon_large(platform)
-    <img class="icon" height=32 width=32 src="{{ platform.icon_32 }}" alt="{{ platform.display_name }}" />
+    <img class="icon icon-32" src="{{ platform.icon_32 }}" alt="{{ platform.display_name }}" />
 % endmacro
 
 % macro user_lookup_form()

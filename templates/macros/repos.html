@@ -8,7 +8,7 @@
         {{ _("(fork)") if repo.is_fork else '' }}
         </span>
         % if repo.stars_count != None
-        <span class="inline-block text-nowrap"><small>{{ icon('star') }} {{ repo.stars_count }}</small></span>
+        <span class="inline-block stars text-nowrap"><small>{{ icon('star', _("Stars")) }} {{ repo.stars_count }}</small></span>
         % endif
         % set last_update = to_age(repo.last_update, granularity='week')
         <span class="inline-block"><small>{{

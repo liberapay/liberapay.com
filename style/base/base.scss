@@ -119,21 +119,28 @@ input.amount {
 }
 
 div.account {
-    .auth-button {
-        display: inline-block;
-    }
-    & > .account-link {
-        display: inline-block;
-        margin-bottom: 0.3em;
-        padding: 0.1em 0;
-        text-decoration: none;
-    }
-    & > form {
-        margin-bottom: 0.9em;
+    line-height: 32px;
+}
+@media (max-width: $screen-xs-min - 1) {
+    div.account {
+        margin: .5em 0 2em 0;
+        & > * {
+            display: block;
+            text-align: center;
+        }
+        & > a.account-link {
+            margin: 0 0 .5em;
+        }
     }
 }
-.account-username {
-    margin-left: 0.5ex;
+@media (min-width: $screen-xs-min) {
+    div.account {
+        margin: .5em 0 .5em 0;
+        & > a.account-link {
+            display: inline-block;
+            margin: 0 2ex 0 .5ex;
+        }
+    }
 }
 
 a.account-link[href="#not-available"] {
@@ -226,9 +233,6 @@ p.summary {
         max-height: 2 * 23px;
         overflow: hidden;
         text-overflow: ellipsis;
-        .icon {
-            vertical-align: baseline;
-        }
     }
     .summary {
         height: 3 * $line-height-computed;
@@ -282,9 +286,13 @@ p.summary {
             margin: 0 1ex 0.6em 0;
         }
     }
-    .star {
+    small {
+        display: inline-block;
+        font-size: $font-size-base;
+        line-height: $line-height-computed;
+    }
+    .stars > .icon {
         color: $gray-light;
-        font-size: 80%;
     }
     .description {
         margin: 0.2em 0 1em;
@@ -724,10 +732,6 @@ p.event {
     margin-bottom: 0.5em;
 }
 
-.icon + span {
-    margin-left: 2px;
-}
-
 span.help-title {
     border-bottom: 1px dotted;
     cursor: help;
@@ -777,8 +781,13 @@ span.help-title {
     }
 }
 
-.card-brands > svg {
-    margin: 0 2ex .3em 0;
+.card-brands {
+    display: block;
+    margin: 0 -2ex -.3em 0;
+    & > svg {
+        margin: 0 2ex .3em 0;
+        vertical-align: top;
+    }
 }
 
 @media (max-width: $screen-sm-min - 1) {
@@ -806,8 +815,9 @@ span.help-title {
 }
 
 .payment-icons {
-    text-wrap: nowrap;
+    display: inline-block;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 .s-logo {

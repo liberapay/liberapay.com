@@ -1,22 +1,17 @@
-svg {
-    vertical-align: top;
+.icon {
+    display: inline-block;
+    fill: currentColor;
 }
 .icon + span {
     margin-left: 2px;
 }
-span.icon-16 {
-    display: inline-block;
-    line-height: 16px;
-    & > svg {
-        height: 16px;
-        width: 16px;
-    }
+.icon-16 {
+    height: 16px;
+    margin-top: calc((1lh - 16px) / 2);
+    vertical-align: top;
+    width: 16px;
 }
-span.icon-32 {
-    display: inline-block;
-    line-height: 32px;
-    & > svg {
-        height: 32px;
-        width: 32px;
-    }
+.icon-32 {
+    height: 32px;
+    width: 32px;
 }
