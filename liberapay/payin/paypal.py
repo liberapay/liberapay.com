@@ -224,7 +224,7 @@ def record_order_result(db, payin, order):
             refund_amount = refund['amount']
             refund_amount = Money(refund_amount['value'], refund_amount['currency_code'])
             reversed_amount += refund_amount
-            refund_description = refund['note_to_payer']
+            refund_description = refund.get('note_to_payer')
             refund_status = REFUND_STATUSES_MAP[refund['status']]
             refund_error = refund.get('status_details', {}).get('reason')
             payin_refund = record_payin_refund(
