@@ -131,11 +131,11 @@ msgstr "Verwalte deine E-Mail-Adressen"
 
 #, python-brace-format
 msgid "Your Liberapay income is approximately {money_amount} this week"
-msgstr "Ihr Einkommen auf Liberapay beträgt etwa {money_amount} diese Woche"
+msgstr "Ihre Einnahmen auf Liberapay betragen etwa {money_amount} diese Woche"
 
 #, python-brace-format
 msgid "Your Liberapay income is {money_amount} this week"
-msgstr "Ihr Einkommen auf Liberapay beträgt {money_amount} diese Woche"
+msgstr "Ihre Einnahmen auf Liberapay betragen {money_amount} diese Woche"
 
 msgid "Here is the breakdown of your income this week:"
 msgstr "Hier ist die Aufschlüsselung Ihrer Einnahmen diese Woche:"
@@ -1620,7 +1620,7 @@ msgid "Recipients"
 msgstr "Empfänger"
 
 msgid "Hopefuls"
-msgstr "Hoffnungsvolle Menschen"
+msgstr "Bewerber"
 
 msgid "Unclaimed Donations"
 msgstr "Nicht beanspruchte Zusagen"
@@ -1793,7 +1793,7 @@ msgid "Update my nominal take"
 msgstr "Aktualisiere nominelle Entnahme"
 
 msgid "Unused income will be consumed in following weeks, it does not accrue in the team account. A team cannot own money because it is not a legal entity."
-msgstr "Unverteiltes Einkommen wird über die folgenden Wochen aufgebraucht, da es sich nicht auf dem Team-Konto akkumuliert. Ein Team kann kein eigenes Geld sammeln, da es keine juristische Person ist."
+msgstr "Nicht verteilte Einnahmen werden über die folgenden Wochen aufgebraucht, sie sammeln sich nicht auf dem Team-Konto an. Ein Team kann kein eigenes Geld besitzen, da es keine juristische Person ist."
 
 msgid "Leftover"
 msgstr "Übrig"
@@ -2861,14 +2861,14 @@ msgid "{username} closed this account {timespan_ago}."
 msgstr "{username} hat dieses Konto vor {timespan_ago} geschlossen."
 
 msgid "View income history"
-msgstr "Einkommensverlauf anzeigen"
+msgstr "Einnahmen-Verlauf anzeigen"
 
 msgid "No data to show."
 msgstr "Keine Daten zu zeigen."
 
 #, python-brace-format
 msgid "Income Per Week (in {currency})"
-msgstr "Einkommen pro Woche (in {currency})"
+msgstr "Einnahmen pro Woche (in {currency})"
 
 msgid "Number of Patrons Per Week"
 msgstr "Anzahl Unterstützer pro Woche"
@@ -3442,7 +3442,7 @@ msgstr "Sie können erst neue Spenden erhalten, wenn Sie einen Zahlungsdienstlei
 
 #, python-brace-format
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
-msgstr "Spenden durch Teams machen einen Anteil von {income_percent} Ihres Einkommens ({team_income} von {total_income}) und {patrons_percent} von Ihren Spendern ({nteampatrons} von {npatrons}) aus."
+msgstr "Spenden durch Teams machen einen Anteil von {income_percent} Ihrer Einnahmen ({team_income} von {total_income}) und {patrons_percent} von Ihren Spendern ({nteampatrons} von {npatrons}) aus."
 
 msgid "Details of Donations"
 msgstr "Spendendetails"
@@ -4147,9 +4147,8 @@ msgstr "Datenschutzerklärung"
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Diese Seite enthält Links und Informationen zum Liberapay-Logo. Wir hoffen, dass Sie es nützlich finden, besonders wenn Sie einen Artikel über Liberapay schreiben oder wenn Sie Ihrem Liberapay-Profil auf Ihrer Website eigene Links hinzufügen möchten."
 
-#, fuzzy
 msgid "The Liberapay logo is composed of the two letters “lp”. It's usually colored black-on-yellow or just black. We used a white-on-yellow variant in the past, but it's now phased out as its contrast was deemed too low."
-msgstr "Das Liberapay-Logo besteht aus den beiden Buchstaben \"lp\". Es ist in der Regel schwarz-auf-gelb oder einfach schwarz gefärbt. In der Vergangenheit haben wir eine weiß-gelbe Variante verwendet, die jedoch nicht mehr verwendet wird, da ihr Kontrast als zu gering erachtet wurde."
+msgstr "Das Liberapay-Logo besteht aus den beiden Buchstaben „lp“. Es ist in der Regel schwarz auf gelb oder einfach schwarz gefärbt. In der Vergangenheit haben wir eine weiß-gelbe Variante verwendet, die jedoch nicht mehr verwendet wird, da ihr Kontrast als zu gering erachtet wurde."
 
 #, python-brace-format
 msgid "The Liberapay yellow is {yellow_color_code}, the black is {black_color_code}."
@@ -4163,9 +4162,8 @@ msgstr "Das Liberapay-Logo ist dank der {CC0_link_start}CC0 Public Domain Dedica
 msgid "You can view and download our logos below or {link_start}on GitHub{link_end}."
 msgstr "Sie können unsere Logos unten oder {link_start}auf GitHub{link_end} ansehen und herunterladen."
 
-#, fuzzy
 msgid "Liberapay logo, black-on-yellow"
-msgstr "Liberapay-Logo, schwarz-auf-gelb"
+msgstr "Liberapay-Logo, schwarz auf gelb"
 
 msgid "Download the black-on-yellow SVG"
 msgstr "Laden Sie das Schwarz-auf-Gelb-SVG herunter"
@@ -4174,7 +4172,6 @@ msgstr "Laden Sie das Schwarz-auf-Gelb-SVG herunter"
 msgid "Download the black-on-yellow PNG ({x_y} pixels)"
 msgstr "Laden Sie das Schwarz-auf-Gelb-PNG ({x_y} Pixel) herunter"
 
-#, fuzzy
 msgid "Liberapay logo, black"
 msgstr "Liberapay-Logo, schwarz"
 
@@ -4433,7 +4430,7 @@ msgid "The nominal takes are the raw numbers that the members input themselves, 
 msgstr "Die nominellen Entnahmen werden von den Mitgliedern selbst bestimmt. Die tatsächlichen Auszalungen werden vom System berechnet: Zuerst summiert es die nominellen Entnahmen, dann berechnet es den Prozentsatz, dem jede Entnahme entspricht. Anschließend wendet es diese Prozentsätze auf die verfügbaren Einnahmen an. Nominelle Entnahmen können auch als Maxima verstanden werden: Die tatsächliche Auszahlung ist nie höher als die nominelle Entnahme, selbst wenn zusätzliche Einnahmen zur Verfügung stünden."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the stability of the team's income."
-msgstr "Sie wundern sich vielleicht, weshalb wir nominelle Entnahmen als Maxima anstelle von Prozenten verwenden. Maxima erlauben Teams einen Überschuss (oder Rest) zu erzielen. Erstens bildet dies einen Puffer, um die Einnahmen der Team-Mitglieder zu stabilisieren. Zweitens verringern neue Mitglieder zuerst den Puffer, bevor sie die Einnahmen der anderen Mitglieder mindern. Drittens erlaubt unsere Software, die Beträge, die tatsächlich von Spendern überwiesen werden, anzupassen. Dies gleicht den Betrag eines Spenders über die Zeit aus und macht das Spendensystem gerechter. Außerdem ermutigt es Spender für Teams zu spenden, die ihr Spendenziel schon erreicht haben. Denn dies stabilisiert das Einkommen des Teams weiter."
+msgstr "Sie wundern sich vielleicht, weshalb wir nominelle Entnahmen als Maxima anstelle von Prozenten verwenden. Maxima erlauben Teams einen Überschuss (oder Rest) zu erzielen. Erstens bildet dies einen Puffer, um die Einnahmen der Team-Mitglieder zu stabilisieren. Zweitens verringern neue Mitglieder zuerst den Puffer, bevor sie die Einnahmen der anderen Mitglieder mindern. Drittens erlaubt unsere Software, die Beträge, die tatsächlich von Spendern überwiesen werden, anzupassen. Dies gleicht den Betrag eines Spenders über die Zeit aus und macht das Spendensystem gerechter. Außerdem ermutigt es Spender für Teams zu spenden, die ihr Spendenziel schon erreicht haben. Denn dies stabilisiert die Einnahmen des Teams weiter."
 
 msgid "Automatic takes"
 msgstr "Automatische Entnahmen"
@@ -4445,7 +4442,7 @@ msgid "Regulation of take amounts"
 msgstr "Regelung der Entnahmebeträge"
 
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Wenn diese Funktion „Einnahmen beschränken“ für das Team aktiviert ist, dann können Mitglieder ihre Entnahmen nicht über das berechnete Maximum setzen. Dieses wird auf Basis der nominellen Einnahmen des vorherigen Zahltags berechnet. Dieser Mechanismus soll die Motivation fördern, neue Mitwirkende zum Team einzuladen, indem sichergestellt wird, dass sie in den ersten Wochen keinen überproportionalen Anteil am Einkommen einnehmen."
+msgstr "Wenn diese Funktion „Einnahmen beschränken“ für das Team aktiviert ist, dann können Mitglieder ihre Entnahmen nicht über das berechnete Maximum setzen. Dieses wird auf Basis der nominellen Einnahmen des vorherigen Zahltags berechnet. Dieser Mechanismus soll die Motivation fördern, neue Mitwirkende zum Team einzuladen, indem sichergestellt wird, dass sie in den ersten Wochen keinen überproportionalen Anteil der Einnahmen erhalten."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
@@ -4552,16 +4549,14 @@ msgstr "Profile werden frühestens 72 Stunden nach ihrer Erstellung in der Liste
 msgid "People and projects who receive donations through Liberapay."
 msgstr "Personen und Projekte, die über Liberapay Spenden erhalten."
 
-#, fuzzy
 msgid "Explore Recipients"
 msgstr "Empfänger erkunden"
 
 msgid "Users who are hoping to receive their first donations through Liberapay."
 msgstr "Nutzer, die hoffen, ihre ersten Spenden über Liberapay zu erhalten."
 
-#, fuzzy
 msgid "Explore Hopefuls"
-msgstr "Hopefuls erforschen"
+msgstr "Bewerber erkunden"
 
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
 msgstr "Liberapay erlaubt es, an Personen Spenden zu versprechen, die noch keine Mitglieder sind."
@@ -4594,9 +4589,8 @@ msgstr "Die Top-{0}-Personen auf Liberapay sind:"
 msgid "Sort by"
 msgstr "Sortieren nach"
 
-#, fuzzy
 msgid "income"
-msgstr "Einkommen"
+msgstr "Einnahmen"
 
 #, fuzzy
 msgid "creation date"
