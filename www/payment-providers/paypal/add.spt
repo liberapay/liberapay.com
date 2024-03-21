@@ -47,7 +47,7 @@ if request.method == 'POST':
 title = _("Connecting a {platform} account", platform='PayPal')
 
 [---] text/html
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % extends "templates/layouts/base-thin.html"
 
@@ -64,7 +64,7 @@ title = _("Connecting a {platform} account", platform='PayPal')
             "A confirmation code will be sent to this email address, unless it's "
             "already linked to your Liberapay account."
         ) }}</div>
-        <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+        <div class="text-warning">{{ icon('warning-sign') }} {{ _(
             "PayPal payments are currently not anonymous, donors will see your "
             "email address, and you will see theirs."
         ) }}</div>

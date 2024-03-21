@@ -9,7 +9,6 @@ class Bitbucket(PlatformOAuth1):
     # Platform attributes
     name = 'bitbucket'
     display_name = 'Bitbucket'
-    fontawesome_name = name
     account_url = 'https://bitbucket.org/{user_name}'
 
     # Auth attributes

@@ -32,7 +32,7 @@ title = _("Explore")
 subhead = _("Hopefuls")
 
 [---] text/html
-% from 'templates/macros/icons.html' import glyphicon with context
+% from 'templates/macros/icons.html' import icon with context
 % from 'templates/macros/pagination.html' import simple_pager with context
 % from 'templates/macros/profile-box.html' import profile_box_embedded with context
 
@@ -42,11 +42,11 @@ subhead = _("Hopefuls")
 
 % if participants
     <p>{{ _("This page lists Liberapay users who are hoping to receive their first donations.") }}</p>
-    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+    <p class="text-warning">{{ icon('warning-sign') }} {{ _(
         "Despite our efforts, some of the listed profiles may be spam or fraud."
     ) }}</p>
     % if last_shown is None
-    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
         "Profiles only start appearing in the list 72 hours after they're created."
     ) }}</p>
     % endif

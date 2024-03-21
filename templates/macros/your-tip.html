@@ -1,4 +1,4 @@
-% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/icons.html" import icon with context
 % from "templates/macros/payment-methods.html" import payment_methods_icons with context
 
 % macro tip_form(tippee, tip=None, disabled='')
@@ -216,7 +216,7 @@
     % elif tippee_p.payment_providers
     <p class="text-center">{{ payment_methods_icons(tippee_p, new_currency) }}</p>
     % elif not pledging
-    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-muted">{{ icon('info-sign') }} {{ _(
         "{username} hasn't configured any payment method yet, so your donation "
         "cannot actually be processed right now. We will notify you when payment "
         "becomes possible.",
@@ -235,17 +235,17 @@
         % endif
     % endif
     % if patron_visibilities == 1
-    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
         "{username} has chosen not to see who their patrons are, so your donation will be secret.",
         username=tippee_name
     ) }}</p>
     % elif patron_visibilities == 2 or paypal_only and not patron_visibilities
-    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
         "This donation won't be secret, you will appear in {username}'s private list of patrons.",
         username=tippee_name
     ) }}</p>
     % elif patron_visibilities == 4
-    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-warning">{{ icon('info-sign') }} {{ _(
         "{username} discloses who their patrons are, your donation will be public.",
         username=tippee_name
     ) }}</p>
@@ -299,7 +299,7 @@
         % endif
     </ul>
     % else
-    <p class="text-muted">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-muted">{{ icon('info-sign') }} {{ _(
         "{username} hasn't yet specified whether they want to see who their patrons are, "
         "so your donation will be secret.",
         username=tippee_name

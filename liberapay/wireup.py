@@ -7,6 +7,7 @@ import re
 import socket
 from sys import intern
 import traceback
+import xml.etree.ElementTree as ET
 
 import babel
 from babel.messages.pofile import read_po
@@ -605,15 +606,15 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
     platforms = PlatformRegistry(platforms)
 
     for platform in platforms:
-        if platform.fontawesome_name:
-            continue
-        platform.icon = asset(
-            'platforms/%s.svg' % platform.name,
+        platform.icon_16 = asset(
+            'platforms/%s.16.webp' % platform.name,
             'platforms/%s.16.png' % platform.name,
-        )
-        platform.logo = asset(
             'platforms/%s.svg' % platform.name,
-            'platforms/%s.png' % platform.name,
+        )
+        platform.icon_32 = asset(
+            'platforms/%s.32.webp' % platform.name,
+            'platforms/%s.32.png' % platform.name,
+            'platforms/%s.svg' % platform.name,
         )
 
     return {'platforms': platforms}
@@ -795,7 +796,7 @@ def load_i18n(canonical_host, canonical_scheme, project_root, tell_sentry):
 
 
 def asset_url_generator(env, asset_url, tell_sentry, www_root):
-    def asset(*paths):
+    def asset(*paths, domain=True):
         for path in paths:
             fspath = www_root+'/assets/'+path
             etag = ''
@@ -812,8 +813,31 @@ def asset_url_generator(env, asset_url, tell_sentry, www_root):
                     continue
             except Exception as e:
                 tell_sentry(e)
-            return asset_url+path+(etag and '?etag='+etag)
+            if domain:
+                return asset_url+path+(etag and '?etag='+etag)
+            else:
+                return '/assets/'+path+(etag and '?etag='+etag)
     return {'asset': asset}
+
+
+def icon_names(www_root):
+    icons_file_path = f'{www_root}/assets/icons.svg'
+    svg = ET.parse(icons_file_path).getroot()
+    icon_identifiers = set()
+    for el in svg:
+        if el.tag != '{http://www.w3.org/2000/svg}symbol':
+            raise AssertionError(
+                f"{icons_file_path} contains unknown element <{el.tag.split('}')[1]}>"
+            )
+        icon_id = el.get('id')
+        if not icon_id:
+            raise AssertionError(f"{icons_file_path} contains a <symbol> without an id")
+        if icon_id in icon_identifiers:
+            raise AssertionError(
+                f'{icons_file_path} contains multiple symbols with id="{icon_id}"'
+            )
+        icon_identifiers.add(icon_id)
+    return {'icon_names': icon_identifiers}
 
 
 def load_scss_variables(project_root):
@@ -865,6 +889,7 @@ full_chain = StateChain(
     username_restrictions,
     load_i18n,
     asset_url_generator,
+    icon_names,
     accounts_elsewhere,
     load_scss_variables,
     s3,

@@ -24,7 +24,7 @@ subhead = _("Avatar")
 [---] text/html
 % from 'templates/macros/avatar-url.html' import avatar_img, avatar_url with context
 % from "templates/macros/elsewhere.html" import auth_button with context
-% from 'templates/macros/icons.html' import glyphicon
+% from 'templates/macros/icons.html' import icon with context
 
 % extends "templates/layouts/profile-edit.html"
 
@@ -66,19 +66,19 @@ subhead = _("Avatar")
     <div class="buttons">
     <a class="btn btn-default" target="_blank" rel="noopener noreferrer"
        href="https://www.libravatar.org/accounts/login/">
-       {{ glyphicon('edit') }}
+       {{ icon('change-image') }}
        <span>{{ _("Modify your Libravatar") }}</span>
     </a>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <a class="btn btn-default btn-sm" target="_blank" rel="noopener noreferrer"
        href="https://www.libravatar.org/">
-       {{ glyphicon('info-sign') }}
+       {{ icon('info-sign') }}
        <span>{{ _("What is Libravatar?") }}</span>
     </a>
     <br><br>
     % if participant.avatar_url and request.method == 'GET'
     <button class="btn btn-default" data-action="reload" type="button">
-       {{ glyphicon('refresh') }} <span>{{ _("Refresh") }}</span>
+       {{ icon('refresh') }} <span>{{ _("Refresh") }}</span>
     </button>
     <noscript><span class="text-danger">{{ _("JavaScript is required") }}</span></noscript>
     % endif

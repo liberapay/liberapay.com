@@ -81,7 +81,7 @@ if action:
 [---] text/html
 % extends "templates/layouts/settings.html"
 
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % block content
 
@@ -170,7 +170,7 @@ if action:
         <input type="date" name="new_date" value="{{ sp.execution_date }}"
                class="form-control" placeholder="{{ _('YYYY-MM-DD') }}" />
     </div>
-    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+    <p class="text-warning">{{ icon('warning-sign') }} {{ _(
         "Delaying your payment beyond its normal date will result in your donation "
         "being inactive during that time."
     ) }}</p>

@@ -103,7 +103,7 @@ title = participant.username
 subhead = _("Payment Processors")
 
 [---] text/html
-% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % extends "templates/layouts/settings.html"
 
@@ -137,7 +137,7 @@ subhead = _("Payment Processors")
         "supported payment processor. This page allows you to do so."
     ) }}</p>
 
-    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
         "Donors do not need to connect any payment account below, they are only "
         "necessary to receive money."
     ) }}</p>
@@ -152,7 +152,7 @@ subhead = _("Payment Processors")
         link_close='</a>'|safe,
     ) }}</p>
     % elif not accounts
-    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
         "We recommend connecting both Stripe and PayPal if they're both available "
         "in your country."
     ) }}</p>
@@ -172,10 +172,10 @@ subhead = _("Payment Processors")
         <form class="card card-default" action="" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="account_pk" value="{{ account.pk }}" />
-            <button class="corner-icon fa fa-close" name="action" value="disconnect"
-                    title="{{ _('Disconnect') }}"></button>
-            <button class="corner-icon fa fa-refresh" name="action" value="refresh"
-                    title="{{ _('Refresh') }}"></button>
+            <button class="corner-icon" name="action" value="disconnect"
+                    title="{{ _('Disconnect') }}">{{ icon('disconnect') }}</button>
+            <button class="corner-icon" name="action" value="refresh"
+                    title="{{ _('Refresh') }}">{{ icon('refresh') }}</button>
             % if account.display_name
             <h4>{{ account.display_name }}</h4>
             {{ _("Account ID: {0}", account.id) }}<br>
@@ -190,14 +190,14 @@ subhead = _("Payment Processors")
             </p>
             <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.charges_enabled
-            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{ _(
+            <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
                 "This account cannot receive payments. To fix this, log in to the "
                 "account and complete the verification process. After that, reconnect "
                 "the account if you still see this message."
             ) }}</p>
             % endif
             <a href="https://dashboard.stripe.com/{{ account.id }}" target="_blank" rel="noopener noreferrer">{{
-                fontawesome("external-link") }} {{ _(
+                icon("external-link") }} {{ _(
                 "Manage this {platform} account", platform="Stripe"
             ) }}</a>
         </form>
@@ -206,11 +206,11 @@ subhead = _("Payment Processors")
     <br>
     % elif country in locale.countries
         % if country in constants.PAYOUT_COUNTRIES['stripe']
-            <p class="text-success">{{ glyphicon('ok-sign') }} {{ _(
+            <p class="text-success">{{ icon('ok-sign') }} {{ _(
                 "Available in {country}.", country=Country(country)
             ) }}</p>
         % else
-            <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+            <p class="text-danger">{{ icon('exclamation-sign') }} {{ _(
                 "Not available in {country}.", country=Country(country)
             ) }}</p>
         % endif
@@ -241,8 +241,8 @@ subhead = _("Payment Processors")
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % for account in paypal_accounts
         <div class="card card-default">
-            <button class="corner-icon fa fa-close" name="account_pk" value="{{ account.pk }}"
-                    title="{{ _('Disconnect') }}"></button>
+            <button class="corner-icon" name="account_pk" value="{{ account.pk }}"
+                    title="{{ _('Disconnect') }}">{{ icon('disconnect') }}</button>
             % if account.display_name
             <h4>{{ account.display_name }}</h4>
             {{ _("Account ID: {0}", account.id) }}<br>
@@ -257,18 +257,18 @@ subhead = _("Payment Processors")
             </p>
             <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
             % if not account.verified
-            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+            <p class="text-warning">{{ icon('exclamation-sign') }} {{
                 _("The email address '{0}' is not verified.", account.id)
             }}</p>
             % elif account.charges_enabled == False
-            <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{ _(
+            <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
                 "This account cannot receive payments. To fix this, log in to the "
                 "account and complete the verification process. After that, reconnect "
                 "the account if you still see this message."
             ) }}</p>
             % endif
             <a href="https://www.paypal.com/signin" target="_blank" rel="noopener noreferrer">{{
-                fontawesome("external-link") }} {{ _(
+                icon("external-link") }} {{ _(
                 "Manage this {platform} account", platform="PayPal"
             ) }}</a>
         </div>
@@ -277,11 +277,11 @@ subhead = _("Payment Processors")
     <br>
     % elif country in locale.countries
         % if country in constants.PAYOUT_COUNTRIES['paypal']
-            <p class="text-success">{{ glyphicon('ok-sign') }} {{ _(
+            <p class="text-success">{{ icon('ok-sign') }} {{ _(
                 "Available in {country}.", country=Country(country)
             ) }}</p>
         % else
-            <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+            <p class="text-danger">{{ icon('exclamation-sign') }} {{ _(
                 "Not available in {country}.", country=Country(country)
             ) }}</p>
         % endif

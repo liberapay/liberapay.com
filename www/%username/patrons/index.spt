@@ -35,7 +35,7 @@ subhead = _("Patrons")
 [---] text/html
 % extends "templates/layouts/settings.html"
 
-% from "templates/macros/icons.html" import fontawesome, glyphicon with context
+% from "templates/macros/icons.html" import icon with context
 
 % block content
 
@@ -67,14 +67,14 @@ subhead = _("Patrons")
         "be turned on or off, but at least one of them must be enabled."
     ) }}</p>
     % if participant.payment_providers == 2 and new_patron_visibilities.__and__(1)
-    <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+    <p class="text-danger">{{ icon('exclamation-sign') }} {{ _(
         "Secret donations aren't possible with PayPal. You should either disable "
         "secret donations or {link_start}add a Stripe account{link_end}.",
         link_start=('<a href="%s">'|safe) % participant.path('payment/'),
         link_end='</a>'|safe,
     ) }}</p>
     % else
-    <p class="text-warning">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-warning">{{ icon('info-sign') }} {{ _(
         "Secret donations aren't possible when the payer uses PayPal."
     ) }}</p>
     % endif
@@ -113,10 +113,10 @@ subhead = _("Patrons")
 
 % if patron_visibilities > 1
 <h3>{{ _("Data export") }}</h3>
-<p><a href="{{ participant.path('patrons/export.csv?scope=active') }}">{{ fontawesome('download') }} {{
+<p><a href="{{ participant.path('patrons/export.csv?scope=active') }}">{{ icon('download') }} {{
     _("Download the list of currently active patrons")
 }}</a></p>
-<p><a href="{{ participant.path('patrons/export.csv?scope=all') }}">{{ fontawesome('download') }} {{
+<p><a href="{{ participant.path('patrons/export.csv?scope=all') }}">{{ icon('download') }} {{
     _("Download the record of all patrons in the last ten years")
 }}</a></p>
 

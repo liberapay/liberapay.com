@@ -146,8 +146,8 @@ next_payday = compute_next_payday_date()
 % extends "templates/layouts/settings.html"
 
 % from "templates/macros/avatar-url.html" import avatar_img with context
-% from 'templates/macros/elsewhere.html' import platform_icon
-% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from 'templates/macros/elsewhere.html' import platform_icon_small
+% from "templates/macros/icons.html" import icon with context
 % from "templates/macros/payment-methods.html" import payment_methods_icons with context
 
 % block content
@@ -182,7 +182,7 @@ next_payday = compute_next_payday_date()
 
 % if show_automatic_renewal_hint
     <div class="text-info">
-        {{ glyphicon('info-sign') }} {{ _(
+        {{ icon('info-sign') }} {{ _(
             "Liberapay now supports automatic renewals, do you want to switch it "
             "on for all your donations?"
         ) }}
@@ -204,7 +204,7 @@ next_payday = compute_next_payday_date()
 
 % if show_visibility_hint
     <div class="text-info">
-        {{ glyphicon('info-sign') }} {{ _(
+        {{ icon('info-sign') }} {{ _(
             "Liberapay now supports non-anonymous donations, do you want to "
             "modify the visibility of all your donations at once?"
         ) }}
@@ -227,7 +227,7 @@ next_payday = compute_next_payday_date()
     % endif
 % elif show_incomplete_profile_warning
     <div class="text-info">
-        {{ glyphicon('info-sign') }} {{ _(
+        {{ icon('info-sign') }} {{ _(
             "Since you've chosen to make a public donation, we recommend that you "
             "complete your public profile."
         ) }}
@@ -310,7 +310,7 @@ next_payday = compute_next_payday_date()
                                 }}</a>
                                 <button class="btn btn-default btn-xs" name="tippee" value="{{ tip.tippee }}"
                                         title="{{ _('Discontinue the donation') }}">
-                                    <span class="text-danger">{{ glyphicon('minus-sign') }}</span>
+                                    <span class="text-danger">{{ icon('discontinue') }}</span>
                                 </button>
                             </span>
                         </div>
@@ -329,42 +329,42 @@ next_payday = compute_next_payday_date()
                 % endif
                 <p>
                     % if tip.visibility == 3
-                        {{ fontawesome('eye') }} {{ _("Public donation") }}
+                        {{ icon('public') }} {{ _("Public donation") }}
                     % elif tip.visibility == 2
-                        {{ fontawesome('eye-slash') }} {{ _("Private donation") }}
+                        {{ icon('private') }} {{ _("Private donation") }}
                     % else
-                        {{ fontawesome('user-secret') }} {{ _("Secret donation") }}
+                        {{ icon('secret') }} {{ _("Secret donation") }}
                     % endif
                     &nbsp;&nbsp;
                     % if tip.renewal_mode == 2
                         % if tip.tippee_p.payment_providers == 2
-                            </p><p class="text-warning">{{ fontawesome('repeat') }} {{ _(
+                            </p><p class="text-warning">{{ icon('repeat') }} {{ _(
                                 "Automatic renewals are enabled for this donation, but are "
                                 "currently impossible due to payment processor limitations."
                             ) }}</p>
                         % else
-                            {{ fontawesome('repeat') }} {{ _("Automatic renewal") }}
+                            {{ icon('repeat') }} {{ _("Automatic renewal") }}
                         % endif
                     % else
-                        {{ fontawesome('hand-pointer-o') }} {{ _("Manual renewal") }}
+                        {{ icon('manual') }} {{ _("Manual renewal") }}
                     % endif
                 </p>
                 % if tippee.is_suspended
-                    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+                    <p class="text-warning">{{ icon('warning-sign') }} {{ _(
                         "Inactive because the account of the recipient is blacklisted."
                     ) }}</p>
                 % elif tippee.status == 'closed'
-                    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+                    <p class="text-warning">{{ icon('warning-sign') }} {{ _(
                         "Inactive because the account of the recipient is closed."
                     ) }}</p>
                 % elif not tippee.accepts_tips
-                    <p class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+                    <p class="text-warning">{{ icon('warning-sign') }} {{ _(
                         "Inactive because the recipient no longer accepts donations."
                     ) }}</p>
                 % elif tip.paid_in_advance and tip.paid_in_advance >= tip.amount
                     % set weeks_remaning = int(tip.paid_in_advance / tip.amount)
                     <p>
-                        <span class="text-success">{{ glyphicon('ok-sign') }} {{ _("Active") }}</span>
+                        <span class="text-success">{{ icon('ok') }} {{ _("Active") }}</span>
                         &nbsp;&nbsp;
                         % set delta = timedelta(weeks=weeks_remaning - 1)
                         {{ _(
@@ -380,22 +380,22 @@ next_payday = compute_next_payday_date()
                     </p>
                 % else
                     % if tip.tippee in has_pending_transfer
-                        <p class="text-warning">{{ glyphicon('exclamation-sign') }} {{
+                        <p class="text-warning">{{ icon('info-sign') }} {{
                             _("Pending payment completion.")
                         }}</p>
                         <br>
                     % elif tip.payment_providers
-                        <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+                        <p class="text-danger">{{ icon('exclamation-sign') }} {{ _(
                             "You need to initiate a new payment to fund this donation. "
                             "Click on the button below to proceed."
                         ) }}</p>
                         <a class="btn btn-primary"
                            href="{{ participant.path('giving/pay/') }}?beneficiary={{ tippee.id }}">
-                           {{ fontawesome('repeat') }} {{ _("Renew") }}
+                           {{ icon('repeat') }} {{ _("Renew") }}
                         </a>
                         &nbsp; {{ payment_methods_icons(tippee, tip.amount.currency) }}
                     % else
-                        <p class="text-danger">{{ glyphicon('exclamation-sign') }} {{ _(
+                        <p class="text-danger">{{ icon('warning-sign') }} {{ _(
                             "Cannot be renewed because the account of the recipient isn't ready to receive new payments."
                         ) }}</p>
                     % endif
@@ -436,7 +436,7 @@ next_payday = compute_next_payday_date()
                     }}</a></div>
                     <div class="col-2">
                         <a class="username" href="{{ e.liberapay_path }}">
-                            {{ platform_icon(e.platform_data) }}
+                            {{ platform_icon_small(e.platform_data) }}
                             {{ e.friendly_name }}
                             <span class="sr-only">({{ e.platform_data.display_name }})</span>
                         </a>
@@ -461,7 +461,9 @@ next_payday = compute_next_payday_date()
                                 }}</a>
                                 <button class="btn btn-default btn-xs" name="tippee" value="{{ tip.tippee }}"
                                         title="{{ _('Cancel the pledge') }}">
-                                    <span class="text-warning">{{ glyphicon('remove', _('Cancel the pledge')) }}</span>
+                                    <span class="text-warning">{{
+                                        icon('remove', _('Cancel the pledge'))
+                                    }}</span>
                                 </button>
                             </span>
                         </div>
@@ -526,7 +528,9 @@ next_payday = compute_next_payday_date()
                             }}</a>
                             <button class="btn btn-default btn-xs" name="hide" value="{{ tip.tippee }}"
                                     title="{{ _('Hide') }}">
-                                <span class="text-danger">{{ glyphicon('remove', _('Hide')) }}</span>
+                                <span class="text-danger">{{
+                                    icon('remove', _('Hide'))
+                                }}</span>
                             </button>
                         </span>
                     </div>
@@ -538,7 +542,7 @@ next_payday = compute_next_payday_date()
                 timespan_ago_2=to_age(tip.mtime)
             ) }}</p>
             % if tip.paid_in_advance and tip.paid_in_advance >= tip.amount
-                <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+                <p class="text-info">{{ icon('info-sign') }} {{ _(
                     "This stopped donation still has {money_amount} paid in advance. "
                     "That advance will be consumed every week until it reaches zero.",
                     money_amount=tip.paid_in_advance
@@ -562,7 +566,7 @@ next_payday = compute_next_payday_date()
                 }}</a></div>
                 <div class="col-2">
                     <a class="username" href="{{ e.liberapay_path }}">
-                        {{ platform_icon(e.platform_data) }}
+                        {{ platform_icon_small(e.platform_data) }}
                         {{ e.friendly_name }}
                         <span class="sr-only">({{ e.platform_data.display_name }})</span>
                     </a>
@@ -587,7 +591,9 @@ next_payday = compute_next_payday_date()
                             }}</a>
                             <button class="btn btn-default btn-xs" name="hide" value="{{ tip.tippee }}"
                                     title="{{ _('Hide') }}">
-                                <span class="text-danger">{{ glyphicon('remove', _('Hide')) }}</span>
+                                <span class="text-danger">{{
+                                    icon('remove', _('Hide'))
+                                }}</span>
                             </button>
                         </span>
                     </div>

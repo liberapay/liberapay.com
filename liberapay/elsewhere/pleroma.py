@@ -7,7 +7,6 @@ class Pleroma(Mastodon):
     # Platform attributes
     name = 'pleroma'
     display_name = 'Pleroma'
-    fontawesome_name = name
     account_url = 'https://{domain}/{user_name}'
     single_domain = False
 

@@ -1,4 +1,17 @@
-% from "templates/macros/icons.html" import fontawesome
+% from "templates/macros/icons.html" import icon with context
+
+% macro card_brands()
+    <span aria-hidden="true" class="card-brands">
+    {{ website.read_asset('card_brands/american-express.svg')|safe }}
+    {{ website.read_asset('card_brands/diners.svg')|safe }}
+    {{ website.read_asset('card_brands/discover.svg')|safe }}
+    {{ website.read_asset('card_brands/jcb.svg')|safe }}
+    {{ website.read_asset('card_brands/mastercard.svg')|safe }}
+    {{ website.read_asset('card_brands/unionpay.svg')|safe }}
+    {{ website.read_asset('card_brands/visa.svg')|safe }}
+    </span>
+    <span class="sr-only">American Express, Diners, Discover, JCB, Mastercard, UnionPay, Visa</span>
+% endmacro
 
 % macro describe_payment_methods(tippee)
 {{ _(
@@ -11,7 +24,7 @@
     "({list_of_card_brands}), or by direct debit of a Euro bank account "
     "(for donations in Euro only).",
     username=tippee.username,
-    list_of_card_brands=["Visa", "Mastercard", "American Express", "UnionPay", "Discover", "Diners", "JCB"],
+    list_of_card_brands=["American Express", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
 ) if tippee.payment_providers == 1 else _(
     "Donations to {username} are processed through PayPal.",
     username=tippee.username
@@ -20,7 +33,7 @@
     "({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or "
     "a PayPal account.",
     username=tippee.username,
-    list_of_card_brands=["Visa", "Mastercard", "American Express", "UnionPay", "Discover", "Diners", "JCB"],
+    list_of_card_brands=["American Express", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
 ) }}
 % endmacro
 
@@ -28,20 +41,20 @@
 <span class="payment-icons" title="{{ describe_payment_methods(tippee) }}"
       data-toggle="tooltip" data-placement="bottom">
     % if tippee.payment_providers.__and__(1)
-        {{ fontawesome('credit-card', _("Credit/Debit Card")) }}
+        {{ icon('payment-card', _("Payment Card")) }}
         % if not currency or currency == 'EUR'
-            {{ fontawesome('bank', _("Direct Debit")) }}
+            {{ icon('bank-account', _("Direct Debit")) }}
         % endif
     % endif
     % if tippee.payment_providers.__and__(2)
-        {{ fontawesome('paypal', "PayPal") }}
+        {{ icon('paypal', "PayPal") }}
     % endif
 </span>
 % endmacro
 
 % macro payment_method_icon(method)
-{{ fontawesome('credit-card', _("Credit/Debit Card")) if method == 'stripe-card' else
-   fontawesome('bank', _("Direct Debit")) if method == 'stripe-sdd' else
-   fontawesome('paypal', "PayPal") if method == 'paypal' else
+{{ icon('payment-card', _("Credit/Debit Card")) if method == 'stripe-card' else
+   icon('bank-account', _("Direct Debit")) if method == 'stripe-sdd' else
+   icon('paypal', "PayPal") if method == 'paypal' else
    '' }}
 % endmacro

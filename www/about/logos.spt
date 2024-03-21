@@ -3,6 +3,8 @@ title = _("Logos")
 [---] text/html
 % extends "templates/layouts/about.html"
 
+% from "templates/macros/icons.html" import icon with context
+
 % block content
 
     <p>{{ _(
@@ -49,32 +51,21 @@ title = _("Logos")
     <div class="card text-center">
         <p><img src="{{ website.asset('liberapay/icon-v2_black-on-yellow.svg') }}" height=150 alt="{{ _('Liberapay logo, black-on-yellow') }}" /></p>
         <p><a href="/assets/liberapay/icon-v2_black-on-yellow.svg?save_as=liberapay_logo_black-on-yellow.svg">
-            {{ fontawesome('download') }} {{ _("Download the black-on-yellow SVG") }}
+            {{ icon('download') }} {{ _("Download the black-on-yellow SVG") }}
         </a></p>
         <p><a href="/assets/liberapay/icon-v2_black-on-yellow.200.png?save_as=liberapay_logo_black-on-yellow_200px.png">
-            {{ fontawesome('download') }} {{ _("Download the black-on-yellow PNG ({x_y} pixels)", x_y="200×200") }}
+            {{ icon('download') }} {{ _("Download the black-on-yellow PNG ({x_y} pixels)", x_y="200×200") }}
         </a></p>
     </div>
 
     <div class="card text-center">
         <p><img src="{{ website.asset('liberapay/icon-v2_black.svg') }}" height=150 alt="{{ _('Liberapay logo, black') }}" /></p>
         <p><a href="/assets/liberapay/icon-v2_black.svg?save_as=liberapay_logo_black.svg">
-            {{ fontawesome('download') }} {{ _("Download the black SVG") }}
+            {{ icon('download') }} {{ _("Download the black SVG") }}
         </a></p>
         <p><a href="/assets/liberapay/icon-v2_black.200.png?save_as=liberapay_logo_black_200px.png">
-            {{ fontawesome('download') }} {{ _("Download the black PNG ({x_y} pixels)", x_y="200×200") }}
+            {{ icon('download') }} {{ _("Download the black PNG ({x_y} pixels)", x_y="200×200") }}
         </a></p>
     </div>
-
-    <h3>{{ _("Fonts") }}</h3>
-
-    <p>{{ _(
-        "The Liberapay logo is included in the {fa_link_start}Fork Awesome{link_end} "
-        "font in two forms: {fa_liberapay_link} and {fa_liberapay_square_link}.",
-        fa_link_start='<a href="https://forkaweso.me/Fork-Awesome/">'|safe,
-        fa_liberapay_link='<a href="https://forkaweso.me/Fork-Awesome/icon/liberapay/"><code class="gray">liberapay</code></a>'|safe,
-        fa_liberapay_square_link='<a href="https://forkaweso.me/Fork-Awesome/icon/liberapay-square/"><code class="gray">liberapay-square</code></a>'|safe,
-        link_end='</a>'|safe,
-    ) }}</p>
 
 % endblock

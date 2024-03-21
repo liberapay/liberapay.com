@@ -4,7 +4,7 @@ title = _("Explore")
 
 [---]
 % from 'templates/macros/avatar-url.html' import avatar_img, avatar_default with context
-% from 'templates/macros/icons.html' import glyphicon
+% from 'templates/macros/icons.html' import icon with context
 
 % extends "templates/layouts/explore.html"
 
@@ -39,7 +39,7 @@ title = _("Explore")
         <h2 class="text-info">{{ _("Repositories") }}
             <small title="{{ _("A repository contains a project's data, for example the source code of an application.") }}"
                    data-toggle="tooltip" data-placement="top"
-                   >{{ glyphicon('question-sign') }}</small>
+                   >{{ icon('question-sign') }}</small>
         </h2>
         <p>{{ _(
             "See the most popular repositories belonging to Liberapay users, and "

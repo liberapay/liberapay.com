@@ -1,16 +1,58 @@
-% macro icon_span(classes)
-    <span class="{{ classes }}" aria-hidden="true"></span>
-% endmacro
+% set icon_aliases = {
+    'advertise': 'broadcast',
+    'bank-account': 'bank2',
+    'change-image': 'images',
+    'create-profile': 'file-person',
+    'direct-debit': 'bank2',
+    'disconnect': 'x-lg',
+    'discontinue': 'stop-fill',
+    'donations': 'gift',
+    'enter': 'box-arrow-in-right',
+    'external-link': 'box-arrow-up-right',
+    'exclamation-sign': 'exclamation-circle-fill',
+    'exit': 'box-arrow-right',
+    'explore': 'globe2',
+    'feed': 'rss',
+    'homepage': 'house',
+    'index': 'list',
+    'info-sign': 'info-circle',
+    'integrate': 'gear',
+    'locale': 'translate',
+    'manual': 'hand-index',
+    'mark-as-read': 'eye-fill',
+    'markdown': 'markdown-fill',
+    'mastodon': 'mastodon',
+    'ok': 'check-circle',
+    'payment-card': 'credit-card',
+    'pledge': 'balloon-heart',
+    'private': 'eye-slash',
+    'public': 'globe2',
+    'ok-sign': 'check-circle',
+    'pay': 'cash',
+    'print': 'printer',
+    'question-sign': 'question-circle',
+    'refresh': 'arrow-clockwise',
+    'remove': 'x-lg',
+    'secret': 'incognito',
+    'secure': 'shield-check',
+    'set-up': 'sliders',
+    'smile': 'emoji-smile',
+    'stats': 'bar-chart',
+    'team': 'people',
+    'text-prompt': 'input-cursor-text',
+    'twitter': 'twitter-x',
+    'users': 'person-add',
+    'warning-sign': 'exclamation-triangle-fill',
+}
 
-% macro glyphicon(name, sr='')
-    <span class="glyphicon glyphicon-{{ name }}" aria-hidden="true" {% if sr %} title="{{ sr }}" {% endif %}></span>
-    % if sr
-        <span class="sr-only">{{ sr }}</span>
+% macro icon(name, sr='', size=16)
+    % set name = icon_aliases.get(name, name)
+    % if soft_assert(name in website.icon_names, "unknown icon name %r" % name)
+        <svg aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}"{% endif %}{#
+            #}><use xlink:href="{{ website.asset('icons.svg', domain=False) }}#{{ name }}"/></svg>
+    % else
+        <img aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}"{% endif %} src="/assets/nonexistent" />
     % endif
-% endmacro
-
-% macro fontawesome(name, sr='')
-    <span class="fa fa-{{ name }}" aria-hidden="true" {% if sr %} title="{{ sr }}" {% endif %}></span>
     % if sr
         <span class="sr-only">{{ sr }}</span>
     % endif

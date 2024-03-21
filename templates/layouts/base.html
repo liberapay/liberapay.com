@@ -14,7 +14,6 @@
     <link rel="apple-touch-icon" href="{{ website.asset('liberapay/icon-v2_black-on-yellow.200.png') }}">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ website.asset('forkawesome/1.1.7/css/fork-awesome.min.css') }}" type="text/css">
     % block head_alternates
     % if request.method in constants.SAFE_METHODS and response.code == 200
         <link rel="alternate" hreflang="x-default" href="{{ website.canonical_url }}{{ request.line.uri.decoded }}" />
@@ -29,7 +28,7 @@
     % endif
     {% block head %}{% endblock %}
 </head>
-% from "templates/macros/icons.html" import fontawesome, glyphicon
+% from "templates/macros/icons.html" import icon with context
 % from 'templates/macros/nav.html' import nav, nav_about, nav_explore with context
 % from 'templates/macros/search.html' import search_form with context
 <body{% if page_id is defined %} id="{{ page_id }}"{% endif %}>
@@ -55,7 +54,7 @@
                        data-target="#navbar-liberapay-collapse" data-parent="#navbar"
                        aria-expanded="false">
                         <span class="sr-only">{{ _("Toggle navigation") }}</span>
-                        {{ glyphicon('menu-hamburger') }}
+                        {{ icon('list') }}
                     </a>
                 </li>
                 % block navbar_alternates
@@ -65,30 +64,30 @@
                 % include "templates/layouts/components/navbar-logged-in.html"
             % elif response.no_navbar_sign_in|default(True)
                 % from "templates/macros/sign-in-link.html" import sign_in_link with context
-                <li>{{ sign_in_link('glyphicon glyphicon-log-in', 'navbar-btn') }}</li>
+                <li>{{ sign_in_link(icon('enter'), 'navbar-btn') }}</li>
             % endif
             </ul>
             <div class="collapse navbar-collapse navbar-left" id="navbar-liberapay-collapse">
             <ul class="nav navbar-nav">
                 % if page_id|default('') != 'homepage'
                 <li class="hidden-xs">
-                    <a class="navbar-brand" href="/">{{ fontawesome('liberapay', _("Homepage")) }}</a></li>
+                    <a class="navbar-brand" href="/">{{ icon('liberapay', _("Homepage"), size=32) }}</a></li>
                 <li class="visible-xs">
-                    <a href="/">{{ glyphicon('home') }} <span>{{ _("Homepage") }}</span></a></li>
+                    <a href="/">{{ icon('homepage') }} <span>{{ _("Homepage") }}</span></a></li>
                 % endif
                 {{ nav([
                     ('/explore/', _('Explore'), {
-                        'icon': 'glyphicon glyphicon-globe',
+                        'icon': icon('explore'),
                         'dropdown': nav_explore(),
                     }),
                     ('/search', _('Search'), {
-                        'icon': 'glyphicon glyphicon-search',
+                        'icon': icon('text-prompt'),
                         'form': True,
                         'role': 'search',
                         'dropdown': search_form(autocomplete=False),
                     }),
                     ('/about/', _('About'), {
-                        'icon': 'glyphicon glyphicon-question-sign',
+                        'icon': icon('info-sign'),
                         'dropdown': nav_about(),
                     }),
                 ]) }}
@@ -123,11 +122,11 @@
             <li><a href="/about/legal">{{ _("Legal") }}</a></li>
         </ul>
         <ul class="icons">
-            <li><a href="https://medium.com/liberapay-blog">{{ fontawesome('medium', 'Medium') }}</a></li>
-            <li><a href="https://mastodon.xyz/@Liberapay">{{ fontawesome('mastodon', 'Mastodon') }}</a></li>
-            <li><a href="https://github.com/liberapay/liberapay.com">{{ fontawesome('github', 'GitHub') }}</a></li>
-            <li><a href="https://twitter.com/liberapay">{{ fontawesome('twitter', 'Twitter') }}</a></li>
-            <li><a href="https://www.facebook.com/Liberapay-472128142945598/">{{ fontawesome('facebook', 'Facebook') }}</a></li>
+            <li><a href="https://medium.com/liberapay-blog">{{ icon('medium', 'Medium') }}</a></li>
+            <li><a href="https://mastodon.xyz/@Liberapay">{{ icon('mastodon', 'Mastodon') }}</a></li>
+            <li><a href="https://github.com/liberapay/liberapay.com">{{ icon('github', 'GitHub') }}</a></li>
+            <li><a href="https://twitter.com/liberapay">{{ icon('twitter', 'Twitter') }}</a></li>
+            <li><a href="https://www.facebook.com/Liberapay-472128142945598/">{{ icon('facebook', 'Facebook') }}</a></li>
         </ul>
     </footer>
 

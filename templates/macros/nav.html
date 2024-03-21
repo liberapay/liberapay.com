@@ -1,12 +1,11 @@
-% from "templates/macros/icons.html" import fontawesome, icon_span
+% from "templates/macros/icons.html" import icon with context
 
 % macro nav(items, base='')
     % set current = request.path.raw[len(base):].strip('/')
     % for item in items
         % set slug = item[0].strip('/')
         % set options = item[2] if len(item) > 2 else {}
-        % set icon = options.get('icon')
-        % set icon = icon_span(icon) if icon else ''
+        % set icon = options.get('icon') or ''
         % set dropdown = options.get('dropdown')
         % set subnav = options.get('subnav')
         % set togglable = options.get('togglable')
@@ -69,7 +68,7 @@
 
 % macro nav_admin()
     {{ nav([
-        ('/', fontawesome('home', "Index")),
+        ('/', icon('index', "Index")),
         ('/admins', "Audit Log"),
         ('/cron', "Cron Jobs"),
         ('/debug', "Debugging"),

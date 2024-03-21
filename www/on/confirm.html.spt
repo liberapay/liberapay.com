@@ -25,13 +25,13 @@ other_accounts = other.get_accounts_elsewhere()
 title = _("Please Confirm")
 
 [--------]
-% from 'templates/macros/elsewhere.html' import platform_icon
+% from 'templates/macros/elsewhere.html' import platform_icon_small
 
 % extends "templates/layouts/base.html"
 % block content
 <div class="on-confirm">
 
-    <p>{{ platform_icon(account.platform_data) }}
+    <p>{{ platform_icon_small(account.platform_data) }}
     {{ _("{0} is connected to {1} on Liberapay. Transfer it?",
          '<span class="highlight">%s</span>'|safe % account.friendly_name,
          ('<a href="/{0}/">{0}</a>'|safe).format(other.username)) }}
@@ -43,7 +43,7 @@ title = _("Please Confirm")
         <div class="col-sm-4">
             <b>{{ p.username }}</b><br />
             % for account in user_accounts
-                {{ platform_icon(account.platform_data) }}
+                {{ platform_icon_small(account.platform_data) }}
                 <span class="sr-only">{{ account.platform_data.display_name }}:</span>
                 {{ account.friendly_name }}<br />
             % else
@@ -53,7 +53,7 @@ title = _("Please Confirm")
         <div class="col-sm-4 other">
             <b>{{ other.username }}</b><br />
             % for other_account in other_accounts
-                {{ platform_icon(other_account.platform_data) }}
+                {{ platform_icon_small(other_account.platform_data) }}
                 <span class="sr-only">{{ other_account.platform_data.display_name }}:</span>
                 <span class="{{ 'highlight' if other_account.platform == account.platform else '' }}">{{
                     other_account.friendly_name
@@ -70,14 +70,14 @@ title = _("Please Confirm")
             <b>{{ p.username }}</b><br />
             % for user_account in user_accounts
                 <span class="account-elsewhere">
-                    {{ platform_icon(user_account.platform_data) }}
+                    {{ platform_icon_small(user_account.platform_data) }}
                     <span class="sr-only">{{ user_account.platform_data.display_name }}:</span>
                     {{ user_account.friendly_name }}<br />
                 </span>
             % endfor
 
             <span class="account-elsewhere">
-                {{ platform_icon(account.platform_data) }}
+                {{ platform_icon_small(account.platform_data) }}
                 <span class="sr-only">{{ account.platform_data.display_name }}:</span>
                 <span class="highlight">
                     {{ account.friendly_name }}<br />
@@ -89,7 +89,7 @@ title = _("Please Confirm")
             % for other_account in other_accounts
                 % if other_account.platform != account.platform
                     <span class="account-elsewhere">
-                        {{ platform_icon(other_account.platform_data) }}
+                        {{ platform_icon_small(other_account.platform_data) }}
                         <span class="sr-only">{{ other_account.platform_data.display_name }}:</span>
                         {{ other_account.friendly_name }}<br />
                     </span>

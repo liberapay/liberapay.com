@@ -44,7 +44,7 @@ recent_donation_changes = website.db.all("""
 [-----------------------------------------------------------------------------]
 % extends "templates/layouts/settings.html"
 
-% from "templates/macros/icons.html" import glyphicon with context
+% from "templates/macros/icons.html" import icon with context
 % from "templates/macros/team-members.html" import team_takes_table with context
 
 % block content
@@ -111,7 +111,7 @@ recent_donation_changes = website.db.all("""
 % if recent_donation_changes or participant.receiving > participant.taking
 <h3>{{ _("Details of Donations") }}</h3>
 % if participant.taking
-    <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+    <p class="text-info">{{ icon('info-sign') }} {{ _(
         "This section doesn't include data on donations through teams, it only "
         "shows the donations that you receive personally."
     ) }}</p>

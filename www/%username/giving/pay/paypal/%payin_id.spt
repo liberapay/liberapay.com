@@ -129,6 +129,8 @@ title = _("Funding your donations")
 [---] text/html
 % extends "templates/layouts/base-thin.html"
 
+% from "templates/macros/icons.html" import icon with context
+
 % block thin_content
 
 % if payin is defined
@@ -256,13 +258,13 @@ title = _("Funding your donations")
             </ul>
         </fieldset>
 
-        <p class="text-info">{{ glyphicon('info-sign') }} {{ _(
+        <p class="text-info">{{ icon('info-sign') }} {{ _(
             "Liberapay does not store money, the entire amount of your payment will "
             "go immediately to the {payment_provider} accounts of the recipients.",
             payment_provider='PayPal',
         ) }}</p>
 
-        <div class="text-warning">{{ glyphicon('warning-sign') }} {{ _(
+        <div class="text-warning">{{ icon('warning-sign') }} {{ _(
             "PayPal reveals your name and email address to the recipient."
         ) }}</div>
 

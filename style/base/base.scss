@@ -119,43 +119,30 @@ input.amount {
 }
 
 div.account {
-    .auth-button {
-        display: inline-block;
-    }
-    & > .account-link {
-        display: inline-block;
-        margin-bottom: 0.3em;
-        padding: 0.1em 0;
-        text-decoration: none;
-    }
-    & > form {
-        margin-bottom: 0.9em;
+    line-height: 32px;
+}
+@media (max-width: $screen-xs-min - 1) {
+    div.account {
+        margin: .5em 0 2em 0;
+        & > * {
+            display: block;
+            text-align: center;
+        }
+        & > a.account-link {
+            margin: 0 0 .5em;
+        }
     }
 }
-.account-username {
-    margin-left: 0.5ex;
+@media (min-width: $screen-xs-min) {
+    div.account {
+        margin: .5em 0 .5em 0;
+        & > a.account-link {
+            display: inline-block;
+            margin: 0 2ex 0 .5ex;
+        }
+    }
 }
 
-img.platform-icon {
-    height: 16px;
-}
-i.platform-icon {
-    display: inline-block;
-    font-size: 16px;
-    width: 16px;
-    text-align: center;
-    vertical-align: middle;
-}
-img.account-type {
-    height: 32px;
-}
-i.account-type {
-    display: inline-block;
-    font-size: 32px;
-    width: 32px;
-    text-align: center;
-    vertical-align: middle;
-}
 a.account-link[href="#not-available"] {
     color: inherit;
     cursor: default;
@@ -240,9 +227,6 @@ p.summary {
     max-width: 320px;
     text-align: center;
     width: 320px;
-    .platform-icon {
-        margin-top: -3px;
-    }
     h4 {
         margin-top: 5px;
         line-height: 23px;
@@ -302,9 +286,13 @@ p.summary {
             margin: 0 1ex 0.6em 0;
         }
     }
-    .glyphicon-star {
+    small {
+        display: inline-block;
+        font-size: $font-size-base;
+        line-height: $line-height-computed;
+    }
+    .stars > .icon {
         color: $gray-light;
-        font-size: 80%;
     }
     .description {
         margin: 0.2em 0 1em;
@@ -744,10 +732,6 @@ p.event {
     margin-bottom: 0.5em;
 }
 
-.glyphicon + span {
-    margin-left: 2px;
-}
-
 span.help-title {
     border-bottom: 1px dotted;
     cursor: help;
@@ -768,28 +752,41 @@ span.help-title {
 
 .payment-methods {
     margin-right: -10px;
-    & > div {
+    & > .panel {
         display: inline-block;
         margin-right: 10px;
-        min-height: 145px;
         text-align: center;
         vertical-align: top;
         width: 350px;
         max-width: 100%;
-    }
-    .payment-icon {
-        font-size: 2em;
+        & > .panel-body {
+            min-height: 165px;
+        }
     }
     .muted {
         color: #888;
-        .payment-icon {
+        svg {
             color: #ccc;
         }
     }
-    small.text-warning, small.text-danger {
+    h4 {
+        margin-bottom: 0;
+    }
+    small {
+        display: block;
         font-size: $font-size-medium;
         font-weight: bold;
         line-height: $font-size-medium * $line-height-base;
+        margin-top: 11px;
+    }
+}
+
+.card-brands {
+    display: block;
+    margin: 0 -2ex -.3em 0;
+    & > svg {
+        margin: 0 2ex .3em 0;
+        vertical-align: top;
     }
 }
 
@@ -818,9 +815,9 @@ span.help-title {
 }
 
 .payment-icons {
-    font-size: $font-size-large;
-    text-wrap: nowrap;
+    display: inline-block;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 .s-logo {

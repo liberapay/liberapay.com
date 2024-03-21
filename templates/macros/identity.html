@@ -1,4 +1,4 @@
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import icon with context
 % from "templates/macros/postal-addresses.html" import postal_address_form_v2 with context
 
 
@@ -63,7 +63,7 @@
             <span title='{{ _(
                       "Your main professional activity."
                   ) }}' data-toggle="tooltip" data-placement="top">{{
-                glyphicon('question-sign')
+                icon('question-sign')
             }}</span>
         </span>
         <input name="occupation" {{ required }} maxlength=200

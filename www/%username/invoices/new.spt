@@ -80,9 +80,10 @@ if request.method == 'POST':
 title = _("Invoice {someone}", someone=addressee.username)
 
 [---] text/html
-% from "templates/macros/currencies.html" import currency_buttons with context
-
 % extends "templates/layouts/base.html"
+
+% from "templates/macros/currencies.html" import currency_buttons with context
+% from "templates/macros/icons.html" import icon with context
 
 % block content
 
@@ -129,7 +130,7 @@ title = _("Invoice {someone}", someone=addressee.username)
               placeholder="{{ _('Details of the invoice (e.g. the breakdown of the amount into its components)') }}"
               maxlength=4096>{{ invoice.details or '' }}</textarea>
     <p class="help-block">
-        {{ _("Markdown supported.") }}
+        {{ icon('markdown') }} {{ _("Markdown supported.") }}
         <a href="https://daringfireball.net/projects/markdown/basics"
            target="_blank" rel="noopener noreferrer">{{ _("What is Markdown?") }}</a>
     </p>

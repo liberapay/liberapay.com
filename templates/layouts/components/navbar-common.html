@@ -1,11 +1,11 @@
-% from "templates/macros/icons.html" import glyphicon
+% from "templates/macros/icons.html" import icon with context
 
 % if request.method in constants.SAFE_METHODS
 <li class="dropdown dropdown-hover locale">
     <button class="dropdown-toggle navbar-btn" type="button"
             data-toggle="dropdown"
             title="{{ _('Switch to another language') }}">
-        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+        {{ icon('locale') }}
         <span class="text">{{ locale.language_name }}</span>
         <span class="caret"></span>
     </button>
@@ -24,8 +24,7 @@
         <li role="separator" class="divider"></li>
         <li><a href="https://hosted.weblate.org/engage/liberapay/?utm_source=liberapay-navbar"
                target="_blank" rel="noopener noreferrer"
-               ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-               {{ _("Help us translate Liberapay") }}</a></li>
+               >{{ icon('external-link') }}&nbsp;{{ _("Help us translate Liberapay") }}</a></li>
     </ul>
 </li>
 % endif

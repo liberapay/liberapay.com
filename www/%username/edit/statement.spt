@@ -181,7 +181,7 @@ subhead = _("Descriptions")
                   class="form-control profile-statement vertical-resize"
                   placeholder="{{ _('Full description in {language}', language=locale.Language(lang)) }}"
             >{{ statement or '' }}</textarea>
-        <p class="help-block pull-right">{{ _("Markdown supported.") }}
+        <p class="help-block pull-right">{{ icon('markdown') }} {{ _("Markdown supported.") }}
             <a href="https://daringfireball.net/projects/markdown/basics"
                target="_blank" rel="noopener noreferrer">{{ _("What is Markdown?") }}</a>
         </p>

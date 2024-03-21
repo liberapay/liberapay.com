@@ -140,7 +140,13 @@ For our styles we use [SASS](http://sass-lang.com/) and [Bootstrap 3](https://ge
 We compile Bootstrap ourselves from the SASS source in the `style/bootstrap/`
 directory. We do that to be able to easily customize it by changing values in
 `style/variables.scss`. Modifying the files in `style/bootstrap/` is probably
-not a good idea.
+a bad idea.
+
+### Icons
+
+For user interface icons we use [Bootstrap Icons](https://icons.getbootstrap.com/). An icon can be included in a page by calling the `icon` macro from `templates/macros/icons.html`, e.g. `{{ icon('liberapay') }}`. The icons are stored in the `www/assets/icons.svg` file. To add a new icon in that file, the root `<svg>` element of the icon being added must be turned into a `<symbol>` element, preserving only its `viewBox` attribute and adding an `id` attribute.
+
+If you don't find any icon in Bootstrap Icons that fits your use case, you can try to search online catalogs like [Flaticon](https://www.flaticon.com/search?type=uicon), [Icons8](https://icons8.com/icons), [Pictogrammers](https://pictogrammers.com/), [SVG Repo](https://www.svgrepo.com/) and [The Noun Project](https://thenounproject.com/). For brand icons, [Simple Icons](https://simpleicons.org/) is a good resource.
 
 ### Testing
 

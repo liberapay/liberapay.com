@@ -4,6 +4,8 @@ title = _("Privacy")
 [---] text/html
 % extends "templates/layouts/about.html"
 
+% from "templates/macros/icons.html" import icon with context
+
 % block content
 
 <p>{{ _(
@@ -12,14 +14,13 @@ title = _("Privacy")
     "actually need, and we don't sell it to anyone."
 ) }}</p>
 
-<h3>{{ _("Cookies") }}
-    <small title="{{ _(
-               'A cookie is a piece of information sent by a website to your browser, '
-               'stored on your machine, and resent by your browser to that same '
-               'website in every subsequent request.'
-           ) }}"
-           data-toggle="tooltip" data-placement="bottom">{{ glyphicon("question-sign") }}</small>
-</h3>
+<h3>{{ _("Cookies") }}</h3>
+
+<p class="text-info">{{ icon("info-sign") }} {{ _(
+   "A cookie is a piece of information sent by a website to your browser, "
+   "stored on your machine, and resent by your browser to that same "
+   "website in every subsequent request."
+) }}</p>
 
 <p>{{ _(
     "The liberapay.com website only sets technical cookies which are required to "

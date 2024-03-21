@@ -37,6 +37,18 @@ class Website(_Website):
     def link(self, path, text):
         return self._html_link % (path, text)
 
+    def read_asset(self, path):
+        try:
+            assert '..' not in path
+            resource = website.request_processor.resources.get(
+                f'{website.www_root}/assets/{path}'
+            )
+            bs = resource.render().body if resource.raw is None else resource.raw
+            return bs.decode('utf8')
+        except Exception as e:
+            self.tell_sentry(e)
+            return ''
+
     def respond(self, *args, **kw):
         # Run in a new (sub)context
         return copy_context().run(super().respond, *args, **kw)

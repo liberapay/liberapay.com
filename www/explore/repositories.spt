@@ -28,9 +28,10 @@ title = _("Explore")
 subhead = _("Repositories")
 
 [---] text/html
-% from 'templates/macros/pagination.html' import simple_pager with context
-
 % extends "templates/layouts/explore.html"
+
+% from "templates/macros/icons.html" import icon with context
+% from 'templates/macros/pagination.html' import simple_pager with context
 
 % block content
 
@@ -56,7 +57,7 @@ subhead = _("Repositories")
                 "by {author_name}",
                 author_name='<a href="%s">%s</a>'|safe % (owner.path(''), owner.username)
             ) }}</small></span>
-            <span class="inline-block text-nowrap">{{ glyphicon('star', _("Stars")) }} {{ repo.stars_count }}</span>
+            <span class="inline-block stars text-nowrap">{{ icon('star-fill', _("Stars")) }} {{ repo.stars_count }}</span>
         </h4>
         <p class="description">{{ repo.description or '' }}</p>
         <a class="btn btn-donate" href="{{ owner.path('donate') }}">{{ _("Donate") }}</a>

@@ -1,5 +1,5 @@
 % from 'templates/macros/avatar-url.html' import avatar_img with context
-% from 'templates/macros/elsewhere.html' import platform_icon
+% from 'templates/macros/elsewhere.html' import platform_icon_small
 
 % macro profile_box_embedded_wrapper(participant, path, style='default')
 <div class="inline-box">
@@ -61,7 +61,7 @@
         % set p = e.participant
 
         <h4><a href="{{ path }}">
-            {{ platform_icon(e.platform_data) if show_platform_icon else '' }}
+            {{ platform_icon_small(e.platform_data) if show_platform_icon else '' }}
             <span>{{ e.friendly_name }}</span>
             <span class="sr-only">({{ e.platform_data.display_name }})</span>
         </a></h4>
