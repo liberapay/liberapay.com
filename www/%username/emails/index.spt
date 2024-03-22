@@ -59,6 +59,10 @@ if not participant.email_lang:
 title = participant.username
 subhead = _("Email settings")
 emails = participant.get_emails()
+emails.sort(key=lambda e: (
+    -(e.address == participant.email),
+    e.id
+))
 email_locale = website.locales.get(participant.email_lang) or website.locales['en']
 
 [---] text/html
