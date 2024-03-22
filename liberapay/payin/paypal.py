@@ -233,7 +233,7 @@ def record_order_result(db, payin, order):
 
             )
             record_payin_transfer_reversal(
-                db, pt_id, refund['id'], payin_refund.id, refund['create_time']
+                db, pt_id, refund['id'], refund_amount, payin_refund.id, refund['create_time']
             )
         if reversed_amount == 0:
             reversed_amount = None
