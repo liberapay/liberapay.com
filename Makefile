@@ -60,6 +60,10 @@ py: $(env)
 
 shell: py
 
+# empty shell
+shell2: $(env)
+	$(with_local_env) -s RUN_CRON_JOBS=no $(env_py)
+
 test-shell: $(env)
 	$(with_tests_env) $(env_py) -i $${main-liberapay/main.py}
 
