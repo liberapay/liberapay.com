@@ -111,10 +111,10 @@ def create_order(db, payin, payer, return_url, cancel_url, state):
         (f'-{locale.territory}' if locale.territory else '')
     )
     if not locale_re.match(locale_tag):
-        website.tell_sentry(Warning(
+        logger.warning(
             f"the locale tag `{locale_tag}` doesn't match the format expected by PayPal; "
             f"falling back to `{locale.language}`"
-        ))
+        )
         locale_tag = locale.language
     data = {
         "intent": "CAPTURE",
