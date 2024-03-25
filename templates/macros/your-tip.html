@@ -12,6 +12,17 @@
     % if request.qs.get('currency') in accepted_currencies
         % set new_currency = request.qs['currency']
     % endif
+    % if not tippee_is_stub
+        % set patron_countries = tippee.recipient_settings.patron_countries
+        % set source_country = request.source_country or 'FI'
+        % if True or patron_countries and source_country and source_country not in patron_countries
+            <p class="alert alert-warning">{{ _(
+                "It looks like you are in {country}. {username} does not accept "
+                "donations coming from that country.",
+                country=locale.Country(source_country), username=tippee_name,
+            ) }}</p>
+        % endif
+    % endif
     % set currency_mismatch = tip_currency not in accepted_currencies
     % if tip.renewal_mode > 0 and not pledging
         % if currency_mismatch

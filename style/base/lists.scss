@@ -1,3 +1,11 @@
+.checklist {
+    list-style: none;
+    padding-left: 0;
+    & > li {
+        padding-left: 0;
+    }
+}
+
 .right-pointing-arrows {
     list-style-type: '→ ';
     padding-left: 2ex;

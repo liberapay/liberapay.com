@@ -11,7 +11,8 @@ from psycopg2.extras import execute_batch
 from ..constants import SEPA
 from ..exceptions import (
     AccountSuspended, BadDonationCurrency, MissingPaymentAccount,
-    RecipientAccountSuspended, NoSelfTipping, UserDoesntAcceptTips,
+    NoSelfTipping, ProhibitedSourceCountry, RecipientAccountSuspended,
+    UserDoesntAcceptTips,
 )
 from ..i18n.currencies import Money, MoneyBasket
 from ..utils import group_by
@@ -57,6 +58,11 @@ def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
 
     if payer.is_suspended or not payer.get_email_address():
         raise AccountSuspended()
+
+    for pt in proto_transfers:
+        if (allowed_countries := pt.recipient.recipient_settings.patron_countries):
+            if route.country and route.country not in allowed_countries:
+                raise ProhibitedSourceCountry(route, pt.recipient)
 
     with db.get_cursor() as cursor:
         payin = cursor.one("""
