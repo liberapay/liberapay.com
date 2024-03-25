@@ -307,7 +307,7 @@ title = "Users Admin"
             <span class="text-warning">{{ icon('warning-sign', "Unconfirmed") }}</span>
             % endif
             &nbsp;
-            <form action="/admin/emails" method="POST" target="_blank" class="inline-block middle">
+            <form action="/admin/emails" method="POST" target="_blank" class="inline-block">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
                 <input type="hidden" name="email" value="{{ row.email.address }}" />
                 <button class="link" name="action" value="lookup">{{

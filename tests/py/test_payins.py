@@ -700,7 +700,10 @@ class TestPayinsPayPal(Harness):
         assert pt.amount == EUR('10.00')
 
         # 3rd request: redirect to PayPal
-        r = self.client.GxT('/donor/giving/pay/paypal/1', auth_as=self.donor)
+        r = self.client.GxT(
+            '/donor/giving/pay/paypal/1', HTTP_ACCEPT_LANGUAGE=b'es-419',
+            auth_as=self.donor,
+        )
         assert r.code == 302, r.text
         assert r.headers[b'Location'].startswith(b'https://www.sandbox.paypal.com/')
         payin = self.db.one("SELECT * FROM payins")
