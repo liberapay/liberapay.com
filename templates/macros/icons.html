@@ -48,8 +48,9 @@
 % macro icon(name, sr='', size=16)
     % set name = icon_aliases.get(name, name)
     % if soft_assert(name in website.icon_names, "unknown icon name %r" % name)
-        <svg aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}"{% endif %}{#
-            #}><use xlink:href="{{ website.asset('icons.svg', domain=False) }}#{{ name }}"/></svg>
+        <span aria-hidden="true" {% if sr %} title="{{ sr }}"{% endif %}{#
+            #}><svg class="icon icon-{{ size }}"{#
+                #}><use xlink:href="{{ website.asset('icons.svg', domain=False) }}#{{ name }}"/></svg></span>
     % else
         <img aria-hidden="true" class="icon icon-{{ size }}" {% if sr %} title="{{ sr }}"{% endif %} src="/assets/nonexistent" />
     % endif
