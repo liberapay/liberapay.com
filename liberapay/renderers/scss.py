@@ -4,7 +4,7 @@ import posixpath
 import re
 from urllib.parse import urlsplit
 
-import sass
+import dartsass as sass
 from aspen import renderers
 
 from ..website import website
@@ -17,10 +17,10 @@ class Renderer(renderers.Renderer):
         renderers.Renderer.__init__(self, factory, *a, **kw)
         self.cache_static = website.env.cache_static
         compress = website.env.compress_assets
-        output_style = 'compressed' if compress else 'nested'
+        output_style = 'compressed' if compress else 'expanded'
         kw = dict(output_style=output_style)
         if self.request_processor.project_root is not None:
-            kw['include_paths'] = self.request_processor.project_root
+            kw['load_paths'] = self.request_processor.project_root
         self.sass_conf = kw
 
     # SASS doesn't support wildcard imports, so we implement it ourselves

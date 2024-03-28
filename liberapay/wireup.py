@@ -19,7 +19,7 @@ from postgres.cursors import SimpleRowCursor
 import psycopg2
 from psycopg2.extensions import adapt, AsIs, new_type, register_adapter, register_type
 from psycopg2_pool import PoolError
-import sass
+import dartsass as sass
 import sentry_sdk
 from state_chain import StateChain
 
