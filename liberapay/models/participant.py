@@ -6,6 +6,7 @@ from email.utils import formataddr
 from hashlib import pbkdf2_hmac, md5, sha1
 from operator import attrgetter, itemgetter
 from os import urandom
+from random import randint
 from threading import Lock
 from time import sleep
 from types import SimpleNamespace
@@ -16,6 +17,7 @@ import uuid
 import aspen_jinja2_renderer
 from cached_property import cached_property
 from dateutil.parser import parse as parse_date
+from dns.resolver import Cache as DNSCache, Resolver as DNSResolver
 from html2text import html2text
 from markupsafe import escape as htmlescape
 from pando import json, Response
@@ -97,6 +99,10 @@ TEN_YEARS = timedelta(days=3652)
 
 
 email_lock = Lock()
+
+DNS = DNSResolver()
+DNS.lifetime = 1.0  # 1 second timeout, per https://github.com/liberapay/liberapay.com/pull/1043#issuecomment-377891723
+DNS.cache = DNSCache()
 
 
 class Participant(Model, MixinTeam):
@@ -2176,8 +2182,63 @@ class Participant(Model, MixinTeam):
         if platform == 'libravatar' or platform is None and email:
             if not email:
                 return
-            avatar_id = md5(email.strip().lower().encode('utf8')).hexdigest()
-            avatar_url = 'https://seccdn.libravatar.org/avatar/'+avatar_id
+            # https://wiki.libravatar.org/api/
+            #
+            # We only use the first SRV record that we choose; if there is an
+            # error talking to that server, we give up, instead of retrying with
+            # another record.  pyLibravatar does the same.
+            normalized_email = email.strip().lower()
+            try:
+                # Look up the SRV record to use.
+                _, email_domain = normalized_email.rsplit('@', 1)
+                try:
+                    srv_records = DNS.query('_avatars-sec._tcp.'+email_domain, 'SRV')
+                    scheme = 'https'
+                except Exception:
+                    srv_records = DNS.query('_avatars._tcp.'+email_domain, 'SRV')
+                    scheme = 'http'
+                # Filter down to just the records with the "highest" `.priority`
+                # (lower number = higher priority); for the libravatar API tells us:
+                #
+                # > Libravatar clients MUST only consider servers listed in the
+                # > highest SRV priority.
+                top_priority = min(rec.priority for rec in srv_records)
+                srv_records = [rec for rec in srv_records if rec.priority == top_priority]
+                # Of those, choose randomly based on their relative `.weight`s;
+                # for the libravatar API tells us:
+                #
+                # > They MUST honour relative weights.
+                #
+                # RFC 2782 (at the top of page 4) gives us this algorithm for
+                # randomly selecting a record based on the weights:
+                srv_records.sort(key=lambda rec: rec.weight)  # ensure that .weight=0 recs are first in the list
+                weight_choice = randint(0, sum(rec.weight for rec in srv_records))
+                weight_sum = 0
+                for rec in srv_records:
+                    weight_sum += rec.weight
+                    if weight_sum >= weight_choice:
+                        choice_record = rec
+                        break
+
+                # Validate.
+                # The Dnspython library has already validated that `.target` is
+                # a valid DNS name and that `.port` is a uint16.
+                host = choice_record.target.canonicalize().to_text(omit_final_dot=True)
+                port = choice_record.port
+                if port == 0:
+                    raise ValueError("invalid port number")
+
+                # Build `avatar_origin` from that.
+                # Only include an explicit port number if it's not the default
+                # port for the scheme.
+                if (scheme == 'http' and port != 80) or (scheme == 'https' and port != 443):
+                    avatar_origin = '%s://%s:%d' % (scheme, host, port)
+                else:
+                    avatar_origin = '%s://%s' % (scheme, host)
+            except Exception:
+                avatar_origin = 'https://seccdn.libravatar.org'
+            avatar_id = md5(normalized_email.encode('utf8')).hexdigest()
+            avatar_url = avatar_origin + '/avatar/' + avatar_id
             avatar_url += AVATAR_QUERY
 
         elif platform is None:
