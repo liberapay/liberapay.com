@@ -75,7 +75,7 @@ Make sure you have the following dependencies installed first:
 
 - python ≥ 3.11
   - including the C headers of python and libffi, which are packaged separately in many Linux distributions
-- postgresql 13 (see [the official download & install docs](https://www.postgresql.org/download/))
+- postgresql 16 (see [the official download & install docs](https://www.postgresql.org/download/))
 - make
 
 Then run:
