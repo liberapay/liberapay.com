@@ -65,6 +65,7 @@ from liberapay.exceptions import (
     UsernameContainsInvalidCharacters,
     UsernameEndsWithForbiddenSuffix,
     UsernameIsEmpty,
+    UsernameIsPurelyNumerical,
     UsernameIsRestricted,
     UsernameTooLong,
     ValueTooLong,
@@ -2048,6 +2049,9 @@ class Participant(Model, MixinTeam):
         if set(suggested) - ASCII_ALLOWED_IN_USERNAME:
             raise UsernameContainsInvalidCharacters(suggested)
 
+        if suggested.isdigit():
+            raise UsernameIsPurelyNumerical(suggested)
+
         if suggested[0] == '.':
             raise UsernameBeginsWithRestrictedCharacter(suggested)
 
@@ -2059,7 +2063,8 @@ class Participant(Model, MixinTeam):
             raise UsernameIsRestricted(suggested)
 
     def change_username(self, suggested, cursor=None, recorder=None):
-        self.check_username(suggested)
+        if suggested != f'~{self.id}':
+            self.check_username(suggested)
         recorder_id = getattr(recorder, 'id', None)
 
         if suggested != self.username:

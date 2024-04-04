@@ -126,6 +126,11 @@ class UsernameContainsInvalidCharacters(UsernameError):
         return _("The username '{0}' contains invalid characters.", self.username)
 
 
+class UsernameIsPurelyNumerical(UsernameError):
+    def msg(self, _):
+        return _("The username '{0}' is purely numerical. This isn't allowed.")
+
+
 class UsernameIsRestricted(UsernameError):
     def msg(self, _):
         return _("The username '{0}' is restricted.", self.username)
