@@ -9,6 +9,11 @@ PT_STATUS_MAP = {
 }
 ACCOUNT_MARKS = set(website.db.one("SELECT array_to_json(enum_range(NULL::account_mark))"))
 ACCOUNT_MARKS.add('')
+PAYMENT_INSTRUMENT_TYPES = {
+    'paypal': "PayPal",
+    'stripe-card': "card",
+    'stripe-sdd': "SEPA mandate",
+}
 
 [---]
 
@@ -101,6 +106,14 @@ if mode == 'all':
                            WHERE tip.tipper = p.id
                         ) tip
                ) AS outgoing_donations
+             , ( SELECT json_objectagg(r.network:r.count)
+                   FROM ( SELECT r.network, count(*) AS count
+                            FROM exchange_routes r
+                           WHERE r.participant = p.id
+                        GROUP BY r.network
+                        ORDER BY r.network
+                        ) r
+               ) AS payment_instruments
              , ( SELECT json_agg(json_build_object(
                             'provider', a.provider,
                             'id', a.id,
@@ -346,6 +359,19 @@ title = "Users Admin"
             none.
         % endif
         </p>
+
+        % if row.payment_instruments is defined
+        <p><strong>Payment instruments:</strong>
+        % if row.payment_instruments
+            % for network, count in row.payment_instruments.items()
+                {{ count }} {{ PAYMENT_INSTRUMENT_TYPES.get(network, network) }}
+                {{- '' if count == 1 else 's' }}
+                {{- '.' if loop.last else ',' }}
+            % endfor
+        % else
+            none.
+        % endif
+        % endif
         % endif
 
         <p><strong>Payment accounts:</strong>

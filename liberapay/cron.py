@@ -172,30 +172,43 @@ class Job:
                     self.running = False
                     self.cron.website.tell_sentry(e)
                     if self.exclusive:
-                        try:
-                            self.cron.website.db.run("""
-                                INSERT INTO cron_jobs
-                                            (name, last_error_time, last_error)
-                                     VALUES (%s, current_timestamp, %s)
-                                ON CONFLICT (name) DO UPDATE
-                                        SET last_error_time = excluded.last_error_time
-                                          , last_error = excluded.last_error
-                            """, (func_name, traceback.format_exc()))
-                        except psycopg2.OperationalError:
-                            pass
+                        while True:
+                            try:
+                                self.cron.website.db.run("""
+                                    INSERT INTO cron_jobs
+                                                (name, last_error_time, last_error)
+                                         VALUES (%s, current_timestamp, %s)
+                                    ON CONFLICT (name) DO UPDATE
+                                            SET last_error_time = excluded.last_error_time
+                                              , last_error = excluded.last_error
+                                """, (func_name, traceback.format_exc()))
+                            except psycopg2.OperationalError as e:
+                                self.cron.website.tell_sentry(e)
+                                # retry in a minute
+                                sleep(60)
+                            else:
+                                break
                     # retry in a minute
                     sleep(60)
                     continue
                 else:
                     self.running = False
                     if self.exclusive:
-                        self.cron.website.db.run("""
-                            INSERT INTO cron_jobs
-                                        (name, last_success_time)
-                                 VALUES (%s, current_timestamp)
-                            ON CONFLICT (name) DO UPDATE
-                                    SET last_success_time = excluded.last_success_time
-                        """, (func_name,))
+                        while True:
+                            try:
+                                self.cron.website.db.run("""
+                                    INSERT INTO cron_jobs
+                                                (name, last_success_time)
+                                         VALUES (%s, current_timestamp)
+                                    ON CONFLICT (name) DO UPDATE
+                                            SET last_success_time = excluded.last_success_time
+                                """, (func_name,))
+                            except psycopg2.OperationalError:
+                                self.cron.website.tell_sentry(e)
+                                # retry in a minute
+                                sleep(60)
+                            else:
+                                break
                     if period == 'irregular':
                         if r is None:
                             return
