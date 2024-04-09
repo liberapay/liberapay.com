@@ -17,6 +17,7 @@ import uuid
 import aspen_jinja2_renderer
 from cached_property import cached_property
 from dateutil.parser import parse as parse_date
+from dns.exception import DNSException
 from dns.resolver import Cache as DNSCache, Resolver as DNSResolver
 from html2text import html2text
 from markupsafe import escape as htmlescape
@@ -2188,9 +2189,10 @@ class Participant(Model, MixinTeam):
             # error talking to that server, we give up, instead of retrying with
             # another record.  pyLibravatar does the same.
             normalized_email = email.strip().lower()
+            avatar_origin = 'https://seccdn.libravatar.org'
             try:
                 # Look up the SRV record to use.
-                _, email_domain = normalized_email.rsplit('@', 1)
+                email_domain = normalized_email.rsplit('@', 1)[1]
                 try:
                     srv_records = DNS.query('_avatars-sec._tcp.'+email_domain, 'SRV')
                     scheme = 'https'
@@ -2211,7 +2213,7 @@ class Participant(Model, MixinTeam):
                 #
                 # RFC 2782 (at the top of page 4) gives us this algorithm for
                 # randomly selecting a record based on the weights:
-                srv_records.sort(key=lambda rec: rec.weight)  # ensure that .weight=0 recs are first in the list
+                srv_records.sort(key=attrgetter('weight'))  # ensure that .weight=0 recs are first in the list
                 weight_choice = randint(0, sum(rec.weight for rec in srv_records))
                 weight_sum = 0
                 for rec in srv_records:
@@ -2220,23 +2222,25 @@ class Participant(Model, MixinTeam):
                         choice_record = rec
                         break
 
-                # Validate.
+                # Build the `avatar_origin` URL.
                 # The Dnspython library has already validated that `.target` is
                 # a valid DNS name and that `.port` is a uint16.
                 host = choice_record.target.canonicalize().to_text(omit_final_dot=True)
                 port = choice_record.port
                 if port == 0:
-                    raise ValueError("invalid port number")
-
-                # Build `avatar_origin` from that.
-                # Only include an explicit port number if it's not the default
-                # port for the scheme.
-                if (scheme == 'http' and port != 80) or (scheme == 'https' and port != 443):
+                    # Port zero isn't supposed to be used and typically can't be. The
+                    # Libravatar wiki doesn't clearly specify what to do in this case.
+                    pass
+                elif (scheme == 'http' and port != 80) or (scheme == 'https' and port != 443):
+                    # Only include an explicit port number if it's not the default
+                    # port for the scheme.
                     avatar_origin = '%s://%s:%d' % (scheme, host, port)
                 else:
                     avatar_origin = '%s://%s' % (scheme, host)
-            except Exception:
-                avatar_origin = 'https://seccdn.libravatar.org'
+            except DNSException:
+                pass
+            except Exception as e:
+                website.tell_sentry(e)
             avatar_id = md5(normalized_email.encode('utf8')).hexdigest()
             avatar_url = avatar_origin + '/avatar/' + avatar_id
             avatar_url += AVATAR_QUERY
