@@ -3,17 +3,6 @@
 
 from liberapay.utils import excerpt_intro, get_participant, markdown
 
-MARK_CLASSES = {
-    'trusted': 'text-success',
-    'okay': 'text-info',
-    'unsettling': 'text-info',
-    'controversial': 'text-warning',
-    'irrelevant': 'text-warning',
-    'misleading': 'text-warning',
-    'spam': 'text-danger',
-    'fraud': 'text-danger',
-}
-
 [-----------------------------------------------------------------------------]
 
 participant = get_participant(state, restrict=False)
@@ -148,7 +137,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
 % if user.is_acting_as('admin')
     <p><a class="btn btn-default btn-lg" href="{{ participant.path('admin') }}">Admin</a></p>
     % if participant.marked_as
-    <p>Marked as: <span class="{{ MARK_CLASSES[participant.marked_as] }}">{{ participant.marked_as }}</span></p>
+    <p>Marked as: <span class="{{ constants.MARK_CLASSES[participant.marked_as] }}">{{ participant.marked_as }}</span></p>
     % else
     <p class="text-muted">Not marked</p>
     % endif

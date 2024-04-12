@@ -99,8 +99,9 @@ website.default_renderers_by_media_type['-/subject'] = 'jinja2'
 website.default_renderers_by_media_type['text/html'] = 'jinja2'
 website.default_renderers_by_media_type['text/plain'] = 'jinja2'
 
-def _assert(x):
-    assert x, repr(x)
+def _assert(x, msg=None):
+    if not x:
+        raise AssertionError(msg or repr(x))
     return x
 
 def soft_assert(x, msg):
