@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-04-14 23:01+0000\n"
-"Last-Translator: Philip Johansson <phi@qgr.se>\n"
+"PO-Revision-Date: 2024-04-15 12:01+0000\n"
+"Last-Translator: Anders Lund <a_lund_01@hotmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/liberapay/core/nb_NO/>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgstr "Det er på tide å fornye donasjonene dine på Liberapay"
 msgid "Your donation of {amount} to {recipient} is awaiting payment."
 msgstr "Donasjonen din på {amount} til {recipient} avventer betaling."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {n} donation waiting to be renewed:"
 msgid_plural "You have {n} donations waiting to be renewed:"
 msgstr[0] "Du har {n} donasjon som venter på å bli fornyet:"
@@ -85,17 +85,17 @@ msgstr "Din donasjon av {amount} per måned til {username} må fornyes før {dat
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
 msgstr "Din donasjon av {amount} per år til {username} må fornyes før {date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per week to {username} was supposed to be renewed before {past_date}."
-msgstr "Din donasjon på {amount} per uke til {username} skulle fornyes før {past_date}."
+msgstr "Donasjonen din på {amount} per uke til {username} skulle fornyes før {past_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr "Din donasjon på {amount} per måned til {username} skulle fornyes før {past_date}."
+msgstr "Donasjonen din på {amount} per måned til {username} skulle fornyes før {past_date}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
-msgstr "Din donasjon på {amount} per år til {username} skulle fornyes før {past_date}."
+msgstr "Donasjonen din på {amount} per år til {username} skulle fornyes før {past_date}."
 
 #, python-brace-format
 msgid "You have {n} donation up for renewal:"
@@ -140,7 +140,7 @@ msgid "Your Liberapay income is {money_amount} this week"
 msgstr "Din Liberapay-inntekt er {money_amount} denne uken"
 
 msgid "Here is the breakdown of your income this week:"
-msgstr "Her har du en lønningsoversikt for denne uken:"
+msgstr "Her er oversikten for inntekten din denne uken:"
 
 #, python-brace-format
 msgid "Personal donations: {money_amount} from {n} donor."
@@ -149,16 +149,16 @@ msgstr[0] "Personlige donasjoner: {money_amount} fra én donor."
 msgstr[1] "Personlige donasjoner: {money_amount} fra {n} donorer."
 
 msgid "Personal donations: none."
-msgstr "Personlige donasjoner: Ingen."
+msgstr "Personlige donasjoner: ingen."
 
 #, python-brace-format
 msgid "Donations for your role in the {team_name} team: {money_amount} from {n} donor."
 msgid_plural "Donations for your role in the {team_name} team: {money_amount} from {n} donors."
-msgstr[0] "Donasjoner for din rolle i {team_name}-laget: {money_amount} fra {n} donor."
-msgstr[1] "Donasjoner for din rolle i {team_name}-laget: {money_amount} fra {n} donorer."
+msgstr[0] "Donasjoner for din rolle i {team_name} teamet: {money_amount} fra {n} donor."
+msgstr[1] "Donasjoner for din rolle i {team_name} teamet: {money_amount} fra {n} donorer."
 
 msgid "Donations through teams: none (you are not a member of any team)."
-msgstr "Donasjoner gjennom lag: Ingen (du er ikke medlem av noen lag)."
+msgstr "Donasjoner gjennom teams: Ingen (du er ikke medlem av noen team)."
 
 msgid "NB: Donations through Liberapay are now paid in advance instead of being transferred weekly. The numbers above match what you would have received this week under the old system."
 msgstr "NB: Donasjoner gjennom Liberapay forhåndsbetales nå istedenfor å bli overført på ukentlig basis. Numrene ovenfor samsvarer med det du ville ha mottatt denne uken i det gamle systemet."
@@ -172,15 +172,15 @@ msgid "Your request for a payment of {amount} from {addressee_name} has been acc
 msgstr "Forespørselen din om å utbetale {amount} fra {addressee_name} har blitt godkjent."
 
 msgid "View the invoice"
-msgstr "Vis faktura"
+msgstr "Vis fakturaen"
 
 #, python-brace-format
 msgid "Your invoice to {0} has been accepted and paid - Liberapay"
-msgstr "Fakturaen din til {0} har blitt godkjent og utbetalt - Liberapay"
+msgstr "Fakturaen din til {0} har blitt godkjent og betalt - Liberapay"
 
 #, python-brace-format
 msgid "Your invoice of {amount} to {addressee_name} has been paid."
-msgstr "Din faktura på {amount} til {addressee_name} har blitt betalt."
+msgstr "Fakturaen din på {amount} til {addressee_name} har blitt betalt."
 
 #, python-brace-format
 msgid "Your invoice to {0} has been rejected - Liberapay"
@@ -188,7 +188,7 @@ msgstr "Fakturaen din til {0} har blitt avvist - Liberapay"
 
 #, python-brace-format
 msgid "Your request for a payment of {amount} from {addressee_name} has been rejected."
-msgstr "Forespørselen din om utbetaling på {amount} fra {addressee_name} har blitt avvist."
+msgstr "Forespørselen din om utbetaling av {amount} fra {addressee_name} har blitt avvist."
 
 #, python-brace-format
 msgid "Reason: “{0}”"
@@ -209,27 +209,27 @@ msgstr "Logg inn"
 
 #, python-brace-format
 msgid "Please note that the link is only valid for {0}."
-msgstr "Legg merke til at lenken bare er gyldig i {0}."
+msgstr "Vær oppmerksom på at lenken bare er gyldig i {0}."
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr "Fornyelse av Liberapay-donasjon: Intet gyldig betalingsmiddel"
+msgstr "Fornyelse av Liberapay-donasjon: Ingen gyldig betalingsmiddel"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Du har en betaling på {amount} til forfall {payment_date} for fornyelse av din donasjon til {recipient}, men den kan ikke behandles siden et gyldig betalingsmiddel mangler."
+msgstr "Du har en betaling på {amount} til forfall {payment_date} for å fornye donasjonen din til {recipient}, men den kan ikke behandles siden et gyldig betalingsmiddel mangler."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "Du har en betaling på {amount} til forfall {payment_date} for fornyelse av din donasjon til {recipients}, men den kan ikke behandles siden et gyldig betalingsmiddel ikke forefinnes."
+msgstr "Du har en betaling på {amount} til forfall {payment_date} for å fornye av donasjonene dine til {recipients}, men den kan ikke behandles siden et gyldig betalingsmiddel mangler."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "Du har en betaling til forfall for fornyelse av din donasjon, men den kan ikke behandles siden et gyldig betalingsmiddel mangler."
-msgstr[1] "Du har {n} betalinger til forfall for fornyelse av din donasjon, men den kan ikke behandles siden et gyldig betalingsmiddel mangler."
+msgstr[0] "Du har én betaling til forfall for å fornye donasjonene dine, men vi kan ikke behandle den ettersom et gyldig betalingsmiddel mangler."
+msgstr[1] "Du har {n} betalinger til forfall for å fornye av donasjonene dine, men vi kan ikke behandle de ettersom et gyldig betalingsmiddel mangler."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr "Betalingstadoene, beløp og mottagere er:"
+msgstr "Betalingsdatoene, beløpene og mottakerene er:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
@@ -264,35 +264,34 @@ msgid "We have detected that your password is a commonly used one. It appears ma
 msgstr "Liberapay har oppdaget at du benytter et ofte brukt passord. Det forekommer flere ganger i forskjellige lekkede databaser, noe som gjør det veldig usikkert."
 
 msgid "We have detected that your password has been compromised: it appears in one or more public data leaks."
-msgstr "Liberapay har oppdaget at passordet ditt har blitt kjent: Det opptrer i én eller flere offentlige datalekkasjer."
+msgstr "Vi har oppdaget at passordet ditt har kommet på avveie: det finnes i én eller flere offentlige databrudd."
 
 #, python-brace-format
 msgid "You should {link_start}change your password{link_end} now."
 msgstr "Du bør {link_start}endre passordet ditt{link_end} nå."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your payment of {money_amount} has been disputed"
-msgstr "Din betaling av {money_amount} har blitt påklagd"
+msgstr "Betalingen din av {money_amount} har blitt påklagd"
 
 #, python-brace-format
 msgid "The transfer of {money_amount} that you initiated on {date} has been reversed by your bank."
-msgstr "Overføringen på {money_amount} som satte i gang {date} har blitt avvist av banken din."
+msgstr "Overføringen på {money_amount} du satte i gang {date} har blitt reversert av banken din."
 
 msgid "The reason provided by your bank is: it was unable to process the payment."
-msgstr "Grunnen angitt av din bank: Kunne ikke behandle betalingen."
+msgstr "Grunnen oppgitt av banken din: Kunne ikke behandle betalingen."
 
 msgid "The reason provided by your bank is: you requested a refund."
-msgstr "Grunn angitt av din bank: Du har forespurt refundering."
+msgstr "Grunnen oppgitt av banken din: Du har forespurt en refusjon."
 
 msgid "The reason provided by your bank is: the payment wasn't authorized."
-msgstr "Grunn angitt av din bank: Betalingen er ikke identitetsbekreftet."
+msgstr "Grunnen oppgitt av banken din: betalingen er ikke identitetsbekreftet."
 
-#, fuzzy
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr "Grunnen angitt av din bank: Betalingen har blitt duplisert."
+msgstr "Grunnen oppgitt av banken din: betalingen var en duplikat."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
-msgstr "Grunnen angitt av din bank: Betalingen er en svindel."
+msgstr "Grunnen oppgitt av banken din: betalingen ble flagget som svindel."
 
 msgid "Your bank didn't provide a specific reason for this dispute."
 msgstr "Banken din anga ikke noen spesifikk grunn for denne påklagelsen."
@@ -432,9 +431,9 @@ msgstr "Automatisk betaling av {money_amount} igangsatt i dag vellykket."
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
 msgstr "Automatisk betaling av {money_amount} igangsatt {date} vellykket."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "Betalingen på {money_amount} igangsatt tidligere i dag har blitt gjennomført."
+msgstr "Betalingen på {money_amount} satt i gang tidligere i dag har blitt gjennomført."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
@@ -573,9 +572,9 @@ msgstr "Doner til {0}"
 msgid "Your Liberapay profile is incomplete"
 msgstr "Din Liberapay-profil er ufullstendig"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your {link_start}public profile page{link_end} is missing a description. Without this information, we may be unable to confirm that your use of our platform is legitimate, and consequently your account may be marked as fraudulent and disabled. An incomplete profile is also less likely to attract donations, so we strongly recommend that you fill yours."
-msgstr "Din {link_start}offentlige profilside{link_end} mangler en beskrivelse. Uten denne infoen kan vi være ute av stand til å bekrefte at din bruk av plattformen er legitim. Kontoen din har derfor blitt markert som utilbørlig og vil bli avskrudd. En ufullstendig profil tiltrekker seg også færre donasjoner, så de anbefales sterkt at du fyller den ut."
+msgstr "Din {link_start}offentlige profilside{link_end} mangler en beskrivelse. Uten denne infoen, kan det hende det ikke er mulig å bekrefte at bruken din av plattformen er legitim. Kontoen din kan derfor blitt markert som utilbørlig og bli deaktivert. En ufullstendig profil tiltrekker seg også færre donasjoner, så det anbefales sterkt at du fyller den ut."
 
 msgid "Edit your profile"
 msgstr "Rediger profilen din"
@@ -590,24 +589,22 @@ msgstr "Fornyelse av donasjonsgjentagelse på {money_amount} til {recipient} lag
 msgid "The following donation renewal payments have been aborted because the recipients are unable to receive them:"
 msgstr "Følgende fornyelser av donasjonsbetalinger har blitt avbrutt fordi mottagerne ikke kunne motta dem."
 
-#, fuzzy
 msgid "Liberapay donation renewal: manual action required"
 msgstr "Liberapay-donasjonsfornyelse: manuell handling kreves"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The donation renewal payment of {money_amount} to {recipient} scheduled for {date} requires manual action."
-msgstr "Donasjonsfornyelsesbetalingen på {money_amount} til {recipient} planlagt for {date} krever manuell handling."
+msgstr "Betalingen for donasjonsfornyelsen på {money_amount} til {recipient} planlagt for {date} krever manuell handling."
 
-#, fuzzy
 msgid "The following donation renewal payments require manual action:"
-msgstr "Følgende donasjonsfornyelsesbetalinger krever manuell handling:"
+msgstr "Følgende betalinger for donasjonsfornyelse krever manuell handling:"
 
 msgid "Liberapay donation renewal: authentication required"
 msgstr "Fornyelse av Liberpay-donasjon: identitetsbekreftelse kreves"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "We haven't been able to complete your scheduled payment of {money_amount}, because your bank requested that you confirm it."
-msgstr "Din planlagte betaling på {money_amount} kunne ikke fullføres fordi banken har forespurt at du bekrefter den."
+msgstr "Din planlagte betaling på {money_amount} kunne ikke fullføres fordi banken din har forespurt at du bekrefter den."
 
 msgid "Confirm the payment"
 msgstr "Bekreft betalingen"
@@ -3052,7 +3049,7 @@ msgid "preparing"
 msgstr "forbereder"
 
 msgid "awaiting confirmation"
-msgstr "ventende bekreftelse"
+msgstr "avventer bekreftelse"
 
 #, fuzzy
 msgid "awaiting review"
