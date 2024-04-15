@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-04-15 12:01+0000\n"
+"PO-Revision-Date: 2024-04-15 15:06+0000\n"
 "Last-Translator: H Tamás <hovanszki@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
@@ -1428,14 +1428,14 @@ msgid "Switch to a different account"
 msgstr "Váltás másik fiókra"
 
 msgid "The changes have been saved."
-msgstr "A módosítások mentése megtörtént."
+msgstr "A módosítások mentésre kerültek."
 
 msgid "We've sent you a single-use login link. Check your inbox, open the provided link in a new tab, then come back to this page and click on the button below to carry on with what you wanted to do."
 msgstr "Küldtünk Önnek egy egyszer használható hivatkozást a bejelentkezéshez. Kérjük nézze meg a postaládáját, nyissa meg a kapott hivatkozást egy új lapon, majd jöjjön vissza erre a lapra, és kattintson az alábbi gombra, hogy folytathassa amit elkezdett."
 
 #, python-brace-format
 msgid "You're still not logged in as {0}."
-msgstr "Ön még mindig nem jelentkezett be mint {0}."
+msgstr "Még mindig nem jelentkezett be mint {0}."
 
 msgid "Please fill in your password to authenticate yourself:"
 msgstr "Kérjük, adja meg jelszavát a hitelesítéshez:"
@@ -1496,6 +1496,7 @@ msgstr "Találjon remek embereket akiknek adományozhat"
 msgid "Whose work do you appreciate? See if they're on Liberapay"
 msgstr "Kinek a munkáját értékeli? Nézze meg, hogy elérhetőek-e a Liberapay-en"
 
+#, fuzzy
 msgid "Disconnect"
 msgstr "Leválasztás"
 
@@ -1611,11 +1612,12 @@ msgstr "Áttekintés"
 msgid "Recipients"
 msgstr "Címzettek"
 
+#, fuzzy
 msgid "Hopefuls"
 msgstr "Kérelmező"
 
 msgid "Unclaimed Donations"
-msgstr "Felhasználatlan adományok"
+msgstr "Még nem igénylelt támogatás"
 
 msgid "Repositories"
 msgstr "Tárolók"
@@ -1639,7 +1641,7 @@ msgid "Linked Accounts"
 msgstr "Összekapcsolt fiókok"
 
 msgid "Instruments"
-msgstr "Fizetési lehetőségek"
+msgstr "Fizetőeszközök"
 
 msgid "Schedule"
 msgstr "Ütemezés"
@@ -1660,7 +1662,7 @@ msgid "Last"
 msgstr "Utolsó"
 
 msgid "View More"
-msgstr "Nézet"
+msgstr "Továbbiak"
 
 #, python-brace-format
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
@@ -1691,13 +1693,13 @@ msgid "You can leave this field empty if your country does not use regions in po
 msgstr "Ezt a mezőt üresen hagyhatja, amennyiben az Ön országa nem használ régiókat a postai címekben."
 
 msgid "City"
-msgstr "Város"
+msgstr "Település"
 
 msgid "Postal code"
 msgstr "Irányítószám"
 
 msgid "Address within the city"
-msgstr "Cím a városon belül"
+msgstr "Cím a településen belül"
 
 msgid "Income"
 msgstr "Bevétel"
@@ -1706,10 +1708,10 @@ msgid "per week"
 msgstr "hetente"
 
 msgid "Modify your pledge"
-msgstr "Módosítsa felajánlását"
+msgstr "Módosítsa az ígéretét"
 
 msgid "Pledges"
-msgstr "Felajánlások"
+msgstr "Ígéretek"
 
 msgid "Sum"
 msgstr "Összeg"
@@ -1724,6 +1726,7 @@ msgstr "Küldetés teljesítve!"
 msgid "View income shares"
 msgstr "Bevételek részesedéseinek megtekintése"
 
+#, fuzzy
 msgid "(fork)"
 msgstr "(fork)"
 
@@ -1756,7 +1759,7 @@ msgid "Email"
 msgstr "E-mail-cím"
 
 msgid "and select your preferred currency:"
-msgstr "és válassza ki a preferált pénznemet:"
+msgstr "és válassza ki az előnyben részesített pénznemet:"
 
 #, python-brace-format
 msgid "By creating a Liberapay account you accept our {0}Terms of Service{1}."
@@ -1764,7 +1767,7 @@ msgstr "Azzal, hogy létrehoz egy Liberapay fiókot, elfogadja a {0}Szolgáltat�
 
 #, python-brace-format
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
-msgstr "Az Ön névleges bevétele a(z) {0} csapattól korlátozva van {1}-ra ezen a héten. {2}Miért?{3}"
+msgstr "Az Ön névleges bevétele a(z) {0} csapattól korlátozásra került {1} összegre ezen a héten. {2}Miért?{3}"
 
 msgid "Last Payday"
 msgstr "Utolsó Fizetésnap"
@@ -1778,15 +1781,18 @@ msgstr "Következő Fizetésnap"
 msgid "Member"
 msgstr "Tag"
 
+#, fuzzy
 msgid "Nominal Take"
 msgstr "Névleges Bevétel"
 
+#, fuzzy
 msgid "Actual Take"
 msgstr "Aktuális Bevétel"
 
 msgid "auto"
 msgstr "automatikus"
 
+#, fuzzy
 msgid "Update my nominal take"
 msgstr "A névleges bevételének frissítése"
 
@@ -1798,23 +1804,23 @@ msgstr "Maradék"
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
-msgstr "A {name} címre tett jelenlegi adománya a {currency} pénznemben érkezett, de már csak a {accepted_currency} pénznemben fogadnak el adományokat. Átkonvertálhatja az adományát erre a pénznemre, vagy megszüntetheti."
+msgstr "A {name} számára adományozott összeg {currency} pénznemben érkezett, de már csak a {accepted_currency} pénznemben fogadnak el adományokat. Átkonvertálhatja az adományát erre a pénznemre, vagy megszüntetheti."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they no longer accept that currency. The suggested new currency is the {accepted_currency}, but you can choose another one."
-msgstr "Az Ön jelenlegi adományának a pénzneme {name} címre {currency}, de ők már nem fogadják el ezt a pénznemet, {accepted_currency} a javasolt új pénznem. De választhat másikat is."
+msgstr "A {name} számára adományozott összeg {currency} pénznemben érkezett, de már nem fogadnak el adományokat ebben a devizában. Az ajánlott deviza a {accepted_currency}, de választhat mást is."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per week to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr "{recipient_name} címre Ön jelenleg hetente {money_amount} összeget adományoz. Az alábbi űrlapon módosíthatja vagy leállíthatja az adományozását."
+msgstr "{recipient_name} számára jelenleg heti {money_amount} összeget adományoz. Az alábbi űrlapon módosíthatja vagy leállíthatja az adományozását."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr "{recipient_name} címre Ön jelenleg havonta {money_amount} összeget adományoz. Az alábbi űrlapon módosíthatja vagy leállíthatja az adományozását."
+msgstr "{recipient_name} számára jelenleg havi {money_amount} összeget adományoz. Az alábbi űrlapon módosíthatja vagy leállíthatja az adományozását."
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr "{recipient_name} címre Ön jelenleg évente {money_amount} összeget adományoz. Az alábbi űrlapon módosíthatja vagy leállíthatja az adományozását."
+msgstr "{recipient_name} számára jelenleg évi {money_amount} összeget adományoz. Az alábbi űrlapon módosíthatja vagy leállíthatja az adományozását."
 
 msgid "Please select or input an amount:"
 msgstr "Kérjük válasszon vagy adjon meg egy összeget:"
@@ -1822,18 +1828,18 @@ msgstr "Kérjük válasszon vagy adjon meg egy összeget:"
 #, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {n} other is supported:"
 msgid_plural "The {currency_name} isn't your preferred currency? {n} others are supported:"
-msgstr[0] "A(z) {currency_name} nem az előnyben részesített pénzneme? {n} egyéb támogatott:"
+msgstr[0] "A(z) {currency_name} nem az előnyben részesített pénzneme? Még {n} másik támogatott:"
 
 #, python-brace-format
 msgid "The {currency_name} isn't your preferred currency? {username} also accepts {n} other:"
 msgid_plural "The {currency_name} isn't your preferred currency? {username} also accepts {n} others:"
-msgstr[0] "A {currency_name} nem a preferált pénzneme? {username} elfogad {n} másikat is:"
+msgstr[0] "A {currency_name} nem a preferált pénzneme? {username} elfogad még {n} másikat is:"
 
 msgid "not supported by PayPal"
 msgstr "a PayPal nem támogatja"
 
 msgid "Switch"
-msgstr "Kapcsoló"
+msgstr "Váltás"
 
 msgid "Amount"
 msgstr "Összeg"
@@ -1852,7 +1858,7 @@ msgid "Custom"
 msgstr "Egyéni"
 
 msgid "Please choose how this donation should be renewed:"
-msgstr "Kérjük válasszon, hogy miként legyen megújítva ez az adományozás:"
+msgstr "Kérjük válasszon, hogy miként legyen megújítva ez a támogatás:"
 
 msgid "Automatic renewal"
 msgstr "Automatikus megújítás"
@@ -1861,25 +1867,24 @@ msgid "We'll attempt to charge your card or bank account. You will be notified a
 msgstr "Megkíséreljük megterhelni a kártyáját vagy a bankszámláját. Legalább két nappal korábban értesítést fog kapni erről."
 
 msgid "Manual renewal"
-msgstr "Manuális megújítás"
+msgstr "Kézi megújítás"
 
 msgid "A reminder to renew your donation will be sent to you via email."
-msgstr "Ki lesz küldve egy emlékeztető az adomány megújításáról az Ön e-mail címére."
+msgstr "Az e-mail címére kiküldésre kerül egy emlékeztető a támogatás megújításával kapcsolatban."
 
 msgid "Discontinue the donation"
-msgstr "Adományozás beszűntetése"
+msgstr "Támogatás beszűntetése"
 
-#, fuzzy
 msgid "Cancel the pledge"
 msgstr "Törölje az ígéretet"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
-msgstr "{username} úgy döntött, hogy nem látja, kik a támogatói, így az adománya titokban marad."
+msgstr "{username} úgy döntött, hogy nem nézi kik a támogatói, így az adománya titokban marad."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr "Ez az adomány nem lesz titkos, Ön megjelenik a {username} privát támogatói listáján."
+msgstr "Ez a támogatás nem marad titokban, {username} privát listáján feltüntetésre kerül a neve."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
@@ -1900,7 +1905,7 @@ msgstr "Magán adomány"
 
 #, python-brace-format
 msgid "You will appear in {username}'s private list of patrons."
-msgstr "Csak {username} privát pártfogói listáján jelenik meg."
+msgstr "Meg fog jelenni {username} privát pártfogói listáján."
 
 msgid "Public donation"
 msgstr "Nyilvános támogatás"
