@@ -7,6 +7,7 @@ class TestDonating(Harness):
         creator = self.make_participant(
             'creator', accepted_currencies=None, email='creator@liberapay.com',
         )
+        creator.update_recipient_settings(patron_visibilities=7)
         r = self.client.GET('/creator/donate?currency=KRW')
         assert r.code == 200
         assert ">Pledge<" in r.text
@@ -54,6 +55,7 @@ class TestDonating(Harness):
         creator = self.make_participant(
             'creator', accepted_currencies=None, email='creator@liberapay.com',
         )
+        creator.update_recipient_settings(patron_visibilities=7)
         self.add_payment_account(creator, 'stripe')
         donor = self.make_participant('donor')
         donor.set_tip_to(creator, USD('10.00'), renewal_mode=1, visibility=3)

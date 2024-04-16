@@ -62,6 +62,7 @@ from liberapay.exceptions import (
     TooManyRequests,
     TooManyUsernameChanges,
     UnableToSendEmail,
+    UnacceptedDonationVisibility,
     UnexpectedCurrency,
     UsernameAlreadyTaken,
     UsernameBeginsWithRestrictedCharacter,
@@ -2507,6 +2508,8 @@ class Participant(Model, MixinTeam):
                 raise BadAmount(periodic_amount, period, limits)
             if amount.currency not in tippee.accepted_currencies_set:
                 raise BadDonationCurrency(tippee, amount.currency)
+            if visibility and not tippee.accepts_tip_visibility(visibility):
+                raise UnacceptedDonationVisibility(tippee, visibility)
 
         # Insert tip
         t = self.db.one("""\
@@ -2614,6 +2617,11 @@ class Participant(Model, MixinTeam):
                     AND (visibility < 0) IS NOT %(hide)s
               RETURNING tips
         """, dict(tipper=self.id, tippee=tippee_id, hide=hide))
+
+
+    def accepts_tip_visibility(self, visibility):
+        bit = 2 ** (visibility - 1)
+        return self.recipient_settings.patron_visibilities & bit > 0
 
 
     @cached_property

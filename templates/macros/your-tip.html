@@ -235,16 +235,19 @@
         % endif
     % endif
     % if patron_visibilities == 1
+    <input type="hidden" name="visibility" value="1" />
     <p class="text-info">{{ icon('info-sign') }} {{ _(
         "{username} has chosen not to see who their patrons are, so your donation will be secret.",
         username=tippee_name
     ) }}</p>
     % elif patron_visibilities == 2 or paypal_only and not patron_visibilities
+    <input type="hidden" name="visibility" value="2" />
     <p class="text-info">{{ icon('info-sign') }} {{ _(
         "This donation won't be secret, you will appear in {username}'s private list of patrons.",
         username=tippee_name
     ) }}</p>
     % elif patron_visibilities == 4
+    <input type="hidden" name="visibility" value="3" />
     <p class="text-warning">{{ icon('info-sign') }} {{ _(
         "{username} discloses who their patrons are, your donation will be public.",
         username=tippee_name
@@ -299,6 +302,7 @@
         % endif
     </ul>
     % else
+    <input type="hidden" name="visibility" value="1" />
     <p class="text-muted">{{ icon('info-sign') }} {{ _(
         "{username} hasn't yet specified whether they want to see who their patrons are, "
         "so your donation will be secret.",
