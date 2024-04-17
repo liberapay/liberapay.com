@@ -203,7 +203,7 @@ class Job:
                                     ON CONFLICT (name) DO UPDATE
                                             SET last_success_time = excluded.last_success_time
                                 """, (func_name,))
-                            except psycopg2.OperationalError:
+                            except psycopg2.OperationalError as e:
                                 self.cron.website.tell_sentry(e)
                                 # retry in a minute
                                 sleep(60)

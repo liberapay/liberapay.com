@@ -464,6 +464,19 @@ class BadDonationCurrency(LazyResponseXXX):
         )
 
 
+class UnacceptedDonationVisibility(LazyResponseXXX):
+    code = 403
+    def msg(self, _):
+        tippee, visibility = self.args
+        return _(
+            "{username} no longer accepts secret donations.", username=tippee.username,
+        ) if visibility == 1 else _(
+            "{username} no longer accepts private donations.", username=tippee.username,
+        ) if visibility == 2 else _(
+            "{username} no longer accepts public donations.", username=tippee.username,
+        )
+
+
 class UnexpectedCurrency(LazyResponse400):
 
     def __init__(self, unexpected_amount, expected_currency):

@@ -199,7 +199,7 @@ class TestRecipientSettings(Harness):
         # Check that the donation form isn't proposing the visibility options
         r = self.client.GET('/alice/donate')
         assert r.code == 200
-        assert 'name="visibility"' not in r.text
+        assert 'name="visibility"' in r.text
         assert 'Secret donation' not in r.text
         assert 'Private donation' not in r.text
         assert 'Public donation' not in r.text
@@ -221,7 +221,7 @@ class TestRecipientSettings(Harness):
         assert alice.recipient_settings.patron_visibilities == 1
         r = self.client.GET('/alice/donate')
         assert r.code == 200
-        assert 'name="visibility"' not in r.text
+        assert 'name="visibility"' in r.text
         assert 'Secret donation' not in r.text
         assert 'Private donation' not in r.text
         assert 'Public donation' not in r.text
