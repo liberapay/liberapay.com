@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-04-17 08:03+0000\n"
+"PO-Revision-Date: 2024-04-17 11:34+0000\n"
 "Last-Translator: H Tamás <hovanszki@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
@@ -2431,10 +2431,10 @@ msgid "Automatic renewals are enabled for this donation, but are currently impos
 msgstr "Ez az adományozás automatikusan megújuló, de a fizetési feldolgozó korlátozása miatt nem lehetséges."
 
 msgid "Inactive because the account of the recipient is blacklisted."
-msgstr "Inaktív, mert a címzett fiókja feketelistán szerepel."
+msgstr "Inaktív, mert a címzett fiókja feketelistás."
 
 msgid "Inactive because the account of the recipient is closed."
-msgstr "Inaktív, mert a címzett fiókja le van zárva."
+msgstr "Inaktív, mert a címzett fiókja lezárásra került."
 
 msgid "Inactive because the recipient no longer accepts donations."
 msgstr "Inaktív, mert a címzett már nem fogad el támogatásokat."
@@ -2444,18 +2444,16 @@ msgstr "Aktív"
 
 #, python-brace-format
 msgid "Next payment due {in_N_weeks_months_or_years}."
-msgstr "Következő fizetés esedékessége: {in_N_weeks_months_or_years}."
+msgstr "Következő fizetés {in_N_weeks_months_or_years} múlva esedékes."
 
 msgid "Renew now"
 msgstr "Megújítás most"
 
-#, fuzzy
 msgid "Pending payment completion."
-msgstr "Fizetés befejezéséig."
+msgstr "Folyamatban levő befizetés."
 
-#, fuzzy
 msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
-msgstr "Fizetésre vár."
+msgstr "Új fizető eszközt kell hozzáadnia az adományozáshoz. Nyomjon a lenti gombra a továbblépéshez."
 
 msgid "Renew"
 msgstr "Megújítás"
@@ -2465,12 +2463,11 @@ msgstr "Nem lehet megújítani, mivel a fogadó fél fiókja nem áll készen ú
 
 #, python-brace-format
 msgid "{bold}Total:{bold_end} {0} per week ~ {1} per month ~ {2} per year."
-msgstr "{bold}Összesen:{bold_end} {0} hetente ~ {1} havonta ~ {2} évente."
+msgstr "{bold}Összesen:{bold_end} hetente {0} ~ havonta {1} ~ évente {2}."
 
 msgid "You are currently not donating to anyone."
 msgstr "Ön jelenleg nem támogat senkit."
 
-#, fuzzy
 msgid "Discontinued donations"
 msgstr "Felfüggesztett támogatások"
 
@@ -2478,90 +2475,84 @@ msgid "Restart"
 msgstr "Újraindítás"
 
 msgid "Hide"
-msgstr "Elrejtés"
+msgstr "Elrejt"
 
 #, python-brace-format
 msgid "Started {timespan_ago_1}. Stopped {timespan_ago_2}."
-msgstr "Elindítva {timespan_ago_1}. Leállítva {timespan_ago_2}."
+msgstr "{timespan_ago_1} idővel ezelőtt elindítva. {timespan_ago_2} idővel ezelőtt leállítva."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This stopped donation still has {money_amount} paid in advance. That advance will be consumed every week until it reaches zero."
-msgstr "Ez a leállított adomány még mindig a {money_amount} előre kifizetett. Ezt az előleget minden héten felemésztjük, amíg el nem éri a nullát."
+msgstr "Ebből a korábban leállított előre befizetett támogatásból hátra van még {money_amount} összeg. Ez az előleg minden héten kifizetésre kerül amíg el nem fogy."
 
-#, fuzzy
 msgid "Cancelled pledges"
 msgstr "Visszamondott ígéretek"
 
-#, fuzzy
 msgid "Funding your donations"
 msgstr "Adományok finanszírozása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {n} donation which needs to be modified because the recipient no longer accepts the currency you had chosen."
 msgid_plural "You have {n} donations which need to be modified because the recipients no longer accept the currencies you had chosen."
-msgstr[0] "A {n} adományt módosítani kell, mert a címzett már nem fogadja el az Ön által választott pénznemet."
+msgstr[0] "A {n} db adományát módosítani kell, mert a címzett már nem fogad be az Ön által választott pénznemet."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Modify your donation to {username}"
-msgstr "Módosítsa adományát {username}"
+msgstr "Módosítsa {username} számára szánt adományát"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=098cce804aadd8f637c3d509c3157b37)>"
 msgid_plural "Due to legal and technical limitations we are currently unable to process all your donations as a single payment. Instead you will have to make {n} separate payments. We apologize for the inconvenience."
-msgstr[0] "Jogi és technikai korlátozások miatt jelenleg nem áll módunkban az összes adományt egy összegben feldolgozni. Ehelyett a {n} oldalon kell külön-külön befizetnie. Elnézést kérünk a kellemetlenségekért."
+msgstr[0] "Jogi és technikai korlátozások miatt jelenleg nem áll módunkban az összes adományt egy összegben feldolgozni. Ehelyett {n} db külön befizetést kell eszközölnie. Elnézést kérünk a kellemetlenségekért."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Send money to {recipients}"
-msgstr "Küldj pénzt az alábbi címre {recipients}"
+msgstr "Küldjön {recipients} számára pénzt"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr "Az Ön {recipients} részeire küldött támogatásai kifizetésre várnak."
+msgstr "A(z) {recipients} részeire küldött támogatásai kifizetésre várnak."
 
 msgid "We are able to group these donations into a single payment."
-msgstr "Ezeket a támogatásokat egyetlen kifizetésbe tudjuk csoportosítani."
+msgstr "Ezeket a támogatásokat egyetlen kifizetésbe össze tudjuk fésülni."
 
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Jelenleg a PayPal az egyetlen elérhető lehetőség az adomány küldésére. Kérjük kattintson a következő gombra a folytatáshoz:"
 
 msgid "Please choose a payment method:"
-msgstr "Válasszon fizetési módot:"
+msgstr "Kérem válasszon fizetési módot:"
 
 msgid "Currently unavailable"
 msgstr "Jelenleg nem elérhető"
 
-#, fuzzy
 msgid "Pay by card"
 msgstr "Fizetés kártyával"
 
 msgid "Euro donations only"
-msgstr "kizárólag euró adományok"
+msgstr "Kizárólag euró adományok"
 
 msgid "Euro bank accounts only"
 msgstr "Kizárólag euró bankszámlák"
 
-#, fuzzy
 msgid "Pay by direct debit"
-msgstr "Fizetés közvetlen terheléssel"
+msgstr "Fizetés betéti kártyával"
 
 #, python-brace-format
 msgid "Doesn't support the {currency}"
-msgstr "Nem támogatja a(z) {currency}-t"
+msgstr "Nem támogatja a(z) {currency} valutát"
 
 msgid "Doesn't support automatic renewal"
 msgstr "Nem támogatja az automatikus megújítást"
 
-#, fuzzy
 msgid "Reveals your name and email address to the recipient"
-msgstr "Feltárja az Ön nevét és e-mail címét a címzett előtt"
+msgstr "Feltárja az Ön nevét és e-mail címét a kedvezményezett előtt"
 
-#, fuzzy
 msgid "Pay with PayPal"
 msgstr "Fizetés PayPal-lal"
 
 #, python-brace-format
 msgid "Your donation to {team} cannot be processed because it would be sending money to yourself."
-msgstr "Az Ön {team} számára nyújtott támogatását nem lehet feldolgozni, mert azzal pénzt küldene önmagának."
+msgstr "Az Ön {team} számára nyújtott támogatását nem lehet feldolgozni, mert azzal pénzt küldene önmagának is."
 
 msgid "All your donations are funded."
 msgstr "Minden támogatása finanszírozva van."
@@ -2571,20 +2562,20 @@ msgstr "A kérés folyamatban van, kérjük várjon…"
 
 #, python-brace-format
 msgid "The payment of {charge_amount} was successful."
-msgstr "A(z) {charge_amount}-ra szóló fizetés sikeresen végbement."
+msgstr "A(z) {charge_amount} összegű kifizetés sikeresen végbement."
 
 msgid "Failure"
-msgstr "Hiba"
+msgstr "Sikertelen"
 
 #, python-brace-format
 msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "A(z) {name} fizetés feldolgozó hibaüzenetet adott vissza: \"{error_message}\"."
 
 msgid "The payment has been initiated."
-msgstr "A fizetés kezdeményezve lett."
+msgstr "A fizetési folyamat megkezdődött."
 
 msgid "The payment is awaiting your approval."
-msgstr "A fizetés az Ön jóváhagyására várakozik."
+msgstr "A fizetés az Ön jóváhagyására vár."
 
 #, python-brace-format
 msgid "You have {n} other donation awaiting payment."
@@ -2592,41 +2583,39 @@ msgid_plural "You have {n} other donations awaiting payment."
 msgstr[0] "Önnek {n} további adománya várakozik kifizetésre."
 
 msgid "You don't have any other donation awaiting payment at this time."
-msgstr "Jelenleg Önnek nincsenek további adományai, amelyek fizetésre várakoznának."
+msgstr "Önnek jelenleg nincsenek további kifizetésre váró adományai."
 
 #, python-brace-format
 msgid "We cannot charge you only {donation_amount}, the minimum payment amount is {min_payment_amount}."
-msgstr "Nem terhelhetjük Önt {donation_amount} összeggel, a minimális kifizetési összeg {min_payment_amount}."
+msgstr "Nem terhelhetjük meg Önt {donation_amount} összeggel, a minimális kifizetési összeg {min_payment_amount}."
 
 msgid "Please select or input a payment amount:"
 msgstr "Kérjük válasszon vagy adjon meg egy fizetési összeget:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay does not store money, the entire amount of your payment will go immediately to the {payment_provider} accounts of the recipients."
-msgstr "Az Ön fizetésének teljes összege azonnal {payment_provider} fiókjaiba lesz utalva."
+msgstr "A Liberapay nem tárol pénzt, az egész befizetett összeg közvetlenül a {payment_provider} fizetés feldolgozóhoz kerül utalásra."
 
-#, fuzzy
 msgid "PayPal reveals your name and email address to the recipient."
-msgstr "A PayPal feltárja az Ön nevét és e-mail címét a címzett előtt."
+msgstr "A PayPal feltárja az Ön nevét és e-mail címét a kedvezményezett előtt."
 
 msgid "Initiate the payment"
-msgstr "A fizetés kezdeményezése"
+msgstr "A fizetés megkezdése"
 
 msgid "The payment instrument is invalid, please select or add another one."
-msgstr "A fizetési eszköz érvénytelen, kérjük válasszon vagy adjon hozzá egy másikat."
+msgstr "A fizetési eszköz érvénytelen, kérjük válasszon másikat vagy adjon hozzá egy újat."
 
 msgid "More information is required in order to process this payment."
-msgstr "További információk szükségesek ahhoz, hogy fel lehessen dolgozni ezt a fizetést."
+msgstr "További információk szükségesek a fizetés feldolgozásához."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
-msgstr "A fizetési szolgáltató ({name}) még nem tudja feldolgozni a {currency} beszedési megbízásokat ennek a címzettnek. Kérjük, próbálja meg újra egy másik fizetési móddal."
+msgstr "A {name} fizetési szolgáltató még nem tudja feldolgozni a {currency} beszedési megbízásokat ennél a címzettnél. Kérjük, próbálja meg újra egy másik fizetési eszközzel."
 
-#, fuzzy
 msgid "Your payment has been initiated. It will be submitted to your bank at a later time, after being manually checked for signs of fraud."
-msgstr "Az Ön fizetését elindítottuk. A kifizetést egy későbbi időpontban nyújtjuk be bankjához, miután manuálisan ellenőriztük a csalás jeleit."
+msgstr "Az Ön fizetését elindítottuk. A kifizetés kérelmet egy későbbi időpontban nyújtjuk be bankjához, miután manuálisan ellenőriztük hogy nem csalásról van szó."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "A bankja elutasíthatja ezt a kifizetést. Javasoljuk, hogy küldjön egy másolatot a {link_start}megbízásról{link_end} a bankjának, ha nem biztos benne, hogy az megfelelően kezeli a {currency} beszedési megbízásokat."
 
@@ -2662,7 +2651,7 @@ msgstr "Emlékezzen a kártyaszámra a következő alkalomra"
 
 #, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr "Alapértelmezés szerint ezt a fizetési eszközt használja a jövőbeni fizetésekhez {currency}"
+msgstr "Alapértelmezés szerint ezt a fizetési eszközt használja a jövőbeni {currency} kifizetésekhez"
 
 msgid "Use this payment instrument by default for future payments"
 msgstr "Alapértelmezés szerint ezt a fizetési eszközt használja a jövőbeli fizetésekhez"
