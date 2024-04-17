@@ -842,7 +842,7 @@ msgstr "用戶名稱 '{0}' 包含了無效的字符。"
 
 #, fuzzy, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
-msgstr "使用者名稱 '{0}' 純數字。这是不允许的。"
+msgstr "使用者名稱 '{0}' 是純數字。這是不允許的。"
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
@@ -989,6 +989,18 @@ msgstr "用戶 {0} 不接受捐款。"
 #, python-brace-format
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username}不接受{rejected_currency}的捐款。"
+
+#, python-brace-format
+msgid "{username} no longer accepts secret donations."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} no longer accepts private donations."
+msgstr ""
+
+#, python-brace-format
+msgid "{username} no longer accepts public donations."
+msgstr ""
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
