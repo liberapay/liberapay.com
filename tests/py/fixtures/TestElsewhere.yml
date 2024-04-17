@@ -72,7 +72,7 @@ interactions:
     method: GET
     uri: https://bitbucket.org/api/2.0/users/adhsjakdjsdkjsajdhksda
   response:
-    body: {string: !!python/unicode '{"type": "error", "error": {"message": "adhsjakdjsdkjsajdhksda"}}'}
+    body: {string: '{"type": "error", "error": {"message": "adhsjakdjsdkjsajdhksda"}}'}
     headers:
       content-length: ['65']
       content-type: [application/json; charset=utf-8]
@@ -108,7 +108,7 @@ interactions:
     method: GET
     uri: https://gitlab.com/api/v4/users?username=adhsjakdjsdkjsajdhksda
   response:
-    body: {string: !!python/unicode '[]'}
+    body: {string: '[]'}
     headers:
       cache-control: ['max-age=0, private, must-revalidate']
       content-length: ['2']
@@ -126,12 +126,12 @@ interactions:
       vary: [Origin]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode client_secret=o090sc7828d7gljtrqc5n4vcpx3bfx&grant_type=client_credentials&client_id=9ro3g4slh0de5yijy6rqb2p0jgd7hi
+    body: client_secret=o090sc7828d7gljtrqc5n4vcpx3bfx&grant_type=client_credentials&client_id=9ro3g4slh0de5yijy6rqb2p0jgd7hi
     headers: {}
     method: POST
     uri: https://id.twitch.tv/oauth2/token
   response:
-    body: {string: !!python/unicode '{"access_token":"l5v4ham8prjwrvowu1pd1pue81t1qp","expires_in":5281481,"token_type":"bearer"}
+    body: {string: '{"access_token":"l5v4ham8prjwrvowu1pd1pue81t1qp","expires_in":5281481,"token_type":"bearer"}
 
 '}
     headers:
@@ -145,7 +145,7 @@ interactions:
     method: GET
     uri: https://api.twitch.tv/helix/users?login=adhsjakdjsdkjsajdhksda
   response:
-    body: {string: !!python/unicode '{"data":[]}'}
+    body: {string: '{"data":[]}'}
     headers:
       access-control-allow-origin: ['*']
       cache-control: ['no-cache, no-store, must-revalidate, private']
@@ -191,7 +191,7 @@ interactions:
     method: GET
     uri: https://bitbucket.org/api/2.0/users/%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
   response:
-    body: {string: !!python/unicode ''}
+    body: {string: ''}
     headers:
       content-length: ['0']
       content-type: [text/html; charset=utf-8]
@@ -227,7 +227,7 @@ interactions:
     method: GET
     uri: https://gitlab.com/api/v4/users?username=%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
   response:
-    body: {string: !!python/unicode '[]'}
+    body: {string: '[]'}
     headers:
       cache-control: ['max-age=0, private, must-revalidate']
       content-length: ['2']
@@ -250,7 +250,7 @@ interactions:
     method: GET
     uri: https://api.twitch.tv/helix/users?login=%3E%27%3E%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert%280%29%3E
   response:
-    body: {string: !!python/unicode '{"error":"Bad Request","status":400,"message":"Error
+    body: {string: '{"error":"Bad Request","status":400,"message":"Error
         (400): Invalid login parameter requested: \u003e''\u003e\"\u003e\u003cimg
         src=x onerror=alert(0)\u003e"}'}
     headers:
