@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-04-17 11:34+0000\n"
+"PO-Revision-Date: 2024-04-17 12:13+0000\n"
 "Last-Translator: H Tamás <hovanszki@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
@@ -2659,50 +2659,44 @@ msgstr "Alapértelmezés szerint ezt a fizetési eszközt használja a jövőbel
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Kérjük, adja meg nevét és IBAN kódját (nemzetközi bankszámlaszám):"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "By providing your IBAN and confirming this payment, you are authorizing {platform} and {provider}, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited."
-msgstr "Az IBAN megadásával és a fizetés megerősítésével Ön felhatalmazza a {platform} és a {provider}, a fizetési szolgáltatónkat, hogy utasításokat küldjön a bankjának az Ön számlájának megterhelésére, és a bankja pedig arra, hogy az utasításoknak megfelelően megterhelje a számláját. Ön jogosult a bankjától visszatérítésre a bankjával kötött szerződésében foglalt feltételek szerint. A visszatérítést az Ön számlájának megterhelésétől számított 8 héten belül kell kérnie."
+msgstr "Az IBAN megadásával és a fizetés megerősítésével Ön felhatalmazza a {platform} platformot és a {provider} szolgáltatót, a fizetési szolgáltatónkat, hogy utasításokat küldjön a bankjának az Ön számlájának megterhelésére, és a bankja pedig arra, hogy az utasításoknak megfelelően megterhelje a számláját. Ön jogosult a bankjától visszatérítésre a bankjával kötött szerződésében foglalt feltételek szerint. A visszatérítést az Ön számlájának megterhelésétől számított 8 héten belül kell kérnie."
 
-#, fuzzy
 msgid "Remember the bank account number for future payments"
-msgstr "Ne feledje a bankszámlaszámot a jövőbeli kifizetésekhez"
+msgstr "Jegyezze meg a bankszámlaszámot a jövőbeli kifizetésekhez"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
-msgstr "Annak érdekében, hogy csökkentse a fizetés elutasításának kockázatát, javasoljuk, hogy adja meg a postai címét az alábbiakban. Ezt titkosítva tároljuk az adatbázisunkban, és elküldjük a fizetési processzornak ({processor_name})."
+msgstr "Annak érdekében, hogy csökkentse a fizetés elutasításának kockázatát, javasoljuk, hogy adja meg a postázási címét az alábbiakban. Ezt titkosítva tároljuk az adatbázisunkban, és elküldjük a {processor_name} fizetési szolgáltatónak."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
 msgstr "A(z) „{0}” nem elfogadható mennyiség (min={1}, max={2})"
 
-#, fuzzy
 msgid "The date must be in the future."
-msgstr "A dátumnak a jövőben kell lennie."
+msgstr "Jövőbeli dátumnak kell lennie."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donation to {recipient}."
-msgstr "Biztos, hogy törölni szeretné ezt a tervezett kifizetést? Ez leállítja az adományozását a {recipient}."
+msgstr "Biztos, hogy törölni szeretné ezt az ütemezett kifizetést? Ezzel leállítja {recipient} támogatását."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
-msgstr "Biztos, hogy törölni szeretné ezt a tervezett kifizetést? Ez leállítja a {recipients} címre történő adományozását."
+msgstr "Biztos, hogy törölni szeretné ezt az ütemezett kifizetést? Ezzel leállítja {recipients} támogatásait."
 
 msgid "Go back"
-msgstr "Visszalépés"
+msgstr "Vissza"
 
-#, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "Ha módosítani szeretné az ütemezett fizetés összegét, kérjük, válassza ki vagy adjon meg egy újat:"
 
-#, fuzzy
 msgid "(not recommended, high fee percentage)"
-msgstr "(nem ajánlott, magas díjszázalék)"
+msgstr "(nem ajánlott, magas jutalék)"
 
-#, fuzzy
 msgid "(okay, moderate fee percentage)"
-msgstr "(oké, mérsékelt díjszabás)"
+msgstr "(okés, mérsékelt jutalék)"
 
-#, fuzzy
 msgid "(recommended, low fee percentage)"
 msgstr "(ajánlott, alacsony díjszabás)"
 
@@ -2723,7 +2717,7 @@ msgid "If you want to modify the date of this scheduled payment, please select o
 msgstr "Ha módosítani szeretné az ütemezett fizetés dátumát, kérjük, válasszon ki vagy adjon meg egy újat:"
 
 msgid "Delaying your payment beyond its normal date will result in your donation being inactive during that time."
-msgstr "Ha a befizetést a szokásos időponton túl késlelteti, az adománya ez idő alatt inaktívvá válik."
+msgstr "Ha a befizetést nem történik meg a határidőn belül, a támogatása semmissé válik a következő időszakra."
 
 #, python-brace-format
 msgid "You have {n} scheduled payment:"
@@ -2734,13 +2728,13 @@ msgid "You currently don't have any scheduled payment."
 msgstr "Jelenleg nincs ütemezett kifizetése."
 
 msgid "The provided postal address is incomplete."
-msgstr "A megadott postai cím nem teljes."
+msgstr "A megadott levelezési cím nem teljes."
 
 msgid "Invalid date of birth."
 msgstr "Érvénytelen születési dátum."
 
 msgid "Your identity information has been updated."
-msgstr "A személyazonosító adatai frissítésre kerültek."
+msgstr "A személyi adatai frissítésre kerültek."
 
 msgid "JavaScript is required"
 msgstr "JavaScript szükséges"
