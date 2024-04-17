@@ -461,9 +461,9 @@ msgstr "Az Ön vagy kedvezményezettjének változtatásai miatt a fizetési üt
 msgid "The payment of {money_amount} scheduled for {date} has been cancelled."
 msgstr "A(z) {date}-ra időzített {money_amount} összegű kifizetés érvénytelenítésre került."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The manual payment scheduled for {date} has been cancelled."
-msgstr "A(z) {date}-ra időzített {money_amount} összegű kézi kifizetés érvénytelenítésre került."
+msgstr "A(z) {date}-ra időzített összegű kézi kifizetés érvénytelenítésre került."
 
 #, python-brace-format
 msgid "A new payment of {money_amount} has been scheduled for {date}."
@@ -2757,7 +2757,7 @@ msgstr "Jövedelem Részesedés"
 
 #, python-brace-format
 msgid "{0} receives {1} per week"
-msgstr "{0} hetente {1}-t kap"
+msgstr "{0} hetente {1} összeget kap"
 
 #, python-brace-format
 msgid "You are not a member of the {0} team."
@@ -2769,7 +2769,7 @@ msgstr "Az Ön bevétele jelenleg {0} (nem mehet magasabbra ezen a héten)."
 
 #, python-brace-format
 msgid "Your take is now {0}."
-msgstr "Az Ön bevétele jelenleg {0}."
+msgstr "Az Ön részesedése most {0}."
 
 #, python-brace-format
 msgid "{username}'s profile"
@@ -2785,7 +2785,7 @@ msgstr "Nyelvek listájának megjelenítése"
 
 #, python-brace-format
 msgid "This profile is only available in {language}"
-msgstr "Ez a profil csak {language} érhető el"
+msgstr "Ez a profil csak {language} nyelven érhető el"
 
 msgid "Edit"
 msgstr "Szerkesztés"
@@ -2795,12 +2795,12 @@ msgstr "Leírás"
 
 #, python-brace-format
 msgid "{0} owns the following accounts on other platforms:"
-msgstr "{0} a következő fiókokat birtokolja más helyeken:"
+msgstr "{0} a következő fiókokkal rendelkezik más platformokon:"
 
 #, python-brace-format
 msgid "{username} is a member of {n} team:"
 msgid_plural "{username} is a member of {n} teams:"
-msgstr[0] "{username} {n} csapat tagja:"
+msgstr[0] "{username} jelenleg {n} csapat tagja:"
 
 msgid "Communities"
 msgstr "Közösségek"
@@ -2825,15 +2825,15 @@ msgstr[0] "A legbőkezűbb {n} mecénás a következő:"
 
 #, python-brace-format
 msgid "{username} doesn't publish how much they give."
-msgstr "A(z) {username} nem teszi közzé, hogy mennyit adnak."
+msgstr "A(z) {username} nem teszi közzé, hogy mennyit adományoz."
 
 msgid "Donees"
-msgstr "A megajándékozott"
+msgstr "Kedvezményezett"
 
 #, python-brace-format
 msgid "{username} donates publicly to {n} creator."
 msgid_plural "{username} donates publicly to {n} creators."
-msgstr[0] "{username} nyilvánosan adományoz {n} alkotónak."
+msgstr[0] "{username} nyilvánosan támogat {n} alkotót."
 
 #, python-brace-format
 msgid "{username} does not disclose how much they receive through Liberapay."
@@ -2844,11 +2844,11 @@ msgstr "Előzmények"
 
 #, python-brace-format
 msgid "{username} joined {timespan_ago}."
-msgstr "{username} {timespan_ago} csatlakozott."
+msgstr "{username} {timespan_ago} ideje csatlakozott."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
-msgstr "{username} lezárta ezt a fiókot {timespan_ago}-al ezelőtt."
+msgstr "{username} lezárta ezt a fiókot {timespan_ago} idővel ezelőtt."
 
 msgid "View income history"
 msgstr "Bevételi előzmények megtekintése"
@@ -2861,7 +2861,7 @@ msgid "Income Per Week (in {currency})"
 msgstr "Heti jövedelem ({currency} valutában)"
 
 msgid "Number of Patrons Per Week"
-msgstr "Támogatók Száma Hetente"
+msgstr "Heti támogatók száma"
 
 msgid "Invoice documents are private."
 msgstr "A számlázási dokumentumok privátak."
@@ -2883,13 +2883,13 @@ msgid "Reject"
 msgstr "Elutasítás"
 
 msgid "The invoice is ready, please check that everything is correct, then click the button below to send it."
-msgstr "A számla elkészült, kérjük nézze át, hogy minden rendben van-e, ez után kattintson az alábbi gombra az elküldéséhez."
+msgstr "A számla elkészült, kérjük nézze át, hogy minden rendben van-e, ezután kattintson az alábbi gombra az elküldéséhez."
 
 msgid "This invoice has been paid."
-msgstr "Ez a számla ki lett fizetve."
+msgstr "Ez a számla kifizetésre került."
 
 msgid "This invoice has been rejected."
-msgstr "Ez a számla vissza lett utasítva."
+msgstr "Ez a számla visszautasításra került."
 
 #, python-brace-format
 msgid "From: {0}"
@@ -2923,7 +2923,7 @@ msgid "Accept and Pay"
 msgstr "Elfogadás és Fizetés"
 
 msgid "Mark as paid"
-msgstr "Fizetettként megjelölés"
+msgstr "Megjelölés fizetettként"
 
 #, python-brace-format
 msgid "Message: {0}"
@@ -2973,17 +2973,17 @@ msgid "Details (optional)"
 msgstr "Részletek (nem kötelező)"
 
 msgid "Details of the invoice (e.g. the breakdown of the amount into its components)"
-msgstr "A számla részletei (pl. az összeg összetevőire bontása)"
+msgstr "A számla részletei (pl. az összeg összetevőkre bontása)"
 
 msgid "Documents (private)"
 msgstr "Dokumentumok (magánjellegű)"
 
 msgid "A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened."
-msgstr "A visszafizetési kérelem elfogadása valószínűbb, ha bizonyítékot ad, ami szerint a kiadás valóban megtörtént."
+msgstr "A visszatérítési kérelem elfogadása valószínűbb, ha bizonyítékot ad, ami szerint a kiadás valóban megtörtént."
 
 #, python-brace-format
 msgid "Only the administrators of {0} will be able to download these files."
-msgstr "Kizárólag a(z) {0} adminisztrátorai fogjék tudni letölteni ezeket a fájlokat."
+msgstr "Kizárólag a(z) {0} adminisztrátorai fogják tudni letölteni ezeket a fájlokat."
 
 #, python-brace-format
 msgid "Allowed file extensions: {0}. Maximum file size: {1}MB."
@@ -3021,11 +3021,11 @@ msgstr "felfüggesztett"
 
 #, python-brace-format
 msgid "The totals below don't include donations through the old wallet system. You can find those in {link_start}your Wallet page{link_end}."
-msgstr "Az alábbi összegek nem tartalmazzák a régi pénztárcarendszeren keresztül történt adományozásokat. Ezeket a {link_start}your Wallet oldalon{link_end} linken találja."
+msgstr "Az alábbi összegek nem tartalmazzák a régi pénztárcarendszeren keresztül beérkezett adományozásokat. Ezeket a {link_start}Pénztárca oldalán{link_end} találja meg."
 
 #, python-brace-format
 msgid "Total money received: {0}"
-msgstr "Összes fogadott pénz: {0}"
+msgstr "Összes befogadott pénz: {0}"
 
 #, python-brace-format
 msgid "{0}: {1}"
@@ -3048,7 +3048,7 @@ msgid "charge"
 msgstr "terhelés"
 
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
-msgstr "Ez a fizetés arra vár, hogy a Liberapay munkatársai kézzel ellenőrizzék a csalás jeleit."
+msgstr "Ez a fizetés arra vár, hogy a Liberapay munkatársai kézzel ellenőrizzék a csalás szempontból."
 
 #, python-brace-format
 msgid "error message: {0}"
@@ -3059,7 +3059,7 @@ msgstr "rejtett"
 
 #, python-brace-format
 msgid "public donation from {donor_name}"
-msgstr "{donor_name} publikus adományozásai"
+msgstr "{donor_name} publikus adományozása"
 
 #, python-brace-format
 msgid "private donation from {donor_name}"
@@ -3070,15 +3070,15 @@ msgstr "titkos adomány"
 
 #, python-brace-format
 msgid "public donation from {donor_name} for your role in the {team_name} team"
-msgstr "a(z) {donor_name} nyilvános adománya a(z) {team_name} csapatban betöltött szerepéért"
+msgstr "{donor_name} nyilvános adománya a(z) {team_name} csapatban betöltött szerepéért"
 
 #, python-brace-format
 msgid "private donation from {donor_name} for your role in the {team_name} team"
-msgstr "a(z) {donor_name} magánadománya a(z) {team_name} csapatban betöltött szerepéért"
+msgstr "{donor_name} magánadománya a(z) {team_name} csapatban betöltött szerepéért"
 
 #, python-brace-format
 msgid "secret donation for your role in the {team_name} team"
-msgstr "titkos adomány a(z) {team_name} csapatban betöltött szerepedért"
+msgstr "titkos adomány a(z) {team_name} csapatban betöltött szerepéért"
 
 #, python-brace-format
 msgid "public donation to {recipient_name}"
@@ -3094,36 +3094,36 @@ msgstr "{recipient_name} kapott titkos adományai"
 
 #, python-brace-format
 msgid "public donation to {recipient_name} for their role in the {team_name} team"
-msgstr "nyilvános adomány a(z) {recipient_name} részére a(z) {team_name} csapatban betöltött szerepéért"
+msgstr "nyilvános adomány {recipient_name} részére a(z) {team_name} csapatban betöltött szerepéért"
 
 #, python-brace-format
 msgid "private donation to {recipient_name} for their role in the {team_name} team"
-msgstr "magánadomány a(z) {recipient_name} részére a(z) {team_name} csapatban betöltött szerepéért"
+msgstr "magánadomány {recipient_name} részére a(z) {team_name} csapatban betöltött szerepéért"
 
 #, python-brace-format
 msgid "secret donation to {recipient_name} for their role in the {team_name} team"
-msgstr "titkos adomány a(z) {recipient_name} számára a(z) {team_name} csapatban betöltött szerepéért"
+msgstr "titkos adomány {recipient_name} számára a(z) {team_name} csapatban betöltött szerepéért"
 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
-msgstr "Ezt a kifizetést a kedvezményezettnek kézzel kell jóváhagynia a {provider} weboldalon keresztül."
+msgstr "Ezt a kifizetést a kedvezményezettnek kézzel kell jóváhagynia a {provider} weboldalán keresztül."
 
 #, python-brace-format
 msgid "PayPal status code: {0}"
 msgstr "PayPal státuszkód: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
-msgstr "A fizető fél fiókját csalás vagy egyéb jogosulatlan tevékenység gyanúja miatt felfüggesztésre került."
+msgstr "A fizető fél fiókja csalás vagy egyéb jogosulatlan tevékenység gyanúja miatt felfüggesztésre került."
 
 msgid "There were no transactions during this period."
-msgstr "Nem voltak átutalások ez idő alatt."
+msgstr "Nem voltak átutalások ebben az időintervallumban."
 
 #, python-brace-format
 msgid "To view the transactions processed in the past by Mangopay {link_start}go to the Wallet page{link_end}."
-msgstr "A Mangopay által korábban feldolgozott tranzakciók megtekintéséhez látogasson el a {link_start}tárca oldalra{link_end}."
+msgstr "A Mangopay által korábban feldolgozott tranzakciók megtekintéséhez látogasson el a {link_start}Tárca oldalra{link_end}."
 
 msgid "You are not invited to join this team."
-msgstr "Ön nincs meghívva ebbe a csoportba csatlakozásra."
+msgstr "Ön nincs meghívva ebbe a csapatba."
 
 msgid "You have been removed from this team."
 msgstr "Eltávolították a csapatból."
@@ -3144,15 +3144,15 @@ msgid "A team can't join a team"
 msgstr "Egy csapat nem tud csatlakozni egy csapathoz"
 
 msgid "You can't invite an inactive user to join a team."
-msgstr "Nem lehet inaktív felhasználót meghívni egy csoportba."
+msgstr "Nem hívhat meg inaktív felhasználót egy csapatba."
 
 #, python-brace-format
 msgid "{username} has already been invited to join this team {timespan_ago}."
-msgstr "{username} már meg lett hívva {timespan_ago}, hogy csatlakozzon ehhez a csoporthoz."
+msgstr "{username} már korábban meghívásra került ebbe a csapatba {timespan_ago} ezelőtt."
 
 #, python-brace-format
 msgid "{username} has already refused to join this team {timespan_ago}."
-msgstr "{username} már {timespan_ago} elutasította a csatlakozást ehhez a csoporthoz."
+msgstr "{username} már korábban elutasította a csatlakozást ehhez a csoporthoz {timespan_ago} ezelőtt."
 
 #, python-brace-format
 msgid "{0} has been invited to the team."
