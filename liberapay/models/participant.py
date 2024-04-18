@@ -2621,7 +2621,7 @@ class Participant(Model, MixinTeam):
 
     def accepts_tip_visibility(self, visibility):
         bit = 2 ** (visibility - 1)
-        return self.recipient_settings.patron_visibilities & bit > 0
+        return (self.recipient_settings.patron_visibilities or 1) & bit > 0
 
 
     @cached_property
