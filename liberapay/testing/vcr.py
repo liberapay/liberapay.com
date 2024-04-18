@@ -37,7 +37,7 @@ class CustomSerializer:
 
     @staticmethod
     def deserialize(cassette_str):
-        return yaml.load(cassette_str, Loader=yaml.Loader)
+        return yaml.safe_load(cassette_str)
 
 
 vcr = VCR(

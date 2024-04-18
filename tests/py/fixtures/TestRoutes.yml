@@ -5,7 +5,7 @@ interactions:
     method: GET
     uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cards/20717494
   response:
-    body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":true,"Currency":"EUR","Validity":"VALID","UserId":"20717491","Id":"20717494","Tag":null,"CreationDate":1486643837}'}
+    body: {string: '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":true,"Currency":"EUR","Validity":"VALID","UserId":"20717491","Id":"20717494","Tag":null,"CreationDate":1486643837}'}
     headers:
       cache-control: [no-cache]
       content-length: ['288']
@@ -22,7 +22,7 @@ interactions:
     method: PUT
     uri: https://api.sandbox.mangopay.com/v2.01/liberapay-dev/cards/20717494
   response:
-    body: {string: !!python/unicode '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":false,"Currency":"EUR","Validity":"VALID","UserId":"20717491","Id":"20717494","Tag":null,"CreationDate":1486643837}'}
+    body: {string: '{"ExpirationDate":"1234","Alias":"356999XXXXXX0132","CardType":"CB_VISA_MASTERCARD","CardProvider":"MASTERCARD","Country":"USA","Product":"   ","BankCode":"unknown","Active":false,"Currency":"EUR","Validity":"VALID","UserId":"20717491","Id":"20717494","Tag":null,"CreationDate":1486643837}'}
     headers:
       cache-control: [no-cache]
       content-length: ['289']
