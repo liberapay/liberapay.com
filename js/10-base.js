@@ -82,7 +82,11 @@ Liberapay.init = function() {
         $requirer.trigger('change');
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
 
     $('.radio input:not([type="radio"]), .radio-group input:not([type="radio"])').on('click change', function(event) {
         if (event.type == 'click' && event.clientX == 0 && event.clientY == 0) {
