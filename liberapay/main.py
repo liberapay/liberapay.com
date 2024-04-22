@@ -203,6 +203,7 @@ if conf:
     cron(intervals.get('execute_reviewed_payins', 3600), execute_reviewed_payins, True)
 
     cron('irregular', website.cryptograph.rotate_stored_data, True)
+    cron(Weekly(weekday=3, hour=1), Participant.check_income_goals, True)
 
 
 # Website Algorithm
