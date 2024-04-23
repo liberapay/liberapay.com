@@ -336,7 +336,11 @@ class Locale(babel.core.Locale):
         # https://github.com/liberapay/liberapay.com/issues/1066
         if group_symbol in string:
             proper = self.format_decimal(decimal, decimal_quantization=False)
-            if string != proper and string.rstrip('0') != (proper + decimal_symbol):
+            ambiguous = string != proper and (
+                (string + ('' if decimal_symbol in string else decimal_symbol)).rstrip('0') !=
+                (proper + ('' if decimal_symbol in proper else decimal_symbol)).rstrip('0')
+            )
+            if ambiguous:
                 # Irregular number format (e.g. `10.00` in German)
                 try:
                     proper_alt = (
