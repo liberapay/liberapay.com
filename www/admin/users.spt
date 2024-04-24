@@ -234,8 +234,7 @@ elif mode == 'new_recipients':
           JOIN participants p ON p.id = pt.recipient
           JOIN participants payer ON payer.id = pt.payer
      LEFT JOIN participants team ON team.id = pt.team
-         WHERE p.marked_as IS NULL
-           AND pt.row_number <= 20
+         WHERE pt.row_number <= 20
       GROUP BY p.id
         HAVING coalesce(min(pt.id) < %s, true)
       ORDER BY min(pt.id) DESC
