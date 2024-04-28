@@ -3438,7 +3438,7 @@ DELETE FROM elsewhere WHERE platform in ('facebook', 'google');
 DELETE FROM app_conf WHERE key LIKE 'facebook_%';
 
 -- migration #174
-CREATE TEMPORARY TABLE _tippees ON COMMIT DROP AS (
+CREATE TEMPORARY TABLE _tippees AS (
     SELECT e.participant AS id
          , (CASE WHEN e.payload->>'patron_visibilities' = '2' THEN 2 ELSE 3 END) AS only_accepted_visibility
          , e.ts AS start_time
@@ -3469,3 +3469,4 @@ UPDATE payin_transfers AS pt
    AND pt.ctime > tippee.start_time
    AND pt.ctime < tippee.end_time
    AND pt.visibility <> tippee.only_accepted_visibility;
+DROP TABLE _tippees;
