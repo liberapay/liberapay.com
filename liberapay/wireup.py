@@ -219,6 +219,7 @@ class AppConf:
         linuxfr_id=str,
         linuxfr_secret=str,
         log_emails=bool,
+        openstreetmap_access_token_url=str,
         openstreetmap_api_url=str,
         openstreetmap_auth_url=str,
         openstreetmap_callback=str,
