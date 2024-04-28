@@ -66,25 +66,25 @@ test-shell: $(env)
 test-schema: $(env)
 	$(with_tests_env) ./recreate-schema.sh test
 
-pyflakes: $(env)
-	$(env_py) -m flake8 app.py liberapay tests
+lint: $(env)
+	$(env_py) -m ruff check app.py liberapay tests
 
 test: test-schema pytest
 tests: test
 
 pytest: $(env)
 	$(py_test) ./tests/py/test_$${PYTEST-*}.py
-	@$(MAKE) --no-print-directory pyflakes
+	@$(MAKE) --no-print-directory lint
 	$(py_test) --doctest-modules liberapay
 
 pytest-cov: $(env)
 	$(py_test) --cov-report html --cov liberapay ./tests/py/test_$${PYTEST-*}.py
-	@$(MAKE) --no-print-directory pyflakes
+	@$(MAKE) --no-print-directory lint
 	$(py_test) --doctest-modules liberapay
 
 pytest-re: $(env)
 	$(py_test) --lf ./tests/py/
-	@$(MAKE) --no-print-directory pyflakes
+	@$(MAKE) --no-print-directory lint
 
 pytest-i18n-browse: $(env)
 	@if [ -f sql/branch.sql ]; then $(MAKE) --no-print-directory test-schema; fi

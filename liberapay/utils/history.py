@@ -241,7 +241,7 @@ def iter_payday_events(db, participant, period_start, period_end, today, minimiz
     prev_date = None
     get_timestamp = lambda e: e['timestamp']
     events = sorted(exchanges+transfers, key=get_timestamp, reverse=True)
-    day_events, day_open = None, None  # for pyflakes
+    day_events, day_open = None, None  # for the linter
     for event in events:
 
         collapse = False
