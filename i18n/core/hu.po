@@ -1736,7 +1736,6 @@ msgstr "Küldetés teljesítve!"
 msgid "View income shares"
 msgstr "Bevételek részesedéseinek megtekintése"
 
-#, fuzzy
 msgid "(fork)"
 msgstr "(fork)"
 
@@ -2844,7 +2843,7 @@ msgstr "Előzmények"
 
 #, python-brace-format
 msgid "{username} joined {timespan_ago}."
-msgstr "{username} {timespan_ago} ideje csatlakozott."
+msgstr "{username} {timespan_ago} csatlakozott."
 
 #, python-brace-format
 msgid "{username} closed this account {timespan_ago}."
@@ -3608,7 +3607,7 @@ msgid "Identity information and transaction records are kept for as long as is n
 msgstr "A személyazonossági- és tranzakciós adatokat addig őrizzük meg, ameddig az a jogi kötelezettségeknek való megfeleléshez szükséges."
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr "Fiók törlés után egy évvel mások regisztrálhatnak az Ön régi felhasználónevével (kivétel ha megállapításra kerül, hogy korábban jogsértően használta a nevet)."
+msgstr "Odaadhatjuk a felhasználónevét valakinek, ha kéri, de csak egy évvel a fiókja megszüntetése után (kivétel ha megállapításra kerül, hogy korábban jogsértően használta a nevet)."
 
 msgid "Feedback"
 msgstr "Visszajelzés"
@@ -3890,7 +3889,7 @@ msgid "Send an email to Liberapay"
 msgstr "Küldjön e-mailt a Liberapay-nek"
 
 msgid "If your message isn't written in English or French, then it will be translated automatically by a machine. Our reply will be translated to your language the same way."
-msgstr "Ha az üzenete nem angol vagy francia nyelven íródott, akkor azt egy gép automatikusan lefordítja. Válaszunkat ugyanígy fordításra kerül az Ön nyelvére."
+msgstr "Ha az üzenete nem angol vagy francia nyelven íródott, akkor azt egy gép automatikusan lefordítja. Válaszunk ugyanígy kerül fordításra az Ön nyelvére."
 
 #, python-brace-format
 msgid "If you think you've found a technical vulnerability in our system, please follow the instructions in {link_start}the {page_name} page{link_end} instead of sending us an email."
@@ -3910,7 +3909,7 @@ msgstr "Hogyan finanszírozzák a Liberapay-t? Vannak díjak?"
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
-msgstr "A Liberapay nem von le jutalékot a fizetésekből, a szolgáltatást a {1}saját számlájára{0} érkező adományokból finanszírozza. Azonban vannak {2}fizetési feldolgozási díjak{0}."
+msgstr "A Liberapay nem von le jutalékot a fizetésekből, a szolgáltatást a {1}saját számlájára{0} érkező adományokból finanszírozza. Azonban vannak {2}fizetésfeldolgozási díjak{0}."
 
 msgid "Who can use Liberapay?"
 msgstr "Ki használhatja a Liberapay-t?"
@@ -3952,9 +3951,9 @@ msgstr "A Liberapay egy nyílt projekt, amely egy nonprofit szervezet köré ép
 msgid "We care about internationalization, our service supports multiple currencies and is translated into many languages ({link_open}you can contribute{link_close})."
 msgstr "Igyekszünk az oldalt elérhetővé tenni minél több országban, szolgáltatásunk több pénznemet támogat, és számos nyelvre került lefordításra ({link_open}utóbbihoz hozzá is járulhat{link_close})."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you'd like more details, the Snowdrift.coop folks have compiled {0}a big list{1} of crowdfunding platforms and the differences between them."
-msgstr "Ha további részletekre kíváncsi, a Snowdrift.coop munkatársai összeállítottak egy terjedelmes listát {0}a közösségi finanszírozási platformokról{1} és a köztük lévő különbségekről."
+msgstr "Ha további részletekre kíváncsi, a Snowdrift.coop munkatársai összeállítottak egy terjedelmes {0}listát a közösségi finanszírozási platformokról{1} és a köztük lévő különbségekről."
 
 msgid "Does Liberapay respect financial regulations?"
 msgstr "A Liberapay tiszteletben tartja a pénzügyi szabályozásokat?"
@@ -4051,38 +4050,35 @@ msgstr "Követheti a {1}a Liberapay szoftver fejlesztését{0}, a {2}a Liberapay
 msgid "Donations can come from anywhere in the world."
 msgstr "Az adományok a világ bármely pontjáról érkezhetnek."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] "Az adományozók a címzett preferenciáitól és az alapul szolgáló fizetési processzor képességeitől függően akár a {n} oldalon is választhatnak a pénznemek közül."
+msgstr[0] "Az adományozók a címzett preferenciáitól és az alapul szolgáló pénzforgalmi feldolgozó funkcióitól függően akár {n} pénznem közül is választhatnak."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "Az adományok csak olyan területeken kaphatók, ahol legalább egy támogatott fizetési processzor áll rendelkezésre. A jelenleg támogatott fizetési processzorok {Stripe} és {PayPal}. Néhány jellemző csak Stripe-en keresztül érhető el, így a Liberapay teljes mértékben elérhető a Stripe által támogatott területeken, és részben csak a PayPal által támogatott területeken."
+msgstr "Az adományok csak olyan területek lakói kaphatnak, ahol legalább egy támogatott pénzforgalmi feldolgozó áll rendelkezésre. A jelenleg támogatott pénzforgalmi feldolgozók a {Stripe} és {PayPal}. Néhány jellemző csak Stripe-en keresztül érhető el, így a Liberapay teljes mértékben elérhető a Stripe által támogatott területeken, és részben csak a PayPal által támogatott területeken."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] "A Liberapay teljes mértékben elérhető az alkotók számára a {n} weboldalon:"
+msgstr[0] "A Liberapay teljes mértékben elérhető az alkotók számára {n} térségben:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] "Liberapay részben elérhető az alkotók számára {n} területeken:"
+msgstr[0] "Liberapay részben elérhető az alkotók számára {n} térségben:"
 
-#, fuzzy
 msgid "What is Liberapay?"
-msgstr "Mi az a Liberapay?"
+msgstr "Mi a Liberapay?"
 
-#, fuzzy
 msgid "Liberapay is a way to donate money recurrently to people whose work you appreciate."
 msgstr "A Liberapay egy módja annak, hogy rendszeresen pénzt adományozzon olyan embereknek, akiknek a munkáját nagyra értékeli."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "A kifizetésekhez nem kapcsolódnak feltételek. Alapértelmezés szerint a kedvezményezettek nem tudják, hogy kik a támogatóik, és az adományokat adományozónként és adományozónként heti {0} értékben korlátozzuk, hogy csökkentsük az indokolatlan befolyást."
+msgstr "A kifizetések feltétel nélküliek. Alapértelmezés szerint a kedvezményezettek nem tudják, hogy kik a támogatóik, és az adományokat heti {0} értékben korlátozzuk, hogy csökkentsük a bizonyos mecénásoktól való túlzott függést."
 
-#, fuzzy
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Alapértelmezés szerint az Ön által adott és kapott teljes összeg nyilvános (az információ megosztását le lehet tiltani)."
 
@@ -4090,306 +4086,262 @@ msgstr "Alapértelmezés szerint az Ön által adott és kapott teljes összeg n
 msgid "Liberapay is an open project, you can help us {1}translate it{0}, {2}improve its code{0}, and {3}manage its legal entity{0}. If you do so, you'll be able to join {4}the Liberapay team{0} and receive a share of the money that our users donate to keep the service running."
 msgstr "A Liberapay egy nyílt projekt, segíthetsz nekünk {1}lefordítani{0}, {2}javítani a kódját{0}, és {3}kezelni a jogi személyiségét{0}. Ha ezt megteszed, csatlakozhatsz a {4}Liberapay csapatához{0} és részesülhetsz abból a pénzből, amit a felhasználóink adományoznak a szolgáltatás fenntartására."
 
-#, fuzzy
 msgid "Why should you donate?"
-msgstr "Miért érdemes adományozni?"
+msgstr "Miért érdemes adományoznia?"
 
-#, fuzzy
 msgid "Who is Liberapay?"
 msgstr "Ki a Liberapay?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay is a non-profit organization {0}founded in 2015 in France{1} by {2} and {3}."
-msgstr "A Liberapay egy nonprofit szervezet {0}, amelyet 2015-ben alapított Franciaországban{1} a {2} és a {3}."
+msgstr "A Liberapay egy nonprofit szervezet, {0}amelyet 2015-ben alapított Franciaországban{1}, {2} és {3} által."
 
-#, fuzzy
 msgid "Legal information"
 msgstr "Jogi információk"
 
-#, fuzzy
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
 msgstr "Ezt a weboldalt a Liberapay, egy 2015-ben Franciaországban jogilag alapított nonprofit szervezet (azonosító: W144000981) kezeli."
 
-#, fuzzy
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
-msgstr "A Liberapay megfelel az Európai Unió jogszabályainak. Partnereink segítségével ellenőrizzük a tranzakciókat az esetleges csalás, pénzmosás és terrorizmus finanszírozása szempontjából."
+msgstr "A Liberapay megfelel az Európai Unió jogszabályainak. Partnereink segítségével folyamatosan ellenőrizzük a tranzakciókat az esetleges csalás, pénzmosás és terrorizmus finanszírozása szempontjából."
 
-#, fuzzy
 msgid "Postal address:"
 msgstr "Postacím:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This website is hosted on {0} by:"
-msgstr "Ezt a weboldalt a {0} oldalon tárolja:"
+msgstr "Ezt a weboldalt a {0} oldalon hosztolja:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The publication director is Liberapay's legal representative, currently {0}."
 msgstr "A kiadvány igazgatója a Liberapay jogi képviselője, jelenleg {0}."
 
-#, fuzzy
 msgid "Terms of Service"
-msgstr "Általános szerződési feltételek"
+msgstr "Általános Szerződési Feltételek"
 
-#, fuzzy
 msgid "Privacy Policy"
-msgstr "Adatvédelmi irányelvek"
+msgstr "Adatvédelmi Szabályzat"
 
-#, fuzzy
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Ez az oldal a Liberapay logóra mutató linkeket és információkat tartalmaz. Reméljük, hogy különösen hasznosnak találja, ha cikket ír a Liberapay-ről, vagy ha egyéni linkeket szeretne hozzáadni a Liberapay profiljához a weboldalán."
 
-#, fuzzy
 msgid "The Liberapay logo is composed of the two letters “lp”. It's usually colored black-on-yellow or just black. We used a white-on-yellow variant in the past, but it's now phased out as its contrast was deemed too low."
-msgstr "A Liberapay logója az \"lp\" két betűjéből áll. Általában fekete-sárga vagy csak fekete színű. Régebben használtunk egy fehér-sárga színű változatot is, de azt már kivontuk a forgalomból, mivel a kontrasztját túl alacsonynak ítéltük."
+msgstr "A Liberapay logója az \"lp\" betűkből áll. Általában citromsárga alapon fekete vagy csak szimplán fekete színű. Régebben használtunk egy citromsárga alapon fehér színű változatot is, de azt kivontuk a forgalomból, mivel a kontrasztját túl alacsonynak ítéltük."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay yellow is {yellow_color_code}, the black is {black_color_code}."
-msgstr "A Liberapay sárga a {yellow_color_code}, a fekete a {black_color_code}."
+msgstr "A Liberapay sárga kódja {yellow_color_code}, a feketéjé pedig {black_color_code}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay logo is pretty much free of copyright thanks to {CC0_link_start}the CC0 Public Domain Dedication{link_end}, so you are allowed to distribute it and modify it without asking our permission. However, the Liberapay logo is part of the Liberapay trademark, so you can't use it to represent your own products."
-msgstr "A Liberapay logó a {CC0_link_start}a CC0 Public Domain Dedication{link_end} címnek köszönhetően nagyjából mentes a szerzői jogoktól, így engedélyünk kérése nélkül terjesztheti és módosíthatja azt. A Liberapay logó azonban a Liberapay védjegy része, így nem használhatja saját termékei képviseletére."
+msgstr "A Liberapay logó a {CC0_link_start}a CC0 Public Domain Dedication{link_end} címnek köszönhetően szinte mentes a szerzői jogoktól, így engedélyünk kérése nélkül terjesztheti és módosíthatja azt. A Liberapay logó azonban a Liberapay védjegy része, így nem használhatja saját termékei képviseletére."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can view and download our logos below or {link_start}on GitHub{link_end}."
-msgstr "Logóinkat megtekintheti és letöltheti alább, vagy a {link_start}oldalon a GitHubon{link_end}."
+msgstr "Logóinkat megtekintheti és letöltheti alábbiakban, vagy a {link_start}GitHub-on{link_end}."
 
-#, fuzzy
 msgid "Liberapay logo, black-on-yellow"
-msgstr "Liberapay logó, fekete-sárga"
+msgstr "Liberapay logó, ciromsárga alapon fekete"
 
-#, fuzzy
 msgid "Download the black-on-yellow SVG"
-msgstr "Töltse le a fekete-sárga SVG-t"
+msgstr "Töltse le a citromsárga alapon fekete SVG-t"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Download the black-on-yellow PNG ({x_y} pixels)"
-msgstr "A fekete-sárga PNG letöltése ({x_y} pixel)"
+msgstr "A citromsárga alapon fekete PNG letöltése ({x_y} pixel)"
 
-#, fuzzy
 msgid "Liberapay logo, black"
 msgstr "Liberapay logó, fekete"
 
-#, fuzzy
 msgid "Download the black SVG"
 msgstr "A fekete SVG letöltése"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Download the black PNG ({x_y} pixels)"
 msgstr "A fekete PNG letöltése ({x_y} pixel)"
 
-#, fuzzy
 msgid "Here is a list of differences between them:"
 msgstr "Íme egy lista a köztük lévő különbségekről:"
 
-#, fuzzy
 msgid "The payment processing fees are usually lower with Stripe than with PayPal."
-msgstr "A fizetési folyamatok feldolgozási díjai általában alacsonyabbak a Stripe esetében, mint a PayPal esetében."
+msgstr "A pénzforgalmi feldolgozói díjak általában alacsonyabbak a Stripe-nál, mint a PayPal esetében."
 
-#, fuzzy
 msgid "Stripe allows renewing donations automatically, whereas PayPal currently requires donors to confirm every payment."
 msgstr "A Stripe lehetővé teszi az adományok automatikus megújítását, míg a PayPal jelenleg megköveteli, hogy az adományozók minden egyes fizetést megerősítsenek."
 
-#, fuzzy
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr "A Stripe-on keresztüli adományok titkosak lehetnek, míg a PayPal mindig lehetővé teszi, hogy az adományozók és a címzettek láthassák egymás nevét és e-mail címét."
+msgstr "A Stripe-on keresztüli adományok lehetnek titkosak, míg a PayPal mindig lehetővé teszi, hogy az adományozók és a címzettek láthassák egymás nevét és e-mail címét."
 
-#, fuzzy
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
-msgstr "A Stripe bizonyos esetekben lehetővé teszi, hogy egyszerre több alkotónak is adományozhassunk, míg a PayPal mindig külön-külön kell fizetni."
+msgstr "A Stripe bizonyos esetekben lehetővé teszi, hogy egyszerre több alkotónak is adományozhassunk, míg a PayPal esetén mindig külön-külön kell fizetni."
 
-#, fuzzy
 msgid "PayPal payments require redirecting the donor to PayPal's website, whereas Stripe is integrated into Liberapay."
-msgstr "A PayPal-fizetésekhez az adományozót át kell irányítani a PayPal weboldalára, míg a Stripe a Liberapaybe van integrálva."
+msgstr "A PayPal-fizetésekhez az adományozót át kell irányítani a PayPal weboldalára, míg a Stripe a Liberapay-be van integrálva."
 
-#, fuzzy
 msgid "Stripe makes SEPA Direct Debits easy for European donors."
 msgstr "A Stripe megkönnyíti a SEPA beszedést az európai adományozók számára."
 
-#, fuzzy
 msgid "Stripe allows creators to configure automatic payouts to their bank accounts."
-msgstr "A Stripe lehetővé teszi az alkotók számára, hogy automatikus kifizetéseket konfiguráljanak a bankszámlájukra."
+msgstr "A Stripe lehetővé teszi az alkotók számára, hogy automatikus kifizetéseket állítsanak be a bankszámlájukra."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "PayPal only supports {n_paypal_currencies} of the {n_liberapay_currencies} currencies supported by Liberapay and Stripe."
-msgstr "A PayPal csak a {n_paypal_currencies} a {n_liberapay_currencies} pénznemek közül a Liberapay és a Stripe által támogatott pénznemeket támogatja."
+msgstr "A PayPal csak {n_paypal_currencies} számú devizát támogat a Stripe és Liberapay {n_liberapay_currencies} devizája közül."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=47f7d13f5771b30f0bcf49ea3acd518b)>"
 msgid_plural "PayPal is available to creators in more than 100 countries, whereas Stripe only supports {n} countries in a suitable way."
-msgstr[0] "A PayPal több mint 100 országban áll az alkotók rendelkezésére, míg a Stripe csak a {n} országokat támogatja megfelelő módon."
+msgstr[0] "A PayPal több mint 100 országban áll az alkotók rendelkezésére, míg a Stripe csak a {n} országban támogatja őket megfelelő módon."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can find more information on supported countries and currencies in {link_start}the “{page_name}” page{link_end}."
-msgstr "A támogatott országokról és pénznemekről további információkat talál a {link_start}oldalon \"{page_name}\"{link_end}."
+msgstr "A támogatott országokról és pénznemekről további információkat talál a {link_start}\"{page_name}\" oldalon{link_end}."
 
-#, fuzzy
 msgid "We do our best to protect everyone's privacy: we do not attempt to track people who visit our website, we strive to collect only the personal information we actually need, and we don't sell it to anyone."
-msgstr "Mindent megteszünk, hogy megvédjük mindenki magánéletét: nem próbáljuk nyomon követni a weboldalunkat látogató embereket, igyekszünk csak olyan személyes adatokat gyűjteni, amelyekre valóban szükségünk van, és nem adjuk el azokat senkinek."
+msgstr "Mindent megteszünk, hogy megvédjük privát adatait: nem próbáljuk nyomon követni a weboldalunk látogatóit, igyekszünk csak szükséges személyes adatokat gyűjteni, és nem adjuk el azokat senkinek."
 
-#, fuzzy
 msgid "Cookies"
 msgstr "Sütik"
 
-#, fuzzy
 msgid "A cookie is a piece of information sent by a website to your browser, stored on your machine, and resent by your browser to that same website in every subsequent request."
-msgstr "A süti egy weboldal által a böngészőjének küldött információ, amelyet az Ön gépén tárolnak, és amelyet a böngészője minden további kéréskor újra elküld ugyanannak a weboldalnak."
+msgstr "A süti egy weboldal által a böngészőjének küldött információ, amelyet az Ön gépe tárol, és amelyet a böngészője minden további kéréskor újra elküld ugyanannak a weboldalnak."
 
-#, fuzzy
 msgid "The liberapay.com website only sets technical cookies which are required to authenticate the user or to perform a specific operation. These cookies are restricted to same-site requests, so we don't know who visits websites that contain Liberapay widgets."
 msgstr "A liberapay.com weboldal csak olyan technikai sütiket állít be, amelyek a felhasználó hitelesítéséhez vagy egy adott művelet elvégzéséhez szükségesek. Ezek a cookie-k az azonos webhelyen történő kérésekre korlátozódnak, így nem tudjuk, hogy ki látogatja a Liberapay widgeteket tartalmazó webhelyeket."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} if you want to learn more about them."
-msgstr "A liberapay.com weboldal látogatói a Cloudflare által küldött cookie-kat is kaphatnak. Kérjük, olvassa el a {link_open}\"A Cloudflare sütik megértése\"{link_close}, ha többet szeretne megtudni róluk."
+msgstr "A liberapay.com weboldal látogatói a Cloudflare által küldött cookie-kat is kaphatnak. Kérjük, olvassa el a {link_open}\"A Cloudflare sütik megértése\"{link_close} cikket, ha többet szeretne megtudni róluk."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
 msgstr "Egyes fizetési oldalakon a fizetési szolgáltató további sütiket állíthat be. Kérjük, olvassa el ezeket a dokumentumokat, ha további információkra van szüksége: {links_to_policies}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{platform_name}'s cookie policy"
-msgstr "{platform_name}cookie-szabályzata"
+msgstr "{platform_name} cookie-szabályzata"
 
-#, fuzzy
 msgid "Social networks"
 msgstr "Közösségi hálózatok"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay currently has integrations with {list_of_platforms}. When an account from one of those platforms is connected to a Liberapay profile, we retrieve and store some data from that platform, for example the unique identifier of the linked account. We only keep public information about the linked account, no private data."
-msgstr "A Liberapay jelenleg integrációval rendelkezik a {list_of_platforms} oldalon. Amikor egy ilyen platformról származó számlát összekapcsolunk egy Liberapay-profillal, lekérdezünk és tárolunk néhány adatot az adott platformról, például a kapcsolódó számla egyedi azonosítóját. A kapcsolt számláról csak nyilvános információkat tárolunk, magánadatokat nem."
+msgstr "A Liberapay jelenleg {list_of_platforms} integrációkkal rendelkezik. Amikor egy ilyen platformról származó fiókot összekapcsolunk egy Liberapay-profillal, lekérdezünk és tárolunk néhány adatot az adott platformról, például a kapcsolódó számla egyedi azonosítóját. A kapcsolt számláról csak nyilvános információkat tárolunk, magánadatokat nem."
 
-#, fuzzy
 msgid "The primary purpose of these integrations is to confirm that a Liberapay account hasn't been created by an impostor attempting to profit from someone's else work."
-msgstr "Ezen integrációk elsődleges célja annak megerősítése, hogy a Liberapay-fiókot nem egy csaló hozta létre, aki megpróbál valaki más munkájából profitálni."
+msgstr "Ezen integrációk elsődleges célja annak megerősítése, hogy a Liberapay fiókot nem egy csaló hozta létre, aki megpróbál valaki más munkájából profitálni."
 
-#, fuzzy
 msgid "The second purpose is to help patrons find the Liberapay accounts of the creators they follow on other platforms."
 msgstr "A második cél az, hogy segítsen a támogatóknak megtalálni az általuk más platformokon követett alkotók Liberapay-fiókjait."
 
 msgid "Payment processors"
-msgstr "Fizetésfeldolgozók"
+msgstr "Pénzforgalmi feldolgozók"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay relies on payment service providers to actually transfer money from donors to creators, as we have neither the resources nor the desire to directly interface with banks and payment networks. If you want to learn about the personal data collected by these payment processors, please read these documents: {links_to_policies}."
-msgstr "A Liberapay a pénzforgalmi szolgáltatókra támaszkodik, hogy ténylegesen pénzt utaljon át az adományozóktól az alkotóknak, mivel sem erőforrásaink, sem kedvünk nincs arra, hogy közvetlenül kapcsolódjunk a bankokhoz és a fizetési hálózatokhoz. Ha szeretne többet megtudni az ezen fizetési szolgáltatók által gyűjtött személyes adatokról, kérjük, olvassa el ezeket a dokumentumokat: {links_to_policies}."
+msgstr "A Liberapay a pénzforgalmi szolgáltatókra támaszkodik, hogy ténylegesen pénzt utaljon át az adományozóktól az alkotóknak, mivel sem erőforrásaink, sem vágyaink nincsenek arra, hogy közvetlenül kapcsolódjunk a bankokhoz és a fizetési hálózatokhoz. Ha szeretne többet megtudni az ezen pénzforgalmi feldolgozók által gyűjtött személyes adatokról, kérjük, olvassa el ezeket a dokumentumokat: {links_to_policies}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{platform_name}'s privacy policy"
-msgstr "{platform_name}adatvédelmi irányelvei"
+msgstr "{platform_name} adatvédelmi irányelvei"
 
-#, fuzzy
 msgid "Personal information leaks"
 msgstr "Személyes adatok kiszivárgása"
 
-#, fuzzy
 msgid "Liberapay does not tell creators who their patrons are. However, PayPal allows the recipient of a payment to see the name and email address of the payer, so donors who don't want to reveal themselves should not choose PayPal as the payment method."
 msgstr "A Liberapay nem közli az alkotókkal, hogy kik a támogatóik. A PayPal azonban lehetővé teszi, hogy a fizetés címzettje lássa a fizető nevét és e-mail címét, így azok az adományozók, akik nem akarják felfedni magukat, ne a PayPal-t válasszák fizetési módként."
 
-#, fuzzy
 msgid "Similarly, PayPal allows a donor to see the name and email address of the recipient, and Stripe may expose the recipient's phone number, so creators who do not want to reveal their identities should not use these payment processors, unless they have carefully configured their accounts to only leak nonsensitive information (a business name instead of the creator's name, a dedicated email address and phone number instead of the creator's personal contact details)."
-msgstr "Hasonlóképpen, a PayPal lehetővé teszi, hogy az adományozó lássa a címzett nevét és e-mail címét, a Stripe pedig felfedheti a címzett telefonszámát, ezért azoknak az alkotóknak, akik nem szeretnék felfedni személyazonosságukat, nem szabad ezeket a fizetési folyamatokat használniuk, kivéve, ha gondosan konfigurálták fiókjukat úgy, hogy csak nem érzékeny információk szivárogjanak ki (az alkotó neve helyett egy cégnév, az alkotó személyes elérhetőségei helyett egy külön e-mail cím és telefonszám)."
+msgstr "Hasonlóképpen, a PayPal lehetővé teszi, hogy az adományozó lássa a címzett nevét és e-mail címét, a Stripe pedig felfedheti a címzett telefonszámát, ezért azoknak az alkotóknak, akik nem szeretnék felfedni személyazonosságukat, nem szabad ezeket a fizetési folyamatokat használniuk, kivéve, ha gondosan konfigurálták fiókjukat csak nem érzékeny információk szivárogtatásával (az alkotó neve helyett egy cég fantázianév, az alkotó személyes elérhetőségei helyett egy külön e-mail cím és telefonszám)."
 
-#, fuzzy
 msgid "Encryption"
 msgstr "Titkosítás"
 
-#, fuzzy
 msgid "All network connections are encrypted, except for some communications between machines located in the same datacenter."
 msgstr "Minden hálózati kapcsolat titkosított, kivéve az ugyanabban az adatközpontban található gépek közötti kommunikáció egy részét."
 
-#, fuzzy
 msgid "As a precaution against identity theft in case of data leak, the identity information of Liberapay account owners is stored encrypted in our database."
 msgstr "Az adatszivárgás esetén a személyazonosság-lopás elleni óvintézkedésként a Liberapay-fiók tulajdonosainak személyazonossági adatait titkosítva tároljuk az adatbázisunkban."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If you think you've found a security issue, and it's not already in our list of {known_issues_link}known low-severity issues{link_close}, then please {hackerone_report_link}report it to us through HackerOne{link_close}."
-msgstr "Ha úgy gondolod, hogy találtál egy biztonsági problémát, és az még nem szerepel a {known_issues_link}ismert, alacsony súlyosságú problémák listáján{link_close}, akkor kérjük, {hackerone_report_link}jelentsd nekünk a HackerOne{link_close} címen keresztül."
+msgstr "Ha úgy gondolja, hogy talált egy biztonsági problémát, és az még nem szerepel a {known_issues_link}ismert alacsony súlyosságú problémák listáján{link_close}, akkor kérjük, {hackerone_report_link}jelentse számunkra a HackerOne{link_close} címen keresztül."
 
-#, fuzzy
 msgid "Policy"
-msgstr "Politika"
+msgstr "Irányelvek"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The details of our security policy (scope, rewards…) are available in {link_open}our HackerOne profile{link_close}."
-msgstr "A biztonsági politikánk részletei (hatály, jutalmak...) a {link_open}HackerOne profilunkban{link_close} érhetőek el."
+msgstr "A biztonsági irányelveink részletei (hatály, jutalmak...) a {link_open}HackerOne profilunkban{link_close} érhetőek el."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Thanks to {link_open}everyone who has sent us a report through HackerOne{link_close}."
-msgstr "Köszönjük a {link_open}mindenkinek, aki jelentést küldött nekünk a HackerOne{link_close} címen keresztül."
+msgstr "Köszönjük {link_open}mindenkinek, aki jelentést küldött nekünk a HackerOne{link_close} címen keresztül."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Liberapay was launched {timespan_ago} and has {n} user."
 msgid_plural "Liberapay was launched {timespan_ago} and has {n} users."
-msgstr[0] "Liberapay indult {timespan_ago} és van {n} felhasználó."
+msgstr[0] "A Liberapay {timespan_ago} idővel ezelőtt indult, és már {n} felhasználóval rendelkezik."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fd1709b5b191a6dcb851e261d315f1e1)>"
 msgid_plural "The last payday was {timespan_ago} and transferred {money_amount} between {n} users."
-msgstr[0] "A legutóbbi fizetésnap a {timespan_ago} volt, és a {n} felhasználók között a {money_amount} utalták át."
+msgstr[0] "A legutóbbi fizetésnap {timespan_ago} idővel ezelőtt volt, és a {n} felhasználók között {money_amount} összeget utalták ki."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant gave money."
 msgid_plural "{n} participants gave money."
-msgstr[0] "{n} a résztvevő pénzt adott."
+msgstr[0] "{n} támogató küldött pénzt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant received money."
 msgid_plural "{n} participants received money."
-msgstr[0] "{n} a résztvevő pénzt kapott."
+msgstr[0] "{n} címzett kapott támogatást."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} participant was both a donor and a recipient."
 msgid_plural "{n} participants were both donors and recipients."
-msgstr[0] "{n} a résztvevő egyszerre volt donor és recipiens."
+msgstr[0] "{n} felhasználó egyszerre volt küldő és fogadó."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "On average, people who donate give {0} each to one other user."
 msgid_plural "On average, people who donate give {0} each to {n} other users."
-msgstr[0] "Az adományozók átlagosan {0} adományt adnak {n} más felhasználónak."
+msgstr[0] "Az adományozók átlagosan {0} adományt adnak {n} felhasználónak."
 
-#, fuzzy
 msgid "Open Accounts"
-msgstr "Nyitott számlák"
+msgstr "Nyitott Fiókok"
 
-#, fuzzy
 msgid "Number of open individual and organization accounts on Liberapay"
-msgstr "A Liberapay-en nyitott egyéni és szervezeti számlák száma"
+msgstr "Nyilvános egyéni és szervezeti fiókok száma a Liberapay-en"
 
 msgid "weeks"
 msgstr "hét"
 
-#, fuzzy
 msgid "Active Users"
 msgstr "Aktív felhasználók"
 
-#, fuzzy
 msgid "Users that gave and/or received money within Liberapay (per week)"
 msgstr "Felhasználók, akik pénzt adtak és/vagy kaptak a Liberapay-en belül (hetente)"
 
-#, fuzzy
 msgid "Weekly Donations"
 msgstr "Heti adományok"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The sum of active donations for each week, expressed in {currency}."
-msgstr "Az aktív adományok összege minden héten, a {currency} oldalon."
+msgstr "A heti aktív adományok összege {currency}-ben kifejezve."
 
-#, fuzzy
 msgid "Donor Debits"
 msgstr "Adományozói terhelések"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The sum of charges processed during each week, expressed in {currency}."
-msgstr "Az egyes hetek során feldolgozott díjak összege, a {currency} weboldalon kifejezve."
+msgstr "Az egyes hetek során feldolgozott díjak összege {currency}-ben kifejezve."
 
-#, fuzzy
 msgid "You're not allowed to do this because your account has been flagged. Please contact support@liberapay.com if you want to know why and request that your account be unflagged."
-msgstr "Ezt nem teheti meg, mert a fiókját megjelölték. Kérjük, lépjen kapcsolatba a support@liberapay.com címen, ha tudni szeretné, hogy miért, és kérje a fiókja megjelölésének feloldását."
+msgstr "Ezt nem teheti meg, mert a fiókját kockázatosként jelölték meg. Kérjük, lépjen kapcsolatba a support@liberapay.com címen, ha tudni szeretné miért, és kérheti a fiókja megjelölésének feloldását."
 
-#, fuzzy
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. The donors choose how much they want to give, the team members specify how they want to share the money, and Liberapay attempts to distribute the funds accordingly."
-msgstr "A Liberapay csapata koordinálja a több adományozótól több kedvezményezettnek érkező adományokat. Az adományozók választják ki, hogy mennyit szeretnének adni, a csapattagok meghatározzák, hogy hogyan akarják megosztani a pénzt, és a Liberapay megpróbálja ennek megfelelően elosztani a pénzt."
+msgstr "A Liberapay csapata több adományozótól több kedvezményezettnek érkező adományokat koordinál. Az adományozók választják ki mennyit szeretnének adni, a csapattagok meghatározzák hogyan akarják megosztani a pénzt, és a Liberapay megpróbálja ennek megfelelően elosztani a pénzt."
 
 #, fuzzy
 msgid "A team account isn't meant to be used by the members of a single legal entity, it is designed for a group of independent individuals or organizations who work together on a common project. However, it's also okay to create a team account for a project that only has one contributor, as this allows marking a donation as being intended to support that project specifically rather than the person behind it."
@@ -4397,7 +4349,7 @@ msgstr "A csapatszámla nem arra szolgál, hogy egyetlen jogi személy tagjai ha
 
 #, fuzzy, python-brace-format
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
-msgstr "A {bold}csapatszámla nem tárolja a pénzt{end_bold} későbbi felhasználásra. Minden adományt azonnal szétosztunk, vagy több tag között, ha lehetséges, vagy egyetlen tag között, ha a pénz felosztását a fizetési processzor nem támogatja. E fizetési feldolgozási korlátozások miatt a tagok által kapott összegek átmenetileg kiegyensúlyozatlanok lehetnek, különösen, ha a csapatnak kevesebb támogatója van, mint tagja."
+msgstr "A {bold}csapatszámla nem tárolja a pénzt{end_bold} későbbi felhasználásra. Minden adományt azonnal szétosztunk, vagy több tag között, ha lehetséges, vagy egyetlen tag között, ha a pénz felosztását a fizetési processzor nem támogatja. E fizetésfeldolgozási korlátozások miatt a tagok által kapott összegek átmenetileg kiegyensúlyozatlanok lehetnek, különösen, ha a csapatnak kevesebb támogatója van, mint tagja."
 
 #, fuzzy, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
@@ -4803,7 +4755,7 @@ msgstr "Ön a commonsok alkotója? Szabad művészetet készítesz, szabad tudá
 
 #, fuzzy
 msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
-msgstr "Igen? Akkor a Liberapay Önnek való! Hozzon létre fiókot, töltse ki profilját, és kérje meg közönségét, hogy anyagilag támogassa munkáját."
+msgstr "Igen? Akkor a Liberapay Önnek való! Hozzon létre egy fiókot, töltse ki a profilját, és kérje meg a közönségét, hogy anyagilag támogassa a munkáját."
 
 #, fuzzy
 msgid "Create your account"
@@ -4902,10 +4854,10 @@ msgstr "A Liberapayt egy {1}nonprofit szervezet{0} átláthatóan működteti, {
 
 #, fuzzy, python-brace-format
 msgid "We rely on your support to keep Liberapay running and {link_start}improving{link_end}."
-msgstr "Számítunk az Ön támogatására, hogy a Liberapay továbbra is működjön és a {link_start}továbbfejlődjön{link_end}."
+msgstr "Számítunk az Ön támogatására, hogy a Liberapay továbbra is működjön és {link_start}továbbfejlődjön{link_end}."
 
 msgid "Fund Liberapay"
-msgstr "Liberapay támogatása"
+msgstr "A Liberapay támogatása"
 
 #, fuzzy
 msgid "Features"
@@ -4964,14 +4916,14 @@ msgstr "A Liberapay lehetővé teszi, hogy olyan emberek is tegyenek felajánlá
 msgid "Sponsors"
 msgstr "Szponzorok"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations from businesses and nonprofits are welcome on Liberapay. If you have any questions, don't hesitate to {0}contact us{1}."
-msgstr "A Liberapayen szívesen fogadjuk a vállalkozások és a nonprofit szervezetek adományait. Ha bármilyen kérdése van, forduljon hozzánk bizalommal a {0}címen:{1}."
+msgstr "A Liberapayen szívesen fogadjuk a vállalkozások és a nonprofit szervezetek adományait. Ha bármilyen kérdése van, forduljon hozzánk bizalommal az {0}elérhetőségeinken{1} keresztül."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "There is currently {n} sponsor on the platform, this section is our way of thanking them."
 msgid_plural "There are currently {n} sponsors on the platform, this section is our way of thanking them."
-msgstr[0] "Jelenleg a {n} szponzor van a platformon, ezzel a szekcióval szeretnénk köszönetet mondani nekik."
+msgstr[0] "Jelenleg {n} szponzora van a platformnak, ezzel a szakasszal szeretnénk köszönetet mondani nekik."
 
 #, fuzzy
 msgid "The list below is rotated pseudorandomly."
