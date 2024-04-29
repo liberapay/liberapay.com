@@ -98,7 +98,7 @@ class Platform:
     required_attrs = ('account_url', 'display_name', 'name')
 
     def __init__(self, api_key, api_secret, callback_url, api_url=None, auth_url=None,
-                 api_timeout=20.0, app_name=None, app_url=None):
+                 api_timeout=20.0, app_name=None, app_url=None, access_token_url=None):
         self.api_key = api_key
         self.api_secret = api_secret
         self.callback_url = callback_url
@@ -108,6 +108,8 @@ class Platform:
             self.auth_url = auth_url
         elif not getattr(self, 'auth_url', None):
             self.auth_url = self.api_url
+        if access_token_url:
+            self.access_token_url = access_token_url
         self.api_timeout = api_timeout
         self.app_name = app_name
         self.app_url = app_url
