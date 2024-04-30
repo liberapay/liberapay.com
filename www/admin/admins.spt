@@ -11,7 +11,7 @@ events = website.db.all("""
       FROM events e
       JOIN participants p ON p.id = e.participant
       JOIN participants admin ON admin.id = e.recorder
-     WHERE e.type = 'admin_request'
+     WHERE e.type IN ('admin_request', 'flags_changed')
        AND coalesce(e.ts < %s, true)
   ORDER BY e.ts DESC
      LIMIT %s
@@ -25,9 +25,25 @@ title = "Admins Oversight"
 % block content
 
 % if events
+    % set prev_date = [None]
     % for e in events
-        <div>{{ e.recorder_name }} modified the account of <a href="/~{{ e.participant }}/">{{ e.username }}</a> at {{ e.ts.time() }} on {{ e.ts.date() }}:<br>
-        <pre>{{ json.dumps(e.payload) }}</pre></div><br>
+    % if e.ts.date() != prev_date[0]
+        % do prev_date.__setitem__(0, e.ts.date())
+        <h4 class="mt-4">{{ e.ts.date() }}</h4>
+    % endif
+    % if e.type == 'admin_request'
+        <div class="mb-3">{{ e.recorder_name }} modified the account of <a href="/~{{ e.participant }}/">{{ e.username }}</a>:<br>
+        <pre>{{ json.dumps(e.payload) }}</pre></div>
+    % elif assert(e.type == 'flags_changed', "unexpected event type: " + e.type)
+        % set marked_as = e.payload.get('marked_as', '')
+        % if marked_as is None
+            <p>{{ e.recorder_name }} unmarked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a>.</p>
+        % elif marked_as == ''
+            <p>{{ e.recorder_name }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <code>{{ e.payload }}</code>.</p>
+        % else
+            <p>{{ e.recorder_name }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.MARK_CLASSES.get(marked_as, 'text-muted') }}">{{ marked_as }}</span>.</p>
+        % endif
+    % endif
     % endfor
     % if len(events) == PAGE_SIZE
         <a class="btn btn-primary" href="{{ request.qs.derive(before=events[-1].ts.isoformat()) }}">Next page →</a>

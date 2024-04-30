@@ -159,6 +159,17 @@ INVOICE_STATUSES = {
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
 
+MARK_CLASSES = {
+    'trusted': 'text-success',
+    'okay': 'text-info',
+    'unsettling': 'text-info',
+    'controversial': 'text-warning',
+    'irrelevant': 'text-warning',
+    'misleading': 'text-warning',
+    'spam': 'text-danger',
+    'fraud': 'text-danger',
+}
+
 PARTICIPANT_KINDS = {
     'individual': _("Individual"),
     'organization': _("Organization"),

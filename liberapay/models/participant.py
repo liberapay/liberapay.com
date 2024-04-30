@@ -2863,7 +2863,7 @@ class Participant(Model, MixinTeam):
                 for naive_group in naive_groups:
                     naive_group.sort(key=due_date_getter)
                     group = None
-                    execution_date = weeks_until_execution = None  # for flake8
+                    execution_date = weeks_until_execution = None  # for the linter
                     for tip in naive_group:
                         last_payment_amount = last_payment_amounts.get(tip.tippee)
                         # Start a new group if…

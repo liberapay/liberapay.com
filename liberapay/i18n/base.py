@@ -109,8 +109,8 @@ class Locale(babel.core.Locale):
         super().__init__(*a, **kw)
         self.currency_formats['amount_only'] = MONEY_AMOUNT_FORMAT
         delta_p = self.currency_formats['standard'].pattern
-        minus_sign = self.number_symbols.get('minusSign', '-')
-        plus_sign = self.number_symbols.get('plusSign', '+')
+        minus_sign = self.number_symbols[self.default_numbering_system].get('minusSign', '-')
+        plus_sign = self.number_symbols[self.default_numbering_system].get('plusSign', '+')
         if ';' in delta_p:
             pos, neg = delta_p.split(';')
             assert len(neg) >= len(pos), (self, neg, pos)
@@ -235,10 +235,10 @@ class Locale(babel.core.Locale):
     def format_money(self, m, format='standard', trailing_zeroes=True):
         s = self.currency_formats[format].apply(
             m.amount, self, currency=m.currency, currency_digits=True,
-            decimal_quantization=True
+            decimal_quantization=True, numbering_system='default',
         )
         if trailing_zeroes is False:
-            i = s.find(self.number_symbols['decimal'])
+            i = s.find(self.number_symbols[self.default_numbering_system]['decimal'])
             if i != -1 and set(s[i+1:]) == ONLY_ZERO:
                 s = s[:i]
         return s
@@ -252,6 +252,7 @@ class Locale(babel.core.Locale):
         return format_datetime(*a, locale=self)
 
     def format_decimal(self, number, **kw):
+        kw.setdefault('numbering_system', 'default')
         return self.decimal_formats[None].apply(number, self, **kw)
 
     def format_list(self, l, pattern='standard', escape=_return_):
@@ -274,7 +275,10 @@ class Locale(babel.core.Locale):
             return '0'
         pattern = self.currency_formats['standard']
         items = (
-            pattern.apply(money.amount, self, currency=money.currency)
+            pattern.apply(
+                money.amount, self, currency=money.currency,
+                numbering_system='default',
+            )
             for money in basket if money
         )
         if sep == ',':
@@ -286,7 +290,7 @@ class Locale(babel.core.Locale):
     def format_money_delta(self, money):
         return self.currency_delta_pattern.apply(
             money.amount, self, currency=money.currency, currency_digits=True,
-            decimal_quantization=True
+            decimal_quantization=True, numbering_system='default',
         )
 
     def format_percent(self, number, min_precision=1, group_separator=True):
@@ -297,7 +301,7 @@ class Locale(babel.core.Locale):
         return self.percent_formats[None].apply(
             number, self,
             decimal_quantization=decimal_quantization,
-            group_separator=True,
+            group_separator=True, numbering_system='default',
         )
 
     def format_time(self, t, format='medium'):
@@ -309,8 +313,8 @@ class Locale(babel.core.Locale):
         return format_timedelta(o, locale=self, **kw)
 
     def parse_money_amount(self, string, currency, maximum=D_MAX):
-        group_symbol = self.number_symbols['group']
-        decimal_symbol = self.number_symbols['decimal']
+        group_symbol = self.number_symbols[self.default_numbering_system]['group']
+        decimal_symbol = self.number_symbols[self.default_numbering_system]['decimal']
         # Strip the string of spaces, and of the specified currency's symbol in
         # this locale (if that symbol exists).
         string = string.strip()

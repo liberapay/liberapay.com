@@ -113,8 +113,11 @@ subhead = _("Patrons")
 
 % if patron_visibilities > 1
 <h3>{{ _("Data export") }}</h3>
+<p><a href="{{ participant.path('patrons/public.csv') }}">{{ icon('download') }} {{
+    _("Download the list of currently active patrons who chose to make their donations public")
+}}</a></p>
 <p><a href="{{ participant.path('patrons/export.csv?scope=active') }}">{{ icon('download') }} {{
-    _("Download the list of currently active patrons")
+    _("Download the list of all currently active patrons")
 }}</a></p>
 <p><a href="{{ participant.path('patrons/export.csv?scope=all') }}">{{ icon('download') }} {{
     _("Download the record of all patrons in the last ten years")
