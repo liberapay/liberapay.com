@@ -66,6 +66,8 @@ if mode == 'all':
                                   FROM email_blacklist bl
                                  WHERE lower(bl.address) = lower(e.address)
                                    AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+                              ORDER BY bl.ignore_after DESC NULLS FIRST, bl.ts DESC
+                                 LIMIT 1
                             )
                         )
                    FROM emails e
