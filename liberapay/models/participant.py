@@ -3294,7 +3294,9 @@ class Participant(Model, MixinTeam):
                         WHERE pt.payer = t.tipper
                           AND COALESCE(pt.team, pt.recipient) = t.tippee
                           AND ( pi.status IN ('awaiting_review', 'pending') OR
-                                pt.status IN ('awaiting_review', 'pending') )
+                                pt.status IN ('awaiting_review', 'pending') OR
+                                pi.status = 'succeeded' AND
+                                pi.ctime > (current_timestamp - interval '5 days') )
                         LIMIT 1
                    ){}
           ORDER BY ( SELECT 1
