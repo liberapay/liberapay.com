@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-05-02 10:07+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-05-04 01:07+0000\n"
+"Last-Translator: H Tamás <hovanszki@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.3-dev\n"
+"X-Generator: Weblate 5.5.3\n"
 "Generated-By: Babel 2.14.0\n"
 
 #, python-brace-format
@@ -4347,24 +4347,23 @@ msgstr "Ezt nem teheti meg, mert a fiókját kockázatosként jelölték meg. K�
 msgid "A Liberapay team coordinates donations from multiple donors to multiple donees. The donors choose how much they want to give, the team members specify how they want to share the money, and Liberapay attempts to distribute the funds accordingly."
 msgstr "A Liberapay csapata több adományozótól több kedvezményezettnek érkező adományokat koordinál. Az adományozók választják ki mennyit szeretnének adni, a csapattagok meghatározzák hogyan akarják megosztani a pénzt, és a Liberapay megpróbálja ennek megfelelően elosztani a pénzt."
 
-#, fuzzy
 msgid "A team account isn't meant to be used by the members of a single legal entity, it is designed for a group of independent individuals or organizations who work together on a common project. However, it's also okay to create a team account for a project that only has one contributor, as this allows marking a donation as being intended to support that project specifically rather than the person behind it."
-msgstr "A csapatszámla nem arra szolgál, hogy egyetlen jogi személy tagjai használják, hanem olyan független magánszemélyek vagy szervezetek csoportja számára készült, akik együtt dolgoznak egy közös projekten. Ugyanakkor az is rendben van, ha egy olyan projekthez hozol létre csapatfiókot, amelynek csak egy közreműködője van, mivel ez lehetővé teszi, hogy az adományt úgy jelöljék meg, hogy az kifejezetten az adott projekt támogatására szolgál, nem pedig a mögötte álló személy támogatására."
+msgstr "A csapatfiók nem arra szolgál, hogy egy bizonyos jogi személy tagjai vegyék igénybe, hanem egy bizonyos egyedülálló természetes személyek csoportja, akik együtt dolgoznak egy projekten. Emellett alkalmas arra is, hogy a csapatfiókot hozzon létre egy olyan projektre, ami mögött csak egy közreműködő áll. Ezzel specifikálható az adomány a projekt felé, ahelyett, hogy közvetlenül a közreműködő saját nevére kapná."
 
 #, python-brace-format
 msgid "A team account {bold}does not store money{end_bold} for later use. Every donation is distributed immediately, either to multiple members if possible, or to a single member when splitting the money isn't supported by the payment processor. Because of these payment processing limitations, the amounts received by the members can be temporarily unbalanced, especially if the team has fewer patrons than members."
-msgstr "A {bold}csapatszámla nem tárolja a pénzt{end_bold} későbbi felhasználásra. Minden adományt azonnal szétosztunk, ha lehetséges több tag között, vagy egyetlen tag kapja meg, ha a pénz felosztását a fizetésfeldolgozó nem támogatja. E fizetésfeldolgozási korlátozások miatt a tagok által kapott összegek átmenetileg kiegyensúlyozatlanok lehetnek, különösen, ha a csapatnak kevesebb támogatója van, mint tagja."
+msgstr "A {bold}csapatszámla nem tárolja a pénzt{end_bold} későbbi felhasználásra. Minden adományt azonnal szétosztunk a csapattagok között, vagy egy személy kapja ha a pénz felosztását a pénzforgalmi feldolgozó nem támogatja. E fizetésfeldolgozási korlátozások miatt a tagok által kapott összegek átmenetileg kiegyensúlyozatlanok lehetnek, különösen, ha a csapatnak kevesebb támogatója van, mint tagja."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "Ha a Liberapay csapatszámlák nem felelnek meg az Ön igényeinek, akkor helyette a {link_start}Open Collective{link_end} platformot érdemes használni, amely lehetővé teszi, hogy a csapatot egy bejegyzett nonprofit szervezet \"üzemeltesse\". Ez a \"fiskális fogadó\" a kollektív pénzeszközök jogi tulajdonosa, felügyeli azok felhasználását, és általában az adományok egy százalékát saját maga finanszírozására használja fel. (Tervezzük egy hasonló rendszer bevezetését a Liberapayben, de még nem tudjuk, hogy ez mikor fog megtörténni.)"
+msgstr "Ha a Liberapay csapatfiókok nem felelnek meg az Ön igényeinek, akkor helyette a {link_start}Open Collective{link_end} platformot érdemes használni, amely lehetővé teszi, hogy a csapatot egy bejegyzett nonprofit szervezet \"üzemeltesse\". Ez a \"pénzügyi üzemeltető\" a kollektív pénzeszközök jogi tulajdonosa, felügyeli azok felhasználását, és általában az adományok egyes százalékát saját jutalékaként számolja el. (Tervezzük egy hasonló rendszer bevezetését a Liberapay-en, de még nem tudjuk, hogy ez mikor fog megtörténni.)"
 
 msgid "Creating a team"
 msgstr "Csapat létrehozása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You need to {0}sign into your own account{1} first."
-msgstr "Először a {0}címen kell bejelentkeznie a saját fiókjába{1}."
+msgstr "Először be kell jelentkeznie a {0}saját fiókjába{1}."
 
 msgid "Name of the team"
 msgstr "Csapat neve"
@@ -4374,7 +4373,7 @@ msgstr "Csapat e-mail címe (nem kötelező)"
 
 #, python-brace-format
 msgid "Enable {0}limits on team takes{1}"
-msgstr "Engedélyezés {0}a csapat bevételének korlátozására{1}"
+msgstr "{0}A csapat bevételének korlátozásának{1} engedélyezése"
 
 msgid "Create"
 msgstr "Létrehozás"
@@ -4383,7 +4382,7 @@ msgid "Becoming a team member"
 msgstr "Csapattaggá válás"
 
 msgid "Once you have contributed to a team's project, ask its members to invite you. Don't forget to tell them what your username is."
-msgstr "Ha már hozzájárultál egy csapat projektjéhez, kérd meg a csapat tagjait, hogy hívjanak meg téged. Ne felejtsd el megadni nekik a felhasználónevedet."
+msgstr "Ha már hozzájárult egy csapat projektjéhez, kérje meg a csapat tagjait, hogy hívják meg. Ne felejtse el megadni nekik a felhasználónevét."
 
 msgid "Sharing the money"
 msgstr "A pénz megosztása"
@@ -4391,154 +4390,133 @@ msgstr "A pénz megosztása"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "A csapatoknak nincs hierarchiája, minden tagjuk egyenlő, és maguk határozzák meg a saját elképzeléseiket."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Megváltoztathatod a felvételeidet a {0}címen, a csapatod műszerfalán{1}. Ez olyan táblázatokat tartalmaz, amelyek az összes tag névleges bevételét mutatják a következő és az előző fizetésnapra, valamint a következő fizetésnapon ténylegesen megkapott pénzösszegek becsült értékét."
+msgstr "Megváltoztathatod a feltételeidet a {0}a csapato vezérlőpultban{1}. Egy olyan táblázatokat tartalmaz, amely az összes tag névleges bevételét mutatják a következő és az előző fizetésnapnál, valamint a következő fizetésnapon ténylegesen megkapott pénzösszegek becsült értékét."
 
-#, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
-msgstr "A nominális bevételek a tagok által maguk által megadott nyers számok, a tényleges bevételeket a rendszer számítja ki: először összeadja a nominális bevételeket, majd kiszámítja az egyes bevételek százalékos arányát, és végül ezeket a százalékokat alkalmazza a rendelkezésre álló jövedelemre. A névleges bevételek egyben maximumként is működnek: a tényleges bevételek soha nem magasabbak a névlegesnél, még akkor sem, ha további jövedelem áll rendelkezésre."
+msgstr "A névleges bevételek a tagok által maguk által megadott nyers számok, a tényleges bevételeket a rendszer számítja ki: először összeadja a nominális bevételeket, majd kiszámítja az egyes bevételek százalékos arányát, és végül ezeket a százalékokat alkalmazza a rendelkezésre álló jövedelemre. A névleges bevételek egyben maximumként is funkcionálnak: a tényleges bevételek soha nem magasabbak a névlegesnél, még akkor sem, ha további jövedelem áll rendelkezésre."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the stability of the team's income."
-msgstr "Felmerülhet benned a kérdés, hogy miért kezeljük a névleges mennyiségeket maximumként, nem pedig egyszerű százalékként. Ez azért van így, mert a maximum elérése lehetővé teszi a csapatnak, hogy fel nem használt bevétele legyen (úgynevezett „maradék”), és ez több szempontból is jó. Először is egy „párnát” biztosít, amely stabilizálja a csapat tagjainak jövedelmét. Másodszor, megkönnyíti az új tagok beilleszkedését a csapatba, mert ahogy növelik a bevételüket, úgy csökkentik a maradékot, ahelyett, hogy a többi tag bevételét befolyásolnák. Harmadszor, lehetővé teszi szoftverünknek, hogy módosítsa az adományozók által a csapat tagjainak ténylegesen átutalt összegeket oly módon, hogy az idővel kiegyensúlyozza az adományozók hozzájárulását, ezáltal igazságosabbá téve a rendszert.Végül pedig ösztönzi a csapatnak való adományozást még akkor is, ha az már elérte a finanszírozási célját, ami jótékony hatással van a csapat bevételeinek stabilitására."
+msgstr "Felmerülhet a kérdés, hogy miért kezeljük a névleges mennyiségeket maximumként, nem pedig egyszerű százalékként. Ez azért van így, mert a maximum elérése lehetővé teszi a csapatnak, hogy fel nem használt bevétele legyen (úgynevezett „maradék”), és ez több szempontból is jó. Először is egy „hálót” képez, amely stabilizálhatja a csapat tagjainak jövedelmét. Másodszor, megkönnyíti az új tagok beilleszkedését a csapatba, mert ahogy növelik a bevételüket, úgy csökkentik a maradékot, ahelyett, hogy a többi tag bevételét befolyásolnák. Harmadszor, lehetővé teszi szoftverünknek, hogy módosítsa az adományozók által a csapat tagjainak ténylegesen átutalt összegeket oly módon, hogy az idővel kiegyensúlyozza az adományozók hozzájárulását, ezáltal igazságosabbá téve a rendszert. Végül pedig ösztönzi a csapatnak való adományozást még akkor is, ha az már elérte a finanszírozási célját, ami jótékony hatással van a csapat bevételeinek stabilitására."
 
-#, fuzzy
 msgid "Automatic takes"
-msgstr "Automatikus felvételek"
+msgstr "Automatikus részesedések"
 
-#, fuzzy
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr "Alapértelmezés szerint minden csapattagnak az \"auto\" speciális értéket kell beállítani, ami egyenlő részesedést jelent a maradékból. Más szóval, azok a tagok kapnak először pénzt, akik explicit módon állították be a take-jüket, majd ami megmarad, azt egyenlő arányban osztják szét azon tagok között, akiknek automatikus take-jük van."
+msgstr "Alapértelmezés szerint minden csapattagnak az \"auto\" kerül beállításra, ami egyenlő részesedést jelent a \"maradékból\". Más szóval, azok a tagok kapnak először pénzt, akik egy bizonyos értéket állítottak be, majd ami megmarad, azt egyenlő arányban osztják szét azon tagok között, akiknek automatikus részesedésük van."
 
 msgid "Regulation of take amounts"
-msgstr "A felvett összegek szabályozása"
+msgstr "A részesedések szabályozása"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Ha egy csapat számára engedélyezve van a \"take throttling\", a tagok nem emelhetik a take-jüket az előző fizetési napon a névleges take alapján kiszámított maximumnál magasabbra. Ennek a mechanizmusnak az a célja, hogy ösztönözze az új hozzájárulók meghívását a csapathoz, mivel biztosítja, hogy az első hetekben nem fognak aránytalanul nagy részt elvenni a bevételből."
+msgstr "Ha egy csapat számára engedélyezve van a \"részesedés fojtás\", a csapattagok nem növelhetik az utolsó fizetésnapi számított maximális névleges részesedés alapon túl. Ez elősegíti az újabb résztvevők bevonását a csapatba anélkül, hogy aránytalan bevételt szereznének az első hetekben."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "A limit a következőképpen működik: bármikor megemelheted a bevételedet a {amount} címre, ha ez alatt volt, megduplázhatod a bevételedet az előző héthez képest, megemelheted a bevételedet, hogy igényt tarthass a csapat megmaradt bevételére, és felhozhatod a bevételedet az előző fizetési nap medián bevételének szintjére. Amelyik lehetőség a legmagasabb összeget eredményezi, az a maximális bevételed a héten."
+msgstr "A limit a következőképpen működik: bármikor megemelheti a részesedését ha nem érte el a {amount} összeget, megduplázhatja az előző hetihez képest, megemelheti egészen addig míg felhasználja a csapat maradékát, vagy felemelheti az utolsó fizetésnap mediánjáig. A legnagyobb ezek közül jelenti az Ön maximumát egy héten."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "A bevételek nem korlátozottak, ha a csapatnak csak egy tagja van, vagy ha az előző heti bevételek mindegyike nulla volt (ez a helyzet minden olyan új csapat esetében, amelyet a legutóbbi fizetési nap után hoztak létre)."
 
-#, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
-msgstr "Kérjük, lépjen kapcsolatba az ügyfélszolgálattal, ha egy meglévő csapat esetében engedélyezni vagy letiltani szeretné az átvételi korlátokat. Ne felejtsen el bizonyítékot csatolni arról, hogy a módosítást a többi csapattag jóváhagyta."
+msgstr "Kérjük, lépjen kapcsolatba az ügyfélszolgálattal, ha egy meglévő csapat esetében szeretné engedélyezni vagy letiltani a korlátokat. Ne felejtsen el bizonyítékot csatolni arról, hogy a módosítást a többi csapattag is jóváhagyta."
 
-#, fuzzy
 msgid "Removing team membership"
 msgstr "Csapattagság megszüntetése"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can leave a team from {0}your teams dashboard{1}."
-msgstr "Egy csapatot a {0}címen hagyhatsz el a csapatok műszerfalán{1}."
+msgstr "Elhagyhatja a csapatot a {0}csapat vezérlőpultjánál{1}."
 
-#, fuzzy
 msgid "Kicking a member out of a team is not implemented yet. Please contact support with evidence that the member needs to be kicked out and that there is consensus on that among the other members."
-msgstr "Egy tag kirúgása a csapatból még nem került bevezetésre. Kérjük, fordulj a támogatáshoz, és bizonyítsd be, hogy a tagot ki kell rúgni, és hogy a többi tag egyetért ezzel kapcsolatban."
+msgstr "A kirúgás még nem került implementálásra. Ebben az esetben forduljon ügyfélszolgálatunkhoz bizonyítékkal arról, hogy miért kell a tagot eltávolítani, és arról, hogy a többi tag is támogatja a döntést."
 
-#, fuzzy
 msgid "Closing a team account"
-msgstr "Csapatszámla lezárása"
+msgstr "Csapatfiók bezárása"
 
-#, fuzzy
 msgid "A team account is automatically closed when its last member leaves."
-msgstr "Egy csapatfiók automatikusan lezárul, amikor az utolsó tag kilép."
+msgstr "Egy csapatfiók automatikusan bezáródik az utolsó tag kilépésével."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last changed {timespan_ago} by {username}."
-msgstr "Utolsó módosítás: {timespan_ago} by {username}."
+msgstr "Utolsó módosítás {timespan_ago} ezelőtt történt {username} által."
 
-#, fuzzy
 msgid "Communities allow you to find people that work on things you care about. You can also subscribe to their newsletters to stay informed."
-msgstr "A közösségek lehetővé teszik, hogy olyan embereket találjon, akik olyan dolgokon dolgoznak, amelyek érdeklik Önt. Hírleveleikre is feliratkozhatsz, hogy tájékozott maradj."
+msgstr "A közösség lehetővé teszik, hogy olyan embereket találjon, akik olyan dolgokon dolgoznak, amelyek érdeklik Önt. Hírleveleikre is feliratkozhat, hogy tájékozott maradjon."
 
-#, fuzzy
 msgid "Start a new community"
 msgstr "Új közösség indítása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "There is {n} community on Liberapay."
 msgid_plural "There are {n} communities on Liberapay."
-msgstr[0] "Van {n} közösség a Liberapay-en."
+msgstr[0] "{n} közösség van a Liberapay-en."
 
-#, fuzzy
 msgid "Search communities"
-msgstr "Keresés a közösségekben"
+msgstr "Keresés a közösségek között"
 
-#, fuzzy
 msgid "Largest communities"
 msgstr "Legnagyobb közösségek"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Largest communities in {language}"
-msgstr "Legnagyobb közösségek {language}"
+msgstr "Legnagyobb közösségek {language} nyelven"
 
-#, fuzzy
 msgid "Sorry, we haven't found any. Why don't you start one?"
-msgstr "Sajnáljuk, nem találtunk ilyet. Miért nem indítasz egyet?"
+msgstr "Sajnáljuk, nem találtunk ilyet. Miért nem indít egyet?"
 
-#, fuzzy
 msgid "Which platform would you like to explore?"
-msgstr "Melyik platformot szeretné felfedezni?"
+msgstr "Melyik platformot szeretné tallózni?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} connected account"
 msgid_plural "{n} connected accounts"
 msgstr[0] "{n} csatlakoztatott fiók"
 
 #, python-brace-format
 msgid "Explore {0}"
-msgstr "Fedezze fel {0}"
+msgstr "{0} felfedezése"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Explore Your {0} Contacts"
-msgstr "Fedezze fel a {0} kapcsolatokat"
+msgstr "Fedezze fel a {0} kapcsolatát"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=913600022f5361dd8872dc74f6b023e8)>"
 msgid_plural "Here are {n} random Liberapay users who have connected their {0} account:"
-msgstr[0] "Íme {n} véletlenszerű Liberapay felhasználók, akik csatlakoztatták {0} számlájukat:"
+msgstr[0] "Íme {n} véletlenszerű Liberapay felhasználó, akik csatlakoztatták {0} fiókjukat:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=fa66aed7cc36b8a0d266394a9f2b8fef)>"
 msgid_plural "This page shows {n} Liberapay users who have connected their {0} account, in reverse chronological order."
-msgstr[0] "Ez az oldal fordított időrendi sorrendben mutatja a {n} Liberapay felhasználóit, akik csatlakoztatták {0} számlájukat."
+msgstr[0] "Ez az oldal fordított időrendi sorrendben mutat {n} Liberapay felhasználóit, akik csatlakoztatták a {0} fiókjukat."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Here is the {n} Liberapay user who has connected their {0} account:"
 msgid_plural "Here are the {n} Liberapay users who have connected their {0} account:"
-msgstr[0] "Itt van a {n} Liberapay felhasználó, aki csatlakoztatta {0} számláját:"
+msgstr[0] "Itt látható {n} Liberapay felhasználó, akik csatlakoztatták {0} fiókjukat:"
 
-#, fuzzy
 msgid "Explore other platforms:"
 msgstr "Fedezzen fel más platformokat:"
 
 msgid "This page lists Liberapay users who are hoping to receive their first donations."
-msgstr "Ez az oldal azokat a Liberapay-felhasználókat sorolja fel, akik remélik, hogy megkapják az első adományaikat."
+msgstr "Ez az oldal azokat a Liberapay-felhasználókat sorolja fel, akik remélik, hogy megkapják az első adományukat."
 
 msgid "Despite our efforts, some of the listed profiles may be spam or fraud."
-msgstr "Erőfeszítéseink ellenére a felsorolt profilok egy része spam vagy csalás lehet."
+msgstr "Erőfeszítéseink ellenére a felsorolt profilok egy része spam vagy csaló lehet."
 
-#, fuzzy
 msgid "Profiles only start appearing in the list 72 hours after they're created."
 msgstr "A profilok csak 72 órával a létrehozásuk után jelennek meg a listán."
 
-#, fuzzy
 msgid "People and projects who receive donations through Liberapay."
-msgstr "Emberek és projektek, akik a Liberapay-en keresztül kapnak adományokat."
+msgstr "Személyek és projektek, akik a Liberapay-en keresztül kapnak adományokat."
 
-#, fuzzy
 msgid "Explore Recipients"
-msgstr "Recipiensek felfedezése"
+msgstr "Címzettek felfedezése"
 
-#, fuzzy
 msgid "Users who are hoping to receive their first donations through Liberapay."
-msgstr "Azok a felhasználók, akik azt remélik, hogy a Liberapayen keresztül kapják meg első adományaikat."
+msgstr "Azok a felhasználók, akik azt remélik, hogy a Liberapay-en keresztül kapják meg első adományukat."
 
 msgid "Explore Hopefuls"
 msgstr "Reménykedők felfedezése"
@@ -4553,262 +4531,227 @@ msgid "A repository contains a project's data, for example the source code of an
 msgstr "Egy tároló egy projekt adatait tartalmazza, például egy alkalmazás forráskódját."
 
 msgid "See the most popular repositories belonging to Liberapay users, and browse lists of repos that you've starred on other platforms."
-msgstr "Tekintse meg a legnépszerűbb tárolóit a Liberapay felhasználóinak, és böngéssze a tárolók listáit, amelyeket más platformokon kedvenceknek jelölt."
+msgstr "Tekintse meg a legnépszerűbb Liberapay-es felhasználók tárolóit, és böngésszen olyan tárolók között amelyeket már a kedvencekbe rakott más platformon."
 
 msgid "Explore Repositories"
 msgstr "Tárolók felfedezése"
 
-#, fuzzy
 msgid "Browse the accounts that Liberapay users have on other platforms. Find your contacts by connecting your own accounts."
-msgstr "Böngésszen a Liberapay-felhasználók más platformokon vezetett számlái között. Keresse meg kapcsolatait saját fiókjainak összekapcsolásával."
+msgstr "Böngésszen a Liberapay-felhasználók más platformokon vezetett fiókjai között. Keresse meg ismerőseit saját fiókjai összekapcsolásával."
 
-#, fuzzy
 msgid "Explore Social Networks"
 msgstr "Fedezze fel a közösségi hálózatokat"
 
 msgid "Individuals"
 msgstr "Egyének"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The top {0} individuals on Liberapay are:"
-msgstr "A Liberapay legnépszerűbb {0} személyei a következők:"
+msgstr "A Liberapay {0} legnépszerűbb személye:"
 
-#, fuzzy
 msgid "Sort by"
 msgstr "Rendezés"
 
-#, fuzzy
 msgid "income"
 msgstr "jövedelem"
 
-#, fuzzy
 msgid "creation date"
 msgstr "létrehozás dátuma"
 
-#, fuzzy
 msgid "sort order"
 msgstr "rendezési sorrend"
 
-#, fuzzy
 msgid "in descending order"
-msgstr "csökkenő sorrendben"
+msgstr "csökkenő sorrend"
 
-#, fuzzy
 msgid "in ascending order"
-msgstr "növekvő sorrendben"
+msgstr "növekvő sorrend"
 
 msgid "Organizations"
 msgstr "Szervezetek"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The top {0} organizations on Liberapay are:"
-msgstr "A Liberapay legnépszerűbb {0} szervezetei a következők:"
+msgstr "A Liberapay {0} legnépszerűbb szervezete:"
 
 msgid "Create an organization account"
 msgstr "Szervezeti fiók létrehozása"
 
-#, fuzzy
 msgid "Please don't spam the people and projects listed below with messages inviting them to join Liberapay or asking them why they haven't."
-msgstr "Kérjük, ne küldjön üzeneteket az alább felsorolt személyeknek és projekteknek, amelyekben arra kéri őket, hogy csatlakozzanak a Liberapayhez, vagy megkérdezi tőlük, hogy miért nem csatlakoztak még."
+msgstr "Kérjük, ne küldjön üzeneteket az alább felsorolt személyeknek és projekteknek, amelyekben arra kéri őket, hogy csatlakozzanak a Liberapay-hez, vagy számon kérni miért nem csatlakoztak eddig."
 
-#, fuzzy
 msgid "There are no unclaimed donations right now."
-msgstr "Jelenleg nincsenek be nem váltott adományok."
+msgstr "Jelenleg nincsenek megigénylésre váró adományok."
 
-#, fuzzy
 msgid "Make a pledge"
-msgstr "Tegyen fogadalmat"
+msgstr "Tegyen ígéretet"
 
-#, fuzzy
 msgid "Do you have someone in mind?"
-msgstr "Gondoltál már valakire?"
+msgstr "Esetleg gondolt már valakire?"
 
-#, fuzzy
 msgid "We can help you find pledgees if you connect your accounts:"
-msgstr "Segítünk megtalálni a zálogkötelezetteket, ha összekapcsolja a számláit:"
+msgstr "Segítünk megtalálni az ígérkezőket, ha összekapcsolja fiókjait:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The individual receiving the most money through Liberapay is:"
 msgid_plural "The {n} individuals receiving the most money through Liberapay are:"
-msgstr[0] "A {n} magánszemélyek kapják a legtöbb pénzt a Liberapay-en keresztül:"
+msgstr[0] "A {n} Liberapay-en legtöbbet kereső magánszemély:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The organization receiving the most money through Liberapay is:"
 msgid_plural "The {n} organizations receiving the most money through Liberapay are:"
-msgstr[0] "A {n} szervezetek kapják a legtöbb pénzt a Liberapayen keresztül:"
+msgstr[0] "A {n} Liberapay-en legtöbbet kereső szervezet:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The team receiving the most money through Liberapay is:"
 msgid_plural "The {n} teams receiving the most money through Liberapay are:"
-msgstr[0] "A {n} csapatai kapják a legtöbb pénzt a Liberapayen keresztül:"
+msgstr[0] "A {n} Liberapay-en legtöbbet kereső csapat:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The Liberapay account receiving the most money is:"
 msgid_plural "The {n} Liberapay accounts receiving the most money are:"
-msgstr[0] "A {n} Liberapay számlák, amelyekre a legtöbb pénz érkezik, a következők:"
+msgstr[0] "A {n} Liberapay-en legtöbbet kereső fiók:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The most popular repository currently linked to a Liberapay account is:"
 msgid_plural "The {n} most popular repositories currently linked to a Liberapay account are:"
-msgstr[0] "A Liberapay-fiókhoz jelenleg a következő {n} legnépszerűbb tárolók kapcsolódnak:"
+msgstr[0] "A {n} Liberapay-en legtöbbet kereső összekötött tároló:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "by {author_name}"
-msgstr "a {author_name}"
+msgstr "{author_name} szerint"
 
-#, fuzzy
 msgid "stars count"
 msgstr "csillagok száma"
 
-#, fuzzy
 msgid "connection date"
 msgstr "csatlakozási dátum"
 
-#, fuzzy
 msgid "Browse your favorite repositories"
-msgstr "Böngésszen kedvenc tárolóiban"
+msgstr "Böngésszen kedvenc tárolói között"
 
-#, fuzzy
 msgid "Link your repositories to your profile"
-msgstr "Kapcsolja a tárolókat a profiljához"
+msgstr "Kapcsolja hozzá tárolóit a profiljához"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The top team on Liberapay is:"
 msgid_plural "The top {n} teams on Liberapay are:"
-msgstr[0] "A Liberapay legjobb {n} csapata a következő:"
+msgstr[0] "A {n} legelső Liberapay csapat:"
 
-#, fuzzy
 msgid "Create a team"
 msgstr "Csapat létrehozása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} community settings"
-msgstr "{0} közösségi környezet"
+msgstr "{0} közösségi beállítások"
 
 #, fuzzy, python-brace-format
 msgid "Sidebar text in {language}"
 msgstr "Oldalsáv szöveg a {language}"
 
-#, fuzzy
 msgid "This profile is marked as spam."
-msgstr "Ez a profil spamként van megjelölve."
+msgstr "Ez a profil spamként került megjelölésre."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This community was created {timespan_ago} and has {n} member."
 msgid_plural "This community was created {timespan_ago} and has {n} members."
-msgstr[0] "Ez a közösség a {timespan_ago} címen jött létre, és a {n} taggal rendelkezik."
+msgstr[0] "Ez a közösség {timespan_ago} idővel ezelőtt jött létre, és {n} taggal rendelkezik."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Are you a contributor in the {0} community? Then join it on Liberapay!\n"
 "Soon you'll be able to advertise your community projects here and post status updates about your work."
 msgstr ""
-"Ön a {0} közösség tagja? Akkor csatlakozz hozzá a Liberapay-en!\n"
-"Hamarosan lehetőséged lesz itt hirdetni a közösségi projektjeidet, és állapotfrissítéseket posztolni a munkádról."
+"Ön tesz a {0} közösségért? Akkor csatlakozzon hozzá a Liberapay-en!\n"
+"Hamarosan lehetősége lesz közösségi projekteket hirdetni, és állapotfrissítéseket posztolni munkájáról."
 
-#, fuzzy
 msgid "Join"
 msgstr "Csatlakozás"
 
-#, fuzzy
 msgid "New Members"
 msgstr "Új tagok"
 
-#, fuzzy
 msgid "Community newsletters will help you stay informed about what's going on and which projects need support. They're not operational yet but you can already subscribe."
-msgstr "A közösségi hírlevelek segítségével tájékozódhat arról, hogy mi történik, és mely projektek szorulnak támogatásra. Még nem működnek, de már feliratkozhatsz rájuk."
+msgstr "A közösségi hírlevelek segítségével tájékozódhat arról, hogy mi történik, és mely projektek szorulnak támogatásra. Még nem üzemképes, de már feliratkozhat rájuk."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{n} subscriber"
 msgid_plural "{n} subscribers"
 msgstr[0] "{n} előfizető"
 
-#, fuzzy
 msgid "Use underscores (_) instead of spaces. All unicode alphanumeric characters are allowed, as well as dots (.) and dashes (-)."
-msgstr "Használjon aláhúzásokat (_) a szóközök helyett. Az összes unicode alfanumerikus karakter, valamint a pontok (.) és a kötőjelek (-) engedélyezettek."
+msgstr "Használjon alulvonásokat (_) a szóközök helyett. Az összes unicode alfanumerikus karakter, valamint a pontok (.) és a kötőjelek (-) engedélyezettek."
 
-#, fuzzy
 msgid "Language of the name"
 msgstr "A név nyelve"
 
-#, fuzzy
 msgid "We help you fund the creators and projects you appreciate."
 msgstr "Segítünk finanszírozni az Ön által nagyra értékelt alkotókat és projekteket."
 
-#, fuzzy
 msgid "Liberapay is a recurrent donations platform."
-msgstr "A Liberapay egy visszatérő adományozási platform."
+msgstr "A Liberapay egy ütemezhető adományozási platform."
 
-#, fuzzy
 msgid "Receive"
 msgstr "Fogadás"
 
-#, fuzzy
 msgid "Are you a creator of commons? Do you make free art, spread free knowledge, write free software? Or something else that can be funded by recurrent donations?"
-msgstr "Ön a commonsok alkotója? Szabad művészetet készítesz, szabad tudást terjesztesz, szabad szoftvereket írsz? Vagy valami mást, amit visszatérő adományokból lehet finanszírozni?"
+msgstr "Ingyenes kontentet hoz létre? Ingyenes művészeti értéket teremt, vagy tudást terjeszt, ingyenes szotvert fejleszt? Esetleges más hasonló amit rendszeres támogatás érdemel?"
 
 msgid "Yes? Then Liberapay is for you! Create your account, fill your profile, and ask your audience to financially support your work."
 msgstr "Igen? Akkor a Liberapay Önnek való! Hozzon létre egy fiókot, töltse ki a profilját, és kérje meg a közönségét, hogy anyagilag támogassa a munkáját."
 
-#, fuzzy
 msgid "Create your account"
-msgstr "Fiók létrehozása"
+msgstr "Saját fiók létrehozása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have {n} active donor who is giving you {money_amount} per week."
 msgid_plural "You have {n} active donors giving you a total of {money_amount} per week."
-msgstr[0] "Van {n} aktív donorod, aki hetente {money_amount} adományt ad neked."
+msgstr[0] "{n} aktív adakozóval rendelkezik, aki(k) hetente {money_amount} összeget utalnak."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are currently refusing donations, you can change that in {0}your profile settings{1}."
-msgstr "Ön jelenleg elutasítja az adományokat, ezt a {0}profilbeállítások{1} oldalon tudja megváltoztatni."
+msgstr "Ön jelenleg elutasítja az adományokat, ezt a {0}profil beállítások{1} oldalon tudja megváltoztatni."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Congratulations, you have reached your goal of receiving {0} per week!"
-msgstr "Gratulálunk, elérted a célodat, hogy hetente megkapd a {0} címet!"
+msgstr "Gratulálunk, elérte a heti {0} célját!"
 
-#, fuzzy
 msgid "To receive money, do something awesome and then tell people about it:"
-msgstr "Ahhoz, hogy pénzt kapj, csinálj valami fantasztikusat, majd mesélj róla az embereknek:"
+msgstr "A bevétel érdekében hozzon létre valami csodásat, és közölje az emberekkel:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0}Fill out your profile{1}."
 msgstr "{0}Töltse ki a profilját{1}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0}Configure a payment account{1}."
-msgstr "{0}Fizetési számla beállítása{1}."
+msgstr "{0}Fizetési fiók beállítása{1}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0}Embed our widgets{1} on your blog/website."
-msgstr "{0}Embed a widgetek{1} a blog / honlapon."
+msgstr "{0}Ágyazza be a widget-et{1} a blogján/oldalán."
 
-#, fuzzy
 msgid "Contact the people who benefit from your work and ask them to support you."
-msgstr "Vegye fel a kapcsolatot azokkal az emberekkel, akiknek a munkája hasznára válik, és kérje meg őket, hogy támogassák Önt."
+msgstr "Vegye fel a kapcsolatot azokkal, akik hasznosnak találják munkáját, és kérjen támogatást tőlük."
 
-#, fuzzy
 msgid "How it works for donors"
-msgstr "Hogyan működik az adományozók számára"
+msgstr "Hogyan működik az adományozók esetében"
 
-#, fuzzy
 msgid "1. Set up a donation"
 msgstr "1. Adományozás beállítása"
 
 msgid "Find someone you want to give money to, then choose an amount, a period (weekly, monthly, or yearly), and a renewal method (manual or automatic)."
 msgstr "Keressen valakit, akinek pénzt szeretne adni, majd válasszon összeget, időszakot (heti, havi vagy éves), és egy megújítási módot (kézi vagy automatikus)."
 
-#, fuzzy
 msgid "2. Fund your donation"
 msgstr "2. Adományozás finanszírozása"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "On Liberapay, donations are funded in advance. You have control over when and how much you pay. Sending more money at once usually results in a lower percentage of {0}transaction fees{1}."
-msgstr "A Liberapay-en az adományok előre finanszírozottak. Ön dönti el, hogy mikor és mennyit fizet. Ha több pénzt küld egyszerre, általában alacsonyabb százalékos {0}tranzakciós díjat eredményez{1}."
+msgstr "A Liberapay-en az adományok előfinanszírozottak. Ön dönti el, hogy mikor és mennyit fizet. Ha több pénzt küld egyszerre, általában alacsonyabb százalékos {0}tranzakciós díjat eredményez{1}."
 
-#, fuzzy
 msgid "3. Keep your donation funded"
-msgstr "3. Tartsa az adományt finanszírozva"
+msgstr "3. Tartsa adományait finanszírozva"
 
 msgid "We will notify you whenever a donation needs to be renewed. If you've opted for automatic renewals, then we will attempt to debit your card or bank account as agreed."
 msgstr "Értesíteni fogjuk Önt amikor szükségessé válik megújítani egy adományt. Amennyiben Ön az automatikus megújítást választotta, akkor meg fogjuk kísérelni a bankszámlájára terhelni, megegyezés szerint."
