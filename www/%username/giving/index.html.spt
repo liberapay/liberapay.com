@@ -378,12 +378,17 @@ next_payday = compute_next_payday_date()
                             </a>
                         % endif
                     </p>
+                    % if tip.amount.currency not in tip.tippee_p.accepted_currencies_set
+                        <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
+                            "The recipient no longer accepts payments in {currency}.",
+                            currency=Currency(tip.amount.currency),
+                        ) }}</p>
+                    % endif
                 % else
                     % if tip.tippee in has_pending_transfer
                         <p class="text-warning">{{ icon('info-sign') }} {{
                             _("Pending payment completion.")
                         }}</p>
-                        <br>
                     % elif tip.payment_providers
                         <p class="text-danger">{{ icon('exclamation-sign') }} {{ _(
                             "You need to initiate a new payment to fund this donation. "
