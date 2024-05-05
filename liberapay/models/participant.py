@@ -2621,7 +2621,11 @@ class Participant(Model, MixinTeam):
 
     def accepts_tip_visibility(self, visibility):
         bit = 2 ** (visibility - 1)
-        return (self.recipient_settings.patron_visibilities or 1) & bit > 0
+        acceptable_visibilites = self.recipient_settings.patron_visibilities or 1
+        if self.payment_providers == 2:
+            acceptable_visibilites &= 6
+            acceptable_visibilites |= 2
+        return acceptable_visibilites & bit > 0
 
 
     @cached_property
