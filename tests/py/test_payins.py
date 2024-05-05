@@ -8,7 +8,7 @@ import stripe
 
 from liberapay.billing.payday import Payday
 from liberapay.constants import DONATION_LIMITS, EPOCH, PAYIN_AMOUNTS, STANDARD_TIPS
-from liberapay.exceptions import MissingPaymentAccount, NoSelfTipping
+from liberapay.exceptions import MissingPaymentAccount, NoSelfTipping, ProhibitedSourceCountry
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.payin.common import resolve_amounts, resolve_team_donation
 from liberapay.payin.cron import execute_reviewed_payins
@@ -765,6 +765,84 @@ class TestPayinsPayPal(Harness):
         assert payin.error
         assert 'debug_id' in payin.error
 
+    def test_payin_paypal_with_failing_origin_country_check(self):
+        self.add_payment_account(self.creator_2, 'paypal', 'US')
+        self.creator_2.update_recipient_settings(patron_countries='-FI')
+        tip = self.donor.set_tip_to(self.creator_2, EUR('0.01'))
+
+        # 1st request: initiate the payment
+        form_data = {
+            'amount': '10.00',
+            'currency': 'EUR',
+            'tips': str(tip['id'])
+        }
+        r = self.client.PxST('/donor/giving/pay/paypal', form_data, auth_as=self.donor)
+        assert r.code == 200, r.text
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/paypal/1'
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'pre'
+        assert payin.amount == EUR('10.00')
+        pt = self.db.one("SELECT * FROM payin_transfers")
+        assert pt.status == 'pre'
+        assert pt.amount == EUR('10.00')
+
+        # 2nd request: redirect to PayPal
+        r = self.client.GxT(
+            '/donor/giving/pay/paypal/1', HTTP_ACCEPT_LANGUAGE=b'en-US',
+            auth_as=self.donor,
+        )
+        assert r.code == 302, r.text
+        assert r.headers[b'Location'].startswith(b'https://www.sandbox.paypal.com/')
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'awaiting_payer_action'
+
+        # 3rd request: execute the payment
+        qs = '?token=FFFFFFFFFFFFFFFFF&PayerID=6C9EQBCEQY4MA'
+        r = self.client.GET('/donor/giving/pay/paypal/1' + qs, auth_as=self.donor)
+        assert r.code == 200, r.text
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'failed'
+        assert payin.error.startswith("creator_2 does not accept donations from Finland. ")
+
+    def test_payin_paypal_with_passing_origin_country_check(self):
+        self.add_payment_account(self.creator_2, 'paypal', 'US')
+        self.creator_2.update_recipient_settings(patron_countries='-FI')
+        tip = self.donor.set_tip_to(self.creator_2, EUR('0.01'))
+
+        # 1st request: initiate the payment
+        form_data = {
+            'amount': '10.00',
+            'currency': 'EUR',
+            'tips': str(tip['id'])
+        }
+        r = self.client.PxST('/donor/giving/pay/paypal', form_data, auth_as=self.donor)
+        assert r.code == 200, r.text
+        assert r.headers[b'Refresh'] == b'0;url=/donor/giving/pay/paypal/1'
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'pre'
+        assert payin.amount == EUR('10.00')
+        pt = self.db.one("SELECT * FROM payin_transfers")
+        assert pt.status == 'pre'
+        assert pt.amount == EUR('10.00')
+
+        # 2nd request: redirect to PayPal
+        r = self.client.GxT(
+            '/donor/giving/pay/paypal/1', HTTP_ACCEPT_LANGUAGE=b'en-US',
+            auth_as=self.donor,
+        )
+        assert r.code == 302, r.text
+        assert r.headers[b'Location'].startswith(b'https://www.sandbox.paypal.com/')
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'awaiting_payer_action'
+
+        # 3rd request: execute the payment
+        qs = '?token=8UK19239YC952053V&PayerID=6C9EQBCEQY4MA'
+        r = self.client.GET('/donor/giving/pay/paypal/1' + qs, auth_as=self.donor)
+        assert r.code == 200, r.text
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'succeeded'
+        assert payin.error is None
+
 
 class TestPayinsStripe(Harness):
 
@@ -1175,6 +1253,7 @@ class TestPayinsStripe(Harness):
         self.add_payment_account(self.creator_1, 'stripe', id=self.acct_switzerland.id)
         self.add_payment_account(self.creator_3, 'stripe')
         self.add_payment_account(self.creator_3, 'paypal')
+        self.creator_3.update_recipient_settings(patron_countries='-FI')
         tip1 = self.donor.set_tip_to(self.creator_1, EUR('12.50'))
         tip3 = self.donor.set_tip_to(self.creator_3, EUR('12.50'))
 
@@ -1673,6 +1752,35 @@ class TestPayinsStripe(Harness):
             pt = self.db.one("SELECT * FROM payin_transfers")
             assert pt.status == 'failed'
             assert pt.error == "canceled because the destination account is blocked"
+
+    def test_10_payin_stripe_failing_origin_country_check(self):
+        self.db.run("ALTER SEQUENCE payins_id_seq RESTART WITH %s", (self.offset,))
+        self.db.run("ALTER SEQUENCE payin_transfers_id_seq RESTART WITH %s", (self.offset,))
+        self.add_payment_account(self.creator_1, 'stripe')
+        self.creator_1.update_recipient_settings(patron_countries='-CN')
+        tip = self.donor.set_tip_to(self.creator_1, EUR('0.06'))
+
+        # 1st request: test getting the payment page
+        r = self.client.GET(
+            '/donor/giving/pay/stripe?method=card&beneficiary=%i' % self.creator_1.id,
+            auth_as=self.donor
+        )
+        assert r.code == 200, r.text
+
+        # 2nd request: try to prepare the payment
+        form_data = {
+            'amount': '6.66',
+            'currency': 'EUR',
+            'keep': 'true',
+            'tips': str(tip['id']),
+            'token': 'tok_cn',
+        }
+        r = self.client.PxST('/donor/giving/pay/stripe', form_data, auth_as=self.donor)
+        assert isinstance(r, ProhibitedSourceCountry)
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin is None
+        pt = self.db.one("SELECT * FROM payin_transfers")
+        assert pt is None
 
 
 class TestRefundsStripe(EmailHarness):

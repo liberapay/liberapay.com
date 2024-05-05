@@ -3944,4 +3944,175 @@ interactions:
       Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
       Stripe-Version: ['2019-08-14']
     status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/tokens/tok_cn
+  response:
+    body: {string: "{\n  \"id\": \"tok_1PDQiWFk4eGpfLOCiSX7NtF1\",\n  \"object\":\
+        \ \"token\",\n  \"card\": {\n    \"id\": \"card_1PDQiWFk4eGpfLOC5QydDSvU\"\
+        ,\n    \"object\": \"card\",\n    \"address_city\": null,\n    \"address_country\"\
+        : null,\n    \"address_line1\": null,\n    \"address_line1_check\": null,\n\
+        \    \"address_line2\": null,\n    \"address_state\": null,\n    \"address_zip\"\
+        : null,\n    \"address_zip_check\": null,\n    \"brand\": \"Visa\",\n    \"\
+        country\": \"CN\",\n    \"cvc_check\": \"unchecked\",\n    \"dynamic_last4\"\
+        : null,\n    \"exp_month\": 5,\n    \"exp_year\": 2025,\n    \"fingerprint\"\
+        : \"tK1E0SQqkJE83bzR\",\n    \"funding\": \"credit\",\n    \"last4\": \"0002\"\
+        ,\n    \"metadata\": {},\n    \"name\": null,\n    \"networks\": {\n     \
+        \ \"preferred\": null\n    },\n    \"tokenization_method\": null,\n    \"\
+        wallet\": null\n  },\n  \"client_ip\": null,\n  \"created\": 1714998748,\n\
+        \  \"livemode\": false,\n  \"type\": \"card\",\n  \"used\": false\n}"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET,HEAD,PUT,PATCH,POST,DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, Stripe-Should-Retry,
+          X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['837']
+      Content-Security-Policy: ['report-uri https://q.stripe.com/csp-report?p=v1%2Ftokens%2F%3Atoken;
+          block-all-mixed-content; default-src ''none''; base-uri ''none''; form-action
+          ''none''; frame-ancestors ''none''; img-src ''self''; script-src ''self''
+          ''report-sample''; style-src ''self''']
+      Content-Type: [application/json]
+      Cross-Origin-Opener-Policy-Report-Only: [same-origin; report-to="coop"]
+      Date: ['Mon, 06 May 2024 12:32:28 GMT']
+      Report-To: ['{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}']
+      Reporting-Endpoints: ['coop="https://q.stripe.com/coop-report"']
+      Request-Id: [req_EQHPgk1POGltV1]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
+      Stripe-Version: ['2019-08-14']
+      Vary: [Origin]
+      X-Content-Type-Options: [nosniff]
+      X-Stripe-Routing-Context-Priority-Tier: [api-testmode]
+    status: {code: 200, message: OK}
+- request:
+    body: owner[email]=donor%40example.com&redirect[return_url]=http%3A%2F%2Flocalhost%2Fdonor%2Fgiving%2Fpay%2Fstripe%2Fcomplete&token=tok_1PDQiWFk4eGpfLOCiSX7NtF1&type=card&usage=reusable
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/sources
+  response:
+    body: {string: "{\n  \"id\": \"src_1PDQiXFk4eGpfLOCf3u2MlSq\",\n  \"object\":\
+        \ \"source\",\n  \"amount\": null,\n  \"card\": {\n    \"address_line1_check\"\
+        : null,\n    \"address_zip_check\": null,\n    \"brand\": \"Visa\",\n    \"\
+        country\": \"CN\",\n    \"cvc_check\": \"unchecked\",\n    \"dynamic_last4\"\
+        : null,\n    \"exp_month\": 5,\n    \"exp_year\": 2025,\n    \"fingerprint\"\
+        : \"tK1E0SQqkJE83bzR\",\n    \"funding\": \"credit\",\n    \"last4\": \"0002\"\
+        ,\n    \"name\": null,\n    \"three_d_secure\": \"optional\",\n    \"tokenization_method\"\
+        : null\n  },\n  \"client_secret\": \"src_client_secret_e1CCxgxIyFytmuYuPHGXHwuL\"\
+        ,\n  \"created\": 1714998749,\n  \"currency\": null,\n  \"flow\": \"none\"\
+        ,\n  \"livemode\": false,\n  \"metadata\": {},\n  \"owner\": {\n    \"address\"\
+        : null,\n    \"email\": \"donor@example.com\",\n    \"name\": null,\n    \"\
+        phone\": null,\n    \"verified_address\": null,\n    \"verified_email\": null,\n\
+        \    \"verified_name\": null,\n    \"verified_phone\": null\n  },\n  \"statement_descriptor\"\
+        : null,\n  \"status\": \"chargeable\",\n  \"type\": \"card\",\n  \"usage\"\
+        : \"reusable\"\n}"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET,HEAD,PUT,PATCH,POST,DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, Stripe-Should-Retry,
+          X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['961']
+      Content-Security-Policy: ['report-uri https://q.stripe.com/csp-report?p=v1%2Fsources;
+          block-all-mixed-content; default-src ''none''; base-uri ''none''; form-action
+          ''none''; frame-ancestors ''none''; img-src ''self''; script-src ''self''
+          ''report-sample''; style-src ''self''']
+      Content-Type: [application/json]
+      Cross-Origin-Opener-Policy-Report-Only: [same-origin; report-to="coop"]
+      Date: ['Mon, 06 May 2024 12:32:29 GMT']
+      Idempotency-Key: [create_source_from_tok_1PDQiWFk4eGpfLOCiSX7NtF1]
+      Original-Request: [req_SGJ5HzinsgHaO1]
+      Report-To: ['{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}']
+      Reporting-Endpoints: ['coop="https://q.stripe.com/coop-report"']
+      Request-Id: [req_SGJ5HzinsgHaO1]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
+      Stripe-Should-Retry: ['false']
+      Stripe-Version: ['2019-08-14']
+      Vary: [Origin]
+      X-Content-Type-Options: [nosniff]
+      X-Stripe-Routing-Context-Priority-Tier: [api-testmode]
+    status: {code: 200, message: OK}
+- request:
+    body: email=donor%40example.com&source=src_1PDQiXFk4eGpfLOCf3u2MlSq
+    headers: {}
+    method: POST
+    uri: https://api.stripe.com/v1/customers
+  response:
+    body: {string: "{\n  \"id\": \"cus_Q3XoBRX8tjftwS\",\n  \"object\": \"customer\"\
+        ,\n  \"account_balance\": 0,\n  \"address\": null,\n  \"balance\": 0,\n  \"\
+        created\": 1714998749,\n  \"currency\": null,\n  \"default_currency\": null,\n\
+        \  \"default_source\": \"src_1PDQiXFk4eGpfLOCf3u2MlSq\",\n  \"delinquent\"\
+        : false,\n  \"description\": null,\n  \"discount\": null,\n  \"email\": \"\
+        donor@example.com\",\n  \"invoice_prefix\": \"644AECDD\",\n  \"invoice_settings\"\
+        : {\n    \"custom_fields\": null,\n    \"default_payment_method\": null,\n\
+        \    \"footer\": null,\n    \"rendering_options\": null\n  },\n  \"livemode\"\
+        : false,\n  \"metadata\": {},\n  \"name\": null,\n  \"next_invoice_sequence\"\
+        : 1,\n  \"phone\": null,\n  \"preferred_locales\": [],\n  \"shipping\": null,\n\
+        \  \"sources\": {\n    \"object\": \"list\",\n    \"data\": [\n      {\n \
+        \       \"id\": \"src_1PDQiXFk4eGpfLOCf3u2MlSq\",\n        \"object\": \"\
+        source\",\n        \"amount\": null,\n        \"card\": {\n          \"address_line1_check\"\
+        : null,\n          \"address_zip_check\": null,\n          \"brand\": \"Visa\"\
+        ,\n          \"country\": \"CN\",\n          \"cvc_check\": \"pass\",\n  \
+        \        \"dynamic_last4\": null,\n          \"exp_month\": 5,\n         \
+        \ \"exp_year\": 2025,\n          \"fingerprint\": \"tK1E0SQqkJE83bzR\",\n\
+        \          \"funding\": \"credit\",\n          \"last4\": \"0002\",\n    \
+        \      \"name\": null,\n          \"three_d_secure\": \"optional\",\n    \
+        \      \"tokenization_method\": null\n        },\n        \"client_secret\"\
+        : \"src_client_secret_e1CCxgxIyFytmuYuPHGXHwuL\",\n        \"created\": 1714998749,\n\
+        \        \"currency\": null,\n        \"customer\": \"cus_Q3XoBRX8tjftwS\"\
+        ,\n        \"flow\": \"none\",\n        \"livemode\": false,\n        \"metadata\"\
+        : {},\n        \"owner\": {\n          \"address\": null,\n          \"email\"\
+        : \"donor@example.com\",\n          \"name\": null,\n          \"phone\":\
+        \ null,\n          \"verified_address\": null,\n          \"verified_email\"\
+        : null,\n          \"verified_name\": null,\n          \"verified_phone\"\
+        : null\n        },\n        \"statement_descriptor\": null,\n        \"status\"\
+        : \"chargeable\",\n        \"type\": \"card\",\n        \"usage\": \"reusable\"\
+        \n      }\n    ],\n    \"has_more\": false,\n    \"total_count\": 1,\n   \
+        \ \"url\": \"/v1/customers/cus_Q3XoBRX8tjftwS/sources\"\n  },\n  \"subscriptions\"\
+        : {\n    \"object\": \"list\",\n    \"data\": [],\n    \"has_more\": false,\n\
+        \    \"total_count\": 0,\n    \"url\": \"/v1/customers/cus_Q3XoBRX8tjftwS/subscriptions\"\
+        \n  },\n  \"tax_exempt\": \"none\",\n  \"tax_ids\": {\n    \"object\": \"\
+        list\",\n    \"data\": [],\n    \"has_more\": false,\n    \"total_count\"\
+        : 0,\n    \"url\": \"/v1/customers/cus_Q3XoBRX8tjftwS/tax_ids\"\n  },\n  \"\
+        tax_info\": null,\n  \"tax_info_verification\": null,\n  \"test_clock\": null\n\
+        }"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET,HEAD,PUT,PATCH,POST,DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, Stripe-Should-Retry,
+          X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['2493']
+      Content-Security-Policy: ['report-uri https://q.stripe.com/csp-report?p=v1%2Fcustomers;
+          block-all-mixed-content; default-src ''none''; base-uri ''none''; form-action
+          ''none''; frame-ancestors ''none''; img-src ''self''; script-src ''self''
+          ''report-sample''; style-src ''self''']
+      Content-Type: [application/json]
+      Cross-Origin-Opener-Policy-Report-Only: [same-origin; report-to="coop"]
+      Date: ['Mon, 06 May 2024 12:32:30 GMT']
+      Idempotency-Key: [create_customer_for_participant_2310_with_src_1PDQiXFk4eGpfLOCf3u2MlSq]
+      Original-Request: [req_TgAUzyWrG6GmIa]
+      Report-To: ['{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}']
+      Reporting-Endpoints: ['coop="https://q.stripe.com/coop-report"']
+      Request-Id: [req_TgAUzyWrG6GmIa]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
+      Stripe-Should-Retry: ['false']
+      Stripe-Version: ['2019-08-14']
+      Vary: [Origin]
+      X-Content-Type-Options: [nosniff]
+      X-Stripe-Routing-Context-Priority-Tier: [api-testmode]
+    status: {code: 200, message: OK}
 version: 1
