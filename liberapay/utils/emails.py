@@ -253,7 +253,7 @@ def get_email_server_addresses(email):
 
     """
     domain = email.domain
-    rrset = DNS.query(domain, 'MX', raise_on_no_answer=False).rrset
+    rrset = DNS.resolve(domain, 'MX', raise_on_no_answer=False).rrset
     if rrset:
         if len(rrset) == 1 and str(rrset[0].exchange) == '.':
             # This domain doesn't accept email. https://tools.ietf.org/html/rfc7505
@@ -298,11 +298,11 @@ def get_public_ip_addresses(domain):
     records = []
     exception = None
     try:
-        records.extend(DNS.query(domain, 'A', raise_on_no_answer=False).rrset or ())
+        records.extend(DNS.resolve(domain, 'A', raise_on_no_answer=False).rrset or ())
     except DNSException as e:
         exception = e
     try:
-        records.extend(DNS.query(domain, 'AAAA', raise_on_no_answer=False).rrset or ())
+        records.extend(DNS.resolve(domain, 'AAAA', raise_on_no_answer=False).rrset or ())
     except DNSException:
         if exception:
             raise exception from None

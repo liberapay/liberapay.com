@@ -2200,10 +2200,10 @@ class Participant(Model, MixinTeam):
                 # Look up the SRV record to use.
                 email_domain = normalized_email.rsplit('@', 1)[1]
                 try:
-                    srv_records = DNS.query('_avatars-sec._tcp.'+email_domain, 'SRV')
+                    srv_records = DNS.resolve('_avatars-sec._tcp.'+email_domain, 'SRV')
                     scheme = 'https'
                 except Exception:
-                    srv_records = DNS.query('_avatars._tcp.'+email_domain, 'SRV')
+                    srv_records = DNS.resolve('_avatars._tcp.'+email_domain, 'SRV')
                     scheme = 'http'
                 # Filter down to just the records with the "highest" `.priority`
                 # (lower number = higher priority); for the libravatar API tells us:
@@ -3294,7 +3294,9 @@ class Participant(Model, MixinTeam):
                         WHERE pt.payer = t.tipper
                           AND COALESCE(pt.team, pt.recipient) = t.tippee
                           AND ( pi.status IN ('awaiting_review', 'pending') OR
-                                pt.status IN ('awaiting_review', 'pending') )
+                                pt.status IN ('awaiting_review', 'pending') OR
+                                pi.status = 'succeeded' AND
+                                pi.ctime > (current_timestamp - interval '5 days') )
                         LIMIT 1
                    ){}
           ORDER BY ( SELECT 1

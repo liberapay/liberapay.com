@@ -183,9 +183,27 @@ title = _("Funding your donations")
 
 % block thin_content
 
-% if n_payments > 1
+% set currency_conflicts = donation_groups['currency_conflict']
+% if currency_conflicts
+    <p class="text-warning">{{ icon('warning-sign') }} &nbsp;{{ ngettext(
+        "You have {n} donation which needs to be modified because the "
+        "recipient no longer accepts the currency you had chosen.",
+        "You have {n} donations which need to be modified because the "
+        "recipients no longer accept the currencies you had chosen.",
+        n=len(currency_conflicts)
+    ) }}</p>
+    <div class="buttons">
+    % for tip in currency_conflicts
+        <a class="btn btn-primary btn-block" href="{{ tip.tippee_p.path('donate') }}">{{ _(
+            "Modify your donation to {username}",
+            username=BOLD % tip.tippee_p.username,
+        ) }}</a>
+    % endfor
+    </div>
+    <br>
+% endif
 
-    % set currency_conflicts = donation_groups['currency_conflict']
+% if n_payments > 1
 
     % if n_fundable > 1 and not retry_id
         <p>{{ ngettext(
@@ -195,35 +213,14 @@ title = _("Funding your donations")
         ) }}</p>
     % endif
 
-    % if currency_conflicts
-        <p class="text-warning">{{ icon('warning-sign') }} &nbsp;{{ ngettext(
-            "You have {n} donation which needs to be modified because the "
-            "recipient no longer accepts the currency you had chosen.",
-            "You have {n} donations which need to be modified because the "
-            "recipients no longer accept the currencies you had chosen.",
-            n=len(currency_conflicts)
-        ) }}</p>
-        <div class="buttons">
-        % for tip in currency_conflicts
-            <a class="btn btn-primary btn-block" href="{{ tip.tippee_p.path('donate') }}">{{ _(
-                "Modify your donation to {username}",
-                username=BOLD % tip.tippee_p.username,
-            ) }}</a>
-        % endfor
-        </div>
-        <br>
-    % endif
-
-    % if n_payments > 1
-        <p class="text-info">{{ icon('info-sign') }} &nbsp;{{ ngettext(
-            "",
-            "Due to legal and technical limitations we are currently unable to process "
-            "all your donations as a single payment. Instead you will have to make {n} "
-            "separate payments. We apologize for the inconvenience.",
-            n=n_payments
-        ) }}</p>
-        <br>
-    % endif
+    <p class="text-info">{{ icon('info-sign') }} &nbsp;{{ ngettext(
+        "",
+        "Due to legal and technical limitations we are currently unable to process "
+        "all your donations as a single payment. Instead you will have to make {n} "
+        "separate payments. We apologize for the inconvenience.",
+        n=n_payments
+    ) }}</p>
+    <br>
 
     <div class="buttons">
     % for payment in payments

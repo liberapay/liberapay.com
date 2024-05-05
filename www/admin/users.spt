@@ -228,7 +228,7 @@ elif mode == 'new_recipients':
                ) ORDER BY pt.row_number) AS incoming_payments
              , ( SELECT f.feedback FROM feedback f WHERE f.participant = p.id ) AS feedback
           FROM ( SELECT pt.*
-                      , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime DESC, pt.id DESC)
+                      , row_number() OVER (PARTITION BY pt.recipient ORDER BY pt.ctime ASC, pt.id ASC)
                    FROM payin_transfers pt
                   WHERE pt.status <> 'pre'
                     AND coalesce(pt.error <> 'aborted by payer', true)

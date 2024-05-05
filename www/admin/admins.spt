@@ -1,11 +1,10 @@
 from pando import json
 
-PAGE_SIZE = 20
-
 [---]
 
 user.require_active_privilege('admin')
 
+page_size = request.qs.get_int('page_size', 50, minimum=1, maximum=500)
 events = website.db.all("""
     SELECT e.*, p.username, admin.username AS recorder_name
       FROM events e
@@ -15,7 +14,7 @@ events = website.db.all("""
        AND coalesce(e.ts < %s, true)
   ORDER BY e.ts DESC
      LIMIT %s
-""", (request.qs.get('before'), PAGE_SIZE))
+""", (request.qs.get('before'), page_size))
 
 title = "Admins Oversight"
 
@@ -45,7 +44,7 @@ title = "Admins Oversight"
         % endif
     % endif
     % endfor
-    % if len(events) == PAGE_SIZE
+    % if len(events) == page_size
         <a class="btn btn-primary" href="{{ request.qs.derive(before=events[-1].ts.isoformat()) }}">Next page →</a>
     % endif
 % else
