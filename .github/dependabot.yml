@@ -6,3 +6,6 @@ updates:
     schedule:
       interval: "weekly"
       day: "tuesday"
+    ignore:
+      - dependency-name: "botocore"
+        update-types: ["version-update:semver-patch"]
