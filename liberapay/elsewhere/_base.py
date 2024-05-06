@@ -491,9 +491,7 @@ class PlatformOAuth1(Platform):
         sess = self.get_auth_session(domain, dict(token=token, token_secret=token_secret))
         sess.parse_authorization_response(url)
         auth_url = self.auth_url.format(domain=domain)
-        r = sess.fetch_access_token(auth_url+self.access_token_path)
-        sess.token = dict(token=r['oauth_token'],
-                          token_secret=r['oauth_token_secret'])
+        sess.token = sess.fetch_access_token(auth_url+self.access_token_path)
         return sess
 
 
