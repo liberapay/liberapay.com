@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "PO-Revision-Date: 2024-05-07 09:47+0000\n"
-"Last-Translator: Joel Yliluoma <bisqwit@iki.fi>\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -1050,12 +1050,13 @@ msgstr "Tätä maksua ei voida käsitellä, koska vastaanottajan tili on tällä
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Lahjoitustasi vastaanottajalle {recipient} ei voida käsitellä juuri nyt, sillä vastaanottajan tili ei ole valmis ottamaan rahaa vastaan."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} ei hyväksy lahjoituksia osoitteesta {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "Maksusi käsittely epäonnistui, koska ohjelmistomme ei pystynyt määrittämään, mistä maasta rahat tulevat. Näin ei pitäisi tapahtua."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Olet hiljattain vaihtanut päävaluuttaasi. Yritä uudelleen myöhemmin (esim. viikossa), tai ota yhteyttä asiakaspalveluun support@liberapay.com (englanniksi)."
@@ -1663,8 +1664,9 @@ msgstr "Nimi"
 msgid "Currencies"
 msgstr "Valuutat"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Maat"
 
 msgid "Goal"
 msgstr "Tavoite"
@@ -1834,9 +1836,9 @@ msgstr "Käyttämättömät varat kulutetaan seuraavien viikkojen aikana; se ei 
 msgid "Leftover"
 msgstr "Jäännös"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Näyttää siltä, että olet osoitteessa {country}. {username} ei hyväksy kyseisestä maasta tulevia lahjoituksia."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2095,11 +2097,13 @@ msgstr "Tutki yhteisöjä"
 msgid "You have to check at least one box."
 msgstr "Sinun on rastitettava vähintään yksi ruutu."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Mistä maista lahjoittajasi saisivat lähettää sinulle rahaa?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Suosittelemme lahjoitusten alkuperän rajoittamista vain, jos laki niin vaatii."
 
 msgid "The submitted settings are incoherent."
 msgstr "Asetuksesi ovat epäjohdonmukaiset."
