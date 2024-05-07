@@ -12,6 +12,17 @@
     % if request.qs.get('currency') in accepted_currencies
         % set new_currency = request.qs['currency']
     % endif
+    % if not tippee_is_stub
+        % set patron_countries = tippee.recipient_settings.patron_countries
+        % set source_country = request.source_country
+        % if patron_countries and source_country and source_country not in patron_countries
+            <p class="alert alert-warning">{{ _(
+                "It looks like you are in {country}. {username} does not accept "
+                "donations coming from that country.",
+                country=locale.Country(source_country), username=tippee_name,
+            ) }}</p>
+        % endif
+    % endif
     % set currency_mismatch = tip_currency not in accepted_currencies
     % if tip.renewal_mode > 0 and not pledging
         % if currency_mismatch
@@ -228,7 +239,7 @@
 % macro tip_visibility_choice(tippee_name, patron_visibilities, payment_providers, tip)
     % set paypal_only = payment_providers == 2
     % if paypal_only
-        % if patron_visibilities == 0
+        % if not patron_visibilities
             % set patron_visibilities = 2
         % elif patron_visibilities.__and__(1)
             % set patron_visibilities = patron_visibilities.__xor__(1).__or__(2)

@@ -11,7 +11,8 @@ from psycopg2.extras import execute_batch
 from ..constants import SEPA
 from ..exceptions import (
     AccountSuspended, BadDonationCurrency, MissingPaymentAccount,
-    RecipientAccountSuspended, NoSelfTipping, UserDoesntAcceptTips,
+    NoSelfTipping, ProhibitedSourceCountry, RecipientAccountSuspended,
+    UnableToDeterminePayerCountry, UserDoesntAcceptTips,
 )
 from ..i18n.currencies import Money, MoneyBasket
 from ..utils import group_by
@@ -57,6 +58,19 @@ def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
 
     if payer.is_suspended or not payer.get_email_address():
         raise AccountSuspended()
+
+    if route.network == 'paypal':
+        # The country of origin check for PayPal payments is in the
+        # `liberapay.payin.paypal.capture_order` function.
+        pass
+    else:
+        for pt in proto_transfers:
+            if (allowed_countries := pt.recipient.recipient_settings.patron_countries):
+                if route.country not in allowed_countries:
+                    if route.country:
+                        raise ProhibitedSourceCountry(pt.recipient, route.country)
+                    else:
+                        raise UnableToDeterminePayerCountry()
 
     with db.get_cursor() as cursor:
         payin = cursor.one("""

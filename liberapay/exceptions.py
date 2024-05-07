@@ -559,6 +559,31 @@ class MissingPaymentAccount(LazyResponseXXX):
         )
 
 
+class ProhibitedSourceCountry(LazyResponseXXX):
+    code = 403
+
+    def __init__(self, recipient, country):
+        super().__init__()
+        self.recipient = recipient
+        self.country = country
+
+    def msg(self, _, locale):
+        return _(
+            "{username} does not accept donations from {country}.",
+            username=self.recipient.username, country=locale.Country(self.country)
+        )
+
+
+class UnableToDeterminePayerCountry(LazyResponseXXX):
+    code = 500
+    def msg(self, _):
+        return _(
+            "The processing of your payment has failed because our software was "
+            "unable to determine which country the money would come from. This "
+            "isn't supposed to happen."
+        )
+
+
 class TooManyCurrencyChanges(LazyResponseXXX):
     code = 429
     def msg(self, _):

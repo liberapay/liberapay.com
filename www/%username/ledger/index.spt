@@ -112,7 +112,7 @@ if participant.join_time:
 % endif
 
 % set show_id = user_is_admin
-% set show_patrons = participant.recipient_settings.patron_visibilities > 1
+% set show_patrons = (participant.recipient_settings.patron_visibilities or 0) > 1
 <div class="row">
 <div class="col-lg-10">
 % if events
@@ -281,8 +281,10 @@ if participant.join_time:
                     % if event['error'] == 'RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION'
                         {{ _("This payment must be manually approved by the recipient through {provider}'s website.",
                              provider='PayPal') }}
-                    % else
+                    % elif event['error'].isupper()
                         {{ _("PayPal status code: {0}", event['error']) }}
+                    % else
+                        {{ _("error message: {0}", event['error']) }}
                     % endif
                 % else
                     {{ _("error message: {0}", event['error']) }}
