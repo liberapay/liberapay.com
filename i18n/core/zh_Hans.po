@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-05-07 09:47+0000\n"
-"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"PO-Revision-Date: 2024-05-07 22:07+0000\n"
+"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/liberapay/core/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.4-dev\n"
+"X-Generator: Weblate 5.5.4-rc\n"
 "Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
@@ -1040,11 +1040,10 @@ msgstr "由于收款人的账户目前被停权，无法处理这笔支付。"
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "您给 {recipient} 的捐款目前无法处理，因受益人的账户尚无法接收款项。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr "{username} 不接受 的捐赠。{country}"
+msgstr "{username} 不接受来自 {country} 地区的捐赠。"
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
 msgstr "由于我们的软件无法确定款项来自哪个国家/地区，因此您的支付处理失败。这是不应该发生的。"
 
@@ -1648,7 +1647,6 @@ msgstr "名称"
 msgid "Currencies"
 msgstr "币种"
 
-#, fuzzy
 msgid "Countries"
 msgstr "国家/地区"
 
@@ -1819,9 +1817,9 @@ msgstr "未使用的收入会在未来数周内被消耗掉，不会累积在团
 msgid "Leftover"
 msgstr "盈余"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr "{country} {username} 不接受来自该国的捐款／捐助。"
+msgstr "看起来您位于 {country} 地区。{username} 不接受来自该地区的捐款。"
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2077,11 +2075,9 @@ msgstr "探索社群"
 msgid "You have to check at least one box."
 msgstr "你必须至少勾选一个方框。"
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "应该允许你的捐助者从哪些国家/地区给你汇款？"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
 msgstr "我们建议只有在法律要求的情况下才限制捐赠来源。"
 
