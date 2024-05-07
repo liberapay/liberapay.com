@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1048,6 +1048,13 @@ msgstr "Pembayaran ini tidak dapat diproses kerana akaun penerima digantung keti
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Derma anda kepada {recipient} tidak boleh diproses pada waktu ini kerana akaun penerima belum sedia untuk menerima wang."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Anda telah menukar mata wang utama anda baru-baru ini, sila cuba lagi kemudian (cth. dalam seminggu) atau hubungi support@liberapay.com."
 
@@ -1653,6 +1660,9 @@ msgstr "Nama"
 msgid "Currencies"
 msgstr "Mata wang"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Matlamat"
 
@@ -1820,6 +1830,10 @@ msgstr "Baki pendapatan sesuatu minggu akan digunakan pada minggu berikutnya, ia
 
 msgid "Leftover"
 msgstr "Baki"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2074,6 +2088,15 @@ msgstr "Tinggal"
 
 msgid "Explore communities"
 msgstr "Teroka komuniti"
+
+msgid "You have to check at least one box."
+msgstr "Anda perlu menanda sekurang-kurangnya satu kotak."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "Tetapan yang anda cuba simpan mempunyai ketidakserasian."
@@ -2603,8 +2626,12 @@ msgid "Failure"
 msgstr "Gagal"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Pemproses pembayaran {name} mengembalikan ralat: “{error_message}”."
+msgid "PayPal status code: {0}"
+msgstr "Kod status PayPal: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "mesej ralat: {0}"
 
 msgid "The payment has been initiated."
 msgstr "Pembayaran telah dimulakan."
@@ -2637,6 +2664,10 @@ msgstr "PayPal mendedahkan nama dan alamat e-mel anda kepada penerima."
 
 msgid "Initiate the payment"
 msgstr "Mulakan pembayaran"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Pemproses pembayaran {name} mengembalikan ralat: “{error_message}”."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Alat pembayaran tidak sah, sila pilih atau tambah yang lain."
@@ -3084,10 +3115,6 @@ msgstr "caj"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Pembayaran ini sedang menunggu untuk diperiksa secara manual oleh kakitangan Liberapay untuk tanda-tanda penipuan."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "mesej ralat: {0}"
-
 msgid "hidden"
 msgstr "disembunyikan"
 
@@ -3141,10 +3168,6 @@ msgstr "derma rahsia kepada {recipient_name} untuk peranannya dalam kumpulan {te
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Pembayaran ini mesti diluluskan secara manual oleh penerima melalui laman web {provider}."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Kod status PayPal: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Akaun pembayar telah digantung kerana disyaki berlaku penipuan atau tindakan lain yang tidak dibenarkan."
@@ -3235,9 +3258,6 @@ msgstr "Tiada pemberitahuan boleh ditunjukkan."
 
 msgid "Next Page →"
 msgstr "Halaman Seterusnya →"
-
-msgid "You have to check at least one box."
-msgstr "Anda perlu menanda sekurang-kurangnya satu kotak."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

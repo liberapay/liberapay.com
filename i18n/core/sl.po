@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, fuzzy, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1197,6 +1197,13 @@ msgstr "Tega plačila ni mogoče obdelati, ker je račun prejemnika trenutno blo
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Vaše donacije za {recipient} trenutno ni mogoče obdelati, ker račun upravičenca ni pripravljen za prejem denarja."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Pred kratkim ste že spremenili glavno valuto, zato poskusite pozneje (npr. čez teden dni) ali se obrnite na support@liberapay.com."
@@ -1965,6 +1972,9 @@ msgstr "Ime"
 msgid "Currencies"
 msgstr "Valute"
 
+msgid "Countries"
+msgstr ""
+
 #, fuzzy
 msgid "Goal"
 msgstr "Cilj"
@@ -2176,6 +2186,10 @@ msgstr "Neporabljeni prihodki se porabijo v naslednjih tednih in se ne nalagajo 
 #, fuzzy
 msgid "Leftover"
 msgstr "Preostanek"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2480,6 +2494,16 @@ msgstr "Pustite"
 #, fuzzy
 msgid "Explore communities"
 msgstr "Raziščite skupnosti"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Označiti morate vsaj eno polje."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 #, fuzzy
 msgid "The submitted settings are incoherent."
@@ -3148,8 +3172,12 @@ msgid "Failure"
 msgstr "Neuspeh"
 
 #, fuzzy, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Obdelovalec plačil {name} je vrnil napako: \"{error_message}\"."
+msgid "PayPal status code: {0}"
+msgstr "Koda stanja PayPal: {0}"
+
+#, fuzzy, python-brace-format
+msgid "error message: {0}"
+msgstr "sporočilo o napaki: {0}"
 
 #, fuzzy
 msgid "The payment has been initiated."
@@ -3190,6 +3218,10 @@ msgstr "PayPal prejemniku razkrije vaše ime in e-poštni naslov."
 #, fuzzy
 msgid "Initiate the payment"
 msgstr "Začetek plačila"
+
+#, fuzzy, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Obdelovalec plačil {name} je vrnil napako: \"{error_message}\"."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3731,10 +3763,6 @@ msgstr "naboj"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "To plačilo čaka na ročno preverjanje, ki ga bo opravilo osebje Liberapay, da bi ugotovilo znake goljufije."
 
-#, fuzzy, python-brace-format
-msgid "error message: {0}"
-msgstr "sporočilo o napaki: {0}"
-
 #, fuzzy
 msgid "hidden"
 msgstr "skrito"
@@ -3790,10 +3818,6 @@ msgstr "tajna donacija za {recipient_name} za njihovo vlogo v ekipi {team_name}"
 #, fuzzy, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "To plačilo mora prejemnik ročno odobriti na spletnem mestu {provider}."
-
-#, fuzzy, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Koda stanja PayPal: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3906,10 +3930,6 @@ msgstr "Ni prikazanih nobenih obvestil."
 #, fuzzy
 msgid "Next Page →"
 msgstr "Naslednja stran →"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "Označiti morate vsaj eno polje."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

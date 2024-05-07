@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, fuzzy, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1183,6 +1183,13 @@ msgstr "Ní féidir an íocaíocht seo a phróiseáil toisc go bhfuil cuntas an 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Ní féidir do thabhartas chuig {recipient} a phróiseáil faoi láthair toisc nach bhfuil cuntas an tairbhí réidh chun airgead a fháil."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "D’athraigh tú do phríomh-airgeadra le déanaí, bain triail eile as níos déanaí (m.sh. i gceann seachtaine) nó déan teagmháil le support@liberapay.com."
@@ -1944,6 +1951,9 @@ msgstr "Ainm"
 msgid "Currencies"
 msgstr "Airgeadraí"
 
+msgid "Countries"
+msgstr ""
+
 #, fuzzy
 msgid "Goal"
 msgstr "Sprioc"
@@ -2152,6 +2162,10 @@ msgstr "Déanfar ioncam neamhúsáidte a chaitheamh sna seachtainí ina dhiaidh 
 #, fuzzy
 msgid "Leftover"
 msgstr "Fágtha"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2448,6 +2462,16 @@ msgstr "Fág"
 #, fuzzy
 msgid "Explore communities"
 msgstr "Déan iniúchadh ar phobail"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Caithfidh tú bosca amháin ar a laghad a sheiceáil."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 #, fuzzy
 msgid "The submitted settings are incoherent."
@@ -3100,8 +3124,12 @@ msgid "Failure"
 msgstr "Teip"
 
 #, fuzzy, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Chuir an próiseálaí íocaíochta {name} earráid ar ais: “{error_message}”."
+msgid "PayPal status code: {0}"
+msgstr "Cód stádais PayPal: {0}"
+
+#, fuzzy, python-brace-format
+msgid "error message: {0}"
+msgstr "teachtaireacht earráide: {0}"
 
 #, fuzzy
 msgid "The payment has been initiated."
@@ -3141,6 +3169,10 @@ msgstr "Nochtann PayPal d'ainm agus do sheoladh ríomhphoist don fhaighteoir."
 #, fuzzy
 msgid "Initiate the payment"
 msgstr "Tús a chur leis an íocaíocht"
+
+#, fuzzy, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Chuir an próiseálaí íocaíochta {name} earráid ar ais: “{error_message}”."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3667,10 +3699,6 @@ msgstr "muirear"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Tá an íocaíocht seo ag fanacht le seiceáil de láimh ag foireann Liberapay le haghaidh comharthaí calaoise."
 
-#, fuzzy, python-brace-format
-msgid "error message: {0}"
-msgstr "teachtaireacht earráide: {0}"
-
 #, fuzzy
 msgid "hidden"
 msgstr "i bhfolach"
@@ -3726,10 +3754,6 @@ msgstr "síntiús rúnda do {recipient_name} as a ról san fhoireann {team_name}
 #, fuzzy, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Ní mór don fhaighteoir an íocaíocht seo a fhaomhadh de láimh trí shuíomh Gréasáin {provider}."
-
-#, fuzzy, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Cód stádais PayPal: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3840,10 +3864,6 @@ msgstr "Níl aon fhógraí le taispeáint."
 #, fuzzy
 msgid "Next Page →"
 msgstr "An Chéad Leathanach Eile →"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "Caithfidh tú bosca amháin ar a laghad a sheiceáil."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, fuzzy, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1041,6 +1041,13 @@ msgstr "수신자의 계정이 현재 지급정지되어 있기 때문에 지불
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "{recipient} 님이 돈을 받을 준비가 되어 있지 않기 때문에 기부를 처리할 수 없습니다."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "최근에 주 화폐를 변경하려고 시도하셨습니다, 나중에 (예: 다음 주에) 다시 시도해 보시거나 support@liberapay.com에 연락해 주세요."
 
@@ -1651,6 +1658,9 @@ msgstr "이름"
 msgid "Currencies"
 msgstr "화폐"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "목표"
 
@@ -1819,6 +1829,10 @@ msgstr "사용되지 않는 수입은 다음 주 내에 소비될 것이며, 팀
 
 msgid "Leftover"
 msgstr "잔액"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2074,6 +2088,16 @@ msgstr "탈퇴하기"
 
 msgid "Explore communities"
 msgstr "커뮤니티 둘러보기"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "하나 이상의 확인란을 선택해야 합니다."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "제출된 설정값을 다시 검토해야 합니다."
@@ -2604,8 +2628,12 @@ msgid "Failure"
 msgstr "실패"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "결제 처리자 {name}에서 \"{error_message}\" 오류를 반환했습니다."
+msgid "PayPal status code: {0}"
+msgstr "PayPal 상태 코드: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "에러 메시지: {0}"
 
 msgid "The payment has been initiated."
 msgstr "결제가 시작되었습니다."
@@ -2637,6 +2665,10 @@ msgstr "PayPal은 이름과 이메일을 돈을 받는 사람에게 공개합니
 
 msgid "Initiate the payment"
 msgstr "지불 시작"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "결제 처리자 {name}에서 \"{error_message}\" 오류를 반환했습니다."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3086,10 +3118,6 @@ msgstr "청구"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "이 결제는 사기 징후가 있는지 Liberapay 직원이 수동으로 확인하기를 기다리고 있습니다."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "에러 메시지: {0}"
-
 msgid "hidden"
 msgstr "숨김"
 
@@ -3143,10 +3171,6 @@ msgstr "{team_name}팀에서의 역할에 대해 {recipient_name}님에게 보�
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "이 지급은 수신인이 {provider}의 웹사이트를 통해 수동으로 승인해야 합니다."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPal 상태 코드: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3239,10 +3263,6 @@ msgstr "확인할 알림이 없습니다."
 
 msgid "Next Page →"
 msgstr "다음 페이지 →"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "하나 이상의 확인란을 선택해야 합니다."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

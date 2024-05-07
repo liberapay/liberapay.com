@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1048,6 +1048,13 @@ msgstr "Ce paiement ne peut pas être traité car le compte du destinataire est 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Votre don à {recipient} ne peut pas être traité tout de suite car le compte du bénéficiaire n'est pas prêt à recevoir de la monnaie."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Vous avez déjà modifié votre monnaie de référence récemment, veuillez réessayer plus tard (par exemple dans une semaine) ou contacter support@liberapay.com."
 
@@ -1653,6 +1660,9 @@ msgstr "Nom"
 msgid "Currencies"
 msgstr "Monnaies"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Objectif"
 
@@ -1819,6 +1829,10 @@ msgstr "Les revenus inutilisés seront utilisés dans les semaines suivantes, il
 
 msgid "Leftover"
 msgstr "Restant"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2073,6 +2087,15 @@ msgstr "Quitter"
 
 msgid "Explore communities"
 msgstr "Explorer les communautés"
+
+msgid "You have to check at least one box."
+msgstr "Vous devez cocher au moins une case."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "Les paramètres demandés sont incohérents."
@@ -2602,8 +2625,12 @@ msgid "Failure"
 msgstr "Échec"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "L'opérateur de paiement {name} a renvoyé une erreur : « {error_message} »."
+msgid "PayPal status code: {0}"
+msgstr "code d'état fourni par PayPal : {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "message d'erreur : {0}"
 
 msgid "The payment has been initiated."
 msgstr "Le paiement a été initié."
@@ -2636,6 +2663,10 @@ msgstr "PayPal révèle votre nom et votre adresse de courriel au destinataire."
 
 msgid "Initiate the payment"
 msgstr "Initier le paiement"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "L'opérateur de paiement {name} a renvoyé une erreur : « {error_message} »."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "L'instrument de paiement est invalide, veuillez en sélectionner ou en ajouter un autre."
@@ -3083,10 +3114,6 @@ msgstr "prélèvement"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Ce paiement est en attente d'une inspection manuelle par un membre du personnel de Liberapay ayant pour but de vérifier qu'il n'est pas frauduleux."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "message d'erreur : {0}"
-
 msgid "hidden"
 msgstr "caché"
 
@@ -3140,10 +3167,6 @@ msgstr "don secret à {recipient_name} pour son rôle dans l'équipe {team_name}
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Ce paiement doit être approuvé manuellement par son destinataire via le site web de {provider}."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "code d'état fourni par PayPal : {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Le compte du payeur est suspendu en raison d'une suspicion de fraude ou d'une autre action non autorisée."
@@ -3234,9 +3257,6 @@ msgstr "Aucune notification à afficher."
 
 msgid "Next Page →"
 msgstr "Page suivante →"
-
-msgid "You have to check at least one box."
-msgstr "Vous devez cocher au moins une case."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

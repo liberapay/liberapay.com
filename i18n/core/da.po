@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1048,6 +1048,13 @@ msgstr "Denne betaling kan ikke behandles, fordi modtagerens konto er suspendere
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Din donation til {recipient} kan ikke behandles lige nu, fordi modtagerens konto ikke er klar til at modtage penge."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har allerede ændret din møntfod for nylig. Prøv igen senere (d.v.s. om en uge) eller kontakt support@liberapay.com."
 
@@ -1654,6 +1661,9 @@ msgstr "Navn"
 msgid "Currencies"
 msgstr "Valutaer"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Mål"
 
@@ -1821,6 +1831,10 @@ msgstr "Ubrugt indkomst vil blive brugt i løbet af de følgende uger, det akkum
 
 msgid "Leftover"
 msgstr "Overskydende"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2075,6 +2089,15 @@ msgstr "Forlad"
 
 msgid "Explore communities"
 msgstr "Udforsk fælleskaber"
+
+msgid "You have to check at least one box."
+msgstr "Du skal afkrydse mindst ét felt."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "De indsendte indstillinger passer ikke sammen."
@@ -2604,8 +2627,12 @@ msgid "Failure"
 msgstr "Fejl"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Betalingsformidleren {name} returnerede en fejl: “{error_message}“."
+msgid "PayPal status code: {0}"
+msgstr "PayPal-statuskode: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "fejlmeddelelse: {0}"
 
 msgid "The payment has been initiated."
 msgstr "Betalingen er blevet påbegyndt."
@@ -2638,6 +2665,10 @@ msgstr "Paypal viser dit navn og din e-mail til modtageren."
 
 msgid "Initiate the payment"
 msgstr "Påbegynd betalingen"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Betalingsformidleren {name} returnerede en fejl: “{error_message}“."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Betalingsmetoden er ugyldig. Vælg eller tilføj en anden."
@@ -3085,10 +3116,6 @@ msgstr "opkræv"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Denne betaling venter på at blive kontrolleret manuelt af Liberapays personale for indikationer på svindel."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "fejlmeddelelse: {0}"
-
 msgid "hidden"
 msgstr "skjult"
 
@@ -3142,10 +3169,6 @@ msgstr "hemmelig donation til {recipient_name} for at deltage i {team_name}-team
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Denne betaling skal godkendes manuelt af modtageren via {provider}s hjemmeside."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPal-statuskode: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Betalers konto er suspenderet på grund af mistanke om svindel eller andre uautoriserede handlinger."
@@ -3236,9 +3259,6 @@ msgstr "Ingen notifikationer at vise."
 
 msgid "Next Page →"
 msgstr "Næste side →"
-
-msgid "You have to check at least one box."
-msgstr "Du skal afkrydse mindst ét felt."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

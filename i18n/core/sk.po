@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1058,6 +1058,13 @@ msgstr "Platba nemôže byť spracované pretože účet prijímateľa je súča
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Váš príspevok pre {recipient} nemôže byť spracovaný, pretože účet príjemcu nie je pripravený na prijímanie darov."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Nedávno ste zmenili hlavnú menu, prosím skúste neskôr (napríklad za týždeň) alebo kontaktuje support@liberapay.com."
 
@@ -1668,6 +1675,9 @@ msgstr "Meno"
 msgid "Currencies"
 msgstr "Meny"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Cieľ"
 
@@ -1835,6 +1845,10 @@ msgstr "Nepoužitý zárobok bude vyplatený nasledujúce týždne, nenarastá v
 
 msgid "Leftover"
 msgstr "Prebytok"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2092,6 +2106,15 @@ msgstr "Opustiť"
 
 msgid "Explore communities"
 msgstr "Prechádzať komunity"
+
+msgid "You have to check at least one box."
+msgstr "Musíte zaškrtnúť aspoň jedno políčko."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "Odoslané nastavenia nie sú koherentné."
@@ -2630,8 +2653,12 @@ msgid "Failure"
 msgstr "Chyba"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Platobný systém {name} vrátil chybu: \"{error_message}\"."
+msgid "PayPal status code: {0}"
+msgstr "Stavový kód PayPal: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "chybová správa: {0}"
 
 msgid "The payment has been initiated."
 msgstr "Platba bola zahájená."
@@ -2665,6 +2692,10 @@ msgstr "PayPal prezradí príjemcovi vaše meno a emailovú adresu."
 
 msgid "Initiate the payment"
 msgstr "Začnite platbu"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Platobný systém {name} vrátil chybu: \"{error_message}\"."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Platobný prostriedok nie je platný, prosím zvoľte alebo vytvorte iný."
@@ -3120,10 +3151,6 @@ msgstr "účtovať"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Táto platba čaká na manuálnu kontrolu personálu Liberapay, či neobsahuje známky podvodu."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "chybová správa: {0}"
-
 msgid "hidden"
 msgstr "skryté"
 
@@ -3177,10 +3204,6 @@ msgstr "tajný príspevok pre {recipient_name} za jeho rolu v tíme {team_name}"
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Táto platba musí byť manuálne potvrdená príjemcom cez stránku {provider}."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Stavový kód PayPal: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Účet platiteľa je pozastavený z dôvodu podozrenia z podvodu alebo iného neoprávneného konania."
@@ -3271,9 +3294,6 @@ msgstr "Žiadne oznámenia k zobrazeniu."
 
 msgid "Next Page →"
 msgstr "Ďalšia stránka →"
-
-msgid "You have to check at least one box."
-msgstr "Musíte zaškrtnúť aspoň jedno políčko."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

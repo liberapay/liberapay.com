@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1038,6 +1038,13 @@ msgstr "Ez a kifizetés nem dolgozható fel, mert a címzett fiókja jelenleg fe
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "A {recipient} felé irányuló adományt jelenleg nem lehet feldolgozni, mert a kedvezményezett fiókja még nem áll készen a pénz fogadására."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ön nemrégiben már megváltoztatta az elsődleges valutáját, kérjük próbálja újra később (pl.: egy hét múlva), vagy írjon a support@liberapay.com e-mail címre."
 
@@ -1640,6 +1647,9 @@ msgstr "Név"
 msgid "Currencies"
 msgstr "Pénznemek"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Cél"
 
@@ -1809,6 +1819,10 @@ msgstr "A fel nem használt bevételek a következő hetekben kerülnek felhaszn
 
 msgid "Leftover"
 msgstr "Maradék"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2060,6 +2074,15 @@ msgstr "Kilépés"
 
 msgid "Explore communities"
 msgstr "Közösségek felfedezése"
+
+msgid "You have to check at least one box."
+msgstr "Legalább egy rubrikát be kell jelölnie."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "A beküldött beállítások ellentmondásosak."
@@ -2580,8 +2603,12 @@ msgid "Failure"
 msgstr "Sikertelen"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "A(z) {name} pénzforgalmi feldolgozó hibaüzenetet adott vissza: \"{error_message}\"."
+msgid "PayPal status code: {0}"
+msgstr "PayPal státuszkód: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "hiba üzenet: {0}"
 
 msgid "The payment has been initiated."
 msgstr "A fizetési folyamat megkezdődött."
@@ -2613,6 +2640,10 @@ msgstr "A PayPal feltárja az Ön nevét és e-mail címét a kedvezményezett e
 
 msgid "Initiate the payment"
 msgstr "A fizetés megkezdése"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "A(z) {name} pénzforgalmi feldolgozó hibaüzenetet adott vissza: \"{error_message}\"."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "A fizetési eszköz érvénytelen, kérjük válasszon másikat vagy adjon hozzá egy újat."
@@ -3052,10 +3083,6 @@ msgstr "terhelés"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Ez a fizetés arra vár, hogy a Liberapay munkatársai kézzel ellenőrizzék a csalás szempontból."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "hiba üzenet: {0}"
-
 msgid "hidden"
 msgstr "rejtett"
 
@@ -3109,10 +3136,6 @@ msgstr "titkos adomány {recipient_name} számára a(z) {team_name} csapatban be
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Ezt a kifizetést a kedvezményezettnek kézzel kell jóváhagynia a {provider} weboldalán keresztül."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPal státuszkód: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "A fizető fél fiókja csalás vagy egyéb jogosulatlan tevékenység gyanúja miatt felfüggesztésre került."
@@ -3203,9 +3226,6 @@ msgstr "Nincsenek megjeleníthető értesítések."
 
 msgid "Next Page →"
 msgstr "Következő Oldal →"
-
-msgid "You have to check at least one box."
-msgstr "Legalább egy rubrikát be kell jelölnie."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

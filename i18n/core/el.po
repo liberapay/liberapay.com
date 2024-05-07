@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1048,6 +1048,13 @@ msgstr "Η πληρωμή δεν είναι δυνατόν να επεξεργα
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Η δωρεά σας στο/ην {recipient} δεν είναι επεξεργάσιμη τώρα, επειδή ο λογαριασμός του δικαιούχου δεν είναι έτοιμος να λάβει τα χρήματα."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Έχεις ήδη αλλάξει πρόσφατα το κυρίως νόμισμά σου, παρακαλώ δοκίμασε αργότερα (π.χ. σε μια εβδομάδα) ή επικοινώνησε με το support@liberapay.com."
 
@@ -1653,6 +1660,9 @@ msgstr "Όνομα"
 msgid "Currencies"
 msgstr "Συναλλάγματα"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Στόχος"
 
@@ -1820,6 +1830,10 @@ msgstr "Αχρησιμοποίητα εισοδήματα θα καταναλώ�
 
 msgid "Leftover"
 msgstr "Έχουν απομείνει"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2074,6 +2088,15 @@ msgstr "Αποχώρηση"
 
 msgid "Explore communities"
 msgstr "Εξερεύνηση κοινοτήτων"
+
+msgid "You have to check at least one box."
+msgstr "Πρέπει να επιλέξετε τουλάχιστον ένα πλαίσιο."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "Οι ρυθμίσεις που υποβάλλονται είναι ασυνάρτητες."
@@ -2603,8 +2626,12 @@ msgid "Failure"
 msgstr "Αποτυχία"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Ο επεξεργαστής πληρωμών {name} επέστρεψε ένα σφάλμα: \"{error_message}\"."
+msgid "PayPal status code: {0}"
+msgstr "Κωδικός κατάστασης PayPal: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "μήνυμα σφάλματος: {0}"
 
 msgid "The payment has been initiated."
 msgstr "Η πληρωμή έχει ξεκινήσει."
@@ -2637,6 +2664,10 @@ msgstr "Το PayPal αποκαλύπτει το όνομα και τη διεύ�
 
 msgid "Initiate the payment"
 msgstr "Ξεκινήστε την πληρωμή"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Ο επεξεργαστής πληρωμών {name} επέστρεψε ένα σφάλμα: \"{error_message}\"."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Το μέσο πληρωμής είναι άκυρο, παρακαλούμε επιλέξτε ή προσθέστε ένα άλλο."
@@ -3084,10 +3115,6 @@ msgstr "χρέωση"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Αυτή η πληρωμή αναμένεται να ελεγχθεί χειροκίνητα από το προσωπικό της Liberapay για ενδείξεις απάτης."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "μήνυμα σφάλματος: {0}"
-
 msgid "hidden"
 msgstr "κρυμμένο"
 
@@ -3141,10 +3168,6 @@ msgstr "μυστική δωρεά στον {recipient_name} για τον ρόλ
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Η πληρωμή αυτή πρέπει να εγκριθεί χειροκίνητα από τον παραλήπτη μέσω του δικτυακού τόπου του {provider}."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Κωδικός κατάστασης PayPal: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Ο λογαριασμός του πληρωτή αναστέλλεται λόγω υποψίας απάτης ή άλλης μη εξουσιοδοτημένης ενέργειας."
@@ -3235,9 +3258,6 @@ msgstr "Δεν υπάρχουν ειδοποιήσεις για εμφάνιση
 
 msgid "Next Page →"
 msgstr "Επόμενη Σελίδα →"
-
-msgid "You have to check at least one box."
-msgstr "Πρέπει να επιλέξετε τουλάχιστον ένα πλαίσιο."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

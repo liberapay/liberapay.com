@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1038,6 +1038,13 @@ msgstr "由於受領者的帳號目前被停權，所以無法處理這筆付款
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "您給{recipient}的捐款現在無法處理，因受益人的帳戶尚無法接受款項。"
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "你最近變動了主要的貨幣，請稍後（例如一週內）再試或聯絡 support@liberapay.com."
 
@@ -1638,6 +1645,9 @@ msgstr "名稱"
 msgid "Currencies"
 msgstr "貨幣"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "目標"
 
@@ -1805,6 +1815,10 @@ msgstr "未使用的收入會在未來數週內被消費掉，它不會累積在
 
 msgid "Leftover"
 msgstr "餘額"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2056,6 +2070,15 @@ msgstr "離開"
 
 msgid "Explore communities"
 msgstr "探索社區"
+
+msgid "You have to check at least one box."
+msgstr "你必須至少勾選一個方框。"
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "您提交的设定不连贯。"
@@ -2576,8 +2599,12 @@ msgid "Failure"
 msgstr "失敗"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "付款結算方 {name} 傳回錯誤訊息：「{error_message}」。"
+msgid "PayPal status code: {0}"
+msgstr "PayPal 狀態碼: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "錯誤訊息：{0}"
 
 msgid "The payment has been initiated."
 msgstr "此支付已被啟動。"
@@ -2609,6 +2636,10 @@ msgstr "PayPal 會向收款人顯示您的姓名和電子郵件地址。"
 
 msgid "Initiate the payment"
 msgstr "啟動支付"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "付款結算方 {name} 傳回錯誤訊息：「{error_message}」。"
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "支付方式無效，請另選或新增其它方式。"
@@ -3048,10 +3079,6 @@ msgstr "收費"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "這筆付款正在等待 Liberapay 員工進行人工審核，確定是否有欺詐跡象。"
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "錯誤訊息：{0}"
-
 msgid "hidden"
 msgstr "隱藏"
 
@@ -3105,10 +3132,6 @@ msgstr "不具名捐款給 {recipient_name}，以表彰其在 {team_name} 團隊
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "支付必須由收款者透過 {provider} 網站的手動操作來處理。"
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPal 狀態碼: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "由於付款人的帳戶涉嫌欺詐或其他未經授權的行為，該帳戶已被凍結。"
@@ -3199,9 +3222,6 @@ msgstr "無通知可顯示。"
 
 msgid "Next Page →"
 msgstr "下一頁 →"
-
-msgid "You have to check at least one box."
-msgstr "你必須至少勾選一個方框。"
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

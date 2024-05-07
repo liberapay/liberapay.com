@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, fuzzy, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1147,6 +1147,13 @@ msgstr "Seda makset ei saa töödelda, sest saaja konto on hetkel peatatud."
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Teie annetust aadressile {recipient} ei saa praegu töödelda, sest abisaaja konto ei ole raha vastuvõtmiseks valmis."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Olete juba hiljuti oma põhivaluutat muutnud, palun proovige hiljem (nt nädala pärast) uuesti või võtke ühendust aadressil support@liberapay.com."
@@ -1875,6 +1882,9 @@ msgstr "Nimi"
 msgid "Currencies"
 msgstr "Valuutad"
 
+msgid "Countries"
+msgstr ""
+
 #, fuzzy
 msgid "Goal"
 msgstr "Eesmärk"
@@ -2083,6 +2093,10 @@ msgstr "Kasutamata jäänud tulu kulub ära järgmistel nädalatel, see ei kogun
 #, fuzzy
 msgid "Leftover"
 msgstr "Ülejäänu"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2375,6 +2389,16 @@ msgstr "Lahku"
 #, fuzzy
 msgid "Explore communities"
 msgstr "Tutvu kogukondadega"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Te peate märgistama vähemalt ühe kasti."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 #, fuzzy
 msgid "The submitted settings are incoherent."
@@ -3023,8 +3047,12 @@ msgid "Failure"
 msgstr "Ebaõnnestumine"
 
 #, fuzzy, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Makseprotsessor {name} tagastas vea: \"{error_message}\"."
+msgid "PayPal status code: {0}"
+msgstr "PayPali staatuse kood: {0}"
+
+#, fuzzy, python-brace-format
+msgid "error message: {0}"
+msgstr "veateade: {0}"
 
 #, fuzzy
 msgid "The payment has been initiated."
@@ -3063,6 +3091,10 @@ msgstr "PayPal avaldab saajale teie nime ja e-posti aadressi."
 #, fuzzy
 msgid "Initiate the payment"
 msgstr "Makse algatamine"
+
+#, fuzzy, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Makseprotsessor {name} tagastas vea: \"{error_message}\"."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3588,10 +3620,6 @@ msgstr "tasu"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Liberapay töötajad kontrollivad seda makset käsitsi, et tuvastada pettuse tunnuseid."
 
-#, fuzzy, python-brace-format
-msgid "error message: {0}"
-msgstr "veateade: {0}"
-
 #, fuzzy
 msgid "hidden"
 msgstr "peidetud"
@@ -3647,10 +3675,6 @@ msgstr "salajane annetus {recipient_name} nende rolli eest {team_name} meeskonna
 #, fuzzy, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Selle makse peab saaja käsitsi heaks kiitma veebilehe {provider} kaudu."
-
-#, fuzzy, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPali staatuse kood: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3762,10 +3786,6 @@ msgstr "Teavitusi ei näidata."
 #, fuzzy
 msgid "Next Page →"
 msgstr "Järgmine lehekülg →"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "Te peate märgistama vähemalt ühe kasti."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1146,6 +1146,13 @@ msgstr "Không thể xử lý khoản thanh toán này vì tài khoản của ng
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Không thể xử lý khoản đóng góp của bạn cho {recipient} ngay bây giờ vì tài khoản của người thụ hưởng chưa sẵn sàng để nhận tiền."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Gần đây, bạn đã thay đổi đơn vị tiền tệ chính của mình, vui lòng thử lại sau (ví dụ: sau một tuần) hoặc liên hệ với support@liberapay.com."
@@ -1898,6 +1905,9 @@ msgstr "Tên"
 msgid "Currencies"
 msgstr "Tiền tệ"
 
+msgid "Countries"
+msgstr ""
+
 #, fuzzy
 msgid "Goal"
 msgstr "Mục tiêu"
@@ -2109,6 +2119,10 @@ msgstr "Thu nhập chưa sử dụng sẽ được tiêu thụ trong các tuần
 #, fuzzy
 msgid "Leftover"
 msgstr "Thức ăn thừa"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2404,6 +2418,16 @@ msgstr "Rời đi"
 #, fuzzy
 msgid "Explore communities"
 msgstr "Khám phá cộng đồng"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Bạn phải kiểm tra ít nhất một hộp."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 #, fuzzy
 msgid "The submitted settings are incoherent."
@@ -3045,8 +3069,12 @@ msgid "Failure"
 msgstr "Thất bại"
 
 #, fuzzy, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Bộ xử lý thanh toán {name} đã trả lại lỗi: “{error_message}”."
+msgid "PayPal status code: {0}"
+msgstr "Mã trạng thái PayPal: {0}"
+
+#, fuzzy, python-brace-format
+msgid "error message: {0}"
+msgstr "thông báo lỗi: {0}"
 
 #, fuzzy
 msgid "The payment has been initiated."
@@ -3084,6 +3112,10 @@ msgstr "PayPal tiết lộ tên và địa chỉ email của bạn cho người 
 #, fuzzy
 msgid "Initiate the payment"
 msgstr "Bắt đầu thanh toán"
+
+#, fuzzy, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Bộ xử lý thanh toán {name} đã trả lại lỗi: “{error_message}”."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3601,10 +3633,6 @@ msgstr "sạc pin"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Khoản thanh toán này đang chờ nhân viên Liberapay kiểm tra thủ công để tìm dấu hiệu gian lận."
 
-#, fuzzy, python-brace-format
-msgid "error message: {0}"
-msgstr "thông báo lỗi: {0}"
-
 #, fuzzy
 msgid "hidden"
 msgstr "ẩn"
@@ -3660,10 +3688,6 @@ msgstr "quyên góp bí mật cho {recipient_name} vì vai trò của họ trong
 #, fuzzy, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Khoản thanh toán này phải được người nhận phê duyệt theo cách thủ công thông qua trang web của {provider}."
-
-#, fuzzy, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Mã trạng thái PayPal: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3776,10 +3800,6 @@ msgstr "Không có thông báo nào để hiển thị."
 #, fuzzy
 msgid "Next Page →"
 msgstr "Trang tiếp theo & rarr;"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "Bạn phải kiểm tra ít nhất một hộp."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

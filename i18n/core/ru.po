@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1058,6 +1058,13 @@ msgstr "Этот платёж не может быть обработан, по�
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Ваше пожертвование {recipient} не может быть обработана прямо сейчас, так как аккаунт получателя ещё не готов принимать платежи."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Вы недавно меняли вашу основную валюту, попробуйте ещё раз позже (например, через неделю) или свяжитесь с support@liberapay.com."
 
@@ -1668,6 +1675,9 @@ msgstr "Имя"
 msgid "Currencies"
 msgstr "Валюты"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Цель"
 
@@ -1834,6 +1844,10 @@ msgstr "Неиспользованный доход будет израсход�
 
 msgid "Leftover"
 msgstr "Остаток"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2091,6 +2105,15 @@ msgstr "Выйти"
 
 msgid "Explore communities"
 msgstr "Список сообществ"
+
+msgid "You have to check at least one box."
+msgstr "Вы должны поставить галочку хотя бы в одном поле."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "Указанные настройки противоречат друг другу."
@@ -2629,8 +2652,12 @@ msgid "Failure"
 msgstr "Ошибка"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Обработчик платежа {name} возвратил ошибку: “{error_message}”."
+msgid "PayPal status code: {0}"
+msgstr "Код состояния PayPal: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "сообщение об ошибке: {0}"
 
 msgid "The payment has been initiated."
 msgstr "Платёж инициирован."
@@ -2664,6 +2691,10 @@ msgstr "PayPal раскрывает ваше имя и адрес электро
 
 msgid "Initiate the payment"
 msgstr "Начать оплату"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Обработчик платежа {name} возвратил ошибку: “{error_message}”."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Платежный инструмент недействителен, выберите или добавьте другой."
@@ -3119,10 +3150,6 @@ msgstr "списание"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Этот платеж ожидает ручной проверки сотрудниками Liberapay на наличие признаков мошенничества."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "сообщение об ошибке: {0}"
-
 msgid "hidden"
 msgstr "скрытый"
 
@@ -3176,10 +3203,6 @@ msgstr "секретное пожертвование {recipient_name} за их
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Этот платеж должен быть подтвержден получателем вручную через веб-сайт {provider}."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Код состояния PayPal: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Счет плательщика деактивирован из-за подозрения в мошенничестве или других несанкционированных действиях."
@@ -3270,9 +3293,6 @@ msgstr "Нет уведомлений для отображения."
 
 msgid "Next Page →"
 msgstr "Следующая страница →"
-
-msgid "You have to check at least one box."
-msgstr "Вы должны поставить галочку хотя бы в одном поле."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

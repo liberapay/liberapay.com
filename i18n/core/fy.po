@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, fuzzy, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1137,6 +1137,13 @@ msgstr "Dizze betelling kin net ferwurke wurde om't it akkount fan 'e ûntfanger
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Jo donaasje oan {recipient} kin no net ferwurke wurde, om't it akkount fan 'e begunstigde net ree is om jild te ûntfangen."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Jo hawwe jo haadfaluta koartlyn al feroare, besykje it letter nochris (bgl. oer in wike) of nim kontakt op mei support@liberapay.com."
@@ -1891,6 +1898,9 @@ msgstr "Namme"
 msgid "Currencies"
 msgstr "Faluta's"
 
+msgid "Countries"
+msgstr ""
+
 #, fuzzy
 msgid "Goal"
 msgstr "Doelpunt"
@@ -2099,6 +2109,10 @@ msgstr "Net brûkte ynkommen sil yn de folgjende wiken konsumearre wurde, it kom
 #, fuzzy
 msgid "Leftover"
 msgstr "Oerbliuwsel"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2395,6 +2409,16 @@ msgstr "Ferlitte"
 #, fuzzy
 msgid "Explore communities"
 msgstr "Mienskippen ûntdekke"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Jo moatte op syn minst ien fakje kontrolearje."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 #, fuzzy
 msgid "The submitted settings are incoherent."
@@ -3041,8 +3065,12 @@ msgid "Failure"
 msgstr "Mislearring"
 
 #, fuzzy, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "De betellingsprosessor {name} joech in flater werom: \"{error_message}\"."
+msgid "PayPal status code: {0}"
+msgstr "PayPal-statuskoade: {0}"
+
+#, fuzzy, python-brace-format
+msgid "error message: {0}"
+msgstr "flaterberjocht: {0}"
 
 msgid "The payment has been initiated."
 msgstr "It behanneljen fan de betelling is begûn."
@@ -3078,6 +3106,10 @@ msgstr "PayPal iepenbiere jo namme en e-mailadres oan de ûntfanger."
 #, fuzzy
 msgid "Initiate the payment"
 msgstr "Begjin de betelling"
+
+#, fuzzy, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "De betellingsprosessor {name} joech in flater werom: \"{error_message}\"."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3599,10 +3631,6 @@ msgstr "kosten"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Dizze betelling wachtet om manuell te wurde kontrolearre troch Liberapay-meiwurkers op tekens fan fraude."
 
-#, fuzzy, python-brace-format
-msgid "error message: {0}"
-msgstr "flaterberjocht: {0}"
-
 #, fuzzy
 msgid "hidden"
 msgstr "ferburgen"
@@ -3658,10 +3686,6 @@ msgstr "geheime donaasje oan {recipient_name} foar har rol yn it team {team_name
 #, fuzzy, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Dizze betelling moat mei de hân goedkard wurde troch de ûntfanger fia de webside fan {provider}."
-
-#, fuzzy, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPal-statuskoade: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3773,10 +3797,6 @@ msgstr "Gjin notifikaasjes om te sjen."
 #, fuzzy
 msgid "Next Page →"
 msgstr "Folgjende side →"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "Jo moatte op syn minst ien fakje kontrolearje."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

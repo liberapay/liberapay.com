@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1048,6 +1048,13 @@ msgstr "Alıcının hesabı şu anda askıya alındığı için bu ödeme işlem
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "{recipient} adresine bağışınız şu anda işlenemiyor çünkü yararlanıcı hesabı para almaya hazır değil."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ana para biriminizi zaten yakın zamanda değiştirdiniz, lütfen daha sonra tekrar deneyin (örn. bir hafta içinde) veya support@liberapay.com ile iletişime geçin."
 
@@ -1653,6 +1660,9 @@ msgstr "Ad"
 msgid "Currencies"
 msgstr "Para Birimleri"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Hedef"
 
@@ -1819,6 +1829,10 @@ msgstr "Kullanılmayan gelir sonraki haftalarda tüketilecektir, takım hesabın
 
 msgid "Leftover"
 msgstr "Artık"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2073,6 +2087,15 @@ msgstr "Ayrıl"
 
 msgid "Explore communities"
 msgstr "Toplulukları keşfet"
+
+msgid "You have to check at least one box."
+msgstr "En az bir kutucuğu işaretlemeniz gerekir."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "Gönderilen ayarlar tutarsız."
@@ -2602,8 +2625,12 @@ msgid "Failure"
 msgstr "Başarısız"
 
 #, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "{name} ödeme işleyicisi bir hata verdi: “{error_message}”."
+msgid "PayPal status code: {0}"
+msgstr "PayPal durum kodu: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "hata mesajı: {0}"
 
 msgid "The payment has been initiated."
 msgstr "Ödeme başlatıldı."
@@ -2636,6 +2663,10 @@ msgstr "PayPal, adınızı ve e-posta adresinizi alıcıya gösterir."
 
 msgid "Initiate the payment"
 msgstr "Ödemeyi başlat"
+
+#, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "{name} ödeme işleyicisi bir hata verdi: “{error_message}”."
 
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Ödeme aracı geçersiz, lütfen başka bir tane seçin veya ekleyin."
@@ -3083,10 +3114,6 @@ msgstr "ücretlendir"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Bu ödeme, Liberapay personeli tarafından dolandırıcılık belirtilerine karşı elle denetlenmeyi bekliyor."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "hata mesajı: {0}"
-
 msgid "hidden"
 msgstr "gizli"
 
@@ -3140,10 +3167,6 @@ msgstr "{team_name} takımındaki rolü için {recipient_name} kullanıcısına 
 #, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Bu ödeme alıcı tarafından {provider} web sitesi aracılığıyla elle onaylanmalıdır."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPal durum kodu: {0}"
 
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
 msgstr "Ödeme yapan kişinin hesabı, dolandırıcılık şüphesi veya diğer yetkisiz eylemler nedeniyle askıya alındı."
@@ -3234,9 +3257,6 @@ msgstr "Gösterilecek bildirim yok."
 
 msgid "Next Page →"
 msgstr "Sonraki Sayfa →"
-
-msgid "You have to check at least one box."
-msgstr "En az bir kutucuğu işaretlemeniz gerekir."
 
 #, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

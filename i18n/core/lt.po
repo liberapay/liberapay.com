@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, fuzzy, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1154,6 +1154,13 @@ msgstr "Šis mokėjimas negali būti atliktas, nes gavėjo sąskaita šiuo metu 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Jūsų auka {recipient} šiuo metu negali būti apdorota, nes gavėjo sąskaita nėra paruošta priimti pinigus."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Neseniai pakeitėte pagrindinę valiutą, bandykite tai padaryti vėliau (pvz., po savaitės) arba kreipkitės į support@liberapay.com."
@@ -1826,6 +1833,9 @@ msgstr "Vardas"
 msgid "Currencies"
 msgstr "Valiutos"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Tikslas"
 
@@ -2016,6 +2026,10 @@ msgstr "Nepanaudotos pajamos bus panaudotos per kitas savaites, jos nesikaupia k
 #, fuzzy
 msgid "Leftover"
 msgstr "Likučiai"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2311,6 +2325,16 @@ msgstr "Palikti"
 #, fuzzy
 msgid "Explore communities"
 msgstr "Ištirti bendruomenes"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Turite pažymėti bent vieną langelį."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 #, fuzzy
 msgid "The submitted settings are incoherent."
@@ -2951,9 +2975,13 @@ msgstr "Mokėjimas {charge_amount} buvo sėkmingas."
 msgid "Failure"
 msgstr "Nesėkmė"
 
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr "PayPal būsenos kodas: {0}"
+
 #, fuzzy, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Mokėjimo apdorojimo procesorius {name} grąžino klaidą: \"{error_message}\"."
+msgid "error message: {0}"
+msgstr "klaidos pranešimas: {0}"
 
 #, fuzzy
 msgid "The payment has been initiated."
@@ -2993,6 +3021,10 @@ msgstr "\"PayPal\" gavėjui atskleidžia jūsų vardą, pavardę ir el. pašto a
 #, fuzzy
 msgid "Initiate the payment"
 msgstr "Inicijuoti mokėjimą"
+
+#, fuzzy, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Mokėjimo apdorojimo procesorius {name} grąžino klaidą: \"{error_message}\"."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3505,10 +3537,6 @@ msgstr "mokestis"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Šį mokėjimą rankiniu būdu patikrins \"Liberapay\" darbuotojai, ar nėra sukčiavimo požymių."
 
-#, fuzzy, python-brace-format
-msgid "error message: {0}"
-msgstr "klaidos pranešimas: {0}"
-
 #, fuzzy
 msgid "hidden"
 msgstr "paslėpta"
@@ -3564,10 +3592,6 @@ msgstr "slaptas dovanojimas {recipient_name} už jų vaidmenį {team_name} koman
 #, fuzzy, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Šį mokėjimą gavėjas turi patvirtinti rankiniu būdu svetainėje {provider}."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "PayPal būsenos kodas: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3670,10 +3694,6 @@ msgstr "Pranešimai nerodomi."
 
 msgid "Next Page →"
 msgstr "Kitas puslapis →"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "Turite pažymėti bent vieną langelį."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."

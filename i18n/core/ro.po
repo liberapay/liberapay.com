@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.15.0\n"
 
 #, fuzzy, python-brace-format
 msgid "The translation of this page from English is not yet complete. {link_start}You can contribute{link_end}."
@@ -1105,6 +1105,13 @@ msgstr "Această plată nu poate fi procesată deoarece contul destinatarului es
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Donația dvs. către {recipient} nu poate fi procesată în acest moment deoarece contul beneficiarului nu este pregătit să primească bani."
 
+#, python-brace-format
+msgid "{username} does not accept donations from {country}."
+msgstr ""
+
+msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
+msgstr ""
+
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ați schimbat deja valuta principală în ultima vreme, încercați mai târziu (de ex. într-o săptămână) sau contactați support@liberapay.com."
 
@@ -1751,6 +1758,9 @@ msgstr "Nume"
 msgid "Currencies"
 msgstr "Valute"
 
+msgid "Countries"
+msgstr ""
+
 msgid "Goal"
 msgstr "Țel"
 
@@ -1924,6 +1934,10 @@ msgstr "Veniturile neutilizate vor fi consumate în săptămânile următoare, n
 
 msgid "Leftover"
 msgstr "Exces"
+
+#, python-brace-format
+msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2199,6 +2213,16 @@ msgstr "Părăsește"
 
 msgid "Explore communities"
 msgstr "Explorează comunități"
+
+#, fuzzy
+msgid "You have to check at least one box."
+msgstr "Trebuie să bifați cel puțin o căsuță."
+
+msgid "Which countries should your donors be allowed to send you money from?"
+msgstr ""
+
+msgid "We recommend limiting the origins of donations only if you are required to by law."
+msgstr ""
 
 msgid "The submitted settings are incoherent."
 msgstr "Configurările trimise sunt incoerente."
@@ -2782,9 +2806,13 @@ msgstr "Plata de {charge_amount} a fost efectuată cu succes."
 msgid "Failure"
 msgstr "Eșec"
 
-#, fuzzy, python-brace-format
-msgid "The payment processor {name} returned an error: “{error_message}”."
-msgstr "Procesatorul de plăți {name} a returnat o eroare: \"{error_message}\"."
+#, python-brace-format
+msgid "PayPal status code: {0}"
+msgstr "Cod de stare PayPal: {0}"
+
+#, python-brace-format
+msgid "error message: {0}"
+msgstr "mesaj de eroare: {0}"
 
 msgid "The payment has been initiated."
 msgstr "Plata a fost inițiată."
@@ -2819,6 +2847,10 @@ msgstr "PayPal dezvăluie destinatarului numele și adresa dvs. de e-mail."
 
 msgid "Initiate the payment"
 msgstr "Inițiază plata"
+
+#, fuzzy, python-brace-format
+msgid "The payment processor {name} returned an error: “{error_message}”."
+msgstr "Procesatorul de plăți {name} a returnat o eroare: \"{error_message}\"."
 
 #, fuzzy
 msgid "The payment instrument is invalid, please select or add another one."
@@ -3296,10 +3328,6 @@ msgstr "taxă"
 msgid "This payment is awaiting to be manually checked by Liberapay staff for signs of fraud."
 msgstr "Această plată așteaptă să fie verificată manual de către personalul Liberapay pentru a detecta semne de fraudă."
 
-#, python-brace-format
-msgid "error message: {0}"
-msgstr "mesaj de eroare: {0}"
-
 #, fuzzy
 msgid "hidden"
 msgstr "ascuns"
@@ -3355,10 +3383,6 @@ msgstr "donație secretă către {recipient_name} pentru rolul lor în echipa {t
 #, fuzzy, python-brace-format
 msgid "This payment must be manually approved by the recipient through {provider}'s website."
 msgstr "Această plată trebuie să fie aprobată manual de către beneficiar prin intermediul site-ului {provider}."
-
-#, python-brace-format
-msgid "PayPal status code: {0}"
-msgstr "Cod de stare PayPal: {0}"
 
 #, fuzzy
 msgid "The payer's account is suspended due to a suspicion of fraud or other unauthorized action."
@@ -3455,10 +3479,6 @@ msgstr "Nicio notificare de arătat."
 
 msgid "Next Page →"
 msgstr "Pagina următoare →"
-
-#, fuzzy
-msgid "You have to check at least one box."
-msgstr "Trebuie să bifați cel puțin o căsuță."
 
 #, fuzzy, python-brace-format
 msgid "You have {n} active patron giving you {money_amount} per week."
