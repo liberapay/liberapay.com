@@ -7,6 +7,8 @@ updates:
       interval: "weekly"
       day: "tuesday"
     ignore:
+      - dependency-name: "aspen"
       - dependency-name: "botocore"
         update-types: ["version-update:semver-patch"]
+      - dependency-name: "pando"
       - dependency-name: "psycopg2-pool"
