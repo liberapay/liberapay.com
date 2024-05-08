@@ -1050,12 +1050,13 @@ msgstr "Denne betalingen kan ikke behandles fordi mottagers konto for øyeblikke
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Din donasjon til {recipient} kan ikke behandles akkurat nå fordi mottagers konto ikke er klar til å motta penger."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} tar ikke imot donasjoner fra {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "Behandlingen av betalingen din har mislyktes fordi programvaren vår ikke klarte å finne ut hvilket land pengene skulle komme fra. Det er ikke meningen at dette skal skje."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du endret nylig hovedvalutaen din, prøv igjen senere (f.eks. neste uke), eller ta kontakt med support@liberapay.com."
@@ -1674,8 +1675,9 @@ msgstr "Navn"
 msgid "Currencies"
 msgstr "Valutaer"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Land"
 
 msgid "Goal"
 msgstr "Mål"
@@ -1845,9 +1847,9 @@ msgstr "Ubrukt inntekt vil bli brukt i påfølgende uker, det akkumuleres ikke p
 msgid "Leftover"
 msgstr "Til overs"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Det ser ut som du er i {country}. {username} godtar ikke donasjoner som kommer fra det landet."
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2111,11 +2113,13 @@ msgstr "Utforsk fellesskap"
 msgid "You have to check at least one box."
 msgstr "Du må krysse av i minst én boks."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Hvilke land skal giverne dine ha lov til å sende deg penger fra?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Vi anbefaler å begrense opprinnelsen til donasjoner bare hvis du er lovpålagt å gjøre det."
 
 msgid "The submitted settings are incoherent."
 msgstr "Innsendte innstillinger går ikke overens."

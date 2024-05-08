@@ -1048,12 +1048,13 @@ msgstr "Este pagamento não pode ser processado porque a conta do destinatário 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "O seu donativo para {recipient} não foi processado neste momento porque a conta do beneficiário não está pronta para receber donativos."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} não aceita donativos de {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "O processador de pagamentos falhou porque o nosso software não conseguiu determinar de que país vinha o dinheiro. Isto não é suposto acontecer."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Já mudou a sua moeda principal recentemente, tente novamente daqui a uma semana ou contacte-nos para support@liberapay.com."
@@ -1663,8 +1664,9 @@ msgstr "Nome"
 msgid "Currencies"
 msgstr "Moedas"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Países"
 
 msgid "Goal"
 msgstr "Objetivo"
@@ -1834,9 +1836,9 @@ msgstr "A renda não usada será consumida nas semanas seguintes, ela não acumu
 msgid "Leftover"
 msgstr "Sobrante"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Parece que está em {country}. {username} não aceita donativos provenientes desse país."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2097,11 +2099,13 @@ msgstr "Ver comunidades"
 msgid "You have to check at least one box."
 msgstr "Você tem que marcar pelo menos uma caixa."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "De que países devem os seus doadores ser autorizados a enviar dinheiro?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Recomendamos que limite a origem dos donativos apenas se for obrigado por lei."
 
 msgid "The submitted settings are incoherent."
 msgstr "As configurações enviadas são incoerentes."

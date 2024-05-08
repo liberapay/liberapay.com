@@ -1048,12 +1048,13 @@ msgstr "Betalningen kunde inte genomföras eftersom mottagarens konto i nuläget
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Din donation till {recipient} kan inte behandlas just nu eftersom mottagarens konto inte är redo för att ta emot pengar."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} tar inte emot donationer från {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "Betalningen behandlas inte eftersom vår programvara inte kunde avgöra vilket land pengarna skulle komma från. Detta är inte meningen att hända."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har redan ändrat din huvudvaluta nyligen, var god försök senare (t.ex. om en vecka) eller kontakta support@liberapay.com."
@@ -1660,8 +1661,9 @@ msgstr "Namn"
 msgid "Currencies"
 msgstr "Valutor"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Länder"
 
 msgid "Goal"
 msgstr "Mål"
@@ -1830,9 +1832,9 @@ msgstr "Oanvänd inkomst kommer förbrukas under de kommande veckorna, de ackumu
 msgid "Leftover"
 msgstr "Överblivet"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Det ser ut som om du är i {country}. {username} tar inte emot donationer som kommer från det landet."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2091,11 +2093,13 @@ msgstr "Utforska nätverk"
 msgid "You have to check at least one box."
 msgstr "Du måste bocka för minst en ruta."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Vilka länder ska dina givare få skicka pengar till dig från?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Vi rekommenderar att du begränsar ursprunget för donationer endast om du är skyldig att göra det enligt lag."
 
 msgid "The submitted settings are incoherent."
 msgstr "The inmatade värdena är inte giltiga."

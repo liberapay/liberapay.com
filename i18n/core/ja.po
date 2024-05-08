@@ -1038,12 +1038,13 @@ msgstr "現在受取人のアカウントが利用停止中のため、この支
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "受取人のアカウントは寄付を受け取る準備ができていないため、{recipient}さんへの支払いを処理できません。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} {country} からの寄付は承認していない。"
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "あなたの支払い手続きは、当社のソフトウェアが金銭の出所を特定できなかったために失敗しました。このようなことは起こりえません。"
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "最近、すでにメイン通貨を変更しています。間を空けてお試しいただくか（1週間後など）、support@liberapay.com までお問い合わせください。"
@@ -1646,8 +1647,9 @@ msgstr "名前"
 msgid "Currencies"
 msgstr "通貨"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "国名"
 
 msgid "Goal"
 msgstr "目標"
@@ -1817,9 +1819,9 @@ msgstr "未使用の収入は次の週に消費されますが、チームアカ
 msgid "Leftover"
 msgstr "繰り越し"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "{country}。{username}、その国からの寄付は承認していない。"
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2075,11 +2077,13 @@ msgstr "コミュニティを探す"
 msgid "You have to check at least one box."
 msgstr "少なくとも1つの項目にチェックを入れる必要があります。"
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "あなたの寄付者は、どの国からあなたに金銭を送ることを許されるべきですか？"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "法律で義務付けられている場合に限り、寄付の出所を制限することをお勧めします。"
 
 msgid "The submitted settings are incoherent."
 msgstr "送信された設定は一貫性がありません。"

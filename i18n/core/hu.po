@@ -1038,12 +1038,13 @@ msgstr "Ez a kifizetés nem dolgozható fel, mert a címzett fiókja jelenleg fe
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "A {recipient} felé irányuló adományt jelenleg nem lehet feldolgozni, mert a kedvezményezett fiókja még nem áll készen a pénz fogadására."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} nem fogad el adományokat a {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "A fizetés feldolgozása meghiúsult, mert a szoftverünk nem tudta megállapítani, hogy a pénz melyik országból származik. Ennek nem szabadna megtörténnie."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ön nemrégiben már megváltoztatta az elsődleges valutáját, kérjük próbálja újra később (pl.: egy hét múlva), vagy írjon a support@liberapay.com e-mail címre."
@@ -1647,8 +1648,9 @@ msgstr "Név"
 msgid "Currencies"
 msgstr "Pénznemek"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Országok"
 
 msgid "Goal"
 msgstr "Cél"
@@ -1820,9 +1822,9 @@ msgstr "A fel nem használt bevételek a következő hetekben kerülnek felhaszn
 msgid "Leftover"
 msgstr "Maradék"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Úgy tűnik, hogy Ön a {country} oldalon van. A {username} nem fogad el adományokat abból az országból."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2078,11 +2080,13 @@ msgstr "Közösségek felfedezése"
 msgid "You have to check at least one box."
 msgstr "Legalább egy rubrikát be kell jelölnie."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Mely országokból küldhetnek pénzt az adományozók?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Javasoljuk, hogy csak akkor korlátozza az adományok eredetét, ha erre jogszabály kötelezi."
 
 msgid "The submitted settings are incoherent."
 msgstr "A beküldött beállítások ellentmondásosak."

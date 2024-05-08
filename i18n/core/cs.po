@@ -1058,12 +1058,13 @@ msgstr "Tuto platbu nelze zpracovat, protože účet příjemce je v současné 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Váš dar pro {recipient} nelze nyní zpracovat, protože účet příjemce není připraven na příjem peněz."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} nepřijímá dary od {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "Zpracování vaší platby se nezdařilo, protože náš software nedokázal určit, ze které země mají peníze přijít. To by se nemělo stát."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Hlavní měnu jste již nedávno změnili, zkuste to prosím později (např. za týden) nebo kontaktujte support@liberapay.com."
@@ -1675,8 +1676,9 @@ msgstr "Jméno"
 msgid "Currencies"
 msgstr "Měny"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Země"
 
 msgid "Goal"
 msgstr "Cíl"
@@ -1845,9 +1847,9 @@ msgstr "Nevyužité příjmy se spotřebují v následujících týdnech, na tý
 msgid "Leftover"
 msgstr "Přebytek"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Vypadá to, že jste na {country}. {username} nepřijímá dary pocházející z této země."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2109,11 +2111,13 @@ msgstr "Procházet společenství"
 msgid "You have to check at least one box."
 msgstr "Musíte zaškrtnout alespoň jedno políčko."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Z jakých zemí by vám dárci měli smět posílat peníze?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Původ darů doporučujeme omezit pouze v případě, že vám to ukládá zákon."
 
 msgid "The submitted settings are incoherent."
 msgstr "Předložená nastavení jsou nesouvislá."

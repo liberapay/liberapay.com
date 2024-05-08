@@ -1058,12 +1058,13 @@ msgstr "Этот платёж не может быть обработан, по�
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Ваше пожертвование {recipient} не может быть обработана прямо сейчас, так как аккаунт получателя ещё не готов принимать платежи."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} не принимает пожертвования с сайта {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "Обработка вашего платежа не удалась, потому что наше программное обеспечение не смогло определить, из какой страны поступили деньги. Этого не должно было произойти."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Вы недавно меняли вашу основную валюту, попробуйте ещё раз позже (например, через неделю) или свяжитесь с support@liberapay.com."
@@ -1675,8 +1676,9 @@ msgstr "Имя"
 msgid "Currencies"
 msgstr "Валюты"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Страны"
 
 msgid "Goal"
 msgstr "Цель"
@@ -1845,9 +1847,9 @@ msgstr "Неиспользованный доход будет израсход�
 msgid "Leftover"
 msgstr "Остаток"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Похоже, вы находитесь в {country}. {username} не принимает пожертвования из этой страны."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2109,11 +2111,13 @@ msgstr "Список сообществ"
 msgid "You have to check at least one box."
 msgstr "Вы должны поставить галочку хотя бы в одном поле."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Из каких стран вашим донорам разрешено отправлять вам деньги?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Мы рекомендуем ограничивать происхождение пожертвований только в том случае, если это требуется по закону."
 
 msgid "The submitted settings are incoherent."
 msgstr "Указанные настройки противоречат друг другу."

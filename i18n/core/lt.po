@@ -1154,12 +1154,13 @@ msgstr "Šis mokėjimas negali būti atliktas, nes gavėjo sąskaita šiuo metu 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Jūsų auka {recipient} šiuo metu negali būti apdorota, nes gavėjo sąskaita nėra paruošta priimti pinigus."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} nepriima aukų iš {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "Jūsų mokėjimas nebuvo apdorotas, nes mūsų programinei įrangai nepavyko nustatyti, iš kurios šalies bus pervesti pinigai. Taip neturėtų nutikti."
 
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
@@ -1833,8 +1834,9 @@ msgstr "Vardas"
 msgid "Currencies"
 msgstr "Valiutos"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Šalys"
 
 msgid "Goal"
 msgstr "Tikslas"
@@ -2027,9 +2029,9 @@ msgstr "Nepanaudotos pajamos bus panaudotos per kitas savaites, jos nesikaupia k
 msgid "Leftover"
 msgstr "Likučiai"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Atrodo, kad esate {country}. {username} nepriima aukų iš šios šalies."
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2330,11 +2332,13 @@ msgstr "Ištirti bendruomenes"
 msgid "You have to check at least one box."
 msgstr "Turite pažymėti bent vieną langelį."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Iš kurių šalių donorams turėtų būti leidžiama siųsti jums pinigus?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Rekomenduojame apriboti dovanų kilmę tik tuo atveju, jei to reikalaujama pagal įstatymus."
 
 #, fuzzy
 msgid "The submitted settings are incoherent."

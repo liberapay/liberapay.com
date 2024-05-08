@@ -1147,12 +1147,13 @@ msgstr "Seda makset ei saa töödelda, sest saaja konto on hetkel peatatud."
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Teie annetust aadressile {recipient} ei saa praegu töödelda, sest abisaaja konto ei ole raha vastuvõtmiseks valmis."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr ""
+msgstr "{username} ei võta vastu annetusi aadressilt {country}."
 
+#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr ""
+msgstr "Teie makse töötlemine ebaõnnestus, sest meie tarkvara ei suutnud kindlaks teha, millisest riigist raha tuleb. Seda ei tohiks juhtuda."
 
 #, fuzzy
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
@@ -1882,8 +1883,9 @@ msgstr "Nimi"
 msgid "Currencies"
 msgstr "Valuutad"
 
+#, fuzzy
 msgid "Countries"
-msgstr ""
+msgstr "Riigid"
 
 #, fuzzy
 msgid "Goal"
@@ -2094,9 +2096,9 @@ msgstr "Kasutamata jäänud tulu kulub ära järgmistel nädalatel, see ei kogun
 msgid "Leftover"
 msgstr "Ülejäänu"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr ""
+msgstr "Paistab, et olete aadressil {country}. {username} ei võta vastu sellest riigist pärit annetusi."
 
 #, fuzzy, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2394,11 +2396,13 @@ msgstr "Tutvu kogukondadega"
 msgid "You have to check at least one box."
 msgstr "Te peate märgistama vähemalt ühe kasti."
 
+#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr ""
+msgstr "Millistest riikidest peaksid teie doonorid teile raha saatma?"
 
+#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr ""
+msgstr "Soovitame piirata annetuste päritolu ainult siis, kui seadus seda nõuab."
 
 #, fuzzy
 msgid "The submitted settings are incoherent."
