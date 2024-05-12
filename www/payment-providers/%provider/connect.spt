@@ -103,6 +103,9 @@ elif 'state' in request.qs:
     else:
         raise ValueError(provider_name)
     if token_response.status_code != 200:
+        website.logger.error(
+            f"{provider.display_name} responded with {response.code}: {token_response.text}"
+        )
         raise response.error(502, _(
             "{0} returned an error, please try again later.", provider.display_name
         ))
