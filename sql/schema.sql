@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '175'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '176'::jsonb);
 
 
 -- app configuration
@@ -173,8 +173,12 @@ CREATE TRIGGER update_profile_visibility
 
 CREATE TABLE recipient_settings
 ( participant           bigint   PRIMARY KEY REFERENCES participants
-, patron_visibilities   int      NOT NULL CHECK (patron_visibilities > 0)
+, patron_visibilities   int      CHECK (patron_visibilities > 0)
 -- Three bits: 1 is for "secret", 2 is for "private", 4 is for "public".
+, patron_countries      text     CHECK (patron_countries <> '')
+-- A comma (,) separated list of uppercase 3-letter ISO country codes, possibly
+-- prefixed with a dash (-) indicating that the listed countries are the ones
+-- to exclude rather than the ones to allow.
 );
 
 
