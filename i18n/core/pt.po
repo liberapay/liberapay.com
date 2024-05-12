@@ -849,7 +849,7 @@ msgstr "O nome de utilizador '{0}' é muito longo."
 msgid "The username '{0}' contains invalid characters."
 msgstr "O nome de utilizador '{0}' contém caracteres inválidos."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
 msgstr "O nome de utilizador '{0}' é puramente numérico. Isto não é permitido."
 
@@ -999,17 +999,17 @@ msgstr "O utilizador {0} não aceita donativos."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} não aceita donativos em {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
-msgstr "{username} já não aceita donativos secretos."
+msgstr "{username} já não aceita doações secretas."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
-msgstr "{username} já não aceita donativos privados."
+msgstr "{username} não aceita mais donativos privados."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
-msgstr "{username} já não aceita donativos públicos."
+msgstr "{username} não aceita mais donativos públicos."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
@@ -1048,13 +1048,12 @@ msgstr "Este pagamento não pode ser processado porque a conta do destinatário 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "O seu donativo para {recipient} não foi processado neste momento porque a conta do beneficiário não está pronta para receber donativos."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
 msgstr "{username} não aceita donativos de {country}."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr "O processador de pagamentos falhou porque o nosso software não conseguiu determinar de que país vinha o dinheiro. Isto não é suposto acontecer."
+msgstr "O processamento do pagamento falhou porque o nosso software não conseguiu determinar de que país vinha o dinheiro. Isto não é normal."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Já mudou a sua moeda principal recentemente, tente novamente daqui a uma semana ou contacte-nos para support@liberapay.com."
@@ -1424,9 +1423,8 @@ msgstr "Sair"
 msgid "Print"
 msgstr "Imprimir"
 
-#, fuzzy
 msgid "Liberapay logo"
-msgstr "Logótipo Liberapay"
+msgstr "Logótipo do Liberapay"
 
 #, python-brace-format
 msgid "{0} has {n} patron."
@@ -1643,7 +1641,7 @@ msgstr "Visão geral"
 
 #, fuzzy
 msgid "Recipients"
-msgstr "Beneficiários"
+msgstr "Recipientes"
 
 #, fuzzy
 msgid "Hopefuls"
