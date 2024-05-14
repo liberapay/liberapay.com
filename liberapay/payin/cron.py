@@ -23,7 +23,7 @@ def reschedule_renewals():
     """This function looks for inconsistencies in scheduled payins.
     """
     donors = website.db.all("""
-        SELECT p
+        SELECT p, tips.count AS expected
           FROM ( SELECT tip.tipper, count(*)
                    FROM current_tips tip
                    JOIN participants tippee_p ON tippee_p.id = tip.tippee
@@ -62,7 +62,19 @@ def reschedule_renewals():
                     WHERE sp.payer = p.id
                       AND sp.payin IS NULL
                ), 0)
-        UNION
+    """)
+    for p, expected in donors:
+        logger.info(f"Rescheduling the renewals of participant ~{p.id}")
+        new_schedule = p.schedule_renewals()
+        actual = sum(len(sp.transfers) for sp in new_schedule)
+        if actual < expected:
+            logger.warning(
+                "Rescheduling the renewals of participant ~%s failed to correct "
+                "the imbalance: expected %s, found %s",
+                p.id, expected, actual,
+            )
+        sleep(0.1)
+    donors = website.db.all("""
         SELECT ( SELECT p FROM participants p WHERE p.id = tip.tipper )
           FROM current_tips tip
           JOIN participants tippee_p ON tippee_p.id = tip.tippee
