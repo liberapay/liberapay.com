@@ -1,3 +1,4 @@
+from liberapay.exceptions import BadEmailAddress
 from liberapay.utils import form_post_success, get_participant
 
 [---]
@@ -8,6 +9,8 @@ if request.method == 'POST':
 
     if src not in constants.AVATAR_SOURCES:
         raise response.invalid_input(src, 'src', 'body')
+    if '@' not in email:
+        raise BadEmailAddress(email)
 
     new_avatar_url = participant.update_avatar(src+':', avatar_email=email)
     if new_avatar_url:
