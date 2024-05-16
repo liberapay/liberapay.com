@@ -25,14 +25,14 @@ StandardTip = namedtuple('StandardTip', 'label weekly monthly yearly')
 _ = lambda a: a
 
 ACCOUNT_MARK_CLASSES = {
-    'trusted': 'success',
-    'okay': 'info',
-    'unsettling': 'info',
-    'controversial': 'warning',
-    'irrelevant': 'warning',
-    'misleading': 'warning',
-    'fraud': 'danger',
-    'spam': 'danger',
+    'trusted': 'text-success',
+    'okay': 'text-info',
+    'unsettling': 'text-info',
+    'controversial': 'text-warning',
+    'irrelevant': 'text-warning',
+    'misleading': 'text-warning',
+    'fraud': 'text-danger',
+    'spam': 'text-danger',
 }
 
 ASCII_ALLOWED_IN_USERNAME = set("0123456789"
@@ -158,17 +158,6 @@ INVOICE_STATUSES = {
 }
 
 LAUNCH_TIME = datetime(2016, 2, 3, 12, 50, 0, 0, utc)
-
-MARK_CLASSES = {
-    'trusted': 'text-success',
-    'okay': 'text-info',
-    'unsettling': 'text-info',
-    'controversial': 'text-warning',
-    'irrelevant': 'text-warning',
-    'misleading': 'text-warning',
-    'spam': 'text-danger',
-    'fraud': 'text-danger',
-}
 
 PARTICIPANT_KINDS = {
     'individual': _("Individual"),
