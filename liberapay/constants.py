@@ -28,9 +28,9 @@ ACCOUNT_MARK_CLASSES = {
     'trusted': 'text-success',
     'okay': 'text-info',
     'unsettling': 'text-info',
-    'controversial': 'text-warning',
-    'irrelevant': 'text-warning',
-    'misleading': 'text-warning',
+    'controversial': 'text-muted',
+    'irrelevant': 'text-muted',
+    'misleading': 'text-muted',
     'fraud': 'text-danger',
     'spam': 'text-danger',
 }
