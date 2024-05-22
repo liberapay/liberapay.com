@@ -474,7 +474,7 @@ title = _("Funding your donations")
             % if route.network == 'stripe-card'
             <p>{{ _(
                 "We will charge your {brand} card (last four digits: {last4}).",
-                brand=route.get_brand(), last4=route.get_partial_number()
+                brand=route.get_brand(), last4=route.get_last4()
             ) }}</p>
             <button class="btn btn-default btn-sm" type="button" data-modify="#card-form">{{
                 _("Use another card")

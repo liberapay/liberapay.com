@@ -1,0 +1,19 @@
+import stripe
+
+from liberapay.models.exchange_route import ExchangeRoute
+from liberapay.utils import get_participant
+
+[---]
+
+participant = get_participant(state, restrict=True)
+route = ExchangeRoute.from_id(participant, request.path.get_int('route_id'))
+if route.network == 'stripe-sdd':
+    if route.address.startswith('pm_'):
+        mandate = stripe.Mandate.retrieve(route.mandate)
+        raise response.redirect(mandate.payment_method_details.sepa_debit.url)
+    else:
+        raise response.redirect(route.stripe_source.sepa_debit.mandate_url)
+else:
+    raise response.error(400, f"unexpected `route.network` value {route.network!r}")
+
+[---] text/html

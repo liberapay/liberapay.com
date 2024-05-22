@@ -113,6 +113,9 @@ title = _("Payment Instruments")
                 % if route.currency
                     <span class="text-muted">({{ locale.currencies.get(route.currency, route.currency) }})</span>
                 % endif
+                % if user.is_acting_as('admin')
+                    <span class="monospace text-warning">({{ route.owner_name }})</span>
+                % endif
                 % if route.is_default
                     &nbsp; <span class="label label-primary" title="{{ _(
                         'This instrument is used by default.'

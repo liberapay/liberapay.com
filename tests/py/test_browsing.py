@@ -55,12 +55,15 @@ class BrowseTestHarness(Harness):
                  VALUES (%s, %s, 'expense', ('28.04','EUR'), 'badges and stickers', null, '{}'::jsonb, 'new')
               RETURNING id
         """, (self.david.id, self.org.id))
+        self.route = self.db.ExchangeRoute.upsert_generic_route(self.david, 'paypal')
         Payday.start().run()
 
     def browse(self, **kw):
         for url in self.urls:
             if url.endswith('/%exchange_id') or '/receipts/' in url:
                 continue
+            if '/%route_id' in url:
+                url = url.replace('/%route_id', f'/{self.route.id}')
             url = url.replace('/team/invoices/%invoice_id', '/org/invoices/%s' % self.invoice_id)
             url = url.replace('/%invoice_id', '/%s' % self.invoice_id)
             assert '/%' not in url

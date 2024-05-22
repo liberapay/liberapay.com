@@ -1143,21 +1143,15 @@ class TestScheduledPayins(EmailHarness):
         assert payins[1].payer == alice.id
         assert payins[1].amount == EUR('43.00')
         assert payins[1].off_session is True
-        assert payins[1].status == 'awaiting_payer_action'
+        assert payins[1].status == 'failed'
         emails = self.get_emails()
         assert len(emails) == 1
         assert emails[0]['to'] == ['alice <alice@liberapay.com>']
-        assert emails[0]['subject'] == 'Liberapay donation renewal: authentication required'
-        payin_page_path = f'/alice/giving/pay/stripe/{payins[1].id}'
-        assert payin_page_path in emails[0]['text']
+        assert emails[0]['subject'] == 'Your payment has failed'
         scheduled_payins = self.db.all("SELECT * FROM scheduled_payins ORDER BY id")
         assert len(scheduled_payins) == 1
         assert scheduled_payins[0].payin == payins[1].id
         assert self.sr_mock.call_count == 0
-        # Test the payin page, it should redirect to the 3DSecure page
-        r = self.client.GET(payin_page_path, auth_as=alice, raise_immediately=False)
-        assert r.code == 200
-        assert r.headers[b'Refresh'].startswith(b'0;url=https://hooks.stripe.com/')
 
     def test_scheduled_automatic_payin_currency_unaccepted_before_reminder(self):
         alice = self.make_participant('alice', email='alice@liberapay.com')

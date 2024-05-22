@@ -17,6 +17,7 @@ from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import settle_charge_and_transfers, try_other_destinations
 from liberapay.testing import Harness, EUR, KRW, JPY, USD
 from liberapay.testing.emails import EmailHarness
+from liberapay.utils.types import Object
 
 
 class TestResolveAmounts(Harness):
@@ -1823,16 +1824,70 @@ class TestRefundsStripe(EmailHarness):
         super().tearDown()
 
     @patch('stripe.BalanceTransaction.retrieve')
-    @patch('stripe.Source.retrieve')
+    @patch('stripe.Customer.create')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_destination_charge(
-        self, construct_event, tr_retrieve, tr_modify, source_retrieve, bt_retrieve
+        self, construct_event, tr_retrieve, tr_modify, cus_create, bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
-        route = self.upsert_route(alice, 'stripe-card')
+        pm_card = stripe.PaymentMethod.construct_from(
+            json.loads('''{
+              "allow_redisplay": "unspecified",
+              "billing_details": {
+                "address": {
+                  "city": null,
+                  "country": null,
+                  "line1": null,
+                  "line2": null,
+                  "postal_code": null,
+                  "state": null
+                },
+                "email": null,
+                "name": "Alice",
+                "phone": null
+              },
+              "card": {
+                "brand": "visa",
+                "checks": {
+                  "address_line1_check": null,
+                  "address_postal_code_check": null,
+                  "cvc_check": "unchecked"
+                },
+                "country": "US",
+                "display_brand": "visa",
+                "exp_month": 1,
+                "exp_year": 2026,
+                "fingerprint": "k6ycurEAdsI1uF3b",
+                "funding": "credit",
+                "generated_from": null,
+                "last4": "4242",
+                "networks": {
+                  "available": [
+                    "visa"
+                  ],
+                  "preferred": null
+                },
+                "regulated_status": "unregulated",
+                "three_d_secure_usage": {
+                  "supported": true
+                },
+                "wallet": null
+              },
+              "created": 1737972884,
+              "customer": null,
+              "id": "pm_1QlpL6Fk4eGpfLOCMk6ovdcp",
+              "livemode": false,
+              "metadata": {},
+              "object": "payment_method",
+              "type": "card"
+            }'''),
+            stripe.api_key
+        )
+        cus_create.return_value = Object(id='cus_XXXXXXXXXXXXXX')
+        route = ExchangeRoute.attach_stripe_payment_method(alice, pm_card, False)
         alice.set_tip_to(bob, EUR('2.46'))
         payin, pt = self.make_payin_and_transfer(
             route, bob, EUR(400), fee=EUR('3.45'),
@@ -1899,16 +1954,17 @@ class TestRefundsStripe(EmailHarness):
                   },
                   "paid": true,
                   "payment_intent": null,
-                  "payment_method": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "payment_method": "pm_XXXXXXXXXXXXXXXXXXXXXXXXXX",
                   "payment_method_details": {
-                    "sepa_debit": {
-                      "bank_code": "12345",
-                      "branch_code": "10000",
+                    "card": {
                       "country": "FR",
+                      "display_brand": "visa",
+                      "exp_month": 1,
+                      "exp_year": 2099,
                       "fingerprint": "XXXXXXXXXXXXXXXX",
                       "last4": "0000"
                     },
-                    "type": "sepa_debit"
+                    "type": "card"
                   },
                   "receipt_email": null,
                   "receipt_number": null,
@@ -1940,66 +1996,6 @@ class TestRefundsStripe(EmailHarness):
                   },
                   "review": null,
                   "shipping": null,
-                  "source": {
-                    "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "object": "source",
-                    "amount": null,
-                    "client_secret": "src_client_secret_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "created": 1563594673,
-                    "currency": "eur",
-                    "customer": "cus_XXXXXXXXXXXXXX",
-                    "flow": "none",
-                    "livemode": false,
-                    "mandate": {
-                      "acceptance": {
-                        "date": null,
-                        "ip": null,
-                        "offline": null,
-                        "online": null,
-                        "status": "pending",
-                        "type": null,
-                        "user_agent": null
-                      },
-                      "amount": null,
-                      "currency": null,
-                      "interval": "variable",
-                      "notification_method": "none",
-                      "reference": "XXXXXXXXXXXXXXXX",
-                      "url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-                    },
-                    "metadata": {
-                    },
-                    "owner": {
-                      "address": {
-                        "city": null,
-                        "country": "FR",
-                        "line1": null,
-                        "line2": null,
-                        "postal_code": null,
-                        "state": null
-                      },
-                      "email": "xxxxxxxxx@outlook.fr",
-                      "name": "Jane Doe",
-                      "phone": null,
-                      "verified_address": null,
-                      "verified_email": null,
-                      "verified_name": null,
-                      "verified_phone": null
-                    },
-                    "sepa_debit": {
-                      "last4": "0000",
-                      "bank_code": "12345",
-                      "branch_code": "10000",
-                      "fingerprint": "XXXXXXXXXXXXXXXX",
-                      "country": "FR",
-                      "mandate_reference": "XXXXXXXXXXXXXXXX",
-                      "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-                    },
-                    "statement_descriptor": null,
-                    "status": "chargeable",
-                    "type": "sepa_debit",
-                    "usage": "reusable"
-                  },
                   "source_transfer": null,
                   "statement_descriptor": "Liberapay %(payin_id)s",
                   "status": "succeeded",
@@ -2140,62 +2136,18 @@ class TestRefundsStripe(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['subject'] == "A refund of €400.00 has been initiated"
         # Check that the receipt for this payment has been voided
-        source_retrieve.return_value = stripe.Source.construct_from(
-            json.loads('''{
-              "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
-              "object": "source",
-              "amount": null,
-              "created": 1563594673,
-              "currency": "eur",
-              "customer": "cus_XXXXXXXXXXXXXX",
-              "flow": "none",
-              "livemode": false,
-              "owner": {
-                "address": {
-                  "city": null,
-                  "country": "FR",
-                  "line1": null,
-                  "line2": null,
-                  "postal_code": null,
-                  "state": null
-                },
-                "email": "xxxxxxxxx@outlook.fr",
-                "name": "Jane Doe",
-                "phone": null,
-                "verified_address": null,
-                "verified_email": null,
-                "verified_name": null,
-                "verified_phone": null
-              },
-              "sepa_debit": {
-                "last4": "0000",
-                "bank_code": "12345",
-                "branch_code": "10000",
-                "fingerprint": "XXXXXXXXXXXXXXXX",
-                "country": "FR",
-                "mandate_reference": "XXXXXXXXXXXXXXXX",
-                "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-              },
-              "statement_descriptor": null,
-              "status": "chargeable",
-              "type": "sepa_debit",
-              "usage": "reusable"
-            }'''),
-            stripe.api_key
-        )
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
         assert r.code == 200
         assert ' fully refunded ' in r.text
 
     @patch('stripe.BalanceTransaction.retrieve')
-    @patch('stripe.Source.retrieve')
     @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_refunded_split_charge(
         self, construct_event, tr_retrieve, tr_modify, tr_create_reversal,
-        source_retrieve, bt_retrieve
+        bt_retrieve
     ):
         alice = self.make_participant('alice', email='alice@liberapay.com')
         bob = self.make_participant('bob')
@@ -2204,7 +2156,11 @@ class TestRefundsStripe(EmailHarness):
         self.add_payment_account(LiberapayOrg, 'stripe', id='acct_1ChyayFk4eGpfLOC')
         alice.set_tip_to(bob, EUR('1.00'))
         alice.set_tip_to(LiberapayOrg, EUR('1.00'))
-        route = self.upsert_route(alice, 'stripe-card')
+        route = self.upsert_route(
+            alice, 'stripe-card', address='pm_XXXXXXXXXXXXXXXXXXXXXXXXXX',
+            country='FR', brand='visa', last4='4242', fingerprint='XXXXXXXXXXXXXXXX',
+            owner_name='Alice', expiration_date='2099-01-01',
+        )
         payin, transfers = self.make_payin_and_transfers(
             route, EUR(400),
             [
@@ -2274,16 +2230,17 @@ class TestRefundsStripe(EmailHarness):
                   },
                   "paid": true,
                   "payment_intent": null,
-                  "payment_method": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
+                  "payment_method": "pm_XXXXXXXXXXXXXXXXXXXXXXXXXX",
                   "payment_method_details": {
-                    "sepa_debit": {
-                      "bank_code": "12345",
-                      "branch_code": "10000",
+                    "card": {
                       "country": "FR",
+                      "display_brand": "visa",
+                      "exp_month": 1,
+                      "exp_year": 2099,
                       "fingerprint": "XXXXXXXXXXXXXXXX",
                       "last4": "0000"
                     },
-                    "type": "sepa_debit"
+                    "type": "card"
                   },
                   "receipt_email": null,
                   "receipt_number": null,
@@ -2315,66 +2272,6 @@ class TestRefundsStripe(EmailHarness):
                   },
                   "review": null,
                   "shipping": null,
-                  "source": {
-                    "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "object": "source",
-                    "amount": null,
-                    "client_secret": "src_client_secret_XXXXXXXXXXXXXXXXXXXXXXXX",
-                    "created": 1563594673,
-                    "currency": "eur",
-                    "customer": "cus_XXXXXXXXXXXXXX",
-                    "flow": "none",
-                    "livemode": false,
-                    "mandate": {
-                      "acceptance": {
-                        "date": null,
-                        "ip": null,
-                        "offline": null,
-                        "online": null,
-                        "status": "pending",
-                        "type": null,
-                        "user_agent": null
-                      },
-                      "amount": null,
-                      "currency": null,
-                      "interval": "variable",
-                      "notification_method": "none",
-                      "reference": "XXXXXXXXXXXXXXXX",
-                      "url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-                    },
-                    "metadata": {
-                    },
-                    "owner": {
-                      "address": {
-                        "city": null,
-                        "country": "FR",
-                        "line1": null,
-                        "line2": null,
-                        "postal_code": null,
-                        "state": null
-                      },
-                      "email": "xxxxxxxxx@outlook.fr",
-                      "name": "Jane Doe",
-                      "phone": null,
-                      "verified_address": null,
-                      "verified_email": null,
-                      "verified_name": null,
-                      "verified_phone": null
-                    },
-                    "sepa_debit": {
-                      "last4": "0000",
-                      "bank_code": "12345",
-                      "branch_code": "10000",
-                      "fingerprint": "XXXXXXXXXXXXXXXX",
-                      "country": "FR",
-                      "mandate_reference": "XXXXXXXXXXXXXXXX",
-                      "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-                    },
-                    "statement_descriptor": null,
-                    "status": "chargeable",
-                    "type": "sepa_debit",
-                    "usage": "reusable"
-                  },
                   "source_transfer": null,
                   "statement_descriptor": "Liberapay %(payin_id)s",
                   "status": "succeeded",
@@ -2491,64 +2388,20 @@ class TestRefundsStripe(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['subject'] == "A refund of €400.00 has been initiated"
         # Check that the receipt for this payment has been voided
-        source_retrieve.return_value = stripe.Source.construct_from(
-            json.loads('''{
-              "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
-              "object": "source",
-              "amount": null,
-              "created": 1563594673,
-              "currency": "eur",
-              "customer": "cus_XXXXXXXXXXXXXX",
-              "flow": "none",
-              "livemode": false,
-              "owner": {
-                "address": {
-                  "city": null,
-                  "country": "FR",
-                  "line1": null,
-                  "line2": null,
-                  "postal_code": null,
-                  "state": null
-                },
-                "email": "xxxxxxxxx@outlook.fr",
-                "name": "Jane Doe",
-                "phone": null,
-                "verified_address": null,
-                "verified_email": null,
-                "verified_name": null,
-                "verified_phone": null
-              },
-              "sepa_debit": {
-                "last4": "0000",
-                "bank_code": "12345",
-                "branch_code": "10000",
-                "fingerprint": "XXXXXXXXXXXXXXXX",
-                "country": "FR",
-                "mandate_reference": "XXXXXXXXXXXXXXXX",
-                "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-              },
-              "statement_descriptor": null,
-              "status": "chargeable",
-              "type": "sepa_debit",
-              "usage": "reusable"
-            }'''),
-            stripe.api_key
-        )
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
         assert r.code == 200
         assert ' fully refunded ' in r.text
 
     @patch('stripe.BalanceTransaction.retrieve')
     @patch('stripe.Charge.retrieve')
-    @patch('stripe.Source.detach')
-    @patch('stripe.Source.retrieve')
+    @patch('stripe.PaymentMethod.detach')
     @patch('stripe.Transfer.create_reversal')
     @patch('stripe.Transfer.modify')
     @patch('stripe.Transfer.retrieve')
     @patch('stripe.Webhook.construct_event')
     def test_charge_dispute(
-        self, construct_event, tr_retrieve, tr_modify, create_reversal, source_retrieve,
-        source_detach, ch_retrieve, bt_retrieve,
+        self, construct_event, tr_retrieve, tr_modify, create_reversal,
+        pm_detach, ch_retrieve, bt_retrieve,
     ):
         alice = self.make_participant('alice')
         bob = self.make_participant('bob')
@@ -2557,7 +2410,11 @@ class TestRefundsStripe(EmailHarness):
         self.add_payment_account(LiberapayOrg, 'stripe', id='acct_1ChyayFk4eGpfLOC')
         alice.set_tip_to(bob, EUR('3.96'))
         alice.set_tip_to(LiberapayOrg, EUR('3.96'))
-        route = self.upsert_route(alice, 'stripe-card')
+        route = self.upsert_route(
+            alice, 'stripe-card', address='pm_XXXXXXXXXXXXXXXXXXXXXXXXXX',
+            country='FR', brand='visa', last4='4242', fingerprint='XXXXXXXXXXXXXXXX',
+            owner_name='Alice', expiration_date='2099-01-01',
+        )
         payin, transfers = self.make_payin_and_transfers(
             route, EUR(400),
             [
@@ -2655,16 +2512,17 @@ class TestRefundsStripe(EmailHarness):
               },
               "paid": true,
               "payment_intent": null,
-              "payment_method": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
+              "payment_method": "pm_XXXXXXXXXXXXXXXXXXXXXXXXXX",
               "payment_method_details": {
-                "sepa_debit": {
-                  "bank_code": "12345",
-                  "branch_code": "10000",
+                "card": {
                   "country": "FR",
+                  "display_brand": "visa",
+                  "exp_month": 1,
+                  "exp_year": 2099,
                   "fingerprint": "XXXXXXXXXXXXXXXX",
                   "last4": "0000"
                 },
-                "type": "sepa_debit"
+                "type": "card"
               },
               "receipt_email": null,
               "receipt_number": null,
@@ -2679,66 +2537,6 @@ class TestRefundsStripe(EmailHarness):
               },
               "review": null,
               "shipping": null,
-              "source": {
-                "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
-                "object": "source",
-                "amount": null,
-                "client_secret": "src_client_secret_XXXXXXXXXXXXXXXXXXXXXXXX",
-                "created": 1563594673,
-                "currency": "eur",
-                "customer": "cus_XXXXXXXXXXXXXX",
-                "flow": "none",
-                "livemode": false,
-                "mandate": {
-                  "acceptance": {
-                    "date": null,
-                    "ip": null,
-                    "offline": null,
-                    "online": null,
-                    "status": "pending",
-                    "type": null,
-                    "user_agent": null
-                  },
-                  "amount": null,
-                  "currency": null,
-                  "interval": "variable",
-                  "notification_method": "none",
-                  "reference": "XXXXXXXXXXXXXXXX",
-                  "url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-                },
-                "metadata": {
-                },
-                "owner": {
-                  "address": {
-                    "city": null,
-                    "country": "FR",
-                    "line1": null,
-                    "line2": null,
-                    "postal_code": null,
-                    "state": null
-                  },
-                  "email": "xxxxxxxxx@outlook.fr",
-                  "name": "Jane Doe",
-                  "phone": null,
-                  "verified_address": null,
-                  "verified_email": null,
-                  "verified_name": null,
-                  "verified_phone": null
-                },
-                "sepa_debit": {
-                  "last4": "0000",
-                  "bank_code": "12345",
-                  "branch_code": "10000",
-                  "fingerprint": "XXXXXXXXXXXXXXXX",
-                  "country": "FR",
-                  "mandate_reference": "XXXXXXXXXXXXXXXX",
-                  "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-                },
-                "statement_descriptor": null,
-                "status": "chargeable",
-                "type": "sepa_debit",
-                "usage": "reusable"
-              },
               "source_transfer": null,
               "statement_descriptor": "Liberapay %(payin_id)s",
               "status": "succeeded",
@@ -2811,55 +2609,7 @@ class TestRefundsStripe(EmailHarness):
             }''' % params),
             stripe.api_key
         )
-        chargeable_source = stripe.Source.construct_from(
-            json.loads('''{
-              "id": "src_XXXXXXXXXXXXXXXXXXXXXXXX",
-              "object": "source",
-              "amount": null,
-              "created": 1563594673,
-              "currency": "eur",
-              "customer": "cus_XXXXXXXXXXXXXX",
-              "flow": "none",
-              "livemode": false,
-              "owner": {
-                "address": {
-                  "city": null,
-                  "country": "FR",
-                  "line1": null,
-                  "line2": null,
-                  "postal_code": null,
-                  "state": null
-                },
-                "email": "xxxxxxxxx@outlook.fr",
-                "name": "Jane Doe",
-                "phone": null,
-                "verified_address": null,
-                "verified_email": null,
-                "verified_name": null,
-                "verified_phone": null
-              },
-              "sepa_debit": {
-                "last4": "0000",
-                "bank_code": "12345",
-                "branch_code": "10000",
-                "fingerprint": "XXXXXXXXXXXXXXXX",
-                "country": "FR",
-                "mandate_reference": "XXXXXXXXXXXXXXXX",
-                "mandate_url": "https://hooks.stripe.com/adapter/sepa_debit/file/..."
-              },
-              "statement_descriptor": null,
-              "status": "consumed",
-              "type": "sepa_debit",
-              "usage": "reusable"
-            }'''),
-            stripe.api_key
-        )
-        source_retrieve.return_value = chargeable_source
-        consumed_source = stripe.Source.construct_from(
-            dict(chargeable_source, status='consumed'),
-            stripe.api_key
-        )
-        source_detach.return_value = consumed_source
+        pm_detach.return_value = None
         r = self.client.POST('/callbacks/stripe', {}, HTTP_STRIPE_SIGNATURE='fake')
         assert r.code == 200
         assert r.text == 'OK'
@@ -2945,7 +2695,6 @@ class TestRefundsStripe(EmailHarness):
         assert len(emails) == 1
         assert emails[0]['subject'] == "Your payment of €400.00 has been disputed"
         # Check that the receipt for this payment has been voided
-        source_retrieve.return_value = consumed_source
         r = self.client.GET('/alice/receipts/direct/%i' % payin.id, auth_as=alice)
         assert r.code == 200
         assert ' fully refunded ' in r.text

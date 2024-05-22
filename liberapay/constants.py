@@ -49,14 +49,17 @@ BASE64URL_CHARS = set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTU
 BIRTHDAY = date(2015, 5, 22)
 
 CARD_BRANDS = {
-    'amex': 'American Express',
-    'diners': 'Diners Club',
+    'american_express': 'American Express',
+    'cartes_bancaires': 'CB',
+    'diners_club': 'Diners Club',
     'discover': 'Discover',
+    'eftpos_australia': 'eftpos',
+    'interac': 'Interac',
     'jcb': 'JCB',
     'mastercard': 'Mastercard',
-    'unionpay': 'UnionPay',
+    'union_pay': 'UnionPay',
     'visa': 'Visa',
-    'unknown': '',
+    'other': '',
 }
 
 

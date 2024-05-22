@@ -425,18 +425,36 @@ class Harness(unittest.TestCase):
               RETURNING *
         """, locals())
 
-    def upsert_route(self, participant, network,
-                     status='chargeable', one_off=False, address='x', remote_user_id='x'):
+    def upsert_route(
+        self, participant, network, address='x',
+        status='chargeable', one_off=False, remote_user_id='x',
+        country=None, brand=None, last4=None, fingerprint=None, owner_name=None,
+        expiration_date=None,
+    ):
         r = self.db.one("""
             INSERT INTO exchange_routes AS r
-                        (participant, network, address, status, one_off, remote_user_id)
-                 VALUES (%s, %s, %s, %s, %s, %s)
+                        (participant, network, address,
+                         status, one_off, remote_user_id, country, brand, last4,
+                         fingerprint, owner_name, expiration_date)
+                 VALUES (%s, %s, %s,
+                         %s, %s, %s, %s, %s, %s,
+                         %s, %s, %s)
             ON CONFLICT (participant, network, address) DO UPDATE
                     SET status = excluded.status
                       , one_off = excluded.one_off
                       , remote_user_id = excluded.remote_user_id
+                      , country = excluded.country
+                      , brand = excluded.brand
+                      , last4 = excluded.last4
+                      , fingerprint = excluded.fingerprint
+                      , owner_name = excluded.owner_name
+                      , expiration_date = excluded.expiration_date
               RETURNING r
-        """, (participant.id, network, address, status, one_off, remote_user_id))
+        """, (
+            participant.id, network, address,
+            status, one_off, remote_user_id, country, brand, last4,
+            fingerprint, owner_name, expiration_date,
+        ))
         r.__dict__['participant'] = participant
         return r
 

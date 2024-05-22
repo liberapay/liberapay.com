@@ -111,7 +111,7 @@ if mode == 'all':
                         ) tip
                ) AS outgoing_donations
              , ( SELECT json_objectagg(r.network:r.count)
-                   FROM ( SELECT r.network, count(*) AS count
+                   FROM ( SELECT r.network, count(DISTINCT r.fingerprint) AS count
                             FROM exchange_routes r
                            WHERE r.participant = p.id
                         GROUP BY r.network
