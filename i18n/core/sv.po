@@ -999,15 +999,15 @@ msgstr "Användaren {0} accepterar inte donationer."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} tar inte emot donationer i {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
 msgstr "{username} tar inte längre emot hemliga donationer."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
 msgstr "{username} tar inte längre emot privata donationer."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
 msgstr "{username} tar inte längre emot offentliga donationer."
 
@@ -1048,13 +1048,12 @@ msgstr "Betalningen kunde inte genomföras eftersom mottagarens konto i nuläget
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Din donation till {recipient} kan inte behandlas just nu eftersom mottagarens konto inte är redo för att ta emot pengar."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
 msgstr "{username} tar inte emot donationer från {country}."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr "Betalningen behandlas inte eftersom vår programvara inte kunde avgöra vilket land pengarna skulle komma från. Detta är inte meningen att hända."
+msgstr "Behandlingen av din betalning misslyckades eftersom vår programvara inte kunde avgöra från vilket land pengarna skulle komma. Detta ska inte hända."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har redan ändrat din huvudvaluta nyligen, var god försök senare (t.ex. om en vecka) eller kontakta support@liberapay.com."
@@ -1661,7 +1660,6 @@ msgstr "Namn"
 msgid "Currencies"
 msgstr "Valutor"
 
-#, fuzzy
 msgid "Countries"
 msgstr "Länder"
 
@@ -1832,7 +1830,7 @@ msgstr "Oanvänd inkomst kommer förbrukas under de kommande veckorna, de ackumu
 msgid "Leftover"
 msgstr "Överblivet"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
 msgstr "Det ser ut som om du är i {country}. {username} tar inte emot donationer som kommer från det landet."
 
@@ -2093,13 +2091,11 @@ msgstr "Utforska nätverk"
 msgid "You have to check at least one box."
 msgstr "Du måste bocka för minst en ruta."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Vilka länder ska dina givare få skicka pengar till dig från?"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr "Vi rekommenderar att du begränsar ursprunget för donationer endast om du är skyldig att göra det enligt lag."
+msgstr "Vi rekommenderar att du begränsar varifrån donationer får komma endast om du är skyldig att göra det enligt lag."
 
 msgid "The submitted settings are incoherent."
 msgstr "The inmatade värdena är inte giltiga."
@@ -2504,9 +2500,9 @@ msgstr "Nästa betalning sker {in_N_weeks_months_or_years}."
 msgid "Renew now"
 msgstr "Förnya nu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
-msgstr "Mottagaren tar inte längre emot betalningar på {currency}."
+msgstr "Mottagaren tar inte längre emot betalningar i {currency}."
 
 msgid "Pending payment completion."
 msgstr "Väntar på att betalningen är klar."
@@ -3306,13 +3302,11 @@ msgstr "Detta är vad dina potentiella givare kommer att se med de nya inställn
 msgid "Data export"
 msgstr "Dataexport"
 
-#, fuzzy
 msgid "Download the list of currently active patrons who chose to make their donations public"
-msgstr "Ladda ner listan över aktiva beskyddare som har valt att offentliggöra sina donationer"
+msgstr "Ladda ner listan över aktiva bidragsgivare som har valt att offentliggöra sina donationer"
 
-#, fuzzy
 msgid "Download the list of all currently active patrons"
-msgstr "Ladda ner listan över alla aktiva låntagare"
+msgstr "Ladda ner listan över alla aktiva bidragsgivare"
 
 msgid "Download the record of all patrons in the last ten years"
 msgstr "Ladda ner registret över alla bidragsgivande under de senaste tio åren"

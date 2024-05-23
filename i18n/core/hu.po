@@ -218,7 +218,7 @@ msgstr "Önnél sorban állnak {amount} összegű tervezett adományozások {pay
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
-msgstr[0] "Önnek {n} ütemezett fizetése van az adományai megújítására, de nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetőeszköz."
+msgstr[0] "Önnek {n} ütemezett fizetése van az adományai megújítására, de sajnos nem tudjuk feldolgozni, mivel nem áll rendelkezésre érvényes fizetőeszköz."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "A fizetési dátumok, összegek és befogadók:"
@@ -440,7 +440,7 @@ msgid "You're missing out on donations through Liberapay"
 msgstr "Lemarad a Liberapay-es adományokról"
 
 msgid "Your patrons are currently unable to send you money through Liberapay because payment processing isn't set up for your account."
-msgstr "Az Ön támogatói jelenleg nem tudnak Önnek pénzt küldeni a Liberapay-en keresztül, mert nincs fizetési feldolgozó beállítva fiókjához."
+msgstr "Az Ön támogatói jelenleg nem tudnak Önnek pénzt küldeni a Liberapay-en keresztül, mert nincs fizetésfeldolgozó beállítva fiókjához."
 
 msgid "Configure payment processing"
 msgstr "Fizetési feldolgozás beállítása"
@@ -1512,7 +1512,6 @@ msgstr "Találjon remek embereket akiknek adományozhat"
 msgid "Whose work do you appreciate? See if they're on Liberapay"
 msgstr "Kinek a munkáját értékeli? Nézze meg, hogy elérhetőek-e a Liberapay-en"
 
-#, fuzzy
 msgid "Disconnect"
 msgstr "Leválasztás"
 
@@ -1629,7 +1628,7 @@ msgid "Recipients"
 msgstr "Címzettek"
 
 msgid "Hopefuls"
-msgstr "Támogatásra pályázók"
+msgstr "Támogatást remélők"
 
 msgid "Unclaimed Donations"
 msgstr "Még nem igénylelt támogatás"
@@ -1816,9 +1815,9 @@ msgstr "A fel nem használt bevételek a következő hetekben kerülnek felhaszn
 msgid "Leftover"
 msgstr "Maradék"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr "Úgy tűnik, hogy Ön a {country} oldalon van. A {username} nem fogad el adományokat abból az országból."
+msgstr "Úgy tűnik az Ön jelenlegi lakóhelye {country}. {username} sajnos nem fogad el támogatást ebből az országból."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -1937,7 +1936,7 @@ msgid "{username} hasn't yet specified whether they want to see who their patron
 msgstr "{username} még nem határozta meg, hogy látni akarja-e, kik a támogatói, így az adománya titkos marad."
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
-msgstr "Az embereknek, akik hozzájárulnak a közjóhoz, szükségük van az Ön támogatására a munkájukhoz. A szabad szoftverek építése, és az ingyenes tudás közzététele időigényes és pénzbe kerül, és nem csak a létrehozásuk, de a további karbantartásuk is."
+msgstr "Az embereknek, akik hozzájárulnak a közjóhoz, szükségük van az Ön támogatására a munkájuk folytatásához. A szabad szoftverek építése, és az ingyenes tudás közzététele, terjesztése időigényes és pénzbe kerül, és nem csak a létrehozásuk, de a további karbantartásuk is."
 
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
 msgstr "A Liberapay ismétlődő adományozási rendszere arra lett tervezve, hogy stabil közösségi-finanszírozású alapjövedelmet biztosítson az alkotóknak, lehetővé téve számukra, hogy tovább végezzék a nagyszerű munkájukat, amiből mindenki profitál. Készen áll a folytatásra? Akkor, kezdjünk neki:"
@@ -2074,11 +2073,9 @@ msgstr "Közösségek felfedezése"
 msgid "You have to check at least one box."
 msgstr "Legalább egy rubrikát be kell jelölnie."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Mely országokból küldhetnek pénzt az adományozók?"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
 msgstr "Javasoljuk, hogy csak akkor korlátozza az adományok eredetét, ha erre jogszabály kötelezi."
 
@@ -2478,9 +2475,9 @@ msgstr "Következő fizetés {in_N_weeks_months_or_years} múlva esedékes."
 msgid "Renew now"
 msgstr "Megújítás most"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
-msgstr "A címzett már nem fogad el kifizetéseket a {currency} oldalon."
+msgstr "A címzett már nem fogad el kifizetéseket {currency} devizában."
 
 msgid "Pending payment completion."
 msgstr "Folyamatban levő befizetés."
@@ -3269,7 +3266,7 @@ msgid "Data export"
 msgstr "Adat export"
 
 msgid "Download the list of currently active patrons who chose to make their donations public"
-msgstr "Töltse le a jelenleg aktív támogatók listáját, akik úgy döntöttek, hogy nyilvánosságra hozzák adományaikat."
+msgstr "Töltse le a jelenleg aktív támogatók listáját, akik úgy döntöttek, hogy nyilvánosságra hozzák adományaikat"
 
 msgid "Download the list of all currently active patrons"
 msgstr "Töltse le az összes jelenleg aktív mecénás listáját"
@@ -3882,9 +3879,8 @@ msgstr "Így fog kinézni:"
 msgid "And here's what it looks like with JavaScript turned off:"
 msgstr "És így néz ki kikapcsolt JavaScript esetén:"
 
-#, fuzzy
 msgid "Giving & Receiving Widgets"
-msgstr "Adás és vétel widgetek"
+msgstr "Widget-ek küldése és fogadása"
 
 msgid "Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:"
 msgstr "Használja ezt a kódot, hogy hozzáadjon a weboldalához egy widgetet, amely megjeleníti a Liberapay-en kapott adományok összegét:"
@@ -4072,26 +4068,26 @@ msgid "You can also follow the {1}development of the Liberapay software{0}, the 
 msgstr "Követheti a {1}a Liberapay szoftver fejlesztését{0}, a {2}a Liberapay jogi személyiségének kalandjait{0}, és a {3}a Liberapay csapat általános diskurzusait{0}."
 
 msgid "Donations can come from anywhere in the world."
-msgstr "Az adományok a világ bármely pontjáról érkezhetnek."
+msgstr "Adományok a világ bármely pontjáról érkezhetnek."
 
 #, python-brace-format
 msgid "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgid_plural "Donors can choose between up to {n} currencies, depending on the preferences of the recipient and the capabilities of the underlying payment processor."
-msgstr[0] "Az adományozók a címzett preferenciáitól és az alapul szolgáló pénzforgalmi feldolgozó funkcióitól függően akár {n} pénznem közül is választhatnak."
+msgstr[0] "Az adományozók a címzett preferenciáitól és a pénzforgalmi feldolgozó képességeitől függően akár {n} pénznem közül is választhatnak."
 
 #, python-brace-format
 msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "Az adományok csak olyan területek lakói kaphatnak, ahol legalább egy támogatott pénzforgalmi feldolgozó áll rendelkezésre. A jelenleg támogatott pénzforgalmi feldolgozók a {Stripe} és {PayPal}. Néhány jellemző csak Stripe-en keresztül érhető el, így a Liberapay teljes mértékben elérhető a Stripe által támogatott területeken, és részben csak a PayPal által támogatott területeken."
+msgstr "Adományokat csak azokon a területeken lehet fogadni, ahol legalább egy támogatott pénzforgalmi feldolgozó elérhető. A jelenleg támogatott fizetésfeldolgozók a {Stripe} és a {PayPal}. Néhány funkció csak a Stripe-en keresztül érhető el, így az alkotók számára a Liberapay teljes mértékben csak a Stripe által támogatott területeken érhető el, és részben érhető el azokon a területeken, amelyek csak a PayPal által támogatottak."
 
 #, python-brace-format
 msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
 msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] "A Liberapay teljes mértékben elérhető az alkotók számára {n} térségben:"
+msgstr[0] "A Liberapay teljes mértékben elérhető az alkotók számára az alábbi {n} térségben:"
 
 #, python-brace-format
 msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
 msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] "Liberapay részben elérhető az alkotók számára {n} térségben:"
+msgstr[0] "Részben elérhető az alkotók számára a Liberapay az alábbi {n} térségben:"
 
 msgid "What is Liberapay?"
 msgstr "Mi a Liberapay?"
@@ -4536,10 +4532,10 @@ msgid "Explore Recipients"
 msgstr "Címzettek felfedezése"
 
 msgid "Users who are hoping to receive their first donations through Liberapay."
-msgstr "Azok a felhasználók, akik azt remélik, hogy a Liberapay-en keresztül kapják meg első adományukat."
+msgstr "Azok a felhasználók, akik remélik, hogy első adományaikat a Liberapay-en keresztül kapják meg."
 
 msgid "Explore Hopefuls"
-msgstr "Fedezze fel a pályázókat"
+msgstr "Fedezze fel a támogatást remélőket"
 
 msgid "Liberapay allows pledging to fund people who haven't joined the site yet."
 msgstr "A Liberapay lehetőség biztosít arra, hogy olyan embereknek letéteményezzen, akik még nem csatlakoztak az oldalhoz."
@@ -4665,9 +4661,9 @@ msgstr "Csapat létrehozása"
 msgid "{0} community settings"
 msgstr "{0} közösségi beállítások"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Sidebar text in {language}"
-msgstr "Oldalsáv szöveg a {language}"
+msgstr "Oldalsáv szövege {language} nyelven"
 
 msgid "This profile is marked as spam."
 msgstr "Ez a profil spamként került megjelölésre."
@@ -4790,7 +4786,7 @@ msgstr "2. Pénzforgalmi feldolgozó konfigurálása"
 
 #, python-brace-format
 msgid "We currently support processing payments through {payment_processors_list}."
-msgstr "Jelenleg a {payment_processors_list} feldolgozón keresztül támogatjuk kifizetéseket."
+msgstr "Jelenleg a {payment_processors_list} fizetésfeldolgozókon keresztül támogatjuk a kifizetéseket."
 
 msgid "3. Reach out to your audience"
 msgstr "3. Kérje fel közösségét"
@@ -4800,7 +4796,7 @@ msgstr "Hogyan működik belülről"
 
 #, python-brace-format
 msgid "Liberapay is run transparently by a {1}non-profit organization{0}, its {2}source code{0} is public."
-msgstr "A Liberapayt egy átláthatóan működő {1}nonprofit szervezet{0}, {2}forráskódja{0} nyilvános."
+msgstr "A Liberapay egy átláthatóan működő {1}nonprofit szervezet{0}, {2}a forráskódja{0} nyilvános."
 
 #, python-brace-format
 msgid "We rely on your support to keep Liberapay running and {link_start}improving{link_end}."
@@ -4893,12 +4889,12 @@ msgstr[0] "{n} felhasználói fiókot hoztak létre az elmúlt hónapban. A legu
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] "{n} új adomány indult az elmúlt hónapban, {money_amount} növelte a teljes heti finanszírozást."
+msgstr[0] "{n} új adomány indult az elmúlt hónapban, {money_amount} összeggel növelve a teljes heti finanszírozást."
 
 #, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
 msgid_plural "{n} new {link_open}pledges{link_close} have been made in the past month, adding {money_amount} of weekly donations waiting to be claimed."
-msgstr[0] "{n} új {link_open}felajánlást{link_close} tettek az elmúlt hónapban, {money_amount} került hozzáadásra az igénylésre váró heti adományokhoz."
+msgstr[0] "{n} új {link_open}ígéretet{link_close} tettek az elmúlt hónapban, ezzel {money_amount} növekedett a befogadásra váró adományok száma."
 
 #, python-brace-format
 msgid "<unused singular (hash=8aaae81f2b8f07235680896ca08d13fe)>"
@@ -4917,194 +4913,181 @@ msgstr "Kövessen minket"
 msgid "Log In"
 msgstr "Bejelentkezés"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "We were unable to determine if you are a member of the {team_name} team on {platform_name}.\n"
 "\n"
 "Please {link_start}make sure your membership of the team is public{link_end}."
 msgstr ""
-"Nem tudtuk megállapítani, hogy Ön a {team_name} csapat tagja-e a {platform_name} oldalon.\n"
+"Nem tudtuk megállapítani, hogy tagja-e a {team_name} csapatnak az {platform_name} platformon.\n"
 "\n"
-"Kérjük, {link_start}győződjön meg arról, hogy a csapattagsága nyilvános{link_end}."
+"Kérjük, {link_start}győződjön meg arról, hogy a tagsága nyilvános-e{link_end}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Are you really an administrator of the {0} team?"
-msgstr "Tényleg a {0} csapat adminisztrátora vagy?"
+msgstr "Ön ténylegesen a {0} csapat vezetője?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone who isn't an administrator of the {1} team. Please sign out and {2}try again{3}."
-msgstr "A fiók igénylésére tett kísérlete sikertelen volt, mivel olyan személyként jelentkezett be a {0} oldalra, aki nem a {1} csapat rendszergazdája. Kérjük, jelentkezzen ki, és {2}próbálja meg újra{3}."
+msgstr "A fiók igénylésére tett kísérlete sikertelen volt, mivel {0}-ba olyan felhasználóval van bejelentkezve, aki nem a {1} csapat adminisztrátora. Kérjük, jelentkezzen ki, és {2}próbálkozzon újra{3}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Are you really {0}?"
-msgstr "Tényleg {0}?"
+msgstr "Ön ténylegesen {0}?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your attempt to claim this account failed because you're logged into {0} as someone else. Please sign out and {1}try again{2}."
-msgstr "A fiók igénylésére tett kísérleted sikertelen volt, mert valaki másként vagy bejelentkezve a {0} oldalon. Kérjük, jelentkezzen ki, és {1}próbálja meg újra{2}."
+msgstr "A fiók igénylésére tett kísérleted sikertelen volt, mert {0}-ba más felhasználóval van bejelentkezve. Kérjük, jelentkezzen ki, és {1}próbálkozzon újra{2}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} is a private team"
 msgstr "{0} egy magáncsapat"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} is a big team"
 msgstr "{0} egy nagy csapat"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} is a team with {n} public member"
 msgid_plural "{0} is a team with {n} public members"
-msgstr[0] "{0} egy csapat, amelynek nyilvános tagja a {n}"
+msgstr[0] "A {0} csapat {n} nyilvános taggal rendelkezik"
 
-#, fuzzy
 msgid "Explore unclaimed donations"
 msgstr "Fedezze fel a be nem váltott adományokat"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This page is for pledges to the {platform} user {user_name}:"
-msgstr "Ez az oldal a {platform} felhasználónak, a {user_name} felhasználónak szóló ígéreteknek szól:"
+msgstr "Ez az ígéret a {platform} platform {user_name} felhasználójának szól:"
 
 msgid "No description available."
-msgstr "Nem érhető el leírás."
+msgstr "Leírás nem elérhető."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Profile on {0}"
-msgstr "Profil a {0}"
+msgstr "{0}-n levő profil"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A Liberapay user has pledged to donate {0} per week to {1}."
 msgid_plural "{n} Liberapay users have pledged to donate a total of {0} per week to {1}."
-msgstr[0] "{n} Liberapay-felhasználó vállalta, hogy hetente összesen {0} összeget adományoz {1}-nek."
+msgstr[0] "{n} Liberapay-felhasználó vállalta, hogy hetente összesen {0} összeget adományoz {1} számára."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{user_name} has indicated that they can't or don't want to join Liberapay. You can still make a pledge to them below, but you should also consider supporting them in other ways."
-msgstr "{user_name} jelezte, hogy nem tud vagy nem akar csatlakozni a Liberapayhez. Az alábbiakban még mindig tehetsz nekik felajánlást, de érdemes megfontolnod, hogy más módon is támogasd őket."
+msgstr "{user_name} jelezte, hogy nem tud vagy nem akar csatlakozni a Liberapayhez. Ettől függetlenül tehet nekik felajánlást, de érdemes megfontolni a támogatás egy másik módját."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please don't send messages to {user_name} inviting them to join Liberapay or asking them why they haven't."
-msgstr "Kérjük, ne küldjön üzeneteket a {user_name} címre, amelyben meghívja őket, hogy csatlakozzanak a Liberapayhez, vagy megkérdezi tőlük, hogy miért nem csatlakoztak."
+msgstr "Kérjük, ne küldjön üzeneteket {user_name} számára, amelyben meghívja őket a Liberapayhez, vagy kérdőre vonja őket miért nem csatlakoztak eddig."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Pledge to {user_name}"
-msgstr "Ígéretet tesz arra, hogy {user_name}"
+msgstr "Ígéret {user_name} számára"
 
-#, fuzzy
 msgid "You can support individual team members:"
-msgstr "Támogathatja az egyes csapattagokat:"
+msgstr "Támogathat külön csapattagokat is:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Are you a member of the {team_name} team?"
-msgstr "Ön a {team_name} csapat tagja?"
+msgstr "Ön tagja a {team_name} csapatnak?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Are you {user_name}?"
-msgstr "Te vagy a {user_name}?"
+msgstr "Ön {user_name}?"
 
-#, fuzzy
 msgid "You can't or don't want to join Liberapay?"
 msgstr "Nem tud vagy nem akar csatlakozni a Liberapayhez?"
 
-#, fuzzy
 msgid "You can “opt out” of Liberapay. People will still be able to pledge to you, but a message will be displayed on this page informing everyone that you're not planning to join and asking them not to send you messages about Liberapay."
-msgstr "A Liberapayről \"le lehet mondani\". Az emberek továbbra is tudnak majd Önnek ígéretet tenni, de ezen az oldalon megjelenik egy üzenet, amely mindenkit tájékoztat arról, hogy Ön nem tervezi a csatlakozást, és arra kéri őket, hogy ne küldjenek Önnek üzeneteket a Liberapayről."
+msgstr "Elutasíthatja a Liberapay-hez való csatlakozást. Az emberek továbbra is tudnak majd Önnek ígéretet tenni, de ezen az oldalon megjelenik egy üzenet, amely mindenkit tájékoztat arról, hogy Ön nem tervezi a csatlakozást, és arra kéri őket, hogy ne küldjenek Önnek további üzeneteket a Liberapay-ről."
 
 msgid "Opt out"
-msgstr "Kiszáll"
+msgstr "Elutasítás"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} returned this error message: {1}"
-msgstr "{0} ezt a hibaüzenetet küldte vissza: {1}"
+msgstr "{0} ezt a hibaüzenetet eredményezte: {1}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{platform} returned an error, please retry the operation from the beginning."
-msgstr "{platform} hibát adott vissza, kérjük, próbálja meg újra a műveletet az elejétől."
+msgstr "{platform} hibát eredményezett, kérjük próbálja meg újra a műveletet az elejétől."
 
 msgid "Social Explorer"
 msgstr "Közösségi felfedező"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Connect your {platform} account"
 msgstr "Csatlakoztassa a {platform} fiókját"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you don't follow anyone on {platform}."
-msgstr "Úgy tűnik, hogy nem követsz senkit a {platform} oldalon."
+msgstr "Úgy tűnik, hogy nem követ senkit a(z) {platform} oldalon."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You follow {n} account on {platform}."
 msgid_plural "You follow {n} accounts on {platform}."
-msgstr[0] "Követed a {n} fiókot a {platform} oldalon."
+msgstr[0] "{n} fiókot követ a(z) {platform} oldalon."
 
-#, fuzzy
 msgid "The address you provided is not valid. Expected format: username@domain"
-msgstr "Az Ön által megadott cím nem érvényes. Várt formátum: username@domain"
+msgstr "Az Ön által megadott cím nem érvényes. Elvárt formátum: felhasznalo@tartomany"
 
-#, fuzzy
 msgid "Which account?"
-msgstr "Melyik számla?"
+msgstr "Mely fiók?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please enter the name of the {0} account you would like to connect:"
 msgstr "Kérjük, adja meg a csatlakozni kívánt {0} fiók nevét:"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Name of the team's account on {platform}"
-msgstr "A csapat fiókjának neve a {platform}"
+msgstr "A csapat fiókjának neve a {platform} platformon"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Name of the organization's account on {platform}"
-msgstr "A szervezet számlájának neve a {platform}"
+msgstr "A szervezet fiókjának neve a {platform} platformon"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} username"
 msgstr "{0} felhasználónév"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please enter the address of the {0} account you would like to connect:"
-msgstr "Kérjük, adja meg a csatlakozni kívánt {0} fiók címét:"
+msgstr "Kérjük adja meg a {0} fiók címét, amelyhez csatlakozni akar:"
 
 msgid "Connect"
 msgstr "Csatlakozás"
 
-#, fuzzy
 msgid "Please Confirm"
 msgstr "Kérjük erősítse meg"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{0} is connected to {1} on Liberapay. Transfer it?"
-msgstr "{0} kapcsolódik a {1} oldalhoz a Liberapay-en. Átutalni?"
+msgstr "{0} csatlakozott {1}-hoz a Liberapay-en. Valóban utalja?"
 
-#, fuzzy
 msgid "How the accounts are now"
-msgstr "Hogyan alakulnak most a számlák"
+msgstr "A fiókok jelenlegi állapota"
 
-#, fuzzy
 msgid "No connected accounts."
-msgstr "Nincsenek kapcsolódó számlák."
+msgstr "Nincsenek kapcsolt fiókok."
 
-#, fuzzy
 msgid "How the accounts will be after the transfer"
-msgstr "Hogyan alakulnak a számlák az átutalás után"
+msgstr "A fiókok alakulása az utalást követően"
 
-#, fuzzy
 msgid "Transfer the account"
-msgstr "A számla átvezetése"
+msgstr "A fiók átvezetése"
 
 #, python-brace-format
 msgid "The {provider} account you are attempting to connect is linked to another Liberapay account marked as fraudulent."
-msgstr "A(z) {provider} fiók, amellyel csatlakozni próbál, egy másik Liberapay-fiókhoz van kapcsolva, amely csalárdként van megjelölve."
+msgstr "A(z) {provider} fiók, amelyhez csatolni próbálja fiókját már egy másik Liberapay-fiókhoz van kapcsolva, amely csalárdként került megjelölésre."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Connecting a {platform} account"
 msgstr "A {platform} fiók csatlakoztatása"
 
-#, fuzzy
 msgid "Please input the email address and country of the PayPal account you want to connect:"
 msgstr "Kérjük, adja meg a csatlakoztatni kívánt PayPal-fiók e-mail címét és országát:"
 
-#, fuzzy
 msgid "A confirmation code will be sent to this email address, unless it's already linked to your Liberapay account."
-msgstr "Erre az e-mail címre küldünk egy megerősítő kódot, kivéve, ha az már kapcsolódik a Liberapay-fiókjához."
+msgstr "Ezen e-mail címre küldünk egy megerősítő kódot, kivéve, ha az már kapcsolódik a Liberapay-fiókjához."
 
 msgid "PayPal payments are currently not anonymous, donors will see your email address, and you will see theirs."
 msgstr "A PayPal kifizetések jelenleg nem névtelenek, a támogatók látni fogják az Ön e-mail címét, Ön pedig az övékét."
@@ -5117,11 +5100,11 @@ msgstr "Kinek a munkáját méltányolja?"
 
 msgid "Found a matching username"
 msgid_plural "Found matching usernames"
-msgstr[0] "Megfelelő felhasználónevek találhatóak"
+msgstr[0] "Azonos felhasználónevek találhatóak"
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
-msgstr[0] "Megfelelő közösségnevek találhatóak"
+msgstr[0] "Azonos közösségnevek találhatóak"
 
 #, python-brace-format
 msgid "{n} member"
@@ -5130,22 +5113,21 @@ msgstr[0] "{n} tag"
 
 msgid "Found a matching repository"
 msgid_plural "Found matching repositories"
-msgstr[0] "Megfelelő tárolók találhatóak"
+msgstr[0] "Azonos tárolók találhatóak"
 
 #, python-brace-format
 msgid "{username} has a repository named {repo_name} in their {platform} account"
 msgstr "{username} {platform} fiókjában található egy {repo_name} nevű tároló"
 
-#, fuzzy
 msgid "Found a matching user description"
 msgid_plural "Found matching user descriptions"
-msgstr[0] "Megfelelő felhasználói nyilatkozatok találhatóak"
+msgstr[0] "Azonos felhasználói leírások találhatóak"
 
 msgid "Didn't find who you were looking for?"
 msgstr "Nem találta akit keresett?"
 
 msgid "You can also pledge to people who haven't joined Liberapay yet:"
-msgstr "Kínálhat lekötést azok számára, akik még nem csatlakoztak a Liberapay-hez:"
+msgstr "Beígérhet támogatást azok számára is, akik még nem csatlakoztak a Liberapay-hez:"
 
 msgid "Sign In"
 msgstr "Bejelentkezés"
@@ -5154,7 +5136,7 @@ msgid "If you already have an account, log in:"
 msgstr "Ha már van fiókja, jelentkezzen be:"
 
 msgid "Otherwise, sign up:"
-msgstr "Ha nincs, regisztráljon:"
+msgstr "Máskülönben regisztráljon:"
 
 msgid "Sign Out"
 msgstr "Kijelentkezés"
@@ -5164,4 +5146,4 @@ msgstr "Regisztráció"
 
 #, python-brace-format
 msgid "You are already logged in as {0}."
-msgstr "Már be van jelentkezve mint {0}."
+msgstr "Már bejelentkezett mint {0}."
