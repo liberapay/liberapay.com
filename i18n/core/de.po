@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: German "
-"<https://hosted.weblate.org/projects/liberapay/core/de/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-05-13 07:00+0000\n"
+"Last-Translator: Wuzzy <Wuzzy@disroot.org>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/liberapay/core/de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.5.5-dev\n"
 "Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
@@ -210,7 +212,7 @@ msgid "Please note that the link is only valid for {0}."
 msgstr "Bitte beachten Sie, dass der Link nur gültig ist für {0}."
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr "Liberapay Spendenerneuerung: kein gültiges Zahlungsmittel"
+msgstr "Liberapay-Spendenerneuerung: kein gültiges Zahlungsmittel"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
@@ -843,42 +845,42 @@ msgstr "Sie müssen einen Benutzernamen angeben!"
 
 #, python-brace-format
 msgid "The username '{0}' is too long."
-msgstr "Der Benutzername '{0}' ist zu lang."
+msgstr "Der Benutzername „{0}“ ist zu lang."
 
 #, python-brace-format
 msgid "The username '{0}' contains invalid characters."
-msgstr "Der Benutzername '{0}' enthält ungültige Zeichen."
+msgstr "Der Benutzername „{0}“ enthält ungültige Zeichen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
-msgstr "Der Benutzername '{0}' ist rein numerisch. Dies ist nicht erlaubt."
+msgstr "Der Benutzername „{0}“ ist rein numerisch. Dies ist nicht erlaubt."
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
-msgstr "Der Benutzername '{0}' ist nicht verfügbar."
+msgstr "Der Benutzername „{0}“ ist nicht verfügbar."
 
 #, python-brace-format
 msgid "The username '{0}' is already taken."
-msgstr "Der Benutzername '{0}' ist bereits vergeben."
+msgstr "Der Benutzername „{0}“ ist bereits vergeben."
 
 #, python-brace-format
 msgid "The username '{0}' begins with a restricted character."
-msgstr "Der Benutzername '{0}' beginnt mit einem unzulässigen Zeichen."
+msgstr "Der Benutzername „{0}“ beginnt mit einem unzulässigen Zeichen."
 
 #, python-brace-format
 msgid "The username '{0}' ends with the forbidden suffix '{1}'."
-msgstr "Der Benutzername '{0}' endet mit der ungültigen Endung '{1}'."
+msgstr "Der Benutzername „{0}“ endet mit der ungültigen Endung „{1}“."
 
 msgid "You've already changed your username many times recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Sie haben Ihren Benutzernamen in kurzer Zeit zu oft geändert. Bitte versuchen Sie es später (z. B. in einer Woche) erneut oder kontaktieren support@liberapay.com."
 
 #, python-brace-format
 msgid "The value '{0}' is too long."
-msgstr "Die Eingabe '{0}' ist zu lang."
+msgstr "Der Wert „{0}“ ist zu lang."
 
 #, python-brace-format
 msgid "The value '{0}' contains the following forbidden characters: {1}."
-msgstr "Die Eingabe '{0}' enthält diese verbotenen Zeichen: {1}."
+msgstr "Der Wert „{0}“ enthält diese verbotenen Zeichen: {1}."
 
 #, python-brace-format
 msgid "{0} is already connected to a different Liberapay account."
@@ -889,14 +891,14 @@ msgstr "Ihre primäre E-Mail-Adresse kann nicht entfernt werden."
 
 #, python-brace-format
 msgid "The email address '{0}' is not verified."
-msgstr "Die E-Mail-Adresse '{0}' ist noch nicht bestätigt."
+msgstr "Die E-Mail-Adresse „{0}“ ist noch nicht bestätigt."
 
 msgid "You've reached the maximum number of email addresses we allow."
 msgstr "Sie haben die maximale Anzahl an E-Mail-Adressen erreicht."
 
 #, python-brace-format
 msgid "'{0}' is not a valid email address."
-msgstr "'{0}' ist keine gültige E-Mail-Adresse."
+msgstr "„{0}“ ist keine gültige E-Mail-Adresse."
 
 #, python-brace-format
 msgid "{0} is not a valid domain name."
@@ -912,11 +914,11 @@ msgstr "Unser Versuch, eine Verbindung mit dem E-Mail-Server {domain_name} herzu
 
 #, python-brace-format
 msgid "'{domain_name}' is not a valid email domain."
-msgstr "'{domain_name}' ist keine gültige E-Mail-Domain."
+msgstr "„{domain_name}“ ist keine gültige E-Mail-Domain."
 
 #, python-brace-format
 msgid "The email address {email_address} doesn't seem to exist. The {domain} email server at IP address {ip_address} rejected it with the error message “{error_message}”."
-msgstr "Die E-Mail Adresse {email_address} scheint nicht zu existieren. Der E-Mail-Server {domain} mit der IP-Adresse {ip_address} hat sie mit der Fehlermeldung \"{error_message}\" zurückgewiesen."
+msgstr "Die E-Mail Adresse {email_address} scheint nicht zu existieren. Der E-Mail-Server {domain} mit der IP-Adresse {ip_address} hat sie mit der Fehlermeldung „{error_message}“ zurückgewiesen."
 
 #, python-brace-format
 msgid "The email address {email_address} is blacklisted because an attempt to send a message to it failed {timespan_ago}."
@@ -999,15 +1001,15 @@ msgstr "Der Benutzer {0} akzeptiert keine Spenden."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} akzeptiert keine Spenden in {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
 msgstr "{username} nimmt keine geheimen Spenden mehr an."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
 msgstr "{username} nimmt keine privaten Spenden mehr an."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
 msgstr "{username} nimmt keine öffentlichen Spenden mehr an."
 
@@ -1048,11 +1050,10 @@ msgstr "Diese Zahlung kann nicht bearbeitet werden, da das Konto des Empfängers
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Ihre Spende an {recipient} kann zur Zeit nicht bearbeitet werden, da der Empfänger nicht bereit ist Geld zu empfangen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
 msgstr "{username} nimmt keine Spenden von {country} an."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
 msgstr "Die Bearbeitung Ihrer Zahlung ist fehlgeschlagen, weil unsere Software nicht feststellen konnte, aus welchem Land das Geld kommt. Das sollte nicht passieren."
 
@@ -1661,7 +1662,6 @@ msgstr "Name"
 msgid "Currencies"
 msgstr "Währungen"
 
-#, fuzzy
 msgid "Countries"
 msgstr "Länder"
 
@@ -1832,7 +1832,7 @@ msgstr "Nicht verteilte Einnahmen werden über die folgenden Wochen aufgebraucht
 msgid "Leftover"
 msgstr "Übrig"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
 msgstr "Es sieht so aus, als ob Sie sich auf {country} befinden. {username} nimmt keine Spenden aus diesem Land an."
 
@@ -2093,11 +2093,9 @@ msgstr "Gemeinschaften entdecken"
 msgid "You have to check at least one box."
 msgstr "Sie müssen mindestens ein Kästchen ankreuzen."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Aus welchen Ländern sollten Ihre Spender Ihnen Geld schicken dürfen?"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
 msgstr "Wir empfehlen, die Herkunft der Spenden nur dann zu begrenzen, wenn Sie gesetzlich dazu verpflichtet sind."
 
@@ -2504,7 +2502,7 @@ msgstr "Nächste Zahlung findet {in_N_weeks_months_or_years} statt."
 msgid "Renew now"
 msgstr "Jetzt erneuern"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
 msgstr "Der Empfänger nimmt keine Zahlungen mehr in {currency} an."
 
@@ -3306,11 +3304,9 @@ msgstr "Das werden Ihre potenziellen Spender mit den neuen Einstellungen sehen:"
 msgid "Data export"
 msgstr "Datenexport"
 
-#, fuzzy
 msgid "Download the list of currently active patrons who chose to make their donations public"
 msgstr "Laden Sie die Liste der derzeit aktiven Förderer herunter, die ihre Spenden öffentlich machen wollen"
 
-#, fuzzy
 msgid "Download the list of all currently active patrons"
 msgstr "Laden Sie die Liste aller derzeit aktiven Förderer herunter"
 
@@ -4003,7 +3999,7 @@ msgstr "Kann ich meine Spenden ändern oder stoppen?"
 
 #, python-brace-format
 msgid "Yes, you can stop your donations or modify their amounts, periods and renewal modes at any time through {link_open}your “Giving” page{link_close}. Stopping a donation doesn't trigger any refund, it merely cancels future renewals."
-msgstr "Ja, Sie können Ihre Spenden jederzeit über {link_open}Ihre \"Ausgaben\"-Seite{link_close} stoppen oder die zugehörigen Beträge, Zeiträume und Verlängerungsmodi ändern. Das Einstellen einer Spende löst keine Rückerstattung aus, es verhindert lediglich zukünftige Erneuerungen."
+msgstr "Ja, Sie können Ihre Spenden jederzeit über {link_open}Ihre „Ausgaben“-Seite{link_close} stoppen oder die zugehörigen Beträge, Zeiträume und Verlängerungsmodi ändern. Das Einstellen einer Spende löst keine Rückerstattung aus, es verhindert lediglich zukünftige Erneuerungen."
 
 msgid "Liberapay is designed for long-term stable funding and only supports recurring gifts."
 msgstr "Liberapay wurde entwickelt um eine langfristige, planbare Finanzierung zu ermöglichen und unterstützt deshalb nur wiederkehrende Spenden."
@@ -4286,7 +4282,7 @@ msgstr "Die liberapay.com-Webpräsenz setzt nur technische Cookies, die benötig
 
 #, python-brace-format
 msgid "Visitors of the liberapay.com website can also receive cookies sent by Cloudflare. Please read {link_open}“Understanding the Cloudflare Cookies”{link_close} if you want to learn more about them."
-msgstr "Besucher der Website liberapay.com können auch von Cloudflare gesendete Cookies empfangen. Bitte lesen Sie {link_open}\"Cloudflare-Cookies verstehen\"{link_close}, wenn Sie mehr darüber erfahren möchten."
+msgstr "Besucher der Website liberapay.com können auch von Cloudflare gesendete Cookies empfangen. Bitte lesen Sie {link_open}„Cloudflare-Cookies verstehen“{link_close}, wenn Sie mehr darüber erfahren möchten."
 
 #, python-brace-format
 msgid "On some payment pages, extra cookies may be set by the payment processor. Please read these documents if you want more information: {links_to_policies}."
@@ -4481,7 +4477,7 @@ msgid "Automatic takes"
 msgstr "Automatische Entnahmen"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr "Standardmäßig haben alle Teammitglieder ihre Einnahmen auf den speziellen Wert 'auto' gesetzt, was einem gleichen Anteil des Restbetrages entspricht. Mit anderen Worten, die Mitglieder, die ihre Einnahmen festlegen, werden explizit zuerst finanziert, dann wird der Rest zu gleichen Teilen an die Mitglieder verteilt, die automatische Einnahmen haben."
+msgstr "Standardmäßig haben alle Teammitglieder ihre Einnahmen auf den speziellen Wert „auto“ gesetzt, was einem gleichen Anteil des Restbetrages entspricht. Mit anderen Worten, die Mitglieder, die ihre Einnahmen festlegen, werden explizit zuerst finanziert, dann wird der Rest zu gleichen Teilen an die Mitglieder verteilt, die automatische Einnahmen haben."
 
 msgid "Regulation of take amounts"
 msgstr "Regelung der Entnahmebeträge"
