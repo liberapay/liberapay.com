@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Dutch "
-"<https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-05-14 07:01+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.5.5\n"
 "Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
@@ -849,7 +851,7 @@ msgstr "De gebruikersnaam '{0}' is te lang."
 msgid "The username '{0}' contains invalid characters."
 msgstr "De gebruikersnaam '{0}' bevat ongeldige tekens."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
 msgstr "De inlognaam '{0}' is puur numeriek. Dit is niet toegestaan."
 
@@ -999,17 +1001,17 @@ msgstr "De gebruiker {0} accepteert geen donaties."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} accepteert geen donaties in {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
-msgstr "{username} accepteert niet langer geheime donaties."
+msgstr "{username} accepteert geen geheime donaties meer."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
-msgstr "{username} accepteert niet langer particuliere donaties."
+msgstr "{username} accepteert geen privédonaties meer."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
-msgstr "{username} accepteert niet langer donaties van het publiek."
+msgstr "{username} accepteert geen publieke donaties meer."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
@@ -1048,11 +1050,10 @@ msgstr "Deze betaling kan niet worden verwerkt, omdat de rekening van de ontvang
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Uw donatie aan {recipient} kan op dit moment niet worden verwerkt, omdat de rekening van de begunstigde niet klaar is om geld te ontvangen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr "{username} accepteert geen donaties van {country}."
+msgstr "{username} accepteert geen donaties uit {country}."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
 msgstr "De verwerking van uw betaling is mislukt omdat onze software niet kon bepalen uit welk land het geld zou komen. Dit zou niet mogen gebeuren."
 
@@ -1661,7 +1662,6 @@ msgstr "Naam"
 msgid "Currencies"
 msgstr "Valuta's"
 
-#, fuzzy
 msgid "Countries"
 msgstr "Landen"
 
@@ -1714,7 +1714,6 @@ msgstr "Donaties aan {username} worden verwerkt via PayPal."
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Donaties aan {username} kunnen worden betaald met een creditcard ({list_of_card_brands}), een Europese bankrekening (SEPA Direct Debit) of via PayPal-account."
 
-#, fuzzy
 msgid "Payment Card"
 msgstr "Betaalkaart"
 
@@ -1833,7 +1832,7 @@ msgstr "Ongebruikt inkomen zal worden geconsumeerd in de volgende weken, het bou
 msgid "Leftover"
 msgstr "Overgelaten geld"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
 msgstr "Het lijkt erop dat je in {country} bent. {username} accepteert geen donaties uit dat land."
 
@@ -2094,13 +2093,11 @@ msgstr "Verken de gemeenschappen"
 msgid "You have to check at least one box."
 msgstr "Je moet minstens één vakje aankruisen."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Uit welke landen mogen uw donateurs u geld sturen?"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr "We raden aan om de herkomst van donaties alleen te beperken als je hiertoe wettelijk verplicht bent."
+msgstr "We raden aan om de herkomst van donaties alleen te beperken als u hiertoe wettelijk verplicht bent."
 
 msgid "The submitted settings are incoherent."
 msgstr "De ingezonden instellingen zijn onsamenhangend."
@@ -2505,7 +2502,7 @@ msgstr "Volgende betaling verschuldigd {in_N_weeks_months_or_years}."
 msgid "Renew now"
 msgstr "Nu vernieuwen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
 msgstr "De ontvanger accepteert geen betalingen meer in {currency}."
 
@@ -3307,11 +3304,9 @@ msgstr "Dit is wat uw potentiële donateurs zullen zien met de nieuwe instelling
 msgid "Data export"
 msgstr "Gegevensexport"
 
-#, fuzzy
 msgid "Download the list of currently active patrons who chose to make their donations public"
-msgstr "Download de lijst met actieve donateurs die ervoor hebben gekozen hun donaties openbaar te maken"
+msgstr "Download de lijst met actieve donateurs die ervoor hebben gekozen hun donaties publiek te maken"
 
-#, fuzzy
 msgid "Download the list of all currently active patrons"
 msgstr "Download de lijst met alle huidige actieve donateurs"
 
