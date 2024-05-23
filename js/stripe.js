@@ -14,6 +14,22 @@ Liberapay.stripe_form_init = function($form) {
     });
 
     var $container = $('#stripe-element');
+    var $postal_address_alert = $form.find('.msg-postal-address-required');
+    var $postal_address_country = $form.find('select[name="postal_address.country"]');
+    var $postal_address_region = $form.find('input[name="postal_address.region"]');
+    var $postal_address_city = $form.find('input[name="postal_address.city"]');
+    var $postal_address_code = $form.find('input[name="postal_address.postal_code"]');
+    var $postal_address_local = $form.find('textarea[name="postal_address.local_address"]');
+    function is_postal_address_filled() {
+        return $postal_address_country.val() > '' &&
+               $postal_address_city.val() > '' &&
+               $postal_address_code.val() > '' &&
+               $postal_address_local.val() > '';
+    }
+    function is_postal_address_required() {
+        return /AD|BL|CH|GB|GG|GI|IM|JE|MC|NC|PF|PM|SM|TF|VA|WF/.test($container.data('country'));
+    }
+
     var stripe = Stripe($form.data('stripe-pk'));
     var elements = stripe.elements();
     var element_type = $container.data('type');
@@ -36,6 +52,12 @@ Liberapay.stripe_form_init = function($form) {
             $errorElement.text(event.error.message);
         } else {
             $errorElement.text('');
+        }
+        if (event.country) {
+            $container.data('country', event.country);
+            if (!is_postal_address_required()) {
+                $postal_address_alert.hide();
+            }
         }
     });
 
@@ -64,63 +86,46 @@ Liberapay.stripe_form_init = function($form) {
             $form.submit();
             return;
         }
-        var local_address = $form.find('input[name="postal_address.local_address"]').val();
+        var pmType = element_type;
+        if (element_type == 'iban') {
+            pmType = 'sepa_debit';
+            if (is_postal_address_required() && !is_postal_address_filled()) {
+                $postal_address_alert.removeClass('hidden').hide().fadeIn()[0].scrollIntoView();
+                return;
+            }
+        }
+        var local_address = $postal_address_local.val();
         local_address = !!local_address ? local_address.split(/(?:\r\n?|\n)/g) : [null];
         if (local_address.length === 1) {
             local_address.push(null);
         }
-        if (element_type == 'iban') {
-            var tokenData = {};
-            tokenData.currency = 'EUR';
-            tokenData.account_holder_name = $form.find('input[name="owner.name"]').val();
-            tokenData.address_country = $form.find('input[name="postal_address.country"]').val();
-            tokenData.address_state = $form.find('input[name="postal_address.region"]').val();
-            tokenData.address_city = $form.find('input[name="postal_address.city"]').val();
-            tokenData.address_zip = $form.find('input[name="postal_address.postal_code"]').val();
-            tokenData.address_line1 = local_address[0];
-            tokenData.address_line2 = local_address[1];
-            stripe.createToken(element, tokenData).then(Liberapay.wrap(function(result) {
-                if (result.error) {
-                    $errorElement.text(result.error.message);
-                } else {
-                    submitting = true;
-                    $form.find('input[name="route"]').remove();
-                    $form.find('input[name="token"]').remove();
-                    var $hidden_input = $('<input type="hidden" name="token">');
-                    $hidden_input.val(result.token.id);
-                    $form.append($hidden_input);
-                    $form.submit();
-                }
-            }));
-        } else if (element_type == 'card') {
-            var pmData = {
-                billing_details: {
-                    address: {
-                        city: $form.find('input[name="postal_address.city"]').val(),
-                        country: $form.find('input[name="postal_address.country"]').val(),
-                        line1: local_address[0],
-                        line2: local_address[1],
-                        postal_code: $form.find('input[name="postal_address.postal_code"]').val(),
-                        state: $form.find('input[name="postal_address.region"]').val(),
-                    },
-                    email: $form.find('input[name="owner.email"]').val(),
-                    name: $form.find('input[name="owner.name"]').val(),
-                }
-            };
-            stripe.createPaymentMethod('card', element, pmData).then(Liberapay.wrap(function(result) {
-                if (result.error) {
-                    $errorElement.text(result.error.message);
-                } else {
-                    submitting = true;
-                    $form.find('input[name="route"]').remove();
-                    $form.find('input[name="stripe_pm_id"]').remove();
-                    var $hidden_input = $('<input type="hidden" name="stripe_pm_id">');
-                    $hidden_input.val(result.paymentMethod.id);
-                    $form.append($hidden_input);
-                    $form.submit();
-                }
-            }));
-        }
+        var pmData = {
+            billing_details: {
+                address: {
+                    city: $postal_address_city.val(),
+                    country: $postal_address_country.val(),
+                    line1: local_address[0],
+                    line2: local_address[1],
+                    postal_code: $postal_address_code.val(),
+                    state: $postal_address_region.val(),
+                },
+                email: $form.find('input[name="owner.email"]').val(),
+                name: $form.find('input[name="owner.name"]').val(),
+            }
+        };
+        stripe.createPaymentMethod(pmType, element, pmData).then(Liberapay.wrap(function(result) {
+            if (result.error) {
+                $errorElement.text(result.error.message);
+            } else {
+                submitting = true;
+                $form.find('input[name="route"]').remove();
+                $form.find('input[name="stripe_pm_id"]').remove();
+                var $hidden_input = $('<input type="hidden" name="stripe_pm_id">');
+                $hidden_input.val(result.paymentMethod.id);
+                $form.append($hidden_input);
+                $form.submit();
+            }
+        }));
     }));
     $form.attr('action', '');
 };
