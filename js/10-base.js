@@ -174,20 +174,3 @@ Liberapay.jsonml = function(jsonml) {
 
     return node;
 };
-
-(function($) {
-    return $.fn.center = function(position) {
-        return this.each(function() {
-            var e = $(this);
-            var pos = e.css('position');
-            if (pos != 'absolute' && pos != 'fixed' || position && pos != position) {
-                e.css('position', position || 'absolute');
-            }
-            e.css({
-                left: '50%',
-                top: '50%',
-                margin: '-' + (e.innerHeight() / 2) + 'px 0 0 -' + (e.innerWidth() / 2) + 'px'
-            });
-        });
-    };
-})(jQuery);
