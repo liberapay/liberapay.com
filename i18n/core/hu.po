@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-05-23 15:19+0000\n"
-"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"PO-Revision-Date: 2024-05-30 02:09+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -1941,7 +1941,7 @@ msgid "People who contribute to the commons need you to support their work. Buil
 msgstr "Az embereknek, akik hozzájárulnak a közjóhoz, szükségük van az Ön támogatására a munkájuk folytatásához. A szabad szoftverek építése, és az ingyenes tudás közzététele, terjesztése időigényes és pénzbe kerül, és nem csak a létrehozásuk, de a további karbantartásuk is."
 
 msgid "Liberapay's recurrent donations system is designed to provide a stable crowdfunded basic income to creators, enabling them to keep doing great work that benefits everyone. Ready to contribute? Then let's get started:"
-msgstr "A Liberapay ismétlődő adományozási rendszere arra lett tervezve, hogy stabil közösségi-finanszírozású alapjövedelmet biztosítson az alkotóknak, lehetővé téve számukra, hogy tovább végezzék a nagyszerű munkájukat, amiből mindenki profitál. Készen áll a folytatásra? Akkor, kezdjünk neki:"
+msgstr "A Liberapay ismétlődő adományozási rendszere arra lett tervezve, hogy stabil közösségi-finanszírozású alapjövedelmet biztosítson az alkotóknak, lehetővé téve számukra, hogy tovább végezzék nagyszerű munkájukat, amely mindenki számára hasznos. Készen áll a folytatásra? Akkor, kezdjünk neki:"
 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Ön jelenleg tesztüzemben van, kérjük ne adjon meg semmilyen valós fizetési vagy személyes adatot!"
@@ -1951,7 +1951,7 @@ msgstr "Vezérlőpult"
 
 #, python-brace-format
 msgid "Donate to {0} via Liberapay"
-msgstr "{0} támogatása Liberapay-en keresztül"
+msgstr "{0} támogatása a Liberapay-en keresztül"
 
 #, python-brace-format
 msgid "Support {username}'s work with a recurrent donation."
@@ -2399,10 +2399,10 @@ msgid "Liberapay does not take a cut of payments and is only funded by the donat
 msgstr "A Liberapay nem vesz el a fizetésekből, és kizárólag a saját részére kapott adományokból tartja fent magát, amiket a {0}saját{1} tárcájába kap, kérjük vegye fontolóra a támogatásban való részvételt:"
 
 msgid "Support Liberapay"
-msgstr "A Liberapay Támogatása"
+msgstr "A Liberapay támogatása"
 
 msgid "Building Liberapay is a lot of work, and there still is much to do, but our developers, translators, and other contributors are severely underpaid, and it's slowing down our progress."
-msgstr "A Liberapay építése rengeteg munka, és még mindig sok a tennivaló, de a fejlesztőink, fordítóink, és egyéb közreműködőink jelentősen alulfizetettek, és ez lelassítja a fejlődésünket."
+msgstr "A Liberapay építése rengeteg munka, és még mindig sok a tennivaló, de a fejlesztőink, fordítóink és egyéb közreműködőink jelentősen alulfizetettek, és ez lelassítja a fejlődésünket."
 
 msgid "Liberapay now supports automatic renewals, do you want to switch it on for all your donations?"
 msgstr "A Liberapay immár lehetővé teszi az automatikus megújításokat, szeretné engedélyezni az összes adományozására?"
@@ -2710,7 +2710,6 @@ msgstr "Jegyezze meg a bankszámlaszámot a jövőbeli kifizetésekhez"
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Annak érdekében, hogy csökkentse a fizetés elutasításának kockázatát, javasoljuk, hogy adja meg a postázási címét az alábbiakban. Ezt titkosítva tároljuk az adatbázisunkban, és elküldjük a {processor_name} pénzforgalmi feldolgozónak."
 
-#, fuzzy
 msgid "Please fill in your postal address. It's required because the IBAN you've provided emanates from outside the European Union."
 msgstr "Kérjük, adja meg a postacímét. Erre azért van szükség, mert az Ön által megadott IBAN az Európai Unión kívülről származik."
 
@@ -3509,13 +3508,13 @@ msgstr "A teljes bevétel {x_percent}-a"
 
 #, python-brace-format
 msgid "Starred Repositories on {platform}"
-msgstr "Csillagozott Tárolók a(z) {platform}-on"
+msgstr "Kedvenc tárolók ezen a platformon: {platform}"
 
 msgid "Starred Repositories"
-msgstr "Csillagozott Tárolók"
+msgstr "Kedvenc tárolók"
 
 msgid "We can import a list of repositories you have starred from:"
-msgstr "Beimportálható egy csillagozott tárolólista a következőkből:"
+msgstr "Importálhatjuk a kedvenc tárolói listáját innen:"
 
 #, python-brace-format
 msgid "Your {platform} account needs to be reconnected."
@@ -3524,7 +3523,7 @@ msgstr "Az Ön {platform} fiókját újra kell csatlakoztatni."
 #, python-brace-format
 msgid "You have starred {n} repository on {platform}."
 msgid_plural "You have starred {n} repositories on {platform}."
-msgstr[0] "{n} tárolót csillagozott a {platform}-on."
+msgstr[0] "{n} kedvenc tárólója van ezen a platformon: {platform}."
 
 msgid "The payment instrument has been successfully added."
 msgstr "A fizetési eszközt sikeresen hozzáadásra került."
@@ -3886,7 +3885,7 @@ msgid "And here's what it looks like with JavaScript turned off:"
 msgstr "És így néz ki kikapcsolt JavaScript esetén:"
 
 msgid "Giving & Receiving Widgets"
-msgstr "Widget-ek küldése és fogadása"
+msgstr "Küldési és fogadási widgetek"
 
 msgid "Use this code to add to your website a widget which displays the amount of donations you're receiving on Liberapay:"
 msgstr "Használja ezt a kódot, hogy hozzáadjon a weboldalához egy widgetet, amely megjeleníti a Liberapay-en kapott adományok összegét:"
@@ -4414,10 +4413,10 @@ msgstr "A csapatoknak nincs hierarchiája, minden tagjuk egyenlő, és maguk hat
 
 #, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Megváltoztathatod a feltételeidet a {0}a csapato vezérlőpultban{1}. Egy olyan táblázatokat tartalmaz, amely az összes tag névleges bevételét mutatják a következő és az előző fizetésnapnál, valamint a következő fizetésnapon ténylegesen megkapott pénzösszegek becsült értékét."
+msgstr "Megváltoztathatod a bevételeidet a {0}csapatod vezérlőpultjában{1}. Ez olyan táblázatokat tartalmaz, amely az összes tag névleges bevételét mutatják a következő és az előző fizetésnapnál, valamint a következő fizetésnapra tervezett tényleges pénzösszegek becsült értékét."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
-msgstr "A névleges bevételek a tagok által maguk által megadott nyers számok, a tényleges bevételeket a rendszer számítja ki: először összeadja a nominális bevételeket, majd kiszámítja az egyes bevételek százalékos arányát, és végül ezeket a százalékokat alkalmazza a rendelkezésre álló jövedelemre. A névleges bevételek egyben maximumként is funkcionálnak: a tényleges bevételek soha nem magasabbak a névlegesnél, még akkor sem, ha további jövedelem áll rendelkezésre."
+msgstr "A névleges bevételek a tagok által maguknak megadott nyers számok, a tényleges bevételeket a rendszer számítja ki: először összeadja a nominális bevételeket, majd kiszámítja az egyes bevételek százalékos arányát, és végül ezeket a százalékokat alkalmazza a rendelkezésre álló jövedelemre. A névleges bevételek egyben maximumként is funkcionálnak: a tényleges bevételek soha nem magasabbak a névlegesnél, még akkor sem, ha további jövedelem áll rendelkezésre."
 
 msgid "You may wonder why we treat nominal takes as maximums instead of simple percentages. It's because having maximums allows a team to have unused income (called “leftover”), and that is good in several ways. Firstly, it provides a “cushion” that stabilizes the income of the team's members. Secondly, it eases the integration of new members into a team, because as they increase their takes they reduce the leftover instead of affecting the income of the other members. Thirdly, it allows our software to adjust the amounts that donors actually transfer to the team's members, in a way that balances the donors' contributions over time, thus making the system more fair. Finally, it encourages donating to a team even if it has already reached its funding goal, which is good for the stability of the team's income."
 msgstr "Felmerülhet a kérdés, hogy miért kezeljük a névleges mennyiségeket maximumként, nem pedig egyszerű százalékként. Ez azért van így, mert a maximum elérése lehetővé teszi a csapatnak, hogy fel nem használt bevétele legyen (úgynevezett „maradék”), és ez több szempontból is jó. Először is ez úgynevezett „biztonságihálót” képez, amely stabilizálhatja a csapat tagjainak jövedelmét. Másodszor, megkönnyíti az új tagok beilleszkedését a csapatba, mivel a létszám növelése a „maradékot” csökkenti, a többi tag bevételének befolyásolása helyett. Harmadszor, lehetővé teszi szoftverünknek, hogy módosítsa az adományozók által a csapat tagjainak ténylegesen átutalt összegeket oly módon, hogy az idővel kiegyensúlyozza az adományozók hozzájárulását, ezáltal igazságosabbá téve a rendszert. Végül pedig ösztönzi a csapatnak való adományozást még akkor is, ha az már elérte a finanszírozási célját, ami jótékony hatással van a csapat bevételeinek stabilitására."
@@ -4426,17 +4425,17 @@ msgid "Automatic takes"
 msgstr "Automatikus részesedések"
 
 msgid "By default all team members have their take set to the special value 'auto', which corresponds to an equal share of the leftover. In other words, the members who set their takes explicitly get funded first, then whatever's left is distributed in equal amounts to the members who have automatic takes."
-msgstr "Alapértelmezés szerint minden csapattagnak az \"auto\" kerül beállításra, ami egyenlő részesedést jelent a \"maradékból\". Más szóval, azok a tagok kapnak először pénzt, akik egy bizonyos értéket állítottak be, majd ami megmarad, azt egyenlő arányban osztják szét azon tagok között, akiknek automatikus részesedésük van."
+msgstr "Alapértelmezés szerint minden csapattagnak az „auto” kerül beállításra, ami egyenlő részesedést jelent a maradékból. Más szóval, azok a tagok kapnak először pénzt, akik egy bizonyos értéket állítottak be, majd ami megmarad, azt egyenlő arányban osztják szét azon tagok között, akiknek automatikus részesedésük van."
 
 msgid "Regulation of take amounts"
 msgstr "A részesedések szabályozása"
 
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Ha egy csapat számára engedélyezve van a \"részesedés fojtás\", a csapattagok nem növelhetik az utolsó fizetésnapi számított maximális névleges részesedés alapon túl. Ez elősegíti az újabb résztvevők bevonását a csapatba anélkül, hogy aránytalan bevételt szereznének az első hetekben."
+msgstr "Ha egy csapat számára engedélyezve van a „részesedésfojtás”, a csapattagok nem emelhetik magasabbra a bevételeiket, mint az utolsó fizetési napon a névleges bevételek alapján számított maximum. Ez elősegíti az újabb résztvevők bevonását a csapatba anélkül, hogy aránytalanul magas részesedést szereznének az első hetek jövedelméből."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "A limit a következőképpen működik: bármikor megemelheti a részesedését ha nem érte el a {amount} összeget, megduplázhatja az előző hetihez képest, megemelheti egészen addig míg felhasználja a csapat maradékát, vagy felemelheti az utolsó fizetésnap mediánjáig. A legnagyobb ezek közül jelenti az Ön maximumát egy héten."
+msgstr "A limit a következőképpen működik: Bármikor megemelheti a részesedését {amount} összegre, ha az nem érte el ezt az értéket, megduplázhatja az előző hetihez képest, megemelheti bevételét igényt tartva a csapat fennmaradó teljes jövedelmére, és felemelheti a bevételét az előző fizetésnap mediánjának szintjére. Ezek közül a legnagyobb összeg jelenti az Ön maximális bevételét egy héten."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
 msgstr "A bevételek nem korlátozottak, ha a csapatnak csak egy tagja van, vagy ha az előző heti bevételek mindegyike nulla volt (ez a helyzet minden olyan új csapat esetében, amelyet a legutóbbi fizetési nap után hoztak létre)."
@@ -4795,7 +4794,7 @@ msgid "We currently support processing payments through {payment_processors_list
 msgstr "Jelenleg a {payment_processors_list} fizetésfeldolgozókon keresztül támogatjuk a kifizetéseket."
 
 msgid "3. Reach out to your audience"
-msgstr "3. Kérje fel közösségét"
+msgstr "3. Kérje fel a közösségét"
 
 msgid "How it works internally"
 msgstr "Hogyan működik belülről"
@@ -4890,12 +4889,12 @@ msgstr "Legutóbbi tevékenység"
 #, python-brace-format
 msgid "<unused singular (hash=8f25a32cb396bbc6c1d75477de7f1941)>"
 msgid_plural "{n} user accounts have been created in the past month. The most recent was {timespan_ago}."
-msgstr[0] "{n} felhasználói fiókot hoztak létre az elmúlt hónapban. A legutóbbit {timespan_ago} ezelőtt."
+msgstr[0] "{n} felhasználói fiókot hoztak létre az elmúlt hónapban. A legutóbbit {timespan_ago} hozták létre."
 
 #, python-brace-format
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
-msgstr[0] "{n} új adomány indult az elmúlt hónapban, {money_amount} összeggel növelve a teljes heti finanszírozást."
+msgstr[0] "{n} új adományozás indult az elmúlt hónapban, {money_amount} összeggel növelve a teljes heti finanszírozást."
 
 #, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"
