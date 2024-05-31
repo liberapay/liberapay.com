@@ -28,7 +28,7 @@ subhead = _("Communities")
 
 % block form
 
-    <form action="" method="POST" class="js-submit" data-on-success="fadeOut:li">
+    <form action="" method="POST" data-on-success="fadeOut:li">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <ul class="communities memberships">
             % for community in communities

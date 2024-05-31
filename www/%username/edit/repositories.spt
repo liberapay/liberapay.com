@@ -116,8 +116,7 @@ subhead = _("Repositories")
             n=total_count, platform=platform.display_name,
             timespan_ago=to_age(last_fetch.ts)
         ) }}</p>
-        <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
-        <form action="javascript:" class="js-submit" method="POST">
+        <form action="" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             % if repos
                 % for repo in repos
@@ -131,7 +130,7 @@ subhead = _("Repositories")
                     _("Next Page →")
                 }}</a>
                 % endif
-                <button class="btn btn-success btn-lg">{{ _("Save") }}</button>
+                <button class="btn btn-success btn-lg" data-on-success="notify">{{ _("Save") }}</button>
             % else
                 <p>{{ _("No repositories found.") }}</p>
             % endif
@@ -146,8 +145,7 @@ subhead = _("Repositories")
     % set repos = participant.get_repos_for_profile()
     % if repos
     <p>{{ _("The following repositories are currently displayed on your profile:") }}</p>
-    <form action="" class="js-submit"
-          data-on-success="fadeOut:.repo" method="POST">
+    <form action="" method="POST" data-on-success="fadeOut:.repo">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % for repo in repos
             {{ show_repo(repo, unlist=True) }}

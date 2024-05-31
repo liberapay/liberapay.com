@@ -2,6 +2,7 @@ from dateutil.parser import parse as parse_date
 
 from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.models.participant import Participant
+from liberapay.utils import form_post_success
 
 PT_STATUS_MAP = {
     'failed': 'danger',
@@ -44,10 +45,10 @@ if request.method == 'POST':
                 event_data['reason'] = request.body['reason']
             p.add_event(cursor, 'flags_changed', event_data, user.id)
 
-    raise response.json({'msg': (
+    form_post_success(state, msg=(
         f"Done, {updated} attribute has been updated." if updated == 1 else
         f"Done, {updated} attributes have been updated."
-    )})
+    ))
 
 last_showed = request.qs.get_int('last_showed', default=None)
 mode = request.qs.get('mode', 'all')

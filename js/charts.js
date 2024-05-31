@@ -16,19 +16,21 @@ Liberapay.charts.init = function() {
 }
 
 Liberapay.charts.load = function(url, $container) {
-    jQuery.get(url, function(series) {
-        $(function() {
-            Liberapay.charts.make(series, $container);
-        });
-    }).fail(Liberapay.error);
+    fetch(url).then(function(response) {
+        response.json().then(function(series) {
+            $(function() {
+                Liberapay.charts.make(series, $container);
+            });
+        }).catch(Liberapay.error);
+    }).catch(Liberapay.error);
 }
 
 Liberapay.charts.make = function(series, $container) {
     if (series.length) {
         $('.chart-wrapper').show();
     } else {
-        if (!!$container.data('msg-empty')) {
-            $container.append($('<span>').text(' '+$container.data('msg-empty')));
+        if ($container.attr('data-msg-empty')) {
+            $container.append($('<span>').text(' '+$container.attr('data-msg-empty')));
         }
         return;
     }

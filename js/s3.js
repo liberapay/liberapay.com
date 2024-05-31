@@ -48,7 +48,7 @@ Liberapay.s3_uploader_init = function () {
                 }
             },
             onSubmitted: function () {
-                $('#invoice-form button').filter(':not([type]), [type="submit"]').prop('disabled', false);
+                $form.find('button').filter(':not([type]), [type="submit"]').prop('disabled', false);
             },
         },
     });
@@ -59,44 +59,18 @@ Liberapay.s3_uploader_init = function () {
     }
 
     function custom_headers() { return {
-        'X-CSRF-TOKEN': Liberapay.getCookie('csrf_token'),
+        'X-CSRF-TOKEN': $form.find('input[name="csrf_token"]').val(),
         'X-Invoice-Id': uploader._invoice_id,
     }}
 
-    function submit(e) {
-        e.preventDefault();
-        var form = $form.get(0);
-        if (form.reportValidity && form.reportValidity() == false) return;
-        var $inputs = $form.find(':not(:disabled)').filter(function () {
-            return $(this).parents('#fine-uploader').length == 0
-        });
-        var data = $form.serializeArray();
-        $inputs.prop('disabled', true);
-        jQuery.ajax({
-            url: '',
-            type: 'POST',
-            data: data,
-            dataType: 'json',
-            success: function(data) {
-                uploader._invoice_id = data.invoice_id;
-                history.pushState(null, null, location.pathname + '?id=' + data.invoice_id);
-                return upload_docs()
-            },
-            error: [
-                function () { $inputs.prop('disabled', false); },
-                Liberapay.error,
-            ],
-        });
-    }
-    $('#invoice-form').submit(submit);
-    $('#invoice-form button').filter(':not([type]), [type="submit"]').click(submit);
-
-    function upload_docs() {
+    Liberapay.upload_to_s3 = function(data) {
+        uploader._invoice_id = data.invoice_id;
+        history.pushState(null, null, location.pathname + '?id=' + data.invoice_id);
         if (uploader._storedIds.length !== 0) {
             uploader.uploadStoredFiles();
         } else {
             window.location.href = base_path + uploader._invoice_id;
         }
-    }
+    };
 
 };

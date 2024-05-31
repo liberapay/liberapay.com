@@ -23,9 +23,9 @@ class Tests(Harness):
         admin = self.make_participant('admin', privileges=1)
         self.com.participant.upsert_statement('en', "spammy subtitle", 'subtitle')
         self.com.participant.upsert_statement('en', "spammy sidebar", 'sidebar')
-        r = self.client.PxST(
+        r = self.client.POST(
             '/admin/users', data={'p_id': str(self.com.participant.id), 'mark_as': 'spam'},
-            auth_as=admin,
+            auth_as=admin, json=True,
         )
         assert r.code == 200
         assert json.loads(r.text) == {"msg": "Done, 1 attribute has been updated."}

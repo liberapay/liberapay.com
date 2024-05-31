@@ -10,7 +10,7 @@
         </a>
         % if edit
             <form action="/{{ account.participant.username }}/elsewhere/delete"
-                  method="POST" class="inline-block js-submit">
+                  method="POST" class="inline-block" data-on-success="fadeOut:.account">
                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                  <input type="hidden" name="platform" value="{{ platform.name }}">
                  <input type="hidden" name="domain" value="{{ account.domain }}">

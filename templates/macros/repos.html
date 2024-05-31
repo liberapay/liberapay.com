@@ -25,6 +25,7 @@
     <p>{{ repo.description or '' }}</p>
     % if edit
     <p><label>
+        <input type="hidden" name="show_on_profile:{{ repo.id }}" value="off" />
         <input type="checkbox" name="show_on_profile:{{ repo.id }}" value="on"
                {{ 'checked' if repo.show_on_profile }} />
         {{ _("Show on your profile") }}

@@ -61,6 +61,8 @@ title = _("Add a payment instrument")
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     <form action="javascript:" method="POST" id="stripe"
+          data-before-submit="call:Liberapay.stripe_before_submit"
+          data-msg-submitting="{{ _('Request in progress, please wait…') }}"
           data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="owner.email" value="{{ participant.get_email_address() }}" />

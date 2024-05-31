@@ -11,7 +11,7 @@ Liberapay.forms.focusInvalid = function($form) {
 
 Liberapay.forms.setInvalid = function($input, invalid) {
     $input.toggleClass('invalid', invalid);
-    if (!!$input.attr('title') && $input.nextAll('.invalid-msg').length == 0) {
+    if ($input.attr('title') && $input.nextAll('.invalid-msg').length == 0) {
         $input.after($('<span class="invalid-msg">').text($input.attr('title')));
     }
 };
@@ -22,109 +22,225 @@ Liberapay.forms.setValidity = function($input, validity) {
 };
 
 Liberapay.forms.jsSubmit = function() {
-    // Initialize forms with the `js-submit` class
-    function submit(e) {
-        var form = this.form || this;
+    var $body = $('body');
+    var $overlay = $('<div>').css({
+        'align-items': 'center',
+        'background-color': 'rgba(0, 0, 0, 0.33)',
+        'bottom': 0,
+        'display': 'flex',
+        'justify-content': 'center',
+        'left': 0,
+        'position': 'fixed',
+        'right': 0,
+        'top': 0,
+        'z-index': 1040,
+    });
+    var $overlay_text_container = $('<output class="alert alert-info"></output>').appendTo($overlay);
+
+    function add_overlay() {
+        if ($overlay.parent().length > 0) return;
+        $overlay.appendTo($body);
+        $('html').css('overflow', 'hidden');
+    }
+    function remove_overlay() {
+        clearTimeout($overlay.data('timeoutId'));
+        $('html').css('overflow', 'auto');
+        $overlay.detach();
+    }
+
+    var $result_container = $('<output class="alert mt-4"></output>');
+
+    async function submit(e) {
+        console.debug('jsSubmit: called with event', e);
+        var form = this;
         var $form = $(form);
-        if ($form.data('bypass-js-submit') === 'on') {
-            setTimeout(function () { $form.data('bypass-js-submit', 'off') }, 100);
+        var target = $form.attr('action');
+        if (target.startsWith('javascript:')) {
+            form.attr('action', target.substr(11));
+        }
+        // Don't interfere with stage 2 submission
+        if ($form.attr('submitting') == '2') {
+            console.debug('jsSubmit: not interfering with stage 2');
             return
         }
-        e.preventDefault();
-        if (form.reportValidity && form.reportValidity() == false) return;
-        var target = $form.attr('action');
-        var js_only = target.substr(0, 11) == 'javascript:';
-        var data = $form.serializeArray();
-        if (js_only) {
-            // workaround for http://stackoverflow.com/q/11424037/2729778
-            $form.find('input[type="checkbox"]').each(function () {
-                var $input = $(this);
-                if (!$input.prop('checked')) {
-                    data.push({name: $input.attr('name'), value: 'off'});
+        // Determine the submission mode
+        var form_on_success = form.getAttribute('data-on-success');
+        var button, button_on_success;
+        if (e.submitter.tagName == 'BUTTON') {
+            button = e.submitter;
+            button_on_success = button.getAttribute('data-on-success');
+        }
+        var navigate = (button_on_success || form_on_success || '') == '';
+        // Ask the browser to tell the user if the form is in an invalid state
+        if (form.reportValidity && form.reportValidity() == false) {
+            console.debug('jsSubmit: form.reportValidity() returned false');
+            e.preventDefault();
+            return
+        }
+        // Prevent parallel submissions
+        if ($form.attr('submitting')) {
+            console.debug('jsSubmit: ignoring duplicate event');
+            e.preventDefault();
+            return
+        }
+        $form.attr('submitting', '1');
+        $result_container.detach();
+        // Execute the custom pre-submission actions, if there are any
+        var before_submit = [
+            button && button.getAttribute('data-before-submit'),
+            form.getAttribute('data-before-submit')
+        ];
+        var proceed = true;
+        $overlay_text_container.text($form.attr('data-msg-submitting') || '…');
+        $overlay.data('timeoutId', setTimeout(add_overlay, 50));
+        for (const action of before_submit) {
+            if (!action) continue;
+            if (action.startsWith('call:')) {
+                // We have to prevent the form submission here because browsers
+                // don't await event handlers.
+                e.preventDefault();
+                var func = Liberapay.get_object_by_name(action.substr(5));
+                try {
+                    console.debug('jsSubmit: calling pre-submit function', func);
+                    proceed = await func();
+                    if (proceed === false) {
+                        console.debug('jsSubmit: the pre-submit function returned false');
+                    }
+                } catch(exc) {
+                    Liberapay.error(exc);
+                    proceed = false;
                 }
+            } else {
+                Liberapay.error("invalid value in `data-before-submit` attribute");
+                proceed = false;
+            }
+        }
+        clearTimeout($overlay.data('timeoutId'));
+        if (proceed === false) {
+            form.removeAttribute('submitting');
+            remove_overlay();
+            return
+        }
+        // If we don't want to send a custom request, proceed with a normal submission
+        if (navigate) {
+            // Try to unlock the form if the user navigates back to the page
+            $(window).on('pageshow', function () {
+                form.removeAttribute('submitting');
+                remove_overlay();
             });
+            // Trigger another submit event if we've canceled the original one
+            if (e.defaultPrevented) {
+                console.debug('jsSubmit: initiating stage 2');
+                $form.attr('submitting', '2');
+                if (button) {
+                    $(button).click();
+                } else {
+                    $form.submit();
+                }
+            }
+            return;
         }
-        var button = this.tagName == 'BUTTON' ? this : null;
-        if (this.tagName == 'BUTTON') {
-            data.push({name: this.name, value: this.value});
-        }
-        var $inputs = $form.find(':not(:disabled)');
-        $inputs.prop('disabled', true);
-        jQuery.ajax({
-            url: js_only ? target.substr(11) : target,
-            type: 'POST',
-            data: data,
-            dataType: 'json',
-            success: Liberapay.forms.success($form, $inputs, button),
-            error: function (jqXHR, textStatus, errorThrown) {
-                $inputs.prop('disabled', false);
-                var msg = null;
-                if (jqXHR.responseText > "") {
-                    try {
-                        msg = JSON.parse(jqXHR.responseText).error_message_long;
-                    } catch(exc) {
-                        if (!js_only) {
-                            $form.data('bypass-js-submit', 'on');
-                            if (button) {
-                                $(button).click();
-                            } else {
-                                $form.submit();
-                            }
-                            $inputs.prop('disabled', true);
-                            return
+        e.preventDefault();
+        // Send the form data, asking for JSON in response
+        try {
+            console.debug('jsSubmit: submitting form with `fetch()`');
+            var response = await fetch(target, {
+                body: new FormData(form, e.submitter),
+                headers: {'Accept': 'application/json'},
+                method: 'POST'
+            });
+            var data = (await response.json()) || {};
+            var navigating = false;
+            $result_container.text('').hide().insertAfter($form);
+            if (data.confirm) {
+                console.debug("jsSubmit: asking the user to confirm");
+                if (window.confirm(data.confirm)) {
+                    form.removeAttribute('submitting');
+                    $form.append('<input type="hidden" name="confirmed" value="true" />');
+                    if (button) {
+                        $(button).click();
+                    } else {
+                        $form.submit();
+                    }
+                    return
+                }
+            } else if (data.html_template) {
+                console.debug("jsSubmit: received a complex response; trying a native submission");
+                form.setAttribute('submitting', '2');
+                if (button) {
+                    $(button).click();
+                } else {
+                    $form.submit();
+                }
+                return
+            } else if (data.error_message_long) {
+                console.debug("jsSubmit: showing error message received from server");
+                $result_container.addClass('alert-danger').removeClass('alert-success');
+                $result_container.text(data.error_message_long);
+            } else {
+                for (const action of [button_on_success, form_on_success]) {
+                    if (!action) continue;
+                    if (action.startsWith("call:")) {
+                        console.debug('jsSubmit: calling post-submit function', func);
+                        var func = Liberapay.get_object_by_name(action.substr(5));
+                        try {
+                            await func(data);
+                        } catch(exc) {
+                            Liberapay.error(exc);
                         }
+                    } else if (action.startsWith("fadeOut:")) {
+                        var $e = $(button).parents(action.substr(8)).eq(0);
+                        if ($e.length > 0) {
+                            console.debug('jsSubmit: calling fadeOut on', $e[0]);
+                            $e.fadeOut(400, function() { $e.remove() });
+                        } else {
+                            console.error("jsSubmit: fadeOut element not found; reloading page");
+                            window.location.href = window.location.href;
+                            navigating = true;
+                        }
+                    } else if (action == "notify") {
+                        var msg = data && data.msg;
+                        if (msg) {
+                            console.debug("jsSubmit: showing success message");
+                            $result_container.addClass('alert-success').removeClass('alert-danger');
+                            $result_container.text(msg);
+                        } else {
+                            console.error("jsSubmit: empty or missing `msg` key in server response:", data);
+                            window.location.href = window.location.href;
+                            navigating = true;
+                        }
+                    } else {
+                        Liberapay.error("invalid value in `data-on-success` attribute");
                     }
                 }
-                if (typeof msg != "string" || msg.length == 0) {
-                    msg = "An error occurred (" + (errorThrown || textStatus || jqXHR.status) + ").\n" +
-                          "Please contact support@liberapay.com if the problem persists.";
-                }
-                Liberapay.notification(msg, 'error', -1);
-            },
-        });
-    }
-    $('.js-submit').submit(submit);
-    $('.js-submit button').filter(':not([type]), [type="submit"]').click(submit);
-    // Prevent accidental double-submits of non-JS forms
-    $('form:not(.js-submit):not([action^="javascript:"])').on('submit', function (e) {
-        // Check that the form hasn't already been submitted recently
-        var $form = $(this);
-        if ($form.data('js-submit-disable')) {
-            e.preventDefault();
-            return false;
+            }
+            if ($result_container.text() > '') {
+                $result_container.css('visibility', 'visible').fadeIn()[0].scrollIntoView();
+            }
+            if (navigating) {
+                // Try to unlock the form if the user navigates back to the page
+                $(window).on('pageshow', function () {
+                    form.removeAttribute('submitting');
+                    remove_overlay();
+                });
+            } else {
+                remove_overlay();
+                // Allow submitting again after 0.2s
+                setTimeout(function () { form.removeAttribute('submitting'); }, 200);
+            }
+            $form.find('[type="password"]').val('');
+        } catch (exc) {
+            console.error(exc);
+            console.debug('jsSubmit: trying a native submission');
+            form.setAttribute('submitting', '2');
+            if (button) {
+                $(button).click();
+            } else {
+                $form.submit();
+            }
         }
-        // Prevent submitting again
-        $form.data('js-submit-disable', true);
-        var $inputs = $form.find(':not(:disabled)');
-        setTimeout(function () { $inputs.prop('disabled', true); }, 100);
-        // Unlock if the user comes back to the page
-        $(window).on('focus pageshow', function () {
-            $form.data('js-submit-disable', false);
-            $inputs.prop('disabled', false);
-        });
-    });
+    }
+    for (const form of document.getElementsByTagName('form')) {
+        form.addEventListener('submit', Liberapay.wrap(submit));
+    }
 };
-
-Liberapay.forms.success = function($form, $inputs, button) { return function(data) {
-    $inputs.prop('disabled', false);
-    if (data.confirm) {
-        if (window.confirm(data.confirm)) {
-            $form.append('<input type="hidden" name="confirmed" value="true" />');
-            $form.submit();
-        }
-        return;
-    }
-    $inputs.filter('[type=password]').val('');
-    var on_success = $form.data('on-success');
-    if (on_success && on_success.substr(0, 8) == 'fadeOut:') {
-        var $e = $(button).parents(on_success.substr(8)).eq(0);
-        return $e.fadeOut(null, $e.remove);
-    }
-    var msg = data && data.msg || $form.data('success');
-    var on_success = $form.data('on-success');
-    if (msg && on_success != 'reload') {
-        Liberapay.notification(msg, 'success');
-    } else {
-        window.location.href = window.location.href;
-    }
-}};

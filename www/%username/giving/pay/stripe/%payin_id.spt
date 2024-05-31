@@ -134,8 +134,11 @@ if request.method == 'POST':
         msg = _("Request in progress, please wait…")
         response.refresh(state, url=payer.path('giving/pay/stripe/%i' % payin.id), msg=msg)
 
-    elif not error:
-        error = _("The payment instrument is invalid, please select or add another one.")
+    else:
+        if not error:
+            error = _("The payment instrument is invalid, please select or add another one.")
+        if request.headers.get(b'Accept', b'').startswith(b'application/json'):
+            raise response.error(400, error)
 
 payin_id = request.path['payin_id']
 
@@ -367,7 +370,10 @@ title = _("Funding your donations")
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     <form action="javascript:" method="POST" id="stripe"
+          data-before-submit="call:Liberapay.stripe_before_submit"
+          data-msg-submitting="{{ _('Request in progress, please wait…') }}"
           data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % if len(payment.recipient_names) == 1
             <p>{{ _(
                 "Your donation of {amount} to {recipient} is awaiting payment.",
@@ -390,7 +396,6 @@ title = _("Funding your donations")
         % endif
         <p>{{ _("Please select or input a payment amount:") }}</p>
         <fieldset id="amount">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="currency" value="{{ payment.currency }}" />
             <input type="hidden" name="tips" value="{{ payment.tip_ids }}" />
             <ul class="list-group radio-group">
