@@ -2307,9 +2307,17 @@ class Participant(Model, MixinTeam):
             if goal.currency != self.main_currency:
                 raise UnexpectedCurrency(goal, self.main_currency)
         with self.db.get_cursor(cursor) as c:
+            r = c.one("""
+                UPDATE participants
+                   SET goal = %(new_goal)s
+                 WHERE id = %(p_id)s
+                   AND ( (goal IS NULL) <> (%(new_goal)s IS NULL) OR goal <> %(new_goal)s )
+             RETURNING id
+            """, dict(new_goal=goal, p_id=self.id))
+            if r is None:
+                return
             json = None if goal is None else str(goal)
             self.add_event(c, 'set_goal', json)
-            c.run("UPDATE participants SET goal=%s WHERE id=%s", (goal, self.id))
             self.set_attributes(goal=goal)
             if not self.accepts_tips:
                 tippers = c.all("""
