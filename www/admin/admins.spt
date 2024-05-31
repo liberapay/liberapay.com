@@ -40,7 +40,7 @@ title = "Admins Oversight"
         % elif marked_as == ''
             <p>{{ e.recorder_name }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <code>{{ e.payload }}</code>.</p>
         % else
-            <p>{{ e.recorder_name }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.MARK_CLASSES.get(marked_as, 'text-muted') }}">{{ marked_as }}</span>.</p>
+            <p>{{ e.recorder_name }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.ACCOUNT_MARK_CLASSES.get(marked_as, 'text-muted') }}">{{ marked_as }}</span>.</p>
         % endif
     % endif
     % endfor

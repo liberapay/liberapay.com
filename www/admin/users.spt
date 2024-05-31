@@ -244,7 +244,7 @@ elif mode == 'new_recipients':
       ORDER BY min(pt.id) DESC
          LIMIT 25
     """, (last_showed,))
-    page_end = participants[-1].incoming_payments[-1]['id'] if participants else None
+    page_end = participants[-1].incoming_payments[0]['id'] if participants else None
 else:
     raise response.invalid_input(mode, 'mode', 'querystring')
 

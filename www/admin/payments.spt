@@ -142,7 +142,7 @@ title = "Payments Admin"
                     ) -}}
                 </span>
                 {% endif %}{% if pi.payer_marked_as %}<br>
-                <span class="text-{{ constants.ACCOUNT_MARK_CLASSES[pi.payer_marked_as] }}">[{{
+                <span class="{{ constants.ACCOUNT_MARK_CLASSES[pi.payer_marked_as] }}">[{{
                     pi.payer_marked_as
                 }}]</span>{% endif %}</td>
             <td class="text-center">{{

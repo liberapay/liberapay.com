@@ -307,7 +307,7 @@ title = "Email Domains"
             % for p in participants
                 <tr>
                     <td><a class="break-word-anywhere" href="/~{{ p.id }}/">{{ p.username }}</a>{% if p.marked_as %}<br>
-                        <span class="text-{{ constants.ACCOUNT_MARK_CLASSES[p.marked_as] }}">[{{ p.marked_as }}]</span>{% endif %}</td>
+                        <span class="{{ constants.ACCOUNT_MARK_CLASSES[p.marked_as] }}">[{{ p.marked_as }}]</span>{% endif %}</td>
                     <td>
                     % for ea in p.addresses
                         <span class="break-word-anywhere">{{ ea.address }}</span>
