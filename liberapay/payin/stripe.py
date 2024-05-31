@@ -243,21 +243,25 @@ def charge_and_transfer(
     description = generate_charge_description(payin)
     try:
         if route.address.startswith('pm_'):
-            intent = stripe.PaymentIntent.create(
+            params = dict(
                 amount=Money_to_int(amount),
                 confirm=True,
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
                 description=description,
+                mandate=route.mandate,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=on_behalf_of,
                 payment_method=route.address,
+                payment_method_types=['sepa_debit' if route.network == 'stripe-sdd' else 'card'],
                 return_url=payer.url('giving/pay/stripe/%i' % payin.id),
-                setup_future_usage=(None if route.one_off or payin.off_session else 'off_session'),
                 statement_descriptor=statement_descriptor,
                 idempotency_key='payin_intent_%i' % payin.id,
             )
+            if not route.mandate and not route.one_off and not payin.off_session:
+                params['setup_future_usage'] = 'off_session'
+            intent = stripe.PaymentIntent.create(**params)
         else:
             charge = stripe.Charge.create(
                 amount=Money_to_int(amount),
@@ -313,22 +317,26 @@ def destination_charge(db, payin, payer, statement_descriptor, update_donor=True
         destination = None
     try:
         if route.address.startswith('pm_'):
-            intent = stripe.PaymentIntent.create(
+            params = dict(
                 amount=Money_to_int(amount),
                 confirm=True,
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
                 description=description,
+                mandate=route.mandate,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=destination,
                 payment_method=route.address,
+                payment_method_types=['sepa_debit' if route.network == 'stripe-sdd' else 'card'],
                 return_url=payer.url('giving/pay/stripe/%i' % payin.id),
-                setup_future_usage=(None if route.one_off or payin.off_session else 'off_session'),
                 statement_descriptor=statement_descriptor,
                 transfer_data={'destination': destination} if destination else None,
                 idempotency_key='payin_intent_%i' % payin.id,
             )
+            if not route.mandate and not route.one_off and not payin.off_session:
+                params['setup_future_usage'] = 'off_session'
+            intent = stripe.PaymentIntent.create(**params)
         else:
             charge = stripe.Charge.create(
                 amount=Money_to_int(amount),
