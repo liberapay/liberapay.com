@@ -48,7 +48,7 @@ from liberapay.payin.cron import (
     send_upcoming_debit_notifications,
 )
 from liberapay.security import authentication, csrf, set_default_security_headers
-from liberapay.security.csp import csp_allow, csp_allow_stripe
+from liberapay.security.csp import csp_allow, csp_allow_stripe, csp_allow_stripe_connect
 from liberapay.utils import (
     b64decode_s, b64encode_s, erase_cookie, http_caching, set_cookie,
 )
@@ -411,6 +411,10 @@ pando.Response.csp_allow = csp_allow
 if hasattr(pando.Response, 'csp_allow_stripe'):
     raise Warning('pando.Response.csp_allow_stripe() already exists')
 pando.Response.csp_allow_stripe = csp_allow_stripe
+
+if hasattr(pando.Response, 'csp_allow_stripe_connect'):
+    raise Warning('pando.Response.csp_allow_stripe_connect() already exists')
+pando.Response.csp_allow_stripe_connect = csp_allow_stripe_connect
 
 if hasattr(pando.Response, 'encode_url'):
     raise Warning('pando.Response.encode_url() already exists')

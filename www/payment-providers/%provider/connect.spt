@@ -130,6 +130,8 @@ elif 'state' in request.qs:
             charges_enabled=None,
             display_name=user_info['name'],
             token=token_response_data,
+            independent=True,
+            loss_taker='provider',
         )
     elif provider_name == 'stripe':
         data_from_stripe = token_response.json()
@@ -139,6 +141,16 @@ elif 'state' in request.qs:
             ))
         account_id = data_from_stripe['stripe_user_id']
         account = stripe.Account.retrieve(account_id)
+        independent = (
+            account.type == 'standard' or
+            account.controller.stripe_dashboard.type != "none"
+        )
+        assert independent
+        if account.type == 'standard' or account.controller.losses.payments == 'stripe':
+            loss_taker = 'provider'
+        else:
+            loss_taker = 'platform'
+        assert loss_taker == 'provider'
         account_data.update(
             country=account.country,
             account_id=account_id,
@@ -146,6 +158,8 @@ elif 'state' in request.qs:
             charges_enabled=account.charges_enabled,
             display_name=account.settings.dashboard.display_name,
             token=None,
+            independent=independent,
+            loss_taker=loss_taker,
         )
     else:
         raise ValueError(provider_name)
@@ -180,10 +194,10 @@ elif 'state' in request.qs:
             INSERT INTO payment_accounts
                         (participant, provider, country, id,
                          default_currency, charges_enabled, verified,
-                         display_name, token)
+                         display_name, token, independent, loss_taker)
                  VALUES (%(p_id)s, %(provider)s, %(country)s, %(account_id)s,
                          %(default_currency)s, %(charges_enabled)s, true,
-                         %(display_name)s, %(token)s)
+                         %(display_name)s, %(token)s, %(independent)s, %(loss_taker)s)
             ON CONFLICT (provider, id, participant) DO UPDATE
                     SET is_current = true
                       , country = excluded.country
@@ -192,7 +206,9 @@ elif 'state' in request.qs:
                       , verified = true
                       , authorized = true
                       , display_name = excluded.display_name
-                      , token = excluded.token;
+                      , token = excluded.token
+                      , independent = excluded.independent
+                      , loss_taker = excluded.loss_taker;
         """, account_data)
 
     response.erase_cookie(cookie_name)

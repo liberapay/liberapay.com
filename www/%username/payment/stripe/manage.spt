@@ -1,0 +1,106 @@
+import stripe
+
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=False)
+user.require_write_permission()
+if user != participant:
+    raise response.error(403)
+
+payment_account = website.db.one("""
+    SELECT *
+      FROM payment_accounts
+     WHERE participant = %s
+       AND pk = %s
+""", (participant.id, request.qs.get_int('sn')))
+if not payment_account:
+    raise response.error(400, "invalid `sn` value in querystring")
+
+if not payment_account.details_submitted:
+    account = stripe.Account.retrieve(payment_account.id)
+    if account.details_submitted:
+        payment_account = website.db.one("""
+            UPDATE payment_accounts
+               SET details_submitted = true
+                 , charges_enabled = %s
+                 , display_name = %s
+             WHERE pk = %s
+         RETURNING *
+        """, (
+            account.charges_enabled,
+            account.settings.dashboard.display_name,
+            payment_account.pk
+        ))
+    else:
+        response.redirect(participant.path(f'payment/stripe/onboard?sn={payment_account.pk}'))
+
+if request.method == 'POST':
+    allow_payout = bool(user.has_privilege('admin')) or payment_account.allow_payout
+    account_session = stripe.AccountSession.create(
+        account=payment_account.id,
+        components={
+            "account_management": {
+                "enabled": True,
+                "features": {
+                    "disable_stripe_user_authentication": True,
+                },
+            },
+            "notification_banner": {
+                "enabled": True,
+                "features": {
+                    "disable_stripe_user_authentication": True,
+                },
+            },
+            "payments": {
+                "enabled": True,
+                "features": {
+                    "capture_payments": False,
+                    "dispute_management": False,
+                    "refund_management": False,
+                },
+            },
+            "payouts": {
+                "enabled": True,
+                "features": {
+                    "disable_stripe_user_authentication": True,
+                    "edit_payout_schedule": allow_payout,
+                    "instant_payouts": allow_payout,
+                    "standard_payouts": allow_payout,
+                },
+            },
+        },
+    )
+    raise response.json({"client_secret": account_session.client_secret})
+
+title = _("Manage a {provider} account", provider='Stripe')
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% block content
+    <noscript><p class="alert alert-danger">{{ _("JavaScript is required") }}</p></noscript>
+    <div id="stripe-notification"></div>
+    <nav id="stripe-component-nav" class="hidden">
+        <ul class="nav nav-pills">
+            <li><a data-component="account-management" href="javascript:">{{ _("Account") }}</a></li>
+            <li><a data-component="payments" href="javascript:">{{ _("Payments") }}</a></li>
+            <li><a data-component="payouts" href="javascript:">{{ _("Payouts") }}</a></li>
+        </ul>
+    </nav>
+    <br>
+    <div id="stripe-connect" data-csrf-token="{{ csrf_token }}"
+         data-msg-stripe-missing='{{ _(
+              "The initialization of a required component has failed. If you use a "
+              "browser extension that blocks requests, for example NoScript, please "
+              "make sure it’s allowing requests to the “stripe.com” domain."
+          ) }}'
+         data-stripe-pub-key="{{ website.app_conf.stripe_publishable_key }}"></div>
+    <br><br>
+    <a class="btn btn-default" href="{{ participant.path('payment') }}">{{ _("Go back") }}</a>
+% endblock
+
+% block scripts
+    % do response.csp_allow_stripe_connect()
+    <script src="https://connect-js.stripe.com/v1.0/connect.js"></script>
+% endblock

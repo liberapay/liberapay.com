@@ -43,3 +43,14 @@ def csp_allow_stripe(response) -> None:
         (b'frame-src', b"*.js.stripe.com js.stripe.com hooks.stripe.com"),
         (b'script-src', b"*.js.stripe.com js.stripe.com"),
     )
+
+
+def csp_allow_stripe_connect(response) -> None:
+    # https://docs.stripe.com/security/guide?csp=csp-connect#content-security-policy
+    csp_allow(
+        response,
+        (b'frame-src', b"connect-js.stripe.com js.stripe.com"),
+        (b'img-src', b"*.stripe.com"),
+        (b'script-src', b"connect-js.stripe.com js.stripe.com"),
+        (b'style-src', b"sha256-0hAheEzaMe6uXIKV4EehS9pu1am1lj/KnnzrOYqckXk="),
+    )

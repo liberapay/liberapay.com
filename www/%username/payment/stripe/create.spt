@@ -1,0 +1,146 @@
+import stripe
+
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=False)
+
+if request.method == 'POST':
+    if user != participant:
+        raise response.error(403)
+    country = request.body.get_choice('country', constants.PAYOUT_COUNTRIES['stripe'])
+    country_in_sepa = country in constants.SEPA
+    account_token_id = request.body['account_token']
+    if website.app_conf.stripe_secret_key.startswith('sk_test_'):
+        profile_url = f"https://fake.liberapay.com/{participant.username}"
+    else:
+        profile_url = participant.url()
+    account = stripe.Account.create(
+        account_token=account_token_id,
+        business_profile={
+            "url": profile_url,
+        },
+        controller={
+            "fees": {
+                "payer": "application",
+            },
+            "losses": {
+                "payments": "application",
+            },
+            "requirement_collection": "application",
+            "stripe_dashboard": {
+                "type": "none",
+            },
+        },
+        capabilities={
+            "transfers": {"requested": True},
+        } if country_in_sepa else {
+            "card_payments": {"requested": True},
+            "transfers": {"requested": True},
+        },
+        country=country,
+        metadata={
+            "participant_id": str(participant.id),
+        },
+        settings={
+            "payouts": {
+                "debit_negative_balances": True,
+                "schedule": {
+                    "interval": "manual",
+                },
+            },
+        },
+        idempotency_key=f"create_{country}_account_for_{participant.id}",
+    )
+    independent = (
+        account.type == 'standard' or
+        account.controller.stripe_dashboard.type != "none"
+    )
+    if account.type == 'standard' or account.controller.losses.payments == 'stripe':
+        loss_taker = 'provider'
+    else:
+        loss_taker = 'platform'
+    serial_number = website.db.one("""
+        UPDATE payment_accounts
+           SET is_current = NULL
+         WHERE participant = %(p_id)s
+           AND provider = 'stripe'
+           AND country = %(country)s;
+
+        INSERT INTO payment_accounts
+                    (participant, provider, country, id,
+                     default_currency, charges_enabled, verified,
+                     display_name, independent, loss_taker)
+             VALUES (%(p_id)s, 'stripe', %(country)s, %(account_id)s,
+                     %(default_currency)s, %(charges_enabled)s, true,
+                     %(display_name)s, %(independent)s, %(loss_taker)s)
+        ON CONFLICT (provider, id, participant) DO UPDATE
+                SET is_current = true
+                  , country = excluded.country
+                  , default_currency = excluded.default_currency
+                  , charges_enabled = excluded.charges_enabled
+                  , verified = true
+                  , display_name = excluded.display_name
+                  , independent = excluded.independent
+                  , loss_taker = excluded.loss_taker
+          RETURNING pk;
+    """, dict(
+        p_id=participant.id,
+        country=country,
+        account_id=account.id,
+        default_currency=account.default_currency.upper(),
+        charges_enabled=account.charges_enabled,
+        display_name=account.settings.dashboard.display_name,
+        independent=independent,
+        loss_taker=loss_taker,
+    ))
+    raise response.redirect(participant.path(
+        f'payment/stripe/onboard?sn={serial_number}'
+    ))
+
+title = _("Create a {provider} account", provider='Stripe')
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% block content
+    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
+    <output id="stripe-errors" class="alert alert-danger"></output>
+
+    <form action="javascript:" method="POST" id="stripe"
+          data-before-submit="call:Liberapay.stripe_before_account_submit"
+          data-msg-submitting="{{ _('Request in progress, please wait…') }}"
+          data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <p>{{ _(
+            "Please select the country you live in or have a registered business "
+            "in, and confirm that you agree to Stripe's terms."
+        ) }}</p>
+        <div class="form-group form-inline">
+            <select name="country" class="form-control country" required>
+                % set country = user.guessed_country
+                % if country not in constants.PAYOUT_COUNTRIES['stripe']
+                    <option></option>
+                % endif
+                % for code, name in locale.countries.items() if code in constants.PAYOUT_COUNTRIES['stripe']
+                    <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
+                % endfor
+            </select>
+        </div>
+        <p class="form-group"><label>
+            <input type="checkbox" name="tos_shown_and_accepted" value="true" required />
+            {{ _("I agree to the {link_start}Stripe Connected Account Agreement{link_end}.",
+                 link_start='<a href="https://stripe.com/connect-account/legal" target="_blank" rel="noopener noreferrer">'|safe,
+                 link_end='</a>'|safe) }}
+        </label></p>
+        <div class="buttons">
+            <button class="btn btn-primary">{{ _("Create account") }}</button>
+            <a class="btn btn-default" href="{{ participant.path('payment/') }}">{{ _("Go back") }}</a>
+        </div>
+    </form>
+% endblock
+
+% block scripts
+    % do response.csp_allow_stripe()
+    <script src="https://js.stripe.com/v3/"></script>
+% endblock
