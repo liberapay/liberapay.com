@@ -375,6 +375,7 @@ def resolve_destination(
            AND ( country IN %(SEPA)s OR NOT %(sepa_only)s )
       ORDER BY default_currency = %(currency)s DESC
              , country = %(payer_country)s DESC
+             , loss_taker = 'provider' DESC
              , connection_ts
          LIMIT 1
     """, dict(locals(), SEPA=SEPA))
@@ -435,6 +436,7 @@ def resolve_team_donation(
       ORDER BY participant
              , default_currency = %(currency)s DESC
              , country = %(payer_country)s DESC
+             , loss_taker = 'provider' DESC
              , connection_ts
     """, locals())}
     del member_ids
@@ -462,6 +464,8 @@ def resolve_team_donation(
                AND a.country IN %(SEPA)s
           ORDER BY a.participant
                  , a.default_currency = %(currency)s DESC
+                 , a.country = %(payer_country)s DESC
+                 , a.loss_taker = 'provider' DESC
                  , a.connection_ts
         """, dict(locals(), SEPA=SEPA, member_ids={t.member for t in takes}))}
         if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:

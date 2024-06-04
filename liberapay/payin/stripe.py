@@ -508,6 +508,7 @@ def execute_transfer(db, pt, source_transaction, update_donor=True):
                    AND charges_enabled
                    AND country IN %(SEPA)s
               ORDER BY default_currency = %(currency)s DESC
+                     , loss_taker = 'provider' DESC
                      , connection_ts
                  LIMIT 1
             """, dict(p_id=pt.recipient, SEPA=SEPA, currency=pt.amount.currency))
