@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Danish "
-"<https://hosted.weblate.org/projects/liberapay/core/da/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-06-05 10:09+0000\n"
+"Last-Translator: Katharsisdrill <katharsisdrill@phillfromgchq.co.uk>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/liberapay/core/da/>\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6-dev\n"
 "Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
@@ -224,7 +226,7 @@ msgstr "Du har en betaling på {amount} sat til {payment_date} for at forny din 
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
-msgstr[1] "Du har {n} betalinger sat klar til fornyelse af dine donationer, men vi kan ikke behandle dem fordi der mangler et gyldigt betalingsmiddel."
+msgstr[1] "Du har {n} betalinger klar til fornyelse af dine donationer, men vi kan ikke behandle dem fordi der mangler et gyldigt betalingsmiddel."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "Betalingsdatoer, beløb og modtagere er:"
@@ -849,9 +851,9 @@ msgstr "Brugernavnet '{0}' er for langt."
 msgid "The username '{0}' contains invalid characters."
 msgstr "Brugernavnet '{0}' indeholder ulovlige tegn."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
-msgstr "Brugernavnet '{0}' er rent numerisk. Det er ikke tilladt."
+msgstr "Brugernavnet '{0}' er rent numerisk. Dette er ikke tilladt."
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
@@ -999,17 +1001,17 @@ msgstr "Brugeren {0} accepterer ikke donationer."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} accepterer ikke donationer i {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
-msgstr "{username} tager ikke længere imod hemmelige donationer."
+msgstr "{username} accepterer ikke længere hemmelige donationer."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
-msgstr "{username} tager ikke længere imod private donationer."
+msgstr "{username} accepterer ikke længere private donationer."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
-msgstr "{username} tager ikke længere imod offentlige donationer."
+msgstr "{username} accepterer ikke længere offentlige donationer."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
@@ -1048,13 +1050,12 @@ msgstr "Denne betaling kan ikke behandles, fordi modtagerens konto er suspendere
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Din donation til {recipient} kan ikke behandles lige nu, fordi modtagerens konto ikke er klar til at modtage penge."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr "{username} tager ikke imod donationer fra {country}."
+msgstr "{username} accepterer ikke donationer fra {country}."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr "Betalingsbehandlingen af din betaling er mislykkedes, fordi vores software ikke kunne afgøre, hvilket land pengene skulle komme fra. Det er ikke meningen, at det skal ske."
+msgstr "Betalingsprocessen af din betaling er mislykkedes, fordi vores software ikke kunne afgøre, hvilket land pengene skulle komme fra. Det er ikke meningen, at dette skal ske."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Du har allerede ændret din møntfod for nylig. Prøv igen senere (d.v.s. om en uge) eller kontakt support@liberapay.com."
@@ -1424,7 +1425,6 @@ msgstr "Log ud"
 msgid "Print"
 msgstr "Udskriv"
 
-#, fuzzy
 msgid "Liberapay logo"
 msgstr "Liberapay-logo"
 
@@ -1662,7 +1662,6 @@ msgstr "Navn"
 msgid "Currencies"
 msgstr "Valutaer"
 
-#, fuzzy
 msgid "Countries"
 msgstr "Lande"
 
@@ -1715,7 +1714,6 @@ msgstr "Donationer til {username} bliver håndteret gennem PayPal."
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Donationer til {username} kan betales ved hjælp af: et kredit- eller betalingskort ({list_of_card_brands}), en Euro bankkonto (SEPA Direct Debit) eller en PayPal-konto."
 
-#, fuzzy
 msgid "Payment Card"
 msgstr "Betalingskort"
 
@@ -1834,9 +1832,9 @@ msgstr "Ubrugt indkomst vil blive brugt i løbet af de følgende uger, det akkum
 msgid "Leftover"
 msgstr "Overskydende"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr "Det ser ud til, at du er i {country}. {username} accepterer ikke donationer, der kommer fra det land."
+msgstr "Det ser ud til, at du er i {country}. {username} accepterer ikke donationer, der kommer fra dette land."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2095,11 +2093,9 @@ msgstr "Udforsk fælleskaber"
 msgid "You have to check at least one box."
 msgstr "Du skal afkrydse mindst ét felt."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Hvilke lande skal dine donorer have lov til at sende dig penge fra?"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
 msgstr "Vi anbefaler kun at begrænse oprindelsen af donationer, hvis du er forpligtet til det ved lov."
 
@@ -2506,7 +2502,7 @@ msgstr "Næste betaling er {in_N_weeks_months_or_years}."
 msgid "Renew now"
 msgstr "Forny nu"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
 msgstr "Modtageren accepterer ikke længere betalinger i {currency}."
 
@@ -2742,9 +2738,8 @@ msgstr "Husk bankkontonummeret til fremtidige betalinger"
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "For at reducere risikoen for at denne betaling bliver afvist, anbefaler vi at du indtaster din postadresse nedenfor. Den vil blive gemt krypteret i vores database og sendt til betalingsbehandleren ({processor_name})."
 
-#, fuzzy
 msgid "Please fill in your postal address. It's required because the IBAN you've provided emanates from outside the European Union."
-msgstr "Udfyld venligst din postadresse. Det er nødvendigt, fordi det IBAN-nummer, du har oplyst, kommer fra et land uden for EU."
+msgstr "Udfyld venligst din postadresse. Det er nødvendigt fordi det IBAN-nummer du har oplyst, kommer fra et land uden for EU."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -3312,13 +3307,11 @@ msgstr "Dette er hvad dine potentielle donorer vil se med de nye indstillinger:"
 msgid "Data export"
 msgstr "Data-eksport"
 
-#, fuzzy
 msgid "Download the list of currently active patrons who chose to make their donations public"
-msgstr "Download listen over aktive lånere, der har valgt at offentliggøre deres donationer"
+msgstr "Download listen over aktive donorer, der har valgt at offentliggøre deres donationer"
 
-#, fuzzy
 msgid "Download the list of all currently active patrons"
-msgstr "Download listen over alle aktive lånere"
+msgstr "Download listen over alle aktive donorer"
 
 msgid "Download the record of all patrons in the last ten years"
 msgstr "Download optegnelsen over alle velyndere i de sidste ti år"
@@ -4204,9 +4197,8 @@ msgstr "Privatlivspolitik"
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Denne side indeholder links til og information om Liberapay-logoet. Vi håber du finder det nyttigt hvis du skriver en artikel om Liberapay, eller hvis du vil tilføje brugerdefinerede links til din Liberapay-profil på dit websted."
 
-#, fuzzy
 msgid "The Liberapay logo is composed of the two letters “lp”. It's usually colored black-on-yellow or just black. We used a white-on-yellow variant in the past, but it's now phased out as its contrast was deemed too low."
-msgstr "Liberapays logo er sammensat af de to bogstaver \"lp\". Det er normalt farvet sort på gult eller bare sort. Vi har tidligere brugt en hvid-på-gul-variant, men den er nu udfaset, da kontrasten blev anset for at være for lav."
+msgstr "Liberapays logo er sammensat af de to bogstaver \"lp\". Det er normalt farvet sort på gult eller bare sort. Vi har tidligere brugt en hvid-på-gul-variant, men den er nu udfaset, da kontrasten blev skønnet at være for lav."
 
 #, python-brace-format
 msgid "The Liberapay yellow is {yellow_color_code}, the black is {black_color_code}."
@@ -4220,9 +4212,8 @@ msgstr "Liberapay-logoet er stort set fri for ophavsret takket være {CC0_link_s
 msgid "You can view and download our logos below or {link_start}on GitHub{link_end}."
 msgstr "Du kan se og hente vores logoer nedefor eller {link_start}på GitHub{link_end}."
 
-#, fuzzy
 msgid "Liberapay logo, black-on-yellow"
-msgstr "Liberapay-logo, sort-på-gul"
+msgstr "Liberapay-logo, sort på gul"
 
 msgid "Download the black-on-yellow SVG"
 msgstr "Download den sort-på-gule SVG"
@@ -4231,7 +4222,6 @@ msgstr "Download den sort-på-gule SVG"
 msgid "Download the black-on-yellow PNG ({x_y} pixels)"
 msgstr "Download den sort-på-gule PNG ({x_y} pixel)"
 
-#, fuzzy
 msgid "Liberapay logo, black"
 msgstr "Liberapay-logo, sort"
 
