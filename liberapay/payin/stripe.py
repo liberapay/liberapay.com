@@ -227,28 +227,6 @@ def try_other_destinations(db, payin, payer, charge, update_donor=True):
     return payin, charge
 
 
-def get_mandate_data():
-    state = website.state.get(None)
-    if not state:
-        return None
-    request, response = state['request'], state['response']
-    user_agent = request.headers.get(b'User-Agent', b'')
-    try:
-        user_agent = user_agent.decode('ascii', 'backslashreplace')
-    except UnicodeError:
-        raise response.error(400, "User-Agent must be ASCII only")
-    return {
-        "customer_acceptance": {
-            "type": "online",
-            "accepted_at": int(utcnow().timestamp()),
-            "online": {
-                "ip_address": str(request.source),
-                "user_agent": user_agent,
-            },
-        },
-    }
-
-
 def charge_and_transfer(
     db, payin, payer, statement_descriptor, on_behalf_of=None, update_donor=True,
 ):
@@ -266,23 +244,25 @@ def charge_and_transfer(
     description = generate_charge_description(payin)
     try:
         if route.address.startswith('pm_'):
-            intent = stripe.PaymentIntent.create(
+            params = dict(
                 amount=Money_to_int(amount),
                 confirm=True,
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
                 description=description,
-                mandate_data=get_mandate_data() if route.network == 'stripe-sdd' else None,
+                mandate=route.mandate,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=on_behalf_of,
                 payment_method=route.address,
                 payment_method_types=['sepa_debit' if route.network == 'stripe-sdd' else 'card'],
                 return_url=payer.url('giving/pay/stripe/%i' % payin.id),
-                setup_future_usage=(None if route.one_off or payin.off_session else 'off_session'),
                 statement_descriptor=statement_descriptor,
                 idempotency_key='payin_intent_%i' % payin.id,
             )
+            if not route.mandate and not route.one_off and not payin.off_session:
+                params['setup_future_usage'] = 'off_session'
+            intent = stripe.PaymentIntent.create(**params)
         else:
             charge = stripe.Charge.create(
                 amount=Money_to_int(amount),
@@ -338,24 +318,26 @@ def destination_charge(db, payin, payer, statement_descriptor, update_donor=True
         destination = None
     try:
         if route.address.startswith('pm_'):
-            intent = stripe.PaymentIntent.create(
+            params = dict(
                 amount=Money_to_int(amount),
                 confirm=True,
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
                 description=description,
-                mandate_data=get_mandate_data() if route.network == 'stripe-sdd' else None,
+                mandate=route.mandate,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=destination,
                 payment_method=route.address,
                 payment_method_types=['sepa_debit' if route.network == 'stripe-sdd' else 'card'],
                 return_url=payer.url('giving/pay/stripe/%i' % payin.id),
-                setup_future_usage=(None if route.one_off or payin.off_session else 'off_session'),
                 statement_descriptor=statement_descriptor,
                 transfer_data={'destination': destination} if destination else None,
                 idempotency_key='payin_intent_%i' % payin.id,
             )
+            if not route.mandate and not route.one_off and not payin.off_session:
+                params['setup_future_usage'] = 'off_session'
+            intent = stripe.PaymentIntent.create(**params)
         else:
             charge = stripe.Charge.create(
                 amount=Money_to_int(amount),
