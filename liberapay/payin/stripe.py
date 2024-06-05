@@ -227,28 +227,6 @@ def try_other_destinations(db, payin, payer, charge, update_donor=True):
     return payin, charge
 
 
-def get_mandate_data():
-    state = website.state.get(None)
-    if not state:
-        return None
-    request, response = state['request'], state['response']
-    user_agent = request.headers.get(b'User-Agent', b'')
-    try:
-        user_agent = user_agent.decode('ascii', 'backslashreplace')
-    except UnicodeError:
-        raise response.error(400, "User-Agent must be ASCII only")
-    return {
-        "customer_acceptance": {
-            "type": "online",
-            "accepted_at": int(utcnow().timestamp()),
-            "online": {
-                "ip_address": str(request.source),
-                "user_agent": user_agent,
-            },
-        },
-    }
-
-
 def charge_and_transfer(
     db, payin, payer, statement_descriptor, on_behalf_of=None, update_donor=True,
 ):
@@ -272,7 +250,7 @@ def charge_and_transfer(
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
                 description=description,
-                mandate_data=get_mandate_data() if route.network == 'stripe-sdd' else None,
+                mandate=route.mandate,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=on_behalf_of,
@@ -344,7 +322,7 @@ def destination_charge(db, payin, payer, statement_descriptor, update_donor=True
                 currency=amount.currency.lower(),
                 customer=route.remote_user_id,
                 description=description,
-                mandate_data=get_mandate_data() if route.network == 'stripe-sdd' else None,
+                mandate=route.mandate,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
                 on_behalf_of=destination,
