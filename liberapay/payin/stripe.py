@@ -227,7 +227,7 @@ def try_other_destinations(db, payin, payer, charge, update_donor=True):
 
 
 def charge_and_transfer(
-    db, payin, payer, statement_descriptor, on_behalf_of=None, update_donor=True,
+    db, payin, payer, statement_descriptor, update_donor=True,
 ):
     """Create a standalone Charge then multiple Transfers.
 
@@ -252,7 +252,6 @@ def charge_and_transfer(
                 mandate=route.mandate,
                 metadata={'payin_id': payin.id},
                 off_session=payin.off_session,
-                on_behalf_of=on_behalf_of,
                 payment_method=route.address,
                 payment_method_types=['sepa_debit' if route.network == 'stripe-sdd' else 'card'],
                 return_url=payer.url('giving/pay/stripe/%i' % payin.id),
@@ -269,7 +268,6 @@ def charge_and_transfer(
                 customer=route.remote_user_id,
                 description=description,
                 metadata={'payin_id': payin.id},
-                on_behalf_of=on_behalf_of,
                 source=route.address,
                 statement_descriptor=statement_descriptor,
                 expand=['balance_transaction'],
