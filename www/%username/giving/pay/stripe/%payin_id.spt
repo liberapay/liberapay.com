@@ -254,7 +254,19 @@ if tippees:
              LIMIT 1
         """, tippee_ids=tuple(tip.tippee for tip in tips))
     )
+    stripe_on_behalf_of = ''
+    if len(tips) == 1:
+        proto_transfers = resolve_tip(
+            website.db, tips[0], tips[0].tippee_p, 'stripe', payer, payer.guessed_country,
+            tips[0].periodic_amount
+        )
+        if len(proto_transfers) == 1:
+            if proto_transfers[0].destination.country not in constants.SEPA:
+                stripe_on_behalf_of = proto_transfers[0].destination.id
+        del proto_transfers
     del tips
+    # Note: the `stripe_on_behalf_of` value isn't 100% accurate. This can be fixed
+    # later if it causes too many problems.
 
 elif not payin_id:
     response.redirect(payer.path('giving/pay'))
@@ -377,6 +389,7 @@ title = _("Funding your donations")
               "make sure it’s allowing requests to the “stripe.com” domain."
           ) }}'
           data-msg-submitting="{{ _('Request in progress, please wait…') }}"
+          data-stripe-on-behalf-of="{{ stripe_on_behalf_of }}"
           data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % if len(payment.recipient_names) == 1
