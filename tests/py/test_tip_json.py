@@ -11,7 +11,7 @@ class TestTipJson(Harness):
             "/%s/tip.json" % tippee,
             data,
             auth_as=tipper,
-            xhr=True,
+            json=True,
             raise_immediately=raise_immediately,
         )
 
@@ -96,7 +96,7 @@ class TestTipJson(Harness):
             "/bob/tip.json",
             {'selected_amount': '1.00'},
             auth_as=alice,
-            xhr=True,
+            json=True,
         )
         assert r.code == 200
         r_data = json.loads(r.text)

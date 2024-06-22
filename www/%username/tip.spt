@@ -78,7 +78,7 @@ if request.method == 'POST':
         messages = PLEDGE_MESSAGES if out['is_pledge'] else DONATION_MESSAGES
         msg = messages[out['period']]
         out["msg"] = _(msg, out['periodic_amount'], tippee_name)
-    if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
+    if output.media_type != 'application/json':
         back_to = request.body.get('back_to') or tipper.path('giving/')
         back_to += '&' if '?' in back_to else '?'
         back_to += 'success=' + b64encode_s(out["msg"])

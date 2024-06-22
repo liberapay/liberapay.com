@@ -377,8 +377,8 @@ class TestPayday(EmailHarness):
         self.make_payin_and_transfer(janet_card, self.david, EUR('4.50'))
         self.make_payin_and_transfer(janet_card, self.homer, EUR('3.50'))
         self.make_payin_and_transfer(janet_card, team, EUR('25.00'))
-        self.client.PxST('/homer/emails/', auth_as=self.homer,
-                         data={'events': 'income', 'income': ''}, xhr=True)
+        self.client.POST('/homer/emails/', auth_as=self.homer,
+                         data={'events': 'income', 'income': ''}, json=True)
         self.db.run("""
             UPDATE scheduled_payins
                SET ctime = ctime - interval '12 hours'

@@ -102,7 +102,7 @@ class TestPages(Harness):
 
     def test_sign_out_doesnt_redirect_xhr(self):
         alice = self.make_participant('alice')
-        response = self.client.PxST('/sign-out.html', auth_as=alice, xhr=True)
+        response = self.client.POST('/sign-out.html', auth_as=alice, json=True)
         assert response.code == 200
 
     def test_giving_page(self):

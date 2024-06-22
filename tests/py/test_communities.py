@@ -54,16 +54,16 @@ class TestCommunitiesJson(Harness):
         assert response.code == 400
 
     def test_joining_and_leaving_community(self):
-        response = self.client.PxST('/alice/edit/communities',
+        response = self.client.POST('/alice/edit/communities',
                                     {'do': 'join:'+self.c_id},
-                                    auth_as=self.alice, xhr=True)
+                                    auth_as=self.alice, json=True)
 
         r = json.loads(response.text)
-        assert r == {}
+        assert isinstance(r, dict)
 
-        response = self.client.PxST('/alice/edit/communities',
+        response = self.client.POST('/alice/edit/communities',
                                     {'do': 'leave:'+self.c_id},
-                                    auth_as=self.alice, xhr=True)
+                                    auth_as=self.alice, json=True)
 
         communities = self.alice.get_communities()
         assert len(communities) == 0
@@ -84,39 +84,39 @@ class TestCommunityActions(Harness):
 
     def test_subscribe_and_unsubscribe(self):
         # Subscribe
-        response = self.client.POST('/for/test/subscribe', auth_as=self.bob, xhr=True)
+        response = self.client.POST('/for/test/subscribe', auth_as=self.bob, json=True)
         assert response.code == 200
         p = self.community.participant.refetch()
         assert p.nsubscribers == 1
 
         # Subscribe again, shouldn't do anything
-        response = self.client.POST('/for/test/subscribe', auth_as=self.bob, xhr=True)
+        response = self.client.POST('/for/test/subscribe', auth_as=self.bob, json=True)
         assert response.code == 200
         p = self.community.participant.refetch()
         assert p.nsubscribers == 1
 
         # Unsubscribe
-        self.client.POST('/for/test/unsubscribe', auth_as=self.bob, xhr=True)
+        self.client.POST('/for/test/unsubscribe', auth_as=self.bob, json=True)
         communities = self.bob.get_communities()
         assert len(communities) == 0
 
     def test_subscribe_and_unsubscribe_as_anon(self):
-        response = self.client.POST('/for/test/subscribe', xhr=True, raise_immediately=False)
+        response = self.client.POST('/for/test/subscribe', json=True)
         assert response.code == 403
 
-        response = self.client.POST('/for/test/unsubscribe', xhr=True, raise_immediately=False)
+        response = self.client.POST('/for/test/unsubscribe', json=True)
         assert response.code == 403
 
     def test_join_and_leave(self):
         with self.assertRaises(AuthRequired):
             self.client.POST('/for/test/join')
 
-        self.client.POST('/for/test/join', auth_as=self.bob, xhr=True)
+        self.client.POST('/for/test/join', auth_as=self.bob, json=True)
 
         communities = self.bob.get_communities()
         assert len(communities) == 1
 
-        self.client.POST('/for/test/leave', auth_as=self.bob, xhr=True)
+        self.client.POST('/for/test/leave', auth_as=self.bob, json=True)
 
         communities = self.bob.get_communities()
         assert len(communities) == 0

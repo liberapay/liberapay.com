@@ -1,7 +1,7 @@
 from liberapay.exceptions import AuthRequired, LoginRequired
 from liberapay.models.participant import Participant
 from liberapay.security.crypto import constant_time_compare
-from liberapay.utils import get_participant
+from liberapay.utils import form_post_success, get_participant
 
 [---]
 
@@ -42,8 +42,7 @@ if request.method == 'POST':
 
     subscriber.upsert_subscription(subscribe, publisher.id)
 
-    if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-        response.redirect(back_to)
+    form_post_success(state, redirect_url=back_to)
 
 title = _("Subscribe") if subscribe else _("Unsubscribe")
 
@@ -66,6 +65,3 @@ title = _("Subscribe") if subscribe else _("Unsubscribe")
         <a class="btn btn-default" href="{{ back_to }}">{{ _("← Go back") }}</a>
     </form>
 % endblock
-
-[---] application/json
-{}
