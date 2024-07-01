@@ -83,6 +83,7 @@ user_agent = request.headers.get(b'User-Agent')
                }}Error location: {{ error_location }}{{ '\n'
                }}User: {{ user }}{{ '\n'
                }}Locale: {{ locale }}{{ '\n'
+               }}IP address: {{ request.source }} ({{ request.source_country }}){{ '\n'
                }}Website version: {{ website.version }}</pre>
         % endif
     % endif
