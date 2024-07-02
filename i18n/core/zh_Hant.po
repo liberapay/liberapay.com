@@ -1038,13 +1038,12 @@ msgstr "由於受領者的帳號目前被停權，所以無法處理這筆付款
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "您給{recipient}的捐款現在無法處理，因受益人的帳戶尚無法接受款項。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr "{username} 不接受來自 {country} 地區的捐贈。"
+msgstr "{username} 不接受來自 {country} 的捐款／捐助。"
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr "由於我們的軟件無法確定款項來自哪個國家/地區，因此您的支付處理失敗。這是不應該發生的。"
+msgstr "由於我們的軟體無法確定款項來自哪個國家，因此您的付款處理失敗。這是不應該發生的。"
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "你最近變動了主要的貨幣，請稍後（例如一週內）再試或聯絡 support@liberapay.com."
@@ -1646,9 +1645,8 @@ msgstr "名稱"
 msgid "Currencies"
 msgstr "貨幣"
 
-#, fuzzy
 msgid "Countries"
-msgstr "國家/地區"
+msgstr "國家"
 
 msgid "Goal"
 msgstr "目標"
@@ -1699,7 +1697,6 @@ msgstr "透過 PayPal 處理向 {username} 的捐助。"
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "可使用信用卡、簽帳金融卡（{list_of_card_brands}）、歐洲銀行帳號（SEPA 直接扣款）或 PayPal 帳號來捐助 {username}。"
 
-#, fuzzy
 msgid "Payment Card"
 msgstr "付款卡"
 
@@ -1818,9 +1815,9 @@ msgstr "未使用的收入會在未來數週內被消費掉，它不會累積在
 msgid "Leftover"
 msgstr "餘額"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr "看起來您位於 {country} 地區。{username} 不接受來自該地區的捐款。"
+msgstr "看起來您位於 {country}。{username} 不接受來自該國家的捐款／捐助。"
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
