@@ -3,7 +3,8 @@
 % macro admin_form(p, reload=False, style='columns-sm-2 block-labels')
     <form action="/admin/users" method="POST"{% if not reload %}
           data-on-success="notify"{% endif %}>
-        <input type="hidden" name="back_to" value="{{ request.line.uri }}" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="back_to" value="{{ request.line.uri.decoded }}" />
         <input type="hidden" name="p_id" value="{{ p.id }}">
         <p>This account is…</p>
         <div class="form-group {{ style }}">

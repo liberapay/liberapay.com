@@ -215,7 +215,7 @@ Liberapay.forms.jsSubmit = function() {
                 }
             }
             if ($result_container.text() > '') {
-                $result_container.css('visibility', 'visible').fadeIn()[0].scrollIntoView();
+                $result_container.css('visibility', 'visible').fadeIn()[0].scrollIntoViewIfNeeded();
             }
             if (navigating) {
                 // Try to unlock the form if the user navigates back to the page
