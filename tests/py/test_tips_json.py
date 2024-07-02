@@ -53,7 +53,7 @@ class TestTipsJson(Harness):
         response = self.client.POST('/test_tippee1/tip.json',
                                     {'amount': '1.00', 'period': 'weekly'},
                                     auth_as=test_tipper,
-                                    xhr=True,
+                                    json=True,
                                     )
         data = json.loads(response.text)
         assert response.code == 200

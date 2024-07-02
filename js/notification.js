@@ -8,7 +8,7 @@ Liberapay.notification = function(text, type, timeout) {
     var type = type || 'notice';
     var timeout = timeout || (type == 'error' ? 10000 : 5000);
 
-    var dialog = ['div', { 'class': 'notification notification-' + type }, text];
+    var dialog = ['output', { 'class': 'notification notification-' + type }, text];
     var $dialog = $(Liberapay.jsonml(dialog));
 
     if (!$('#notification-area-bottom').length)

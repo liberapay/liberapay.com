@@ -188,8 +188,9 @@ def form_post_success(state, msg='', redirect_url=None):
     """This function is meant to be called after a successful form POST.
     """
     request, response = state['request'], state['response']
-    if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
-        raise response.json({"msg": msg} if msg else {})
+    if request.headers.get(b'Accept', b'').startswith(b'application/json'):
+        _ = state['_']
+        raise response.json({"msg": msg or _("The changes have been saved.")})
     else:
         if not redirect_url:
             redirect_url = request.body.get('back_to') or request.line.uri.decoded

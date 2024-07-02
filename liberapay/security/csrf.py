@@ -112,9 +112,7 @@ def add_token_to_response(response, csrf_token=None):
     """Store the latest CSRF token as a cookie.
     """
     if csrf_token:
-        # Don't set httponly so that we can POST using XHR.
-        # https://github.com/gratipay/gratipay.com/issues/3030
-        response.set_cookie(CSRF_TOKEN, str(csrf_token), expires=CSRF_TIMEOUT, httponly=False)
+        response.set_cookie(CSRF_TOKEN, str(csrf_token), expires=CSRF_TIMEOUT)
 
 
 def require_cookie(state):

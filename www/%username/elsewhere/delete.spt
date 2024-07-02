@@ -11,10 +11,8 @@ user_id = request.body["user_id"]
 
 participant.delete_elsewhere(platform, domain, user_id)
 
-if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-    response.redirect('..')
-
 [---] text/html
+% do response.redirect('..')
 
 [---] application/json via json_dump
 {}

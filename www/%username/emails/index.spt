@@ -75,7 +75,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 
     <h3>{{ ngettext("Email Address (Private)", "Email Addresses (Private)", len(emails)) }}</h3>
 
-    <form action="" method="POST" class="js-submit">
+    <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <ul class="emails">
         % for email in emails
@@ -84,19 +84,19 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
                 % if email.blacklisted
                     <span class="label label-danger">{{ _("Blacklisted") }}</span>
                     % if participant.email and email.address != participant.email
-                    <button name="remove" value="{{ email.address }}"
+                    <button name="remove" value="{{ email.address }}" data-on-success="fadeOut:li"
                             class="btn btn-warning btn-sm">{{ _("Remove") }}</button>
                     % endif
                 % elif email.address == participant.email
                     <span class="label label-primary">{{ _("Primary") }}</span>
                 % else
-                    <button name="remove" value="{{ email.address }}"
+                    <button name="remove" value="{{ email.address }}" data-on-success="fadeOut:li"
                             class="btn btn-danger btn-sm">{{ _("Remove") }}</button>
                     % if email.disavowed
                         <span class="label label-danger">{{ _("Disavowed") }}</span>
                     % elif not email.verified
                         <span class="label label-warning">{{ _("Unverified") }}</span>
-                        <button name="resend" value="{{ email.address }}"
+                        <button name="resend" value="{{ email.address }}" data-on-success="notify"
                                 class="btn btn-default btn-sm">{{ _("Resend email") }}</button>
                     % else
                         <span class="label label-success">{{ _("Verified") }}</span>
@@ -122,7 +122,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 
     <h3>{{ _("Notifications") }}</h3>
 
-    <form action="" method="POST" class="js-submit">
+    <form action="" method="POST" data-on-success="notify">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="events" value="{{ EVENTS_S }}" />
         <span>{{ _("Send me notifications via email:") }}</span><br>
@@ -147,7 +147,7 @@ email_locale = website.locales.get(participant.email_lang) or website.locales['e
 
     <br>
     <h4>{{ _("Language") }}</h4>
-    <form action="" method="POST" class="form-inline js-submit">
+    <form action="" method="POST" class="form-inline" data-on-success="notify">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <select class="form-control" name="set_email_lang">{{
             lang_options(EMAIL_LANGS, email_locale.tag)

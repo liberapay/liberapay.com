@@ -25,7 +25,7 @@ class TestEmail(EmailHarness):
 
     def hit_email_spt(self, action, address, auth_as='alice', expected_code=200):
         data = {action: address}
-        headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
+        headers = {'HTTP_ACCEPT_LANGUAGE': 'en', 'HTTP_ACCEPT': 'application/json'}
         auth_as = self.alice if auth_as == 'alice' else auth_as
         r = self.client.POST(
             '/alice/emails/', data,

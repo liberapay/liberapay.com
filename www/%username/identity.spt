@@ -58,7 +58,7 @@ if request.method == 'POST':
         success = _("Your identity information has been updated.")
         form_post_success(state, msg=success)
 
-    if error and request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
+    if error and request.headers.get(b'Accept', b'').startswith(b'application/json'):
         raise response.error(400, error)
 
 else:

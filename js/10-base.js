@@ -1,23 +1,4 @@
-Liberapay.getCookie = function(key) {
-    var o = new RegExp("(?:^|; ?)" + escape(key) + "=([^;]+)").exec(document.cookie);
-    if (!o) return null;
-    var value = o[1];
-    if (value.charAt(0) === '"') value = value.slice(1, -1);
-    return unescape(value);
-}
-
 Liberapay.init = function() {
-    // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
-    jQuery.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            var safeMethod = (/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type));
-            if (!safeMethod && !settings.crossDomain) {
-                // We have to avoid httponly on the csrf_token cookie because of this.
-                xhr.setRequestHeader("X-CSRF-TOKEN", Liberapay.getCookie('csrf_token'));
-            }
-        }
-    });
-
     Liberapay.forms.jsSubmit();
 
     var success_re = /([?&])success=[^&]*/;
@@ -32,7 +13,6 @@ Liberapay.init = function() {
 
     Liberapay.auto_tail_log();
     Liberapay.charts.init();
-    Liberapay.identity_docs_init();
     Liberapay.lookup.init();
     Liberapay.s3_uploader_init();
     Liberapay.stripe_init();
@@ -130,30 +110,26 @@ Liberapay.init = function() {
 
 $(function(){ Liberapay.init(); });
 
-Liberapay.error = function(jqXHR, textStatus, errorThrown) {
-    var msg = null;
-    if (jqXHR.responseText > "") {
-        try {
-            msg = JSON.parse(jqXHR.responseText).error_message_long;
-        } catch(exc) {}
-    }
-    if (typeof msg != "string" || msg.length == 0) {
-        msg = "An error occurred (" + (errorThrown || textStatus || jqXHR.status) + ").\n" +
+Liberapay.error = function(exc) {
+    console.error(exc);
+    var msg = "An error occurred (" + exc + ").\n" +
               "Please contact support@liberapay.com if the problem persists.";
-    }
     Liberapay.notification(msg, 'error', -1);
 }
 
 Liberapay.wrap = function(f) {
-    return function() {
+    return async function() {
         try {
-            return f.apply(this, arguments);
-        } catch (e) {
-            console.log(e);
-            Liberapay.notification(e, 'error', -1);
+            return await f.apply(this, arguments);
+        } catch (exc) {
+            Liberapay.error(exc);
         }
     }
 };
+
+Liberapay.get_object_by_name = function(name) {
+    return name.split('.').reduce(function(o, k) {return o[k]}, window);
+}
 
 Liberapay.jsonml = function(jsonml) {
     var node  = document.createElement(jsonml[0]);
@@ -175,20 +151,3 @@ Liberapay.jsonml = function(jsonml) {
 
     return node;
 };
-
-(function($) {
-    return $.fn.center = function(position) {
-        return this.each(function() {
-            var e = $(this);
-            var pos = e.css('position');
-            if (pos != 'absolute' && pos != 'fixed' || position && pos != position) {
-                e.css('position', position || 'absolute');
-            }
-            e.css({
-                left: '50%',
-                top: '50%',
-                margin: '-' + (e.innerHeight() / 2) + 'px 0 0 -' + (e.innerWidth() / 2) + 'px'
-            });
-        });
-    };
-})(jQuery);

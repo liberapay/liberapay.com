@@ -88,11 +88,13 @@ user_agent = request.headers.get(b'User-Agent')
     % endif
 % endblock
 [----------------------------------------] application/json via json_dump
-{ "error_code": code
-, "error_message_short": msg
-, "error_message_long": err
-, "error_id": sentry_ident
-, "error_location": error_location
- }
+{
+    "error_code": code,
+    "error_id": sentry_ident,
+    "error_location": error_location,
+    "error_message_long": err,
+    "error_message_short": msg,
+    "html_template": getattr(response, 'html_template', None),
+}
 [----------------------------------------] text/plain
 {{err or msg}}

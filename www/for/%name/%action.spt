@@ -1,4 +1,4 @@
-from liberapay.utils import get_community
+from liberapay.utils import form_post_success, get_community
 
 [---]
 
@@ -18,8 +18,8 @@ elif action in ('join', 'leave'):
 else:
     raise response.error(400)
 
-if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
-    response.redirect(request.body.get('back_to') or '/for/'+community.name, trusted_url=False)
+back_to = response.sanitize_untrusted_url(request.body.get('back_to') or '/for/'+community.name)
+form_post_success(state, redirect_url=back_to)
 
 [---] text/html
 % extends "templates/layouts/base-thin.html"
@@ -27,6 +27,3 @@ if request.headers.get(b'X-Requested-With') != b'XMLHttpRequest':
 % block thin_content
     <p class="alert alert-danger">These aren't the droids you're looking for.</p>
 % endblock
-
-[---] application/json
-{}

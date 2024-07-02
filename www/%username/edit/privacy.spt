@@ -30,7 +30,7 @@ subhead = _("Privacy")
 
 % block form
 
-    <form action="" method="POST" class="js-submit">
+    <form action="" method="POST" data-on-success="notify">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
         <input type="hidden" name="privacy" value="{{ constants.PRIVACY_FIELDS_S }}" />

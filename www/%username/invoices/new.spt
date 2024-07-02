@@ -75,7 +75,10 @@ if request.method == 'POST':
                  VALUES (%s, %s, %s, %s, %s, %s, '{}'::jsonb, 'pre')
               RETURNING id
         """, (user.id, addressee.id, invoice_nature, amount, description, details))
-    raise response.json({'invoice_id': invoice_id})
+    if request.headers.get(b'Accept', b'').startswith(b'application/json'):
+        raise response.json({'invoice_id': invoice_id})
+    else:
+        raise response.redirect(f'?id={invoice_id}')
 
 title = _("Invoice {someone}", someone=addressee.username)
 
@@ -90,6 +93,7 @@ title = _("Invoice {someone}", someone=addressee.username)
 <noscript class="alert alert-danger">{{ _("JavaScript is required") }}</noscript>
 
 <form action="javascript:" method="POST" id="invoice-form"
+      data-on-success="call:Liberapay.upload_to_s3"
       data-base-path="{{ addressee.path('invoices/') }}"
       data-s3-endpoint="{{ website.app_conf.s3_endpoint }}"
       data-s3-access-key="{{ website.app_conf.s3_public_access_key }}"
@@ -134,6 +138,7 @@ title = _("Invoice {someone}", someone=addressee.username)
         <a href="https://daringfireball.net/projects/markdown/basics"
            target="_blank" rel="noopener noreferrer">{{ _("What is Markdown?") }}</a>
     </p>
+</form>
 
     <h4>{{ _("Documents (private)") }}</h4>
     <p>{{ _("A reimbursement request is more likely to be accepted if you provide proof that the expense actually happened.") }}</p>
@@ -145,9 +150,7 @@ title = _("Invoice {someone}", someone=addressee.username)
     <p class="alert alert-warning">{{ _("We will not store these documents forever, archiving them for the long term is your responsibility.") }}</p>
 
     <br>
-    <button class="btn btn-lg btn-success">{{ _("Go") }}</button>
-
-</form>
+    <button class="btn btn-lg btn-success" form="invoice-form">{{ _("Go") }}</button>
 
 % endblock
 

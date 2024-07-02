@@ -1,4 +1,5 @@
 from liberapay.security.authentication import ANON
+from liberapay.utils import form_post_success
 
 [---]
 
@@ -8,16 +9,7 @@ if user.ANON:
 if request.method == 'POST':
     user.sign_out(response.headers.cookie)
     state['user'] = ANON
-
-    if request.headers.get(b'X-Requested-With') == b'XMLHttpRequest':
-        raise response.success()
-
-    if 'back_to' in request.body:
-        back_to = request.body['back_to']
-    else:
-        back_to = request.headers.get(b'Referer', b'/')
-
-    response.redirect(back_to, trusted_url=False)
+    form_post_success(state)
 
 title = _("Sign Out")
 [---] text/html
