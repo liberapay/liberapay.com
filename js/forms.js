@@ -122,6 +122,17 @@ Liberapay.forms.jsSubmit = function() {
             return
         }
         // If we don't want to send a custom request, proceed with a normal submission
+        function resubmit() {
+            // For an unknown reason, resubmitting directly doesn't always work,
+            // but using a fake timeout does.
+            setTimeout(function() {
+                if (button) {
+                    $(button).click();
+                } else {
+                    $form.submit();
+                }
+            }, 0);
+        }
         if (navigate) {
             // Try to unlock the form if the user navigates back to the page
             $(window).on('pageshow', function () {
@@ -132,11 +143,7 @@ Liberapay.forms.jsSubmit = function() {
             if (e.defaultPrevented) {
                 console.debug('jsSubmit: initiating stage 2');
                 $form.attr('submitting', '2');
-                if (button) {
-                    $(button).click();
-                } else {
-                    $form.submit();
-                }
+                resubmit();
             }
             return;
         }
@@ -157,21 +164,13 @@ Liberapay.forms.jsSubmit = function() {
                 if (window.confirm(data.confirm)) {
                     form.removeAttribute('submitting');
                     $form.append('<input type="hidden" name="confirmed" value="true" />');
-                    if (button) {
-                        $(button).click();
-                    } else {
-                        $form.submit();
-                    }
+                    resubmit();
                     return
                 }
             } else if (data.html_template) {
                 console.debug("jsSubmit: received a complex response; trying a native submission");
                 form.setAttribute('submitting', '2');
-                if (button) {
-                    $(button).click();
-                } else {
-                    $form.submit();
-                }
+                resubmit();
                 return
             } else if (data.error_message_long) {
                 console.debug("jsSubmit: showing error message received from server");
@@ -233,11 +232,7 @@ Liberapay.forms.jsSubmit = function() {
             console.error(exc);
             console.debug('jsSubmit: trying a native submission');
             form.setAttribute('submitting', '2');
-            if (button) {
-                $(button).click();
-            } else {
-                $form.submit();
-            }
+            resubmit();
         }
     }
     for (const form of document.getElementsByTagName('form')) {
