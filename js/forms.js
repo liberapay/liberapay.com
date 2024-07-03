@@ -48,8 +48,6 @@ Liberapay.forms.jsSubmit = function() {
         $overlay.detach();
     }
 
-    var $result_container = $('<output class="alert mt-4"></output>');
-
     async function submit(e) {
         console.debug('jsSubmit: called with event', e);
         var form = this;
@@ -84,7 +82,13 @@ Liberapay.forms.jsSubmit = function() {
             return
         }
         $form.attr('submitting', '1');
-        $result_container.detach();
+        // Remove output of previous submission, if it exists
+        var $result_container = $form.next('output.js-result');
+        if ($result_container.length == 0) {
+            $result_container = $('<output class="alert js-result mt-4"></output>');
+        } else {
+            $result_container.detach();
+        }
         // Execute the custom pre-submission actions, if there are any
         var before_submit = [
             button && button.getAttribute('data-before-submit'),
