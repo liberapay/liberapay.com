@@ -160,7 +160,7 @@ def add_content_disposition_header(request, response):
 def merge_responses(state, exception, website, response=None):
     """Merge the initial Response object with the one raised later in the chain.
     """
-    if response is None or not isinstance(exception, Response):
+    if not isinstance(exception, Response):
         return
     # log the exception
     website.tell_sentry(exception, state)
@@ -177,6 +177,11 @@ def merge_responses(state, exception, website, response=None):
     # there's nothing else to do if the exception is the response
     if exception is response:
         return
+    # set response
+    state['response'] = exception
+    # there's nothing to merge if there's no prior Response object in the state
+    if response is None:
+        return
     # merge cookies
     for k, v in response.headers.cookie.items():
         exception.headers.cookie.setdefault(k, v)
@@ -187,8 +192,6 @@ def merge_responses(state, exception, website, response=None):
     if hasattr(response, '__dict__'):
         for k, v in response.__dict__.items():
             exception.__dict__.setdefault(k, v)
-    # set response
-    state['response'] = exception
 
 
 def turn_socket_error_into_50X(website, state, exception, _=str.format, response=None):
@@ -248,6 +251,17 @@ def bypass_csp_for_form_redirects(response, state, website, request=None):
             response.refresh(state, interval=0, url=url)
         except Response:
             pass
+
+
+def get_response_for_exception(state, website, exception, response=None):
+    if isinstance(exception, Response):
+        return merge_responses(state, exception, website, response)
+    else:
+        response = response or Response(500)
+        if response.code < 400:
+            response.code = 500
+        response.__cause__ = exception
+        return {'response': response, 'exception': None}
 
 
 def delegate_error_to_simplate(website, state, response, request=None, resource=None):

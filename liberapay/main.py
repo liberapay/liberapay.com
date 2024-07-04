@@ -63,6 +63,7 @@ from liberapay.utils.state_chain import (
     detect_obsolete_browsers,
     drop_accept_all_header,
     enforce_rate_limits,
+    get_response_for_exception,
     insert_constants,
     merge_responses,
     no_response_body_for_HEAD_requests,
@@ -246,9 +247,8 @@ algorithm.functions = [
 
     merge_responses,
     turn_socket_error_into_50X,
-
     tell_sentry,
-    algorithm['get_response_for_exception'],
+    get_response_for_exception,
     delegate_error_to_simplate,
 
     bypass_csp_for_form_redirects,

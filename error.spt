@@ -1,8 +1,39 @@
+import os.path
+import sys
+
 from pando.http import status_strings
 from pando.utils import utcnow
 
 from liberapay.exceptions import LazyResponse
 from liberapay.i18n.base import HTTP_ERRORS
+
+python_dir = f"python{sys.version_info.major}.{sys.version_info.minor}"
+project_root = website.project_root.rstrip(os.path.sep) + os.path.sep
+
+def get_short_traceback(exception):
+    tb = getattr(exception, '__traceback__', None)
+    if tb:
+        r = []
+        for i in range(25):
+            frame = tb.tb_frame
+            filepath = frame.f_code.co_filename.split(os.path.sep)
+            try:
+                i = filepath.index(python_dir)
+            except Exception:
+                filepath = os.path.sep.join(filepath)
+                if filepath.startswith(project_root):
+                    filepath = filepath.removeprefix(project_root)
+            else:
+                if filepath[i+1] == 'site-packages':
+                    i += 1
+                filepath = os.path.sep.join(filepath[i+1:])
+            r.append(f'{filepath}:{tb.tb_lineno} ({frame.f_code.co_name})')
+            tb = tb.tb_next
+            if tb is None:
+                break
+        return '\n  ' + '\n  '.join(r)
+    else:
+        return ' none'
 
 [----------------------------------------]
 
@@ -19,11 +50,6 @@ if isinstance(response, LazyResponse):
 err = response.text
 if code == 500 and not err:
     err = _("Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!")
-
-if response.whence_raised == (None, None):
-    response.set_whence_raised()
-filepath, linenum = response.whence_raised
-error_location = '%s:%i' % (filepath, linenum) if filepath else 'unknown'
 
 referer = request.headers.get(b'Referer')
 user_agent = request.headers.get(b'User-Agent')
@@ -80,11 +106,13 @@ user_agent = request.headers.get(b'User-Agent')
                }}Time: {{ utcnow() }}{{ '\n'
                }}Response code: {{ code }}{{ '\n'
                }}Response message: {{ repr(err) }}{{ '\n'
-               }}Error location: {{ error_location }}{{ '\n'
                }}User: {{ user }}{{ '\n'
                }}Locale: {{ locale }}{{ '\n'
                }}IP address: {{ request.source }} ({{ request.source_country }}){{ '\n'
-               }}Website version: {{ website.version }}</pre>
+               }}Website version: {{ website.version }}{{ '\n'
+               }}Traceback:{{
+                   get_short_traceback(response.__cause__ or response)
+               }}</pre>
         % endif
     % endif
 % endblock
@@ -92,7 +120,6 @@ user_agent = request.headers.get(b'User-Agent')
 {
     "error_code": code,
     "error_id": sentry_ident,
-    "error_location": error_location,
     "error_message_long": err,
     "error_message_short": msg,
     "html_template": getattr(response, 'html_template', None),
