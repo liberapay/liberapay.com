@@ -230,29 +230,6 @@ def turn_socket_error_into_50X(website, state, exception, _=str.format, response
     return {'response': response, 'exception': None}
 
 
-def bypass_csp_for_form_redirects(response, state, website, request=None):
-    if request is None:
-        return
-    # https://github.com/liberapay/liberapay.com/issues/952
-    if response.code == 302:
-        target = response.headers[b'Location']
-        is_internal = (
-            target[:1] in (b'/', b'.') or
-            target.startswith(b'%s://%s/' % (
-                website.canonical_scheme.encode('ascii'), request.headers[b'Host']
-            ))
-        )
-        if is_internal:
-            # Not an external redirect
-            return
-        response.code = 200
-        url = response.headers.pop(b'Location').decode('ascii')
-        try:
-            response.refresh(state, interval=0, url=url)
-        except Response:
-            pass
-
-
 def get_response_for_exception(state, website, exception, response=None):
     if isinstance(exception, Response):
         return merge_responses(state, exception, website, response)
@@ -276,18 +253,27 @@ def delegate_error_to_simplate(website, state, response, request=None, resource=
     )
 
 
-def return_500_for_exception(website, exception, response=None):
-    response = response or Response()
-    response.code = 500
-    if website.show_tracebacks:
-        import traceback
-        response.body = traceback.format_exc()
-    else:
-        response.body = (
-            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
-            "we'll get it fixed ASAP."
+def bypass_csp_for_form_redirects(response, state, website, request=None):
+    if request is None:
+        return
+    # https://github.com/liberapay/liberapay.com/issues/952
+    if response.code == 302:
+        target = response.headers[b'Location']
+        is_internal = (
+            target[:1] in (b'/', b'.') or
+            target.startswith(b'%s://%s/' % (
+                website.canonical_scheme.encode('ascii'), request.headers[b'Host']
+            ))
         )
-    return {'response': response, 'exception': None}
+        if is_internal:
+            # Not an external redirect
+            return
+        response.code = 200
+        url = response.headers.pop(b'Location').decode('ascii')
+        try:
+            response.refresh(state, interval=0, url=url)
+        except Response:
+            pass
 
 
 def overwrite_status_code_of_gateway_errors(response):
@@ -310,3 +296,17 @@ def no_response_body_for_HEAD_requests(response, request=None, exception=None):
     """
     if request and request.method == 'HEAD' and response.body:
         response.body = b''
+
+
+def return_500_for_exception(website, exception, response=None):
+    response = response or Response()
+    response.code = 500
+    if website.show_tracebacks:
+        import traceback
+        response.body = traceback.format_exc()
+    else:
+        response.body = (
+            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
+            "we'll get it fixed ASAP."
+        )
+    return {'response': response, 'exception': None}
