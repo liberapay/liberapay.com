@@ -410,7 +410,7 @@ def make_sentry_teller(env, version):
                     if sentry:
                         # Record the exception raised above instead of the
                         # original one, to avoid duplicate issues.
-                        return tell_sentry(e, state, allow_reraise=True)
+                        return tell_sentry(e, allow_reraise=True)
 
                 if 'read-only' in str(exception):
                     # DB is in read only mode

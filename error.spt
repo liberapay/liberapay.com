@@ -40,10 +40,8 @@ def get_short_traceback(exception):
 sentry_ident = state.get('sentry_ident')
 code = response.code
 msg = _(HTTP_ERRORS[code]) if code in HTTP_ERRORS else status_strings.get(code, '')
-try:
-    assert msg
-except Exception as e:
-    website.tell_sentry(e)
+if not msg:
+    website.tell_sentry(Warning(f"missing error message for HTTP code {code}"))
 
 if isinstance(response, LazyResponse):
     response.render_body(state)

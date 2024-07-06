@@ -163,7 +163,7 @@ def merge_responses(state, exception, website, response=None):
     if not isinstance(exception, Response):
         return
     # log the exception
-    website.tell_sentry(exception, state)
+    state.update(website.tell_sentry(exception))
     # clear the exception
     state['exception'] = None
     # set debug info
@@ -220,7 +220,7 @@ def turn_socket_error_into_50X(website, state, exception, _=str.format, response
         else:
             return
     # log the exception
-    website.tell_sentry(exception, state, level='warning')
+    website.tell_sentry(exception, level='warning')
     # show a proper error message
     response.body = _(
         "Processing your request failed because our server was unable to communicate "
