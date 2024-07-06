@@ -152,11 +152,11 @@ else:
     if show == 'all':
         show = 'top'
     if show == 'new':
-        order = 'first_appearance DESC, domain'
+        order = 'first_appearance DESC'
     elif show == 'top':
-        order = 'n_addresses DESC, domain'
+        order = 'n_addresses DESC'
     else:
-        order = 'domain'
+        order = 'blacklisted_since DESC'
     offset = request.qs.get_int('offset', 0)
     join_type = "LEFT" if show == 'blacklisted' else "RIGHT"
     email_domains = website.db.all("""

@@ -160,10 +160,10 @@ def add_content_disposition_header(request, response):
 def merge_responses(state, exception, website, response=None):
     """Merge the initial Response object with the one raised later in the chain.
     """
-    if response is None or not isinstance(exception, Response):
+    if not isinstance(exception, Response):
         return
     # log the exception
-    website.tell_sentry(exception, state)
+    state.update(website.tell_sentry(exception))
     # clear the exception
     state['exception'] = None
     # set debug info
@@ -177,6 +177,11 @@ def merge_responses(state, exception, website, response=None):
     # there's nothing else to do if the exception is the response
     if exception is response:
         return
+    # set response
+    state['response'] = exception
+    # there's nothing to merge if there's no prior Response object in the state
+    if response is None:
+        return
     # merge cookies
     for k, v in response.headers.cookie.items():
         exception.headers.cookie.setdefault(k, v)
@@ -187,8 +192,6 @@ def merge_responses(state, exception, website, response=None):
     if hasattr(response, '__dict__'):
         for k, v in response.__dict__.items():
             exception.__dict__.setdefault(k, v)
-    # set response
-    state['response'] = exception
 
 
 def turn_socket_error_into_50X(website, state, exception, _=str.format, response=None):
@@ -217,7 +220,7 @@ def turn_socket_error_into_50X(website, state, exception, _=str.format, response
         else:
             return
     # log the exception
-    website.tell_sentry(exception, state, level='warning')
+    website.tell_sentry(exception, level='warning')
     # show a proper error message
     response.body = _(
         "Processing your request failed because our server was unable to communicate "
@@ -225,6 +228,29 @@ def turn_socket_error_into_50X(website, state, exception, _=str.format, response
         "try again later."
     )
     return {'response': response, 'exception': None}
+
+
+def get_response_for_exception(state, website, exception, response=None):
+    if isinstance(exception, Response):
+        return merge_responses(state, exception, website, response)
+    else:
+        response = response or Response(500)
+        if response.code < 400:
+            response.code = 500
+        response.__cause__ = exception
+        return {'response': response, 'exception': None}
+
+
+def delegate_error_to_simplate(website, state, response, request=None, resource=None):
+    """
+    Wrap Pando's function to avoid dispatching to `error.spt` if the response is
+    already a complete error page.
+    """
+    if b'Content-Type' in response.headers:
+        return  # this response is already completely rendered
+    return pando.state_chain.delegate_error_to_simplate(
+        website, state, response, request, resource
+    )
 
 
 def bypass_csp_for_form_redirects(response, state, website, request=None):
@@ -250,32 +276,6 @@ def bypass_csp_for_form_redirects(response, state, website, request=None):
             pass
 
 
-def delegate_error_to_simplate(website, state, response, request=None, resource=None):
-    """
-    Wrap Pando's function to avoid dispatching to `error.spt` if the response is
-    already a complete error page.
-    """
-    if b'Content-Type' in response.headers:
-        return  # this response is already completely rendered
-    return pando.state_chain.delegate_error_to_simplate(
-        website, state, response, request, resource
-    )
-
-
-def return_500_for_exception(website, exception, response=None):
-    response = response or Response()
-    response.code = 500
-    if website.show_tracebacks:
-        import traceback
-        response.body = traceback.format_exc()
-    else:
-        response.body = (
-            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
-            "we'll get it fixed ASAP."
-        )
-    return {'response': response, 'exception': None}
-
-
 def overwrite_status_code_of_gateway_errors(response):
     """This function changes 502 and 504 response codes to 500.
 
@@ -296,3 +296,17 @@ def no_response_body_for_HEAD_requests(response, request=None, exception=None):
     """
     if request and request.method == 'HEAD' and response.body:
         response.body = b''
+
+
+def return_500_for_exception(website, exception, response=None):
+    response = response or Response()
+    response.code = 500
+    if website.show_tracebacks:
+        import traceback
+        response.body = traceback.format_exc()
+    else:
+        response.body = (
+            "Uh-oh, you've found a serious bug. Sorry for the inconvenience, "
+            "we'll get it fixed ASAP."
+        )
+    return {'response': response, 'exception': None}
