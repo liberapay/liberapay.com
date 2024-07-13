@@ -72,7 +72,7 @@ elif 'state' in request.qs:
     # Get the cookie that matches the query id
     cookie_name = str(provider_name + '_' + query_id)
     try:
-        cookie_value = request.headers.cookie[cookie_name].value
+        cookie_value = request.cookies[cookie_name]
     except KeyError:
         raise response.error(400, 'Missing cookie')
     if not cookie_value:

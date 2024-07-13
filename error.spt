@@ -36,13 +36,9 @@ def get_short_traceback(exception):
         return ' none'
 
 def render_cookies(request):
-    cookies = request.headers.cookie
-    if cookies:
-        return '; '.join(
-            f"{name}=[{len(value.value)} bytes]" for name, value in cookies.items()
-        )
-    else:
-        return 'none'
+    return '; '.join(
+        f"{name}=[{len(value)} bytes]" for name, value in request.cookies.items()
+    ) or 'none'
 
 [----------------------------------------]
 

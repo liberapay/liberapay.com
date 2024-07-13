@@ -681,9 +681,9 @@ def add_currency_to_state(request, user, locale):
     qs_currency = request.qs.get('currency')
     if qs_currency in CURRENCIES:
         return {'currency': qs_currency}
-    cookie = request.headers.cookie.get('currency')
-    if cookie and cookie.value in CURRENCIES:
-        return {'currency': cookie.value}
+    cookie = request.cookies.get('currency')
+    if cookie in CURRENCIES:
+        return {'currency': cookie}
     if user:
         return {'currency': user.main_currency}
     else:

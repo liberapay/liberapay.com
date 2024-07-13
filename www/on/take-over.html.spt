@@ -28,8 +28,8 @@ if not account:
     raise response.invalid_input(account_id, 'account_id', 'body')
 
 cookie_name = 'connect_%s' % account_id
-token = request.headers.cookie.get(cookie_name)
-if not token or not account.check_connect_token(token.value):
+token = request.cookies.get(cookie_name)
+if not token or not account.check_connect_token(token):
     raise response.invalid_input(token, cookie_name, 'cookies')
 
 account.save_connect_token(None, None)

@@ -50,10 +50,7 @@ class CSRF_Token:
     def token(self):
         if not self._token:
             state = website.state.get()
-            try:
-                cookie_token = state['request'].headers.cookie[CSRF_TOKEN].value
-            except KeyError:
-                cookie_token = ''
+            cookie_token = state['request'].cookies.get(CSRF_TOKEN, '')
             if len(cookie_token) == TOKEN_LENGTH:
                 self._token = cookie_token
             else:
@@ -77,10 +74,7 @@ def reject_forgeries(state, request, response, website, _):
         return
 
     # Get token from cookies.
-    try:
-        cookie_token = request.headers.cookie[CSRF_TOKEN].value
-    except KeyError:
-        cookie_token = ""
+    cookie_token = request.cookies.get(CSRF_TOKEN)
     if not cookie_token:
         raise response.error(403, _(
             "A security check has failed. Please make sure your browser is "
@@ -124,7 +118,7 @@ def require_cookie(state):
     check that the client supports cookies.
     """
     request = state['request']
-    if request.headers.cookie.get(CSRF_TOKEN):
+    if request.cookies.get(CSRF_TOKEN):
         request.qs.pop('cookie_sent', None)
         return
     _, response, website = state['_'], state['response'], state['website']
