@@ -15,13 +15,13 @@ from ..utils import cbor
 from ..website import website
 
 
-def get_random_string(length=32, altchars=None) -> str:
+def get_random_string(length=32, altchars=(b'-', b'_')) -> str:
     """
     Returns a securely generated random string.
 
     Args:
         length (int): the number of base64 characters to return
-        altchars (bytes): optional replacement characters for `+` and `/`, e.g. b'-_'
+        altchars (bytes): optional replacement characters for `+` and `/`
 
     The default length (32) returns a value with 192 bits of entropy (log(64**32, 2)).
     """

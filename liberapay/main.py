@@ -10,6 +10,7 @@ else:
     _init_modules = set(sys.modules.keys())
 
 import builtins
+import http.cookies
 from ipaddress import ip_address
 import os
 import signal
@@ -341,6 +342,28 @@ if hasattr(aspen.http.request.Querystring, 'serialize'):
 def _Querystring_serialize(self, **kw):
     return ('?' + urlencode(self, doseq=True)) if self else ''
 aspen.http.request.Querystring.serialize = _Querystring_serialize
+
+pando.http.request.Headers.__init__ = pando.http.mapping.CaseInsensitiveMapping.__init__
+
+if hasattr(pando.http.request.Request, 'cookies'):
+    raise Warning('pando.http.request.Request.cookies already exists')
+def _cookies(self):
+    cookies = self.__dict__.get('cookies')
+    if cookies is None:
+        header = self.headers.get(b'Cookie', b'').decode('utf8', 'backslashreplace')
+        cookies = {}
+        for item in header.split(';'):
+            try:
+                k, v = item.split('=', 1)
+            except ValueError:
+                continue
+            k = k.strip()
+            if len(v) > 1 and v.startswith('"') and v.endswith('"'):
+                v = http.cookies._unquote(v)
+            cookies[k] = v
+        self.__dict__['cookies'] = cookies
+    return cookies
+pando.http.request.Request.cookies = property(_cookies)
 
 if hasattr(pando.http.request.Request, 'queued_success_messages'):
     raise Warning('pando.http.request.Request.queued_success_messages already exists')

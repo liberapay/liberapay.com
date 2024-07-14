@@ -448,9 +448,11 @@ class Participant(Model, MixinTeam):
                AND s.id = %s
         """, (p_id, session_id))
         if not r:
+            erase_cookie(cookies, SESSION)
             return None, 'invalid'
         p, stored_secret, mtime = r
         if not constant_time_compare(stored_secret, secret):
+            erase_cookie(cookies, SESSION)
             return None, 'invalid'
         if rate_limit:
             cls.db.decrement_rate_limit('log-in.session.ip-addr', str(request.source))

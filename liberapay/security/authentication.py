@@ -262,8 +262,8 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
     # We want to try cookie auth first, but we want password and email auth to
     # supersede it.
     session_p = None
-    if SESSION in request.headers.cookie:
-        creds = request.headers.cookie[SESSION].value.split(':', 2)
+    if SESSION in request.cookies:
+        creds = request.cookies[SESSION].split(':', 2)
         if len(creds) == 2:
             creds = [creds[0], 1, creds[1]]
         if len(creds) == 3:

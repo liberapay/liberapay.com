@@ -35,6 +35,11 @@ def get_short_traceback(exception):
     else:
         return ' none'
 
+def render_cookies(request):
+    return '; '.join(
+        f"{name}=[{len(value)} bytes]" for name, value in request.cookies.items()
+    ) or 'none'
+
 [----------------------------------------]
 
 sentry_ident = state.get('sentry_ident')
@@ -101,12 +106,13 @@ user_agent = request.headers.get(b'User-Agent')
                }}Method: {{ request.method }}{{ '\n'
                }}Referer: {{ repr(referer) }}{{ '\n'
                }}User-Agent: {{ repr(user_agent) }}{{ '\n'
+               }}Cookies: {{ render_cookies(request) }}{{ '\n'
+               }}IP address: {{ request.source }} ({{ request.source_country }}){{ '\n'
                }}Time: {{ utcnow() }}{{ '\n'
                }}Response code: {{ code }}{{ '\n'
                }}Response message: {{ repr(err) }}{{ '\n'
                }}User: {{ user }}{{ '\n'
                }}Locale: {{ locale }}{{ '\n'
-               }}IP address: {{ request.source }} ({{ request.source_country }}){{ '\n'
                }}Website version: {{ website.version }}{{ '\n'
                }}Traceback:{{
                    get_short_traceback(response.__cause__ or response)

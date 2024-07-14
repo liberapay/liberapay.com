@@ -105,8 +105,7 @@ def detect_obsolete_browsers(request, response, state):
     if b'MSIE' in request.headers.get(b'User-Agent', b''):
         if state.get('etag'):
             return
-        cookie = request.headers.cookie.get('obsolete_browser_warning')
-        if cookie and cookie.value == 'ignore':
+        if request.cookies.get('obsolete_browser_warning') == 'ignore':
             return
         if request.method == 'POST':
             try:
