@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '176'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '177'::jsonb);
 
 
 -- app configuration
@@ -99,6 +99,11 @@ CREATE INDEX username_trgm_idx ON participants
     USING GIN (lower(username) gin_trgm_ops)
     WHERE status = 'active'
       AND NOT username like '~%';
+
+CREATE INDEX public_name_trgm_idx ON participants
+    USING GIN (lower(public_name) gin_trgm_ops)
+    WHERE status = 'active'
+      AND public_name IS NOT null;
 
 CREATE INDEX participants_join_time_idx ON participants (join_time)
     WHERE join_time IS NOT NULL;

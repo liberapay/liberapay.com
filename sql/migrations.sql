@@ -3482,3 +3482,9 @@ UPDATE app_conf SET value = '"JtqazsotvWZQ1G6ynYhDlHXouQji-qDwwU2WQW7j-kE"' WHER
 ALTER TABLE recipient_settings
     ALTER COLUMN patron_visibilities DROP NOT NULL,
     ADD COLUMN patron_countries text CHECK (patron_countries <> '');
+
+-- migration #177
+CREATE INDEX public_name_trgm_idx ON participants
+    USING GIN (lower(public_name) gin_trgm_ops)
+    WHERE status = 'active'
+      AND public_name IS NOT null;
