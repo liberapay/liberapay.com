@@ -15,12 +15,21 @@ if query:
 
     if scope in (None, 'usernames'):
         results['usernames'] = website.db.all("""
-            SELECT username, avatar_url, similarity(username, %(q)s) AS rank, id
+            SELECT username
+                 , public_name
+                 , avatar_url
+                 , greatest(
+                       similarity(username, %(q)s),
+                       similarity(public_name, %(q)s)
+                   ) AS rank
+                 , id
               FROM participants
              WHERE status = 'active'
-               AND NOT username like '~%%'
-               AND lower(username) %% lower(%(q)s)
                AND hide_from_search = 0
+               AND ( NOT username like '~%%' AND lower(username) %% lower(%(q)s)
+                     OR
+                     public_name IS NOT NULL AND lower(public_name) %% lower(%(q)s)
+                   )
           ORDER BY rank DESC, username
              LIMIT 10
         """, locals())
@@ -114,14 +123,17 @@ if query:
     <div class="row">
     % if usernames
     <div class="col-md-6">
-        <h3>{{ ngettext("Found a matching username",
-                        "Found matching usernames",
+        <h3>{{ ngettext("Found a matching user name",
+                        "Found matching user names",
                         len(usernames)) }}</h3>
         % for result in usernames
         <div class="mini-user">
             <a href="/{{ result.username }}/">
                 {{ avatar_img(result) }}
                 <div class="name">{{ result.username }}</div>
+                % if result.public_name
+                    <div class="name">{{ result.public_name }}</div>
+                % endif
             </a>
         </div>
         % endfor
