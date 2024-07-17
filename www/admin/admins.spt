@@ -21,6 +21,14 @@ title = "Admins Oversight"
 [---] text/html
 % extends "templates/layouts/admin.html"
 
+% macro recorder(e)
+    % if e.recorder_name == user.username
+        You
+    % else
+        <strong>{{ e.recorder_name }}</strong>
+    % endif
+% endmacro
+
 % block content
 
 % if events
@@ -31,16 +39,16 @@ title = "Admins Oversight"
         <h4 class="mt-4">{{ e.ts.date() }}</h4>
     % endif
     % if e.type == 'admin_request'
-        <div class="mb-3">{{ e.recorder_name }} modified the account of <a href="/~{{ e.participant }}/">{{ e.username }}</a>:<br>
+        <div class="mb-3">{{ recorder(e) }} modified the account of <a href="/~{{ e.participant }}/">{{ e.username }}</a>:<br>
         <pre>{{ json.dumps(e.payload) }}</pre></div>
     % elif assert(e.type == 'flags_changed', "unexpected event type: " + e.type)
         % set marked_as = e.payload.get('marked_as', '')
         % if marked_as is None
-            <p>{{ e.recorder_name }} unmarked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a>.</p>
+            <p>{{ recorder(e) }} unmarked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a>.</p>
         % elif marked_as == ''
-            <p>{{ e.recorder_name }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <code>{{ e.payload }}</code>.</p>
+            <p>{{ recorder(e) }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <code>{{ e.payload }}</code>.</p>
         % else
-            <p>{{ e.recorder_name }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.ACCOUNT_MARK_CLASSES.get(marked_as, 'text-muted') }}">{{ marked_as }}</span>.</p>
+            <p>{{ recorder(e) }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.ACCOUNT_MARK_CLASSES.get(marked_as, 'text-muted') }}">{{ marked_as }}</span>.</p>
         % endif
     % endif
     % endfor
