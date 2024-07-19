@@ -20,7 +20,7 @@ for cc in sorted(country_codes):
     )
     if not is_supported:
         country_codes.remove(cc)
-    sleep(1.5)
+    sleep(2)
 
 country_codes.remove('uk')
 country_codes.add('gb')
