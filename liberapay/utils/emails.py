@@ -156,6 +156,9 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
 
     # Check that we can send emails to this address
     if website.app_conf.check_email_domains:
+        request = website.state.get({}).get('request')
+        if request:
+            website.db.hit_rate_limit('email.test', request.source, TooManyAttempts)
         try:
             test_email_address(email)
         except EmailAddressError as e:
@@ -175,7 +178,6 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
                 if port_25_is_open is False:
                     website.tell_sentry(e, allow_reraise=False)
                     return
-            request = website.state.get({}).get('request')
             if request:
                 bypass_error = request.body.get('email.bypass_error') == 'yes'
             else:
