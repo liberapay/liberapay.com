@@ -309,6 +309,7 @@ RATE_LIMITS = {
     'check_password': (25, 60*60*24*7),  # 25 per week
     'elsewhere-lookup.ip-addr': (5, 20),  # 5 per 20 seconds
     'email.bypass_error': (2, 60*60*24*7),  # 2 per week
+    'email.test': (15, 60*60*24*7),  # 15 per week
     'email.unblacklist.source': (5, 60*60*24*7),  # 5 per week
     'email.unblacklist.target': (3, 60*60*24*7),  # 3 per week
     'hash_password.ip-addr': (3, 15),  # 3 per 15 seconds
