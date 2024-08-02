@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Dutch "
-"<https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-07-30 19:09+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.7-dev\n"
 "Generated-By: Babel 2.15.0\n"
 
 #, python-brace-format
@@ -851,7 +853,7 @@ msgstr "De gebruikersnaam '{0}' bevat ongeldige tekens."
 
 #, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
-msgstr "De inlognaam '{0}' is puur numeriek. Dit is niet toegestaan."
+msgstr "De inlognaam '{0}' bestaat enkel uit cijfers. Dit is niet toegestaan."
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
@@ -1001,7 +1003,7 @@ msgstr "{username} accepteert geen donaties in {rejected_currency}."
 
 #, python-brace-format
 msgid "{username} no longer accepts secret donations."
-msgstr "{username} accepteert geen geheime donaties meer."
+msgstr "{username} accepteert niet langer anonieme donaties."
 
 #, python-brace-format
 msgid "{username} no longer accepts private donations."
@@ -1009,7 +1011,7 @@ msgstr "{username} accepteert geen privédonaties meer."
 
 #, python-brace-format
 msgid "{username} no longer accepts public donations."
-msgstr "{username} accepteert geen publieke donaties meer."
+msgstr "{username} accepteert niet langer publieke donaties."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
@@ -1053,7 +1055,7 @@ msgid "{username} does not accept donations from {country}."
 msgstr "{username} accepteert geen donaties uit {country}."
 
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr "De verwerking van uw betaling is mislukt omdat onze software niet kon bepalen uit welk land het geld zou komen. Dit zou niet mogen gebeuren."
+msgstr "De verwerking van uw betaling is mislukt omdat onze software niet kon bepalen uit welk land het geld afkomstig is. Dit zou niet mogen gebeuren."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "U heeft de valuta recent al aangepast, probeer het later opnieuw (bijvoorbeeld over een week) of neemt contact op met support@liberapay.com."
@@ -1914,11 +1916,11 @@ msgstr "Annuleer de toezegging"
 
 #, python-brace-format
 msgid "{username} has chosen not to see who their patrons are, so your donation will be secret."
-msgstr "{username} heeft ervoor gekozen niet te zien wie hun donateurs zijn, dus uw donatie zal geheim zijn."
+msgstr "{username} heeft ervoor gekozen niet te zien wie hun donateurs zijn, dus uw donatie zal anoniem zijn."
 
 #, python-brace-format
 msgid "This donation won't be secret, you will appear in {username}'s private list of patrons."
-msgstr "Deze donatie zal niet geheim zijn, u komt in {username}'s privélijst van donateurs."
+msgstr "Deze donatie zal niet anoniem zijn, u komt in {username}'s privélijst van donateurs."
 
 #, python-brace-format
 msgid "{username} discloses who their patrons are, your donation will be public."
@@ -1950,7 +1952,7 @@ msgstr "Iedereen zal kunnen zien dat u {username} steunt."
 
 #, python-brace-format
 msgid "{username} hasn't yet specified whether they want to see who their patrons are, so your donation will be secret."
-msgstr "{username} heeft nog niet aangegeven of hen wil zien wie de donateurs zijn, dus uw donatie zal geheim zijn."
+msgstr "{username} heeft nog niet aangegeven of hen wil zien wie de donateurs zijn, dus uw donatie zal anoniem zijn."
 
 msgid "People who contribute to the commons need you to support their work. Building free software, spreading free knowledge, these things take time and cost money, not only to do the initial work, but also to maintain it over time."
 msgstr "Mensen die bijdragen aan het gemeenschappelijke hebben uw hulp nodig. Het bouwen van vrije software of het verspreiden van vrije kennis kost tijd en geld. Niet alleen om het op te starten, maar ook om het te onderhouden."
@@ -2736,9 +2738,8 @@ msgstr "Onthoud het bankrekeningnummer voor toekomstige betalingen"
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Om het risico te verminderen dat deze betaling wordt geweigerd, raden wij u aan uw postadres hieronder in te voeren. Het wordt gecodeerd opgeslagen in onze database en doorgestuurd naar de betalingsverwerker ({processor_name})."
 
-#, fuzzy
 msgid "Please fill in your postal address. It's required because the IBAN you've provided emanates from outside the European Union."
-msgstr "Vul uw postadres in. Dit is nodig omdat het IBAN dat je hebt opgegeven van buiten de Europese Unie komt."
+msgstr "Vul uw postadres in. Dit is nodig omdat het IBAN dat u heeft opgegeven van buiten de Europese Unie komt."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -4242,7 +4243,7 @@ msgid "Stripe allows renewing donations automatically, whereas PayPal currently 
 msgstr "Stripe maakt het mogelijk om donaties automatisch te verlengen, terwijl PayPal momenteel vereist dat donoren elke betaling bevestigen."
 
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr "Donaties via Stripe kunnen geheim zijn, terwijl PayPal donateurs en ontvangers altijd toestaat elkaars namen en e-mailadressen te zien."
+msgstr "Donaties via Stripe kunnen anoniem zijn, terwijl PayPal donateurs en ontvangers altijd toestaat elkaars namen en e-mailadressen te zien."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe maakt het mogelijk om in sommige gevallen aan meerdere makers tegelijk te doneren, terwijl PayPal altijd afzonderlijke betalingen vereist."
@@ -5184,11 +5185,10 @@ msgstr "Sorry, we hebben niks gevonden voor uw zoekopdracht."
 msgid "Whose work do you appreciate?"
 msgstr "Wiens werk waardeert u?"
 
-#, fuzzy
 msgid "Found a matching user name"
 msgid_plural "Found matching user names"
-msgstr[0] "Gevonden gebruikersnaam"
-msgstr[1] "Gevonden gebruikersnamen"
+msgstr[0] "Er is een overeenkomende gebruikersnaam gevonden"
+msgstr[1] "Er zijn overeenkomende gebruikersnamen gevonden"
 
 msgid "Found a matching community name"
 msgid_plural "Found matching community names"
