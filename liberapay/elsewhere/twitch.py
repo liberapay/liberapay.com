@@ -14,6 +14,7 @@ class Twitch(PlatformOAuth2):
     # Auth attributes
     # https://dev.twitch.tv/docs/authentication/
     auth_url = 'https://id.twitch.tv/oauth2/authorize'
+    oauth_include_client_id = True
     access_token_url = 'https://id.twitch.tv/oauth2/token'
     can_auth_with_client_credentials = True
 

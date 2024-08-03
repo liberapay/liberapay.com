@@ -500,6 +500,7 @@ class PlatformOAuth2(Platform):
     oauth_default_scope = []
     oauth_email_scope = None
     oauth_follows_scope = ''
+    oauth_include_client_id = None
 
     can_auth_with_client_credentials = None
     use_basic_auth_for_app_session = False
@@ -561,9 +562,10 @@ class PlatformOAuth2(Platform):
     def handle_auth_callback(self, domain, url, state, unused_arg):
         sess = self.get_auth_session(domain, state=state)
         client_secret = self.get_credentials(domain)[1]
-        sess.fetch_token(self.access_token_url.format(domain=domain),
-                         client_secret=client_secret,
-                         authorization_response=url)
+        sess.fetch_token(
+            self.access_token_url.format(domain=domain), client_secret=client_secret,
+            authorization_response=url, include_client_id=self.oauth_include_client_id,
+        )
         return sess
 
 
