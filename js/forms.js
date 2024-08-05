@@ -54,7 +54,8 @@ Liberapay.forms.jsSubmit = function() {
         var $form = $(form);
         var target = $form.attr('action');
         if (target.startsWith('javascript:')) {
-            form.attr('action', target.substr(11));
+            target = target.substr(11);
+            $form.attr('action', target);
         }
         // Don't interfere with stage 2 submission
         if ($form.attr('submitting') == '2') {
