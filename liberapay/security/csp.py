@@ -36,10 +36,10 @@ def csp_allow(response, *items: Tuple[bytes, bytes]) -> None:
 
 
 def csp_allow_stripe(response) -> None:
-    # https://stripe.com/docs/security#content-security-policy
+    # https://docs.stripe.com/security/guide?csp=csp-js#content-security-policy
     csp_allow(
         response,
         (b'connect-src', b"api.stripe.com"),
-        (b'frame-src', b"js.stripe.com hooks.stripe.com"),
-        (b'script-src', b"js.stripe.com"),
+        (b'frame-src', b"*.js.stripe.com js.stripe.com hooks.stripe.com"),
+        (b'script-src', b"*.js.stripe.com js.stripe.com"),
     )
