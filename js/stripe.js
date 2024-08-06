@@ -30,41 +30,51 @@ Liberapay.stripe_form_init = function($form) {
         return /AD|BL|CH|GB|GG|GI|IM|JE|MC|NC|PF|PM|SM|TF|VA|WF/.test($container.data('country'));
     }
 
-    var stripe = Stripe($form.data('stripe-pk'));
-    var elements = stripe.elements();
-    var element_type = $container.data('type');
-    var options = {style: {
-        base: {
-            color: rgb_to_hex($container.css('color')),
-            fontFamily: $container.css('font-family'),
-            fontSize: $container.css('font-size'),
-            lineHeight: $container.css('line-height'),
-        }
-    }};
-    if (element_type == 'iban') {
-        options.supportedCountries = ['SEPA'];
-    }
-    var element = elements.create(element_type, options);
-    element.mount('#stripe-element');
     var $errorElement = $('#stripe-errors');
-    element.addEventListener('change', function(event) {
-        if (event.error) {
-            $errorElement.text(event.error.message);
-        } else {
-            $errorElement.text('');
-        }
-        if (event.country) {
-            $container.data('country', event.country);
-            if (!is_postal_address_required()) {
-                $postal_address_alert.hide();
+    var stripe = null;
+    if (window.Stripe) {
+        stripe = Stripe($form.data('stripe-pk'));
+        var elements = stripe.elements();
+        var element_type = $container.data('type');
+        var options = {style: {
+            base: {
+                color: rgb_to_hex($container.css('color')),
+                fontFamily: $container.css('font-family'),
+                fontSize: $container.css('font-size'),
+                lineHeight: $container.css('line-height'),
             }
+        }};
+        if (element_type == 'iban') {
+            options.supportedCountries = ['SEPA'];
         }
-    });
+        var element = elements.create(element_type, options);
+        element.mount('#stripe-element');
+        element.addEventListener('change', function(event) {
+            if (event.error) {
+                $errorElement.text(event.error.message);
+            } else {
+                $errorElement.text('');
+            }
+            if (event.country) {
+                $container.data('country', event.country);
+                if (!is_postal_address_required()) {
+                    $postal_address_alert.hide();
+                }
+            }
+        });
+    } else {
+        $errorElement.text($form.attr('data-msg-stripe-missing'));
+    }
 
     Liberapay.stripe_before_submit = async function() {
         // If the Payment Element is hidden, simply let the browser submit the form
         if ($container.parents('.hidden').length > 0) {
             return true;
+        }
+        // If Stripe.js is missing, stop the submission
+        if (!stripe) {
+            $errorElement.hide().fadeIn()[0].scrollIntoView();
+            return false;
         }
         // Create the PaymentMethod
         var pmType = element_type;

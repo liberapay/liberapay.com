@@ -371,6 +371,11 @@ title = _("Funding your donations")
 
     <form action="javascript:" method="POST" id="stripe"
           data-before-submit="call:Liberapay.stripe_before_submit"
+          data-msg-stripe-missing='{{ _(
+              "The initialization of a required component has failed. If you use a "
+              "browser extension that blocks requests, for example NoScript, please "
+              "make sure it’s allowing requests to the “stripe.com” domain."
+          ) }}'
           data-msg-submitting="{{ _('Request in progress, please wait…') }}"
           data-stripe-pk="{{ website.app_conf.stripe_publishable_key }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
@@ -514,7 +519,7 @@ title = _("Funding your donations")
             <input name="owner.name" autocomplete="name" required minlength=3
                    class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
             <div id="stripe-element" data-type="card" class="form-control mb-3"></div>
-            <span id="stripe-errors" role="alert" class="invalid-msg"></span>
+            <output id="stripe-errors" class="alert alert-danger"></output>
             <p class="help-block">{{ icon('secure') }} {{ _(
                 "This data will be sent directly to the payment processor "
                 "{name} through an encrypted connection.",
@@ -546,7 +551,7 @@ title = _("Funding your donations")
             <input name="owner.name" autocomplete="name" required minlength=3
                    class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
             <div id="stripe-element" data-type="iban" class="form-control mb-3"></div>
-            <span id="stripe-errors" role="alert" class="invalid-msg"></span>
+            <output id="stripe-errors" class="alert alert-danger"></output>
             <p class="help-block">{{ _(
                 "By providing your IBAN and confirming this payment, you are authorizing "
                 "{platform} and {provider}, our payment service provider, to send instructions "
