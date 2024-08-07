@@ -69,7 +69,7 @@ if query:
           ORDER BY max_rank DESC
         """, locals())
 
-    if scope in (None, 'communities'):
+    if scope == 'communities':
         results['communities'] = website.db.all("""
             SELECT c.id, c.name, c.nmembers, p.nsubscribers
                  , similarity(c.name, %(q)s) AS rank
