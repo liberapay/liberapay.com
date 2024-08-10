@@ -1819,8 +1819,7 @@ class Participant(Model, MixinTeam):
                         try:
                             session = self.start_session(suffix='.em', id_min=1001, id_max=1010)
                         except AccountSuspended:
-                            if log_in == 'required':
-                                raise
+                            session = self.start_session(suffix='.ro', id_min=1001, id_max=1010)
                         self._email_session = session
                     if session:
                         extra_query.append(('log-in.id', self.id))
