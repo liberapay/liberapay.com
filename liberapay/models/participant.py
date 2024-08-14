@@ -2836,7 +2836,7 @@ class Participant(Model, MixinTeam):
                             tip.renewal_amount = last_payment_amount.convert(tip.amount.currency)
                         else:
                             tip.renewal_amount = None
-                        if not tip.renewal_amount or tip.renewal_amount < (tip.amount * 2):
+                        if not tip.renewal_amount or tip.renewal_amount < tip.amount:
                             pp = PayinProspect(self, [tip], 'stripe')
                             tip.renewal_amount = pp.moderate_proposed_amount
                         del last_payment_amount
