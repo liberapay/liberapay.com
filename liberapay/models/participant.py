@@ -1,5 +1,6 @@
 from base64 import b64decode, b64encode
 from collections import defaultdict
+from contextvars import ContextVar
 from datetime import date, timedelta
 from decimal import Decimal
 from email.utils import formataddr
@@ -114,6 +115,8 @@ class Participant(Model, MixinTeam):
 
     ANON = False
     EMAIL_VERIFICATION_TIMEOUT = EMAIL_VERIFICATION_TIMEOUT
+
+    notification_counts = ContextVar('notification_counts')
 
     session = None
 
@@ -1410,6 +1413,9 @@ class Participant(Model, MixinTeam):
                      VALUES (%(p_id)s, %(event)s, %(context)s, %(web)s, %(email)s, %(email_status)s, %(idem_key)s)
                   RETURNING id;
             """, locals())
+        notif_counts = self.notification_counts.get(None)
+        if notif_counts is not None:
+            notif_counts[event] += 1
         if not web:
             return n_id
         self.set_attributes(pending_notifs=self.pending_notifs + 1)

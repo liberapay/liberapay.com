@@ -1,4 +1,5 @@
 from collections import namedtuple
+from contextvars import copy_context
 from datetime import timedelta
 import logging
 import threading
@@ -165,7 +166,7 @@ class Job:
                     if break_before_call():
                         break
                     self.running = True
-                    r = self.func()
+                    r = copy_context().run(self.func)
                     if break_after_call():
                         break
                 except Exception as e:

@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import date
+from functools import wraps
 from operator import itemgetter
 from time import sleep
 
@@ -12,11 +13,24 @@ from ..exceptions import (
     RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
 )
 from ..i18n.currencies import Money
+from ..models.participant import Participant
 from ..website import website
 from ..utils import utcnow
 from ..utils.types import Object
 from .common import prepare_payin, resolve_tip
 from .stripe import charge
+
+
+def log_notification_counts(f):
+    @wraps(f)
+    def g(*args, **kw):
+        Participant.notification_counts.set(defaultdict(int))
+        r = f(*args, **kw)
+        for k, n in sorted(Participant.notification_counts.get().items()):
+            logger.info("Sent %i %s notifications.", n, k)
+        return r
+
+    return g
 
 
 def reschedule_renewals():
@@ -99,13 +113,13 @@ def reschedule_renewals():
         sleep(0.1)
 
 
+@log_notification_counts
 def send_donation_reminder_notifications():
     """This function reminds donors to renew their donations.
 
     The notifications are sent two weeks before the due date.
     """
     db = website.db
-    counts = defaultdict(int)
     rows = db.all("""
         SELECT (SELECT p FROM participants p WHERE p.id = sp.payer) AS payer
              , json_agg((SELECT a FROM (
@@ -169,7 +183,6 @@ def send_donation_reminder_notifications():
             overdue=overdue,
             email_unverified_address=True,
         )
-        counts['donate_reminder'] += 1
         db.run("""
             UPDATE scheduled_payins
                SET notifs_count = notifs_count + 1
@@ -177,10 +190,9 @@ def send_donation_reminder_notifications():
              WHERE payer = %s
                AND id IN %s
         """, (payer.id, tuple(sp['id'] for sp in payins)))
-    for k, n in sorted(counts.items()):
-        logger.info("Sent %i %s notifications." % (n, k))
 
 
+@log_notification_counts
 def send_upcoming_debit_notifications():
     """This daily cron job notifies donors who are about to be debited.
 
@@ -188,7 +200,6 @@ def send_upcoming_debit_notifications():
     payment of the "month" (31 days, not the calendar month).
     """
     db = website.db
-    counts = defaultdict(int)
     rows = db.all("""
         SELECT (SELECT p FROM participants p WHERE p.id = sp.payer) AS payer
              , json_agg((SELECT a FROM (
@@ -249,7 +260,6 @@ def send_upcoming_debit_notifications():
         else:
             event = 'missing_route'
         payer.notify(event, email_unverified_address=True, **context)
-        counts[event] += 1
         db.run("""
             UPDATE scheduled_payins
                SET notifs_count = notifs_count + 1
@@ -257,15 +267,13 @@ def send_upcoming_debit_notifications():
              WHERE payer = %s
                AND id IN %s
         """, (payer.id, tuple(sp['id'] for sp in payins)))
-    for k, n in sorted(counts.items()):
-        logger.info("Sent %i %s notifications." % (n, k))
 
 
+@log_notification_counts
 def execute_scheduled_payins():
     """This daily cron job initiates scheduled payments.
     """
     db = website.db
-    counts = defaultdict(int)
     retry = False
     rows = db.all("""
         SELECT p AS payer, json_agg(json_build_object(
@@ -364,7 +372,6 @@ def execute_scheduled_payins():
                     email_unverified_address=True,
                     force_email=True,
                 )
-                counts['renewal_unauthorized'] += 1
                 continue
             if payin.status == 'failed' and route.status == 'expired':
                 can_retry = db.one("""
@@ -385,7 +392,6 @@ def execute_scheduled_payins():
                     provider='Stripe',
                     email_unverified_address=True,
                 )
-                counts['payin_' + payin.status] += 1
         elif actionable:
             db.run("""
                 UPDATE scheduled_payins
@@ -406,7 +412,6 @@ def execute_scheduled_payins():
                 email_unverified_address=True,
                 force_email=True,
             )
-            counts['renewal_actionable'] += 1
         if impossible:
             for tr in impossible:
                 tr['execution_date'] = execution_date
@@ -416,9 +421,6 @@ def execute_scheduled_payins():
                 transfers=impossible,
                 email_unverified_address=True,
             )
-            counts['renewal_aborted'] += 1
-    for k, n in sorted(counts.items()):
-        logger.info("Sent %i %s notifications." % (n, k))
     if retry:
         execute_scheduled_payins()
 
