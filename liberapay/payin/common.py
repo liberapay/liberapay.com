@@ -884,6 +884,31 @@ def update_payin_transfer(
     return pt
 
 
+def handle_payin_result(db, payin):
+    """Notify the payer of the success or failure of a charge.
+    """
+    assert payin.status in ('failed', 'succeeded')
+    if payin.ctime > (utcnow() - timedelta(hours=6)) and not payin.off_session:
+        return
+    payer = db.Participant.from_id(payin.payer)
+    if payin.status == 'succeeded':
+        payer.notify(
+            'payin_succeeded',
+            payin=payin._asdict(),
+            email_unverified_address=True,
+            idem_key=f"{payin.id}_{payin.status}",
+        )
+    elif payin.status == 'failed':
+        route = db.ExchangeRoute.from_id(payer, payin.route)
+        payer.notify(
+            'payin_failed',
+            payin=payin._asdict(),
+            provider=route.processor_display_name,
+            email_unverified_address=True,
+            idem_key=f"{payin.id}_{payin.status}",
+        )
+
+
 def abort_payin(db, payin, error='aborted by payer'):
     """Mark a payin as cancelled.
 

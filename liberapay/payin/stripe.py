@@ -10,7 +10,7 @@ from ..i18n.currencies import Money, ZERO_DECIMAL_CURRENCIES
 from ..models.exchange_route import ExchangeRoute
 from ..website import website
 from .common import (
-    abort_payin, adjust_payin_transfers, prepare_payin,
+    abort_payin, adjust_payin_transfers, handle_payin_result, prepare_payin,
     record_payin_refund, record_payin_transfer_reversal, resolve_tip,
     update_payin, update_payin_transfer,
 )
@@ -453,6 +453,7 @@ def settle_charge_and_transfers(
     refunded_amount = None
     if charge.amount_refunded:
         refunded_amount = int_to_Money(charge.amount_refunded, charge.currency)
+    old_status = payin.status
     payin = update_payin(
         db, payin.id, charge.id, charge.status, error,
         amount_settled=amount_settled, fee=fee, intent_id=intent_id,
@@ -539,6 +540,9 @@ def settle_charge_and_transfers(
                 db, pt.id, None, charge.status, error,
                 update_donor=(update_donor and i == last),
             )
+
+    if payin.status != old_status and payin.status in ('failed', 'succeeded'):
+        handle_payin_result(db, payin)
 
     return payin
 
@@ -745,6 +749,7 @@ def settle_destination_charge(
     if charge.amount_refunded:
         refunded_amount = int_to_Money(charge.amount_refunded, charge.currency)
 
+    old_status = payin.status
     payin = update_payin(
         db, payin.id, charge.id, status, error,
         amount_settled=amount_settled, fee=fee, intent_id=intent_id,
@@ -781,6 +786,9 @@ def settle_destination_charge(
         db, pt.id, pt_remote_id, status, error, amount=net_amount,
         reversed_amount=reversed_amount, update_donor=update_donor,
     )
+
+    if payin.status != old_status and payin.status in ('failed', 'succeeded'):
+        handle_payin_result(db, payin)
 
     return payin
 

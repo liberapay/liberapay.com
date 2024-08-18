@@ -385,13 +385,6 @@ def execute_scheduled_payins():
                 if can_retry:
                     retry = True
                     continue
-            if payin.status in ('failed', 'succeeded'):
-                payer.notify(
-                    'payin_' + payin.status,
-                    payin=payin._asdict(),
-                    provider='Stripe',
-                    email_unverified_address=True,
-                )
         elif actionable:
             db.run("""
                 UPDATE scheduled_payins
