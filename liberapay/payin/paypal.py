@@ -12,8 +12,8 @@ from ..exceptions import (
 from ..i18n.currencies import Money
 from ..website import website
 from .common import (
-    abort_payin, update_payin, update_payin_transfer, record_payin_refund,
-    record_payin_transfer_reversal,
+    abort_payin, handle_payin_result, update_payin, update_payin_transfer,
+    record_payin_refund, record_payin_transfer_reversal,
 )
 
 
@@ -243,6 +243,7 @@ def record_order_result(db, payin, order):
         )
         for pu in order['purchase_units']
     ) or None
+    old_status = payin.status
     payin = update_payin(
         db, payin.id, order['id'], status, error, refunded_amount=refunded_amount
     )
@@ -285,6 +286,9 @@ def record_order_result(db, payin, order):
                 db, pt_id, pt_remote_id, pt_status, pt_error,
                 amount=net_amount, fee=pt_fee, reversed_amount=reversed_amount
             )
+
+    if payin.status != old_status and payin.status in ('failed', 'succeeded'):
+        handle_payin_result(db, payin)
 
     return payin
 
