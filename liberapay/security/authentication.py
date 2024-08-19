@@ -318,8 +318,6 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
             if not session_id or session_id < '1001' or session_id > '1010':
                 raise response.render('simplates/log-in-link-is-invalid.spt', state)
             token = request.qs.get('log-in.token')
-            if not (token and token.endswith('.em')):
-                raise response.render('simplates/log-in-link-is-invalid.spt', state)
             required = request.qs.parse_boolean('log-in.required', default=True)
             p = Participant.authenticate_with_session(
                 id, session_id, token,
@@ -356,7 +354,7 @@ def authenticate_user_if_possible(csrf_token, request, response, state, user, _)
                        AND mtime = %s
                 """, (p.id, p.session.id, p.session.mtime))
                 p.session = None
-                session_suffix = '.em'
+                session_suffix = token[-3:]
             elif required:
                 raise response.render('simplates/log-in-link-is-invalid.spt', state)
             del request.qs['log-in.id'], request.qs['log-in.key'], request.qs['log-in.token']
