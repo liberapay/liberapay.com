@@ -1058,11 +1058,10 @@ msgstr "Tuto platbu nelze zpracovat, protože účet příjemce je v současné 
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "Váš dar pro {recipient} nelze nyní zpracovat, protože účet příjemce není připraven na příjem peněz."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr "{username} nepřijímá dary od {country}."
+msgstr "{username} nepřijímá příspěvky z {country}."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
 msgstr "Zpracování vaší platby se nezdařilo, protože náš software nedokázal určit, ze které země mají peníze přijít. To by se nemělo stát."
 
@@ -1679,7 +1678,6 @@ msgstr "Jméno"
 msgid "Currencies"
 msgstr "Měny"
 
-#, fuzzy
 msgid "Countries"
 msgstr "Země"
 
@@ -1850,9 +1848,9 @@ msgstr "Nevyužité příjmy se spotřebují v následujících týdnech, na tý
 msgid "Leftover"
 msgstr "Přebytek"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr "Vypadá to, že jste na {country}. {username} nepřijímá dary pocházející z této země."
+msgstr "Vypadá to, že jste v {country}. {username} nepřijímá dary pocházející z této země."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -2114,13 +2112,11 @@ msgstr "Procházet společenství"
 msgid "You have to check at least one box."
 msgstr "Musíte zaškrtnout alespoň jedno políčko."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Z jakých zemí by vám dárci měli smět posílat peníze?"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr "Původ darů doporučujeme omezit pouze v případě, že vám to ukládá zákon."
+msgstr "Původ příspěvků doporučujeme omezit pouze v případě, že vám to ukládá zákon."
 
 msgid "The submitted settings are incoherent."
 msgstr "Předložená nastavení jsou nesouvislá."
@@ -2532,9 +2528,9 @@ msgstr "Příští platba je splatná {in_N_weeks_months_or_years}."
 msgid "Renew now"
 msgstr "Obnovit nyní"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
-msgstr "Příjemce již nepřijímá platby na {currency}."
+msgstr "Příjemce již nepřijímá platby v {currency}."
 
 msgid "Pending payment completion."
 msgstr "Čeká se na dokončení platby."
@@ -2720,7 +2716,6 @@ msgstr "Vaše platba byla iniciována. Později bude odeslána do vaší banky p
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Vaše banka může tuto platbu odmítnout. Pokud si nejste jisti, že vaše banka správně zpracovává příkazy k inkasu v {currency}, doporučujeme jí zaslat kopii {link_start}mandátu{link_end}."
 
-#, fuzzy
 msgid "The initialization of a required component has failed. If you use a browser extension that blocks requests, for example NoScript, please make sure it’s allowing requests to the “stripe.com” domain."
 msgstr "Inicializace požadované součásti se nezdařila. Pokud používáte rozšíření prohlížeče, které blokuje požadavky, například NoScript, zkontrolujte, zda povoluje požadavky na doménu \"stripe.com\"."
 
@@ -2775,7 +2770,6 @@ msgstr "Zapamatujte si číslo bankovního účtu pro budoucí platby"
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Abyste snížili riziko odmítnutí této platby, doporučujeme, abyste níže zadali svou poštovní adresu. Ta bude uložena šifrovaně v naší databázi a odeslána zpracovateli plateb ({processor_name})."
 
-#, fuzzy
 msgid "Please fill in your postal address. It's required because the IBAN you've provided emanates from outside the European Union."
 msgstr "Vyplňte prosím svou poštovní adresu. Je to nutné, protože vámi uvedený IBAN pochází ze země mimo Evropskou unii."
 
@@ -5272,7 +5266,6 @@ msgstr "Bohužel jsme nenašli žádnou položku odpovídající dotazu."
 msgid "Whose work do you appreciate?"
 msgstr "Jejichž práce si ceníte?"
 
-#, fuzzy
 msgid "Found a matching user name"
 msgid_plural "Found matching user names"
 msgstr[0] "Nalezeno odpovídající uživatelské jméno"
