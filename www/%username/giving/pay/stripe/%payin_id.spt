@@ -208,7 +208,6 @@ if tippees:
             raise response.redirect(payer.path(
                 'giving/pay?redirect_reason=unaccepted_currency'
             ))
-    route_address_pattern = 'src_%' if payment_type == 'sdd' and len(tips) == 1 else '%'
     routes = website.db.all("""
         SELECT r
           FROM exchange_routes r
@@ -216,12 +215,11 @@ if tippees:
            AND r.status = 'chargeable'
            AND r.network::text LIKE %s
            AND (r.one_off IS FALSE OR r.ctime > (current_timestamp - interval '6 hours'))
-           AND r.address LIKE %s
       ORDER BY r.is_default_for = %s DESC NULLS LAST
              , r.is_default DESC NULLS LAST
              , r.network = 'stripe-sdd' DESC
              , r.id DESC
-    """, (payer.id, 'stripe-' + (payment_type or '%'), route_address_pattern, payment.currency))
+    """, (payer.id, 'stripe-' + (payment_type or '%'), payment.currency))
     if routes:
         route = None
         while routes:
