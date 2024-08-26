@@ -65,6 +65,7 @@ def charge(db, payin, payer, route, update_donor=True):
 
     """
     assert payin.route == route.id
+    assert payin.status in ('pre', 'awaiting_payer_action', 'awaiting_review')
     transfers = db.all("""
         SELECT pt.*,
                p.marked_as AS recipient_marked_as,
@@ -123,6 +124,8 @@ def charge(db, payin, payer, route, update_donor=True):
         )
     if charge and charge.status == 'failed' and charge.failure_code == 'expired_card':
         route.update_status('expired')
+    if payin.status in ('failed', 'succeeded'):
+        handle_payin_result(db, payin)
     return payin
 
 
@@ -325,10 +328,12 @@ def create_charge(
         payin = settle_destination_charge(
             db, payin, charge, payin_transfers[0],
             intent_id=intent.id, update_donor=update_donor,
+            handle_result=False,
         )
     else:
         payin = settle_charge_and_transfers(
             db, payin, charge, intent_id=intent.id, update_donor=update_donor,
+            handle_result=False,
         )
     send_payin_notification(db, payin, payer, charge, route)
     return payin, charge
@@ -423,7 +428,7 @@ def settle_charge(db, payin, charge):
 
 
 def settle_charge_and_transfers(
-    db, payin, charge, intent_id=None, update_donor=True,
+    db, payin, charge, intent_id=None, update_donor=True, handle_result=True,
 ):
     """Record the result of a charge, and execute the transfers if it succeeded.
     """
@@ -533,8 +538,9 @@ def settle_charge_and_transfers(
                 update_donor=(update_donor and i == last),
             )
 
-    if payin.status != old_status and payin.status in ('failed', 'succeeded'):
-        handle_payin_result(db, payin)
+    if handle_result:
+        if payin.status != old_status and payin.status in ('failed', 'succeeded'):
+            handle_payin_result(db, payin)
 
     return payin
 
@@ -751,7 +757,7 @@ def sync_transfer(db, pt, charge, update_donor=True):
 
 
 def settle_destination_charge(
-    db, payin, charge, pt, intent_id=None, update_donor=True,
+    db, payin, charge, pt, intent_id=None, update_donor=True, handle_result=True,
 ):
     """Record the result of a charge, and recover the fee.
     """
@@ -814,8 +820,9 @@ def settle_destination_charge(
         update_donor=update_donor,
     )
 
-    if payin.status != old_status and payin.status in ('failed', 'succeeded'):
-        handle_payin_result(db, payin)
+    if handle_result:
+        if payin.status != old_status and payin.status in ('failed', 'succeeded'):
+            handle_payin_result(db, payin)
 
     return payin
 
