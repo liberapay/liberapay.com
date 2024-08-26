@@ -134,12 +134,14 @@ def charge(db, payin, payer, route, update_donor=True):
     if len(transfers) == 1:
         payin, charge = destination_charge(
             db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
-            update_donor=update_donor,
+            update_donor=update_donor, handle_result=False,
         )
         if payin.status == 'failed':
             payin, charge = try_other_destinations(
                 db, payin, payer, charge, update_donor=update_donor,
             )
+        if payin.status in ('failed', 'succeeded'):
+            handle_payin_result(db, payin)
     else:
         payin, charge = charge_and_transfer(
             db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
@@ -204,12 +206,12 @@ def try_other_destinations(db, payin, payer, charge, update_donor=True):
             if len(payin_transfers) == 1:
                 payin, charge = destination_charge(
                     db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
-                    update_donor=update_donor,
+                    update_donor=update_donor, handle_result=False,
                 )
             else:
                 payin, charge = charge_and_transfer(
                     db, payin, payer, statement_descriptor=('Liberapay %i' % payin.id),
-                    update_donor=update_donor,
+                    update_donor=update_donor, handle_result=False,
                 )
         except NextAction:
             raise
@@ -227,7 +229,7 @@ def try_other_destinations(db, payin, payer, charge, update_donor=True):
 
 
 def charge_and_transfer(
-    db, payin, payer, statement_descriptor, update_donor=True,
+    db, payin, payer, statement_descriptor, update_donor=True, handle_result=True,
 ):
     """Create a standalone Charge then multiple Transfers.
 
@@ -288,12 +290,15 @@ def charge_and_transfer(
     intent_id = getattr(intent, 'id', None)
     payin = settle_charge_and_transfers(
         db, payin, charge, intent_id=intent_id, update_donor=update_donor,
+        handle_result=handle_result,
     )
     send_payin_notification(db, payin, payer, charge, route)
     return payin, charge
 
 
-def destination_charge(db, payin, payer, statement_descriptor, update_donor=True):
+def destination_charge(
+    db, payin, payer, statement_descriptor, update_donor=True, handle_result=True,
+):
     """Create a Destination Charge.
 
     Doc: https://stripe.com/docs/connect/destination-charges
@@ -363,6 +368,7 @@ def destination_charge(db, payin, payer, statement_descriptor, update_donor=True
     intent_id = getattr(intent, 'id', None)
     payin = settle_destination_charge(
         db, payin, charge, pt, intent_id=intent_id, update_donor=update_donor,
+        handle_result=handle_result,
     )
     send_payin_notification(db, payin, payer, charge, route)
     return payin, charge
@@ -435,7 +441,7 @@ def settle_charge(db, payin, charge):
 
 
 def settle_charge_and_transfers(
-    db, payin, charge, intent_id=None, update_donor=True,
+    db, payin, charge, intent_id=None, update_donor=True, handle_result=True,
 ):
     """Record the result of a charge, and execute the transfers if it succeeded.
     """
@@ -541,8 +547,9 @@ def settle_charge_and_transfers(
                 update_donor=(update_donor and i == last),
             )
 
-    if payin.status != old_status and payin.status in ('failed', 'succeeded'):
-        handle_payin_result(db, payin)
+    if handle_result:
+        if payin.status != old_status and payin.status in ('failed', 'succeeded'):
+            handle_payin_result(db, payin)
 
     return payin
 
@@ -729,7 +736,7 @@ def sync_transfer(db, pt, update_donor=True):
 
 
 def settle_destination_charge(
-    db, payin, charge, pt, intent_id=None, update_donor=True,
+    db, payin, charge, pt, intent_id=None, update_donor=True, handle_result=True,
 ):
     """Record the result of a charge, and recover the fee.
     """
@@ -787,8 +794,9 @@ def settle_destination_charge(
         reversed_amount=reversed_amount, update_donor=update_donor,
     )
 
-    if payin.status != old_status and payin.status in ('failed', 'succeeded'):
-        handle_payin_result(db, payin)
+    if handle_result:
+        if payin.status != old_status and payin.status in ('failed', 'succeeded'):
+            handle_payin_result(db, payin)
 
     return payin
 
