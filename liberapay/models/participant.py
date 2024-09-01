@@ -2730,10 +2730,19 @@ class Participant(Model, MixinTeam):
                            (self.id,))
 
             # Get renewable tips
+            next_payday = compute_next_payday_date()
             renewable_tips = cursor.all("""
-                SELECT t.*::tips, tippee_p
+                SELECT t.*::tips, tippee_p, last_pt::payin_transfers
                   FROM current_tips t
                   JOIN participants tippee_p ON tippee_p.id = t.tippee
+             LEFT JOIN LATERAL (
+                           SELECT pt.*
+                             FROM payin_transfers pt
+                            WHERE pt.payer = t.tipper
+                              AND coalesce(pt.team, pt.recipient) = t.tippee
+                         ORDER BY pt.ctime DESC
+                            LIMIT 1
+                       ) last_pt ON true
                  WHERE t.tipper = %s
                    AND t.renewal_mode > 0
                    AND t.paid_in_advance IS NOT NULL
@@ -2741,25 +2750,21 @@ class Participant(Model, MixinTeam):
                    AND ( tippee_p.goal IS NULL OR tippee_p.goal >= 0 )
                    AND tippee_p.is_suspended IS NOT TRUE
                    AND tippee_p.payment_providers > 0
-                   AND NOT EXISTS (
-                           SELECT 1
-                             FROM ( SELECT pt.*
-                                      FROM payin_transfers pt
-                                     WHERE pt.payer = t.tipper
-                                       AND coalesce(pt.team, pt.recipient) = t.tippee
-                                  ORDER BY pt.ctime DESC
-                                     LIMIT 1
-                                  ) pt
-                            WHERE pt.status IN ('pending', 'failed')
-                       )
               ORDER BY t.tippee
             """, (self.id,))
-            for tip, tippee_p in renewable_tips:
+            for tip, tippee_p, last_pt in renewable_tips:
                 tip.tippee_p = tippee_p
                 tip.periodic_amount = tip.periodic_amount.convert_if_currency_is_phased_out()
                 tip.amount = tip.amount.convert_if_currency_is_phased_out()
                 tip.paid_in_advance = tip.paid_in_advance.convert_if_currency_is_phased_out()
-            renewable_tips = [tip for tip, tippee_p in renewable_tips]
+                tip.due_date = tip.compute_renewal_due_date(next_payday, cursor)
+            renewable_tips = [
+                tip for tip, tippee_p, last_pt in renewable_tips
+                if last_pt.id is None or
+                   last_pt.status == 'succeeded' or
+                   last_pt.status == 'failed' and
+                   last_pt.ctime.date() < (tip.due_date - timedelta(weeks=1))
+            ]
 
             # Get the existing schedule
             current_schedule = cursor.all("""
@@ -2864,10 +2869,8 @@ class Participant(Model, MixinTeam):
 
             # Group the tips into payments
             # 1) Group the tips by renewal_mode and currency.
-            next_payday = compute_next_payday_date()
             naive_tip_groups = defaultdict(list)
             for tip in renewable_tips:
-                tip.due_date = tip.compute_renewal_due_date(next_payday, cursor)
                 naive_tip_groups[(tip.renewal_mode, tip.amount.currency)].append(tip)
             del renewable_tips
             # 2) Subgroup by payment processor and geography.

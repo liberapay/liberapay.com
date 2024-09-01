@@ -42,6 +42,7 @@ from liberapay.models.encrypted import Encrypted
 from liberapay.models.exchange_route import ExchangeRoute
 from liberapay.models.participant import Participant
 from liberapay.models.payin import Payin
+from liberapay.models.payin_transfer import PayinTransfer
 from liberapay.models.repository import Repository
 from liberapay.models.tip import Tip
 from liberapay.security.crypto import Cryptograph
@@ -117,8 +118,8 @@ def database(env, tell_sentry):
     db.back_as_registry[Object] = db.back_as_registry['Object'] = back_as_Object
 
     models = (
-        _AccountElsewhere, AccountElsewhere, _Community, Community,
-        Encrypted, ExchangeRoute, Participant, Payin, Repository, Tip,
+        _AccountElsewhere, AccountElsewhere, _Community, Community, Encrypted,
+        ExchangeRoute, Participant, Payin, PayinTransfer, Repository, Tip,
     )
     for model in models:
         db.register_model(model)
