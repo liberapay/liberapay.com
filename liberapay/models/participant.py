@@ -2763,7 +2763,8 @@ class Participant(Model, MixinTeam):
                 if last_pt.id is None or
                    last_pt.status == 'succeeded' or
                    last_pt.status == 'failed' and
-                   last_pt.ctime.date() < (tip.due_date - timedelta(weeks=1))
+                   last_pt.ctime.date() < (tip.due_date - timedelta(weeks=1)) and
+                   tip.due_date >= date(2024, 9, 4)
             ]
 
             # Get the existing schedule
