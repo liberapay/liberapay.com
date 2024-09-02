@@ -9,7 +9,7 @@ if request.method == 'POST':
 
     if src not in constants.AVATAR_SOURCES:
         raise response.invalid_input(src, 'src', 'body')
-    if '@' not in email:
+    if email and '@' not in email:
         raise BadEmailAddress(email)
 
     new_avatar_url = participant.update_avatar(src+':', avatar_email=email)
