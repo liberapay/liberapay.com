@@ -91,6 +91,7 @@ has_paypal_but_not_stripe = (
 
 has_statement = len(participant.get_statement_langs()) > 0
 allow_connect = (
+    user == participant and
     participant.email is not None and
     participant.username[0] != '~' and
     has_statement
