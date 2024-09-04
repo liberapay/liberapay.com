@@ -568,10 +568,10 @@ title = _("Funding your donations")
                 {{ _("Remember the bank account number for future payments") }}
             </label><br>
             <label>
-                <input type="checkbox" name="set_as_default" value="true" checked />
-                {{ _("Use this payment instrument by default for future payments") }}
-            </label>
-            <br>
+                <input type="checkbox" name="set_as_default_for" value="{{ payment.currency }}" checked />
+                {{ _("Use this payment instrument by default for future payments in {currency}",
+                     currency=Currency(payment.currency)) }}
+            </label><br>
         </fieldset>
         % endif
 

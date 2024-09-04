@@ -3,6 +3,7 @@
 % macro card_brands()
     <span aria-hidden="true" class="card-brands">
     {{ website.read_asset('card_brands/american-express.svg')|safe }}
+    {{ website.read_asset('card_brands/cartes-bancaires.svg')|safe }}
     {{ website.read_asset('card_brands/diners.svg')|safe }}
     {{ website.read_asset('card_brands/discover.svg')|safe }}
     {{ website.read_asset('card_brands/jcb.svg')|safe }}
@@ -10,7 +11,7 @@
     {{ website.read_asset('card_brands/unionpay.svg')|safe }}
     {{ website.read_asset('card_brands/visa.svg')|safe }}
     </span>
-    <span class="sr-only">American Express, Diners, Discover, JCB, Mastercard, UnionPay, Visa</span>
+    <span class="sr-only">American Express, Cartes Bancaires, Diners, Discover, JCB, Mastercard, UnionPay, Visa</span>
 % endmacro
 
 % macro describe_payment_methods(tippee)
@@ -24,7 +25,7 @@
     "({list_of_card_brands}), or by direct debit of a Euro bank account "
     "(for donations in Euro only).",
     username=tippee.username,
-    list_of_card_brands=["American Express", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
+    list_of_card_brands=["American Express", "Cartes Bancaires", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
 ) if tippee.payment_providers == 1 else _(
     "Donations to {username} are processed through PayPal.",
     username=tippee.username
@@ -33,7 +34,7 @@
     "({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or "
     "a PayPal account.",
     username=tippee.username,
-    list_of_card_brands=["American Express", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
+    list_of_card_brands=["American Express", "Cartes Bancaires", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
 ) }}
 % endmacro
 
