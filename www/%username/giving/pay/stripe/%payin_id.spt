@@ -123,7 +123,7 @@ if request.method == 'POST':
         )
         payer_country = route.country or payer.guessed_country
         proto_transfers = []
-        sepa_only = len(tips) > 1
+        sepa_only = len(tips) > 1 or route.network == 'stripe-sdd'
         for tip in tips:
             proto_transfers.extend(resolve_tip(
                 website.db, tip, tip.tippee_p, 'stripe', payer, payer_country,

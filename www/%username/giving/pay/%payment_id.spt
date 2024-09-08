@@ -2,6 +2,7 @@ from functools import reduce
 from math import ceil
 from types import SimpleNamespace
 
+from liberapay.constants import SEPA
 from liberapay.i18n.base import BOLD
 from liberapay.models.participant import Participant
 from liberapay.utils import get_participant, group_by, partition
@@ -13,6 +14,33 @@ PAYMENT_PROVIDERS = website.db.one(
 allow_stripe_card = website.app_conf.payin_methods.get('stripe-card', True)
 allow_stripe_sdd = website.app_conf.payin_methods.get('stripe-sdd', True)
 allow_paypal = website.app_conf.payin_methods.get('paypal', True)
+
+def is_sepa(payment):
+    tip = payment.tips[0]
+    if tip.tippee_p.kind == 'group':
+        return website.db.one("""
+            SELECT true
+              FROM current_takes t
+              JOIN participants p ON p.id = t.member
+              JOIN payment_accounts a ON a.participant = t.member
+             WHERE t.team = %(tippee)s
+               AND t.amount <> 0
+               AND p.is_suspended IS NOT TRUE
+               AND a.provider = 'stripe'
+               AND a.is_current
+               AND a.country IN %(SEPA)s
+             LIMIT 1
+        """, dict(tippee=tip.tippee, SEPA=SEPA), default=False)
+    else:
+        return website.db.one("""
+            SELECT true
+              FROM payment_accounts a
+             WHERE a.participant = %(tippee)s
+               AND a.provider = 'stripe'
+               AND a.is_current
+               AND a.country IN %(SEPA)s
+             LIMIT 1
+        """, dict(tippee=tip.tippee, SEPA=SEPA), default=False)
 
 [---]
 
@@ -276,7 +304,8 @@ title = _("Funding your donations")
                 % endif
             </div>
         </div>
-        % set possible = allow_stripe_sdd and payment.currency == 'EUR'
+        % set sepa = is_sepa(payment)
+        % set possible = allow_stripe_sdd and sepa and payment.currency == 'EUR'
         % set warn = payer.guessed_country not in constants.SEPA
         <div class="panel panel-default {{ '' if possible else 'muted' }}">
             <div class="panel-body overlaid">
@@ -284,6 +313,8 @@ title = _("Funding your donations")
                 <h4>{{ _("Direct Debit") }}<br>
                     % if not allow_stripe_sdd
                     <small class="text-danger">{{ _("Currently unavailable") }}</small>
+                    % elif not sepa
+                    <small class="text-danger">{{ _("Only for donations to SEPA countries") }}</small>
                     % elif payment.currency != 'EUR'
                     <small class="text-warning">{{ _("Euro donations only") }}</small>
                     % else
