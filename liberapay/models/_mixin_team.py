@@ -191,7 +191,7 @@ class MixinTeam:
         TAKES = """
             SELECT p.id AS member_id, p.username AS member_name, p.avatar_url
                  , p.is_suspended
-                 , t.amount, t.actual_amount, t.ctime, t.mtime
+                 , t.amount, t.actual_amount, t.ctime, t.mtime, t.paid_in_advance
               FROM current_takes t
               JOIN participants p ON p.id = member
              WHERE t.team=%(team)s
@@ -347,6 +347,7 @@ class MixinTeam:
             member['username'] = take['member_name']
             member['nominal_take'] = take['amount']
             member['actual_amount'] = take['actual_amount']
+            member['received_in_advance'] = take['paid_in_advance']
             member['last_week'] = last_week.get(m_id)
             if compute_max:
                 x = self.compute_max_this_week(m_id, last_week, take['amount'].currency)
