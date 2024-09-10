@@ -28,6 +28,7 @@ def is_sepa(payment):
                AND p.is_suspended IS NOT TRUE
                AND a.provider = 'stripe'
                AND a.is_current
+               AND a.charges_enabled
                AND a.country IN %(SEPA)s
              LIMIT 1
         """, dict(tippee=tip.tippee, SEPA=SEPA), default=False)
@@ -38,6 +39,7 @@ def is_sepa(payment):
              WHERE a.participant = %(tippee)s
                AND a.provider = 'stripe'
                AND a.is_current
+               AND a.charges_enabled
                AND a.country IN %(SEPA)s
              LIMIT 1
         """, dict(tippee=tip.tippee, SEPA=SEPA), default=False)
