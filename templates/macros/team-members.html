@@ -25,12 +25,20 @@
           <th></th>
           <th>{{ _("Last Payday") }}<br><small>({{ locale.format_date(last_payday) if last_payday else _("n/a") }})</small></th>
           <th colspan=2>{{ _("Next Payday") }}<br><small>({{ locale.format_date(next_payday) }})</small></th>
+          <th></th>
         </tr>
         <tr>
           <th>{{ _("Member") }}</th>
           <th>{{ _("Nominal Take") }}</th>
           <th>{{ _("Nominal Take") }}</th>
           <th>{{ _("Actual Take") }}</th>
+          <th><span class="help-title" data-toggle="tooltip" data-placement="top" title="{{ _(
+                        'On Liberapay, donations are paid in advance. This column '
+                        'shows how much money each member has received in advance '
+                        'through this team. An advance increases every time a member '
+                        'receives a new payment from a donor through the team, and '
+                        'decreases every week during “payday”.'
+                    ) }}">{{ _("Advance") }}</span></th>
         </tr>
       </thead>
       <tbody>
@@ -88,6 +96,7 @@
             <td{% if fuzzy_take.fuzzy %} title="{{ locale.format_money_basket(member.actual_amount) }}"{% endif %}>{{
                 '~' if fuzzy_take.fuzzy else '' }}{{ locale.format_money(fuzzy_take)
             }}</td>
+            <td>{{ locale.format_money(member.received_in_advance or nominal_take.zero()) }}</td>
         </tr>
         % endfor
         <tr class="leftover">
@@ -104,6 +113,7 @@
              %} title="{{ locale.format_money_basket(members.leftover) }}"{% endif %}>{{
                 '~' if fuzzy_leftover.fuzzy else '' }}{{ locale.format_money(fuzzy_leftover)
             }}</td>
+            <td></td>
         </tr>
       </tbody>
     </table>
