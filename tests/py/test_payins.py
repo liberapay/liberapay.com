@@ -1353,30 +1353,22 @@ class TestPayinsStripe(Harness):
         pt = payin_transfers[0]
         assert pt.status == 'pre'
         assert pt.amount == EUR('100.00')
-        assert pt.recipient == self.creator_1.id
+        assert pt.recipient == self.creator_2.id
 
         # 3rd request: execute the payment
-        r = self.client.GxT('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
-        assert r.code == 302, r.text
-        assert r.headers[b'Location'] == b'/donor/giving/pay/stripe/%i' % (self.offset + 1)
-        r = self.client.GET('/donor/giving/pay/stripe/%i' % (self.offset + 1), auth_as=self.donor)
+        r = self.client.GET('/donor/giving/pay/stripe/%i' % self.offset, auth_as=self.donor)
         assert r.code == 200, r.text
-        payin1, payin2 = self.db.all("SELECT * FROM payins ORDER BY id")
-        assert payin1.status == 'failed'
-        assert payin1.error.startswith("For 'sepa_debit' payments, we currently require ")
-        assert payin2.status == 'pending'
-        assert payin2.amount_settled is None
-        assert payin2.fee is None
+        payin = self.db.one("SELECT * FROM payins")
+        assert payin.status == 'pending'
+        assert payin.amount_settled is None
+        assert payin.fee is None
         payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
-        assert len(payin_transfers) == 2
-        pt1, pt2 = payin_transfers
-        assert pt1.status == 'failed'
-        assert pt1.amount == EUR('100.00')
-        assert pt1.remote_id is None
-        assert pt2.status == 'pending'
-        assert pt2.amount == EUR('100.00')
-        assert pt2.remote_id is None
-        assert pt2.recipient == self.creator_2.id
+        assert len(payin_transfers) == 1
+        pt = payin_transfers[0]
+        assert pt.status == 'pending'
+        assert pt.amount == EUR('100.00')
+        assert pt.remote_id is None
+        assert pt.recipient == self.creator_2.id
 
         # 4th request: test getting the payment page again
         r = self.client.GET(expected_uri, auth_as=self.donor)
@@ -1387,25 +1379,22 @@ class TestPayinsStripe(Harness):
         assert r.code == 404, r.text
 
         # Settle
-        charge = stripe.Charge.retrieve(payin2.remote_id)
+        charge = stripe.Charge.retrieve(payin.remote_id)
         if charge.status == 'pending':
             # Wait ten seconds for the payment to succeed.
             sleep(10)
-            charge = stripe.Charge.retrieve(payin2.remote_id)
+            charge = stripe.Charge.retrieve(payin.remote_id)
         assert charge.status == 'succeeded'
         assert charge.balance_transaction
-        payin = settle_charge_and_transfers(self.db, payin2, charge)
+        payin = settle_charge_and_transfers(self.db, payin, charge)
         assert payin.status == 'succeeded'
         assert payin.amount_settled
         assert payin.fee
         payin_transfers = self.db.all("SELECT * FROM payin_transfers ORDER BY id")
-        assert len(payin_transfers) == 2
-        pt1, pt2 = payin_transfers
-        assert pt1.status == 'failed'
-        assert pt1.amount == EUR('100.00')
-        assert pt1.remote_id is None
-        assert pt2.status == 'succeeded'
-        assert pt2.amount == EUR('99.65')
+        assert len(payin_transfers) == 1
+        pt = payin_transfers[0]
+        assert pt.status == 'succeeded'
+        assert pt.amount == EUR('99.65')
 
         # 6th request: test getting the receipt after the payment is settled
         r = self.client.GET('/donor/receipts/direct/%i' % payin.id, auth_as=self.donor)

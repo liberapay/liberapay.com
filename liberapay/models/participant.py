@@ -3377,6 +3377,7 @@ class Participant(Model, MixinTeam):
                                AND t.member IN %(members)s
                                AND a.provider = 'stripe'
                                AND a.is_current
+                               AND a.charges_enabled
                                AND a.country IN %(SEPA)s
                              LIMIT 1
                         """, dict(members=members, tippee=tip.tippee, SEPA=SEPA))
@@ -3398,6 +3399,7 @@ class Participant(Model, MixinTeam):
                          WHERE a.participant = %(tippee)s
                            AND a.provider = 'stripe'
                            AND a.is_current
+                           AND a.charges_enabled
                            AND a.country IN %(SEPA)s
                          LIMIT 1
                     """, dict(tippee=tip.tippee, SEPA=SEPA))

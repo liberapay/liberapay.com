@@ -2729,39 +2729,7 @@ interactions:
       Stripe-Version: ['2019-08-14']
     status: {code: 200, message: OK}
 - request:
-    body: amount=10000&currency=eur&customer=cus_N2OGdmqk7gOwWc&description=Liberapay&destination[account]=acct_1Gv6gnIi3iiNpKFF&metadata[payin_id]=2270&source=src_1MIJTwFk4eGpfLOCarFVaLAl&statement_descriptor=Liberapay+2270&expand[0]=balance_transaction
-    headers: {}
-    method: POST
-    uri: https://api.stripe.com/v1/charges
-  response:
-    body: {string: "{\n  \"error\": {\n    \"message\": \"For 'sepa_debit' payments,\
-        \ we currently require your account to have a bank account in one of the following\
-        \ currencies: eur, usd, gbp, sek, nok, dkk, chf, pln, jpy, hkd, bgn, czk,\
-        \ ron, sgd, aud, nzd, cad, huf, mxn, hrk\",\n    \"param\": \"currency\",\n\
-        \    \"request_log_url\": \"https://dashboard.stripe.com/test/logs/req_fUiqPovXPYHuvc?t=1671833569\"\
-        ,\n    \"type\": \"invalid_request_error\"\n  }\n}\n"}
-    headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Methods: ['GET, POST, HEAD, OPTIONS, DELETE']
-      Access-Control-Allow-Origin: ['*']
-      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required,
-          X-Stripe-Privileged-Session-Required']
-      Access-Control-Max-Age: ['300']
-      Cache-Control: ['no-cache, no-store']
-      Connection: [keep-alive]
-      Content-Length: ['416']
-      Content-Type: [application/json]
-      Date: ['Fri, 23 Dec 2022 22:12:50 GMT']
-      Idempotency-Key: [payin_2270]
-      Original-Request: [req_fUiqPovXPYHuvc]
-      Request-Id: [req_fUiqPovXPYHuvc]
-      Server: [nginx]
-      Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
-      Stripe-Should-Retry: ['false']
-      Stripe-Version: ['2019-08-14']
-    status: {code: 400, message: Bad Request}
-- request:
-    body: amount=10000&currency=eur&customer=cus_N2OGdmqk7gOwWc&description=Liberapay&metadata[payin_id]=2271&source=src_1MIJTwFk4eGpfLOCarFVaLAl&statement_descriptor=Liberapay+2271&expand[0]=balance_transaction
+    body: amount=10000&currency=eur&customer=cus_N2OGdmqk7gOwWc&description=Liberapay&metadata[payin_id]=2270&source=src_1MIJTwFk4eGpfLOCarFVaLAl&statement_descriptor=Liberapay+2270&expand[0]=balance_transaction
     headers: {}
     method: POST
     uri: https://api.stripe.com/v1/charges
@@ -2779,7 +2747,7 @@ interactions:
         Liberapay\",\n  \"destination\": null,\n  \"dispute\": null,\n  \"disputed\"\
         : false,\n  \"failure_balance_transaction\": null,\n  \"failure_code\": null,\n\
         \  \"failure_message\": null,\n  \"fraud_details\": {},\n  \"invoice\": null,\n\
-        \  \"livemode\": false,\n  \"metadata\": {\n    \"payin_id\": \"2271\"\n \
+        \  \"livemode\": false,\n  \"metadata\": {\n    \"payin_id\": \"2270\"\n \
         \ },\n  \"on_behalf_of\": null,\n  \"order\": null,\n  \"outcome\": {\n  \
         \  \"network_status\": \"approved_by_network\",\n    \"reason\": null,\n \
         \   \"risk_level\": \"not_assessed\",\n    \"seller_message\": \"Payment complete.\"\
@@ -2816,7 +2784,7 @@ interactions:
         : \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1MIJTwFk4eGpfLOCarFVaLAl/src_client_secret_jpdzp4TA311MUQfnuQgdtX2c\"\
         \n    },\n    \"statement_descriptor\": null,\n    \"status\": \"chargeable\"\
         ,\n    \"type\": \"sepa_debit\",\n    \"usage\": \"reusable\"\n  },\n  \"\
-        source_transfer\": null,\n  \"statement_descriptor\": \"Liberapay 2271\",\n\
+        source_transfer\": null,\n  \"statement_descriptor\": \"Liberapay 2270\",\n\
         \  \"statement_descriptor_suffix\": null,\n  \"status\": \"pending\",\n  \"\
         transfer_data\": null,\n  \"transfer_group\": null\n}"}
     headers:
@@ -2831,7 +2799,7 @@ interactions:
       Content-Length: ['3709']
       Content-Type: [application/json]
       Date: ['Fri, 23 Dec 2022 22:12:50 GMT']
-      Idempotency-Key: [payin_2271]
+      Idempotency-Key: [payin_2270]
       Original-Request: [req_AIGHuA9bpiHuCr]
       Request-Id: [req_AIGHuA9bpiHuCr]
       Server: [nginx]
@@ -2993,7 +2961,7 @@ interactions:
         Liberapay\",\n  \"destination\": null,\n  \"dispute\": null,\n  \"disputed\"\
         : false,\n  \"failure_balance_transaction\": null,\n  \"failure_code\": null,\n\
         \  \"failure_message\": null,\n  \"fraud_details\": {},\n  \"invoice\": null,\n\
-        \  \"livemode\": false,\n  \"metadata\": {\n    \"payin_id\": \"2271\"\n \
+        \  \"livemode\": false,\n  \"metadata\": {\n    \"payin_id\": \"2270\"\n \
         \ },\n  \"on_behalf_of\": null,\n  \"order\": null,\n  \"outcome\": {\n  \
         \  \"network_status\": \"approved_by_network\",\n    \"reason\": null,\n \
         \   \"risk_level\": \"not_assessed\",\n    \"seller_message\": \"Payment complete.\"\
@@ -3030,7 +2998,7 @@ interactions:
         : \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1MIJTwFk4eGpfLOCarFVaLAl/src_client_secret_jpdzp4TA311MUQfnuQgdtX2c\"\
         \n    },\n    \"statement_descriptor\": null,\n    \"status\": \"chargeable\"\
         ,\n    \"type\": \"sepa_debit\",\n    \"usage\": \"reusable\"\n  },\n  \"\
-        source_transfer\": null,\n  \"statement_descriptor\": \"Liberapay 2271\",\n\
+        source_transfer\": null,\n  \"statement_descriptor\": \"Liberapay 2270\",\n\
         \  \"statement_descriptor_suffix\": null,\n  \"status\": \"pending\",\n  \"\
         transfer_data\": null,\n  \"transfer_group\": null\n}"}
     headers:
@@ -3070,7 +3038,7 @@ interactions:
         : null,\n  \"dispute\": null,\n  \"disputed\": false,\n  \"failure_balance_transaction\"\
         : null,\n  \"failure_code\": null,\n  \"failure_message\": null,\n  \"fraud_details\"\
         : {},\n  \"invoice\": null,\n  \"livemode\": false,\n  \"metadata\": {\n \
-        \   \"payin_id\": \"2271\"\n  },\n  \"on_behalf_of\": null,\n  \"order\":\
+        \   \"payin_id\": \"2270\"\n  },\n  \"on_behalf_of\": null,\n  \"order\":\
         \ null,\n  \"outcome\": {\n    \"network_status\": \"approved_by_network\"\
         ,\n    \"reason\": null,\n    \"risk_level\": \"not_assessed\",\n    \"seller_message\"\
         : \"Payment complete.\",\n    \"type\": \"authorized\"\n  },\n  \"paid\":\
@@ -3108,7 +3076,7 @@ interactions:
         : \"https://hooks.stripe.com/adapter/sepa_debit/file/src_1MIJTwFk4eGpfLOCarFVaLAl/src_client_secret_jpdzp4TA311MUQfnuQgdtX2c\"\
         \n    },\n    \"statement_descriptor\": null,\n    \"status\": \"chargeable\"\
         ,\n    \"type\": \"sepa_debit\",\n    \"usage\": \"reusable\"\n  },\n  \"\
-        source_transfer\": null,\n  \"statement_descriptor\": \"Liberapay 2271\",\n\
+        source_transfer\": null,\n  \"statement_descriptor\": \"Liberapay 2270\",\n\
         \  \"statement_descriptor_suffix\": null,\n  \"status\": \"succeeded\",\n\
         \  \"transfer_data\": null,\n  \"transfer_group\": null\n}"}
     headers:

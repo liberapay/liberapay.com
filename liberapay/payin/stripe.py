@@ -305,7 +305,16 @@ def destination_charge(db, payin, payer, statement_descriptor, update_donor=True
     """
     assert payer.id == payin.payer
     pt = db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin.id,))
-    destination = db.one("SELECT id FROM payment_accounts WHERE pk = %s", (pt.destination,))
+    destination, country = db.one("""
+        SELECT id, country
+          FROM payment_accounts
+         WHERE pk = %s
+    """, (pt.destination,))
+    if country in SEPA:
+        return charge_and_transfer(
+            db, payin, payer, statement_descriptor=statement_descriptor,
+            update_donor=update_donor,
+        )
     amount = payin.amount
     route = ExchangeRoute.from_id(payer, payin.route)
     description = generate_charge_description(payin)
