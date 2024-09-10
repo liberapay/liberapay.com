@@ -2153,6 +2153,12 @@ msgstr "Tóg Ainmniúil"
 msgid "Actual Take"
 msgstr "Tóg Iarbhír"
 
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
+msgstr ""
+
+msgid "Advance"
+msgstr ""
+
 #, fuzzy
 msgid "auto"
 msgstr "gluaisteán"
@@ -3083,6 +3089,9 @@ msgstr "Níl sé ar fáil faoi láthair"
 #, fuzzy
 msgid "Pay by card"
 msgstr "Íoc le cárta"
+
+msgid "Only for donations to SEPA countries"
+msgstr ""
 
 msgid "Euro donations only"
 msgstr "Bronntaí in euro amháin"
@@ -4886,23 +4895,48 @@ msgstr[0] "Is féidir le deontóirí rogha a dhéanamh idir suas le {n} airgeadr
 msgstr[1] ""
 msgstr[2] ""
 
-#, fuzzy, python-brace-format
-msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "Ní féidir síntiúis a fháil ach amháin i gcríocha ina bhfuil próiseálaí íocaíochta amháin ar a laghad ar fáil. Is iad na próiseálaithe íocaíochta faoi láthair tacaíocht {Stripe} agus {PayPal}. Tá roinnt gnéithe ar fáil ach amháin trí Stripe, mar sin tá Liberapay go hiomlán ar fáil do creators i gcríocha le tacaíocht ó Stripe, agus go páirteach ar fáil i gcríocha amháin tacaíocht ó PayPal."
+msgid "Donations can only be received in territories where at least one supported payment processor is available. Moreover, some features are only available in some of the territories supported by a payment processor."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
-msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] "Tá Liberapay ar fáil go hiomlán do chruthaitheoirí i gcríocha {n}:"
+#, python-brace-format
+msgid "The currently supported payment processors are {Stripe} and {PayPal}. You can find a list of the differences between them {link_start}in the “{page_name}” page{link_end}."
+msgstr ""
+
+msgid "Best supported territories"
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
+msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
+msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
-msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] "gan úsáid uatha (airgead = 853969b22957acb45a26404e37a3ef82)"
-msgstr[1] "Tá Liberapay ar fáil go páirteach do creators i 2 críocha:"
-msgstr[2] "Tá Liberapay ar fáil go páirteach do creators i {n} críocha:"
+msgid "Well supported territories"
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
+msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Barely supported territories"
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
+msgid_plural "Liberapay is partly available to creators in the {n} territories listed below, which are supported by PayPal but not by Stripe."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Unsupported territories"
+msgstr ""
+
+msgid "If you don't live or have a registered business in one of the territories listed above, then you currently can't use Liberapay to receive donations. Sorry."
+msgstr ""
 
 #, fuzzy
 msgid "What is Liberapay?"

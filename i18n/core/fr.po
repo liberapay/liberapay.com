@@ -1821,6 +1821,12 @@ msgstr "Part nominale"
 msgid "Actual Take"
 msgstr "Montant réel"
 
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
+msgstr ""
+
+msgid "Advance"
+msgstr ""
+
 msgid "auto"
 msgstr "auto"
 
@@ -2587,6 +2593,9 @@ msgstr "Actuellement indisponible"
 
 msgid "Pay by card"
 msgstr "Payer par carte"
+
+msgid "Only for donations to SEPA countries"
+msgstr ""
 
 msgid "Euro donations only"
 msgstr "Dons en euros uniquement"
@@ -4127,21 +4136,45 @@ msgid_plural "Donors can choose between up to {n} currencies, depending on the p
 msgstr[0] "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgstr[1] "Les donateurs peuvent choisir jusqu'à {n} devises, en fonction des préférences du destinataire et des capacités de l'opérateur de paiement sous-jacent."
 
-#, python-brace-format
-msgid "Donations can only be received in territories where at least one supported payment processor is available. The currently supported payment processors are {Stripe} and {PayPal}. Some features are only available through Stripe, so Liberapay is fully available to creators in territories supported by Stripe, and partially available in territories only supported by PayPal."
-msgstr "Les dons ne peuvent être reçus que dans les territoires où au moins un opérateur de paiement est disponible. Les opérateurs de paiement actuellement supportés sont {Stripe} et {PayPal}. Certaines fonctionnalités ne sont disponibles qu'à travers Stripe, ainsi Liberapay est entièrement disponible pour les créateurs dans les territoires supportés par Stripe, et partiellement disponible dans les territoires qui ne sont supportés que par PayPal."
+msgid "Donations can only be received in territories where at least one supported payment processor is available. Moreover, some features are only available in some of the territories supported by a payment processor."
+msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
-msgid_plural "Liberapay is fully available to creators in {n} territories:"
-msgstr[0] "<unused singular (hash=15422027494f4dee6eed143ece78c0ce)>"
-msgstr[1] "Liberapay est entièrement disponible pour les créateurs dans {n} territoires :"
+msgid "The currently supported payment processors are {Stripe} and {PayPal}. You can find a list of the differences between them {link_start}in the “{page_name}” page{link_end}."
+msgstr ""
+
+msgid "Best supported territories"
+msgstr ""
 
 #, python-brace-format
-msgid "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
-msgid_plural "Liberapay is partially available to creators in {n} territories:"
-msgstr[0] "<unused singular (hash=853969b22957acb45a26404e37a3ef82)>"
-msgstr[1] "Liberapay est partiellement disponible pour les créateurs dans {n} territoires :"
+msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
+msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Well supported territories"
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
+msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Barely supported territories"
+msgstr ""
+
+#, python-brace-format
+msgid "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
+msgid_plural "Liberapay is partly available to creators in the {n} territories listed below, which are supported by PayPal but not by Stripe."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Unsupported territories"
+msgstr ""
+
+msgid "If you don't live or have a registered business in one of the territories listed above, then you currently can't use Liberapay to receive donations. Sorry."
+msgstr ""
 
 msgid "What is Liberapay?"
 msgstr "Qu'est-ce que Liberapay ?"
