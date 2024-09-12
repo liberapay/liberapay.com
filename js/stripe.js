@@ -35,7 +35,7 @@ Liberapay.stripe_form_init = function($form) {
     if (window.Stripe) {
         stripe = Stripe($form.data('stripe-pk'));
         var elements = stripe.elements({
-            onBehalfOf: $form.data('stripe-on-behalf-of'),
+            onBehalfOf: $form.data('stripe-on-behalf-of') || undefined,
         });
         var element_type = $container.data('type');
         var options = {style: {
