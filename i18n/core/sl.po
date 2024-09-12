@@ -459,7 +459,7 @@ msgstr "Z vašega bančnega računa ({partial_account_number}) smo sprožili dir
 
 #, fuzzy, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "{mandate_id}{link_end} Ta operacija se izvaja na podlagi pooblastila {link_start}, ki ste ga podpisali na {acceptance_date} in s katerim ste Liberapay (SEPA upnik {creditor_identifier}) pooblastili, da vaši banki pošlje navodila za obremenitev vašega računa, vaša banka pa, da v skladu s temi navodili obremeni vaš račun."
+msgstr "Ta operacija se izvaja na podlagi pooblastila {link_start}{mandate_id}{link_end}, ki ste ga podpisali na {acceptance_date} in s katerim ste Liberapay (SEPA upnik {creditor_identifier}) pooblastili, da vaši banki pošlje navodila za obremenitev vašega računa, vaša banka pa, da v skladu s temi navodili obremeni vaš račun."
 
 #, fuzzy
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
@@ -3261,7 +3261,7 @@ msgstr "Vaše plačilo je bilo sproženo. Vaši banki bo posredovano pozneje, ko
 
 #, fuzzy, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
-msgstr "Vaša banka lahko to plačilo zavrne.{link_end} {currency} Če niste prepričani, da banka pravilno obdeluje navodila za direktno obremenitev, ji priporočamo, da ji pošljete kopijo pooblastila {link_start}."
+msgstr "Vaša banka lahko to plačilo zavrne. Če niste prepričani, da banka pravilno obdeluje navodila za direktno obremenitev {currency}, ji priporočamo, da ji pošljete kopijo {link_start}pooblastila{link_end}."
 
 #, fuzzy
 msgid "The initialization of a required component has failed. If you use a browser extension that blocks requests, for example NoScript, please make sure it’s allowing requests to the “stripe.com” domain."
