@@ -4,6 +4,7 @@
 [---] text/html
 % if len(payins) == 1
     % set sp = payins[0]
+    % set n_transfers = len(sp.transfers)
     <p>{{ _(
         "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing.",
         amount=sp.amount, payment_date=sp.execution_date, recipient=website.tippee_links(sp.transfers)[0]
@@ -12,6 +13,7 @@
         amount=sp.amount, payment_date=sp.execution_date, recipients=website.tippee_links(sp.transfers)
     ) }}</p>
 % else
+    % set n_transfers = [0]
     <p>{{ ngettext(
         "",
         "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing.",
@@ -20,6 +22,7 @@
     <p>{{ _("The payment dates, amounts and recipients are:") }}</p>
     <ul>
     % for sp in payins
+        % do n_transfers.__setitem__(0, n_transfers[0] + len(sp.transfers))
         <li>{{ _(
             "{date}: {money_amount} to {recipient}",
             date=sp.execution_date, money_amount=sp.amount, recipient=website.tippee_links(sp.transfers)[0]
@@ -29,8 +32,11 @@
         ) }}</li>
     % endfor
     </ul>
+    % set n_transfers = n_transfers[0]
 % endif
 
-<p><a href="{{ participant.url('routes/') }}" style="{{ button_style('primary') }}">{{ _("Add a payment instrument") }}</a></p>
+<p><a href="{{ participant.url('giving/pay/') }}" style="{{ button_style('primary') }}">{{ ngettext(
+    "Renew this donation", "Renew these donations", n_transfers
+) }}</a></p>
 
 <p><a href="{{ participant.url('giving/') }}" style="{{ button_style('default') }}">{{ _("Manage your donations") }}</a></p>
