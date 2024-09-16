@@ -181,18 +181,18 @@ title = _("Payment Instruments")
             % if route.status in ('chargeable', 'pending')
             <span>
                 <button class="btn btn-danger btn-xs" name="remove" value="{{ route.id }}">{{ _("Remove") }}</button>
-            % if not route.is_default
-                <button class="btn btn-primary btn-xs" name="set_as_default" value="{{ route.id }}">{{ _("Set as default") }}</button>
-                % if last_payin and participant.donates_in_multiple_currencies
-                    <button class="btn btn-primary btn-xs"
-                            name="set_as_default_for" value="{{ route.id }}:{{ last_payin.amount.currency }}"
-                            title="{{ _(
-                                'Use this instrument by default for payments in {currency}.',
-                                currency=Currency(last_payin.amount.currency)
-                            ) }}">{{ _(
-                        "Set as default for {currency}", currency=last_payin.amount.currency
-                    ) }}</button>
-                % endif
+            % if route.network == 'stripe-card' and not route.is_default
+            <button class="btn btn-primary btn-xs" name="set_as_default" value="{{ route.id }}">{{ _("Set as default") }}</button>
+            % endif
+            % if last_payin and participant.donates_in_multiple_currencies and not route.is_default_for
+                <button class="btn btn-primary btn-xs"
+                        name="set_as_default_for" value="{{ route.id }}:{{ last_payin.amount.currency }}"
+                        title="{{ _(
+                            'Use this instrument by default for payments in {currency}.',
+                            currency=Currency(last_payin.amount.currency)
+                        ) }}">{{ _(
+                    "Set as default for {currency}", currency=last_payin.amount.currency
+                ) }}</button>
             % endif
             </span>
             % endif
