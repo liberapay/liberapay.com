@@ -6,6 +6,7 @@ from time import sleep
 from pando import json
 
 from ..billing.payday import compute_next_payday_date
+from ..constants import SEPA
 from ..cron import logger
 from ..exceptions import (
     AccountSuspended, BadDonationCurrency, MissingPaymentAccount, NoSelfTipping,
@@ -282,7 +283,29 @@ def execute_scheduled_payins():
                   WHERE r.participant = sp.payer
                     AND r.status = 'chargeable'
                     AND r.network::text LIKE 'stripe-%%'
-                    AND ( sp.amount::currency = 'EUR' OR r.network <> 'stripe-sdd' )
+                    AND ( r.network <> 'stripe-sdd' OR
+                          sp.amount::currency = 'EUR' AND
+                          ( SELECT count(*) > 0
+                              FROM json_array_elements(sp.transfers) tr
+                              JOIN LATERAL (
+                                       SELECT 1
+                                         FROM payment_accounts a
+                                        WHERE ( a.participant = (tr->>'tippee')::bigint OR
+                                                a.participant IN (
+                                                    SELECT t.member
+                                                      FROM current_takes t
+                                                     WHERE t.team = (tr->>'tippee')::bigint
+                                                       AND t.amount <> 0
+                                                )
+                                              )
+                                          AND a.is_current IS TRUE
+                                          AND a.verified IS TRUE
+                                          AND a.charges_enabled IS TRUE
+                                          AND a.country IN %(SEPA)s
+                                        LIMIT 1
+                                   ) ON true
+                          )
+                        )
                ORDER BY r.is_default_for = sp.amount::currency DESC NULLS LAST
                       , r.is_default DESC NULLS LAST
                       , r.ctime DESC
@@ -296,7 +319,7 @@ def execute_scheduled_payins():
            AND p.is_suspended IS NOT TRUE
       GROUP BY p.id
       ORDER BY p.id
-    """)
+    """, dict(SEPA=SEPA,))
     for payer, scheduled_payins in rows:
         scheduled_payins[:] = [Object(**sp) for sp in scheduled_payins]
         for sp in scheduled_payins:
@@ -319,7 +342,7 @@ def execute_scheduled_payins():
         if transfers:
             payin_amount = sum(tr['amount'] for tr in transfers)
             proto_transfers = []
-            sepa_only = len(transfers) > 1
+            sepa_only = len(transfers) > 1 or route.network == 'stripe-sdd'
             for tr in list(transfers):
                 try:
                     proto_transfers.extend(resolve_tip(
