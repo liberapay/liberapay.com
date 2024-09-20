@@ -318,9 +318,9 @@ title = _("Funding your donations")
                     % elif not sepa
                     <small class="text-danger">{{ _("Only for donations to SEPA countries") }}</small>
                     % elif payment.currency != 'EUR'
-                    <small class="text-warning">{{ _("Euro donations only") }}</small>
+                    <small class="text-warning">{{ _("Only for donations in euros") }}</small>
                     % else
-                    <small class="{{ 'text-warning' if warn else '' }}">{{ _("Euro bank accounts only") }}</small>
+                    <small class="{{ 'text-warning' if warn else '' }}">{{ _("Only euro bank accounts") }}</small>
                     % endif
                 </h4>
                 % if possible

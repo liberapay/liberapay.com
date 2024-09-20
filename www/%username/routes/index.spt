@@ -216,15 +216,13 @@ title = _("Payment Instruments")
                 ><span class="sr-only">{{ _("Add a card") }}</span></a>
         </div>
     </div>
-    <div class="panel panel-default {{ '' if has_euro_donations else 'muted' }}">
+    <div class="panel panel-default {{ '' if has_euro_donations and participant.guessed_country in constants.EUROZONE else 'muted' }}">
         <div class="panel-body overlaid">
             {{ icon('bank-account', size=32) }}
-            <h4>{{ _("Bank Account") }}<br>
+            <h4>{{ _("Euro Bank Account") }}<br>
                 <small>
-                    <span class="text-{{ 'info' if participant.guessed_country in constants.EUROZONE else 'warning' }}">{{
-                        _("Euro bank accounts only") }}</span><br>
-                    <span class="text-{{ 'info' if has_euro_donations else 'warning' }}">{{
-                        _("Euro donations only") }}</span>
+                    <span class="text-warning">{{
+                        _("Only for donations in euros to recipients in SEPA countries") }}</span><br>
                 </small>
             </h4>
             <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-sdd"
