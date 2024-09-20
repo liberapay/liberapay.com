@@ -357,7 +357,7 @@ title = "Email Domains"
             <tbody>
             % for d in email_domains
                 <tr>
-                    <td><a href="?domain={{ d.domain }}">{{ d.domain }}</a></td>
+                    <td><a class="break-word-anywhere" href="?domain={{ d.domain }}">{{ d.domain }}</a></td>
                     <td class="text-center">{{ d.n_addresses }}</td>
                     % set percent_verified = d.n_verified / d.n_addresses if d.n_addresses else 1
                     <td class="text-center {{ 'danger' if percent_verified <= 0.2 else 'warning' if percent_verified <= 0.5 else '' }}">{{ d.n_verified }}</td>
