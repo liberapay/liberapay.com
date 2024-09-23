@@ -127,15 +127,15 @@ title = "Email Addresses"
 </form>
 
 % if request.method != 'POST'
-    <h3>Bounces and complaints</h3>
+    <h3>Blocked addresses</h3>
     % if blacklist_entries
         <form action="" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         % for e in blacklist_entries
             <p>
                 <button class="link" name="email" value="{{ e.address }}">{{ e.address }}</button> :
-                {{ "a complaint was received" if e.reason == 'complaint' else "a message bounced" }}
-                at {{ locale.format_time(e.ts.time()) }} on {{ locale.format_date(e.ts.date(), format='long') }}.
+                blocked since {{ locale.format_time(e.ts.time()) }} on {{ locale.format_date(e.ts.date(), format='long') }},
+                reason = {{ repr(e.reason) }}
             </p>
         % endfor
         </form>
