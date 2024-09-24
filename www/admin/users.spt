@@ -53,6 +53,7 @@ if request.method == 'POST':
 last_showed = request.qs.get_int('last_showed', default=None)
 mode = request.qs.get('mode', 'all')
 if mode == 'all':
+    marked_as = request.qs.get('marked_as')
     participants = website.db.all("""
         SELECT p
              , c.name AS c_name
@@ -159,10 +160,11 @@ if mode == 'all':
      LEFT JOIN communities c ON c.participant = p.id
      LEFT JOIN feedback f ON f.participant = p.id
          WHERE coalesce(p.id < %s, true)
+           AND coalesce(p.marked_as = %s, true)
            AND (p.status <> 'stub' OR p.receiving > 0)
       ORDER BY p.id DESC
          LIMIT 25
-    """, (last_showed,))
+    """, (last_showed, marked_as))
     page_end = participants[-1][0].id if participants else None
 elif mode == 'new_recipients':
     participants = website.db.all("""
