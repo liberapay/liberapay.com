@@ -222,11 +222,11 @@ def test_email_address(email: NormalizedEmailAddress, timeout: float = 30.0):
                 website.tell_sentry(e)
                 exceptions.append(e)
             n_attempts += 1
-            if n_attempts >= 3:
+            if n_attempts >= 10:
                 break
             time_elapsed = time.monotonic() - start_time
-            timeout = website.app_conf.socket_timeout - time_elapsed
-            if timeout <= 3:
+            timeout -= time_elapsed
+            if timeout < 2:
                 break
         if not success:
             if n_ip_addresses == 0:
