@@ -22,6 +22,7 @@ def attach_environ_to_request(environ, request):
     except UnicodeDecodeError:
         request.hostname = ''
     request.subdomain = None
+    request.save_data = request.headers.get(b'Save-Data') == b'on'
 
 
 def create_response_object(request, website):
