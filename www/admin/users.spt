@@ -145,6 +145,8 @@ if mode == 'all':
                    FROM events e
                   WHERE e.participant = p.id
                     AND e.type = 'sign_up_request'
+               ORDER BY e.ts
+                  LIMIT 1
                ) AS sign_up_request
              , ( SELECT row_to_json(e)
                    FROM ( SELECT e.*, p2.username AS recorder_name
