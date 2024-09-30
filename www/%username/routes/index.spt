@@ -23,7 +23,9 @@ if request.method == 'POST':
         try:
             route_id, currency = request.body['set_as_default_for'].split(':')
             route_id = int(route_id)
-            if currency not in constants.CURRENCIES:
+            if currency == '':
+                currency = None
+            elif currency not in constants.CURRENCIES:
                 raise ValueError(currency)
         except ValueError:
             raise response.invalid_input(request.body['set_as_default_for'], 'set_as_default_for', 'body')
@@ -181,18 +183,27 @@ title = _("Payment Instruments")
             % if route.status in ('chargeable', 'pending')
             <span>
                 <button class="btn btn-danger btn-xs" name="remove" value="{{ route.id }}">{{ _("Remove") }}</button>
-            % if not route.is_default
-                <button class="btn btn-primary btn-xs" name="set_as_default" value="{{ route.id }}">{{ _("Set as default") }}</button>
-                % if last_payin and participant.donates_in_multiple_currencies
-                    <button class="btn btn-primary btn-xs"
-                            name="set_as_default_for" value="{{ route.id }}:{{ last_payin.amount.currency }}"
-                            title="{{ _(
-                                'Use this instrument by default for payments in {currency}.',
-                                currency=Currency(last_payin.amount.currency)
-                            ) }}">{{ _(
-                        "Set as default for {currency}", currency=last_payin.amount.currency
-                    ) }}</button>
-                % endif
+            % if route.network == 'stripe-card' and not route.is_default
+            <button class="btn btn-primary btn-xs" name="set_as_default" value="{{ route.id }}">{{ _("Set as default") }}</button>
+            % endif
+            % if route.is_default_for
+                <button class="btn btn-warning btn-xs"
+                        name="set_as_default_for" value="{{ route.id }}:"
+                        title="{{ _(
+                            'Stop using this instrument by default for payments in {currency}.',
+                            currency=Currency(last_payin.amount.currency)
+                        ) }}">{{ _(
+                    "Unset as default for {currency}", currency=last_payin.amount.currency
+                ) }}</button>
+            % elif route.network != 'stripe-card' and last_payin and participant.donates_in_multiple_currencies
+                <button class="btn btn-primary btn-xs"
+                        name="set_as_default_for" value="{{ route.id }}:{{ last_payin.amount.currency }}"
+                        title="{{ _(
+                            'Use this instrument by default for payments in {currency}.',
+                            currency=Currency(last_payin.amount.currency)
+                        ) }}">{{ _(
+                    "Set as default for {currency}", currency=last_payin.amount.currency
+                ) }}</button>
             % endif
             </span>
             % endif
@@ -216,15 +227,13 @@ title = _("Payment Instruments")
                 ><span class="sr-only">{{ _("Add a card") }}</span></a>
         </div>
     </div>
-    <div class="panel panel-default {{ '' if has_euro_donations else 'muted' }}">
+    <div class="panel panel-default {{ '' if has_euro_donations and participant.guessed_country in constants.EUROZONE else 'muted' }}">
         <div class="panel-body overlaid">
             {{ icon('bank-account', size=32) }}
-            <h4>{{ _("Bank Account") }}<br>
+            <h4>{{ _("Euro Bank Account") }}<br>
                 <small>
-                    <span class="text-{{ 'info' if participant.guessed_country in constants.EUROZONE else 'warning' }}">{{
-                        _("Euro bank accounts only") }}</span><br>
-                    <span class="text-{{ 'info' if has_euro_donations else 'warning' }}">{{
-                        _("Euro donations only") }}</span>
+                    <span class="text-warning">{{
+                        _("Only for donations in euros to recipients in SEPA countries") }}</span><br>
                 </small>
             </h4>
             <a class="overlay" href="{{ participant.path('routes/add') }}?type=stripe-sdd"

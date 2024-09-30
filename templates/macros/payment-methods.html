@@ -22,8 +22,8 @@
     username=tippee.username
 ) if tippee.payment_providers == 0 else _(
     "Donations to {username} can be paid using a credit or debit card "
-    "({list_of_card_brands}), or by direct debit of a Euro bank account "
-    "(for donations in Euro only).",
+    "({list_of_card_brands}), or by direct debit of a euro bank account "
+    "(for donations in euro only).",
     username=tippee.username,
     list_of_card_brands=["American Express", "Cartes Bancaires", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
 ) if tippee.payment_providers == 1 else _(
@@ -31,7 +31,7 @@
     username=tippee.username
 ) if tippee.payment_providers == 2 else _(
     "Donations to {username} can be paid using: a credit or debit card "
-    "({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or "
+    "({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or "
     "a PayPal account.",
     username=tippee.username,
     list_of_card_brands=["American Express", "Cartes Bancaires", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
