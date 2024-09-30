@@ -13,6 +13,9 @@
     <link rel="icon" href="{{ website.asset('liberapay/icon-v2_black.16.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ website.asset('liberapay/icon-v2_black-on-yellow.200.png') }}">
     <link rel="stylesheet" href="{{ website.asset('bootstrap/css/bootstrap.css') }}">
+    % if not request.save_data
+    <link rel="stylesheet" href="{{ website.asset('fonts.css') }}" type="text/css">
+    % endif
     <link rel="stylesheet" href="{{ website.asset('base.css') }}" type="text/css">
     % block head_alternates
     % if request.method in constants.SAFE_METHODS and response.code == 200

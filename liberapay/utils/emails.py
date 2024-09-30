@@ -222,11 +222,11 @@ def test_email_address(email: NormalizedEmailAddress, timeout: float = 30.0):
                 website.tell_sentry(e)
                 exceptions.append(e)
             n_attempts += 1
-            if n_attempts >= 3:
+            if n_attempts >= 10:
                 break
             time_elapsed = time.monotonic() - start_time
-            timeout = website.app_conf.socket_timeout - time_elapsed
-            if timeout <= 3:
+            timeout -= time_elapsed
+            if timeout < 2:
                 break
         if not success:
             if n_ip_addresses == 0:
@@ -372,20 +372,26 @@ def test_email_server(ip_address: str, email=None, timeout=None) -> None:
             enhanced_code, msg = parse_SMTP_reply(msg)
             if enhanced_code:
                 cls, subject, detail = enhanced_code.split('.')
-                recipient_rejected = cls in '45' and (
+            else:
+                cls = subject = detail = None
+            recipient_rejected = (
+                cls and cls in '45' and (
                     # Address errors
                     subject == '1' and detail in '12346' or
                     # Mailbox errors
-                    subject == '2' and detail in '124' or
-                    # gamil.com SMTP server
-                    msg.startswith("sorry, no mailbox here by that name") or
-                    # Microsoft's SMTP server
-                    msg.startswith("Requested action not taken: mailbox unavailable") or
-                    # Tutanota's SMTP server
-                    msg.endswith("Recipient address rejected: Recipient not found")
-                )
-                if recipient_rejected:
-                    raise EmailAddressRejected(email, msg, ip_address)
+                    subject == '2' and detail in '124'
+                ) or
+                # gamil.com SMTP server
+                msg.startswith("sorry, no mailbox here by that name") or
+                # Microsoft's SMTP server
+                msg.startswith("Requested action not taken: mailbox unavailable") or
+                # OpenSMTPD
+                msg.startswith("Invalid recipient: ") or
+                # Tutanota's SMTP server
+                msg.endswith("Recipient address rejected: Recipient not found")
+            )
+            if recipient_rejected:
+                raise EmailAddressRejected(email, msg, ip_address)
     finally:
         try:
             smtp.close()

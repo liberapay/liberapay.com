@@ -220,7 +220,13 @@ class ExchangeRoute(Model):
     def invalidate(self, obj=None):
         if self.network.startswith('stripe-'):
             if self.address.startswith('pm_'):
-                stripe.PaymentMethod.detach(self.address)
+                try:
+                    stripe.PaymentMethod.detach(self.address)
+                except stripe.error.InvalidRequestError as e:
+                    if "The payment method you provided is not attached " in str(e):
+                        pass
+                    else:
+                        raise
             else:
                 try:
                     source = stripe.Source.retrieve(self.address).detach()
