@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2024-09-15 02:09+0000\n"
+"Last-Translator: Suguru Hirahara <shirahara@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.8-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -839,9 +841,9 @@ msgstr "ユーザー名 '{0}' は長すぎます。"
 msgid "The username '{0}' contains invalid characters."
 msgstr "ユーザー名 '{0}' には使用できない文字列が含まれています。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
-msgstr "ユーザー名 '{0}' は純粋な数字です。これは許されない。"
+msgstr "ユーザー名 '{0}' は数字のみから構成されています。これは許可されません。"
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
@@ -989,17 +991,17 @@ msgstr "ユーザー {0} は寄付を受け付けていません。"
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username}は{rejected_currency}での寄付を受け付けていません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
-msgstr "{username} は秘密の寄付を承認しなくなった。"
+msgstr "{username} は秘密の寄付を受け付けなくなりました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
-msgstr "{username} 非公開寄付の承認は終了した。"
+msgstr "{username} は非公開の寄付を受け付けなくなりました。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
-msgstr "{username} 公開寄付の承認は終了した。"
+msgstr "{username} は公開の寄付を受け付けなくなりました。"
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
@@ -1038,9 +1040,9 @@ msgstr "現在受取人のアカウントが利用停止中のため、この支
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "受取人のアカウントは寄付を受け取る準備ができていないため、{recipient}さんへの支払いを処理できません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr "{username} {country} からの寄付は承認していない。"
+msgstr "{username} は {country} からの寄付は受け付けていません。"
 
 #, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
