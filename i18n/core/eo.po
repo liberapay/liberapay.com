@@ -1704,16 +1704,16 @@ msgid "{username} hasn't configured any payment method yet, so your donation can
 msgstr "{username} ne ankoraŭ agordis ajnan pagmetodon, do fakte via donaco ne povas esti traktita nun. Ni sciigos vin kiam pago eblos."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donacoj al {username} povas esti pagataj per kreditkarto aŭ debetkarto ({list_of_card_brands}), aŭ per rekta debeto de eŭra bankokonto (nur por eŭraj donacoj)."
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
+msgstr ""
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donacoj al {username} estas traktitaj per PayPal."
 
 #, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donacoj al {username} povas esti pagataj per: kreditkarto aŭ debetkarto ({list_of_card_brands}), eŭra bankokonto (SEPA rekta debeto) aŭ PayPal-konto."
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
 
 msgid "Payment Card"
 msgstr "Pagkarto"
@@ -2597,11 +2597,11 @@ msgstr "Pagi per karto"
 msgid "Only for donations to SEPA countries"
 msgstr "Nur por donacoj al SEPA-landoj"
 
-msgid "Euro donations only"
-msgstr "Nur eŭraj donacoj"
+msgid "Only for donations in euros"
+msgstr ""
 
-msgid "Euro bank accounts only"
-msgstr "Nur eŭraj bankokontoj"
+msgid "Only euro bank accounts"
+msgstr ""
 
 msgid "Pay by direct debit"
 msgstr "Pagi per rekta debeto"
@@ -3370,8 +3370,8 @@ msgstr "Donacantoj ne bezonas konekti iun ian pagkonton ĉi-sube, ili nur estas 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Ni rekomendas konekti je kaj Stripe kaj PayPal, se ili ambaŭ estas disponebla en via lando."
 
-msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Per Stripe viaj donacantoj povas pagi per karto rekte en la Liberapay-retejo. (Rektaj debetoj estas nun subtenataj nur el eŭraj bankokontoj.)"
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
+msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3651,6 +3651,14 @@ msgid "Set as default"
 msgstr "Uzi implicite"
 
 #, python-brace-format
+msgid "Stop using this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Unset as default for {currency}"
+msgstr ""
+
+#, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
 msgstr "Implicite uzi ĉi tiun pagilon por pagoj per {currency}."
 
@@ -3666,6 +3674,12 @@ msgstr "Aldoni pagilon:"
 
 msgid "Add a card"
 msgstr "Aldoni karton"
+
+msgid "Euro Bank Account"
+msgstr ""
+
+msgid "Only for donations in euros to recipients in SEPA countries"
+msgstr ""
 
 msgid "Add a bank account"
 msgstr "Aldoni bankokonton"
@@ -4061,8 +4075,8 @@ msgid "See the “{page_name}” page."
 msgstr "Vidu la “{page_name}” paĝo."
 
 #, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "La disponeblaj pagmetodoj dependas de kiuj provizantoj de pagservo estas subtenataj de la ricevanto. Se pago estas traktata per Stripe, tiam la plej multo de la kreditkartoj kaj debetkartoj ({list_of_card_brands}) estas akceptataj, kaj ankaŭ SEPA rektaj debetoj (nur por eŭra donacoj). Se estas pago per PayPal, tiam ankaŭ eblas pagi per diversaj manieroj, tamen la donacanto bezonas krei PayPal-konton."
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "Kiom estas la pago-peradkostoj?"
@@ -4155,10 +4169,10 @@ msgid "Well supported territories"
 msgstr "Bone subtenataj teritorioj"
 
 #, python-brace-format
-msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
-msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
-msgstr[0] "<neuzata singularo (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
-msgstr[1] "Liberapay ankaŭ disponeblas por kreintoj en la {n} teritorioj listigitaj malsupre. Tamen donacoj irantaj al tiuj teritorioj ne povas esti grupigitaj por malaltigi la pago-peradkostojn kaj la eŭro-pagmetodo de rekta debeto ne estas disponebla por donacantoj."
+msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Barely supported territories"
 msgstr "Apenaŭ subtenataj teritorioj"

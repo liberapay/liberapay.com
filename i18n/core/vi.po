@@ -1961,17 +1961,17 @@ msgstr "Xem thêm"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} chưa định cấu hình bất kỳ phương thức thanh toán nào, vì vậy, khoản đóng góp của bạn thực sự không thể được xử lý ngay bây giờ. Chúng tôi sẽ thông báo cho bạn khi có thể thanh toán."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Các khoản đóng góp cho {username} có thể được thanh toán bằng thẻ tín dụng hoặc thẻ ghi nợ ({list_of_card_brands}) hoặc bằng cách ghi nợ trực tiếp vào tài khoản ngân hàng Euro (chỉ dành cho các khoản đóng góp bằng Euro)."
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Các khoản đóng góp cho {username} được xử lý thông qua PayPal."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Các khoản đóng góp cho {username} có thể được thanh toán bằng: thẻ tín dụng hoặc thẻ ghi nợ ({list_of_card_brands}), tài khoản ngân hàng Euro (Ghi nợ trực tiếp SEPA) hoặc tài khoản PayPal."
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "Payment Card"
@@ -3039,13 +3039,11 @@ msgstr "Thanh toán bằng thẻ"
 msgid "Only for donations to SEPA countries"
 msgstr "Chỉ dành cho các khoản quyên góp cho các quốc gia SEPA"
 
-#, fuzzy
-msgid "Euro donations only"
-msgstr "Chỉ quyên góp bằng đồng Euro"
+msgid "Only for donations in euros"
+msgstr ""
 
-#, fuzzy
-msgid "Euro bank accounts only"
-msgstr "Chỉ tài khoản ngân hàng Euro"
+msgid "Only euro bank accounts"
+msgstr ""
 
 #, fuzzy
 msgid "Pay by direct debit"
@@ -3941,9 +3939,8 @@ msgstr "Người đóng góp không cần kết nối bất kỳ tài khoản th
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Chúng tôi khuyên bạn nên kết nối cả Stripe và PayPal nếu cả hai đều có sẵn ở quốc gia của bạn."
 
-#, fuzzy
-msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Với Stripe, các nhà tài trợ của bạn có thể thanh toán bằng thẻ hoặc ghi nợ trực tiếp trực tiếp từ trang web Liberapay. (Ghi nợ trực tiếp hiện chỉ được hỗ trợ từ tài khoản ngân hàng Euro.)"
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Account ID: {0}"
@@ -4247,6 +4244,14 @@ msgstr "Công cụ thanh toán này vẫn chưa được sử dụng."
 msgid "Set as default"
 msgstr "Chọn làm mặc định"
 
+#, python-brace-format
+msgid "Stop using this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Unset as default for {currency}"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
 msgstr "Sử dụng công cụ này theo mặc định để thanh toán trong {currency}."
@@ -4266,6 +4271,12 @@ msgstr "Thêm cách thanh toán"
 #, fuzzy
 msgid "Add a card"
 msgstr "Thêm một thẻ"
+
+msgid "Euro Bank Account"
+msgstr ""
+
+msgid "Only for donations in euros to recipients in SEPA countries"
+msgstr ""
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4727,9 +4738,9 @@ msgstr "Những quốc gia và đơn vị tiền tệ nào được hỗ trợ?"
 msgid "See the “{page_name}” page."
 msgstr "Xem trang “{page_name}”."
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Các phương thức thanh toán khả dụng tùy thuộc vào việc người nhận hỗ trợ bộ xử lý thanh toán nào. Nếu một khoản thanh toán được xử lý bởi Stripe, thì hầu hết các thẻ tín dụng và thẻ ghi nợ ({list_of_card_brands}) đều được chấp nhận, cũng như Ghi nợ Trực tiếp SEPA (chỉ dành cho các khoản đóng góp bằng Euro). Nếu thanh toán qua PayPal, thì có thể thanh toán theo nhiều cách khác nhau, tuy nhiên nhà tài trợ cần phải có hoặc tạo tài khoản PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "What are the payment processing fees?"
@@ -4837,10 +4848,10 @@ msgstr[0] "Những người sáng tạo ở {n} vùng lãnh thổ này được 
 msgid "Well supported territories"
 msgstr "Lãnh thổ được hỗ trợ tốt"
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
-msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
-msgstr[0] "Liberapay cũng khả dụng cho những người sáng tạo ở {n} vùng lãnh thổ được liệt kê bên dưới. Tuy nhiên, các khoản quyên góp đến những vùng lãnh thổ đó không thể được nhóm lại để giảm phí xử lý thanh toán và phương thức thanh toán ghi nợ trực tiếp bằng Euro không khả dụng cho những người quyên góp."
+#, python-brace-format
+msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
+msgstr[0] ""
 
 #, fuzzy
 msgid "Barely supported territories"

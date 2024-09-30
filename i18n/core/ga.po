@@ -2008,17 +2008,17 @@ msgstr "Féach ar Tuilleadh"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "Níl aon mhodh íocaíochta cumraithe ag {username} go fóill, mar sin ní féidir do shíntiús a phróiseáil faoi láthair. Cuirfimid in iúl duit nuair a bheidh íocaíocht indéanta."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Is féidir síntiúis chuig {username} a íoc le cárta creidmheasa nó dochair ({list_of_card_brands}), nó trí dhochar díreach ó chuntas bainc Euro (le haghaidh deonachán in Euro amháin)."
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Déantar síntiúis chuig {username} a phróiseáil trí PayPal."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Is féidir síntiúis chuig {username} a íoc trí úsáid a bhaint as: cárta creidmheasa nó dochair ({list_of_card_brands}), cuntas bainc Euro (Dochar Díreach SEPA), nó cuntas PayPal."
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "Payment Card"
@@ -3096,12 +3096,11 @@ msgstr "Íoc le cárta"
 msgid "Only for donations to SEPA countries"
 msgstr "Le haghaidh deonacháin do thíortha SEPA amháin"
 
-msgid "Euro donations only"
-msgstr "Bronntaí in euro amháin"
+msgid "Only for donations in euros"
+msgstr ""
 
-#, fuzzy
-msgid "Euro bank accounts only"
-msgstr "Cuntais bhainc euro amháin"
+msgid "Only euro bank accounts"
+msgstr ""
 
 #, fuzzy
 msgid "Pay by direct debit"
@@ -4008,9 +4007,8 @@ msgstr "Ní gá do dheontóirí aon chuntas íocaíochta a nascadh thíos, ní g
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Molaimid Stripe agus PayPal a nascadh má tá siad araon ar fáil i do thír féin."
 
-#, fuzzy
-msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Le Stripe is féidir le do dheontóirí íoc le cárta nó dochar díreach ó shuíomh Gréasáin Liberapay. (Ní thacaítear le dochar díreach faoi láthair ach ó chuntais bhainc an Euro.)"
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Account ID: {0}"
@@ -4321,6 +4319,14 @@ msgstr "Níor úsáideadh an ionstraim íocaíochta seo fós."
 msgid "Set as default"
 msgstr "Socraigh mar réamhshocrú"
 
+#, python-brace-format
+msgid "Stop using this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Unset as default for {currency}"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
 msgstr "Bain úsáid as an ionstraim seo de réir réamhshocraithe le haghaidh íocaíochtaí i {currency}."
@@ -4340,6 +4346,12 @@ msgstr "Cuir ionstraim íocaíochta leis:"
 #, fuzzy
 msgid "Add a card"
 msgstr "Cuir cárta leis"
+
+msgid "Euro Bank Account"
+msgstr ""
+
+msgid "Only for donations in euros to recipients in SEPA countries"
+msgstr ""
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4807,9 +4819,9 @@ msgstr "Cad iad na tíortha agus na hairgeadraí a dtugtar tacaíocht dóibh?"
 msgid "See the “{page_name}” page."
 msgstr "Féach ar an leathanach \"{page_name}\"."
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Braitheann na modhanna íocaíochta atá ar fáil ar na próiseálaithe íocaíochta a dtugann an faighteoir tacaíocht dóibh. Má phróiseálann Stripe íocaíocht, glactar le formhór na gcártaí creidmheasa agus dochair ({list_of_card_brands}), chomh maith le Dochair Dhíreacha SEPA (le haghaidh deonacháin Euro amháin). Má dhéantar íocaíocht trí PayPal, is féidir íoc ar bhealaí éagsúla, ach ní mór don deontóir cuntas PayPal a bheith aige nó a chruthú."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "What are the payment processing fees?"
@@ -4921,12 +4933,12 @@ msgstr[2] "Baineann cruthaitheoirí sna {n} gcríocha seo leas as gnéithe uile 
 msgid "Well supported territories"
 msgstr "Críocha a bhfuil tacaíocht mhaith acu"
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
-msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
-msgstr[0] "<uathúil gan úsáid (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
-msgstr[1] "Tá Liberapay ar fáil freisin do chruthaitheoirí sa dá chríoch atá liostaithe thíos. Mar sin féin, ní féidir síntiúis a théann chuig na críocha sin a ghrúpáil chun na táillí próiseála íocaíochta a ísliú, agus níl modh íocaíochta dochair dhírigh an Euro ar fáil do na deontóirí."
-msgstr[2] "Tá Liberapay ar fáil freisin do chruthaitheoirí sna {n} críocha atá liostaithe thíos. Mar sin féin, ní féidir síntiúis a théann chuig na críocha sin a ghrúpáil chun na táillí próiseála íocaíochta a ísliú, agus níl modh íocaíochta dochair dhírigh an Euro ar fáil do na deontóirí."
+#, python-brace-format
+msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, fuzzy
 msgid "Barely supported territories"

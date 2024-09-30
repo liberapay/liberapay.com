@@ -2029,17 +2029,17 @@ msgstr "Oglejte si več"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} še ni konfiguriral nobenega načina plačila, zato vaše donacije trenutno ni mogoče obdelati. Ko bo plačilo mogoče, vas bomo o tem obvestili."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "Donacije na {username} lahko plačate s kreditno ali debetno kartico ({list_of_card_brands}) ali z direktno obremenitvijo evrskega bančnega računa (samo za donacije v eurih)."
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donacije za {username} se obdelujejo prek sistema PayPal."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donacije za {username} lahko plačate s kreditno ali debetno kartico ({list_of_card_brands}), bančnim računom v evrih (direktna obremenitev SEPA) ali računom PayPal."
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "Payment Card"
@@ -3143,13 +3143,11 @@ msgstr "Plačilo s kartico"
 msgid "Only for donations to SEPA countries"
 msgstr "Samo za donacije v države SEPA"
 
-#, fuzzy
-msgid "Euro donations only"
-msgstr "Samo donacije v evrih"
+msgid "Only for donations in euros"
+msgstr ""
 
-#, fuzzy
-msgid "Euro bank accounts only"
-msgstr "Samo bančni računi v eurih"
+msgid "Only euro bank accounts"
+msgstr ""
 
 #, fuzzy
 msgid "Pay by direct debit"
@@ -4075,9 +4073,8 @@ msgstr "Donatorjem ni treba povezati nobenega spodnjega plačilnega računa, saj
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Priporočamo, da povežete Stripe in PayPal, če sta na voljo v vaši državi."
 
-#, fuzzy
-msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "S storitvijo Stripe lahko vaši donatorji plačujejo s kartico ali direktno bremenitvijo neposredno s spletnega mesta Liberapay. (Neposredne bremenitve so trenutno podprte le z bančnih računov v evrih.)"
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "Account ID: {0}"
@@ -4391,6 +4388,14 @@ msgstr "Ta plačilni instrument še ni bil uporabljen."
 msgid "Set as default"
 msgstr "Nastavljeno kot privzeto"
 
+#, python-brace-format
+msgid "Stop using this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Unset as default for {currency}"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
 msgstr "Ta instrument privzeto uporabljajte za plačila na spletnem mestu {currency}."
@@ -4410,6 +4415,12 @@ msgstr "Dodajte plačilni instrument:"
 #, fuzzy
 msgid "Add a card"
 msgstr "Dodajanje kartice"
+
+msgid "Euro Bank Account"
+msgstr ""
+
+msgid "Only for donations in euros to recipients in SEPA countries"
+msgstr ""
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4883,9 +4894,9 @@ msgstr "Katere države in valute so podprte?"
 msgid "See the “{page_name}” page."
 msgstr "Oglejte si stran \"{page_name}\"."
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Razpoložljivi načini plačila so odvisni od tega, katere plačilne procesorje podpira prejemnik. Če plačilo obdeluje Stripe, je sprejeta večina kreditnih in debetnih kartic ({list_of_card_brands}) ter direktne obremenitve SEPA (samo za donacije v evrih). Če plačilo poteka prek sistema PayPal, potem je mogoče plačevati na različne načine, vendar mora donator imeti ali ustvariti račun PayPal."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "What are the payment processing fees?"
@@ -4999,13 +5010,13 @@ msgstr[3] "Ustvarjalci na teh ozemljih {n} imajo koristi od vseh funkcij Liberap
 msgid "Well supported territories"
 msgstr "Dobro podprta območja"
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
-msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
+#, python-brace-format
+msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] "Liberapay je na voljo tudi ustvarjalcem na spodaj navedenih ozemljih {n}. Vendar pa donacij, namenjenih na ta ozemlja, ni mogoče združiti v skupine, da bi znižali stroške obdelave plačil, prav tako pa donatorjem ni na voljo način plačila z direktno obremenitvijo v evrih."
+msgstr[3] ""
 
 #, fuzzy
 msgid "Barely supported territories"

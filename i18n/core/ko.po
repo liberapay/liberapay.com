@@ -1703,17 +1703,17 @@ msgstr "더 보기"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} 님이 아직 지불 방식을 명시하지 않으셨기 때문에 아직 기부금을 처리할 수 없습니다. 결제가 가능해지면 다시 연락드리겠습니다."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a Euro bank account (for donations in Euro only)."
-msgstr "{username}에 대한 기부는 신용카드 또는 직불카드({list_of_card_brands})를 사용하거나 유로 은행 계좌의 자동 이체를 통해 지불할 수 있습니다(유로 기부에만 해당)."
+#, python-brace-format
+msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
+msgstr ""
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "{username} 님에 대한 기부는 PayPal을 통해 처리됩니다."
 
-#, fuzzy, python-brace-format
-msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a Euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "{username} 님에 대한 기부는 신용카드 또는 직불카드 ({list_of_card_brands}), 유로 은행 계좌 (SEPA Direct Debit), 또는 PayPal을 통해 가능합니다."
+#, python-brace-format
+msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
+msgstr ""
 
 #, fuzzy
 msgid "Payment Card"
@@ -2607,11 +2607,11 @@ msgstr "카드로 지불"
 msgid "Only for donations to SEPA countries"
 msgstr "SEPA 국가에 기부하는 경우에만 해당됩니다."
 
-msgid "Euro donations only"
-msgstr "유로 기부금 전용"
+msgid "Only for donations in euros"
+msgstr ""
 
-msgid "Euro bank accounts only"
-msgstr "유럽 계좌 전용"
+msgid "Only euro bank accounts"
+msgstr ""
 
 msgid "Pay by direct debit"
 msgstr "계좌 이체로 지불"
@@ -3399,8 +3399,8 @@ msgstr "기부자는 아래의 결제 계좌를 연결할 필요가 없으며, �
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Stripe과 PayPal 둘 다 자국에서 사용이 가능하다면 연결하기를 권장합니다."
 
-msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from Euro bank accounts.)"
-msgstr "Stripe를 사용하면 기부자가 Liberapay 웹사이트에서 직접 카드 또는 계좌 이체로 지불할 수 있습니다. (계좌 이체는 현재 유럽 은행 계좌에서만 지원됩니다.)"
+msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
+msgstr ""
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3689,6 +3689,14 @@ msgstr "아직 사용하지 않은 결제 수단입니다."
 msgid "Set as default"
 msgstr "기본값으로 설정"
 
+#, python-brace-format
+msgid "Stop using this instrument by default for payments in {currency}."
+msgstr ""
+
+#, python-brace-format
+msgid "Unset as default for {currency}"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
 msgstr "{currency}의 결제에 대한 기본으로이 악기를 사용합니다."
@@ -3708,6 +3716,12 @@ msgstr "결제 수단 추가"
 #, fuzzy
 msgid "Add a card"
 msgstr "카드 추가"
+
+msgid "Euro Bank Account"
+msgstr ""
+
+msgid "Only for donations in euros to recipients in SEPA countries"
+msgstr ""
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4117,9 +4131,9 @@ msgstr "어떤 국가와 통화가 지원됩니까?"
 msgid "See the “{page_name}” page."
 msgstr "\"{page_name}\" 페이지를 참조하십시오."
 
-#, fuzzy, python-brace-format
-msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (for Euro donations only). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "사용 가능한 지불 방법은 수신자가 지원하는 지불 프로세서에 따라 다릅니다. Stripe에서 지불을 처리하는 경우 대부분의 신용 카드 및 직불 카드({list_of_card_brands})와 SEPA 자동 이체(유로 기부에만 해당)를 사용할 수 있습니다. 페이팔을 통한 결제의 경우 다양한 방법으로 결제가 가능하지만 기부자는 페이팔 계정을 가지고 있거나 만들어야 합니다."
+#, python-brace-format
+msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
+msgstr ""
 
 msgid "What are the payment processing fees?"
 msgstr "지불 대행자 수수료가 뭡니까?"
@@ -4219,10 +4233,10 @@ msgstr[0] "{n} 지역의 크리에이터는 리베라페이의 모든 기능을 
 msgid "Well supported territories"
 msgstr "잘 지원되는 지역"
 
-#, fuzzy, python-brace-format
-msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
-msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
-msgstr[0] "아래 나열된 {n} 지역의 크리에이터도 리베라페이를 사용할 수 있습니다. 단, 해당 지역으로 가는 기부금은 결제 처리 수수료를 낮추기 위해 그룹화할 수 없으며, 기부자에게는 유로 자동 이체 결제 수단을 사용할 수 없습니다."
+#, python-brace-format
+msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
+msgstr[0] ""
 
 #, fuzzy
 msgid "Barely supported territories"
