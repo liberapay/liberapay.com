@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2024-09-13 23:09+0000\n"
+"Last-Translator: Jiří Podhorecký <j.podhorecky@volny.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.8-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -229,7 +231,7 @@ msgstr "Máte platbu částky {amount} naplánovanou na {payment_date} pro obnov
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "Máte naplánovanou {n} platbu pro obnovení vašeho příspěvku, ale nejsme schopni ji zpracovat, protože chybí platná platební metoda."
-msgstr[1] "Máte naplánovano {n} plateb pro obnovení vašich příspěvků, ale nejsme schopni je zpracovat, protože chybí platná platební metoda."
+msgstr[1] "Máte naplánovány {n} platby pro obnovení vašich příspěvků, ale nejsme schopni je zpracovat, protože chybí platná platební metoda."
 msgstr[2] "Máte {n} naplánovaných plateb pro obnovení vašich příspěvků, ale nejsme schopni je zpracovat, protože chybí platný platební prostředek."
 
 msgid "The payment dates, amounts and recipients are:"
@@ -4187,45 +4189,41 @@ msgstr "Příspěvky lze přijímat pouze na územích, kde je k dispozici alesp
 msgid "The currently supported payment processors are {Stripe} and {PayPal}. You can find a list of the differences between them {link_start}in the “{page_name}” page{link_end}."
 msgstr "V současné době jsou podporovány tyto platební procesory: {Stripe} a {PayPal}. Seznam rozdílů mezi nimi najdete na {link_start}této stránce \"{page_name}\"{link_end}."
 
-#, fuzzy
 msgid "Best supported territories"
-msgstr "Nejlépe podporovaná území"
+msgstr "Nejlepší podporovaná území"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Tvůrci na těchto územích {n} mohou využívat všechny funkce Liberapay:"
+msgstr[0] "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
+msgstr[1] "Tvůrci v těchto {n} územích mohou využívat všechny funkce Liberapay:"
+msgstr[2] "Tvůrci na těchto {n} územích mohou využívat všechny funkce Liberapay:"
 
 msgid "Well supported territories"
 msgstr "Dobře podporovaná území"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=ff8828b1fe9423b32e827b29e81d2d2a)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the Euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Liberapay je k dispozici také tvůrcům na níže uvedených územích {n}. Dary směřující do těchto území však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a způsob platby inkasem v eurech není dárcům k dispozici."
+msgstr[0] "Liberapay je k dispozici také autorům v {n} oblasti uvedené níže. Dary směřující do těchto oblastí však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a dárci nemají k dispozici způsob platby inkasem v eurech."
+msgstr[1] "Liberapay je k dispozici také autorům ve {n} oblastech uvedených níže. Dary směřující do těchto oblastí však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a dárci nemají k dispozici způsob platby inkasem v eurech."
+msgstr[2] "Liberapay je k dispozici také autorům v {n} oblastech uvedených níže. Dary směřující do těchto oblastí však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a dárci nemají k dispozici způsob platby inkasem v eurech."
 
-#, fuzzy
 msgid "Barely supported territories"
 msgstr "Sotva podporovaná území"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
 msgid_plural "Liberapay is partly available to creators in the {n} territories listed below, which are supported by PayPal but not by Stripe."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Služba Liberapay je částečně k dispozici tvůrcům na níže uvedených územích {n}, která jsou podporována službou PayPal, ale ne službou Stripe."
+msgstr[0] "Liberapay je částečně k dispozici autorům v {n} oblasti uvedených níže, které podporují PayPal, ale ne Stripe."
+msgstr[1] "Liberapay je částečně k dispozici autorům ve {n} oblastech uvedených níže, které podporují PayPal, ale ne Stripe."
+msgstr[2] "Liberapay je částečně k dispozici autorům v {n} oblastech uvedených níže, které podporují PayPal, ale ne Stripe."
 
-#, fuzzy
 msgid "Unsupported territories"
 msgstr "Nepodporovaná území"
 
-#, fuzzy
 msgid "If you don't live or have a registered business in one of the territories listed above, then you currently can't use Liberapay to receive donations. Sorry."
-msgstr "Pokud nežijete nebo nemáte registrovanou firmu na některém z výše uvedených území, nemůžete v současné době Liberapay k přijímání darů používat. Omlouváme se."
+msgstr "Pokud nežijete nebo nemáte registrovanou firmu na jednom z výše uvedených území, nemůžete v současné době používat Liberapay k přijímání darů. Je nám líto."
 
 msgid "What is Liberapay?"
 msgstr "Co je Liberapay?"
