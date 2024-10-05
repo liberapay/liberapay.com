@@ -390,6 +390,16 @@ class ExchangeRoute(Model):
              LIMIT 1
         """, (self.participant.id, self.id)))
 
+    @property
+    def processor_display_name(self):
+        match self.network.split('-', 1)[0]:
+            case 'paypal':
+                return "PayPal"
+            case 'stripe':
+                return "Stripe"
+            case _:
+                raise NotImplementedError(self.network)
+
     @cached_property
     def stripe_payment_method(self):
         return stripe.PaymentMethod.retrieve(self.address)

@@ -16,6 +16,7 @@ from ..exceptions import (
 )
 from ..i18n.currencies import Money, MoneyBasket
 from ..utils import group_by
+from ..website import website
 
 
 ProtoTransfer = namedtuple(
@@ -882,6 +883,32 @@ def update_payin_transfer(
         donor.schedule_renewals()
 
     return pt
+
+
+def handle_payin_result(db, payin):
+    """Notify the payer of the success or failure of a charge.
+    """
+    assert payin.status in ('failed', 'succeeded')
+    payer = db.Participant.from_id(payin.payer)
+    if payin.status == 'succeeded':
+        payer.notify(
+            'payin_succeeded',
+            payin=payin._asdict(),
+            email_unverified_address=True,
+            idem_key=f"{payin.id}_{payin.status}",
+        )
+    elif payin.status == 'failed':
+        if website.state.get({}).get('user') == payer:
+            # We're about to show the payin's result to the payer.
+            return
+        route = db.ExchangeRoute.from_id(payer, payin.route)
+        payer.notify(
+            'payin_failed',
+            payin=payin._asdict(),
+            provider=route.processor_display_name,
+            email_unverified_address=True,
+            idem_key=f"{payin.id}_{payin.status}",
+        )
 
 
 def abort_payin(db, payin, error='aborted by payer'):
