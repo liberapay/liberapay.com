@@ -1939,17 +1939,17 @@ msgstr "Vaata rohkem"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} ei ole veel ühtegi makseviisi konfigureerinud, seega ei saa teie annetust praegu veel töödelda. Me teavitame teid, kui makse muutub võimalikuks."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "Annetusi {username} saab teha krediit- või deebetkaardiga ({list_of_card_brands}) või otsekorraldusega euro pangakontolt (ainult eurodes tehtud annetuste puhul)."
 
 #, fuzzy, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Annetusi aadressil {username} töödeldakse PayPali kaudu."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Annetusi {username} saab teha krediit- või deebetkaardiga ({list_of_card_brands}), euro pangakontoga (SEPA otsekorraldus) või PayPal-kontoga."
 
 #, fuzzy
 msgid "Payment Card"
@@ -3018,11 +3018,13 @@ msgstr "Maksmine kaardiga"
 msgid "Only for donations to SEPA countries"
 msgstr "Ainult SEPA riikidele tehtavate annetuste puhul"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "Ainult eurodes tehtud annetuste puhul"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "Ainult euro pangakontod"
 
 #, fuzzy
 msgid "Pay by direct debit"
@@ -3926,8 +3928,9 @@ msgstr "Annetajad ei pea ühendama ühtegi allolevat maksekontot, need on vajali
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Soovitame siduda nii PayPal kui Stripe kontod, kui need on sinu riigis saadaval."
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "Stripe'i abil saavad teie annetajad maksta kaardiga või otsekorraldusega otse Liberapay veebisaidilt. (Otsekorraldused on praegu toetatud ainult euro pangakontodelt.)"
 
 #, fuzzy, python-brace-format
 msgid "Account ID: {0}"
@@ -4235,13 +4238,13 @@ msgstr "Seda maksevahendit ei ole veel kasutatud."
 msgid "Set as default"
 msgstr "Seadistatakse vaikimisi"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Lõpetage selle instrumendi kasutamine vaikimisi maksete tegemiseks aadressil {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "Vaikimisi seadistamata järgmistel juhtudel {currency}"
 
 #, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -4263,11 +4266,13 @@ msgstr "Lisage maksevahend:"
 msgid "Add a card"
 msgstr "Lisa kaart"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "Euro pangakonto"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "Ainult eurodes tehtavate annetuste puhul SEPA riikides asuvatele saajatele."
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4732,9 +4737,9 @@ msgstr "Milliseid riike ja valuutasid toetatakse?"
 msgid "See the “{page_name}” page."
 msgstr "Vaata lehekülge \"{page_name}\"."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "Saadaolevad makseviisid sõltuvad sellest, milliseid makseprotsessoreid vastuvõtja toetab. Kui makset töötleb Stripe, siis aktsepteeritakse enamikku krediit- ja deebetkaarte ({list_of_card_brands}), samuti SEPA otsekorraldusi (ainult eurodes tehtud annetuste puhul SEPA riikides asuvatele saajatele). Kui makse toimub PayPali kaudu, siis on võimalik maksta mitmel viisil, kuid annetajal peab olema või olema loodud PayPali konto."
 
 #, fuzzy
 msgid "What are the payment processing fees?"
@@ -4842,11 +4847,11 @@ msgstr[1] "Nende {n} territooriumide loojad saavad kasu kõigist Liberapay funkt
 msgid "Well supported territories"
 msgstr "Hästi toetatud territooriumid"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgstr[1] "Liberapay on saadaval ka allpool loetletud {n} territooriumidel tegutsevatele loojatele. Nendele territooriumidele minevaid annetusi ei saa aga maksete töötlemise tasude vähendamiseks rühmitada ning eurodes otsekorraldusega makseviis ei ole annetajatele kättesaadav."
 
 #, fuzzy
 msgid "Barely supported territories"

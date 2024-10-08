@@ -1703,17 +1703,17 @@ msgstr "Se Mere"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "Donationer til {username} kan betales med et kredit- eller betalingskort ({list_of_card_brands}) eller ved direkte debitering af en bankkonto i euro (kun for donationer i euro)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donationer til {username} bliver håndteret gennem PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Donationer til {username} kan betales med: et kredit- eller betalingskort ({list_of_card_brands}), en euro-bankkonto (SEPA Direct Debit) eller en PayPal-konto."
 
 msgid "Payment Card"
 msgstr "Betalingskort"
@@ -2600,11 +2600,13 @@ msgstr "Betal med kort"
 msgid "Only for donations to SEPA countries"
 msgstr "Kun for donationer til SEPA-lande"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "Kun for donationer i euro"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "Kun bankkonti i euro"
 
 msgid "Pay by direct debit"
 msgstr "Betal med direkte debitering"
@@ -3374,8 +3376,9 @@ msgstr "donorer behøver ikke at forbinde via en betalingskonto nedenfor, det er
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Vi anbefaler at du både tilslutter dig til Stripe og Paypal hvis de begge er tilgængelige i dit land."
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "Med Stripe kan dine donorer betale med kort eller direkte debitering direkte fra Liberapays hjemmeside. (Direkte debiteringer understøttes i øjeblikket kun fra euro-bankkonti)."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3654,13 +3657,13 @@ msgstr "Denne betalingsmetode har ikke været brugt endnu."
 msgid "Set as default"
 msgstr "Sæt som standard"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Stop med at bruge dette instrument som standard til betalinger på {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "Indstillet som standard for {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3679,11 +3682,13 @@ msgstr "Tilføj betalingsmetode:"
 msgid "Add a card"
 msgstr "Tilføj et kort"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "Euro-bankkonto"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "Kun for donationer i euro til modtagere i SEPA-lande"
 
 msgid "Add a bank account"
 msgstr "Tilføj en bankkonto"
@@ -4078,9 +4083,9 @@ msgstr "Hvilke lande og valutaer understøttes?"
 msgid "See the “{page_name}” page."
 msgstr "Se “{page_name}” siden."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "De tilgængelige betalingsmetoder afhænger af, hvilke betalingsbehandlere der understøttes af modtageren. Hvis en betaling behandles af Stripe, accepteres de fleste kredit- og betalingskort ({list_of_card_brands}) samt SEPA Direct Debits (kun for donationer i euro til modtagere i SEPA-lande). Hvis en betaling sker via PayPal, er det muligt at betale på forskellige måder, men donoren skal have eller oprette en PayPal-konto."
 
 msgid "What are the payment processing fees?"
 msgstr "Hvad er overførselsgebyrerne?"
@@ -4175,11 +4180,11 @@ msgstr[1] "Skabere i disse {n} områder nyder godt af alle Liberapays funktioner
 msgid "Well supported territories"
 msgstr "Godt understøttede territorier"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>."
+msgstr[1] "Liberapay er også tilgængelig for skabere i de {n} områder, der er anført nedenfor. Donationer, der går til disse territorier, kan dog ikke grupperes for at sænke gebyrerne for betalingsbehandling, og betalingsmetoden direkte debitering i euro er ikke tilgængelig for donorerne."
 
 #, fuzzy
 msgid "Barely supported territories"

@@ -1691,17 +1691,17 @@ msgstr "もっと見る"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username}さんはまだ支払い方法を設定していないため、寄付を今すぐには処理できません。支払いが可能になった際に通知を送信します。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "{username} への寄付は、クレジットカードまたはデビットカード({list_of_card_brands})、またはユーロ銀行口座からの自動振替（ユーロ建ての寄付のみ）でお支払いいただけます。"
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "{username}さんへの寄付はPayPalにより処理されます。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "{username} への寄付は、クレジットカードまたは口座自動振替カード({list_of_card_brands})、ユーロ銀行口座(SEPA口座振替)、PayPal口座のいずれかを使用してお支払いいただけます。"
 
 #, fuzzy
 msgid "Payment Card"
@@ -2579,11 +2579,13 @@ msgstr "カードで支払う"
 msgid "Only for donations to SEPA countries"
 msgstr "SEPA加盟国への寄付に限ります。"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "ユーロでの寄付のみ"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "ユーロ銀行口座のみ"
 
 msgid "Pay by direct debit"
 msgstr "口座自動振替による支払い"
@@ -3346,8 +3348,9 @@ msgstr "寄付者は、以下の支払いアカウントを連携する必要は
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "お住まいの国でStripeとPayPalが共に利用可能な場合は、両方を連携することを推奨します。"
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "Stripeを使えば、あなたの寄付者はLiberapayウェブサイトから直接カードや口座自動振替で支払うことができます。(口座自動振替は、現在ユーロ銀行口座からのみ対応しています。）"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3623,13 +3626,13 @@ msgstr "この決済手段はまだ使用されていません。"
 msgid "Set as default"
 msgstr "デフォルトに設定"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "{currency} での決済手段をデフォルトで使用することをやめる。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "のデフォルトとして設定されていない{currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3648,11 +3651,13 @@ msgstr "決済手段を追加"
 msgid "Add a card"
 msgstr "カードを追加"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "ユーロ銀行口座"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "SEPA加盟国の受取人へのユーロ建て寄付のみ対象"
 
 msgid "Add a bank account"
 msgstr "銀行口座を追加"
@@ -4043,9 +4048,9 @@ msgstr "どの国と通貨をサポートしていますか？"
 msgid "See the “{page_name}” page."
 msgstr "“{page_name}”ページをご覧ください。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "利用可能な決済方法は、受取人がどの決済サービスに対応しているかによって異なります。Stripeによる支払い手続きの場合、ほとんどのクレジットカードとデビットカード({list_of_card_brands})、SEPA口座自動振替（SEPA加盟国の受取人へのユーロ建て寄付のみ）が承認されます。PayPalでのお支払いの場合、様々な方法でのお支払いが可能ですが、寄付者がPayPalアカウントをお持ちであるか、作成する必要があります。"
 
 msgid "What are the payment processing fees?"
 msgstr "取引手数料とは何ですか？"
@@ -4138,10 +4143,10 @@ msgstr[0] "これらの{n} 領域のクリエイターは、Liberapayのすべ�
 msgid "Well supported territories"
 msgstr "よくサポートされた領土"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
+msgstr[0] "Liberapayは、以下の一覧{n} の地域のクリエイターも利用できます。ただし、これらの地域への寄付は、支払い手続き手数料を下げるためにグループ化することができず、ユーロ口座自動振替の支払い方法は寄付者には利用できません。"
 
 #, fuzzy
 msgid "Barely supported territories"

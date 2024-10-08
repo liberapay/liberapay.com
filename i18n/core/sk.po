@@ -1718,17 +1718,17 @@ msgstr "Zobraziť viac"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} nemá nastavený spôsob platby, takže Váš dar sa momentálne nedá spracovať. Oznámime Vám, keď bude platba možná."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "Príspevky na adresu {username} je možné uhradiť kreditnou alebo debetnou kartou ({list_of_card_brands}) alebo priamym inkasom z bankového účtu v eurách (len v prípade príspevkov v eurách)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Príspevky pre {username} sú vykonané cez PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Príspevky na adresu {username} môžete zaplatiť: kreditnou alebo debetnou kartou ({list_of_card_brands}), bankovým účtom v eurách (SEPA Direct Debit) alebo účtom PayPal."
 
 msgid "Payment Card"
 msgstr "Platobná karta"
@@ -2627,11 +2627,13 @@ msgstr "Zaplatiť kartou"
 msgid "Only for donations to SEPA countries"
 msgstr "Len pre dary do krajín SEPA"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "Len pre dary v eurách"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "Len bankové účty v eurách"
 
 msgid "Pay by direct debit"
 msgstr "Zaplatiť debetnou kartou"
@@ -3411,8 +3413,9 @@ msgstr "Darcovia nemusia pripájať žiadny platobný účet, je potrebný iba n
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Odporúčame pripojiť Stripe aj PayPal ak sú obidve dostupné vo vašej krajine."
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "Pomocou služby Stripe môžu vaši darcovia platiť kartou alebo priamym inkasom priamo z webovej stránky Liberapay. (Priame inkasá sú v súčasnosti podporované len z bankových účtov v eurách.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3694,13 +3697,13 @@ msgstr "Platobný prostriedok ešte nebol použitý."
 msgid "Set as default"
 msgstr "Prednastaviť"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Prestaňte štandardne používať tento nástroj na platby na {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "Nenastavené ako predvolené pre {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3719,11 +3722,13 @@ msgstr "Pridať platobný prostriedok:"
 msgid "Add a card"
 msgstr "Pridať kartu"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "Bankový účet v eurách"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "Len pre dary v eurách príjemcom v krajinách SEPA"
 
 msgid "Add a bank account"
 msgstr "Pridať bankový účet"
@@ -4122,9 +4127,9 @@ msgstr "Ktoré krajiny a meny sú podporované?"
 msgid "See the “{page_name}” page."
 msgstr "Viď stránku \"{page_name}\"."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "Dostupné spôsoby platby závisia od toho, ktoré platobné procesory príjemca podporuje. Ak platbu spracúva Stripe, potom je akceptovaná väčšina kreditných a debetných kariet ({list_of_card_brands}), ako aj SEPA inkasá (len v prípade darov v eurách pre príjemcov v krajinách SEPA). Ak je platba realizovaná prostredníctvom služby PayPal, potom je možné platiť rôznymi spôsobmi, darca však musí mať alebo si vytvoriť účet PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Aké sú poplatky za spracovanie platieb?"
@@ -4221,12 +4226,12 @@ msgstr[2] "Tvorcovia na týchto územiach {n} môžu využívať všetky funkcie
 msgid "Well supported territories"
 msgstr "Dobre podporované územia"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
+msgstr[0] "<nepoužívaný singulár (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay je k dispozícii aj tvorcom na nižšie uvedených územiach {n}. Príspevky smerujúce do týchto území však nie je možné zoskupiť, aby sa znížili poplatky za spracovanie platby, a darcom nie je k dispozícii spôsob platby priamym inkasom v eurách."
 
 #, fuzzy
 msgid "Barely supported territories"

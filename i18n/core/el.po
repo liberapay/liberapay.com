@@ -849,7 +849,7 @@ msgstr "Το όνομα χρήστη '{0}' είναι πολύ μακρύ."
 msgid "The username '{0}' contains invalid characters."
 msgstr "Το όνομα χρήστη '{0}' περιέχει μη έγκυρους χαρακτήρες."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
 msgstr "Το όνομα χρήστη '{0}' είναι καθαρά αριθμητικό. Αυτό δεν επιτρέπεται."
 
@@ -999,15 +999,15 @@ msgstr "Ο χρήστης {0} δεν δέχεται δωρεές."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} δεν δέχεται δωρεές σε {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
 msgstr "{username} δεν δέχεται πλέον μυστικές δωρεές."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
 msgstr "{username} δεν δέχεται πλέον ιδιωτικές δωρεές."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
 msgstr "{username} δεν δέχεται πλέον δημόσιες δωρεές."
 
@@ -1704,17 +1704,17 @@ msgstr "Εμφάνιση Περισσότερων"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "Ο/Η {username} δεν έχει ορίσει κάποια μέθοδο πληρωμής ακόμη, οπότε η δωρεά σας δεν μπορεί να επεξεργαστεί τώρα. Θα σας ενημερώσουμε όταν η πληρωμή είναι διαθέσιμη."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "Οι δωρεές στο {username} μπορούν να καταβληθούν με πιστωτική ή χρεωστική κάρτα ({list_of_card_brands}) ή με άμεση χρέωση τραπεζικού λογαριασμού σε ευρώ (μόνο για δωρεές σε ευρώ)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Οι δωρεές σε {username} επεξεργάζονται μέσω PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Οι δωρεές στο {username} μπορούν να καταβληθούν με: πιστωτική ή χρεωστική κάρτα ({list_of_card_brands}), τραπεζικό λογαριασμό σε ευρώ (SEPA Direct Debit) ή λογαριασμό PayPal."
 
 msgid "Payment Card"
 msgstr "Κάρτα πληρωμής"
@@ -1826,7 +1826,6 @@ msgstr "Πραγματικό μερίδιο"
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
 msgstr "Στο Liberapay, οι δωρεές καταβάλλονται εκ των προτέρων. Αυτή η στήλη δείχνει πόσα χρήματα έχει λάβει προκαταβολικά κάθε μέλος μέσω αυτής της ομάδας. Μια προκαταβολή αυξάνεται κάθε φορά που ένα μέλος λαμβάνει μια νέα πληρωμή από έναν δωρητή μέσω της ομάδας και μειώνεται κάθε εβδομάδα κατά τη διάρκεια της \"ημέρας πληρωμής\"."
 
-#, fuzzy
 msgid "Advance"
 msgstr "Προκαταβολή"
 
@@ -2103,7 +2102,6 @@ msgstr "Εξερεύνηση κοινοτήτων"
 msgid "You have to check at least one box."
 msgstr "Πρέπει να επιλέξετε τουλάχιστον ένα πλαίσιο."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Από ποιες χώρες θα πρέπει να επιτρέπεται στους δωρητές σας να σας στέλνουν χρήματα;"
 
@@ -2603,11 +2601,13 @@ msgstr "Πληρωμή μέσω κάρτας"
 msgid "Only for donations to SEPA countries"
 msgstr "Μόνο για δωρεές σε χώρες SEPA"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "Μόνο για δωρεές σε ευρώ"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "Μόνο τραπεζικοί λογαριασμοί σε ευρώ"
 
 msgid "Pay by direct debit"
 msgstr "Πληρώστε με άμεση χρέωση"
@@ -3379,8 +3379,9 @@ msgstr "Οι δωρητές δεν χρειάζεται να συνδέσουν 
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Συνιστούμε να συνδέσετε τόσο το Stripe όσο και το PayPal, εάν είναι και τα δύο διαθέσιμα στη χώρα σας."
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "Με το Stripe οι δωρητές σας μπορούν να πληρώνουν με κάρτα ή άμεση χρέωση απευθείας από την ιστοσελίδα του Liberapay. (Οι άμεσες χρεώσεις υποστηρίζονται προς το παρόν μόνο από τραπεζικούς λογαριασμούς σε ευρώ)."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3659,13 +3660,13 @@ msgstr "Αυτό το μέσο πληρωμής δεν έχει χρησιμοπ
 msgid "Set as default"
 msgstr "Ορισμός ως προεπιλογή"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Σταματήστε να χρησιμοποιείτε το μέσο αυτό εξ ορισμού για πληρωμές στο {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "Μη ρυθμισμένη ως προεπιλογή για {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3684,11 +3685,13 @@ msgstr "Προσθήκη ένος μέσου πληρωμής:"
 msgid "Add a card"
 msgstr "Προσθήκη μίας κάρτας"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "Τραπεζικός λογαριασμός σε ευρώ"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "Μόνο για δωρεές σε ευρώ σε παραλήπτες σε χώρες SEPA"
 
 msgid "Add a bank account"
 msgstr "Προσθήκη ενός τραπεζικού λογαριασμού"
@@ -4083,9 +4086,9 @@ msgstr "Ποιες χώρες και νομίσματα υποστηρίζοντ
 msgid "See the “{page_name}” page."
 msgstr "Δείτε τη σελίδα \"{page_name}\"."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "Οι διαθέσιμες μέθοδοι πληρωμής εξαρτώνται από τους επεξεργαστές πληρωμών που υποστηρίζονται από τον παραλήπτη. Εάν η επεξεργασία μιας πληρωμής γίνεται από την Stripe, τότε γίνονται δεκτές οι περισσότερες πιστωτικές και χρεωστικές κάρτες ({list_of_card_brands}), καθώς και οι άμεσες χρεώσεις SEPA (μόνο για δωρεές σε ευρώ σε παραλήπτες σε χώρες του SEPA). Εάν μια πληρωμή γίνεται μέσω PayPal, τότε είναι δυνατή η πληρωμή με διάφορους τρόπους, ωστόσο ο δωρητής πρέπει να διαθέτει ή να δημιουργήσει λογαριασμό PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Ποια είναι τα τέλη επεξεργασίας πληρωμών;"
@@ -4180,11 +4183,11 @@ msgstr[1] "Οι δημιουργοί σε αυτά τα εδάφη {n} επωφ�
 msgid "Well supported territories"
 msgstr "Καλά υποστηριζόμενα εδάφη"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgstr[1] "Το Liberapay είναι επίσης διαθέσιμο στους δημιουργούς στις περιοχές {n} που αναφέρονται παρακάτω. Ωστόσο, οι δωρεές που πηγαίνουν σε αυτά τα εδάφη δεν μπορούν να ομαδοποιηθούν για να μειωθούν τα τέλη επεξεργασίας πληρωμών και η μέθοδος πληρωμής με άμεση χρέωση σε ευρώ δεν είναι διαθέσιμη στους δωρητές."
 
 #, fuzzy
 msgid "Barely supported territories"
