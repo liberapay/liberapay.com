@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Catalan "
-"<https://hosted.weblate.org/projects/liberapay/core/ca/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-09-30 13:43+0000\n"
+"Last-Translator: Google Cloud Translation Advanced <noreply-mt-google-translate-api-v3@weblate.org>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/liberapay/core/ca/>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1705,17 +1707,17 @@ msgstr "Més informació"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} encara no ha configurat cap mètode de pagament, per això ara mateix no es pot processar el vostre donatiu. Quan el pagament sigui possible, us ho notificarem."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "Les donacions a {username} es poden pagar amb una targeta de crèdit o dèbit ( {list_of_card_brands} ) o per domiciliació bancària d'un compte bancari en euros (només per a donacions en euros)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Els donatius a {username} es processen via PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Les donacions a {username} es poden pagar amb: una targeta de crèdit o dèbit ( {list_of_card_brands} ), un compte bancari en euros (Dèbit SEPA) o un compte de PayPal."
 
 #, fuzzy
 msgid "Payment Card"
@@ -2605,11 +2607,13 @@ msgstr "Pagament amb targeta"
 msgid "Only for donations to SEPA countries"
 msgstr "Només per a donacions a països SEPA"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "Només per a donacions en euros"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "Només comptes bancaris en euros"
 
 msgid "Pay by direct debit"
 msgstr "Pagament amb càrrec bancari"
@@ -3382,8 +3386,9 @@ msgstr "Els donants no cal que associïn cap compte de pagament a sota, això no
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Us recomanem associar Stripe i PayPal, si tots dos estan disponibles al vostre país."
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "Amb Stripe els teus donants poden pagar amb targeta o domiciliació bancària directament des del web de Liberapay. (Actualment, només s'admeten els càrrecs domiciliats des de comptes bancaris en euros.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3662,13 +3667,13 @@ msgstr "Aquest instrument de pagament encara no s'ha usat."
 msgid "Set as default"
 msgstr "Estableix com a predeterminat"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Deixeu d'utilitzar aquest instrument de manera predeterminada per als pagaments en {currency} ."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "Desactivat com a predeterminat per {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3687,11 +3692,13 @@ msgstr "Afegeix un instrument de pagament:"
 msgid "Add a card"
 msgstr "Afegeix una targeta"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "Compte bancari en euros"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "Només per a donacions en euros a destinataris dels països SEPA"
 
 msgid "Add a bank account"
 msgstr "Afegeix un compte bancari"
@@ -4087,9 +4094,9 @@ msgstr "Quins països i divises s'admeten?"
 msgid "See the “{page_name}” page."
 msgstr "Vegeu la pàgina «{page_name}»."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "Els mètodes de pagament disponibles depenen de quins processadors de pagament són compatibles amb el destinatari. Si Stripe processa un pagament, s'accepten la majoria de targetes de crèdit i dèbit ( {list_of_card_brands} ), així com les domiciliacions SEPA (només per a donacions en euros als destinataris dels països SEPA). Si el pagament es fa a través de PayPal, és possible pagar de diverses maneres, però el donant ha de tenir o crear un compte de PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Quines són les comissions de processament de pagaments?"
@@ -4184,11 +4191,11 @@ msgstr[1] "Els creadors d'aquests {n} territoris es beneficien de totes les func
 msgid "Well supported territories"
 msgstr "Territoris ben recolzats"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<singular no utilitzat (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgstr[1] "Liberapay també està disponible per als creadors dels {n} territoris que s'indiquen a continuació. Tanmateix, les donacions que es dirigeixen a aquests territoris no es poden agrupar per reduir les tarifes de processament de pagaments i els donants no poden utilitzar el mètode de pagament per domiciliació bancària en euros."
 
 #, fuzzy
 msgid "Barely supported territories"

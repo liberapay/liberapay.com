@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Arabic "
-"<https://hosted.weblate.org/projects/liberapay/core/ar/>\n"
-"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5);\n"
+"PO-Revision-Date: 2024-09-30 13:43+0000\n"
+"Last-Translator: Google Cloud Translation Advanced <noreply-mt-google-translate-api-v3@weblate.org>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/liberapay/core/ar/>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n>=3 && n<=10 ? 3 : n>=11 && n<=99 ? 4 : 5);\n"
+"X-Generator: Weblate 5.8-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1927,17 +1929,17 @@ msgstr "عرض المزيد"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "لم يقم {username} بتهيئة أي طريقة دفع حتى الآن ، لذلك لا يمكن معالجة تبرعك في الوقت الحالي. سنخطرك عندما يصبح الدفع ممكنًا."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "يمكن دفع التبرعات إلى {username} باستخدام بطاقة الائتمان أو الخصم ( {list_of_card_brands} )، أو عن طريق الخصم المباشر من حساب مصرفي باليورو (للتبرعات باليورو فقط)."
 
 #, fuzzy, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "تتم معالجة التبرعات إلى {username} من خلال PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "يمكن دفع التبرعات إلى {username} باستخدام: بطاقة الائتمان أو الخصم ( {list_of_card_brands} )، أو حساب مصرفي باليورو (SEPA Direct Debit)، أو حساب PayPal."
 
 #, fuzzy
 msgid "Payment Card"
@@ -3032,11 +3034,13 @@ msgstr "الدفع بالبطاقة"
 msgid "Only for donations to SEPA countries"
 msgstr "مخصص للتبرعات لدول منطقة اليورو فقط"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "للتبرعات باليورو فقط"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "حسابات بنكية باليورو فقط"
 
 #, fuzzy
 msgid "Pay by direct debit"
@@ -3969,8 +3973,9 @@ msgstr "لا يحتاج المانحون إلى ربط أي حساب دفع أد
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "نوصي بربط كل من Stripe و PayPal إذا كانا متاحين في بلدك."
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "مع Stripe، يمكن للمتبرعين الدفع بالبطاقة أو الخصم المباشر مباشرة من موقع Liberapay. (لا يتم دعم الخصم المباشر حاليًا إلا من الحسابات المصرفية باليورو.)"
 
 #, fuzzy, python-brace-format
 msgid "Account ID: {0}"
@@ -4290,13 +4295,13 @@ msgstr "لم يتم استخدام وسيلة الدفع هذه حتى الآن.
 msgid "Set as default"
 msgstr "تعيين كافتراضي"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "التوقف عن استخدام هذه الأداة افتراضيًا للدفعات بالعملة {currency} ."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "تم إلغاء تعيينه كإعداد افتراضي لـ {currency}"
 
 #, fuzzy, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -4318,11 +4323,13 @@ msgstr "قم بإضافة وسيلة دفع:"
 msgid "Add a card"
 msgstr "إضافة بطاقة"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "حساب بنكي باليورو"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "مخصص فقط للتبرعات باليورو للمستفيدين في دول منطقة اليورو الأوروبية"
 
 #, fuzzy
 msgid "Add a bank account"
@@ -4796,9 +4803,9 @@ msgstr "ما هي البلدان والعملات المدعومة؟"
 msgid "See the “{page_name}” page."
 msgstr "راجع صفحة \"{page_name}\"."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "تعتمد طرق الدفع المتاحة على معالجات الدفع التي يدعمها المستلم. إذا تمت معالجة الدفع بواسطة Stripe، فسيتم قبول معظم بطاقات الائتمان والخصم ( {list_of_card_brands} )، بالإضافة إلى الخصم المباشر من SEPA (فقط للتبرعات باليورو للمستلمين في دول SEPA). إذا تم الدفع من خلال PayPal، فمن الممكن الدفع بطرق مختلفة، ولكن يجب أن يكون لدى المتبرع حساب PayPal أو ينشئه."
 
 #, fuzzy
 msgid "What are the payment processing fees?"
@@ -4915,15 +4922,15 @@ msgstr[5] "يستفيد المبدعون في {n} المناطق من جميع �
 msgid "Well supported territories"
 msgstr "الأراضي المدعومة بشكل جيد"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "تتوفر خدمة Liberapay أيضًا للمبدعين في المناطق المدرجة أدناه. ومع ذلك، لا يمكن تجميع التبرعات الموجهة إلى تلك المناطق لتقليل رسوم معالجة الدفع، كما أن طريقة الدفع المباشر باليورو غير متاحة للمتبرعين."
+msgstr[1] "<غير مستخدم مفرد (التجزئة=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgstr[2] "تتوفر خدمة Liberapay أيضًا للمبدعين في المنطقتين المدرجتين أدناه. ومع ذلك، لا يمكن تجميع التبرعات الموجهة إلى تلك المناطق لتقليل رسوم معالجة الدفع، كما أن طريقة الدفع المباشر باليورو غير متاحة للمتبرعين."
 msgstr[3] ""
 msgstr[4] ""
-msgstr[5] ""
+msgstr[5] "تتوفر خدمة Liberapay أيضًا للمبدعين في المناطق المدرجة {n} . ومع ذلك، لا يمكن تجميع التبرعات الموجهة إلى تلك المناطق لتقليل رسوم معالجة الدفع، كما أن طريقة الدفع المباشر باليورو غير متاحة للمتبرعين."
 
 #, fuzzy
 msgid "Barely supported territories"
