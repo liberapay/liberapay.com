@@ -3488,3 +3488,6 @@ CREATE INDEX public_name_trgm_idx ON participants
     USING GIN (lower(public_name) gin_trgm_ops)
     WHERE status = 'active'
       AND public_name IS NOT null;
+
+-- migration #178
+UPDATE exchange_routes SET is_default_for = 'EUR', is_default = null WHERE network = 'stripe-sdd' AND is_default;
