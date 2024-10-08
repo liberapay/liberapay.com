@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-09-30 13:43+0000\n"
-"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"PO-Revision-Date: 2024-10-05 06:16+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/liberapay/core/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -1690,17 +1690,17 @@ msgstr "Továbbiak"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} még nem állított be semmilyen fizetési módot, így az Ön támogatása jelenleg nem feldolgozható. Értesíteni fogjuk Önt, amikor a fizetés lehetségessé válik."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "A {username} címre történő adományok befizetése történhet hitel- vagy bankkártyával ({list_of_card_brands}), vagy euróban vezetett bankszámláról történő közvetlen terheléssel (csak euróban történő adományozás esetén)."
+msgstr "{username} részére történő adományok fizetése történhet hitel- vagy bankkártyával ({list_of_card_brands}), vagy euróban vezetett bankszámláról történő közvetlen terheléssel (csak euróban történő adományozás esetén)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
-msgstr "{username} adományait a PayPal dolgozza fel."
+msgstr "{username} részére történő adományozást a PayPal dolgozza fel."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "A {username} címre történő adományok befizetése történhet: hitel- vagy bankkártyával ({list_of_card_brands}), eurobankszámlával (SEPA közvetlen beszedés) vagy PayPal számlával."
+msgstr "{username} részére történő adományok fizetése történhet: hitel- vagy bankkártyával ({list_of_card_brands}), eurobankszámlával (SEPA közvetlen beszedés) vagy PayPal számlával."
 
 msgid "Payment Card"
 msgstr "Fizetési kártya"
@@ -2552,10 +2552,10 @@ msgstr "Küldjön {recipients} számára pénzt"
 
 #, python-brace-format
 msgid "Your donations to {recipients} are awaiting payment."
-msgstr "A(z) {recipients} részeire küldött támogatásai kifizetésre várnak."
+msgstr "Az Ön adományai amit {recipients} részére tett, kifizetésre várnak."
 
 msgid "We are able to group these donations into a single payment."
-msgstr "Ezeket a támogatásokat egyetlen kifizetésbe össze tudjuk fésülni."
+msgstr "Ezeket az adományokat egyetlen fizetésbe tudjuk csoportosítani."
 
 msgid "PayPal is currently the only available option to fund this donation. Please click on the following button to proceed:"
 msgstr "Jelenleg a PayPal az egyetlen elérhető lehetőség az adomány küldésére. Kérjük kattintson a következő gombra a folytatáshoz:"
@@ -2572,11 +2572,9 @@ msgstr "Fizetés kártyával"
 msgid "Only for donations to SEPA countries"
 msgstr "Csak a SEPA országokba irányuló adományok esetében"
 
-#, fuzzy
 msgid "Only for donations in euros"
-msgstr "Csak euróban történő adományozás esetén"
+msgstr "Csak euróban történő adományozás"
 
-#, fuzzy
 msgid "Only euro bank accounts"
 msgstr "Csak euróban vezetett bankszámlák"
 
@@ -3337,9 +3335,8 @@ msgstr "Az adományozóknak nem kell csatlakoztatniuk semmilyen fizetési szolg�
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Javasoljuk mind a Stripe és a PayPal hozzákapcsolását, ha mindkettő elérhető az Ön országában."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr "A Stripe segítségével adományozói közvetlenül a Liberapay weboldaláról fizethetnek kártyával vagy beszedési megbízással. (A beszedések jelenleg csak az euróban vezetett bankszámlákról támogatottak.)"
+msgstr "A Stripe segítségével az adományozói közvetlenül a Liberapay weboldaláról fizethetnek kártyával vagy közvetlen beszedési megbízással. (A beszedések jelenleg csak az euróban vezetett bankszámlákról támogatottak.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3615,17 +3612,17 @@ msgstr "Ezt a fizetési eszközt még nem használta."
 msgid "Set as default"
 msgstr "Beállítás alapértelmezettként"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr "Ne használja ezt az eszközt alapértelmezés szerint a {currency} oldalon történő kifizetésekhez."
+msgstr "Ne használja ezt az eszközt alapértelmezés szerint a(z) {currency} pénznemben történő fizetésekhez."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr "Alapértelmezettként nem beállított {currency}"
+msgstr "Ne legyen alapértelmezett a(z) {currency} pénznemhez"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr "Használja ezt az eszközt alapértelmezetten {currency} deviza kifizetésekhez."
+msgstr "Használja ezt az eszközt alapértelmezettként a(z) {currency} pénznemű fizetésekhez."
 
 #, python-brace-format
 msgid "Set as default for {currency}"
@@ -3640,13 +3637,11 @@ msgstr "Fizetési eszköz hozzáadása:"
 msgid "Add a card"
 msgstr "Kártya hozzáadása"
 
-#, fuzzy
 msgid "Euro Bank Account"
-msgstr "Euro bankszámla"
+msgstr "Euroban vezetett bankszámla"
 
-#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "Kizárólag a SEPA-országokban lévő kedvezményezetteknek szóló, euróban történő adományok esetében."
+msgstr "Csak a SEPA-országok kedvezményezettei számára euróban történő adományozás esetén."
 
 msgid "Add a bank account"
 msgstr "Bankszámla hozzáadása"
@@ -4035,11 +4030,11 @@ msgstr "Mely országok és pénznemek támogatottak?"
 
 #, python-brace-format
 msgid "See the “{page_name}” page."
-msgstr "Lásd a \"{page_name}\" oldalon."
+msgstr "Lásd a(z) „{page_name}” oldalon."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "A rendelkezésre álló fizetési módok attól függnek, hogy a címzett mely fizetési folyamatokat támogatja. Ha a fizetést a Stripe dolgozza fel, akkor a legtöbb hitel- és betéti kártyát ({list_of_card_brands}) elfogadják, valamint a SEPA-beszedéseket (csak a SEPA-országokban lévő címzetteknek szánt euróban történő adományok esetében). Ha a fizetés a PayPal-on keresztül történik, akkor többféle módon is lehet fizetni, azonban az adományozónak rendelkeznie kell PayPal-fiókkal vagy létre kell hoznia egy PayPal-fiókot."
+msgstr "A rendelkezésre álló fizetési módok attól függnek, hogy a címzett mely fizetési folyamatokat támogatja. Ha a fizetést a Stripe dolgozza fel, akkor a legtöbb hitelkártya és betéti kártya ({list_of_card_brands}) elfogadott, valamint a SEPA-beszedések is (csak a SEPA-országok címzetteinek szánt, euróban történő adományok esetében). Ha a fizetés a PayPal rendszerén keresztül történik, akkor többféle módon is lehet fizetni, azonban az adományozónak rendelkeznie kell PayPal-fiókkal vagy létre kell hoznia egy PayPal-fiókot."
 
 msgid "What are the payment processing fees?"
 msgstr "Mik a pénzforgalmi feldolgozói díjak?"
@@ -4129,10 +4124,10 @@ msgstr[0] "A következő {n} területen működő alkotók a Liberapay összes f
 msgid "Well supported territories"
 msgstr "Jó támogatottságú területek"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] "A Liberapay az alábbiakban felsorolt {n} területeken is elérhető az alkotók számára. Az ezekre a területekre érkező adományok azonban nem csoportosíthatók a fizetési feldolgozási díjak csökkentése érdekében, és az euróban történő beszedési fizetési mód sem áll az adományozók rendelkezésére."
+msgstr[0] "A Liberapay az alábbi {n} területen is elérhető az alkotók számára. Az ezekre a területekre érkező adományok azonban nem csoportosíthatók a fizetésfeldolgozási díjak csökkentése érdekében, és az euróban történő közvetlen beszedési mód sem áll az adományozók rendelkezésére."
 
 msgid "Barely supported territories"
 msgstr "Gyenge támogatottságú területek"
