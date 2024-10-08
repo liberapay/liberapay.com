@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2024-09-30 13:43+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.8-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1718,17 +1720,17 @@ msgstr "Zobrazit více"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} zatím nenakonfigurovalo žádný způsob platby, takže váš dar nemůže být nyní zpracován. Jakmile bude platba možná, budeme vás informovat."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr ""
+msgstr "Příspěvky na {username} lze platit kreditní nebo debetní kartou ({list_of_card_brands}) nebo přímým inkasem z bankovního účtu v eurech (pouze pro příspěvky v eurech)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Příspěvky pro {username} jsou zpracovávány přes PayPal."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr ""
+msgstr "Příspěvky na {username} lze platit pomocí: kreditní nebo debetní karty ({list_of_card_brands}), bankovního účtu v eurech (SEPA Direct Debit) nebo účtu PayPal."
 
 msgid "Payment Card"
 msgstr "Platební karta"
@@ -2624,11 +2626,13 @@ msgstr "Zaplatit kartou"
 msgid "Only for donations to SEPA countries"
 msgstr "Pouze pro příspěvky do zemí SEPA"
 
+#, fuzzy
 msgid "Only for donations in euros"
-msgstr ""
+msgstr "Pouze pro dary v eurech"
 
+#, fuzzy
 msgid "Only euro bank accounts"
-msgstr ""
+msgstr "Pouze bankovní účty v eurech"
 
 msgid "Pay by direct debit"
 msgstr "Platba přímým výdajem"
@@ -3407,8 +3411,9 @@ msgstr "Dárci nemusí připojovat žádný níže uvedený platební účet, je
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Doporučujeme připojit služby Stripe i PayPal, pokud jsou ve vaší zemi dostupné."
 
+#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr ""
+msgstr "Pomocí služby Stripe mohou vaši dárci platit kartou nebo inkasem přímo z webových stránek Liberapay. (Přímé inkaso je v současné době podporováno pouze z bankovních účtů v eurech.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3690,13 +3695,13 @@ msgstr "Platební prostředek ještě nebyl použit."
 msgid "Set as default"
 msgstr "Nastavit jako výchozí"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr ""
+msgstr "Přestaňte tento nástroj standardně používat pro platby na {currency}."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr ""
+msgstr "Nenastaveno jako výchozí pro {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3715,11 +3720,13 @@ msgstr "Přidat platební prostředek:"
 msgid "Add a card"
 msgstr "Přidat kartu"
 
+#, fuzzy
 msgid "Euro Bank Account"
-msgstr ""
+msgstr "Bankovní účet v eurech"
 
+#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr ""
+msgstr "Pouze pro dary v eurech příjemcům v zemích SEPA"
 
 msgid "Add a bank account"
 msgstr "Přidat bankovní účet"
@@ -4118,9 +4125,9 @@ msgstr "Které země a měny jsou podporovány?"
 msgid "See the “{page_name}” page."
 msgstr "Viz stránka „{page_name}“."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr ""
+msgstr "Dostupné platební metody závisí na tom, které platební procesory příjemce podporuje. Pokud platbu zpracovává Stripe, je přijímána většina kreditních a debetních karet ({list_of_card_brands}) a také SEPA inkasa (pouze pro dary v eurech příjemcům v zemích SEPA). Pokud platba probíhá prostřednictvím služby PayPal, pak je možné platit různými způsoby, dárce však musí mít nebo si vytvořit účet PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Jaké jsou poplatky za zpracování plateb?"
@@ -4204,22 +4211,22 @@ msgstr "V současné době jsou podporovány tyto platební procesory: {Stripe} 
 msgid "Best supported territories"
 msgstr "Nejlepší podporovaná území"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
 msgstr[0] ""
-msgstr[1] "Tvůrci v těchto {n} územích mohou využívat všechny funkce Liberapay:"
-msgstr[2] "Tvůrci na těchto {n} územích mohou využívat všechny funkce Liberapay:"
+msgstr[1] ""
+msgstr[2] "Tvůrci na těchto územích {n} mohou využívat všechny funkce Liberapay:"
 
 msgid "Well supported territories"
 msgstr "Dobře podporovaná území"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
+msgstr[2] "Liberapay je k dispozici také tvůrcům na níže uvedených územích {n}. Dary směřující do těchto území však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a dárcům není k dispozici metoda inkasa v eurech."
 
 msgid "Barely supported territories"
 msgstr "Sotva podporovaná území"
