@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-09-30 13:43+0000\n"
-"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"PO-Revision-Date: 2024-10-01 03:32+0000\n"
+"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/projects/liberapay/core/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
@@ -1690,17 +1690,17 @@ msgstr "查看更多"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} 尚未设置任何支付方式，所以您目前无法进行捐款。当对方可接受付款时，我们会通知您。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "向{username} 捐赠可以使用信用卡或借记卡 ({list_of_card_brands}) 支付，也可以直接借记欧元银行账户（仅限欧元捐赠）。"
+msgstr "向 {username} 的捐赠可以使用信用卡或借记卡 ({list_of_card_brands}) 支付，也可以通过欧元银行账户的直接借记（仅限欧元捐赠）。"
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "给 {username} 捐款经由 PayPal 处理。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "向{username} 捐赠可以使用：信用卡或借记卡 ({list_of_card_brands})、欧元银行账户（SEPA 直接借记）或 PayPal 账户。"
+msgstr "向 {username} 的捐赠可以使用：信用卡或借记卡 ({list_of_card_brands})、欧元银行账户（SEPA 直接借记）或 PayPal 账户。"
 
 msgid "Payment Card"
 msgstr "付款卡"
@@ -2572,13 +2572,11 @@ msgstr "信用卡支付"
 msgid "Only for donations to SEPA countries"
 msgstr "仅限向 SEPA 国家/地区的捐赠"
 
-#, fuzzy
 msgid "Only for donations in euros"
 msgstr "仅限欧元捐赠"
 
-#, fuzzy
 msgid "Only euro bank accounts"
-msgstr "只有欧元银行账户"
+msgstr "仅欧元银行账户"
 
 msgid "Pay by direct debit"
 msgstr "直接借记支付"
@@ -3337,9 +3335,8 @@ msgstr "捐款人无需连接下方的任何支付账户，仅收取款项需要
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "如果您所在的国家/地区允许，我们推荐同时使用 Stripe 和 PayPal。"
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr "使用 Stripe，你的捐赠者可以直接从 Liberapay 网站通过银行卡或直接借记付款。(目前仅支持从欧元银行账户直接借记）。"
+msgstr "使用 Stripe，你的捐赠者可以直接从 Liberapay 网站通过银行卡或直接借记付款。(目前仅支持从欧元银行账户直接借记）"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3615,13 +3612,13 @@ msgstr "此支付方式尚未用过。"
 msgid "Set as default"
 msgstr "设为默认"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr "在{currency} 中停止默认使用该支付票据。"
+msgstr "对 {currency} 付款默认停止使用该工具。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr "未设置为默认值，因为{currency}"
+msgstr "已不是 {currency} 付款的默认值"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3640,13 +3637,11 @@ msgstr "添加一个支付方式："
 msgid "Add a card"
 msgstr "添加一个信用卡"
 
-#, fuzzy
 msgid "Euro Bank Account"
 msgstr "欧元银行账户"
 
-#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "仅适用于以欧元捐赠给 SEPA 国家/地区的收款人"
+msgstr "仅适用于给 SEPA 国家/地区收款人的欧元捐赠"
 
 msgid "Add a bank account"
 msgstr "新增一个银行账户"
@@ -4037,9 +4032,9 @@ msgstr "目前支持哪几种货币和国家/地区？"
 msgid "See the “{page_name}” page."
 msgstr "见“{page_name}”页面。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "可用的支付方式取决于收款人支持哪些支付处理商。如果通过 Stripe 支付处理，则接受大多数信用卡和借记卡 ({list_of_card_brands}) 以及 SEPA 直接借记（仅适用于向 SEPA 国家/地区的受款人以欧元捐赠）。如果通过 PayPal 付款，则可以多种方式付款，但捐赠者需要拥有或创建一个 PayPal 账户。"
+msgstr "可用的支付方式取决于收款人支持哪些支付处理商。如果通过 Stripe 支付处理，则接受大多数信用卡和借记卡 ({list_of_card_brands}) 以及 SEPA 直接借记（仅适用于向 SEPA 国家/地区收款人的欧元捐赠）。如果通过 PayPal 付款，则可以多种方式付款，但捐赠者需要拥有或创建一个 PayPal 账户。"
 
 msgid "What are the payment processing fees?"
 msgstr "什么是支付处理费用？"
@@ -4129,10 +4124,10 @@ msgstr[0] "这些 {n} 个地区的创作者可以享受 Liberapay 的所有功�
 msgid "Well supported territories"
 msgstr "得到充分支持的地区"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] "Liberapay也适用于下列{n} 地区的创作者。不过，前往这些地区的捐赠无法进行分组以降低支付处理费用，而且捐赠者也无法使用欧元直接借记支付方式。"
+msgstr[0] "下列 {n} 地区的创作者也可使用 Liberapay。不过，无法对前往这些地区的捐赠分组以降低支付处理费用，而且捐赠者也无法使用欧元直接借记支付方式。"
 
 msgid "Barely supported territories"
 msgstr "勉强支持的地区"
