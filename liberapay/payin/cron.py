@@ -284,26 +284,28 @@ def execute_scheduled_payins():
                     AND r.status = 'chargeable'
                     AND r.network::text LIKE 'stripe-%%'
                     AND ( r.network <> 'stripe-sdd' OR
-                          sp.amount::currency = 'EUR' AND
-                          ( SELECT count(*) > 0
+                          sp.amount::currency = 'EUR' AND EXISTS
+                          ( SELECT 1
                               FROM json_array_elements(sp.transfers) tr
                               JOIN LATERAL (
                                        SELECT 1
                                          FROM payment_accounts a
-                                        WHERE ( a.participant = (tr->>'tippee')::bigint OR
+                                        WHERE ( a.participant = (tr->>'tippee_id')::bigint OR
                                                 a.participant IN (
                                                     SELECT t.member
                                                       FROM current_takes t
-                                                     WHERE t.team = (tr->>'tippee')::bigint
+                                                     WHERE t.team = (tr->>'tippee_id')::bigint
                                                        AND t.amount <> 0
                                                 )
                                               )
+                                          AND a.provider = 'stripe'
                                           AND a.is_current IS TRUE
                                           AND a.verified IS TRUE
                                           AND a.charges_enabled IS TRUE
                                           AND a.country IN %(SEPA)s
                                         LIMIT 1
-                                   ) ON true
+                                   ) a ON true
+                             LIMIT 1
                           )
                         )
                ORDER BY r.is_default_for = sp.amount::currency DESC NULLS LAST
