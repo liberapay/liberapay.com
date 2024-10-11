@@ -71,6 +71,7 @@ Liberapay.stripe_form_init = function($form) {
     Liberapay.stripe_before_submit = async function() {
         // If the Payment Element is hidden, simply let the browser submit the form
         if ($container.parents('.hidden').length > 0) {
+            console.debug("stripe_before_submit: ignoring hidden payment element");
             return true;
         }
         // If Stripe.js is missing, stop the submission
@@ -109,16 +110,18 @@ Liberapay.stripe_form_init = function($form) {
         var result = await stripe.createPaymentMethod(pmType, element, pmData);
         // If the PaymentMethod has been created, submit the form. Otherwise,
         // display an error.
-        if (result.error) {
-            $errorElement.text(result.error.message)[0].scrollIntoView();
+        if (result.paymentMethod && result.paymentMethod.id) {
+            $form.find('input[name="route"]').remove();
+            $form.find('input[name="stripe_pm_id"]').remove();
+            var $pm_id_input = $('<input type="hidden" name="stripe_pm_id">');
+            $pm_id_input.val(result.paymentMethod.id);
+            $pm_id_input.appendTo($form);
+            return true;
+        } else {
+            var msg = '' + (result.error ? result.error.message : result);
+            $errorElement.text(msg)[0].scrollIntoView();
             return false;
         }
-        $form.find('input[name="route"]').remove();
-        $form.find('input[name="stripe_pm_id"]').remove();
-        var $pm_id_input = $('<input type="hidden" name="stripe_pm_id">');
-        $pm_id_input.val(result.paymentMethod.id);
-        $pm_id_input.appendTo($form);
-        return true;
     };
     $form.attr('action', '');
 };
