@@ -124,14 +124,14 @@ Liberapay.stripe_form_init = function($form) {
         }
     };
     $form.attr('action', '');
-};
 
-Liberapay.stripe_next_action = function ($next_action) {
-    stripe.handleCardAction($next_action.data('client_secret')).then(function (result) {
-        if (result.error) {
-            $next_action.addClass('alert alert-danger').text(result.error.message);
-        } else {
-            window.location.reload();
-        }
-    })
+    Liberapay.stripe_next_action = function ($next_action) {
+        stripe.handleCardAction($next_action.data('client_secret')).then(function (result) {
+            if (result.error) {
+                $next_action.addClass('alert alert-danger').text(result.error.message);
+            } else {
+                window.location.reload();
+            }
+        })
+    };
 };
