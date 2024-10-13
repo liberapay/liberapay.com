@@ -123,7 +123,6 @@ Liberapay.stripe_form_init = function($form) {
             return false;
         }
     };
-    $form.attr('action', '');
 
     Liberapay.stripe_next_action = function ($next_action) {
         stripe.handleCardAction($next_action.data('client_secret')).then(function (result) {
