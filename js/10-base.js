@@ -108,7 +108,13 @@ Liberapay.init = function() {
     });
 };
 
-$(function(){ Liberapay.init(); });
+$(function(){
+    try {
+        Liberapay.init();
+    } catch (exc) {
+        Liberapay.error(exc);
+    }
+});
 
 Liberapay.error = function(exc) {
     console.error(exc);
@@ -116,16 +122,6 @@ Liberapay.error = function(exc) {
               "Please contact support@liberapay.com if the problem persists.";
     Liberapay.notification(msg, 'error', -1);
 }
-
-Liberapay.wrap = function(f) {
-    return async function() {
-        try {
-            return await f.apply(this, arguments);
-        } catch (exc) {
-            Liberapay.error(exc);
-        }
-    }
-};
 
 Liberapay.get_object_by_name = function(name) {
     return name.split('.').reduce(function(o, k) {return o[k]}, window);

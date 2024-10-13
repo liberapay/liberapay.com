@@ -241,6 +241,13 @@ Liberapay.forms.jsSubmit = function() {
         }
     }
     for (const form of document.getElementsByTagName('form')) {
-        form.addEventListener('submit', Liberapay.wrap(submit));
+        form.addEventListener('submit', async function(event) {
+            try {
+                return await submit.apply(this, arguments);
+            } catch (exc) {
+                Liberapay.error(exc);
+                event.preventDefault();
+            }
+        });
     }
 };
