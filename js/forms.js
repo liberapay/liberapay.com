@@ -52,7 +52,7 @@ Liberapay.forms.jsSubmit = function() {
         console.debug('jsSubmit: called with event', e);
         var form = this;
         var $form = $(form);
-        var target = $form.attr('action');
+        var target = $form.attr('action') || '';
         if (target.startsWith('javascript:')) {
             target = target.substr(11);
             $form.attr('action', target);
