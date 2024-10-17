@@ -201,9 +201,9 @@ def send_upcoming_debit_notifications():
            AND sp.notifs_count = 0
            AND sp.payin IS NULL
            AND sp.ctime < (current_timestamp - interval '6 hours')
-      GROUP BY sp.payer, (sp.amount).currency
+      GROUP BY sp.payer
         HAVING min(sp.execution_date) <= (current_date + interval '14 days')
-      ORDER BY sp.payer, (sp.amount).currency
+      ORDER BY sp.payer
     """)
     for payer, payins in rows:
         if not payer.can_attempt_payment:
@@ -211,53 +211,68 @@ def send_upcoming_debit_notifications():
         _check_scheduled_payins(db, payer, payins, automatic=True)
         if not payins:
             continue
-        payins.sort(key=itemgetter('execution_date'))
-        context = {
-            'payins': payins,
-            'total_amount': sum(sp['amount'] for sp in payins),
-        }
-        for sp in context['payins']:
+        payins.sort(key=lambda sp: (
+            sp['amount'].currency, sp['execution_date'], sp['id']
+        ))
+        routes = website.db.all("""
+            SELECT r
+              FROM exchange_routes r
+             WHERE r.participant = %(payer_id)s
+               AND r.status = 'chargeable'
+               AND r.network::text LIKE 'stripe-%%'
+        """, dict(payer_id=payer.id))
+        for route in routes:
+            route.__dict__['participant'] = payer
+        grouped_payins = defaultdict(list)
+        for sp in payins:
             for tr in sp['transfers']:
                 del tr['tip'], tr['beneficiary']
-        if len(payins) > 1:
-            last_execution_date = payins[-1]['execution_date']
-            max_execution_date = max(sp['execution_date'] for sp in payins)
-            assert last_execution_date == max_execution_date
-            context['ndays'] = (max_execution_date - utcnow().date()).days
-        currency = payins[0]['amount'].currency
-        while True:
-            route = db.one("""
-                SELECT r
-                  FROM exchange_routes r
-                 WHERE r.participant = %s
-                   AND r.status = 'chargeable'
-                   AND r.network::text LIKE 'stripe-%%'
-              ORDER BY r.is_default_for = %s DESC NULLS LAST
-                     , r.is_default NULLS LAST
-                     , r.network = 'stripe-sdd' DESC
-                     , r.ctime DESC
-                 LIMIT 1
-            """, (payer.id, currency))
-            if route is None:
+            currency = sp['amount'].currency
+            routes.sort(key=lambda r: (
+                -(r.is_default_for == currency),
+                -(r.is_default is True),
+                -(r.network == 'stripe-sdd'),
+                -(r.ctime.timestamp()),
+            ))
+            recipients_are_in_sepa = (
+                len(sp['transfers']) > 1 or db.Participant.from_id(
+                    sp['transfers'][0]['tippee_id']
+                ).has_stripe_sepa_for(payer)
+            )
+            suitable_route = None
+            for route in routes:
+                if route.network == 'stripe-sdd' and not recipients_are_in_sepa:
+                    continue
+                suitable_route = route
                 break
-            route.sync_status()
-            if route.status == 'chargeable':
-                break
-        if route:
-            event = 'upcoming_debit'
-            context['instrument_brand'] = route.get_brand()
-            context['instrument_partial_number'] = route.get_partial_number()
-        else:
-            event = 'missing_route'
-        payer.notify(event, email_unverified_address=True, **context)
-        counts[event] += 1
-        db.run("""
-            UPDATE scheduled_payins
-               SET notifs_count = notifs_count + 1
-                 , last_notif_ts = now()
-             WHERE payer = %s
-               AND id IN %s
-        """, (payer.id, tuple(sp['id'] for sp in payins)))
+            grouped_payins[(currency, suitable_route)].append(sp)
+            del suitable_route
+        del payins
+        for (currency, route), payins in grouped_payins.items():
+            context = {
+                'payins': payins,
+                'total_amount': sum(sp['amount'] for sp in payins),
+            }
+            if len(payins) > 1:
+                last_execution_date = payins[-1]['execution_date']
+                max_execution_date = max(sp['execution_date'] for sp in payins)
+                assert last_execution_date == max_execution_date
+                context['ndays'] = (max_execution_date - utcnow().date()).days
+            if route:
+                event = 'upcoming_debit'
+                context['instrument_brand'] = route.get_brand()
+                context['instrument_partial_number'] = route.get_partial_number()
+            else:
+                event = 'missing_route'
+            payer.notify(event, email_unverified_address=True, **context)
+            counts[event] += 1
+            db.run("""
+                UPDATE scheduled_payins
+                   SET notifs_count = notifs_count + 1
+                     , last_notif_ts = now()
+                 WHERE payer = %s
+                   AND id IN %s
+            """, (payer.id, tuple(sp['id'] for sp in payins)))
     for k, n in sorted(counts.items()):
         logger.info("Sent %i %s notifications." % (n, k))
 
