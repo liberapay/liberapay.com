@@ -1700,17 +1700,17 @@ msgstr "Mehr ansehen"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} hat bisher keine Zahlungsmethode eingestellt, weshalb Ihre Spende derzeit nicht verarbeitet werden kann. Wir werden Sie informieren, sobald Zahlungen möglich sind."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte ({list_of_card_brands}) oder per Lastschrift von einem Bankkonto (nur für Spenden in Euro) bezahlt werden."
+msgstr "Spenden an {username} können per Kredit- oder Debitkarte ({list_of_card_brands}) oder per Lastschrift von einem Euro-Bankkonto (nur für Spenden in Euro) getätigt werden."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Spenden an {username} werden mittels PayPal abgewickelt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte ({list_of_card_brands}), einem Euro-Bankkonto (SEPA-Lastschriftverfahren) oder einem PayPal-Konto bezahlt werden."
+msgstr "Spenden an {username} können mit einer Kredit- oder Debitkarte ({list_of_card_brands}), einem Euro-Bankkonto (SEPA-Lastschrift) oder einem PayPal-Konto getätigt werden."
 
 msgid "Payment Card"
 msgstr "Zahlungskarte"
@@ -2597,11 +2597,9 @@ msgstr "Mit Karte zahlen"
 msgid "Only for donations to SEPA countries"
 msgstr "Nur für Spenden zu SEPA-Ländern"
 
-#, fuzzy
 msgid "Only for donations in euros"
 msgstr "Nur für Spenden in Euro"
 
-#, fuzzy
 msgid "Only euro bank accounts"
 msgstr "Nur Euro-Bankkonten"
 
@@ -3372,9 +3370,8 @@ msgstr "Spender müssen kein Auszahlungs-Konto unten angeben. Dies ist nur notwe
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Wir empfehlen, sowohl Stripe als auch PayPal zu benutzen, falls diese in Ihrem Land verfügbar sind."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr "Mit Stripe können Ihre Spender direkt von der Liberapay-Website aus per Karte oder Lastschriftverfahren bezahlen. (Lastschriften werden derzeit nur von Euro-Bankkonten unterstützt.)"
+msgstr "Mit Stripe können Ihre Spender per Kreditkarte oder Lastschrift direkt über die Liberapay-Website bezahlen. (Lastschriften werden derzeit nur von Euro-Bankkonten unterstützt.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3653,13 +3650,13 @@ msgstr "Dieses Zahlungsmittel ist noch nicht verwendet worden."
 msgid "Set as default"
 msgstr "Zum Standard machen"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr "Verwenden Sie dieses Zahlungsmittel nicht mehr standardmäßig für Zahlungen auf {currency}."
+msgstr "Dieses Zahlungsmittel nicht mehr standardmäßig für Zahlungen in {currency} verwenden."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr "Nicht als Standard eingestellt für {currency}"
+msgstr "Nicht mehr als Standard eingestellt für {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3678,11 +3675,9 @@ msgstr "Ein Zahlungsmittel hinzufügen:"
 msgid "Add a card"
 msgstr "Eine Karte hinzufügen"
 
-#, fuzzy
 msgid "Euro Bank Account"
 msgstr "Euro Bankkonto"
 
-#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
 msgstr "Nur für Spenden in Euro an Empfänger in SEPA-Ländern"
 
@@ -4174,11 +4169,11 @@ msgstr[1] "Schöpfer in diesen {n} Gebieten profitieren von allen Funktionen von
 msgid "Well supported territories"
 msgstr "Gut unterstützte Territorien"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
-msgstr[1] "Liberapay ist auch für Schöpfer in den unten aufgeführten Gebieten von {n} verfügbar. Allerdings können Spenden für diese Gebiete nicht gebündelt werden, um die Zahlungsabwicklungsgebühren zu senken, und die Zahlungsmethode Euro-Lastschrift steht den Spendern nicht zur Verfügung."
+msgstr[1] "Liberapay steht auch Erstellern in den unten aufgeführten Gebieten zur Verfügung. Spenden, die in diese Gebiete gehen, können jedoch nicht zusammengefasst werden, um die Gebühren für die Zahlungsabwicklung zu senken, und die Zahlungsmethode Euro-Lastschrift steht den Spendern nicht zur Verfügung."
 
 msgid "Barely supported territories"
 msgstr "Kaum unterstützte Territorien"
@@ -4485,7 +4480,7 @@ msgstr "Ein Teamkonto {bold}behält kein Geld{end_bold} für die spätere Benutz
 
 #, python-brace-format
 msgid "If Liberapay team accounts don't fit your needs, you may want to use the {link_start}Open Collective{link_end} platform instead, which allows a team to be “hosted” by a registered nonprofit. This “fiscal host” is the legal owner of the collective's funds, oversees how they're used, and usually takes a percentage of the donations to fund itself. (We're planning to implement a similar system in Liberapay, but we don't know when it will be done.)"
-msgstr "Falls Liberapay-Teamkonten nicht zu Ihren Bedürfnissen passen, könnte Sie stattdessen die „{link_start}Open Collective{link_end}“-Plattform verwenden. Dort kann ein Team von einer registrierten Non-Profit-Organisation „beherbergt“ werden. Dieser „Treuhänder“ ist der rechtliche Eigentümer des Teamkapitals, überwacht, wie das Kapital benutzt wird und nimmt eine kleine Gebühr. (Wir planen, ein ähnliches System für Liberapay, aber wir wissen nicht, wann es fertig sein wird.)"
+msgstr "Wenn die Teamkonten von Liberapay nicht Ihren Anforderungen entsprechen, können Sie stattdessen die Plattform {link_start}Open Collective{link_end} nutzen, die es einem Team ermöglicht, von einer registrierten gemeinnützigen Organisation „gehostet“ zu werden. Dieser „steuerliche Gastgeber“ ist der rechtmäßige Eigentümer der Gelder des Kollektivs, überwacht deren Verwendung und behält in der Regel einen Prozentsatz der Spenden ein, um sich selbst zu finanzieren. (Wir planen, ein ähnliches System in Liberapay zu implementieren, wissen aber noch nicht, wann dies geschehen wird.)"
 
 msgid "Creating a team"
 msgstr "Ein Team gründen"
