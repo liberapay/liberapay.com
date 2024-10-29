@@ -3366,43 +3366,7 @@ class Participant(Model, MixinTeam):
                     groups['self_donation'].append(tip)
                 else:
                     n_fundable += 1
-                    if tippee_p.payment_providers & 1 == 1:
-                        members = set(members)
-                        members.discard(self.id)
-                        in_sepa = self.db.one("""
-                            SELECT true
-                              FROM current_takes t
-                              JOIN payment_accounts a ON a.participant = t.member
-                             WHERE t.team = %(tippee)s
-                               AND t.member IN %(members)s
-                               AND a.provider = 'stripe'
-                               AND a.is_current
-                               AND a.charges_enabled
-                               AND a.country IN %(SEPA)s
-                             LIMIT 1
-                        """, dict(members=members, tippee=tip.tippee, SEPA=SEPA))
-                        if in_sepa:
-                            group = stripe_europe.setdefault(tip.amount.currency, [])
-                            if len(group) == 0:
-                                groups['fundable'].append(group)
-                            group.append(tip)
-                        else:
-                            groups['fundable'].append([tip])
-                    else:
-                        groups['fundable'].append([tip])
-            else:
-                n_fundable += 1
-                if tippee_p.payment_providers & 1 == 1:
-                    in_sepa = self.db.one("""
-                        SELECT true
-                          FROM payment_accounts a
-                         WHERE a.participant = %(tippee)s
-                           AND a.provider = 'stripe'
-                           AND a.is_current
-                           AND a.charges_enabled
-                           AND a.country IN %(SEPA)s
-                         LIMIT 1
-                    """, dict(tippee=tip.tippee, SEPA=SEPA))
+                    in_sepa = tip.tippee_p.has_stripe_sepa_for(self)
                     if in_sepa:
                         group = stripe_europe.setdefault(tip.amount.currency, [])
                         if len(group) == 0:
@@ -3410,9 +3374,48 @@ class Participant(Model, MixinTeam):
                         group.append(tip)
                     else:
                         groups['fundable'].append([tip])
+            else:
+                n_fundable += 1
+                in_sepa = tip.tippee_p.has_stripe_sepa_for(self)
+                if in_sepa:
+                    group = stripe_europe.setdefault(tip.amount.currency, [])
+                    if len(group) == 0:
+                        groups['fundable'].append(group)
+                    group.append(tip)
                 else:
                     groups['fundable'].append([tip])
         return groups, n_fundable
+
+    def has_stripe_sepa_for(self, tipper):
+        if tipper == self or self.payment_providers & 1 == 0:
+            return False
+        if self.kind == 'group':
+            return self.db.one("""
+                SELECT true
+                  FROM current_takes t
+                  JOIN participants p ON p.id = t.member
+                  JOIN payment_accounts a ON a.participant = t.member
+                 WHERE t.team = %(tippee)s
+                   AND t.member <> %(tipper)s
+                   AND t.amount <> 0
+                   AND p.is_suspended IS NOT TRUE
+                   AND a.provider = 'stripe'
+                   AND a.is_current
+                   AND a.charges_enabled
+                   AND a.country IN %(SEPA)s
+                 LIMIT 1
+            """, dict(tipper=tipper.id, tippee=self.id, SEPA=SEPA))
+        else:
+            return self.db.one("""
+                SELECT true
+                  FROM payment_accounts a
+                 WHERE a.participant = %(tippee)s
+                   AND a.provider = 'stripe'
+                   AND a.is_current
+                   AND a.charges_enabled
+                   AND a.country IN %(SEPA)s
+                 LIMIT 1
+            """, dict(tippee=self.id, SEPA=SEPA))
 
     def get_tips_to(self, tippee_ids):
         return self.db.all("""
