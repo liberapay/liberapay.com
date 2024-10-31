@@ -501,7 +501,7 @@ def settle_charge_and_transfers(
                     )
                 elif pt.status in ('pre', 'pending'):
                     pt = execute_transfer(
-                        db, pt, pt.destination_id, charge.id,
+                        db, pt, charge.id,
                         update_donor=(update_donor and i == last),
                     )
             else:
@@ -552,12 +552,11 @@ def settle_charge_and_transfers(
     return payin
 
 
-def execute_transfer(db, pt, destination, source_transaction, update_donor=True):
+def execute_transfer(db, pt, source_transaction, update_donor=True):
     """Create a Transfer.
 
     Args:
         pt (Record): a row from the `payin_transfers` table
-        destination (str): the Stripe ID of the destination account
         source_transaction (str): the ID of the Charge this transfer is linked to
 
     Returns:
@@ -570,7 +569,7 @@ def execute_transfer(db, pt, destination, source_transaction, update_donor=True)
             amount=Money_to_int(pt.amount),
             currency=pt.amount.currency,
             description=generate_transfer_description(pt),
-            destination=destination,
+            destination=pt.destination_id,
             metadata={'payin_transfer_id': pt.id},
             source_transaction=source_transaction,
             idempotency_key='payin_transfer_%i' % pt.id,
@@ -583,9 +582,9 @@ def execute_transfer(db, pt, destination, source_transaction, update_donor=True)
                    SET is_current = null
                  WHERE provider = 'stripe'
                    AND id = %s
-            """, (destination,))
+            """, (pt.destination_id,))
             alternate_destination = db.one("""
-                SELECT id
+                SELECT id, pk
                   FROM payment_accounts
                  WHERE participant = %(p_id)s
                    AND provider = 'stripe'
@@ -597,7 +596,14 @@ def execute_transfer(db, pt, destination, source_transaction, update_donor=True)
                  LIMIT 1
             """, dict(p_id=pt.recipient, SEPA=SEPA, currency=pt.amount.currency))
             if alternate_destination:
-                return execute_transfer(db, pt, alternate_destination, source_transaction)
+                pt = db.one("""
+                    UPDATE payin_transfers
+                       SET destination = %s
+                     WHERE id = %s
+                 RETURNING *
+                """, (alternate_destination.pk, pt.id))
+                pt.destination_id = alternate_destination.id
+                return execute_transfer(db, pt, source_transaction)
             error = "The recipient's account no longer exists."
             return update_payin_transfer(
                 db, pt.id, None, 'failed', error, update_donor=update_donor,
