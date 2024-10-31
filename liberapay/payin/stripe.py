@@ -483,7 +483,7 @@ def settle_charge_and_transfers(
       ORDER BY pt.id
     """, (payin.id,))
     last = len(payin_transfers) - 1
-    if amount_settled is not None:
+    if charge.status == 'succeeded':
         payer = db.Participant.from_id(payin.payer)
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
@@ -542,7 +542,8 @@ def settle_charge_and_transfers(
                         update_donor=(update_donor and i == last),
                     )
 
-    elif charge.status in ('failed', 'pending'):
+    else:
+        assert charge.status in ('failed', 'pending')
         for i, pt in enumerate(payin_transfers):
             update_payin_transfer(
                 db, pt.id, None, charge.status, error,
