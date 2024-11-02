@@ -256,7 +256,7 @@ if tippees:
     if len(tips) == 1:
         proto_transfers = resolve_tip(
             website.db, tips[0], tips[0].tippee_p, 'stripe', payer, payer.guessed_country,
-            tips[0].periodic_amount
+            tips[0].amount * 52
         )
         if len(proto_transfers) == 1:
             if proto_transfers[0].destination.country not in constants.SEPA:
