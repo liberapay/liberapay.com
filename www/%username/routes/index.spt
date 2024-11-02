@@ -191,9 +191,9 @@ title = _("Payment Instruments")
                         name="set_as_default_for" value="{{ route.id }}:"
                         title="{{ _(
                             'Stop using this instrument by default for payments in {currency}.',
-                            currency=Currency(last_payin.amount.currency)
+                            currency=Currency(route.is_default_for)
                         ) }}">{{ _(
-                    "Unset as default for {currency}", currency=last_payin.amount.currency
+                    "Unset as default for {currency}", currency=route.is_default_for
                 ) }}</button>
             % elif route.network != 'stripe-card' and last_payin and participant.donates_in_multiple_currencies
                 <button class="btn btn-primary btn-xs"
