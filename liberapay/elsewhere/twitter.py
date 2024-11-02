@@ -8,7 +8,7 @@ class Twitter(PlatformOAuth1):
     # Platform attributes
     name = 'twitter'
     display_name = 'Twitter'
-    account_url = 'https://twitter.com/{user_name}'
+    account_url = 'https://x.com/{user_name}'
 
     # Auth attributes
     auth_url = 'https://api.twitter.com'

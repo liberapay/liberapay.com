@@ -50,6 +50,7 @@ if request.method == 'POST':
           JOIN participants p ON p.id = t.tippee
          WHERE t.tipper = %s
            AND t.id IN %s
+           AND t.renewal_mode > 0
            AND p.payment_providers & %s > 0
       ORDER BY t.id
     """, (payer.id, set(body.parse_list('tips', int)), STRIPE_BIT))
@@ -198,7 +199,7 @@ tippees = request.qs.parse_list('beneficiary', int, default=None)
 if tippees:
     tips = [
         tip for tip in payer.get_tips_to(tippees)
-        if tip.tippee_p.payment_providers & STRIPE_BIT > 0
+        if tip.renewal_mode > 0 and tip.tippee_p.payment_providers & STRIPE_BIT > 0
     ]
     if len(set(tip.amount.currency for tip in tips)) != 1:
         raise response.invalid_input(tippees, 'beneficiary', 'querystring')
