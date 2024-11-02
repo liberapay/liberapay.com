@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Slovak "
-"<https://hosted.weblate.org/projects/liberapay/core/sk/>\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"PO-Revision-Date: 2024-11-02 19:04+0000\n"
+"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/liberapay/core/sk/>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.8.2\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1715,15 +1717,15 @@ msgstr "Zobraziť viac"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} nemá nastavený spôsob platby, takže Váš dar sa momentálne nedá spracovať. Oznámime Vám, keď bude platba možná."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Príspevky na adresu {username} je možné uhradiť kreditnou alebo debetnou kartou ({list_of_card_brands}) alebo priamym inkasom z bankového účtu v eurách (len v prípade príspevkov v eurách)."
+msgstr "Príspevky pre {username} možu byť zaplatené prostredníctvom debetnej karty ({list_of_card_brands}) alebo priamou platbou v eurách na bankový účet (iba v eurách)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Príspevky pre {username} sú vykonané cez PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Príspevky na adresu {username} môžete zaplatiť: kreditnou alebo debetnou kartou ({list_of_card_brands}), bankovým účtom v eurách (SEPA Direct Debit) alebo účtom PayPal."
 
@@ -1833,13 +1835,11 @@ msgstr "Normálny podiel"
 msgid "Actual Take"
 msgstr "Skutočný podiel"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
 msgstr "V službe Liberapay sa dary platia vopred. V tomto stĺpci je uvedené, koľko peňazí každý člen dostal vopred prostredníctvom tohto tímu. Záloha sa zvyšuje vždy, keď člen dostane novú platbu od darcu prostredníctvom tímu, a znižuje sa každý týždeň počas \"dňa výplaty\"."
 
-#, fuzzy
 msgid "Advance"
-msgstr "Advance"
+msgstr "Pokročilé"
 
 msgid "auto"
 msgstr "auto"
@@ -2623,15 +2623,12 @@ msgstr "Momentálne nedostupné"
 msgid "Pay by card"
 msgstr "Zaplatiť kartou"
 
-#, fuzzy
 msgid "Only for donations to SEPA countries"
 msgstr "Len pre dary do krajín SEPA"
 
-#, fuzzy
 msgid "Only for donations in euros"
 msgstr "Len pre dary v eurách"
 
-#, fuzzy
 msgid "Only euro bank accounts"
 msgstr "Len bankové účty v eurách"
 
@@ -2730,7 +2727,6 @@ msgstr "Vaša platba bola iniciovaná. Do vašej banky bude odoslaná neskôr po
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Vaša banka môže odmietnuť túto platbu. Odporúčame aby ste poslali kópiu {link_start}mandátu{link_end} vašej banke ak ste si nie istý či správne spracováva priame platby v mene {currency}."
 
-#, fuzzy
 msgid "The initialization of a required component has failed. If you use a browser extension that blocks requests, for example NoScript, please make sure it’s allowing requests to the “stripe.com” domain."
 msgstr "Inicializácia požadovanej zložky zlyhala. Ak používate rozšírenie prehliadača, ktoré blokuje požiadavky, napríklad NoScript, uistite sa, že povoľuje požiadavky na doménu \"stripe.com\"."
 
@@ -3413,7 +3409,6 @@ msgstr "Darcovia nemusia pripájať žiadny platobný účet, je potrebný iba n
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Odporúčame pripojiť Stripe aj PayPal ak sú obidve dostupné vo vašej krajine."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
 msgstr "Pomocou služby Stripe môžu vaši darcovia platiť kartou alebo priamym inkasom priamo z webovej stránky Liberapay. (Priame inkasá sú v súčasnosti podporované len z bankových účtov v eurách.)"
 
@@ -3697,11 +3692,11 @@ msgstr "Platobný prostriedok ešte nebol použitý."
 msgid "Set as default"
 msgstr "Prednastaviť"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
 msgstr "Prestaňte štandardne používať tento nástroj na platby na {currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unset as default for {currency}"
 msgstr "Nenastavené ako predvolené pre {currency}"
 
@@ -3722,11 +3717,9 @@ msgstr "Pridať platobný prostriedok:"
 msgid "Add a card"
 msgstr "Pridať kartu"
 
-#, fuzzy
 msgid "Euro Bank Account"
 msgstr "Bankový účet v eurách"
 
-#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
 msgstr "Len pre dary v eurách príjemcom v krajinách SEPA"
 
@@ -4127,9 +4120,9 @@ msgstr "Ktoré krajiny a meny sú podporované?"
 msgid "See the “{page_name}” page."
 msgstr "Viď stránku \"{page_name}\"."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Dostupné spôsoby platby závisia od toho, ktoré platobné procesory príjemca podporuje. Ak platbu spracúva Stripe, potom je akceptovaná väčšina kreditných a debetných kariet ({list_of_card_brands}), ako aj SEPA inkasá (len v prípade darov v eurách pre príjemcov v krajinách SEPA). Ak je platba realizovaná prostredníctvom služby PayPal, potom je možné platiť rôznymi spôsobmi, darca však musí mať alebo si vytvoriť účet PayPal."
+msgstr "Dostupné spôsoby platby závisia od toho, ktorí spracovatelia platieb sú podporovaní príjemcom. Ak platbu spracuje Stripe, akceptuje sa väčšina kreditných a debetných kariet ( {list_of_card_brands} ), ako aj SEPA inkasá (iba pre dary v eurách príjemcom v krajinách SEPA). Ak je platba uskutočnená cez PayPal, potom je možné platiť rôznymi spôsobmi, avšak darca musí mať alebo si vytvoriť PayPal účet."
 
 msgid "What are the payment processing fees?"
 msgstr "Aké sú poplatky za spracovanie platieb?"
@@ -4203,54 +4196,48 @@ msgstr[0] "<unused singular (hash=4cf42af35c271573d64f577e06447211)>"
 msgstr[1] "Darcovia si môžu vybrať z {n} mien, v závislosti na preferenciách prijímateľa a možnostiach platobného procesu."
 msgstr[2] "Darcovia si môžu vybrať z {n} mien, v závislosti na preferenciách prijímateľa a možnostiach platobného procesu."
 
-#, fuzzy
 msgid "Donations can only be received in territories where at least one supported payment processor is available. Moreover, some features are only available in some of the territories supported by a payment processor."
-msgstr "Dary je možné prijímať len na územiach, kde je k dispozícii aspoň jeden podporovaný platobný procesor. Okrem toho sú niektoré funkcie dostupné len na niektorých územiach podporovaných platobným procesorom."
+msgstr "Dary je možné prijímať iba na územiach, kde je dostupný aspoň jeden podporovaný spracovateľ platieb. Okrem toho sú niektoré funkcie dostupné iba na niektorých územiach podporovaných spracovateľom platieb."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The currently supported payment processors are {Stripe} and {PayPal}. You can find a list of the differences between them {link_start}in the “{page_name}” page{link_end}."
-msgstr "Aktuálne podporované platobné procesory sú {Stripe} a {PayPal}. Zoznam rozdielov medzi nimi nájdete {link_start}na stránke \"{page_name}\"{link_end}."
+msgstr "Aktuálne podporovaní spracovatelia platieb sú {Stripe} a {PayPal} . Zoznam rozdielov medzi nimi {link_start} nájdete na stránke „ {page_name} “ {link_end} ."
 
-#, fuzzy
 msgid "Best supported territories"
 msgstr "Najlepšie podporované územia"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
 msgstr[0] "<nepoužívaný singulár (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
-msgstr[1] ""
+msgstr[1] "Tvorcovia na týchto územiach {n} môžu využívať všetky funkcie Liberapay:"
 msgstr[2] "Tvorcovia na týchto územiach {n} môžu využívať všetky funkcie Liberapay:"
 
-#, fuzzy
 msgid "Well supported territories"
 msgstr "Dobre podporované územia"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] "<nepoužívaný singulár (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
-msgstr[1] ""
+msgstr[1] "Liberapay je k dispozícii aj tvorcom na nižšie uvedených územiach {n}. Príspevky smerujúce do týchto území však nie je možné zoskupiť, aby sa znížili poplatky za spracovanie platby, a darcom nie je k dispozícii spôsob platby priamym inkasom v eurách."
 msgstr[2] "Liberapay je k dispozícii aj tvorcom na nižšie uvedených územiach {n}. Príspevky smerujúce do týchto území však nie je možné zoskupiť, aby sa znížili poplatky za spracovanie platby, a darcom nie je k dispozícii spôsob platby priamym inkasom v eurách."
 
-#, fuzzy
 msgid "Barely supported territories"
-msgstr "Sotva podporované územia"
+msgstr "Takmer podporované územia"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
 msgid_plural "Liberapay is partly available to creators in the {n} territories listed below, which are supported by PayPal but not by Stripe."
 msgstr[0] "<nepoužívaný singulár (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
-msgstr[1] ""
+msgstr[1] "Služba Liberapay je čiastočne k dispozícii tvorcom na nižšie uvedených územiach {n}, ktoré sú podporované spoločnosťou PayPal, ale nie spoločnosťou Stripe."
 msgstr[2] "Služba Liberapay je čiastočne k dispozícii tvorcom na nižšie uvedených územiach {n}, ktoré sú podporované spoločnosťou PayPal, ale nie spoločnosťou Stripe."
 
-#, fuzzy
 msgid "Unsupported territories"
 msgstr "Nepodporované územia"
 
-#, fuzzy
 msgid "If you don't live or have a registered business in one of the territories listed above, then you currently can't use Liberapay to receive donations. Sorry."
-msgstr "Ak nežijete alebo nemáte registrovanú firmu na jednom z vyššie uvedených území, v súčasnosti nemôžete používať Liberapay na prijímanie darov. Ospravedlňujeme sa."
+msgstr "Ak nežijete alebo nemáte zaregistrovanú firmu v niektorom z území uvedených vyššie, v súčasnosti nemôžete používať Liberapay na prijímanie darov. prepáč."
 
 msgid "What is Liberapay?"
 msgstr "Čo je Liberapay?"
@@ -5329,10 +5316,9 @@ msgstr "Bohužial sme nenašli žiadnu položku zodpovedajúcu vašej požiadavk
 msgid "Whose work do you appreciate?"
 msgstr "Koho prácu si ceníte?"
 
-#, fuzzy
 msgid "Found a matching user name"
 msgid_plural "Found matching user names"
-msgstr[0] "Nájdené vyhovujúce uživateľské meno"
+msgstr[0] "Nájdené vyhovujúce užívateľské meno"
 msgstr[1] "Nájdené vyhovujúce uživateľské mená"
 msgstr[2] "Nájdené vyhovujúce uživateľské mená"
 
