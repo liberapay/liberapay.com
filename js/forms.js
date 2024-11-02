@@ -65,7 +65,7 @@ Liberapay.forms.jsSubmit = function() {
         // Determine the submission mode
         var form_on_success = form.getAttribute('data-on-success');
         var button, button_on_success;
-        if (e.submitter.tagName == 'BUTTON') {
+        if (e.submitter && e.submitter.tagName == 'BUTTON') {
             button = e.submitter;
             button_on_success = button.getAttribute('data-on-success');
         }
