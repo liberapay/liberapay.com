@@ -558,6 +558,9 @@ def resolve_amounts(
 
     Returns a copy of `base_amounts` with updated values.
     """
+    if available_amount < (minimum_amount or 0):
+        raise ValueError("available_amount can't be less than minimum_amount or 0")
+
     currency = available_amount.currency
     zero = Money.ZEROS[currency]
     inf = Money('inf', currency)
