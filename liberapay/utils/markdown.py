@@ -4,13 +4,13 @@ from markupsafe import Markup
 import misaka as m  # http://misaka.61924.nl/
 
 
-url_re = re.compile(r'^(https?|xmpp):')
+uri_re = re.compile(r'^(https?|xmpp|imap|irc|nntp):')
 
 
 class CustomRenderer(m.SaferHtmlRenderer):
 
     def check_url(self, url, is_image_src=False):
-        return bool(url_re.match(url))
+        return bool(uri_re.match(url))
 
 
 renderer = CustomRenderer()
