@@ -48,7 +48,7 @@ class CustomRenderer(m.SaferHtmlRenderer):
             # make sure localhost is handled
             self.canonical_host = 'http://' + self.canonical_host
 
-        super().__init__(link_rewrite=f"{self.canonical_host}/redirect?url={{url}}?back_to={self.canonical_host}")
+        super().__init__(link_rewrite=f"{self.canonical_host}/redirect?url={{url}}")
         
     def autolink(self, raw_url, is_email):
         # override super's autolink function, add target="_blank"
