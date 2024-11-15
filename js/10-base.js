@@ -106,6 +106,40 @@ Liberapay.init = function() {
     $('button[data-action="reload"]').on('click', function() {
         location.reload();
     });
+        
+    // Add remaining length indicator on page load
+    $('input[maxlength], textarea[maxlength]').each(function() {
+        var $this = $(this)
+        var maxLength = $this.attr('maxlength');
+        var dataMaxlengthMsg = $this.data('maxlengthMsg');
+        $this.data('maxlength', maxLength);
+        $this.removeAttr('maxlength');
+        maxLength = $this.data('maxlength');
+        var remainingLength = maxLength - $this.val().length;
+        $this.after("<span class='remaining-length'>" + remainingLength + "</span>");
+
+        // Style remaining length indicator
+        $('.remaining-length').each(function() {
+            $(this).css({
+                'float': 'right',
+                'margin-right': '5px'
+            });
+        });
+
+        // Update remaining length dynamically
+        $this.on('focus input', function() {
+            var $this = $(this)
+            var maxLength = $this.data('maxlength');
+            var remainingLength = maxLength - $this.val().length;
+            $this.siblings("span[class='remaining-length']").first().text(remainingLength);
+            
+            if (remainingLength < 0) {
+                $this.get(0).setCustomValidity(dataMaxlengthMsg);
+            } else {
+                $this.get(0).setCustomValidity('');
+            }
+        });
+    });
 };
 
 $(function(){

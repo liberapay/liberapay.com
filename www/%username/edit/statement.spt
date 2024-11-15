@@ -172,6 +172,7 @@ subhead = _("Descriptions")
         <div class="form-group">
         <input name="summary" class="form-control" size=60
                maxlength="{{ constants.SUMMARY_MAX_SIZE }}"
+               data-maxlength-msg="{{ _('Maximum length is {0}.', constants.SUMMARY_MAX_SIZE) }}"
                placeholder="{{ _('Short description in {language}', language=locale.Language(lang)) }}"
                value="{{ summary }}" lang="{{ lang }}" />
         </div>

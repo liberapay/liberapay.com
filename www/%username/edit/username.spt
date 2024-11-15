@@ -58,6 +58,7 @@ subhead = _("Username")
             <input name="username" class="form-control"
                    value="{{ _username }}" required
                    maxlength="{{ constants.USERNAME_MAX_SIZE }}"
+                   data-maxlength-msg="{{ _('Maximum length is {0}.', constants.USERNAME_MAX_SIZE) }}"
                    placeholder="{{ _('Username') }}"/>
             <p class="help-block">{{
                 _("Maximum length is {0}.", constants.USERNAME_MAX_SIZE) + " " +
@@ -77,6 +78,7 @@ subhead = _("Username")
             <input name="public_name" class="form-control"
                    value="{{ participant.public_name or '' }}"
                    maxlength="{{ constants.PUBLIC_NAME_MAX_SIZE }}"
+                   data-maxlength-msg="{{ _('Maximum length is {0}.', constants.PUBLIC_NAME_MAX_SIZE) }}"
                    placeholder="{{ _('Name') }}"/>
             <p class="help-block">{{
                 _("Maximum length is {0}.", constants.PUBLIC_NAME_MAX_SIZE) + " " +

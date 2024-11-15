@@ -98,7 +98,8 @@ title = _("{0} community settings", c.name)
             "Short description in {language}", language=locale.Language(lang)
         ) }}</label>
         <input class="form-control" name="subtitle" value="{{ subtitle or '' }}"
-               id="subtitle" maxlength="{{ c.subtitle_maxlength }}" lang="{{ lang }}" />
+               id="subtitle" maxlength="{{ c.subtitle_maxlength }}" lang="{{ lang }}" 
+               data-maxlength-msg="{{ _('Maximum length is {0}.', c.subtitle_maxlength) }}" />
         <p class="help-block">{{ _(
             "Maximum length is {0}.", c.subtitle_maxlength
         ) }}</p>
@@ -110,6 +111,7 @@ title = _("{0} community settings", c.name)
         ) }}</label>
         <textarea class="form-control vertical-resize" name="sidebar" rows=10
                   id="sidebar" maxlength="{{ c.sidebar_maxlength }}" lang="{{ lang }}"
+                  data-maxlength-msg="{{ _('Maximum length is {0}.', c.sidebar_maxlength) }}"
             >{{ sidebar or '' }}</textarea>
         <p class="help-block">
             {{ _("Maximum length is {0}.", c.sidebar_maxlength) }}
