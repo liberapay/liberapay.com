@@ -1,0 +1,34 @@
+import html
+
+[---]
+
+# Get the URL from the query parameter
+raw_url = request.qs.get('url', '')
+back_to = request.qs.get('back_to', '/')
+
+# If no URL is provided, redirect to home
+if not raw_url:
+    response.redirect(back_to)
+
+unescaped_url = html.unescape(raw_url)
+title = _("Redirect")
+
+[---] text/html
+% extends "templates/layouts/base-thin.html"
+
+{% block heading %}{% endblock %}
+
+% block thin_content
+    <h2>{{_("Warning")}}</h2>
+    
+    <br />
+    <p>{{_("You are being redirected to {0}. This link is out of our control and may not be secure.", unescaped_url)}}</p>
+    <br />
+    
+    <div class="buttons">
+        <a class="btn btn-primary" href="{{ back_to }}">{{ _("No, cancel") }}</a>
+        <a href="{{unescaped_url}}" class="btn btn-default">
+            {{_("Yes, proceed")}}
+        </a>
+    </div>
+% endblock
