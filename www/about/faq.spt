@@ -249,15 +249,6 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
-    {{ dt(_("What is “payday”?"), 'payday') }}
-
-    <p>{{ _(
-        "Payday is a program ({0}this one{1}) that we run every Wednesday. It "
-        "executes donations and notifies donors and recipients.",
-        '<a href="https://github.com/liberapay/liberapay.com/blob/master/liberapay/billing/payday.py">'|safe,
-        '</a>'|safe
-    ) }}</p>
-
 </dl>
 </div>
 % endblock

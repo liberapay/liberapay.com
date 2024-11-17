@@ -138,9 +138,9 @@ title = _("Teams")
 
 <p>{{ _(
     "You can change your takes from {0}your teams dashboard{1}. It contains "
-    "tables that show the nominal takes of all members for the next and "
-    "previous payday, as well as an estimate of the actual amounts of money "
-    "they'll receive in the next payday.",
+    "tables that show the nominal takes of all members, as well as an estimate "
+    "of the actual amounts of money that will be deducted at the end of the "
+    "current weekly cycle.",
     '<a href="/about/me/receiving/#teams">'|safe,
     '</a>'|safe
 ) }}</p>
@@ -184,7 +184,7 @@ title = _("Teams")
 <p>{{ _(
     "When “take throttling” is enabled for a team, its members can't raise their "
     "takes higher than a maximum computed on the basis of the nominal takes at "
-    "the time of the previous payday. This mechanism is meant to encourage "
+    "the end of the previous weekly cycle. This mechanism is meant to encourage "
     "inviting new contributors to join the team, by ensuring that they won't "
     "take a disproportionate share of the income in their first weeks."
 ) }}</p>
@@ -193,16 +193,16 @@ title = _("Teams")
     "The limit works like this: you can always increase your take to {amount} if "
     "it was below that, you can double your take compared to the previous week, "
     "you can raise your take to claim the team's leftover income, and you can "
-    "bring your take up to the level of the median take in the previous payday. "
-    "Whichever of these possibilities results in the highest amount is your "
-    "maximum take for the week.",
+    "bring your take up to the level of the median take at the end of the "
+    "previous weekly cycle. Whichever of these possibilities results in the "
+    "highest amount is your maximum take for the week.",
     amount=constants.TAKE_THROTTLING_THRESHOLD[currency]
 ) }}</p>
 
 <p>{{ _(
     "Takes are not limited if the team has only one member, or if the previous "
     "week's takes were all zero (which is the case for any new team that has "
-    "been created after the most recent payday)."
+    "been created during the current weekly cycle)."
 ) }}</p>
 
 <p>{{ _(
