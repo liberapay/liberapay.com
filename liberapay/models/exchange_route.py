@@ -217,7 +217,7 @@ class ExchangeRoute(Model):
         route.stripe_source = source
         return route
 
-    def invalidate(self, obj=None):
+    def invalidate(self):
         if self.network.startswith('stripe-'):
             if self.address.startswith('pm_'):
                 try:
