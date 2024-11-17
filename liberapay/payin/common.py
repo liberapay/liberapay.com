@@ -137,12 +137,16 @@ def update_payin(
             """, (payin_id, status, error))
 
         if status in ('pending', 'succeeded'):
-            cursor.run("""
+            route = cursor.one("""
                 UPDATE exchange_routes
                    SET status = 'consumed'
                  WHERE id = %s
-                   AND one_off IS TRUE
+                   AND one_off
+                   AND status = 'chargeable'
+             RETURNING exchange_routes
             """, (payin.route,))
+            if route:
+                route.invalidate()
 
         # Lock to avoid concurrent updates
         cursor.run("SELECT * FROM participants WHERE id = %s FOR UPDATE",
