@@ -690,9 +690,6 @@ table.team {
             border-left: 2px solid #ddd;
         }
     }
-    tr:nth-child(2) > th:nth-child(4), td:nth-child(4) {
-        border-left: 1px dashed #ddd;
-    }
     td:first-child {
         min-width: 12em;
     }
@@ -700,6 +697,9 @@ table.team {
         text-align: right;
         min-width: 8em;
         max-width: 11em;
+    }
+    tr:last-child td {
+        border-top-width: 2px;
     }
     input {
         text-align: inherit;

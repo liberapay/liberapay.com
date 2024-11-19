@@ -22,14 +22,7 @@
     <table class="table valign-middle team {{ cls }}">
       <thead>
         <tr>
-          <th></th>
-          <th>{{ _("Last Payday") }}<br><small>({{ locale.format_date(last_payday) if last_payday else _("n/a") }})</small></th>
-          <th colspan=2>{{ _("Next Payday") }}<br><small>({{ locale.format_date(next_payday) }})</small></th>
-          <th></th>
-        </tr>
-        <tr>
           <th>{{ _("Member") }}</th>
-          <th>{{ _("Nominal Take") }}</th>
           <th>{{ _("Nominal Take") }}</th>
           <th>{{ _("Actual Take") }}</th>
           <th><span class="help-title" data-toggle="tooltip" data-placement="top" title="{{ _(
@@ -37,7 +30,7 @@
                         'shows how much money each member has received in advance '
                         'through this team. An advance increases every time a member '
                         'receives a new payment from a donor through the team, and '
-                        'decreases every week during “payday”.'
+                        'decreases every week.'
                     ) }}">{{ _("Advance") }}</span></th>
         </tr>
       </thead>
@@ -45,13 +38,16 @@
         % for member in members.values()
         <tr>
             <td><a href="/{{ member.username }}/">{{ member.username }}</a></td>
-            <td>{{
-                _("n/a") if member.last_week is none else
-                _("auto") if member.last_week.amount == -1 else
-                locale.format_money(member.last_week)
-            }}</td>
             % set nominal_take = member.nominal_take
             % set cell_cls = get_cls(member) if nominal_take != member.last_week else ''
+            % set title = (
+                None if member.last_week == nominal_take else
+                _("Last week: {0}", (
+                    _("no take") if member.last_week is none else
+                    _("auto") if member.last_week.amount == -1 else
+                    member.last_week
+                ))
+            )
             % if member.id == user.id
                 <td class="{{ cell_cls or 'active' }}">
                     <form action="/~{{ team.id }}/income/take?back_to={{ urlquote(request.line.uri) }}"
@@ -78,7 +74,7 @@
                             % endif
                             <input class="form-control" name="take" value="{{
                                 locale.format_money(nominal_take, format='amount_only') if nominal_take.amount >= 0 else ''
-                            }}" placeholder="auto" />
+                            }}" placeholder="auto"{% if title %} title="{{ title }}"{% endif %} />
                             <div class="input-group-btn">
                                 <button class="btn btn-default" title="{{ _('Update my nominal take') }}">{{
                                     icon('check-lg')
@@ -87,10 +83,10 @@
                         </div>
                     </form>
                 </td>
-            % elif nominal_take.amount == -1
-                <td class="{{ 'text-'+cell_cls }}">{{ _("auto") }}</td>
             % else
-                <td class="{{ 'text-'+cell_cls }}">{{ locale.format_money(nominal_take) }}</td>
+                <td class="{{ 'text-'+cell_cls }}"{% if title %} title="{{ title }}"{% endif %}>{{
+                    _("auto") if nominal_take.amount == -1 else locale.format_money(nominal_take)
+                }}</td>
             % endif
             % set fuzzy_take = member.actual_amount.fuzzy_sum(nominal_take.currency)
             <td{% if fuzzy_take.fuzzy %} title="{{ locale.format_money_basket(member.actual_amount) }}"{% endif %}>{{
@@ -106,7 +102,6 @@
                     'not accrue in the team account. A team cannot own money '
                     'because it is not a legal entity.'
                 ) }}" data-toggle="tooltip" data-placement="bottom">{{ _("Leftover") }}</span></td>
-            <td></td>
             <td></td>
             % set fuzzy_leftover = members.leftover.fuzzy_sum(team.main_currency)
             <td class="{{ 'info' if members.leftover else '' }}"{% if fuzzy_leftover.fuzzy
