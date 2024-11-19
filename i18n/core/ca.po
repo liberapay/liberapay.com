@@ -1803,15 +1803,6 @@ msgstr "En crear un compte en Liberapay accepteu les nostres {0}condicions de se
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "La vostra fracció nominal de l'equip {0} està limitada a {1} aquesta setmana. {2}Per què?{3}"
 
-msgid "Last Payday"
-msgstr "Últim dia de paga"
-
-msgid "n/a"
-msgstr "n/d"
-
-msgid "Next Payday"
-msgstr "Dia de paga següent"
-
 msgid "Member"
 msgstr "Membre"
 
@@ -1821,13 +1812,19 @@ msgstr "Fracció nominal"
 msgid "Actual Take"
 msgstr "Fracció real"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "A Liberapay, les donacions es paguen per avançat. Aquesta columna mostra quants diners ha rebut cada membre per avançat a través d'aquest equip. Un avançament augmenta cada vegada que un membre rep un nou pagament d'un donant a través de l'equip, i disminueix cada setmana durant el \"dia de pagament\"."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "Avançar"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "automàtica"
@@ -4138,18 +4135,11 @@ msgstr "Es poden desgravar els donatius fets via Liberapay?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probablement no, però depèn de les normes fiscals del vostre estat."
 
-msgid "What are wallets?"
-msgstr "Què són les carteres?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "El Liberapay conservava els fons dels donants en carteres, però ja no ho fa. En comptes d'això, es transfereix immediatament l'import íntegre del donatiu al destinatari."
-
-msgid "What is “payday”?"
-msgstr "Què és el «dia de paga»?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "El dia de paga és un programa ({0}aquest{1}) que executem cada dimecres. Realitza els donatius i n'informa als donants i beneficiaris."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Podeu obtenir novetats sobre nosaltres en les xarxes socials següents:"
@@ -4538,8 +4528,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Els equips no tenen cap jerarquia, tots els membres són iguals i prenen la mateixa participació."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Podeu canviar la fracció des del {0}panell dels vostres equips{1}. Conté taules que mostren la fracció nominal de tots els membres per a l'últim dia de paga i el següent. També mostra una estimació de la quantitat real dels diners que rebreu en el següent dia de paga."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Les fraccions nominals són els números en brut que els membres introdueixen, les fraccions reals les computa el sistema: primer suma les fraccions nominals, després computa el percentatge que cada fracció representa i, finalment, aplica aquests percentatges als ingressos disponibles. Les fraccions nominals també actuen com a màxims: les fraccions reals no poden ser més grans que les nominals, fins i tot si hi ha ingressos addicionals disponibles."
@@ -4556,15 +4546,15 @@ msgstr "Per defecte, tots els membres dels equips tenen establerta la seva part 
 msgid "Regulation of take amounts"
 msgstr "Regulació del repartiment de diners"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Si activeu aquesta característica en un equip, els membres poden augmentar la fracció respectiva per sobre d'un màxim calculat a partir a la fracció nominal del moment del dia de paga anterior. Aquest mecanisme està pensat per a animar a convidar col·laboradors nous a unir-se a l'equip, assegurant que rebran una fracció desproporcionada en les primeres setmanes."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "El límit funciona així: sempre podeu incrementar la vostra fracció {amount} si era inferior a això; podeu doblar la vostra fracció en comparació a la setmana anterior; podeu incrementar la vostra fracció per a reclamar el romanent d'ingressos de l'equip; i podeu augmentar la vostra fracció a la fracció mitjana del dia de paga anterior. La quantitat més ala de qualsevol d'aquestes possibilitats és la vostra fracció màxima per a la setmana."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Les fraccions no estan limitades si l'equip només té un únic membre, o si les fraccions de la setmana anterior foren totes zero (aquest és el cas de qualsevol equip nou que s'ha creat després del dia de paga més recent)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Contacteu amb l'assistència si voleu activar o desactivar els límits de la fracció per a un equip existent. No oblideu d'incloure proves que el canvi s'ha aprovat amb els altres membres de l'equip."

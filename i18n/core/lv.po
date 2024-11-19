@@ -2135,18 +2135,6 @@ msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{
 msgstr "Šonedēļ jūsu nominālā maksa no {0} komandas ir ierobežota līdz {1}. {2}Kāpēc?{3}"
 
 #, fuzzy
-msgid "Last Payday"
-msgstr "Pēdējā algas diena"
-
-#, fuzzy
-msgid "n/a"
-msgstr "neattiecas"
-
-#, fuzzy
-msgid "Next Payday"
-msgstr "Nākamā algas diena"
-
-#, fuzzy
 msgid "Member"
 msgstr "Dalībvalsts"
 
@@ -2158,13 +2146,19 @@ msgstr "Nominālais patēriņš"
 msgid "Actual Take"
 msgstr "Faktiskais izmantojums"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Izmantojot Liberapay, ziedojumi tiek maksāti avansā. Šajā slejā redzams, cik daudz naudas katrs dalībnieks ir saņēmis avansā, izmantojot šo komandu. Avanss palielinās katru reizi, kad dalībnieks saņem jaunu maksājumu no ziedotāja ar komandas starpniecību, un samazinās katru nedēļu \"algas dienas\" laikā."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "Advance"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 #, fuzzy
 msgid "auto"
@@ -4911,21 +4905,11 @@ msgstr "Vai ar Liberapay starpniecību veiktie ziedojumi ir atskaitāmi no nodok
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Iespējams, ka nē, taču tas ir atkarīgs no jūsu valsts nodokļu noteikumiem."
 
-#, fuzzy
-msgid "What are wallets?"
-msgstr "Kas ir maki?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-#, fuzzy
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay agrāk turēja ziedotāju līdzekļus makos, taču mēs to vairs nedarām. Tā vietā visa ziedojuma summa uzreiz tiek pārskaitīta saņēmējam."
-
-#, fuzzy
-msgid "What is “payday”?"
-msgstr "Kas ir \"algas diena\"?"
-
-#, fuzzy, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Payday ir programma ({0}šī ir{1}), ko mēs īstenojam katru trešdienu. Tā izpilda ziedojumus un informē ziedotājus un saņēmējus."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
@@ -5384,9 +5368,9 @@ msgstr "Dalīšanās ar naudu"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Komandām nav hierarhijas, visi to dalībnieki ir vienlīdzīgi un paši nosaka savu rīcību."
 
-#, fuzzy, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Varat mainīt savus pārņemšanas režīmus no {0}jūsu komandas paneļa{1}. Tajā ir ietvertas tabulas, kurās ir norādītas visu dalībnieku nominālās summas, ko viņi saņems nākamajā un iepriekšējā algas dienā, kā arī aplēses par faktiskajām naudas summām, ko viņi saņems nākamajā algas dienā."
+#, python-brace-format
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -5408,17 +5392,15 @@ msgstr "Pēc noklusējuma visiem komandas locekļiem ir iestatīta īpaša vērt
 msgid "Regulation of take amounts"
 msgstr "Regulējums par nozvejas apjomiem"
 
-#, fuzzy
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Ja komandai ir ieslēgta \"ņemšanas ierobežošana\", tās dalībnieki nevar palielināt savu ņemšanas apjomu, kas pārsniedz maksimālo apjomu, kurš aprēķināts, pamatojoties uz nominālo ņemšanas apjomu iepriekšējā izmaksas dienā. Šis mehānisms ir paredzēts, lai veicinātu jaunu dalībnieku uzaicināšanu pievienoties komandai, nodrošinot, ka viņi pirmajās nedēļās nesaņems nesamērīgi lielu ienākumu daļu."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limits darbojas šādi: jūs vienmēr varat palielināt savu ieņēmumu apjomu līdz {amount}, ja tas bija mazāks par to, jūs varat dubultot savu ieņēmumu apjomu salīdzinājumā ar iepriekšējo nedēļu, jūs varat palielināt savu ieņēmumu apjomu, lai pieprasītu komandas atlikušos ienākumus, un jūs varat palielināt savu ieņēmumu apjomu līdz vidējā ieņēmumu apjoma līmenim iepriekšējā algas dienā. Kura no šīm iespējām dod lielāko summu, ir jūsu maksimālais nedēļas ieguvums."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-#, fuzzy
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Ieņēmumi nav ierobežoti, ja komandā ir tikai viens dalībnieks vai ja iepriekšējā nedēļā visi ieņēmumi ir bijuši nulle (tas attiecas uz jebkuru jaunu komandu, kas izveidota pēc pēdējās izmaksas dienas)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."

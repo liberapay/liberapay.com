@@ -1800,15 +1800,6 @@ msgstr "Dengan mencipta akaun Liberapay anda menerima {0}Syarat Perkhidmatan{1} 
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Perolehan nominal anda dari kumpulan {0} dihadkan kepada {1} minggu ini. {2}Kenapa?{3}"
 
-msgid "Last Payday"
-msgstr "Hari Bayaran Terakhir"
-
-msgid "n/a"
-msgstr "tiada"
-
-msgid "Next Payday"
-msgstr "Hari Bayaran Seterusnya"
-
 msgid "Member"
 msgstr "Ahli"
 
@@ -1818,11 +1809,18 @@ msgstr "Perolehan Nominal"
 msgid "Actual Take"
 msgstr "Perolehan Sebenar"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Di Liberapay, derma dibayar secara pendahuluan. Lajur ini menunjukkan jumlah wang pendahuluan yang telah diterima oleh setiap ahli melalui kumpulan ini. Jumlah pendahuluan meningkat setiap kali ahli menerima bayaran baharu daripada penderma melalui kumpulan, dan berkurangan setiap minggu semasa “hari bayaran”."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "Pendahuluan"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "auto"
@@ -4121,18 +4119,11 @@ msgstr "Adakah derma melalui Liberapay boleh ditolak cukai?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Mungkin tidak, tetapi ia bergantung kepada peraturan cukai negara anda."
 
-msgid "What are wallets?"
-msgstr "Apakah itu dompet?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay pernah memegang dana penderma dalam dompet, tetapi kami sudah tidak berbuat sebegitu. Sekarang ini, jumlah penuh derma akan dipindahkan serta-merta kepada penerima."
-
-msgid "What is “payday”?"
-msgstr "Apakah itu “hari bayaran”?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Hari bayaran ialah sebuah atur cara ({0}yang ini{1}) yang kami jalankan setiap hari Rabu. Ia melaksanakan proses pendermaan dan memaklumkan penderma dan penerima derma."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Anda boleh mendapatkan kemas kini daripada kami di rangkaian sosial berikut:"
@@ -4515,8 +4506,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Kumpulan tidak ada hierarki, semua ahli kumpulan sama rata dan menetapkan perolehan mereka sendiri."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Anda boleh menukar perolehan anda melalui {0}papan pemuka kumpulan anda{1}. Ia mengandungi jadual yang menunjukkan perolehan nominal kesemua ahli untuk hari bayaran seterusnya dan sebelumnya, dan juga anggaran jumlah wang sebenar yang mereka akan terima dalam hari bayaran seterusnya."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Perolehan nominal ialah jumlah mentah yang para ahli masukkan sendiri, perolehan sebenar akan dikira oleh sistem: mula-mula ia menambah kesemua perolehan nominal, kemudian ia mengira peratusan setiap perolehan, dan akhirnya ia menggunakan peratusan tersebut untuk membahagikan pendapatan yang ada. Perolehan nominal juga bertindak sebagai nilai maksimum: perolehan sebenar tidak akan melebihi perolehan nominal, walaupun adanya pendapatan tambahan."
@@ -4533,15 +4524,15 @@ msgstr "Secara lalainya semua ahli kumpulan ditetapkan perolehan kepada nilai kh
 msgid "Regulation of take amounts"
 msgstr "Kawalan jumlah perolehan"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Apabila “pendikit perolehan” ini dibolehkan penggunaan dalam kumpulan, ahlinya tidak boleh menaikkan perolehan mereka melampaui jumlah maksimum yang dikira berdasarkan asas perolehan nominal pada hari bayaran sebelumnya. Mekanisme ini bertujuan untuk menggalakkan penyumbang baru sertai kumpulan tersebut, dengan memastikan mereka tidak mengambil bahagian yang tidak seimbang daripada jumlah pendapatan dalam minggu-minggu awal mereka sertai kumpulan tersebut."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Had tersebut adalah seperti ini: anda boleh sentiasa naikkan perolehan anda kepada {amount} jika sebelumnya ia kurang dari itu, anda boleh menggandakan perolehan anda berbanding minggu sebelumnya, anda boleh naikkan perolehan anda untuk mengambil baki pendapatan kumpulan, dan anda boleh naikkan perolehan anda ke tahap perolehan median dari hari bayaran sebelumnya. Salah satu pilihan ini yang mendatangkan jumlah tertinggi akan menjadi perolehan maksimum anda untuk minggu seterusnya."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Perolehan tidak dihadkan jika kumpulan hanya ada seorang ahli, atau jika perolehan minggu sebelumnya semuanya kosong (iaitu perkara biasa untuk mana-mana kumpulan baru yang dicipta selepas hari bayaran terbaru)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Sila hubungi kami jika anda ingin membolehkan atau melumpuhkan had perolehan untuk kumpulan sedia ada. Jangan lupa untuk sertakan bukti bahawa perubahan ini telah dipersetujui oleh kesemua ahli-ahli kumpulan yang lain."

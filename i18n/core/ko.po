@@ -1802,15 +1802,6 @@ msgstr "Liberapay 계정을 생성함으로써 {0}이용 약관{1}에 동의하�
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "{0} 팀에서 이번주에 얻을 수 있는 금액은 {1} 까지입니다. {2}왜죠? {3}"
 
-msgid "Last Payday"
-msgstr "최근의 지불일"
-
-msgid "n/a"
-msgstr "n/a"
-
-msgid "Next Payday"
-msgstr "다음 지불일"
-
 msgid "Member"
 msgstr "참여자"
 
@@ -1820,13 +1811,19 @@ msgstr "명목상 지분"
 msgid "Actual Take"
 msgstr "실제 지분"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "리베라페이에서는 기부금이 선불로 지급됩니다. 이 열에는 각 회원이 이 팀을 통해 선지급받은 금액이 표시됩니다. 회원이 팀을 통해 기부자로부터 새로운 결제를 받을 때마다 선지급금이 증가하고, 매주 '급여일'이 되면 선지급금이 감소합니다."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "사전"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "자동"
@@ -4185,21 +4182,11 @@ msgstr "Liberapay에서 발생하는 기부는 소득공제를 받을 수 있나
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "아닐 것입니다만, 거주 국가의 조세 규정에 따라 다릅니다."
 
-#, fuzzy
-msgid "What are wallets?"
-msgstr "지갑이란 무엇입니까?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-#, fuzzy
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay는 기부자의 자금을 지갑에 보관했지만 더 이상 그렇게하지 않습니다. 대신 기부금 전액이 수령인에게 즉시 이체됩니다."
-
-#, fuzzy
-msgid "What is “payday”?"
-msgstr "\"월급일\"이란 무엇입니까?"
-
-#, fuzzy, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Payday는 매주 수요일에 진행하는 프로그램({0}이것{1})입니다. 기부금을 집행하고 기부자와 수혜자에게 통지합니다."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "다음 소셜 네트워크에서 저희에 관한 업데이트를 수신할 수 있습니다:"
@@ -4612,9 +4599,9 @@ msgstr "돈 나누기"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "팀에는 게층이 없습니다. 모든 회원은 동등하며 각자의 몫을 설정합니다."
 
-#, fuzzy, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "{0}팀 대시보드{1}에서 테이크를 변경할 수 있습니다. 여기에는 다음 급여일과 이전 급여일에 대한 모든 구성원의 명목상 테이크와 다음 급여일에 받게 될 실제 금액의 추정치를 보여주는 테이블이 포함되어 있습니다."
+#, python-brace-format
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -4636,17 +4623,15 @@ msgstr "기본적으로 모든 팀 구성원은 남은 몫의 동일한 몫에 �
 msgid "Regulation of take amounts"
 msgstr "복용량 규제"
 
-#, fuzzy
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "팀에 대해 \"take throttling\"이 활성화된 경우 구성원은 이전 급여일의 명목 테이크를 기반으로 계산된 최대값보다 높은 테이크를 올릴 수 없습니다. 이 메커니즘은 처음 몇 주 동안 수입의 불균형한 몫을 차지하지 않도록 함으로써 새로운 기여자를 팀에 합류하도록 초대하기 위한 것입니다."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "한도는 다음과 같이 작동합니다. {amount} 미만인 경우 언제든지 테이크를 늘릴 수 있습니다. 이전 주에 비해 테이크를 두 배로 늘릴 수 있으며, 팀의 남은 수입을 청구하기 위해 테이크를 올릴 수 있습니다. 이전 급여일의 중간값 수준까지 가져갑니다. 이러한 가능성 중 가장 높은 금액이 나오는 것이 해당 주의 최대 복용량입니다."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-#, fuzzy
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "팀에 구성원이 한 명뿐인 경우 또는 이전 주의 테이크가 모두 0인 경우(가장 최근 급여일 이후에 생성된 새 팀의 경우) 테이크가 제한되지 않습니다."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."

@@ -1815,15 +1815,6 @@ msgstr "Vytvořením účtu na Liberapay přijímáte naše {0}podmínky služby
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Váš nominální podíl na týmu {0} je tento týden omezen na {1}. {2}Zjistěte proč.{3}"
 
-msgid "Last Payday"
-msgstr "Poslední výplata"
-
-msgid "n/a"
-msgstr "n/a"
-
-msgid "Next Payday"
-msgstr "Příští výplata"
-
 msgid "Member"
 msgstr "Člen"
 
@@ -1833,11 +1824,18 @@ msgstr "Nominální podíl"
 msgid "Actual Take"
 msgstr "Skutečný podíl"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Na Liberapay se dary platí předem. Tento sloupec ukazuje, kolik peněz každý člen obdržel předem prostřednictvím tohoto týmu. Záloha se zvyšuje pokaždé, když člen obdrží novou platbu od dárce prostřednictvím týmu, a snižuje se každý týden během \"výplatního dne\"."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "Záloha"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "automaticky"
@@ -4164,18 +4162,11 @@ msgstr "Jsou příspěvky prostřednictvím Liberapay daňově uznatelné?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Asi ne, ale to záleží na daňových předpisech vaší země."
 
-msgid "What are wallets?"
-msgstr "Co jsou peněženky?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay dříve uchovávala prostředky dárců v peněženkách, ale to už neděláme. Místo toho je celá částka příspěvku okamžitě převedena příjemci."
-
-msgid "What is “payday”?"
-msgstr "Co je to „výplatní den“?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Payday je program ({0}tento{1}), který spouštíme každou středu. Provádí výplaty a informuje dárce a příjemce."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Novinky od nás můžete najít na následujících sociálních sítích:"
@@ -4569,8 +4560,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Týmy nemají hierarchii, všichni jejich členové jsou si rovni a nastavují své vlastní podíly."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Můžete změnit svůj podíl na {0}nástěnce týmu{1}. Ta obsahuje tabulku s nominálními podíly všech členů pro následující a předcházející výplaty, stejně jako odhad aktuálních podílů, které každý získá."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nominální podíly jsou hrubá čísla, která si členové nastavují sami. Skutečné podíly jsou počítány v systému: nejprve se sečtou nominální podíly z nichž se vypočítá procento, které představuje každý podíl a nakonec se vyplatí tyto procenta z dostupného příjmu. Nominální podíly rovněž působí jako maximální hodnoty: skutečné podíly pak nejsou nikdy vyšší než nominální, a to i v případě, že je k dispozici další příjem."
@@ -4587,15 +4578,15 @@ msgstr "Ve výchozím nastavení mají všichni členové týmu nastaven odběr 
 msgid "Regulation of take amounts"
 msgstr "Omezení částky podílu"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Pokud je pro tým povoleno \"omezení podílu\", nemohou jeho členové zvýšit svůj podíl nad maximální hodnotu vypočtenou na základě nominálního podíl v době předchozího výplatního dne. Tento mechanismus má podpořit pozvání nových přispěvatelů do týmu tím, že zajistí, aby si v prvních týdnech nebrali neúměrný podíl na příjmech."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limit funguje následovně: vždy můžete zvýšit váš podíl na {amount}, pokud byl nižší, můžete zdvojnásobit váš podíl oproti předchozímu týdnu, můžete zvýšit váš podíl, abyste získali přebytek týmu a můžete zvýšit váš podíl na úroveň mediánu podílu v předchozím výplatním termínu. Kterákoli z těchto možností vede k nejvyšší částce, je váš maximální podíl za týden."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Podíly nejsou omezeny, pokud má tým pouze jednoho člena nebo pokud byly všechny podíly v předchozím týdnu nulové (což je případ každého nového týmu, který byl vytvořen po posledním výplatním dni)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Pokud chcete povolit nebo zakázat limity podílů pro existující tým, kontaktujte prosím podporu. Nezapomeňte přiložit důkaz, že změnu schválili ostatní členové týmu."

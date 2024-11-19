@@ -1905,15 +1905,6 @@ msgstr "Prin crearea unui cont Liberapay sunteți de acord cu {0}Termenii și co
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Beneficiul dumneavoastră nominal de la echipa {0} este limitat la {1} această săptămână. {2}De ce?{3}"
 
-msgid "Last Payday"
-msgstr "Ultima zi de plată"
-
-msgid "n/a"
-msgstr "neaplicabil"
-
-msgid "Next Payday"
-msgstr "Următoarea zi de plată"
-
 msgid "Member"
 msgstr "Membru"
 
@@ -1923,13 +1914,19 @@ msgstr "Beneficiu nominal"
 msgid "Actual Take"
 msgstr "Beneficiu real"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Pe Liberapay, Donațiile sunt plătite în avans. Această coloană arată câți bani a primit în avans fiecare membru prin intermediul acestei echipe. Un avans crește de fiecare dată când un membru primește o nouă plată de la un donator prin intermediul echipei și scade în fiecare săptămână în timpul \"zilei de plată\"."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "Avans"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "automat"
@@ -4420,19 +4417,11 @@ msgstr "Sunt donațiile prin Liberapay deductibile din taxe?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probabil că nu, dar depinde de regulațiile taxelor și impozitelor din țara dumneavoastră."
 
-msgid "What are wallets?"
-msgstr "Ce sunt portofelele?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-#, fuzzy
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay obișnuia să păstreze fondurile donatorilor în portofele, dar nu mai facem acest lucru. În schimb, suma totală a unei donații este transferată imediat către beneficiar."
-
-msgid "What is “payday”?"
-msgstr "Ce este „ziua de plată”?"
-
-#, fuzzy, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Payday este un program ({0}acesta{1}) pe care îl derulăm în fiecare miercuri. Acesta execută donațiile și notifică donatorii și beneficiarii."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Puteți primi actualizări de la noi pe următoarele rețele sociale:"
@@ -4864,8 +4853,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Echipele nu au o ierarhie, toți membrii lor sunt egali și își stabilesc propriul beneficiu."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Vă puteți schimba beneficiile din {0}tabloul de bord al echipei{1}. Conține tabele care arătă beneficiul nominal al tuturor membrilor pentru următoarea și precedenta zi de plată, de asemenea și o estimată a sumelor de bani pe care le vor primi la următoarea zi de plată."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Beneficiile nominale sunt numere brute pe care membrii le introduc singuri, beneficiile reale sunt calculate de sistem: mai întâi se adună beneficiile nominale, apoi se computează procentele reprezentate de fiecare beneficiu, iar în final se aplică acele procente la venitul disponibil. Beneficiile nominale acționează ca maxime: beneficiile reale nu sunt niciodată mai mari decât cele nominale, chiar dacă sunt venituri disponibile."
@@ -4883,15 +4872,15 @@ msgstr "În mod implicit, toți membrii echipei au valoarea specială \"auto\", 
 msgid "Regulation of take amounts"
 msgstr "Reglementarea sumelor beneficiilor"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Când „limitarea beneficiului” este activată pentru o echipă, membrii ei nu pot mări beneficiile lor mai mult decât un maxim calculat pe baza beneficiilor nominale la timpul zilei de plată precedente. Acest mecanism este conceput pentru a încuraja invitarea contribuitorilor noi în a se alătura echipei, asigurând că nu vor lua o parte disproporționată din venit în primele lor săptămâni."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limita funcționează așa: vă puteți întotdeauna mări beneficiul cu {amount} dacă a fost mai jos de atât, puteți dubla beneficiul comparativ cu săptămâna trecută, puteți mări beneficiul pentru a revendica din excesul de venit al echipei, și puteți ridica beneficiul la nivelul beneficiului mediu din ziua de plată precedentă. Oricare dintre aceste posibilități rezultă în cea mai mare sumă va deveni beneficiul pentru acea săptămână."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Beneficiile nu sunt limitate dacă echipa are doar un membru, sau dacă beneficiile din săptămânile trecute sunt toate zero (care este cazul pentru orice echipă nouă care a fost creeată după cea mai recentă zi de plată)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."

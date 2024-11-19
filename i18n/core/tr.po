@@ -1800,15 +1800,6 @@ msgstr "Bir Liberapay hesabı oluşturarak {0}Hizmet Şartlarını{1} kabul etmi
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "{0} takımından nominal payınız bu hafta {1} ile sınırlıdır. {2}Neden?{3}"
 
-msgid "Last Payday"
-msgstr "Son Ödeme Günü"
-
-msgid "n/a"
-msgstr "-"
-
-msgid "Next Payday"
-msgstr "Sonraki Ödeme günü"
-
 msgid "Member"
 msgstr "Üye"
 
@@ -1818,11 +1809,18 @@ msgstr "Nominal Pay"
 msgid "Actual Take"
 msgstr "Gerçek Pay"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Liberapay'de bağışlar önceden ödenir. Bu sütun, her üyenin bu takım aracılığıyla önceden ödenmiş ne kadar para aldığını gösterir. Bir üye takım aracılığıyla bir bağışçıdan her yeni ödeme aldığında önceden alınan miktar artar ve her hafta “ödeme günü” sırasında azalır."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "Önceden ödenen"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "otomatik"
@@ -4120,18 +4118,11 @@ msgstr "Liberapay aracılığıyla yapılan bağışlar vergiden düşülebilir 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Muhtemelen hayır, ancak bu ülkenizin vergi kurallarına bağlı."
 
-msgid "What are wallets?"
-msgstr "Cüzdan nedir?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay bağışçıların fonlarını cüzdanlarda tutardı, ancak artık bunu yapmıyoruz. Bunun yerine bir bağışın tamamı hemen alıcıya aktarılır."
-
-msgid "What is “payday”?"
-msgstr "“Ödeme günü” nedir?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Ödeme günü her Çarşamba yürüttüğümüz bir programdır ({0}bu{1}). Bağışları gerçekleştirir ve bağışçılarla alıcılara bildirir."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Aşağıdaki sosyal ağlarda bizden güncellemeler alabilirsiniz:"
@@ -4514,8 +4505,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Takımların bir hiyerarşisi yoktur, tüm üyeleri eşittir ve kendi oylarını belirler."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Paylarınızı {0}takım denetim panelinizden{1} değiştirebilirsiniz. Tüm üyelerin sonraki ve önceki ödeme günü için nominal paylarını ve bir sonraki ödeme gününde alacakları gerçek para miktarlarının bir tahminini gösteren tablolar içerir."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nominal paylar, üyelerin kendilerinin girdiği ham sayılardır, gerçek paylar sistem tarafından hesaplanır: önce nominal payları toplar, sonra her bir payın temsil ettiği yüzdeyi hesaplar ve son olarak bu yüzdeleri kullanılabilir gelire uygular. Nominal paylar ayrıca en üst sınır olarak hareket eder: İlave gelir olsa bile, gerçek paylar asla nominal olanlardan yüksek değildir."
@@ -4532,15 +4523,15 @@ msgstr "Öntanımlı olarak tüm takım üyelerinin payları, artıkların eşit
 msgid "Regulation of take amounts"
 msgstr "Pay tutarlarının düzenlenmesi"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Bir takım için “pay kısıtlaması” etkinleştirildiğinde, üyeleri paylarını bir önceki ödeme günü sırasında nominal paylar temel alınarak hesaplanan azami değerden daha fazlasına yükseltemez. Bu mekanizma, ilk haftalarında gelirden orantısız bir pay almamalarını sağlayarak katkıda bulunan yeni kişileri takıma katılmaya davet etmeyi cesaretlendirmeyi amaçlamaktadır."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Sınır şu şekilde çalışır: eğer altındaysa payınızı her zaman {amount} seviyesine kadar arttırabilir, bir önceki haftaya göre ikiye katlayabilir, takımın artık gelirini talep etmek için yükseltebilir ve önceki ödeme gününün medyan pay seviyesine kadar çıkarabilirsiniz. Bu olasılıklardan en yüksek tutarla sonuçlanan o hafta için azami payınızdır."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Takımın tek bir üyesi varsa veya önceki haftanın paylarının tümü sıfırsa (en son ödeme gününden sonra oluşturulan yeni takımlar için geçerli olan durum budur), paylar sınırlı değildir."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Var olan bir takım için pay sınırlarını etkinleştirmek veya devre dışı bırakmak istiyorsanız lütfen destekle iletişime geçin. Değişikliğin diğer takım üyeleri tarafından onaylandığına dair kanıt eklemeyi unutmayın."

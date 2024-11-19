@@ -1785,15 +1785,6 @@ msgstr "Azzal, hogy létrehoz egy Liberapay fiókot, elfogadja a {0}Szolgáltat�
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Az Ön névleges bevétele a(z) {0} csapattól korlátozásra került {1} összegre ezen a héten. {2}Miért?{3}"
 
-msgid "Last Payday"
-msgstr "Utolsó Fizetésnap"
-
-msgid "n/a"
-msgstr "n/a"
-
-msgid "Next Payday"
-msgstr "Következő Fizetésnap"
-
 msgid "Member"
 msgstr "Tag"
 
@@ -1803,11 +1794,18 @@ msgstr "Névleges felvétel"
 msgid "Actual Take"
 msgstr "Tényleges felvétel"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "A Liberapay-en az adományokat előre fizetik. Ez az oszlop azt mutatja, hogy az egyes tagok mennyi pénzt kaptak előre ezen a csapaton keresztül. Az előleg minden alkalommal növekszik, amikor a tag a csapaton keresztül új befizetést kap egy adományozótól, és minden héten csökken a tagok számára történő kifizetés napján."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "Előre"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "automatikus"
@@ -4076,18 +4074,11 @@ msgstr "A Liberapay-en keresztül történő adományok levonhatók az adóból?
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Valószínűleg nem, de ez az Ön országának adószabályaitól függ."
 
-msgid "What are wallets?"
-msgstr "Mik azok a pénztárcák?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "A Liberapay korábban pénztárcákban tartotta az adományozók pénzeszközeit, de ez már a múlté. Ehelyett az adomány teljes összegét azonnal átutaljuk a címzettnek."
-
-msgid "What is “payday”?"
-msgstr "Mi az a \"fizetésnap\"?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "A {0}Payday egy olyan program{1}, amelyet minden szerdán lefuttatunk. Végrehajtja az utalásokat, valamint kiértesíti az adományozókat és a címzetteket."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "A következő közösségi hálózatokon kaphat tőlünk frissítéseket:"
@@ -4459,8 +4450,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "A csapatoknak nincs hierarchiája, minden tagjuk egyenlő, és maguk határozzák meg a saját elképzeléseiket."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Megváltoztathatod a bevételeidet a {0}csapatod vezérlőpultjában{1}. Ez olyan táblázatokat tartalmaz, amely az összes tag névleges bevételét mutatják a következő és az előző fizetésnapnál, valamint a következő fizetésnapra tervezett tényleges pénzösszegek becsült értékét."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "A névleges bevételek a tagok által maguknak megadott nyers számok, a tényleges bevételeket a rendszer számítja ki: először összeadja a nominális bevételeket, majd kiszámítja az egyes bevételek százalékos arányát, és végül ezeket a százalékokat alkalmazza a rendelkezésre álló jövedelemre. A névleges bevételek egyben maximumként is funkcionálnak: a tényleges bevételek soha nem magasabbak a névlegesnél, még akkor sem, ha további jövedelem áll rendelkezésre."
@@ -4477,15 +4468,15 @@ msgstr "Alapértelmezés szerint minden csapattagnak az „auto” kerül beáll
 msgid "Regulation of take amounts"
 msgstr "A részesedések szabályozása"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Ha egy csapat számára engedélyezve van a „részesedésfojtás”, a csapattagok nem emelhetik magasabbra a bevételeiket, mint az utolsó fizetési napon a névleges bevételek alapján számított maximum. Ez elősegíti az újabb résztvevők bevonását a csapatba anélkül, hogy aránytalanul magas részesedést szereznének az első hetek jövedelméből."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "A limit a következőképpen működik: Bármikor megemelheti a részesedését {amount} összegre, ha az nem érte el ezt az értéket, megduplázhatja az előző hetihez képest, megemelheti bevételét igényt tartva a csapat fennmaradó teljes jövedelmére, és felemelheti a bevételét az előző fizetésnap mediánjának szintjére. Ezek közül a legnagyobb összeg jelenti az Ön maximális bevételét egy héten."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "A bevételek nem korlátozottak, ha a csapatnak csak egy tagja van, vagy ha az előző heti bevételek mindegyike nulla volt (ez a helyzet minden olyan új csapat esetében, amelyet a legutóbbi fizetési nap után hoztak létre)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Kérjük, lépjen kapcsolatba az ügyfélszolgálattal, ha egy meglévő csapat esetében szeretné engedélyezni vagy letiltani a korlátokat. Ne felejtsen el bizonyítékot csatolni arról, hogy a módosítást a többi csapattag is jóváhagyta."

@@ -1800,15 +1800,6 @@ msgstr "Luomalla Liberapay-tilin hyväksyt {0}käyttöehtomme{1}."
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Nimellinen osuutesi {0}-ryhmästä on rajattu {1} arvoon tällä viikolla. {2}Miksi?{3}"
 
-msgid "Last Payday"
-msgstr "Viimeisin Maksupäivä"
-
-msgid "n/a"
-msgstr "‒"
-
-msgid "Next Payday"
-msgstr "Seuraava Maksupäivä"
-
 msgid "Member"
 msgstr "Jäsen"
 
@@ -1818,13 +1809,19 @@ msgstr "Nimellinen osuus"
 msgid "Actual Take"
 msgstr "Todellinen osuus"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Liberapayn kautta lahjoitukset maksetaan etukäteen. Tässä sarakkeessa näkyy, kuinka paljon rahaa kukin jäsen on saanut ennakkoon tämän ryhmän kautta. Ennakko kasvaa aina, kun jäsen saa uuden maksun lahjoittajalta tiimin kautta, ja pienenee joka viikko \"palkkapäivänä\"."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "Ennakko"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "automaattinen"
@@ -4129,18 +4126,11 @@ msgstr "Voiko Liberapay-palvelun kautta tehdyt lahjoitukset vähentää verotuks
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Todennäköisesti ei, mutta asia riippuu maasi verotussäännöistä."
 
-msgid "What are wallets?"
-msgstr "Mitä ovat lompakot?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "LiberaPay säilytti lahjoittajien varoja lompakoissa, mutta näin ei enää tehdä. Koko lahjoitussumma siirretään nyt suoraan vastaanottajalle."
-
-msgid "What is “payday”?"
-msgstr "Mikä on ”maksupäivä”?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Maksupäivä on ohjelma ({0}tämä{1}), jonka ajamme keskiviikkoisin. Se toimittaa lahjoitukset ja ilmoittaa asiasta lahjoittajille sekä vastaanottajille."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Saat uutisia meistä seuraavien sosiaalisten verkkojen kautta:"
@@ -4529,8 +4519,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Ryhmillä ei ole hierarkiaa. Kaikki jäsenet ovat tasa-arvoisia, ja määrittävät oman osuutensa."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Voit muuttaa osuuksiasi {0}ryhmän hallintapaneelista{1}. Se sisältää taulukot, joista näkyy ryhmän kaikkien jäsenten osuudet seuraavalle ja edelliselle Maksupäivälle, sekä arviot todellisista määristä, jonka nämä saavat seuraavana Maksupäivänä."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nimelliset osuudet ovat raakoja lukuarvoja, jotka ryhmän jäsenet syöttävät itse. Todelliset osuudet muodostuvat järjestelmän laskemana: Ensin nimelliset osuudet summataan, ja sen jälkeen lasketaan prosenttimäärä, mitä kukin osuus edustaa, ja tämä prosenttimäärä sovelletaan saatavilla olevaan rahasummaan. Nimelliset osuudet toimivat myös maksimeina: Todelliset osuudet eivät koskaan ylitä nimellistä osuutta edes siinä tilanteessa, että rahaa olisi saatavilla enemmänkin."
@@ -4547,15 +4537,15 @@ msgstr "Oletuksena kaikilla ryhmän jäsenillä on osuus asetettu arvoon “auto
 msgid "Regulation of take amounts"
 msgstr "Osuuksien säätely"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Kun “osuuksien säätely” kytketään ryhmälle päälle, ryhmän jäsenet eivät voi korottaa osuuksiaan laskettua maksimia korkeammiksi. Tämä laskelma pohjautuu edellisen Maksupäivän nimellisiin osuuksiin. Toiminnon tarkoitus on helpottaa uusien osallistujien kutsumista ryhmään tekemällä mahdottomaksi sen, että nämä varaisivat itselleen suhteettoman suuria osuuksia ryhmän tuloista ensimmäisten viikkojen aikana."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Raja toimii näin: Voit aina lisätä osuutesi {amount}:een, mikäli se oli sen alle. Voit tuplata osuutesi edelliseen viikkoon verrattuna. Voit kohottaa osuutesi lunastaaksesi ryhmän tulojen ylijäämän. Ja voit kohottaa osuutesi edellisen Maksupäivän mediaaniosuuden tasolle. Mikä tahansa näistä onkaan suurin määrä, se on maksimiosuutesi viikolle."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Osuuksia ei rajoiteta, mikäli ryhmällä on vain yksi jäsen, tai mikäli edellisen viikon osuudet olivat kokonaan nollia (tämä koskee esimerkiksi vasta luotuja ryhmiä, joilla ei ole ollut vielä yhtään Maksupäivää)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Ota yhteyttä Liberapayn tukeen, jos haluat ottaa käyttöön tai poistaa rajat olemassaolevan ryhmän osuuksista. Muista liittää mukaan riittävät todisteet siitä, että pyynnölläsi on ryhmän jäsenten hyväksyntä."

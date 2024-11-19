@@ -2083,18 +2083,6 @@ msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{
 msgstr "Số lượt nhận danh nghĩa của bạn từ nhóm {0} được giới hạn ở {1} trong tuần này. {2} Tại sao? {3}"
 
 #, fuzzy
-msgid "Last Payday"
-msgstr "Ngày lĩnh lương cuối cùng"
-
-#, fuzzy
-msgid "n/a"
-msgstr "không"
-
-#, fuzzy
-msgid "Next Payday"
-msgstr "Ngày lương tiếp theo"
-
-#, fuzzy
 msgid "Member"
 msgstr "Hội Viên"
 
@@ -2106,13 +2094,19 @@ msgstr "Nhận danh nghĩa"
 msgid "Actual Take"
 msgstr "Thực tế lấy"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Trên Liberapay, các khoản quyên góp được trả trước. Cột này hiển thị số tiền mà mỗi thành viên đã nhận được trước thông qua nhóm này. Khoản tạm ứng tăng lên mỗi khi một thành viên nhận được khoản thanh toán mới từ một nhà tài trợ thông qua nhóm và giảm xuống mỗi tuần trong \"ngày trả lương\"."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "Nâng cao"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 #, fuzzy
 msgid "auto"
@@ -4799,21 +4793,11 @@ msgstr "Các khoản đóng góp thông qua Liberapay có được khấu trừ 
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Có thể là không, nhưng nó phụ thuộc vào các quy tắc thuế của quốc gia của bạn."
 
-#, fuzzy
-msgid "What are wallets?"
-msgstr "Ví là gì?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-#, fuzzy
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay từng giữ tiền của các nhà tài trợ trong ví, nhưng chúng tôi không còn làm điều đó nữa. Thay vào đó, toàn bộ số tiền đóng góp sẽ được chuyển ngay đến người nhận."
-
-#, fuzzy
-msgid "What is “payday”?"
-msgstr "\"Ngày lĩnh lương\" là gì?"
-
-#, fuzzy, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Payday là một chương trình ({0} chương trình này {1}) mà chúng tôi chạy vào Thứ Tư hàng tuần. Nó thực hiện các hoạt động quyên góp và thông báo cho người cho và người nhận."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
@@ -5250,9 +5234,9 @@ msgstr "Chia sẻ tiền"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Các đội không có hệ thống phân cấp, tất cả các thành viên của họ đều bình đẳng và tự quyết định."
 
-#, fuzzy, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Bạn có thể thay đổi lượt thực hiện của mình từ {0} bảng điều khiển nhóm của bạn {1}. Nó chứa các bảng hiển thị số tiền nhận được danh nghĩa của tất cả các thành viên cho ngày lĩnh lương tiếp theo và trước đó, cũng như ước tính số tiền thực tế mà họ sẽ nhận được trong ngày lĩnh lương tiếp theo."
+#, python-brace-format
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -5274,17 +5258,15 @@ msgstr "Theo mặc định, tất cả các thành viên trong nhóm đều đư
 msgid "Regulation of take amounts"
 msgstr "Quy định số tiền nhận"
 
-#, fuzzy
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Khi kích hoạt tính năng “lấy điều chỉnh” cho một nhóm, các thành viên của nhóm đó không thể nâng mức lương của họ lên cao hơn mức tối đa được tính toán trên cơ sở mức nhận danh nghĩa tại thời điểm của ngày trả lương trước đó. Cơ chế này nhằm khuyến khích việc mời những người đóng góp mới tham gia vào nhóm, bằng cách đảm bảo rằng họ sẽ không nhận một phần thu nhập không tương xứng trong những tuần đầu tiên của họ."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Giới hạn hoạt động như thế này: bạn luôn có thể tăng số tiền của mình lên {amount} nếu nó ở dưới mức đó, bạn có thể tăng gấp đôi số tiền của mình so với tuần trước, bạn có thể tăng số tiền thực hiện của mình để yêu cầu thu nhập còn lại của nhóm và bạn có thể mang lại lên đến mức của mức nhận trung bình của ngày trả lương trước đó. Bất kỳ khả năng nào trong số này dẫn đến số tiền cao nhất là số tiền tối đa của bạn trong tuần."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-#, fuzzy
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Số lượt nhận không bị giới hạn nếu nhóm chỉ có một thành viên hoặc nếu số lượt nhận của tuần trước đó đều bằng 0 (trường hợp này xảy ra đối với bất kỳ nhóm mới nào đã được tạo sau ngày trả lương gần đây nhất)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."

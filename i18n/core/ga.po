@@ -2126,18 +2126,6 @@ msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{
 msgstr "Tá do ghlacadh ainmniúil ón bhfoireann {0} teoranta go {1} an tseachtain seo. {2}Cén fáth?{3}"
 
 #, fuzzy
-msgid "Last Payday"
-msgstr "An Lá pá seo caite"
-
-#, fuzzy
-msgid "n/a"
-msgstr "n / A"
-
-#, fuzzy
-msgid "Next Payday"
-msgstr "An Lá pá seo chugainn"
-
-#, fuzzy
 msgid "Member"
 msgstr "Ball"
 
@@ -2149,13 +2137,19 @@ msgstr "Tóg Ainmniúil"
 msgid "Actual Take"
 msgstr "Tóg Iarbhír"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Ar Liberapay, íoctar síntiúis roimh ré. Léiríonn an colún seo cé mhéad airgid a fuair gach ball roimh ré tríd an bhfoireann seo. Méadaítear réamhíocaíocht gach uair a fhaigheann ball íocaíocht nua ó dheontóir tríd an bhfoireann, agus laghdaítear é gach seachtain le linn “lá pá”."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "Chun cinn"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 #, fuzzy
 msgid "auto"
@@ -4880,21 +4874,11 @@ msgstr "An bhfuil síntiúis trí Liberapay cáin-asbhainte?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Is dócha nach bhfuil, ach braitheann sé ar na rialacha cánach de do thír féin."
 
-#, fuzzy
-msgid "What are wallets?"
-msgstr "Cad is sparán ann?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-#, fuzzy
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Ba ghnách le Liberapay cistí na ndeontóirí a choinneáil i sparán, ach ní dhéanaimid é sin a thuilleadh. Ina ionad sin aistrítear méid iomlán an tsíntiúis láithreach chuig an bhfaighteoir."
-
-#, fuzzy
-msgid "What is “payday”?"
-msgstr "Cad is “lá pá” ann?"
-
-#, fuzzy, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Is clár é Payday ({0}an ceann seo{1}) a bhíonn ar siúl againn gach Céadaoin. Déanann sé síntiúis a fhorghníomhú agus cuireann sé in iúl do dheontóirí agus faighteoirí."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
@@ -5353,9 +5337,9 @@ msgstr "Ag roinnt an airgid"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Níl ordlathas ag na foirne, bíonn a gcuid ball ar fad ar comhchéim agus socraíonn siad a nglacadh féin."
 
-#, fuzzy, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Is féidir leat do ghlactha a athrú ó {0} deais do fhoirne{1}. Tá táblaí ann a thaispeánann líon na mball go léir don chéad lá pá eile agus don lá pá roimhe sin, chomh maith le meastachán ar na méideanna iarbhír airgid a gheobhaidh siad an chéad lá pá eile."
+#, python-brace-format
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -5377,17 +5361,15 @@ msgstr "De réir réamhshocraithe, cuirtear an luach speisialta 'uathoibríoch' 
 msgid "Regulation of take amounts"
 msgstr "Méideanna glactha a rialáil"
 
-#, fuzzy
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Nuair a bhíonn “scóig sníomh” cumasaithe d’fhoireann, ní féidir lena comhaltaí a ngabhálacha a ardú níos airde ná an t-uasmhéid a ríomhtar ar bhonn na dtógann ainmniúil ag am an lae pá roimhe sin. Tá an mheicníocht seo i gceist le spreagadh a thabhairt do ranníocóirí nua a bheith páirteach san fhoireann, trína chinntiú nach nglacfaidh siad sciar díréireach den ioncam ina gcéad seachtainí."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Feidhmíonn an teorainn mar seo: is féidir leat do ghlacadh a mhéadú go {amount} i gcónaí má bhí sé faoi sin, is féidir leat do ghlacadh a dhúbailt i gcomparáid leis an tseachtain roimhe sin, is féidir leat do ghlacadh a ardú chun ioncam fágtha na foirne a éileamh, agus is féidir leat do ghlacadh a thabhairt leat. Tóg suas go dtí leibhéal an ghlactha airmheánaigh sa lá pá roimhe sin. Cibé ceann de na féidearthachtaí seo a bhfuil an méid is airde mar thoradh air, is é an t-uasmhéid a thógann tú don tseachtain."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-#, fuzzy
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Níl teorainn leis an líon a thógann an fhoireann mura bhfuil ach ball amháin ag an bhfoireann, nó más rud é gur nialais a bhí i gceisteanna na seachtaine roimhe sin (mar atá i gcás aon fhoireann nua a cruthaíodh tar éis an lá pá is déanaí)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."

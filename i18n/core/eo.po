@@ -1800,15 +1800,6 @@ msgstr "Per kreado de Liberapay-konto, vi akceptas niajn {0}uzkondiĉojn{1}."
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Via nominala parto el la teamo {0} estas limigita al {1} tiusemajne. {2}Kial?{3}"
 
-msgid "Last Payday"
-msgstr "Lasta pagotago"
-
-msgid "n/a"
-msgstr "neaplikebla"
-
-msgid "Next Payday"
-msgstr "Venonta pagotago"
-
 msgid "Member"
 msgstr "Membro"
 
@@ -1818,11 +1809,18 @@ msgstr "Nominala parto"
 msgid "Actual Take"
 msgstr "Fakta parto"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "En Liberapay, donacoj estas pagitaj anticipe. Ĉi tiu kolumno montras kiom da mono ĉiu membro ricevis anticipe per ĉi tiu teamo. Anticipo pliiĝas ĉiufoje kiam membro ricevas novan pagon de donacanto per la teamo, kaj malpliiĝas ĉiun semajnon dum “pagotago”."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "Anticipo"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "aŭtomata"
@@ -4120,18 +4118,11 @@ msgstr "Ĉu donacoj per Liberapay estas subtraheblaj de imposto-kalkulo?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Verŝajne ne, sed tio dependas de la imposto-reguloj de via lando."
 
-msgid "What are wallets?"
-msgstr "Kio estas monujoj?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay kutimis reteni la monon de donacantoj en monujoj, sed ni ne plu faras tion. Anstataŭ la tuta kiomo de donaco estas tuje transdonita al ricevanto."
-
-msgid "What is “payday”?"
-msgstr "Kio estas “pagotago”?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Pagotago estas programo ({0}ĉi tiu{1}), kiun ni rulas ĉiun merkredon. Ĝi plenumas donacojn kaj informas al donacantoj kaj ricevantoj."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Vi povas ricevi novaĵojn el ni per la jenaj sociaj retoj:"
@@ -4514,8 +4505,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Teamoj ne havas hierarkion, ĉiu membro estas egala kaj povas elekti sian propran parton."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Vi povas ŝanĝi viajn partojn en {0}la kontrolpanelo de viaj teamoj{1}. Ĝi enhavas tabelojn, kiuj montras la nominalajn partojn de ĉiuj membroj por la sekva kaj lasta pagotago, kaj ankaŭ takson de la faktaj partoj de mono, kiujn ili ricevos en la venonta pagotago."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "La nominalaj partoj estas la krudaj nombroj, kiujn la membroj mem enigas, la faktaj partoj estas kalkulitaj de la sistemo: unue, ĝi sumigas la nominalajn partojn, kaj poste ĝi kalkulas la elcenton, kiun ĉiu parto reprezentas, kaj fine ĝi uzas tiujn elcentojn al la disponebla enspezo. Nominalaj partoj ankaŭ funkcias kiel maksimumoj: faktaj partoj neniam pli altas ol nominalaj partoj, eĉ se plia enspezo estas disponebla."
@@ -4532,15 +4523,15 @@ msgstr "Implicite ĉiuj teamanoj havas siajn partojn agorditaj kun la speciala v
 msgid "Regulation of take amounts"
 msgstr "Limigi la kvanton de partoj"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Kiam tiu funkcio estas ŝaltita por teamo, ĝiaj membroj ne povas altigi siajn partojn pli alte ol kalkulita maksimumo, kiu baziĝas sur la nominalaj partoj en la lasta pagotago. Tiu mekanismo celas kuraĝigi inviti novajn kontribuantojn al aliĝi al la teamo, garantiante ke ili ne prenos tro grandan parton de la enspezo en siaj unuaj semajnoj."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "La limo funkcias tiel: vi ĉiam povas altigi vian parton al {amount} se ĝi estis sub tio, vi povas duobligi vian parton kompare al la lasta semajno, vi povas altigi vian parton por pretendi al la enspeza restaĵo de la teamo, kaj vi povas ŝanĝi vian parton al la meza nivelo de parto de la lasta pagotago. El tiuj ebloj, tiu kiu donas plej grandan kvanton estas via maksimuma kvanto por tiu semajno."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Partoj ne estas limigitaj, se la teamo havas nur unu membron, aŭ se la partoj de la lasta semajno estis ĉiuj nulo (kio ofte okazas por nova teamo kreita post la plej lasta pagotago)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Bonvolu kontakti subtenon, se vi volas ebligi aŭ malebligi la limon de la nominalaj partoj de ekzistanta teamo. Ne forgesu inkludi ateston de la aprobo de la ŝanĝo de la aliaj membroj el la teamo."

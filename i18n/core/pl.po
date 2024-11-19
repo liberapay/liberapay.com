@@ -1815,15 +1815,6 @@ msgstr "Tworząc konto Liberapay, akceptujesz nasze {0}warunki korzystania z us�
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Twój nominalny pobór z zespołu {0} jest limitowany do {1} w tym tygodniu. {2}Dlaczego?{3}"
 
-msgid "Last Payday"
-msgstr "Ostatni payday"
-
-msgid "n/a"
-msgstr "nie dotyczy"
-
-msgid "Next Payday"
-msgstr "Następny payday"
-
 msgid "Member"
 msgstr "Członek"
 
@@ -1833,11 +1824,18 @@ msgstr "Nominalny pobór"
 msgid "Actual Take"
 msgstr "Rzeczywisty pobór"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "W Liberapay darowizny są wypłacane z góry. Ta kolumna pokazuje, ile pieniędzy każdy członek otrzymywał z góry za pośrednictwem tego zespołu. Zaliczka rośnie za każdym razem, gdy członek otrzymuje nową wpłatę od darczyńcy za pośrednictwem zespołu, a maleje co tydzień w dniu wypłaty."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "Zaliczka"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "automatyczny"
@@ -4165,18 +4163,11 @@ msgstr "Czy mogę odpisać od podatku darowizny przekazywane poprzez Liberapay?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Prawdopodobnie nie, jednak zależy to od prawa podatkowego Twojego kraju."
 
-msgid "What are wallets?"
-msgstr "Czym są portfele?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay trzymał pieniądze darczyńców w portfelach, ale już tego nie robimy. Zamiast tego pełna kwota darowizny jest natychmiast przekazywana odbiorcy."
-
-msgid "What is “payday”?"
-msgstr "Co to jest „dzień wypłaty”?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Payday to program ({0} ten {1}), który uruchamiamy w każdą środę. Wykonuje darowizny i powiadamia darczyńców i odbiorców."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Najnowsze informacje na temat naszej działalności możesz znaleźć w następujących sieciach społecznościowych:"
@@ -4570,8 +4561,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "Zespoły nie mają hierarchii, wszyscy członkowie są równi i ustawiają własną wysokość poboru."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Możesz zmienić wysokość Twoich poborów z poziomu {0}Twojego kokpitu zespołów{1}. Zawiera on tabele pokazujące nominalne pobory wszystkich członków podczas następnego i poprzedniego dnia wypłaty (payday), jak i prognozy rzeczywistych kwot jakie oni otrzymają podczas następnego dnia wypłaty."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nominalne pobory to surowe liczby wprowadzane przez samych członków, natomiast rzeczywiste pobory są wyliczane w następujący sposób: najpierw wszystkie nominalne pobory są do siebie dodawane, następnie oblicza się jaki procent każdy pobór reprezentuje i na koniec na podstawie tych procentów dzielony jest dostępny przychód. Nominalne pobory to wartości maksymalne: rzeczywiste pobory nigdy nie są wyższe niż nominalne, nawet jeżeli dostępny jest jeszcze dodatkowy przychód."
@@ -4588,15 +4579,15 @@ msgstr "Domyślnie wszyscy członkowie zespołu mają ustawioną specjalną wart
 msgid "Regulation of take amounts"
 msgstr "Regulacja wysokości poboru"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Gdy w zespole jest włączone „ograniczanie przepustowości”, jego członkowie nie mogą podnosić swoich stawek powyżej maksymalnego obliczonego na podstawie nominalnych wartości w momencie poprzedniej wypłaty. Ten mechanizm ma na celu zachęcenie nowych członków do dołączenia do zespołu, zapewniając, że nie wezmą nieproporcjonalnej części dochodów w pierwszych tygodniach."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limit ten działa następująco: zawsze możesz zwiększyć swój pobór do {amount} jeśli był od tego mniejszy, podwoić swój pobór w stosunku do poprzedniego tygodnia, zwiększyć swój pobór by wziąć pozostałość przychodu zespołu, jak i zwiększyć swój pobór do poziomu mediany poboru z ostatniego dnia wypłaty (payday). Możliwość która w Twoim przypadku da w rezultacie najwyższą wartość będzie Twoim maksymalnym poborem podczas aktualnego tygodnia."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Pobory nie są limitowane gdy zespół składa się z tylko jednego członka lub gdy pobory z ostatniego tygodnia wynosiły zero (co ma miejsce w przypadku nowych zespołów, które zostały stworzone po ostatnim dniu wypłaty, znanym także jako payday)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Skontaktuj się z pomocą techniczną, jeśli chcesz włączyć lub wyłączyć limity przejęcia dla istniejącego zespołu. Nie zapomnij dołączyć dowodów, że zmiana została zatwierdzona przez innych członków zespołu."

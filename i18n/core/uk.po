@@ -1815,15 +1815,6 @@ msgstr "Створюючи обліковий запис на Liberapay, ви п
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "Ваше номінальне отримання від команди {0} обмежено до {1} цього тижня. {2}Чому?{3}"
 
-msgid "Last Payday"
-msgstr "Останній день виплат"
-
-msgid "n/a"
-msgstr "н/з"
-
-msgid "Next Payday"
-msgstr "Наступний день виплат"
-
 msgid "Member"
 msgstr "Учасник"
 
@@ -1833,11 +1824,18 @@ msgstr "Номінальне отримання"
 msgid "Actual Take"
 msgstr "Фактичне отримання"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "На Liberapay внески виплачуються авансом. Цей стовпчик показує, скільки грошей кожен учасник отримав авансом через цю команду. Аванс збільшується щоразу, коли учасник отримує новий платіж від донора через команду, і зменшується щотижня під час \"дня виплати\"."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "Аванс"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "автоматично"
@@ -4165,18 +4163,11 @@ msgstr "Чи оподатковуються внески Liberapay?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Напевно ні, але це залежить від правил оподаткування вашої країни."
 
-msgid "What are wallets?"
-msgstr "Що таке гаманці?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Раніше, Liberapay тримав кошти спонсорів у гаманцях, але ми більше цього не робимо. Натомість уся сума внеску негайно передається одержувачу."
-
-msgid "What is “payday”?"
-msgstr "Що таке “день виплат”?"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "День виплат — це програма ({0}ця{1}), яку ми запускаємо щосереди. Вона здійснює внески та повідомляє спонсорів та одержувачів."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Ви можете стежити за новинами в таких суспільних мережах:"
@@ -4570,8 +4561,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "В командах нема ієрархії, усі їхні учасники рівні та встановлюють свої власні бажані надходження."
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Можна змінювати ваші надходження на {0}панелі керування вашими командами{1}. В ній є таблиця, яка показує номінальні виручки всіх учасників за наступний та попередній день виплат, а також оцінку фактичної суми грошей, яку вони отримають наступного дня виплат."
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Номінальні надходження — це просто числа, які учасники вводять самі, а власне отримання обчислюються системою: спочатку вона підсумовує номінальні отримання, потім обчислює, скільки процентів складає кожне надходження, та наприкінці вона застосовує ці проценти до доступного надходження. Номінальні отримання також грають роль максимумів: дійсне отримання ніколи не перевищить номінального, навіть якщо є додаткове надходження."
@@ -4588,15 +4579,15 @@ msgstr "Типово, для всіх членів команди встанов
 msgid "Regulation of take amounts"
 msgstr "Регулювання суми отримання"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Коли для команди увімкнено \"прискорене отримання\", його учасники не можуть збільшити їхнє отримання, ніж максимальне обчислене на основі номінального отримання на момент попереднього дня платежів. Цей механізм покликано заохочувати нових учасників приєднатися до команди, гарантуючи, що вони не будуть отримувати непропорційну частку доходів у перші тижні."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Обмеження діє : ви завжди можете збільшити ваше надходження до {amount}, якщо воно було нижче цього значення, ви можете подвоїти ваше надходження у порівнянні з минулим тижнем, також ви можете збільшити ваше отримання, щоб претендувати на залишок надходжень команди, і ви можете збільшити своє отримання до рівня середнього отримання за попередній день виплат. В результаті, ваше отримання за тиждень збільшиться до максимального з цих значень."
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Отримання не обмежено. якщо в команді є лише один учасник або якщо виручка за минулий тиждень дорівнює нулю (це буває, коли нову команду створено після найближчого дня виплат)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Будь ласка, зв’яжіться зі службою підтримки, якщо ви хочете ввімкнути або вимкнути обмеження отримань для наявної команди. Не забудьте включити докази того, що зміну схвалили інші учасники команди."

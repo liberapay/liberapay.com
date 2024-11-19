@@ -1785,15 +1785,6 @@ msgstr "创建 Liberapay 账户即表示您同意我们的{0}服务条款{1}。"
 msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{3}"
 msgstr "您在 {0} 团队的名目上收取本周被限制为 {1}。{2}为什么会这样？{3}"
 
-msgid "Last Payday"
-msgstr "上一个付款日"
-
-msgid "n/a"
-msgstr "不可用"
-
-msgid "Next Payday"
-msgstr "下一个付款日"
-
 msgid "Member"
 msgstr "成员"
 
@@ -1803,11 +1794,18 @@ msgstr "名目上收取"
 msgid "Actual Take"
 msgstr "实际收取"
 
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "在 Liberapay 上，捐赠是提前支付的。本列显示每位成员通过该团队预收的款项。每当成员通过团队从捐赠者那里收到一笔新的付款时，预付款就会增加，而在 \"付款日 \"期间，预付款每周都会减少。"
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 msgid "Advance"
 msgstr "预付款"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 msgid "auto"
 msgstr "自动"
@@ -4076,18 +4074,11 @@ msgstr "通过 Liberapay 进行捐款可以减税吗？"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "可能不行，但同样取决于各国家/地区的税收规定。"
 
-msgid "What are wallets?"
-msgstr "什么是“钱包”？"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay 曾经用“钱包”来保存捐款者的资金，但现在我们会将捐款全额立即转账给收款人。"
-
-msgid "What is “payday”?"
-msgstr "什么是“支付日”？"
-
-#, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "支付日（Payday）是我们在每周三运行的一个{0}程序{1}，它负责执行捐款并通知捐款人与收款人。"
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "您可以通过以下社交平台了解我们的近况："
@@ -4459,8 +4450,8 @@ msgid "Teams don't have a hierarchy, all their members are equal and set their o
 msgstr "团队并无任何阶层，所有成员皆为平等，并设定自己的分配额度。"
 
 #, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "您可以在所属团队的{0}团队控制面板{1}中更改自己收取的份额。其中包含一个表格，显示所有成员在前一次与下一次付款日时名目上收取的份额，以及预估在下次付款日可以收到的实际金额。"
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "名目收取是成员自己所输入的数额，而实际收取是由系统计算得出：首先计算出名目收取的总和，然后得出每份收取代表的百分比，最后将此百分比套入可得收入。名目收取也是“最高得到”：实际收取不会高过名目收取，即便有多出来的收入。"
@@ -4477,15 +4468,15 @@ msgstr "所有团队成员的默认分成设置为特殊值“自动”（auto�
 msgid "Regulation of take amounts"
 msgstr "收取份额的规定"
 
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "当一个团队启用“分成节流”功能时，团队成员无法将自己的收取改为高于前一个捐款日中名目收取的最大值。该功能是为了邀请更多的新志愿者加入团队，且保障成员不会在前几周拿到比例失衡的收入。"
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
 #, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "限制原理如下：您随时可以将自己的分成提升至最高 {amount}，您可以使自己较前一周的分成翻倍，您可以提升自己的分成来领取团队的盈余，您还可以将分成提升到上一个捐款日的中位数。以上算法中的最高收入，作为您本周的分成上限。"
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "若团队只有一名成员，或是前一周的分成均为零（在最近一次捐款日之后创建的团队），分成没有限制。"
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "如果为现有团队启用或停用分成上限，请联系客服人员。请记得提供其他团队成员同意变更的证明。"

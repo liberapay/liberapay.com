@@ -2150,18 +2150,6 @@ msgid "Your nominal take from the {0} team is limited to {1} this week. {2}Why?{
 msgstr "Vaš nominalni prevzem od ekipe {0} je ta teden omejen na {1}. {2}Zakaj?{3}"
 
 #, fuzzy
-msgid "Last Payday"
-msgstr "Zadnji dan plačila"
-
-#, fuzzy
-msgid "n/a"
-msgstr "ni na voljo"
-
-#, fuzzy
-msgid "Next Payday"
-msgstr "Naslednji dan plačila"
-
-#, fuzzy
 msgid "Member"
 msgstr "Član"
 
@@ -2173,13 +2161,19 @@ msgstr "Nazivni prevzem"
 msgid "Actual Take"
 msgstr "Dejanski prevzem"
 
-#, fuzzy
-msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week during “payday”."
-msgstr "Pri Liberapayu so donacije plačane vnaprej. V tem stolpcu je prikazano, koliko denarja je vsak član prejel vnaprej prek te ekipe. Predplačilo se poveča vsakič, ko član prek te ekipe prejme novo plačilo od donatorja, in se zmanjša vsak teden ob \"dnevu plačila\"."
+msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
+msgstr ""
 
 #, fuzzy
 msgid "Advance"
 msgstr "Predhodno"
+
+#, python-brace-format
+msgid "Last week: {0}"
+msgstr ""
+
+msgid "no take"
+msgstr ""
 
 #, fuzzy
 msgid "auto"
@@ -4955,21 +4949,11 @@ msgstr "Ali so donacije prek Liberapay davčno odbitne?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Verjetno ne, vendar je to odvisno od davčnih predpisov v vaši državi."
 
-#, fuzzy
-msgid "What are wallets?"
-msgstr "Kaj so denarnice?"
+msgid "Is a Liberapay account a wallet?"
+msgstr ""
 
-#, fuzzy
-msgid "Liberapay used to hold the funds of donors in wallets, but we no longer do that. Instead the full amount of a donation is immediately transferred to the recipient."
-msgstr "Liberapay je sredstva donatorjev hranil v denarnicah, vendar tega ne počnemo več. Namesto tega se celoten znesek donacije takoj prenese na prejemnika."
-
-#, fuzzy
-msgid "What is “payday”?"
-msgstr "Kaj je \"payday\"?"
-
-#, fuzzy, python-brace-format
-msgid "Payday is a program ({0}this one{1}) that we run every Wednesday. It executes donations and notifies donors and recipients."
-msgstr "Payday je program ({0}ta{1}), ki ga izvajamo vsako sredo. Izvaja donacije ter obvešča donatorje in prejemnike."
+msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
+msgstr ""
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
@@ -5439,9 +5423,9 @@ msgstr "Delitev denarja"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Ekipe nimajo hierarhije, vsi njihovi člani so enakopravni in sami določajo svoje cilje."
 
-#, fuzzy, python-brace-format
-msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members for the next and previous payday, as well as an estimate of the actual amounts of money they'll receive in the next payday."
-msgstr "Prevzeme lahko spremenite na spletnem mestu {0}na nadzorni plošči ekipe{1}. V njej so tabele, ki prikazujejo nominalne prejemke vseh članov za naslednji in prejšnji dan izplačila ter oceno dejanskih zneskov denarja, ki jih bodo prejeli v naslednjem dnevu izplačila."
+#, python-brace-format
+msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
+msgstr ""
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -5463,17 +5447,15 @@ msgstr "Privzeto imajo vsi člani ekipe nastavljeno posebno vrednost \"auto\", k
 msgid "Regulation of take amounts"
 msgstr "Uredba o količinah ulova"
 
-#, fuzzy
-msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the time of the previous payday. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Če je za ekipo omogočeno omejevanje prevzemov, njeni člani ne morejo povečati svojih prevzemov nad najvišjo vrednost, izračunano na podlagi nominalnih prevzemov ob prejšnjem izplačilu. Namen tega mehanizma je spodbuditi nove sodelavce, da se pridružijo ekipi, saj zagotavlja, da v prvih tednih ne bodo prevzeli nesorazmernega deleža prihodkov."
+msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
+msgstr ""
 
-#, fuzzy, python-brace-format
-msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take in the previous payday. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Omejitev deluje na naslednji način: vedno lahko povečate svoj prejemek na {amount}, če je bil pod tem zneskom, lahko podvojite svoj prejemek v primerjavi s prejšnjim tednom, lahko povečate svoj prejemek in zahtevate preostali dohodek ekipe ter lahko svoj prejemek povečate na raven mediane prejemka v prejšnjem plačilnem dnevu. Katera koli od teh možnosti prinese najvišji znesek, je vaš najvišji prejemek v tednu."
+#, python-brace-format
+msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
+msgstr ""
 
-#, fuzzy
-msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created after the most recent payday)."
-msgstr "Prevzemi niso omejeni, če ima ekipa samo enega člana ali če so bili vsi prevzemi v prejšnjem tednu enaki nič (kar velja za vsako novo ekipo, ki je bila ustanovljena po zadnjem izplačilu)."
+msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
+msgstr ""
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
