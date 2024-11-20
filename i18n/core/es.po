@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-11-19 11:15+0000\n"
-"Last-Translator: Jorge Maldonado Ventura <jorgesumle@freakspot.net>\n"
+"PO-Revision-Date: 2024-11-19 22:14+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/liberapay/core/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -226,10 +226,10 @@ msgstr "Tiene un pago de {amount} programado {payment_date} para renovar sus don
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
-msgstr[1] "Tienes {n} pagos programados para renovar tus donaciones, pero no podemos procesarlos porque falta un instrumento de pago válido."
+msgstr[1] "Tienes {n} pagos programados para renovar tus donaciones, pero no podemos procesarlos porque falta un método de pago válido."
 
 msgid "The payment dates, amounts and recipients are:"
-msgstr "Las fechas, cantidades y receptores de pagos son:"
+msgstr "Las fechas de pago, los importes y los beneficiarios son:"
 
 #, python-brace-format
 msgid "{date}: {money_amount} to {recipient}"
@@ -4122,13 +4122,13 @@ msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probablemente no, pero depende de las normas fiscales de tu país."
 
 msgid "Is a Liberapay account a wallet?"
-msgstr "¿Es una cuenta Liberapay una cartera?"
+msgstr "¿Es una cuenta Liberapay un monedero?"
 
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr "No desde mediados de 2018. El dinero enviado por un donante llega inmediatamente al destinatario. Antes, los fondos se guardaban en la cuenta del donante y se desembolsaban poco a poco al destinatario cada semana. Ese sistema se abandonó definitivamente debido a sus gravísimos inconvenientes."
+msgstr "No desde mediados de 2018. El dinero enviado por un donante llega inmediatamente al beneficiario. Antes, los fondos se guardaban en la cuenta del donante y se desembolsaban poco a poco al beneficiario cada semana. Ese sistema se abandonó definitivamente debido a sus importantísimos inconvenientes."
 
 msgid "You can get updates from us on the following social networks:"
-msgstr "Puedes recibir actualizaciones de nosotros en las siguientes redes sociales:"
+msgstr "Puede recibir nuestras novedades en las siguientes redes sociales:"
 
 #, python-brace-format
 msgid "You can also follow the {1}development of the Liberapay software{0}, the {2}adventures of the Liberapay legal entity{0}, and the {3}general discussions of the Liberapay team{0}."
@@ -4527,11 +4527,11 @@ msgid "Regulation of take amounts"
 msgstr "Regulación del importe de las partes"
 
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Cuando se activa el «ahogamiento de partes» para un equipo, sus miembros no pueden aumentar sus tomas por encima de un máximo calculado sobre la base de las recaudaciones nominales al final del ciclo semanal anterior. Este mecanismo pretende animar a nuevos colaboradores a unirse al equipo, asegurando que no se lleven una parte desproporcionada de los ingresos en sus primeras semanas."
+msgstr "Cuando se habilita la \"limitación de ingresos\" para un equipo, sus miembros no pueden aumentar sus ingresos por encima de un máximo calculado sobre la base de los ingresos nominales al final del ciclo semanal anterior. Este mecanismo tiene como objetivo animar la invitación a nuevos colaboradores para que se unan al equipo, al garantizar que no se lleven una parte desproporcionada de los ingresos en sus primeras semanas."
 
 #, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "El límite funciona de la siguiente manera: siempre puedes aumentar tu toma a {amount} si estaba por debajo, puedes duplicar tu toma en comparación con la semana anterior, puedes aumentar tu toma para reclamar los ingresos sobrantes del equipo y puedes llevar tu toma hasta el nivel de la recaudación media al final del ciclo semanal anterior. Cualquiera de estas posibilidades que dé como resultado la cantidad más alta es tu recaudación máxima de la semana."
+msgstr "El límite funciona de la siguiente manera: siempre puedes aumentar tus ingresos hasta {amount} si estaba por debajo de esa cantidad, puedes duplicar tus ingresos en comparación con la semana anterior, puedes aumentar tus ingresos para reclamar los ingresos sobrantes del equipo y puede llevar tus ingresos hasta el nivel de la recaudación media al final del ciclo semanal anterior. Cualquiera de estas posibilidades que dé como resultado la cantidad más alta es la recaudación máxima de la semana."
 
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
 msgstr "Las tomas no están limitadas si el equipo solo tiene un miembro o si las tomas de la semana anterior fueron todas cero (que es el caso de cualquier equipo nuevo que se haya creado durante el ciclo semanal actual)."
