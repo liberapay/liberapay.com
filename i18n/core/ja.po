@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2024-11-19 10:57+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1794,18 +1796,20 @@ msgstr "名目上の取り分"
 msgid "Actual Take"
 msgstr "実際の取り分"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "Liberapayでは、寄付は前払いです。この欄は、各メンバーがこのチームを通じていくら前払い金を受け取ったかを示しています。前受金は、メンバーがチームを通じて寄付者から新たな支払いを受けるたびに増加し、毎週減少します。"
 
 msgid "Advance"
 msgstr "前払い金"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "先週は{0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "取り分なし"
 
 msgid "auto"
 msgstr "自動"
@@ -4074,11 +4078,13 @@ msgstr "Liberapayでの寄付は所得から控除できますか？"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "おそらくできません。ご自身の国の税規則次第では可能な場合もあります。"
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Liberapayアカウントはウォレットですか？"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "2018年半ば以降は違う。寄付者から送られた金銭はすぐに受取人に渡る。以前は寄付者の口座に資金を追加し、毎週少しずつ受取人に送金していた。そのシステムは非常に大きな欠点があったため、決定的に放棄された。"
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "以下のSNSから最新の情報を入手できます。"
@@ -4449,9 +4455,9 @@ msgstr "寄付を分配"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "チームに階級はありません。メンバー全員が平等で、各自の取り分が設定されています。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "{0}あなたのチームのダッシュボード{1} から取り分を変更することができます。このダッシュボードには、全メンバーの名目取り分と、現在の週サイクルの終わりに差し引かれる実際の金銭の概算が表示された表があります。"
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "名目上の取り分は、メンバーが自分自身で入力する数字ですが、実際の取り分は、システムによって計算されます。最初に名目上の金額を合計し、それぞれが取る割合を計算してから、分配できる収入にこれらの割合を掛け算します。名目上のものは、いわば最大値です。追加の収入があっても、実際の持ち分は名目上の金額よりも決して高くはなりません。"
@@ -4468,15 +4474,17 @@ msgstr "デフォルトでは、すべてのチームメンバーは、取り分
 msgid "Regulation of take amounts"
 msgstr "取り分の金額に関する規制"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "チームに対して「取り分調整」が有効になっている場合、そのチームのメンバーは、前の週サイクルの終了時の公称取り分に基づいて計算された最大値より高い取り分を上げることはできません。このメカニズムは、新しい貢献者をチームに招き入れることを奨励するもので、彼らが最初の週に収入の不均衡な取り分を取らないようにするものです。"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "{amount} 、あなたの取り分を前週の2倍にすることもできますし、チームの余剰収入を請求するために取り分を増やすこともできます。また、前週のサイクル終了時の中央値まで取り分を引き上げることもできます。これらの可能性のうち、最も高い金額があなたのその週の最大取り分となります。"
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "チームのメンバーが1人しかいない場合や、前週の取り分がすべてゼロの場合（現在のウィークリーサイクルで新規に作成されたチームの場合）には、取り分は制限されません。"
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "すでに存在しているチームの取り分の制限を有効あるいは無効にするには、サポートに連絡してください。その際には、この変更がチームの他のメンバーによって認められているという証拠を忘れずに含めてください。"

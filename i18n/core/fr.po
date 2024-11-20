@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: French "
-"<https://hosted.weblate.org/projects/liberapay/core/fr/>\n"
-"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"PO-Revision-Date: 2024-11-19 10:57+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/liberapay/core/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1809,18 +1811,20 @@ msgstr "Part nominale"
 msgid "Actual Take"
 msgstr "Montant réel"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "Sur Liberapay, les dons sont payés à l'avance. Cette colonne indique le montant que chaque membre a reçu à l'avance par l'intermédiaire de cette équipe. Une avance augmente chaque fois qu'un membre reçoit un nouveau paiement d'un donateur par l'intermédiaire de l'équipe, et diminue chaque semaine."
 
 msgid "Advance"
 msgstr "Avance"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "La semaine dernière : {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "pas de prise"
 
 msgid "auto"
 msgstr "auto"
@@ -4119,11 +4123,13 @@ msgstr "Les dons effectués via Liberapay sont-ils déductibles des impôts ?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probablement pas, mais cela dépend des règles fiscales de votre pays."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Un compte Liberapay est-il un portefeuille ?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Pas depuis mi-2018. L'argent envoyé par un donateur va immédiatement au destinataire. Auparavant, les fonds étaient conservés sur le compte du donateur et versés petit à petit au destinataire chaque semaine. Ce système a été définitivement abandonné en raison de ses inconvénients très importants."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Vous pouvez nous suivre sur les réseaux sociaux suivants :"
@@ -4505,9 +4511,9 @@ msgstr "Partager l'argent"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Les équipes n'ont pas de hiérarchie, tous les membres sont égaux et décident eux-mêmes de la part des revenus de l'équipe qu'ils prennent."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Vous pouvez modifier vos prises à partir de {0}le tableau de bord de vos équipes{1}. Il contient des tableaux qui indiquent les prises nominales de tous les membres, ainsi qu'une estimation des montants réels qui seront déduits à la fin du cycle hebdomadaire en cours."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Les parts nominales sont les nombres bruts fixés par les membres eux-mêmes, les montants réels sont calculés par le système : d'abord il fait la somme des parts nominales, puis il calcule le pourcentage que chaque part représente, et enfin il applique ces pourcentages au revenu disponible. Les parts nominales agissent aussi en maximums : les montants réels ne sont jamais supérieurs aux montants nominaux, même si le revenu de l'équipe le permettrait."
@@ -4524,15 +4530,17 @@ msgstr "Par défaut toutes les parts nominales ont la valeur spéciale 'auto', q
 msgid "Regulation of take amounts"
 msgstr "Régulation des montants des parts"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Lorsque la \"limitation des prises\" est activée pour une équipe, ses membres ne peuvent pas augmenter leurs prises au-delà d'un maximum calculé sur la base des prises nominales à la fin du cycle hebdomadaire précédent. Ce mécanisme vise à encourager les nouveaux contributeurs à rejoindre l'équipe, en garantissant qu'ils ne prendront pas une part disproportionnée des revenus au cours de leurs premières semaines."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "La limite fonctionne comme suit : vous pouvez toujours augmenter votre gain à {amount} s'il était inférieur à ce montant, vous pouvez doubler votre gain par rapport à la semaine précédente, vous pouvez augmenter votre gain pour réclamer le revenu restant de l'équipe, et vous pouvez porter votre gain au niveau du gain médian à la fin du cycle hebdomadaire précédent. Le montant le plus élevé parmi ces possibilités est votre gain maximum pour la semaine."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Les prises ne sont pas limitées si l'équipe ne compte qu'un seul membre ou si les prises de la semaine précédente étaient toutes nulles (ce qui est le cas pour toute nouvelle équipe créée pendant le cycle hebdomadaire en cours)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Veuillez contacter le support si vous souhaitez activer ou désactiver la régulation des montants des parts pour une équipe existante. N'oubliez pas d'inclure la preuve que le changement a été approuvé par les autres membres de l'équipe."

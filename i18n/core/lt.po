@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Lithuanian "
-"<https://hosted.weblate.org/projects/liberapay/core/lt/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2024-11-19 10:57+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/liberapay/core/lt/>\n"
+"Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, fuzzy, python-brace-format
@@ -2000,19 +2002,21 @@ msgstr "Nominalus paėmimas"
 msgid "Actual Take"
 msgstr "Faktinis paėmimas"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "\"Liberapay\" sistemoje aukos mokamos iš anksto. Šiame stulpelyje rodoma, kiek pinigų kiekvienas narys gavo avansu per šią komandą. Avansas didėja kiekvieną kartą, kai narys gauna naują mokėjimą iš aukotojo per šią komandą, ir mažėja kiekvieną savaitę."
 
 #, fuzzy
 msgid "Advance"
 msgstr "Išankstinis"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "Praėjusią savaitę: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "neimti"
 
 #, fuzzy
 msgid "auto"
@@ -4683,11 +4687,13 @@ msgstr "Ar aukos per \"Liberapay\" yra atskaitomos iš mokesčių?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Tikriausiai ne, bet tai priklauso nuo jūsų šalies mokesčių taisyklių."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Ar \"Liberapay\" sąskaita yra piniginė?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Ne nuo 2018 m. vidurio. Donoro atsiųsti pinigai iš karto keliauja gavėjui. Anksčiau lėšos buvo laikomos aukotojo sąskaitoje ir po truputį kas savaitę išmokamos gavėjui. Šios sistemos buvo galutinai atsisakyta dėl labai didelių trūkumų."
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
@@ -5144,9 +5150,9 @@ msgstr "Dalijimasis pinigais"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Komandose nėra hierarchijos, visi jų nariai yra lygūs ir patys nustato savo požiūrį."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Pakeisti užėmimus galite iš {0}savo komandos prietaisų skydelio{1}. Joje pateikiamos lentelės, kuriose nurodomi nominalūs visų narių paimti pinigai, taip pat apskaičiuotos faktinės pinigų sumos, kurios bus išskaičiuotos einamojo savaitės ciklo pabaigoje."
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -5168,15 +5174,17 @@ msgstr "Pagal numatytuosius nustatymus visiems komandos nariams nustatoma specia
 msgid "Regulation of take amounts"
 msgstr "Išvežamų kiekių reguliavimas"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Kai komandai įjungtas \"imčių ribojimas\", jos nariai negali padidinti savo imčių daugiau nei maksimali suma, apskaičiuota remiantis nominaliomis imtimis praėjusio savaitės ciklo pabaigoje. Šis mechanizmas skirtas paskatinti naujus dalyvius prisijungti prie komandos, užtikrinant, kad pirmosiomis savaitėmis jie negaus neproporcingai didelės pajamų dalies."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Limitas veikia taip: visada galite padidinti savo uždarbį iki {amount}, jei jis buvo mažesnis, galite padvigubinti savo uždarbį, palyginti su ankstesne savaite, galite padidinti savo uždarbį, kad gautumėte likusias komandos pajamas, ir galite padidinti savo uždarbį iki ankstesnio savaitės ciklo pabaigoje buvusio uždarbio medianos lygio. Kuri iš šių galimybių duoda didžiausią sumą, yra jūsų maksimalus savaitės uždarbis."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Imtys neribojamos, jei komandoje yra tik vienas narys arba jei praėjusią savaitę visos imtys buvo lygios nuliui (tai galioja bet kuriai naujai komandai, sukurtai per dabartinį savaitės ciklą)."
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."

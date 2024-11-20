@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"PO-Revision-Date: 2024-11-19 10:57+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/liberapay/core/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1824,18 +1826,20 @@ msgstr "Номинальная выручка"
 msgid "Actual Take"
 msgstr "Реальная выручка"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "На Liberapay пожертвования выплачиваются авансом. В этой колонке показано, сколько денег каждый участник получил авансом через эту команду. Аванс увеличивается каждый раз, когда участник получает новый платеж от донора через команду, и уменьшается каждую неделю."
 
 msgid "Advance"
 msgstr "Аванс"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "На прошлой неделе: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "без выручки"
 
 msgid "auto"
 msgstr "авто"
@@ -4163,11 +4167,13 @@ msgstr "Применим ли к пожертвованиям Liberapay нало
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Вероятно, нет, но это зависит от правил налогообложения в вашей стране."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Является ли счет в Liberapay кошельком?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "С середины 2018 года - нет. Деньги, отправленные донором, сразу же попадают к получателю. Раньше средства хранились на счету донора и выплачивались получателю понемногу каждую неделю. Эта система была окончательно отменена из-за ее очень существенных недостатков."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Вы можете следить за новостями в следующих социальных сетях:"
@@ -4560,9 +4566,9 @@ msgstr "Распределение денег"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "В командах нет иерархии, все их участники равны и устанавливают свои собственные желаемые выручки."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Вы можете изменить выручку на панели команд {0}{1} . Там содержатся таблицы, в которых указаны номинальные выручки всех участников, а также оценка реальных сумм, которые будут вычтены в конце текущего недельного цикла."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Номинальные выручки - это просто числа, которые участники вводят сами, а актуальные выручки рассчитываются системой: сначала она суммирует номинальные выручки, затем вычисляет, сколько процентов составляет каждая выручка, и в конце она применяет эти проценты к доступному доходу. Номинальные выручки также играют роль максимумов: актуальная выручка никогда не будет выше номинальной, даже если есть дополнительный доход."
@@ -4579,15 +4585,17 @@ msgstr "По умолчанию для всех членов команды ус
 msgid "Regulation of take amounts"
 msgstr "Регулирование суммы выручки"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Когда для команды включено \"ограничение выручки\", ее члены не могут поднимать свою выручку выше максимума, рассчитанного на основе номинальной выручки в конце предыдущего недельного цикла. Этот механизм призван стимулировать привлечение новых участников в команду, гарантируя, что в первые недели они не получат непропорционально большую долю дохода."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Лимит действует следующим образом: вы всегда можете увеличить вашу выручку до {amount}, если она была ниже этого уровня, вы можете удвоить вашу выручку по сравнению с предыдущей неделей, вы можете увеличить вашу выручку, чтобы получить оставшийся доход команды, и вы можете довести вашу выручку до уровня медианной выручки в конце предыдущего недельного цикла. Ваша максимальная выручка за неделю - та, которая будет наибольшей из этих возможностей."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Выручка не ограничивается, если в команде только один участник или если за предыдущую неделю все выручки были нулевыми (это касается любой новой команды, созданной в текущем недельном цикле)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Пожалуйста, свяжитесь со службой поддержки, если вы хотите включить или отключить лимиты приема для существующей команды. Не забудьте указать доказательства того, что изменение было одобрено другими членами команды."

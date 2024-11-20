@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Estonian "
-"<https://hosted.weblate.org/projects/liberapay/core/et/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-11-19 10:57+0000\n"
+"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/liberapay/core/et/>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -2068,19 +2070,21 @@ msgstr "Nominaalne võtmine"
 msgid "Actual Take"
 msgstr "Tegelik võtmine"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "Liberapay puhul makstakse annetused ette. See veerg näitab, kui palju raha on iga liige selle meeskonna kaudu ette saanud. Ettemakse suureneb iga kord, kui liige saab meeskonna kaudu uue makse annetajalt, ja väheneb iga nädal."
 
 #, fuzzy
 msgid "Advance"
 msgstr "Advance"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "Eelmisel nädalal: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "ei võta"
 
 #, fuzzy
 msgid "auto"
@@ -4785,11 +4789,13 @@ msgstr "Kas Liberapay kaudu tehtud annetused on maksustatav?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Eeldatavasti mitte, kuid see oleneb sinu riigi maksuseadusest."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Kas Liberapay konto on rahakott?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Mitte alates 2018. aasta keskpaigast. Doonori poolt saadetud raha läheb kohe saajale. Varem hoiti raha doonori kontol ja maksti see iga nädal vähehaaval saajale välja. Sellest süsteemist loobuti lõplikult selle väga oluliste puuduste tõttu."
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
@@ -5237,9 +5243,9 @@ msgstr "Raha jagamine"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Meeskondadel ei ole hierarhiat, kõik nende liikmed on võrdsed ja määravad ise, mida nad võtavad."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Saate oma võtteid muuta aadressil {0}oma meeskonna armatuurlaual{1}. See sisaldab tabeleid, mis näitavad kõigi liikmete nominaalseid laekumisi, samuti jooksva iganädalase tsükli lõpus mahaarvatud tegelikke rahasummasid."
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -5261,15 +5267,17 @@ msgstr "Vaikimisi on kõigi meeskonnaliikmete jaoks määratud eriväärtus \"au
 msgid "Regulation of take amounts"
 msgstr "Võetud koguste reguleerimine"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Kui meeskonnale on lubatud \"võtete piiramine\", ei saa selle liikmed tõsta oma võtteid kõrgemale kui maksimum, mis on arvutatud eelmise nädalatsükli lõpu nominaalsete võtete alusel. Selle mehhanismi eesmärk on julgustada uute panustajate kutsumist meeskonnaga liituma, tagades, et nad ei võta oma esimestel nädalatel ebaproportsionaalselt suurt osa sissetulekust."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Limiit toimib järgmiselt: võite alati suurendada oma sissetulekut {amount}, kui see oli sellest väiksem, võite kahekordistada oma sissetulekut võrreldes eelmise nädalaga, võite tõsta oma sissetulekut, et nõuda meeskonna ülejäävat tulu, ja võite viia oma sissetuleku eelmise nädalatsükli lõpus mediaanse sissetuleku tasemeni. Ükskõik, milline neist võimalustest annab suurima summa, on teie nädala maksimaalne tulu."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Võtteid ei piirata, kui meeskonnas on ainult üks liige või kui kõik eelmise nädala võtmised olid null (mis kehtib iga uue meeskonna puhul, mis on loodud jooksva nädalatsükli jooksul)."
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
