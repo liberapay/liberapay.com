@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-11-19 10:57+0000\n"
-"Last-Translator: Google Cloud Translation Advanced <noreply-mt-google-translate-api-v3@weblate.org>\n"
+"PO-Revision-Date: 2024-11-20 22:00+0000\n"
+"Last-Translator: Jorge Maldonado Ventura <jorgesumle@freakspot.net>\n"
 "Language-Team: Esperanto <https://hosted.weblate.org/projects/liberapay/core/eo/>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -1811,20 +1811,18 @@ msgstr "Nominala parto"
 msgid "Actual Take"
 msgstr "Fakta parto"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "Ĉe Liberapay, donacoj estas pagitaj anticipe. Ĉi tiu kolumno montras kiom da mono ĉiu membro ricevis anticipe per ĉi tiu teamo. Antaŭeniĝo pliiĝas ĉiufoje kiam membro ricevas novan pagon de donacanto tra la teamo, kaj malpliiĝas ĉiun semajnon."
+msgstr "En Liberapay, donacoj estas pagitaj anticipe. Ĉi tiu kolumno montras kiom da mono ĉiu membro ricevis anticipe per ĉi tiu teamo. Antaŭeniĝo pliiĝas ĉiufoje kiam membro ricevas novan pagon de donacanto tra la teamo, kaj malpliiĝas ĉiun semajnon."
 
 msgid "Advance"
 msgstr "Anticipo"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
 msgstr "Lasta semajno: {0}"
 
-#, fuzzy
 msgid "no take"
-msgstr "neniu prenu"
+msgstr "neniu parto"
 
 msgid "auto"
 msgstr "aŭtomata"
@@ -4122,13 +4120,11 @@ msgstr "Ĉu donacoj per Liberapay estas subtraheblaj de imposto-kalkulo?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Verŝajne ne, sed tio dependas de la imposto-reguloj de via lando."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
 msgstr "Ĉu Liberapay-konto estas monujo?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr "Ne ekde meze de 2018. Mono sendita de donacanto tuj iras al la ricevanto. Antaŭe, fondusoj estis tenitaj en la konto de la donacanto kaj elpagitaj iom post iom al la ricevanto ĉiusemajne. Tiu sistemo estis definitive prirezignita pro siaj tre signifaj malavantaĝoj."
+msgstr "Ne ekde meze de 2018. Mono sendita de donacanto tuj iras al la ricevanto. Antaŭe, mono estis tenita en la konto de la donacanto kaj pagitaj iom post iom al la ricevanto ĉiusemajne. Tiu sistemo estis definitive forlasita pro siaj tre signifaj malavantaĝoj."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Vi povas ricevi novaĵojn el ni per la jenaj sociaj retoj:"
@@ -4510,9 +4506,9 @@ msgstr "Dividi la monon"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Teamoj ne havas hierarkion, ĉiu membro estas egala kaj povas elekti sian propran parton."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Vi povas ŝanĝi viajn prenojn de {0} via teampanelo {1} . Ĝi enhavas tabelojn, kiuj montras la nominalajn prenojn de ĉiuj membroj, kaj ankaŭ takson de la realaj monsumoj, kiuj estos subtrahitaj ĉe la fino de la nuna semajna ciklo."
+msgstr "Vi povas ŝanĝi viajn prenojn en {0}via teampanelo{1} . Ĝi enhavas tabelojn, kiuj montras la nominalajn partojn de ĉiuj membroj, kaj ankaŭ takson de la realaj monsumoj, kiuj estos subtrahitaj fine de la nuna semajna ciklo."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "La nominalaj partoj estas la krudaj nombroj, kiujn la membroj mem enigas, la faktaj partoj estas kalkulitaj de la sistemo: unue, ĝi sumigas la nominalajn partojn, kaj poste ĝi kalkulas la elcenton, kiun ĉiu parto reprezentas, kaj fine ĝi uzas tiujn elcentojn al la disponebla enspezo. Nominalaj partoj ankaŭ funkcias kiel maksimumoj: faktaj partoj neniam pli altas ol nominalaj partoj, eĉ se plia enspezo estas disponebla."
@@ -4529,17 +4525,15 @@ msgstr "Implicite ĉiuj teamanoj havas siajn partojn agorditaj kun la speciala v
 msgid "Regulation of take amounts"
 msgstr "Limigi la kvanton de partoj"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Kiam \"take throttling\" estas ebligita por teamo, ĝiaj membroj ne povas altigi siajn prenojn pli alte ol maksimumo kalkulita surbaze de la nominalaj prenoj ĉe la fino de la antaŭa semajna ciklo. Ĉi tiu mekanismo celas instigi inviti novajn kontribuantojn aliĝi al la teamo, certigante ke ili ne prenos neproporcian parton de la enspezo en siaj unuaj semajnoj."
+msgstr "Kiam «parto limigado» estas ebligita por teamo, ĝiaj membroj ne povas altigi siajn partojn pli alte ol maksimumo kalkulita surbaze de la nominalaj partoj ĉe la fino de la antaŭa semajna ciklo. Ĉi tiu mekanismo celas instigi inviti novajn kontribuantojn aliĝi al la teamo, certigante ke ili ne prenos neproporcian parton de la enspezo en siaj unuaj semajnoj."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "La limo funkcias jene: vi ĉiam povas pliigi vian prenon al {amount} se ĝi estis sub tio, vi povas duobligi vian prenon kompare kun la antaŭa semajno, vi povas pliigi vian prenon por postuli la restantan enspezon de la teamo, kaj vi povas alporti vian prenon. prenu ĝis la nivelo de la meza preno ĉe la fino de la antaŭa semajna ciklo. Kiu ajn el ĉi tiuj eblecoj rezultigas la plej altan kvanton, estas via maksimuma konsumo por la semajno."
+msgstr "La limo funkcias jene: vi ĉiam povas pliigi vian parton al {amount} se ĝi estis sub tio; vi povas duobligi vian parton kompare kun la antaŭa semajno; vi povas pliigi vian parton por postuli la restantan enspezon de la teamo; kaj vi povas alporti vian parton ĝis la nivelo de la meza parto fine de la antaŭa semajna ciklo. Kiu ajn el ĉi tiuj eblecoj rezultigas la plej altan kvanton, estas via maksimuma konsumo por la semajno."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Prenoj ne estas limigitaj se la teamo havas nur unu membron, aŭ se la prenoj de la antaŭa semajno estis ĉiuj nul (kio estas la kazo por iu nova teamo kiu estis kreita dum la nuna semajna ciklo)."
+msgstr "Partoj ne estas limigitaj se la teamo havas nur unu membron, aŭ se la partoj de la antaŭa semajno estis ĉiuj nul (kio okazas al iu ajn nova teamo, kiu estis kreita dum la nuna semajna ciklo)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Bonvolu kontakti subtenon, se vi volas ebligi aŭ malebligi la limon de la nominalaj partoj de ekzistanta teamo. Ne forgesu inkludi ateston de la aprobo de la ŝanĝo de la aliaj membroj el la teamo."
