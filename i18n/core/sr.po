@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Serbian "
-"<https://hosted.weblate.org/projects/liberapay/core/sr/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2024-11-19 10:57+0000\n"
+"Last-Translator: Google Cloud Translation Advanced <noreply-mt-google-translate-api-v3@weblate.org>\n"
+"Language-Team: Serbian <https://hosted.weblate.org/projects/liberapay/core/sr/>\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -2141,19 +2143,21 @@ msgstr "Номинал Таке"
 msgid "Actual Take"
 msgstr "Ацтуал Таке"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "На Либерапаи-у се донације плаћају унапред. Ова колона показује колико је новца сваки члан унапред примио преко овог тима. Аванс се повећава сваки пут када члан добије нову уплату од донатора преко тима, а смањује се сваке недеље."
 
 #, fuzzy
 msgid "Advance"
 msgstr "Напред"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "Прошле недеље: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "но таке"
 
 #, fuzzy
 msgid "auto"
@@ -4899,11 +4903,13 @@ msgstr "Да ли се донације преко Либерапаи-а одб�
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Вероватно не, али то зависи од пореских правила ваше земље."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Да ли је Либерапаи налог новчаник?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Не од средине 2018. Новац који донатор пошаље одмах иде примаоцу. Раније су средства држана на рачуну донатора и исплаћивана мало по мало примаоцу сваке недеље. Тај систем је дефинитивно напуштен због својих веома значајних недостатака."
 
 #, fuzzy
 msgid "You can get updates from us on the following social networks:"
@@ -5362,9 +5368,9 @@ msgstr "Дељење новца"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Тимови немају хијерархију, сви њихови чланови су једнаки и постављају своје мишљење."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Можете да промените своје снимке са {0} контролне табле својих тимова {1} . Садржи табеле које приказују номиналне износе свих чланова, као и процену стварних износа новца који ће бити одузети на крају текућег недељног циклуса."
 
 #, fuzzy
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
@@ -5386,15 +5392,17 @@ msgstr "Подразумевано, сви чланови тима имају п
 msgid "Regulation of take amounts"
 msgstr "Регулисање износа преузимања"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Када је „пригушивање преузимања“ омогућено за тим, његови чланови не могу да подигну своје узимања веће од максимума израчунатог на основу номиналног преузимања на крају претходног недељног циклуса. Овај механизам има за циљ да подстакне позивање нових сарадника да се придруже тиму, тако што ће осигурати да неће узети несразмеран део прихода у својим првим недељама."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Ограничење функционише овако: увек можете да повећате свој износ на {amount} ако је био испод тога, можете да удвостручите свој износ у поређењу са претходном недељом, можете повећати износ да бисте затражили преостали приход тима и можете донети свој узети до нивоа средњег узимања на крају претходног недељног циклуса. Која од ових могућности резултира највећим износом, то је ваш максимални унос за недељу дана."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Број преузимања није ограничен ако тим има само једног члана или ако су сви резултати претходне недеље били нула (што је случај за сваки нови тим који је креиран током текућег недељног циклуса)."
 
 #, fuzzy
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
