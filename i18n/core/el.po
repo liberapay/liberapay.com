@@ -1810,18 +1810,20 @@ msgstr "Ονομαστικό μερίδιο"
 msgid "Actual Take"
 msgstr "Πραγματικό μερίδιο"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "Στο Liberapay, οι δωρεές καταβάλλονται εκ των προτέρων. Αυτή η στήλη δείχνει πόσα χρήματα έχει λάβει προκαταβολικά κάθε μέλος μέσω αυτής της ομάδας. Μια προκαταβολή αυξάνεται κάθε φορά που ένα μέλος λαμβάνει μια νέα πληρωμή από έναν δωρητή μέσω της ομάδας και μειώνεται κάθε εβδομάδα."
 
 msgid "Advance"
 msgstr "Προκαταβολή"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "Την περασμένη εβδομάδα: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "Δεν υπάρχει λήψη"
 
 msgid "auto"
 msgstr "αυτόματο"
@@ -4126,11 +4128,13 @@ msgstr "Οι δωρεές μέσω Liberapay εκπίπτουν από το φό
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Μάλλον όχι, αλλά εξαρτάται από τους φορολογικούς κανόνες της χώρας σας."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Είναι ένας λογαριασμός Liberapay πορτοφόλι;"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Όχι από τα μέσα του 2018. Τα χρήματα που αποστέλλονται από έναν δωρητή πηγαίνουν αμέσως στον παραλήπτη. Προηγουμένως, τα χρήματα κρατούνταν στο λογαριασμό του δωρητή και εκταμιεύονταν σιγά-σιγά στον παραλήπτη κάθε εβδομάδα. Το σύστημα αυτό εγκαταλείφθηκε οριστικά λόγω των πολύ σημαντικών μειονεκτημάτων του."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Μπορείτε να λαμβάνετε ενημερώσεις από εμάς στα ακόλουθα κοινωνικά δίκτυα:"
@@ -4519,9 +4523,9 @@ msgstr "Διαμοιρασμός των χρημάτων"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Οι ομάδες δεν έχουν ιεραρχία, όλα τα μέλη τους είναι ίσα και καθορίζουν τις δικές τους αποφάσεις."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Μπορείτε να αλλάξετε τις λήψεις σας από το {0}το ταμπλό των ομάδων σας{1}. Περιέχει πίνακες που δείχνουν τις ονομαστικές εισπράξεις όλων των μελών, καθώς και μια εκτίμηση των πραγματικών χρηματικών ποσών που θα αφαιρεθούν στο τέλος του τρέχοντος εβδομαδιαίου κύκλου."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Οι ονομαστικές εισπράξεις είναι οι ακατέργαστοι αριθμοί που εισάγουν τα ίδια τα μέλη, ενώ οι πραγματικές εισπράξεις υπολογίζονται από το σύστημα: πρώτα αθροίζει τις ονομαστικές εισπράξεις, στη συνέχεια υπολογίζει το ποσοστό που αντιπροσωπεύει κάθε είσπραξη και εφαρμόζει αυτά τα ποσοστά στο διαθέσιμο εισόδημα. Οι ονομαστικές εισπράξεις λειτουργούν επίσης ως ανώτατα όρια: οι πραγματικές εισπράξεις δεν είναι ποτέ υψηλότερες από τις ονομαστικές, ακόμη και αν υπάρχει διαθέσιμο πρόσθετο εισόδημα."
@@ -4538,15 +4542,17 @@ msgstr "Από προεπιλογή, όλα τα μέλη της ομάδας έ
 msgid "Regulation of take amounts"
 msgstr "Ρύθμιση ποσών ανάληψης"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Όταν είναι ενεργοποιημένο το \"take throttling\" για μια ομάδα, τα μέλη της δεν μπορούν να αυξήσουν τις λήψεις τους πάνω από ένα μέγιστο όριο που υπολογίζεται με βάση τις ονομαστικές λήψεις στο τέλος του προηγούμενου εβδομαδιαίου κύκλου. Αυτός ο μηχανισμός έχει ως στόχο να ενθαρρύνει την πρόσκληση νέων συνεισφερόντων να συμμετάσχουν στην ομάδα, διασφαλίζοντας ότι δεν θα πάρουν δυσανάλογο μερίδιο των εσόδων τις πρώτες εβδομάδες."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Το όριο λειτουργεί ως εξής: μπορείτε πάντα να αυξήσετε το εισόδημά σας στο {amount} αν ήταν κάτω από αυτό, μπορείτε να διπλασιάσετε το εισόδημά σας σε σχέση με την προηγούμενη εβδομάδα, μπορείτε να αυξήσετε το εισόδημά σας για να διεκδικήσετε το υπόλοιπο εισόδημα της ομάδας και μπορείτε να φέρετε το εισόδημά σας στο επίπεδο του μέσου όρου στο τέλος του προηγούμενου εβδομαδιαίου κύκλου. Όποια από αυτές τις δυνατότητες οδηγεί στο υψηλότερο ποσό είναι η μέγιστη είσπραξη για την εβδομάδα."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Οι λήψεις δεν περιορίζονται εάν η ομάδα έχει μόνο ένα μέλος ή εάν οι λήψεις της προηγούμενης εβδομάδας ήταν όλες μηδενικές (κάτι που ισχύει για κάθε νέα ομάδα που δημιουργήθηκε κατά τη διάρκεια του τρέχοντος εβδομαδιαίου κύκλου)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Επικοινωνήστε με την υποστήριξη αν θέλετε να ενεργοποιήσετε ή να απενεργοποιήσετε τα όρια λήψης μιας υπάρχουσας ομάδας. Μην ξεχάσετε να συμπεριλάβετε αποδεικτικά στοιχεία ότι η αλλαγή έχει εγκριθεί από τα άλλα μέλη της."

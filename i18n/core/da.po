@@ -1809,19 +1809,21 @@ msgstr "Nominelle udbytte"
 msgid "Actual Take"
 msgstr "Faktiske Udbytte"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "På Liberapay betales donationer på forhånd. Denne kolonne viser, hvor mange penge hvert medlem har modtaget på forskud gennem dette hold. Et forskud stiger, hver gang et medlem modtager en ny betaling fra en donor gennem holdet, og falder hver uge."
 
 #, fuzzy
 msgid "Advance"
 msgstr "Gå videre"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "I sidste uge: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "ingen optagelse"
 
 msgid "auto"
 msgstr "auto"
@@ -4126,11 +4128,13 @@ msgstr "Er donationer via Liberapay skattefradrag-berettigede?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Næppe, men det kommer an på dit lands skatteregler."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Er en Liberapay-konto en wallet?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Ikke siden midten af 2018. Penge sendt af en donor går straks til modtageren. Tidligere stod pengene på donorens konto og blev udbetalt lidt efter lidt til modtageren hver uge. Det system blev definitivt opgivet på grund af dets meget betydelige ulemper."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Du kan få opdateringer fra os på følgende sociale medier:"
@@ -4518,9 +4522,9 @@ msgstr "At dele pengene"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Der er ikke noget hierarki på et team, alle deres medlemmer er lige og sætter deres egne andel."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Du kan ændre dine takes fra {0}dit holds dashboard{1}. Det indeholder tabeller, der viser alle medlemmers nominelle take samt et skøn over de faktiske beløb, der vil blive trukket ved afslutningen af den aktuelle ugecyklus."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "De nominelle andele er de rå tal, som medlemmerne indtaster selv. De faktiske andele beregnes af systemet: først opsummerer det de nominelle andele, så beregnes den procentdel som hver repræsenterer, og endelig anvendes disse procentsatser til at beregne den disponible indkomst. Nominelle andele fungerer også som maksimumsbeløb: de faktiske andele er aldrig højere end de nominelle, selvom der er ekstra indtægter til rådighed."
@@ -4537,15 +4541,17 @@ msgstr "Som standard har alle teammedlemmer sat deres andel til den specialværd
 msgid "Regulation of take amounts"
 msgstr "Regulering af andels beløb"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Når \"take throttling\" er aktiveret for et hold, kan dets medlemmer ikke hæve deres takes højere end et maksimum, der er beregnet på baggrund af de nominelle takes i slutningen af den foregående ugecyklus. Denne mekanisme er beregnet til at opmuntre nye bidragydere til at slutte sig til holdet ved at sikre, at de ikke tager en uforholdsmæssig stor del af indkomsten i deres første uger."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Grænsen fungerer således: Du kan altid øge dit take til {amount}, hvis det var under det, du kan fordoble dit take i forhold til den foregående uge, du kan øge dit take for at gøre krav på holdets resterende indkomst, og du kan bringe dit take op på niveau med median-take i slutningen af den foregående ugecyklus. Den af disse muligheder, der resulterer i det højeste beløb, er din maksimale take for ugen."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Takes er ikke begrænset, hvis holdet kun har ét medlem, eller hvis den foregående uges takes alle var nul (hvilket er tilfældet for alle nye hold, der er blevet oprettet i løbet af den aktuelle ugecyklus)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Kontakt venligst support, hvis du vil aktivere eller deaktivere grænserne for et eksisterende teams andele. Glem ikke at inkludere beviser for at ændringen er blevet godkendt af de øvrige holdmedlemmer."

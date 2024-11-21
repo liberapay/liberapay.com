@@ -1809,19 +1809,21 @@ msgstr "Nominell Andel"
 msgid "Actual Take"
 msgstr "Faktisk Andel"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "På Liberapay betalas donationer i förskott. Den här kolumnen visar hur mycket pengar varje medlem har fått i förskott genom den här gruppen. Ett förskott ökar varje gång en medlem får en ny betalning från en givare genom gruppen och minskar varje vecka."
 
 #, fuzzy
 msgid "Advance"
 msgstr "Förskott"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "Förra veckan: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "inget tag"
 
 msgid "auto"
 msgstr "auto"
@@ -4125,11 +4127,13 @@ msgstr "Är donationer genom Liberapay avdragsgilla?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Antagligen inte, men det beror på skattereglerna i ditt land."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Är ett Liberapay-konto en plånbok?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Inte sedan mitten av 2018. Pengar som skickas från en givare går omedelbart till mottagaren. Tidigare hölls pengarna på givarens konto och betalades ut till mottagaren lite i taget varje vecka. Det systemet övergavs definitivt på grund av dess mycket betydande nackdelar."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Du kan få uppdateringar från oss på följande sociala nätverk:"
@@ -4517,9 +4521,9 @@ msgstr "Delning av pengarna"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Teamen har inte en hierarki, alla deras medlemmar är jämnlikar och sätter sin egna andel."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Du kan ändra dina takes från {0}din grupps instrumentpanel{1}. Den innehåller tabeller som visar alla medlemmars nominella take samt en uppskattning av de faktiska belopp som kommer att dras av i slutet av den aktuella veckocykeln."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "De nominella andelarna är de råa siffrorna som medlemmarna anger själva, de faktiska andelarna beräknas av systemet: först summeras de nominella andelarna, sedan beräknar den procenten som varje andel representerar, och slutligen tillämpar den dessa procentsatser på den tillgängliga inkomsten . Nominella andelar fungerar även som tak: den faktiska andelen är aldrig högre än dess nominella, även om ytterligare kapital finns tillgängligt."
@@ -4536,15 +4540,17 @@ msgstr "Som standard har alla gruppmedlemmar sin andel satt till specialvärdet 
 msgid "Regulation of take amounts"
 msgstr "Regulering av andelsbelopp"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "När \"take throttling\" är aktiverat för en grupp kan dess medlemmar inte höja sina takes högre än ett maximum som beräknas utifrån de nominella takes i slutet av föregående veckocykel. Denna mekanism är avsedd att uppmuntra nya bidragsgivare att gå med i gruppen genom att säkerställa att de inte tar en oproportionerlig andel av intäkterna under sina första veckor."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Gränsen fungerar så här: du kan alltid öka din take till {amount} om den var lägre än så, du kan dubbla din take jämfört med föregående vecka, du kan höja din take för att göra anspråk på gruppens överblivna inkomst och du kan höja din take till samma nivå som medianen i slutet av föregående veckas cykel. Den av dessa möjligheter som resulterar i det högsta beloppet är din maximala take för veckan."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Takes är inte begränsade om gruppen bara har en medlem eller om alla föregående veckors takes var noll (vilket är fallet för alla nya grupper som har skapats under den aktuella veckocykeln)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Kontakta supporten om du vill aktivera eller inaktivera gränserna för ett befintlig grupps andelar. Glöm inte att ta med bevis på att förändringen har godkänts av de andra gruppmedlemmarna."

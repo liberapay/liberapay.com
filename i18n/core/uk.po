@@ -1824,18 +1824,20 @@ msgstr "Номінальне отримання"
 msgid "Actual Take"
 msgstr "Фактичне отримання"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "На Liberapay пожертви виплачуються авансом. Ця колонка показує, скільки грошей кожен учасник отримав авансом через цю команду. Аванс збільшується щоразу, коли учасник отримує новий платіж від донора через команду, і зменшується щотижня."
 
 msgid "Advance"
 msgstr "Аванс"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "Минулого тижня: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "не беруть"
 
 msgid "auto"
 msgstr "автоматично"
@@ -4163,11 +4165,13 @@ msgstr "Чи оподатковуються внески Liberapay?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Напевно ні, але це залежить від правил оподаткування вашої країни."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Чи є рахунок Liberapay гаманцем?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "З середини 2018 року - ні. Гроші, надіслані донором, одразу потрапляють до реципієнта. Раніше кошти зберігалися на рахунку донора і щотижня потроху перераховувалися реципієнту. Від цієї системи остаточно відмовилися через її дуже суттєві недоліки."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Ви можете стежити за новинами в таких суспільних мережах:"
@@ -4560,9 +4564,9 @@ msgstr "Розподілення грошей"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "В командах нема ієрархії, усі їхні учасники рівні та встановлюють свої власні бажані надходження."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Ви можете змінити свої гонорари з {0}інформаційної панелі вашої команди{1}. Вона містить таблиці, які показують номінальні гонорари всіх учасників, а також оцінку реальних сум грошей, які будуть відраховані в кінці поточного тижневого циклу."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Номінальні надходження — це просто числа, які учасники вводять самі, а власне отримання обчислюються системою: спочатку вона підсумовує номінальні отримання, потім обчислює, скільки процентів складає кожне надходження, та наприкінці вона застосовує ці проценти до доступного надходження. Номінальні отримання також грають роль максимумів: дійсне отримання ніколи не перевищить номінального, навіть якщо є додаткове надходження."
@@ -4579,15 +4583,17 @@ msgstr "Типово, для всіх членів команди встанов
 msgid "Regulation of take amounts"
 msgstr "Регулювання суми отримання"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Коли для команди ввімкнено \"дроселювання гонорарів\", її учасники не можуть піднімати свої гонорари вище максимуму, розрахованого на основі номінальних гонорарів наприкінці попереднього тижневого циклу. Цей механізм має на меті заохотити нових учасників приєднатися до команди, гарантуючи, що вони не отримають непропорційно велику частку доходу в перші тижні роботи."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Ліміт працює наступним чином: ви завжди можете збільшити свій гонорар до {amount}, якщо він був нижчим, ви можете подвоїти свій гонорар порівняно з попереднім тижнем, ви можете збільшити свій гонорар, щоб отримати залишок доходу команди, і ви можете довести свій гонорар до рівня медіанного гонорару в кінці попереднього тижневого циклу. Яка з цих можливостей приведе до найбільшої суми, така і буде ваша максимальна частка за тиждень."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Кількість дублів не обмежена, якщо команда складається лише з одного учасника, або якщо всі дублі попереднього тижня були нульовими (це стосується будь-якої нової команди, яка була створена протягом поточного тижневого циклу)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Будь ласка, зв’яжіться зі службою підтримки, якщо ви хочете ввімкнути або вимкнути обмеження отримань для наявної команди. Не забудьте включити докази того, що зміну схвалили інші учасники команди."

@@ -1824,18 +1824,20 @@ msgstr "Nominální podíl"
 msgid "Actual Take"
 msgstr "Skutečný podíl"
 
+#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr ""
+msgstr "Na Liberapay se dary platí předem. Tento sloupec ukazuje, kolik peněz každý člen obdržel předem prostřednictvím tohoto týmu. Záloha se zvyšuje pokaždé, když člen obdrží novou platbu od dárce prostřednictvím týmu, a snižuje se každý týden."
 
 msgid "Advance"
 msgstr "Záloha"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr ""
+msgstr "Minulý týden: {0}"
 
+#, fuzzy
 msgid "no take"
-msgstr ""
+msgstr "žádné převzetí"
 
 msgid "auto"
 msgstr "automaticky"
@@ -4162,11 +4164,13 @@ msgstr "Jsou příspěvky prostřednictvím Liberapay daňově uznatelné?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Asi ne, ale to záleží na daňových předpisech vaší země."
 
+#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr ""
+msgstr "Je účet Liberapay peněženka?"
 
+#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr ""
+msgstr "Ne od poloviny roku 2018. Peníze zaslané dárcem jdou okamžitě příjemci. Dříve byly prostředky drženy na účtu dárce a vypláceny příjemci postupně každý týden. Tento systém byl definitivně opuštěn pro své velmi výrazné nedostatky."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Novinky od nás můžete najít na následujících sociálních sítích:"
@@ -4559,9 +4563,9 @@ msgstr "Sdílení peněz"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Týmy nemají hierarchii, všichni jejich členové jsou si rovni a nastavují své vlastní podíly."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr ""
+msgstr "Své záběry můžete změnit na adrese {0}na panelu týmů{1}. Obsahuje tabulky, které zobrazují nominální výběry všech členů a také odhad skutečných částek, které budou odečteny na konci aktuálního týdenního cyklu."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nominální podíly jsou hrubá čísla, která si členové nastavují sami. Skutečné podíly jsou počítány v systému: nejprve se sečtou nominální podíly z nichž se vypočítá procento, které představuje každý podíl a nakonec se vyplatí tyto procenta z dostupného příjmu. Nominální podíly rovněž působí jako maximální hodnoty: skutečné podíly pak nejsou nikdy vyšší než nominální, a to i v případě, že je k dispozici další příjem."
@@ -4578,15 +4582,17 @@ msgstr "Ve výchozím nastavení mají všichni členové týmu nastaven odběr 
 msgid "Regulation of take amounts"
 msgstr "Omezení částky podílu"
 
+#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr ""
+msgstr "Pokud je pro tým povoleno \"omezování odběrů\", nemohou jeho členové zvýšit své odběry nad maximální hodnotu vypočtenou na základě nominálních odběrů na konci předchozího týdenního cyklu. Tento mechanismus má podpořit pozvání nových přispěvatelů do týmu tím, že zajistí, aby v prvních týdnech nepobírali neúměrný podíl na příjmech."
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr ""
+msgstr "Limit funguje následovně: vždy můžete zvýšit svůj příjem na {amount}, pokud byl nižší, můžete zdvojnásobit svůj příjem oproti předchozímu týdnu, můžete zvýšit svůj příjem, abyste si nárokovali zbytek příjmu týmu, a můžete zvýšit svůj příjem na úroveň mediánu příjmu na konci předchozího týdenního cyklu. Kterákoli z těchto možností vede k nejvyšší částce, je vaším maximálním výběrem pro daný týden."
 
+#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr ""
+msgstr "Přebírání není omezeno, pokud má tým pouze jednoho člena nebo pokud byly všechny přebírání v předchozím týdnu nulové (což je případ každého nového týmu, který byl vytvořen během aktuálního týdenního cyklu)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Pokud chcete povolit nebo zakázat limity podílů pro existující tým, kontaktujte prosím podporu. Nezapomeňte přiložit důkaz, že změnu schválili ostatní členové týmu."
