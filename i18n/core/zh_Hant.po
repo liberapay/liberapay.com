@@ -1796,7 +1796,7 @@ msgstr "實際收取"
 
 #, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "在 Liberapay 上，捐款是提前支付的。此欄顯示每個成員透過該團隊預先收到了多少錢。每當成員透過團隊從捐贈者收到新的付款時，預付款就會增加，並且每週都會減少。"
+msgstr "在 Liberapay 上，捐贈是提前支付的。本列顯示每位成員通過該團隊預收了多少款項。每當成員通過團隊從捐贈者處收到一筆新的付款時，預付款就會增加，每週減少一次。"
 
 #, fuzzy
 msgid "Advance"
@@ -1804,11 +1804,11 @@ msgstr "預付款"
 
 #, fuzzy, python-brace-format
 msgid "Last week: {0}"
-msgstr "上週： {0}"
+msgstr "上週：{0}"
 
 #, fuzzy
 msgid "no take"
-msgstr "不接受"
+msgstr "未收取"
 
 msgid "auto"
 msgstr "自動"
@@ -4089,11 +4089,11 @@ msgstr "恐怕不行，但這要視你國家的規定而論。"
 
 #, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr "Liberapay 帳號是錢包嗎？"
+msgstr "Liberapay 賬戶是錢包嗎？"
 
 #, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr "自 2018 年中期以來就沒有了。捐贈者寄出的錢立即轉到接收者手中。此前，資金存放在捐贈者的帳戶中，每週一點一點支付給受贈者。由於其非常明顯的缺點，該系統最終被放棄。"
+msgstr "自 2018 年年中以來不是了。捐贈人寄來的錢會立即到收款人手中。之前，資金先存放在捐贈人的賬戶中，每週一點一點地發放給受款人。由於該系統存在非常大的弊端，已被明確放棄。"
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "您可以透過以下社交平臺來了解我們的近況："
@@ -4472,7 +4472,7 @@ msgstr "團隊並無任何階層，所有的成員都是平等地來設定他們
 
 #, fuzzy, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "您可以從{0}您的團隊資訊中心{1}更改您的拍攝。它包含顯示所有會員名義收入的表格，以及當前每週週期結束時將扣除的實際金額的估計值。"
+msgstr "您可以從 {0}您團隊控制面板{1} 更改收取的金額。其中的表格顯示了所有成員名義上的收取金額，以及在當前週週期結束時將扣除的實際金額估算值。"
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "名目上的收取是成員所輸入的粗略數字，而真實收取則是由系統計算：首先它會加總名目收取，然後再計算每份收取代表的百分比，最後再將此百分比依可得收入轉算。名目收取通常代表最大：而實際收取不會高過名目，即便有多出來的收入。"
@@ -4491,15 +4491,15 @@ msgstr "收取數額的規定"
 
 #, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "當為團隊啟用「鏡頭限制」時，其成員無法將其鏡頭提高到高於根據上一周週期結束時的名目鏡頭計算得出的最大值。這種機制旨在鼓勵邀請新的貢獻者加入團隊，確保他們不會在第一週內獲得不成比例的收入份額。"
+msgstr "當一個團隊啓用了 \"收取節流 \"功能時，其成員收取的金額不能超過根據上一個週週期結束時的名義收取金額計算出來的最大值。這一機制旨在鼓勵邀請新的貢獻者加入團隊，確保他們在最初幾周內不會獲得不相稱的收入份額。"
 
 #, fuzzy, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "限制的運作方式是這樣的：如果低於 {amount}，您可以隨時將您的收入增加到，您可以將您的收入比前一周翻倍，您可以提高您的收入以索取團隊的剩餘收入，並且您可以將您的收入帶入達到上一周週期結束時的中位數水平。無論哪種可能性導致的金額最高，都是您本週的最大金額。"
+msgstr "限額是這樣工作的：如果你收取的金額低於 {amount}，你可以隨時將你的金額增加到這個數字；你可以將你的收取金額較前一週增加一倍；你可以提高你的收取金額以領取團隊的剩餘收入；你也可以將你的金額最多提高到前一個週週期結束時的中位數水平。無論哪種情況結果是一樣的，即最高金額是你本週收取金額的最大值。"
 
 #, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "如果團隊只有一名成員，或者前一周的拍攝次數全部為零（當前每週週期內創建的任何新團隊都是這種情況），則拍攝次數不受限制。"
+msgstr "如果團隊只有一名成員，或前一週成員收取的金額都爲零（在當前週週期內創建的任何新團隊都是這種情況），則收取金額不受限制。"
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "如果需啟動或關閉現有團隊的分紅上限，請直接聯繫客服人員。別忘了算入其它團隊成員所同意的變動證明。"
