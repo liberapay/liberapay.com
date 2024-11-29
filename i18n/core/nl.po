@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Dutch "
-"<https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-11-25 22:00+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1700,17 +1702,17 @@ msgstr "Bekijk meer"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} heeft nog geen betaalmethode geconfigureerd, dus uw donatie kan nu niet worden verwerkt. Wij zullen u op de hoogte brengen wanneer betaling mogelijk wordt."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Donaties aan {username} kunnen worden betaald met een creditcard of bankpas ({list_of_card_brands}), of via automatische incasso van een eurobankrekening (alleen voor donaties in euro's)."
+msgstr "Donaties aan {username} kunnen betaald worden met een creditcard, bankpas ({list_of_card_brands}) of via een automatische incasso van een euro-bankrekening (alleen voor donaties in Euro's)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donaties aan {username} worden verwerkt via PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donaties aan {username} kunnen worden betaald met: een credit- of debitcard ({list_of_card_brands}), een eurobankrekening (SEPA Direct Debit) of een PayPal-rekening."
+msgstr "Donaties aan {username} kunnen worden betaald met: een creditcard, debetkaart ({list_of_card_brands}), een euro-bankrekening (SEPA Direct Debit) of een PayPal-rekening."
 
 msgid "Payment Card"
 msgstr "Betaalkaart"
@@ -1809,20 +1811,18 @@ msgstr "Nominaal Inkomen"
 msgid "Actual Take"
 msgstr "Werkelijk inkomen"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "Op Liberapay worden donaties vooruitbetaald. Deze kolom laat zien hoeveel geld elk lid vooraf heeft ontvangen via dit team. Een voorschot neemt toe elke keer dat een lid een nieuwe betaling ontvangt van een donateur via het team, en neemt elke week af."
+msgstr "Op Liberapay worden donaties vooruitbetaald. Deze kolom laat zien hoeveel geld elk lid vooraf heeft ontvangen via dit team. Een voorschot neemt toe elke keer dat een lid een nieuwe betaling ontvangt van een donateur via het team en neemt hierna elke week af."
 
 msgid "Advance"
 msgstr "Vooruitbetaling"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
 msgstr "Vorige week: {0}"
 
-#, fuzzy
 msgid "no take"
-msgstr "geen take"
+msgstr "geen deel"
 
 msgid "auto"
 msgstr "auto"
@@ -2597,13 +2597,11 @@ msgstr "Betalen met creditcard"
 msgid "Only for donations to SEPA countries"
 msgstr "Alleen voor donaties aan SEPA-landen"
 
-#, fuzzy
 msgid "Only for donations in euros"
 msgstr "Alleen voor donaties in euro's"
 
-#, fuzzy
 msgid "Only euro bank accounts"
-msgstr "Alleen eurobankrekeningen"
+msgstr "Alleen euro-bankrekeningen"
 
 msgid "Pay by direct debit"
 msgstr "Betaal via automatische incasso"
@@ -3372,9 +3370,8 @@ msgstr "Donateurs hoeven geen betaalrekening aan te sluiten, dit is alleen nodig
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Wij raden je aan om zowel Stripe als PayPal aan te sluiten als ze allebei beschikbaar zijn in je land."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr "Met Stripe kunnen uw donateurs direct vanaf de Liberapay website per kaart of automatische incasso betalen. (Automatische incasso's worden momenteel alleen ondersteund vanaf eurobankrekeningen)."
+msgstr "Met Stripe kunnen uw donateurs direct vanaf de Liberapay website per kaart of automatische incasso betalen. (Automatische incasso's worden momenteel alleen ondersteund vanaf euro-bankrekeningen)."
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3653,11 +3650,11 @@ msgstr "Deze betaalmethode is nog niet gebruikt."
 msgid "Set as default"
 msgstr "Instellen als standaard"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
 msgstr "Stop met het standaard gebruik van deze betaalmethode voor betalingen in {currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unset as default for {currency}"
 msgstr "Verwijderd als standaard voor {currency}"
 
@@ -3678,11 +3675,9 @@ msgstr "Voeg een betaalmethode toe:"
 msgid "Add a card"
 msgstr "Een kaart toevoegen"
 
-#, fuzzy
 msgid "Euro Bank Account"
 msgstr "Euro Bankrekening"
 
-#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
 msgstr "Alleen voor donaties in euro's aan ontvangers in SEPA-landen"
 
@@ -4080,9 +4075,9 @@ msgstr "Welke landen en valuta worden ondersteund?"
 msgid "See the “{page_name}” page."
 msgstr "Zie de \"{page_name}\"-pagina."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "De beschikbare betalingsmethoden zijn afhankelijk van welke betalingsverwerkers worden ondersteund door de ontvanger. Als een betaling wordt verwerkt door Stripe, dan worden de meeste credit- en debitcards ({list_of_card_brands}) geaccepteerd, evenals SEPA-incasso's (alleen voor donaties in euro's aan ontvangers in SEPA-landen). Als een betaling via PayPal verloopt, dan is het mogelijk om op verschillende manieren te betalen, maar de donateur moet wel een PayPal-rekening hebben of aanmaken."
+msgstr "De beschikbare betalingsmethoden zijn afhankelijk van welke betalingsverwerkers worden ondersteund door de ontvanger. Als een betaling wordt verwerkt door Stripe, dan worden de meeste creditcards en debetkaarten ({list_of_card_brands}) geaccepteerd, evenals SEPA-incasso's (alleen voor donaties in euro's aan ontvangers in SEPA-landen). Als een betaling via PayPal verloopt, dan is het mogelijk om op verschillende manieren te betalen, maar de donateur moet wel een PayPal-rekening hebben of aanmaken."
 
 msgid "What are the payment processing fees?"
 msgstr "Wat is de provisie?"
@@ -4126,11 +4121,9 @@ msgstr "Zijn donaties van Liberapay fiscaal aftrekbaar?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Waarschijnlijk niet, maar het hangt af van de fiscale regels van je land."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr "Is een Liberapay-rekening een portemonnee?"
+msgstr "Is een Liberapay-account een portemonnee?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
 msgstr "Niet sinds medio 2018. Geld dat door een donateur wordt gestuurd, gaat onmiddellijk naar de ontvanger. Voorheen werd het geld op de rekening van de donateur gezet en elke week beetje bij beetje aan de ontvanger uitbetaald. Dat systeem werd definitief verlaten vanwege de zeer grote nadelen."
 
@@ -4169,11 +4162,11 @@ msgstr[1] "Makers in deze {n} gebieden profiteren van alle functies van Liberapa
 msgid "Well supported territories"
 msgstr "Goed ondersteunde gebieden"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] "<ongebruikt enkelvoud (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
-msgstr[1] "Liberapay is ook beschikbaar voor makers in de onderstaande {n} gebieden. Donaties die naar deze gebieden gaan, kunnen echter niet worden gegroepeerd om de kosten voor betaling verwerking te verlagen, en de betaalmethode euro automatische incasso is niet beschikbaar voor de donateurs."
+msgstr[1] "Liberapay is ook beschikbaar voor makers in de onderstaande {n} gebieden. Donaties die naar deze gebieden gaan, kunnen echter niet worden gegroepeerd om de kosten voor betaling verwerking te verlagen en de betaalmethode euro automatische incasso is niet beschikbaar voor de donateurs."
 
 msgid "Barely supported territories"
 msgstr "Nauwelijks ondersteunde gebieden"
@@ -4514,7 +4507,7 @@ msgstr "Geld verdelen"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Teams hebben geen hiërarchie. Alle leden zijn gelijk en kiezen hun eigen deel."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
 msgstr "U kunt uw innames wijzigen via {0}op het dashboard van uw teams{1}. Het bevat tabellen met de nominale innames van alle leden en een schatting van de werkelijke bedragen die aan het einde van de huidige wekelijkse cyclus zullen worden afgetrokken."
 
@@ -4533,15 +4526,13 @@ msgstr "Standaard hebben alle teamleden hun deel ingesteld op de speciale waarde
 msgid "Regulation of take amounts"
 msgstr "Regulering van het inkomen"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Wanneer \"take throttling\" is ingeschakeld voor een team, kunnen de leden hun innames niet hoger maken dan een maximum dat is berekend op basis van de nominale innames aan het einde van de vorige wekelijkse cyclus. Dit mechanisme is bedoeld om het uitnodigen van nieuwe teamleden aan te moedigen, door ervoor te zorgen dat ze in hun eerste weken geen onevenredig deel van het inkomen nemen."
+msgstr "Wanneer \"deel beperking\" is ingeschakeld voor een team, kunnen de leden hun innames niet hoger maken dan een maximum dat is berekend op basis van de nominale innames aan het einde van de vorige wekelijkse cyclus. Dit mechanisme is bedoeld om het uitnodigen van nieuwe teamleden aan te moedigen, door ervoor te zorgen dat ze in hun eerste weken geen onevenredig deel van het inkomen nemen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "De limiet werkt als volgt: u kunt uw inname altijd verhogen naar {amount} als het daaronder was, u kunt uw inname verdubbelen ten opzichte van de vorige week, u kunt uw inname verhogen om de overgebleven inkomsten van het team op te eisen en u kunt uw inname op het niveau brengen van de mediane inname aan het einde van de vorige wekelijkse cyclus. Welke van deze mogelijkheden het hoogste bedrag oplevert, is uw maximale opbrengst voor de week."
+msgstr "Het limiet werkt als volgt: u kunt uw inname altijd verhogen naar {amount} als het daaronder was, u kunt uw inname verdubbelen ten opzichte van de vorige week, u kunt uw inname verhogen om de overgebleven inkomsten van het team op te eisen en u kunt uw inname op het niveau brengen van de mediane inname aan het einde van de vorige wekelijkse cyclus. Welke van deze mogelijkheden het hoogste bedrag oplevert, is uw maximale opbrengst voor de week."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
 msgstr "De innames zijn niet beperkt als het team maar één lid heeft of als de innames van de vorige week allemaal nul waren (wat het geval is voor elk nieuw team dat tijdens de huidige wekelijkse cyclus is aangemaakt)."
 
