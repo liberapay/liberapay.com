@@ -21,7 +21,7 @@ msgid "Your Liberapay account has been disabled"
 msgstr "Ihr Liberapay Konto wurde deaktiviert"
 
 msgid "Your Liberapay account has been marked as fraudulent by a staff member. You are no longer able to send and receive payments."
-msgstr "Dein Liberapay-Konto wurde von einem Mitarbeiter als betrügerisch markiert. Du kannst keine Zahlungen mehr senden und empfangen."
+msgstr "Ihr Liberapay-Konto wurde von einem Mitarbeiter als betrügerisch eingestuft. Sie können keine Zahlungen mehr senden und empfangen."
 
 msgid "Your Liberapay profile has been marked as spam by a staff member. It is now hidden."
 msgstr "Ihr Liberapay Profil wurde von einem Mitarbeiter als Spam markiert. Es ist jetzt ausgeblendet."
@@ -224,7 +224,7 @@ msgstr "Sie haben eine Zahlung von {amount} am {payment_date} geplant, um Ihre S
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
-msgstr[1] "Sie haben {n} Zahlungen geplant, um Ihre Spenden zu erneuern, aber wir können sie nicht bearbeiten, weil ein gültiges Zahlungsmittel fehlt."
+msgstr[1] "Sie haben {n} Zahlungen zur Erneuerung Ihrer Spenden geplant, dch wir können sie nicht bearbeiten, weil ein gültiges Zahlungsinstrument fehlt."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "Das Zahlungsdatum, Beträge und Empfänger sind:"
@@ -283,7 +283,7 @@ msgid "The reason provided by your bank is: the payment wasn't authorized."
 msgstr "Ihre Bank gab folgenden Grund an: Die Zahlung wurde nicht autorisiert."
 
 msgid "The reason provided by your bank is: the payment was a duplicate."
-msgstr "Ihre Bank gab folgenden Grund an: Die Zahlung ist ein Duplikat."
+msgstr "Die von Ihrer Bank angegebene Begründung lautet: Die Zahlung war eine Dublette."
 
 msgid "The reason provided by your bank is: the payment was fraudulent."
 msgstr "Ihre Bank gab folgenden Grund an: Ihre Zahlung war betrügerisch."
@@ -1778,7 +1778,7 @@ msgid "Show on your profile"
 msgstr "Ihr Profil anzeigen"
 
 msgid "Search Liberapay"
-msgstr "Durchsuche Liberapay"
+msgstr "Liberapay durchsuchen"
 
 msgid "Log In or Create Account"
 msgstr "Einloggen oder Konto eröffnen"
@@ -1809,18 +1809,16 @@ msgstr "Nominelle Entnahme"
 msgid "Actual Take"
 msgstr "Tatsächliche Entnahme"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
 msgstr "Bei Liberapay werden die Spenden im Voraus bezahlt. Diese Spalte zeigt, wie viel Geld jedes Mitglied im Voraus über dieses Team erhalten hat. Ein Vorschuss erhöht sich jedes Mal, wenn ein Mitglied eine neue Zahlung von einem Spender über das Team erhält, und verringert sich jede Woche."
 
 msgid "Advance"
 msgstr "Vorschuss"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
 msgstr "Letzte Woche: {0}"
 
-#, fuzzy
 msgid "no take"
 msgstr "Kein Zutritt"
 
@@ -4075,9 +4073,9 @@ msgstr "Welche Länder und Währungen werden unterstützt?"
 msgid "See the “{page_name}” page."
 msgstr "Siehe die Seite „{page_name}“."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Die verfügbaren Zahlungsmethoden hängen davon ab, welche Zahlungsabwickler vom Empfänger unterstützt werden. Wenn eine Zahlung über Stripe abgewickelt wird, werden die meisten Kredit- und Debitkarten ({list_of_card_brands}) akzeptiert, ebenso wie SEPA-Lastschriften (nur für Spenden in Euro an Empfänger in SEPA-Ländern). Wenn eine Zahlung über PayPal abgewickelt wird, ist es möglich, auf verschiedene Arten zu zahlen, allerdings muss der Spender ein PayPal-Konto haben oder einrichten."
+msgstr "Die verfügbaren Zahlungsmethoden hängen davon ab, welche Zahlungsprozessoren vom Empfänger unterstützt werden. Wenn eine Zahlung über Stripe abgewickelt wird, werden die meisten Kredit- und Debitkarten ({list_of_card_brands}) akzeptiert, ebenso wie SEPA-Lastschriften (nur für Spenden in Euro an Empfänger in SEPA-Ländern). Wenn eine Zahlung über PayPal erfolgt, ist es möglich, auf verschiedene Arten zu bezahlen, allerdings muss der Spender ein PayPal-Konto haben oder erstellen."
 
 msgid "What are the payment processing fees?"
 msgstr "Wie hoch sind die Gebühren zur Bearbeitung einer Zahlung?"
@@ -4121,11 +4119,9 @@ msgstr "Sind Spenden durch Liberapay steuerlich absetzbar?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Wahrscheinlich nicht, aber das hängt von den steuerlichen Regeln Ihres Landes hab."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr "Ist ein Liberapay-Konto eine Brieftasche?"
+msgstr "Ist ein Liberapay-Konto ein Wallet?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
 msgstr "Nicht seit Mitte 2018. Das Geld, das ein Spender schickt, geht sofort an den Empfänger. Zuvor wurden die Gelder auf dem Konto des Spenders gehalten und nach und nach jede Woche an den Empfänger ausgezahlt. Dieses System wurde aufgrund seiner erheblichen Nachteile endgültig aufgegeben."
 
@@ -4168,7 +4164,7 @@ msgstr "Gut unterstützte Territorien"
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
-msgstr[1] "Liberapay steht auch Erstellern in den unten aufgeführten Gebieten zur Verfügung. Spenden, die in diese Gebiete gehen, können jedoch nicht zusammengefasst werden, um die Gebühren für die Zahlungsabwicklung zu senken, und die Zahlungsmethode Euro-Lastschrift steht den Spendern nicht zur Verfügung."
+msgstr[1] "Liberapay ist auch für Schöpfer in den unten aufgeführten {n} Gebieten verfügbar. Allerdings können Spenden für diese Gebiete nicht gebündelt werden, um die Gebühren für die Zahlungsabwicklung zu senken, und die Zahlungsmethode Euro-Lastschrift steht den Spendern nicht zur Verfügung."
 
 msgid "Barely supported territories"
 msgstr "Kaum unterstützte Territorien"
@@ -4509,9 +4505,9 @@ msgstr "Das Geld teilen"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Teams haben keine Hierarchie. Ihre Mitglieder sind gleichberechtigt, die eigene Entnahme zu bestimmen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Sie können Ihre Takes auf {0}ändern. Das Dashboard Ihres Teams finden Sie unter{1}. Es enthält Tabellen mit den nominellen Beträgen aller Mitglieder sowie eine Schätzung der tatsächlichen Beträge, die am Ende des aktuellen Wochenzyklus abgezogen werden."
+msgstr "Sie können Ihre Einnahmen über {0}das Dashboard Ihres Teams{1} ändern. Es enthält Tabellen mit den nominalen Einnahmen aller Mitglieder sowie eine Schätzung der tatsächlichen Geldbeträge, die am Ende des aktuellen Wochenzyklus abgezogen werden."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Die nominellen Entnahmen werden von den Mitgliedern selbst bestimmt. Die tatsächlichen Auszalungen werden vom System berechnet: Zuerst summiert es die nominellen Entnahmen, dann berechnet es den Prozentsatz, dem jede Entnahme entspricht. Anschließend wendet es diese Prozentsätze auf die verfügbaren Einnahmen an. Nominelle Entnahmen können auch als Maxima verstanden werden: Die tatsächliche Auszahlung ist nie höher als die nominelle Entnahme, selbst wenn zusätzliche Einnahmen zur Verfügung stünden."
@@ -4528,17 +4524,15 @@ msgstr "Standardmäßig haben alle Teammitglieder ihre Einnahmen auf den speziel
 msgid "Regulation of take amounts"
 msgstr "Regelung der Entnahmebeträge"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Wenn die \"Take-Drosselung\" für ein Team aktiviert ist, können seine Mitglieder ihre Takes nicht über ein Maximum hinaus erhöhen, das auf der Grundlage der nominalen Takes am Ende des vorherigen Wochenzyklus berechnet wird. Dieser Mechanismus soll neue Mitwirkende dazu ermutigen, dem Team beizutreten, indem sichergestellt wird, dass sie in den ersten Wochen keinen unverhältnismäßig hohen Anteil an den Einnahmen erhalten."
+msgstr "Wenn die „Take-Drosselung“ für ein Team aktiviert ist, können seine Mitglieder ihre Takes nicht über ein Maximum hinaus erhöhen, das auf der Grundlage der nominalen Takes am Ende des vorherigen Wochenzyklus berechnet wird. Dieser Mechanismus soll neue Mitwirkende dazu ermutigen, dem Team beizutreten, indem er sicherstellt, dass sie in den ersten Wochen keinen unverhältnismäßig großen Anteil an den Einnahmen erhalten."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Das Limit funktioniert folgendermaßen: Sie können Ihre Einnahme immer auf {amount} erhöhen, wenn sie darunter lag, Sie können Ihre Einnahme im Vergleich zur Vorwoche verdoppeln, Sie können Ihre Einnahme erhöhen, um die restlichen Einnahmen des Teams zu beanspruchen, und Sie können Ihre Einnahme auf das Niveau des Medians am Ende des vorherigen Wochenzyklus bringen. Welche dieser Möglichkeiten den höchsten Betrag ergibt, ist Ihre maximale Einnahme für die Woche."
+msgstr "Das Limit funktioniert folgendermaßen: Sie können Ihre Einnahme immer auf {amount} erhöhen, wenn sie darunter lag, Sie können Ihre Einnahme im Vergleich zur Vorwoche verdoppeln, Sie können Ihre Einnahme erhöhen, um das Resteinkommen des Teams in Anspruch zu nehmen, und Sie können Ihre Einnahme auf das Niveau der mittleren Einnahme am Ende des vorherigen Wochenzyklus bringen. Welche dieser Möglichkeiten auch immer den höchsten Betrag ergibt, ist Ihre maximale Einnahme für die Woche."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Die Takes sind nicht begrenzt, wenn das Team nur ein Mitglied hat oder wenn die Takes der Vorwoche alle null waren (was bei jedem neuen Team der Fall ist, das während des aktuellen Wochenzyklus erstellt wurde)."
+msgstr "Die Takes sind nicht begrenzt, wenn das Team nur ein Mitglied hat oder wenn die Takes der Vorwoche alle null waren (was bei jedem neuen Team, das während des aktuellen Wochenzyklus erstellt wurde, der Fall ist)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Bitte kontaktieren Sie den Support, wenn sie das Abhebelimit für ein bestehendes Team ein- oder ausschalten möchten. Vergessen Sie nicht zu belegen, dass die Änderung von den anderen Teammitgliedern genehmigt wurde."
@@ -5115,7 +5109,7 @@ msgid "Pledge to {user_name}"
 msgstr "Versprich {user_name} eine Spende"
 
 msgid "You can support individual team members:"
-msgstr "Du kannst Team-Mitglieder individuell unterstützen:"
+msgstr "Sie können einzelne Teammitglieder unterstützen:"
 
 #, python-brace-format
 msgid "Are you a member of the {team_name} team?"
