@@ -29,7 +29,7 @@ communities = () # participant.get_communities()
 langs = participant.get_statement_langs(include_conversions=True)
 
 patron_visibilities = participant.recipient_settings.patron_visibilities or 0
-if patron_visibilities > 1:
+if patron_visibilities & 4:
     public_patrons = website.db.all("""
         SELECT tipper_p.id
              , tipper_p.avatar_url
@@ -208,7 +208,7 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         % endif
     % endif
 
-    % if patron_visibilities > 1 and n_public_patrons
+    % if n_public_patrons|default(0)
     <h3>{{ _("Patrons") }}
         &nbsp;
         <small><a href="{{ participant.path('patrons/public.csv') }}">{{ icon('download', _("Export as CSV")) }}</a></small>

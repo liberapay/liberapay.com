@@ -1367,10 +1367,12 @@ class Participant(Model, MixinTeam):
         """)
 
     def set_email_lang(self, lang, cursor=None):
-        (cursor or self.db).run(
-            "UPDATE participants SET email_lang=%s WHERE id=%s",
-            (lang, self.id)
-        )
+        with self.db.get_cursor(cursor=cursor) as c:
+            c.run(
+                "UPDATE participants SET email_lang=%s WHERE id=%s",
+                (lang, self.id)
+            )
+            self.add_event(c, 'set_email_lang', lang)
         self.set_attributes(email_lang=lang)
 
 

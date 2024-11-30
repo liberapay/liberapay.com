@@ -388,7 +388,9 @@ def test_email_server(ip_address: str, email=None, timeout=None) -> None:
                 # OpenSMTPD
                 msg.startswith("Invalid recipient: ") or
                 # Tutanota's SMTP server
-                msg.endswith("Recipient address rejected: Recipient not found")
+                msg.endswith("Recipient address rejected: Recipient not found") or
+                # Yandex
+                msg.startswith("No such user")
             )
             if recipient_rejected:
                 raise EmailAddressRejected(email, msg, ip_address)
