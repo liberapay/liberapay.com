@@ -343,6 +343,7 @@ SAFE_METHODS = {'GET', 'HEAD', 'OPTIONS'}
 SESSION = 'session'
 SESSION_REFRESH = timedelta(hours=12)
 SESSION_TIMEOUT = timedelta(hours=6)
+SESSION_TIMEOUT_LONG = timedelta(days=400)
 
 
 def make_standard_tip(label, weekly, currency):
