@@ -1,0 +1,75 @@
+from liberapay.utils import form_post_success, get_participant, utcnow
+
+[---]
+participant = get_participant(state, restrict=True)
+s = website.db.one("""
+    SELECT id, secret, mtime, latest_use
+      FROM user_secrets
+     WHERE participant = %s
+       AND id = 800
+""", (participant.id,))
+if request.method == 'POST':
+    action = request.body['action']
+    with website.db.get_cursor() as cursor:
+        if action == 'start':
+            s = cursor.one("""
+                INSERT INTO user_secrets
+                            (participant, id, secret)
+                     VALUES (%s, 800, %s)
+                ON CONFLICT (participant, id) DO UPDATE
+                        SET latest_use = null
+                          , mtime = excluded.mtime
+                          , secret = excluded.secret
+                  RETURNING id, secret, mtime, latest_use
+            """, (participant.id, participant.generate_session_token() + '.ro'))
+            participant.add_event(cursor, 'start_infinite_session', {'id': 800})
+            msg = _("The credentials have been generated.")
+        elif action == 'end':
+            cursor.run("""
+                DELETE FROM user_secrets
+                 WHERE participant = %s
+                   AND id = 800
+            """, (participant.id,))
+            participant.add_event(cursor, 'end_infinite_session', {'id': 800})
+            msg = _("The credentials have been revoked.")
+        else:
+            raise response.invalid_input(action, 'action', 'body')
+    form_post_success(state, msg=msg)
+
+title = _("Constant session")
+
+[---] text/html
+% extends "templates/layouts/settings.html"
+
+% block content
+<form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    % if s and (s.latest_use or s.mtime.date()) >= (utcnow() - constants.SESSION_TIMEOUT_LONG).date()
+        <p>{{ _(
+            "You can automate downloading private information from your account "
+            "by including the following HTTP header in your requests:"
+        ) }}</p>
+        <pre>Cookie: session={{ participant.id }}:{{ s.id }}:{{ s.secret }}</pre>
+        <p>{{ _(
+            "For example, you can download the list of your currently active patrons "
+            "by executing the following command:"
+        ) }}</p>
+        <pre>curl -b 'session={{ participant.id }}:{{ s.id }}:{{ s.secret }}' '{{ participant.url('patrons/export.csv?scope=active') }}'</pre>
+        <p class="text-info">{{ icon('info-sign') }} {{ _(
+            "To minimize the risks to you, these credentials can only be used to fetch "
+            "data, not to modify anything in your account, and they will automatically "
+            "expire if unused for a year."
+        ) }}</p>
+        <button class="btn btn-danger" name="action" value="end">{{ _("Revoke credentials") }}</button>
+    % elif s
+        <p>{{ _("The credentials have expired.") }}</p>
+        <button class="btn btn-primary" name="action" value="start">{{ _("Regenerate credentials") }}</button>
+    % else
+        <p>{{ _(
+            "To simplify automating downloads of private information from your "
+            "account, you can generate long-lived read-only credentials."
+        ) }}</p>
+        <button class="btn btn-primary" name="action" value="start">{{ _("Generate credentials") }}</button>
+    % endif
+</form>
+% endblock
