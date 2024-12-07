@@ -2,7 +2,7 @@ import stripe
 
 from liberapay.exceptions import AccountSuspended
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.payin.stripe import create_source_from_token, repr_stripe_error
+from liberapay.payin.stripe import repr_stripe_error
 from liberapay.utils import check_address_v2, form_post_success, get_participant
 
 [---]
@@ -16,18 +16,8 @@ if request.method == 'POST':
     body = request.body
     one_off = body.get('one_off') == 'true'
     try:
-        if 'token' in body:
-            owner_info = {
-                'email': participant.get_email_address(),
-                'name': body.get('owner.name'),
-            }
-            source = create_source_from_token(
-                body.word('token'), one_off, None, owner_info, participant.url('routes/')
-            )
-            route = ExchangeRoute.attach_stripe_source(participant, source, one_off)
-        else:
-            pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
-            route = ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
+        pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
+        route = ExchangeRoute.attach_stripe_payment_method(participant, pm, one_off)
     except stripe.error.StripeError as e:
         raise response.error(e.http_status or 500, _(
             "The payment processor {name} returned an error: “{error_message}”.",
