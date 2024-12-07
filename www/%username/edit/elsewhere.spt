@@ -35,18 +35,9 @@ subhead = _("Linked Accounts")
 
     <h4>{{ _("Connect an account") }}</h4>
     <div class="buttons">
-    % for platform in website.platforms.hasattr('account_url')
-        % if platform.name == 'youtube'
-            % set disabled = true
-            % set disabled_msg = _(
-                "Our YouTube integration has been disabled by Google. We're working on "
-                "re-implementing this feature in a different way."
-            )
-        % else
-            % set disabled = participant.kind == 'group' and platform.has_teams and not hasattr(platform, 'is_team_member')
-            % set disabled_msg = None
-        % endif
-        % call auth_button(platform.name, 'connect', btn_cls='no-default-styles', form_cls='btn btn-default', participant=participant, disabled=disabled, disabled_msg=disabled_msg)
+    % for platform in website.platforms.hasattr('account_url') if platform.name != 'youtube'
+        % set disabled = participant.kind == 'group' and platform.has_teams and not hasattr(platform, 'is_team_member')
+        % call auth_button(platform.name, 'connect', btn_cls='no-default-styles', form_cls='btn btn-default', participant=participant, disabled=disabled)
             {{ platform_icon_large(platform) }}<br>{{ platform.display_name }}
         % endcall
     % endfor
