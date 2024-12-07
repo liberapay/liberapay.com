@@ -203,15 +203,19 @@ class TestPages(Harness):
         r = self.client.GET('/alice/routes/', auth_as=alice)
         assert r.code == 200, r.text
         assert "You have 1 connected payment instrument." in r.text, r.text
-        sepa_direct_debit_token = stripe.Token.create(bank_account=dict(
-            country='BE',
-            currency='EUR',
-            account_number='BE62510007547061',
-            account_holder_name='Dupond et Dupont',
-        ))
+        sepa_debit_pm = stripe.PaymentMethod.create(
+            type='sepa_debit',
+            billing_details=dict(
+                email='dupond.dupont@example.com',
+                name='Dupond et Dupont',
+            ),
+            sepa_debit=dict(
+                iban='BE62510007547061',
+            ),
+        )
         r = self.client.POST(
             '/alice/routes/add?type=stripe-sdd',
-            {'token': sepa_direct_debit_token.id},
+            {'stripe_pm_id': sepa_debit_pm.id},
             auth_as=alice, raise_immediately=False,
         )
         assert r.code == 302, r.text

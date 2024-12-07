@@ -336,12 +336,14 @@ def _Querystring_derive(self, **kw):
             new_qs[k] = v
     return '?' + urlencode(new_qs, doseq=True)
 aspen.http.request.Querystring.derive = _Querystring_derive
+del _Querystring_derive
 
 if hasattr(aspen.http.request.Querystring, 'serialize'):
     raise Warning('aspen.http.request.Querystring.serialize() already exists')
 def _Querystring_serialize(self, **kw):
     return ('?' + urlencode(self, doseq=True)) if self else ''
 aspen.http.request.Querystring.serialize = _Querystring_serialize
+del _Querystring_serialize
 
 pando.http.request.Headers.__init__ = pando.http.mapping.CaseInsensitiveMapping.__init__
 
@@ -364,6 +366,7 @@ def _cookies(self):
         self.__dict__['cookies'] = cookies
     return cookies
 pando.http.request.Request.cookies = property(_cookies)
+del _cookies
 
 if hasattr(pando.http.request.Request, 'queued_success_messages'):
     raise Warning('pando.http.request.Request.queued_success_messages already exists')
@@ -372,6 +375,7 @@ def _queued_success_messages(self):
         self._queued_success_messages = map(b64decode_s, self.qs.all('success'))
     return self._queued_success_messages
 pando.http.request.Request.queued_success_messages = property(_queued_success_messages)
+del _queued_success_messages
 
 if hasattr(pando.http.request.Request, 'source'):
     raise Warning('pando.http.request.Request.source already exists')
@@ -388,6 +392,7 @@ def _source(self):
         self.__dict__['source'] = ip_address(addr)
     return self.__dict__['source']
 pando.http.request.Request.source = property(_source)
+del _source
 
 if hasattr(pando.http.request.Request, 'find_input_name'):
     raise Warning('pando.http.request.Request.find_input_name already exists')
@@ -397,6 +402,7 @@ def _find_input_name(self, value):
         if any(map(value.__eq__, values)):
             return k
 pando.http.request.Request.find_input_name = _find_input_name
+del _find_input_name
 
 if hasattr(pando.Response, 'csp_allow'):
     raise Warning('pando.Response.csp_allow() already exists')
@@ -411,6 +417,7 @@ if hasattr(pando.Response, 'encode_url'):
 def _encode_url(url):
     return maybe_encode(urlquote(url, string.punctuation))
 pando.Response.encode_url = staticmethod(_encode_url)
+del _encode_url
 
 if hasattr(pando.Response, 'error'):
     raise Warning('pando.Response.error() already exists')
@@ -419,6 +426,7 @@ def _error(self, code, msg=''):
     self.body = msg
     return self
 pando.Response.error = _error
+del _error
 
 if hasattr(pando.Response, 'invalid_input'):
     raise Warning('pando.Response.invalid_input() already exists')
@@ -431,6 +439,7 @@ def _invalid_input(self, input_value, input_name, input_location, code=400,
     self.body = msg % (input_name, input_value, input_location)
     raise self
 pando.Response.invalid_input = _invalid_input
+del _invalid_input
 
 if hasattr(pando.Response, 'success'):
     raise Warning('pando.Response.success() already exists')
@@ -439,6 +448,7 @@ def _success(self, code=200, msg=''):
     self.body = msg
     raise self
 pando.Response.success = _success
+del _success
 
 if hasattr(pando.Response, 'json'):
     raise Warning('pando.Response.json() already exists')
@@ -448,6 +458,7 @@ def _json(self, obj, code=200):
     self.headers[b'Content-Type'] = b'application/json'
     raise self
 pando.Response.json = _json
+del _json
 
 if hasattr(pando.Response, 'sanitize_untrusted_url'):
     raise Warning('pando.Response.sanitize_untrusted_url() already exists')
@@ -460,6 +471,7 @@ def _sanitize_untrusted_url(response, url):
     # ^ this is safe because we don't accept requests with unknown hosts
     return response.website.canonical_scheme + '://' + host + url
 pando.Response.sanitize_untrusted_url = _sanitize_untrusted_url
+del _sanitize_untrusted_url
 
 if hasattr(pando.Response, 'redirect'):
     raise Warning('pando.Response.redirect() already exists')
@@ -470,6 +482,7 @@ def _redirect(response, url, code=302, trusted_url=True):
     response.headers[b'Location'] = response.encode_url(url)
     raise response
 pando.Response.redirect = _redirect
+del _redirect
 
 if hasattr(pando.Response, 'refresh'):
     raise Warning('pando.Response.refresh() already exists')
@@ -477,6 +490,7 @@ def _refresh(response, state, **extra):
     # https://en.wikipedia.org/wiki/Meta_refresh
     raise response.render('simplates/refresh.spt', state, **extra)
 pando.Response.refresh = _refresh
+del _refresh
 
 if hasattr(pando.Response, 'render'):
     raise Warning('pando.Response.render() already exists')
@@ -491,18 +505,21 @@ def _render(response, path, state, **extra):
     render_response(state, resource, response, website)
     raise response
 pando.Response.render = _render
+del _render
 
 if hasattr(pando.Response, 'set_cookie'):
     raise Warning('pando.Response.set_cookie() already exists')
 def _set_cookie(response, *args, **kw):
     set_cookie(response.headers.cookie, *args, **kw)
 pando.Response.set_cookie = _set_cookie
+del _set_cookie
 
 if hasattr(pando.Response, 'erase_cookie'):
     raise Warning('pando.Response.erase_cookie() already exists')
 def _erase_cookie(response, *args, **kw):
     erase_cookie(response.headers.cookie, *args, **kw)
 pando.Response.erase_cookie = _erase_cookie
+del _erase_cookie
 
 if hasattr(pando.Response, 'text'):
     raise Warning('pando.Response.text already exists')
@@ -510,7 +527,20 @@ def _decode_body(self):
     body = self.body
     return body.decode('utf8') if isinstance(body, bytes) else body
 pando.Response.text = property(_decode_body)
+del _decode_body
 
+def _str(self):
+    r = f"{self.code} {self._status()}"
+    if self.code >= 301 and self.code < 400 and b'Location' in self.headers:
+        r += f" (Location: {self.headers[b'Location'].decode('ascii', 'backslashreplace')})"
+    body = self.body
+    if body:
+        if isinstance(body, bytes):
+            body = body.decode('ascii', 'backslashreplace')
+        r += f":\n{body}"
+    return r
+pando.Response.__str__ = _str
+del _str
 
 # Log some performance information
 # ================================
