@@ -49,7 +49,7 @@ class CustomRenderer(m.SaferHtmlRenderer):
             self.canonical_host = 'http://' + self.canonical_host
 
         super().__init__(link_rewrite=f"{self.canonical_host}/redirect?url={{url}}")
-        
+
     def autolink(self, raw_url, is_email):
         # override super's autolink function, add target="_blank"
         if self.check_url(raw_url):
@@ -73,7 +73,7 @@ class CustomRenderer(m.SaferHtmlRenderer):
         return bool(_uri_re.match(url))
     
     def rewrite_url(self, url, is_image_src=False):
-        rewrite = not _is_internal_url(url)
+        rewrite = not _is_internal_url(url) and not is_image_src
         if rewrite:
             return super().rewrite_url(m.escape_html(url, escape_slash=True), is_image_src)
         return url
