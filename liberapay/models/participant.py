@@ -34,7 +34,7 @@ from liberapay.constants import (
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
-    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_TIMEOUT,
+    PUBLIC_NAME_MAX_SIZE, SEPA, SESSION, SESSION_TIMEOUT, SESSION_TIMEOUT_LONG,
     USERNAME_MAX_SIZE, USERNAME_SUFFIX_BLACKLIST,
 )
 from liberapay.exceptions import (
@@ -441,7 +441,7 @@ class Participant(Model, MixinTeam):
             else:
                 rate_limit = False
         r = cls.db.one("""
-            SELECT p, s.secret, s.mtime
+            SELECT p, s.secret, s.mtime, s.latest_use
               FROM user_secrets s
               JOIN participants p ON p.id = s.participant
              WHERE s.participant = %s
@@ -450,26 +450,38 @@ class Participant(Model, MixinTeam):
         if not r:
             erase_cookie(cookies, SESSION)
             return None, 'invalid'
-        p, stored_secret, mtime = r
+        p, stored_secret, mtime, latest_use = r
         if not constant_time_compare(stored_secret, secret):
             erase_cookie(cookies, SESSION)
             return None, 'invalid'
         if rate_limit:
             cls.db.decrement_rate_limit('log-in.session.ip-addr', str(request.source))
-        if mtime > utcnow() - SESSION_TIMEOUT:
+        now = utcnow()
+        today = now.date()
+        if session_id >= 800 and session_id < 810:
+            if (latest_use or mtime.date()) < today - SESSION_TIMEOUT_LONG:
+                return None, 'expired'
+        elif mtime > utcnow() - SESSION_TIMEOUT:
             p.session = SimpleNamespace(id=session_id, secret=secret, mtime=mtime)
         elif allow_downgrade:
-            if mtime > utcnow() - FOUR_WEEKS:
+            if mtime > now - FOUR_WEEKS:
                 p.regenerate_session(
                     SimpleNamespace(id=session_id, secret=secret, mtime=mtime),
                     cookies,
                     suffix='.ro',  # stands for "read only"
                 )
             else:
-                set_cookie(cookies, SESSION, f"{p.id}:!:", expires=utcnow() + TEN_YEARS)
+                set_cookie(cookies, SESSION, f"{p.id}:!:", expires=now + TEN_YEARS)
                 return None, 'expired'
         else:
             return None, 'expired'
+        if not latest_use or latest_use < today:
+            cls.db.run("""
+                UPDATE user_secrets
+                   SET latest_use = current_date
+                 WHERE participant = %s
+                   AND id = %s
+            """, (p_id, session_id))
         p.authenticated = True
         return p, 'valid'
 
@@ -489,6 +501,9 @@ class Participant(Model, MixinTeam):
 
         The new secret is guaranteed to be different from the old one.
         """
+        if session.id >= 800 and session.id < 810:
+            # Sessions in this range aren't meant to be regenerated automatically.
+            return
         if self.is_suspended:
             if not suffix:
                 suffix = '.ro'

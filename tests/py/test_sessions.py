@@ -787,3 +787,98 @@ class TestSessions(Harness):
         assert r.code == 200, r.text
         r = self.client.PxST('/alice/edit/username', {}, auth_as=alice)
         assert r.code == 403, r.text
+
+    def test_constant_sessions(self):
+        alice = self.make_participant('alice')
+        r = self.client.GET('/alice/access/constant-session', auth_as=alice)
+        assert r.code == 200, r.text
+        constant_sessions = self.db.all("""
+            SELECT *
+              FROM user_secrets
+             WHERE participant = %s
+               AND id >= 800
+        """, (alice.id,))
+        assert not constant_sessions
+        del constant_sessions
+        # Test creating the constant session
+        r = self.client.PxST(
+            '/alice/access/constant-session',
+            {'action': 'start'},
+            auth_as=alice,
+        )
+        assert r.code == 302, r.text
+        constant_session = self.db.one("""
+            SELECT *
+              FROM user_secrets
+             WHERE participant = %s
+               AND id >= 800
+        """, (alice.id,))
+        assert constant_session
+        r = self.client.GET('/alice/access/constant-session', auth_as=alice)
+        assert r.code == 200, r.text
+        assert constant_session.secret in r.text
+        # Test using the constant session
+        r = self.client.GxT(
+            '/about/me/',
+            cookies={
+                'session': f'{alice.id}:{constant_session.id}:{constant_session.secret}',
+            },
+        )
+        assert r.code == 302, r.text
+        # Test regenerating the constant session
+        r = self.client.PxST(
+            '/alice/access/constant-session',
+            {'action': 'start'},
+            auth_as=alice,
+        )
+        assert r.code == 302, r.text
+        old_constant_session = constant_session
+        constant_session = self.db.one("""
+            SELECT *
+              FROM user_secrets
+             WHERE participant = %s
+               AND id >= 800
+        """, (alice.id,))
+        assert constant_session
+        assert constant_session.secret != old_constant_session.secret
+        # Test expiration of the session
+        self.db.run("""
+            UPDATE user_secrets
+               SET mtime = mtime - interval '300 days'
+                 , latest_use = latest_use - interval '300 days'
+             WHERE id = 800
+        """)
+        r = self.client.GxT(
+            '/about/me/',
+            cookies={
+                'session': f'{alice.id}:{constant_session.id}:{constant_session.secret}',
+            },
+        )
+        assert r.code == 302, r.text
+        self.db.run("""
+            UPDATE user_secrets
+               SET mtime = mtime - interval '500 days'
+                 , latest_use = latest_use - interval '500 days'
+             WHERE id = 800
+        """)
+        r = self.client.GxT(
+            '/about/me/',
+            cookies={
+                'session': f'{alice.id}:{constant_session.id}:{constant_session.secret}',
+            },
+        )
+        assert r.code == 403, r.text
+        # Test revoking the constant session
+        r = self.client.PxST(
+            '/alice/access/constant-session',
+            {'action': 'end'},
+            auth_as=alice,
+        )
+        assert r.code == 302, r.text
+        constant_session = self.db.one("""
+            SELECT *
+              FROM user_secrets
+             WHERE participant = %s
+               AND id >= 800
+        """, (alice.id,))
+        assert not constant_session
