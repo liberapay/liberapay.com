@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"PO-Revision-Date: 2024-12-02 22:00+0000\n"
+"Last-Translator: Jiří Podhorecký <j.podhorecky@volny.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/liberapay/core/cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1824,20 +1826,18 @@ msgstr "Nominální podíl"
 msgid "Actual Take"
 msgstr "Skutečný podíl"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "Na Liberapay se dary platí předem. Tento sloupec ukazuje, kolik peněz každý člen obdržel předem prostřednictvím tohoto týmu. Záloha se zvyšuje pokaždé, když člen obdrží novou platbu od dárce prostřednictvím týmu, a snižuje se každý týden."
+msgstr "Na Liberapay se příspěvky platí předem. Tento sloupec ukazuje, kolik peněz každý člen obdržel předem prostřednictvím tohoto týmu. Záloha se zvyšuje pokaždé, když člen obdrží novou platbu od dárce prostřednictvím týmu, a snižuje se každý týden."
 
 msgid "Advance"
 msgstr "Záloha"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
-msgstr "Minulý týden: {0}"
+msgstr "Poslední týden: {0}"
 
-#, fuzzy
 msgid "no take"
-msgstr "žádné převzetí"
+msgstr "žádný podíl"
 
 msgid "auto"
 msgstr "automaticky"
@@ -4164,11 +4164,9 @@ msgstr "Jsou příspěvky prostřednictvím Liberapay daňově uznatelné?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Asi ne, ale to záleží na daňových předpisech vaší země."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
 msgstr "Je účet Liberapay peněženka?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
 msgstr "Ne od poloviny roku 2018. Peníze zaslané dárcem jdou okamžitě příjemci. Dříve byly prostředky drženy na účtu dárce a vypláceny příjemci postupně každý týden. Tento systém byl definitivně opuštěn pro své velmi výrazné nedostatky."
 
@@ -4199,22 +4197,22 @@ msgstr "V současné době jsou podporovány tyto platební procesory: {Stripe} 
 msgid "Best supported territories"
 msgstr "Nejlepší podporovaná území"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Tvůrci na těchto územích {n} mohou využívat všechny funkce Liberapay:"
+msgstr[1] "Tvůrci na těchto {n} územích mohou využívat všechny funkce Liberapay:"
+msgstr[2] "Tvůrci na těchto {n} územích mohou využívat všechny funkce Liberapay:"
 
 msgid "Well supported territories"
 msgstr "Dobře podporovaná území"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] ""
-msgstr[1] ""
-msgstr[2] "Liberapay je k dispozici také tvůrcům na níže uvedených územích {n}. Dary směřující do těchto území však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a dárcům není k dispozici metoda inkasa v eurech."
+msgstr[1] "Liberapay je k dispozici také tvůrcům na {n} níže uvedených územích. Dary směřující do těchto území však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a dárcům není k dispozici metoda inkasa v eurech."
+msgstr[2] "Liberapay je k dispozici také tvůrcům na {n} níže uvedených územích. Dary směřující do těchto území však nelze seskupovat, aby se snížily poplatky za zpracování plateb, a dárcům není k dispozici metoda inkasa v eurech."
 
 msgid "Barely supported territories"
 msgstr "Sotva podporovaná území"
@@ -4563,9 +4561,9 @@ msgstr "Sdílení peněz"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Týmy nemají hierarchii, všichni jejich členové jsou si rovni a nastavují své vlastní podíly."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Své záběry můžete změnit na adrese {0}na panelu týmů{1}. Obsahuje tabulky, které zobrazují nominální výběry všech členů a také odhad skutečných částek, které budou odečteny na konci aktuálního týdenního cyklu."
+msgstr "Své podíly můžete změnit na adrese {0}na panelu týmů{1}. Obsahuje tabulky, které zobrazují nominální výběry všech členů a také odhad skutečných částek, které budou odečteny na konci aktuálního týdenního cyklu."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Nominální podíly jsou hrubá čísla, která si členové nastavují sami. Skutečné podíly jsou počítány v systému: nejprve se sečtou nominální podíly z nichž se vypočítá procento, které představuje každý podíl a nakonec se vyplatí tyto procenta z dostupného příjmu. Nominální podíly rovněž působí jako maximální hodnoty: skutečné podíly pak nejsou nikdy vyšší než nominální, a to i v případě, že je k dispozici další příjem."
@@ -4582,17 +4580,15 @@ msgstr "Ve výchozím nastavení mají všichni členové týmu nastaven odběr 
 msgid "Regulation of take amounts"
 msgstr "Omezení částky podílu"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Pokud je pro tým povoleno \"omezování odběrů\", nemohou jeho členové zvýšit své odběry nad maximální hodnotu vypočtenou na základě nominálních odběrů na konci předchozího týdenního cyklu. Tento mechanismus má podpořit pozvání nových přispěvatelů do týmu tím, že zajistí, aby v prvních týdnech nepobírali neúměrný podíl na příjmech."
+msgstr "Pokud je pro tým povoleno \"omezování podílů\", nemohou jeho členové zvýšit své výběry nad maximální hodnotu vypočtenou na základě nominálních výběrů na konci předchozího týdenního cyklu. Tento mechanismus má podpořit pozvání nových přispěvatelů do týmu tím, že zajistí, aby v prvních týdnech nepobírali neúměrný podíl na příjmech."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Limit funguje následovně: vždy můžete zvýšit svůj příjem na {amount}, pokud byl nižší, můžete zdvojnásobit svůj příjem oproti předchozímu týdnu, můžete zvýšit svůj příjem, abyste si nárokovali zbytek příjmu týmu, a můžete zvýšit svůj příjem na úroveň mediánu příjmu na konci předchozího týdenního cyklu. Kterákoli z těchto možností vede k nejvyšší částce, je vaším maximálním výběrem pro daný týden."
+msgstr "Limit funguje následovně: vždy můžete zvýšit svůj podíl na {amount}, pokud byl nižší, můžete zdvojnásobit svůj podíl oproti předchozímu týdnu, můžete zvýšit svůj podíl, abyste si nárokovali zbytek příjmu týmu, a můžete zvýšit svůj podíl na úroveň mediánu příjmu na konci předchozího týdenního cyklu. Kterákoli z těchto možností vede k nejvyšší částce, je vaším maximálním podílem pro daný týden."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Přebírání není omezeno, pokud má tým pouze jednoho člena nebo pokud byly všechny přebírání v předchozím týdnu nulové (což je případ každého nového týmu, který byl vytvořen během aktuálního týdenního cyklu)."
+msgstr "Čerpání není omezeno, pokud má tým pouze jednoho člena nebo pokud všechna čerpání v předchozím týdnu byla nulová (což je případ každého nového týmu, který byl vytvořen během aktuálního týdenního cyklu)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Pokud chcete povolit nebo zakázat limity podílů pro existující tým, kontaktujte prosím podporu. Nezapomeňte přiložit důkaz, že změnu schválili ostatní členové týmu."
