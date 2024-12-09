@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Italian "
-"<https://hosted.weblate.org/projects/liberapay/core/it/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2024-12-06 21:06+0000\n"
+"Last-Translator: Davide Neri <davnerix@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/liberapay/core/it/>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1809,18 +1811,16 @@ msgstr "Quota nominale"
 msgid "Actual Take"
 msgstr "Quota effettiva"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "Su Liberapay, le donazioni vengono pagate in anticipo. Questa colonna mostra l'ammontare del denaro che ogni membro ha ricevuto in anticipo attraverso questa squadra. L'anticipo aumenta ogni volta che un membro riceve un nuovo pagamento da un donatore attraverso la squadra e diminuisce ogni settimana."
+msgstr "Su Liberapay, le donazioni vengono pagate in anticipo. Questa colonna mostra la somma di denaro che ogni membro ha ricevuto in anticipo attraverso questa squadra. L'anticipo aumenta ogni volta che un membro riceve un nuovo pagamento da un donatore attraverso la squadra e diminuisce ogni settimana."
 
 msgid "Advance"
 msgstr "Anticipo"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
-msgstr "La settimana scorsa: {0}"
+msgstr "La scorsa settimana: {0}"
 
-#, fuzzy
 msgid "no take"
 msgstr "nessuna quota"
 
@@ -4121,13 +4121,11 @@ msgstr "Le donazioni tramite Liberapay sono deducibili dalle tasse?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probabilmente no, ma dipende dalle norme fiscali del tuo Paese."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
-msgstr "Un conto (profilo se social) Liberapay è un portafoglio?"
+msgstr "Un conto Liberapay è un portafoglio?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr "Non più dalla metà del 2018. Il denaro inviato da un donatore arriva immediatamente al destinatario. In precedenza, i finanziamenti venivano tenuti sul conto (profilo se social) del donatore e versati poco alla volta al destinatario ogni settimana. Questo sistema è stato definitivamente abbandonato a causa dei suoi notevoli inconvenienti."
+msgstr "Non più dalla metà del 2018. Il denaro inviato da un donatore arriva immediatamente al destinatario. In precedenza, i finanziamenti venivano tenuti sul conto del donatore e versati poco alla volta al destinatario ogni settimana. Questo sistema è stato definitivamente abbandonato a causa dei suoi notevoli inconvenienti."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "È possibile ottenere aggiornamenti da noi sui seguenti social network:"
@@ -4509,9 +4507,9 @@ msgstr "Condivisione del denaro"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Le squadre non hanno una gerarchia, tutti i loro membri sono uguali e impostano la propria quota."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Puoi modificare le tue quote da {0}il cruscotto delle squadre{1}. Contiene tabelle che mostrano le quote nominali di tutti i membri, oltre a una stima dell'importo effettivo del denaro che verrà detratto alla fine del ciclo settimanale corrente."
+msgstr "Puoi modificare le tue quote dal {0}cruscotto delle squadre{1}. Contiene tabelle che mostrano le quote nominali di tutti i membri, oltre a una stima dell'importo effettivo del denaro che verrà detratto alla fine del ciclo settimanale corrente."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Le quote nominali sono i numeri grezzi che i membri stessi inseriscono, le quote effettive vengono calcolate dal sistema: prima somma le quote nominali, poi calcola la percentuale che ogni quota rappresenta, e, infine, applica queste percentuali ai guadagni disponibili. Le quote nominali corrispondono anche ai massimali: le quote effettive non sono mai superiori a quelle nominali, anche se sono disponibili guadagni in eccesso."
@@ -4528,15 +4526,13 @@ msgstr "L'azione predefinita è che tutti i membri hanno le loro quote impostate
 msgid "Regulation of take amounts"
 msgstr "Regolazione degli importi delle quote"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
 msgstr "Quando la \"limitazione delle quote\" è abilitata per una squadra, i suoi membri non possono aumentare le loro quote oltre un massimo calcolato sulla base delle quote nominali alla fine del ciclo settimanale precedente. Questo meccanismo ha lo scopo di incoraggiare i nuovi collaboratori a unirsi alla squadra, garantendo che non prendano una quota sproporzionata dei guadagni nelle loro prime settimane."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Il limite funziona così: puoi sempre aumentare la tua quota a {amount} se era inferiore, puoi raddoppiare la tua quota rispetto alla settimana precedente, puoi aumentare la tua quota per richiedere i guadagni avanzati dalla squadra e puoi portare la tua quota al livello della quota mediana alla fine del ciclo settimanale precedente. La quota più alta tra queste possibilità è la tua quota massima per la settimana."
+msgstr "Il limite funziona così: puoi sempre aumentare la tua quota fino a {amount} se era inferiore, puoi raddoppiare la tua quota rispetto alla settimana precedente, puoi aumentare la tua quota per richiedere i guadagni avanzati dalla squadra e puoi portare la tua quota al livello della quota mediana alla fine del ciclo settimanale precedente. La quota più alta tra queste possibilità è la tua quota massima per la settimana."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
 msgstr "Le quote non sono limitate se la squadra ha un solo membro o se le quote della settimana precedente sono tutte pari a zero (come nel caso di qualsiasi nuova squadra creata durante il ciclo settimanale corrente)."
 
