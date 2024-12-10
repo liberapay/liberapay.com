@@ -461,7 +461,7 @@ class Participant(Model, MixinTeam):
         if session_id >= 800 and session_id < 810:
             if (latest_use or mtime.date()) < today - SESSION_TIMEOUT_LONG:
                 return None, 'expired'
-        elif mtime > utcnow() - SESSION_TIMEOUT:
+        elif mtime > now - SESSION_TIMEOUT:
             p.session = SimpleNamespace(id=session_id, secret=secret, mtime=mtime)
         elif allow_downgrade:
             if mtime > now - FOUR_WEEKS:
