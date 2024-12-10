@@ -133,6 +133,7 @@ class ExchangeRoute(Model):
         else:
             customer_id = stripe.Customer.create(
                 email=participant.get_email_address(),
+                metadata={'participant_id': participant.id},
                 payment_method=pm.id,
                 preferred_locales=[participant.email_lang],
                 idempotency_key='create_customer_for_participant_%i_with_%s' % (
