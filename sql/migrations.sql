@@ -3491,3 +3491,6 @@ CREATE INDEX public_name_trgm_idx ON participants
 
 -- migration #178
 UPDATE exchange_routes SET is_default_for = 'EUR', is_default = null WHERE network = 'stripe-sdd' AND is_default;
+
+-- migration #179
+ALTER TABLE user_secrets ADD COLUMN latest_use date;
