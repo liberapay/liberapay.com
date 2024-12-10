@@ -79,18 +79,7 @@ if request.method == 'POST':
         postal_address = None
 
     try:
-        if 'token' in body:
-            return_url = payer.url('giving/pay/stripe/complete')
-            one_off = body.get('keep') != 'true'
-            owner_info = {
-                'email': payer.get_email_address(),
-                'name': body.get('owner.name'),
-            }
-            source = create_source_from_token(
-                body.word('token'), one_off, payin_amount, owner_info, return_url
-            )
-            route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
-        elif 'stripe_pm_id' in body:
+        if 'stripe_pm_id' in body:
             one_off = body.get('keep') != 'true'
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)

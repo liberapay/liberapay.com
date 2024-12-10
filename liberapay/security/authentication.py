@@ -251,7 +251,7 @@ def start_user_as_anon():
 def authenticate_user_if_possible(csrf_token, request, response, state, user, _):
     """This signs the user in.
     """
-    if state.get('etag'):
+    if state.get('etag') or request.path.raw.startswith('/callbacks/'):
         return
 
     db = state['website'].db
