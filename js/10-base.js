@@ -79,21 +79,24 @@ Liberapay.init = function() {
         $(this).children('input[type="radio"]').prop('checked', true).trigger('change');
     });
 
-    $('[data-toggle="enable"]').each(function() {
-        if (this.tagName == 'OPTION') {
-            var $option = $(this);
-            var $select = $option.parent();
-            $select.on('change', function() {
-                var $target = $($option.data('target'));
-                $target.prop('disabled', !$option.prop('selected'));
+    $('[data-toggle="enable"], [data-toggle="disable"]').each(function() {
+        var enable = this.getAttribute('data-toggle') == 'enable';
+        var $target = $(this.getAttribute('data-target'));
+        var $control = $(this);
+        (this.tagName == 'OPTION' ? $control.parent() : $control).on('change', function() {
+            var disable = enable ^ ($control.prop('checked') || $control.prop('selected'));
+            $target.prop('disabled', disable);
+            $target.find('input[type="checkbox"]').each(function() {
+                var $subelement = $(this);
+                if (disable) {
+                    $subelement.data('was-checked', $subelement.prop('checked'));
+                    $subelement.prop('checked', false);
+                } else {
+                    $subelement.prop('checked', $subelement.data('was-checked'));
+                }
+                $subelement.prop('disabled', disable);
             });
-        } else {
-            var $control = $(this);
-            $control.on('change', function() {
-                var $target = $($control.data('target'));
-                $target.prop('disabled', !$control.prop('checked'));
-            });
-        }
+        });
     });
 
     $('[data-email]').one('mouseover click', function () {

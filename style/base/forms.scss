@@ -136,8 +136,13 @@ form.buttons > .btn, span.buttons > .btn {
     white-space: normal;
 }
 
-form[disabled] button {
-    pointer-events: none;
+form:disabled, fieldset:disabled {
+    button {
+        pointer-events: none;
+    }
+    label {
+        color: $gray-light;
+    }
 }
 
 .btn-block + p {

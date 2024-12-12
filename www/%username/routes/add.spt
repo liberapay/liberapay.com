@@ -23,8 +23,9 @@ if request.method == 'POST':
             "The payment processor {name} returned an error: “{error_message}”.",
             name='Stripe', error_message=repr_stripe_error(e)
         ))
-    if body.parse_boolean('set_as_default', default=False):
-        route.set_as_default()
+    if not route.one_off:
+        if body.parse_boolean('set_as_default', default=False):
+            route.set_as_default()
     postal_address = {
         k: body.get('postal_address.' + k) for k in constants.POSTAL_ADDRESS_KEYS_LIBERAPAY
     }
@@ -76,13 +77,15 @@ title = _("Add a payment instrument")
                 name='<a href="https://stripe.com/" target="_blank" rel="noopener noreferrer">Stripe</a>'|safe
             ) }}</p>
             <label>
-                <input type="checkbox" name="one_off" value="true" />
+                <input type="checkbox" name="one_off" value="true" data-toggle="disable" data-target="#set-as-default" />
                 {{ _("Forget this card number after one payment.") }}
             </label><br>
+            <fieldset id="set-as-default">
             <label>
                 <input type="checkbox" name="set_as_default" value="true" checked />
                 {{ _("Use this payment instrument by default for future payments") }}
             </label>
+            </fieldset>
         </fieldset>
         % elif network == 'stripe-sdd'
         <fieldset id="iban-form" class="form-group">
@@ -106,13 +109,15 @@ title = _("Add a payment instrument")
                 provider='<a href="https://stripe.com/" target="_blank" rel="noopener noreferrer">Stripe</a>'|safe
             ) }}</p>
             <label>
-                <input type="checkbox" name="one_off" value="true" />
+                <input type="checkbox" name="one_off" value="true" data-toggle="disable" data-target="#set-as-default" />
                 {{ _("Forget this bank account number after one payment.") }}
             </label><br>
+            <fieldset id="set-as-default">
             <label>
                 <input type="checkbox" name="set_as_default_for" value="EUR" checked />
                 {{ _("Use this payment instrument by default for future payments") }}
             </label>
+            </fieldset>
         </fieldset>
         % endif
         <p>{{ _(
