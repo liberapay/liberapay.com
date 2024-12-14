@@ -291,12 +291,19 @@ class ExchangeRoute(Model):
             return
         elif self.network == 'stripe-sdd':
             if self.address.startswith('pm_'):
-                mandate = stripe.Mandate.retrieve(self.mandate)
-                return mandate.payment_method_details.sepa_debit.url
+                if self.mandate:
+                    mandate = stripe.Mandate.retrieve(self.mandate)
+                    return mandate.payment_method_details.sepa_debit.url
+                else:
+                    website.tell_sentry(Warning(
+                        f"{self!r}.mandate is unexpectedly None"
+                    ))
+                    return
             else:
                 return self.stripe_source.sepa_debit.mandate_url
         else:
-            raise NotImplementedError(self.network)
+            website.tell_sentry(NotImplementedError(self.network))
+            return
 
     def get_partial_number(self):
         if self.network == 'stripe-card':
