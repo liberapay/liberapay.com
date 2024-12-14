@@ -133,7 +133,9 @@ class ExchangeRoute(Model):
         else:
             customer_id = stripe.Customer.create(
                 email=participant.get_email_address(),
+                metadata={'participant_id': participant.id},
                 payment_method=pm.id,
+                preferred_locales=[participant.email_lang],
                 idempotency_key='create_customer_for_participant_%i_with_%s' % (
                     participant.id, pm.id
                 ),
@@ -175,46 +177,6 @@ class ExchangeRoute(Model):
             )
             route.set_mandate(si.mandate)
             assert not si.next_action, si.next_action
-        return route
-
-    @classmethod
-    def attach_stripe_source(cls, participant, source, one_off):
-        if source.type == 'sepa_debit':
-            network = 'stripe-sdd'
-        elif source.type == 'card':
-            network = 'stripe-card'
-        else:
-            raise NotImplementedError(source.type)
-        customer_id = cls.db.one("""
-            SELECT remote_user_id
-              FROM exchange_routes
-             WHERE participant = %s
-               AND network::text LIKE 'stripe-%%'
-             LIMIT 1
-        """, (participant.id,))
-        if customer_id:
-            customer = stripe.Customer.retrieve(customer_id)
-            customer.sources.create(
-                source=source.id,
-                idempotency_key='attach_%s_to_%s' % (source.id, customer_id),
-            )
-            del customer
-        else:
-            customer_id = stripe.Customer.create(
-                email=source.owner.email,
-                source=source.id,
-                idempotency_key='create_customer_for_participant_%i_with_%s' % (
-                    participant.id, source.id
-                ),
-            ).id
-        source_country = getattr(getattr(source, source.type), 'country', None)
-        source_currency = getattr(getattr(source, source.type), 'currency', None)
-        route = ExchangeRoute.insert(
-            participant, network, source.id, source.status,
-            one_off=one_off, remote_user_id=customer_id,
-            country=source_country, currency=source_currency,
-        )
-        route.stripe_source = source
         return route
 
     def invalidate(self):
@@ -329,12 +291,19 @@ class ExchangeRoute(Model):
             return
         elif self.network == 'stripe-sdd':
             if self.address.startswith('pm_'):
-                mandate = stripe.Mandate.retrieve(self.mandate)
-                return mandate.payment_method_details.sepa_debit.url
+                if self.mandate:
+                    mandate = stripe.Mandate.retrieve(self.mandate)
+                    return mandate.payment_method_details.sepa_debit.url
+                else:
+                    website.tell_sentry(Warning(
+                        f"{self!r}.mandate is unexpectedly None"
+                    ))
+                    return
             else:
                 return self.stripe_source.sepa_debit.mandate_url
         else:
-            raise NotImplementedError(self.network)
+            website.tell_sentry(NotImplementedError(self.network))
+            return
 
     def get_partial_number(self):
         if self.network == 'stripe-card':

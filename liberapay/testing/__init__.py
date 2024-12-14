@@ -8,6 +8,7 @@ from os.path import dirname, join, realpath
 import unittest
 
 import html5lib
+import pando
 from pando.testing.client import Client
 from pando.utils import utcnow
 from psycopg2 import IntegrityError, InternalError
@@ -62,6 +63,7 @@ class ClientWithAuth(Client):
     def build_wsgi_environ(self, method, *a, **kw):
         """Extend base class to support authenticating as a certain user.
         """
+        kw.setdefault('HTTP_USER_AGENT', f"Pando-test-client/{pando.__version__}")
 
         # csrf - for both anon and authenticated
         csrf_token = kw.get('csrf_token', 'ThisIsATokenThatIsThirtyTwoBytes')

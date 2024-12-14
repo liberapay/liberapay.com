@@ -12,7 +12,7 @@ from liberapay.payin.common import (
 )
 from liberapay.payin.prospect import PayinProspect
 from liberapay.payin.stripe import (
-    charge, create_source_from_token, repr_stripe_error, settle_payin,
+    charge, repr_stripe_error, settle_payin,
 )
 from liberapay.utils import check_address_v2, get_participant
 
@@ -79,18 +79,7 @@ if request.method == 'POST':
         postal_address = None
 
     try:
-        if 'token' in body:
-            return_url = payer.url('giving/pay/stripe/complete')
-            one_off = body.get('keep') != 'true'
-            owner_info = {
-                'email': payer.get_email_address(),
-                'name': body.get('owner.name'),
-            }
-            source = create_source_from_token(
-                body.word('token'), one_off, payin_amount, owner_info, return_url
-            )
-            route = ExchangeRoute.attach_stripe_source(payer, source, one_off)
-        elif 'stripe_pm_id' in body:
+        if 'stripe_pm_id' in body:
             one_off = body.get('keep') != 'true'
             pm = stripe.PaymentMethod.retrieve(body.word('stripe_pm_id'))
             route = ExchangeRoute.attach_stripe_payment_method(payer, pm, one_off)
@@ -99,11 +88,12 @@ if request.method == 'POST':
             if route is None:
                 raise response.invalid_input(body.get('route'), 'route', 'body')
             route.sync_status()
-        if body.parse_boolean('set_as_default', default=False):
-            route.set_as_default()
-        set_as_default_for = body.get_currency('set_as_default_for', None)
-        if set_as_default_for:
-            route.set_as_default_for(set_as_default_for)
+        if not route.one_off:
+            if body.parse_boolean('set_as_default', default=False):
+                route.set_as_default()
+            set_as_default_for = body.get_currency('set_as_default_for', None)
+            if set_as_default_for:
+                route.set_as_default_for(set_as_default_for)
 
     except stripe.error.StripeError as e:
         route = None
@@ -538,9 +528,10 @@ title = _("Funding your donations")
                 name='<a href="https://stripe.com/" target="_blank" rel="noopener noreferrer">Stripe</a>'|safe
             ) }}</p>
             <label>
-                <input type="checkbox" name="keep" value="true" checked />
+                <input type="checkbox" name="keep" value="true" checked data-toggle="enable" data-target="#set-as-default" />
                 {{ _("Remember the card number for next time") }}
             </label><br>
+            <fieldset id="set-as-default">
             % if payer.donates_in_multiple_currencies
             <label>
                 <input type="checkbox" name="set_as_default_for" value="{{ payment.currency }}" checked />
@@ -553,6 +544,7 @@ title = _("Funding your donations")
                 {{ _("Use this payment instrument by default for future payments") }}
             </label>
             % endif
+            </fieldset>
             <br><br>
         </fieldset>
         % elif payment_type == 'sdd'
@@ -576,14 +568,16 @@ title = _("Funding your donations")
                 provider='<a href="https://stripe.com/" target="_blank" rel="noopener noreferrer">Stripe</a>'|safe
             ) }}</p>
             <label>
-                <input type="checkbox" name="keep" value="true" checked />
+                <input type="checkbox" name="keep" value="true" checked data-toggle="enable" data-target="#set-as-default" />
                 {{ _("Remember the bank account number for future payments") }}
             </label><br>
+            <fieldset id="set-as-default">
             <label>
                 <input type="checkbox" name="set_as_default_for" value="{{ payment.currency }}" checked />
                 {{ _("Use this payment instrument by default for future payments in {currency}",
                      currency=Currency(payment.currency)) }}
             </label><br>
+            </fieldset>
         </fieldset>
         % endif
 

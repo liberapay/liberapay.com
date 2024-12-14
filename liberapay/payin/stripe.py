@@ -61,25 +61,6 @@ def get_partial_iban(sepa_debit):
     return '%s⋯%s' % (sepa_debit.country, sepa_debit.last4)
 
 
-def create_source_from_token(token_id, one_off, amount, owner_info, return_url):
-    token = stripe.Token.retrieve(token_id)
-    if token.type == 'bank_account':
-        source_type = 'sepa_debit'
-    elif token.type == 'card':
-        source_type = 'card'
-    else:
-        raise NotImplementedError(token.type)
-    return stripe.Source.create(
-        amount=Money_to_int(amount) if one_off and amount else None,
-        owner=owner_info,
-        redirect={'return_url': return_url},
-        token=token.id,
-        type=source_type,
-        usage=('single_use' if one_off and amount and source_type == 'card' else 'reusable'),
-        idempotency_key='create_source_from_%s' % token.id,
-    )
-
-
 def charge(db, payin, payer, route, update_donor=True):
     """Initiate the Charge for the given payin.
 
