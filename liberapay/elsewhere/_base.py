@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from functools import cached_property
 import hashlib
 import json
 import logging
@@ -9,7 +10,6 @@ import warnings
 import xml.etree.ElementTree as ET
 
 from babel.dates import format_timedelta
-from cached_property import cached_property
 from dateutil.parser import parse as parse_date
 from pando.utils import utc
 from oauthlib.oauth2 import BackendApplicationClient, InvalidGrantError, TokenExpiredError

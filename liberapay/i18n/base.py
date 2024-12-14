@@ -1,6 +1,7 @@
 from collections import namedtuple
 from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
+from functools import cached_property
 from sys import intern
 from unicodedata import combining, normalize
 import warnings
@@ -9,7 +10,6 @@ import babel.core
 from babel.dates import format_date, format_datetime, format_time, format_timedelta
 from babel.messages.pofile import Catalog
 from babel.numbers import parse_pattern
-from cached_property import cached_property
 from markupsafe import Markup
 import opencc
 from pando.utils import utcnow

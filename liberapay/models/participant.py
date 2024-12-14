@@ -3,6 +3,7 @@ from collections import defaultdict
 from datetime import date, timedelta
 from decimal import Decimal
 from email.utils import formataddr
+from functools import cached_property
 from hashlib import pbkdf2_hmac, md5, sha1
 from operator import attrgetter, itemgetter
 from os import urandom
@@ -15,7 +16,6 @@ from urllib.parse import quote as urlquote, urlencode
 import uuid
 
 import aspen_jinja2_renderer
-from cached_property import cached_property
 from dateutil.parser import parse as parse_date
 from dns.exception import DNSException
 from dns.resolver import Cache as DNSCache, Resolver as DNSResolver
