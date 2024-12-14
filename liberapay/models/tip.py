@@ -1,6 +1,6 @@
 from datetime import timedelta
+from functools import cached_property
 
-from cached_property import cached_property
 from postgres.orm import Model
 
 

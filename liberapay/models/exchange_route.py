@@ -1,7 +1,7 @@
 from calendar import monthrange
 from datetime import date
+from functools import cached_property
 
-from cached_property import cached_property
 from postgres.orm import Model
 import stripe
 

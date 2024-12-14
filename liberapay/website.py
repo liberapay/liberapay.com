@@ -5,10 +5,10 @@ To avoid circular imports this module should not import any other liberapay subm
 
 from contextvars import ContextVar, copy_context
 from datetime import timedelta
+from functools import cached_property
 import logging
 import os
 
-from cached_property import cached_property
 from environment import Environment, is_yesish
 from markupsafe import Markup
 from pando.utils import utcnow
