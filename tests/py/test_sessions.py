@@ -743,6 +743,20 @@ class TestSessions(Harness):
         assert new_session_secret != initial_session.secret
         assert new_session_secret.endswith('.ro')
 
+    def test_read_only_session_eventually_expires(self):
+        alice = self.make_participant('alice')
+        alice.session = alice.start_session(suffix='.ro')
+        self.db.run("UPDATE user_secrets SET mtime = mtime - interval '40 days'")
+        r = self.client.GET('/alice/edit/username', auth_as=alice, raise_immediately=False)
+        assert r.code == 403, r.text
+        assert r.headers.cookie[SESSION].value == f'{alice.id}:!:'
+        r = self.client.GET(
+            '/alice/edit/username',
+            HTTP_COOKIE=f"session={alice.id}:!:",
+            raise_immediately=False,
+        )
+        assert r.code == 403, r.text
+
     def test_long_lived_session_tokens_are_regularly_regenerated(self):
         alice = self.make_participant('alice')
         alice.authenticated = True
@@ -882,3 +896,30 @@ class TestSessions(Harness):
                AND id >= 800
         """, (alice.id,))
         assert not constant_session
+
+    def test_invalid_session_cookies(self):
+        r = self.client.GET('/about/me/', HTTP_COOKIE='session=::', raise_immediately=False)
+        assert r.code == 403, r.text
+        r = self.client.GET('/about/me/', HTTP_COOKIE='session=_:_:_', raise_immediately=False)
+        assert r.code == 403, r.text
+        r = self.client.GET('/about/me/', HTTP_COOKIE='session=0:0:0', raise_immediately=False)
+        assert r.code == 403, r.text
+        r = self.client.GET('/about/me/', HTTP_COOKIE='session=1:1:1', raise_immediately=False)
+        assert r.code == 403, r.text
+        alice = self.make_participant('alice')
+        r = self.client.GET('/about/me/', HTTP_COOKIE=f'session={alice.id}::', raise_immediately=False)
+        assert r.code == 403, r.text
+        r = self.client.GET('/about/me/', HTTP_COOKIE=f'session={alice.id}:0:', raise_immediately=False)
+        assert r.code == 403, r.text
+        r = self.client.GET('/about/me/', HTTP_COOKIE=f'session={alice.id}:1:', raise_immediately=False)
+        assert r.code == 403, r.text
+        r = self.client.GET('/about/me/', HTTP_COOKIE=f'session={alice.id}:1:_', raise_immediately=False)
+        assert r.code == 403, r.text
+        session = alice.start_session(suffix='.pw')
+        incorrect_secret = str(ord(session.secret[0]) ^ 1) + session.secret[1:]
+        r = self.client.GET(
+            '/about/me/',
+            HTTP_COOKIE=f'session={alice.id}:{session.id}:{incorrect_secret}',
+            raise_immediately=False,
+        )
+        assert r.code == 403, r.text
