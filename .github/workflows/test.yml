@@ -32,10 +32,6 @@ jobs:
         run: createdb liberapay_tests
       - name: Create the test database schema
         run: DATABASE_URL=liberapay_tests ./recreate-schema.sh test
-      - name: Install Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
       - name: Install Python 3.12
         uses: actions/setup-python@v4
         with:
