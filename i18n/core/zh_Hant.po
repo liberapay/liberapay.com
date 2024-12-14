@@ -1953,11 +1953,11 @@ msgstr "你正在使用沙盒模式，請勿輸入真實的付款或個人信息
 
 #, fuzzy
 msgid "The credentials have been generated."
-msgstr "憑證已產生。"
+msgstr "已生成憑據。"
 
 #, fuzzy
 msgid "The credentials have been revoked."
-msgstr "憑證已被撤銷。"
+msgstr "已撤銷憑據。"
 
 #, fuzzy
 msgid "Constant session"
@@ -1965,35 +1965,35 @@ msgstr "持續會話"
 
 #, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
-msgstr "您可以透過在請求中包含以下 HTTP 標頭來自動從您的帳戶下載私人資訊："
+msgstr "您可以在請求中加入以下 HTTP 標頭，自動下載賬戶中的私人信息："
 
 #, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "例如，您可以透過執行以下命令來下載目前活躍訂閱會員的清單："
+msgstr "例如，您可以通過執行以下命令下載您當前的活躍贊助列表："
 
 #, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
-msgstr "為了最大限度地降低您的風險，這些憑證只能用於獲取數據，而不能修改您帳戶中的任何內容，並且如果一年未使用，它們將自動過期。"
+msgstr "爲了將你的風險降到最低，這些憑據只能用於獲取數據，不能修改你的賬戶中的任何內容，如果一年內未使用，它們將自動過期。"
 
 #, fuzzy
 msgid "Revoke credentials"
-msgstr "撤銷憑證"
+msgstr "撤銷憑據"
 
 #, fuzzy
 msgid "The credentials have expired."
-msgstr "憑證已過期。"
+msgstr "憑據已過期。"
 
 #, fuzzy
 msgid "Regenerate credentials"
-msgstr "重新產生憑證"
+msgstr "重新生成憑據"
 
 #, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "為了簡化從您的帳戶自動下載私人資訊的過程，您可以產生長期有效的唯讀憑證。"
+msgstr "爲了簡化自動下載賬戶私人信息，你可以生成長期的只讀憑據。"
 
 #, fuzzy
 msgid "Generate credentials"
-msgstr "產生憑證"
+msgstr "生成憑據"
 
 msgid "Dashboard"
 msgstr "儀控表"
@@ -2171,9 +2171,6 @@ msgstr[0] "您目前已連接{n}的帳號："
 
 msgid "Connect an account"
 msgstr "連接帳號"
-
-msgid "Our YouTube integration has been disabled by Google. We're working on re-implementing this feature in a different way."
-msgstr "我們的 YouTube 集成已被 Google 禁用。我們正努力以不同的方式重新實現此功能。"
 
 msgid "I'm grateful for gifts, but don't have a specific funding goal."
 msgstr "我很感謝能收到禮物，並沒有特定的籌款目標。"
@@ -4095,6 +4092,12 @@ msgstr "什麼是付款處理費用？"
 #, python-brace-format
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "費用會因支付處理機構、支付方式、國家及貨幣而異。去年，Stripe 處理的付款平均費用百分比為 {average_fee_stripe}，PayPal 處理的付款平均百分比為 {average_fee_paypal}。"
+
+msgid "How and when do I receive the money sent by my patrons?"
+msgstr ""
+
+msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
+msgstr ""
 
 msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "為什麼我會在 Stripe 控制面板中看到部分退款?"
