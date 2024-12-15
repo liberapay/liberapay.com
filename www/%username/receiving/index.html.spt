@@ -64,6 +64,23 @@ recent_donation_changes = website.db.all("""
     ) }}</p>
 % endif
 
+<h3>{{ _("Income history") }}</h3>
+<noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
+<div data-charts="{{ participant.path('charts.json') }}" data-msg-empty="{{ _('No data to show.') }}">
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h4>{{ _("Income per week (in {currency})", currency=Currency(participant.main_currency)) }}</h4>
+        <div class="chart" data-chart="receipts"></div>
+        <div class="x-axis"></div>
+    </div>
+    <div class="chart-wrapper">
+        <a name="gifts"></a>
+        <h4>{{ _("Number of patrons per week") }}</h4>
+        <div class="chart" data-chart="npatrons"></div>
+        <div class="x-axis"></div>
+    </div>
+</div>
+
 % if participant.is_person
 
 % if not participant.payment_providers
@@ -109,7 +126,7 @@ recent_donation_changes = website.db.all("""
 % endif
 
 % if recent_donation_changes or participant.receiving > participant.taking
-<h3>{{ _("Details of Donations") }}</h3>
+<h3>{{ _("Details of personal donations") }}</h3>
 % if participant.taking
     <p class="text-info">{{ icon('info-sign') }} {{ _(
         "This section doesn't include data on donations through teams, it only "
@@ -123,7 +140,7 @@ recent_donation_changes = website.db.all("""
     {{ description }}<br>
 % endmacro
 
-<h4>{{ _("Recent Changes") }}</h4>
+<h4>{{ _("Recent changes to personal donations") }}</h4>
 % for change in recent_donation_changes
     % if change.old_amount is none
         {{ show_change(change, '+', 'info', _(
@@ -161,7 +178,7 @@ recent_donation_changes = website.db.all("""
 
 % set tip_distribution = participant.get_tip_distribution()[0]
 % if tip_distribution
-<h4>{{ _("Stats") }}</h4>
+<h4>{{ _("Statistics on personal donations") }}</h4>
 <div class="row">
 <div class="col-md-10 col-lg-8">
     <p>{{ _("The table below lists the donations you receive, grouped by amount.") }}</p>
@@ -198,22 +215,5 @@ recent_donation_changes = website.db.all("""
 </div>
 % endif
 % endif
-
-<h3>{{ _("History") }}</h3>
-<noscript><div class="alert alert-warning">{{ _("JavaScript is required") }}</div></noscript>
-<div data-charts="{{ participant.path('charts.json') }}" data-msg-empty="{{ _('No data to show.') }}">
-    <div class="chart-wrapper">
-        <a name="gifts"></a>
-        <h4>{{ _("Income Per Week (in {currency})", currency=Currency(participant.main_currency)) }}</h4>
-        <div class="chart" data-chart="receipts"></div>
-        <div class="x-axis"></div>
-    </div>
-    <div class="chart-wrapper">
-        <a name="gifts"></a>
-        <h4>{{ _("Number of Patrons Per Week") }}</h4>
-        <div class="chart" data-chart="npatrons"></div>
-        <div class="x-axis"></div>
-    </div>
-</div>
 
 % endblock
