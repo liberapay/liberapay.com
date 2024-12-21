@@ -30,7 +30,7 @@ import requests
 
 from liberapay.billing.payday import compute_next_payday_date
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, AVATAR_QUERY, BASE64URL_CHARS, CURRENCIES,
+    ASCII_ALLOWED_IN_USERNAME, BASE64URL_CHARS, CURRENCIES,
     DONATION_LIMITS, EMAIL_VERIFICATION_TIMEOUT, EVENTS, HTML_A,
     PASSWORD_MAX_SIZE, PASSWORD_MIN_SIZE, PAYPAL_CURRENCIES,
     PERIOD_CONVERSION_RATES, PRIVILEGES,
@@ -87,6 +87,7 @@ from liberapay.payin.prospect import PayinProspect
 from liberapay.security.crypto import constant_time_compare
 from liberapay.utils import (
     deserialize, erase_cookie, get_recordable_headers, serialize, set_cookie,
+    tweak_avatar_url,
     markdown,
 )
 from liberapay.utils.emails import (
@@ -2200,7 +2201,7 @@ class Participant(Model, MixinTeam):
 
         return new_public_name
 
-    def update_avatar(self, src=None, cursor=None, avatar_email=None, check=True):
+    def update_avatar(self, src=None, cursor=None, avatar_email=None, refresh=False):
         if self.status == 'stub':
             assert src is None
 
@@ -2274,7 +2275,6 @@ class Participant(Model, MixinTeam):
                 website.tell_sentry(e)
             avatar_id = md5(normalized_email.encode('utf8')).hexdigest()
             avatar_url = avatar_origin + '/avatar/' + avatar_id
-            avatar_url += AVATAR_QUERY
 
         elif platform is None:
             avatar_url = (cursor or self.db).one("""
@@ -2298,7 +2298,14 @@ class Participant(Model, MixinTeam):
                  LIMIT 1
             """, (self.id, platform, user_id or None))
 
-        if avatar_url and avatar_url != self.avatar_url and check and website.app_conf.check_avatar_urls:
+        avatar_url = tweak_avatar_url(avatar_url, increment=refresh)
+        check_url = (
+            avatar_url and
+            avatar_url != self.avatar_url and
+            self.status != 'stub' and
+            website.app_conf.check_avatar_urls
+        )
+        if check_url:
             # Check that the new avatar URL returns a 200.
             try:
                 r = requests.head(avatar_url, allow_redirects=True, timeout=5)

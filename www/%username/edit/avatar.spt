@@ -5,17 +5,23 @@ from liberapay.utils import form_post_success, get_participant
 participant = get_participant(state, restrict=True, allow_member=True)
 
 if request.method == 'POST':
-    src, email = request.body['src'], request.body.get('email', '')
-
-    if src not in constants.AVATAR_SOURCES:
-        raise response.invalid_input(src, 'src', 'body')
-    if email and '@' not in email:
-        raise BadEmailAddress(email)
-
-    new_avatar_url = participant.update_avatar(src+':', avatar_email=email)
+    action = request.body.get('action', 'set_source')
+    if action == 'refresh':
+        new_avatar_url = participant.update_avatar(refresh=True)
+    elif action == 'set_source':
+        src, email = request.body['src'], request.body.get('email', '')
+        if src not in constants.AVATAR_SOURCES:
+            raise response.invalid_input(src, 'src', 'body')
+        if email and '@' not in email:
+            raise BadEmailAddress(email)
+        new_avatar_url = participant.update_avatar(src+':', avatar_email=email)
+    else:
+        raise response.invalid_input(action, 'action', 'body')
     if new_avatar_url:
         msg = _("Your new avatar URL is: {0}", new_avatar_url)
-        form_post_success(state, msg=msg)
+    else:
+        msg = _("Your profile no longer has an avatar.")
+    form_post_success(state, msg=msg)
 
 else:
     src = participant.avatar_src
@@ -80,10 +86,12 @@ subhead = _("Avatar")
     </a>
     <br><br>
     % if participant.avatar_url and request.method == 'GET'
-    <button class="btn btn-default" data-action="reload" type="button">
-       {{ icon('refresh') }} <span>{{ _("Refresh") }}</span>
-    </button>
-    <noscript><span class="text-danger">{{ _("JavaScript is required") }}</span></noscript>
+    <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="btn btn-default" name="action" value="refresh">
+           {{ icon('refresh') }} <span>{{ _("Refresh") }}</span>
+        </button>
+    </form>
     % endif
     </div>
     </div>
@@ -92,6 +100,7 @@ subhead = _("Avatar")
 
     <form action="" method="POST" class="form-inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <input type="hidden" name="action" value="set_source" />
 
         <div class="form-group">
             <label for="avatar-src">{{ _("Avatar source") }}</label><br>

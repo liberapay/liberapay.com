@@ -1,6 +1,5 @@
 from datetime import timedelta
 import json
-from urllib.parse import urlsplit, urlunsplit
 import uuid
 
 from markupsafe import Markup
@@ -9,14 +8,14 @@ from pando.utils import utcnow
 from postgres.orm import Model
 from psycopg2 import IntegrityError
 
-from ..constants import AVATAR_QUERY, DOMAIN_RE, SUMMARY_MAX_SIZE
+from ..constants import DOMAIN_RE, SUMMARY_MAX_SIZE
 from ..cron import logger
 from ..elsewhere._base import (
     ElsewhereError, InvalidServerResponse, UserNotFound,
 )
 from ..exceptions import InvalidId
 from ..security.crypto import constant_time_compare
-from ..utils import excerpt_intro
+from ..utils import excerpt_intro, tweak_avatar_url
 from ..website import website
 
 
@@ -114,13 +113,7 @@ class AccountElsewhere(Model):
 
         # Clean up avatar_url
         if i.avatar_url:
-            scheme, netloc, path, query, fragment = urlsplit(i.avatar_url)
-            fragment = ''
-            if netloc.endswith('githubusercontent.com') or \
-               netloc.endswith('gravatar.com') or \
-               netloc.endswith('libravatar.org'):
-                query = AVATAR_QUERY
-            i.avatar_url = urlunsplit((scheme, netloc, path, query, fragment))
+            i.avatar_url = tweak_avatar_url(i.avatar_url)
 
         d = dict(i.__dict__)
         d.pop('email', None)
@@ -193,7 +186,7 @@ class AccountElsewhere(Model):
                     raise
 
         # Return account after propagating avatar_url to participant
-        account.participant.update_avatar(check=False)
+        account.participant.update_avatar()
         return account
 
 
