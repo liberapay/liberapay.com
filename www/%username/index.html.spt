@@ -315,13 +315,13 @@ show_income = not participant.hide_receiving and participant.accepts_tips
         <div id="charts-container" data-msg-empty="{{ _('No data to show.') }}">
             <div class="chart-wrapper">
                 <a name="gifts"></a>
-                <h4>{{ _("Income Per Week (in {currency})", currency=Currency(participant.main_currency)) }}</h4>
+                <h4>{{ _("Income per week (in {currency})", currency=Currency(participant.main_currency)) }}</h4>
                 <div class="chart" data-chart="receipts"></div>
                 <div class="x-axis"></div>
             </div>
             <div class="chart-wrapper">
                 <a name="gifts"></a>
-                <h4>{{ _("Number of Patrons Per Week") }}</h4>
+                <h4>{{ _("Number of patrons per week") }}</h4>
                 <div class="chart" data-chart="npatrons"></div>
                 <div class="x-axis"></div>
             </div>
