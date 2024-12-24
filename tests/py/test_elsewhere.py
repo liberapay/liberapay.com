@@ -119,10 +119,10 @@ class TestElsewhere(EmailHarness):
         alice = alice.refetch()
         assert alice.avatar_url == libravatar_url
         alice.update_avatar(src='github:')
-        assert alice.avatar_url == 'fake-github-avatar-url'
+        assert alice.avatar_url == 'fake-github-avatar-url?s=160&d=404&=1'
         alice_github_info.avatar_url = 'new-fake-github-avatar-url'
         alice_github = AccountElsewhere.upsert(alice_github_info)
-        assert alice_github.participant.avatar_url == 'new-fake-github-avatar-url'
+        assert alice_github.participant.avatar_url == 'new-fake-github-avatar-url?s=160&d=404&=1'
 
     @mock.patch('liberapay.elsewhere._base.Platform.get_user_info')
     def test_user_pages(self, get_user_info):

@@ -9,6 +9,7 @@ from operator import getitem
 import os
 import re
 import socket
+from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
 from pando import Response, json
 from pando.utils import to_rfc822, utcnow
@@ -730,3 +731,23 @@ def get_recordable_headers(request):
         for k, v in request.headers.items()
         if k != b'Cookie'
     }
+
+
+def tweak_avatar_url(avatar_url, increment=True):
+    if not avatar_url:
+        return ''
+    # Parse the URL
+    scheme, netloc, path, query, fragment = urlsplit(avatar_url)
+    query = parse_qs(query)
+    # Add parameters inherited from Gravatar (https://wiki.libravatar.org/api/)
+    query['s'] = '160'  # size = 160 pixels
+    query['d'] = '404'  # default = a 404 HTTP response
+    # Increment the serial number to avoid stale images in a browser's cache
+    try:
+        query[''] = str(int(query[''][-1]) + int(increment))
+    except (KeyError, ValueError):
+        query[''] = '1'
+    # Drop any fragment that might be there
+    fragment = ''
+    # Return the modified URL
+    return urlunsplit((scheme, netloc, path, urlencode(query), fragment))
