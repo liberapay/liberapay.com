@@ -31,6 +31,7 @@ ACCOUNT_MARK_CLASSES = {
     'controversial': 'text-muted',
     'irrelevant': 'text-muted',
     'misleading': 'text-muted',
+    'obsolete': 'text-warning',
     'out-of-scope': 'text-warning',
     'unverifiable': 'text-warning',
     'fraud': 'text-danger',

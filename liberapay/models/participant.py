@@ -4070,10 +4070,10 @@ def send_account_flagged_notifications():
           FROM events e
           JOIN participants p ON p.id = e.participant
          WHERE e.type = 'flags_changed'
-           AND e.payload->>'marked_as' IN ('out-of-scope', 'unverifiable')
+           AND e.payload->>'marked_as' IN ('obsolete', 'out-of-scope', 'unverifiable')
            AND e.ts < (current_timestamp - interval '1 hour')
            AND e.ts > (current_timestamp - interval '48 hours')
-           AND p.marked_as IN ('out-of-scope', 'unverifiable')
+           AND p.marked_as IN ('obsolete', 'out-of-scope', 'unverifiable')
            AND NOT EXISTS (
                    SELECT 1
                      FROM notifications n

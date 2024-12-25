@@ -4,6 +4,8 @@
 [---] text/html
 % if reason == 'unverifiable'
     <p>{{ _("The information you've put in your Liberapay profile isn't sufficient to verify that your attempt to collect donations is legitimate.") }}</p>
+% elif reason == 'obsolete'
+    <p>{{ _("The information in your Liberapay profile is too old to enable us to check that your use of our service is still legitimate.") }}</p>
 % elif assert(reason == 'out-of-scope', "unexpected value %r" % reason)
     <p>{{ _(
         "You appear to be using Liberapay for something other than the {link_start}authorized use cases{link_end}.",

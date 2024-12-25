@@ -43,6 +43,11 @@
                 misleading
             </label>
             <label class="text-warning">
+                <input type="radio" name="mark_as" value="obsolete" {{
+                       'checked' if p.marked_as == 'obsolete' else '' }} />
+                obsolete
+            </label>
+            <label class="text-warning">
                 <input type="radio" name="mark_as" value="unverifiable" {{
                        'checked' if p.marked_as == 'unverifiable' else '' }} />
                 unverifiable
