@@ -556,6 +556,7 @@ class MoneyAutoConvertDict(dict):
 def fetch_currency_exchange_rates(db=None):
     db = db or website.db
     currencies = set(db.one("SELECT array_to_json(enum_range(NULL::currency))"))
+    currencies.remove('EUR')
     r = requests.get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
     rates = xmltodict.parse(r.text)['gesmes:Envelope']['Cube']['Cube']['Cube']
     for fx in rates:
@@ -570,6 +571,7 @@ def fetch_currency_exchange_rates(db=None):
             ON CONFLICT (source_currency, target_currency) DO UPDATE
                     SET rate = excluded.rate
         """, dict(target=currency, rate=Decimal(fx['@rate'])))
+        currencies.remove(currency)
     # Update the local cache, unless it hasn't been created yet.
     if hasattr(website, 'currency_exchange_rates'):
         website.currency_exchange_rates = get_currency_exchange_rates(db)
@@ -577,6 +579,11 @@ def fetch_currency_exchange_rates(db=None):
     # with the new exchange rates.
     for d in MoneyAutoConvertDict.instances:
         d.clear()
+    # Check for missing exchange rates.
+    if currencies:
+        raise Exception(
+            f"missing exchange rates for currencies {', '.join(currencies)}"
+        )
 
 
 def get_currency_exchange_rates(db):
