@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-12-24 11:17+0000\n"
-"Last-Translator: DeepL <noreply-mt-deepl@weblate.org>\n"
+"PO-Revision-Date: 2025-01-01 13:01+0000\n"
+"Last-Translator: Jelv <post@jelv.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/liberapay/core/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -1967,47 +1967,36 @@ msgstr "Liberapay's systeem voor periodieke donaties is ontworpen om makers een 
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Je bent in de sandbox-modus, voer geen echte betalingen of persoonlijke gegevens in!"
 
-#, fuzzy
 msgid "The credentials have been generated."
-msgstr "De referenties zijn gegenereerd."
+msgstr "De gegevens zijn gegenereerd."
 
-#, fuzzy
 msgid "The credentials have been revoked."
-msgstr "De geloofsbrieven zijn ingetrokken."
+msgstr "De gegevens zijn ingetrokken."
 
-#, fuzzy
 msgid "Constant session"
 msgstr "Constante sessie"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "U kunt het downloaden van privégegevens van uw account automatiseren door de volgende HTTP-header op te nemen in uw verzoeken:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
 msgstr "U kunt bijvoorbeeld de lijst van uw huidige actieve donateurs downloaden door het volgende commando uit te voeren:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
-msgstr "Om de risico's voor u tot een minimum te beperken, kunnen deze referenties alleen worden gebruikt om gegevens op te halen, niet om iets in uw account te wijzigen, en ze verlopen automatisch als ze een jaar lang niet zijn gebruikt."
+msgstr "Om de risico's voor u tot een minimum te beperken, kunnen deze gegevens alleen worden gebruikt om gegevens op te halen, niet om iets in uw account te wijzigen, en ze verlopen automatisch als ze een jaar lang niet zijn gebruikt."
 
-#, fuzzy
 msgid "Revoke credentials"
 msgstr "Inloggegevens intrekken"
 
-#, fuzzy
 msgid "The credentials have expired."
-msgstr "De referenties zijn verlopen."
+msgstr "De inloggegevens zijn verlopen."
 
-#, fuzzy
 msgid "Regenerate credentials"
-msgstr "Regenereren referenties"
+msgstr "Regenereren inloggegevens"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "Om het automatisch downloaden van privégegevens uit uw account te vereenvoudigen, kunt u langlevende alleen-lezen referenties aanmaken."
+msgstr "Om het automatisch downloaden van privégegevens uit uw account te vereenvoudigen, kunt u langlevende alleen-lezen inloggegevens aanmaken."
 
-#, fuzzy
 msgid "Generate credentials"
 msgstr "Inloggegevens genereren"
 
@@ -2109,7 +2098,6 @@ msgstr "Vernieuwde Payment Services Directive"
 msgid "Your new avatar URL is: {0}"
 msgstr "Je nieuwe avatar URL is: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
 msgstr "Uw profiel heeft geen avatar meer."
 
@@ -2983,11 +2971,10 @@ msgstr "Bekijk de inkomensontwikkeling"
 msgid "No data to show."
 msgstr "Geen gegevens om te tonen."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
 msgstr "Inkomen per week (in {currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
 msgstr "Aantal donateurs per week"
 
@@ -3547,7 +3534,6 @@ msgstr "Belastingen"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Deze betaling is een donatie, er worden geen goederen of diensten geleverd in ruil, er is geen belasting geïnd door Liberapay."
 
-#, fuzzy
 msgid "Income history"
 msgstr "Inkomensgeschiedenis"
 
@@ -3558,14 +3544,12 @@ msgstr "Je kunt geen nieuwe donaties ontvangen totdat je de betalingsverwerking 
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Donaties via teams vormen {income_percent} van je inkomen ({team_income} van {total_income}) en {patrons_percent} van je donoren ({nteampatrons} van {npatrons})."
 
-#, fuzzy
 msgid "Details of personal donations"
 msgstr "Details van persoonlijke donaties"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Deze sectie bevat geen gegevens over donaties via teams, het toont alleen de donaties die je persoonlijk ontvangt."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
 msgstr "Recente wijzigingen in persoonlijke donaties"
 
@@ -3589,7 +3573,6 @@ msgstr "Een donatie is verlaagd van {old_amount} per week naar {new_amount}."
 msgid "A donation of {amount} per week has been restarted."
 msgstr "Een donatie van {amount} per week is opnieuw gestart."
 
-#, fuzzy
 msgid "Statistics on personal donations"
 msgstr "Statistieken over persoonlijke donaties"
 
@@ -4142,11 +4125,9 @@ msgstr "Wat is de provisie?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "De kosten variëren per betalingsverwerker, betalingsmethode, land en valuta. In het afgelopen jaar bedroegen de gemiddelde kostenpercentages {average_fee_stripe} voor de betalingen die door Stripe werden verwerkt en {average_fee_paypal} voor de betalingen die door PayPal werden verwerkt."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
 msgstr "Hoe en wanneer ontvang ik het geld van mijn donateurs?"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
 msgstr "Geld dat door een donateur wordt overgemaakt, gaat onmiddellijk naar uw Stripe- of PayPal-rekening. Standaard stuurt Stripe het geld dan automatisch naar uw bankrekening, terwijl PayPal het gewoon opslaat totdat u het uitgeeft of opneemt."
 
