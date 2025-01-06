@@ -9,6 +9,7 @@ INSERT INTO app_conf (key, value) VALUES
     ('check_email_domains', 'true'::jsonb),
     ('check_email_servers', 'true'::jsonb),
     ('cron_intervals', jsonb_build_object()),
+    ('fixer_access_key', 'null'::jsonb),
     ('github_callback', '"http://127.0.0.1:8339/on/github/associate"'::jsonb),
     ('github_id', '"18891d01e40e5aef93b8"'::jsonb),
     ('github_secret', '"46f75669895e96029d57b64832d6f2c8e6291a0e"'::jsonb),
