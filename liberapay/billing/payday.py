@@ -497,10 +497,9 @@ class Payday:
                 if tip_amount == 0:
                     continue
                 assert tip_amount > 0
-                assert tip_amount <= tip.full_amount
-                tip.amount = tip_amount
             else:
-                tip.amount = (tip.funded_amount * tips_ratio).round_up()
+                tip_amount = (tip.funded_amount * tips_ratio).round_up()
+            tip.amount = min(tip_amount, tip.funded_amount)
             sorted_takes = chain(
                 takes_by_preferred_currency.get(tip_currency, ()),
                 takes_by_secondary_currency.get(tip_currency, ()),
@@ -540,6 +539,7 @@ class Payday:
         # members who have now left the team or have zeroed takes.
         transfers = list(transfers.values())
         leftover = total_income - MoneyBasket(t.amount for t in transfers)
+        assert leftover >= 0
         if leftover and leftover_takes:
             leftover_takes.sort(key=lambda t: t.member)
             leftover_takes_fuzzy_sum = MoneyBasket(
