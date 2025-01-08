@@ -257,7 +257,7 @@ PAYOUT_COUNTRIES = {
 
 # https://developer.paypal.com/docs/api/reference/currency-codes/
 PAYPAL_CURRENCIES = set("""
-    AUD CAD CHF CZK DKK EUR GBP HKD HUF ILS JPY MXN NOK NZD PHP PLN RUB SEK SGD
+    AUD BRL CAD CHF CZK DKK EUR GBP HKD HUF ILS JPY MXN NOK NZD PHP PLN SEK SGD
     THB TWD USD
 """.split())
 
