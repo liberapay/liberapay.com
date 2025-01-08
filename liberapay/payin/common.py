@@ -743,7 +743,7 @@ def prepare_payin_transfer(
                 'pre', clock_timestamp())
      RETURNING *
     """, (payin.id, payin.payer, recipient.id, destination.pk, context, amount,
-          unit_amount, n_units, period, team, visibility))
+          unit_amount, n_units, period, team, abs(visibility)))
 
 
 def update_payin_transfer(
