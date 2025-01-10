@@ -393,9 +393,9 @@ class MoneyBasket:
 
     def _compare(self, op, other):
         if isinstance(other, self.__class__):
-            return self.amounts == other.amounts
+            return self.amounts.items() == other.amounts.items()
         elif other == 0:
-            return any(op(v, 0) for v in self.amounts.values())
+            return all(op(v, 0) for v in self.amounts.values())
         else:
             raise TypeError(
                 "can't compare %r and %r" % (self.__class__, other.__class__)

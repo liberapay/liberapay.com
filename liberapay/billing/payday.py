@@ -539,7 +539,7 @@ class Payday:
         # members who have now left the team or have zeroed takes.
         transfers = list(transfers.values())
         leftover = total_income - MoneyBasket(t.amount for t in transfers)
-        assert leftover >= 0
+        assert leftover >= 0, "leftover is negative"
         if leftover and leftover_takes:
             leftover_takes.sort(key=lambda t: t.member)
             leftover_takes_fuzzy_sum = MoneyBasket(
