@@ -54,14 +54,13 @@ def canonize(request, response, website):
     """
     if request.path.raw.startswith('/callbacks/'):
         # Don't redirect callbacks
-        if request.path.raw[-1] == '/':
+        if request.path.raw.endswith('/'):
             # Remove trailing slash
             l = request.line
             scheme, netloc, path, query, fragment = urlsplit(l.uri)
-            assert path[-1] == '/'  # sanity check
-            path = path[:-1]
+            path = path.removesuffix(b'/')
             new_uri = urlunsplit((scheme, netloc, path, query, fragment))
-            request.line = Line(l.method.raw, new_uri, l.version.raw)
+            request.line = Line(l.method, new_uri, l.version)
         return
     canonical_host = website.canonical_host
     canonical_scheme = website.canonical_scheme
