@@ -83,7 +83,7 @@ recent = website.db.one("""
 
     <div class="row section">
     <div class="col-md-6">
-        <h2 class="text-primary">{{ _("Donate") }}</h2>
+        <h2 class="text-primary">{{ pgettext("home page", "Donate") }}</h2>
         % include "templates/pitch-donors.html"
         % from "templates/macros/buttons.html" import find_donees with context
         <div class="buttons">{{ find_donees() }}</div>
