@@ -79,14 +79,14 @@
         ) }}</p>
         <form action="" method="GET" class="form-inline">
             <select class="form-control" name="currency">
-            % set paypal = tippee_p.payment_providers.__and__(2)
+            % set show_paypal_support = tippee_p.payment_providers > 2
             % for c, translated_currency_name in locale.supported_currencies.items()
                 % if c in accepted_currencies and c != new_currency
                 <option value="{{ c }}">
                     {{ translated_currency_name }}
                     ({{ locale.currency_symbols.get(c, c) }})
-                    % if paypal and c not in constants.PAYPAL_CURRENCIES
-                        ({{ _("not supported by PayPal") }})
+                    % if show_paypal_support and c in constants.PAYPAL_CURRENCIES
+                        &mdash; {{ _("supported by PayPal") }}
                     % endif
                 </option>
                 % endif

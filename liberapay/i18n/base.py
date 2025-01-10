@@ -439,14 +439,31 @@ def make_currencies_map():
                 continue
             if start_date:
                 start_date = date(*start_date)
+                if start_date > today:
+                    continue
             if end_date:
                 end_date = date(*end_date)
-            if (start_date is None or start_date <= today) and (end_date is None or end_date >= today):
-                assert country not in r
-                r[country] = currency
+                if end_date < today:
+                    continue
+            if (other_currency := r.get(country)):
+                if other_currency.startswith(country):
+                    if currency.startswith(country):
+                        raise Exception(
+                            f"found more than one currency for territory {country}: "
+                            f"{currency} and {other_currency}"
+                        )
+                    else:
+                        continue
+            r[country] = currency
     for currency, (_, new_currency, _) in CURRENCY_REPLACEMENTS.items():
         if currency[:2] not in r:
             r[currency[:2]] = new_currency
+    mapped_currencies = set(r.values())
+    for currency in CURRENCIES:
+        if currency not in mapped_currencies:
+            raise Exception(
+                f"currency {currency} isn't associated to any territories"
+            )
     return r
 
 CURRENCIES_MAP = make_currencies_map()

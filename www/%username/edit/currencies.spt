@@ -78,13 +78,12 @@ subhead = _("Currencies")
                    {{ 'checked' if accept_all else '' }} />
             {{ _("Accept all currencies, including any that we may add in the future.") }}
         </label></td>
-    % for c in constants.CURRENCIES
+    % for c, localized_currency_name in locale.supported_currencies.items()
     <tr>
         <td>
-        {{ locale.title(locale.currencies.get(c, c)) }}
-                ({{ locale.currency_symbols.get(c, c) }})
-        % if c not in constants.PAYPAL_CURRENCIES
-            <small class="text-warning">({{ _("not supported by PayPal") }})</small>
+        {{ localized_currency_name }} ({{ c }})
+        % if c in constants.PAYPAL_CURRENCIES
+            {{ icon('paypal', _("supported by PayPal")) }}
         % endif
         </td>
         <td><label>

@@ -1,41 +1,53 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from decimal import (
     Decimal, InvalidOperation, ROUND_DOWN, ROUND_FLOOR, ROUND_HALF_UP, ROUND_UP,
 )
-from itertools import chain, starmap, zip_longest
+from itertools import chain
 from numbers import Number
 import operator
 from threading import Lock
 
-from pando.utils import utc
 import requests
-import xmltodict
 
 from ..exceptions import InvalidNumber
 from ..website import website
 
 
 CURRENCIES = dict.fromkeys([
-    'EUR', 'USD',
-    'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
-    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD',
-    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'
+    'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN', 'BAM',
+    'BBD', 'BDT', 'BGN', 'BIF', 'BMD', 'BND', 'BOB', 'BRL', 'BSD', 'BWP', 'BYN',
+    'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CVE', 'CZK', 'DJF',
+    'DKK', 'DOP', 'DZD', 'EGP', 'ETB', 'EUR', 'FJD', 'FKP', 'GBP', 'GEL', 'GIP',
+    'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HTG', 'HUF', 'IDR', 'ILS', 'INR',
+    'ISK', 'JMD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KRW', 'KYD', 'KZT', 'LAK',
+    'LBP', 'LKR', 'LRD', 'LSL', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP',
+    'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR',
+    'NZD', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD',
+    'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SEK', 'SGD', 'SHP', 'SLE', 'SOS', 'SRD',
+    'SZL', 'THB', 'TJS', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD',
+    'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR',
+    'ZMW',
 ])
 
 CURRENCY_REPLACEMENTS = {
-    'HRK': (Decimal('7.53450'), 'EUR', datetime(2023, 1, 1, 1, 0, 0, tzinfo=utc)),
+    'HRK': (Decimal('7.53450'), 'EUR', datetime(2023, 1, 1, 1, 0, 0, tzinfo=timezone.utc)),
 }
 
 ZERO_DECIMAL_CURRENCIES = {
-    # https://developer.paypal.com/reference/currency-codes/
-    'paypal': {'HUF', 'JPY', 'TWD'},
     # https://stripe.com/docs/currencies#presentment-currencies
     'stripe': {
         'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA', 'PYG', 'RWF',
-        'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF',
+        'VND', 'VUV', 'XAF', 'XOF', 'XPF',
     },
 }
 ZERO_DECIMAL_CURRENCIES['any'] = set(chain(*ZERO_DECIMAL_CURRENCIES.values()))
+UNDIVIDABLE_CURRENCIES = {
+    # https://developer.paypal.com/reference/currency-codes/
+    'paypal': {'HUF', 'JPY', 'TWD'},
+    # https://stripe.com/docs/currencies#presentment-currencies
+    'stripe': ZERO_DECIMAL_CURRENCIES['stripe'] | {'HUF', 'ISK', 'TWD', 'UGX'},
+}
+UNDIVIDABLE_CURRENCIES['any'] = set(chain(*UNDIVIDABLE_CURRENCIES.values()))
 
 
 D_CENT = Decimal('0.01')
@@ -52,7 +64,7 @@ class CurrencyMismatch(ValueError):
 class _Minimums(dict):
     def __missing__(self, currency):
         minimum = Money(
-            D_ONE if currency in ZERO_DECIMAL_CURRENCIES['any'] else D_CENT,
+            D_ONE if currency in UNDIVIDABLE_CURRENCIES['any'] else D_CENT,
             currency
         )
         self[currency] = minimum
@@ -61,7 +73,7 @@ class _Minimums(dict):
 class _Zeros(dict):
     def __missing__(self, currency):
         zero = Money(
-            D_ZERO if currency in ZERO_DECIMAL_CURRENCIES['any'] else D_ZERO_CENT,
+            D_ZERO if currency in UNDIVIDABLE_CURRENCIES['any'] else D_ZERO_CENT,
             currency
         )
         self[currency] = zero
@@ -331,34 +343,16 @@ class Money:
         return self.ZEROS[self.currency]
 
 
-class MoneyBasketAmounts:
+class MoneyBasketAmounts(dict):
 
-    __slots__ = tuple(CURRENCIES)
-
-    def __init__(self):
-        for currency in self.__slots__:
-            self[currency] = Money.ZEROS[currency].amount
-
-    def __eq__(self, other):
-        return all(starmap(tuple.__eq__, zip_longest(self.items(), other.items())))
-
-    def __getitem__(self, currency):
-        try:
-            return getattr(self, currency)
-        except AttributeError:
-            raise KeyError(f"unknown currency {currency!r}") from None
+    def __missing__(self, currency):
+        return Money.ZEROS[currency].amount
 
     def __setitem__(self, currency, amount):
-        try:
-            setattr(self, currency, amount)
-        except AttributeError:
-            raise KeyError(f"unknown currency {currency!r}") from None
-
-    def items(self):
-        return ((currency, getattr(self, currency)) for currency in self.__slots__)
-
-    def values(self):
-        return (getattr(self, currency) for currency in self.__slots__)
+        if amount:
+            super().__setitem__(currency, amount)
+        else:
+            self.pop(currency, None)
 
 
 class MoneyBasket:
@@ -399,9 +393,7 @@ class MoneyBasket:
 
     def _compare(self, op, other):
         if isinstance(other, self.__class__):
-            return all(op(a, b) for a, b in zip(self.amounts.values(), other.amounts.values()))
-        elif isinstance(other, Money):
-            return op(self.amounts[other.currency], other.amount)
+            return self.amounts == other.amounts
         elif other == 0:
             return any(op(v, 0) for v in self.amounts.values())
         else:
@@ -556,10 +548,17 @@ class MoneyAutoConvertDict(dict):
 def fetch_currency_exchange_rates(db=None):
     db = db or website.db
     currencies = set(db.one("SELECT array_to_json(enum_range(NULL::currency))"))
-    r = requests.get('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml')
-    rates = xmltodict.parse(r.text)['gesmes:Envelope']['Cube']['Cube']['Cube']
-    for fx in rates:
-        currency = fx['@currency']
+    currencies.remove('EUR')
+    if (access_key := website.app_conf.fixer_access_key):
+        yesterday = datetime.now(timezone.utc).date() - timedelta(days=1)
+        r = requests.get(
+            f'https://data.fixer.io/api/{yesterday}?access_key={access_key}&base=EUR'
+        )
+    else:
+        assert website.env.instance_type != 'production'
+        r = requests.get('https://liberapay.com/data/exchange-rates.json')
+    rates = r.json()['rates']
+    for currency, rate in rates.items():
         if currency not in currencies:
             continue
         db.run("""
@@ -569,7 +568,8 @@ def fetch_currency_exchange_rates(db=None):
                       , (%(target)s, 'EUR', 1 / %(rate)s)
             ON CONFLICT (source_currency, target_currency) DO UPDATE
                     SET rate = excluded.rate
-        """, dict(target=currency, rate=Decimal(fx['@rate'])))
+        """, dict(target=currency, rate=Decimal(str(rate))))
+        currencies.remove(currency)
     # Update the local cache, unless it hasn't been created yet.
     if hasattr(website, 'currency_exchange_rates'):
         website.currency_exchange_rates = get_currency_exchange_rates(db)
@@ -577,6 +577,11 @@ def fetch_currency_exchange_rates(db=None):
     # with the new exchange rates.
     for d in MoneyAutoConvertDict.instances:
         d.clear()
+    # Check for missing exchange rates.
+    if currencies:
+        raise Exception(
+            f"missing exchange rates for currencies {', '.join(currencies)}"
+        )
 
 
 def get_currency_exchange_rates(db):
@@ -585,8 +590,3 @@ def get_currency_exchange_rates(db):
         return r
     fetch_currency_exchange_rates(db)
     return get_currency_exchange_rates(db)
-
-
-for currency in CURRENCY_REPLACEMENTS:
-    del CURRENCIES[currency]
-    del currency

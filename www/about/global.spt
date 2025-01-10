@@ -16,7 +16,12 @@ title = _("Global")
 
 <ul class="columns-sm-2 columns-md-3">
 % for c, localized_currency_name in locale.supported_currencies.items()
-    <li>{{ localized_currency_name }} ({{ c }})</li>
+    <li>
+        {{ localized_currency_name }} ({{ c }})
+        % if c in constants.PAYPAL_CURRENCIES
+            {{ icon('paypal', _("supported by PayPal")) }}
+        % endif
+    </li>
 % endfor
 </ul>
 

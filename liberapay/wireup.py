@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from decimal import Decimal
 from functools import partial
 import json
@@ -194,86 +195,92 @@ def database(env, tell_sentry):
     return {'db': db}
 
 
+@dataclass(slots=True)
 class AppConf:
+    app_name:  str
+    bitbucket_callback:  str
+    bitbucket_id:  str
+    bitbucket_secret:  str
+    bot_github_token:  str
+    bot_github_username:  str
+    check_avatar_urls:  bool
+    check_email_domains:  bool
+    check_email_servers:  bool
+    cron_intervals:  dict
+    fixer_access_key:  str | None
+    github_callback:  str
+    github_id:  str
+    github_secret:  str
+    gitlab_callback:  str
+    gitlab_id:  str
+    gitlab_secret:  str
+    google_callback:  str
+    google_id:  str
+    google_secret:  str
+    linuxfr_callback:  str
+    linuxfr_id:  str
+    linuxfr_secret:  str
+    log_emails:  bool
+    openstreetmap_access_token_url:  str
+    openstreetmap_api_url:  str
+    openstreetmap_auth_url:  str
+    openstreetmap_callback:  str
+    openstreetmap_id:  str
+    openstreetmap_secret:  str
+    password_rounds:  int
+    payday_label:  str
+    payday_repo:  str
+    payin_methods:  dict
+    paypal_domain:  str
+    paypal_id:  str
+    paypal_secret:  str
+    s3_endpoint:  str
+    s3_public_access_key:  str
+    s3_secret_key:  str
+    s3_region:  str
+    s3_payday_logs_bucket:  str
+    ses_feedback_queue_url:  str
+    ses_region:  str
+    sepa_creditor_identifier:  str
+    show_sandbox_warning:  bool
+    socket_timeout:  float
+    smtp_host:  str
+    smtp_port:  int
+    smtp_username:  str
+    smtp_password:  str
+    smtp_use_tls:  bool
+    stripe_callback_secret:  str
+    stripe_connect_callback_secret:  str
+    stripe_connect_id:  str
+    stripe_publishable_key:  str
+    stripe_secret_key:  str
+    twitch_id:  str
+    twitch_secret:  str
+    twitter_callback:  str
+    twitter_id:  str
+    twitter_secret:  str
 
-    fields = dict(
-        app_name=str,
-        bitbucket_callback=str,
-        bitbucket_id=str,
-        bitbucket_secret=str,
-        bot_github_token=str,
-        bot_github_username=str,
-        check_avatar_urls=bool,
-        check_email_domains=bool,
-        check_email_servers=bool,
-        cron_intervals=dict,
-        github_callback=str,
-        github_id=str,
-        github_secret=str,
-        gitlab_callback=str,
-        gitlab_id=str,
-        gitlab_secret=str,
-        google_callback=str,
-        google_id=str,
-        google_secret=str,
-        linuxfr_callback=str,
-        linuxfr_id=str,
-        linuxfr_secret=str,
-        log_emails=bool,
-        openstreetmap_access_token_url=str,
-        openstreetmap_api_url=str,
-        openstreetmap_auth_url=str,
-        openstreetmap_callback=str,
-        openstreetmap_id=str,
-        openstreetmap_secret=str,
-        password_rounds=int,
-        payday_label=str,
-        payday_repo=str,
-        payin_methods=dict,
-        paypal_domain=str,
-        paypal_id=str,
-        paypal_secret=str,
-        s3_endpoint=str,
-        s3_public_access_key=str,
-        s3_secret_key=str,
-        s3_region=str,
-        s3_payday_logs_bucket=str,
-        ses_feedback_queue_url=str,
-        ses_region=str,
-        sepa_creditor_identifier=str,
-        show_sandbox_warning=bool,
-        socket_timeout=float,
-        smtp_host=str,
-        smtp_port=int,
-        smtp_username=str,
-        smtp_password=str,
-        smtp_use_tls=bool,
-        stripe_callback_secret=str,
-        stripe_connect_callback_secret=str,
-        stripe_connect_id=str,
-        stripe_publishable_key=str,
-        stripe_secret_key=str,
-        twitch_id=str,
-        twitch_secret=str,
-        twitter_callback=str,
-        twitter_id=str,
-        twitter_secret=str,
-    )
+    _missing:  list[str]  = field(init=False)
+    _mistyped:  list[tuple[str, str, type]]  = field(init=False)
+    _unexpected:  list[str]  = field(init=False)
 
     def __init__(self, d):
         d = d if isinstance(d, dict) else dict(d)
 
-        unexpected = set(d) - set(self.fields)
+        fields = {
+            k: v for k, v in self.__annotations__.items() if not k.startswith('_')
+        }
+        unexpected = list(set(d) - set(fields))
         if unexpected:
             print("Found %i unexpected variables in the app_conf table:  %s" %
                   (len(unexpected), ' '.join(unexpected)))
 
         missing, mistyped = [], []
-        for k, t in self.fields.items():
+        for k, t in fields.items():
             if k in d:
                 v = d[k]
                 if isinstance(v, t):
-                    self.__dict__[k] = v
+                    setattr(self, k, v)
                 else:
                     mistyped.append((k, v, t))
             else:
@@ -284,9 +291,17 @@ class AppConf:
             print('Invalid configuration variable, %s: %s is of type %s, not %s' %
                   (k, json.dumps(v), type(v), t))
 
-        self.missing = missing
-        self.mistyped = mistyped
-        self.unexpected = unexpected
+        self._missing = missing
+        self._mistyped = mistyped
+        self._unexpected = unexpected
+
+    def dict(self, prefix=''):
+        i = len(prefix)
+        return {
+            k[i:]: getattr(self, k)
+            for k in self.__annotations__
+            if k.startswith(prefix) and hasattr(self, k) and not k.startswith('_')
+        }
 
 
 def app_conf(db):
@@ -301,9 +316,7 @@ def app_conf(db):
 def mail(app_conf, env, project_root='.'):
     if not app_conf:
         return
-    smtp_conf = {
-        k[5:]: v for k, v in app_conf.__dict__.items() if k.startswith('smtp_')
-    }
+    smtp_conf = app_conf.dict('smtp_')
     if smtp_conf:
         smtp_conf.setdefault('timeout', app_conf.socket_timeout)
     if getattr(app_conf, 'ses_region', None):
@@ -559,10 +572,7 @@ def accounts_elsewhere(app_conf, asset, canonical_url, db):
         return {'platforms': db}
     platforms = []
     for cls in elsewhere.CLASSES:
-        conf = {
-            k[len(cls.name)+1:]: v
-            for k, v in app_conf.__dict__.items() if k.startswith(cls.name+'_')
-        }
+        conf = app_conf.dict(cls.name+'_')
         conf.setdefault('api_timeout', app_conf.socket_timeout)
         conf.setdefault('app_name', app_conf.app_name)
         conf.setdefault('app_url', canonical_url)
@@ -904,7 +914,7 @@ def main():
     environ['RUN_CRON_JOBS'] = 'no'
     from liberapay.main import website
     app_conf, env = website.app_conf, website.env
-    if app_conf.missing or app_conf.mistyped or env.missing or env.malformed:
+    if app_conf._missing or app_conf._mistyped or env.missing or env.malformed:
         raise SystemExit('The configuration is incorrect.')
 
 
