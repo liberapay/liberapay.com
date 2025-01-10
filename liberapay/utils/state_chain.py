@@ -1,7 +1,6 @@
-from urllib.parse import quote as urlquote, urlsplit, urlunsplit
+from urllib.parse import quote as urlquote
 
 from pando import Response
-from pando.http.request import Line
 import pando.state_chain
 from requests.exceptions import ConnectionError, Timeout
 
@@ -54,14 +53,6 @@ def canonize(request, response, website):
     """
     if request.path.raw.startswith('/callbacks/'):
         # Don't redirect callbacks
-        if request.path.raw[-1] == '/':
-            # Remove trailing slash
-            l = request.line
-            scheme, netloc, path, query, fragment = urlsplit(l.uri)
-            assert path[-1] == '/'  # sanity check
-            path = path[:-1]
-            new_uri = urlunsplit((scheme, netloc, path, query, fragment))
-            request.line = Line(l.method.raw, new_uri, l.version.raw)
         return
     canonical_host = website.canonical_host
     canonical_scheme = website.canonical_scheme
