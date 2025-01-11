@@ -6,7 +6,17 @@ CREATE TYPE currency AS ENUM (
     'EUR', 'USD',
     'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'GBP', 'HKD', 'HRK',
     'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD',
-    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR'
+    'PHP', 'PLN', 'RON', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'ZAR',
+    'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AWG', 'AZN', 'BAM', 'BBD',
+    'BDT', 'BIF', 'BMD', 'BND', 'BOB', 'BSD', 'BWP', 'BYN', 'BZD', 'CDF', 'CLP',
+    'COP', 'CRC', 'CVE', 'DJF', 'DOP', 'DZD', 'EGP', 'ETB', 'FJD', 'FKP', 'GEL',
+    'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HNL', 'HTG', 'JMD', 'KES', 'KGS', 'KHR',
+    'KMF', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'MAD', 'MDL', 'MGA',
+    'MKD', 'MMK', 'MNT', 'MOP', 'MUR', 'MVR', 'MWK', 'MZN', 'NAD', 'NGN', 'NIO',
+    'NPR', 'PAB', 'PEN', 'PGK', 'PKR', 'PYG', 'QAR', 'RSD', 'RWF', 'SAR', 'SBD',
+    'SCR', 'SHP', 'SLE', 'SOS', 'SRD', 'SZL', 'TJS', 'TOP', 'TTD', 'TWD', 'TZS',
+    'UAH', 'UGX', 'UYU', 'UZS', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF',
+    'YER', 'ZMW'
 );
 CREATE TYPE currency_amount AS (amount numeric, currency currency);
 
