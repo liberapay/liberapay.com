@@ -1,0 +1,13 @@
+[---]
+rates = dict(website.db.all("""
+    SELECT target_currency, rate
+      FROM currency_exchange_rates
+     WHERE source_currency = 'EUR'
+  ORDER BY target_currency
+"""))
+response.headers[b'Cache-Control'] = b'public, max-age=3600'
+[---] application/json
+{
+    "base": "EUR",
+    "rates": rates
+}
