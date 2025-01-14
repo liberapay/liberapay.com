@@ -1,0 +1,60 @@
+from itertools import chain
+
+PLATFORM_NAMES = ['Ghost', 'Open Collective', 'Patreon', 'Tipeee']
+PLATFORM_SLUGS = {name.replace(' ', '').lower(): name for name in PLATFORM_NAMES}
+NAV_ITEMS = [
+    ('/' + slug, name) for slug, name in PLATFORM_SLUGS.items()
+]
+
+[---]
+
+platform_slug = request.path['platform']
+platform_name = PLATFORM_SLUGS.get(platform_slug)
+if platform_slug and not platform_name:
+    if platform_slug.lower() in PLATFORM_SLUGS:
+        raise response.redirect('/about/alternatives/' + platform_slug.lower())
+    raise response.error(404)
+
+if platform_name:
+    title = platform_name
+    full_title = _("{platform1} versus {platform2} - A comparison",
+                   platform1=platform_name, platform2='Liberapay')
+else:
+    title = _("Alternatives")
+
+[---] text/html
+% extends "templates/layouts/about.html"
+
+% from "templates/macros/nav.html" import nav with context
+
+% block content
+
+<ul class="nav nav-pills">{{ nav(chain(
+    (('/', _("Overview")),),
+    NAV_ITEMS
+), base='/about/alternatives') }}</ul>
+<br>
+
+% if not platform_slug
+
+    <p>{{ _("TODO") }}</p>
+
+% elif platform_slug == 'ghost'
+
+    <p>{{ _("TODO") }}</p>
+
+% elif platform_slug == 'opencollective'
+
+    <p>{{ _("TODO") }}</p>
+
+% elif platform_slug == 'patreon'
+
+    <p>{{ _("TODO") }}</p>
+
+% elif platform_slug == 'tipeee'
+
+    <p>{{ _("TODO") }}</p>
+
+% endif
+
+% endblock
