@@ -75,7 +75,7 @@ def charge(db, payin, payer, route, update_donor=True):
     """, dict(payin=payin.id))
     payer_state = (
         'blocked' if payer.is_suspended else
-        'invalid' if payer.status != 'active' or not payer.get_email_address() else
+        'invalid' if payer.status != 'active' or not payer.can_be_emailed else
         'okay'
     )
     new_status = None
@@ -384,9 +384,10 @@ def settle_charge_and_transfers(
     last = len(payin_transfers) - 1
     if charge.captured and charge.status == 'succeeded':
         payer = db.Participant.from_id(payin.payer)
+        suspend = payer.is_suspended or not payer.can_be_emailed
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
-            if payer.is_suspended or not payer.get_email_address():
+            if suspend:
                 if pt.status not in ('failed', 'succeeded'):
                     pt = update_payin_transfer(
                         db, pt.id, None, 'suspended', None,

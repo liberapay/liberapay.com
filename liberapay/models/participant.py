@@ -1217,6 +1217,10 @@ class Participant(Model, MixinTeam):
              LIMIT 1
         """, (self.id, allow_disavowed))
 
+    @property
+    def can_be_emailed(self):
+        return any(not e.blacklisted and not e.disavowed for e in self.get_emails())
+
     def remove_email(self, address):
         if address == self.email:
             raise CannotRemovePrimaryEmail()

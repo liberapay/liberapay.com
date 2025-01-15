@@ -56,7 +56,7 @@ def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
     assert route.participant == payer, (route.participant, payer)
     assert route.status in ('pending', 'chargeable')
 
-    if payer.is_suspended or not payer.get_email_address():
+    if payer.is_suspended or not payer.can_be_emailed:
         raise AccountSuspended()
 
     if route.network == 'paypal':
