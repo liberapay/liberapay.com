@@ -2187,12 +2187,14 @@ class Participant(Model, MixinTeam):
             raise ValueContainsForbiddenCharacters(new_public_name, bad_chars)
 
         if new_public_name != self.public_name:
+            if new_public_name == '':
+                new_public_name = None
             with self.db.get_cursor(cursor) as c:
                 r = c.one("""
                     UPDATE participants
                        SET public_name = %s
                      WHERE id = %s
-                       AND (public_name IS NULL OR public_name <> %s)
+                       AND coalesce(public_name, '') <> coalesce(%s, '')
                  RETURNING id
                 """, (new_public_name, self.id, new_public_name))
                 if r:
