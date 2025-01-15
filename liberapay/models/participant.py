@@ -3843,6 +3843,15 @@ class Participant(Model, MixinTeam):
             bool(self.get_email_address())
         )
 
+    @property
+    def marked_since(self):
+        return self.db.one("""
+            SELECT max(e.ts)
+              FROM events e
+             WHERE e.participant = %s
+               AND e.type IN ('is_suspended', 'flags_changed')
+        """, (self.id,))
+
 
 class NeedConfirmation(Exception):
     """Represent the case where we need user confirmation during a merge.

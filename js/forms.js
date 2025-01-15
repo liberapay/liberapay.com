@@ -213,6 +213,19 @@ Liberapay.forms.jsSubmit = function() {
                             window.location.href = window.location.href;
                             navigating = true;
                         }
+                    } else if (action == "replaceButton") {
+                        var $button = $(button);
+                        var $replacement = $button.siblings('button.hidden');
+                        if ($replacement.length > 0) {
+                            $button.fadeOut(200, function() {
+                                $button.addClass('hidden');
+                                $replacement.removeClass('hidden').hide().fadeIn(200);
+                            });
+                        } else {
+                            console.error("jsSubmit: replacement button not found");
+                            window.location.href = window.location.href;
+                            navigating = true;
+                        }
                     } else {
                         Liberapay.error("invalid value in `data-on-success` attribute");
                     }

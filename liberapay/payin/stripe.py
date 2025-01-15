@@ -8,6 +8,7 @@ from ..constants import EPOCH, PAYIN_SETTLEMENT_DELAYS, SEPA
 from ..exceptions import MissingPaymentAccount, NextAction, NoSelfTipping
 from ..i18n.currencies import Money, ZERO_DECIMAL_CURRENCIES
 from ..models.exchange_route import ExchangeRoute
+from ..utils import utcnow
 from ..website import website
 from .common import (
     abort_payin, adjust_payin_transfers, prepare_payin,
@@ -223,48 +224,76 @@ def create_charge(
             # Don't use destination charges when we can use separate transfers
             destination = None
         del country
-    try:
-        params = dict(
-            amount=Money_to_int(amount),
-            confirm=True,
-            currency=amount.currency.lower(),
-            customer=route.remote_user_id,
-            description=description,
-            mandate=route.mandate,
-            metadata={'payin_id': payin.id},
-            off_session=payin.off_session,
-            payment_method=route.address,
-            payment_method_types=['sepa_debit' if route.network == 'stripe-sdd' else 'card'],
-            return_url=payer.url('giving/pay/stripe/%i' % payin.id),
-            statement_descriptor=statement_descriptor,
-            idempotency_key='payin_intent_%i' % payin.id,
-        )
-        if not route.mandate and not route.one_off and not payin.off_session:
-            params['setup_future_usage'] = 'off_session'
-        if destination:
-            params['on_behalf_of'] = destination
-            params['transfer_data'] = {'destination': destination}
-        intent = stripe.PaymentIntent.create(**params)
-    except stripe.error.StripeError as e:
-        return abort_payin(db, payin, repr_stripe_error(e)), None
-    except Exception as e:
-        website.tell_sentry(e)
-        return abort_payin(db, payin, str(e)), None
+    if payin.intent_id:
+        intent = stripe.PaymentIntent.retrieve(payin.intent_id)
+    else:
+        try:
+            params = dict(
+                amount=Money_to_int(amount),
+                confirm=True,
+                currency=amount.currency.lower(),
+                customer=route.remote_user_id,
+                description=description,
+                mandate=route.mandate,
+                metadata={'payin_id': payin.id},
+                off_session=payin.off_session,
+                payment_method=route.address,
+                payment_method_types=['sepa_debit' if route.network == 'stripe-sdd' else 'card'],
+                return_url=payer.url('giving/pay/stripe/%i' % payin.id),
+                statement_descriptor=statement_descriptor,
+                idempotency_key='payin_intent_%i' % payin.id,
+            )
+            if route.network == 'stripe-card':
+                params['capture_method'] = 'manual'
+            if not route.mandate and not route.one_off and not payin.off_session:
+                params['setup_future_usage'] = 'off_session'
+            if destination:
+                params['on_behalf_of'] = destination
+                params['transfer_data'] = {'destination': destination}
+            intent = stripe.PaymentIntent.create(**params)
+        except stripe.error.StripeError as e:
+            return abort_payin(db, payin, repr_stripe_error(e)), None
+        except Exception as e:
+            website.tell_sentry(e)
+            return abort_payin(db, payin, str(e)), None
     if intent.status == 'requires_action':
         update_payin(db, payin.id, None, 'awaiting_payer_action', None,
                      intent_id=intent.id)
         raise NextAction(intent)
     charge = intent.charges.data[0]
-    if destination:
-        payin = settle_destination_charge(
-            db, payin, charge, payin_transfers[0],
-            intent_id=intent.id, update_donor=update_donor,
-        )
-    else:
-        payin = settle_charge_and_transfers(
-            db, payin, charge, intent_id=intent.id, update_donor=update_donor,
-        )
-    send_payin_notification(db, payin, payer, charge, route)
+    if not charge.captured:
+        five_minutes_ago = utcnow() - timedelta(minutes=5)
+        if payer.is_suspended:
+            if payer.marked_since < five_minutes_ago:
+                return update_payin(
+                    db, payin.id, charge.id, 'failed', 'canceled on suspicion of fraud',
+                    intent_id=intent.id,
+                ), charge
+        else:
+            capture = payin.status == 'pre' and (
+                charge.outcome.risk_level == 'normal' or
+                payin.allowed_by is not None and payin.allowed_since < five_minutes_ago
+            )
+            if capture:
+                try:
+                    intent.capture()
+                    charge = intent.charges.data[0]
+                except stripe.error.StripeError as e:
+                    return abort_payin(db, payin, repr_stripe_error(e)), None
+                except Exception as e:
+                    website.tell_sentry(e)
+                    return abort_payin(db, payin, str(e)), None
+    if charge.captured:
+        if destination:
+            payin = settle_destination_charge(
+                db, payin, charge, payin_transfers[0],
+                intent_id=intent.id, update_donor=update_donor,
+            )
+        else:
+            payin = settle_charge_and_transfers(
+                db, payin, charge, intent_id=intent.id, update_donor=update_donor,
+            )
+        send_payin_notification(db, payin, payer, charge, route)
     return payin, charge
 
 

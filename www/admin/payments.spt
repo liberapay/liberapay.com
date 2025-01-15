@@ -1,7 +1,7 @@
 from operator import itemgetter
 
 from liberapay.i18n.base import LOCALE_EN as locale, MoneyBasket
-from liberapay.utils import group_by, render_postal_address
+from liberapay.utils import form_post_success, group_by, render_postal_address
 
 PAGE_SIZE = 50
 STATUS_MAP = {
@@ -15,6 +15,37 @@ STATUS_MAP = {
 [---]
 
 user.require_active_privilege('admin')
+
+if request.method == 'POST':
+    if 'allow' in request.body:
+        payin_id = request.body.get_int('allow')
+        payin = website.db.one("""
+            UPDATE payins
+               SET allowed_since = coalesce(allowed_since, current_timestamp)
+                 , allowed_by = coalesce(allowed_by, %s)
+             WHERE id = %s
+               AND status = 'awaiting_review'
+         RETURNING *
+        """, (user.id, payin_id))
+        if not payin:
+            raise response.error(400, f"payin {payin_id} isn't awaiting review")
+        del payin
+    elif 'disallow' in request.body:
+        payin_id = request.body.get_int('disallow')
+        payin = website.db.one("""
+            UPDATE payins
+               SET allowed_since = null
+                 , allowed_by = null
+             WHERE id = %s
+               AND status = 'awaiting_review'
+         RETURNING *
+        """, (payin_id,))
+        if not payin:
+            raise response.error(400, f"payin {payin_id} isn't awaiting review")
+        del payin
+    else:
+        raise response.error(400)
+    form_post_success(state)
 
 before = request.qs.get_int('before', default=None)
 status = request.qs.get('status')
@@ -111,6 +142,9 @@ title = "Payments Admin"
 <br><br>
 
 % if payins
+<form action="javascript:/admin/payments" method="POST" class="js-submit"
+      data-on-success="replaceButton">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     <table class="table">
     <thead>
         <tr>
@@ -184,7 +218,14 @@ title = "Payments Admin"
                 <code>{{ pi.transfers }}</code>
             % endif
             </td>
-            <td class="text-{{ STATUS_MAP.get(pi.status, 'info') }}">{{ pi.status }}</td>
+            % set allowed = bool(pi.allowed_by)
+            <td class="text-{{ STATUS_MAP.get(pi.status, 'info') }}">
+                <p>{{ pi.status }}</p>
+                % if pi.status == 'awaiting_review'
+                    <button class="btn btn-warning btn-sm {{ 'hidden' if allowed else '' }}" name="allow" value="{{ pi.id }}">Allow</button>
+                    <button class="btn btn-default btn-sm {{ '' if allowed else 'hidden' }}" name="disallow" value="{{ pi.id }}">Disallow</button>
+                % endif
+            </td>
         </tr>
         % if pi.error
         <tr class="subrow">
@@ -195,6 +236,7 @@ title = "Payments Admin"
     % endfor
     </tbody>
     </table>
+</form>
     % if len(payins) == PAGE_SIZE
         <a class="btn btn-primary" href="{{ request.qs.derive(before=payins[-1].id) }}">Next page →</a>
     % endif
