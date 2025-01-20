@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"PO-Revision-Date: 2025-01-12 17:00+0000\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/liberapay/core/ja/>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.10-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -75,7 +77,7 @@ msgstr "{date}までに{username}さんへの1週あたり{amount}の寄付を�
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} needs to be renewed before {date}."
-msgstr "{date}までに{username}さんへの1月あたり{amount}の寄付を更新する必要があります。"
+msgstr "{date}までに{username}さんへのひと月あたり{amount}の寄付を更新する必要があります。"
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} needs to be renewed before {date}."
@@ -87,7 +89,7 @@ msgstr "{past_date}までに{username}さんへの1週あたり{amount}の寄付
 
 #, python-brace-format
 msgid "Your donation of {amount} per month to {username} was supposed to be renewed before {past_date}."
-msgstr "{past_date}までに{username}さんへの1月あたり{amount}の寄付を更新する必要がありました。"
+msgstr "{past_date}までに{username}さんへのひと月あたり{amount}の寄付を更新する必要がありました。"
 
 #, python-brace-format
 msgid "Your donation of {amount} per year to {username} was supposed to be renewed before {past_date}."
@@ -1838,7 +1840,7 @@ msgstr "現在、あなたは{recipient_name}さんに1週あたり{money_amount
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per month to {recipient_name}. The form below enables you to modify or stop your donation."
-msgstr "現在、あなたは{recipient_name}さんに1月あたり{money_amount}を寄付しています。以下のフォームから、寄付を変更・停止できます。"
+msgstr "現在、あなたは{recipient_name}さんにひと月あたり{money_amount}を寄付しています。以下のフォームから、寄付を変更・停止できます。"
 
 #, python-brace-format
 msgid "You are currently donating {money_amount} per year to {recipient_name}. The form below enables you to modify or stop your donation."
@@ -1868,14 +1870,14 @@ msgid "Amount"
 msgstr "金額"
 
 msgid "per month"
-msgstr "1月あたり"
+msgstr "ひと月あたり"
 
 msgid "per year"
 msgstr "1年あたり"
 
 #, python-brace-format
 msgid "{0} per week ~ {1} per month ~ {2} per year"
-msgstr "1週あたり{0} 〜 1月あたり{1} 〜 1年あたり{2}"
+msgstr "1週あたり{0} 〜 ひと月あたり{1} 〜 1年あたり{2}"
 
 msgid "Custom"
 msgstr "カスタム"
@@ -1950,49 +1952,38 @@ msgstr "Liberapayの継続的な寄付システムは、クラウドファンデ
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "現在サンドボックスモードです。実際の支払い情報や個人情報は入力しないでください！"
 
-#, fuzzy
 msgid "The credentials have been generated."
-msgstr "クレデンシャルが生成された。"
+msgstr "認証情報を生成しました。"
 
-#, fuzzy
 msgid "The credentials have been revoked."
-msgstr "資格は取り消された。"
+msgstr "認証情報を無効化しました。"
 
-#, fuzzy
 msgid "Constant session"
 msgstr "常時セッション"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
-msgstr "あなたのリクエストに以下のHTTPヘッダーを含めることで、アカウントからの非公開情報のダウンロードを自動化できます："
+msgstr "HTTPリクエストに以下のヘッダーを含めることで、アカウントからの非公開情報のダウンロードを自動化できます。"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "例えば、以下のコマンドを実行することで、あなたの現在アクティブな支援者の一覧をダウンロードすることができます："
+msgstr "例えば、以下のコマンドを実行することで、あなたの現在アクティブな支援者の一覧をダウンロードできます。"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
-msgstr "あなたのリスクを最小限に抑えるため、これらの認証情報はデータを取得するためにのみ使用でき、あなたのアカウント内の何かを変更することはできません。"
+msgstr "リスクを最小限に抑えるため、これらの認証情報ではデータの取得のみが可能で、アカウント内のいかなる情報も変更できません。また、一年間使用されなかった場合は、自動的に期限切れになります。"
 
-#, fuzzy
 msgid "Revoke credentials"
-msgstr "クレデンシャルの失効"
+msgstr "認証情報を無効化"
 
-#, fuzzy
 msgid "The credentials have expired."
-msgstr "クレデンシャルの有効期限が切れている。"
+msgstr "認証情報の有効期限が切れています。"
 
-#, fuzzy
 msgid "Regenerate credentials"
-msgstr "資格情報を再生成する"
+msgstr "認証情報を再生成"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "あなたのアカウントからの非公開情報のダウンロードを自動化することを簡素化するために、長期間の読み取り専用クレデンシャルを生成することができます。"
+msgstr "アカウントからの非公開情報のダウンロードをより簡単に自動化できるよう、有効期限が長い読み取り専用の認証情報を生成できます。"
 
-#, fuzzy
 msgid "Generate credentials"
-msgstr "認証情報の生成"
+msgstr "認証情報を生成"
 
 msgid "Dashboard"
 msgstr "ダッシュボード"
@@ -2091,7 +2082,6 @@ msgstr "改正された決済サービス指令"
 msgid "Your new avatar URL is: {0}"
 msgstr "新しいアバターのURLは次の通りです：{0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
 msgstr "あなたのプロフィールにアバターが表示されなくなりました。"
 
@@ -2947,13 +2937,12 @@ msgstr "収入履歴を表示"
 msgid "No data to show."
 msgstr "表示できるデータはありません。"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
-msgstr "週間あたり収入 (単位:{currency})"
+msgstr "1週あたり収入 (単位:{currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
-msgstr "週間あたり支援者数"
+msgstr "1週あたり支援者数"
 
 msgid "Invoice documents are private."
 msgstr "請求書は非公開です。"
@@ -3509,7 +3498,6 @@ msgstr "税金"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "この支払いは寄付であり、その対価としていかなる商品やサービスも提供されません。Liberapayはいかなる税金も徴収していません。"
 
-#, fuzzy
 msgid "Income history"
 msgstr "収入履歴"
 
@@ -3520,14 +3508,12 @@ msgstr "決済サービスを設定するまで、新しい寄付を受け取る
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "チームを通した寄付は、あなたの収入の{income_percent}を占めており（{total_income}のうち{team_income}）、あなたの寄付者の{patrons_percent}を占めています（{npatrons}のうち {nteampatrons}）。"
 
-#, fuzzy
 msgid "Details of personal donations"
 msgstr "個人寄付の詳細"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "このセクションには、チームを通した寄付についてのデータは含まれていません。個人的に受け取った寄付のみが表示されます。"
 
-#, fuzzy
 msgid "Recent changes to personal donations"
 msgstr "個人寄付に関する最近の変更点"
 
@@ -3551,7 +3537,6 @@ msgstr "1週あたりの寄付が{old_amount}から{new_amount}に減りまし�
 msgid "A donation of {amount} per week has been restarted."
 msgstr "1週あたり{amount}の寄付が再開されました。"
 
-#, fuzzy
 msgid "Statistics on personal donations"
 msgstr "個人寄付に関する統計"
 
@@ -4097,13 +4082,11 @@ msgstr "取引手数料とは何ですか？"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "手数料は、決済サービスや決済方法、国、通貨によって異なります。過去1年間の平均手数料率は、Stripeによる支払いでは{average_fee_stripe}、PayPalによる支払いでは{average_fee_paypal}となっています。"
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
 msgstr "支援者から送られた金銭は、いつ、どのように受け取るのですか？"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
-msgstr "寄付者から送られた金銭は、すぐにあなたのStripeまたはPayPalアカウントに送られます。デフォルトでは、Stripeはあなたの銀行口座に自動的に資金を追加しますが、PayPalはあなたが使うか引き出すまで資金を保管するだけです。"
+msgstr "寄付者から送られた金銭は、すぐにあなたのStripeまたはPayPalアカウントに送られます。デフォルトでは、その後Stripeはあなたの銀行口座に自動的に送金するのに対して、PayPalはあなたが使うか引き出すまで純粋に資金を保管します。"
 
 msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "Stripeのダッシュボードに一部払い戻しが表示されるのはなぜですか？"
