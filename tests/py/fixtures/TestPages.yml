@@ -590,4 +590,48 @@ interactions:
       X-Stripe-Routing-Context-Priority-Tier: [api-testmode]
       X-Wc: [AB]
     status: {code: 200, message: OK}
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://api.stripe.com/v1/mandates/mandate_1QUWHEFk4eGpfLOCOm3mpD8x
+  response:
+    body: {string: "{\n  \"id\": \"mandate_1QUWHEFk4eGpfLOCOm3mpD8x\",\n  \"object\"\
+        : \"mandate\",\n  \"customer_acceptance\": {\n    \"accepted_at\": 1733848032,\n\
+        \    \"online\": {\n      \"ip_address\": \"0.0.0.0\",\n      \"user_agent\"\
+        : \"Pando-test-client/0.47\"\n    },\n    \"type\": \"online\"\n  },\n  \"\
+        livemode\": false,\n  \"multi_use\": {},\n  \"payment_method\": \"pm_1QUWHDFk4eGpfLOC2Rtdljhd\"\
+        ,\n  \"payment_method_details\": {\n    \"sepa_debit\": {\n      \"reference\"\
+        : \"E9NAUZGZMDTCAOU4\",\n      \"url\": \"https://payments.stripe.com/sepa_debit/mandate/mandate_test_YWNjdF8xQ2h5YXlGazRlR3BmTE9DLG1hbmRhdGVzdF9STkdvdDB1ZHlWeGgyWlhlR2NhTDdsaDlaa2FSY1h4000057JhtxCh\"\
+        \n    },\n    \"type\": \"sepa_debit\"\n  },\n  \"status\": \"inactive\",\n\
+        \  \"type\": \"multi_use\"\n}"}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Methods: ['GET, HEAD, PUT, PATCH, POST, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Expose-Headers: ['Request-Id, Stripe-Manage-Version, Stripe-Should-Retry,
+          X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required']
+      Access-Control-Max-Age: ['300']
+      Cache-Control: ['no-cache, no-store']
+      Connection: [keep-alive]
+      Content-Length: ['688']
+      Content-Security-Policy: ['base-uri ''none''; default-src ''none''; form-action
+          ''none''; frame-ancestors ''none''; img-src ''self''; script-src ''self''
+          ''report-sample''; style-src ''self''; upgrade-insecure-requests; report-uri
+          https://q.stripe.com/csp-violation?q=pDdsOmSni-xq1k5YS-2UfBemScxSgAF4GOIQvRLUuNQSBJeQHc4QjHrb2Id1Su1t_78ay8ZaSnF6GLxD']
+      Content-Type: [application/json]
+      Cross-Origin-Opener-Policy-Report-Only: [same-origin; report-to="coop"]
+      Date: ['Tue, 28 Jan 2025 16:30:59 GMT']
+      Report-To: ['{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}']
+      Reporting-Endpoints: ['coop="https://q.stripe.com/coop-report"']
+      Request-Id: [req_vh6DY07qy1eMm9]
+      Server: [nginx]
+      Strict-Transport-Security: [max-age=63072000; includeSubDomains; preload]
+      Stripe-Version: ['2019-08-14']
+      Vary: [Origin]
+      X-Content-Type-Options: [nosniff]
+      X-Stripe-Priority-Routing-Enabled: ['true']
+      X-Stripe-Routing-Context-Priority-Tier: [api-testmode]
+      X-Wc: [AB]
+    status: {code: 200, message: OK}
 version: 1
