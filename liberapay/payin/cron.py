@@ -341,7 +341,6 @@ def execute_scheduled_payins():
         scheduled_payins[:] = [Object(**sp) for sp in scheduled_payins]
         for sp in scheduled_payins:
             sp.route = db.ExchangeRoute.from_id(payer, sp.route)
-            sp.route.sync_status()
             if sp.route.status != 'chargeable':
                 retry = True
                 scheduled_payins.remove(sp)

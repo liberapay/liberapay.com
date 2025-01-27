@@ -25,7 +25,7 @@ identity = payer.get_current_identity() or {}
 
 del currency
 
-payment_type = request.qs.get('method', 'card')
+payment_type = request.qs.get_choice('method', ('card', 'sdd'), default='card')
 
 error = None
 if request.method == 'POST':
@@ -87,7 +87,6 @@ if request.method == 'POST':
             route = ExchangeRoute.from_id(payer, body.get_int('route'), _raise=False)
             if route is None:
                 raise response.invalid_input(body.get('route'), 'route', 'body')
-            route.sync_status()
         if not route.one_off:
             if body.parse_boolean('set_as_default', default=False):
                 route.set_as_default()
@@ -210,19 +209,7 @@ if tippees:
              , r.is_default DESC NULLS LAST
              , r.network = 'stripe-sdd' DESC
              , r.id DESC
-    """, (payer.id, 'stripe-' + (payment_type or '%'), payment.currency))
-    if routes:
-        route = None
-        while routes:
-            route = routes[0]
-            route.sync_status()
-            if route:
-                break
-            routes = routes[1:]
-        payment_type = route.network.split('-', 1)[-1]
-        del route
-    if not payment_type:
-        response.redirect(payer.path('giving/pay'))
+    """, (payer.id, 'stripe-' + payment_type, payment.currency))
     ask_for_postal_address = (
         payment_type == 'sdd' or
         len(tips) == 1 and

@@ -422,12 +422,3 @@ class ExchangeRoute(Model):
     @cached_property
     def stripe_source(self):
         return stripe.Source.retrieve(self.address)
-
-    def sync_status(self):
-        if self.address.startswith('pm_'):
-            # A PaymentMethod doesn't have a status.
-            return
-        else:
-            source = stripe.Source.retrieve(self.address)
-            self.update_status(source.status)
-            self.stripe_source = source
