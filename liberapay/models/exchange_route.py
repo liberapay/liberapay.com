@@ -70,15 +70,21 @@ class ExchangeRoute(Model):
 
     @classmethod
     def insert(cls, participant, network, address, status,
-               one_off=False, remote_user_id=None, country=None, currency=None):
+               one_off=False, remote_user_id=None, country=None, currency=None,
+               brand=None, last4=None, fingerprint=None, owner_name=None,
+               expiration_date=None):
         p_id = participant.id
         cls.db.hit_rate_limit('add_payment_instrument', str(p_id), TooManyAttempts)
         r = cls.db.one("""
             INSERT INTO exchange_routes AS r
                         (participant, network, address, status,
-                         one_off, remote_user_id, country, currency)
+                         one_off, remote_user_id, country, currency,
+                         brand, last4, fingerprint, owner_name,
+                         expiration_date)
                  VALUES (%(p_id)s, %(network)s, %(address)s, %(status)s,
-                         %(one_off)s, %(remote_user_id)s, %(country)s, %(currency)s)
+                         %(one_off)s, %(remote_user_id)s, %(country)s, %(currency)s,
+                         %(brand)s, %(last4)s, %(fingerprint)s, %(owner_name)s,
+                         %(expiration_date)s)
             ON CONFLICT (participant, network, address) DO NOTHING
               RETURNING r
         """, locals()) or cls.db.one("""
@@ -114,8 +120,17 @@ class ExchangeRoute(Model):
     def attach_stripe_payment_method(cls, participant, pm, one_off):
         if pm.type == 'card':
             network = 'stripe-card'
+            card = pm.card
+            brand = card.display_brand
+            currency = None
+            day = monthrange(card.exp_year, card.exp_month)[-1]
+            expiration_date = date(card.exp_year, card.exp_month, day)
+            del card, day
         elif pm.type == 'sepa_debit':
             network = 'stripe-sdd'
+            brand = None
+            currency = 'EUR'
+            expiration_date = None
         else:
             raise NotImplementedError(pm.type)
         customer_id = cls.db.one("""
@@ -140,12 +155,13 @@ class ExchangeRoute(Model):
                     participant.id, pm.id
                 ),
             ).id
-        pm_country = getattr(getattr(pm, pm.type), 'country', None)
-        pm_currency = getattr(getattr(pm, pm.type), 'currency', None)
+        pm_instrument = getattr(pm, pm.type)
         route = cls.insert(
             participant, network, pm.id, 'chargeable',
             one_off=one_off, remote_user_id=customer_id,
-            country=pm_country, currency=pm_currency,
+            country=pm_instrument.country, currency=currency, brand=brand,
+            last4=pm_instrument.last4, fingerprint=pm_instrument.fingerprint,
+            expiration_date=expiration_date, owner_name=pm.billing_details.name,
         )
         route.stripe_payment_method = pm
         if network == 'stripe-sdd':
@@ -175,7 +191,8 @@ class ExchangeRoute(Model):
                 usage='off_session',
                 idempotency_key='create_SI_for_route_%i' % route.id,
             )
-            route.set_mandate(si.mandate)
+            mandate = stripe.Mandate.retrieve(si.mandate)
+            route.set_mandate(si.mandate, mandate.payment_method_details.sepa_debit.reference)
             assert not si.next_action, si.next_action
         return route
 
@@ -239,13 +256,14 @@ class ExchangeRoute(Model):
                 id=self.id, network=self.network, currency=currency,
             ))
 
-    def set_mandate(self, mandate_id):
+    def set_mandate(self, mandate_id, mandate_reference):
         self.db.run("""
             UPDATE exchange_routes
                SET mandate = %s
+                 , mandate_reference = %s
              WHERE id = %s
-        """, (mandate_id, self.id))
-        self.set_attributes(mandate=mandate_id)
+        """, (mandate_id, mandate_reference, self.id))
+        self.set_attributes(mandate=mandate_id, mandate_reference=mandate_reference)
 
     def update_status(self, new_status):
         id = self.id
@@ -259,12 +277,13 @@ class ExchangeRoute(Model):
         self.set_attributes(status=new_status)
 
     def get_brand(self):
-        if self.network == 'stripe-card':
+        if self.brand:
+            brand = self.brand
+        elif self.network == 'stripe-card':
             if self.address.startswith('pm_'):
-                brand = self.stripe_payment_method.card.brand
-                return CARD_BRANDS.get(brand, brand)
+                brand = self.stripe_payment_method.card.display_brand
             else:
-                return self.stripe_source.card.brand
+                brand = self.stripe_source.card.brand
         elif self.network == 'stripe-sdd':
             if self.address.startswith('pm_'):
                 return getattr(self.stripe_payment_method.sepa_debit, 'bank_name', '')
@@ -272,8 +291,11 @@ class ExchangeRoute(Model):
                 return getattr(self.stripe_source.sepa_debit, 'bank_name', '')
         else:
             raise NotImplementedError(self.network)
+        return CARD_BRANDS.get(brand, brand)
 
     def get_expiration_date(self):
+        if self.expiration_date:
+            return self.expiration_date
         if self.network == 'stripe-card':
             if self.address.startswith('pm_'):
                 card = self.stripe_payment_method.card
@@ -305,27 +327,52 @@ class ExchangeRoute(Model):
             website.tell_sentry(NotImplementedError(self.network))
             return
 
-    def get_partial_number(self):
-        if self.network == 'stripe-card':
+    def get_mandate_reference(self):
+        if self.mandate_reference:
+            return self.mandate_reference
+        if self.network == 'stripe-sdd':
             if self.address.startswith('pm_'):
-                return '⋯' + str(self.stripe_payment_method.card.last4)
+                mandate = stripe.Mandate.retrieve(self.mandate)
+                return mandate.payment_method_details.sepa_debit.reference
             else:
-                return '⋯' + str(self.stripe_source.card.last4)
-        elif self.network == 'stripe-sdd':
-            from ..payin.stripe import get_partial_iban
-            if self.address.startswith('pm_'):
-                return get_partial_iban(self.stripe_payment_method.sepa_debit)
-            else:
-                return get_partial_iban(self.stripe_source.sepa_debit)
+                return self.stripe_source.sepa_debit.mandate_reference
         else:
             raise NotImplementedError(self.network)
 
-    def get_postal_address(self):
+    def get_last4(self):
+        if self.last4:
+            return self.last4
+        if self.network == 'stripe-card':
+            if self.address.startswith('pm_'):
+                return self.stripe_payment_method.card.last4
+            else:
+                return self.stripe_source.card.last4
+        elif self.network == 'stripe-sdd':
+            if self.address.startswith('pm_'):
+                return self.stripe_payment_method.sepa_debit.last4
+            else:
+                return self.stripe_source.sepa_debit.last4
+        else:
+            raise NotImplementedError(self.network)
+
+    def get_partial_number(self):
+        if self.network == 'stripe-card':
+            return f'⋯{self.get_last4()}'
+        elif self.network == 'stripe-sdd':
+            return f'{self.country}⋯{self.get_last4()}'
+        else:
+            raise NotImplementedError(self.network)
+
+    def get_owner_name(self):
+        if self.owner_name:
+            return self.owner_name
         if self.network.startswith('stripe-'):
             if self.address.startswith('pm_'):
-                return self.stripe_payment_method.billing_details.address
+                return self.stripe_payment_method.billing_details.name
             else:
-                return self.stripe_source.owner.address
+                return self.stripe_source.owner.name
+        elif self.network == 'paypal':
+            return None  # TODO
         else:
             raise NotImplementedError(self.network)
 

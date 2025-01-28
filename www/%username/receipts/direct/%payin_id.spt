@@ -1,10 +1,7 @@
 from datetime import date
 
-import stripe
-
 from liberapay.i18n.base import Percent
 from liberapay.models.exchange_route import ExchangeRoute
-from liberapay.payin.stripe import get_partial_iban
 from liberapay.utils import get_participant, render, render_postal_address
 
 [---]
@@ -33,43 +30,13 @@ if not payer_email:
     raise response.error(500, "missing payer email")
 
 payer_identity = payer.get_current_identity() or {}
-payer_name = payer_identity.get('name')
 organization_name = payer_identity.get('organization_name')
 headquarters_address = render_postal_address(
     payer_identity.get('headquarters_address'), single_line=True,
 )
 
 route = ExchangeRoute.from_id(payer, payin.route)
-if route.network.startswith('stripe-'):
-    if route.address.startswith('pm_'):
-        pm = stripe.PaymentMethod.retrieve(route.address)
-        if not payer_name:
-            payer_name = pm.billing_details.name
-        if pm.type == 'card':
-            card_brand, card_last4 = pm.card.brand, pm.card.last4
-        elif pm.type == 'sepa_debit':
-            partial_iban = get_partial_iban(pm.sepa_debit)
-        else:
-            try:
-                raise ValueError(pm.type)
-            except ValueError as e:
-                website.tell_sentry(e)
-    else:
-        source = stripe.Source.retrieve(route.address)
-        if not payer_name:
-            payer_name = source.owner.name
-        if source.type == 'card':
-            card_brand, card_last4 = source.card.brand, source.card.last4
-        elif source.type == 'sepa_debit':
-            partial_iban = get_partial_iban(source.sepa_debit)
-        else:
-            try:
-                raise ValueError(source.type)
-            except ValueError as e:
-                website.tell_sentry(e)
-    if not payer_name:
-        customer = stripe.Customer.retrieve(route.remote_user_id)
-        payer_name = customer.name
+payer_name = route.get_owner_name() or payer_identity.get('name')
 
 settlement_date = website.db.one("""
     SELECT pe.timestamp::date
@@ -196,15 +163,15 @@ output.body = render(globals(), allow_partial_i18n=False)
     % endif
 
     <h2>{{ _("Payment details") }}</h2>
-    % if card_last4 is defined
+    % if route.network == 'stripe-card'
     {{ _(
         "Payment method: {brand} card, number ending in {last4}",
-        brand=constants.CARD_BRANDS.get(card_brand, card_brand), last4=card_last4
+        brand=route.get_brand(), last4=route.get_last4(),
     ) }}
-    % elif partial_iban is defined
+    % elif route.network == 'stripe-sdd'
     {{ _(
         "Payment method: direct debit of bank account {partial_account_number}",
-        partial_account_number=partial_iban
+        partial_account_number=route.get_partial_number()
     ) }}
     % else
     {{ _("Payment method: {0}", _(constants.PAYMENT_METHODS[route.network])) }}

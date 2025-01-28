@@ -20,7 +20,10 @@ class TestReceipts(Harness):
 
     def test_stripe_card_receipt(self):
         self.donor.set_tip_to(self.recipient, JPY('100'))
-        route = self.upsert_route(self.donor, 'stripe-card', address='pm_1EZc8vFk4eGpfLOCibbhONPo')
+        route = self.upsert_route(
+            self.donor, 'stripe-card', address='pm_1EZc8vFk4eGpfLOCibbhONPo',
+            owner_name='Foo Bar',
+        )
         payin = self.make_payin_and_transfer(route, self.recipient, JPY('2001'))[0]
         r = self.client.GET(
             self.donor.path('receipts/direct/%s' % payin.id),
@@ -30,7 +33,10 @@ class TestReceipts(Harness):
 
     def test_stripe_direct_debit_receipt(self):
         self.donor.set_tip_to(self.recipient, USD('0.99'))
-        route = self.upsert_route(self.donor, 'stripe-sdd', address='src_1E42IaFk4eGpfLOCUau5nIdg')
+        route = self.upsert_route(
+            self.donor, 'stripe-sdd', address='src_1E42IaFk4eGpfLOCUau5nIdg',
+            owner_name='Foo Bar',
+        )
         payin = self.make_payin_and_transfer(route, self.recipient, USD('20.02'))[0]
         r = self.client.GET(
             self.donor.path('receipts/direct/%s' % payin.id),
