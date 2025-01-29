@@ -376,6 +376,15 @@ class ExchangeRoute(Model):
         else:
             raise NotImplementedError(self.network)
 
+    def get_postal_address(self):
+        if self.network.startswith('stripe-'):
+            if self.address.startswith('pm_'):
+               return self.stripe_payment_method.billing_details.address
+            else:
+               return self.stripe_source.owner.address
+        else:
+            raise NotImplementedError(self.network)
+
     def set_postal_address(self, addr):
         if self.network.startswith('stripe-'):
             addr = addr.copy()
