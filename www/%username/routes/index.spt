@@ -134,9 +134,8 @@ title = _("Payment Instruments")
                     &nbsp; <span class="label label-default">{{ route.status }}</span>
                 % endif
                 <br>{{ _("Added on {date}", date=route.ctime.date()) }}
-                % set mandate_url = route.get_mandate_url()
-                % if mandate_url
-                    (<a href="{{ mandate_url }}">{{ _("view mandate") }}</a>)
+                % if route.network == 'stripe-sdd'
+                    (<a href="{{ participant.path('routes/%s/mandate' % route.id) }}">{{ _("view mandate") }}</a>)
                 % endif
                 % set exp_date = route.get_expiration_date()
                 % if exp_date
