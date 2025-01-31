@@ -540,6 +540,12 @@ class AccountSuspended(LazyResponseXXX):
         )
 
 
+class EmailRequired(LazyResponseXXX):
+    code = 403
+    def msg(self, _):
+        return _("Your account lacks a valid email address, please add one.")
+
+
 class RecipientAccountSuspended(LazyResponseXXX):
     code = 403
     def msg(self, _):
