@@ -85,14 +85,12 @@ subhead = _("Avatar")
        <span>{{ _("What is Libravatar?") }}</span>
     </a>
     <br><br>
-    % if participant.avatar_url and request.method == 'GET'
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <button class="btn btn-default" name="action" value="refresh">
            {{ icon('refresh') }} <span>{{ _("Refresh") }}</span>
         </button>
     </form>
-    % endif
     </div>
     </div>
     % endif
