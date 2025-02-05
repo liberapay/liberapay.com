@@ -352,7 +352,10 @@ title = "Users Admin"
                 <br>
             % endfor
         % else
-            none. <span class="text-warning">{{ icon('warning-sign') }}</span>
+            none.
+            % if row.payment_accounts
+            <span class="text-warning">{{ icon('warning-sign') }}</span>
+            % endif
         % endif
         </p>
         % endif
@@ -471,7 +474,10 @@ title = "Users Admin"
                 <br>
             % endfor
         % elif not p.public_name
-            none. <span class="text-warning">{{ icon('warning-sign') }}</span>
+            none.
+            % if row.payment_accounts
+            <span class="text-warning">{{ icon('warning-sign') }}</span>
+            % endif
         % endif
         </div>
 
