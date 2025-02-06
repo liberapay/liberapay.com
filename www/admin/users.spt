@@ -119,6 +119,15 @@ if mode == 'all':
                         ORDER BY r.network
                         ) r
                ) AS payment_instruments
+             , ( SELECT json_objectagg(pi.status:pi.count)
+                   FROM ( SELECT pi.status
+                               , count(*) AS count
+                            FROM payins pi
+                           WHERE pi.payer = p.id
+                        GROUP BY pi.status
+                        ORDER BY pi.status
+                        ) pi
+               ) AS payin_counts
              , ( SELECT json_agg(json_build_object(
                             'provider', a.provider,
                             'id', a.id,
@@ -336,6 +345,14 @@ title = "Users Admin"
                     icon('search', "Look it up")
                 }}</button>
             </form>
+            &nbsp;
+            <a href="/admin/email-domains?domain={{ row.email.address.rsplit('@', 1)[1] }}"
+               target="_blank" rel="noopener noreferrer" title="Look up the domain">@</a>
+            &nbsp;
+            <a href="https://verifymail.io/domain/{{ row.email.address.rsplit('@', 1)[1] }}"
+               target="_blank" rel="noopener noreferrer">{{
+                icon('external-link', "Check the domain")
+            }}</a>
         % else
             <strong>Email address:</strong> none.
         % endif
@@ -352,7 +369,10 @@ title = "Users Admin"
                 <br>
             % endfor
         % else
-            none. <span class="text-warning">{{ icon('warning-sign') }}</span>
+            none.
+            % if row.payment_accounts
+            <span class="text-warning">{{ icon('warning-sign') }}</span>
+            % endif
         % endif
         </p>
         % endif
@@ -381,6 +401,16 @@ title = "Users Admin"
             none.
         % endif
         % endif
+
+        <p><strong>Payment attempts:</strong>
+        % if row.payin_counts
+            % for status, count in row.payin_counts.items()
+                {{ count }} {{ status }}{{ '.' if loop.last else ',' }}
+            % endfor
+        % else
+            none.
+        % endif
+        </p>
         % endif
 
         <p><strong>Payment accounts:</strong>
@@ -471,7 +501,10 @@ title = "Users Admin"
                 <br>
             % endfor
         % elif not p.public_name
-            none. <span class="text-warning">{{ icon('warning-sign') }}</span>
+            none.
+            % if row.payment_accounts
+            <span class="text-warning">{{ icon('warning-sign') }}</span>
+            % endif
         % endif
         </div>
 

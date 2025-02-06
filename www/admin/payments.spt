@@ -136,7 +136,7 @@ title = "Payments Admin"
             <td><a href="/~{{ pi.payer }}/">{{ pi.payer_name }}</a>{% if pi.payer_identity %}<br>
                 % set payer_identity = pi.payer_identity.decrypt()
                 <span class="break-word-anywhere monospace">
-                    {{- payer_identity.name }}<br>
+                    {{- payer_identity.name|default('') }}<br>
                     {{- render_postal_address(
                         payer_identity.postal_address, single_line=True, format='downward'
                     ) -}}
