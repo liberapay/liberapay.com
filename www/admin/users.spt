@@ -345,6 +345,11 @@ title = "Users Admin"
                     icon('search', "Look it up")
                 }}</button>
             </form>
+            &nbsp;
+            <a href="https://verifymail.io/domain/{{ row.email.address.rsplit('@', 1)[1] }}"
+               target="_blank" rel="noopener noreferrer">{{
+                icon('external-link', "Check the domain")
+            }}</a>
         % else
             <strong>Email address:</strong> none.
         % endif
