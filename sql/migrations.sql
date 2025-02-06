@@ -3607,3 +3607,6 @@ ALTER TABLE exchange_routes
     ADD COLUMN owner_name text,
     ADD COLUMN expiration_date date,
     ADD COLUMN mandate_reference text;
+
+-- migration #182
+UPDATE participants SET public_name = null WHERE public_name = '';
