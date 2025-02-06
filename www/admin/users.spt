@@ -119,6 +119,15 @@ if mode == 'all':
                         ORDER BY r.network
                         ) r
                ) AS payment_instruments
+             , ( SELECT json_objectagg(pi.status:pi.count)
+                   FROM ( SELECT pi.status
+                               , count(*) AS count
+                            FROM payins pi
+                           WHERE pi.payer = p.id
+                        GROUP BY pi.status
+                        ORDER BY pi.status
+                        ) pi
+               ) AS payin_counts
              , ( SELECT json_agg(json_build_object(
                             'provider', a.provider,
                             'id', a.id,
@@ -384,6 +393,16 @@ title = "Users Admin"
             none.
         % endif
         % endif
+
+        <p><strong>Payment attempts:</strong>
+        % if row.payin_counts
+            % for status, count in row.payin_counts.items()
+                {{ count }} {{ status }}{{ '.' if loop.last else ',' }}
+            % endfor
+        % else
+            none.
+        % endif
+        </p>
         % endif
 
         <p><strong>Payment accounts:</strong>
