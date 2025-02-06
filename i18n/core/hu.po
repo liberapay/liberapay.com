@@ -395,7 +395,7 @@ msgstr "Kezdeményeztünk egy {money_amount} összegű közvetlen terhelést a b
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
-msgstr "Ez a művelet a(z) {link_start}{mandate_id} azonosítójú megbízás{link_end} alapján megy végbe, amelyet {acceptance_date} napján jóváhagyott, ezzel felhatalmazva a Liberapayt ({creditor_identifier} azonosítójú SEPA-hitelező) arra, hogy utasításokat küldjön a bankjának, hogy azoknak megfelelően terheljék meg a számláját."
+msgstr "Ez a művelet a(z) {link_start}{mandate_id} azonosítójú megbízás{link_end} alapján megy végbe, amelyet {acceptance_date} napján jóváhagyott, ezzel felhatalmazva a Liberapayt ({creditor_identifier} azonosítójú SEPA hitelező) arra, hogy utasításokat küldjön a bankjának, hogy azoknak megfelelően terheljék meg a számláját."
 
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
 msgstr "Ha nem engedélyezte ezt a kifizetést, kérjük, tudassa velünk. Tájékoztatjuk, hogy kezdeményezhetünk-e visszatérítést, vagy azt a bankjától kell kérnie."
@@ -1340,7 +1340,7 @@ msgid "Contact Us"
 msgstr "Kapcsolat"
 
 msgid "FAQ"
-msgstr "Gy.I.K."
+msgstr "Gy.i.k."
 
 msgid "Legal"
 msgstr "Jogi információk"
@@ -1695,7 +1695,7 @@ msgstr "{username} részére történő adományozást a PayPal dolgozza fel."
 
 #, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "{username} részére történő adományok fizetése történhet: hitel- vagy bankkártyával ({list_of_card_brands}), eurobankszámlával (SEPA közvetlen beszedés) vagy PayPal számlával."
+msgstr "{username} részére történő adományok fizetése történhet: hitel- vagy bankkártyával ({list_of_card_brands}), euróban vezetett bankszámlával (SEPA közvetlen beszedés) vagy PayPal számlával."
 
 msgid "Payment Card"
 msgstr "Fizetési kártya"
@@ -1949,47 +1949,37 @@ msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Ön jelenleg tesztüzemben van, kérjük ne adjon meg semmilyen valós fizetési vagy személyes adatot!"
 
 msgid "The credentials have been generated."
-msgstr "A hitelesítő adatok létrehozásra kerültek."
+msgstr "A hitelesítési adatok létrehozásra kerültek."
 
-#, fuzzy
 msgid "The credentials have been revoked."
-msgstr "A megbízólevelet visszavonták."
+msgstr "A hitelesítési adatokat visszavonták."
 
-#, fuzzy
 msgid "Constant session"
 msgstr "Folyamatos munkamenet"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "Automatizálhatja a személyes adatok letöltését a fiókjából, ha a következő HTTP-fejlécet is beilleszti a kéréseibe:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "Például a következő parancs végrehajtásával letöltheti a jelenleg aktív védnökök listáját:"
+msgstr "Például a következő parancs végrehajtásával letöltheti a jelenleg aktív mecénásainak listáját:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
-msgstr "Az Önt érintő kockázatok minimalizálása érdekében ezek a hitelesítő adatok csak adatok lekérdezésére használhatók, a fiókjában semmit sem módosíthatnak, és automatikusan lejárnak, ha egy évig nem használják őket."
+msgstr "Az Önt érintő kockázatok minimalizálása érdekében ezek a hitelesítési adatok csak adatok lekérdezésére használhatók, a fiókjában semmit sem módosíthatnak, és automatikusan lejárnak, ha egy évig nem használják őket."
 
-#, fuzzy
 msgid "Revoke credentials"
-msgstr "Meghatalmazások visszavonása"
+msgstr "Hitelesítési adatok visszavonása"
 
-#, fuzzy
 msgid "The credentials have expired."
-msgstr "A hitelesítő adatok lejártak."
+msgstr "A hitelesítési adatok lejártak."
 
-#, fuzzy
 msgid "Regenerate credentials"
-msgstr "Megbízólevelek újrateremtése"
+msgstr "Hitelesítési adatok újra létrehozása"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "A fiókjából származó személyes adatok letöltésének automatizálásának egyszerűsítése érdekében hosszú élettartamú, csak olvasásra engedélyezett hitelesítő adatokat hozhat létre."
+msgstr "A személyes adatoknak a fiókjából történő automatikus letöltésének egyszerűsítése érdekében hosszú élettartamú, csak olvasásra engedélyezett hitelesítési adatokat hozhat létre."
 
-#, fuzzy
 msgid "Generate credentials"
-msgstr "Hitelesítési adatok generálása"
+msgstr "Hitelesítési adatok létrehozása"
 
 msgid "Dashboard"
 msgstr "Vezérlőpult"
@@ -2038,7 +2028,7 @@ msgid "We have confirmed through an automated verification process that {0} has 
 msgstr "Megerősítettük egy automatikus hitelesítési folyamat során, hogy {0} más platformokon is rendelkezik fiókokkal:"
 
 msgid "Frequently Asked Questions"
-msgstr "Gyakran Ismételt Kérdések"
+msgstr "Gyakran ismételt kérdések"
 
 msgid "Can I donate in another currency?"
 msgstr "Adományozhatok más devizában?"
@@ -2048,7 +2038,7 @@ msgid "No, {username} only accepts payments in {currency}."
 msgstr "Nem, {username} csak {currency} devizában fogad el kifizetéseket."
 
 msgid "What payment methods are available?"
-msgstr "Milyen fizetési lehetőségek érhetőek el?"
+msgstr "Milyen fizetési lehetőségek érhetők el?"
 
 msgid "How do recurrent donations work?"
 msgstr "Hogyan működnek az ismétlődő adományozások?"
@@ -2076,7 +2066,7 @@ msgstr "Biztonságos ez a platform?"
 
 #, python-brace-format
 msgid "Liberapay has been running for {timedelta} without any significant security incident. We do everything we can to keep your data safe and comply with the laws of the European Union ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end}, et cetera)."
-msgstr "A Liberapay különösebb biztonsági incidens nélkül már {timedelta} éve áll fent. Mindent megteszünk, hogy biztonságban tudja adatát, és teljesítsük az Európai Unió törvényeit ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end}, stb.)."
+msgstr "A Liberapay mögött már {timedelta} különösebb biztonsági incidens nélküli működés van. Mindent megteszünk, hogy biztonságban tudja adatát, és teljesítsük az Európai Unió törvényeit ({GDPR}GDPR{abbr_end}, {PSD2}PSD2{abbr_end}, stb.)."
 
 msgid "General Data Protection Regulation"
 msgstr "Általános adatvédelmi rendelet"
@@ -2088,7 +2078,6 @@ msgstr "Felülvizsgált pénzforgalmi irányelv"
 msgid "Your new avatar URL is: {0}"
 msgstr "Az Ön új profilképének hivatkozása: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
 msgstr "A profilodnak már nincs avatárja."
 
@@ -2944,13 +2933,12 @@ msgstr "Bevételi előzmények megtekintése"
 msgid "No data to show."
 msgstr "Nincs megjeleníthető adat."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
 msgstr "Heti jövedelem ({currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
-msgstr "Heti látogatók száma"
+msgstr "Mecénások heti száma"
 
 msgid "Invoice documents are private."
 msgstr "A számlázási dokumentumok privátak."
@@ -3506,9 +3494,8 @@ msgstr "Adók"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Ez a kifizetés adomány, cserébe nem történt szolgáltatás vagy áru mozgás, a Liberapay nem szedett adót."
 
-#, fuzzy
 msgid "Income history"
-msgstr "Bevételi előzmények"
+msgstr "A bevételek alakulása"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "Addig nem fogadhat támogatásokat, amíg nem állította be a fizetési szolgáltatót."
@@ -3517,16 +3504,14 @@ msgstr "Addig nem fogadhat támogatásokat, amíg nem állította be a fizetési
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "A csapatokon keresztüli adományozás teszik ki a {income_percent} bevételét ({team_income} a(z) {total_income} összesből) és a {patrons_percent} fő támogatót jelent ({nteampatrons} a(z) {npatrons} összesből)."
 
-#, fuzzy
 msgid "Details of personal donations"
 msgstr "A személyes adományok részletei"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Ez a rész nem tartalmazza a csapatokon keresztül kapott adományok adatait, csak a személyesen közvetlenül kapott adományokat."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
-msgstr "A személyes adományozással kapcsolatos legújabb változások"
+msgstr "A személyes adományokkal kapcsolatos legújabb változások"
 
 #, python-brace-format
 msgid "A new donation of {amount} per week has been created."
@@ -3548,9 +3533,8 @@ msgstr "A korábban {old_amount} heti értékű adomány {new_amount} értékre 
 msgid "A donation of {amount} per week has been restarted."
 msgstr "A(z) {amount} összegű heti adományozás újraindult."
 
-#, fuzzy
 msgid "Statistics on personal donations"
-msgstr "Személyes adományokra vonatkozó statisztikák"
+msgstr "A személyes adományok statisztikái"
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "Az alábbi táblázat a fogadott adományait részletezi, összeg szerint csoportosítva."
@@ -3689,10 +3673,10 @@ msgid "Add a card"
 msgstr "Kártya hozzáadása"
 
 msgid "Euro Bank Account"
-msgstr "Euroban vezetett bankszámla"
+msgstr "Euróban vezetett bankszámla"
 
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "Csak a SEPA-országok kedvezményezettei számára euróban történő adományozás esetén."
+msgstr "Csak a SEPA országok kedvezményezettei számára euróban történő adományozás esetén."
 
 msgid "Add a bank account"
 msgstr "Bankszámla hozzáadása"
@@ -3710,7 +3694,7 @@ msgid "Identity information and transaction records are kept for as long as is n
 msgstr "A személyazonossági- és tranzakciós adatokat addig őrizzük meg, ameddig az a jogi kötelezettségeknek való megfeleléshez szükséges."
 
 msgid "We may give your username to someone else if they ask for it, but not for at least a year after you close your account (unless we determine that you've been infringing a trademark)."
-msgstr "Odaadhatjuk a felhasználónevét valakinek, ha kéri, de csak egy évvel a fiókja megszüntetése után (kivétel ha megállapításra kerül, hogy korábban jogsértően használta a nevet)."
+msgstr "Odaadhatjuk a felhasználónevét valakinek, ha kéri, de csak egy évvel a fiókja megszüntetése után (kivéve ha megállapításra kerül, hogy korábban jogsértően használta a nevet)."
 
 msgid "Feedback"
 msgstr "Visszajelzés"
@@ -4011,13 +3995,13 @@ msgstr "Hogyan finanszírozzák a Liberapay-t? Vannak díjak?"
 
 #, python-brace-format
 msgid "Liberapay does not take a cut of payments, the service is funded by the donations to {1}its own account{0}. However there are {2}payment processing fees{0}."
-msgstr "A Liberapay nem von le jutalékot a fizetésekből, a szolgáltatást a {1}saját számlájára{0} érkező adományokból finanszírozza. Azonban vannak {2}fizetésfeldolgozási díjak{0}."
+msgstr "A Liberapay nem von le jutalékot a fizetésekből, a szolgáltatást a {1}saját számlájára{0} érkező adományokból finanszírozza. Azonban vannak {2}pénzforgalmi feldolgozói díjak{0}."
 
 msgid "Who can use Liberapay?"
 msgstr "Ki használhatja a Liberapay-t?"
 
 msgid "Liberapay can be used by anyone who wishes to fund their work by collecting recurrent donations."
-msgstr "A Liberapay-t bárki használhatja, aki munkáját ütemezett adományok gyűjtésével kívánja finanszírozni."
+msgstr "A Liberapay-t bárki használhatja, aki a munkáját ütemezett adományok gyűjtésével kívánja finanszírozni."
 
 #, python-brace-format
 msgid "Can creators of {abbr_}NSFW{_abbr} content use Liberapay?"
@@ -4064,17 +4048,17 @@ msgid "Yes. Liberapay is based in France and complies with the European Union's 
 msgstr "Igen. A Liberapay székhelye Franciaországban van, és megfelel az Európai Unió pénzügyi szabályainak. Pénzforgalmi feldolgozóink mindegyike megfelelő engedéllyel rendelkezik, és segítenek a csalás-, a pénzmosás- és a terrorizmus finanszírozásának megakadályozásában."
 
 msgid "How do I know that my donation won't go to an impostor?"
-msgstr "Honnan tudom, hogy az adományom nem egy csalóhoz kerül?"
+msgstr "Honnan tudom, hogy az adományom nem egy szélhámoshoz kerül?"
 
 msgid "You can usually check the authenticity of a Liberapay profile by looking at the social accounts connected to it. Only someone who controls a social account can connect it to a Liberapay profile, because the process includes an authentication step. You can also look for a link to a Liberapay profile in a project's official website. Finally if you have doubts about a specific account you can ask us and we'll look into it."
 msgstr "A Liberapay-profil hitelességét általában a hozzá kapcsolódó közösségi fiókok alapján ellenőrizheti. Csak a közösségi fiók tulajdonosa tud egy Liberapay-profilhoz kapcsolódni, mivel a folyamat tartalmaz egy hitelesítési lépést. A projekt hivatalos weboldalán is kereshet egy Liberapay-profilra mutató linket. Végül, ha kétségei vannak egy adott fiókkal kapcsolatban, megkérdezhet minket, és mi utánanézünk."
 
 msgid "How do I know that my pledges won't be claimed by an impostor?"
-msgstr "Honnan tudhatom, hogy nem egy szélhámos fogja elvinni a felajánlásaimat?"
+msgstr "Honnan tudhatom, hogy a felajánlásomat nem egy szélhámos fogja igényelni?"
 
 #, python-brace-format
 msgid "A pledge is linked to an account on another platform (e.g. {platform}) and it can only be claimed by someone who controls this account."
-msgstr "A felajánlás egy másik platformon (pl. {platform}) lévő fiókhoz kapcsolódik, és csak az igényelheti, aki ehhez a fiókhoz hozzáfér."
+msgstr "A felajánlás egy másik platformon (pl. {platform}) lévő fiókhoz kapcsolódik, és csak az igényelheti, aki ezt a fiókot létrehozta."
 
 msgid "Which countries and currencies are supported?"
 msgstr "Mely országok és pénznemek támogatottak?"
@@ -4085,7 +4069,7 @@ msgstr "Lásd a(z) „{page_name}” oldalon."
 
 #, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "A rendelkezésre álló fizetési módok attól függnek, hogy a címzett mely fizetési folyamatokat támogatja. Ha a fizetést a Stripe dolgozza fel, akkor a legtöbb hitelkártya és betéti kártya ({list_of_card_brands}) elfogadott, valamint a SEPA-beszedések is (csak a SEPA-országok címzetteinek szánt, euróban történő adományok esetében). Ha a fizetés a PayPal rendszerén keresztül történik, akkor többféle módon is lehet fizetni, azonban az adományozónak rendelkeznie kell PayPal-fiókkal vagy létre kell hoznia egy PayPal-fiókot."
+msgstr "A rendelkezésre álló fizetési módok attól függnek, hogy a címzett mely fizetési folyamatokat támogatja. Ha a fizetést a Stripe dolgozza fel, akkor a legtöbb hitelkártya és betéti kártya ({list_of_card_brands}) elfogadott, valamint a SEPA beszedések is (csak a SEPA országok címzetteinek szánt, euróban történő adományok esetében). Ha a fizetés a PayPal rendszerén keresztül történik, akkor többféle módon is lehet fizetni, azonban az adományozónak rendelkeznie kell PayPal számlával vagy nyitnia kell egy PayPal számlát."
 
 msgid "What are the payment processing fees?"
 msgstr "Mik a pénzforgalmi feldolgozói díjak?"
@@ -4094,13 +4078,11 @@ msgstr "Mik a pénzforgalmi feldolgozói díjak?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "A díjak pénzforgalmi feldolgozótól, fizetési módtól, valamint országtól és pénznemtől függően változnak. Az elmúlt évben az átlagos díjszázalékok a Stripe által feldolgozott fizetések esetében {average_fee_stripe}, a PayPal által feldolgozott fizetések esetében pedig {average_fee_paypal} voltak."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
-msgstr "Hogyan és mikor kapom meg a támogatóim által küldött pénzt?"
+msgstr "Hogyan és mikor kaphatom meg a támogatóim által küldött pénzt?"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
-msgstr "Az adományozó által küldött pénz azonnal az Ön Stripe vagy PayPal számlájára kerül. Alapértelmezés szerint a Stripe ezután automatikusan elküldi a pénzt a bankszámlájára, míg a PayPal egyszerűen tárolja azt, amíg el nem költi vagy ki nem veszi."
+msgstr "Az adományozó által küldött pénz azonnal az Ön Stripe vagy PayPal számlájára kerül. Alapértelmezés szerint a Stripe ezután automatikusan elküldi a pénzt a bankszámlájára, míg a PayPal egyszerűen tárolja azt, amíg Ön el nem költi vagy ki nem veszi."
 
 msgid "Why do I see partial refunds in the Stripe dashboard?"
 msgstr "Miért látok részleges visszatérítéseket a Stripe vezérlőpulton?"
@@ -4119,17 +4101,17 @@ msgstr "Van minimális vagy maximális összeg, amit adhatok vagy kaphatok?"
 
 #, python-brace-format
 msgid "The minimum you can give any user is {0} per week, but in order to minimize processing fees you will be asked to pay for multiple weeks in advance."
-msgstr "A heti minimum {0} amit bármely felhasználónak adhat, de a feldolgozási díjak minimalizálása érdekében több hétre előre kell fizetnie."
+msgstr "A heti minimum {0} amit bármely felhasználónak adhat, de a pénzforgalmi feldolgozói díjak minimalizálása érdekében több hétre előre kell fizetnie."
 
 #, python-brace-format
 msgid "The maximum you can give any one user is {0} per week. This helps to stabilize income by reducing how dependent it is on a few large patrons."
-msgstr "Egy felhasználónak legfeljebb {0} összeget adhat hetente. Ez segít stabilizálni a bevételt azáltal, hogy csökkenti annak függőségét néhány nagy támogatótól."
+msgstr "Egy felhasználónak legfeljebb {0} összeget adományozhat hetente. Ez elősegíti a jövedelem stabilizálását azáltal, hogy csökkenti a függőségét a nagy mecénásoktól."
 
 msgid "Do I have to pay taxes on the income I receive from Liberapay?"
 msgstr "Kell-e adót fizetnem a Liberapay-től kapott jövedelmem után?"
 
 msgid "We don't know, it's up to you to figure out your country's tax rules."
-msgstr "Nem tudunk ebben segíteni, az Ön saját feladata, hogy utánanézzen az országa adószabályainak. Magyarországon érdemes érdeklődni a Nemzeti Adó- és Vámhivatal ügyfélszolgálatán."
+msgstr "Nem tudunk ebben segíteni, az Ön saját feladata, hogy utánanézzen az országa adószabályainak. Magyarországon a Nemzeti Adó- és Vámhivatal ügyfélszolgálatán érdemes érdeklődni."
 
 msgid "Are donations through Liberapay tax-deductible?"
 msgstr "A Liberapay-en keresztül történő adományok levonhatók az adóból?"
@@ -4179,7 +4161,7 @@ msgstr "Jó támogatottságú területek"
 #, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] "A Liberapay az alábbi {n} területen is elérhető az alkotók számára. Az ezekre a területekre érkező adományok azonban nem csoportosíthatók a fizetésfeldolgozási díjak csökkentése érdekében, és az euróban történő közvetlen beszedési mód sem áll az adományozók rendelkezésére."
+msgstr[0] "A Liberapay az alábbi {n} területen is elérhető az alkotók számára. Az ezekre a területekre érkező adományok azonban nem csoportosíthatók a pénzforgalmi feldolgozói díjak csökkentése érdekében, és az euróban történő közvetlen beszedési mód sem áll az adományozók rendelkezésére."
 
 msgid "Barely supported territories"
 msgstr "Gyenge támogatottságú területek"
@@ -4193,7 +4175,7 @@ msgid "Unsupported territories"
 msgstr "Nem támogatott területek"
 
 msgid "If you don't live or have a registered business in one of the territories listed above, then you currently can't use Liberapay to receive donations. Sorry."
-msgstr "Ha nem a fent felsorolt területek egyikén él, vagy nem ott van bejegyzett vállalkozása, akkor jelenleg nem tudja használni a Liberapayt adományok fogadására. Sajnálom."
+msgstr "Ha nem a fent felsorolt területek egyikén él, vagy nem ott van a bejegyzett vállalkozása, akkor jelenleg nem tudja használni a Liberapayt adományok fogadására. Sajnálom."
 
 msgid "What is Liberapay?"
 msgstr "Mi a Liberapay?"
@@ -4203,7 +4185,7 @@ msgstr "A Liberapay egy módja annak, hogy rendszeresen pénzt adományozzon oly
 
 #, python-brace-format
 msgid "Payments come with no strings attached. By default, recipients don't know who their patrons are, and donations are capped at {0} per week per donor to dampen undue influence."
-msgstr "A kifizetések feltétel nélküliek. Alapértelmezés szerint a kedvezményezettek nem tudják, hogy kik a támogatóik, és az adományokat heti {0} értékben korlátozzuk, hogy csökkentsük a bizonyos mecénásoktól való túlzott függést."
+msgstr "A kifizetésekhez nem kapcsolódhatnak feltételek. Alapértelmezés szerint a címzettek nem tudják, hogy kik a támogatóik, és az adományok felső határa {0} hetente és adományozónként, hogy csökkenthető legyen a befolyásolás."
 
 msgid "By default, the total amount you give and the total amount you receive are public (you can opt out of sharing this info)."
 msgstr "Alapértelmezés szerint az Ön által adott és kapott teljes összeg nyilvános (az információ megosztását le lehet tiltani)."
@@ -4226,7 +4208,7 @@ msgid "Legal information"
 msgstr "Jogi információk"
 
 msgid "This website is managed by Liberapay, a non-profit organization legally founded in 2015 in France (identifier: W144000981)."
-msgstr "Ezt a weboldalt a Liberapay, egy 2015-ben Franciaországban jogilag alapított nonprofit szervezet (azonosító: W144000981) kezeli."
+msgstr "Ezt a weboldalt a Liberapay, egy 2015-ben Franciaországban a francia jog szerint alapított nonprofit szervezet kezeli (azonosító: W144000981)."
 
 msgid "Liberapay complies with the laws of the European Union. With the help of our partners we monitor transactions for possible fraud, money laundering, and terrorism financing."
 msgstr "A Liberapay megfelel az Európai Unió jogszabályainak. Partnereink segítségével folyamatosan ellenőrizzük a tranzakciókat az esetleges csalás, pénzmosás és terrorizmus finanszírozása szempontjából."
@@ -4236,23 +4218,23 @@ msgstr "Postacím:"
 
 #, python-brace-format
 msgid "This website is hosted on {0} by:"
-msgstr "Ezt a weboldalt a {0} oldalon hosztolja:"
+msgstr "Ennek a weboldalnak az {0} ad otthont, a házigazda:"
 
 #, python-brace-format
 msgid "The publication director is Liberapay's legal representative, currently {0}."
-msgstr "A kiadvány igazgatója a Liberapay jogi képviselője, jelenleg {0}."
+msgstr "A kiadvány igazgatója jelenleg {0}, aki a Liberapay jogi képviselője."
 
 msgid "Terms of Service"
-msgstr "Általános Szerződési Feltételek"
+msgstr "Általános szerződési feltételek"
 
 msgid "Privacy Policy"
-msgstr "Adatvédelmi Szabályzat"
+msgstr "Adatvédelmi szabályzat"
 
 msgid "This page contains links to and information about the Liberapay logo. We hope you'll find it especially useful if you're writing an article about Liberapay or if you want to add custom links to your Liberapay profile in your website."
 msgstr "Ez az oldal a Liberapay logóra mutató linkeket és információkat tartalmaz. Reméljük, hogy különösen hasznosnak találja, ha cikket ír a Liberapay-ről, vagy ha egyéni linkeket szeretne hozzáadni a Liberapay profiljához a weboldalán."
 
 msgid "The Liberapay logo is composed of the two letters “lp”. It's usually colored black-on-yellow or just black. We used a white-on-yellow variant in the past, but it's now phased out as its contrast was deemed too low."
-msgstr "A Liberapay logója az \"lp\" betűkből áll. Általában citromsárga alapon fekete vagy csak szimplán fekete színű. Régebben használtunk egy citromsárga alapon fehér színű változatot is, de azt kivontuk a forgalomból, mivel a kontrasztját túl alacsonynak ítéltük."
+msgstr "A Liberapay logója az „lp” betűkből áll. Általában citromsárga alapon fekete vagy csak szimplán fekete színű. Régebben használtunk egy citromsárga alapon fehér színű változatot is, de azt kivontuk a forgalomból, mivel a kontrasztját túl alacsonynak ítéltük."
 
 #, python-brace-format
 msgid "The Liberapay yellow is {yellow_color_code}, the black is {black_color_code}."

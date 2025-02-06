@@ -1890,7 +1890,6 @@ msgstr[0] "Валюта {currency_name} – не та, которую вы пр�
 msgstr[1] "Валюта {currency_name} – не та, которую вы предпочитаете? {username} также принимает ещё {n} валюты:"
 msgstr[2] "Валюта {currency_name} – не та, которую вы предпочитаете? {username} также принимает ещё {n} валют:"
 
-#, fuzzy
 msgid "supported by PayPal"
 msgstr "При поддержке PayPal"
 
@@ -1983,42 +1982,33 @@ msgstr "Система периодических пожертвований Lib
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Вы находитесь в режиме песочницы, не вводите никаких реальных платёжных или персональных данных!"
 
-#, fuzzy
 msgid "The credentials have been generated."
-msgstr "Учетные данные были сгенерированы."
+msgstr "Учетные данные были созданы."
 
-#, fuzzy
 msgid "The credentials have been revoked."
 msgstr "Полномочия были отозваны."
 
-#, fuzzy
 msgid "Constant session"
 msgstr "Постоянная сессия"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "Вы можете автоматизировать загрузку приватной информации из вашей учетной записи, включив в ваши запросы следующий HTTP-заголовок:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
 msgstr "Например, вы можете загрузить список ваших активных покровителей, выполнив следующую команду:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
 msgstr "Чтобы минимизировать риски для вас, эти учетные данные могут использоваться только для получения данных, но не для изменения чего-либо в вашей учетной записи, и их срок действия автоматически истекает, если они не используются в течение года."
 
-#, fuzzy
 msgid "Revoke credentials"
 msgstr "Отозвать учетные данные"
 
-#, fuzzy
 msgid "The credentials have expired."
 msgstr "Срок действия учетных данных истек."
 
 msgid "Regenerate credentials"
 msgstr "Пересоздать учётные данные"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
 msgstr "Чтобы упростить автоматизацию загрузки конфиденциальной информации из вашей учетной записи, вы можете создать долгоживущие учетные данные, доступные только для чтения."
 
@@ -2124,7 +2114,6 @@ msgstr "Пересмотренная директива о платежных у
 msgid "Your new avatar URL is: {0}"
 msgstr "URL вашего нового аватара: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
 msgstr "В вашем профиле больше нет аватара."
 
@@ -3016,11 +3005,10 @@ msgstr "Просмотреть историю доходов"
 msgid "No data to show."
 msgstr "Нет данных для отображения."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
 msgstr "Доход в неделю (в {currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
 msgstr "Количество покровителей в неделю"
 
@@ -3582,7 +3570,6 @@ msgstr "Налоги"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Этот платеж является пожертвованием, взамен не должны предоставляться никакие товары или услуги, Liberapay не взимает никаких налогов."
 
-#, fuzzy
 msgid "Income history"
 msgstr "История доходов"
 
@@ -3593,14 +3580,12 @@ msgstr "Вы не сможете получать новые пожертвов�
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Пожертвования через команды составляют {income_percent} вашего дохода ({team_income} из {total_income}) и {patrons_percent} ваших спонсоров ({nteampatrons} из {npatrons})."
 
-#, fuzzy
 msgid "Details of personal donations"
 msgstr "Подробная информация о личных пожертвованиях"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Этот раздел не включает данные о пожертвованиях через команды, он показывает только пожертвования, которые вы получаете лично."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
 msgstr "Последние изменения в личных пожертвованиях"
 
@@ -3624,7 +3609,6 @@ msgstr "Пожертвование было снижено с {old_amount} в н
 msgid "A donation of {amount} per week has been restarted."
 msgstr "Пожертвование {amount} в неделю было возобновлено."
 
-#, fuzzy
 msgid "Statistics on personal donations"
 msgstr "Статистика личных пожертвований"
 
@@ -4183,11 +4167,9 @@ msgstr "Сколько составляет комиссия за перевод
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "Комиссии варьируются в зависимости от платежной системы, способа оплаты, страны и валюты. За последний год средний процент комиссии составил {average_fee_stripe} для платежей, обрабатываемых Stripe, и {average_fee_paypal} для платежей, обрабатываемых PayPal."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
 msgstr "Как и когда я получу деньги, отправленные моими покровителями?"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
 msgstr "Деньги, отправленные донором, сразу же поступают на ваш счет в Stripe или PayPal. По умолчанию Stripe автоматически отправляет средства на ваш банковский счет, в то время как PayPal просто хранит их до тех пор, пока вы не потратите или не снимите их."
 
