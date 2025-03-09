@@ -383,6 +383,8 @@ def test_email_server(ip_address: str, email=None, timeout=None) -> None:
                 ) or
                 # gamil.com SMTP server
                 msg.startswith("sorry, no mailbox here by that name") or
+                # ilxnetworks.com SMTP server
+                msg.endswith(": Relay access denied") or
                 # Microsoft's SMTP server
                 msg.startswith("Requested action not taken: mailbox unavailable") or
                 # OpenSMTPD
