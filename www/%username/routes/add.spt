@@ -128,7 +128,7 @@ title = _("Add a payment instrument")
             processor_name='Stripe',
         ) }}</p>
         <div class="block-labels max-width-500">{{
-            postal_address_form_v2(saved=identity.get('postal_address'), required=False)
+            postal_address_form_v2(participant, saved=identity.get('postal_address'), required=False)
         }}</div>
         <br>
         <output class="alert alert-danger hidden msg-postal-address-required">{{ _(

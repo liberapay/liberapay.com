@@ -576,7 +576,7 @@ title = _("Funding your donations")
             processor_name='Stripe',
         ) }}</p>
         <div class="block-labels max-width-500">{{
-            postal_address_form_v2(saved=identity.get('postal_address'), required=False)
+            postal_address_form_v2(payer, saved=identity.get('postal_address'), required=False)
         }}</div>
         <br>
         % endif
