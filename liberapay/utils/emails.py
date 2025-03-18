@@ -167,7 +167,7 @@ def check_email_address(email: NormalizedEmailAddress) -> None:
                 if port_25_is_open is None:
                     try:
                         test_email_address(normalize_email_address(
-                            'support@liberapay.com'
+                            website.env.test_email_address
                         ))
                     except BrokenEmailDomain:
                         port_25_is_open = False
