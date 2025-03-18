@@ -66,9 +66,9 @@ class TestEmail(EmailHarness):
         msg = json.loads(response.body)['msg']
         assert msg == "A verification email has been sent to alice@example.com."
         with patch.object(self.website.app_conf, 'check_email_domains', True):
-            response = self.hit_email_spt('add-email', 'support@liberapay.com')
+            response = self.hit_email_spt('add-email', 'test@ipv6.changaco.net')
             msg = json.loads(response.body)['msg']
-            assert msg == "A verification email has been sent to support@liberapay.com."
+            assert msg == "A verification email has been sent to test@ipv6.changaco.net."
 
     def test_participant_can_add_email_with_unicode_domain_name(self):
         punycode_email = 'alice@' + 'accentué.com'.encode('idna').decode()
