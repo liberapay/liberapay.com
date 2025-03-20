@@ -1,12 +1,14 @@
-
 msgid ""
 msgstr ""
-"Language-Team: Finnish "
-"<https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"PO-Revision-Date: 2025-03-16 03:37+0000\n"
+"Last-Translator: Art0 <peacefool@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/liberapay/core/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11-dev\n"
 "Generated-By: Babel 2.16.0\n"
 
 #, python-brace-format
@@ -1700,17 +1702,17 @@ msgstr "Näytä lisää"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} ei ole vielä määrittänyt maksumenetelmiä, joten lahjoitustasi ei voida käsitellä nyt. Ilmoitamme, kun maksaminen mahdollistuu."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Lahjoitukset osoitteeseen {username} voidaan maksaa luotto- tai pankkikortilla ({list_of_card_brands}) tai suoraveloituksena euromääräiseltä pankkitililtä (vain euromääräiset lahjoitukset)."
+msgstr "Lahjoitukset käyttäjälle {username} voidaan maksaa luotto- tai pankkikortilla ({list_of_card_brands}) tai suoraveloituksena euromääräiseltä pankkitililtä (vain euromääräiset lahjoitukset)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Lahjoitukset käyttäjälle {username} käsitellään PayPalin kautta."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Lahjoitukset osoitteeseen {username} voi maksaa luotto- tai pankkikortilla ({list_of_card_brands}), euromääräisellä pankkitilillä (SEPA-suoraveloitus) tai PayPal-tilillä."
+msgstr "Lahjoitukset käyttäjälle {username} voi maksaa luotto- tai pankkikortilla ({list_of_card_brands}), euromääräisellä pankkitilillä (SEPA-suoraveloitus) tai PayPal-tilillä."
 
 msgid "Payment Card"
 msgstr "Maksukortti"
@@ -1809,19 +1811,16 @@ msgstr "Nimellinen osuus"
 msgid "Actual Take"
 msgstr "Todellinen osuus"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
 msgstr "Liberapayn kautta lahjoitukset maksetaan etukäteen. Tässä sarakkeessa näkyy, kuinka paljon rahaa kukin jäsen on saanut ennakkoon tämän ryhmän kautta. Ennakko kasvaa aina, kun jäsen saa uuden maksun lahjoittajalta tiimin kautta, ja pienenee joka viikko."
 
-#, fuzzy
 msgid "Advance"
 msgstr "Ennakko"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
-msgstr "Viime viikolla: {0}"
+msgstr "Viime viikko: {0}"
 
-#, fuzzy
 msgid "no take"
 msgstr "ei oteta"
 
@@ -1876,9 +1875,8 @@ msgid_plural "The {currency_name} isn't your preferred currency? {username} also
 msgstr[0] "Onko {currency_name} väärä valuutta? {username} kelpuuttaa {n} muuta valuuttaa:"
 msgstr[1] "Onko {currency_name} väärä valuutta? {username} kelpuuttaa myös {n} muuta valuuttaa:"
 
-#, fuzzy
 msgid "supported by PayPal"
-msgstr "tukee PayPal"
+msgstr "PayPalin tukema"
 
 msgid "Switch"
 msgstr "Vaihda"
@@ -1969,49 +1967,38 @@ msgstr "Liberapayn toistuvien lahjoitusten järjestelmän ydin on yhteisöläht�
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Olet kokeilumoodissa, älä syötä mitään oikeita maksutietoja tai henkilökohtaisia tietoa!"
 
-#, fuzzy
 msgid "The credentials have been generated."
-msgstr "Valtakirjat on luotu."
+msgstr "Tili on luotu."
 
-#, fuzzy
 msgid "The credentials have been revoked."
-msgstr "Valtakirjat on peruutettu."
+msgstr "Tili on poistettu käytöstä"
 
-#, fuzzy
 msgid "Constant session"
 msgstr "Jatkuva istunto"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "Voit automatisoida yksityisten tietojen lataamisen tililtäsi sisällyttämällä pyyntöihisi seuraavan HTTP-otsikon:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "Voit esimerkiksi ladata luettelon aktiivisista asiakkaistasi suorittamalla seuraavan komennon:"
+msgstr "Voit esimerkiksi ladata listan aktiivisia tukijoitasi suorittamalla seuraavan komennon:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
-msgstr "Riskien minimoimiseksi näitä tunnuksia voidaan käyttää vain tietojen hakemiseen, ei minkään muokkaamiseen tililläsi, ja ne vanhenevat automaattisesti, jos niitä ei käytetä vuoden ajan."
+msgstr "Riskien minimoimiseksi näitä tunnusoikeuksia voidaan käyttää vain tietojen hakemiseen, ei minkään muokkaamiseen tililläsi, ja ne vanhenevat automaattisesti, jos niitä ei käytetä vuoden ajan."
 
-#, fuzzy
 msgid "Revoke credentials"
-msgstr "Peruuta valtakirjat"
+msgstr "Käyttöoikeuksien kumoaminen"
 
-#, fuzzy
 msgid "The credentials have expired."
-msgstr "Valtakirjat ovat vanhentuneet."
+msgstr "Käyttäjätunnuksen voimassaolo päättynyt."
 
-#, fuzzy
 msgid "Regenerate credentials"
-msgstr "Uudistaa valtakirjat"
+msgstr "Käyttäjätunnuksen uusiminen"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "Voit yksinkertaistaa yksityisten tietojen lataamisen automatisointia tililtäsi luomalla pitkäikäisiä vain lukemiseen tarkoitettuja tunnistetietoja."
+msgstr "Voit yksinkertaistaa yksityisten tietojen lataamisen automatisointia tililtäsi luomalla pitkäkestoiset vain luku -käyttöoikeudet."
 
-#, fuzzy
 msgid "Generate credentials"
-msgstr "Luo valtakirjat"
+msgstr "Luo tunnus"
 
 msgid "Dashboard"
 msgstr "Hallintapaneeli"
@@ -2111,7 +2098,6 @@ msgstr "Revised Payment Services Directive (uudistettu maksupalveludirektiivi)"
 msgid "Your new avatar URL is: {0}"
 msgstr "Uusi avatar-osoitteesi on: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
 msgstr "Profiilissasi ei ole enää avataria."
 
@@ -2641,15 +2627,12 @@ msgstr "Tällä hetkellä ei käytettävissä"
 msgid "Pay by card"
 msgstr "Maksa kortilla"
 
-#, fuzzy
 msgid "Only for donations to SEPA countries"
 msgstr "Vain SEPA-maihin suuntautuviin lahjoituksiin"
 
-#, fuzzy
 msgid "Only for donations in euros"
-msgstr "Vain euromääräiset lahjoitukset"
+msgstr "Vain euroissa tehtävät lahjoitukset"
 
-#, fuzzy
 msgid "Only euro bank accounts"
 msgstr "Vain euromääräiset pankkitilit"
 
@@ -2988,13 +2971,12 @@ msgstr "Näytä tulohistoria"
 msgid "No data to show."
 msgstr "Ei näytettäviä tietoja."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
 msgstr "Viikkotulot ({currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
-msgstr "Asiakkaiden määrä viikossa"
+msgstr "Kannattajien määrä viikossa"
 
 msgid "Invoice documents are private."
 msgstr "Tulodokumentit ovat yksityisiä."
@@ -3421,9 +3403,8 @@ msgstr "Maksutilin yhdistäminen (alla) on tarpeen vain mikäli vastaanotat raha
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Suosittelemme sekä Stripen että PayPalin yhdistämistä, mikäli molemmat ovat käytettävissä maassasi."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr "Stripen avulla lahjoittajasi voivat maksaa kortilla tai suoraveloituksella suoraan Liberapayn verkkosivustolta. (Suoraveloituksia tuetaan tällä hetkellä vain euromääräisiltä pankkitileiltä.)"
+msgstr "Stripe'n avulla lahjoittajasi voivat maksaa kortilla tai suoraveloituksella suoraan Liberapayn verkkosivustolta. (Suoraveloituksia tuetaan tällä hetkellä vain euromääräisiltä pankkitileiltä.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3553,7 +3534,6 @@ msgstr "Verot"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Tämä maksu on lahjoitus. Sen vastineena ei toimiteta mitään hyödykkeitä tai palveluita, eikä Liberapay kerää veroja."
 
-#, fuzzy
 msgid "Income history"
 msgstr "Tulohistoria"
 
@@ -3564,14 +3544,12 @@ msgstr "Et voi vastaanottaa lahjoituksia ennen kuin olet määrittänyt maksujen
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Ryhmien kautta saadut lahjoitukset muodostavat {income_percent} tuloistasi ({team_income}/{total_income}); {patrons_percent} tulee henkilökohtaisista lahjoituksista ({nteampatrons}/{npatrons} lahjoittajaa)."
 
-#, fuzzy
 msgid "Details of personal donations"
-msgstr "Yksityiskohtaiset tiedot henkilökohtaisista lahjoituksista"
+msgstr "Yksityiskohdat henkilökohtaisista lahjoituksista"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Ryhmien kautta saadut lahjoitukset eivät sisälly tähän osioon. Tässä näkyy vain henkilökohtaiset lahjoitukset."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
 msgstr "Viimeaikaiset muutokset henkilökohtaisiin lahjoituksiin"
 
@@ -3595,7 +3573,6 @@ msgstr "Viikkotaista lahjoitussummaa on pienennetty ({old_amount} → {new_amoun
 msgid "A donation of {amount} per week has been restarted."
 msgstr "{amount} viikottainen lahjoitus on herätetty henkiin."
 
-#, fuzzy
 msgid "Statistics on personal donations"
 msgstr "Henkilökohtaisia lahjoituksia koskevat tilastot"
 
@@ -3669,7 +3646,7 @@ msgid "This instrument is used by default."
 msgstr "Tätä välinettä käytetään oletuksena."
 
 msgid "default"
-msgstr "oletus"
+msgstr "oletusarvo"
 
 #, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
