@@ -1,14 +1,17 @@
 % from "templates/macros/icons.html" import icon with context
 
-% macro postal_address_form_v2(prefix='postal_address', saved=None, required=True)
+% macro postal_address_form_v2(participant, prefix='postal_address', saved=None, required=True, preselect=True)
 
     % set required = 'required' if required else ''
 
     <label>
         <span>{{ _("Country") }}</span>
         <select name="{{ prefix }}.country" class="form-control country" {{ required }}>
+            % set country = saved.country|default('')
+            % if not country and preselect and user == participant
+                % set country = user.guessed_country
+            % endif
             <option></option>
-            % set country = saved.country|default('') or user.guessed_country
             % for code, name in locale.countries.items()
                 <option value="{{ code }}" {{ 'selected' if code == country }}>{{ name }}</option>
             % endfor

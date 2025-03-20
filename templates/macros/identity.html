@@ -2,11 +2,12 @@
 % from "templates/macros/postal-addresses.html" import postal_address_form_v2 with context
 
 
-% macro identity_form(identity, wanted, required=True)
+% macro identity_form(participant, identity, wanted, required=True, preselect=True)
 
     % include "templates/sandbox-warning.html"
 
     % set required = 'required' if required else ''
+    % set guessed_country = user.guessed_country if preselect and user == participant else ''
 
     <div class="block-labels-mb-4 max-width-500">
 
@@ -22,20 +23,20 @@
 
     % if 'postal_address.country' in wanted
     <label>
-        % set country = identity.postal_address.get('country') or user.guessed_country
+        % set country = identity.postal_address.get('country') or guessed_country
         <span>{{ _("Country (residence)") }}</span>
         <select name="postal_address.country" class="form-control country" {{ required }}>
             <option></option>
-        % for each in locale.countries.items()
-            <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
-        % endfor
+            % for each in locale.countries.items()
+                <option value="{{ each[0] }}" {{ 'selected' if each[0] == country else '' }}>{{ each[1] }}</option>
+            % endfor
         </select>
     </label>
     % endif
 
     % if 'nationality' in wanted
     <label>
-        % set country = identity.nationality or user.guessed_country
+        % set country = identity.nationality or guessed_country
         <span>{{ _("Nationality") }}</span>
         <select name="nationality" class="form-control country" {{ required }}>
             <option></option>
@@ -73,7 +74,10 @@
 
     % if 'postal_address' in wanted
         <h4>{{ _("Postal Address") }}</h4>
-        {{ postal_address_form_v2(saved=identity.postal_address or None, required=required) }}
+        {{ postal_address_form_v2(
+            participant, saved=identity.postal_address or None, required=required,
+            preselect=preselect,
+        ) }}
     % endif
 
     % if 'organization_name' in wanted
@@ -99,9 +103,11 @@
         % if 'headquarters_address' in wanted
         <h4>{{ _("Headquarters Address") }}</h4>
         {{ postal_address_form_v2(
+            participant,
             prefix='headquarters_address',
             saved=identity.headquarters_address or None,
-            required=required
+            required=required,
+            preselect=preselect,
         ) }}
         % endif
     </fieldset>

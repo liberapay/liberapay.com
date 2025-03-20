@@ -89,6 +89,7 @@ env = Environment(
     COMPRESS_ASSETS=is_yesish,
     CSP_EXTRA=str,
     HOSTNAME=str,
+    TEST_EMAIL_ADDRESS=str,
     SENTRY_DEBUG=is_yesish,
     SENTRY_DSN=str,
     SENTRY_RERAISE=is_yesish,

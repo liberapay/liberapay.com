@@ -4,7 +4,7 @@ from pando import json
 
 user.require_active_privilege('admin')
 
-page_size = request.qs.get_int('page_size', 50, minimum=1, maximum=500)
+page_size = request.qs.get_int('page_size', 100, minimum=1, maximum=500)
 events = website.db.all("""
     SELECT e.*, p.username, admin.username AS recorder_name
       FROM events e

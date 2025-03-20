@@ -5,7 +5,7 @@ import json
 from liberapay.i18n.base import LOCALE_EN as locale
 from liberapay.utils import form_post_success
 
-PAGE_SIZE = 50
+PAGE_SIZE = 100
 
 REASONS = {
     "bounce": (
@@ -85,9 +85,11 @@ if request.method == 'POST':
         """, dict(
             addresses=addresses, reason=reason, details=details, added_by=user.id,
         ))
-        form_post_success(state, msg=(
-            f"{n} domain{' has' if n == 1 else 's have'} been added to the blacklist."
-        ))
+        form_post_success(
+            state,
+            msg=f"{n} domain{' has' if n == 1 else 's have'} been added to the blacklist.",
+            redirect_url=(None if domain else '/admin/email-domains?show=blacklisted'),
+        )
     else:
         raise response.invalid_input(action, 'action', 'body')
 
@@ -252,6 +254,9 @@ title = "Email Domains"
         <p>The domain <span class="monospace">{{ domain }}</span> is not blacklisted.</p>
     % endif
 
+    <a class="btn btn-info" href="https://verifymail.io/domain/{{ domain }}"
+       target="_blank" rel="noopener noreferrer">Check this email domain {{ icon('external-link') }}</a>
+
     <form action="" method="POST" class="block-labels-mb-4">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
     % if blacklisted
@@ -357,7 +362,12 @@ title = "Email Domains"
             <tbody>
             % for d in email_domains
                 <tr>
-                    <td><a class="break-word-anywhere" href="?domain={{ d.domain }}">{{ d.domain }}</a></td>
+                    <td><a class="break-word-anywhere" href="?domain={{ d.domain }}">{{ d.domain }}</a>
+                        &nbsp;
+                        <a href="https://verifymail.io/domain/{{ d.domain }}"
+                           target="_blank" rel="noopener noreferrer">{{
+                            icon('external-link', "Check the domain")
+                        }}</a></td>
                     <td class="text-center">{{ d.n_addresses }}</td>
                     % set percent_verified = d.n_verified / d.n_addresses if d.n_addresses else 1
                     <td class="text-center {{ 'danger' if percent_verified <= 0.2 else 'warning' if percent_verified <= 0.5 else '' }}">{{ d.n_verified }}</td>
