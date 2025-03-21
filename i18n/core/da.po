@@ -1700,17 +1700,17 @@ msgstr "Se Mere"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} har endnu ikke konfigureret en betalingsmetode, så din donation kan faktisk ikke behandles lige nu. Vi meddeler dig, når betalingen bliver mulig."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Donationer til {username} kan betales med et kredit- eller betalingskort ({list_of_card_brands}) eller ved direkte debitering af en bankkonto i euro (kun for donationer i euro)."
+msgstr "Donationer til {username} kan betales med et kredit- eller betalings-kort ({list_of_card_brands}) eller ved direkte debitering af en bankkonto i euro (kun for donationer i euro)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Donationer til {username} bliver håndteret gennem PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Donationer til {username} kan betales med: et kredit- eller betalingskort ({list_of_card_brands}), en euro-bankkonto (SEPA Direct Debit) eller en PayPal-konto."
+msgstr "Donationer til {username} kan betales med: et kredit- eller betalings-kort ({list_of_card_brands}), en euro-bankkonto (SEPA Direct Debit) eller en PayPal-konto."
 
 msgid "Payment Card"
 msgstr "Betalingskort"
@@ -1809,21 +1809,18 @@ msgstr "Nominelle udbytte"
 msgid "Actual Take"
 msgstr "Faktiske Udbytte"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "På Liberapay betales donationer på forhånd. Denne kolonne viser, hvor mange penge hvert medlem har modtaget på forskud gennem dette hold. Et forskud stiger, hver gang et medlem modtager en ny betaling fra en donor gennem holdet, og falder hver uge."
+msgstr "På Liberapay betales donationer på forhånd. Denne kolonne viser hvor mange penge hvert medlem har modtaget på forskud gennem dette hold. Et forskud stiger hver gang et medlem modtager en ny betaling fra en donor gennem holdet, og falder hver uge."
 
-#, fuzzy
 msgid "Advance"
 msgstr "Gå videre"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
 msgstr "I sidste uge: {0}"
 
-#, fuzzy
 msgid "no take"
-msgstr "ingen optagelse"
+msgstr "intet udbytte"
 
 msgid "auto"
 msgstr "auto"
@@ -1876,9 +1873,8 @@ msgid_plural "The {currency_name} isn't your preferred currency? {username} also
 msgstr[0] "Er {currency_name} ikke din foretrukne møntfod? {username} accepterer også {n} anden møntfod:"
 msgstr[1] "Er {currency_name} ikke din foretrukne møntfod? {username} accepterer også {n} andre:"
 
-#, fuzzy
 msgid "supported by PayPal"
-msgstr "støttet af PayPal"
+msgstr "understøttet af PayPal"
 
 msgid "Switch"
 msgstr "Skift"
@@ -1969,47 +1965,36 @@ msgstr "Liberapays donationssystem er designet til at give stabile grundindtægt
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Du er i sandkasse tilstand, lad vær med at indtaste nogen ægte betalings eller personlige data!"
 
-#, fuzzy
 msgid "The credentials have been generated."
 msgstr "Legitimationsoplysningerne er blevet genereret."
 
-#, fuzzy
 msgid "The credentials have been revoked."
-msgstr "Legitimationen er blevet inddraget."
+msgstr "Legitimation er blevet inddraget."
 
-#, fuzzy
 msgid "Constant session"
-msgstr "Konstant session"
+msgstr "Vedblivende session"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "Du kan automatisere download af private oplysninger fra din konto ved at inkludere følgende HTTP-header i dine anmodninger:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "Du kan f.eks. downloade listen over dine aktive lånere ved at udføre følgende kommando:"
+msgstr "Du kan f.eks. downloade listen over dem der aktivt støtter dig ved at udføre følgende kommando:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
 msgstr "For at minimere risikoen for dig kan disse legitimationsoplysninger kun bruges til at hente data, ikke til at ændre noget på din konto, og de udløber automatisk, hvis de ikke er blevet brugt i et år."
 
-#, fuzzy
 msgid "Revoke credentials"
 msgstr "Tilbagekaldelse af legitimationsoplysninger"
 
-#, fuzzy
 msgid "The credentials have expired."
 msgstr "Legitimationsoplysningerne er udløbet."
 
-#, fuzzy
 msgid "Regenerate credentials"
 msgstr "Genopret legitimationsoplysninger"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
 msgstr "For at gøre det nemmere at automatisere downloads af private oplysninger fra din konto, kan du generere langtidsholdbare skrivebeskyttede legitimationsoplysninger."
 
-#, fuzzy
 msgid "Generate credentials"
 msgstr "Generer legitimationsoplysninger"
 
@@ -2111,7 +2096,6 @@ msgstr "Revised Payment Services Directive"
 msgid "Your new avatar URL is: {0}"
 msgstr "Din nye avatar URL er: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
 msgstr "Din profil har ikke længere en avatar."
 
@@ -2641,15 +2625,12 @@ msgstr "Ikke tilgængelig i øjeblikket"
 msgid "Pay by card"
 msgstr "Betal med kort"
 
-#, fuzzy
 msgid "Only for donations to SEPA countries"
 msgstr "Kun for donationer til SEPA-lande"
 
-#, fuzzy
 msgid "Only for donations in euros"
 msgstr "Kun for donationer i euro"
 
-#, fuzzy
 msgid "Only euro bank accounts"
 msgstr "Kun bankkonti i euro"
 
@@ -2747,9 +2728,8 @@ msgstr "Din betaling er påbegyndt. Den vil blive sendt til din bank på et sene
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "Din bank kan afvise denne betaling. Vi anbefaler at sende en kopi af {link_start}mandatet{link_end} til din bank hvis du ikke er sikker på at den håndterer {currency} instruktioner til direkte debitering korrekt."
 
-#, fuzzy
 msgid "The initialization of a required component has failed. If you use a browser extension that blocks requests, for example NoScript, please make sure it’s allowing requests to the “stripe.com” domain."
-msgstr "Initialiseringen af en påkrævet komponent mislykkedes. Hvis du bruger en browserudvidelse, der blokerer anmodninger, for eksempel NoScript, skal du sørge for, at den tillader anmodninger til domænet \"stripe.com\"."
+msgstr "Opstarten af en påkrævet komponent mislykkedes. Hvis du bruger en browserudvidelse, der blokerer anmodninger, for eksempel NoScript, skal du sørge for, at den tillader anmodninger til domænet “stripe.com”."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2989,13 +2969,12 @@ msgstr "Se indkomst historie"
 msgid "No data to show."
 msgstr "Ingen dato at vise."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
 msgstr "Indkomst pr. uge (i {currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
-msgstr "Antal lånere pr. uge"
+msgstr "Antal folk der støtter pr. uge"
 
 msgid "Invoice documents are private."
 msgstr "Faktura-dokumenter er private."
@@ -3422,9 +3401,8 @@ msgstr "donorer behøver ikke at forbinde via en betalingskonto nedenfor, det er
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Vi anbefaler at du både tilslutter dig til Stripe og Paypal hvis de begge er tilgængelige i dit land."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr "Med Stripe kan dine donorer betale med kort eller direkte debitering direkte fra Liberapays hjemmeside. (Direkte debiteringer understøttes i øjeblikket kun fra euro-bankkonti)."
+msgstr "Med Stripe kan dine donorer betale med kort eller direkte debitering fra Liberapays hjemmeside. (Direkte debiteringer understøttes i øjeblikket kun fra euro-bankkonti.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3554,7 +3532,6 @@ msgstr "Skat"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Denne betaling er en donation, ingen varer eller tjenester leveres i bytte, ingen skat er blevet opkrævet af Liberapay."
 
-#, fuzzy
 msgid "Income history"
 msgstr "Indkomsthistorik"
 
@@ -3565,14 +3542,12 @@ msgstr "Du kan ikke modtage nye donationer, før du har konfigureret betalingsbe
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Donationer gennem teams udgør {income_percent} af din indkomst ({team_income} af {total_income}) og {patrons_percent} af dine bidragsydere ({nteampatrons} af {npatrons})."
 
-#, fuzzy
 msgid "Details of personal donations"
 msgstr "Oplysninger om personlige donationer"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Dette afsnit indeholder ikke data om donationer gennem teams, det viser kun de donationer, du modtager personligt."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
 msgstr "Nylige ændringer af personlige donationer"
 
@@ -3596,7 +3571,6 @@ msgstr "En donation er blevet sænket fra {old_amount} til {new_amount} per uge.
 msgid "A donation of {amount} per week has been restarted."
 msgstr "En donation på {amount} pr. uge er blevet fornyet."
 
-#, fuzzy
 msgid "Statistics on personal donations"
 msgstr "Statistik over personlige donationer"
 
@@ -3713,13 +3687,13 @@ msgstr "Denne betalingsmetode har ikke været brugt endnu."
 msgid "Set as default"
 msgstr "Sæt som standard"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr "Stop med at bruge dette instrument som standard til betalinger på {currency}."
+msgstr "Stop med at bruge dette betalingsinstrument som standard til betalinger på {currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unset as default for {currency}"
-msgstr "Indstillet som standard for {currency}"
+msgstr "Fjern som standard for {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
@@ -3738,11 +3712,9 @@ msgstr "Tilføj betalingsmetode:"
 msgid "Add a card"
 msgstr "Tilføj et kort"
 
-#, fuzzy
 msgid "Euro Bank Account"
 msgstr "Euro-bankkonto"
 
-#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
 msgstr "Kun for donationer i euro til modtagere i SEPA-lande"
 
@@ -4139,9 +4111,9 @@ msgstr "Hvilke lande og valutaer understøttes?"
 msgid "See the “{page_name}” page."
 msgstr "Se “{page_name}” siden."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "De tilgængelige betalingsmetoder afhænger af, hvilke betalingsbehandlere der understøttes af modtageren. Hvis en betaling behandles af Stripe, accepteres de fleste kredit- og betalingskort ({list_of_card_brands}) samt SEPA Direct Debits (kun for donationer i euro til modtagere i SEPA-lande). Hvis en betaling sker via PayPal, er det muligt at betale på forskellige måder, men donoren skal have eller oprette en PayPal-konto."
+msgstr "De tilgængelige betalingsmetoder afhænger af, hvilke betalingsbehandlere der understøttes af modtageren. Hvis en betaling behandles af Stripe, accepteres de fleste kredit- og betalingskort ({list_of_card_brands}) samt SEPA Direct Debits (kun for donationer i euro til modtagere i SEPA-lande). Hvis en betaling sker via PayPal, er det muligt at betale på forskellige måder, men donoren skal allerede have eller oprette en PayPal-konto."
 
 msgid "What are the payment processing fees?"
 msgstr "Hvad er overførselsgebyrerne?"
@@ -4150,11 +4122,9 @@ msgstr "Hvad er overførselsgebyrerne?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "Gebyrerne varierer alt efter betalingsformidler, betalingsmetode, land og valuta. I det seneste år har de gennemsnitlige gebyrprocenter været {average_fee_stripe} for betalinger der behandles af Stripe, og {average_fee_paypal} for betalinger der behandles af PayPal."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
-msgstr "Hvordan og hvornår modtager jeg de penge, som mine lånere har sendt?"
+msgstr "Hvordan og hvornår modtager jeg de penge, som dem der støtter mig har sendt?"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
 msgstr "Penge sendt af en donor går straks til din Stripe- eller PayPal-konto. Som standard sender Stripe derefter automatisk pengene til din bankkonto, mens PayPal blot gemmer dem, indtil du bruger eller hæver dem."
 
@@ -4193,11 +4163,9 @@ msgstr "Er donationer via Liberapay skattefradrag-berettigede?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Næppe, men det kommer an på dit lands skatteregler."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
 msgstr "Er en Liberapay-konto en wallet?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
 msgstr "Ikke siden midten af 2018. Penge sendt af en donor går straks til modtageren. Tidligere stod pengene på donorens konto og blev udbetalt lidt efter lidt til modtageren hver uge. Det system blev definitivt opgivet på grund af dets meget betydelige ulemper."
 
@@ -4217,51 +4185,45 @@ msgid_plural "Donors can choose between up to {n} currencies, depending on the p
 msgstr[0] "Donorer kan vælge mellem op til {n} valuta, afhængigt af modtagerens præferencer og den underliggende betalingsbehandlers muligheder."
 msgstr[1] "Donorer kan vælge mellem op til {n} valutaer, afhængigt af modtagerens præferencer og den underliggende betalingsbehandlers muligheder."
 
-#, fuzzy
 msgid "Donations can only be received in territories where at least one supported payment processor is available. Moreover, some features are only available in some of the territories supported by a payment processor."
 msgstr "Donationer kan kun modtages i områder, hvor mindst en understøttet betalingsbehandler er tilgængelig. Desuden er nogle funktioner kun tilgængelige i nogle af de territorier, der understøttes af en betalingsbehandler."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The currently supported payment processors are {Stripe} and {PayPal}. You can find a list of the differences between them {link_start}in the “{page_name}” page{link_end}."
-msgstr "De betalingsbehandlere, der understøttes i øjeblikket, er {Stripe} og {PayPal}. Du kan finde en liste over forskellene mellem dem {link_start}på siden \"{page_name}\"{link_end}."
+msgstr "De betalingsbehandlere, der understøttes i øjeblikket, er {Stripe} og {PayPal}. Du kan finde en liste over forskellene mellem dem {link_start}på siden “{page_name}”{link_end}."
 
-#, fuzzy
 msgid "Best supported territories"
 msgstr "De bedst understøttede territorier"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
-msgstr[0] "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>."
+msgstr[0] "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgstr[1] "Skabere i disse {n} områder nyder godt af alle Liberapays funktioner:"
 
-#, fuzzy
 msgid "Well supported territories"
-msgstr "Godt understøttede territorier"
+msgstr "Godt understøttede områder"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
-msgstr[0] "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>."
-msgstr[1] "Liberapay er også tilgængelig for skabere i de {n} områder, der er anført nedenfor. Donationer, der går til disse territorier, kan dog ikke grupperes for at sænke gebyrerne for betalingsbehandling, og betalingsmetoden direkte debitering i euro er ikke tilgængelig for donorerne."
+msgstr[0] "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
+msgstr[1] "Liberapay er også tilgængelig for skabere i de {n} områder der er anført nedenfor. Donationer der går til disse territorier kan dog ikke grupperes for at sænke gebyrerne for betalingsbehandlingen, og betalingsmetoden direkte debitering i euro er ikke tilgængelig for donorerne."
 
-#, fuzzy
 msgid "Barely supported territories"
 msgstr "Knap så understøttede territorier"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
 msgid_plural "Liberapay is partly available to creators in the {n} territories listed below, which are supported by PayPal but not by Stripe."
-msgstr[0] "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>."
-msgstr[1] "Liberapay er delvist tilgængelig for skabere i de {n} områder, der er anført nedenfor, og som understøttes af PayPal, men ikke af Stripe."
+msgstr[0] "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
+msgstr[1] "Liberapay er delvist tilgængelig for skabere i de {n} områder der er anført nedenfor. Disse understøttes af PayPal, men ikke af Stripe."
 
-#, fuzzy
 msgid "Unsupported territories"
-msgstr "Ikke-understøttede territorier"
+msgstr "Ikke-understøttede områder"
 
-#, fuzzy
 msgid "If you don't live or have a registered business in one of the territories listed above, then you currently can't use Liberapay to receive donations. Sorry."
-msgstr "Hvis du ikke bor eller har en registreret virksomhed i et af de områder, der er nævnt ovenfor, kan du i øjeblikket ikke bruge Liberapay til at modtage donationer. Det er jeg ked af at høre."
+msgstr "Hvis du ikke bor eller har en registreret virksomhed i et af de områder der er nævnt ovenfor, kan du i øjeblikket ikke bruge Liberapay til at modtage donationer. Desværre."
 
 msgid "What is Liberapay?"
 msgstr "Hvad er Liberapay?"
@@ -4587,9 +4549,9 @@ msgstr "At dele pengene"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Der er ikke noget hierarki på et team, alle deres medlemmer er lige og sætter deres egne andel."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Du kan ændre dine takes fra {0}dit holds dashboard{1}. Det indeholder tabeller, der viser alle medlemmers nominelle take samt et skøn over de faktiske beløb, der vil blive trukket ved afslutningen af den aktuelle ugecyklus."
+msgstr "Du kan ændre dine takes fra {0}dit holds dashboard{1}. Det indeholder tabeller, der viser alle medlemmers nominelle take samt et skøn over de faktiske beløb der vil blive trukket ved afslutningen af den aktuelle ugecyklus."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "De nominelle andele er de rå tal, som medlemmerne indtaster selv. De faktiske andele beregnes af systemet: først opsummerer det de nominelle andele, så beregnes den procentdel som hver repræsenterer, og endelig anvendes disse procentsatser til at beregne den disponible indkomst. Nominelle andele fungerer også som maksimumsbeløb: de faktiske andele er aldrig højere end de nominelle, selvom der er ekstra indtægter til rådighed."
@@ -4606,17 +4568,15 @@ msgstr "Som standard har alle teammedlemmer sat deres andel til den specialværd
 msgid "Regulation of take amounts"
 msgstr "Regulering af andels beløb"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Når \"take throttling\" er aktiveret for et hold, kan dets medlemmer ikke hæve deres takes højere end et maksimum, der er beregnet på baggrund af de nominelle takes i slutningen af den foregående ugecyklus. Denne mekanisme er beregnet til at opmuntre nye bidragydere til at slutte sig til holdet ved at sikre, at de ikke tager en uforholdsmæssig stor del af indkomsten i deres første uger."
+msgstr "Når “take throttling” er aktiveret for et hold, kan dets medlemmer ikke hæve deres takes højere end et maksimum der er beregnet på baggrund af de nominelle takes i slutningen af den foregående ugecyklus. Denne mekanisme er beregnet til at opmuntre nye bidragydere til at slutte sig til holdet ved at sikre at de ikke tager en uforholdsmæssig stor del af indkomsten i deres første uger."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "Grænsen fungerer således: Du kan altid øge dit take til {amount}, hvis det var under det, du kan fordoble dit take i forhold til den foregående uge, du kan øge dit take for at gøre krav på holdets resterende indkomst, og du kan bringe dit take op på niveau med median-take i slutningen af den foregående ugecyklus. Den af disse muligheder, der resulterer i det højeste beløb, er din maksimale take for ugen."
+msgstr "Grænsen fungerer således: Du kan altid øge dit take til {amount}, hvis det var under det, du kan fordoble dit take i forhold til den foregående uge, du kan øge dit take for at gøre krav på holdets resterende indkomst, og du kan bringe dit take op på niveau med median-take i slutningen af den foregående ugecyklus. Den af disse muligheder der resulterer i det højeste beløb, er dit maksimale take for ugen."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Takes er ikke begrænset, hvis holdet kun har ét medlem, eller hvis den foregående uges takes alle var nul (hvilket er tilfældet for alle nye hold, der er blevet oprettet i løbet af den aktuelle ugecyklus)."
+msgstr "Takes er ikke begrænset hvis holdet kun har ét medlem, eller hvis den foregående uges takes alle var nul (hvilket er tilfældet for alle nye hold der er blevet oprettet i løbet af den aktuelle ugecyklus)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Kontakt venligst support, hvis du vil aktivere eller deaktivere grænserne for et eksisterende teams andele. Glem ikke at inkludere beviser for at ændringen er blevet godkendt af de øvrige holdmedlemmer."
@@ -5308,7 +5268,6 @@ msgstr "Undskyld, men vi fandt ikke noget der svarede til din søgning."
 msgid "Whose work do you appreciate?"
 msgstr "Hvis arbejde sætter du pris på?"
 
-#, fuzzy
 msgid "Found a matching user name"
 msgid_plural "Found matching user names"
 msgstr[0] "Fandt et matchende brugernavn"

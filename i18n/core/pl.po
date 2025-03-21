@@ -215,22 +215,22 @@ msgid "Please note that the link is only valid for {0}."
 msgstr "Należy pamiętać, że dostęp do tego linku jest ważny tylko przez {0}."
 
 msgid "Liberapay donation renewal: no valid payment instrument"
-msgstr "Odnowienie darowizny Liberapay: brak ważnego instrumentu płatniczego"
+msgstr "Odnowienie darowizny Liberapay: brak ważnej metody płatności"
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donation to {recipient}, but we can't process it because a valid payment instrument is missing."
-msgstr "Masz zaplanowaną płatność w wysokości {amount} na {payment_date}, aby odnowić darowiznę na rzecz {recipient}, ale nie możemy jej przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
+msgstr "Masz zaplanowaną płatność w wysokości {amount} na {payment_date}, aby odnowić darowiznę na rzecz {recipient}, ale nie możemy jej zrealizować, ponieważ brakuje ważnej metody płatności."
 
 #, python-brace-format
 msgid "You have a payment of {amount} scheduled for {payment_date} to renew your donations to {recipients}, but we can't process it because a valid payment instrument is missing."
-msgstr "Masz zaplanowaną płatność w wysokości {amount} na {payment_date}, aby odnowić darowizny na rzecz {recipients}, ale nie możemy jej przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
+msgstr "Masz zaplanowaną płatność w wysokości {amount} na {payment_date}, aby odnowić darowizny na rzecz {recipients}, ale nie możemy jej zrealizować, ponieważ brakuje ważnej metody płatności."
 
 #, python-brace-format
 msgid "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
 msgid_plural "You have {n} payments scheduled to renew your donations, but we can't process them because a valid payment instrument is missing."
 msgstr[0] "<unused singular (hash=875d02423fb659ec81c96c1ca550c608)>"
-msgstr[1] "Zaplanowano {n} płatności na odnowienie darowizn, ale nie możemy ich przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
-msgstr[2] "Zaplanowano {n} płatności na odnowienie darowizn, ale nie możemy ich przetworzyć, ponieważ brakuje ważnego instrumentu płatniczego."
+msgstr[1] "Masz {n} zaplanowane płatności służące odnowieniu Twoich darowizn, ale nie możemy ich zrealizować, ponieważ nie jest zdefiniowana aktualna metoda płatności."
+msgstr[2] "Masz {n} zaplanowanych płatności służących odnowieniu Twoich darowizn, ale nie możemy ich zrealizować, ponieważ nie jest zdefiniowana aktualna metoda płatności."
 
 msgid "The payment dates, amounts and recipients are:"
 msgstr "Daty płatności, kwoty i odbiorcy to:"
@@ -335,19 +335,19 @@ msgstr "Twoja płatność nie powiodła się"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has failed."
-msgstr "Nie powiodła się zainicjowana dzisiaj automatyczna płatność w kwocie {money_amount}."
+msgstr "Rozpoczęta dzisiaj automatyczna płatność w kwocie {money_amount} nie powiodła się."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has failed."
-msgstr "Nie powiodła się automatyczna płatność w kwocie {money_amount} zainicjowana {date}."
+msgstr "Nie powiodła się automatyczna płatność w kwocie {money_amount} rozpoczęta {date}."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has failed."
-msgstr "Zapłata {money_amount} zainicjowana wcześniej nie powiodła się."
+msgstr "Zapłata {money_amount} rozpoczęta wcześniej nie powiodła się."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has failed."
-msgstr "Płatność {money_amount} zainicjowana w dniu {date} nie powiodła się."
+msgstr "Płatność {money_amount} rozpoczęta w dniu {date} nie powiodła się."
 
 #, python-brace-format
 msgid "The error message provided by the payment processor {provider} is:"
@@ -369,7 +369,7 @@ msgstr "Płatność {money_amount}, którą rozpoczęto {date}, zostanie zwróco
 
 #, python-brace-format
 msgid "The payment of {money_amount} that you initiated on {date} is being partially refunded."
-msgstr "Płatność {money_amount} zainicjowana w dniu {date} podlega częściowemu zwrotowi."
+msgstr "Płatność {money_amount} rozpoczęta w dniu {date} podlega częściowemu zwrotowi."
 
 msgid "Reason: the payment was a duplicate."
 msgstr "Przyczyna: płatność została wykonana podwójnie."
@@ -391,26 +391,26 @@ msgstr "Twoje konto bankowe zostanie obciążone"
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donation to {recipient}."
-msgstr "Aby sfinansować twoją darowiznę dla {recipient}, zainicjowano polecenie zapłaty z twojego konta bankowego ({partial_account_number}) kwoty {money_amount}."
+msgstr "Aby sfinansować twoją darowiznę dla {recipient}, rozpoczęto polecenie zapłaty z twojego konta bankowego ({partial_account_number}) w kwocie {money_amount}."
 
 #, python-brace-format
 msgid "A direct debit of {money_amount} from your bank account ({partial_account_number}) has been initiated in order to fund your donations to {recipients}."
-msgstr "Aby sfinansować twoje darowizny dla {recipients}, zainicjowano polecenie zapłaty z twojego konta bankowego ({partial_account_number}) kwoty {money_amount}."
+msgstr "Aby sfinansować twoje darowizny dla {recipients}, rozpoczęto polecenie zapłaty z twojego konta bankowego ({partial_account_number}) w kwocie {money_amount}."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your {bank_name} account ({partial_account_number})."
-msgstr "Zainicjowaliśmy polecenie zapłaty w wysokości {money_amount} z Twojego konta {bank_name} ({partial_account_number})."
+msgstr "Rozpoczęliśmy polecenie zapłaty w wysokości {money_amount} z Twojego konta {bank_name} ({partial_account_number})."
 
 #, python-brace-format
 msgid "We have initiated a direct debit of {money_amount} from your bank account ({partial_account_number})."
-msgstr "Zainicjowaliśmy polecenie zapłaty w wysokości {money_amount} z twojego konta bankowego ({partial_account_number})."
+msgstr "Rozpoczęliśmy polecenie zapłaty w wysokości {money_amount} z twojego konta bankowego ({partial_account_number})."
 
 #, python-brace-format
 msgid "This operation is being carried out based on {link_start}the mandate {mandate_id}{link_end} that you signed on {acceptance_date}, authorizing Liberapay (SEPA creditor {creditor_identifier}) to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions."
 msgstr "Ta operacja jest przeprowadzana na podstawie {link_start}mandatu {mandate_id}{link_end} podpisanego w dniu {acceptance_date}, upoważniając Liberapay (wierzyciel SEPA {creditor_identifier}) do wysyłania instrukcji do Twojego banku, aby obciążyć Twoje konto, a Twój bank do obciążenia konta zgodnie z tymi instrukcjami."
 
 msgid "If you did not authorize this payment, please let us know. We will tell you whether a refund can be initiated by us or if you have to request it from your bank."
-msgstr "Jeśli nie autoryzowałeś(-aś) tej płatności, daj nam znać. Powiemy Ci, czy zwrot pieniędzy może zostać zainicjowany przez nas, czy też musisz poprosić o niego swój bank."
+msgstr "Jeśli nie autoryzowałeś(-aś) tej płatności, daj nam znać. Powiemy Ci, czy zwrot pieniędzy może być zainicjowany przez nas, czy też musisz poprosić o niego swój bank."
 
 #, python-brace-format
 msgid "Once this payment has been processed it should appear on your bank statement as “{descriptor}”."
@@ -425,19 +425,19 @@ msgstr "Płatność powiodła się"
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated today has succeeded."
-msgstr "Powiodła się zainicjowana dzisiaj, automatyczna płatność kwoty {money_amount}."
+msgstr "Rozpoczęta dzisiaj automatyczna płatność w kwocie {money_amount} powiodła się."
 
 #, python-brace-format
 msgid "The automatic payment of {money_amount} initiated on {date} has succeeded."
-msgstr "Powiodła się zainicjowana {date}, automatyczna płatność kwoty {money_amount}."
+msgstr "Automatyczna płatność rozpoczęta {date} w kwocie {money_amount} powiodła się."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated earlier today has succeeded."
-msgstr "Zapłata {money_amount} zainicjowana wcześniej dzisiaj zakończyła się powodzeniem."
+msgstr "Zapłata {money_amount} rozpoczęta wcześniej dzisiaj zakończyła się powodzeniem."
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has succeeded."
-msgstr "Płatność {money_amount} zainicjowana w dniu {date} powiodła się."
+msgstr "Płatność {money_amount} rozpoczęta w dniu {date} powiodła się."
 
 msgid "Thank you for this donation!"
 msgstr "Dziękuję za tę darowiznę!"
@@ -661,18 +661,18 @@ msgstr[2] "Odnowienie darowizn Liberapay: nadchodzących obciążeń {money_amou
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donation to {recipient}."
-msgstr "Ta wiadomość przypomina, że {amount} zostanie pobrana z Twojego domyślnego instrumentu płatniczego w dniu {debit_date}, aby odnowić darowiznę na rzecz {recipient}."
+msgstr "Ta wiadomość przypomina, że {amount} zostanie pobrana z Twojej domyślnej metody płatności w dniu {debit_date}, aby odnowić darowiznę na rzecz {recipient}."
 
 #, python-brace-format
 msgid "This message is a reminder that {amount} is going to be debited from your default payment instrument on {debit_date} in order to renew your donations to {recipients}."
-msgstr "Ta wiadomość przypomina, że {amount} zostanie pobrana z domyślnego instrumentu płatniczego w dniu {debit_date} w celu odnowienia darowizn na rzecz {recipients}."
+msgstr "Ta wiadomość przypomina, że {amount} zostanie pobrana z Twojej domyślnej metody płatności w dniu {debit_date} w celu odnowienia darowizn na rzecz {recipients}."
 
 #, python-brace-format
 msgid "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
 msgid_plural "This message is a reminder that a total of {amount} is going to be debited from your default payment instrument within the next {n} days in order to renew your donations."
 msgstr[0] "<unused singular (hash=db074c4f088215860f599fe497c6aa39)>"
-msgstr[1] "Ta wiadomość przypomina, że w ciągu {n} dni zostanie pobrana kwota {amount} z Twojej domyślnego instrumentu płatniczego w celu odnowienia darowizn."
-msgstr[2] "Ta wiadomość przypomina, że w ciągu {n} dni zostanie pobrana kwota {amount} z Twojej domyślnego instrumentu płatniczego w celu odnowienia darowizn."
+msgstr[1] "Ta wiadomość przypomina, że w ciągu {n} dni zostanie pobrana kwota {amount} z Twojej domyślnej metody płatności w celu odnowienia darowizn."
+msgstr[2] "Ta wiadomość przypomina, że w ciągu {n} dni zostanie pobrana kwota {amount} z Twojej domyślnej metody płatności w celu odnowienia darowizn."
 
 #, python-brace-format
 msgid "If you wish to modify your donations, click on the following link: {link_start}manage my donations{link_end}."
@@ -704,7 +704,7 @@ msgstr "Twoje konto Liberapay jest modyfikowane"
 
 #, python-brace-format
 msgid "Someone is attempting to associate the email address {0} to the Liberapay account whose current address is {1}. If you didn't initiate this operation, then you should click on the link below and remove the anomalous address from your account."
-msgstr "Ktoś próbuje powiązać adres e-mail {0} z kontem Liberapay, którego aktualny adres to {1}. Jeśli nie zainicjowałeś(-aś) tej operacji, kliknij poniższy link i usuń nieprawidłowy adres ze swojego konta."
+msgstr "Ktoś próbuje powiązać adres e-mail {0} z kontem Liberapay, którego aktualny adres to {1}. Jeśli to nie Ty, kliknij poniższy link i usuń nieprawidłowy adres ze swojego konta."
 
 msgid "Looks like you've found a bug! Sorry for the inconvenience, we'll get it fixed ASAP!"
 msgstr "Wygląda na to, że znalazłeś(-aś) błąd! Przepraszamy za niedogodności, postaramy się go naprawić najszybciej jak to możliwe!"
@@ -740,10 +740,10 @@ msgid "When someone invites me to join a team"
 msgstr "Gdy ktoś zaprasza mnie do przyłączenia się do zespołu"
 
 msgid "When a payment I initiated fails"
-msgstr "Gdy zainicjowana płatność nie powiedzie się"
+msgstr "Gdy rozpoczęta przeze mnie płatność nie powiedzie się"
 
 msgid "When a payment I initiated succeeds"
-msgstr "Gdy inicjowana przeze mnie płatność powiedzie się"
+msgstr "Gdy rozpoczęta przeze mnie płatność powiedzie się"
 
 msgid "When money is being refunded back to me"
 msgstr "Kiedy pieniądze są mi zwracane"
@@ -752,7 +752,7 @@ msgid "When an automatic donation renewal payment is upcoming"
 msgstr "Gdy zbliża się automatyczna płatność za przedłużenie darowizny"
 
 msgid "When I no longer have any valid payment instrument"
-msgstr "Kiedy nie mam już ważnego instrumentu płatniczego"
+msgstr "Kiedy nie mam już ważnej metody płatności"
 
 msgid "When a donation renewal payment has been aborted"
 msgstr "Po przerwaniu płatności za przedłużenie darowizny"
@@ -1252,7 +1252,7 @@ msgid "Log in as {identifier}"
 msgstr "Zaloguj się jako {identifier}"
 
 msgid "You seem to be using an obsolete browser, as a result this website may not work properly. We recommend using a recent version of a mainstream browser."
-msgstr "Wygląda na to, że używasz przestarzałej przeglądarki, przez co strona może nie działać prawidłowo. Zalecamy używanie najnowszej wersji wiodącej przeglądarki."
+msgstr "Wygląda na to, że używasz przestarzałej przeglądarki, przez co strona może nie działać prawidłowo. Zalecamy używanie najnowszej wersji jednej z głównych przeglądarek."
 
 msgid "Ignore this warning"
 msgstr "Zignoruj to ostrzeżenie"
@@ -1395,7 +1395,7 @@ msgid "Giving"
 msgstr "Przekazuję"
 
 msgid "Payment Instruments"
-msgstr "Instrumenty płatnicze"
+msgstr "Metody płatności"
 
 msgid "Payment Schedule"
 msgstr "Harmonogram płatności"
@@ -1688,7 +1688,7 @@ msgid "Linked Accounts"
 msgstr "Konta w innych serwisach"
 
 msgid "Instruments"
-msgstr "Instrumenty"
+msgstr "Płatności"
 
 msgid "Schedule"
 msgstr "Harmonogram"
@@ -2509,10 +2509,10 @@ msgid "Since you've chosen to make a public donation, we recommend that you comp
 msgstr "Ponieważ zdecydowałeś(-aś) się przekazać publiczną darowiznę, zalecamy uzupełnienie swojego profilu publicznego."
 
 msgid "You have enabled automatic renewals for some or all of your donations, but you don't have any valid payment instrument that would allow us to initiate the automatic payments when the time comes."
-msgstr "Włączyłeś(-aś) automatyczne odnawianie dla niektórych lub wszystkich swoich darowizn, ale nie masz żadnego ważnego instrumentu płatniczego, który pozwoliłby nam inicjować automatyczne płatności w odpowiednim czasie."
+msgstr "Włączyłeś(-aś) automatyczne odnawianie dla niektórych lub wszystkich swoich darowizn, ale nie masz żadnej ważnej metody płatności, która pozwoliłby nam rozpoczynać automatyczne płatności w odpowiednim czasie."
 
 msgid "Add a payment instrument"
-msgstr "Dodaj instrument płatniczy"
+msgstr "Dodaj metodę płatności"
 
 msgid "Donations"
 msgstr "Darowizny"
@@ -2573,7 +2573,7 @@ msgid "Pending payment completion."
 msgstr "Oczekiwanie na ukończenie płatności."
 
 msgid "You need to initiate a new payment to fund this donation. Click on the button below to proceed."
-msgstr "Musisz zainicjować nową płatność, aby sfinansować tę darowiznę. Kliknij przycisk poniżej, aby kontynuować."
+msgstr "Musisz rozpocząć nową płatność, aby sfinansować tę darowiznę. Kliknij przycisk poniżej, aby kontynuować."
 
 msgid "Renew"
 msgstr "Odnów"
@@ -2740,7 +2740,7 @@ msgid "The payment processor {name} returned an error: “{error_message}”."
 msgstr "Pośrednik płatności {name} zwrócił błąd: „{error_message}”."
 
 msgid "The payment instrument is invalid, please select or add another one."
-msgstr "Instrument płatniczy jest nieprawidłowy, wybierz lub dodaj kolejny."
+msgstr "Metoda płatności jest nieprawidłowa, proszę wybrać lub dodać inną."
 
 msgid "More information is required in order to process this payment."
 msgstr "W celu przetworzenia tej płatności wymagane są dodatkowe informacje."
@@ -2750,7 +2750,7 @@ msgid "The payment processor ({name}) isn't able to process {currency} direct de
 msgstr "Procesor płatności ({name}) nie jest jeszcze w stanie przetworzyć poleceń zapłaty {currency} dla tego odbiorcy. Spróbuj ponownie, używając innej metody płatności."
 
 msgid "Your payment has been initiated. It will be submitted to your bank at a later time, after being manually checked for signs of fraud."
-msgstr "Twoja płatność została zainicjowana. Zostanie przekazana do Twojego banku w późniejszym czasie, po ręcznym sprawdzeniu pod kątem oznak oszustwa."
+msgstr "Twoja płatność została rozpoczęta. Zostanie przekazana do Twojego banku później, po ręcznym sprawdzeniu pod kątem oznak oszustwa."
 
 #, python-brace-format
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
@@ -2774,7 +2774,7 @@ msgid "Use another bank account"
 msgstr "Użyj innego konta bankowego"
 
 msgid "Payment instrument:"
-msgstr "Instrument płatniczy:"
+msgstr "Metoda płatności:"
 
 msgid "Please input your name and card number:"
 msgstr "Wpisz swoje imię i numer karty:"
@@ -2791,10 +2791,10 @@ msgstr "Zapamiętaj numer karty na przyszłość"
 
 #, python-brace-format
 msgid "Use this payment instrument by default for future payments in {currency}"
-msgstr "Używaj tego instrumentu płatniczego domyślnie do przyszłych płatności w {currency}"
+msgstr "Domyślnie używaj tej metody do przyszłych płatności w {currency}"
 
 msgid "Use this payment instrument by default for future payments"
-msgstr "Używaj tego instrumentu płatniczego domyślnie do przyszłych płatności"
+msgstr "Domyślnie używaj tej metody do przyszłych płatności"
 
 msgid "Please input your name and your IBAN (International Bank Account Number):"
 msgstr "Wprowadź swoją nazwę i IBAN (Międzynarodowy Numer Konta Bankowego):"
@@ -2887,7 +2887,7 @@ msgid "JavaScript is required"
 msgstr "JavaScript jest wymagany"
 
 msgid "This page allows you to view and modify the identity information attached to your account. Only authorized personnel can access this information, we do not show it to other users or anyone else unless required by law or if you instruct us to."
-msgstr "Ta strona umożliwia przeglądanie i modyfikowanie informacji o tożsamości dołączonych do konta. Tylko upoważniony personel może uzyskać dostęp do tych informacji, nie pokazujemy ich innym użytkownikom ani nikomu innemu, chyba że jest to wymagane przez prawo lub jeśli nam to nakazujesz."
+msgstr "Ta strona umożliwia przeglądanie i modyfikowanie informacji o tożsamości dołączonych do konta. Tylko upoważniony personel może uzyskać dostęp do tych informacji - nie pokazujemy ich innym użytkownikom ani nikomu innemu, chyba że jest to wymagane przez prawo lub jeśli nam to nakazujesz."
 
 msgid "Income Shares"
 msgstr "Udziały w przychodzie"
@@ -3488,7 +3488,7 @@ msgstr "Potwierdzenie płatności"
 
 #, python-brace-format
 msgid "The payment of {money_amount} initiated on {date} has been received."
-msgstr "Otrzymano płatność w wysokości {money_amount} zainicjowaną w dniu {date}."
+msgstr "Otrzymano płatność w wysokości {money_amount} rozpoczętą w dniu {date}."
 
 #, python-brace-format
 msgid "The funds were automatically converted from {presentment_currency} to {settlement_currency} at a rate of {exchange_rate}."
@@ -3654,7 +3654,7 @@ msgstr[1] "Oznaczyłeś(-aś) gwiazdką {n} repozytoria w serwisie {platform}."
 msgstr[2] "Oznaczyłeś(-aś) gwiazdką {n} repozytoriów w serwisie {platform}."
 
 msgid "The payment instrument has been successfully added."
-msgstr "Instrument płatniczy został pomyślnie dodany."
+msgstr "Metoda płatności została pomyślnie dodana."
 
 msgid "Forget this card number after one payment."
 msgstr "Zapomnij o tym numerze karty po jednej płatności."
@@ -3673,22 +3673,22 @@ msgstr "Ponieważ adres pocztowy płatnika jest czasem wymagany do pomyślnego p
 #, python-brace-format
 msgid "You have {n} connected payment instrument."
 msgid_plural "You have {n} connected payment instruments."
-msgstr[0] "Masz {n} podłączony instrument płatniczy."
-msgstr[1] "Masz {n} podłączone instrumenty płatnicze."
-msgstr[2] "Masz {n} podłączonych instrumentów płatniczych."
+msgstr[0] "Masz {n} podłączoną metodę płatności."
+msgstr[1] "Masz {n} podłączone metody płatności."
+msgstr[2] "Masz {n} podłączonych metod płatności."
 
 msgid "Bank Account"
 msgstr "Konto bankowe"
 
 msgid "This instrument is used by default."
-msgstr "Ten instrument płatniczy jest używany domyślnie."
+msgstr "Ta metoda jest używana domyślnie."
 
 msgid "default"
 msgstr "domyślny"
 
 #, python-brace-format
 msgid "This instrument is used by default for payments in {currency}."
-msgstr "Ten instrument płatniczy jest używany domyślnie do płatności w {currency}."
+msgstr "Ta metoda płatności jest używana domyślnie do płatności w {currency}."
 
 #, python-brace-format
 msgid "default for {currency}"
@@ -3711,25 +3711,25 @@ msgstr "Wygasa za {month} {year}"
 
 #, python-brace-format
 msgid "The last payment initiated on {date} failed."
-msgstr "Ostatnia płatność zainicjowana w dniu {date} nie powiodła się."
+msgstr "Ostatnia płatność rozpoczęta w dniu {date} nie powiodła się."
 
 #, python-brace-format
 msgid "The last payment initiated on {date} is pending."
-msgstr "Ostatnia płatność zainicjowana w dniu {date} jest w toku."
+msgstr "Ostatnia płatność rozpoczęta w dniu {date} jest w toku."
 
 #, python-brace-format
 msgid "The last payment initiated on {date} was successful."
-msgstr "Ostatnia płatność zainicjowana w dniu {date} powiodła się."
+msgstr "Ostatnia płatność rozpoczęta w dniu {date} powiodła się."
 
 msgid "This payment instrument hasn't been used yet."
-msgstr "Ten instrument płatniczy nie był jeszcze używany."
+msgstr "Ta metoda płatności nie była jeszcze używana."
 
 msgid "Set as default"
 msgstr "Ustaw jako domyślny"
 
 #, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr "Zatrzymaj domyślne używanie tego instrumentu płatniczego dla płatności w {currency}."
+msgstr "Przestań domyślnie używać tej metody płatniczej dla płatności w {currency}."
 
 #, python-brace-format
 msgid "Unset as default for {currency}"
@@ -3737,17 +3737,17 @@ msgstr "Odznacz jako domyślne dla {currency}"
 
 #, python-brace-format
 msgid "Use this instrument by default for payments in {currency}."
-msgstr "Używaj tego instrumentu płatniczego domyślnie do płatności w {currency}."
+msgstr "Domyślnie używaj tej metody do płatności w {currency}."
 
 #, python-brace-format
 msgid "Set as default for {currency}"
 msgstr "Ustaw jako domyślny dla {currency}"
 
 msgid "You don't have any valid payment instrument."
-msgstr "Nie masz żadnego ważnego instrumentu płatniczego."
+msgstr "Nie masz żadnej ważnej metody płatności."
 
 msgid "Add a payment instrument:"
-msgstr "Dodaj instrument płatniczy:"
+msgstr "Dodaj metodę płatności:"
 
 msgid "Add a card"
 msgstr "Dodaj kartę"
@@ -5131,8 +5131,8 @@ msgstr[2] "{n} kont użytkowników zostało utworzonych w ciągu ostatniego mies
 msgid "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
 msgid_plural "{n} new donations have been started in the past month, increasing total weekly funding by {money_amount}."
 msgstr[0] "<unused singular (hash=e5b7d2c32b1e52c487dbaf69fc0de6a6)>"
-msgstr[1] "{n} nowe darowizny zostały zainicjowane w ciągu ostatniego miesiąca, zwiększając całkowitą tygodniową pulę finansowania o {money_amount}."
-msgstr[2] "{n} nowych darowizn zostało zainicjowanych w ciągu ostatniego miesiąca, zwiększając całkowitą tygodniową pulę finansowania o {money_amount}."
+msgstr[1] "{n} nowe darowizny zostały dodane w ciągu ostatniego miesiąca, zwiększając całkowitą tygodniową pulę finansowania o {money_amount}."
+msgstr[2] "{n} nowych darowizn zostało dodanych w ciągu ostatniego miesiąca, zwiększając całkowitą tygodniową pulę finansowania o {money_amount}."
 
 #, python-brace-format
 msgid "<unused singular (hash=ac451209b33be4d9667ad1626138debd)>"

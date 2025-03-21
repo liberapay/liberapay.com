@@ -846,9 +846,9 @@ msgstr "El nom d'usuari «{0}» és massa llarg."
 msgid "The username '{0}' contains invalid characters."
 msgstr "El nom d'usuari «{0}» conté caràcters no vàlids."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The username '{0}' is purely numerical. This isn't allowed."
-msgstr "El nom d'usuari \"{0}\" és purament numèric. Això no està permès."
+msgstr "El nom d'usuari «{0}» és purament numèric. Això no és permès."
 
 #, python-brace-format
 msgid "The username '{0}' is restricted."
@@ -996,17 +996,17 @@ msgstr "L'usuari {0} no accepta donatius."
 msgid "{username} doesn't accept donations in {rejected_currency}."
 msgstr "{username} no accepta donatius en {rejected_currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts secret donations."
-msgstr "{username} ja no accepta donacions secretes."
+msgstr "{username} ja no accepta donatius secrets."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts private donations."
-msgstr "{username} ja no accepta donacions privades."
+msgstr "{username} ja no accepta donatius privats."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} no longer accepts public donations."
-msgstr "{username} ja no accepta donacions públiques."
+msgstr "{username} ja no accepta donatius públiques."
 
 #, python-brace-format
 msgid "The amount {money_amount} isn't in the expected currency ({expected_currency})."
@@ -1045,13 +1045,12 @@ msgstr "No s'ha pogut processar aquest pagament perquè el compte del destinatar
 msgid "Your donation to {recipient} cannot be processed right now because the account of the beneficiary isn't ready to receive money."
 msgstr "El vostre donatiu a {recipient} no es pot processar correctament perquè el compte del beneficiari no està preparat per a rebre diners."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{username} does not accept donations from {country}."
-msgstr "{username} no accepta donacions de {country}."
+msgstr "{username} no accepta donatius des de {country}."
 
-#, fuzzy
 msgid "The processing of your payment has failed because our software was unable to determine which country the money would come from. This isn't supposed to happen."
-msgstr "El processament del vostre pagament ha fallat perquè el nostre programari no ha pogut determinar de quin país provenien els diners. Això no ha de passar."
+msgstr "El processament del vostre pagament ha fallat perquè el nostre programari no ha pogut determinar de quin país provenien els diners. Això no hauria de passar."
 
 msgid "You've already changed your main currency recently, please retry later (e.g. in a week) or contact support@liberapay.com."
 msgstr "Ja heu canviat la divisa principal recentment. Torneu a intentar més tard (p. ex. en una setmana) o contacteu amb support@liberapay.com."
@@ -1661,7 +1660,6 @@ msgstr "Nom"
 msgid "Currencies"
 msgstr "Divises"
 
-#, fuzzy
 msgid "Countries"
 msgstr "Països"
 
@@ -1702,19 +1700,18 @@ msgstr "Més informació"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "{username} encara no ha configurat cap mètode de pagament, per això ara mateix no es pot processar el vostre donatiu. Quan el pagament sigui possible, us ho notificarem."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
-msgstr "Les donacions a {username} es poden pagar amb una targeta de crèdit o dèbit ({list_of_card_brands}) o per domiciliació bancària d'un compte bancari en euros (només per a donacions en euros)."
+msgstr "Els donatius a {username} es poden pagar amb una targeta de crèdit o dèbit ({list_of_card_brands}) o per domiciliació bancària d'un compte bancari en euros (només per a donatius en euros)."
 
 #, python-brace-format
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Els donatius a {username} es processen via PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
-msgstr "Les donacions a {username} es poden pagar amb: una targeta de crèdit o dèbit ({list_of_card_brands}), un compte bancari en euros (Dèbit SEPA) o un compte de PayPal."
+msgstr "Els donatius a {username} es poden pagar amb: una targeta de crèdit o dèbit ({list_of_card_brands}), un compte bancari en euros (Dèbit SEPA) o un compte de PayPal."
 
-#, fuzzy
 msgid "Payment Card"
 msgstr "Targeta de pagament"
 
@@ -1812,21 +1809,18 @@ msgstr "Fracció nominal"
 msgid "Actual Take"
 msgstr "Fracció real"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
-msgstr "A Liberapay, les donacions es paguen per avançat. Aquesta columna mostra quants diners ha rebut cada membre per avançat a través d'aquest equip. Un avançament augmenta cada vegada que un membre rep un nou pagament d'un donant a través de l'equip, i disminueix cada setmana."
+msgstr "A Liberapay, els donatius es paguen per avançat. Aquesta columna mostra quants diners ha rebut cada membre per avançat a través d'aquest equip. Un avançament augmenta cada vegada que un membre rep un nou pagament d'un donant a través de l'equip, i disminueix cada setmana."
 
-#, fuzzy
 msgid "Advance"
-msgstr "Avançar"
+msgstr "Avançament"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Last week: {0}"
 msgstr "La setmana passada: {0}"
 
-#, fuzzy
 msgid "no take"
-msgstr "cap presa"
+msgstr "cap fracció"
 
 msgid "auto"
 msgstr "automàtica"
@@ -1840,9 +1834,9 @@ msgstr "Els ingressos no usats es gastaran en les setmanes següents, no s'acumu
 msgid "Leftover"
 msgstr "Romanent"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
-msgstr "Sembla que ets a {country}. {username} no accepta donacions procedents d'aquest país."
+msgstr "Sembla que sou a {country}. {username} no accepta donatius procedents d'aquest país."
 
 #, python-brace-format
 msgid "Your current donation to {name} is in {currency}, but they now only accept donations in {accepted_currency}. You can convert your donation to that currency, or discontinue it."
@@ -1879,7 +1873,6 @@ msgid_plural "The {currency_name} isn't your preferred currency? {username} also
 msgstr[0] "No voleu la divisa {currency_name}? {username} també n'accepta una altra:"
 msgstr[1] "No voleu la divisa {currency_name}? {username} també n'accepta {n} més:"
 
-#, fuzzy
 msgid "supported by PayPal"
 msgstr "compatible amb PayPal"
 
@@ -1972,47 +1965,36 @@ msgstr "El sistema de donatius recurrents de Liberapay està dissenyat per a pro
 msgid "You are in sandbox mode, do not input any real payment or personal data!"
 msgstr "Esteu en el mode de proves, no introduïu cap pagament real ni dades personals!"
 
-#, fuzzy
 msgid "The credentials have been generated."
 msgstr "S'han generat les credencials."
 
-#, fuzzy
 msgid "The credentials have been revoked."
-msgstr "Les credencials han estat revocades."
+msgstr "S'han revocat les credencials."
 
-#, fuzzy
 msgid "Constant session"
-msgstr "Sessió constant"
+msgstr "Sessió permanent"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "Podeu automatitzar la baixada d'informació privada del vostre compte si inclou la següent capçalera HTTP a les vostres sol·licituds:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
-msgstr "Per exemple, podeu descarregar la llista dels vostres mecenes actius executant l'ordre següent:"
+msgstr "Per exemple, podeu baixar la llista dels vostres mecenes actius executant l'ordre següent:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
-msgstr "Per minimitzar els riscos per a vostè, aquestes credencials només es poden utilitzar per obtenir dades, no per modificar res del vostre compte, i caducaran automàticament si no s'utilitzen durant un any."
+msgstr "Per a minimitzar els riscos per a vós, aquestes credencials només es poden utilitzar per a obtenir dades, no per a modificar res del vostre compte, i caducaran automàticament si no s'usen durant un any."
 
-#, fuzzy
 msgid "Revoke credentials"
 msgstr "Revoca les credencials"
 
-#, fuzzy
 msgid "The credentials have expired."
 msgstr "Les credencials han caducat."
 
-#, fuzzy
 msgid "Regenerate credentials"
-msgstr "Regenerar credencials"
+msgstr "Torna a generar les credencials"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
-msgstr "Per simplificar l'automatització de les baixades d'informació privada del vostre compte, podeu generar credencials de només lectura de llarga durada."
+msgstr "Per a simplificar l'automatització de les baixades d'informació privada del vostre compte, podeu generar credencials de només lectura de llarga durada."
 
-#, fuzzy
 msgid "Generate credentials"
 msgstr "Genera credencials"
 
@@ -2114,9 +2096,8 @@ msgstr "Directiva revisada sobre els serveis de pagament"
 msgid "Your new avatar URL is: {0}"
 msgstr "L'URL del vostre avatar nou és: {0}"
 
-#, fuzzy
 msgid "Your profile no longer has an avatar."
-msgstr "El teu perfil ja no té un avatar."
+msgstr "El vostre perfil ja no té cap avatar."
 
 #, python-brace-format
 msgid "You have selected {platform} as your avatar source but you haven't connected any {platform} account."
@@ -2150,13 +2131,11 @@ msgstr "Explora les comunitats"
 msgid "You have to check at least one box."
 msgstr "Heu de marcar almenys una casella."
 
-#, fuzzy
 msgid "Which countries should your donors be allowed to send you money from?"
-msgstr "Des de quins països haurien de permetre que els teus donants t'enviïn diners?"
+msgstr "Des de quins països haurien de poder enviar diners els vostres donants?"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
-msgstr "Recomanem limitar els orígens de les donacions només si la llei ho exigeix."
+msgstr "Recomanem limitar els orígens dels donatius només si la llei ho exigeix."
 
 msgid "The submitted settings are incoherent."
 msgstr "La configuració enviada no és coherent."
@@ -2561,7 +2540,7 @@ msgstr "La pròxima data de pagament és {in_N_weeks_months_or_years}."
 msgid "Renew now"
 msgstr "Renova-ho ara"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
 msgstr "El destinatari ja no accepta pagaments en {currency}."
 
@@ -2646,15 +2625,12 @@ msgstr "Actualment no disponible"
 msgid "Pay by card"
 msgstr "Pagament amb targeta"
 
-#, fuzzy
 msgid "Only for donations to SEPA countries"
-msgstr "Només per a donacions a països SEPA"
+msgstr "Només per a donatius cap a països SEPA"
 
-#, fuzzy
 msgid "Only for donations in euros"
-msgstr "Només per a donacions en euros"
+msgstr "Només per a donatius en euros"
 
-#, fuzzy
 msgid "Only euro bank accounts"
 msgstr "Només comptes bancaris en euros"
 
@@ -2752,9 +2728,8 @@ msgstr "S'ha iniciat el pagament. S'enviarà al vostre banc més endavant, despr
 msgid "Your bank can reject this payment. We recommend sending a copy of {link_start}the mandate{link_end} to your bank if you're not sure that it properly handles {currency} direct debit instructions."
 msgstr "El vostre banc pot rebutjar aquest pagament. Us recomanem enviar una còpia del {link_start}manament{link_end} al vostre banc si no esteu segur que gestiona domiciliacions bancàries directes en {currency}."
 
-#, fuzzy
 msgid "The initialization of a required component has failed. If you use a browser extension that blocks requests, for example NoScript, please make sure it’s allowing requests to the “stripe.com” domain."
-msgstr "La inicialització d'un component necessari ha fallat. Si utilitzeu una extensió del navegador que bloqueja les sol·licituds, per exemple, NoScript, assegureu-vos que permet les sol·licituds al domini \"stripe.com\"."
+msgstr "La inicialització d'un component necessari ha fallat. Si useu una extensió de navegador que bloca les sol·licituds, per exemple, NoScript, assegureu-vos que permet les sol·licituds al domini «stripe.com»."
 
 #, python-brace-format
 msgid "We will charge your {brand} card (last four digits: {last4})."
@@ -2807,9 +2782,8 @@ msgstr "Recorda el número de compte bancari per a pagaments futurs"
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Per tal de reduir el risc que aquest pagament sigui rebutjat, us recomanem que introduïu la vostra adreça postal a continuació. S'emmagatzemarà xifrada en la nostra base de dades i s'enviarà al processador de pagaments ({processor_name})."
 
-#, fuzzy
 msgid "Please fill in your postal address. It's required because the IBAN you've provided emanates from outside the European Union."
-msgstr "Si us plau, empleneu la vostra adreça postal. És obligatori perquè l'IBAN que has proporcionat prové de fora de la Unió Europea."
+msgstr "Indiqueu la vostra adreça postal. És obligatori perquè l'IBAN que heu proporcionat prové de fora de la Unió Europea."
 
 #, python-brace-format
 msgid "'{0}' is not an acceptable amount (min={1}, max={2})"
@@ -2995,11 +2969,10 @@ msgstr "Mostra l'historial d'ingressos"
 msgid "No data to show."
 msgstr "No hi ha dades per a mostrar."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Income per week (in {currency})"
 msgstr "Ingressos per setmana (en {currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
 msgstr "Nombre de mecenes per setmana"
 
@@ -3378,13 +3351,11 @@ msgstr "Això és el que veuran els vostres possibles donants amb la nova config
 msgid "Data export"
 msgstr "Exportació de dades"
 
-#, fuzzy
 msgid "Download the list of currently active patrons who chose to make their donations public"
-msgstr "Baixeu la llista de mecenes actius que han decidit fer públiques les seves donacions"
+msgstr "Baixeu la llista dels mecenes actius que han decidit fer públics els seus donatius"
 
-#, fuzzy
 msgid "Download the list of all currently active patrons"
-msgstr "Descarrega la llista de tots els mecenes actius actualment"
+msgstr "Baixa la llista de tots els mecenes actualment actius"
 
 msgid "Download the record of all patrons in the last ten years"
 msgstr "Baixa el registre de tots els mecenes dels últims deu anys"
@@ -3411,15 +3382,15 @@ msgstr "Les dades s'han actualitzat correctament."
 
 #, python-brace-format
 msgid "You have to {link_open}confirm your email address{link_close} before you can start to receive donations."
-msgstr "Cal que {link_open}confirmeu l'adreça electrònica{link_close} abans de poder començar a rebre donacions."
+msgstr "Cal que {link_open}confirmeu l'adreça electrònica{link_close} abans de poder començar a rebre donatius."
 
 #, python-brace-format
 msgid "You have to {link_open}set your username{link_close} before you can start to receive donations."
-msgstr "Cal que {link_open}definiu el vostre nom d'usuari{link_close} abans de començar a rebre donacions."
+msgstr "Cal que {link_open}definiu el vostre nom d'usuari{link_close} abans de començar a rebre donatius."
 
 #, python-brace-format
 msgid "You have to {link_open}add a profile description{link_close} before you can start to receive donations."
-msgstr "Cal que {link_open}afegiu una descripció de perfil{link_close} abans de poder començar a rebre donacions."
+msgstr "Cal que {link_open}afegiu una descripció de perfil{link_close} abans de poder començar a rebre donatius."
 
 msgid "To receive donations you must connect at least one account from a supported payment processor. This page allows you to do so."
 msgstr "Per a rebre donatius cal que associeu almenys un compte d'un dels processadors de pagament admesos. Aquesta pàgina us ho permet fer."
@@ -3430,9 +3401,8 @@ msgstr "Els donants no cal que associïn cap compte de pagament a sota, això no
 msgid "We recommend connecting both Stripe and PayPal if they're both available in your country."
 msgstr "Us recomanem associar Stripe i PayPal, si tots dos estan disponibles al vostre país."
 
-#, fuzzy
 msgid "With Stripe your donors can pay by card or direct debit directly from the Liberapay website. (Direct debits are currently only supported from euro bank accounts.)"
-msgstr "Amb Stripe els teus donants poden pagar amb targeta o domiciliació bancària directament des del web de Liberapay. (Actualment, només s'admeten els càrrecs domiciliats des de comptes bancaris en euros.)"
+msgstr "Amb Stripe els vostres donants poden pagar amb targeta o domiciliació bancària directament des del web de Liberapay. (Actualment, només s'admeten els càrrecs domiciliats des de comptes bancaris en euros.)"
 
 #, python-brace-format
 msgid "Account ID: {0}"
@@ -3562,9 +3532,8 @@ msgstr "Impostos"
 msgid "This payment is a donation, no goods or services are to be provided in exchange, no tax has been collected by Liberapay."
 msgstr "Aquest pagament és un donatiu, no s'han de proporcionar béns o serveis a canvi, Liberapay no n'ha recaptat cap impost."
 
-#, fuzzy
 msgid "Income history"
-msgstr "Història d'ingressos"
+msgstr "Historial d'ingressos"
 
 msgid "You can't receive new donations until you've configured payment processing."
 msgstr "No podreu rebre donatius nous fins que configureu un processador de pagaments."
@@ -3573,16 +3542,14 @@ msgstr "No podreu rebre donatius nous fins que configureu un processador de paga
 msgid "Donations through teams make up {income_percent} of your income ({team_income} of {total_income}) and {patrons_percent} of your donors ({nteampatrons} of {npatrons})."
 msgstr "Els donatius a través dels equips representen el {income_percent} dels vostres ingressos {team_income} de {total_income} i i el {patrons_percent} dels vostres donants {nteampatrons} de {npatrons}."
 
-#, fuzzy
 msgid "Details of personal donations"
-msgstr "Detalls de donacions personals"
+msgstr "Detalls dels donatius personals"
 
 msgid "This section doesn't include data on donations through teams, it only shows the donations that you receive personally."
 msgstr "Aquesta secció no inclou les dades sobre donatius a través d'equips, només mostra els donatius que rebeu personalment."
 
-#, fuzzy
 msgid "Recent changes to personal donations"
-msgstr "Canvis recents a les donacions personals"
+msgstr "Canvis recents als donatius personals"
 
 #, python-brace-format
 msgid "A new donation of {amount} per week has been created."
@@ -3604,9 +3571,8 @@ msgstr "S'ha reduït un donatiu de {old_amount} a {new_amount} setmanals."
 msgid "A donation of {amount} per week has been restarted."
 msgstr "S'ha tornat a començar un donatiu de {amount} per setmana."
 
-#, fuzzy
 msgid "Statistics on personal donations"
-msgstr "Estadístiques de donacions personals"
+msgstr "Estadístiques dels donatius personals"
 
 msgid "The table below lists the donations you receive, grouped by amount."
 msgstr "La taula següent mostra els donatius que heu rebut, agrupats per quantitat."
@@ -3721,11 +3687,11 @@ msgstr "Aquest instrument de pagament encara no s'ha usat."
 msgid "Set as default"
 msgstr "Estableix com a predeterminat"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stop using this instrument by default for payments in {currency}."
-msgstr "Deixeu d'utilitzar aquest instrument de manera predeterminada per als pagaments en {currency}."
+msgstr "Deixeu d'usar aquest instrument de manera predeterminada per als pagaments en {currency}."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Unset as default for {currency}"
 msgstr "Desactivat com a predeterminat per {currency}"
 
@@ -3746,13 +3712,11 @@ msgstr "Afegeix un instrument de pagament:"
 msgid "Add a card"
 msgstr "Afegeix una targeta"
 
-#, fuzzy
 msgid "Euro Bank Account"
 msgstr "Compte bancari en euros"
 
-#, fuzzy
 msgid "Only for donations in euros to recipients in SEPA countries"
-msgstr "Només per a donacions en euros a destinataris dels països SEPA"
+msgstr "Només per a donatius en euros a destinataris dels països SEPA"
 
 msgid "Add a bank account"
 msgstr "Afegeix un compte bancari"
@@ -4148,9 +4112,9 @@ msgstr "Quins països i divises s'admeten?"
 msgid "See the “{page_name}” page."
 msgstr "Vegeu la pàgina «{page_name}»."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The available payment methods depend on which payment processors are supported by the recipient. If a payment is processed by Stripe, then most credit and debit cards ({list_of_card_brands}) are accepted, as well as SEPA Direct Debits (only for donations in euros to recipients in SEPA countries). If a payment is through PayPal, then it's possible to pay in various ways, however the donor needs to have or create a PayPal account."
-msgstr "Els mètodes de pagament disponibles depenen de quins processadors de pagament són compatibles amb el destinatari. Si Stripe processa un pagament, s'accepten la majoria de targetes de crèdit i dèbit ({list_of_card_brands}), així com les domiciliacions SEPA (només per a donacions en euros als destinataris dels països SEPA). Si el pagament es fa a través de PayPal, és possible pagar de diverses maneres, però el donant ha de tenir o crear un compte de PayPal."
+msgstr "Els mètodes de pagament disponibles depenen de quins processadors de pagament són compatibles amb el destinatari. Si Stripe processa un pagament, s'accepten la majoria de targetes de crèdit i dèbit ({list_of_card_brands}), així com les domiciliacions SEPA (només per a donatius en euros als destinataris dels països SEPA). Si el pagament es fa a través de PayPal, és possible pagar de diverses maneres, però el donant ha de tenir o crear un compte de PayPal."
 
 msgid "What are the payment processing fees?"
 msgstr "Quines són les comissions de processament de pagaments?"
@@ -4159,11 +4123,9 @@ msgstr "Quines són les comissions de processament de pagaments?"
 msgid "The fees vary by payment processor, payment method, countries and currencies. In the last year, the average fee percentages have been {average_fee_stripe} for the payments processed by Stripe and {average_fee_paypal} for the payments processed by PayPal."
 msgstr "Les comissions varien segons el processador de pagaments, la forma de pagament, els països i les monedes. Durant l'últim any, els percentatges de comissions mitjans han estat {average_fee_stripe} per als pagaments processats per Stripe i {average_fee_paypal} per als pagaments processats per PayPal."
 
-#, fuzzy
 msgid "How and when do I receive the money sent by my patrons?"
 msgstr "Com i quan rebo els diners enviats pels meus mecenes?"
 
-#, fuzzy
 msgid "Money sent by a donor immediately goes to your Stripe or PayPal account. By default Stripe then automatically sends the funds to your bank account, whereas PayPal simply stores them until you spend or withdraw them."
 msgstr "Els diners enviats per un donant van immediatament al vostre compte de Stripe o PayPal. Per defecte, Stripe envia automàticament els fons al vostre compte bancari, mentre que PayPal simplement els emmagatzema fins que els gasteu o els retireu."
 
@@ -4202,13 +4164,11 @@ msgstr "Es poden desgravar els donatius fets via Liberapay?"
 msgid "Probably not, but it depends on the tax rules of your country."
 msgstr "Probablement no, però depèn de les normes fiscals del vostre estat."
 
-#, fuzzy
 msgid "Is a Liberapay account a wallet?"
 msgstr "Un compte de Liberapay és una cartera?"
 
-#, fuzzy
 msgid "Not since mid-2018. Money sent by a donor immediately goes to the recipient. Previously, funds were held in the donor's account and disbursed little by little to the recipient every week. That system was definitively abandoned due to its very significant drawbacks."
-msgstr "No des de mitjan 2018. Els diners enviats per un donant van immediatament al receptor. Anteriorment, els fons es guardaven al compte del donant i es desemborsaven a poc a poc al receptor cada setmana. Aquell sistema va quedar definitivament abandonat pels seus inconvenients molt importants."
+msgstr "No des de mitjan 2018. Els diners enviats per un donant van immediatament al receptor. Anteriorment, els fons es guardaven al compte del donant i es desemborsaven a poc a poc al receptor cada setmana. Aquell sistema va quedar definitivament abandonat pels seus importants inconvenients."
 
 msgid "You can get updates from us on the following social networks:"
 msgstr "Podeu obtenir novetats sobre nosaltres en les xarxes socials següents:"
@@ -4226,51 +4186,45 @@ msgid_plural "Donors can choose between up to {n} currencies, depending on the p
 msgstr[0] "Els donants poden triar entre fins a {n} moneda, depenent de les preferències del destinatari i de les capacitats del processador de pagaments subjacent."
 msgstr[1] "Els donants poden triar entre fins a {n} monedes, depenent de les preferències del destinatari i de les capacitats del processador de pagaments subjacent."
 
-#, fuzzy
 msgid "Donations can only be received in territories where at least one supported payment processor is available. Moreover, some features are only available in some of the territories supported by a payment processor."
-msgstr "Les donacions només es poden rebre als territoris on hi hagi disponible almenys un processador de pagaments compatible. A més, algunes funcions només estan disponibles en alguns dels territoris compatibles amb un processador de pagaments."
+msgstr "Els donatius només es poden rebre als territoris on hi hagi disponible almenys un processador de pagaments compatible. A més, algunes funcions només estan disponibles en alguns dels territoris compatibles amb un processador de pagaments."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The currently supported payment processors are {Stripe} and {PayPal}. You can find a list of the differences between them {link_start}in the “{page_name}” page{link_end}."
-msgstr "Els processadors de pagament admesos actualment són {Stripe} i {PayPal}. Podeu trobar una llista de les diferències entre ells {link_start}a la pàgina \"{page_name}\"{link_end}."
+msgstr "Els processadors de pagament admesos actualment són {Stripe} i {PayPal}. Podeu trobar una llista de les diferències entre ells {link_start}a la pàgina «{page_name}»{link_end}."
 
-#, fuzzy
 msgid "Best supported territories"
 msgstr "Territoris amb millor suport"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgid_plural "Creators in these {n} territories benefit from all of Liberapay's features:"
 msgstr[0] "<singular no utilitzat (hash=79acddfc1b997a9b2e4aa18d930e097e)>"
 msgstr[1] "Els creadors d'aquests {n} territoris es beneficien de totes les funcions de Liberapay:"
 
-#, fuzzy
 msgid "Well supported territories"
-msgstr "Territoris ben recolzats"
+msgstr "Territoris ben suportats"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
 msgid_plural "Liberapay is also available to creators in the {n} territories listed below. However, donations going to those territories cannot be grouped to lower the payment processing fees, and the euro direct debit payment method isn't available to the donors."
 msgstr[0] "<singular no utilitzat (hash=d6ace91b81f74c1f52f602d3d7009ed8)>"
-msgstr[1] "Liberapay també està disponible per als creadors dels {n} territoris que s'indiquen a continuació. Tanmateix, les donacions que es dirigeixen a aquests territoris no es poden agrupar per reduir les tarifes de processament de pagaments i els donants no poden utilitzar el mètode de pagament per domiciliació bancària en euros."
+msgstr[1] "Liberapay també està disponible per als creadors dels {n} territoris que s'indiquen a continuació. Tanmateix, els donatius que es dirigeixen a aquests territoris no es poden agrupar per reduir les tarifes de processament de pagaments i els donants no poden utilitzar el mètode de pagament per domiciliació bancària en euros."
 
-#, fuzzy
 msgid "Barely supported territories"
-msgstr "Territoris amb prou feines suportats"
+msgstr "Territoris amb suport limitat"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<unused singular (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
 msgid_plural "Liberapay is partly available to creators in the {n} territories listed below, which are supported by PayPal but not by Stripe."
 msgstr[0] "<singular no utilitzat (hash=53cbe5d36eacd9bcc6b8eed3023c884b)>"
-msgstr[1] "Liberapay està disponible en part per als creadors dels {n} territoris que s'indiquen a continuació, que són compatibles amb PayPal però no per Stripe."
+msgstr[1] "Liberapay està parcialment disponible per als creadors dels {n} territoris que s'indiquen a continuació, que són compatibles amb PayPal però no amb Stripe."
 
-#, fuzzy
 msgid "Unsupported territories"
-msgstr "Territoris no compatibles"
+msgstr "Territoris sense suport"
 
-#, fuzzy
 msgid "If you don't live or have a registered business in one of the territories listed above, then you currently can't use Liberapay to receive donations. Sorry."
-msgstr "Si no vius o tens una empresa registrada en un dels territoris indicats anteriorment, actualment no pots utilitzar Liberapay per rebre donacions. Ho sento."
+msgstr "Si no viviu ni teniu cap empresa registrada en un dels territoris indicats anteriorment, actualment no podeu usar Liberapay per rebre donatius Ho sentim."
 
 msgid "What is Liberapay?"
 msgstr "Què és Liberapay?"
@@ -4373,7 +4327,7 @@ msgid "Stripe allows renewing donations automatically, whereas PayPal currently 
 msgstr "Stripe us permet renovar els donatius de forma automàtica, mentre que actualment PayPal requereix que els donants confirmin cada pagament."
 
 msgid "Donations through Stripe can be secret, whereas PayPal always allows donors and recipients to see each other's names and email addresses."
-msgstr "Les donacions a través de Stripe poden ser secretes, mentre que PayPal sempre permet que els donants i els destinataris vegin els noms i les adreces de correu electrònic dels altres."
+msgstr "Els donatius a través de Stripe poden ser secretes, mentre que PayPal sempre permet que els donants i els destinataris vegin els noms i les adreces de correu electrònic dels altres."
 
 msgid "Stripe allows donating to multiple creators at once in some cases, whereas PayPal always requires separate payments."
 msgstr "Stripe permet fer donatius a diferents creadors a la vegada en alguns casos, mentre que PayPal sempre requereix pagaments per separat."
@@ -4596,9 +4550,9 @@ msgstr "Repartiment dels diners"
 msgid "Teams don't have a hierarchy, all their members are equal and set their own take."
 msgstr "Els equips no tenen cap jerarquia, tots els membres són iguals i prenen la mateixa participació."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You can change your takes from {0}your teams dashboard{1}. It contains tables that show the nominal takes of all members, as well as an estimate of the actual amounts of money that will be deducted at the end of the current weekly cycle."
-msgstr "Podeu canviar les vostres preses des del {0}tauler del vostre equip{1}. Conté taules que mostren les preses nominals de tots els membres, així com una estimació de les quantitats reals de diners que es descomptaran al final del cicle setmanal en curs."
+msgstr "Podeu canviar les vostres fraccions des del {0}tauler del vostre equip{1}. Conté taules que mostren les fraccions nominals de tots els membres, així com una estimació de les quantitats reals de diners que es descomptaran al final del cicle setmanal en curs."
 
 msgid "The nominal takes are the raw numbers that the members input themselves, the actual takes are computed by the system: first it sums up the nominal takes, then it computes the percentage that each take represents, and finally it applies those percentages to the available income. Nominal takes also act as maximums: the actual takes are never higher than the nominal ones, even if additional income is available."
 msgstr "Les fraccions nominals són els números en brut que els membres introdueixen, les fraccions reals les computa el sistema: primer suma les fraccions nominals, després computa el percentatge que cada fracció representa i, finalment, aplica aquests percentatges als ingressos disponibles. Les fraccions nominals també actuen com a màxims: les fraccions reals no poden ser més grans que les nominals, fins i tot si hi ha ingressos addicionals disponibles."
@@ -4615,17 +4569,15 @@ msgstr "Per defecte, tots els membres dels equips tenen establerta la seva part 
 msgid "Regulation of take amounts"
 msgstr "Regulació del repartiment de diners"
 
-#, fuzzy
 msgid "When “take throttling” is enabled for a team, its members can't raise their takes higher than a maximum computed on the basis of the nominal takes at the end of the previous weekly cycle. This mechanism is meant to encourage inviting new contributors to join the team, by ensuring that they won't take a disproportionate share of the income in their first weeks."
-msgstr "Quan el \"take throttling\" està habilitat per a un equip, els seus membres no poden augmentar les seves preses per sobre d'un màxim calculat sobre la base de les preses nominals al final del cicle setmanal anterior. Aquest mecanisme pretén animar a convidar nous col·laboradors a unir-se a l'equip, assegurant-se que no s'emportin una part desproporcionada dels ingressos en les seves primeres setmanes."
+msgstr "Quan la «limitació de fraccions» està habilitada per a un equip, els seus membres no poden augmentar les fraccions per sobre d'un màxim calculat sobre la base de les fraccions nominals al final del cicle setmanal anterior. Aquest mecanisme pretén animar a convidar nous col·laboradors a unir-se a l'equip, assegurant-se que no s'emportin una part desproporcionada dels ingressos en les seves primeres setmanes."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The limit works like this: you can always increase your take to {amount} if it was below that, you can double your take compared to the previous week, you can raise your take to claim the team's leftover income, and you can bring your take up to the level of the median take at the end of the previous weekly cycle. Whichever of these possibilities results in the highest amount is your maximum take for the week."
-msgstr "El límit funciona així: sempre podeu augmentar la vostra presa a {amount} si va ser inferior a això, podeu duplicar la vostra presa en comparació amb la setmana anterior, podeu augmentar la vostra presa per reclamar els ingressos sobrants de l'equip i podeu portar la vostra presa. fins al nivell de la presa mitjana al final del cicle setmanal anterior. Qualsevol d'aquestes possibilitats resulta en la quantitat més alta és la vostra presa màxima per a la setmana."
+msgstr "El límit funciona així: sempre podeu augmentar la vostra fracció a {amount} si va ser inferior a això, podeu duplicar la vostra fracció en comparació amb la setmana anterior, podeu augmentar la vostra fracció per a reclamar els ingressos sobrants de l'equip i podeu portar la vostra fracció fins al nivell de la fracció mitjana al final del cicle setmanal anterior. Qualsevol d'aquestes possibilitats resulta en la quantitat més alta és la vostra fracció màxima per a la setmana."
 
-#, fuzzy
 msgid "Takes are not limited if the team has only one member, or if the previous week's takes were all zero (which is the case for any new team that has been created during the current weekly cycle)."
-msgstr "Les preses no estan limitades si l'equip només té un membre, o si les preses de la setmana anterior eren totes zero (com és el cas de qualsevol equip nou que s'hagi creat durant el cicle setmanal actual)."
+msgstr "Les fraccins no estan limitades si l'equip només té un membre, o si les fraccions de la setmana anterior eren totes zero (com és el cas de qualsevol equip nou que s'hagi creat durant el cicle setmanal actual)."
 
 msgid "Please contact support if you want to enable or disable the take limits for an existing team. Don't forget to include evidence that the change has been approved by the other team members."
 msgstr "Contacteu amb l'assistència si voleu activar o desactivar els límits de la fracció per a un equip existent. No oblideu d'incloure proves que el canvi s'ha aprovat amb els altres membres de l'equip."
@@ -4729,7 +4681,7 @@ msgid "Explore Recipients"
 msgstr "Explora els destinataris"
 
 msgid "Users who are hoping to receive their first donations through Liberapay."
-msgstr "Usuaris que són candidats a rebre les seves primeres donacions a través de Liberapay."
+msgstr "Usuaris que són candidats a rebre els primers donatius a través de Liberapay."
 
 msgid "Explore Hopefuls"
 msgstr "Explora els aspirants"
@@ -5317,7 +5269,6 @@ msgstr "No hem trobat res que coincideixi amb la consulta."
 msgid "Whose work do you appreciate?"
 msgstr "De qui valoreu la feina que fa?"
 
-#, fuzzy
 msgid "Found a matching user name"
 msgid_plural "Found matching user names"
 msgstr[0] "S'ha trobat un nom d'usuari coincident"
