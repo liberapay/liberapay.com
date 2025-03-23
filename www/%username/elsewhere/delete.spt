@@ -1,4 +1,4 @@
-from liberapay.utils import get_participant
+from liberapay.utils import form_post_success, get_participant
 
 [---]
 
@@ -10,9 +10,14 @@ domain = request.body.get("domain", '')
 user_id = request.body["user_id"]
 
 participant.delete_elsewhere(platform, domain, user_id)
+form_post_success(state, redirect_url=participant.path('edit/elsewhere'))
 
 [---] text/html
-% do response.redirect('..')
+% extends "templates/layouts/base-thin.html"
+
+% block thin_content
+    <p class="alert alert-danger">These aren't the droids you're looking for.</p>
+% endblock
 
 [---] application/json via json_dump
 {}
