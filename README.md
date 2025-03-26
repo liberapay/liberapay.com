@@ -82,14 +82,17 @@ Then run:
 
     make env
 
-Now you need to give yourself superuser postgres powers (if it hasn't been done already), and create two databases:
+Now you need to give yourself superuser postgres powers (if it hasn't been done already). One of these commands should work:
 
-    su postgres -c "createuser --superuser $(whoami)"
+    sudo -u postgres -c "createuser --superuser $(whoami)"
+    su -c "su postgres -c 'createuser --superuser $(whoami)'"
+
+Then create two databases:
 
     createdb liberapay
     createdb liberapay_tests
 
-If you need a deeper understanding take a look at the [Database Roles](https://www.postgresql.org/docs/9.4/static/user-manag.html) and [Managing Databases](https://www.postgresql.org/docs/9.4/static/managing-databases.html) sections of PostgreSQL's documentation.
+If you need a deeper understanding, take a look at the [Database Roles](https://www.postgresql.org/docs/9.4/static/user-manag.html) and [Managing Databases](https://www.postgresql.org/docs/9.4/static/managing-databases.html) sections of PostgreSQL's documentation.
 
 Then you can set up the DB:
 
