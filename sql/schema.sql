@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '182'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '183'::jsonb);
 
 
 -- app configuration
@@ -818,7 +818,7 @@ CREATE TABLE events
  );
 
 CREATE INDEX events_participant_idx ON events (participant, type);
-CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type = 'admin_request';
+CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type IN ('admin_request', 'flags_changed');
 
 
 -- email addresses

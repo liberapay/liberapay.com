@@ -3610,3 +3610,7 @@ ALTER TABLE exchange_routes
 
 -- migration #182
 UPDATE participants SET public_name = null WHERE public_name = '';
+
+-- migration #183
+DROP INDEX events_admin_idx;
+CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type IN ('admin_request', 'flags_changed');
