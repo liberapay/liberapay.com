@@ -133,6 +133,8 @@ if domain:
                           FROM email_blacklist bl
                          WHERE lower(bl.address) = lower(e.address)
                            AND (bl.ignore_after IS NULL OR bl.ignore_after > current_timestamp)
+                      ORDER BY bl.ts DESC
+                         LIMIT 1
                     )
                ) ORDER BY e.added_time DESC) AS addresses
              , max(e.added_time) AS max_added_time
