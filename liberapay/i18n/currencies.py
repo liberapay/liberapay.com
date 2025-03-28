@@ -549,7 +549,7 @@ def fetch_currency_exchange_rates(db=None):
     db = db or website.db
     currencies = set(db.one("SELECT array_to_json(enum_range(NULL::currency))"))
     currencies.remove('EUR')
-    if (access_key := website.app_conf.fixer_access_key):
+    if (access_key := db.one("SELECT value FROM app_conf WHERE key = 'fixer_access_key'")):
         yesterday = datetime.now(timezone.utc).date() - timedelta(days=1)
         r = requests.get(
             f'https://data.fixer.io/api/{yesterday}?access_key={access_key}&base=EUR'
