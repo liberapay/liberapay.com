@@ -19,29 +19,37 @@ user.require_active_privilege('admin')
 if request.method == 'POST':
     if 'allow' in request.body:
         payin_id = request.body.get_int('allow')
-        payin = website.db.one("""
-            UPDATE payins
-               SET allowed_since = coalesce(allowed_since, current_timestamp)
-                 , allowed_by = coalesce(allowed_by, %s)
-             WHERE id = %s
-               AND status = 'awaiting_review'
-         RETURNING *
-        """, (user.id, payin_id))
-        if not payin:
-            raise response.error(400, f"payin {payin_id} isn't awaiting review")
+        with website.db.get_cursor() as cursor:
+            payin = cursor.one("""
+                UPDATE payins
+                   SET allowed_since = coalesce(allowed_since, current_timestamp)
+                     , allowed_by = coalesce(allowed_by, %s)
+                 WHERE id = %s
+                   AND status = 'awaiting_review'
+             RETURNING *
+            """, (user.id, payin_id))
+            if not payin:
+                raise response.error(400, f"payin {payin_id} isn't awaiting review")
+            website.db.Participant.from_id(payin.payer).add_event(
+                cursor, 'payin_review', {'allowed': True, 'payin_id': payin_id}
+            )
         del payin
     elif 'disallow' in request.body:
         payin_id = request.body.get_int('disallow')
-        payin = website.db.one("""
-            UPDATE payins
-               SET allowed_since = null
-                 , allowed_by = null
-             WHERE id = %s
-               AND status = 'awaiting_review'
-         RETURNING *
-        """, (payin_id,))
-        if not payin:
-            raise response.error(400, f"payin {payin_id} isn't awaiting review")
+        with website.db.get_cursor() as cursor:
+            payin = cursor.one("""
+                UPDATE payins
+                   SET allowed_since = null
+                     , allowed_by = null
+                 WHERE id = %s
+                   AND status = 'awaiting_review'
+             RETURNING *
+            """, (payin_id,))
+            if not payin:
+                raise response.error(400, f"payin {payin_id} isn't awaiting review")
+            website.db.Participant.from_id(payin.payer).add_event(
+                cursor, 'payin_review', {'allowed': None, 'payin_id': payin_id}
+            )
         del payin
     else:
         raise response.error(400)

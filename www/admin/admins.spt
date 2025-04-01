@@ -10,7 +10,7 @@ events = website.db.all("""
       FROM events e
       JOIN participants p ON p.id = e.participant
       JOIN participants admin ON admin.id = e.recorder
-     WHERE e.type IN ('admin_request', 'flags_changed')
+     WHERE e.type IN ('admin_request', 'flags_changed', 'payin_review')
        AND coalesce(e.ts < %s, true)
   ORDER BY e.ts DESC
      LIMIT %s
@@ -41,7 +41,7 @@ title = "Admins Oversight"
     % if e.type == 'admin_request'
         <div class="mb-3">{{ recorder(e) }} modified the account of <a href="/~{{ e.participant }}/">{{ e.username }}</a>:<br>
         <pre>{{ json.dumps(e.payload) }}</pre></div>
-    % elif assert(e.type == 'flags_changed', "unexpected event type: " + e.type)
+    % elif e.type == 'flags_changed'
         % set marked_as = e.payload.get('marked_as', '')
         % if marked_as is None
             <p>{{ recorder(e) }} unmarked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a>.</p>
@@ -49,6 +49,12 @@ title = "Admins Oversight"
             <p>{{ recorder(e) }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <code>{{ e.payload }}</code>.</p>
         % else
             <p>{{ recorder(e) }} marked the profile <a href="/~{{ e.participant }}/">{{ e.username }}</a> as <span class="{{ constants.ACCOUNT_MARK_CLASSES.get(marked_as, 'text-muted') }}">{{ marked_as }}</span>.</p>
+        % endif
+    % elif assert(e.type == 'payin_review', "unexpected event type: " + e.type)
+        % if e.payload.allowed
+            <p>{{ recorder(e) }} allowed <a href="/admin/payments?before={{ e.payload.payin_id + 1 }}">payin {{ e.payload.payin_id }}</a>.</p>
+        % else
+            <p>{{ recorder(e) }} disallowed <a href="/admin/payments?before={{ e.payload.payin_id + 1 }}">payin {{ e.payload.payin_id }}</a>.</p>
         % endif
     % endif
     % endfor
