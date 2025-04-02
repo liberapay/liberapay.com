@@ -554,7 +554,12 @@ def execute_reviewed_payins():
           JOIN participants payer_p ON payer_p.id = pi.payer
           JOIN exchange_routes r ON r.id = pi.route
          WHERE pi.status = 'awaiting_review'
-           AND ( payer_p.is_suspended IS FALSE OR NOT EXISTS (
+           AND ( pi.allowed_by IS NOT NULL AND
+                 pi.allowed_since < (current_timestamp - interval '5 minutes')
+                 OR
+                 payer_p.is_suspended IS TRUE
+                 OR
+                 NOT EXISTS (
                    SELECT 1
                      FROM payin_transfers pt
                      JOIN participants recipient_p ON recipient_p.id = pt.recipient
@@ -567,7 +572,8 @@ def execute_reviewed_payins():
                                  AND e.type = 'flags_changed'
                             ) > (current_timestamp - interval '6 hours')
                           )
-               ) )
+                 )
+               )
     """)
     for payin, payer, route in payins:
         route.__dict__['participant'] = payer
