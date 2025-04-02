@@ -82,12 +82,14 @@ def charge(db, payin, payer, route, update_donor=True):
     if payer_state != 'okay':
         new_status = 'failed'
     elif route.network == 'stripe-sdd':
-        for pt in transfers:
-            if pt.recipient_marked_as in ('fraud', 'spam'):
-                new_status = 'failed'
-                break
-            elif pt.recipient_marked_as is None and pt.recipient_join_time >= '2022-12-23':
-                new_status = 'awaiting_review'
+        five_minutes_ago = utcnow() - timedelta(minutes=5)
+        if not (payin.allowed_since and payin.allowed_since < five_minutes_ago):
+            for pt in transfers:
+                if pt.recipient_marked_as in ('fraud', 'spam'):
+                    new_status = 'failed'
+                    break
+                elif pt.recipient_marked_as is None and pt.recipient_join_time >= '2022-12-23':
+                    new_status = 'awaiting_review'
     if new_status:
         if new_status == payin.status:
             return payin
