@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '183'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '184'::jsonb);
 
 
 -- app configuration
@@ -519,8 +519,11 @@ CREATE TABLE payins
 , intent_id        text
 , refunded_amount  currency_amount   CHECK (NOT (refunded_amount <= 0))
 , off_session      boolean           NOT NULL
+, allowed_by       bigint            REFERENCES participants
+, allowed_since    timestamptz
 , CONSTRAINT fee_currency_chk CHECK (fee::currency = amount_settled::currency)
 , CONSTRAINT refund_currency_chk CHECK (refunded_amount::currency = amount::currency)
+, CONSTRAINT allowed_chk CHECK ((allowed_since IS NULL) = (allowed_by IS NULL))
 );
 
 CREATE INDEX payins_payer_idx ON payins (payer);
@@ -818,7 +821,8 @@ CREATE TABLE events
  );
 
 CREATE INDEX events_participant_idx ON events (participant, type);
-CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type IN ('admin_request', 'flags_changed');
+CREATE INDEX events_admin_idx ON events (ts DESC)
+    WHERE type IN ('admin_request', 'flags_changed', 'payin_review');
 
 
 -- email addresses
