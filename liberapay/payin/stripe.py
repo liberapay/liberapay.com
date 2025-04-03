@@ -285,17 +285,16 @@ def create_charge(
                 except Exception as e:
                     website.tell_sentry(e)
                     return abort_payin(db, payin, str(e)), None
-    if charge.captured:
-        if destination:
-            payin = settle_destination_charge(
-                db, payin, charge, payin_transfers[0],
-                intent_id=intent.id, update_donor=update_donor,
-            )
-        else:
-            payin = settle_charge_and_transfers(
-                db, payin, charge, intent_id=intent.id, update_donor=update_donor,
-            )
-        send_payin_notification(db, payin, payer, charge, route)
+    if destination:
+        payin = settle_destination_charge(
+            db, payin, charge, payin_transfers[0],
+            intent_id=intent.id, update_donor=update_donor,
+        )
+    else:
+        payin = settle_charge_and_transfers(
+            db, payin, charge, intent_id=intent.id, update_donor=update_donor,
+        )
+    send_payin_notification(db, payin, payer, charge, route)
     return payin, charge
 
 
@@ -375,12 +374,15 @@ def settle_charge_and_transfers(
     refunded_amount = None
     if charge.amount_refunded:
         refunded_amount = int_to_Money(charge.amount_refunded, charge.currency)
+    status = charge.status
+    if status == 'succeeded' and not charge.captured:
+        status = 'awaiting_review'
     payin = update_payin(
-        db, payin.id, charge.id, charge.status, error,
+        db, payin.id, charge.id, status, error,
         amount_settled=amount_settled, fee=fee, intent_id=intent_id,
         refunded_amount=refunded_amount,
     )
-    del refunded_amount
+    del refunded_amount, status
 
     if charge.refunds.data:
         record_refunds(db, payin, charge)
@@ -396,7 +398,7 @@ def settle_charge_and_transfers(
       ORDER BY pt.id
     """, (payin.id,))
     last = len(payin_transfers) - 1
-    if charge.status == 'succeeded':
+    if charge.captured and charge.status == 'succeeded':
         payer = db.Participant.from_id(payin.payer)
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
@@ -456,10 +458,9 @@ def settle_charge_and_transfers(
                     )
 
     else:
-        assert charge.status in ('failed', 'pending')
         for i, pt in enumerate(payin_transfers):
             update_payin_transfer(
-                db, pt.id, None, charge.status, error,
+                db, pt.id, None, payin.status, error,
                 update_donor=(update_donor and i == last),
             )
 
@@ -669,6 +670,8 @@ def settle_destination_charge(
         amount_settled, fee, net_amount = None, None, payin.amount
 
     status = charge.status
+    if status == 'succeeded' and not charge.captured:
+        status = 'awaiting_review'
     error = repr_charge_error(charge)
     refunded_amount = None
     if charge.amount_refunded:
