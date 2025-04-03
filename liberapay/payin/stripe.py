@@ -278,7 +278,7 @@ def create_charge(
             )
             if capture:
                 try:
-                    intent.capture()
+                    intent = intent.capture()
                     charge = intent.charges.data[0]
                 except stripe.error.StripeError as e:
                     return abort_payin(db, payin, repr_stripe_error(e)), None
