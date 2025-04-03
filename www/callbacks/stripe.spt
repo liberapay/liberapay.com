@@ -46,6 +46,8 @@ if event_object_type == 'charge':
     assert payin
     if payin.ctime > (utcnow() - timedelta(minutes=50)):
         raise response.error(409, "This callback is too early.")
+    if payin.status == 'succeeded' and not charge.captured:
+        raise response.error(200, "This callback is too late.")
     payin = settle_charge(website.db, payin, charge)
     if payin.status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
         payer = Participant.from_id(payin.payer)
