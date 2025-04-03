@@ -272,7 +272,7 @@ def create_charge(
                     intent_id=intent.id,
                 ), charge
         else:
-            capture = payin.status == 'pre' and (
+            capture = payin.status in ('pre', 'awaiting_payer_action') and (
                 charge.outcome.risk_level == 'normal' or
                 payin.allowed_by is not None and payin.allowed_since < five_minutes_ago
             )
