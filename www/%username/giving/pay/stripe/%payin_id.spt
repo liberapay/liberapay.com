@@ -11,9 +11,7 @@ from liberapay.payin.common import (
     prepare_payin, prepare_payin_transfer, resolve_amounts, resolve_tip,
 )
 from liberapay.payin.prospect import PayinProspect
-from liberapay.payin.stripe import (
-    charge, repr_stripe_error, settle_payin,
-)
+from liberapay.payin.stripe import charge, repr_stripe_error
 from liberapay.utils import check_address_v2, get_participant
 
 STRIPE_BIT = 1
@@ -160,12 +158,10 @@ elif payin_id:
         raise response.error(404, "unknown payin ID in URL path")
     route = ExchangeRoute.from_id(payer, payin.route)
     try:
-        if payin.status in ('pre', 'awaiting_review'):
+        if payin.status in ('pre', 'awaiting_payer_action', 'awaiting_review'):
             payin = charge(website.db, payin, payer, route)
             if payin.id != int(payin_id):
                 response.redirect(payer.path('giving/pay/stripe/%i' % payin.id))
-        elif payin.status == 'awaiting_payer_action':
-            payin = settle_payin(website.db, payin)
     except NextAction as act:
         if act.type == 'redirect_to_url':
             response.refresh(state, url=act.redirect_to_url.url)

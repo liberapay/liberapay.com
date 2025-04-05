@@ -59,7 +59,7 @@ def repr_charge_error(charge):
 
 
 def charge(db, payin, payer, route, update_donor=True):
-    """Initiate the Charge for the given payin.
+    """Initiate or continue the Charge for the given payin.
 
     Returns the updated payin, or possibly a new payin.
 
@@ -199,7 +199,7 @@ def try_other_destinations(db, payin, payer, charge, update_donor=True):
 def create_charge(
     db, payin, payin_transfers, payer, statement_descriptor, update_donor=True,
 ):
-    """Create a Charge, possibly a Destination Charge if the recipient is outside SEPA.
+    """Try to create and capture a Charge.
 
     Doc: https://docs.stripe.com/connect/charges
 
@@ -263,7 +263,7 @@ def create_charge(
                      intent_id=intent.id)
         raise NextAction(intent)
     charge = intent.charges.data[0]
-    if not charge.captured:
+    if charge.status == 'succeeded' and not charge.captured:
         five_minutes_ago = utcnow() - timedelta(minutes=5)
         if payer.is_suspended:
             if payer.marked_since < five_minutes_ago:
@@ -323,26 +323,6 @@ def send_payin_notification(db, payin, payer, charge, route):
             average_settlement_seconds=PAYIN_SETTLEMENT_DELAYS['stripe-sdd'].total_seconds(),
             tippees=tippees,
         )
-
-
-def settle_payin(db, payin):
-    """Check the status of a payin, take appropriate action if it has changed.
-    """
-    if payin.intent_id:
-        intent = stripe.PaymentIntent.retrieve(payin.intent_id)
-        if intent.status == 'requires_action':
-            raise NextAction(intent)
-        err = intent.last_payment_error
-        if err and intent.status in ('requires_payment_method', 'canceled'):
-            charge_id = getattr(err, 'charge', None)
-            return update_payin(db, payin.id, charge_id, 'failed', err.message)
-        if intent.charges.data:
-            charge = intent.charges.data[0]
-        else:
-            return payin
-    else:
-        charge = stripe.Charge.retrieve(payin.remote_id)
-    return settle_charge(db, payin, charge)
 
 
 def settle_charge(db, payin, charge):
