@@ -487,7 +487,7 @@ def make_sentry_teller(env, version):
             traceback.print_exc()
             # Reraise if allowed
             if env.sentry_reraise and allow_reraise:
-                raise
+                raise exception
             return r
 
         # Prepare context data
