@@ -93,6 +93,9 @@ pytest-i18n-browse: $(env)
 pytest-profiling: $(env)
 	LIBERAPAY_PROFILING=yes $(py_test) -k $${k-TestPerformance} --profile-svg ./tests/py/
 
+update-test-deps: $(env)
+	$(pip) install -U -r requirements_tests.txt
+
 _i18n_extract: $(env)
 	@PYTHONPATH=. $(env_bin)/pybabel extract -F .babel_extract --no-wrap -o i18n/core.pot --sort-by-file $$(\
 		git ls-files | \
