@@ -515,6 +515,7 @@ LOCALES_DEFAULT_MAP = {
     'zh-cn': 'zh-hans-cn',
     'zh-hk': 'zh-hant-hk',
     'zh-mo': 'zh-hant-mo',
+    'zh-my': 'zh-hans-my',
     'zh-sg': 'zh-hans-sg',
     'zh-tw': 'zh-hant-tw',
 }
