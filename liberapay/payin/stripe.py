@@ -394,7 +394,7 @@ def settle_charge_and_transfers(
                         db, pt.id, None, charge.status, error,
                         update_donor=(update_donor and i == last),
                     )
-                elif pt.status in ('pre', 'pending'):
+                elif pt.status in ('pre', 'awaiting_review', 'pending'):
                     pt = execute_transfer(
                         db, pt, charge.id,
                         update_donor=(update_donor and i == last),
