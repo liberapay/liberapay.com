@@ -262,6 +262,8 @@ def create_charge(
         update_payin(db, payin.id, None, 'awaiting_payer_action', None,
                      intent_id=intent.id)
         raise NextAction(intent)
+    if intent.last_payment_error:
+        return abort_payin(db, payin, intent.last_payment_error.message), None
     charge = intent.charges.data[0]
     if charge.status == 'succeeded' and not charge.captured:
         five_minutes_ago = utcnow() - timedelta(minutes=5)
