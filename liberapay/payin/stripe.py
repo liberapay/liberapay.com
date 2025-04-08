@@ -269,10 +269,12 @@ def create_charge(
         five_minutes_ago = utcnow() - timedelta(minutes=5)
         if payer.is_suspended:
             if payer.marked_since < five_minutes_ago:
-                return update_payin(
+                payin = update_payin(
                     db, payin.id, charge.id, 'failed', 'canceled on suspicion of fraud',
                     intent_id=intent.id,
-                ), charge
+                )
+                intent.cancel(cancellation_reason='fraudulent')
+                return payin, charge
         else:
             capture = payin.status in ('pre', 'awaiting_payer_action') and (
                 charge.outcome.risk_level == 'normal' or
