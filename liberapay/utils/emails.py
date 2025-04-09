@@ -383,8 +383,6 @@ def test_email_server(ip_address: str, email=None, timeout=None) -> None:
                 ) or
                 # gamil.com SMTP server
                 msg.startswith("sorry, no mailbox here by that name") or
-                # ilxnetworks.com SMTP server
-                msg.endswith(": Relay access denied") or
                 # Microsoft's SMTP server
                 msg.startswith("Requested action not taken: mailbox unavailable") or
                 # OpenSMTPD
@@ -395,6 +393,11 @@ def test_email_server(ip_address: str, email=None, timeout=None) -> None:
                 msg.startswith("No such user")
             )
             if recipient_rejected:
+                raise EmailAddressRejected(email, msg, ip_address)
+            if 'relay' in msg.lower():
+                # The server seems to think we're trying to use it as a relay.
+                # That means there's a discrepancy between the DNS records and
+                # the server's configuration.
                 raise EmailAddressRejected(email, msg, ip_address)
     finally:
         try:
