@@ -11,7 +11,6 @@ from liberapay.payin.stripe import (
 )
 from liberapay.utils import utcnow
 
-SIX_HOURS = timedelta(hours=6)
 PRODUCTION = website.env.instance_type == 'production'
 
 [---]
@@ -49,14 +48,6 @@ if event_object_type == 'charge':
     if payin.status == 'succeeded' and not charge.captured:
         raise response.error(200, "This callback is too late.")
     payin = settle_charge(website.db, payin, charge)
-    if payin.status in ('failed', 'succeeded') and payin.ctime < (utcnow() - SIX_HOURS):
-        payer = Participant.from_id(payin.payer)
-        payer.notify(
-            'payin_' + payin.status,
-            payin=payin._asdict(),
-            provider='Stripe',
-            email_unverified_address=True,
-        )
 
 elif event_object_type == 'charge.dispute':
     dispute = event.data.object

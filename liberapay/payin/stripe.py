@@ -332,11 +332,27 @@ def send_payin_notification(db, payin, payer, charge, route):
 def settle_charge(db, payin, charge):
     """Handle a charge's status change.
     """
+    old_payin = payin
     if charge.destination:
         pt = db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin.id,))
-        return settle_destination_charge(db, payin, charge, pt)
+        payin = settle_destination_charge(db, payin, charge, pt)
     else:
-        return settle_charge_and_transfers(db, payin, charge)
+        payin = settle_charge_and_transfers(db, payin, charge)
+    notify = (
+        payin.status != old_payin.status and
+        payin.status in ('failed', 'succeeded') and
+        payin.ctime < (utcnow() - timedelta(hours=6))
+    )
+    if notify:
+        payer = db.Participant.from_id(payin.payer)
+        payer.notify(
+            'payin_' + payin.status,
+            payin=payin._asdict(),
+            provider='Stripe',
+            email_unverified_address=True,
+            idem_key=str(payin.id),
+        )
+    return payin
 
 
 def settle_charge_and_transfers(
