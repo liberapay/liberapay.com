@@ -27,6 +27,7 @@ from postgres.orm import Model
 from psycopg2.errors import IntegrityError, ReadOnlySqlTransaction
 from psycopg2.extras import execute_batch, execute_values
 import requests
+import stripe
 
 from liberapay.billing.payday import compute_next_payday_date
 from liberapay.constants import (
@@ -1088,6 +1089,18 @@ class Participant(Model, MixinTeam):
             """, locals())
         self.set_attributes(email=email)
         self.update_avatar()
+        stripe_customer_id = self.db.one("""
+            SELECT remote_user_id
+              FROM exchange_routes
+             WHERE participant = %s
+               AND network::text LIKE 'stripe-%%'
+             LIMIT 1
+        """, (self.id,))
+        if stripe_customer_id:
+            try:
+                stripe.Customer.modify(stripe_customer_id, email=email)
+            except Exception as e:
+                website.tell_sentry(e)
 
     def verify_email(self, email_id, nonce, user, request):
         """Set an email address as verified, if the given nonce is valid.
