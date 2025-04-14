@@ -10,7 +10,7 @@ from psycopg2.extras import execute_batch
 
 from ..constants import SEPA
 from ..exceptions import (
-    AccountSuspended, BadDonationCurrency, MissingPaymentAccount,
+    AccountSuspended, BadDonationCurrency, EmailRequired, MissingPaymentAccount,
     NoSelfTipping, ProhibitedSourceCountry, RecipientAccountSuspended,
     UnableToDeterminePayerCountry, UserDoesntAcceptTips,
 )
@@ -56,8 +56,10 @@ def prepare_payin(db, payer, amount, route, proto_transfers, off_session=False):
     assert route.participant == payer, (route.participant, payer)
     assert route.status in ('pending', 'chargeable')
 
-    if payer.is_suspended or not payer.get_email_address():
+    if payer.is_suspended:
         raise AccountSuspended()
+    if not payer.can_be_emailed:
+        raise EmailRequired()
 
     if route.network == 'paypal':
         # The country of origin check for PayPal payments is in the

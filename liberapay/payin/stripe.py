@@ -75,7 +75,7 @@ def charge(db, payin, payer, route, update_donor=True):
     """, dict(payin=payin.id))
     payer_state = (
         'blocked' if payer.is_suspended else
-        'invalid' if payer.status != 'active' or not payer.get_email_address() else
+        'invalid' if payer.status != 'active' or not payer.can_be_emailed else
         'okay'
     )
     new_status = None
@@ -332,11 +332,27 @@ def send_payin_notification(db, payin, payer, charge, route):
 def settle_charge(db, payin, charge):
     """Handle a charge's status change.
     """
+    old_payin = payin
     if charge.destination:
         pt = db.one("SELECT * FROM payin_transfers WHERE payin = %s", (payin.id,))
-        return settle_destination_charge(db, payin, charge, pt)
+        payin = settle_destination_charge(db, payin, charge, pt)
     else:
-        return settle_charge_and_transfers(db, payin, charge)
+        payin = settle_charge_and_transfers(db, payin, charge)
+    notify = (
+        payin.status != old_payin.status and
+        payin.status in ('failed', 'succeeded') and
+        payin.ctime < (utcnow() - timedelta(hours=6))
+    )
+    if notify:
+        payer = db.Participant.from_id(payin.payer)
+        payer.notify(
+            'payin_' + payin.status,
+            payin=payin._asdict(),
+            provider='Stripe',
+            email_unverified_address=True,
+            idem_key=str(payin.id),
+        )
+    return payin
 
 
 def settle_charge_and_transfers(
@@ -384,9 +400,10 @@ def settle_charge_and_transfers(
     last = len(payin_transfers) - 1
     if charge.captured and charge.status == 'succeeded':
         payer = db.Participant.from_id(payin.payer)
+        suspend = payer.is_suspended or not payer.can_be_emailed
         undeliverable_amount = amount_settled.zero()
         for i, pt in enumerate(payin_transfers):
-            if payer.is_suspended or not payer.get_email_address():
+            if suspend:
                 if pt.status not in ('failed', 'succeeded'):
                     pt = update_payin_transfer(
                         db, pt.id, None, 'suspended', None,
