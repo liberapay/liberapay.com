@@ -27,7 +27,9 @@ Liberapay.stripe_form_init = function($form) {
                $postal_address_local.val() > '';
     }
     function is_postal_address_required() {
-        return /AD|BL|CH|GB|GG|GI|IM|JE|MC|NC|PF|PM|SM|TF|VA|WF/.test($container.data('country'));
+        return /AD|AL|BL|CH|GB|GG|GI|IM|JE|MC|MD|ME|MK|NC|PF|PM|SM|TF|VA|WF/.test(
+            $container.data('country')
+        );
     }
 
     var $errorElement = $('#stripe-errors');
