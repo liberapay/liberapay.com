@@ -9,8 +9,8 @@ from ..billing.payday import compute_next_payday_date
 from ..constants import SEPA
 from ..cron import logger
 from ..exceptions import (
-    AccountSuspended, BadDonationCurrency, MissingPaymentAccount, NoSelfTipping,
-    RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
+    AccountSuspended, BadDonationCurrency, EmailRequired, MissingPaymentAccount,
+    NoSelfTipping, RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
 )
 from ..i18n.currencies import Money
 from ..website import website
@@ -385,7 +385,7 @@ def execute_scheduled_payins():
                     db, payer, payin_amount, route, proto_transfers,
                     off_session=True,
                 )[0]
-            except AccountSuspended:
+            except (AccountSuspended, EmailRequired):
                 continue
             db.run("""
                 UPDATE scheduled_payins
