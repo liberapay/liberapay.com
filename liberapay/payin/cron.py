@@ -424,6 +424,7 @@ def execute_scheduled_payins():
                     payin=payin._asdict(),
                     provider='Stripe',
                     email_unverified_address=True,
+                    idem_key=str(payin.id),
                 )
                 counts['payin_' + payin.status] += 1
         elif actionable:
