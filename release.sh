@@ -140,7 +140,7 @@ run_schema_diff="$(test -s $branch_before -o -s $branch_after && echo "yes" || t
 
 # Ask confirmation and bump the version
 yesno "Tag and deploy version $version?" || exit
-git tag $version
+git tag $version -m ''
 
 # Deploy
 if [ -s $branch_before ]; then
