@@ -84,7 +84,10 @@ title = _("Frequently Asked Questions")
 
     {{ dt(_("Can I make a one-time donation?"), 'one-time-gift') }}
 
-    <dd>{{ _("Liberapay is designed for long-term stable funding and only supports recurring gifts.") }}</dd>
+    <dd>{{ _(
+        "One-time donations aren't properly supported yet, but you can discontinue "
+        "your donation immediately after initiating the first payment."
+    ) }}</dd>
 
 
     {{ dt(_("What are the differences between Liberapay and other recurrent crowdfunding platforms like Patreon?"), 'differences') }}
