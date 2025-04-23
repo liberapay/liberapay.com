@@ -32,7 +32,7 @@ def _strip_prefix(prefix, s):
     raise ValueError('"%s" is not a prefix of "%s"' % (prefix, s))
 
 
-links_keys = set('prev next first last'.split())
+links_keys = {'prev', 'next', 'first', 'last'}
 
 
 def query_param_paginator(param, **kw):

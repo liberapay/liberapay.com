@@ -41,8 +41,9 @@ ASCII_ALLOWED_IN_USERNAME = set("0123456789"
                                 "-_.")
 
 AVATAR_SOURCES = (
-    'libravatar bitbucket github gitlab mastodon pleroma twitch twitter'
-).split()
+    'libravatar', 'bitbucket', 'github', 'gitlab', 'mastodon', 'pleroma', 'twitch',
+    'twitter'
+)
 
 BASE64URL_CHARS = set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_')
 
@@ -116,8 +117,15 @@ EMAIL_RE = re.compile(r'''
 
 EPOCH = datetime(1970, 1, 1, 0, 0, 0, 0, utc)
 
-EUROZONE = set("AT BE CY DE EE ES FI FR GR HR IE IT LT LU LV MT NL PT SI SK".split())
-SEPA = EUROZONE | set("AD BG CH CZ DK GB GI HU IS LI MC NO PL RO SE VA".split())
+EUROZONE = {
+    'AT', 'BE', 'CY', 'DE', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'IE', 'IT', 'LT',
+    'LU', 'LV', 'MT', 'NL', 'PT', 'SI', 'SK',
+}
+SEPA = {
+    *EUROZONE,
+    'AD', 'AL', 'BG', 'CH', 'CZ', 'DK', 'GB', 'GI', 'HU', 'IS', 'LI', 'MC', 'MD',
+    'ME', 'MK', 'NO', 'PL', 'RO', 'SE', 'VA',
+}
 
 EVENTS = [
     Event('income', 1, _("Every week as long as I am receiving donations")),
@@ -137,10 +145,10 @@ EVENTS_S = ' '.join(EVENTS.keys())
 
 HTML_A = Markup('<a href="%s">%s</a>')
 
-IDENTITY_FIELDS = set("""
-    birthdate headquarters_address name nationality occupation organization_name
-    postal_address
-""".split())
+IDENTITY_FIELDS = {
+    'birthdate', 'headquarters_address', 'name', 'nationality', 'occupation',
+    'organization_name', 'postal_address',
+}
 
 INVOICE_DOC_MAX_SIZE = 5000000
 INVOICE_DOCS_EXTS = ['pdf', 'jpeg', 'jpg', 'png']
@@ -242,27 +250,34 @@ PAYMENT_METHODS = {
 }
 
 PAYOUT_COUNTRIES = {
-    'paypal': set("""
-        AD AE AG AL AR AT AU BA BB BE BG BH BM BR BS BW BZ CA CH CL CO CR CY CZ
-        DE DK DM DO DZ EC EE EG ES FI FJ FO FR GB GD GE GL GR GT HK HN HR HU ID
-        IE IL IN IS IT JM JO JP KE KN KR KW KY KZ LC LI LS LT LU LV MA MC MD MT
-        MU MW MX MY MZ NC NI NL NO NZ OM PA PE PF PH PL PT PW QA RO RS SA SC SE
-        SG SI SK SM SN SV TC TH TT TW US UY VE VN ZA
-        PR
-    """.split()),  # see `cli/paypal_payout_countries.py`
+    'paypal': {
+        'AD', 'AE', 'AG', 'AL', 'AR', 'AT', 'AU', 'BA', 'BB', 'BE', 'BG', 'BH',
+        'BM', 'BR', 'BS', 'BW', 'BZ', 'CA', 'CH', 'CL', 'CO', 'CR', 'CY', 'CZ',
+        'DE', 'DK', 'DM', 'DO', 'DZ', 'EC', 'EE', 'EG', 'ES', 'FI', 'FJ', 'FO',
+        'FR', 'GB', 'GD', 'GE', 'GL', 'GR', 'GT', 'HK', 'HN', 'HR', 'HU', 'ID',
+        'IE', 'IL', 'IN', 'IS', 'IT', 'JM', 'JO', 'JP', 'KE', 'KN', 'KR', 'KW',
+        'KY', 'KZ', 'LC', 'LI', 'LS', 'LT', 'LU', 'LV', 'MA', 'MC', 'MD', 'MT',
+        'MU', 'MW', 'MX', 'MY', 'MZ', 'NC', 'NI', 'NL', 'NO', 'NZ', 'OM', 'PA',
+        'PE', 'PF', 'PH', 'PL', 'PT', 'PW', 'QA', 'RO', 'RS', 'SA', 'SC', 'SE',
+        'SG', 'SI', 'SK', 'SM', 'SN', 'SV', 'TC', 'TH', 'TT', 'TW', 'US', 'UY',
+        'VE', 'VN', 'ZA',
+        'PR'
+    },  # see `cli/paypal_payout_countries.py`
 
-    'stripe': set("""
-        AT AU BE BG CA CH CY CZ DE DK EE ES FI FR GB GI GR HK HR HU IE IT JP LI
-        LT LU LV MT MX MY NL NO NZ PL PT RO SE SG SI SK US
-        PR
-    """.split()),  # https://stripe.com/global
+    'stripe': {
+        'AT', 'AU', 'BE', 'BG', 'CA', 'CH', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES',
+        'FI', 'FR', 'GB', 'GI', 'GR', 'HK', 'HR', 'HU', 'IE', 'IT', 'JP', 'LI',
+        'LT', 'LU', 'LV', 'MT', 'MX', 'MY', 'NL', 'NO', 'NZ', 'PL', 'PT', 'RO',
+        'SE', 'SG', 'SI', 'SK', 'US',
+        'PR'
+    },  # https://stripe.com/global
 }
 
 # https://developer.paypal.com/docs/api/reference/currency-codes/
-PAYPAL_CURRENCIES = set("""
-    AUD BRL CAD CHF CZK DKK EUR GBP HKD HUF ILS JPY MXN NOK NZD PHP PLN SEK SGD
-    THB TWD USD
-""".split())
+PAYPAL_CURRENCIES = {
+    'AUD', 'BRL', 'CAD', 'CHF', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD', 'HUF', 'ILS',
+    'JPY', 'MXN', 'NOK', 'NZD', 'PHP', 'PLN', 'SEK', 'SGD', 'THB', 'TWD', 'USD',
+}
 
 PERIOD_CONVERSION_MAP = {
     ('weekly', 'weekly'): Decimal(1),
@@ -387,6 +402,6 @@ TAKE_THROTTLING_THRESHOLD = MoneyAutoConvertDict(
 )
 
 USERNAME_MAX_SIZE = 32
-USERNAME_SUFFIX_BLACKLIST = set('.txt .html .htm .json .xml'.split())
+USERNAME_SUFFIX_BLACKLIST = {'.txt', '.html', '.htm', '.json', '.xml'}
 
 del _

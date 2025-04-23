@@ -383,6 +383,8 @@ def test_email_server(ip_address: str, email=None, timeout=None) -> None:
                 ) or
                 # gamil.com SMTP server
                 msg.startswith("sorry, no mailbox here by that name") or
+                # hmx.net SMTP server
+                msg.endswith("User unknown, not local address") or
                 # Microsoft's SMTP server
                 msg.startswith("Requested action not taken: mailbox unavailable") or
                 # OpenSMTPD
