@@ -276,7 +276,7 @@ def create_charge(
                 intent.cancel(cancellation_reason='fraudulent')
                 return payin, charge
         else:
-            capture = payin.status in ('pre', 'awaiting_payer_action') and (
+            capture = payin.status in ('pre', 'awaiting_payer_action', 'awaiting_review') and (
                 charge.outcome.risk_level == 'normal' or
                 payin.allowed_by is not None and payin.allowed_since < five_minutes_ago
             )
