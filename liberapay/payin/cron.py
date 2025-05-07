@@ -10,7 +10,8 @@ from ..constants import SEPA
 from ..cron import logger
 from ..exceptions import (
     AccountSuspended, BadDonationCurrency, EmailRequired, MissingPaymentAccount,
-    NoSelfTipping, RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
+    NoSelfTipping, ProhibitedSourceCountry, RecipientAccountSuspended,
+    UserDoesntAcceptTips, NextAction,
 )
 from ..i18n.currencies import Money
 from ..website import website
@@ -385,7 +386,7 @@ def execute_scheduled_payins():
                     db, payer, payin_amount, route, proto_transfers,
                     off_session=True,
                 )[0]
-            except (AccountSuspended, EmailRequired):
+            except (AccountSuspended, EmailRequired, ProhibitedSourceCountry):
                 continue
             db.run("""
                 UPDATE scheduled_payins
