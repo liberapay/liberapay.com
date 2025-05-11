@@ -14,36 +14,50 @@
     <span class="sr-only">American Express, Cartes Bancaires, Diners, Discover, JCB, Mastercard, UnionPay, Visa</span>
 % endmacro
 
-% macro describe_payment_methods(tippee)
-{{ _(
-    "{username} hasn't configured any payment method yet, so your donation "
-    "cannot actually be processed right now. We will notify you when payment "
-    "becomes possible.",
-    username=tippee.username
-) if tippee.payment_providers == 0 else _(
-    "Donations to {username} can be paid using a credit or debit card "
-    "({list_of_card_brands}), or by direct debit of a euro bank account "
-    "(for donations in euro only).",
-    username=tippee.username,
-    list_of_card_brands=["American Express", "Cartes Bancaires", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
-) if tippee.payment_providers == 1 else _(
-    "Donations to {username} are processed through PayPal.",
-    username=tippee.username
-) if tippee.payment_providers == 2 else _(
-    "Donations to {username} can be paid using: a credit or debit card "
-    "({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or "
-    "a PayPal account.",
-    username=tippee.username,
-    list_of_card_brands=["American Express", "Cartes Bancaires", "Diners", "Discover", "JCB", "Mastercard", "UnionPay", "Visa"],
-) }}
+% macro describe_payment_methods(tippee, currency=None)
+% if tippee.payment_providers == 0
+    {{ _(
+        "{username} hasn't configured any payment method yet, so your donation "
+        "cannot actually be processed right now. We will notify you when payment "
+        "becomes possible.",
+        username=tippee.username
+    ) }}
+% elif tippee.payment_providers == 2
+    {{ _(
+        "Donations to {username} are processed through PayPal.",
+        username=tippee.username
+    ) }}
+% else
+    % set payment_methods = []
+    % if tippee.payment_providers.__and__(1)
+        % do payment_methods.append(_(
+            "a credit or debit card ({list_of_card_brands})",
+            list_of_card_brands=[
+                "American Express", "Cartes Bancaires", "Diners", "Discover",
+                "JCB", "Mastercard", "UnionPay", "Visa"
+            ],
+        ))
+        % if currency in (None, 'EUR') and tippee.has_stripe_sepa_for(ANON)
+            % do payment_methods.append(_("a euro bank account (SEPA Direct Debit)"))
+        % endif
+    % endif
+    % if tippee.payment_providers.__and__(2)
+        % do payment_methods.append(_("a PayPal account"))
+    % endif
+    {{ _(
+        "Donations to {username} can be paid using: {list_of_payment_methods}.",
+        username=tippee.username,
+        list_of_payment_methods=locale.List(payment_methods, 'or')
+    ) }}
+% endif
 % endmacro
 
 % macro payment_methods_icons(tippee, currency=None)
-<span class="payment-icons" title="{{ describe_payment_methods(tippee) }}"
+<span class="payment-icons" title="{{ describe_payment_methods(tippee, currency) }}"
       data-toggle="tooltip" data-placement="bottom">
     % if tippee.payment_providers.__and__(1)
         {{ icon('payment-card', _("Payment Card")) }}
-        % if not currency or currency == 'EUR'
+        % if currency in (None, 'EUR') and tippee.has_stripe_sepa_for(ANON)
             {{ icon('bank-account', _("Direct Debit")) }}
         % endif
     % endif

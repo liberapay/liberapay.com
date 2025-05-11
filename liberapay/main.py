@@ -117,6 +117,7 @@ def soft_assert(x, msg):
 website.renderer_factories['jinja2'].Renderer.global_context.update(builtins.__dict__)
 website.renderer_factories['jinja2'].Renderer.global_context.update({
     # This is shared via class inheritance with jinja2_* renderers.
+    "ANON": authentication.ANON,
     'assert': _assert,
     'b64decode_s': b64decode_s,
     'b64encode_s': b64encode_s,
