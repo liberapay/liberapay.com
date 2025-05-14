@@ -24,6 +24,24 @@ REFUND_REASONS_MAP = {
     'requested_by_customer': 'requested_by_payer',
 }
 
+STRIPE_ERRORS = {
+    'card_decline': _("Your card was declined."),
+    'card_not_supported': _("Your card does not support this type of purchase."),
+    'currency_not_supported': _("Stripe doesn't currently support destination charges with accounts in BR."),
+    'insufficient_funds': _("Your card has insufficient funds."),
+    'expired_card': _("Your card has expired."),
+    'card_velocity_exceeded ': _("Your card was declined for making repeated attempts too frequently or exceeding its amount limit."),
+    'account_closed': _("The payment can't be processed because your customer's bank account is closed. Reach out to your customer to provide new account details, then try the transaction again."),
+    'payment_intent_authentication_failure': _("The provided PaymentMethod has failed authentication. You can provide payment_method_data or a new PaymentMethod to attempt to fulfill this PaymentIntent again."),
+    'invalid_account': _("Invalid account."),
+    'incorrect_number': _("Your card number is incorrect."),
+    'incorrect_cvc': _("Your card's security code is incorrect."),
+    'invalid_expiry_year ': _("Invalid expiry year."),
+    'unknown_risk_level': _("The payment failed."),
+    'bank_account_restricted': _("The payment can't be processed because your customer's bank has blocked Direct Debits, either by the bank's actions or your customer's. Reach out to your customer to understand the reason for the block. If the bank unblocks the account, attempt the transaction again."),
+    'canceled duplicate payment': _("Duplicate payment canceled."),
+    'canceled on suspicion of fraud': _("Canceled on suspicion of fraud."),
+}
 
 def int_to_Money(amount, currency):
     currency = currency.upper()
