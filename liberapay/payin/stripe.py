@@ -24,7 +24,7 @@ REFUND_REASONS_MAP = {
     'requested_by_customer': 'requested_by_payer',
 }
 
-STRIPE_ERRORS = {
+STRIPE_ERRORS_MAP = {
     'card_decline': _("Your card was declined."),
     'card_not_supported': _("Your card does not support this type of purchase."),
     'currency_not_supported': _("Stripe doesn't currently support destination charges with accounts in BR."),
