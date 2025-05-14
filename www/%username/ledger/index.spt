@@ -3,6 +3,9 @@ from datetime import datetime, timezone
 from liberapay.utils import get_participant
 from liberapay.utils.history import get_payin_ledger
 
+from liberapay.payin.stripe import STRIPE_ERRORS_MAP
+from liberapay.payin.paypal import PAYPAL_ERRORS_MAP
+
 STATUS_MAP = {
     'failed': 'danger',
     'partially_refunded': 'warning',
