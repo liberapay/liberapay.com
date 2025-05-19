@@ -136,6 +136,20 @@ title = _("Frequently Asked Questions")
     ) }}</dd>
 
 
+    {{ dt(_("I'm a Finnish citizen. Can I receive donations?"), 'finnish-regulation') }}
+
+    <dd>{{ _(
+        "Finnish citizens cannot receive donations from people living in Finland "
+        "without a permit. If you're living in this country and still want to receive "
+        "donations from people living in other countries, be careful to uncheck " 
+		"{strong_open}Finland{strong_close} in your profile's {link_open}list of accepted countries{link_close}.",
+        link_open='<a href="/about/me/edit/countries/">'|safe,
+        link_close='</a>'|safe,
+		strong_open='<strong>'|safe,
+		strong_close='</strong>'|safe
+    ) }}</dd>
+
+
     {{ dt(_("How do I know that my donation won't go to an impostor?"), 'impersonation') }}
 
     <dd>{{ _(
