@@ -65,6 +65,42 @@ if participant.join_time:
 
 % extends "templates/layouts/settings.html"
 
+% macro display_error_code(event)
+
+        % if event['payin_method'] == 'stripe'
+            % if event['error'] in STRIPE_ERRORS_MAP
+
+                % for e in STRIPE_ERRORS_MAP
+                    % if event['error'] == e
+                    {{ _("error message: {0}") }}, {{ _(STRIPE_ERRORS_MAP[event['error']]) }}
+
+                    % endif
+                % endfor
+
+                % else
+                {{ _("error message: {0}") }}, {{ event['error'] }}
+
+            % endif
+
+        % elif event['payin_method'] == 'paypal'
+            % if event['error'] in PAYPAL_ERRORS_MAP
+
+                % for e in PAYPAL_ERRORS_MAP
+                    % if event['error'] == e
+                    {{ _("Paypal status code: {0}") }}, {{ _(PAYPAL_ERRORS_MAP[event['error']]) }}
+
+                    % endif
+                % endfor
+
+            % else
+            {{ _("Paypal status code: {0}") }}, {{ event['error'] }}
+
+        % endif
+
+         % endif
+
+% endmacro
+
 % block content
 
 % if len(years) > 1
@@ -170,9 +206,12 @@ if participant.join_time:
                 timedelta=locale.Age(constants.PAYIN_SETTLEMENT_DELAYS['stripe-sdd'], format_args=dict(threshold=0.9))
             ) }}
         % endif
+
         % if event['error']
-            &mdash; {{ _("error message: {0}", event['error']) }}
+            &mdash;
+        {{ display_error_code(event) }}
         % endif
+
         </td>
         % if event['refunded_amount']
         <td class="amount">
@@ -278,20 +317,12 @@ if participant.join_time:
             <span class="text-{{ STATUS_MAP.get(status, 'info') }}">{{
                 translated_status[status]
             }}</span>
-            % if event['error']
-                &mdash;
-                % if event['payin_method'] == 'paypal'
-                    % if event['error'] == 'RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION'
-                        {{ _("This payment must be manually approved by the recipient through {provider}'s website.",
-                             provider='PayPal') }}
-                    % elif event['error'].isupper()
-                        {{ _("PayPal status code: {0}", event['error']) }}
-                    % else
-                        {{ _("error message: {0}", event['error']) }}
-                    % endif
-                % else
-                    {{ _("error message: {0}", event['error']) }}
-                % endif
+
+        % if event['error']
+            &mdash;
+        {{ display_error_code(event) }}
+        % endif
+
             % elif status == 'awaiting_review' and 'payer' in event
                 &mdash; {{ _("This payment is awaiting to be manually checked by Liberapay staff for signs of fraud.") }}
             % elif status == 'pending' and event['payin_method'] == 'stripe-sdd' and 'payer' in event
