@@ -88,7 +88,7 @@ PAYPAL_ERRORS_MAP = {
     'PAYEE_ACCOUNT_LOCKED_OR_CLOSED': _("The receiver account is locked or closed."),
     'UNILATERAL': _("The payment is pending because it was made to an email address that is not yet registered or confirmed."),
     'RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION': _("Receiving preferences mandates manual action from the account's owner."),
-    'CURRENCY_NOT_SUPPORTED': _("Currency code is not currently supported. Please refer https://developer.paypal.com/docs/integration/direct/rest/currency-codes/ for list of supported currency codes")
+    'CURRENCY_NOT_SUPPORTED': _("This currency is not currently supported. Please refer to https://developer.paypal.com/docs/integration/direct/rest/currency-codes/ for a list of supported currencies.")
 }
 
 def create_order(db, payin, payer, return_url, cancel_url, state):
