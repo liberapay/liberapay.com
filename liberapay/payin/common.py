@@ -970,12 +970,13 @@ def record_payin_refund(
             refund.ctime > (utcnow() - timedelta(hours=24))
         )
     if notify:
-        payin = db.one("SELECT * FROM payins WHERE id = %s", (refund.payin,))
+        payin = db.one("SELECT pi FROM payins pi WHERE pi.id = %s", (refund.payin,))
         payer = db.Participant.from_id(payin.payer)
         payer.notify(
             'payin_refund_initiated',
             payin_amount=payin.amount,
             payin_ctime=payin.ctime,
+            recipient_names=payin.recipient_names,
             refund_amount=refund.amount,
             refund_reason=refund.reason,
             email_unverified_address=True,
