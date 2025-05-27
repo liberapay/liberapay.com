@@ -41,6 +41,8 @@ STRIPE_ERRORS_MAP = {
     'bank_account_restricted': _("The payment can't be processed because your customer's bank has blocked Direct Debits, either by the bank's actions or your customer's. Reach out to your customer to understand the reason for the block. If the bank unblocks the account, attempt the transaction again."),
     'canceled duplicate payment': _("Duplicate payment canceled."),
     'canceled on suspicion of fraud': _("Canceled on suspicion of fraud."),
+    'processing_error': _("An error occurred while processing your card. Try again in a little bit."),
+    'refer_to_customer': _("The payment failed and we don't have detailed information regarding the cause of this failure. The bank didn't return an error code. Try again later."),
 }
 
 def int_to_Money(amount, currency):
