@@ -1038,9 +1038,8 @@ msgstr "Το \"{0}\" δεν είναι έγκυρο όνομα κοινότητ�
 msgid "You are not allowed to do this because your account is currently suspended."
 msgstr "Δεν επιτρέπεται να το κάνεις αυτό γιατί ο λογαριασμός σου έχει προς το παρόν ανασταλεί."
 
-#, fuzzy
 msgid "Your account lacks a valid email address, please add one."
-msgstr "Το δικό σας λογαριασμό δεν διαθέτει έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου, παρακαλούμε προσθέστε μία."
+msgstr "Ο λογαριασμός σας δεν διαθέτει έγκυρη διεύθυνση ήμειλ, παρακαλούμε προσθέστε μία."
 
 msgid "This payment cannot be processed because the account of the recipient is currently suspended."
 msgstr "Η πληρωμή δεν είναι δυνατόν να επεξεργασθεί, διότι ο λογαριασμός του δικαιούχου προς το παρόν έχει ανασταλεί."
@@ -1705,7 +1704,7 @@ msgstr "Εμφάνιση Περισσότερων"
 msgid "{username} hasn't configured any payment method yet, so your donation cannot actually be processed right now. We will notify you when payment becomes possible."
 msgstr "Ο/Η {username} δεν έχει ορίσει κάποια μέθοδο πληρωμής ακόμη, οπότε η δωρεά σας δεν μπορεί να επεξεργαστεί τώρα. Θα σας ενημερώσουμε όταν η πληρωμή είναι διαθέσιμη."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using a credit or debit card ({list_of_card_brands}), or by direct debit of a euro bank account (for donations in euro only)."
 msgstr "Οι δωρεές στο {username} μπορούν να καταβληθούν με πιστωτική ή χρεωστική κάρτα ({list_of_card_brands}) ή με άμεση χρέωση τραπεζικού λογαριασμού σε ευρώ (μόνο για δωρεές σε ευρώ)."
 
@@ -1713,7 +1712,7 @@ msgstr "Οι δωρεές στο {username} μπορούν να καταβληθ
 msgid "Donations to {username} are processed through PayPal."
 msgstr "Οι δωρεές σε {username} επεξεργάζονται μέσω PayPal."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Donations to {username} can be paid using: a credit or debit card ({list_of_card_brands}), a euro bank account (SEPA Direct Debit), or a PayPal account."
 msgstr "Οι δωρεές στο {username} μπορούν να καταβληθούν με: πιστωτική ή χρεωστική κάρτα ({list_of_card_brands}), τραπεζικό λογαριασμό σε ευρώ (SEPA Direct Debit) ή λογαριασμό PayPal."
 
@@ -1814,7 +1813,6 @@ msgstr "Ονομαστικό μερίδιο"
 msgid "Actual Take"
 msgstr "Πραγματικό μερίδιο"
 
-#, fuzzy
 msgid "On Liberapay, donations are paid in advance. This column shows how much money each member has received in advance through this team. An advance increases every time a member receives a new payment from a donor through the team, and decreases every week."
 msgstr "Στο Liberapay, οι δωρεές καταβάλλονται εκ των προτέρων. Αυτή η στήλη δείχνει πόσα χρήματα έχει λάβει προκαταβολικά κάθε μέλος μέσω αυτής της ομάδας. Μια προκαταβολή αυξάνεται κάθε φορά που ένα μέλος λαμβάνει μια νέα πληρωμή από έναν δωρητή μέσω της ομάδας και μειώνεται κάθε εβδομάδα."
 
@@ -1840,7 +1838,7 @@ msgstr "Αχρησιμοποίητα εισοδήματα θα καταναλώ�
 msgid "Leftover"
 msgstr "Έχουν απομείνει"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "It looks like you are in {country}. {username} does not accept donations coming from that country."
 msgstr "Φαίνεται ότι βρίσκεστε στη διεύθυνση {country}. Το {username} δεν δέχεται δωρεές που προέρχονται από αυτή τη χώρα."
 
@@ -1980,15 +1978,12 @@ msgstr "Τα διαπιστευτήρια έχουν ανακληθεί."
 msgid "Constant session"
 msgstr "Συνεχής συνεδρία"
 
-#, fuzzy
 msgid "You can automate downloading private information from your account by including the following HTTP header in your requests:"
 msgstr "Μπορείτε να αυτοματοποιήσετε τη λήψη προσωπικών πληροφοριών από το λογαριασμό σας, συμπεριλαμβάνοντας την ακόλουθη κεφαλίδα HTTP στις αιτήσεις σας:"
 
-#, fuzzy
 msgid "For example, you can download the list of your currently active patrons by executing the following command:"
 msgstr "Για παράδειγμα, μπορείτε να κατεβάσετε τη λίστα των ενεργών πελατών σας εκτελώντας την ακόλουθη εντολή:"
 
-#, fuzzy
 msgid "To minimize the risks to you, these credentials can only be used to fetch data, not to modify anything in your account, and they will automatically expire if unused for a year."
 msgstr "Για να ελαχιστοποιηθούν οι κίνδυνοι για εσάς, αυτά τα διαπιστευτήρια μπορούν να χρησιμοποιηθούν μόνο για την ανάκτηση δεδομένων, όχι για την τροποποίηση οποιουδήποτε στοιχείου στο λογαριασμό σας, και θα λήξουν αυτόματα αν δεν χρησιμοποιηθούν για ένα έτος."
 
@@ -2002,7 +1997,6 @@ msgstr "Τα διαπιστευτήρια έχουν λήξει."
 msgid "Regenerate credentials"
 msgstr "Αναγέννηση διαπιστευτηρίων"
 
-#, fuzzy
 msgid "To simplify automating downloads of private information from your account, you can generate long-lived read-only credentials."
 msgstr "Για να απλοποιήσετε την αυτοματοποιημένη λήψη προσωπικών πληροφοριών από το λογαριασμό σας, μπορείτε να δημιουργήσετε διαπιστευτήρια μόνο για ανάγνωση με μεγάλη διάρκεια ζωής."
 
@@ -2145,7 +2139,6 @@ msgstr "Πρέπει να επιλέξετε τουλάχιστον ένα πλ�
 msgid "Which countries should your donors be allowed to send you money from?"
 msgstr "Από ποιες χώρες θα πρέπει να επιτρέπεται στους δωρητές σας να σας στέλνουν χρήματα;"
 
-#, fuzzy
 msgid "We recommend limiting the origins of donations only if you are required to by law."
 msgstr "Συνιστούμε να περιορίσετε την προέλευση των δωρεών μόνο εάν αυτό απαιτείται από το νόμο."
 
@@ -2552,7 +2545,7 @@ msgstr "Επόμενη οφειλόμενη πληρωμή {in_N_weeks_months_or
 msgid "Renew now"
 msgstr "Ανανέωση τώρα"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The recipient no longer accepts payments in {currency}."
 msgstr "Ο παραλήπτης δεν δέχεται πλέον πληρωμές σε {currency}."
 
@@ -2637,7 +2630,6 @@ msgstr "Προς το παρόν μη διαθέσιμο"
 msgid "Pay by card"
 msgstr "Πληρωμή μέσω κάρτας"
 
-#, fuzzy
 msgid "Only for donations to SEPA countries"
 msgstr "Μόνο για δωρεές σε χώρες SEPA"
 
@@ -2796,7 +2788,6 @@ msgstr "Θυμηθείτε τον αριθμό τραπεζικού λογαρι
 msgid "In order to reduce the risk of this payment being rejected, we recommend that you input your postal address below. It will be stored encrypted in our database and sent to the payment processor ({processor_name})."
 msgstr "Για να μειώσετε τον κίνδυνο απόρριψης της πληρωμής, σας συνιστούμε να εισαγάγετε την ταχυδρομική σας διεύθυνση παρακάτω. Θα αποθηκευτεί κρυπτογραφημένη στη βάση δεδομένων μας και θα αποσταλεί στον επεξεργαστή πληρωμών ({processor_name})."
 
-#, fuzzy
 msgid "Please fill in your postal address. It's required because the IBAN you've provided emanates from outside the European Union."
 msgstr "Συμπληρώστε την ταχυδρομική σας διεύθυνση. Απαιτείται επειδή ο IBAN που έχετε δηλώσει προέρχεται από χώρα εκτός Ευρωπαϊκής Ένωσης."
 
@@ -2988,7 +2979,6 @@ msgstr "Δεν υπάρχουν δεδομένα για εμφάνιση."
 msgid "Income per week (in {currency})"
 msgstr "Εισόδημα ανά εβδομάδα (σε {currency})"
 
-#, fuzzy
 msgid "Number of patrons per week"
 msgstr "Αριθμός επισκεπτών ανά εβδομάδα"
 
