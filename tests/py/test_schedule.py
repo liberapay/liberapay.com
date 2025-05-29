@@ -651,6 +651,91 @@ class TestDonationRenewalScheduling(EmailHarness):
         assert schedule[0].automatic is True
         assert schedule[0].customized is True
 
+    def test_schedule_renewals_handles_postponing_payment(self):
+        alice = self.make_participant('alice', email='alice@liberapay.com')
+        bob = self.make_participant('bob', email='bob@liberapay.com', accepted_currencies=None)
+        alice.set_tip_to(bob, EUR('10.00'))
+        alice_card = self.upsert_route(alice, 'stripe-card', address='pm_card_visa')
+        self.make_payin_and_transfer(alice_card, bob, EUR('10.00'))
+        schedule = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        next_payday = compute_next_payday_date()
+        expected_transfers = [
+            {
+                'tippee_id': bob.id,
+                'tippee_username': 'bob',
+                'amount': None,
+            }
+        ]
+        assert len(schedule) == 1
+        assert schedule[0].amount == None
+        assert schedule[0].transfers == expected_transfers
+        expected_renewal_date = next_payday + timedelta(weeks=1)
+        assert schedule[0].execution_date == expected_renewal_date
+        assert schedule[0].automatic is False
+        assert schedule[0].notifs_count == 0
+
+        # Make it look like the "renewal reminder" notification has been sent
+        self.db.run("""
+            UPDATE scheduled_payins
+               SET notifs_count = 1
+                 , last_notif_ts = current_timestamp
+        """)
+
+        # Postpone the payment by a week
+        sp_id = schedule[0].id
+        r = self.client.GET("/alice/giving/schedule", auth_as=alice)
+        assert r.code == 200
+        r = self.client.GET(
+            "/alice/giving/schedule?id=%i&action=modify" % sp_id,
+            auth_as=alice
+        )
+        assert r.code == 200
+        new_date = expected_renewal_date + timedelta(days=7)
+        r = self.client.PxST(
+            "/alice/giving/schedule?id=%i&action=modify" % sp_id,
+            {'new_date': new_date.isoformat()},
+            auth_as=alice
+        )
+        assert r.code == 302
+        sp = self.db.one("SELECT * FROM scheduled_payins WHERE id = %s", (sp_id,))
+        assert sp.amount is None
+        assert sp.execution_date == new_date
+        assert sp.customized is True
+        assert sp.notifs_count == 1
+
+        # Postpone the payment by three more weeks
+        r = self.client.GET("/alice/giving/schedule", auth_as=alice)
+        assert r.code == 200
+        r = self.client.GET(
+            "/alice/giving/schedule?id=%i&action=modify" % sp_id,
+            auth_as=alice
+        )
+        assert r.code == 200
+        new_date += timedelta(weeks=3)
+        r = self.client.PxST(
+            "/alice/giving/schedule?id=%i&action=modify" % sp_id,
+            {'new_date': new_date.isoformat()},
+            auth_as=alice
+        )
+        assert r.code == 302
+        sp = self.db.one("SELECT * FROM scheduled_payins WHERE id = %s", (sp_id,))
+        assert sp.amount is None
+        assert sp.execution_date == new_date
+        assert sp.customized is True
+        assert sp.notifs_count == 0
+
+        # Switch the donation to automatic renewal
+        alice.set_tip_to(bob, EUR('10.00'), renewal_mode=2)
+        schedule = self.db.all("SELECT * FROM scheduled_payins WHERE payin IS NULL")
+        assert len(schedule) == 1
+        expected_transfers = [dict(expected_transfers[0], amount=EUR('10.00').for_json())]
+        assert schedule[0].amount == EUR('10.00')
+        assert schedule[0].transfers == expected_transfers
+        assert schedule[0].execution_date == new_date
+        assert schedule[0].automatic is True
+        assert schedule[0].customized is True
+        assert schedule[0].notifs_count == 0
+
     def test_no_new_renewal_is_scheduled_when_there_is_a_pending_transfer(self):
         # Set up a funded manual donation
         alice = self.make_participant('alice', email='alice@liberapay.com')

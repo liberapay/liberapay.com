@@ -9,9 +9,9 @@ from ..billing.payday import compute_next_payday_date
 from ..constants import SEPA
 from ..cron import logger
 from ..exceptions import (
-    AccountSuspended, BadDonationCurrency, EmailRequired, MissingPaymentAccount,
-    NoSelfTipping, ProhibitedSourceCountry, RecipientAccountSuspended,
-    UserDoesntAcceptTips, NextAction,
+    AccountSuspended, BadDonationCurrency, DuplicateNotification, EmailRequired,
+    MissingPaymentAccount, NoSelfTipping, ProhibitedSourceCountry,
+    RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
 )
 from ..i18n.currencies import Money
 from ..website import website
@@ -424,6 +424,7 @@ def execute_scheduled_payins():
                     payin=payin._asdict(),
                     provider='Stripe',
                     email_unverified_address=True,
+                    idem_key=str(payin.id),
                 )
                 counts['payin_' + payin.status] += 1
         elif actionable:
@@ -440,13 +441,18 @@ def execute_scheduled_payins():
             for tr in actionable:
                 tr['execution_date'] = execution_date
                 del tr['beneficiary'], tr['tip']
-            payer.notify(
-                'renewal_actionable',
-                transfers=actionable,
-                email_unverified_address=True,
-                force_email=True,
-            )
-            counts['renewal_actionable'] += 1
+            try:
+                payer.notify(
+                    'renewal_actionable',
+                    transfers=actionable,
+                    email_unverified_address=True,
+                    force_email=True,
+                    idem_key=str(sp_id),
+                )
+            except DuplicateNotification:
+                pass
+            else:
+                counts['renewal_actionable'] += 1
         if impossible:
             for tr in impossible:
                 tr['execution_date'] = execution_date

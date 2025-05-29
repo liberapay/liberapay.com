@@ -3085,7 +3085,8 @@ class Participant(Model, MixinTeam):
             del current_schedule_map
 
             # Make sure any newly scheduled automatic payment is at least a week away
-            one_week_from_today = utcnow().date() + timedelta(weeks=1)
+            today = utcnow().date()
+            one_week_from_today = today + timedelta(weeks=1)
             for new_sp in insertions:
                 if new_sp.automatic:
                     if new_sp.execution_date < one_week_from_today:
@@ -3114,9 +3115,15 @@ class Participant(Model, MixinTeam):
                 ], fetch=True)
                 for i, row in enumerate(new_ids):
                     insertions[i].id = row.id
+                three_weeks_from_today = today + timedelta(days=21)
                 for cur_sp, new_sp in updates:
                     new_sp.id = cur_sp.id
-                    if new_sp.automatic and not cur_sp.automatic:
+                    reset_notifs = (
+                        new_sp.automatic and not cur_sp.automatic or
+                        new_sp.execution_date > cur_sp.execution_date and
+                        new_sp.execution_date >= three_weeks_from_today
+                    )
+                    if reset_notifs:
                         new_sp.notifs_count = 0
                         new_sp.last_notif_ts = None
                     else:
