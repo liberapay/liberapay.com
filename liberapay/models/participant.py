@@ -225,8 +225,24 @@ class Participant(Model, MixinTeam):
               FROM emails e
               JOIN participants p ON p.id = e.participant
              WHERE lower(e.address) = %s
-               AND (p.email IS NULL OR lower(p.email) = lower(e.address))
-          ORDER BY p.email NULLS LAST, p.id ASC
+               AND (p.email IS NOT NULL AND lower(p.email) = lower(e.address)
+                    OR
+                    p.email IS NULL AND e.id = (
+                        SELECT e2.id
+                          FROM emails e2
+                         WHERE e2.participant = e.participant
+                      ORDER BY e2.disavowed IS NOT true DESC
+                             , ( SELECT count(b)
+                                   FROM email_blacklist b
+                                  WHERE lower(b.address) = lower(e2.address)
+                                    AND (b.ignore_after IS NULL OR
+                                         b.ignore_after > current_timestamp)
+                               ) ASC
+                             , e2.added_time ASC
+                         LIMIT 1
+                    )
+                   )
+          ORDER BY p.email IS NOT NULL DESC, p.status = 'active' DESC, p.id ASC
              LIMIT 1
         """.format('p.id' if id_only else 'p'), (email.lower(),))
 
