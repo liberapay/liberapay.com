@@ -14,7 +14,9 @@ from liberapay.security.authentication import ANON, SESSION
 from liberapay.security.csrf import CSRF_TOKEN
 from liberapay.testing import Harness, postgres_readonly
 from liberapay.testing.emails import EmailHarness
-from liberapay.utils.emails import EmailVerificationResult, check_email_blacklist
+from liberapay.utils.emails import (
+    EmailVerificationResult, check_email_blacklist, _handle_ses_notification,
+)
 
 
 class TestEmail(EmailHarness):
@@ -591,6 +593,80 @@ class TestEmail(EmailHarness):
         emails = self.get_emails()
         assert len(emails) == 1
         assert emails[0]['subject'] == "Log in to Liberapay"
+
+    def test_user_can_request_unblacklisting_of_bounced_email_address(self):
+        alice = self.alice
+        alice.add_email('alice@liberapay.com')
+        # Simulate a bounce
+        _handle_ses_notification({
+            "notificationType": "Bounce",
+            "bounce": {
+                "feedbackId": "fake-id",
+                "bouncedRecipients": [
+                    {
+                        "emailAddress": "alice@liberapay.com",
+                        "action": "failed",
+                        "status": "fake error message",
+                    }
+                ]
+            }
+        })
+        with self.assertRaises(EmailAddressIsBlacklisted):
+            check_email_blacklist('alice@liberapay.com')
+        # Try to log in without requesting a bypass
+        r = self.client.POST(
+            '/log-in',
+            {"log-in.id": "alice@liberapay.com"},
+            HTTP_ACCEPT=b'text/html',
+            raise_immediately=False,
+        )
+        assert isinstance(r, EmailAddressIsBlacklisted)
+        assert "fake error message" in r.text
+        # Try to log in with a bypass
+        self.client.POST(
+            '/log-in',
+            {"log-in.id": "alice@liberapay.com", "email.unblacklist": "alice@liberapay.com"},
+            HTTP_ACCEPT=b'text/html',
+            raise_immediately=False,
+        )
+
+    def test_user_cannot_bypass_email_address_complaint(self):
+        alice = self.alice
+        alice.add_email('alice@liberapay.com')
+        # Simulate a complaint
+        _handle_ses_notification({
+            "notificationType": "Complaint",
+            "complaint": {
+                "feedbackId": "fake-id",
+                "complaintFeedbackType": "abuse",
+                "complainedRecipients": [
+                    {
+                        "emailAddress": "alice@liberapay.com",
+                    }
+                ]
+            }
+        })
+        with self.assertRaises(EmailAddressIsBlacklisted):
+            check_email_blacklist('alice@liberapay.com')
+        # Try to log in without requesting a bypass
+        r = self.client.POST(
+            '/log-in',
+            {"log-in.id": "alice@liberapay.com"},
+            HTTP_ACCEPT=b'text/html',
+            raise_immediately=False,
+        )
+        assert isinstance(r, EmailAddressIsBlacklisted)
+        # Try to log in with a bypass
+        r = self.client.POST(
+            '/log-in',
+            {"log-in.id": "alice@liberapay.com", "email.unblacklist": "alice@liberapay.com"},
+            HTTP_ACCEPT=b'text/html',
+            raise_immediately=False,
+        )
+        assert r.code == 403
+        # The email address should still be on the blacklist
+        with self.assertRaises(EmailAddressIsBlacklisted):
+            check_email_blacklist('alice@liberapay.com')
 
 
 class TestEmail2(Harness):

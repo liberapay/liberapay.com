@@ -9,9 +9,9 @@ from ..billing.payday import compute_next_payday_date
 from ..constants import SEPA
 from ..cron import logger
 from ..exceptions import (
-    AccountSuspended, BadDonationCurrency, DuplicateNotification, EmailRequired,
-    MissingPaymentAccount, NoSelfTipping, ProhibitedSourceCountry,
-    RecipientAccountSuspended, UserDoesntAcceptTips, NextAction,
+    AccountSuspended, BadDonationCurrency, EmailRequired, MissingPaymentAccount,
+    NoSelfTipping, ProhibitedSourceCountry, RecipientAccountSuspended,
+    UserDoesntAcceptTips, NextAction,
 )
 from ..i18n.currencies import Money
 from ..website import website
@@ -332,6 +332,8 @@ def execute_scheduled_payins():
          WHERE ( r.network = 'stripe-sdd' AND sp.execution_date <= (current_date + interval '6 days') OR
                  r.network = 'stripe-card' AND sp.execution_date <= current_date )
            AND sp.last_notif_ts < (current_date - interval '2 days')
+           AND ( sp.notifs_count = 1 OR
+                 sp.notifs_count < 5 AND sp.last_notif_ts <= (current_date - interval '8 days') )
            AND sp.automatic
            AND sp.payin IS NULL
            AND p.is_suspended IS NOT TRUE
@@ -432,27 +434,37 @@ def execute_scheduled_payins():
                 UPDATE scheduled_payins
                    SET notifs_count = notifs_count + 1
                      , last_notif_ts = now()
-                 WHERE payer = %s
-                   AND id = %s
-            """, (payer.id, sp_id))
+                     , transfers = %(transfers)s
+                     , amount = %(amount)s
+                 WHERE payer = %(payer_id)s
+                   AND id = %(sp_id)s
+            """, dict(
+                transfers=json.dumps([
+                    { 'tippee_id': tr['tippee_id']
+                    , 'tippee_username': tr['tippee_username']
+                    , 'amount': tr['amount']
+                    } for tr in actionable
+                ]),
+                amount=Money.sum(
+                    map(itemgetter('amount'), actionable),
+                    actionable[0]['amount'].currency
+                ),
+                payer_id=payer.id,
+                sp_id=sp_id
+            ))
         else:
             db.run("DELETE FROM scheduled_payins WHERE id = %s", (sp_id,))
         if actionable:
             for tr in actionable:
                 tr['execution_date'] = execution_date
                 del tr['beneficiary'], tr['tip']
-            try:
-                payer.notify(
-                    'renewal_actionable',
-                    transfers=actionable,
-                    email_unverified_address=True,
-                    force_email=True,
-                    idem_key=str(sp_id),
-                )
-            except DuplicateNotification:
-                pass
-            else:
-                counts['renewal_actionable'] += 1
+            payer.notify(
+                'renewal_actionable',
+                transfers=actionable,
+                email_unverified_address=True,
+                force_email=True,
+            )
+            counts['renewal_actionable'] += 1
         if impossible:
             for tr in impossible:
                 tr['execution_date'] = execution_date
@@ -461,6 +473,7 @@ def execute_scheduled_payins():
                 'renewal_aborted',
                 transfers=impossible,
                 email_unverified_address=True,
+                idem_key=str(sp_id),
             )
             counts['renewal_aborted'] += 1
     for k, n in sorted(counts.items()):

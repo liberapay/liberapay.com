@@ -499,15 +499,15 @@ def handle_email_bounces():
             break
         for msg in messages:
             try:
-                _handle_ses_notification(msg)
+                _handle_ses_notification(json.loads(json.loads(msg.body)['Message']))
+                msg.delete()
             except Exception as e:
                 website.tell_sentry(e)
         time.sleep(1)
 
 
-def _handle_ses_notification(msg):
+def _handle_ses_notification(data):
     # Doc: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html
-    data = json.loads(json.loads(msg.body)['Message'])
     notif_type = data['notificationType']
     transient = False
     if notif_type == 'Bounce':
@@ -532,7 +532,6 @@ def _handle_ses_notification(msg):
                 "Received an invalid email complaint without a Feedback-Type. ID: %s" %
                 report_id
             )
-            msg.delete()
             return
         elif complaint_type not in ('abuse', 'fraud'):
             # We'll figure out how to deal with that when it happens.
@@ -605,7 +604,6 @@ def _handle_ses_notification(msg):
                 )
             except DuplicateNotification:
                 continue
-    msg.delete()
 
 
 def clean_up_emails():
@@ -647,16 +645,21 @@ def remove_email_address_from_blacklist(address, user, request):
                 ))
             website.db.hit_rate_limit('email.unblacklist.target', address, TooManyAttempts)
     # Mark the matching `email_blacklisted` notifications as read
-    participant = website.db.Participant.from_email(address)
-    if participant:
+    participant_ids = tuple(website.db.all("""
+        SELECT participant
+          FROM emails
+         WHERE lower(address) = lower(%s)
+    """, (address,)))
+    if participant_ids:
         notifications = website.db.all("""
-            SELECT id, context
-              FROM notifications
-             WHERE participant = %s
-               AND event = 'email_blacklisted'
-               AND is_new
-        """, (participant.id,))
-        for notif in notifications:
-            context = deserialize(notif.context)
+            SELECT n.id, n.context, p
+              FROM notifications n
+              JOIN participants p ON p.id = n.participant
+             WHERE n.participant IN %s
+               AND n.event = 'email_blacklisted'
+               AND n.is_new
+        """, (participant_ids,))
+        for n_id, n_context, participant in notifications:
+            context = deserialize(n_context)
             if context['blacklisted_address'].lower() == address.lower():
-                participant.mark_notification_as_read(notif.id)
+                participant.mark_notification_as_read(n_id)

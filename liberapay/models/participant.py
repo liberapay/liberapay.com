@@ -225,8 +225,24 @@ class Participant(Model, MixinTeam):
               FROM emails e
               JOIN participants p ON p.id = e.participant
              WHERE lower(e.address) = %s
-               AND (p.email IS NULL OR lower(p.email) = lower(e.address))
-          ORDER BY p.email NULLS LAST, p.id ASC
+               AND (p.email IS NOT NULL AND lower(p.email) = lower(e.address)
+                    OR
+                    p.email IS NULL AND e.id = (
+                        SELECT e2.id
+                          FROM emails e2
+                         WHERE e2.participant = e.participant
+                      ORDER BY e2.disavowed IS NOT true DESC
+                             , ( SELECT count(b)
+                                   FROM email_blacklist b
+                                  WHERE lower(b.address) = lower(e2.address)
+                                    AND (b.ignore_after IS NULL OR
+                                         b.ignore_after > current_timestamp)
+                               ) ASC
+                             , e2.added_time ASC
+                         LIMIT 1
+                    )
+                   )
+          ORDER BY p.email IS NOT NULL DESC, p.status = 'active' DESC, p.id ASC
              LIMIT 1
         """.format('p.id' if id_only else 'p'), (email.lower(),))
 
@@ -1814,7 +1830,7 @@ class Participant(Model, MixinTeam):
     # Random Stuff
     # ============
 
-    def url(self, path='', query='', log_in='auto'):
+    def url(self, path='', query='', log_in='auto', log_in_with_secondary=False):
         """Return the full canonical URL of a user page.
 
         Args:
@@ -1830,6 +1846,8 @@ class Participant(Model, MixinTeam):
                 log-in token is too old, whereas the default value 'auto' will
                 result in an expired token being ignored.
                 When set to 'no', log-in parameters aren't added to the URL.
+            log_in_with_secondary (bool):
+                whether to allow logging in with a secondary email address
         """
         scheme = website.canonical_scheme
         host = website.canonical_host
@@ -1847,8 +1865,11 @@ class Participant(Model, MixinTeam):
             extra_query = []
             if log_in == 'required' or log_in == 'auto' and not self.has_password:
                 primary_email = self.get_email_address()
-                if primary_email and email_row.address.lower() == primary_email.lower():
-                    # Only send login links to the primary email address
+                allow_log_in = (
+                    log_in_with_secondary or
+                    primary_email and email_row.address.lower() == primary_email.lower()
+                )
+                if allow_log_in:
                     session = self._email_session
                     if not session:
                         try:
