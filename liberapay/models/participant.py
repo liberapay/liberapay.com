@@ -1830,7 +1830,7 @@ class Participant(Model, MixinTeam):
     # Random Stuff
     # ============
 
-    def url(self, path='', query='', log_in='auto'):
+    def url(self, path='', query='', log_in='auto', log_in_with_secondary=False):
         """Return the full canonical URL of a user page.
 
         Args:
@@ -1846,6 +1846,8 @@ class Participant(Model, MixinTeam):
                 log-in token is too old, whereas the default value 'auto' will
                 result in an expired token being ignored.
                 When set to 'no', log-in parameters aren't added to the URL.
+            log_in_with_secondary (bool):
+                whether to allow logging in with a secondary email address
         """
         scheme = website.canonical_scheme
         host = website.canonical_host
@@ -1863,8 +1865,11 @@ class Participant(Model, MixinTeam):
             extra_query = []
             if log_in == 'required' or log_in == 'auto' and not self.has_password:
                 primary_email = self.get_email_address()
-                if primary_email and email_row.address.lower() == primary_email.lower():
-                    # Only send login links to the primary email address
+                allow_log_in = (
+                    log_in_with_secondary or
+                    primary_email and email_row.address.lower() == primary_email.lower()
+                )
+                if allow_log_in:
                     session = self._email_session
                     if not session:
                         try:
