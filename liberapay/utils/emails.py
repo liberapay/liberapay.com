@@ -499,15 +499,15 @@ def handle_email_bounces():
             break
         for msg in messages:
             try:
-                _handle_ses_notification(msg)
+                _handle_ses_notification(json.loads(json.loads(msg.body)['Message']))
+                msg.delete()
             except Exception as e:
                 website.tell_sentry(e)
         time.sleep(1)
 
 
-def _handle_ses_notification(msg):
+def _handle_ses_notification(data):
     # Doc: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/notification-contents.html
-    data = json.loads(json.loads(msg.body)['Message'])
     notif_type = data['notificationType']
     transient = False
     if notif_type == 'Bounce':
@@ -532,7 +532,6 @@ def _handle_ses_notification(msg):
                 "Received an invalid email complaint without a Feedback-Type. ID: %s" %
                 report_id
             )
-            msg.delete()
             return
         elif complaint_type not in ('abuse', 'fraud'):
             # We'll figure out how to deal with that when it happens.
@@ -605,7 +604,6 @@ def _handle_ses_notification(msg):
                 )
             except DuplicateNotification:
                 continue
-    msg.delete()
 
 
 def clean_up_emails():
