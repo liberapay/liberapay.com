@@ -188,6 +188,13 @@ title = _("Payment Instruments")
             % if route.network == 'stripe-card' and not route.is_default
             <button class="btn btn-primary btn-xs" name="set_as_default" value="{{ route.id }}">{{ _("Set as default") }}</button>
             % endif
+            % set suggest_as_default_for = (
+                route.currency
+                if route.currency else
+                last_payin.amount.currency
+                if last_payin and participant.donates_in_multiple_currencies else
+                None
+            )
             % if route.is_default_for
                 <button class="btn btn-warning btn-xs"
                         name="set_as_default_for" value="{{ route.id }}:"
@@ -197,14 +204,14 @@ title = _("Payment Instruments")
                         ) }}">{{ _(
                     "Unset as default for {currency}", currency=route.is_default_for
                 ) }}</button>
-            % elif route.network != 'stripe-card' and last_payin and participant.donates_in_multiple_currencies
+            % elif suggest_as_default_for
                 <button class="btn btn-primary btn-xs"
-                        name="set_as_default_for" value="{{ route.id }}:{{ last_payin.amount.currency }}"
+                        name="set_as_default_for" value="{{ route.id }}:{{ suggest_as_default_for }}"
                         title="{{ _(
                             'Use this instrument by default for payments in {currency}.',
-                            currency=Currency(last_payin.amount.currency)
+                            currency=Currency(suggest_as_default_for)
                         ) }}">{{ _(
-                    "Set as default for {currency}", currency=last_payin.amount.currency
+                    "Set as default for {currency}", currency=suggest_as_default_for
                 ) }}</button>
             % endif
             </span>

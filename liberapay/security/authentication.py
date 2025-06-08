@@ -22,7 +22,7 @@ from liberapay.security.csrf import require_cookie
 from liberapay.utils import b64encode_s, get_ip_net, get_recordable_headers
 from liberapay.utils.emails import (
     EmailVerificationResult, normalize_and_check_email_address,
-    remove_email_address_from_blacklist,
+    normalize_email_address, remove_email_address_from_blacklist,
 )
 
 
@@ -115,25 +115,25 @@ def sign_in_with_form_data(body, state):
             website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('log-in.email.country', src_country, TooManyLogInAttempts)
-            email = input_id
-            p = Participant.from_email(email)
+            normalized_email = normalize_email_address(input_id.lower())
+            p = Participant.from_email(normalized_email)
             if p and p.kind == 'group':
                 state['log-in.error'] = _(
                     "{0} is linked to a team account. It's not possible to log in as a team.",
-                    email
+                    input_id
                 )
             elif p:
-                if not p.get_email(email).verified:
-                    website.db.hit_rate_limit('log-in.email.not-verified', email, TooManyLoginEmails)
+                email_row = p.get_email(normalized_email)
+                if not email_row.verified:
+                    website.db.hit_rate_limit('log-in.email.not-verified', normalized_email, TooManyLoginEmails)
                 website.db.hit_rate_limit('log-in.email', p.id, TooManyLoginEmails)
-                email_row = p.get_email(email)
                 p.send_email('login_link', email_row, link_validity=SESSION_TIMEOUT)
-                state['log-in.email-sent-to'] = email
+                state['log-in.email-sent-to'] = input_id
                 raise LoginRequired
             else:
                 state['log-in.error'] = _(
                     "No account has “{email_address}” as its primary email address.",
-                    email_address=email
+                    email_address=input_id
                 )
             p = None
         else:
