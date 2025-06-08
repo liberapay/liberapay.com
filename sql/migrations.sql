@@ -3622,3 +3622,9 @@ ALTER TABLE payins
     ADD CONSTRAINT allowed_chk CHECK ((allowed_since IS NULL) = (allowed_by IS NULL));
 DROP INDEX events_admin_idx;
 CREATE INDEX events_admin_idx ON events (ts DESC) WHERE type IN ('admin_request', 'flags_changed', 'payin_review');
+
+-- migration #185
+UPDATE exchange_routes
+   SET currency = 'EUR'
+ WHERE network = 'stripe-sdd'
+   AND currency IS NULL;
