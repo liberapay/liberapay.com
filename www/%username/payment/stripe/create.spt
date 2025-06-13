@@ -111,7 +111,7 @@ title = _("Create a {provider} account", provider='Stripe')
             "in, and confirm that you agree to Stripe's terms."
         ) }}</p>
         <div class="form-group form-inline">
-            <select name="country" class="form-control country" required>
+            <select name="country" class="form-control country" required aria-label="{{ _('Country') }}">
                 % set country = user.guessed_country
                 % if country not in constants.PAYOUT_COUNTRIES['stripe']
                     <option></option>
