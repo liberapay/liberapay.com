@@ -185,12 +185,6 @@ elif 'state' in request.qs:
     account_data['token'] = json.dumps(account_data['token'])
     with website.db.get_cursor() as cursor:
         cursor.run("""
-            UPDATE payment_accounts
-               SET is_current = NULL
-             WHERE participant = %(p_id)s
-               AND provider = %(provider)s
-               AND country = %(country)s;
-
             INSERT INTO payment_accounts
                         (participant, provider, country, id,
                          default_currency, charges_enabled, verified,
