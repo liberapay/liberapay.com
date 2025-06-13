@@ -61,12 +61,6 @@ if request.method == 'POST':
     else:
         loss_taker = 'platform'
     serial_number = website.db.one("""
-        UPDATE payment_accounts
-           SET is_current = NULL
-         WHERE participant = %(p_id)s
-           AND provider = 'stripe'
-           AND country = %(country)s;
-
         INSERT INTO payment_accounts
                     (participant, provider, country, id,
                      default_currency, charges_enabled, verified,

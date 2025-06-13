@@ -25,12 +25,6 @@ if request.method == 'POST':
     )
     with website.db.get_cursor() as cursor:
         cursor.run("""
-            UPDATE payment_accounts
-               SET is_current = NULL
-             WHERE participant = %(p_id)s
-               AND provider = 'paypal'
-               AND country = %(country)s;
-
             INSERT INTO payment_accounts
                         (participant, provider, country, id, verified,
                          independent, loss_taker)
