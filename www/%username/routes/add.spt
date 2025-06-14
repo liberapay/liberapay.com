@@ -52,7 +52,7 @@ title = _("Add a payment instrument")
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     <form action="javascript:" method="POST" id="stripe"
-          data-before-submit="call:Liberapay.stripe_before_submit"
+          data-before-submit="call:Liberapay.stripe_before_element_submit"
           data-msg-stripe-missing='{{ _(
               "The initialization of a required component has failed. If you use a "
               "browser extension that blocks requests, for example NoScript, please "
