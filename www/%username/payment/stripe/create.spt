@@ -135,6 +135,6 @@ title = _("Create a {provider} account", provider='Stripe')
 % endblock
 
 % block scripts
-    % do response.csp_allow_stripe()
+    % do response.csp_allow(*constants.CSP_STRIPE)
     <script src="https://js.stripe.com/v3/"></script>
 % endblock
