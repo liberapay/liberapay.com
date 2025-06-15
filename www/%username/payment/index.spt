@@ -74,18 +74,22 @@ accounts = website.db.all("""
     SELECT *
       FROM payment_accounts
      WHERE participant = %s
-       AND is_current IS true
+       AND coalesce(is_current, %s)
   ORDER BY connection_ts
-""", (participant.id,))
+""", (participant.id, user.has_privilege('admin')))
 accounts_by_provider = group_by(accounts, lambda a: a.provider)
-paypal_accounts = accounts_by_provider.get('paypal')
-stripe_accounts = accounts_by_provider.get('stripe')
+has_current_paypal_account = any(
+    a.is_current for a in accounts_by_provider.get('paypal', ())
+)
+has_current_stripe_account = any(
+    a.is_current for a in accounts_by_provider.get('stripe', ())
+)
 
-countries = set(a.country for a in accounts)
+countries = set(a.country for a in accounts if a.is_current)
 country = list(countries)[0] if len(countries) == 1 else participant.guessed_country
 
 has_paypal_but_not_stripe = (
-    paypal_accounts and not stripe_accounts and
+    has_current_paypal_account and not has_current_stripe_account and
     country in constants.PAYOUT_COUNTRIES['stripe']
 )
 
@@ -167,16 +171,19 @@ subhead = _("Payment Processors")
         "Liberapay website. (Direct debits are currently only supported from euro "
         "bank accounts.)"
     ) }}</p>
-    % if stripe_accounts
+    % if accounts_by_provider.get('stripe')
     <div>
-        % for account in stripe_accounts
-        <form class="card card-default" action="" method="POST">
+        % for account in accounts_by_provider['stripe']
+        <form class="card card-default {{ '' if account.is_current else 'text-muted' }}"
+              action="" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <input type="hidden" name="account_pk" value="{{ account.pk }}" />
+            % if account.is_current
             <button class="corner-icon" name="action" value="disconnect"
                     title="{{ _('Disconnect') }}">{{ icon('disconnect') }}</button>
             <button class="corner-icon" name="action" value="refresh"
                     title="{{ _('Refresh') }}">{{ icon('refresh') }}</button>
+            % endif
             % if account.display_name
             <h4>{{ account.display_name }}</h4>
             {{ _("Account ID: {0}", account.id) }}<br>
@@ -244,7 +251,7 @@ subhead = _("Payment Processors")
     <form action="/payment-providers/stripe/connect" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
         <input type="hidden" name="back_to" value="{{ request.path.raw }}" />
-        % if stripe_accounts
+        % if has_current_stripe_account
         <button class="btn btn-default"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect another {platform_name} account", platform_name='Stripe')
         }}</button>
@@ -261,13 +268,15 @@ subhead = _("Payment Processors")
         "PayPal allows receiving money in many more countries than Stripe, "
         "but it's not as well integrated into Liberapay."
     ) }}</p>
-    % if paypal_accounts
+    % if accounts_by_provider.get('paypal')
     <form action="" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-        % for account in paypal_accounts
-        <div class="card card-default">
+        % for account in accounts_by_provider['paypal']
+        <div class="card card-default {{ '' if account.is_current else 'text-muted' }}">
+            % if account.is_current
             <button class="corner-icon" name="account_pk" value="{{ account.pk }}"
                     title="{{ _('Disconnect') }}">{{ icon('disconnect') }}</button>
+            % endif
             % if account.display_name
             <h4>{{ account.display_name }}</h4>
             {{ _("Account ID: {0}", account.id) }}<br>
@@ -313,7 +322,7 @@ subhead = _("Payment Processors")
     % endif
 
     <form action="/payment-providers/paypal/add" method="GET">
-        % if paypal_accounts
+        % if has_current_paypal_account
         <button class="btn btn-default"{% if not allow_connect %} disabled{% endif %}>{{
             _("Connect another {platform_name} account", platform_name='PayPal')
         }}</button>
