@@ -165,8 +165,6 @@ elif payin_id:
     except NextAction as act:
         if act.type == 'redirect_to_url':
             response.refresh(state, url=act.redirect_to_url.url)
-        elif act.type == 'use_stripe_sdk':
-            client_secret = act.client_secret
         else:
             raise NotImplementedError(act.type)
     tell_payer_to_fill_profile = (
@@ -256,13 +254,7 @@ title = _("Funding your donations")
 
 % block thin_content
 
-% if client_secret is defined
-
-    <p>{{ _("More information is required in order to process this payment.") }}</p>
-    <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
-    <div id="stripe_next_action" data-client_secret="{{ client_secret }}"></div>
-
-% elif payin is defined
+% if payin is defined
     % set status = payin.status
     % if status == 'succeeded'
         <div class="alert alert-success">{{ _(
@@ -354,7 +346,7 @@ title = _("Funding your donations")
     <noscript><div class="alert alert-danger">{{ _("JavaScript is required") }}</div></noscript>
 
     <form action="javascript:" method="POST" id="stripe"
-          data-before-submit="call:Liberapay.stripe_before_submit"
+          data-before-submit="call:Liberapay.stripe_before_element_submit"
           data-msg-stripe-missing='{{ _(
               "The initialization of a required component has failed. If you use a "
               "browser extension that blocks requests, for example NoScript, please "
@@ -592,6 +584,6 @@ title = _("Funding your donations")
 % endblock
 
 % block scripts
-    % do response.csp_allow_stripe()
+    % do response.csp_allow(*constants.CSP_STRIPE)
     <script src="https://js.stripe.com/v3/"></script>
 % endblock

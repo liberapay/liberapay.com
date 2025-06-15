@@ -64,6 +64,22 @@ CARD_BRANDS = {
 }
 
 
+# https://docs.stripe.com/security/guide?csp=csp-js#content-security-policy
+CSP_STRIPE = (
+    (b'connect-src', b"api.stripe.com"),
+    (b'frame-src', b"*.js.stripe.com js.stripe.com hooks.stripe.com"),
+    (b'script-src', b"*.js.stripe.com js.stripe.com"),
+)
+
+# https://docs.stripe.com/security/guide?csp=csp-connect#content-security-policy
+CSP_STRIPE_CONNECT = (
+    (b'frame-src', b"connect-js.stripe.com js.stripe.com"),
+    (b'img-src', b"*.stripe.com"),
+    (b'script-src', b"connect-js.stripe.com js.stripe.com"),
+    (b'style-src', b"sha256-0hAheEzaMe6uXIKV4EehS9pu1am1lj/KnnzrOYqckXk="),
+)
+
+
 class _DonationLimits(MoneyAutoConvertDict):
 
     def generate_value(self, currency):

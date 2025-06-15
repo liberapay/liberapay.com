@@ -462,6 +462,7 @@ def resolve_team_donation(
                AND a.country IN %(SEPA)s
           ORDER BY a.participant
                  , a.default_currency = %(currency)s DESC
+                 , a.country = %(payer_country)s DESC
                  , a.connection_ts
         """, dict(locals(), SEPA=SEPA, member_ids={t.member for t in takes}))}
         if sepa_only or len(sepa_accounts) > 1 and takes[0].member in sepa_accounts:

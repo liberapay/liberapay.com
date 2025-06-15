@@ -1,0 +1,61 @@
+import stripe
+
+from liberapay.utils import get_participant
+
+[---]
+participant = get_participant(state, restrict=True, allow_member=False)
+user.require_write_permission()
+if user != participant:
+    raise response.error(403)
+
+payment_account = website.db.one("""
+    SELECT *
+      FROM payment_accounts
+     WHERE participant = %s
+       AND pk = %s
+""", (participant.id, request.qs.get_int('sn')))
+if not payment_account:
+    raise response.error(400, "invalid `sn` value in querystring")
+
+account = stripe.Account.retrieve(payment_account.id)
+if account.details_submitted:
+    response.redirect(participant.path(f'payment/stripe/manage?sn={payment_account.pk}'))
+
+if request.method == 'POST':
+    account_session = stripe.AccountSession.create(
+        account=payment_account.id,
+        components={
+            "account_onboarding": {
+                "enabled": True,
+                "features": {
+                    "disable_stripe_user_authentication": True,
+                },
+            },
+        },
+    )
+    raise response.json({"client_secret": account_session.client_secret})
+
+title = _("Activate a {provider} account", provider='Stripe')
+
+[---] text/html
+% from 'templates/macros/nav.html' import querystring_nav with context
+
+% extends "templates/layouts/settings.html"
+
+% block content
+    <noscript><p class="alert alert-danger">{{ _("JavaScript is required") }}</p></noscript>
+    <div id="stripe-connect" data-csrf-token="{{ csrf_token }}"
+         data-msg-stripe-missing='{{ _(
+              "The initialization of a required component has failed. If you use a "
+              "browser extension that blocks requests, for example NoScript, please "
+              "make sure it’s allowing requests to the “stripe.com” domain."
+          ) }}'
+         data-stripe-pub-key="{{ website.app_conf.stripe_publishable_key }}"></div>
+    <br><br>
+    <a class="btn btn-default" href="{{ participant.path('payment') }}">{{ _("Go back") }}</a>
+% endblock
+
+% block scripts
+    % do response.csp_allow(*constants.CSP_STRIPE_CONNECT)
+    <script src="https://connect-js.stripe.com/v1.0/connect.js"></script>
+% endblock

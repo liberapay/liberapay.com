@@ -18,7 +18,7 @@ if request.method == 'POST':
                AND pk = %s
          RETURNING *
         """, (participant.id, account_pk))
-        if account and account.provider == 'stripe':
+        if account and account.provider == 'stripe' and account.independent:
             try:
                 stripe.oauth.OAuth.deauthorize(stripe_user_id=account.id)
             except stripe.oauth_error.InvalidClientError as e:
@@ -190,17 +190,41 @@ subhead = _("Payment Processors")
             % endif
             </p>
             <p class="text-muted">{{ _("Added on {date}", date=account.connection_ts.date()) }}</p>
-            % if not account.charges_enabled
-            <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
-                "This account cannot receive payments. To fix this, log in to the "
-                "account and complete the verification process. After that, reconnect "
-                "the account if you still see this message."
-            ) }}</p>
+            % if account.independent
+                % if not account.charges_enabled
+                    <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
+                        "This account cannot receive payments. To fix this, log in to the "
+                        "account and complete the verification process. After that, reconnect "
+                        "the account if you still see this message."
+                    ) }}</p>
+                % endif
+                <a href="https://dashboard.stripe.com/{{ account.id }}" target="_blank" rel="noopener noreferrer">{{
+                    icon("external-link") }} {{ _(
+                    "Manage this {platform} account", platform="Stripe"
+                ) }}</a>
+            % elif account.details_submitted
+                % if not account.charges_enabled
+                    <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
+                        "This account cannot receive payments. To fix this, click "
+                        "on the link below and complete the verification process."
+                    ) }}</p>
+                % endif
+                <a href="{{ participant.path('payment/stripe/manage?sn=%s' % account.pk) }}">{{
+                    icon("gear") }} {{ _(
+                    "Manage this {platform} account", platform="Stripe"
+                ) }}</a>
+            % else
+                % if not account.charges_enabled
+                    <p class="text-warning">{{ icon('exclamation-sign') }} {{ _(
+                        "This account cannot receive payments. To fix this, click "
+                        "on the link below and complete the activation process."
+                    ) }}</p>
+                % endif
+                <a href="{{ participant.path('payment/stripe/onboard?sn=%s' % account.pk) }}">{{
+                    icon("manual") }} {{ _(
+                    "Activate this {platform} account", platform="Stripe"
+                ) }}</a>
             % endif
-            <a href="https://dashboard.stripe.com/{{ account.id }}" target="_blank" rel="noopener noreferrer">{{
-                icon("external-link") }} {{ _(
-                "Manage this {platform} account", platform="Stripe"
-            ) }}</a>
         </form>
         % endfor
     </div>

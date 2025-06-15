@@ -25,22 +25,20 @@ if request.method == 'POST':
     )
     with website.db.get_cursor() as cursor:
         cursor.run("""
-            UPDATE payment_accounts
-               SET is_current = NULL
-             WHERE participant = %(p_id)s
-               AND provider = 'paypal'
-               AND country = %(country)s;
-
             INSERT INTO payment_accounts
-                        (participant, provider, country, id, verified)
-                 VALUES (%(p_id)s, 'paypal', %(country)s, %(account_id)s, %(verified)s)
+                        (participant, provider, country, id, verified,
+                         independent, loss_taker)
+                 VALUES (%(p_id)s, 'paypal', %(country)s, %(account_id)s, %(verified)s,
+                         true, 'provider')
             ON CONFLICT (provider, id, participant) DO UPDATE
                     SET is_current = true
                       , country = excluded.country
                       , default_currency = excluded.default_currency
                       , charges_enabled = excluded.charges_enabled
                       , display_name = excluded.display_name
-                      , token = excluded.token;
+                      , token = excluded.token
+                      , independent = excluded.independent
+                      , loss_taker = excluded.loss_taker;
         """, account_data)
     response.redirect(participant.path('payment'))
 

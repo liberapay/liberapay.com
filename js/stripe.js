@@ -1,17 +1,21 @@
 Liberapay.stripe_init = function() {
     var $form = $('form#stripe');
-    if ($form.length === 1) Liberapay.stripe_form_init($form);
-    var $next_action = $('#stripe_next_action');
-    if ($next_action.length === 1) Liberapay.stripe_next_action($next_action);
-};
-
-Liberapay.stripe_form_init = function($form) {
+    if ($form.length !== 1) return;
     $('fieldset.hidden').prop('disabled', true);
     $('button[data-modify]').click(function() {
         var $btn = $(this);
         $($btn.data('modify')).removeClass('hidden').prop('disabled', false);
         $btn.parent().addClass('hidden');
     });
+
+    var $errorElement = $('#stripe-errors');
+    var stripe = null;
+    if (window.Stripe) {
+        stripe = Stripe($form.data('stripe-pk'));
+    } else {
+        $errorElement.text($form.attr('data-msg-stripe-missing'));
+        $errorElement.hide().fadeIn()[0].scrollIntoView();
+    }
 
     var $container = $('#stripe-element');
     var $postal_address_alert = $form.find('.msg-postal-address-required');
@@ -32,10 +36,7 @@ Liberapay.stripe_form_init = function($form) {
         );
     }
 
-    var $errorElement = $('#stripe-errors');
-    var stripe = null;
-    if (window.Stripe) {
-        stripe = Stripe($form.data('stripe-pk'));
+    if ($container.length === 1) {
         var elements = stripe.elements({
             onBehalfOf: $form.data('stripe-on-behalf-of') || undefined,
         });
@@ -66,14 +67,29 @@ Liberapay.stripe_form_init = function($form) {
                 }
             }
         });
-    } else {
-        $errorElement.text($form.attr('data-msg-stripe-missing'));
     }
 
-    Liberapay.stripe_before_submit = async function() {
+    Liberapay.stripe_before_account_submit = async function() {
+        const response = await stripe.createToken('account', {
+            tos_shown_and_accepted: true,
+        });
+        if (response.token) {
+            $form.find('input[name="account_token"]').remove();
+            var $pm_id_input = $('<input type="hidden" name="account_token">');
+            $pm_id_input.val(response.token.id);
+            $pm_id_input.appendTo($form);
+            return true;
+        } else {
+            $errorElement.text(response.error || response);
+            $errorElement.hide().fadeIn()[0].scrollIntoView();
+            return false;
+        }
+    }
+
+    Liberapay.stripe_before_element_submit = async function() {
         // If the Payment Element is hidden, simply let the browser submit the form
         if ($container.parents('.hidden').length > 0) {
-            console.debug("stripe_before_submit: ignoring hidden payment element");
+            console.debug("stripe_before_element_submit: ignoring hidden payment element");
             return true;
         }
         // If Stripe.js is missing, stop the submission
@@ -124,15 +140,5 @@ Liberapay.stripe_form_init = function($form) {
             $errorElement.text(msg)[0].scrollIntoView();
             return false;
         }
-    };
-
-    Liberapay.stripe_next_action = function ($next_action) {
-        stripe.handleCardAction($next_action.data('client_secret')).then(function (result) {
-            if (result.error) {
-                $next_action.addClass('alert alert-danger').text(result.error.message);
-            } else {
-                window.location.reload();
-            }
-        })
     };
 };
