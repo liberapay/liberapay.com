@@ -2925,10 +2925,6 @@ msgstr "Procesatorul de plăți {name} a returnat o eroare: \"{error_message}\".
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "Instrumentul de plată nu este valid, vă rugăm să selectați sau să adăugați altul."
 
-#, fuzzy
-msgid "More information is required in order to process this payment."
-msgstr "Sunt necesare mai multe informații pentru a putea procesa această plată."
-
 #, fuzzy, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "Procesatorul de plăți ({name}) nu poate procesa încă debitele directe {currency} pentru acest destinatar. Vă rugăm să încercați din nou cu o altă metodă de plată."
@@ -3698,6 +3694,16 @@ msgstr "Acest cont nu poate primi plăți. Pentru a remedia acest lucru, conecta
 msgid "Manage this {platform} account"
 msgstr "Gestionați acest cont {platform}"
 
+msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
+msgstr ""
+
+msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
+msgstr ""
+
+#, python-brace-format
+msgid "Activate this {platform} account"
+msgstr ""
+
 #, python-brace-format
 msgid "Available in {country}."
 msgstr "Disponibil în {country}."
@@ -3713,6 +3719,34 @@ msgstr "Conectați un alt cont {platform_name}"
 #, fuzzy
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal permite primirea de bani în mult mai multe țări decât Stripe, dar nu este la fel de bine integrat în Liberapay."
+
+#, python-brace-format
+msgid "Create a {provider} account"
+msgstr ""
+
+msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
+msgstr ""
+
+#, python-brace-format
+msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
+msgstr ""
+
+msgid "Create account"
+msgstr ""
+
+#, python-brace-format
+msgid "Manage a {provider} account"
+msgstr ""
+
+msgid "Payments"
+msgstr ""
+
+msgid "Payouts"
+msgstr ""
+
+#, python-brace-format
+msgid "Activate a {provider} account"
+msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"

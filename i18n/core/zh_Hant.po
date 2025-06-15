@@ -2711,9 +2711,6 @@ msgstr "付款結算方 {name} 傳回錯誤訊息：「{error_message}」。"
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "支付方式無效，請另選或新增其它方式。"
 
-msgid "More information is required in order to process this payment."
-msgstr "需要更多資訊來處理這次付款。"
-
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "支付商{name}無法直接為此位收款人處理{currency}款項，請試試其它支付方式。"
@@ -3419,6 +3416,16 @@ msgstr "這個帳戶無法收款。如需收款，請登入帳戶並完成驗證
 msgid "Manage this {platform} account"
 msgstr "管理 {platform}帳號"
 
+msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
+msgstr ""
+
+msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
+msgstr ""
+
+#, python-brace-format
+msgid "Activate this {platform} account"
+msgstr ""
+
 #, python-brace-format
 msgid "Available in {country}."
 msgstr "可在{country}使用。"
@@ -3433,6 +3440,34 @@ msgstr "聯絡另一個{platform_name}帳號"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "比起 Stripe，PayPal 可接受收款的國家數量更多，但它並未完全整合在 Liberapay 。"
+
+#, python-brace-format
+msgid "Create a {provider} account"
+msgstr ""
+
+msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
+msgstr ""
+
+#, python-brace-format
+msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
+msgstr ""
+
+msgid "Create account"
+msgstr ""
+
+#, python-brace-format
+msgid "Manage a {provider} account"
+msgstr ""
+
+msgid "Payments"
+msgstr ""
+
+msgid "Payouts"
+msgstr ""
+
+#, python-brace-format
+msgid "Activate a {provider} account"
+msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"

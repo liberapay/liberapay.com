@@ -2744,9 +2744,6 @@ msgstr "결제 처리자 {name}에서 \"{error_message}\" 오류를 반환했습
 msgid "The payment instrument is invalid, please select or add another one."
 msgstr "결제 수단이 잘못되었습니다. 다른 결제 수단을 선택하거나 추가하세요."
 
-msgid "More information is required in order to process this payment."
-msgstr "이 지불을 처리하기 위해서는 더 많은 정보가 필요합니다."
-
 #, python-brace-format
 msgid "The payment processor ({name}) isn't able to process {currency} direct debits for this recipient yet. Please retry with a different payment method."
 msgstr "이 지불 매체 ({name}) 에서 자금 수신자에게 {currency} 계좌 이체를 지원하지 않습니다. 다른 지불 매체로 시도해 주세요."
@@ -3478,6 +3475,16 @@ msgstr "이 계정은 지급을 받을 수 없습니다. 이 문제를 해결하
 msgid "Manage this {platform} account"
 msgstr "{platform} 계정 관리"
 
+msgid "This account cannot receive payments. To fix this, click on the link below and complete the verification process."
+msgstr ""
+
+msgid "This account cannot receive payments. To fix this, click on the link below and complete the activation process."
+msgstr ""
+
+#, python-brace-format
+msgid "Activate this {platform} account"
+msgstr ""
+
 #, python-brace-format
 msgid "Available in {country}."
 msgstr "{country}에서 사용 가능."
@@ -3492,6 +3499,34 @@ msgstr "다른 {platform_name} 계정 연결"
 
 msgid "PayPal allows receiving money in many more countries than Stripe, but it's not as well integrated into Liberapay."
 msgstr "PayPal은 Stripe보다 더 많은 나라에서 돈을 받을 수 있지만, Liberapay와 잘 호환되지 않습니다."
+
+#, python-brace-format
+msgid "Create a {provider} account"
+msgstr ""
+
+msgid "Please select the country you live in or have a registered business in, and confirm that you agree to Stripe's terms."
+msgstr ""
+
+#, python-brace-format
+msgid "I agree to the {link_start}Stripe Connected Account Agreement{link_end}."
+msgstr ""
+
+msgid "Create account"
+msgstr ""
+
+#, python-brace-format
+msgid "Manage a {provider} account"
+msgstr ""
+
+msgid "Payments"
+msgstr ""
+
+msgid "Payouts"
+msgstr ""
+
+#, python-brace-format
+msgid "Activate a {provider} account"
+msgstr ""
 
 #, python-brace-format
 msgid "liberapay_receipt_{number}"
