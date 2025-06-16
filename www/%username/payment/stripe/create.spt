@@ -9,7 +9,6 @@ if request.method == 'POST':
     if user != participant:
         raise response.error(403)
     country = request.body.get_choice('country', constants.PAYOUT_COUNTRIES['stripe'])
-    country_in_sepa = country in constants.SEPA
     account_token_id = request.body['account_token']
     if website.app_conf.stripe_secret_key.startswith('sk_test_'):
         profile_url = f"https://fake.liberapay.com/{participant.username}"
@@ -33,8 +32,6 @@ if request.method == 'POST':
             },
         },
         capabilities={
-            "transfers": {"requested": True},
-        } if country_in_sepa else {
             "card_payments": {"requested": True},
             "transfers": {"requested": True},
         },
