@@ -14,7 +14,7 @@ COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQ
 
 -- database metadata
 CREATE TABLE db_meta (key text PRIMARY KEY, value jsonb);
-INSERT INTO db_meta (key, value) VALUES ('schema_version', '185'::jsonb);
+INSERT INTO db_meta (key, value) VALUES ('schema_version', '186'::jsonb);
 
 
 -- app configuration
@@ -477,6 +477,7 @@ CREATE TABLE exchange_events
 
 -- payment accounts (Stripe, PayPal, etc)
 
+CREATE TYPE loss_taker AS ENUM ('provider', 'platform');
 CREATE TYPE payment_providers AS ENUM ('stripe', 'paypal');
 
 CREATE TABLE payment_accounts
@@ -493,9 +494,15 @@ CREATE TABLE payment_accounts
 , pk                    bigserial       PRIMARY KEY
 , verified              boolean         NOT NULL
 , authorized            boolean
-, UNIQUE (participant, provider, country, is_current)
+, independent           boolean
+, loss_taker            loss_taker
+, details_submitted     boolean
+, allow_payout          boolean
 , UNIQUE (provider, id, participant)
 );
+
+CREATE INDEX payment_accounts_participant_provider_country_is_current_idx
+    ON payment_accounts (participant, provider, country, is_current);
 
 
 -- payins -- incoming payments that don't go into a donor wallet
