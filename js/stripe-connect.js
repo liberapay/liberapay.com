@@ -87,9 +87,7 @@ Liberapay.stripe_connect.init = function() {
         self.current_component = self.components[target_component_name] = component;
         if (target_component_name == 'account-onboarding') {
             component.setOnExit(() => {
-                window.location = location.href.replace(
-                    /\/stripe\/onboard\/?\?.+$/, '/'
-                );
+                window.location.href = location.href;
             });
         }
         container.appendChild(self.current_component);

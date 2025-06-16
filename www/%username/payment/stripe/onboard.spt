@@ -19,7 +19,19 @@ if not payment_account:
 
 account = stripe.Account.retrieve(payment_account.id)
 if account.details_submitted:
-    response.redirect(participant.path(f'payment/stripe/manage?sn={payment_account.pk}'))
+    payment_account = website.db.one("""
+        UPDATE payment_accounts
+           SET details_submitted = true
+             , charges_enabled = %s
+             , display_name = %s
+         WHERE pk = %s
+     RETURNING *
+    """, (
+        account.charges_enabled,
+        account.settings.dashboard.display_name,
+        payment_account.pk
+    ))
+    raise response.redirect(participant.path('payment'))
 
 if request.method == 'POST':
     account_session = stripe.AccountSession.create(
