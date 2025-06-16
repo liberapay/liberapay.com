@@ -50,7 +50,6 @@ if request.method == 'POST':
                 },
             },
         },
-        idempotency_key=f"create_{country}_account_for_{participant.id}",
     )
     independent = (
         account.type == 'standard' or
