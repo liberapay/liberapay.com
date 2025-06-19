@@ -726,11 +726,15 @@ def partition(l, predicate):
 
 def get_recordable_headers(request):
     decode = lambda b: b.decode('ascii', 'backslashreplace')
-    return {
+    r = {
         decode(k): decode(b', '.join(v))
         for k, v in request.headers.items()
         if k != b'Cookie'
     }
+    r['Cookie'] = {
+        name: len(value) for name, value in request.cookies.items()
+    }
+    return r
 
 
 def tweak_avatar_url(avatar_url, increment=True):
