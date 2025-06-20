@@ -5,6 +5,7 @@ from pando import Response
 import pytest
 
 from liberapay.billing.payday import Payday
+from liberapay.elsewhere._base import UserInfo
 from liberapay.testing import EUR, Harness
 from liberapay.utils import find_files
 
@@ -56,6 +57,10 @@ class BrowseTestHarness(Harness):
               RETURNING id
         """, (self.david.id, self.org.id))
         self.route = self.db.ExchangeRoute.upsert_generic_route(self.david, 'paypal')
+        self.db.AccountElsewhere.upsert(UserInfo(
+            platform='github', user_id='1', user_name='liberapay', domain='',
+            avatar_url='fake-github-avatar-url',
+        ))
         Payday.start().run()
 
     def browse(self, **kw):
@@ -70,10 +75,10 @@ class BrowseTestHarness(Harness):
             try:
                 r = self.client.GET(url, **kw)
             except Response as e:
-                if e.code == 404 or e.code >= 500:
+                if e.code in (404, 429) or e.code >= 500:
                     raise
                 r = e
-            assert r.code != 404
+            assert r.code not in (404, 429)
             assert r.code < 500
             assert not overescaping_re.search(r.text)
 
