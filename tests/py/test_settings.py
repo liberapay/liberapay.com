@@ -160,15 +160,25 @@ class TestPassword(Harness):
     def test_setting_then_changing_then_unsetting_password(self):
         alice = self.make_participant('alice')
         form_data = {
-            'new-password': 'password',
-            'ignore_warning': 'true',
+            'new-password': 'a',
+            'back_to': alice.path('settings/'),
         }
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 400, r.text
+        form_data['new-password'] = 'password'
+        r = self.client.PxST(
+            '/alice/settings/edit', form_data, auth_as=alice, skip_password_check=True,
+        )
         assert r.code == 302, r.text
-
         form_data['cur-password'] = form_data['new-password']
-        password = form_data['new-password'] = 'correct horse battery staple'
+        form_data['new-password'] = 'a'*200
         r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        assert r.code == 400, r.text
+
+        password = form_data['new-password'] = 'correct horse battery staple'
+        r = self.client.PxST(
+            '/alice/settings/edit', form_data, auth_as=alice, skip_password_check=True,
+        )
         assert r.code == 302, r.text
         assert alice.authenticate_with_password(alice.id, password, context='test')
         form_data['cur-password'] = ''

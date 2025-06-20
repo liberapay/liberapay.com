@@ -54,13 +54,14 @@ from liberapay.exceptions import (
     NonexistingElsewhere,
     NoSelfTipping,
     NoTippee,
-    TooManyTeamsCreated,
+    TooManyAttempts,
     TooManyCurrencyChanges,
     TooManyEmailAddresses,
     TooManyEmailVerifications,
     TooManyLogInAttempts,
     TooManyPasswordLogins,
     TooManyRequests,
+    TooManyTeamsCreated,
     TooManyUsernameChanges,
     UnableToSendEmail,
     UnacceptedDonationVisibility,
@@ -282,7 +283,7 @@ class Participant(Model, MixinTeam):
             AccountIsPasswordless if the account doesn't have a password
         """
         r = cls.db.one("""
-            SELECT p, s.secret
+            SELECT p, s.secret, s.mtime
               FROM user_secrets s
               JOIN participants p ON p.id = s.participant
              WHERE s.participant = %s
@@ -292,7 +293,7 @@ class Participant(Model, MixinTeam):
             raise AccountIsPasswordless()
         if not password:
             return None
-        p, stored_secret = r
+        p, stored_secret, mtime = r
         if context == 'log-in':
             cls.db.hit_rate_limit('log-in.password', p.id, TooManyPasswordLogins)
         request = website.state.get({}).get('request')
@@ -302,9 +303,41 @@ class Participant(Model, MixinTeam):
         rounds = int(rounds)
         salt, hashed = b64decode(salt), b64decode(hashed)
         if constant_time_compare(cls._hash_password(password, algo, salt, rounds), hashed):
-            p.authenticated = True
             if context == 'log-in':
+                password_status = None
+                last_password_check = p.get_last_event_of_type('password-check')
+                if last_password_check and utcnow() - last_password_check.ts < timedelta(days=180):
+                    last_password_warning = cls.db.one("""
+                        SELECT n.*
+                          FROM notifications n
+                         WHERE n.participant = %s
+                           AND n.event = 'password_warning'
+                           AND n.ts > %s
+                      ORDER BY n.ts DESC
+                         LIMIT 1
+                    """, (p.id, mtime))
+                    if last_password_warning:
+                        password_status = deserialize(last_password_warning.context)[
+                            'password_status'
+                        ]
+                else:
+                    try:
+                        password_status = p.check_password(password)
+                    except Exception as e:
+                        website.tell_sentry(e)
+                    else:
+                        if password_status != 'okay':
+                            p.notify(
+                                'password_warning',
+                                email=False,
+                                type='warning',
+                                password_status=password_status,
+                            )
+                        p.add_event(website.db, 'password-check', None)
+                if password_status and password_status != 'okay':
+                    raise AccountIsPasswordless()
                 cls.db.decrement_rate_limit('log-in.password', p.id)
+            p.authenticated = True
             if len(salt) < 32:
                 # Update the password hash in the DB
                 hashed = cls.hash_password(password)
@@ -334,14 +367,31 @@ class Participant(Model, MixinTeam):
         ))
         return hashed
 
-    def update_password(self, password, cursor=None, checked=True):
+    def update_password(self, password_field_name):
+        state = website.state.get()
+        request, response = state['request'], state['response']
+        password = request.body[password_field_name]
         l = len(password)
         if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
             raise BadPasswordSize
+        website.db.hit_rate_limit('change_password', self.id, TooManyAttempts)
+        password_status = None
+        skip_check = state['environ'].get(b'skip_password_check')
+        if not skip_check:
+            try:
+                password_status = self.check_password(password)
+            except Exception as e:
+                website.tell_sentry(e)
+            if password_status and password_status != 'okay':
+                raise response.render(
+                    'simplates/password-warning.spt', state,
+                    password_field_name=password_field_name,
+                    password_status=password_status,
+                )
         hashed = self.hash_password(password)
         p_id = self.id
         current_session_id = getattr(self.session, 'id', 0)
-        with self.db.get_cursor(cursor) as c:
+        with self.db.get_cursor() as c:
             c.run("""
                 INSERT INTO user_secrets
                             (participant, id, secret)
@@ -356,7 +406,7 @@ class Participant(Model, MixinTeam):
                    AND id <> %(current_session_id)s
                    AND secret NOT LIKE '%%.em';
             """, locals())
-            if checked:
+            if password_status:
                 self.add_event(c, 'password-check', None)
 
     def unset_password(self):
@@ -385,16 +435,22 @@ class Participant(Model, MixinTeam):
 
     @cached_property
     def has_password(self):
-        return self.db.one(
-            "SELECT participant FROM user_secrets WHERE participant = %s AND id = 0",
-            (self.id,)
-        ) is not None
+        return self.db.one("""
+            SELECT participant
+              FROM user_secrets
+             WHERE participant = %s
+               AND id = 0
+               AND NOT EXISTS (
+                       SELECT 1
+                         FROM notifications n
+                        WHERE n.participant = user_secrets.participant
+                          AND n.event = 'password_warning'
+                          AND n.ts > user_secrets.mtime
+                        LIMIT 1
+                   )
+        """, (self.id,)) is not None
 
-    def check_password(self, password, context):
-        if context == 'login':
-            last_password_check = self.get_last_event_of_type('password-check')
-            if last_password_check and utcnow() - last_password_check.ts < timedelta(days=180):
-                return
+    def check_password(self, password):
         passhash = sha1(password.encode("utf-8")).hexdigest().upper()
         passhash_prefix, passhash_suffix = passhash[:5], passhash[5:]
         url = "https://api.pwnedpasswords.com/range/" + passhash_prefix
@@ -410,10 +466,6 @@ class Participant(Model, MixinTeam):
             status = 'compromised'
         else:
             status = 'okay'
-        if context == 'login':
-            if status != 'okay':
-                self.notify('password_warning', email=False, type='warning', password_status=status)
-            self.add_event(website.db, 'password-check', None)
         return status
 
 

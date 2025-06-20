@@ -253,6 +253,7 @@ class Harness(unittest.TestCase):
     def make_participant(self, username, **kw):
         platform = kw.pop('elsewhere', 'github')
         domain = kw.pop('domain', '')
+        password = kw.pop('password', None)
         kw.setdefault('kind', 'individual')
         kw.setdefault('status', 'active')
         if username:
@@ -287,6 +288,13 @@ class Harness(unittest.TestCase):
                             (participant, address, verified, verified_time)
                      VALUES (%s, %s, true, now())
             """, (participant.id, email))
+        if password:
+            self.db.run("""
+                INSERT INTO user_secrets
+                            (participant, id, secret)
+                     VALUES (%s, 0, %s)
+            """, (participant.id, participant.hash_password(password)))
+            participant.add_event(self.db, 'password-check', None)
 
         return participant
 

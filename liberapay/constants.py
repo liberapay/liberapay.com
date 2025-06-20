@@ -337,9 +337,8 @@ RATE_LIMITS = {
     'add_payment_instrument': (20, 60*60*24*7),  # 20 per week
     'admin.http-unsafe': (10, 60*60*24),  # 10 per day
     'change_currency': (4, 60*60*24*7),  # 4 per week
-    'change_password': (7, 60*60*24*7),  # 7 per week
+    'change_password': (25, 60*60*24*7),  # 25 per week
     'change_username': (7, 60*60*24*7),  # 7 per week
-    'check_password': (25, 60*60*24*7),  # 25 per week
     'elsewhere-lookup.ip-addr': (5, 20),  # 5 per 20 seconds
     'email.bypass_error': (2, 60*60*24*7),  # 2 per week
     'email.test': (15, 60*60*24*7),  # 15 per week
