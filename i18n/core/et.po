@@ -1392,21 +1392,27 @@ msgstr "Salasõna"
 msgid "This new password is not safe"
 msgstr "See uus parool ei ole turvaline"
 
-#, fuzzy
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Oleme avastanud, et teie praegust parooli on lihtne ära arvata ja seega ebaturvaline."
+msgid "The new password you submitted is unsafe because it matches a commonly used password."
+msgstr ""
+
+msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
+msgstr ""
+
+msgid "The new password you submitted is unsafe because it's too easy to guess."
+msgstr ""
+
+msgid "Please input a different password:"
+msgstr ""
+
+msgid "New password"
+msgstr "Uus salasõna"
+
+msgid "Submit"
+msgstr ""
 
 #, fuzzy
-msgid "Do you still want to use this password?"
-msgstr "Kas soovite seda salasõna endiselt kasutada?"
-
-#, fuzzy
-msgid "No, cancel"
-msgstr "Ei, tühistage"
-
-#, fuzzy
-msgid "Yes, proceed"
-msgstr "Jah, jätkake"
+msgid "Go back"
+msgstr "Mine tagasi"
 
 #, fuzzy, python-brace-format
 msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
@@ -1676,9 +1682,6 @@ msgstr "Parooli määramine võimaldab teil otse sisse logida, selle asemel et o
 #, fuzzy
 msgid "Current password"
 msgstr "Old password"
-
-msgid "New password"
-msgstr "Uus salasõna"
 
 #, fuzzy
 msgid "Unset password"
@@ -3260,10 +3263,6 @@ msgstr "Kas olete kindel, et soovite selle plaanilise makse tühistada? See peat
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Kas olete kindel, et soovite selle plaanilise makse tühistada? See peatab teie annetused aadressile {recipients}."
-
-#, fuzzy
-msgid "Go back"
-msgstr "Mine tagasi"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"

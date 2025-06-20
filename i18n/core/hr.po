@@ -1444,21 +1444,28 @@ msgstr "Lozinka"
 msgid "This new password is not safe"
 msgstr "Ova nova lozinka nije sigurna"
 
-#, fuzzy
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Otkrili smo da je vašu trenutnu lozinku lako pogoditi i stoga nesigurna."
+msgid "The new password you submitted is unsafe because it matches a commonly used password."
+msgstr ""
+
+msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
+msgstr ""
+
+msgid "The new password you submitted is unsafe because it's too easy to guess."
+msgstr ""
+
+msgid "Please input a different password:"
+msgstr ""
 
 #, fuzzy
-msgid "Do you still want to use this password?"
-msgstr "Želite li i dalje koristiti ovu lozinku?"
+msgid "New password"
+msgstr "Nova lozinka"
+
+msgid "Submit"
+msgstr ""
 
 #, fuzzy
-msgid "No, cancel"
-msgstr "Ne, otkaži"
-
-#, fuzzy
-msgid "Yes, proceed"
-msgstr "Da, nastavi"
+msgid "Go back"
+msgstr "Idi natrag"
 
 #, fuzzy, python-brace-format
 msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
@@ -1757,10 +1764,6 @@ msgstr "Postavljanje lozinke omogućuje vam izravnu prijavu, umjesto da čekate 
 #, fuzzy
 msgid "Current password"
 msgstr "Trenutna lozinka"
-
-#, fuzzy
-msgid "New password"
-msgstr "Nova lozinka"
 
 #, fuzzy
 msgid "Unset password"
@@ -3366,10 +3369,6 @@ msgstr "Jeste li sigurni da želite otkazati ovo planirano plaćanje? Zaustavit 
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Jeste li sigurni da želite otkazati ovo planirano plaćanje? Zaustavit će vaše donacije {recipients}."
-
-#, fuzzy
-msgid "Go back"
-msgstr "Idi natrag"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"

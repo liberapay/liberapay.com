@@ -1244,17 +1244,26 @@ msgstr "パスワード"
 msgid "This new password is not safe"
 msgstr "この新しいパスワードは安全ではありません"
 
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "現在お使いのパスワードが推測されやすく、安全ではないことを検知しました。"
+msgid "The new password you submitted is unsafe because it matches a commonly used password."
+msgstr ""
 
-msgid "Do you still want to use this password?"
-msgstr "それでもこのパスワードを使用してもよろしいですか？"
+msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
+msgstr ""
 
-msgid "No, cancel"
-msgstr "キャンセル"
+msgid "The new password you submitted is unsafe because it's too easy to guess."
+msgstr ""
 
-msgid "Yes, proceed"
-msgstr "続行"
+msgid "Please input a different password:"
+msgstr ""
+
+msgid "New password"
+msgstr "新しいパスワード"
+
+msgid "Submit"
+msgstr ""
+
+msgid "Go back"
+msgstr "戻る"
 
 #, python-brace-format
 msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
@@ -1487,9 +1496,6 @@ msgstr "パスワードを設定すると、電子メールで送信される1�
 
 msgid "Current password"
 msgstr "現在のパスワード"
-
-msgid "New password"
-msgstr "新しいパスワード"
 
 msgid "Unset password"
 msgstr "パスワードの設定を取り消す"
@@ -2774,9 +2780,6 @@ msgstr "この定期支払いをキャンセルしてもよろしいですか？
 #, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "この定期支払いをキャンセルしてもよろしいですか？ {recipients}への寄付が停止されます。"
-
-msgid "Go back"
-msgstr "戻る"
 
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
 msgstr "この予定支払い額を変更する場合は、新しい寄付の値段を選択または入力してください。"

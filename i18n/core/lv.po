@@ -1436,21 +1436,28 @@ msgstr "Parole"
 msgid "This new password is not safe"
 msgstr "Šī jaunā parole nav droša"
 
-#, fuzzy
-msgid "We have detected that your current password is easy to guess, and thus insecure."
-msgstr "Esam atklājuši, ka jūsu pašreizējo paroli ir viegli uzminēt un tāpēc tā nav droša."
+msgid "The new password you submitted is unsafe because it matches a commonly used password."
+msgstr ""
+
+msgid "The new password you submitted is unsafe because it matches a password that has been compromised in one or more public data leaks."
+msgstr ""
+
+msgid "The new password you submitted is unsafe because it's too easy to guess."
+msgstr ""
+
+msgid "Please input a different password:"
+msgstr ""
 
 #, fuzzy
-msgid "Do you still want to use this password?"
-msgstr "Vai joprojām vēlaties izmantot šo paroli?"
+msgid "New password"
+msgstr "New password"
+
+msgid "Submit"
+msgstr ""
 
 #, fuzzy
-msgid "No, cancel"
-msgstr "Nē, atcelt"
-
-#, fuzzy
-msgid "Yes, proceed"
-msgstr "Jā, turpiniet"
+msgid "Go back"
+msgstr "Atgriezties"
 
 #, fuzzy, python-brace-format
 msgid "{platform} rejected our request to access your data. Reconnecting your {platform} account should fix the problem."
@@ -1749,10 +1756,6 @@ msgstr "Paroles iestatīšana ļauj pieteikties tieši, nevis gaidīt vienreizē
 #, fuzzy
 msgid "Current password"
 msgstr "Old password"
-
-#, fuzzy
-msgid "New password"
-msgstr "New password"
 
 #, fuzzy
 msgid "Unset password"
@@ -3358,10 +3361,6 @@ msgstr "Vai esat pārliecināts, ka vēlaties atcelt šo plānoto maksājumu? Ta
 #, fuzzy, python-brace-format
 msgid "Are you sure you want to cancel this scheduled payment? It will stop your donations to {recipients}."
 msgstr "Vai esat pārliecināts, ka vēlaties atcelt šo plānoto maksājumu? Tas apturēs jūsu ziedojumus {recipients}."
-
-#, fuzzy
-msgid "Go back"
-msgstr "Atgriezties"
 
 #, fuzzy
 msgid "If you want to modify the amount of this scheduled payment, please select or input a new one:"
