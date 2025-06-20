@@ -34,26 +34,8 @@ if 'new-password' in body or 'action' in body:
         p.unset_password()
         form_post_success(state, msg=_("Your account is now passwordless."))
 
-    # Check the new password
-    new_password = body['new-password']
-    password_status = None
-    ignore_warning = body.get('ignore_warning') == 'true'
-    if new_password and not ignore_warning:
-        website.db.hit_rate_limit('check_password', p.id, TooManyAttempts)
-        try:
-            password_status = p.check_password(new_password, context='update_password')
-        except Exception as e:
-            website.tell_sentry(e)
-        if password_status and password_status != 'okay':
-            raise response.render(
-                'simplates/password-warning.spt', state,
-                password_status=password_status, back_to=p.path('settings'),
-            )
-
     # Update the password
-    website.db.hit_rate_limit('change_password', p.id, TooManyAttempts)
-    checked = password_status is not None or ignore_warning
-    p.update_password(new_password, checked=checked)
+    p.update_password('new-password')
     form_post_success(state, msg=_("Your password has been changed."))
 
 elif 'privacy' in body:

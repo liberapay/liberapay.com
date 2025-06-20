@@ -19,7 +19,6 @@ password = 'password'
 
 good_data = {
     'sign-in.username': 'bob',
-    'sign-in.password': password,
     'sign-in.email': 'bob@example.com',
     'sign-in.token': 'ThisIsATokenThatIsThirtyTwoBytes',
 }
@@ -60,13 +59,11 @@ class TestLogIn(EmailHarness):
         assert r.headers[b'Location'] == b'/' + username.encode() + b'/'
 
     def test_log_in(self):
-        alice = self.make_participant('alice')
-        alice.update_password(password)
+        alice = self.make_participant('alice', password=password)
         self.log_in_and_check(alice, password)
 
     def test_log_in_form_repost(self):
-        alice = self.make_participant('alice')
-        alice.update_password(password)
+        self.make_participant('alice', password=password)
         extra = {'name': 'python', 'lang': 'mul', 'form.repost': 'true'}
         r = self.log_in('alice', password, url='/for/new', extra=extra)
         assert r.code == 302
@@ -76,8 +73,7 @@ class TestLogIn(EmailHarness):
         email = 'alice@example.net'
         alice = self.make_participant('alice')
         alice.add_email(email)
-        bob = self.make_participant('bob', email=email)
-        bob.update_password(password)
+        bob = self.make_participant('bob', email=email, password=password)
         r = self.log_in(email, password)
         self.check_login(r, bob)
 
@@ -90,8 +86,7 @@ class TestLogIn(EmailHarness):
         self.check_with_about_me('alice', cookies)
 
     def test_log_in_switch_user(self):
-        alice = self.make_participant('alice')
-        alice.update_password(password)
+        alice = self.make_participant('alice', password=password)
         bob = self.make_participant('bob')
         bob.authenticated = True
         cookies = SimpleCookie()
@@ -99,8 +94,7 @@ class TestLogIn(EmailHarness):
         self.log_in_and_check(alice, password, cookies=cookies)
 
     def test_log_in_closed_account(self):
-        alice = self.make_participant('alice')
-        alice.update_password(password)
+        alice = self.make_participant('alice', password=password)
         alice.update_status('closed')
         self.log_in_and_check(alice, password)
         alice2 = alice.refetch()
@@ -117,21 +111,19 @@ class TestLogIn(EmailHarness):
         assert SESSION not in r.headers.cookie
 
     def test_log_in_bad_password(self):
-        alice = self.make_participant('alice')
-        alice.update_password('password')
+        self.make_participant('alice', password='password')
         r = self.log_in('alice', 'deadbeef')
         assert SESSION not in r.headers.cookie
 
     def test_log_in_non_ascii_password(self):
         password = 'le blé pousse dans le champ'
-        alice = self.make_participant('alice')
-        alice.update_password(password)
+        alice = self.make_participant('alice', password=password)
         self.log_in_and_check(alice, password.encode('utf8'))
 
     def test_password_is_checked_during_log_in(self):
         password = 'password'
-        alice = self.make_participant('alice')
-        alice.update_password(password, checked=False)
+        alice = self.make_participant('alice', password=password)
+        self.db.run("UPDATE events SET ts = ts - interval '2 years'")
         # Log in twice, the password should only be checked once
         self.log_in('alice', password)
         self.log_in('alice', password)
@@ -548,8 +540,9 @@ class TestLogIn(EmailHarness):
         }
 
     def test_normal_sessions_are_invalidated_when_password_is_changed(self):
-        alice = self.make_participant('alice', email='alice@liberapay.com')
-        alice.update_password('password')
+        alice = self.make_participant(
+            'alice', email='alice@liberapay.com', password='password'
+        )
 
         # Get an initial session
         alice.session = alice.start_session(suffix='.in')
@@ -571,9 +564,10 @@ class TestLogIn(EmailHarness):
         form_data = {
             'cur-password': 'password',
             'new-password': 'correct horse battery staple',
-            'ignore_warning': 'true',
         }
-        r = self.client.PxST('/alice/settings/edit', form_data, auth_as=alice)
+        r = self.client.PxST(
+            '/alice/settings/edit', form_data, auth_as=alice, skip_password_check=True,
+        )
         assert r.code == 302, r.text
 
         # Only the initial and email sessions should still be valid, and of
@@ -655,18 +649,6 @@ class TestSignIn(EmailHarness):
 
     def test_sign_in_restricted_username(self):
         r = self.sign_in(dict(username='about'))
-        assert r.code == 400
-
-    def test_sign_in_without_password(self):
-        r = self.sign_in(dict(password=''))
-        assert r.code == 302
-
-    def test_sign_in_short_password(self):
-        r = self.sign_in(dict(password='a'))
-        assert r.code == 400
-
-    def test_sign_in_long_password(self):
-        r = self.sign_in(dict(password='a'*200))
         assert r.code == 400
 
     def test_sign_in_bad_kind(self):

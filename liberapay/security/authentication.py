@@ -8,11 +8,10 @@ from pando import Response
 from pando.utils import utcnow
 
 from liberapay.constants import (
-    ASCII_ALLOWED_IN_USERNAME, PASSWORD_MIN_SIZE, PASSWORD_MAX_SIZE,
-    SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
+    ASCII_ALLOWED_IN_USERNAME, SESSION, SESSION_REFRESH, SESSION_TIMEOUT,
 )
 from liberapay.exceptions import (
-    AccountIsPasswordless, BadPasswordSize, EmailAlreadyTaken, LoginRequired,
+    AccountIsPasswordless, EmailAlreadyTaken, LoginRequired,
     TooManyLogInAttempts, TooManyLoginEmails, TooManySignUps,
     UsernameAlreadyTaken,
 )
@@ -98,19 +97,15 @@ def sign_in_with_form_data(body, state):
                     return
             else:
                 p = None
-            if not p:
+            if p:
+                website.db.decrement_rate_limit('log-in.password.ip-addr', str(src_addr))
+            else:
                 state['log-in.error'] = (
                     _("The submitted password is incorrect.") if p_id is not None else
                     _("“{0}” is not a valid account ID.", input_id) if id_type == 'immutable' else
                     _("No account has the username “{username}”.", username=input_id) if id_type == 'username' else
                     _("No account has “{email_address}” as its primary email address.", email_address=input_id)
                 )
-            else:
-                website.db.decrement_rate_limit('log-in.password.ip-addr', str(src_addr))
-                try:
-                    p.check_password(password, context='login')
-                except Exception as e:
-                    website.tell_sentry(e)
         elif id_type == 'email':
             website.db.hit_rate_limit('log-in.email.ip-addr', str(src_addr), TooManyLogInAttempts)
             website.db.hit_rate_limit('log-in.email.ip-net', get_ip_net(src_addr), TooManyLogInAttempts)
@@ -156,11 +151,6 @@ def sign_in_with_form_data(body, state):
             state.get('currency') or
             'EUR'
         )
-        password = body.get('sign-in.password')
-        if password:
-            l = len(password)
-            if l < PASSWORD_MIN_SIZE or l > PASSWORD_MAX_SIZE:
-                raise BadPasswordSize
         username = body.get('sign-in.username')
         if username:
             username = username.strip()
@@ -226,16 +216,12 @@ def sign_in_with_form_data(body, state):
             p = Participant.make_active(kind, currency, username, cursor=c, request_data=request_data)
             p.set_email_lang(state['locale'].tag, cursor=c)
             p.add_email(email, cursor=c)
-        if password:
-            p.update_password(password)
-            p.check_password(password, context='login')
         p.authenticated = True
         p.sign_in(response.headers.cookie, token=session_token, suffix='.in')
         website.logger.info(f"a new participant has joined: ~{p.id}")
         # We're done, we can clean up the body now
         body.pop('sign-in.email')
         body.pop('sign-in.currency', None)
-        body.pop('sign-in.password', None)
         body.pop('sign-in.username', None)
         body.pop('sign-in.token', None)
 

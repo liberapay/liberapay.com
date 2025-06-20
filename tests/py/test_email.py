@@ -131,12 +131,17 @@ class TestEmail(EmailHarness):
         initial_session = self.alice.session = self.alice.start_session(suffix='.in')
         self.add_and_verify_email('alice1@example.com')
         assert len(self.alice.get_emails()) == 1
-        self.alice.update_password('password')
         self.db.run("""
             UPDATE user_secrets
                SET mtime = mtime - interval '30 minutes'
              WHERE participant = %s
         """, (self.alice.id,))
+        self.db.run("""
+            INSERT INTO user_secrets
+                        (participant, id, secret)
+                 VALUES (%s, 0, %s)
+        """, (self.alice.id, self.alice.hash_password('password')))
+        self.alice.add_event(self.db, 'password-check', None)
         data = {'add-email': 'alice2@example.com'}
         r = self.client.POST(
             '/alice/emails/', data,
