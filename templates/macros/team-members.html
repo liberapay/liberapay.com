@@ -74,7 +74,7 @@
                             % endif
                             <input class="form-control" name="take" value="{{
                                 locale.format_money(nominal_take, format='amount_only') if nominal_take.amount >= 0 else ''
-                            }}" placeholder="auto"{% if title %} title="{{ title }}"{% endif %} />
+                            }}" type="tel" inputmode="decimal" placeholder="auto"{% if title %} title="{{ title }}"{% endif %} />
                             <div class="input-group-btn">
                                 <button class="btn btn-default" title="{{ _('Update my nominal take') }}">{{
                                     icon('check-lg')

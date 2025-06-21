@@ -33,8 +33,9 @@ request.qs.pop('log-in.token', None)
         <form action="" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
             <div class="input-group">
-                <input name="log-in.id" autocomplete="email" class="form-control"
-                       required placeholder="{{ _('Email address') }}" size=100 />
+                <input name="log-in.id" class="form-control" required
+                       type="email" autocomplete="email"
+                       placeholder="{{ _('Email address') }}" size=100 />
                 <div class="input-group-btn">
                     <button class="btn btn-default">{{ _("Go") }}</button>
                 </div>

@@ -66,7 +66,7 @@ title = _("Add a payment instrument")
         <fieldset id="card-form" class="form-group">
             <p>{{ _("Please input your name and card number:") }}</p>
             <div class="form-group">
-                <input name="owner.name" autocomplete="name" required minlength=3
+                <input name="owner.name" autocomplete="name" spellcheck="false" required minlength=3
                        class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
                 <div id="stripe-element" data-type="card" class="form-control mb-3"></div>
                 <output id="stripe-errors" class="alert alert-danger"></output>
@@ -93,7 +93,7 @@ title = _("Add a payment instrument")
                 "Please input your name and your IBAN (International Bank Account Number):"
             ) }}</p>
             <div class="form-group">
-                <input name="owner.name" autocomplete="name" required minlength=3
+                <input name="owner.name" autocomplete="name" spellcheck="false" required minlength=3
                        class="form-control mb-3" placeholder="{{ _('Jane Doe') }}" />
                 <div id="stripe-element" data-type="iban" class="form-control mb-3"></div>
                 <output id="stripe-errors" class="alert alert-danger"></output>

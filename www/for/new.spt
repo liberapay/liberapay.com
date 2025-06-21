@@ -43,7 +43,7 @@ title = _("Start a new community")
     <label>
         <span>{{ _("Name") }}</span>
         <input class="form-control" name="name" value="{{ name }}"
-               required maxlength="{{ name_maxlength }}" />
+               required maxlength="{{ name_maxlength }}" spellcheck="false" />
         <p class="help-block">{{ _(
             "Use underscores (_) instead of spaces. All unicode alphanumeric "
             "characters are allowed, as well as dots (.) and dashes (-)."
