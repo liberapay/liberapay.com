@@ -3642,3 +3642,16 @@ CREATE INDEX payment_accounts_participant_provider_country_is_current_idx
 ALTER TABLE payment_accounts
     ALTER COLUMN independent DROP DEFAULT,
     ALTER COLUMN loss_taker DROP DEFAULT;
+
+-- migration #187
+CREATE OR REPLACE FUNCTION hit_rate_limit(key text, cap int, period float) RETURNS int AS $$
+    INSERT INTO rate_limiting AS r
+                (key, counter, ts)
+         VALUES (key, 1, current_timestamp)
+    ON CONFLICT (key) DO UPDATE
+            SET counter = r.counter + 1 - least(compute_leak(cap, period, r.ts), r.counter)
+              , ts = current_timestamp
+          WHERE (r.counter - compute_leak(cap, period, r.ts)) < cap
+             OR r.ts < (current_timestamp - make_interval(secs => period / cap * 0.8))
+      RETURNING cap - counter;
+$$ LANGUAGE sql;
